@@ -1,0 +1,15 @@
+function isWorkingStateWarmEligible(agentId, deps) {
+  if (!deps.isStoreEnabled()) return false;
+  if (!deps.isV2StoreEnabled()) return false;
+  if (deps.hasActivePause()) return false;
+  if (!deps.hasAuthenticatedBootstrap()) return false;
+  if (!deps.isBoxAgent(agentId)) return false;
+  return deps.checkGate();
+}
+function boxAgentPopulation(agentIds, runningAgentIds, isBoxAgent) {
+  const boxAgentIds = agentIds.filter(isBoxAgent);
+  return {
+    idleAgentIds: boxAgentIds.filter((agentId) => !runningAgentIds.has(agentId)),
+    totalAgents: boxAgentIds.length
+  };
+}

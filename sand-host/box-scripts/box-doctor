@@ -1,0 +1,285 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+# >>> box port table (from sand/src/shared/box/box-contract.ts; regenerate: pnpm --filter sand run gen:box-ports) >>>
+SAND_BOX_PRIMARY_VNC_PORT=5900
+SAND_BOX_PORT_PRIMARY_NOVNC=6080
+SAND_BOX_PORT_FORK_NOVNC=6081
+SAND_BOX_NOVNC_TOKEN_DIR="/tmp/sand-novnc-tokens.d"
+# <<< box port table <<<
+
+FAILED_CHECKS=()
+TOTAL=0
+
+pass() {
+	TOTAL=$((TOTAL + 1))
+	printf '[box-doctor] PASS %s: %s\n' "$1" "$2"
+}
+
+fail() {
+	TOTAL=$((TOTAL + 1))
+	FAILED_CHECKS+=("$1")
+	printf '[box-doctor] FAIL %s: %s\n' "$1" "$2"
+}
+
+check_machine_id() {
+	local path="/etc/machine-id"
+	if [ ! -f "${path}" ]; then
+		fail machine-id "${path} is missing (Chrome device fingerprint / Okta SSO will break)"
+		return
+	fi
+	local id
+	id="$(tr -d '\n' <"${path}")"
+	if ! printf '%s' "${id}" | grep -Eq '^[0-9a-f]{32}$'; then
+		fail machine-id "${path} is not 32 lowercase hex chars (len=${#id}); Chrome device fingerprint / Okta SSO will break"
+		return
+	fi
+	local dbus_path="/var/lib/dbus/machine-id" dbus_id
+	dbus_id="$(tr -d '\n' <"${dbus_path}" 2>/dev/null || true)"
+	if [ "${dbus_id}" = "${id}" ]; then
+		pass machine-id "${path} holds a valid 32-char id and ${dbus_path} agrees"
+	else
+		fail machine-id "${dbus_path} (${dbus_id:-missing}) disagrees with ${path} (${id}); a D-Bus bus may have bound a stale id before Chrome"
+	fi
+}
+
+check_chrome() {
+	if ! command -v google-chrome-stable >/dev/null 2>&1; then
+		fail chrome "google-chrome-stable is not on PATH"
+		return
+	fi
+	local version
+	if version="$(google-chrome-stable --version 2>/dev/null)" && [ -n "${version}" ]; then
+		pass chrome "${version}"
+	else
+		fail chrome "google-chrome-stable --version did not report a version"
+	fi
+}
+
+CHROME_FD_FAIL_PCT=90
+
+# Chromium copies --remote-debugging-port into renderer command lines, which
+# also carry --type=, so only a port-bearing cmdline without --type= is the
+# browser main (kSwitchNames in
+# https://chromium.googlesource.com/chromium/src/+/refs/tags/151.0.7922.169/content/browser/renderer_host/render_process_host_impl.cc).
+probe_chrome_browser_pids() {
+	local proc_root="${1:-/proc}" dir cmdline
+	for dir in "${proc_root}"/[0-9]*; do
+		cmdline="$(tr '\0' ' ' <"${dir}/cmdline" 2>/dev/null)" || continue
+		case "${cmdline}" in
+		*--type=*) continue ;;
+		*--remote-debugging-port=*) printf '%s\n' "${dir##*/}" ;;
+		esac
+	done
+}
+
+probe_process_fd_usage() {
+	local pid="$1" open soft
+	open="$(ls "/proc/${pid}/fd" 2>/dev/null | wc -l)"
+	if [ -z "${open}" ] || [ "${open}" -le 0 ] 2>/dev/null; then
+		return 1
+	fi
+	soft="$(awk '/^Max open files/ {print $4}' "/proc/${pid}/limits" 2>/dev/null)"
+	case "${soft}" in
+	'' | *[!0-9]*) return 1 ;;
+	esac
+	if [ "${soft}" -le 0 ] 2>/dev/null; then
+		return 1
+	fi
+	printf '%s %s\n' "${open}" "${soft}"
+}
+
+check_chrome_fds() {
+	local pids
+	pids="$(probe_chrome_browser_pids)"
+	if [ -z "${pids}" ]; then
+		pass chrome-fds "no running box Chrome (nothing to inspect)"
+		return
+	fi
+	local pid usage open soft pct readable=0 worst_pct=-1 worst_detail=""
+	for pid in ${pids}; do
+		usage="$(probe_process_fd_usage "${pid}")" || continue
+		readable=$((readable + 1))
+		open="${usage%% *}"
+		soft="${usage##* }"
+		pct=$((open * 100 / soft))
+		if [ "${pct}" -gt "${worst_pct}" ]; then
+			worst_pct="${pct}"
+			worst_detail="pid ${pid} at ${open}/${soft} open files (${pct}%)"
+		fi
+	done
+	if [ "${readable}" -eq 0 ]; then
+		pass chrome-fds "browser fd tables not readable from this user (skipped)"
+		return
+	fi
+	if [ "${worst_pct}" -ge "${CHROME_FD_FAIL_PCT}" ]; then
+		fail chrome-fds "browser process near its open-file limit (${worst_detail}); browser actions will fail with EMFILE (Too many open files) — capture ls /proc/<pid>/fd BEFORE recreating the box"
+	else
+		pass chrome-fds "${readable} browser process(es); worst ${worst_detail}"
+	fi
+}
+
+check_egress() {
+	if ! command -v curl >/dev/null 2>&1; then
+		fail egress "curl is not available to probe egress"
+		return
+	fi
+	if curl -fsS --max-time 8 -o /dev/null "https://www.google.com/generate_204" 2>/dev/null; then
+		pass egress "reached https://www.google.com/generate_204"
+	else
+		fail egress "could not reach https://www.google.com/generate_204 (DNS or egress blocked)"
+	fi
+}
+
+SKEW_THRESHOLD_S=60
+check_clock() {
+	local year
+	year="$(date -u +%Y 2>/dev/null)"
+	if [ -z "${year}" ]; then
+		fail clock "could not read the system clock"
+		return
+	fi
+	if [ "${year}" -lt 2024 ] || [ "${year}" -gt 2100 ]; then
+		fail clock "system clock year ${year} is implausible; TLS validation may fail"
+		return
+	fi
+
+	local now_iso
+	now_iso="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+
+	local trusted_source="https://www.google.com"
+	if ! command -v curl >/dev/null 2>&1; then
+		pass clock "system clock at ${now_iso} (skew check skipped: curl unavailable)"
+		return
+	fi
+	local http_date
+	http_date="$(curl -fsS --max-time 8 -D - -o /dev/null "${trusted_source}/generate_204" 2>/dev/null | tr -d '\r' | sed -n 's/^[Dd]ate:[[:space:]]*//p' | head -n1)"
+	if [ -z "${http_date}" ]; then
+		pass clock "system clock at ${now_iso} (skew check skipped: no egress)"
+		return
+	fi
+	local trusted_epoch local_epoch
+	trusted_epoch="$(date -d "${http_date}" +%s 2>/dev/null || true)"
+	local_epoch="$(date +%s 2>/dev/null || true)"
+	case "${trusted_epoch}:${local_epoch}" in
+	*[!0-9:]* | :* | *:)
+		pass clock "system clock at ${now_iso} (skew check skipped: could not parse Date '${http_date}')"
+		return
+		;;
+	esac
+
+	local skew abs sign
+	skew=$((local_epoch - trusted_epoch))
+	abs="${skew#-}"
+	sign="+"
+	if [ "${skew}" -lt 0 ]; then
+		sign="-"
+	fi
+	if [ "${abs}" -gt "${SKEW_THRESHOLD_S}" ]; then
+		fail clock "system clock skewed ${sign}${abs}s (~$((abs / 60))m) vs ${trusted_source} — wake/tool timestamps will be wrong"
+	else
+		pass clock "system clock at ${now_iso} (skew ${sign}${abs}s vs ${trusted_source})"
+	fi
+}
+
+check_dbus() {
+	if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
+		pass dbus "session bus present (DBUS_SESSION_BUS_ADDRESS set)"
+		return
+	fi
+	if command -v dbus-launch >/dev/null 2>&1; then
+		pass dbus "dbus-launch available to start a session bus"
+	else
+		fail dbus "no session bus and dbus-launch is missing; desktop integration will not work"
+	fi
+}
+
+DESKTOP_DISPLAY="${SAND_DOCTOR_DISPLAY:-:1}"
+
+probe_display_ready() { xdpyinfo -display "$1" >/dev/null 2>&1; }
+
+probe_tcp_listening() {
+	(exec 3<>"/dev/tcp/127.0.0.1/$1") >/dev/null 2>&1
+}
+
+probe_process_running() { pgrep -x "$1" >/dev/null 2>&1; }
+
+retry_probe() {
+	local attempts="${DESKTOP_PROBE_ATTEMPTS:-6}" delay="${DESKTOP_PROBE_DELAY_S:-0.5}"
+	local i
+	for ((i = 1; ; i++)); do
+		if "$@"; then return 0; fi
+		[ "${i}" -ge "${attempts}" ] && return 1
+		sleep "${delay}"
+	done
+}
+
+check_xvfb() {
+	if retry_probe probe_display_ready "${DESKTOP_DISPLAY}"; then
+		pass xvfb "X display ${DESKTOP_DISPLAY} responds (xdpyinfo)"
+	else
+		fail xvfb "X display ${DESKTOP_DISPLAY} not responding (xdpyinfo); the desktop is down"
+	fi
+}
+
+check_x11vnc() {
+	if retry_probe probe_tcp_listening "${SAND_BOX_PRIMARY_VNC_PORT}"; then
+		pass x11vnc "VNC server listening on ${SAND_BOX_PRIMARY_VNC_PORT}"
+	else
+		fail x11vnc "no VNC server on ${SAND_BOX_PRIMARY_VNC_PORT}; noVNC serves a frozen/blank frame"
+	fi
+}
+
+check_novnc() {
+	if retry_probe probe_tcp_listening "${SAND_BOX_PORT_PRIMARY_NOVNC}"; then
+		pass novnc "noVNC websockify listening on ${SAND_BOX_PORT_PRIMARY_NOVNC}"
+	else
+		fail novnc "no noVNC websockify on ${SAND_BOX_PORT_PRIMARY_NOVNC}; the desktop stream is unreachable"
+	fi
+	local token_dir="${SAND_NOVNC_TOKEN_DIR:-${SAND_BOX_NOVNC_TOKEN_DIR}}"
+	if [ -d "${token_dir}" ] && [ -n "$(ls -A "${token_dir}" 2>/dev/null)" ]; then
+		if retry_probe probe_tcp_listening "${SAND_BOX_PORT_FORK_NOVNC}"; then
+			pass novnc-forks "fork noVNC websockify listening on ${SAND_BOX_PORT_FORK_NOVNC}"
+		else
+			fail novnc-forks "no fork noVNC websockify on ${SAND_BOX_PORT_FORK_NOVNC}; forked-window desktops are unreachable"
+		fi
+	fi
+}
+
+check_compositor() {
+	if retry_probe probe_process_running xfwm4 && retry_probe probe_process_running picom; then
+		pass compositor "window manager (xfwm4) + compositor (picom) running on ${DESKTOP_DISPLAY}"
+	else
+		fail compositor "compositor stack down (xfwm4/picom); windows lose decorations/compositing"
+	fi
+}
+
+run_all_checks() {
+	check_machine_id
+	check_chrome
+	check_chrome_fds
+	check_egress
+	check_clock
+	check_dbus
+	check_xvfb
+	check_x11vnc
+	check_novnc
+	check_compositor
+
+	FAIL_COUNT="${#FAILED_CHECKS[@]}"
+	if [ "${FAIL_COUNT}" -eq 0 ]; then
+		printf '[box-doctor] SUMMARY: %d checks, 0 failed\n' "${TOTAL}"
+		return 0
+	fi
+	printf '[box-doctor] SUMMARY: %d checks, %d failed (%s)\n' \
+		"${TOTAL}" "${FAIL_COUNT}" "$(
+			IFS=,
+			echo "${FAILED_CHECKS[*]}"
+		)"
+	return 1
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+	run_all_checks
+	exit $?
+fi

@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+SETTINGS_PATH="${SAND_BOX_TIMEZONE_SETTINGS:-/home/box/sand-data/settings.json}"
+ZONEINFO_DIR="${SAND_BOX_TIMEZONE_ZONEINFO:-/usr/share/zoneinfo}"
+LOCALTIME_PATH="${SAND_BOX_TIMEZONE_LOCALTIME:-/etc/localtime}"
+TIMEZONE_PATH="${SAND_BOX_TIMEZONE_FILE:-/etc/timezone}"
+
+persisted_zone() {
+	command -v jq >/dev/null 2>&1 || return 1
+	[ -f "${SETTINGS_PATH}" ] || return 1
+	timeout 10 jq -r \
+		'[.userTimeZoneOverride, .userTimeZone] | map(select(type == "string" and length > 0)) | first // empty' \
+		"${SETTINGS_PATH}" 2>/dev/null
+}
+
+# ICU derives the host zone from the tail of the /etc/localtime symlink after "/zoneinfo/"
+# (https://github.com/unicode-org/icu/blob/release-77-1/icu4c/source/common/putil.cpp),
+# so the link must point straight at the zoneinfo file, never at a copy.
+current_zone() {
+	local target
+	target="$(readlink "${LOCALTIME_PATH}")" || return 1
+	case "${target}" in
+	"${ZONEINFO_DIR}"/*) ;;
+	*) return 1 ;;
+	esac
+	printf '%s\n' "${target#"${ZONEINFO_DIR}"/}"
+}
+
+valid_zone() {
+	case "$1" in
+	'' | */ | /* | *..* | *[!A-Za-z0-9_+/-]*) return 1 ;;
+	esac
+	[ -f "${ZONEINFO_DIR}/$1" ]
+}
+
+write_zone() {
+	local zone="$1" tmp
+	tmp="${LOCALTIME_PATH}.sand-box-timezone.$$"
+	if ! ln -sfn "${ZONEINFO_DIR}/${zone}" "${tmp}" || ! mv -f "${tmp}" "${LOCALTIME_PATH}"; then
+		rm -f "${tmp}"
+		return 1
+	fi
+	tmp="${TIMEZONE_PATH}.sand-box-timezone.$$"
+	if ! printf '%s\n' "${zone}" >"${tmp}" || ! chmod 644 "${tmp}" || ! mv -f "${tmp}" "${TIMEZONE_PATH}"; then
+		rm -f "${tmp}"
+		return 1
+	fi
+}
+
+apply_zone() {
+	local zone="$1"
+	if ! valid_zone "${zone}"; then
+		echo "sand-box-timezone: '${zone}' is not a zone under ${ZONEINFO_DIR}; leaving the clock alone" >&2
+		return 1
+	fi
+	if [ "$(current_zone 2>/dev/null)" = "${zone}" ] && [ "$(cat "${TIMEZONE_PATH}" 2>/dev/null)" = "${zone}" ]; then
+		return 0
+	fi
+	if [ "$(id -u)" -ne 0 ] && [ ! -w "$(dirname "${LOCALTIME_PATH}")" ] && command -v sudo >/dev/null 2>&1; then
+		exec sudo -n "$0" apply "${zone}"
+	fi
+	if ! write_zone "${zone}"; then
+		echo "sand-box-timezone: could not point ${LOCALTIME_PATH} at ${zone}" >&2
+		return 1
+	fi
+	echo "sand-box-timezone: clock set to ${zone}"
+}
+
+case "${1:-}" in
+apply)
+	zone="${2:-}"
+	if [ -z "${zone}" ]; then
+		zone="$(persisted_zone)" || zone=""
+		if [ -z "${zone}" ]; then
+			echo "sand-box-timezone: no persisted zone in ${SETTINGS_PATH}; leaving the clock alone" >&2
+			exit 0
+		fi
+	fi
+	apply_zone "${zone}"
+	;;
+current)
+	current_zone
+	;;
+*)
+	echo "usage: sand-box-timezone apply [zone]|current" >&2
+	exit 2
+	;;
+esac

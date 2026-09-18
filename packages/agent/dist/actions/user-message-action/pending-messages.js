@@ -1,0 +1,25 @@
+function collectCompletedToolResults(messages2) {
+  const completed = /* @__PURE__ */ new Map();
+  for (const message of messages2) {
+    if (message.role !== "tool")
+      continue;
+    for (const part of message.content) {
+      if (part.type === "tool-result") {
+        completed.set(part.toolCallId, message);
+      }
+    }
+  }
+  return completed;
+}
+function splitPendingMessages(pendingMessages) {
+  const lastAssistantIndex = pendingMessages.findLastIndex((message) => message.role === "assistant");
+  if (lastAssistantIndex === -1) {
+    return void 0;
+  }
+  const lastMessage = pendingMessages[lastAssistantIndex];
+  return {
+    messages: pendingMessages.slice(0, lastAssistantIndex + 1),
+    lastMessage,
+    completedToolResults: collectCompletedToolResults(pendingMessages.slice(lastAssistantIndex + 1))
+  };
+}

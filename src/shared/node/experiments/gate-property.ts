@@ -1,0 +1,34 @@
+init_errors();
+var MutableGateProperty = class {
+  constructor(value) {
+    this.value = value;
+  }
+  value;
+  listeners = /* @__PURE__ */ new Set();
+  get() {
+    return this.value;
+  }
+  subscribe(listener) {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  }
+  set(value) {
+    if (this.value === value) return;
+    this.value = value;
+    for (const listener of this.listeners) {
+      try {
+        listener(value);
+      } catch (error41) {
+        reportExperimentsDiagnostic({
+          kind: "gate_listener_failed",
+          errorClass: errorLogTag(error41)
+        });
+      }
+    }
+  }
+  clearListeners() {
+    this.listeners.clear();
+  }
+};

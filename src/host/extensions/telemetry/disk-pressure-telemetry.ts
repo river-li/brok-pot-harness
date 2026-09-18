@@ -1,0 +1,19 @@
+init_bounded();
+function telemetryLevel(level) {
+  if (level === "hard") return "error";
+  if (level === "soft") return "warn";
+  return "info";
+}
+function diskPressureTelemetry(report) {
+  return {
+    level: telemetryLevel(report.level),
+    metadata: {
+      volume: report.volume,
+      pressure_level: report.level,
+      trigger: brandLiteralEnum(report.trigger),
+      total_bytes: String(report.totalBytes),
+      available_bytes: String(report.availableBytes),
+      used_percent: report.usedPercent.toFixed(1)
+    }
+  };
+}

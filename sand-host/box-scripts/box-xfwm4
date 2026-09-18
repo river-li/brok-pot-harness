@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+display="${DISPLAY:-}"
+
+process_starttime() {
+	local pid="$1" stat rest
+	local -a stat_fields
+	stat="$( (cat "/proc/${pid}/stat") 2>/dev/null || true)"
+	[ -n "${stat}" ] || return 1
+	# starttime is field 22, item 20 after pid and (comm). https://man7.org/linux/man-pages/man5/proc_pid_stat.5.html
+	rest="${stat##*) }"
+	read -r -a stat_fields <<<"${rest}"
+	[ -n "${stat_fields[19]:-}" ] || return 1
+	printf '%s\n' "${stat_fields[19]}"
+}
+
+process_exe_identity() {
+	local pid="$1"
+	stat -Lc '%d-%i' "/proc/${pid}/exe" 2>/dev/null
+}
+
+process_display_matches() {
+	local pid="$1" environ
+	# environ can be empty before exec sets env_end. https://github.com/torvalds/linux/blob/v6.12/fs/proc/base.c#L1008
+	for _ in 1 2 3; do
+		environ="$( (tr '\0' '\n' <"/proc/${pid}/environ") 2>/dev/null || true)"
+		if [ -n "${environ}" ]; then
+			printf '%s\n' "${environ}" | grep -Fqx "DISPLAY=${display}"
+			return
+		fi
+		sleep 0.01
+	done
+	return 1
+}
+
+xfwm4_matches() {
+	local pid="$1" expected_starttime="$2" expected_exe="$3"
+	local comm current_starttime current_exe
+	[ "${pid}" = "$$" ] && return 1
+	comm="$( (cat "/proc/${pid}/comm") 2>/dev/null || true)"
+	[ "${comm}" = "xfwm4" ] || return 1
+	current_starttime="$(process_starttime "${pid}")" || return 1
+	[ "${current_starttime}" = "${expected_starttime}" ] || return 1
+	current_exe="$(process_exe_identity "${pid}")" || return 1
+	[ "${current_exe}" = "${expected_exe}" ] || return 1
+	process_display_matches "${pid}"
+}
+
+reap_targets() {
+	local proc pid comm starttime exe
+	for proc in /proc/[0-9]*; do
+		pid="${proc##*/}"
+		[ "${pid}" = "$$" ] && continue
+		comm="$( (cat "${proc}/comm") 2>/dev/null || true)"
+		[ "${comm}" = "xfwm4" ] || continue
+		process_display_matches "${pid}" || continue
+		starttime="$(process_starttime "${pid}")" || continue
+		exe="$(process_exe_identity "${pid}")" || continue
+		printf '%s:%s:%s\n' "${pid}" "${starttime}" "${exe}"
+	done
+}
+
+if [ -n "${display}" ]; then
+	targets="$(reap_targets)"
+	for target in ${targets}; do
+		pid="${target%%:*}"
+		identity="${target#*:}"
+		starttime="${identity%%:*}"
+		exe="${identity#*:}"
+		xfwm4_matches "${pid}" "${starttime}" "${exe}" \
+			&& kill -TERM "${pid}" 2>/dev/null || true
+	done
+
+	for _ in $(seq 1 10); do
+		remaining=false
+		for target in ${targets}; do
+			pid="${target%%:*}"
+			identity="${target#*:}"
+			starttime="${identity%%:*}"
+			exe="${identity#*:}"
+			xfwm4_matches "${pid}" "${starttime}" "${exe}" && remaining=true
+		done
+		[ "${remaining}" = "false" ] && break
+		sleep 0.1
+	done
+
+	for _ in $(seq 1 40); do
+		remaining=false
+		for target in ${targets}; do
+			pid="${target%%:*}"
+			identity="${target#*:}"
+			starttime="${identity%%:*}"
+			exe="${identity#*:}"
+			if xfwm4_matches "${pid}" "${starttime}" "${exe}"; then
+				remaining=true
+				kill -KILL "${pid}" 2>/dev/null || true
+			fi
+		done
+		[ "${remaining}" = "false" ] && break
+		sleep 0.1
+	done
+fi
+
+exec xfwm4 "$@"

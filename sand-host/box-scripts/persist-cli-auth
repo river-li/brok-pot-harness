@@ -1,0 +1,304 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+if [ -n "${CLI_AUTH_HOME:-}" ]; then
+	CLI_AUTH_HOMES="${CLI_AUTH_HOME}"
+fi
+CLI_AUTH_HOMES="${CLI_AUTH_HOMES:-/home/box}"
+MIRROR_DIR="${CLI_AUTH_MIRROR:-/home/box/cli-config}"
+CLI_AUTH_DIR_CAP_BYTES="${CLI_AUTH_DIR_CAP_BYTES:-52428800}"
+CLI_AUTH_SAVE_INTERVAL_S="${CLI_AUTH_SAVE_INTERVAL_S:-30}"
+CLI_AUTH_VERBOSE="${CLI_AUTH_VERBOSE:-0}"
+CLI_AUTH_CONFIG_SWEEP="${CLI_AUTH_CONFIG_SWEEP:-1}"
+
+CLI_AUTH_TARGETS=(
+	.config/gh
+	.aws
+	.config/gcloud
+	.ssh
+	.docker
+	.vercel
+	.fly
+	.config/fly
+	.netrc
+	.npmrc
+	.gitconfig
+	.git-credentials
+)
+CLI_AUTH_PRUNE_NAMES=(Cache cache GPUCache logs buildx scout)
+
+log() { printf '[persist-cli-auth] %s\n' "$*"; }
+vlog() { if [ "${CLI_AUTH_VERBOSE}" = "1" ]; then log "$*"; fi; }
+
+home_tag() { printf '%s' "$1" | tr -c '[:alnum:]' '_'; }
+
+home_mirror() {
+	local home="$1" first
+	# shellcheck disable=SC2086
+	set -- ${CLI_AUTH_HOMES}
+	first="$1"
+	if [ "$home" = "$first" ]; then
+		printf '%s' "${MIRROR_DIR}"
+	else
+		printf '%s/.by-home/%s' "${MIRROR_DIR}" "$(home_tag "$home")"
+	fi
+}
+
+has_content() {
+	local path="$1"
+	[ -e "$path" ] || return 1
+	if [ -f "$path" ]; then
+		[ -s "$path" ]
+		return
+	fi
+	local nameExpr=() n first=1
+	for n in "${CLI_AUTH_PRUNE_NAMES[@]}"; do
+		if [ "$first" = 1 ]; then
+			nameExpr+=(-name "$n")
+			first=0
+		else
+			nameExpr+=(-o -name "$n")
+		fi
+	done
+	[ -n "$(find "$path" -type d \( "${nameExpr[@]}" \) -prune -o -type f ! -size 0 -print 2>/dev/null | head -n1)" ]
+}
+
+home_targets() {
+	local home="$1" seen=" " t d name rel
+	for t in "${CLI_AUTH_TARGETS[@]}"; do
+		printf '%s\n' "$t"
+		seen="${seen}${t} "
+	done
+	if [ "${CLI_AUTH_CONFIG_SWEEP}" = "1" ] && [ -d "${home}/.config" ]; then
+		for d in "${home}/.config"/*/; do
+			[ -d "$d" ] || continue
+			name="$(basename "$d")"
+			[ "$name" = "origin-cli" ] && continue
+			rel=".config/${name}"
+			case "$seen" in *" ${rel} "*) continue ;; esac
+			printf '%s\n' "$rel"
+			seen="${seen}${rel} "
+		done
+	fi
+}
+
+mirror_targets() {
+	local mdir="$1" e name
+	[ -d "$mdir" ] || return 0
+	for e in "${mdir}"/* "${mdir}"/.[!.]*; do
+		[ -e "$e" ] || continue
+		name="$(basename "$e")"
+		case "$name" in
+			.config | .cli-auth-sigs | .by-home) continue ;;
+			.cli-auth-tmp* | *.cli-auth-old) continue ;;
+			*) printf '%s\n' "$name" ;;
+		esac
+	done
+	if [ -d "${mdir}/.config" ]; then
+		for e in "${mdir}/.config"/*; do
+			[ -e "$e" ] || continue
+			[ "$(basename "$e")" = "origin-cli" ] && continue
+			printf '.config/%s\n' "$(basename "$e")"
+		done
+	fi
+}
+
+pruned_size() {
+	local path="$1"
+	[ -e "$path" ] || { printf '0'; return; }
+	local ex=() n
+	for n in "${CLI_AUTH_PRUNE_NAMES[@]}"; do ex+=(--exclude="$n"); done
+	du -sb "${ex[@]}" "$path" 2>/dev/null | cut -f1
+}
+
+# GNU tar exclusion patterns are unanchored by default, so `--exclude=NAME`
+# matches that name at any depth of the tree
+# (https://www.gnu.org/software/tar/manual/html_node/controlling-pattern_002dmatching.html).
+copy_pruned() {
+	local src="$1" tmpd="$2"
+	local parent base ex=() n
+	parent="$(dirname "$src")"
+	base="$(basename "$src")"
+	for n in "${CLI_AUTH_PRUNE_NAMES[@]}"; do ex+=(--exclude="$n"); done
+	tar -C "$parent" -cf - "${ex[@]}" -- "$base" 2>/dev/null |
+		tar -C "$tmpd" -xpf - 2>/dev/null
+	printf '%s/%s' "$tmpd" "$base"
+}
+
+content_sig() {
+	local path="$1"
+	if [ -d "$path" ]; then
+		(cd "$path" && find . -type f -print0 | sort -z |
+			xargs -0 -r sha256sum 2>/dev/null | sha256sum | cut -d' ' -f1)
+	else
+		sha256sum "$path" 2>/dev/null | cut -d' ' -f1
+	fi
+}
+
+harden_perms() { chmod -R go-rwx "$1" 2>/dev/null || true; }
+
+save_one() {
+	local home="$1" rel="$2"
+	local src="${home}/${rel}"
+	local hmir dst sig_file
+	hmir="$(home_mirror "$home")"
+	dst="${hmir}/${rel}"
+	sig_file="${MIRROR_DIR}/.cli-auth-sigs/$(home_tag "$home")__${rel//\//_}"
+	if ! has_content "$src"; then
+		if [ -e "$dst" ] || [ -e "$sig_file" ]; then
+			rm -rf "$dst" "${dst}.cli-auth-old" "$sig_file"
+			PRUNED=$((PRUNED + 1))
+			log "save: pruned ${home}:${rel} (no live creds)"
+		else
+			ABSENT=$((ABSENT + 1))
+			vlog "save: absent ${home}:${rel}"
+		fi
+		return
+	fi
+	local size
+	size="$(pruned_size "$src")"
+	if [ "${size:-0}" -gt "${CLI_AUTH_DIR_CAP_BYTES}" ]; then
+		log "save: SKIP oversized ${home}:${rel} (${size} B > cap ${CLI_AUTH_DIR_CAP_BYTES} B) — NOT persisted; investigate"
+		OVERSIZED=$((OVERSIZED + 1))
+		return
+	fi
+	local tmpd
+	tmpd="$(mktemp -d "${MIRROR_DIR}/.cli-auth-tmp.XXXXXX")" || {
+		log "save: mktemp failed ${home}:${rel}"
+		return
+	}
+	local payload
+	payload="$(copy_pruned "$src" "$tmpd")"
+	if [ ! -e "$payload" ]; then
+		rm -rf "$tmpd"
+		log "save: copy failed ${home}:${rel}"
+		return
+	fi
+	local newsig oldsig
+	newsig="$(content_sig "$payload")"
+	oldsig="$(cat "$sig_file" 2>/dev/null || true)"
+	if [ -n "$newsig" ] && [ "$newsig" = "$oldsig" ] && [ -e "$dst" ]; then
+		rm -rf "$tmpd"
+		UNCHANGED=$((UNCHANGED + 1))
+		vlog "save: unchanged ${home}:${rel}"
+		return
+	fi
+	mkdir -p "$(dirname "$dst")" "${MIRROR_DIR}/.cli-auth-sigs"
+	rm -rf "${dst}.cli-auth-old"
+	if [ -e "$dst" ]; then mv "$dst" "${dst}.cli-auth-old" 2>/dev/null || true; fi
+	if mv "$payload" "$dst" 2>/dev/null; then
+		printf '%s' "$newsig" >"$sig_file"
+		rm -rf "${dst}.cli-auth-old" "$tmpd"
+		PERSISTED=$((PERSISTED + 1))
+		log "save: persisted ${home}:${rel} (${size} B)"
+	else
+		if [ -e "${dst}.cli-auth-old" ]; then mv "${dst}.cli-auth-old" "$dst" 2>/dev/null || true; fi
+		rm -rf "$tmpd"
+		log "save: install failed ${home}:${rel} (kept previous)"
+	fi
+}
+
+restore_one() {
+	local home="$1" hmir="$2" rel="$3"
+	local msrc="${hmir}/${rel}" dst="${home}/${rel}"
+	[ -e "$msrc" ] || return
+	if has_content "$dst"; then
+		vlog "restore: kept local ${home}:${rel}"
+		KEPT=$((KEPT + 1))
+		return
+	fi
+	mkdir -p "$(dirname "$dst")"
+	local tmpd
+	tmpd="$(mktemp -d "$(dirname "$dst")/.cli-auth-rtmp.XXXXXX")" || {
+		log "restore: mktemp failed ${home}:${rel}"
+		return
+	}
+	if cp -a "$msrc" "${tmpd}/payload" 2>/dev/null; then
+		local owner
+		owner="$(stat -c '%u:%g' "$home" 2>/dev/null || true)"
+		if [ -n "$owner" ]; then chown -R "$owner" "${tmpd}/payload" 2>/dev/null || true; fi
+		harden_perms "${tmpd}/payload"
+		rm -rf "$dst"
+		if mv "${tmpd}/payload" "$dst" 2>/dev/null; then
+			RESTORED=$((RESTORED + 1))
+			log "restore: restored ${home}:${rel}"
+		else
+			log "restore: install failed ${home}:${rel}"
+		fi
+	else
+		log "restore: copy failed ${home}:${rel}"
+	fi
+	rm -rf "$tmpd"
+}
+
+do_save() {
+	mkdir -p "${MIRROR_DIR}"
+	PERSISTED=0 OVERSIZED=0 UNCHANGED=0 ABSENT=0 PRUNED=0
+	local home rel
+	for home in ${CLI_AUTH_HOMES}; do
+		[ -d "$home" ] || continue
+		mkdir -p "$(home_mirror "$home")"
+		while IFS= read -r rel; do
+			[ -n "$rel" ] && save_one "$home" "$rel"
+		done < <(home_targets "$home")
+	done
+	if [ $((PERSISTED + OVERSIZED + PRUNED)) -gt 0 ] || [ "${CLI_AUTH_VERBOSE}" = "1" ]; then
+		log "save: done persisted=${PERSISTED} pruned=${PRUNED} oversized=${OVERSIZED} unchanged=${UNCHANGED} absent=${ABSENT}"
+	fi
+}
+
+do_restore() {
+	RESTORED=0 KEPT=0
+	local home hmir rel
+	for home in ${CLI_AUTH_HOMES}; do
+		[ -d "$home" ] || continue
+		hmir="$(home_mirror "$home")"
+		[ -d "$hmir" ] || continue
+		while IFS= read -r rel; do
+			[ -n "$rel" ] && restore_one "$home" "$hmir" "$rel"
+		done < <(mirror_targets "$hmir")
+	done
+	log "restore: done restored=${RESTORED} kept_local=${KEPT}"
+}
+
+retire_mirror() {
+	do_restore || true
+	local home hmir rel
+	for home in ${CLI_AUTH_HOMES}; do
+		[ -d "$home" ] || continue
+		for rel in .ssh .gnupg; do
+			if [ -e "${home}/${rel}" ]; then
+				chmod 700 "${home}/${rel}" 2>/dev/null || true
+				harden_perms "${home}/${rel}"
+			fi
+		done
+		hmir="$(home_mirror "$home")"
+		[ -d "$hmir" ] || continue
+		while IFS= read -r rel; do
+			[ -n "$rel" ] || continue
+			if has_content "${home}/${rel}" || ! has_content "${hmir}/${rel}"; then
+				rm -rf "${hmir:?}/${rel}"
+			fi
+		done < <(mirror_targets "$hmir")
+	done
+	rm -rf "${MIRROR_DIR:?}/.cli-auth-sigs"
+	log "retire-mirror: done (remaining entries keep their durable copies until a later boot consumes them)"
+}
+
+case "${1:-}" in
+save) do_save ;;
+restore) do_restore ;;
+retire-mirror) retire_mirror ;;
+save-loop)
+	mkdir -p "${MIRROR_DIR}"
+	log "save-loop: refreshing the mirror every ${CLI_AUTH_SAVE_INTERVAL_S}s (cap ${CLI_AUTH_DIR_CAP_BYTES} B)"
+	while :; do
+		do_save
+		sleep "${CLI_AUTH_SAVE_INTERVAL_S}"
+	done
+	;;
+*)
+	echo "usage: persist-cli-auth {save|restore|retire-mirror|save-loop}" >&2
+	exit 2
+	;;
+esac

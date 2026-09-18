@@ -1,0 +1,1 @@
+var VOICE_CALL_CHANNEL_PLATFORM = "voice";

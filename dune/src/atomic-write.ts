@@ -1,0 +1,23 @@
+var import_node_fs3 = require("node:fs");
+var import_node_path4 = require("node:path");
+var import_write_file_atomic = __toESM(require_lib2(), 1);
+async function writeFileAtomic(path31, data, options2 = {}) {
+  createParentsKeepingCallOrder(path31);
+  await (0, import_write_file_atomic.default)(path31, toLibraryData(data), freshLibraryOptions(options2));
+}
+function writeFileAtomicSync(path31, data, options2 = {}) {
+  createParentsKeepingCallOrder(path31);
+  import_write_file_atomic.default.sync(path31, toLibraryData(data), freshLibraryOptions(options2));
+}
+function createParentsKeepingCallOrder(path31) {
+  (0, import_node_fs3.mkdirSync)((0, import_node_path4.dirname)(path31), { recursive: true });
+}
+function toLibraryData(data) {
+  return typeof data === "string" ? data : Buffer.from(data.buffer, data.byteOffset, data.byteLength);
+}
+function freshLibraryOptions(options2) {
+  return {
+    mode: options2.mode,
+    chown: false
+  };
+}

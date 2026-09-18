@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Chrome resolves /etc/opt/chrome/policies/managed per policy key with the
+# lexicographically last file winning the whole key
+# (https://chromium.googlesource.com/chromium/src/+/151.0.7922.169/components/policy/core/common/config_dir_policy_loader.cc),
+# uninstalls a force-installed extension that leaves the effective
+# ExtensionInstallForcelist
+# (https://chromium.googlesource.com/chromium/src/+/151.0.7922.169/components/policy/resources/templates/policy_definitions/Extensions/ExtensionInstallForcelist.yaml),
+# and folds forcelist entries into the same per-extension map as
+# ExtensionSettings
+# (https://chromium.googlesource.com/chromium/src/+/151.0.7922.169/chrome/browser/extensions/extension_management.cc),
+# so this file writes only its own ExtensionSettings entry.
+set -u
+
+policy_file="${SAND_WEBAUTHN_POLICY_FILE:-/etc/opt/chrome/policies/managed/sand-webauthn.json}"
+id_file="${SAND_WEBAUTHN_ID_FILE:-/usr/local/share/sand-webauthn-proxy.id}"
+marker="${SAND_WEBAUTHN_MARKER_FILE:-/home/box/.sand-webauthn-proxy-enabled}"
+update_xml="${SAND_WEBAUTHN_UPDATE_XML:-/usr/local/share/sand-webauthn-proxy-update.xml}"
+
+case "${SAND_WEBAUTHN_PROXY:-}" in
+	1) : >"${marker}" 2>/dev/null || true ;;
+	0) rm -f "${marker}" 2>/dev/null || true ;;
+esac
+
+if [ ! -w "${policy_file}" ]; then
+	exit 0
+fi
+
+if [ -f "${marker}" ] && [ -r "${id_file}" ]; then
+	printf '{"ExtensionSettings":{"%s":{"installation_mode":"force_installed","update_url":"file://%s"}}}\n' \
+		"$(cat "${id_file}")" "${update_xml}" >"${policy_file}"
+else
+	printf '{}\n' >"${policy_file}"
+fi

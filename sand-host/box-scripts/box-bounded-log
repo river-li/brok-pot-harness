@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+# A `>(list)` process substitution runs asynchronously behind a pipe
+# (https://www.gnu.org/software/bash/manual/html_node/Process-Substitution.html) whose
+# closed read end would turn the writer's next write into SIGPIPE
+# (https://man7.org/linux/man-pages/man7/pipe.7.html), so the substitution shell
+# keeps the read end open and drains into /dev/null when the sink fails.
+if [ "${1:-}" != "--run" ] || [ "$#" -lt 4 ]; then
+	exit 64
+fi
+
+log_file="$2"
+shift 2
+if [ "${1:-}" != "--" ]; then
+	exit 64
+fi
+shift
+
+exec >/dev/null 2>&1
+
+node_bin="${SAND_BOX_BOUNDED_LOG_NODE:-/exec-daemon/node}"
+sink_script="${SAND_BOX_BOUNDED_LOG_SINK:-/usr/local/bin/box-bounded-log.mjs}"
+
+drain_bounded() {
+	if flock -n "${log_file}.lock" \
+		"${node_bin}" "${sink_script}" "${log_file}" "$$" 2>/dev/null; then
+		return 0
+	fi
+	cat >/dev/null 2>&1 || true
+}
+
+exec "$@" > >(drain_bounded) 2>&1

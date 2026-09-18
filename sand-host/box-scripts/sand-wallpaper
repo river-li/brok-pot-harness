@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+TONE_DIR="${SAND_WALLPAPER_TONE_DIR:-/usr/share/backgrounds}"
+FALLBACK_IMAGE="${SAND_WALLPAPER_FALLBACK:-${TONE_DIR}/cursor-box-wallpaper.jpg}"
+SETTINGS_PATH="${SAND_WALLPAPER_SETTINGS:-/home/box/sand-data/settings.json}"
+NODE_BIN="${SAND_WALLPAPER_NODE:-/exec-daemon/node}"
+TONE_SCRIPT="${SAND_WALLPAPER_TONE_SCRIPT:-/usr/local/bin/sand-wallpaper-tone.mjs}"
+export DISPLAY="${2:-${DISPLAY:-:1}}"
+
+resolve_plan() {
+	[ -x "${NODE_BIN}" ] || return 1
+	[ -r "${TONE_SCRIPT}" ] || return 1
+	timeout 10 "${NODE_BIN}" "${TONE_SCRIPT}" "${SETTINGS_PATH}" 2>/dev/null
+}
+
+read_tone() {
+	local tone
+	tone="$(resolve_plan || true)"
+	tone="${tone%% *}"
+	case "${tone}" in
+	a | b | c) TONE="${tone}" ;;
+	*) TONE="" ;;
+	esac
+}
+
+paint_root() {
+	local target="$1"
+	{ [ -n "${target}" ] && hsetroot -cover "${target}"; } \
+		|| hsetroot -cover "${FALLBACK_IMAGE}" \
+		|| hsetroot -solid "#1e2330" \
+		|| xsetroot -solid "#1e2330" \
+		|| true
+}
+
+tone_path() {
+	local target="${TONE_DIR}/sand-wallpaper-02-$1.png"
+	[ -f "${target}" ] || return 1
+	printf '%s' "${target}"
+}
+
+case "${1:-paint}" in
+paint)
+	read_tone
+	target=""
+	if [ -n "${TONE}" ]; then
+		target="$(tone_path "${TONE}" || true)"
+	fi
+	paint_root "${target}"
+	;;
+*)
+	echo "usage: sand-wallpaper paint [display]" >&2
+	exit 2
+	;;
+esac

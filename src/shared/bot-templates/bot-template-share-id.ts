@@ -1,0 +1,1 @@
+var BOT_TEMPLATE_SHARE_ID_PATTERN = /^[A-Za-z0-9_-]{21}$/;

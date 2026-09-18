@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+DISPLAY_NUM="${1:?display number required}"
+CHROME_PROFILE="/home/box/chrome-profile/Fork-${DISPLAY_NUM}"
+
+if [ "${DISPLAY_NUM}" -le 1 ] 2>/dev/null; then
+	echo "stop-window: refusing to stop primary desktop :${DISPLAY_NUM}" >&2
+	exit 0
+fi
+
+# >>> box port table (from sand/src/shared/box/box-contract.ts; regenerate: pnpm --filter sand run gen:box-ports) >>>
+WINDOW_TOKEN_DIR="/tmp/sand-window-tokens.d"
+NOVNC_TOKEN_DIR="/tmp/sand-novnc-tokens.d"
+EXEC_DAEMON_PORT=$((14000 + DISPLAY_NUM))
+VNC_PORT=$((5900 + DISPLAY_NUM))
+# <<< box port table <<<
+
+rm -f "${WINDOW_TOKEN_DIR}/${DISPLAY_NUM}"
+
+if [ -r /usr/local/bin/sand-desktop-supervise.sh ]; then
+	# shellcheck source=/dev/null
+	. /usr/local/bin/sand-desktop-supervise.sh
+fi
+if ! command -v sand_desktop_unregister_group >/dev/null 2>&1; then
+	sand_desktop_unregister_group() { :; }
+fi
+sand_desktop_unregister_group "d${DISPLAY_NUM}"
+
+pids_on_port() {
+	local port="$1"
+	[ -n "${port}" ] || return 0
+	if command -v ss >/dev/null 2>&1; then
+		ss -lptnH "sport = :${port}" 2>/dev/null |
+			grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u
+	elif command -v fuser >/dev/null 2>&1; then
+		fuser "${port}/tcp" 2>/dev/null | tr ' ' '\n' | grep -E '^[0-9]+$'
+	fi
+}
+
+kill_pid() { [ -n "${1:-}" ] && kill "${1}" 2>/dev/null || true; }
+
+x11vnc_pids_on_port() {
+	local port="$1" pid cmd
+	[ -n "${port}" ] || return 0
+	{
+		pids_on_port "${port}"
+		pgrep -f "[x]11vnc.*-rfbport ${port}" 2>/dev/null || true
+	} | sort -un | while read -r pid; do
+		[ -n "${pid}" ] || continue
+		[ "${pid}" = "$$" ] && continue
+		cmd="$( (tr '\0' ' ' <"/proc/${pid}/cmdline") 2>/dev/null || true)"
+		case "${cmd}" in
+		*x11vnc*) printf '%s\n' "${pid}" ;;
+		esac
+	done
+}
+
+reap_x11vnc_on_port() {
+	local port="$1" pid remaining
+	[ -n "${port}" ] || return 0
+	for pid in $(x11vnc_pids_on_port "${port}"); do kill_pid "${pid}"; done
+	for _ in $(seq 1 50); do
+		remaining="$(x11vnc_pids_on_port "${port}")"
+		[ -z "${remaining}" ] && return 0
+		for pid in ${remaining}; do kill -9 "${pid}" 2>/dev/null || true; done
+		sleep 0.1
+	done
+	if [ -n "$(x11vnc_pids_on_port "${port}")" ]; then
+		echo "stop-window ${DISPLAY_NUM}: rfbport ${port} still held after reap; box-x11vnc will reap on the next launch" >&2
+		return 1
+	fi
+	return 0
+}
+
+rm -f "${NOVNC_TOKEN_DIR}/${DISPLAY_NUM}"
+
+for pid in $(pids_on_port "${EXEC_DAEMON_PORT}"); do kill_pid "${pid}"; done
+
+reap_x11vnc_on_port "${VNC_PORT}"
+
+LOCK="/tmp/.X${DISPLAY_NUM}-lock"
+if [ -f "${LOCK}" ]; then kill_pid "$(tr -dc '0-9' <"${LOCK}")"; fi
+
+rm -f "${LOCK}" "/tmp/.X11-unix/X${DISPLAY_NUM}"
+rm -rf \
+	"${CHROME_PROFILE}" \
+	"/tmp/xdg-runtime-box-${DISPLAY_NUM}" \
+	"/tmp/xdg-runtime-${DISPLAY_NUM}" \
+	"/tmp/sand-window-${DISPLAY_NUM}"
+
+echo "sand window ${DISPLAY_NUM} stopped"

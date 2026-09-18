@@ -1,0 +1,42 @@
+var init_dist6 = __esm({
+  "../packages/mcp-core/dist/index.js"() {
+    "use strict";
+    init_admin_mcp_policy();
+    init_admin_mcp_tool_allowlist();
+    init_async_cache();
+    init_collect_paginated_mcp_list();
+    init_environment_mcp_policy();
+    init_http_logging();
+    init_log_metadata();
+    init_mcp_tool_annotations();
+    init_oauth_logging();
+    init_permanent_grant_failure();
+    init_mcp_sandbox_policy();
+    init_mcp_sandbox_policy_fingerprint();
+    init_mcp_sandbox_unavailable_error();
+    init_mcp_url_utils();
+    init_mcp_config_service();
+    init_mcp_focus_retry_cooldown();
+    init_mcp_fsm_timing_config();
+    init_mcp_inline_reconnect_cooldown();
+    init_mcp_network_resume_reconnect_policy();
+    init_mcp_reconnect_config();
+    init_mcp_reconnect_runtime_policy();
+    init_mcp_session_404_tombstone_config();
+    init_mcp_supervisor_reconnect_policy();
+    init_mcp_tool_call_timeout();
+    init_fsm();
+    init_logger2();
+    init_oauth_client_provider();
+    init_observability();
+    init_oauth_errors();
+    init_oauth_scope_override();
+    init_rest_mcp_provider_metadata();
+    init_abort_signal();
+    init_mcp_host_environment();
+    init_mcp_url_utils();
+    init_reconnect_manager();
+    init_rest_mcp_cursor_auth();
+    init_sse_fallback();
+  }
+});

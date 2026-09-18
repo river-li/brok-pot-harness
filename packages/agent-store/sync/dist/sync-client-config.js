@@ -1,0 +1,103 @@
+var DAY_MS = 24 * 60 * 60 * 1e3;
+var AGENT_STORE_SYNC_CLIENT_CONFIG_DEFAULTS = Object.freeze({
+  syncDebounceMs: 5e3,
+  syncBackoffBaseMs: 5e3,
+  syncBackoffMaxMs: 6e4,
+  projectSyncDebounceMs: 5e3,
+  projectSyncBackoffBaseMs: 5e3,
+  projectSyncBackoffMaxMs: 6e4,
+  passiveRetryIntervalMs: 5e3,
+  passiveIndexPollIntervalMs: 2e3,
+  maxFileSizeBytes: DEFAULT_MAX_FILE_SIZE_BYTES,
+  tokenRefreshBufferMs: 6e4,
+  rpcRetryMaxAttempts: 3,
+  rpcRetryBaseDelayMs: 250,
+  rpcRetryMaxDelayMs: 5e3,
+  rpcRetryMultiplier: 2,
+  rpcTimeoutMs: 6e4,
+  blobIdleTimeoutMs: 6e4,
+  syncRoundTimeoutMs: 3e5,
+  syncRoundUnwindTimeoutMs: 3e4,
+  lockReleaseFailureThreshold: 3,
+  resumeGapThresholdMs: 12e4,
+  dirtyPassiveStalledThresholdMs: 12e4,
+  s3Concurrency: 8,
+  listConcurrency: 4,
+  hashConcurrency: 4,
+  presignConcurrency: 4,
+  multipartUploadThresholdBytes: DEFAULT_MULTIPART_UPLOAD_THRESHOLD_BYTES,
+  multipartPartSizeBytes: DEFAULT_MULTIPART_PART_SIZE_BYTES,
+  multipartPresignWindowSize: DEFAULT_MULTIPART_PRESIGN_WINDOW_SIZE,
+  pullPresignWindowSize: DEFAULT_PULL_PRESIGN_WINDOW_SIZE,
+  multipartCompleteMaxAttempts: DEFAULT_MULTIPART_COMPLETE_MAX_ATTEMPTS,
+  multipartMaxRestarts: DEFAULT_MULTIPART_MAX_RESTARTS,
+  multipartMaxConflictRenames: DEFAULT_MULTIPART_MAX_CONFLICT_RENAMES,
+  multipartMaxExpiryRefreshes: DEFAULT_MULTIPART_MAX_EXPIRY_REFRESHES,
+  writeBarrierTimeoutMs: 2e3,
+  scopedReservedSlots: 1,
+  pathSyncRequestPollMs: 250,
+  pathSyncRequestWaitPollMs: 50,
+  exclusiveMutationClaimPollMs: 250,
+  staleStoreRootMaxIdleMs: 7 * DAY_MS,
+  tombstoneFullRefreshRounds: DEFAULT_TOMBSTONE_FULL_REFRESH_ROUNDS,
+  tombstoneFullRefreshIntervalMs: DEFAULT_TOMBSTONE_FULL_REFRESH_INTERVAL_MS,
+  tombstonePruneSlackMs: DEFAULT_TOMBSTONE_PRUNE_SLACK_MS
+});
+var MIB = 1024 * 1024;
+var BOUNDS = {
+  syncDebounceMs: { min: 250, max: 36e5 },
+  syncBackoffBaseMs: { min: 100, max: 36e5 },
+  syncBackoffMaxMs: { min: 100, max: 36e5 },
+  projectSyncDebounceMs: { min: 250, max: 36e5 },
+  projectSyncBackoffBaseMs: { min: 100, max: 36e5 },
+  projectSyncBackoffMaxMs: { min: 100, max: 36e5 },
+  passiveRetryIntervalMs: { min: 0, max: 36e5 },
+  passiveIndexPollIntervalMs: { min: 0, max: 36e5 },
+  maxFileSizeBytes: { min: 1024, max: 1024 * 1024 * 1024 },
+  tokenRefreshBufferMs: { min: 0, max: 10 * 6e4 },
+  rpcRetryMaxAttempts: { min: 1, max: 10 },
+  rpcRetryBaseDelayMs: { min: 1, max: 6e4 },
+  rpcRetryMaxDelayMs: { min: 1, max: 5 * 6e4 },
+  rpcRetryMultiplier: { min: 1, max: 10 },
+  rpcTimeoutMs: { min: 1e3, max: 6e5 },
+  // An explicit `0` disables the idle watchdog (see clampZeroOrNumber);
+  // any other value is clamped into [min, max].
+  blobIdleTimeoutMs: { min: 1e3, max: 6e5 },
+  syncRoundTimeoutMs: { min: 3e4, max: 36e5 },
+  syncRoundUnwindTimeoutMs: { min: 1e3, max: 6e5 },
+  lockReleaseFailureThreshold: { min: 1, max: 20 },
+  resumeGapThresholdMs: { min: 3e4, max: 36e5 },
+  dirtyPassiveStalledThresholdMs: { min: 3e4, max: 36e5 },
+  s3Concurrency: { min: 1, max: 64 },
+  listConcurrency: { min: 1, max: 64 },
+  hashConcurrency: { min: 1, max: 64 },
+  presignConcurrency: { min: 1, max: 64 },
+  multipartUploadThresholdBytes: { min: 5 * MIB, max: 1024 * MIB },
+  multipartPartSizeBytes: { min: 5 * MIB, max: 512 * MIB },
+  multipartPresignWindowSize: { min: 1, max: 32 },
+  // Max pinned to the server presign cap (`agentStore:maxPresignFiles`) so
+  // config can never push the pull window back over the per-call limit.
+  pullPresignWindowSize: { min: 1, max: 1e3 },
+  multipartCompleteMaxAttempts: { min: 1, max: 5 },
+  multipartMaxRestarts: { min: 0, max: 2 },
+  multipartMaxConflictRenames: { min: 0, max: 2 },
+  multipartMaxExpiryRefreshes: { min: 0, max: 3 },
+  writeBarrierTimeoutMs: { min: 0, max: 6e4 },
+  scopedReservedSlots: { min: 0, max: 8 },
+  pathSyncRequestPollMs: { min: 0, max: 6e4 },
+  pathSyncRequestWaitPollMs: { min: 1, max: 6e4 },
+  exclusiveMutationClaimPollMs: { min: 50, max: 6e4 },
+  // Present so the bounds map stays complete. Not applied: `0` disables and
+  // any other positive value is kept, so a remote knob cannot be clamped
+  // into a surprise window.
+  staleStoreRootMaxIdleMs: { min: 1, max: Number.MAX_SAFE_INTEGER },
+  // Present so the bounds map stays complete. Not applied: `1` disables the
+  // cursor and any larger integer is kept.
+  tombstoneFullRefreshRounds: { min: 1, max: Number.MAX_SAFE_INTEGER },
+  // Present so the bounds map stays complete. Not applied: `0` disables and
+  // any other non-negative integer is kept.
+  tombstoneFullRefreshIntervalMs: { min: 0, max: Number.MAX_SAFE_INTEGER },
+  // Present so the bounds map stays complete. Not applied: any non-negative
+  // integer is kept, including `0`.
+  tombstonePruneSlackMs: { min: 0, max: Number.MAX_SAFE_INTEGER }
+};

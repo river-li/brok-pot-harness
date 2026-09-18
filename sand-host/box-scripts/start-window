@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+DISPLAY_NUM="${1:?display number required}"
+if [ "${DISPLAY_NUM}" -le 1 ] 2>/dev/null; then
+	echo "start-window: :${DISPLAY_NUM} is the primary desktop; nothing to fork" >&2
+	exit 0
+fi
+
+OWNER_TOKEN="${2:-}"
+
+# >>> box port table (from sand/src/shared/box/box-contract.ts; regenerate: pnpm --filter sand run gen:box-ports) >>>
+WINDOW_TOKEN_DIR="/tmp/sand-window-tokens.d"
+NOVNC_TOKEN_DIR="/tmp/sand-novnc-tokens.d"
+EXEC_DAEMON_PORT=$((14000 + DISPLAY_NUM)) # internal; reached via sand-window-router
+PTY_PORT=$((13600 + DISPLAY_NUM))         # internal
+VNC_PORT=$((5900 + DISPLAY_NUM))          # internal; reached via token-websockify
+WINDOW_UNAVAILABLE_EXIT_CODE=75
+# <<< box port table <<<
+
+bind_owner_token() {
+	[ -n "${OWNER_TOKEN}" ] || return 0
+	mkdir -p "${WINDOW_TOKEN_DIR}" 2>/dev/null || return 0
+	printf '%s' "${OWNER_TOKEN}" >"${WINDOW_TOKEN_DIR}/${DISPLAY_NUM}" 2>/dev/null || true
+}
+
+DISP=":${DISPLAY_NUM}"
+LOG_DIR="/tmp/sand-window-${DISPLAY_NUM}"
+mkdir -p "${LOG_DIR}"
+
+display_alive() { xdpyinfo -display "${DISP}" >/dev/null 2>&1; }
+daemon_alive() { (exec 3<>"/dev/tcp/127.0.0.1/${EXEC_DAEMON_PORT}") >/dev/null 2>&1; }
+
+if [ -n "${OWNER_TOKEN}" ] && display_alive; then
+	current_binding="$(cat "${WINDOW_TOKEN_DIR}/${DISPLAY_NUM}" 2>/dev/null || true)"
+	if [ "${current_binding}" != "${OWNER_TOKEN}" ]; then
+		echo "sand window ${DISPLAY_NUM}: display owned by a different token; refusing to adopt" >&2
+		exit "${WINDOW_UNAVAILABLE_EXIT_CODE}"
+	fi
+fi
+
+if display_alive && daemon_alive; then
+	echo "sand window ${DISPLAY_NUM} already up (display ${DISP}, daemon :${EXEC_DAEMON_PORT})"
+	exit 0
+fi
+
+if ! display_alive; then
+	rm -f "/tmp/.X${DISPLAY_NUM}-lock" "/tmp/.X11-unix/X${DISPLAY_NUM}"
+	SAND_VNC_PORT="${VNC_PORT}" \
+		SAND_NOVNC_TOKEN="${DISPLAY_NUM}" \
+		SAND_NOVNC_TOKEN_DIR="${NOVNC_TOKEN_DIR}" \
+		SAND_CHROME_XDG_DIR="/tmp/xdg-runtime-box-${DISPLAY_NUM}" \
+		SAND_XDG_RUNTIME_DIR="/tmp/xdg-runtime-${DISPLAY_NUM}" \
+		DISPLAY="${DISP}" \
+		setsid nohup /usr/local/bin/box-bounded-log \
+		--run "${LOG_DIR}/start-desktop.log" -- \
+		/usr/local/bin/start-desktop.sh >/dev/null 2>&1 &
+
+	for _ in $(seq 1 150); do
+		if display_alive; then break; fi
+		sleep 0.2
+	done
+
+	if ! display_alive; then
+		echo "sand window ${DISPLAY_NUM}: X display ${DISP} did not become ready" >&2
+		exit 1
+	fi
+
+	bind_owner_token
+fi
+
+if ! daemon_alive; then
+	cd /workspace || exit 1
+	DISPLAY="${DISP}" \
+		env -u SAND_GATEWAY_TOKEN -u SAND_EGRESS_TUNNEL_BEARER \
+		setsid nohup /exec-daemon/exec-daemon serve \
+		--port "${EXEC_DAEMON_PORT}" \
+		--pty-websocket-port "${PTY_PORT}" \
+		--auth-token local \
+		--rg-path /exec-daemon/rg \
+		--computer-use-enabled \
+		--mcp-meta-tool-enabled \
+		--origin-cli-enabled \
+		>"${LOG_DIR}/exec-daemon.log" 2>&1 &
+
+	for _ in $(seq 1 150); do
+		if daemon_alive; then break; fi
+		sleep 0.2
+	done
+
+	if ! daemon_alive; then
+		echo "sand window ${DISPLAY_NUM}: exec-daemon on :${EXEC_DAEMON_PORT} did not become ready" >&2
+		exit 1
+	fi
+fi
+
+echo "sand window ${DISPLAY_NUM} ready (display ${DISP}, daemon :${EXEC_DAEMON_PORT}, vnc token ${DISPLAY_NUM})"

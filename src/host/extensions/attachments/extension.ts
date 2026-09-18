@@ -1,0 +1,13 @@
+var attachmentsExtension = defineHostExtension({
+  id: "attachments",
+  dependencies: [HostExtensions.Auth, HostExtensions.Telemetry],
+  start: (context2) => createAttachmentsService({
+    environment: context2.host.environment,
+    auth: context2.deps.auth,
+    report: (diagnostic) => context2.deps.telemetry.logs.reportHostExtensionDiagnostic(diagnostic),
+    reportRenditionFailure: (failure2) => context2.deps.telemetry.logs.reportHostLog(
+      "warn",
+      `[sand:${failure2.medium}-rendition] ${failure2.stage} failed (${failure2.errorClass})`
+    )
+  })
+});

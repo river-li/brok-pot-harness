@@ -1,0 +1,8 @@
+var DEFAULT_INLINE_RECONNECT_COOLDOWN_MS;
+var init_mcp_inline_reconnect_cooldown = __esm({
+  "../packages/mcp-core/dist/config/mcp-inline-reconnect-cooldown.js"() {
+    "use strict";
+    init_mcp_reconnect_config();
+    DEFAULT_INLINE_RECONNECT_COOLDOWN_MS = 5 * 6e4;
+  }
+});

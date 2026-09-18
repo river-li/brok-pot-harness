@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+display="${DISPLAY:-}"
+
+picom_candidate_pids() {
+	if command -v pgrep >/dev/null 2>&1; then
+		pgrep -x picom 2>/dev/null || true
+		return 0
+	fi
+	local pid comm
+	for pid_dir in /proc/[0-9]*; do
+		pid="${pid_dir#/proc/}"
+		comm="$( (cat "${pid_dir}/comm") 2>/dev/null || true)"
+		[ "${comm}" = "picom" ] || continue
+		printf '%s\n' "${pid}"
+	done
+}
+
+reap_targets() {
+	local pid comm env_display
+	for pid in $(picom_candidate_pids); do
+		[ -n "${pid}" ] || continue
+		[ "${pid}" = "$$" ] && continue
+		comm="$( (cat "/proc/${pid}/comm") 2>/dev/null || true)"
+		[ "${comm}" = "picom" ] || continue
+		env_display="$( (tr '\0' '\n' <"/proc/${pid}/environ" | sed -n 's/^DISPLAY=//p' | head -n 1) 2>/dev/null || true)"
+		if [ -n "${display}" ] && [ "${env_display}" = "${display}" ]; then
+			printf '%s\n' "${pid}"
+		fi
+	done
+}
+
+if [ -n "${display}" ]; then
+	for pid in $(reap_targets); do
+		kill "${pid}" 2>/dev/null || true
+	done
+	for _ in $(seq 1 50); do
+		remaining="$(reap_targets)"
+		[ -z "${remaining}" ] && break
+		for pid in ${remaining}; do
+			kill -9 "${pid}" 2>/dev/null || true
+		done
+		sleep 0.1
+	done
+fi
+
+exec picom "$@"

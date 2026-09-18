@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+python3 - "${DISPLAY:-}" 2>/dev/null <<'PY' || true
+import ctypes
+import sys
+import time
+
+xlib = ctypes.CDLL("libX11.so.6")
+xlib.XOpenDisplay.restype = ctypes.c_void_p
+xlib.XInternAtom.restype = ctypes.c_ulong
+xlib.XInternAtom.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int]
+xlib.XGetSelectionOwner.restype = ctypes.c_ulong
+xlib.XGetSelectionOwner.argtypes = [ctypes.c_void_p, ctypes.c_ulong]
+
+dpy = xlib.XOpenDisplay(sys.argv[1].encode())
+if not dpy:
+    sys.exit(0)
+selection = xlib.XInternAtom(dpy, b"_NET_WM_CM_S0", False)
+deadline = time.monotonic() + 5.0
+while not xlib.XGetSelectionOwner(dpy, selection):
+    if time.monotonic() >= deadline:
+        break
+    time.sleep(0.1)
+PY
+
+exec plank "$@"

@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# A second Chrome on a busy --user-data-dir hands its command line to the
+# running instance and exits
+# (https://chromium.googlesource.com/chromium/src/+/151.0.7922.169/chrome/browser/process_singleton_posix.cc),
+# leveldb lets one process open a database at a time
+# (https://github.com/google/leveldb/blob/main/doc/index.md#concurrency), and
+# SQLite opens a symlinked database by its resolved path with the journal
+# beside the real file (https://www.sqlite.org/changes.html, 3.10.0 and
+# 3.39.0), so each fork keeps its own profile and leveldb while its Cookies
+# and Login Data are symlinks into the shared store.
+set -u
+
+profile_dir="${SAND_CHROME_PROFILE_DIR:-}"
+session_dir="${SAND_CHROME_SESSION_DIR:-/home/box/chrome-profile/Default}"
+[ -n "${profile_dir}" ] || exit 0
+
+default_dir="${profile_dir}/Default"
+
+ensure_real_dir() {
+	local dir="${1}"
+	if [ -L "${dir}" ]; then
+		rm -f "${dir}"
+	fi
+	mkdir -p "${dir}"
+	[ -d "${dir}" ] && [ ! -L "${dir}" ]
+}
+
+ensure_box_owned_real_dir() {
+	local dir="${1}"
+	ensure_real_dir "${dir}" 2>/dev/null || return 0
+	if [ "$(id -u)" -eq 0 ]; then
+		chown box:box "${dir}" 2>/dev/null || true
+	fi
+}
+
+mkdir -p "${session_dir}" 2>/dev/null || true
+if [ "$(id -u)" -eq 0 ] && [ -d "${session_dir}" ] && [ ! -L "${session_dir}" ]; then
+	chown box:box "${session_dir}" 2>/dev/null || true
+fi
+ensure_box_owned_real_dir "${default_dir}"
+
+session_files=(Cookies "Login Data" "Login Data For Account")
+for name in "${session_files[@]}"; do
+	target="${session_dir}/${name}"
+	link="${default_dir}/${name}"
+	if [ -L "${link}" ] && [ "$(readlink "${link}" 2>/dev/null)" = "${target}" ]; then
+		continue
+	fi
+	rm -f "${link}" 2>/dev/null || true
+	ln -s "${target}" "${link}" 2>/dev/null || true
+done
+
+exit 0
