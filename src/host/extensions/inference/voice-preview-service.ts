@@ -14,6 +14,10 @@ var previewDeadline = createDeadlinePolicy({
   timeoutMs: SAND_VOICE_PREVIEW_DEADLINE_MS
 });
 function createSandVoicePreview(backend, auth2, createClient2 = createSandCursorBackendClient) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1") {
+    const speak = require("./local/tts.js").createLocalSpeechService({timeoutMs:SAND_VOICE_PREVIEW_DEADLINE_MS});
+    return request => speak({text:sandVoiceGreetingText(request.greetingId), voiceId:request.voiceId});
+  }
   let client;
   const getClient = () => {
     client ??= createClient2(AiService, {
@@ -40,4 +44,3 @@ function createSandVoicePreview(backend, auth2, createClient2 = createSandCursor
     };
   };
 }
-

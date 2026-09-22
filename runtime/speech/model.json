@@ -1,0 +1,5 @@
+{
+  "repository": "Systran/faster-whisper-base",
+  "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+  "files": ["config.json", "model.bin", "tokenizer.json", "vocabulary.txt", "README.md"]
+}

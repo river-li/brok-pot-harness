@@ -17,6 +17,10 @@ function stripMimeParameters(mimeType) {
   return (mimeType.split(";")[0] ?? mimeType).trim();
 }
 function createSandTranscribeAudio(backend, auth2, options2, createClient2 = createSandCursorBackendClient) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1") {
+    const transcribe = require("./local/transcription.js").createLocalTranscribeService();
+    return request => transcribe({...request, language:request.language ? toWhisperLanguageHint(request.language) : void 0});
+  }
   const onRequestId = options2?.onRequestId;
   let client;
   const getClient = () => {
@@ -47,4 +51,3 @@ function createSandTranscribeAudio(backend, auth2, options2, createClient2 = cre
     };
   };
 }
-
