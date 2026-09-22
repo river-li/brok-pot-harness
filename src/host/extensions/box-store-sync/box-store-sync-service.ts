@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-sync-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs22 = require("node:fs");
+var import_node_path23 = require("node:path");
+init_dist2();
+init_errors();
+
+// @recovered-fragment 2/2
 var BOX_HOME_CATEGORY_NAME = "home";
 var BOX_HOME_DIR = "/home/box";
 var BOX_HOME_REL_PREFIX = "home/box";
@@ -361,3 +372,4 @@ function buildBoxStoreCategories(args) {
 function createBoxStoreSyncService(deps) {
   return new DefaultBoxStoreSyncService(deps);
 }
+

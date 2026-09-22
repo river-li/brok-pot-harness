@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/codebase-telemetry/codebase-snapshot-trigger.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_HANDLED_REASONS = 1e3;
 var CodebaseSnapshotTrigger = class {
   getSession;
@@ -48,3 +53,4 @@ function snapshotReasonKey(reason) {
       return JSON.stringify([reason.type, reason.requestId]);
   }
 }
+

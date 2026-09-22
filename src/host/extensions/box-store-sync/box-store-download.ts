@@ -1,3 +1,20 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-download.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_crypto8 = require("node:crypto");
+var import_node_fs11 = require("node:fs");
+var import_promises14 = require("node:fs/promises");
+var import_node_path12 = require("node:path");
+var import_node_stream3 = require("node:stream");
+var import_promises15 = require("node:stream/promises");
+
+// @recovered-fragment 2/3
+init_errors();
+init_system_errno();
+
+// @recovered-fragment 3/3
 var COPY_IN_LARGE_BLOB_CONCURRENCY = 4;
 var COPY_IN_WAVE_SIZE = 500;
 var BOX_STORE_RESTORE_TMP_SUFFIX = ".box-store-part-";
@@ -770,3 +787,4 @@ async function copyFileHashing(srcPath, destPath) {
     await handle.close();
   }
 }
+

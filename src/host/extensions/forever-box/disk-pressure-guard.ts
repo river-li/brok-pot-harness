@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/forever-box/disk-pressure-guard.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises54 = require("node:fs/promises");
 init_scheduling();
 init_errors();
@@ -129,3 +134,4 @@ function createDiskPressureGuard(options2) {
     }
   };
 }
+

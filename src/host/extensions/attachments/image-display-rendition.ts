@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/attachments/image-display-rendition.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs50 = require("node:fs");
+init_zod();
+init_errors();
+
+// @recovered-fragment 2/2
 var DISPLAY_RENDITION_MAX_EDGE = 4096;
 var JPEG_QSCALE = "2";
 var MAX_CACHED_RENDITIONS = 32;
@@ -235,3 +245,4 @@ var displayableImageRecipe = {
   }
 };
 var withDisplayableImageSource = createMediaRenditionCache(displayableImageRecipe);
+

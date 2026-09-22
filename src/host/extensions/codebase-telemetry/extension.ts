@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/codebase-telemetry/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path100 = require("node:path");
+init_scheduling();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var codebaseTelemetryExtension = defineHostExtension({
   id: "codebase-telemetry",
   dependencies: [HostExtensions.Auth, HostExtensions.Experiments, HostExtensions.PrivacyMode],
@@ -53,3 +63,4 @@ var codebaseTelemetryExtension = defineHostExtension({
     return service.api;
   }
 });
+

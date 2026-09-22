@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/sqlite-snapshot.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs15 = require("node:fs");
+var import_node_sqlite2 = require("node:sqlite");
+init_bounded();
+init_system_errno();
+
+// @recovered-fragment 2/2
 function sqliteVacuumInto(srcPath, destPath, busyTimeoutMs = DB_BUSY_TIMEOUT_MS) {
   const db = new import_node_sqlite2.DatabaseSync(srcPath, { readOnly: true });
   try {
@@ -142,3 +153,4 @@ function copyLockedSqliteDb(args) {
   args.onFailure?.(lastFailure);
   return false;
 }
+

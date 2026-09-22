@@ -1,3 +1,24 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-copy-in.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/5
+var import_node_fs23 = require("node:fs");
+var import_promises23 = require("node:fs/promises");
+var import_node_path24 = require("node:path");
+
+// @recovered-fragment 2/5
+init_scheduling();
+
+// @recovered-fragment 3/5
+init_esm2();
+init_bounded();
+
+// @recovered-fragment 4/5
+init_errors();
+init_system_errno();
+
+// @recovered-fragment 5/5
 function resolveCopyInConcurrency(env) {
   const raw = env.SAND_BOX_STORE_COPY_IN_CONCURRENCY?.trim();
   if (raw == null || raw === "") return void 0;
@@ -949,3 +970,4 @@ function empty(reasonCode, reason) {
     failures: []
   };
 }
+

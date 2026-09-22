@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/attachments/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var attachmentsExtension = defineHostExtension({
   id: "attachments",
   dependencies: [HostExtensions.Auth, HostExtensions.Telemetry],
@@ -11,3 +16,4 @@ var attachmentsExtension = defineHostExtension({
     )
   })
 });
+

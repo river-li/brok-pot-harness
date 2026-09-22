@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/content-search/search-index-writer.ts
+ * Bundle: sand-host/extensions/content-search/search-index-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs = require("node:fs");
 var import_node_path2 = require("node:path");
 var import_node_sqlite3 = require("node:sqlite");
@@ -267,3 +272,4 @@ var SandSearchIndexWriter = class {
     writeReconcileDone(this.db);
   }
 };
+

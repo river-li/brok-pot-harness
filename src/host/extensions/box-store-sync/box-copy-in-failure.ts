@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-copy-in-failure.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_os3 = require("node:os");
+init_esm2();
+
+// @recovered-fragment 2/2
 function isCopyInNativeCode(code) {
   if (typeof code !== "string") return false;
   if (Object.hasOwn(import_node_os3.constants.errno, code)) return true;
@@ -120,3 +129,4 @@ function copyInFailureClassOf(failure2) {
     }
   }
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/codebase-telemetry/codebase-telemetry-adapter.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 init_errors();
 var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
@@ -271,3 +276,4 @@ function toCodebase(authId, codebase) {
     environment: codebase.environment
   };
 }
+

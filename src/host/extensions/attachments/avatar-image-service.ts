@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/attachments/avatar-image-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createSandAvatarImageService(environment, auth2, createGenerator = () => createSandImageGenerator(environment, auth2)) {
   let generate;
   return async (description9) => {
@@ -10,3 +15,4 @@ function createSandAvatarImageService(environment, auth2, createGenerator = () =
     return { imageBase64: generated.imageData, mimeType: generated.mimeType };
   };
 }
+

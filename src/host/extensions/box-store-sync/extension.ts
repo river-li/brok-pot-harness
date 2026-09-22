@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 var boxStoreSyncExtension = defineHostExtension({
   id: "box-store-sync",
@@ -56,3 +61,4 @@ var boxStoreSyncExtension = defineHostExtension({
     return service.api;
   }
 });
+

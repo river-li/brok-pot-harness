@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/store-db-capture.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs17 = require("node:fs");
+var import_promises21 = require("node:fs/promises");
+var import_node_path18 = require("node:path");
+init_errors();
+init_system_errno();
+
+// @recovered-fragment 2/2
 function aggregateStoreDbSweepOutcome(summary) {
   if (summary.failures > 0) return "error";
   if (summary.oversize > 0) return "oversize";
@@ -431,3 +443,4 @@ function boxStoreDbCaptureTelemetry(summary) {
     }
   };
 }
+

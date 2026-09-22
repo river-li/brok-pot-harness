@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/wallpaper/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+
+// @recovered-fragment 2/2
 var wallpaperExtension = defineHostExtension({
   id: "wallpaper",
   dependencies: [HostExtensions.Settings],
@@ -20,3 +28,4 @@ var wallpaperExtension = defineHostExtension({
     return { isEnabled: true };
   }
 });
+

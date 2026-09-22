@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/forever-box/disk-pressure.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto49 = require("node:crypto");
+var import_node_fs62 = require("node:fs");
+var import_node_path110 = require("node:path");
+init_errors();
+init_unknown_record();
+
+// @recovered-fragment 2/2
 var SandDiskPressureLedgerError = class extends SandDomainError {
   name = "SandDiskPressureLedgerError";
 };
@@ -201,3 +213,4 @@ function startDiskPressureWatch(deps) {
     }
   };
 }
+

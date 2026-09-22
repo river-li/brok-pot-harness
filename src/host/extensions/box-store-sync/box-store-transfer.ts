@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-transfer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto11 = require("node:crypto");
+var import_node_fs14 = require("node:fs");
+var import_promises18 = require("node:fs/promises");
+var import_node_path15 = require("node:path");
+init_errors();
+init_system_errno();
+
+// @recovered-fragment 2/2
 var DISK_BOX_STORE_FS = { lstat: import_promises18.lstat, open: import_promises18.open, readdir: import_promises18.readdir, readlink: import_promises18.readlink, stat: import_promises18.stat };
 var SNAPSHOT_OUT_LARGE_CONCURRENCY = 2;
 var BOX_STORE_SNAPSHOT_TMP_SUFFIX = ".box-store-snap-";
@@ -603,3 +616,4 @@ function dedupeNestedRoots(roots) {
     (root) => !unique.some((other) => other !== root && root.startsWith(`${other}/`))
   );
 }
+

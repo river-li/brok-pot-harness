@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/working-state-export/working-state-export-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var exportAttempts = createCounter("sand.working_state_export.attempts", {
   labelNames: ["trigger", "outcome", "skip_reason", "listing_outcome"]
 });
@@ -120,3 +125,4 @@ function recordWorkingStateWarmMetrics(ctx, report) {
     warmPossibleReupload.increment(ctx, 1, { trigger: report.trigger });
   }
 }
+

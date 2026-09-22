@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/forever-box/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_errors();
+
+// @recovered-fragment 3/3
 var foreverBoxExtension = defineHostExtension({
   id: "forever-box",
   dependencies: [
@@ -135,3 +146,4 @@ function jitteredImageWatchIntervalMs({ intervalMs, ratio }) {
   const spread = intervalMs * ratio;
   return Math.max(1, Math.round(intervalMs - spread + Math.random() * spread * 2));
 }
+

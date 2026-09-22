@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/working-state-export/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_scheduling();
+
+// @recovered-fragment 2/2
 var WORKING_STATE_BLOB_KEY_PREFIX = "working-state/blobs/";
 var WORKING_STATE_WARM_GATE = "sand_working_state_warming";
 var WORKING_STATE_WARM_DELAY_MS = 1e4;
@@ -111,3 +120,4 @@ function startWorkingStateExport(context2) {
     scheduleWarm: (agentId) => warmer.schedule(agentId)
   };
 }
+

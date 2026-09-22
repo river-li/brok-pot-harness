@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/content-search/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path102 = require("node:path");
+init_scheduling();
+
+// @recovered-fragment 2/2
 var contentSearchExtension = defineHostExtension({
   id: "content-search",
   dependencies: [HostExtensions.Telemetry],
@@ -26,3 +35,4 @@ var contentSearchExtension = defineHostExtension({
     };
   }
 });
+

@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/store-db-snapshot-upload.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs16 = require("node:fs");
+var import_promises20 = require("node:fs/promises");
+var import_node_path17 = require("node:path");
+var import_node_url4 = require("node:url");
+var import_node_worker_threads = require("node:worker_threads");
+init_errors();
+init_system_errno();
+
+// @recovered-fragment 2/2
 var StoreDbSnapshotUpload = class {
   objectStoreProvider;
   now;
@@ -193,3 +207,4 @@ function runVacuumInWorker(args) {
     worker.postMessage({ srcPath, destPath, busyTimeoutMs });
   });
 }
+

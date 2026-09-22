@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/wallpaper/box-wallpaper-commands.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process15 = require("node:child_process");
 var import_node_fs98 = require("node:fs");
 var import_promises80 = require("node:fs/promises");
@@ -74,3 +79,4 @@ function asDisplayOwner(owner) {
 function describe2(error42) {
   return error42 instanceof Error ? error42.message : String(error42);
 }
+

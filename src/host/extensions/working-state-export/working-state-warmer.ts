@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/working-state-export/working-state-warmer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var WorkingStateWarmOperationTimeoutError = class extends Error {
   name = "WorkingStateWarmOperationTimeoutError";
@@ -144,3 +149,4 @@ var WorkingStateWarmer = class {
     }
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/attachments/media-rendition.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process10 = require("node:child_process");
 var import_node_crypto38 = require("node:crypto");
 var import_node_fs49 = require("node:fs");
@@ -151,3 +156,4 @@ function createMediaRenditionCache(recipe) {
     }
   };
 }
+

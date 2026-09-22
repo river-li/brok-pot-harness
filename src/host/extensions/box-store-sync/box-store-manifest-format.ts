@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-manifest-format.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var BOX_STORE_MANIFEST_REL_PATH = "manifest.json";
 var BOX_STORE_BLOBS_PREFIX = "blobs";
@@ -61,3 +66,4 @@ function boxStoreManifestEntriesEqual(left, right) {
 function isSymlinkManifestValue(entry) {
   return manifestSymlinkEntrySchema.safeParse(entry).success;
 }
+

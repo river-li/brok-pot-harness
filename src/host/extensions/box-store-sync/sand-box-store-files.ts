@@ -1,3 +1,20 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/sand-box-store-files.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto7 = require("node:crypto");
+var import_node_fs8 = require("node:fs");
+var import_node_http2 = __toESM(require("node:http"), 1);
+var import_node_https2 = __toESM(require("node:https"), 1);
+var import_promises10 = require("node:stream/promises");
+init_grok_bot_connect();
+init_sand_box_pb();
+init_esm2();
+init_zod();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 function sandBoxStoreTransportOptions(deps) {
   return {
     backend: deps.backend,
@@ -532,3 +549,4 @@ var SandBoxStoreServiceObjectStore = class {
     }
   }
 };
+

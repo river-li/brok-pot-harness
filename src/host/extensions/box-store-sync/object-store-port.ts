@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/object-store-port.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var BoxStoreCanonicalWriteConflictError = class extends SandDomainError {
   name = "BoxStoreCanonicalWriteConflictError";
@@ -15,3 +20,4 @@ var BoxStoreCanonicalWriteConflictError = class extends SandDomainError {
     this.baselineSource = args.baselineSource ?? null;
   }
 };
+

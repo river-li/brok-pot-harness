@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-manifest.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_fs10 = require("node:fs");
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_zod();
+init_errors();
+init_invariant();
+
+// @recovered-fragment 3/3
 var AGENT_STORE_DB_BASENAMES = ["store.db", "conversation-blobs.db"];
 var STORE_DB_MANIFEST_KEY_RE = /^home\/box\/sand-data\/agents\/([^/]+)\/store\.db$/;
 function countStoreDbManifestEntries(manifest) {
@@ -644,3 +658,4 @@ var BoxStoreManifestStore = class {
     await writeHydrationHandoffMarker(markerPath);
   }
 };
+

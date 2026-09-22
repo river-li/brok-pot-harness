@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/content-search/search-index-worker.ts
+ * Bundle: sand-host/extensions/content-search/search-index-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_worker_threads = require("node:worker_threads");
+
+// @recovered-fragment 2/2
 function errorMessage(error) {
   return error instanceof Error ? error.message : String(error);
 }

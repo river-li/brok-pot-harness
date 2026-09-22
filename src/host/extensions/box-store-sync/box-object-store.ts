@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-object-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs9 = require("node:fs");
+var import_promises11 = require("node:fs/promises");
+var import_node_path9 = require("node:path");
+var import_promises12 = require("node:stream/promises");
+init_system_errno();
+init_invariant();
+
+// @recovered-fragment 2/2
 var AgentStoreObjectStoreProvider = class {
   constructor(deps) {
     this.deps = deps;
@@ -222,3 +235,4 @@ async function walkFiles(dir, out) {
     }
   }
 }
+

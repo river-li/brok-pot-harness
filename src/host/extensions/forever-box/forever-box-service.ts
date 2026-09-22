@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/forever-box/forever-box-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_scheduling();
 init_computer_use_tool_pb();
@@ -355,3 +360,4 @@ async function captureScreenshot(executor, ctx) {
   if (result.result.case !== "success") return null;
   return result.result.value.screenshot ?? null;
 }
+

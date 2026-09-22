@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-pack.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto9 = require("node:crypto");
+var import_node_fs12 = require("node:fs");
+var import_promises16 = require("node:fs/promises");
+var import_node_zlib = require("node:zlib");
+init_zod();
+
+// @recovered-fragment 2/2
 var BOX_STORE_PACKS_PREFIX = "packs";
 var BOX_STORE_PACK_INDEX_KEY = "packs/index.json";
 var BOX_STORE_PACK_RETIRED_KEY = "packs/retired.json";
@@ -266,3 +278,4 @@ function isBoxStorePackBuildEnabled(env) {
   const raw = env.SAND_BOX_STORE_PACKS?.trim().toLowerCase();
   return !(raw === "0" || raw === "false" || raw === "no");
 }
+

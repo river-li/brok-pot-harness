@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/content-search/search-index-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs58 = require("node:fs");
 var import_node_path101 = require("node:path");
 var import_node_url13 = require("node:url");
@@ -444,3 +449,4 @@ function countIndexedMessages(db) {
     return 0;
   }
 }
+

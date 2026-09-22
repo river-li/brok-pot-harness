@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-sync.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs18 = require("node:fs");
+var import_node_path19 = require("node:path");
+init_errors();
+
+// @recovered-fragment 2/2
 var DEFAULT_MAX_OBJECT_BYTES = 32 * 1024 * 1024 * 1024;
 var DEFAULT_COPY_IN_CONCURRENCY = 128;
 var DEFAULT_SNAPSHOT_OUT_CONCURRENCY = 8;
@@ -598,3 +608,4 @@ function evaluateBoxStoreFlush(summary, opts) {
     reason: ""
   };
 }
+

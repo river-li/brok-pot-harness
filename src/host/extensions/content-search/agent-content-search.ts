@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/content-search/agent-content-search.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AGENT_CONTENT_SEARCH_MAX_MATCHES_PER_AGENT = 5;
 var AGENT_CONTENT_SEARCH_MAX_RESULTS = 50;
 var SNIPPET_LEAD = 30;
@@ -52,3 +57,4 @@ function findAgentContentMatches(entries, normalizedQuery, limit = AGENT_CONTENT
   }
   return matches;
 }
+

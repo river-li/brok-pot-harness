@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/forever-box/host-box.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var SandBoxCapabilityError2 = class extends SandDomainError {
   name = "SandBoxCapabilityError";
@@ -203,3 +208,4 @@ var HostBox = class {
     return status;
   }
 };
+

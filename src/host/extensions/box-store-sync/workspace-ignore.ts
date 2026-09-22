@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/workspace-ignore.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs21 = require("node:fs");
 var import_node_path22 = require("node:path");
 init_dist2();
@@ -163,3 +168,4 @@ function readCharClass(glob, start) {
 function escapeRegexChar(c) {
   return /[.*+?^${}()|[\]\\]/.test(c) ? `\\${c}` : c;
 }
+

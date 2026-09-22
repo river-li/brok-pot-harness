@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/codebase-telemetry/codebase-telemetry-host.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_cursor_token();
 var SAND_CODEBASE_TELEMETRY_FEATURE_GATE = "sand_codebase_telemetry";
 function createSandCodebaseTelemetryHost({
@@ -158,3 +163,4 @@ function readMainGate(experiments) {
     disableExposureLog: true
   });
 }
+

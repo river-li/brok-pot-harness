@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript-publish/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path149 = require("node:path");
+init_scheduling();
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var TRANSCRIPT_PUBLISH_GATE = "sand_transcript_double_write";
 var BLOB_KEY_PREFIX2 = "blobs/";
 var transcriptPublishExtension = defineHostExtension({
@@ -107,3 +118,4 @@ var transcriptPublishExtension = defineHostExtension({
     };
   }
 });
+

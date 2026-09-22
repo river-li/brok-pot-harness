@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/codebase-telemetry/csnaps-process.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_child_process13 = require("node:child_process");
+init_scheduling();
+init_errors();
+
+// @recovered-fragment 2/2
 function spawnCsnaps(options2) {
   return CsnapsProcess.spawn(options2);
 }
@@ -366,3 +376,4 @@ function csnapsStdinWriteError(cause) {
   const detail = cause instanceof Error ? `: ${cause.message}` : "";
   return new CsnapsProcessError(`csnaps stdin write failed${detail}`, { cause });
 }
+

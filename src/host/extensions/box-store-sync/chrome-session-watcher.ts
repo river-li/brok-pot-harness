@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/chrome-session-watcher.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs20 = require("node:fs");
 var import_node_path21 = require("node:path");
 init_errors();
@@ -92,3 +97,4 @@ var ChromeSessionWatcher = class {
     this.watcher = void 0;
   }
 };
+

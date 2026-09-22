@@ -1,3 +1,20 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/agent-store-sand-files.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_fs7 = require("node:fs");
+var import_promises8 = require("node:fs/promises");
+var import_node_http = __toESM(require("node:http"), 1);
+var import_node_https = __toESM(require("node:https"), 1);
+var import_node_path8 = require("node:path");
+var import_node_stream2 = require("node:stream");
+var import_promises9 = require("node:stream/promises");
+
+// @recovered-fragment 2/3
+init_cursor_inference();
+
+// @recovered-fragment 3/3
 function createAgentStoreClient(deps) {
   const transport = new BcsAgentStoreTransport({
     transport: createSandBackendTransport({
@@ -332,3 +349,4 @@ async function listAgentStoreObjects(client, sourceId, prefix) {
   const response = await client.listFiles({ agentId: sourceId, relPath: prefix });
   return response.files.map((file2) => file2.relPath);
 }
+

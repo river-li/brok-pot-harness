@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/store-db-bundle-capture.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto12 = require("node:crypto");
 var import_promises19 = require("node:fs/promises");
 var import_node_path16 = require("node:path");
@@ -305,3 +310,4 @@ var StoreDbBundleCapture = class {
     return this.isAgentDbDurablyCaptured(relPath, absPath, fileStat, manifest);
   }
 };
+

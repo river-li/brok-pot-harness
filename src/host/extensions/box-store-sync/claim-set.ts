@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/claim-set.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ClaimSet = class {
   claimed = /* @__PURE__ */ new Set();
   has(path31) {
@@ -22,3 +27,4 @@ async function settleAllThenThrowFirst(promises3) {
   );
   if (failure2 != null) throw failure2.reason;
 }
+

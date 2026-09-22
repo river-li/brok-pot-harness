@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/attachments/video-playback-rendition.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TRANSCODE_THREADS = 2;
 var MAX_CACHED_RENDITIONS2 = 8;
 var videoPlaybackRecipe = {
@@ -60,3 +65,4 @@ var videoPlaybackRecipe = {
   }
 };
 var withVideoPlaybackSource = createMediaRenditionCache(videoPlaybackRecipe);
+

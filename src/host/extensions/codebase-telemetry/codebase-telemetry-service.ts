@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/codebase-telemetry/codebase-telemetry-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+
+// @recovered-fragment 2/2
 function createCodebaseTelemetryService({
   auth: auth2,
   experiments,
@@ -114,3 +122,4 @@ function createSandCodebaseTelemetryLogger(log4) {
     debug: (message, error42) => write2("debug", message, error42)
   };
 }
+

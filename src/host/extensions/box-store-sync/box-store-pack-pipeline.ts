@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-store-sync/box-store-pack-pipeline.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto10 = require("node:crypto");
 var import_promises17 = require("node:fs/promises");
 var import_node_os4 = require("node:os");
@@ -353,3 +358,4 @@ var BoxStorePackPipeline = class {
     return restoredByPack.snapshot();
   }
 };
+

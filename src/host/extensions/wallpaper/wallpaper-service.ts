@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/wallpaper/wallpaper-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var UNRESOLVED_PLAN_RETRY_MS = 6e4;
 var WallpaperToneScheduler = class {
@@ -77,3 +82,4 @@ var WallpaperToneScheduler = class {
     });
   }
 };
+

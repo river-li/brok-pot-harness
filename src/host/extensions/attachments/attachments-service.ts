@@ -1,3 +1,18 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/attachments/attachments-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_crypto39 = require("node:crypto");
+var import_node_fs51 = require("node:fs");
+var import_node_path92 = require("node:path");
+var import_node_url12 = require("node:url");
+
+// @recovered-fragment 2/3
+init_errors();
+init_system_errno();
+
+// @recovered-fragment 3/3
 var reanchorHostPath = (filePath) => reanchorSandPath(filePath, { acceptBoxModelVisibleAlias: true });
 var SandAttachmentError = class extends SandDomainError {
   name = "SandAttachmentError";
@@ -457,3 +472,4 @@ function createAttachmentsService(deps) {
     generateAvatarImage: createSandAvatarImageService(deps.environment, deps.auth)
   };
 }
+
