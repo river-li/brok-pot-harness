@@ -86,13 +86,13 @@ function parseArgs(body, parse11) {
     });
   }
 }
-async function readBody(req) {
+async function readBody(req, maxBytes = MAX_BODY_BYTES) {
   const chunks = [];
   let totalBytes = 0;
   for await (const chunk of req) {
     const buffer = chunk instanceof Buffer ? chunk : Buffer.from(chunk);
     totalBytes += buffer.length;
-    if (totalBytes > MAX_BODY_BYTES) {
+    if (totalBytes > maxBytes) {
       throw new SandGatewayRequestError("Request body is too large.");
     }
     chunks.push(buffer);
@@ -418,8 +418,10 @@ function handleCookieOriginApprovalResponses(deps, body, res) {
 }
 async function startGatewayServer(deps) {
   const host = deps.host ?? "127.0.0.1";
+  let localVoice;
   const eventStreamEchoes = /* @__PURE__ */ new Set();
   const requestListener = (req, res) => {
+    if (localVoice?.handleRequest(req, res)) return;
     void handleRequest(deps, req, res, eventStreamEchoes).catch((error42) => {
       const message = errorMessage(error42);
       if (!res.headersSent) {
@@ -434,6 +436,9 @@ async function startGatewayServer(deps) {
     });
   };
   const server = deps.tls != null ? (0, import_node_https3.createServer)({ cert: deps.tls.cert, key: deps.tls.key }, requestListener) : (0, import_node_http3.createServer)(requestListener);
+  if (process.env.GROKBOT_LOCAL_MODE === "1" && deps.authToken) {
+    localVoice = require("./local/voice-server.js").attachLocalVoiceServer(server, deps.authToken);
+  }
   await new Promise((resolve29, reject2) => {
     server.once("error", reject2);
     server.listen(deps.port ?? 0, host, () => {
@@ -445,6 +450,7 @@ async function startGatewayServer(deps) {
   return {
     port: address.port,
     close: () => new Promise((resolve29, reject2) => {
+      localVoice?.close();
       server.closeAllConnections();
       server.close((error42) => error42 != null ? reject2(error42) : resolve29());
     })
@@ -530,6 +536,22 @@ async function handleRequest(deps, req, res, eventStreamEchoes) {
       return handleAvatarImage(deps, req, res, url2);
     }
     const method = url2.pathname.slice(GATEWAY_API_PREFIX.length + 1);
+    if (process.env.GROKBOT_LOCAL_MODE === "1" && (method === "getLocalMachineLabel" || method === "setLocalMachineLabel")) {
+      if (deps.authToken == null) return respondError(res, 401, "local machine settings require gateway authentication");
+      const body = await readBody(req, 4096);
+      let args;
+      try {
+        args = JSON.parse(body);
+        const validation = require("./local/machine-labels.js");
+        validation.validateMachineId(args?.machineId);
+        if (method === "setLocalMachineLabel") validation.validateMachineLabel(args?.label);
+      } catch {
+        return respondError(res, 400, "invalid local machine name or identity");
+      }
+      const labels = require("./local/machine-labels.js").createLocalMachineLabels(getSandRootDir());
+      const label = method === "setLocalMachineLabel" ? labels.set(args.machineId, args.label) : labels.get(args.machineId);
+      return respondJson(res, { machineId: args.machineId, label: label ?? null });
+    }
     if (deps.authToken == null && SECRET_VALUE_COMMANDS.has(method)) {
       return respondError(res, 401, `${method} requires gateway authentication`);
     }
@@ -546,4 +568,3 @@ async function handleRequest(deps, req, res, eventStreamEchoes) {
   }
   respondError(res, 404, `not found: ${req.method} ${url2.pathname}`);
 }
-

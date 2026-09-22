@@ -47,6 +47,7 @@ var sendPromptFields = {
   agentId: rpcString(),
   directAddressedAcceptance: rpcOptional(rpcLiteral(true)),
   clientNonce: rpcOptional(rpcString()),
+  mcpConfigJson: rpcOptional(rpcString()),
   attachmentPaths: rpcOptional(rpcArray(rpcString())),
   attachmentNames: rpcOptional(rpcArray(rpcString())),
   richText: rpcOptional(rpcString()),
@@ -894,4 +895,3 @@ var gatewayRpcEdge = declareRpcEdge("gateway", {
   capabilities: rpcType(),
   failureCodes: rpcType()
 });
-
