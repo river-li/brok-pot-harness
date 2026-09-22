@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/sand-eval-runner/run.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createRequestContext(request3) {
   return {
     resolve: () => ({
@@ -131,3 +136,4 @@ async function runSandEvalRequest(request3, dependencies) {
     };
   }
 }
+

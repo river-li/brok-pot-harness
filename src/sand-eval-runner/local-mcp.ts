@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/sand-eval-runner/local-mcp.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist();
+
+// @recovered-fragment 2/2
 async function createLocalSandMcp(options2) {
   const loader2 = new FileConfigMcpLoader(options2.configPath, new InMemoryTokenStorage());
   const manager = await loader2.load(createContext().withName("sandEvalMcp"));
@@ -29,3 +37,4 @@ async function createLocalSandMcp(options2) {
     }
   };
 }
+

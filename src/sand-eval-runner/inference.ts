@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/sand-eval-runner/inference.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createSandEvalInference(options2) {
   const backendOptions = {
     backend: options2.backend,
@@ -24,3 +29,4 @@ function createSandEvalInference(options2) {
     }
   };
 }
+

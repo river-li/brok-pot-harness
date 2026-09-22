@@ -3,3 +3,6 @@
 /packages/** whitespace=-blank-at-eof
 /dune/** whitespace=-blank-at-eof
 /reconstruction/** whitespace=-blank-at-eof
+# Imported upstream resources retain their original formatting and bytes.
+/vendor/** -whitespace
+/reconstruction/vendor/** -whitespace
