@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/meta-agent-notes.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 function formatMetaAgentNotesDirectoryInstruction(notesDirectory) {
   return `Write notes which may be useful for other agents working on the same problem to the ${notesDirectory}. If relevant note files already exist, read them and consider extending them.
@@ -41,3 +46,4 @@ function buildUserInfoAgentNotesProps(config2, mode, env) {
     agentConversationNotesFolder: env?.agentConversationNotesFolder
   };
 }
+

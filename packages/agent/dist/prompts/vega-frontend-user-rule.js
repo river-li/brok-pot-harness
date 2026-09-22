@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/vega-frontend-user-rule.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VEGA_FRONTEND_USER_RULE_INTERVENTION = `
 When doing frontend design tasks, avoid generic, overbuilt layouts.
 
@@ -21,3 +26,4 @@ When doing frontend design tasks, avoid generic, overbuilt layouts.
 
 Exception: If working within an existing website or design system, preserve the established patterns, structure, and visual language.
 `;
+

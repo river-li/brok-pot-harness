@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/path-sync-request.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto2 = require("node:crypto");
 var fs7 = __toESM(require("node:fs"), 1);
 var path8 = __toESM(require("node:path"), 1);
@@ -255,3 +260,4 @@ function waitForPathSyncRequestAck(args) {
     }
   });
 }
+

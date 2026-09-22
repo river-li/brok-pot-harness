@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/multitask-mode-user-reminder.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function usesAggressiveMultitaskInstructions(modelInfo) {
   return modelInfo?.isComposer2 === true || modelInfo?.isComposerMatterhorn === true && modelInfo?.isRawTrainingSlug !== true;
 }
@@ -49,3 +54,4 @@ function renderMultitaskModeExitUserReminder() {
 ${renderMultitaskModeExitUserReminderInner()}
 </system_reminder>`;
 }
+

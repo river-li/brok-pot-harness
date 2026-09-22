@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/cloud-meta-agent/self-document.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger58 = createLogger("@anysphere/agent");
 var NAMED_AGENT_SELF_DOCUMENT_TAG = "agent_self_document";
@@ -94,3 +99,4 @@ async function refreshNamedAgentSelfDocumentInMessages(ctx, messages2, getNamedA
   });
   return didRefresh ? refreshed : messages2;
 }
+

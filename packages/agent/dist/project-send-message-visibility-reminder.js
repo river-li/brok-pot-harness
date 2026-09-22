@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/project-send-message-visibility-reminder.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PROJECT_SEND_MESSAGE_REQUEST_BOUNDARY_PROVIDER_KEY = "projectSendMessageRequestBoundary";
 var PROJECT_SEND_MESSAGE_REMINDER_PROVIDER_KEY = "projectSendMessageReminder";
 var PROJECT_SEND_MESSAGE_CONTINUATION_MESSAGE = "<system_reminder>Your response was not visible to the user. Call SendMessage to send a user-visible update or final response.</system_reminder>";
@@ -34,3 +39,4 @@ function createProjectSendMessageVisibilityReminder() {
     }
   };
 }
+

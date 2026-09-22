@@ -1,3 +1,19 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/sync-engine.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto4 = require("node:crypto");
+var fs8 = __toESM(require("node:fs"), 1);
+var http = __toESM(require("node:http"), 1);
+var https = __toESM(require("node:https"), 1);
+var path9 = __toESM(require("node:path"), 1);
+var import_node_stream = require("node:stream");
+var import_promises5 = require("node:stream/promises");
+init_dist2();
+init_esm2();
+
+// @recovered-fragment 2/2
 var __awaiter17 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -6563,3 +6579,4 @@ function isBlobIdleAbortError(error42, signal) {
 function isBlobIdleTimeoutReason(reason) {
   return reason instanceof Error && reason.name === "TimeoutError" && reason.message.includes("blob transfer idle timeout");
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/summarize-action-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_agent_pb();
 var logger70 = createLogger("@anysphere/agent:summarize");
@@ -166,3 +171,4 @@ var SummarizeActionHandler = class {
     return await stateHandler.computeNewStructure(ctx);
   }
 };
+

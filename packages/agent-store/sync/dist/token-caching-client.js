@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/token-caching-client.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist2();
 var __awaiter8 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -467,3 +472,4 @@ function isAgentStoreUnauthorized(error42) {
   const code = "code" in error42 ? error42.code : void 0;
   return code === 7 || code === 16 || code === "PermissionDenied" || code === "Unauthenticated" || code === "PERMISSION_DENIED" || code === "UNAUTHENTICATED";
 }
+

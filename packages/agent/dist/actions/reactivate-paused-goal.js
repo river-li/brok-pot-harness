@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/reactivate-paused-goal.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_goal_tool_pb();
 async function reactivatePausedGoalForTurn(ctx, stateHandler, onStateUpdate) {
   const current = stateHandler.goalState;
@@ -11,3 +16,4 @@ async function reactivatePausedGoalForTurn(ctx, stateHandler, onStateUpdate) {
   stateHandler.setGoalState(resumed);
   await onStateUpdate(ctx, await stateHandler.computeNewStructure(ctx));
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/summary-listener.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto3 = require("node:crypto");
 function notifySummaryResult({ agentId, summary, listener, pathHashSalt }) {
   if (listener === void 0) {
@@ -140,3 +145,4 @@ function opForCode(code) {
       return "unknown";
   }
 }
+

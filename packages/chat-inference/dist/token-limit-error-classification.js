@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference/dist/token-limit-error-classification.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function includesAll(haystack, needles) {
   return needles.every((needle) => haystack.includes(needle));
 }
@@ -90,3 +95,4 @@ function classifyTokenLimitErrorFromMessage(errorMessage6) {
   }
   return void 0;
 }
+

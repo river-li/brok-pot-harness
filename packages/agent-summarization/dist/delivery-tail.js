@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/delivery-tail.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function viewOf(part) {
   return {
     toolName: part.toolName,
@@ -41,3 +46,4 @@ function selectUserDeliveryTail(messages2, options2) {
   }
   return selected;
 }
+

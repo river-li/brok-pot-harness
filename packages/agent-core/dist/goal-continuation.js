@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-core/dist/goal-continuation.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GOAL_STATUS_ACTIVE = 1;
 function goalWorkedMs(goalState) {
   var _a19;
@@ -39,3 +44,4 @@ function isGoalOwnerValid(goalState, agentSessionId) {
   }
   return goalState.agentSessionId.length > 0 && agentSessionId !== void 0 && agentSessionId.length > 0 && goalState.agentSessionId === agentSessionId;
 }
+

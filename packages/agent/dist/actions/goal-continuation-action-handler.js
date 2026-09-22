@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/goal-continuation-action-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto35 = require("node:crypto");
+init_dist2();
+init_agent_pb();
+init_goal_tool_pb();
+
+// @recovered-fragment 2/2
 var MAX_IDLE_CONTINUATIONS_WITHOUT_TOOL_CALLS = 3;
 var GOAL_NOTIFICATION_SOURCE_ATTRIBUTE = 'source="goal"';
 var GOAL_CONTINUATION_USER_MESSAGE_OPTIONS = {
@@ -173,3 +184,4 @@ var GoalContinuationActionHandler = class {
     };
   }
 };
+

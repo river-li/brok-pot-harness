@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/attached-media.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_privacy_mode_pb();
 var DEFAULT_INLINE_VIDEO_MAX_BYTES = 15 * 1024 * 1024;
 var DEFAULT_SIGNED_URL_VIDEO_MAX_BYTES = 15 * 1024 * 1024;
@@ -31,3 +36,4 @@ async function uploadAttachedMediaToSignedUrl(options2) {
     throw new Error(`Failed to upload attached media: ${response.status} ${response.statusText}`);
   }
 }
+

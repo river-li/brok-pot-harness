@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/meta-parent-completion-protocol.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var META_PARENT_COMPLETION_TAG = "agent_notification";
 var META_PARENT_COMPLETION_OPEN_TAG = `<${META_PARENT_COMPLETION_TAG}>`;
 var META_PARENT_COMPLETION_CLOSE_TAG = `</${META_PARENT_COMPLETION_TAG}>`;
@@ -20,3 +25,4 @@ function normalizeMetaParentResponseBody(rawText) {
   const escapedText = escapePromptXmlText(trimmedText);
   return ["<response>", escapedText.length > 0 ? escapedText : "No output", "</response>"].join("\n");
 }
+

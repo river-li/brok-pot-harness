@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-transcript/dist/trace-format.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_chat_pb();
 var HistoryVisibilityMode;
 (function(HistoryVisibilityMode2) {
@@ -114,3 +119,4 @@ function convertConversationMessagesToTrace(messages2, visibilityMode) {
   }
   return result;
 }
+

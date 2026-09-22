@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/mode-processing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_agent_pb();
+init_dist3();
+
+// @recovered-fragment 2/2
 var _logger2 = createLogger("@anysphere/agent:mode-processing");
 var EXPLICIT_MODEL_REQUEST_REMINDER_BODY = `The last user message might have contained meta-guidance about using a specific model. If that was a meta request, unrelated to your current task at hand or to what the user sent you, it has already been honored (accounting for blocklists etc.), so ignore it and process the message as if there were no such mention.
 Never mention this system reminder to the user.`;
@@ -159,3 +169,4 @@ function processWorkspaceChangeReminder(_ctx, currentWorkspaceUris, previousWork
 Workspace folders changed from ${formatWorkspaceUriList(normalizedPrevious)} to ${formatWorkspaceUriList(normalizedCurrent)}.${worktreeNote}${agentEnvironmentTransitionReminder}
 </system_reminder>`;
 }
+

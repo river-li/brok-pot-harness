@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/exclusive-mutation-lock.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var path6 = __toESM(require("node:path"), 1);
+
+// @recovered-fragment 2/2
 var __awaiter5 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -36,3 +44,4 @@ function readAgentStoreExclusiveMutationClaimOwner(args) {
     });
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/paths.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process = require("node:child_process");
 var fs2 = __toESM(require("node:fs"), 1);
 var os = __toESM(require("node:os"), 1);
@@ -228,3 +233,4 @@ function readWindowsUserIdentityUncached(run) {
 function isNodeError2(err) {
   return err instanceof Error && typeof err.code === "string";
 }
+

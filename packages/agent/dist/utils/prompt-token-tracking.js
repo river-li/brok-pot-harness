@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/prompt-token-tracking.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function trackPromptTokenUsage(params) {
   const { ctx, mcpTools, requestContext, messages: messages2, selectedContext, userInfoDisplayOptions, readToolName, invocationId, agentTokenLimit, modelInfo, featureFlags, stateHandler, mcpMetaToolServerCount } = params;
   const { mcpToolTokens, mcpToolCount } = countMcpToolDefinitionTokens(mcpTools);
@@ -255,3 +260,4 @@ function estimateRedactedStringTokenCount(str3) {
   }
   return estimateStringTokenCount(str3.unwrap(PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
 }
+

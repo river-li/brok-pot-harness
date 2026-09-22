@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/mcp-meta-tool.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function buildMcpMetaToolServerEntries(mcpDescriptors, useDynamicToolNamespaces) {
   return mcpDescriptors.map((d) => {
     const attrs = [`name="${d.serverIdentifier}"`];
@@ -220,3 +225,4 @@ function withToolSetMcpSnapshot(mcpMetaToolOptions, toolSetHandle) {
   const toolNames = getMcpMetaToolSnapshotToolNames(toolSetHandle);
   return withMcpMetaToolSnapshotToolNames(mcpMetaToolOptions, toolNames, toolSetHandle.getDynamicToolRegistry()?.getMcpDescriptor(toolNames));
 }
+

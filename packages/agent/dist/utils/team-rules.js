@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/team-rules.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_cursor_rules_pb();
 function teamRuleToCursorRule(rule) {
   const globs = rule.globs ?? [];
@@ -17,3 +22,4 @@ function teamRuleToCursorRule(rule) {
     isRequired: rule.isRequired
   });
 }
+

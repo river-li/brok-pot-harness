@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/transcript-location.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path38 = require("node:path");
+
+// @recovered-fragment 2/2
 function formatTranscriptLocation(agentTranscriptsFolder, options2) {
   const conversationId = options2 === null || options2 === void 0 ? void 0 : options2.conversationId;
   const useXml = (options2 === null || options2 === void 0 ? void 0 : options2.useXml) === true;
@@ -44,3 +52,4 @@ function stripTranscriptsDirPrefix(relativePath) {
   const prefix = `${TRANSCRIPTS_SUBDIR2}/`;
   return relativePath.startsWith(prefix) ? relativePath.slice(prefix.length) : relativePath;
 }
+

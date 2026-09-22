@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/git-commit-processing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GIT_COMMIT_APPROXIMATE_MAX_TOKENS_PER_COMMIT = 8e3;
 var GIT_COMMIT_CHARS_PER_TOKEN = 4;
 var MAX_GIT_COMMIT_CHAR_LENGTH = GIT_COMMIT_APPROXIMATE_MAX_TOKENS_PER_COMMIT * GIT_COMMIT_CHARS_PER_TOKEN;
@@ -48,3 +53,4 @@ ${truncatedDiff}`);
   }
   return parts.join("\n");
 }
+

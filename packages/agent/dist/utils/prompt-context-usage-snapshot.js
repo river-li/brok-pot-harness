@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/prompt-context-usage-snapshot.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_privacy_mode_pb();
 var serializedSnapshotCache = /* @__PURE__ */ new WeakMap();
@@ -38,3 +43,4 @@ async function persistPromptContextUsageSnapshot(options2) {
   });
   return blobId;
 }
+

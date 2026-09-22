@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/reminders/apply-reminders.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function applyRemindersToToolResults(responseMessages, reminders, currentTodos, conversationMessages) {
   if (reminders.length === 0) {
     return;
@@ -31,3 +36,4 @@ async function applyRemindersToToolResults(responseMessages, reminders, currentT
     }
   }
 }
+

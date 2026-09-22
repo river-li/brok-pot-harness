@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/latest-image.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_IMAGE_MIME_TYPE = "image/png";
 var DATA_OR_REMOTE_URL_PREFIX = /^(data:|https?:|blob:)/i;
 function resolveImageMimeType(mimeType) {
@@ -40,3 +45,4 @@ function findLatestImagePart(messages2) {
   }
   return null;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/connect-errors.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_utils_pb();
 init_esm2();
 function getAgentStoreConnectCode(error42) {
@@ -148,3 +153,4 @@ function normalizeConnectCode(code) {
   }
   return void 0;
 }
+

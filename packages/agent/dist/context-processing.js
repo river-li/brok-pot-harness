@@ -1,3 +1,18 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/context-processing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto29 = require("node:crypto");
+var import_node_path80 = __toESM(require("node:path"), 1);
+var import_node_url9 = require("node:url");
+init_dist4();
+init_agent_pb();
+init_selected_context_pb();
+init_write_exec_pb();
+init_dist3();
+
+// @recovered-fragment 2/2
 var logger54 = createLogger("@anysphere/agent/context-processing");
 function getSafeErrorType(error42) {
   return error42 instanceof Error ? error42.name || "Error" : typeof error42;
@@ -1753,3 +1768,4 @@ ${browsersText}
     documentFilePaths
   };
 }
+

@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/summarization-tool-context.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+
+// @recovered-fragment 2/2
 var logger63 = createLogger("@anysphere/agent:summarization-tool-context");
 function resolveWriteBarrierTimeoutMs(config2) {
   return config2.resolveWriteBarrierTimeoutMs?.() ?? config2.featureFlags?.writeBarrierTimeoutMs;
@@ -82,3 +90,4 @@ async function buildSummarizationToolContext(args) {
     toolSetHandle
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/self-summary/token-estimate.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function extractTextContent(message) {
   const content = message.content;
   if (isRedactedString(content)) {
@@ -23,3 +28,4 @@ function estimateTokenCount2(messages2, options2) {
     textContentLengthFn: (message) => extractTextContent(message).length
   });
 }
+

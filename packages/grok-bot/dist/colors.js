@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot/dist/colors.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GROK_BOT_COLORS = [
   { id: "black", label: "Black", value: "#000" },
   { id: "brown", label: "Brown", value: "#936439" },
@@ -12,3 +17,4 @@ var GROK_BOT_COLORS = [
   { id: "gray", label: "Gray", value: "#777777" }
 ];
 var GROK_BOT_HUES = GROK_BOT_COLORS.filter((c) => c.id !== "black");
+

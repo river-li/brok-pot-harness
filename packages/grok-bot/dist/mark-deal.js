@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot/dist/mark-deal.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GROK_BOT_MARK_SHAPES = [
   "blob",
   "pebble",
@@ -53,8 +58,8 @@ function grokBotMarkRandom(seed) {
   };
 }
 function grokBotMarkHueIndex(seed) {
-  const random2 = grokBotMarkRandom((seed ^ Math.imul(HUE_STREAM_SEED, 2654435769)) >>> 0);
-  return Math.floor(random2() * GROK_BOT_MARK_DEALT_HUES.length);
+  const random = grokBotMarkRandom((seed ^ Math.imul(HUE_STREAM_SEED, 2654435769)) >>> 0);
+  return Math.floor(random() * GROK_BOT_MARK_DEALT_HUES.length);
 }
 function grokBotMarkHueIndexForKey(key) {
   return grokBotMarkHueIndex(grokBotMarkSeed(key));
@@ -83,3 +88,4 @@ function resolveGrokBotMark(input) {
     color: knownColor(input.avatarColor) ?? grokBotMarkColorForKey(input.agentId)
   };
 }
+

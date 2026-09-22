@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/safe-paths.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var fs = __toESM(require("node:fs"), 1);
 var path = __toESM(require("node:path"), 1);
 var UnsafeAgentStorePathError = class extends Error {
@@ -851,3 +856,4 @@ function assertAncestorChainNoSymlinks(absPath, fsModule) {
     }
   }
 }
+

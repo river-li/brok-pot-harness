@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/serde.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_todo_tool_pb();
 function jsonReplacer2(_key, value) {
@@ -142,3 +147,4 @@ var conversationPlanSerde = new ProtoSerde(ConversationPlan);
 var shellCommandSerde2 = new ProtoSerde(ShellCommand);
 var shellOutputSerde2 = new ProtoSerde(ShellOutput);
 var fileStateSerde = new ProtoSerde(FileState);
+

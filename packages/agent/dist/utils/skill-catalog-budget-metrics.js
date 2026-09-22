@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/skill-catalog-budget-metrics.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var skillCatalogBudgetApplied = createCounter("skill_catalog_budget.applied", {
   description: "Model invocations that ran the skill-catalog budget pipeline, tagged by which strategy was selected",
   labelNames: ["strategy"]
@@ -21,3 +26,4 @@ function emitSkillCatalogBudgetMetrics(ctx, input) {
   skillCatalogBudgetUncappedTokens.histogram(ctx, input.uncappedTokens, tags);
   skillCatalogBudgetOmittedCount.histogram(ctx, input.omittedCount, tags);
 }
+

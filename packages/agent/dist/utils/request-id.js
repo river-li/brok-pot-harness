@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/request-id.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+
+// @recovered-fragment 2/2
 var requestIdKey2 = createKey(/* @__PURE__ */ Symbol("requestId"), void 0);
 var parentRequestIdKey2 = createKey(/* @__PURE__ */ Symbol("parentRequestId"), void 0);
 var rootParentRequestIdKey2 = createKey(/* @__PURE__ */ Symbol("rootParentRequestId"), void 0);
@@ -154,3 +162,4 @@ function getMaxModeFromContext(ctx) {
 function getAutoRoutingReasonFromContext(ctx) {
   return ctx.get(autoRoutingReasonKey) ?? "unknown";
 }
+

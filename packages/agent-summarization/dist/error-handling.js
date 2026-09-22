@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/error-handling.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var NoSummaryResponseError = class _NoSummaryResponseError extends Error {
   constructor() {
     super("No assistant response received");
@@ -243,3 +248,4 @@ function getRetryDirective(error42, options2) {
     reduceInputs: false
   };
 }
+

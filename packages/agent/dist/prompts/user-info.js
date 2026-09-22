@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/user-info.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path83 = require("node:path");
+init_dist2();
+init_agent_pb();
+init_cursor_rules_pb();
+init_request_context_exec_pb();
+init_background_composer_pb();
+init_dist3();
+
+// @recovered-fragment 2/2
 var SKILL_GLOB_PATTERNS = [
   "**/.cursor/skills/**",
   "**/.cursor/skills-cursor/**",
@@ -854,3 +868,4 @@ function categorizeCursorRules(cursorRules, workspacePaths = [], agentType) {
   }
   return { globalRules, agentRequestableRules, userRules, skills };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/slack-sender-line.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function formatSlackSenderLine(senderName, senderId, senderType) {
   const name17 = senderName?.trim();
   const id = senderId?.trim();
@@ -12,3 +17,4 @@ function formatSlackSenderLine(senderName, senderId, senderType) {
   const present = name17 !== void 0 && name17.length > 0 ? name17 : id;
   return `The current message is being sent by ${present}${typeSuffix}`;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-core/dist/interaction-queries.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_connect_scm_tool_pb();
 init_create_plan_tool_pb();
@@ -345,3 +350,4 @@ var Responses = {
     });
   }
 };
+

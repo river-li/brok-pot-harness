@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/bugbot/automations.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path42 = __toESM(require("node:path"), 1);
 init_dist2();
 init_request_context_exec_pb();
@@ -40,3 +45,4 @@ function materializeAutomationMemoryInstruction(automationInstructions, stores) 
   const replacement = memoryDirectory !== void 0 ? buildAutomationMemoryInstruction(memoryDirectory) : AUTOMATION_MEMORY_UNAVAILABLE_INSTRUCTION;
   return automationInstructions.split(AUTOMATION_MEMORY_INSTRUCTION_MARKER).join(replacement);
 }
+

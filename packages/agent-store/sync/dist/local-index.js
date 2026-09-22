@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/local-index.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var fs6 = __toESM(require("node:fs"), 1);
 var path7 = __toESM(require("node:path"), 1);
 var CURRENT_SCHEMA_VERSION = 4;
@@ -424,3 +429,4 @@ function restrictIndexFileModes(indexPath) {
     }
   }
 }
+

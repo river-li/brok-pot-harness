@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/backoff-scheduler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_MULTIPLIER = 2;
 var DEFAULT_JITTER = 0;
 var BackoffScheduler = class {
@@ -82,3 +87,4 @@ var BackoffScheduler = class {
     return delayMs * factor;
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference/dist/middleware/continuation-injector-middleware.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger2 = createLogger("@anysphere/chat-inference/continuation-injector-middleware");
 var CONTINUATION_MESSAGE = "Your previous response was interrupted. Continue from where you left off.";
@@ -34,3 +39,4 @@ var createContinuationInjectorMiddleware = () => {
   return (executor) => new ContinuationInjectorMiddleware(executor);
 };
 var continuationInjectorMiddleware = createContinuationInjectorMiddleware();
+

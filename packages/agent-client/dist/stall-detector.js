@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-client/dist/stall-detector.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger98 = createLogger("@anysphere/agent-client:stall-detector");
 var streamStallCount = createCounter("agent_client.stream.stall.count", {
@@ -14,3 +19,4 @@ var streamDidStall = createCounter("agent_client.stream.did_stall", {
 var streamTotal = createCounter("agent_client.stream.total", {
   description: "Total number of streams monitored"
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/sync-client-config.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DAY_MS = 24 * 60 * 60 * 1e3;
 var AGENT_STORE_SYNC_CLIENT_CONFIG_DEFAULTS = Object.freeze({
   syncDebounceMs: 5e3,
@@ -101,3 +106,4 @@ var BOUNDS = {
   // integer is kept, including `0`.
   tombstonePruneSlackMs: { min: 0, max: Number.MAX_SAFE_INTEGER }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference/dist/base.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BasePromptBuilder = class {
   constructor(initialMessages) {
     this.messages = [];
@@ -63,3 +68,4 @@ var BaseMiddleware = class {
     return this.innerExecutor.stream(ctx, invocationId, tools, options2);
   }
 };
+

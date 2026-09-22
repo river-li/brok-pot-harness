@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/common.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getFilenameWithoutExtension(filePath) {
   const lastSeparator = Math.max(filePath.lastIndexOf("/"), filePath.lastIndexOf("\\"));
   const filename = lastSeparator >= 0 ? filePath.substring(lastSeparator + 1) : filePath;
@@ -38,3 +43,4 @@ function isHookStepConfigured(configuredSteps, step) {
   }
   return configuredSteps.includes(step);
 }
+

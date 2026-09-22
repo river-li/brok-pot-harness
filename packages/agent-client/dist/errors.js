@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-client/dist/errors.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_utils_pb();
 init_esm2();
 var AgentError = class extends Error {
@@ -249,3 +254,4 @@ function matchesTransportPattern(error42) {
   }
   return false;
 }
+

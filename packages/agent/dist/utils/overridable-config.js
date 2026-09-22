@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/overridable-config.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var configOverridesKey = createKey(/* @__PURE__ */ Symbol("configOverrides"), {});
 function overridableConfig(key, defaultValue) {
@@ -27,3 +32,4 @@ var ALLOW_TASK_TOOL_IN_RL_HARNESS = overridableConfig("allowTaskToolInRlHarness"
 var ALLOW_NESTED_TASK_TOOL_IN_RL_HARNESS = overridableConfig("allowNestedTaskToolInRlHarness", false);
 var SUMMARIZATION_FORCE_DETERMINISTIC_FALLBACK = overridableConfig("summarizationForceDeterministicFallback", void 0);
 var CANVAS_POST_EDIT_DIAGNOSTICS_TIMEOUT_MS = overridableConfig("canvas_post_edit_diagnostics_timeout_ms", 1e4);
+

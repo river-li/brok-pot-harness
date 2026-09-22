@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/prompt-token-breakdown.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 var PROMPT_TOKEN_BREAKDOWN_CATEGORIES = [
   { id: "system_prompt", label: "System prompt" },
@@ -598,3 +603,4 @@ function emitCategoryEstimatedTokensMetric(ctx, sources) {
     });
   }
 }
+

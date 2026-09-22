@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tool-stream-executor.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_dist3();
+
+// @recovered-fragment 2/2
 var completedToolResultsByDeferredError = /* @__PURE__ */ new WeakMap();
 function getToolResultsCompletedBeforeDeferral(error42) {
   return completedToolResultsByDeferredError.get(error42) ?? [];
@@ -1317,3 +1326,4 @@ var RedactedPromptToolExecutor = class {
     return this.innerToolExecutor.stream(ctx, invocationId, tools, options2);
   }
 };
+

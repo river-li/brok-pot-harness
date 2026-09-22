@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/reminders/context-builder.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function buildReminderContext(messages2, todos, responseMessages = []) {
   let toolCallCount2 = 0;
   const toolTypeCounters = /* @__PURE__ */ new Map();
@@ -37,3 +42,4 @@ function buildReminderContext(messages2, todos, responseMessages = []) {
     responseMessages
   };
 }
+

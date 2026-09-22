@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/recent-user-message-ids.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var RECENT_USER_MESSAGE_ID_INDEX_LIMIT = 64;
 function appendRecentUserMessageId(index, messageId, limit = RECENT_USER_MESSAGE_ID_INDEX_LIMIT) {
   const id = messageId?.trim() ?? "";
@@ -46,3 +51,4 @@ function resolveUserTurnMessageIdsFromIndex(index, args) {
   }
   return void 0;
 }
+

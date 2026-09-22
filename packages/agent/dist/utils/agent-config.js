@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/agent-config.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_shell_exec_pb();
 init_background_composer_pb();
 var NoopWebScraperService = class {
@@ -78,3 +83,4 @@ function shouldEnableComputerUse(props) {
   }
   return isComputerUseEligibleModel(props.modelId);
 }
+

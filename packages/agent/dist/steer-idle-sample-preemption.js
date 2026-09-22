@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/steer-idle-sample-preemption.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var modelStreamChunkObserverKey = createKey(/* @__PURE__ */ Symbol("modelStreamChunkObserver"), void 0);
 function withModelStreamChunkObserver(ctx, observer) {
@@ -101,3 +106,4 @@ function createIdleModelSamplePreempter(signal, cancel) {
   }
   return new IdleModelSamplePreempter({ signal, policy, cancel });
 }
+

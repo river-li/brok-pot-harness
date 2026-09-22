@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/ui-browser-verification.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function shouldInjectUiBrowserVerificationPrompt(modelInfo) {
   return modelInfo?.isGrok46ProductPrompt === true && modelInfo?.promptVersion === "cursor-0226" && modelInfo?.isRawTrainingSlug !== true && modelInfo?.suppressUiBrowserVerificationPrompt !== true;
 }
@@ -13,3 +18,4 @@ var UI_BROWSER_VERIFICATION_USER_RULE = `When implementing or fixing anything in
 - If verification finds a problem, fix it and re-verify. Do not finish with unverified UI work.
 
 If no browser tools are available, verify through the closest available substitute (tests, curl against the dev server, rendering scripts) and say what you could not verify.`;
+

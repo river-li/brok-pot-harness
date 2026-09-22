@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/secure-open.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var fs4 = __toESM(require("node:fs"), 1);
 var path4 = __toESM(require("node:path"), 1);
 var __awaiter3 = function(thisArg, _arguments, P2, generator) {
@@ -285,3 +290,4 @@ function hasNofollowConstant() {
 function isNodeError3(error42) {
   return error42 instanceof Error && typeof error42.code === "string";
 }
+

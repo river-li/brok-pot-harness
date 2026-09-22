@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference/dist/mock-prompt-executor.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __awaiter26 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -232,3 +237,4 @@ var MockPromptExecutor = class extends BasePromptExecutor {
 function createMockPromptExecutor(options2) {
   return new MockPromptExecutor(() => options2(), void 0);
 }
+

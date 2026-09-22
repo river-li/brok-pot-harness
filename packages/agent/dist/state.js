@@ -1,3 +1,20 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/state.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_url10 = require("node:url");
+
+// @recovered-fragment 2/3
+init_dist2();
+init_dist4();
+init_agent_pb();
+init_selected_context_pb();
+init_todo_tool_pb();
+init_privacy_mode_pb();
+init_dist3();
+
+// @recovered-fragment 3/3
 var __addDisposableResource19 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -2700,3 +2717,4 @@ Do NOT do any other searches over file system contents, search the web, etc. and
 ${prompt}
 </system_reminder>`;
 }
+

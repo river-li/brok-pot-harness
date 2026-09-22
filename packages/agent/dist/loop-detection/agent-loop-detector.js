@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/loop-detection/agent-loop-detector.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto17 = require("node:crypto");
+init_dist4();
+init_utils_pb();
+init_esm2();
+
+// @recovered-fragment 2/2
 var logger9 = createLogger("@anysphere/agent:loop-detection");
 var loopDetectionCounter = createCounter("agent.assistant_message_looping", {
   description: "Count of agent message loops detected",
@@ -754,3 +765,4 @@ function checkAndHandleLoopOnToolResultAppend(params) {
   }
   return { loopDetected: false };
 }
+

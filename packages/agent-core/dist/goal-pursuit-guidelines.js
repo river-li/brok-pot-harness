@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-core/dist/goal-pursuit-guidelines.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function buildGoalPursuitGuidelines(toolNames = {}) {
   const { todoWriteToolName, updateGoalToolName } = toolNames;
   const progressVisibility = todoWriteToolName === void 0 ? "If the next work is meaningfully multi-step, keep a concise plan tied to the real objective and update it as steps complete or the next best action changes. Skip planning overhead for trivial one-step progress, and do not treat a plan update as a substitute for doing the work." : `If ${todoWriteToolName} is available and the next work is meaningfully multi-step, use it to show a concise plan tied to the real objective. Keep the plan current as steps complete or the next best action changes. Skip planning overhead for trivial one-step progress, and do not treat a plan update as a substitute for doing the work.`;
@@ -33,3 +38,4 @@ Before deciding that the goal is achieved, treat completion as unproven and veri
 
 Do not rely on intent, partial progress, memory of earlier work, or a plausible final answer as proof of completion. Marking the goal complete is a claim that the full objective has been finished and can withstand requirement-by-requirement scrutiny. Only mark the goal achieved when current evidence proves every requirement has been satisfied and no required work remains. If the evidence is incomplete, weak, indirect, merely consistent with completion, or leaves any requirement missing, incomplete, or unverified, keep working instead of marking the goal complete. ${updateGoalGuidance}`;
 }
+

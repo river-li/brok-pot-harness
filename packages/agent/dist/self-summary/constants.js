@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/self-summary/constants.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_SELF_SUMMARY_RETRIES = 3;
 var SELF_SUMMARY_CONTEXT_WINDOW_FRACTION = 0.9;
 var SELF_SUMMARY_USEFUL_THINGS_BY_VARIANT = {
@@ -109,3 +114,4 @@ Here's an example of how your output should be structured:
 Please provide your summary based on the conversation so far, following this structure and ensuring precision and thoroughness in your response.
 
 REMINDER: Do NOT call any tools. Respond with plain text only \u2014 an <analysis> block followed by a <summary> block. Tool calls will be rejected and you will fail the task.`;
+

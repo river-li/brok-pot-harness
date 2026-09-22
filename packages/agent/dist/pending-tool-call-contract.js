@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/pending-tool-call-contract.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isToolCallContentPart(value) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     return false;
@@ -196,3 +201,4 @@ function createPendingToolContractMismatchResult(descriptor2, reason) {
     ]
   };
 }
+

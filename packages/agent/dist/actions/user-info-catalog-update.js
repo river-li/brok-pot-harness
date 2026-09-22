@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/user-info-catalog-update.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var USER_INFO_CATALOG_UPDATE_TAG = "user_info_catalog_update";
 var SECTIONS_ATTRIBUTE_PATTERN = new RegExp(`<${USER_INFO_CATALOG_UPDATE_TAG} sections="([a-z_,]*)"`);
 function parseUpdateSections(text2) {
@@ -69,3 +74,4 @@ function renderUserInfoCatalogUpdateReminder(kinds, inputs) {
     "</system_reminder>"
   ].join("\n");
 }
+

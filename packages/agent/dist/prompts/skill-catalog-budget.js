@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/skill-catalog-budget.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var INITIAL_SKILL_CATALOG_CONTEXT_FRACTION = 0.02;
 var FALLBACK_AGENT_TOKEN_LIMIT = 2e5;
 var TRUNCATED_DESCRIPTION_SUFFIX2 = "...";
@@ -189,3 +194,4 @@ function getSkillDirectoryHint(fullPath) {
   const lastSlashIndex = normalizedPath.lastIndexOf("/");
   return lastSlashIndex === -1 ? normalizedPath : normalizedPath.slice(0, lastSlashIndex);
 }
+

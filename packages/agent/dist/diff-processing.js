@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/diff-processing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DIFF_TRUNCATION_NOTICE = "\n\n[diff truncated due to size]";
 var DIFF_NO_BUDGET_MESSAGE = "[diff omitted due to size constraints]";
 function formatParsedDiffWithTruncation(parsedDiff, maxCharLength, options2 = {}) {
@@ -113,3 +118,4 @@ function truncateWithNotice(diffContent, maxCharLength, truncationNotice2 = DIFF
   }
   return diffContent.slice(0, visibleLength) + truncationNotice2;
 }
+

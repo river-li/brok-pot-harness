@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/smart-mode-classifier-context.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_selected_context_pb();
 init_smart_mode_classifier_exec_pb();
@@ -481,3 +486,4 @@ async function tryExtractSandAutoReviewClassifierConversationContext(ctx, stateH
     return [];
   }
 }
+

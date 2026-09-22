@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/configs/computer-use-harness.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_computer_use_tool_pb();
 init_zod();
 var pixel = external_exports.number().int().min(0);
@@ -27,3 +32,4 @@ var directions = {
   left: ScrollDirection.LEFT,
   right: ScrollDirection.RIGHT
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/subagent-dispatch-step.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 function subagentDispatchStepFromToolCall(toolCall, stepIndex) {
   const toolCallId = toolCall.toolCallId;
@@ -33,3 +38,4 @@ function subagentDispatchStepFromToolCall(toolCall, stepIndex) {
       return void 0;
   }
 }
+

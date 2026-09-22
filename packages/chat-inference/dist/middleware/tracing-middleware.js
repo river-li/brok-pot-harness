@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference/dist/middleware/tracing-middleware.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __asyncValues7 = function(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var m2 = o[Symbol.asyncIterator], i;
@@ -250,3 +255,4 @@ var createTracingMiddleware = () => {
   return (executor) => new TracingMiddleware(executor);
 };
 var tracingMiddleware = createTracingMiddleware();
+

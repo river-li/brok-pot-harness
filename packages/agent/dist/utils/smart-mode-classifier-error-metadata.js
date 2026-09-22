@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/smart-mode-classifier-error-metadata.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SMART_MODE_CLASSIFIER_MANUAL_REVIEW_ERROR_REASON = "An error occured while classifying this action. Please review manually.";
 var METADATA_MARKER = "\n\nSmartModeClassifierFailureMetadata:";
 function parseSmartModeClassifierFailureMetadata(error42) {
@@ -23,3 +28,4 @@ function parseSmartModeClassifierFailureMetadata(error42) {
     return void 0;
   }
 }
+

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/smart-mode-classifier-measurement.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_dist3();
+
+// @recovered-fragment 2/2
 var logger52 = createLogger("@anysphere/agent:smart-mode-classifier");
 var SMART_MODE_CLASSIFIER_TIMEOUT_MS = 1e4;
 var SMART_MODE_CLASSIFIER_LOCAL_DEV_TIMEOUT_MULTIPLIER = 3;
@@ -227,3 +236,4 @@ function recordSmartModeClassifierException(ctx, options2, toolCallId) {
     hasReason: false
   }, toolCallId);
 }
+

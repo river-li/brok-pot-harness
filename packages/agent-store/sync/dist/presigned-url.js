@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/presigned-url.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PresignedUrlRejectedError = class extends Error {
   constructor(options2) {
     super(options2.message);
@@ -239,3 +244,4 @@ function extractIPv4MappedAddress(hostname3) {
   }
   return void 0;
 }
+

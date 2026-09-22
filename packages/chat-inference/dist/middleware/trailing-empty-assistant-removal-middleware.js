@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference/dist/middleware/trailing-empty-assistant-removal-middleware.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger5 = createLogger("@anysphere/chat-inference/trailing-empty-assistant-removal-middleware");
 function isEmptyAssistantMessage2(message) {
@@ -39,3 +44,4 @@ var createTrailingEmptyAssistantRemovalMiddleware = () => {
   return (executor) => new TrailingEmptyAssistantRemovalMiddleware(executor);
 };
 var trailingEmptyAssistantRemovalMiddleware = createTrailingEmptyAssistantRemovalMiddleware();
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-kv/dist/typed-blob-store.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __awaiter48 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -87,3 +92,4 @@ var TypedBlobStore = class {
     return (_c2 = (_b2 = (_a19 = this.inner).isBlobDurable) === null || _b2 === void 0 ? void 0 : _b2.call(_a19, blobId)) !== null && _c2 !== void 0 ? _c2 : true;
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-kv/dist/retry-blob-store.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger26 = createLogger("RetryBlobStore");
 var retryAttempts = createCounter("agent_kv.retry.retries", {
@@ -16,3 +21,4 @@ var retrySetBlobLocallyOnlyLatency = createHistogram("agent_kv.retry.set_blob_lo
 var retryFlushLatency = createHistogram("agent_kv.retry.flush.duration_ms", {
   description: "Duration of RetryBlobStore flush operations in milliseconds"
 });
+

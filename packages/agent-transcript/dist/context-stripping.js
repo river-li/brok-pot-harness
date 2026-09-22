@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-transcript/dist/context-stripping.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CONTEXT_TAGS_TO_STRIP = [
   "user_info",
   "project_layout",
@@ -100,3 +105,4 @@ function truncateMiddle(text2, maxChars) {
   const charsPerSide = Math.max(1, Math.floor((maxChars - separator.length) / 2));
   return `${sliceHeadSafe(text2, charsPerSide)}${separator}${sliceTailSafe(text2, charsPerSide)}`;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/subagent/debug.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEBUG_LOG_PATH = "/opt/cursor/logs/debug.log";
 function DebugModeLoggingSection() {
   return jsx(
@@ -180,3 +185,4 @@ function DebugSubagentSystemPrompt() {
     jsx(FinalMessageRequirementsSection, null)
   );
 }
+

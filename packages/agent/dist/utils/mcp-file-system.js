@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/mcp-file-system.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 function getDsv3McpFileSystemToolNames(modelInfo) {
   if (modelInfo?.isComposerMatterhorn === true && modelInfo.isRawTrainingSlug !== true) {
@@ -38,3 +43,4 @@ function getDsv3McpFileSystemInstructions(params) {
 
 If the available MCP tools do not fully support what the user asked you to do, complete the work you can with the current tool set. In your work summary, include what you were unable to do with MCP and why. Do not use browser automation to work around missing or unavailable MCP tools unless the user explicitly asks you to use the browser.`;
 }
+

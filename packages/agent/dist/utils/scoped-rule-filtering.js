@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/scoped-rule-filtering.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function normalizeEmailForMatch(raw) {
   return raw.trim().toLowerCase();
 }
@@ -102,3 +107,4 @@ function filterByActorIdentity(items, actor) {
     return scopedTo.length === 0 || actor !== void 0 && scopedTo.some((email3) => normalizeEmailForMatch(email3) === actor.email);
   });
 }
+

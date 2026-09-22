@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/cloud-agent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist2();
+
+// @recovered-fragment 2/2
 function PlanningComplexityEstimateGuidanceListItem() {
   return jsx("li", { children: "When planning or scoping work, do not estimate calendar time (e.g. days or weeks of effort). Day/week timelines are a poor fit for autonomous agents. If you need to characterize difficulty, use technical detail instead: which components or subsystems must change, how invasive the edits are, and what dependencies or risks apply." });
 }
@@ -53,3 +61,4 @@ function GitInstructions({ toolInfo, shouldShowTestingInstructions, suppressCrea
     hasPrTool && startedAsNewProject ? jsxs("li", { children: ["This session was started from the New Project flow. Do NOT create a pull request unless the user explicitly asks for one. Commit and push your work to your branch as usual \u2014 the user sees your changes in the agent view without a PR. Only use the ", prToolName, " tool if the user explicitly asks for a pull request."] }, "pr-management-tool-new-project") : hasPrTool ? jsxs("li", { children: ["You can create or update pull requests using the ", prToolName, " tool. Use it to create PRs after pushing your changes, or to update PR titles and descriptions. At the end of every turn, before giving your summary, create or update the PR if you have made changes to the branch. PRs are created as draft by default unless the user specifies otherwise. Before creating a PR, check for a PR template (e.g. PULL_REQUEST_TEMPLATE.md, .github/PULL_REQUEST_TEMPLATE.md, or PULL_REQUEST_TEMPLATE/*.md) and use it to populate the body if one exists", !suppressCreatedPrMention && ". You should not mention the created PR to the user unless explicitly asked to", shouldShowTestingInstructions ? ". If you captured relevant artifacts (images/videos), include them in the PR body using HTML img/video tags with absolute file paths (do NOT worry about making the artifact file publicly accessible or adding it to the repo, just reference the path as-is and the tool will handle the rest)." : "."] }, "pr-management-tool") : jsx("li", { children: "This remote environment will handle PRs/MRs automatically. Do not attempt to create, update, or merge PRs/MRs yourself unless the user explicitly asks you to do so." }, "env-handles-prs")
   ];
 }
+

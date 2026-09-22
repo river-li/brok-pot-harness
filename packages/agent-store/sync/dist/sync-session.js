@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/sync-session.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm2();
 var __awaiter18 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -1746,3 +1751,4 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
   }
 };
 AgentStoreSyncSession.RESUME_DRAIN_MAX_LAPS = 2;
+

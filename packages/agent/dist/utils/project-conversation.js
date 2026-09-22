@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/project-conversation.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist2();
 init_agent_pb();
 function isRootProjectUserMessage(userMessage2) {
@@ -34,3 +39,4 @@ async function resolveProjectConversationContext(ctx, stateHandler) {
   }
   return { lastMode, isRootProject: false, hasProjectBoundary: false };
 }
+

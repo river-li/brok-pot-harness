@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/diff-tab-git-action-prompt.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 var MAX_FILE_PATHS_IN_PROMPT = 30;
 function isNonEmptyString(value) {
@@ -378,3 +383,4 @@ function synthesizeDiffTabGitActionPrompt(args) {
   }
   return buildDiffTabGitActionPrompt(selectedAction, toPullRequestTemplateContext(args.selectedContext), args.environmentParamForSubagent === true, args.babysitV2Prompt === true, args.enablePrCreationForgeGuidance === true);
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/subscription-notification-action-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SubscriptionNotificationActionHandler = class {
   constructor(userMessageActionHandler) {
     this.userMessageActionHandler = userMessageActionHandler;
@@ -36,3 +41,4 @@ function adaptSubscriptionNotificationAction(action) {
     sendToInteractionListener: action.sendToInteractionListener
   });
 }
+

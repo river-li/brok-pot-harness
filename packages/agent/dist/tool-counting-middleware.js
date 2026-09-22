@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tool-counting-middleware.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ToolCountingStateTracker = class {
   constructor() {
     this.toolCallCount = 0;
@@ -62,3 +67,4 @@ function createToolCountingMiddleware(state) {
     }
   });
 }
+

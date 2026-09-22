@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/telemetry/tool-call-events.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 function toolCallAuditOutcomeOf(error42) {
   if (typeof error42 !== "object" || error42 === null)
@@ -140,3 +145,4 @@ function createToolCallEventMiddleware(options2) {
     }
   });
 }
+

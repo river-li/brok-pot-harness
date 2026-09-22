@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/common.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var isEqual = (a, b2) => {
   if (a.length !== b2.length)
     return false;
@@ -19,3 +24,4 @@ function getBrowserMcpProviderName(browserTools) {
   const idx = prefixedTool.indexOf("-browser_");
   return idx > 0 ? prefixedTool.substring(0, idx) : void 0;
 }
+

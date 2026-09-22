@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/summarization-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_fs33 = __toESM(require("node:fs"), 1);
+var import_node_os7 = __toESM(require("node:os"), 1);
+var import_node_path39 = __toESM(require("node:path"), 1);
+
+// @recovered-fragment 2/3
+init_dist4();
+init_privacy_mode_pb();
+
+// @recovered-fragment 3/3
 var __awaiter29 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -1153,3 +1167,4 @@ var SummarizationHandler = class {
     return error42 instanceof InputTokenLimitError || hasErrorName(error42, "InputTokenLimitError") || error42 instanceof OutputTokensLimitExceededError || hasErrorName(error42, "OutputTokensLimitExceededError");
   }
 };
+

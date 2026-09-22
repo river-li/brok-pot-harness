@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/loop-detection/loop-nudge-middleware.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createLoopNudgeMiddleware(minRepetitionsOrOptions, minMessageLengthArg = 0, shouldInjectReminderArg = false) {
   const config2 = typeof minRepetitionsOrOptions === "number" ? {
     minRepetitions: minRepetitionsOrOptions,
@@ -62,3 +67,4 @@ function createLoopNudgeMiddleware(minRepetitionsOrOptions, minMessageLengthArg 
     return wrappedExecutor;
   };
 }
+

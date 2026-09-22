@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/goal-metrics.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var goalCreated = createCounter("agent.goal.created", {
   description: "Counts durable goals created by the agent"
 });
@@ -23,3 +28,4 @@ function recordGoalTerminalTransition(ctx, options2) {
   goalTerminalTransition.increment(ctx, 1, labels);
   goalContinuationsAtTerminal.histogram(ctx, options2.continuationCount, labels);
 }
+

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/ask-question-completion.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto31 = require("node:crypto");
+init_dist4();
+
+// @recovered-fragment 2/2
 var logger62 = createLogger("@anysphere/agent/ask-question-completion");
 function isValidAskQuestionCompletion(action) {
   const resultCase = action.result?.result.case;
@@ -120,3 +129,4 @@ function formatCompletionResult(action, resultFormat) {
   }
   return JSON.stringify(resultPlainObject);
 }
+

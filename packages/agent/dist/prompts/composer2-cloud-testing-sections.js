@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/composer2-cloud-testing-sections.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function parseComposer2CloudTestingSectionsPlacementMetadata(value) {
   return value === "user_info" || value === "system_prompt" ? value : void 0;
 }
@@ -71,3 +76,4 @@ function getComposer2CloudTestingSectionElements(props, options2) {
     computerUse: context2.enableComputerUse ? jsx(ComputerUseInstructionsSection, { props: context2.testingPromptProps }) : void 0
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-kv/dist/blob-not-found-error.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CONVERSATION_DATA_MISSING_MESSAGE = "This conversation's data is missing and can't be restored. Start a new chat to continue.";
 var MAX_MESSAGE_BLOB_ID_HEXES = 3;
 var MESSAGE_BLOB_ID_HEX_LENGTH = 12;
@@ -41,3 +46,4 @@ function findBlobNotFoundError(error42) {
   }
   return void 0;
 }
+

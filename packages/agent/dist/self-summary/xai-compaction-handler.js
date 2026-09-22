@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/self-summary/xai-compaction-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var XAI_COMPACTION_SYSTEM_PROMPT = "You are a conversation compactor. Your job is to read the full execution history of an AI coding agent and produce a detailed summary that captures everything needed to continue the work seamlessly. You have NO tools available \u2014 respond with text only.";
 var XAI_COMPACTION_SUMMARIZE_PROMPT = `Your task is to produce a faithful, concise summary of the conversation so far so that a successor assistant can continue the work seamlessly after the earlier turns are discarded. The successor will see the user's original query plus this summary. Capture what is needed to continue \u2014 the user's explicit requests, your most recent actions, key technical details, file paths, commands, configuration, and architectural decisions \u2014 but be economical: prefer tight prose and short references over long verbatim dumps, and do not pad. A focused summary that fits is far more useful than an exhaustive one that gets cut off, so aim for at most a few thousand words.
 
@@ -108,3 +113,4 @@ ${XAI_COMPACTION_SUMMARIZE_PROMPT}`),
     };
   }
 };
+

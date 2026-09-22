@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/shell-command-action-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_agent_pb();
 var logger69 = createLogger("@anysphere/agent/actions/shell-command-action-handler");
@@ -255,3 +260,4 @@ ${text2}
     return await stateHandler.computeNewStructure(ctx);
   }
 };
+

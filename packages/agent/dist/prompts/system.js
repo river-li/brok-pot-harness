@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/system.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function extractToolInfo(toolSetHandle) {
   const availableTools = toolSetHandle.getAllTools();
   const promptVisibleTools = toolSetHandle.getStaticTools();
@@ -26,3 +31,4 @@ function extractToolInfo(toolSetHandle) {
     mcpMetaToolServerCount: promptVisibleTools.find((tool) => tool.dynamicToolMetaRole === "discovery")?.mcpSnapshotDescriptors?.length ?? 0
   };
 }
+

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/configs/project-workspace-mcp-tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_agent_pb();
+init_mcp_pb();
+
+// @recovered-fragment 2/2
 var CURSOR_APP_CONTROL_SERVER = "cursor-app-control";
 var WORKSPACE_MUTATION_TOOLS = /* @__PURE__ */ new Set([
   "move_agent_to_root",
@@ -25,3 +34,4 @@ function filterProjectWorkspaceMutationMcpDescriptors(descriptors) {
     }))
   }));
 }
+

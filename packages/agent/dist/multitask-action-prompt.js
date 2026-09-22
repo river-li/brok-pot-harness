@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/multitask-action-prompt.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 function synthesizeMultitaskActionPrompt(simulatedMsgReason, { taskToolName, resolvedMode } = {}) {
   if (simulatedMsgReason === SimulatedMsgReason.MULTITASK) {
@@ -39,3 +44,4 @@ ${followUpStatement} For the extent of plan execution, these parallelization ins
   }
   return void 0;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/git-repo.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var UNKNOWN_REPO_LABEL = "unknown-repo";
 var UNKNOWN_BRANCH_NAME = "unknown-branch";
 function getPathFromBranchInfo(repo) {
@@ -46,3 +51,4 @@ function buildRepoPathLookup(gitRepos) {
   }
   return lookup3;
 }
+

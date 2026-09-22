@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/cursor-rule-matching.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path81 = require("node:path");
 init_cursor_rules_pb();
 init_dist3();
@@ -218,3 +223,4 @@ function matchFileScopedSkillsToReadPaths({ readPaths, skills, workspacePaths })
   }
   return matches;
 }
+

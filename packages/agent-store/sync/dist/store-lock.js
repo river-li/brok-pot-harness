@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/store-lock.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var fs5 = __toESM(require("node:fs"), 1);
+var os2 = __toESM(require("node:os"), 1);
+var path5 = __toESM(require("node:path"), 1);
+
+// @recovered-fragment 2/2
 var __awaiter4 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -395,3 +405,4 @@ function getErrorCode(error42) {
   }
   return void 0;
 }
+

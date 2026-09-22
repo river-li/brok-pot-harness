@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/mcp-metrics.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger51 = createLogger("mcp.meta.failure");
 var getMcpToolsDuration = createHistogram("mcp.meta.get_tools_duration_ms", {
@@ -224,3 +229,4 @@ function trackMcpDirectoryAccessIfApplicable(ctx, path31, tool) {
 function trackMcpDirectoryResponseBytes(ctx, responseBytes, tool) {
   mcpDirectoryResponseBytes.histogram(ctx, responseBytes, { tool });
 }
+

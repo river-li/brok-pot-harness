@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/deprecated-do-not-use/shared.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function SwitchModeReminderSnippet({ currentMode, targetModes, fromModes }) {
   const modeStatement = buildCurrentModeStatement(currentMode, targetModes, fromModes);
   return `<system_reminder>
@@ -49,3 +54,4 @@ ${mcpDescriptors.map((descriptor2) => {
 </mcp_file_system>
 `.trim();
 }
+

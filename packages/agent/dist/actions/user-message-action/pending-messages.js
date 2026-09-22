@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/user-message-action/pending-messages.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function collectCompletedToolResults(messages2) {
   const completed = /* @__PURE__ */ new Map();
   for (const message of messages2) {
@@ -23,3 +28,4 @@ function splitPendingMessages(pendingMessages) {
     completedToolResults: collectCompletedToolResults(pendingMessages.slice(lastAssistantIndex + 1))
   };
 }
+

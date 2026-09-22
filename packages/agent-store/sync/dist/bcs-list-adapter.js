@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/bcs-list-adapter.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isLeftoverHiddenByRemovedPrefix({ relPath, listedDir, removed }) {
   for (const marker17 of removed) {
     if (relPath === marker17) {
@@ -75,3 +80,4 @@ function collectSubdir({ prefix, relObjectPath, subdirs }) {
     subdirs.add(`${prefix}${remaining.slice(0, firstSlash)}`);
   }
 }
+

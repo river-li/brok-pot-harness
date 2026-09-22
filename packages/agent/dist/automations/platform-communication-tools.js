@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/automations/platform-communication-tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AUTOMATIONS_PLATFORM_COMMUNICATION_TOOL_NAMES = [
   "SendSlackMessage",
   "SendMicrosoftTeamsMessage",
@@ -35,3 +40,4 @@ var subagentExcludedCommunicationMcpToolNamesByServer = /* @__PURE__ */ new Map(
     new Set(SUBAGENT_EXCLUDED_AUTOMATION_TOOL_NAMES.map(automationToolNameToSnakeCase))
   ]
 ]);
+

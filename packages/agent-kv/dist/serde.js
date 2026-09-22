@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-kv/dist/serde.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var decoder = new TextDecoder();
 var encoder = new TextEncoder();
 var Utf8Serde = class {
@@ -47,3 +52,4 @@ function fromHex(hex) {
   }
   return out;
 }
+

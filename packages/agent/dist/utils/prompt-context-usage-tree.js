@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/prompt-context-usage-tree.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_agent_pb();
+
+// @recovered-fragment 2/2
 function buildPromptContextUsageTree(params) {
   const nodes = [];
   const categoryById = indexBreakdownCategoriesById(params.breakdown);
@@ -582,3 +590,4 @@ function indexBreakdownCategoriesById(snapshot) {
   }
   return map4;
 }
+

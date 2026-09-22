@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/prompts/project-prompt.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_request_context_exec_pb();
 var PROJECT_ROOT_SCOPE = "These instructions bind only this root Project conversation. A delegated child that inherits them follows its own assignment and does not take on the Project role.";
 var DEFAULT_PROJECT_REMINDER_CADENCE_INTERVAL = 1;
@@ -399,3 +404,4 @@ ${body}`;
 function formatProjectSubagentPrompt(options2) {
   return formatProjectSubagentDocsPrompt(options2);
 }
+

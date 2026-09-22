@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/prepare-messages.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var USER_INFO_TAG_REGEX = /<user_info>[\s\S]*<\/user_info>/;
 function hasUserInfoTag(message) {
   const unredactedMessage = fromRedactedCoreMessage(message, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
@@ -51,3 +56,4 @@ function prepareMessagesForCompaction(messages2) {
     messagesForSummarization
   };
 }
+

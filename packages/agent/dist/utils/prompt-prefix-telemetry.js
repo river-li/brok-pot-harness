@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/prompt-prefix-telemetry.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var userInfoRerenderedCounter = createCounter("agent.prompt_prefix.user_info_rerendered", {
   description: "Cached first-turn <user_info> replaced on a later turn, by reason (one increment per contributing reason)",
   labelNames: ["reason", "vendor", "model"]
@@ -134,3 +139,4 @@ function recordSystemPromptRebuild(ctx, params) {
     }
   }
 }
+

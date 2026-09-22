@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-transcript/dist/index.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_agent_pb();
+init_dist3();
+
+// @recovered-fragment 2/2
 var __awaiter27 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -769,3 +779,4 @@ ${terminalMarkers.textSuffixes.join("\n")}` : terminalMarkers.textSuffixes.join(
     });
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/loop-detection/single-message-loop-detector.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BOX_DRAWING_CHARS = /* @__PURE__ */ new Set([
   // Horizontal lines
   "\u2500",
@@ -376,3 +381,4 @@ var SingleMessageLoopDetector = class {
     this.multiLinePeriodMatchRunLengths.fill(0);
   }
 };
+

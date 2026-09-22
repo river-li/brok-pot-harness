@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/smart-mode-project-permissions.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs46 = require("node:fs");
+var import_promises44 = require("node:fs/promises");
+var import_node_path79 = require("node:path");
+
+// @recovered-fragment 2/2
 var MAX_PROJECT_PERMISSION_INSTRUCTIONS_PER_WORKSPACE = 20;
 var MAX_USER_AUTO_RUN_INSTRUCTIONS = 20;
 var MAX_PROJECT_PERMISSION_INSTRUCTION_CHARS = 1e3;
@@ -110,3 +120,4 @@ async function loadSmartModeProjectPermissionsContext(_ctx, workspacePaths, user
     truncated: projectAllowInstructions.truncated || projectBlockInstructions.truncated || userAllowInstructions.truncated || userBlockInstructions.truncated
   };
 }
+

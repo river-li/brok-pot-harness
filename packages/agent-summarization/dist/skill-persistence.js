@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/skill-persistence.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MANUALLY_ATTACHED_SKILLS_REGEX = /<manually_attached_skills>[\s\S]*?<\/manually_attached_skills>/g;
 function extractManuallyAttachedSkillBlocks(redactedMessage) {
   var _a19;
@@ -28,3 +33,4 @@ function collectAllSkillBlocks(messages2) {
   }
   return [];
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/constants.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_AGENT_STEPS = 512;
 var SEND_SLACK_MESSAGE_V2_TOOL_NAME = "SendSlackMessageV2";
 var SLACK_AGENT_TOOLS_MCP_SERVER_ID = "Cursor Slack Tools";
@@ -14,3 +19,4 @@ var NAMED_AGENT_SELF_MEMORY_FILE = "SELF.md";
 var NAMED_AGENT_STORE_SELF_PATH = `${NAMED_AGENT_HOME_STORE_PATH}/${NAMED_AGENT_SELF_MEMORY_FILE}`;
 var NAMED_AGENT_STORE_ACTIVITY_DIR = `${NAMED_AGENT_HOME_STORE_PATH}/activity`;
 var CURSOR_SUBSCRIPTIONS_MCP_SERVER_NAME = "cursor-subscriptions";
+

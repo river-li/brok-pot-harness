@@ -1,14 +1,19 @@
-init_dist();
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference/dist/prompt-executor.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+init_dist4();
 function createStringResult(content, isError = false) {
   return {
     content: [{ type: "text", text: content }],
     isError
   };
 }
-function createImageResult(imageData, mimeType, textContent2, isError = false) {
+function createImageResult(imageData, mimeType, textContent, isError = false) {
   const content = [];
-  if (textContent2) {
-    content.push({ type: "text", text: textContent2 });
+  if (textContent) {
+    content.push({ type: "text", text: textContent });
   }
   content.push({ type: "image", data: imageData, mimeType });
   return {
@@ -35,3 +40,4 @@ var ProactiveSummarizationThresholdError = class extends Error {
   }
 };
 var compactionEpochKey = createKey(/* @__PURE__ */ Symbol("compactionEpoch"), void 0);
+

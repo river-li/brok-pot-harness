@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/smart-mode-permissions-instructions.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function projectPermissionsAutoRunFromProto(instructions) {
   if (instructions === void 0) {
     return void 0;
@@ -23,3 +28,4 @@ function smartModeAutoRunInstructionsFromProtos({ userPermissionsAutoRun, projec
     hasAdminOverride: false
   };
 }
+

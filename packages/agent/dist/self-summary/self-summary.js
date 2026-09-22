@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/self-summary/self-summary.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+
+// @recovered-fragment 2/2
 var logger10 = createLogger("@anysphere/agent");
 function findLastUserMessageIndex2(messages2, options2) {
   for (let i = messages2.length - 1; i >= 0; i--) {
@@ -25,3 +33,4 @@ function shouldPerformSelfSummary(messages2, tokenDetails, ctx, configTokenLimit
   const overTokenLimit = tokenCount >= tokenLimit;
   return overTokenLimit;
 }
+

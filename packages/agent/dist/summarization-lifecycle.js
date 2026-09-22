@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/summarization-lifecycle.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function eventBase(lifecycle) {
   return {
     summaryLifecycleId: lifecycle.summaryLifecycleId,
@@ -74,3 +79,4 @@ function emitSummaryLifecycleAbandoned(ctx, source, reason) {
 function emitSummaryLifecyclePersisted(ctx, source) {
   emitSummaryLifecycleTerminal(ctx, source, { phase: "persisted" });
 }
+

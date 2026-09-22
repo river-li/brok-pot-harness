@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-kv/dist/cached-blob-store.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var __awaiter46 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -175,3 +180,4 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
 };
 EncryptedBlobStore.ALGORITHM = "AES-GCM";
 EncryptedBlobStore.IV_LENGTH = 12;
+

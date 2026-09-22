@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/git-diff-processing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist2();
+
+// @recovered-fragment 2/2
 function buildGitDiffContent(content, fullContentLengthCharCount, tagName2, intro) {
   let diffContent = content ?? "";
   let wasTruncated = fullContentLengthCharCount > diffContent.length;
@@ -62,3 +70,4 @@ function parseGitDiffContent(diffContent) {
     files
   };
 }
+

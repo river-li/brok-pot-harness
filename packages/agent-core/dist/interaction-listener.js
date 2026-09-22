@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-core/dist/interaction-listener.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_ask_question_tool_pb();
+init_create_plan_tool_pb();
+init_pr_management_tool_pb();
+init_replace_env_tool_pb();
+init_setup_vm_environment_tool_pb();
+
+// @recovered-fragment 2/2
 var __awaiter22 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -133,3 +145,4 @@ var NoopInteractionListener = class {
     });
   }
 };
+

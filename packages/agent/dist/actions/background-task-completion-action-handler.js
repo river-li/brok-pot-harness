@@ -1,3 +1,18 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/background-task-completion-action-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_crypto33 = require("node:crypto");
+init_dist2();
+init_dist4();
+
+// @recovered-fragment 2/3
+init_agent_pb();
+init_selected_context_pb();
+init_subagents_pb();
+
+// @recovered-fragment 3/3
 var __addDisposableResource24 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -584,3 +599,4 @@ ${systemReminder}
     }
   }
 };
+

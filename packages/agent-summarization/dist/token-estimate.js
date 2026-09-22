@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/token-estimate.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CHARS_PER_TOKEN = 2.5;
 var MESSAGE_OVERHEAD_CHARS = 25;
 var TOOL_CALL_OVERHEAD_CHARS = 50;
@@ -73,3 +78,4 @@ function estimateTokenCount(messages2, options2) {
   }
   return Math.ceil(totalChars / CHARS_PER_TOKEN);
 }
+

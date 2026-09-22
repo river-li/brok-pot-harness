@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-store/sync/dist/conflict-events.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto = require("node:crypto");
+var fs3 = __toESM(require("node:fs"), 1);
+var path3 = __toESM(require("node:path"), 1);
+
+// @recovered-fragment 2/2
 var CONFLICT_JOURNAL_ROTATE_BYTES = 4 * 1024 * 1024;
 var MAX_DEDUP_ENTRIES = 65536;
 var EVENT_SCHEMA_VERSION = 1;
@@ -748,3 +758,4 @@ var PENDING_FILE_MODE = 384;
 function isEnoent(error42) {
   return typeof error42 === "object" && error42 !== null && "code" in error42 && error42.code === "ENOENT";
 }
+

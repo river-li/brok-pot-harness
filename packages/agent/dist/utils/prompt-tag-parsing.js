@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/utils/prompt-tag-parsing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function findOpenTagEnd(content, startIndex) {
   let inQuote = false;
   for (let i = startIndex; i < content.length; i++) {
@@ -115,3 +120,4 @@ function extractMcpServerTagRanges(promptContent) {
 function extractCompleteTagRanges(promptContent, tagName2) {
   return extractCompleteTagRangesMatching(promptContent, (candidate) => candidate === tagName2);
 }
+

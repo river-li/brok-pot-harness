@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/user-message-action/user-message-run-warning.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger64 = createLogger("@anysphere/agent");
 var CONSECUTIVE_USER_MESSAGE_WARNING_THRESHOLD = 3;
@@ -63,3 +68,4 @@ function warnIfLongTrailingUserMessageRun(ctx, messages2, invocationId) {
     hasDuplicateTailCursorRequestIds: tailDistinctCursorRequestIdCount < tailCursorRequestIds.length
   });
 }
+

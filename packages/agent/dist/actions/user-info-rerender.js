@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/user-info-rerender.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_cursor_rules_pb();
 function fingerprintTeamRules(rules) {
   const entries = rules.filter((rule) => rule.source === CursorRuleSource.TEAM).map((rule) => {
@@ -71,3 +76,4 @@ function getUserInfoRerenderReason(params) {
   }
   return userInfoHasAnyGeneratedCustomUserRules(contentStr) ? "custom_user_rules_stale" : void 0;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/durable-blocks.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SUMMARIZERS = {
   external: {
     leading: [],
@@ -165,3 +170,4 @@ function appendDurableBlocks(summarizer, blocks) {
 function prependDurableBlocks(summarizer, blocks) {
   return selectBlockPrompts(blocks, SUMMARIZERS[summarizer].leading).map((promptText) => `${promptText}${BLOCK_SEPARATOR}`).join("");
 }
+

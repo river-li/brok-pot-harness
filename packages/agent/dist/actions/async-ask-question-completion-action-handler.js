@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/actions/async-ask-question-completion-action-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto34 = require("node:crypto");
 init_dist4();
 init_agent_pb();
@@ -160,3 +165,4 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
     }
   }
 };
+

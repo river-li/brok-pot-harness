@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-summarization/dist/prompt-truncation.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_SUMMARIZATION_PROMPT_CHARS = 32e5;
 var computeMaxMinFairAllocationsDurationMs = createHistogram("agent.summarization.compute_maxmin_fair_allocations_duration_ms", {
   description: "Wall time to compute max-min fair character allocations during prompt truncation"
@@ -88,3 +93,4 @@ function truncatePromptFairly(params) {
   }
   return { resultParts, droppedCount, truncatedCount, fullCount };
 }
+

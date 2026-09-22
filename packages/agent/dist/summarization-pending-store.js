@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/summarization-pending-store.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger59 = createLogger("summarization-pending-store");
 var pendingSummaryAdoption = createCounter("agent.background_summarization.pending_adoption", {
@@ -269,3 +274,4 @@ async function takePendingSummaryForAdoption(args) {
   });
   return { record: record2, result, prefixMessages };
 }
+

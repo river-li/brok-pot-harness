@@ -1,4 +1,13 @@
-var __addDisposableResource26 = function(env, value, async) {
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/self-summary/self-summary-handler.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_dist3();
+
+// @recovered-fragment 2/2
+var __addDisposableResource6 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
     var dispose, inner;
@@ -25,7 +34,7 @@ var __addDisposableResource26 = function(env, value, async) {
   }
   return value;
 };
-var __disposeResources26 = /* @__PURE__ */ (function(SuppressedError2) {
+var __disposeResources6 = /* @__PURE__ */ (function(SuppressedError2) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError2(e, env.error, "An error was suppressed during disposal.") : e;
@@ -52,11 +61,11 @@ var __disposeResources26 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error3, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error3, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger38 = createLogger("@anysphere/agent");
+var logger18 = createLogger("@anysphere/agent");
 var TRANSIENT_SELF_SUMMARY_RETRY_DELAY_MS = 2e3;
 var TOOL_MESSAGE_DROP_THRESHOLD = 0.25;
 var selfSummaryInputTokens = createHistogram("self_summary.input_token", {
@@ -106,7 +115,7 @@ var selfSummaryUnexpectedToolCalls = createCounter("self_summary.unexpected_tool
 async function executeSelfSummaryStream(parentCtx, executor, stateHandler, interactionListener, tools, extraT, descriptionProps) {
   const env_1 = { stack: [], error: void 0, hasError: false };
   try {
-    const spanCtxt = __addDisposableResource26(env_1, createSpan(parentCtx.withName("executeSelfSummaryStream")), false);
+    const spanCtxt = __addDisposableResource6(env_1, createSpan(parentCtx.withName("executeSelfSummaryStream")), false);
     const ctx = spanCtxt.ctx;
     const invocationId = getInvocationId(ctx);
     const noOpToolCallRecorder = {
@@ -128,27 +137,27 @@ async function executeSelfSummaryStream(parentCtx, executor, stateHandler, inter
       descriptionProps ?? buildDescriptionGeneratorProps(tools)
     );
     result.extendedUsage.catch((e) => {
-      logger38.error(ctx, "[self-summary] Error getting extended usage", e, {
+      logger18.error(ctx, "[self-summary] Error getting extended usage", e, {
         summarization: { invocationId }
       });
     });
     result.usage.catch((e) => {
-      logger38.error(ctx, "[self-summary] Error getting usage", e, {
+      logger18.error(ctx, "[self-summary] Error getting usage", e, {
         summarization: { invocationId }
       });
     });
     result.providerMetadata.catch((e) => {
-      logger38.error(ctx, "[self-summary] Error getting provider metadata", e, {
+      logger18.error(ctx, "[self-summary] Error getting provider metadata", e, {
         summarization: { invocationId }
       });
     });
     result.invocationId.catch((e) => {
-      logger38.error(ctx, "[self-summary] Error getting invocation id", e, {
+      logger18.error(ctx, "[self-summary] Error getting invocation id", e, {
         summarization: { invocationId }
       });
     });
     result.response.catch((e) => {
-      logger38.error(ctx, "[self-summary] Error getting response", e, {
+      logger18.error(ctx, "[self-summary] Error getting response", e, {
         summarization: { invocationId }
       });
     });
@@ -180,12 +189,12 @@ async function executeSelfSummaryStream(parentCtx, executor, stateHandler, inter
       }
     }
     if (hasAnyToolCalls) {
-      logger38.error(ctx, "[self-summary] unexpected tool calls detected in summarization response", {
+      logger18.error(ctx, "[self-summary] unexpected tool calls detected in summarization response", {
         summarization: { invocationId }
       });
     }
     if (response.messages.length > 1) {
-      logger38.info(ctx, "[self-summary] self summary response stream contained more than one message", {
+      logger18.info(ctx, "[self-summary] self summary response stream contained more than one message", {
         summarization: {
           messageCount: response.messages.length,
           invocationId
@@ -196,10 +205,10 @@ async function executeSelfSummaryStream(parentCtx, executor, stateHandler, inter
     if (assistantMessage?.role !== "assistant") {
       throw new NoSummaryResponseError();
     }
-    const textContent2 = extractTextContent(toRedactedCoreMessage(assistantMessage, stateHandler.getPrivacyMode())).unwrap(PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
+    const textContent = extractTextContent(toRedactedCoreMessage(assistantMessage, stateHandler.getPrivacyMode())).unwrap(PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
     return {
       assistantMessage,
-      textContent: textContent2,
+      textContent,
       inputTokens: extendedUsage.inputTokens,
       outputTokens: extendedUsage.outputTokens,
       cacheReadTokens: extendedUsage.cacheReadTokens,
@@ -209,7 +218,7 @@ async function executeSelfSummaryStream(parentCtx, executor, stateHandler, inter
     env_1.error = e_1;
     env_1.hasError = true;
   } finally {
-    __disposeResources26(env_1);
+    __disposeResources6(env_1);
   }
 }
 function appendShorterOutputRetryInstruction(inputMessages) {
@@ -258,7 +267,7 @@ function reduceSelfSummaryInputMessages(inputMessages, preservedPrefixMessageCou
 async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession, stateHandler, interactionListener, summarizationInputMessages, tools, extraT, options2) {
   const env_2 = { stack: [], error: void 0, hasError: false };
   try {
-    const spanCtxt = __addDisposableResource26(env_2, createSpan(parentCtx.withName("executeSelfSummaryWithRetry")), false);
+    const spanCtxt = __addDisposableResource6(env_2, createSpan(parentCtx.withName("executeSelfSummaryWithRetry")), false);
     const ctx = spanCtxt.ctx;
     const membershipTags = getMembershipTypeMetricTagsFromContext(ctx);
     const maxmode = getMaxModeFromContext(ctx) ? "true" : "false";
@@ -266,7 +275,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
     let requestShorterOutput = false;
     let lastErrorKind;
     for (let attempt = 1; attempt <= MAX_SELF_SUMMARY_RETRIES; attempt++) {
-      logger38.info(ctx, "[self-summary] attempt started", {
+      logger18.info(ctx, "[self-summary] attempt started", {
         summarization: {
           attempt,
           maxRetries: MAX_SELF_SUMMARY_RETRIES,
@@ -281,7 +290,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
         const result = await executeSelfSummaryStream(ctx, executor, stateHandler, interactionListener, tools, extraT, options2.descriptionProps);
         const hasContent = result.textContent.trim().length > 0;
         if (hasContent) {
-          logger38.info(ctx, "[self-summary] attempt succeeded", {
+          logger18.info(ctx, "[self-summary] attempt succeeded", {
             summarization: {
               attempt,
               contentLength: result.textContent.length
@@ -302,7 +311,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
           errorKind: "EmptyContent",
           ...membershipTags
         });
-        logger38.warn(ctx, "[self-summary] empty content received", {
+        logger18.warn(ctx, "[self-summary] empty content received", {
           summarization: {
             attempt,
             maxRetries: MAX_SELF_SUMMARY_RETRIES,
@@ -316,11 +325,11 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
           errorKind: "EmptyContent",
           ...membershipTags
         });
-      } catch (error3) {
+      } catch (error42) {
         const enableRetryNoSummaryResponse = options2.enableRetryNoSummaryResponse ?? false;
         const enableReduceInputsRetry = options2.enableReduceInputsRetry ?? true;
         const enableRetryUncategorizedErrors = options2.enableRetryUncategorizedErrors ?? true;
-        const retryDirective = getRetryDirective(error3, {
+        const retryDirective = getRetryDirective(error42, {
           transientRetryDelayMs: TRANSIENT_SELF_SUMMARY_RETRY_DELAY_MS,
           enableRetryNoSummaryResponse,
           enableReduceInputsRetry,
@@ -332,7 +341,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
           errorKind: retryDirective.errorType,
           ...membershipTags
         });
-        logger38.error(ctx, "[self-summary] attempt failed with error", error3, {
+        logger18.error(ctx, "[self-summary] attempt failed with error", error42, {
           summarization: {
             attempt,
             maxRetries: MAX_SELF_SUMMARY_RETRIES,
@@ -355,7 +364,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
             ...membershipTags,
             maxmode
           });
-          throw error3;
+          throw error42;
         }
         selfSummaryRetries.increment(ctx, 1, {
           errorKind: retryDirective.errorType,
@@ -364,7 +373,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
         if (retryDirective.requestShorterOutput && !requestShorterOutput) {
           currentInputMessages = appendShorterOutputRetryInstruction(currentInputMessages);
           requestShorterOutput = true;
-          logger38.info(ctx, "[self-summary] retrying with shorter-output instruction", {
+          logger18.info(ctx, "[self-summary] retrying with shorter-output instruction", {
             summarization: {
               attempt,
               nextAttempt: attempt + 1
@@ -373,7 +382,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
         }
         if (retryDirective.reduceInputs) {
           const nextInputMessages = reduceSelfSummaryInputMessages(currentInputMessages, options2.preservedPrefixMessageCount);
-          logger38.info(ctx, "[self-summary] retrying with reduced inputs", {
+          logger18.info(ctx, "[self-summary] retrying with reduced inputs", {
             summarization: {
               attempt,
               previousInputMessageCount: currentInputMessages.length,
@@ -383,17 +392,17 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
           currentInputMessages = nextInputMessages;
         }
         if (retryDirective.retryDelayMs > 0) {
-          logger38.info(ctx, "[self-summary] retrying after delay", {
+          logger18.info(ctx, "[self-summary] retrying after delay", {
             summarization: {
               attempt,
               retryDelayMs: retryDirective.retryDelayMs
             }
           });
-          await delay(retryDirective.retryDelayMs);
+          await delay2(retryDirective.retryDelayMs);
         }
       }
     }
-    logger38.error(ctx, "[self-summary] all retries exhausted", {
+    logger18.error(ctx, "[self-summary] all retries exhausted", {
       summarization: {
         maxRetries: MAX_SELF_SUMMARY_RETRIES
       }
@@ -409,7 +418,7 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
     env_2.error = e_2;
     env_2.hasError = true;
   } finally {
-    __disposeResources26(env_2);
+    __disposeResources6(env_2);
   }
 }
 var SelfSummarizer = class {
@@ -434,17 +443,17 @@ var SelfSummarizer = class {
   // ---------------------------------------------------------------------------
   // Phase 1: Decompose
   // ---------------------------------------------------------------------------
-  partitionMessages(messages, options2) {
-    if (messages.length < 3) {
-      throw new Error(`Self-summary requires at least 3 messages, got ${messages.length}`);
+  partitionMessages(messages2, options2) {
+    if (messages2.length < 3) {
+      throw new Error(`Self-summary requires at least 3 messages, got ${messages2.length}`);
     }
-    const { systemMessage, userInfoMessage, messagesForSummarization } = prepareMessagesForCompaction(messages);
+    const { systemMessage, userInfoMessage, messagesForSummarization } = prepareMessagesForCompaction(messages2);
     if (!systemMessage || systemMessage.role !== "system") {
       throw new Error("Expected system message in conversation");
     }
-    const lastUserIdx = findLastUserMessageIndex2(messages);
-    const lastUserQuery = messages[lastUserIdx];
-    const deliveryTail = lastUserQuery !== void 0 && this.deliveryTail !== void 0 && this.deliveryTail.triggerReasons.includes(options2.triggerReason) ? selectUserDeliveryTail(messages.slice(lastUserIdx + 1), this.deliveryTail) : [];
+    const lastUserIdx = findLastUserMessageIndex2(messages2);
+    const lastUserQuery = messages2[lastUserIdx];
+    const deliveryTail = lastUserQuery !== void 0 && this.deliveryTail !== void 0 && this.deliveryTail.triggerReasons.includes(options2.triggerReason) ? selectUserDeliveryTail(messages2.slice(lastUserIdx + 1), this.deliveryTail) : [];
     const skillBlocks = collectAllSkillBlocks(messagesForSummarization);
     return {
       systemMessage,
@@ -531,22 +540,22 @@ If the task is complete, respond to the user. Otherwise, continue working on the
   // ---------------------------------------------------------------------------
   // Top-level summarize  (delegates to pipeline + adds metrics / onPersisted)
   // ---------------------------------------------------------------------------
-  async summarize(ctx, messages, options2) {
+  async summarize(ctx, messages2, options2) {
     const env_3 = { stack: [], error: void 0, hasError: false };
     try {
-      const spanCtxt = __addDisposableResource26(env_3, createSpan(ctx.withName("SelfSummarizer.summarize")), false);
+      const spanCtxt = __addDisposableResource6(env_3, createSpan(ctx.withName("SelfSummarizer.summarize")), false);
       const innerCtx = spanCtxt.ctx;
       const startTime = performance.now();
-      logger38.info(innerCtx, "[self-summary] SelfSummarizer.summarize starting", {
+      logger18.info(innerCtx, "[self-summary] SelfSummarizer.summarize starting", {
         summarization: {
-          messageCount: messages.length,
+          messageCount: messages2.length,
           modelId: this.modelId
         }
       });
       try {
-        const pipelineResult = await runSummarizationPipeline(this, innerCtx, messages, options2);
+        const pipelineResult = await runSummarizationPipeline(this, innerCtx, messages2, options2);
         const summaryCodeString = createRedactedString(pipelineResult.rawSummary.text, DataClassification.CODE, "summary", this.stateHandler.getPrivacyMode());
-        logger38.info(innerCtx, "[self-summary] SelfSummarizer.summarize completed", {
+        logger18.info(innerCtx, "[self-summary] SelfSummarizer.summarize completed", {
           summarization: {
             summaryTextLength: pipelineResult.rawSummary.text.length,
             fullReplacementMessagesCount: pipelineResult.fullReplacementMessages.length,
@@ -567,7 +576,8 @@ If the task is complete, respond to the user. Otherwise, continue working on the
       env_3.error = e_3;
       env_3.hasError = true;
     } finally {
-      __disposeResources26(env_3);
+      __disposeResources6(env_3);
     }
   }
 };
+

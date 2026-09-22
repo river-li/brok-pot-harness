@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/summarization-settle.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist3();
 function settledUnlessAborted(promise2, signal) {
   if (signal.aborted)
@@ -22,3 +27,4 @@ async function settledAbortedOrTimedOut(promise2, signal, timeoutMs) {
   }
   return signal.aborted ? "aborted" : "settled";
 }
+
