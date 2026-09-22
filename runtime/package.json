@@ -1,0 +1,14 @@
+{
+  "name": "grokbot-runtime-recovery",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Launch and verify the recovered Grok Bot desktop and Linux host",
+  "devDependencies": {
+    "electron": "42.1.0",
+    "prettier": "^3.6.2"
+  },
+  "dependencies": {
+    "tree-sitter": "^0.21.1",
+    "tree-sitter-bash": "^0.21.0"
+  }
+}
