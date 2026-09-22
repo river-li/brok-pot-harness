@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks/dist/claude-code-types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CLAUDE_EVENT_TO_CURSOR_STEP = {
   PreToolUse: HookStep.preToolUse,
   PermissionRequest: null,
@@ -30,3 +35,4 @@ var UNSUPPORTED_CLAUDE_EVENTS = [
   "Notification",
   "PermissionRequest"
 ];
+

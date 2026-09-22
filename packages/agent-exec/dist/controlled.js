@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/controlled.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_exec_pb();
 var __await9 = function(v2) {
@@ -164,3 +169,4 @@ var SimpleControlledStreamExecHandler = class {
     return generator(this);
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks/dist/validators/subagentStartResponse.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var validateSubagentStartResponse = (value) => {
   const baseValidation = validateBaseHookResponse(value);
   if (!baseValidation.isValid) {
@@ -16,3 +21,4 @@ var validateSubagentStartResponse = (value) => {
   }
   return createValidationResult(errors.length === 0, errors);
 };
+

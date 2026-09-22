@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/computer-use.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_computer_use_tool_pb();
 var computerUseHooksConfig = {
   toolName: HooksToolName.ComputerUse,
@@ -31,3 +36,4 @@ var computerUseHooksConfig = {
     return { success: true };
   }
 };
+

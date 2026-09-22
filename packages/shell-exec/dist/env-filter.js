@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/env-filter.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function filterElectronEnv(env) {
   const sourceEnv = env || process.env;
   const { ELECTRON_RUN_AS_NODE, ...filteredEnv } = sourceEnv;
@@ -22,3 +27,4 @@ var init_env_filter = __esm({
     ];
   }
 });
+

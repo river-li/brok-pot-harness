@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-carriers/dist/hook-additional-context-render.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function renderHookAdditionalContextSystemReminder(content, onOversize) {
   const normalized = content === null || content === void 0 ? void 0 : content.trim();
   if (!normalized) {
@@ -12,3 +17,4 @@ function renderHookAdditionalContextSystemReminder(content, onOversize) {
 ${sanitized}
 </system_reminder>`;
 }
+

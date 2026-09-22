@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/sandbox/cache-env.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function generateSessionId() {
   return (0, import_node_crypto20.randomBytes)(16).toString("hex");
 }
@@ -78,3 +83,4 @@ var init_cache_env = __esm({
     SANDBOX_CACHE_DIR = "cursor-sandbox-cache";
   }
 });
+

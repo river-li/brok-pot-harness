@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/shell-stream.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_shell_exec_pb();
 var __awaiter42 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -129,3 +134,4 @@ var shellStreamHooksConfig = {
     yield hookExecutor.executeHookForStep(HookStep.afterShellExecution, Object.assign(Object.assign({}, baseHookRequest), { command: args.command, output: collector.getOutput(), duration: executionDurationMs, sandbox }));
   })
 };
+

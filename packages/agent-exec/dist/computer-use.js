@@ -1,16 +1,8 @@
-var COMPUTER_USE_ACTION_KINDS = [
-  "mouse_move",
-  "click",
-  "mouse_down",
-  "mouse_up",
-  "drag",
-  "scroll",
-  "type",
-  "key",
-  "wait",
-  "screenshot",
-  "cursor_position"
-];
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/computer-use.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function summarizeComputerUseActions(actions) {
   const actionCounts = {
     mouse_move: 0,
@@ -70,3 +62,4 @@ var COMPUTER_USE_SCREENSHOT_SETTLE_DELAY_MS = 2e3;
 var computerUseExecutorResource = createResource((execManager) => new ExecutorResource(execManager, createServerSerializer("computerUseArgs"), createClientDeserializer("computerUseResult")), (implementation, controlledExecManager) => {
   controlledExecManager.register(new SimpleControlledExecHandler(implementation, createServerDeserializer("computerUseArgs"), createClientSerializer("computerUseResult")));
 });
+

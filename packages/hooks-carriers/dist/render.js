@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-carriers/dist/render.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function renderHookAdditionalContextContents(hookAdditionalContexts) {
   return hookAdditionalContexts.map((context2) => context2.content.trim()).filter((content) => content.length > 0);
 }
@@ -13,3 +18,4 @@ function appendHookContextRemindersToCoreToolResult(textParts, toolResultContent
     toolResultContent.push({ type: "text", text: text2 });
   }
 }
+

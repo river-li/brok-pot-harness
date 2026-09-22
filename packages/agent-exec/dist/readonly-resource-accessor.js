@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/readonly-resource-accessor.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_background_shell_exec_pb();
+init_delete_exec_pb();
+init_mcp_exec_pb();
+init_shell_exec_pb();
+init_write_exec_pb();
+
+// @recovered-fragment 2/2
 var __awaiter33 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -229,3 +241,4 @@ function createReadonlyResourceAccessor(baseAccessor, wrapShell) {
     includeWriteBackgroundShellStdin: false
   }));
 }
+

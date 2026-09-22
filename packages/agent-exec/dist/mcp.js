@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/mcp.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CURSOR_PLAYWRIGHT_PROVIDER_ID = "cursor-browser-extension";
 var CURSOR_IDE_BROWSER_PROVIDER_ID = "cursor-ide-browser";
 var CURSOR_SELF_CONTROL_PROVIDER_ID = "cursor-dev-control";
@@ -54,14 +59,14 @@ function parseMcpInputSchemaJson(inputSchemaJson) {
   }
   try {
     return JSON.parse(inputSchemaJson);
-  } catch (_a20) {
+  } catch (_a19) {
     return void 0;
   }
 }
 function mcpInputSchemaToJson(tool) {
-  var _a20;
+  var _a19;
   var _b2;
-  return (_b2 = parseMcpInputSchemaJson(tool.inputSchemaJson)) !== null && _b2 !== void 0 ? _b2 : (_a20 = tool.inputSchema) === null || _a20 === void 0 ? void 0 : _a20.toJson();
+  return (_b2 = parseMcpInputSchemaJson(tool.inputSchemaJson)) !== null && _b2 !== void 0 ? _b2 : (_a19 = tool.inputSchema) === null || _a19 === void 0 ? void 0 : _a19.toJson();
 }
 var McpLeaseChangeReason;
 (function(McpLeaseChangeReason2) {
@@ -75,7 +80,7 @@ function isFullMcpLeaseInvalidation(e) {
   return e === void 0 || e.serverIdentifiers === void 0;
 }
 function mergeMcpLeaseEvents(...events) {
-  var _a20, _b2, _c2, _d, _e2;
+  var _a19, _b2, _c2, _d, _e2;
   const [a, b2] = events;
   if (events.length < 2) {
     return a;
@@ -83,7 +88,7 @@ function mergeMcpLeaseEvents(...events) {
   if (isFullMcpLeaseInvalidation(b2)) {
     return {
       serverIdentifiers: void 0,
-      reason: (_a20 = a === null || a === void 0 ? void 0 : a.reason) !== null && _a20 !== void 0 ? _a20 : b2 === null || b2 === void 0 ? void 0 : b2.reason
+      reason: (_a19 = a === null || a === void 0 ? void 0 : a.reason) !== null && _a19 !== void 0 ? _a19 : b2 === null || b2 === void 0 ? void 0 : b2.reason
     };
   }
   if (a === void 0) {
@@ -114,18 +119,6 @@ function mcpServerUnavailableReason(status) {
       return void 0;
   }
 }
-function mcpClientStateToServerStatus(state) {
-  switch (state.kind) {
-    case "ready":
-      return "connected";
-    case "requires_authentication":
-      return "needsAuth";
-    case "error":
-      return "error";
-    default:
-      return "loading";
-  }
-}
 var mcpExecutorResource = createResource((execManager) => new ExecutorResource(execManager, createServerSerializer("mcpArgs"), createClientDeserializer("mcpResult")), (implementation, controlledExecManager) => {
   controlledExecManager.register(new SimpleControlledExecHandler(implementation, createServerDeserializer("mcpArgs"), createClientSerializer("mcpResult")));
 });
@@ -138,3 +131,4 @@ var readMcpResourceExecutorResource = createResource((execManager) => new Execut
 var mcpStateExecutorResource = createResource((execManager) => new ExecutorResource(execManager, createServerSerializer("mcpStateExecArgs"), createClientDeserializer("mcpStateExecResult")), (implementation, controlledExecManager) => {
   controlledExecManager.register(new SimpleControlledExecHandler(implementation, createServerDeserializer("mcpStateExecArgs"), createClientSerializer("mcpStateExecResult")));
 });
+

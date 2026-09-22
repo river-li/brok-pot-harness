@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-names.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var HooksToolName = {
   // File operations
   Read: "Read",
@@ -24,3 +29,4 @@ var HooksToolName = {
   // Screen recording
   RecordScreen: "RecordScreen"
 };
+

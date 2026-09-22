@@ -1,4 +1,9 @@
-var KnownShellExecutor, SHELL_ENV_OVERRIDES;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var KnownShellExecutor;
 var init_types4 = __esm({
   "../packages/shell-exec/dist/types.js"() {
     "use strict";
@@ -9,11 +14,6 @@ var init_types4 = __esm({
       KnownShellExecutor2["PowerShell"] = "powershell";
       KnownShellExecutor2["Naive"] = "naive";
     })(KnownShellExecutor || (KnownShellExecutor = {}));
-    SHELL_ENV_OVERRIDES = {
-      TERM: "dumb",
-      NO_COLOR: "1",
-      FORCE_COLOR: "0",
-      _ZO_DOCTOR: "0"
-    };
   }
 });
+

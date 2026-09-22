@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/agent-tools-file.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto18 = require("node:crypto");
 var import_node_path40 = __toESM(require("node:path"), 1);
 init_mcp_exec_pb();
@@ -119,3 +124,4 @@ function describeOutputLocation(loc, opts) {
   return `${lead} written to file: ${loc.filePath}
 Size: ${formatOutputLocationSize(loc.sizeBytes)}, ${loc.lineCount} lines`;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_subagent_exec_pb();
 init_subagent_exec_pb();
@@ -175,3 +180,4 @@ function createSubagentExecutor(adapter) {
 var subagentExecutorResource = createResource((execManager) => new ExecutorResource(execManager, createServerSerializer("subagentArgs"), createClientDeserializer("subagentResult")), (implementation, controlledExecManager) => {
   controlledExecManager.register(new SimpleControlledExecHandler(implementation, createServerDeserializer("subagentArgs"), createClientSerializer("subagentResult")));
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/mcp-agent-exec/dist/env-expansion.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ENV_VAR_PATTERN = /\$\{(?:env:([A-Za-z_][A-Za-z0-9_]*)|([^:}]+)(?::-([^}]*))?)\}/g;
 function expandString(value, envLookup) {
   return value.replace(ENV_VAR_PATTERN, (match2, envPrefixVar, plainVar, defaultValue) => {
@@ -31,3 +36,4 @@ function expandEnvVarsWithLookup2(obj, envLookup) {
   }
   return obj;
 }
+

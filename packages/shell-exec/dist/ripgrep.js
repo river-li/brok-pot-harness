@@ -1,13 +1,8 @@
-function resolveRipgrepFromPath() {
-  const resolved = findActualExecutable("rg", []).cmd;
-  return resolved !== "rg" ? resolved : void 0;
-}
-function configureRipgrepPath(path30) {
-  if (!path30) {
-    throw new Error("configureRipgrepPath: path must not be empty");
-  }
-  configuredPath = path30;
-}
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/ripgrep.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function findPathEnvKey(env) {
   const pathKeys = Object.keys(env).filter((key) => key.toLowerCase() === "path");
   if (pathKeys.length === 0) {
@@ -34,19 +29,19 @@ function setPathEnvValue(env, pathValue) {
   return result;
 }
 function prependExecutableDirToPath(env, executablePath) {
-  const executableDir = (0, import_node_path3.dirname)(executablePath);
+  const executableDir = (0, import_node_path43.dirname)(executablePath);
   if (!executableDir || executableDir === ".") {
     return env;
   }
-  const currentPathEntries = getPathEnvValue(env).split(import_node_path3.delimiter).filter(Boolean);
+  const currentPathEntries = getPathEnvValue(env).split(import_node_path43.delimiter).filter(Boolean);
   const newPathValue = [
     executableDir,
     ...currentPathEntries.filter((entry) => entry !== executableDir)
-  ].join(import_node_path3.delimiter);
+  ].join(import_node_path43.delimiter);
   return setPathEnvValue(env, newPathValue);
 }
 function withConfiguredRipgrepEnv(env) {
-  if (!configuredPath || !(0, import_node_path3.isAbsolute)(configuredPath)) {
+  if (!configuredPath || !(0, import_node_path43.isAbsolute)(configuredPath)) {
     return env;
   }
   return {
@@ -60,14 +55,11 @@ function getRipgrepBinaryPath() {
   }
   return configuredPath;
 }
-function isRipgrepConfigured() {
-  return configuredPath !== void 0;
-}
-var import_node_path3, configuredPath;
+var import_node_path43, configuredPath;
 var init_ripgrep = __esm({
   "../packages/shell-exec/dist/ripgrep.js"() {
     "use strict";
-    import_node_path3 = require("node:path");
-    init_dist3();
+    import_node_path43 = require("node:path");
   }
 });
+

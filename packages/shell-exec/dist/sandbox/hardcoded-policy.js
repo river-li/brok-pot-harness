@@ -1,19 +1,24 @@
-function getHardcodedAllowedReadPaths(platform = process.platform, homeDir = import_node_os3.default.homedir(), bundledPaths = {}) {
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/sandbox/hardcoded-policy.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+function getHardcodedAllowedReadPaths(platform2 = process.platform, homeDir = import_node_os9.default.homedir(), bundledPaths = {}) {
   const paths = [];
   for (const entry of HARDCODED_ALLOWED_READ_PATHS) {
-    if (entry.platform !== platform) {
+    if (entry.platform !== platform2) {
       continue;
     }
     if (entry.scope === "global") {
       paths.push(entry.path);
       continue;
     }
-    const candidate = entry.scope === "home" ? (0, import_node_path5.join)(homeDir, entry.path) : bundledPaths[entry.path];
+    const candidate = entry.scope === "home" ? (0, import_node_path45.join)(homeDir, entry.path) : bundledPaths[entry.path];
     if (!candidate) {
       continue;
     }
     try {
-      const isAllowedFile = entry.scope === "home" ? (0, import_node_fs3.lstatSync)(candidate).isFile() : (0, import_node_fs3.statSync)(candidate).isFile();
+      const isAllowedFile = entry.scope === "home" ? (0, import_node_fs34.lstatSync)(candidate).isFile() : (0, import_node_fs34.statSync)(candidate).isFile();
       if (isAllowedFile) {
         paths.push(candidate);
       }
@@ -27,7 +32,7 @@ function convertPathsToIgnoreMapping(...paths) {
   for (const p2 of paths) {
     let isDir = false;
     try {
-      isDir = (0, import_node_fs3.existsSync)(p2) && (0, import_node_fs3.statSync)(p2).isDirectory();
+      isDir = (0, import_node_fs34.existsSync)(p2) && (0, import_node_fs34.statSync)(p2).isDirectory();
     } catch {
     }
     if (isDir) {
@@ -37,11 +42,11 @@ function convertPathsToIgnoreMapping(...paths) {
     } else {
       const lastSlash = p2.lastIndexOf("/");
       const dir = lastSlash > 0 ? p2.slice(0, lastSlash) : "/";
-      const file = lastSlash >= 0 ? p2.slice(lastSlash + 1) : p2;
+      const file2 = lastSlash >= 0 ? p2.slice(lastSlash + 1) : p2;
       if (!mapping[dir])
         mapping[dir] = [];
-      if (file) {
-        mapping[dir].push(file, `${file}/**`);
+      if (file2) {
+        mapping[dir].push(file2, `${file2}/**`);
       } else {
         mapping[dir].push("**");
       }
@@ -49,196 +54,19 @@ function convertPathsToIgnoreMapping(...paths) {
   }
   return mapping;
 }
-function getWorkspaceWriteProtectionMapping(workspaceDir) {
-  const patterns = HARDCODED_WRITE_PROTECTION_PATTERNS.filter((e) => e.type === "workspace").map((e) => e.pattern);
-  return { [workspaceDir]: patterns };
-}
-function getGitWriteProtectionMapping(gitDirParent) {
-  const patterns = HARDCODED_WRITE_PROTECTION_PATTERNS.filter((e) => e.type === "git").map((e) => e.pattern);
-  return { [gitDirParent]: patterns };
-}
-function getWorktreeWriteProtectionMapping(workspaceDir) {
-  const patterns = HARDCODED_WRITE_PROTECTION_PATTERNS.filter((e) => e.type === "worktree").map((e) => e.pattern);
-  return { [workspaceDir]: patterns };
-}
-function getHardcodedNetworkPolicy() {
-  if (HARDCODED_NETWORK_DENYLIST.length === 0) {
-    return void 0;
-  }
-  return {
-    version: 1,
-    // Note: We don't set a default here - that's determined by the merge
-    deny: [...HARDCODED_NETWORK_DENYLIST]
-  };
-}
 function getEffectiveSandboxReadBoundary(requested, workspaceReadEnabled) {
   if (!workspaceReadEnabled) {
     return "system";
   }
   return requested ?? "system";
 }
-function getHardcodedSandboxPolicy(workspaceDir) {
-  const networkPolicy = getHardcodedNetworkPolicy();
-  const homeDir = import_node_os3.default.homedir();
-  const additionalReadonlyPaths = [];
-  for (const entry of HARDCODED_WRITE_PROTECTION_PATTERNS) {
-    switch (entry.type) {
-      case "workspace":
-        break;
-      case "git":
-        break;
-      case "worktree":
-        break;
-      case "absolute": {
-        additionalReadonlyPaths.push(entry.pattern);
-        break;
-      }
-      case "home": {
-        if (homeDir.length > 0) {
-          additionalReadonlyPaths.push((0, import_node_path5.join)(homeDir, entry.pattern));
-        }
-        break;
-      }
-      default: {
-        const _exhaustive = entry.type;
-        throw new Error(`Unknown entry type: ${_exhaustive}`);
-      }
-    }
-  }
-  return {
-    type: "workspace_readwrite",
-    additionalReadonlyPaths,
-    writeProtectionMapping: getWorkspaceWriteProtectionMapping(workspaceDir),
-    ...networkPolicy && { networkPolicy },
-    networkPolicyStrict: true
-  };
-}
-function getWorkspaceIgnore() {
-  if (_workspaceIgnore === null) {
-    _workspaceIgnore = (0, import_ignore.default)({ ignoreCase: true });
-    _workspaceIgnore.add(HARDCODED_WRITE_PROTECTION_PATTERNS.filter((e) => e.type === "workspace").map((e) => e.pattern));
-  }
-  return _workspaceIgnore;
-}
-function getGitIgnore() {
-  if (_gitIgnore === null) {
-    _gitIgnore = (0, import_ignore.default)({ ignoreCase: true });
-    _gitIgnore.add(HARDCODED_WRITE_PROTECTION_PATTERNS.filter((e) => e.type === "git").map((e) => e.pattern));
-  }
-  return _gitIgnore;
-}
-async function resolveWorktreeGitDirParent(workspaceDir) {
-  try {
-    const commonDir = await spawnPromise("git", ["rev-parse", "--git-common-dir"], {
-      cwd: workspaceDir
-    });
-    return (0, import_node_path5.dirname)((0, import_node_path5.resolve)(workspaceDir, commonDir.trim()));
-  } catch {
-    return null;
-  }
-}
-function getAbsoluteAndHomePaths() {
-  if (_absoluteAndHomePaths !== null)
-    return _absoluteAndHomePaths;
-  const homeDir = import_node_os3.default.homedir();
-  const paths = [];
-  for (const entry of HARDCODED_WRITE_PROTECTION_PATTERNS) {
-    switch (entry.type) {
-      case "absolute":
-        paths.push(entry.pattern);
-        break;
-      case "home":
-        if (homeDir.length > 0) {
-          paths.push((0, import_node_path5.join)(homeDir, entry.pattern));
-        }
-        break;
-      default:
-        break;
-    }
-  }
-  _absoluteAndHomePaths = paths;
-  return paths;
-}
-async function resolveGitContext(workspaceDir) {
-  const cached2 = _gitContextCache.get(workspaceDir);
-  if (cached2)
-    return cached2;
-  const dotGitStat = await (0, import_promises3.stat)((0, import_node_path5.join)(workspaceDir, ".git")).catch(() => null);
-  const isWorktree = dotGitStat?.isFile() ?? false;
-  if (!isWorktree) {
-    const result2 = { isWorktree: false, gitDirParent: workspaceDir };
-    _gitContextCache.set(workspaceDir, result2);
-    return result2;
-  }
-  const gitDirParent = await resolveWorktreeGitDirParent(workspaceDir);
-  const result = {
-    isWorktree: true,
-    gitDirParent: gitDirParent ?? workspaceDir
-  };
-  _gitContextCache.set(workspaceDir, result);
-  return result;
-}
-function normalizeRootDir(rootDir) {
-  if (!rootDir.endsWith(import_node_path5.sep)) {
-    return rootDir;
-  }
-  const withoutTrailingSep = rootDir.slice(0, -1);
-  if (withoutTrailingSep === "" || process.platform === "win32" && /^[a-zA-Z]:$/.test(withoutTrailingSep)) {
-    return rootDir;
-  }
-  return withoutTrailingSep;
-}
-function rootDescendantPrefix(root) {
-  return root.endsWith(import_node_path5.sep) ? root : root + import_node_path5.sep;
-}
-function isPathUnder(absolutePath, rootDir) {
-  const root = normalizeRootDir(rootDir);
-  if (_caseInsensitiveFs) {
-    const lower = absolutePath.toLowerCase();
-    const rootLower = root.toLowerCase();
-    return lower === rootLower || lower.startsWith(rootDescendantPrefix(rootLower));
-  }
-  return absolutePath === root || absolutePath.startsWith(rootDescendantPrefix(root));
-}
-function relativeForwardSlash(rootDir, absolutePath) {
-  const root = normalizeRootDir(rootDir);
-  if (_caseInsensitiveFs) {
-    return (0, import_node_path5.relative)(root.toLowerCase(), absolutePath.toLowerCase()).replace(/\\/g, "/");
-  }
-  return (0, import_node_path5.relative)(root, absolutePath).replace(/\\/g, "/");
-}
-async function isHardcodedWriteProtected(absolutePath, workspaceDir) {
-  if (isPathUnder(absolutePath, workspaceDir)) {
-    const relPath = relativeForwardSlash(workspaceDir, absolutePath);
-    if (getWorkspaceIgnore().ignores(relPath))
-      return true;
-  }
-  const { isWorktree, gitDirParent } = await resolveGitContext(workspaceDir);
-  if (isPathUnder(absolutePath, gitDirParent)) {
-    const gitRelPath = relativeForwardSlash(gitDirParent, absolutePath);
-    if (getGitIgnore().ignores(gitRelPath))
-      return true;
-  }
-  if (isWorktree && isPathUnder(absolutePath, workspaceDir)) {
-    const relPath = relativeForwardSlash(workspaceDir, absolutePath);
-    if (relPath === ".git")
-      return true;
-  }
-  for (const protectedPath of getAbsoluteAndHomePaths()) {
-    if (isPathUnder(absolutePath, protectedPath))
-      return true;
-  }
-  return false;
-}
-var import_node_fs3, import_promises3, import_node_os3, import_node_path5, import_ignore, HARDCODED_ALLOWED_READ_PATHS, HARDCODED_WRITE_PROTECTION_PATTERNS, HARDCODED_PROTECTED_GIT_PATTERNS, CURSOR_ALLOWED_WRITE_SUBDIRS, HARDCODED_NETWORK_DENYLIST, _workspaceIgnore, _gitIgnore, _absoluteAndHomePaths, _gitContextCache, _caseInsensitiveFs;
+var import_node_fs34, import_node_os9, import_node_path45, import_ignore, HARDCODED_ALLOWED_READ_PATHS, HARDCODED_WRITE_PROTECTION_PATTERNS, HARDCODED_PROTECTED_GIT_PATTERNS, CURSOR_ALLOWED_WRITE_SUBDIRS, _caseInsensitiveFs;
 var init_hardcoded_policy = __esm({
   "../packages/shell-exec/dist/sandbox/hardcoded-policy.js"() {
     "use strict";
-    import_node_fs3 = require("node:fs");
-    import_promises3 = require("node:fs/promises");
-    import_node_os3 = __toESM(require("node:os"), 1);
-    import_node_path5 = require("node:path");
-    init_dist3();
+    import_node_fs34 = require("node:fs");
+    import_node_os9 = __toESM(require("node:os"), 1);
+    import_node_path45 = require("node:path");
     import_ignore = __toESM(require_ignore(), 1);
     HARDCODED_ALLOWED_READ_PATHS = [
       { platform: "linux", scope: "global", path: "/bin" },
@@ -406,16 +234,7 @@ var init_hardcoded_policy = __esm({
     ];
     HARDCODED_PROTECTED_GIT_PATTERNS = HARDCODED_WRITE_PROTECTION_PATTERNS.filter((e) => e.type === "git").map((e) => e.pattern);
     CURSOR_ALLOWED_WRITE_SUBDIRS = HARDCODED_WRITE_PROTECTION_PATTERNS.filter((e) => e.type === "workspace" && e.pattern.startsWith("!") && !e.pattern.endsWith("/**")).map((e) => e.pattern.replace(/^!(\*\*\/)?/, ""));
-    HARDCODED_NETWORK_DENYLIST = [
-      // Placeholder - to be populated with known malicious destinations
-      // Examples (not actual blocks):
-      // "*.malware-domain.com",
-      // "192.168.0.0/16", // Private network ranges might be blocked in certain contexts
-    ];
-    _workspaceIgnore = null;
-    _gitIgnore = null;
-    _absoluteAndHomePaths = null;
-    _gitContextCache = /* @__PURE__ */ new Map();
     _caseInsensitiveFs = process.platform === "win32" || process.platform === "darwin";
   }
 });
+

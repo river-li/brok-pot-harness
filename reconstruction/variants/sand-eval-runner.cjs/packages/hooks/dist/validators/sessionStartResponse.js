@@ -1,0 +1,37 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks/dist/validators/sessionStartResponse.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var validateSessionStartResponse = (value) => {
+  const baseValidation = validateBaseHookResponse(value);
+  if (!baseValidation.isValid) {
+    return baseValidation;
+  }
+  const errors = [];
+  if (value.env !== void 0) {
+    if (!isObject(value.env)) {
+      errors.push("env must be an object if provided");
+    } else {
+      for (const [key, val] of Object.entries(value.env)) {
+        if (!isString(key)) {
+          errors.push(`env key "${key}" must be a string`);
+        }
+        if (!isString(val)) {
+          errors.push(`env value for "${key}" must be a string`);
+        }
+      }
+    }
+  }
+  if (value.additional_context !== void 0 && !isString(value.additional_context)) {
+    errors.push("additional_context must be a string if provided");
+  }
+  if (value.continue !== void 0 && typeof value.continue !== "boolean") {
+    errors.push("continue must be a boolean if provided");
+  }
+  if (value.user_message !== void 0 && !isString(value.user_message)) {
+    errors.push("user_message must be a string if provided");
+  }
+  return createValidationResult(errors.length === 0, errors);
+};
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks/dist/hook-step.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var HookStep = {
   beforeShellExecution: "beforeShellExecution",
   beforeMCPExecution: "beforeMCPExecution",
@@ -24,3 +29,4 @@ var HookStep = {
   // Unlike most other steps these are not tied to an agent session.
   workspaceOpen: "workspaceOpen"
 };
+

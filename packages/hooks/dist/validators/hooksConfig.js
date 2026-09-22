@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks/dist/validators/hooksConfig.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var validateCommonHookProperties = (value, errors) => {
   var _a19;
   if (value.matcher !== void 0) {
@@ -122,3 +127,4 @@ var validateHooksConfig = (value) => {
   }
   return createValidationResult(errors.length === 0, errors);
 };
+

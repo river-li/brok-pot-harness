@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/sandbox/helper.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function withPolicyDirectoryReadonly(additionalReadonlyPaths) {
   const dir = ensureSandboxPolicyDirectory();
   if (!additionalReadonlyPaths || additionalReadonlyPaths.length === 0) {
@@ -11,16 +16,6 @@ function withPolicyDirectoryReadonly(additionalReadonlyPaths) {
 function isWorkspaceReadControlEnabled() {
   const configured2 = configuredWorkspaceReadEnabled;
   return typeof configured2 === "function" ? configured2() : configured2;
-}
-function configureSandboxPrereqs(options2) {
-  getRipgrepBinaryPath();
-  const { sandboxBinaryPath, workspaceReadEnabled } = options2;
-  if (!configuredSandboxBinaryPath) {
-    configuredSandboxBinaryPath = sandboxBinaryPath;
-  }
-  if (workspaceReadEnabled !== void 0) {
-    configuredWorkspaceReadEnabled = workspaceReadEnabled;
-  }
 }
 function getSandboxBinary() {
   return configuredSandboxBinaryPath;
@@ -48,7 +43,7 @@ function resolveNetworkPolicyForFile(sandboxPolicy) {
   }
   return { version: 1, ...policy };
 }
-function resolveHardcodedAllowedReadPaths(platform = process.platform) {
+function resolveHardcodedAllowedReadPaths(platform2 = process.platform) {
   const resolved = [];
   const seen = /* @__PURE__ */ new Set();
   const bundledPaths = {};
@@ -56,7 +51,7 @@ function resolveHardcodedAllowedReadPaths(platform = process.platform) {
     bundledPaths.ripgrep = getRipgrepBinaryPath();
   } catch {
   }
-  for (const entry of getHardcodedAllowedReadPaths(platform, os3.homedir(), bundledPaths)) {
+  for (const entry of getHardcodedAllowedReadPaths(platform2, os6.homedir(), bundledPaths)) {
     if (seen.has(entry)) {
       continue;
     }
@@ -80,20 +75,20 @@ function normalizeAdditionalReadPathRoots(paths) {
       continue;
     }
     if (entry === "~") {
-      entry = os3.homedir();
+      entry = os6.homedir();
     } else if (entry.startsWith("~/") || entry.startsWith("~\\")) {
-      entry = path4.join(os3.homedir(), entry.slice(2));
+      entry = path16.join(os6.homedir(), entry.slice(2));
     }
     entry = entry.replace(/\/\*\*$/, "").replace(/\/\*$/, "");
     entry = entry.replace(/\\\*\*$/, "").replace(/\\\*$/, "");
-    const base = path4.basename(entry);
+    const base = path16.basename(entry);
     if (base.includes("*") || base.includes("?")) {
-      entry = path4.dirname(entry);
+      entry = path16.dirname(entry);
     }
     if (!entry || entry === ".") {
       continue;
     }
-    const normalized = path4.normalize(entry);
+    const normalized = path16.normalize(entry);
     if (seen.has(normalized)) {
       continue;
     }
@@ -147,25 +142,25 @@ function checkBinaryAvailable(ctx) {
   }
   try {
     const bin = getSandboxBinary();
-    logger8.info(ctx, `[checkBinaryAvailable] Resolved binary path: ${bin}`);
+    logger31.info(ctx, `[checkBinaryAvailable] Resolved binary path: ${bin}`);
     if (!bin) {
       binaryCheckError = new Error("Sandbox binary path was not configured");
       binaryAvailable = false;
-      logger8.info(ctx, "[checkBinaryAvailable] Binary path not set, returning false");
+      logger31.info(ctx, "[checkBinaryAvailable] Binary path not set, returning false");
       return false;
     }
-    binaryAvailable = fs3.existsSync(bin);
+    binaryAvailable = fs16.existsSync(bin);
     if (!binaryAvailable) {
       binaryCheckError = new Error(`Sandbox binary not found at ${bin}`);
-      logger8.info(ctx, `[checkBinaryAvailable] Binary not found at: ${bin}`);
+      logger31.info(ctx, `[checkBinaryAvailable] Binary not found at: ${bin}`);
     } else {
-      logger8.info(ctx, `[checkBinaryAvailable] Binary path exists: ${binaryAvailable}`);
+      logger31.info(ctx, `[checkBinaryAvailable] Binary path exists: ${binaryAvailable}`);
     }
     return !!binaryAvailable;
   } catch (e) {
     binaryCheckError = e;
     binaryAvailable = false;
-    logger8.info(ctx, `[checkBinaryAvailable] Exception checking binary: ${e}`);
+    logger31.info(ctx, `[checkBinaryAvailable] Exception checking binary: ${e}`);
     return false;
   }
 }
@@ -174,23 +169,23 @@ function isSandboxHelperSupported(ctx) {
     return cachedSandboxHelperSupported;
   }
   const effectiveCtx = ctx ?? createContext();
-  logger8.info(effectiveCtx, "[isSandboxHelperSupported] Starting sandbox support check...");
+  logger31.info(effectiveCtx, "[isSandboxHelperSupported] Starting sandbox support check...");
   if (!checkBinaryAvailable(effectiveCtx)) {
     const reason = binaryCheckError?.message || "Binary check failed";
     lastSandboxFailureReason = reason;
-    logger8.info(effectiveCtx, `[isSandboxHelperSupported] Binary not available, returning false. Reason: ${reason}`);
+    logger31.info(effectiveCtx, `[isSandboxHelperSupported] Binary not available, returning false. Reason: ${reason}`);
     cachedSandboxHelperSupported = false;
     return cachedSandboxHelperSupported;
   }
   if (process.platform === "win32") {
     lastSandboxFailureReason = "Windows sandbox helper only provides network proxy, not filesystem isolation";
-    logger8.info(effectiveCtx, "[isSandboxHelperSupported] win32: returning false (proxy-only, no filesystem sandbox)");
+    logger31.info(effectiveCtx, "[isSandboxHelperSupported] win32: returning false (proxy-only, no filesystem sandbox)");
     cachedSandboxHelperSupported = false;
     return cachedSandboxHelperSupported;
   }
   if (process.platform === "darwin") {
     lastSandboxFailureReason = null;
-    logger8.info(effectiveCtx, `[isSandboxHelperSupported] ${process.platform} platform, binary available, sandbox supported!`);
+    logger31.info(effectiveCtx, `[isSandboxHelperSupported] ${process.platform} platform, binary available, sandbox supported!`);
     cachedSandboxHelperSupported = true;
     return cachedSandboxHelperSupported;
   }
@@ -205,15 +200,15 @@ function isSandboxHelperSupported(ctx) {
     });
     const preflightMs = Date.now() - preflightStart;
     lastSandboxFailureReason = null;
-    logger8.info(effectiveCtx, `[isSandboxHelperSupported] Preflight succeeded in ${preflightMs}ms, sandbox supported!`);
+    logger31.info(effectiveCtx, `[isSandboxHelperSupported] Preflight succeeded in ${preflightMs}ms, sandbox supported!`);
     cachedSandboxHelperSupported = true;
     return cachedSandboxHelperSupported;
   } catch (e) {
-    const error3 = e;
+    const error42 = e;
     return recordPreflightFailure(effectiveCtx, {
-      message: error3.message,
-      status: error3.status,
-      stderrText: error3.stderr?.toString?.() || ""
+      message: error42.message,
+      status: error42.status,
+      stderrText: error42.stderr?.toString?.() || ""
     });
   }
 }
@@ -222,8 +217,8 @@ function buildPreflightInvocation(ctx, cwd) {
     sandbox: buildNativeSandboxPolicy(withSandboxPolicyDirectoryReadonly({ type: "workspace_readwrite" }), cwd)
   };
   const binaryPath = String(getSandboxBinary());
-  logger8.info(ctx, `[sandboxPreflight] Running preflight with binary: ${binaryPath}`);
-  logger8.info(ctx, `[sandboxPreflight] CWD: ${cwd}`);
+  logger31.info(ctx, `[sandboxPreflight] Running preflight with binary: ${binaryPath}`);
+  logger31.info(ctx, `[sandboxPreflight] CWD: ${cwd}`);
   const env = { ...process.env };
   applyConfiguredRipgrepToSandboxEnv(env);
   const policyFilePath = writeSandboxPolicyFile(JSON.stringify(unifiedPolicy));
@@ -233,12 +228,12 @@ function buildPreflightInvocation(ctx, cwd) {
     env
   };
 }
-function recordPreflightFailure(ctx, failure) {
-  const { message, status, stderrText } = failure;
-  logger8.error(ctx, `[sandboxPreflight] Preflight failed: ${message}`);
-  logger8.error(ctx, `[sandboxPreflight] Exit status: ${status}`);
+function recordPreflightFailure(ctx, failure2) {
+  const { message, status, stderrText } = failure2;
+  logger31.error(ctx, `[sandboxPreflight] Preflight failed: ${message}`);
+  logger31.error(ctx, `[sandboxPreflight] Exit status: ${status}`);
   if (stderrText) {
-    logger8.error(ctx, `[sandboxPreflight] Stderr: ${stderrText}`);
+    logger31.error(ctx, `[sandboxPreflight] Stderr: ${stderrText}`);
   }
   if (status === 2) {
     lastSandboxFailureReason = `Linux preflight failed with exit code 2 (unsupported kernel features). stderr: ${stderrText || "none"}`;
@@ -247,131 +242,6 @@ function recordPreflightFailure(ctx, failure) {
   }
   cachedSandboxHelperSupported = false;
   return false;
-}
-async function primeSandboxHelperSupport(opts) {
-  if (cachedVerdictIsWorkspaceRooted && cachedSandboxHelperSupported !== null) {
-    return cachedSandboxHelperSupported;
-  }
-  if (inFlightWorkspaceProbe !== null) {
-    return inFlightWorkspaceProbe;
-  }
-  inFlightWorkspaceProbe = probeSandboxSupportFromWorkspace(opts).finally(() => {
-    inFlightWorkspaceProbe = null;
-  });
-  return inFlightWorkspaceProbe;
-}
-async function probeSandboxSupportFromWorkspace(opts) {
-  const ctx = opts.ctx ?? createContext();
-  if (!isLinux || !checkBinaryAvailable(ctx)) {
-    const supported2 = isSandboxHelperSupported(ctx);
-    cachedVerdictIsWorkspaceRooted = true;
-    return supported2;
-  }
-  if (cachedSandboxHelperSupported !== null) {
-    logger8.info(ctx, `[primeSandboxHelperSupport] Re-probing from ${opts.workspaceCwd}; the cached verdict (${cachedSandboxHelperSupported}) was measured from a different directory`);
-  }
-  const timeoutMs = opts.timeoutMs ?? PREFLIGHT_PROBE_TIMEOUT_MS;
-  const { binaryPath, args, env } = buildPreflightInvocation(ctx, opts.workspaceCwd);
-  const started = Date.now();
-  const outcome = await runPreflightWithTimeout({
-    binaryPath,
-    args,
-    env,
-    timeoutMs
-  });
-  const elapsedMs3 = Date.now() - started;
-  if (outcome.kind === "timeout") {
-    lastSandboxFailureReason = `Linux preflight rooted at ${opts.workspaceCwd} did not finish within ${timeoutMs}ms (sandbox setup for this workspace is slower than the terminal tool will wait). stderr: ${outcome.stderrText || "none"}`;
-    logger8.error(ctx, `[primeSandboxHelperSupport] Preflight timed out after ${timeoutMs}ms, treating sandbox as unsupported`);
-    cachedSandboxHelperSupported = false;
-    cachedVerdictIsWorkspaceRooted = true;
-    return false;
-  }
-  if (outcome.kind === "failed") {
-    const supported2 = recordPreflightFailure(ctx, {
-      message: outcome.message,
-      status: outcome.status,
-      stderrText: outcome.stderrText
-    });
-    cachedVerdictIsWorkspaceRooted = true;
-    return supported2;
-  }
-  lastSandboxFailureReason = null;
-  logger8.info(ctx, `[primeSandboxHelperSupport] Preflight rooted at ${opts.workspaceCwd} succeeded in ${elapsedMs3}ms, sandbox supported!`);
-  cachedSandboxHelperSupported = true;
-  cachedVerdictIsWorkspaceRooted = true;
-  return true;
-}
-function runPreflightWithTimeout(opts) {
-  return new Promise((resolve14) => {
-    let child;
-    try {
-      child = spawnWorkload(import_node_child_process3.spawn, opts.binaryPath, opts.args, {
-        stdio: ["ignore", "ignore", "pipe"],
-        env: opts.env,
-        shell: false,
-        detached: true
-      });
-    } catch (e) {
-      resolve14({
-        kind: "failed",
-        message: e instanceof Error ? e.message : String(e),
-        stderrText: ""
-      });
-      return;
-    }
-    let stderrText = "";
-    child.stderr?.on("data", (chunk) => {
-      stderrText += chunk.toString();
-    });
-    let settled = false;
-    const timer2 = setTimeout(() => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      killProcessGroup(child);
-      resolve14({ kind: "timeout", stderrText });
-    }, opts.timeoutMs);
-    timer2.unref?.();
-    const finish = (outcome) => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      clearTimeout(timer2);
-      resolve14(outcome);
-    };
-    child.on("error", (e) => {
-      finish({ kind: "failed", message: e.message, stderrText });
-    });
-    child.on("close", (code, signal) => {
-      if (code === 0) {
-        finish({ kind: "ok" });
-        return;
-      }
-      finish({
-        kind: "failed",
-        message: `preflight exited with code ${code}${signal ? ` (signal ${signal})` : ""}`,
-        status: code,
-        stderrText
-      });
-    });
-  });
-}
-function killProcessGroup(child) {
-  const pid = child.pid;
-  if (pid === void 0) {
-    return;
-  }
-  try {
-    process.kill(-pid, "SIGKILL");
-  } catch {
-    try {
-      child.kill("SIGKILL");
-    } catch {
-    }
-  }
 }
 function spawnWithSandboxHelper(command, args = [], options2 = {}, sandboxPolicy) {
   const ctx = createContext();
@@ -446,16 +316,16 @@ function spawnWithSandboxHelperPolicy(command, args, options2, sandboxPolicy) {
   }
 }
 function isGitBackedSync(dir) {
-  let current = path4.resolve(dir);
+  let current = path16.resolve(dir);
   for (; ; ) {
     try {
-      const dotGit = path4.join(current, ".git");
-      if (fs3.existsSync(dotGit)) {
+      const dotGit = path16.join(current, ".git");
+      if (fs16.existsSync(dotGit)) {
         return true;
       }
     } catch {
     }
-    const parent = path4.dirname(current);
+    const parent = path16.dirname(current);
     if (parent === current) {
       return false;
     }
@@ -484,8 +354,8 @@ function buildIgnoreMapping(ignoreMapping, _cwd, _additionalReadwrite, _addition
 }
 function normalizeIgnoreMapping(ignoreMapping, _cwd, _additionalReadwrite, _additionalReadonly) {
   const result = {};
-  for (const [path30, patterns] of Object.entries(ignoreMapping)) {
-    const fsPath = path30.startsWith("file://") ? uriToFsPath(path30) : path30;
+  for (const [path31, patterns] of Object.entries(ignoreMapping)) {
+    const fsPath = path31.startsWith("file://") ? uriToFsPath(path31) : path31;
     result[fsPath] = patterns;
     const canonicalPath = tryRealpath(fsPath);
     if (canonicalPath !== fsPath) {
@@ -495,16 +365,16 @@ function normalizeIgnoreMapping(ignoreMapping, _cwd, _additionalReadwrite, _addi
   return result;
 }
 function uriToFsPath(uri) {
-  let path30 = uri.replace(/^file:\/\//, "");
-  path30 = decodeURIComponent(path30);
-  if (path30.length > 1 && path30.endsWith("/")) {
-    path30 = path30.slice(0, -1);
+  let path31 = uri.replace(/^file:\/\//, "");
+  path31 = decodeURIComponent(path31);
+  if (path31.length > 1 && path31.endsWith("/")) {
+    path31 = path31.slice(0, -1);
   }
-  return path30;
+  return path31;
 }
 function tryRealpath(p2) {
   try {
-    return (0, import_node_fs4.realpathSync)(p2);
+    return (0, import_node_fs35.realpathSync)(p2);
   } catch {
     return p2;
   }
@@ -512,16 +382,16 @@ function tryRealpath(p2) {
 function getLastSandboxFailureReason() {
   return lastSandboxFailureReason;
 }
-var import_node_child_process3, fs3, import_node_fs4, os3, path4, isMacOS, isLinux, logger8, configuredSandboxBinaryPath, configuredWorkspaceReadEnabled, binaryAvailable, binaryCheckError, lastSandboxFailureReason, cachedSandboxHelperSupported, cachedVerdictIsWorkspaceRooted, inFlightWorkspaceProbe, PREFLIGHT_PROBE_TIMEOUT_MS;
+var import_node_child_process3, fs16, import_node_fs35, os6, path16, isMacOS, isLinux, logger31, configuredSandboxBinaryPath, configuredWorkspaceReadEnabled, binaryAvailable, binaryCheckError, lastSandboxFailureReason, cachedSandboxHelperSupported, PREFLIGHT_PROBE_TIMEOUT_MS;
 var init_helper = __esm({
   "../packages/shell-exec/dist/sandbox/helper.js"() {
     "use strict";
     import_node_child_process3 = require("node:child_process");
-    fs3 = __toESM(require("node:fs"), 1);
-    import_node_fs4 = require("node:fs");
-    os3 = __toESM(require("node:os"), 1);
-    path4 = __toESM(require("node:path"), 1);
-    init_dist();
+    fs16 = __toESM(require("node:fs"), 1);
+    import_node_fs35 = require("node:fs");
+    os6 = __toESM(require("node:os"), 1);
+    path16 = __toESM(require("node:path"), 1);
+    init_dist4();
     init_dist3();
     init_env_filter();
     init_ripgrep();
@@ -531,14 +401,13 @@ var init_helper = __esm({
     init_policy_file();
     isMacOS = process.platform === "darwin";
     isLinux = process.platform === "linux";
-    logger8 = createLogger("shell-exec:sandbox");
+    logger31 = createLogger("shell-exec:sandbox");
     configuredWorkspaceReadEnabled = true;
     binaryAvailable = null;
     binaryCheckError = null;
     lastSandboxFailureReason = null;
     cachedSandboxHelperSupported = null;
-    cachedVerdictIsWorkspaceRooted = false;
-    inFlightWorkspaceProbe = null;
     PREFLIGHT_PROBE_TIMEOUT_MS = 15e3;
   }
 });
+

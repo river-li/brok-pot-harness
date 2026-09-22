@@ -1,30 +1,9 @@
-var __awaiter31 = function(thisArg, _arguments, P2, generator) {
-  function adopt(value) {
-    return value instanceof P2 ? value : new P2(function(resolve14) {
-      resolve14(value);
-    });
-  }
-  return new (P2 || (P2 = Promise))(function(resolve14, reject2) {
-    function fulfilled(value) {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject2(e);
-      }
-    }
-    function rejected3(value) {
-      try {
-        step(generator["throw"](value));
-      } catch (e) {
-        reject2(e);
-      }
-    }
-    function step(result) {
-      result.done ? resolve14(result.value) : adopt(result.value).then(fulfilled, rejected3);
-    }
-    step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
-};
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/mcp-agent-exec/dist/config.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+init_zod();
 var commandBasedMcpServer = external_exports.object({
   type: external_exports.literal("stdio").optional(),
   command: external_exports.string(),
@@ -54,15 +33,4 @@ var mcpServerSchema = external_exports.union([commandBasedMcpServer, remoteMcpSe
 var mcpConfigSchema2 = external_exports.object({
   mcpServers: external_exports.record(external_exports.string(), mcpServerSchema)
 });
-function getMcpConfig(configPath_1) {
-  return __awaiter31(this, arguments, void 0, function* (configPath, envLookup = (key) => process.env[key]) {
-    try {
-      const configString = yield (0, import_promises15.readFile)(configPath, "utf8");
-      const raw = parse5(configString);
-      const expanded = expandEnvVarsWithLookup2(raw, envLookup);
-      return mcpConfigSchema2.parse(expanded);
-    } catch (_a20) {
-      return { mcpServers: {} };
-    }
-  });
-}
+

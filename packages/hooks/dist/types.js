@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks/dist/types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var HOOK_STEPS_SUPPORTING_ADDITIONAL_CONTEXT = /* @__PURE__ */ new Set([
   HookStep.sessionStart,
   HookStep.beforeSubmitPrompt,
@@ -37,3 +42,4 @@ var PERMISSION_HOOK_STEPS = [
   HookStep.preToolUse
 ];
 var WORKSPACE_LIFECYCLE_STEPS = [HookStep.workspaceOpen];
+

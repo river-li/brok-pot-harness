@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/mcp-resources.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_mcp_exec_pb();
 var listMcpResourcesHooksConfig = {
   toolName: HooksToolName.ListMcpResources,
@@ -93,3 +98,4 @@ var readMcpResourceHooksConfig = {
     return { uri: args.uri, success: true };
   }
 };
+

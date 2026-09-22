@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/resource-provider.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createResource(remoteImplementation, controlledImplementation) {
   return {
     symbol: /* @__PURE__ */ Symbol(),
@@ -56,3 +61,4 @@ var CombinedResourceAccessor = class {
     return this.baseAccessor.get(resource);
   }
 };
+

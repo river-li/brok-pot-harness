@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/wakeup/index.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function mergeWakeup(queue, incoming) {
   if (queue.some((wakeup) => wakeup.conversationId === incoming.conversationId && wakeup.id === incoming.id)) {
     return { queue: [...queue] };
@@ -15,3 +20,4 @@ function mergeWakeup(queue, incoming) {
   merged[groupedIndex] = ownedIncoming;
   return { queue: merged, replaced };
 }
+

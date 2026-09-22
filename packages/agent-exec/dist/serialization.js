@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/serialization.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_exec_pb();
 function createServerSerializer(argsKey) {
   function serialize(id, args) {
@@ -38,3 +43,4 @@ function createServerDeserializer(argsKey) {
   }
   return deserialize;
 }
+

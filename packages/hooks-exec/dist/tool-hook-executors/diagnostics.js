@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/diagnostics.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_diagnostics_exec_pb();
 var diagnosticsHooksConfig = {
   toolName: HooksToolName.ReadLints,
@@ -44,3 +49,4 @@ var diagnosticsHooksConfig = {
     return { file_path: args.path, success: true };
   }
 };
+

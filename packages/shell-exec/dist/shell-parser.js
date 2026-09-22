@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/shell-parser.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_tree_sitter = __toESM(require("tree-sitter"), 1);
 var import_tree_sitter_bash = __toESM(require("tree-sitter-bash"), 1);
 var TREE_SITTER_STUBBED_ERROR_CODE = "CURSOR_TREE_SITTER_STUBBED";
@@ -339,3 +344,4 @@ function analyzeShellCommand(cmd) {
     structured
   };
 }
+

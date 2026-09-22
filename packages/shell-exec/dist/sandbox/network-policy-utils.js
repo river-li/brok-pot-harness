@@ -1,9 +1,8 @@
-function getEffectiveNetworkPolicy(policy) {
-  if (policy !== void 0) {
-    return policy;
-  }
-  return { version: 1, default: "deny" };
-}
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/shell-exec/dist/sandbox/network-policy-utils.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isNetworkEnabledByPolicy(policy) {
   if (policy === void 0) {
     return false;
@@ -16,12 +15,6 @@ function isNetworkEnabledByPolicy(policy) {
   }
   return false;
 }
-function isAllowAllNetworkByPolicy(policy) {
-  if (policy === void 0) {
-    return false;
-  }
-  return policy.default === "allow";
-}
 function networkDisabledPolicy() {
   return { version: 1, default: "deny" };
 }
@@ -33,3 +26,4 @@ var init_network_policy_utils = __esm({
     "use strict";
   }
 });
+

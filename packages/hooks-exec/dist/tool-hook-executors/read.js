@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/read.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_read_exec_pb();
 var __awaiter40 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -89,3 +94,4 @@ var readHooksConfig = {
     return void 0;
   })
 };
+

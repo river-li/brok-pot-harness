@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/shell.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_shell_exec_pb();
 var __awaiter41 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -133,3 +138,4 @@ var shellHooksConfig = {
     return void 0;
   })
 };
+

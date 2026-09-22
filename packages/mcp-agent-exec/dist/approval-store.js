@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/mcp-agent-exec/dist/approval-store.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var McpServerDisabledError = class extends Error {
   constructor(serverName) {
     super(`MCP server "${serverName}" is disabled`);
@@ -11,3 +16,4 @@ var McpServerNotApprovedError = class extends Error {
     this.name = "McpServerNotApprovedError";
   }
 };
+

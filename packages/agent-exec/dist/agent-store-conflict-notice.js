@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-exec/dist/agent-store-conflict-notice.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __awaiter32 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -79,3 +84,4 @@ function conflictNoticeNoteDeferredEagerWrittenPaths(executor, ctx, writtenPaths
     yield executor.execute(ctx, Object.assign({ op: "noteDeferredEagerWrittenPaths", writtenPaths }, (args === null || args === void 0 ? void 0 : args.conversationId) !== void 0 ? { conversationId: args.conversationId } : {}), options2);
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/agent-store-conflict-accessor.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_shell_exec_pb();
 init_dist3();
 var __awaiter35 = function(thisArg, _arguments, P2, generator) {
@@ -397,3 +402,4 @@ var AgentStoreConflictDrainResourceAccessor = class _AgentStoreConflictDrainReso
   }
 };
 AgentStoreConflictDrainResourceAccessor.CARRIERS_BY_EXEC_ID_MAX = 32;
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/grep.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_grep_exec_pb();
 var grepHooksConfig = {
   toolName: HooksToolName.Grep,
@@ -36,3 +41,4 @@ var grepHooksConfig = {
     success: true
   })
 };
+

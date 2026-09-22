@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/hooks-exec/dist/tool-hook-executors/record-screen.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_record_screen_exec_pb();
 var recordScreenHooksConfig = {
   toolName: HooksToolName.RecordScreen,
@@ -27,3 +32,4 @@ var recordScreenHooksConfig = {
     result_type: result.result.case
   })
 };
+
