@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/voice-call/send-gate.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var NO_LINE_TO_SPEAK_ON = () => "call-closed";
 function createVoiceCallGatedTransport(transport, refusalFor) {
   return {
@@ -19,3 +24,4 @@ function createVoiceCallGatedTransport(transport, refusalFor) {
     }
   };
 }
+

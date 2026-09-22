@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/email/email-attachments.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path167 = require("node:path");
 var SAND_EMAIL_MAX_ATTACHMENTS = 10;
 var SAND_EMAIL_ATTACHMENT_PREVIEW_MAX_BYTES = 8 * 1024;
@@ -49,3 +54,4 @@ function formatSandEmailAttachmentSize(bytes) {
   if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${bytes} bytes`;
 }
+

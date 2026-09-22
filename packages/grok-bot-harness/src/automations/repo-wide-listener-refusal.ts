@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/repo-wide-listener-refusal.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var REPO_WIDE_FIREHOSE_EVENT_KINDS = [
   "pr-pushed",
   "pr-comment",
@@ -31,3 +36,4 @@ function renderUnboundedRepoListenerRefusal({
 }) {
   return `the ${listener.type} listener on "${listener.repo}" was not saved: ${firehoseKinds.join(", ")} are not scoped on the repo. Narrow it with a 'pr' or 'userAllowlist' filter and try again.`;
 }
+

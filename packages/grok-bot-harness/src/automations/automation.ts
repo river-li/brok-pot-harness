@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/automation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AUTOMATION_MAX_NAME_LENGTH = 80;
 var AUTOMATION_MAX_PER_AGENT = 50;
 var AUTOMATION_UI_LIMIT = 100;
@@ -338,3 +343,4 @@ function buildAutomationSubagentPrompt(args) {
     args.parentMediated === true ? "Stay quiet by default: do not acknowledge this run or send progress updates. You cannot mutate the visible transcript, so instructions above to communicate directly must be fulfilled through WakeParent. Old saved instructions may name SendMessage or SendToUser; both names are deprecated and unavailable in this run. Treat either as a semantic request for outward or user-visible communication: do not try to discover or call it, and call WakeParent with the complete payload or handoff instead. WakeParent is the only route that starts or revives the parent so it can communicate outside this run. If the saved instruction itself requires user-visible communication\u2014for example, pinging, reminding, telling, notifying, asking, or saying something to the user\u2014you MUST call WakeParent, even when the work succeeded. A normal final assistant response does not wake the parent and does not itself reach the user. Also call WakeParent when the parent must communicate with another agent, make a decision, or take over a blocker, and include the complete outcome and what the parent should communicate or do because the call immediately ends your turn. For background work whose result can wait until the parent's next natural safe boundary, do not call WakeParent. End with a concise, complete final assistant response in plain text; it is persisted silently as the automation result for the parent to receive at that boundary, and earlier assistant text is not included." : "Use SendToUser for one-way user-visible updates when something is worth surfacing, while preserving the automation's silence contract when there is nothing to report. Always end with a concise, complete final assistant response in plain text, even if you used SendToUser. Only that final assistant response is relayed durably to the parent agent as the automation result; earlier assistant text and SendToUser updates are not included."
   ].join("\n");
 }
+

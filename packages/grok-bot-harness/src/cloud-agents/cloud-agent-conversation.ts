@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-conversation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_agent_pb();
+init_chat_pb();
+
+// @recovered-fragment 2/2
 var SEND_MESSAGE_BUBBLE_SUFFIX = ":send-message";
 function toCloudAgentMessages(conversation) {
   const messages2 = [];
@@ -55,3 +64,4 @@ function toCloudAgentWake(message) {
     createdAtMs(message.createdAt)
   );
 }
+

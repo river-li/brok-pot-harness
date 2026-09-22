@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/box-handoff.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function buildBoxHandBackPrompt(trigger2) {
   if (trigger2 === "dismissed") {
     return "[The user dismissed your box help request without doing the step you asked for. Treat it as declined: do not assume the step happened, and do not immediately request the box again for the same step. Continue the task without it if you can \u2014 skip the step or find another way. If the task cannot proceed without it, send the user a brief message saying what is blocked, then stop and wait for their reply.]";
@@ -7,3 +12,4 @@ function buildBoxHandBackPrompt(trigger2) {
   }
   return "[The user handed the box back to you. Please continue your task \u2014 start with the read-only Screenshot tool to see the current state of the box desktop.]";
 }
+

@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/prompt-collector-glue.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto76 = require("node:crypto");
+var import_node_path164 = require("node:path");
+init_agent_pb();
+init_selected_context_pb();
+
+// @recovered-fragment 2/2
 var SandVideoAttachmentError = class extends Error {
 };
 function joinNonEmpty(first, second, separator) {
@@ -429,3 +440,4 @@ function createPromptCollectorGlue(host) {
     assembleTurnAction
   };
 }
+

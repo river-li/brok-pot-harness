@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/skillify/base-sections.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SKILLIFY_SKILL_IDS = {
   automations: "routines",
   codeChanges: "code-changes",
@@ -55,3 +60,4 @@ function skillifyBaseSections(sections, options2) {
     return [];
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/ports/computer-use-diagnostics.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 init_zod();
 var COMPUTER_USE_SESSION_EVENT = "sand.computer_use.session";
@@ -62,3 +67,4 @@ function computerUseSessionMetadata(report, harness, outcome, abortReason3, dura
     serving_attribution: "join_inference_request"
   };
 }
+

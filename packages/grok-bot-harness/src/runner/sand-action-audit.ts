@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-action-audit.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 function turnAttributionFromContext(ctx, agentId) {
   const turnId = ctx.get(requestIdKey);
@@ -338,3 +343,4 @@ function computerUseSessionAuditRecord(args) {
     }
   };
 }
+

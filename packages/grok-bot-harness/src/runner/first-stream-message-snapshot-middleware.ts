@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/first-stream-message-snapshot-middleware.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var FirstStreamMessageSnapshotMiddleware = class extends BaseMiddleware {
   constructor(innerExecutor, capture) {
     super(innerExecutor);
@@ -16,3 +21,4 @@ var FirstStreamMessageSnapshotMiddleware = class extends BaseMiddleware {
 function createFirstStreamMessageSnapshotMiddleware(capture) {
   return (executor) => new FirstStreamMessageSnapshotMiddleware(executor, capture);
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/automation-completion-middleware.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_errors();
 var logger102 = createLogger("sand:automation-completion-middleware");
@@ -82,3 +87,4 @@ var AutomationCompletionMiddleware = class extends BaseMiddleware {
 function createAutomationCompletionMiddleware(source) {
   return (executor) => new AutomationCompletionMiddleware(executor, source);
 }
+

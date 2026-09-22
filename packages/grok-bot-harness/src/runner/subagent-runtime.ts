@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/subagent-runtime.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_errors();
+
+// @recovered-fragment 2/2
 var SUBAGENT_STALL_THRESHOLD_MS = MCP_EXEC_STALL_THRESHOLD_MS;
 function subagentSteerRunOptions(meta) {
   const parentToolCallPart = meta.toolCallId.length > 0 ? { parentAgentToolCallId: meta.toolCallId } : {};
@@ -449,3 +458,4 @@ function createSubagentRuntime(host, timing) {
     setSubagentEventHandler
   };
 }
+

@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/memory-file-format.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto55 = require("node:crypto");
+var import_node_path119 = require("node:path");
+init_zod();
+
+// @recovered-fragment 2/2
 var MEMORY_DIRNAME = "memory";
 var MEMORY_PROFILE_FILENAME = "profile.md";
 var MEMORY_LOG_DIRNAME = "log";
@@ -105,3 +115,4 @@ function memoryFactToRecord({
 }) {
   return { id, content, createdAt, kind };
 }
+

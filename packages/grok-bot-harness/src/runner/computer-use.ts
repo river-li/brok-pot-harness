@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/computer-use.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_buffer8 = require("node:buffer");
 init_errors();
 init_mcp_diagnostics();
@@ -207,3 +212,4 @@ function createComputerUseCoordination(deps) {
     }
   };
 }
+

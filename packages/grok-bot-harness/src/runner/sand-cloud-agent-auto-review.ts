@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-cloud-agent-auto-review.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto78 = require("node:crypto");
 init_smart_mode_classifier_exec_pb();
 var SAND_CLOUD_AGENT_CLASSIFIER_TARGET_ACTION = "sand_cloud_agent";
@@ -156,3 +161,4 @@ async function reviewSandCloudAgentAction(args) {
   const decision = await runSandAutoReviewFlow({ ...args, spec: SAND_CLOUD_AGENT_REVIEW_SPEC });
   return decision.allowed === false ? decision : { allowed: true };
 }
+

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/mcp/playwright-mcp-install.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto54 = require("node:crypto");
+init_errors();
+
+// @recovered-fragment 2/2
 var INSTALL_ROOT = "/usr/local/lib/sand-playwright-mcp";
 var BIN_DIR = "/usr/local/bin";
 var STAGE_PARENT = "/tmp/sand-playwright-mcp";
@@ -177,3 +186,4 @@ async function ensurePlaywrightMcpInstalled(args) {
   }
   throw fail({ reason: "install_failed", boxImageSha: probe.boxImageSha, detail: report.failed });
 }
+

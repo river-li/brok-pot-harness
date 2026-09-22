@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/mcp/playwright-box-mcp.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PLAYWRIGHT_BOX_MCP_SERVER_NAME = /^playwright-w(0|[1-9]\d*)$/;
 var PLAYWRIGHT_ACTION_TIMEOUT_MS = 1e4;
 function playwrightBoxMcpServerName(windowIndex) {
@@ -30,3 +35,4 @@ async function playwrightBoxMcpServersForBox(box, ctx, agentId, source) {
   await boxRefreshAssignedWindows(box, ctx);
   return playwrightBoxMcpServers(boxAssignedWindowIndexes(box));
 }
+

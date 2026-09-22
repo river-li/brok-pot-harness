@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/session-context-prompt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GROK_BOT_SESSION_PARTICIPANTS_PROMPT_MAX = 8;
 var SLACK_ONE_REPLY_LINE = "In Slack, each SendToUser call is a separate message in this conversation, and people read it as one exchange, so gather your answer and send it once; split only when the parts are genuinely separate, such as a quick acknowledgement before a long task";
 var SLACK_READING_MEDIUM_LINES = [
@@ -62,3 +67,4 @@ function renderCurrentSessionPrompt(session) {
     ...inSlack && session.slackPluginAuthLink === true ? [SLACK_PLUGIN_AUTH_LINE] : []
   ].join("\n");
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/skills/skill-references.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TEACH_QUEUE_SCOPE_PATTERN = /^[a-f0-9]{64}$/;
 function expandSkillReferences({
   prompt,
@@ -23,3 +28,4 @@ Teach recording queue scope: ${reference.teachQueueScope}` : block
 
 ${prompt}` : blocks.join("\n\n");
 }
+

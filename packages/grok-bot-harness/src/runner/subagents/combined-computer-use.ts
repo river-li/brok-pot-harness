@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/subagents/combined-computer-use.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function selectionReason(args) {
   if (args.desktopAvailable !== true) return "no_desktop";
   if (args.boxAvailable !== true) return "box_unavailable";
@@ -42,3 +47,4 @@ function createCombinedComputerUseSelection(options2) {
     }
   };
 }
+

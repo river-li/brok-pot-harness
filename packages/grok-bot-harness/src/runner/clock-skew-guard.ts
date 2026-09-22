@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/clock-skew-guard.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SEND_DISPATCH_MAX_PLAUSIBLE_MS = 12e4;
 var TTFT_MAX_PLAUSIBLE_MS = 18e5;
 function sanitizeCrossClockDurationMs(rawDeltaMs, ceilingMs) {
@@ -27,3 +32,4 @@ function bucketClockSkewDeltaMs(rawDeltaMs) {
   if (rawDeltaMs <= 9e5) return "le_15m";
   return "gt_15m";
 }
+

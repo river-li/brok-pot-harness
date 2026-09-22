@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/action-audit.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function sandAuditInitiatedByOf(options2) {
   if (options2.isConnectorWake === true) return void 0;
   if (options2.isTopLevelAutomationSubagent === true && options2.requestSource === "automation") {
@@ -55,3 +60,4 @@ function withInitiatedBy(auditor, initiatedBy) {
     }
   };
 }
+

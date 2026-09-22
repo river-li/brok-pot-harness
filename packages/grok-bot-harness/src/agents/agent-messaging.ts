@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/agents/agent-messaging.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AGENT_INBOUND_WAKE_CUE = "[agent]";
 var ADMIN_BROADCAST_WAKE_CUE = "[broadcast]";
 var SAND_SEND_TO_AGENT_TOOL_NAME = "SendToAgent";
@@ -161,3 +166,4 @@ function buildMentionedAgentsContext(mentioned) {
   lines2.push("]");
   return lines2.join("\n");
 }
+

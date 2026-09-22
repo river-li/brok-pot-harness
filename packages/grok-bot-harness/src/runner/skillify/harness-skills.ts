@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/skillify/harness-skills.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function reachingServicesSkillLines(credentialFillEnabled, agentEmailEnabled = false) {
   return [
     "When the user wants something from a service you can't reach, with no connector for it and nothing readable on their computer, the box is your default, not a refusal: reach for it the moment it would help, without first asking permission, proposing it, or offering it as a choice. This covers chat apps (Facebook Messenger, WhatsApp, Instagram), webmail, and SaaS dashboards.",
@@ -255,3 +260,4 @@ function sendOnBehalfSkillBody({
     ...agentEmailEnabled ? [subsection("Agent email", sandAgentEmailPromptSection(multipleInboxesEnabled).body)] : []
   );
 }
+

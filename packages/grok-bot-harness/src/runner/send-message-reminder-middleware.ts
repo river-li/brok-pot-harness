@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/send-message-reminder-middleware.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+
+// @recovered-fragment 2/2
 var logger100 = createLogger("sand:send-message-reminder-middleware");
 function isSandUserDeliveryToolCall(part) {
   return invokesFirstPartyTool(part, isSandUserDeliveryToolName);
@@ -192,3 +200,4 @@ function createSendMessageReminderMiddleware(options2) {
     updateCommunication: options2?.updateCommunication
   });
 }
+

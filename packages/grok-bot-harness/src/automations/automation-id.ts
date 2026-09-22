@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/automation-id.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function stableAutomationId({
   agentId,
   localId
@@ -9,3 +14,4 @@ function stableAutomationId({
     16
   )}-${variant}${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
 }
+

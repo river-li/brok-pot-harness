@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/turn-initiator.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var USER_INITIATED_REQUEST_SOURCES = /* @__PURE__ */ new Set([
   "turn",
   "automation",
@@ -15,3 +20,4 @@ function classifySandTurnInitiator(options2) {
   }
   return "other";
 }
+

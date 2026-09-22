@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/turn-memory.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 async function runTurnMemory(memoryStore, episodeProgress, session, ctx, turnTs, exchange) {
   if (memoryStore.recordMemoryEvidence != null) {
@@ -58,3 +63,4 @@ ${exchange.agent}`
 `);
   }
 }
+

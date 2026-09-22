@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/credential-domain.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_tldts = __toESM(require_cjs3());
 function parseHttpUrl(raw) {
   const value = raw.trim();
@@ -63,3 +68,4 @@ function matchCredentialItemToSite(item, rawTarget) {
 function isBrowserLoginCredential(item) {
   return (item.category === "Login" || item.category === "Password") && item.targetRules.length > 0;
 }
+

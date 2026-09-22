@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/evals/conversation-history.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function textContent(text2) {
   return new ConversationHistoryTextContent({ text: text2 });
 }
@@ -76,3 +81,4 @@ function buildSandEvalConversationHistory(request3) {
   });
   return new ConversationHistory({ messages, replaceUserInfo: true });
 }
+

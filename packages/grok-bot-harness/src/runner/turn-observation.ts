@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/turn-observation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_scheduling();
+init_errors();
+
+// @recovered-fragment 2/2
 var MCP_EXEC_STALL_THRESHOLD_MS = 15 * 60 * 1e3;
 function createTurnObservation(host, timing) {
   const mcpExecStallExpiry = timing?.mcpExecStallExpiry ?? createExpiryPolicy({
@@ -358,3 +368,4 @@ function createTurnObservation(host, timing) {
     listAsyncTasks
   };
 }
+

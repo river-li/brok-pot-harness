@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/failures/turn-failure-classification.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_utils_pb();
 var USAGE_LIMIT_RATE_LIMIT_REASONS = /* @__PURE__ */ new Set([
   "sand_included_limit",
@@ -68,3 +73,4 @@ function resolveTurnOutcomeTags(args) {
   const expected = classifyExpectedTurnFailure(args.error);
   return expected === void 0 ? adjusted : { outcome: "error", errorType: expected };
 }
+

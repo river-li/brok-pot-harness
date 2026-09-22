@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-metrics.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var wakeTurn = createCounter("grok_bot.cloud_agent.wake_turn", {
   description: "A cloud agent completion woke Grok Bot and the turn settled: responded (a user-visible message, reaction, or a widget awaiting the user), quiet (nothing visible), or aborted (interrupted, paused, or failed for good); one increment per completion in the wake batch",
@@ -43,3 +48,4 @@ function recordCloudAgentReply(metrics2, args) {
     });
   });
 }
+

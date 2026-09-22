@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/auto-review-gate.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SandAutoReviewPendingApprovalError = class extends Error {
 };
 function sameAutoReviewModes(a, b2) {
@@ -59,3 +64,4 @@ function createAutoReviewGate(deps) {
     }
   };
 }
+

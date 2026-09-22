@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/email/email-display-name.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GROK_BOT_EMAIL_DISPLAY_NAME_MAX_LENGTH = 128;
 var CONTROL_OR_DEL = /[\u0000-\u001F\u007F]/;
 var ENCODED_WORD = /=\?[^?]*\?[BQbq]\?[^?]*\?=/;
@@ -103,3 +108,4 @@ function mailboxDisplayNameError(name17) {
   }
   return void 0;
 }
+

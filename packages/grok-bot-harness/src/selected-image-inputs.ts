@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/selected-image-inputs.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises76 = require("node:fs/promises");
 function toSandSelectedImageInput(image2) {
   const source = image2.dataOrBlobId;
@@ -30,3 +35,4 @@ async function loadSelectedImageInputs(attachmentPaths) {
   );
   return loaded.filter((image2) => image2 != null);
 }
+

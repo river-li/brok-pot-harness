@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-agent-runner.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_scheduling();
+init_agent_pb();
+init_errors();
+
+// @recovered-fragment 2/2
 var BOX_CDP_PORT_BASE4 = 9222;
 var BROWSER_OPERATION_HARNESS = { box: "BOX", temporal: "TEMPORAL" };
 var SandAgentRunner = class _SandAgentRunner {
@@ -1470,3 +1481,4 @@ var SandAgentRunner = class _SandAgentRunner {
     return this.subagentTranscriptId ?? this.getConversationId();
   }
 };
+

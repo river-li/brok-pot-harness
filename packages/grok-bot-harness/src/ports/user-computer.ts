@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/ports/user-computer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_SAND_COMPUTER_ID = "this-computer";
 var SAND_MACHINE_ID_REQUIRED_MESSAGE = `More than one user machine is registered. Call ${SAND_LIST_MACHINES_TOOL_NAME} and retry with machineId so the action is not sent to the wrong machine.`;
 var SandUserComputerResolutionError = class extends Error {
@@ -37,3 +42,4 @@ function createSingleUserComputer(args) {
     }
   };
 }
+

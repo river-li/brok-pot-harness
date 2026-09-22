@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/sand-multitask.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var EXECUTOR_SUBAGENT_TYPE = "executor";
 var EXECUTOR_PROFILE_NAME_PATTERN = /^[a-z0-9][a-z0-9_-]{0,31}$/;
@@ -110,3 +115,4 @@ function sandParentMediatedAutomationMultitaskPromptSection(options2) {
 var SAND_PARENT_MEDIATED_AUTOMATION_MULTITASK_PROMPT_SECTION = sandParentMediatedAutomationMultitaskPromptSection({
   conservativeExecutorReuse: false
 });
+

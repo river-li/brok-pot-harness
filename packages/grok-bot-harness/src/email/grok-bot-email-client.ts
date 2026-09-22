@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/email/grok-bot-email-client.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_grok_bot_pb();
+init_esm2();
+
+// @recovered-fragment 2/2
 var SAND_EMAIL_UNAVAILABLE = "Email is unavailable right now. Try again shortly.";
 var MODEL_FACING_CODES = /* @__PURE__ */ new Set([
   Code.NotFound,
@@ -249,3 +258,4 @@ function createGrokBotEmailClientPort(rpcs, options2) {
     }
   };
 }
+

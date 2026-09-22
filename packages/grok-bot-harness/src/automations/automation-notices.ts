@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/automation-notices.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GITHUB_LISTENER_SCOPE = "github-listener-scope";
 var SAND_FIVE_MINUTE_AUTOMATION_FLOOR_NOTICE_ID = "sand-five-minute-automation-floor";
 var GITHUB_LISTENER_SCOPE_CREATED_BEFORE_MS = Date.UTC(2026, 6, 30);
@@ -34,3 +39,4 @@ function automationNoticesToRaise(automation) {
 function automationNoticeWakeLines(automation) {
   return automationNoticesToRaise(automation).flatMap((notice) => notice.lines);
 }
+

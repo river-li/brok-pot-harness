@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/brain-docs/user-skills-fingerprint.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto84 = require("node:crypto");
 var import_node_path174 = require("node:path");
 var SKIP_FILENAMES = /* @__PURE__ */ new Set(["runs.json"]);
@@ -31,3 +36,4 @@ function compareCodePoints(a, b2) {
   if (a < b2) return -1;
   return a > b2 ? 1 : 0;
 }
+

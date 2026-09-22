@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/subagents/combined-computer-prompt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BOX_DRIVER_TASK_SCOPE_LINE = "- Stay inside the task you were handed \u2014 it's deliberately narrow. Do exactly that step and its success criteria, then stop. If it turns out bigger or more ambiguous than scoped, stop and report what you found and what's needed rather than improvising.";
 var BOX_DRIVER_BULK_DATA_LINE = "- Move bulk or structured data through files, not the keyboard: build it once with Shell (e.g. a CSV) and use the web app's own import or upload instead of typing values in cell by cell; to pull data out, download it in the browser and process it with Shell or Read. Enter data field by field only when there is no import path.";
 var BOX_DRIVER_PRIVACY_LINE = "- Do not inspect cookies, storage, auth headers, password fields, hidden inputs, tokens, or unrelated account data. Redact sensitive or identifying values from the final report.";
@@ -84,3 +89,4 @@ function combinedComputerPrompt(options2) {
     BOX_DRIVER_PKILL_LINE
   ].join("\n\n");
 }
+

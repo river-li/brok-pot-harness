@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/frozen-tool-descriptions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function sameRecord(a, b2) {
   const left = a ?? {};
@@ -133,3 +138,4 @@ function renderFrozenToolDescriptionUpdates(updates) {
     `</${SAND_INSTRUCTIONS_UPDATE_TAG}>`
   ].join("\n");
 }
+

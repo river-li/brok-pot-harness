@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-automation-auto-review.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_smart_mode_classifier_exec_pb();
 var SAND_AUTOMATION_WRITE_CLASSIFIER_TARGET_ACTION = "sand_automation_write";
 var SAND_AUTOMATION_WRITE_CLASSIFIER_ERROR_REASON = "An error occurred while reviewing this routine. Please review manually.";
@@ -83,3 +88,4 @@ var SAND_AUTOMATION_WRITE_REVIEW_SPEC = {
 async function reviewSandAutomationWrite(args) {
   return await runSandAutoReviewFlow({ ...args, spec: SAND_AUTOMATION_WRITE_REVIEW_SPEC });
 }
+

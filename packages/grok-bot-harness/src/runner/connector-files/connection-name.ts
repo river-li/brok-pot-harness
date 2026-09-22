@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/connector-files/connection-name.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CONNECTOR_CONNECTION_ARGUMENT_DESCRIPTION = "connection is the connection's identifier: the same one GetMcpServerStatus lists and that connection's own tools are prefixed with (for example user-onedrive, dashboard-team-1-Google-drive or user-Gmail--personal). The service short name (google-drive, onedrive, gmail or slack) is accepted when exactly one account of that service is connected; with several accounts, name the identifier so the right account is used. Supported today:";
 function serviceKey(name17) {
   return name17.trim().toLowerCase().replaceAll(/[^a-z0-9]+/g, "-").replaceAll(/^-+|-+$/g, "");
@@ -29,3 +34,4 @@ function describeConnectorConnections(available) {
 function describeAmbiguousConnectorConnection(requested, resolution) {
   return `${JSON.stringify(requested)} matches several connected ${resolution.service} accounts: ${resolution.candidates.join(", ")}. Pass one of those identifiers as connection (GetMcpServerStatus shows which account each one is) so the right account is used.`;
 }
+

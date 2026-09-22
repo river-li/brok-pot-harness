@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/shell-terminal-watch-watermark.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_zod();
 var watermarkReads = createCounter("grok_bot.confirmed_user_turn_watermark", {
@@ -136,3 +141,4 @@ function turnRefsEqual(a, b2) {
   }
   return true;
 }
+

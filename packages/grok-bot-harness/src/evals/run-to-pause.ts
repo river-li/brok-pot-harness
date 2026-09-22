@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/evals/run-to-pause.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function runSandAgentToPause(runner, options2) {
   const pendingCompletions = [];
   runner.setBackgroundSubagentHandler((completion) => {
@@ -17,3 +22,4 @@ async function runSandAgentToPause(runner, options2) {
     });
   }
 }
+

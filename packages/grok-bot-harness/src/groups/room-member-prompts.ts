@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/groups/room-member-prompts.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ROOM_TURN_MESSAGE_LIMIT = 24;
 var ROOM_TURN_TEXT_MAX_LENGTH = GROUP_MESSAGE_TEXT_MAX_LENGTH;
 function toRoomTurnSpeaker(speaker, memberId) {
@@ -42,3 +47,4 @@ function fromRoomTurnMessages(messages2, selfMemberId) {
     };
   });
 }
+

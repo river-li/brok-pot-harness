@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/connector-files/auto-review.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_smart_mode_classifier_exec_pb();
+
+// @recovered-fragment 2/2
 var SAND_CONNECTOR_UPLOAD_CLASSIFIER_ERROR_REASON = "An error occurred while reviewing this upload. Please review manually.";
 function reviewArguments(target) {
   return {
@@ -118,3 +126,4 @@ async function reviewSandConnectorDownload(args) {
   });
   return decision.allowed === false ? decision : { allowed: true };
 }
+

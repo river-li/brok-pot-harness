@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/sand-tool-activity.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_TOOL_NAMES = [
   "AddMcpServer",
   "AuthenticateMcpServer",
@@ -113,3 +118,4 @@ function decodeSandToolActivity(currentStep) {
     target: "target" in payload ? descriptor(payload.target) : void 0
   };
 }
+

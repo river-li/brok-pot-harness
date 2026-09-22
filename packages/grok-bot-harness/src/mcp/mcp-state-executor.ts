@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/mcp/mcp-state-executor.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_mcp_exec_pb();
 init_mcp_pb();
 init_esm();
@@ -43,3 +48,4 @@ function createSandMcpStateExecutor(provider) {
 function statusForCatalog(status) {
   return status !== void 0 && UNUSABLE_SERVER_STATUSES.has(status) ? status : "connected";
 }
+

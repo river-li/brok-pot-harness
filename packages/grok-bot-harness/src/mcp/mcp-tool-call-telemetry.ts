@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/mcp/mcp-tool-call-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var OTHER_MCP_TOOL = "other";
 var ALLOWLISTED_MCP_TOOLS = new Set(
   PLAYWRIGHT_MCP_TOOLS_LIST.map((row) => row.name)
@@ -36,3 +41,4 @@ function toolCallCompletedRow(report, harness) {
     window_index: report.windowIndex === void 0 ? void 0 : String(Math.min(Math.max(0, Math.round(report.windowIndex)), WINDOW_INDEX_CAP))
   };
 }
+

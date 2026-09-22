@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/box/box-windows.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var SandBoxWindowError = class extends Error {
 };
 var SAND_BOX_WINDOW_OWNER_TOKEN_PATTERN = /^[A-Za-z0-9_-]+$/;
@@ -106,3 +114,4 @@ function createWindowMcpHost(daemon) {
     mcpResourceAccessor: (ctx) => daemon.mcpResourceAccessor(ctx)
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/skills/bot-skill-writes.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function botSkillSlugFromPath(filePath) {
   const match2 = /\/skills\/([^/]+)\/SKILL\.md$/.exec(filePath);
   return match2?.[1];
@@ -39,3 +44,4 @@ function otherPluginSkillRefusal(skillId) {
 var BOT_SKILLS_IDENTITY_PATTERN = new RegExp(
   `/${PLUGIN_SKILLS_DIRNAME2}/(bot-skills(?:@[^/]*)?)/`
 );
+

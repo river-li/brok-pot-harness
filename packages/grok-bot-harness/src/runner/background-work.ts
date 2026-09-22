@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/background-work.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var RevivingBackgroundWorkRegistry = class extends InMemoryBackgroundWorkRegistry {
   constructor(onShellCompletion, onShellWorkRegistered, onWorkSetChanged) {
@@ -335,3 +340,4 @@ function createBackgroundWatches(host) {
     cloudAgentWatchEntries: () => watchedCloudAgentBcIds.entries()
   };
 }
+

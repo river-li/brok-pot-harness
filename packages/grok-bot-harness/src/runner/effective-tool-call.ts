@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/effective-tool-call.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function resolveEffectiveToolCall(part) {
   const { toolName, args } = part;
   if (toolName !== SAND_DYNAMIC_MCP_META_TOOL_NAMES.invocation) {
@@ -20,3 +25,4 @@ function invokesFirstPartyTool(part, matches) {
   const call = resolveEffectiveToolCall(part);
   return call.dispatch !== "external-dynamic" && matches(call.toolName, call.args);
 }
+

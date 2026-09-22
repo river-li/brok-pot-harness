@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/messages-grants/asks.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto59 = require("node:crypto");
 init_scheduling();
 var ABORTED = {
@@ -148,3 +153,4 @@ function createMessagesGrantsAsks(deps) {
     }
   };
 }
+

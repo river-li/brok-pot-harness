@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/prompt-prefix-observation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function diffPromptPrefix(previous, current) {
   const changed = [];
@@ -358,3 +363,4 @@ function createPromptPrefixObservation(deps) {
     }
   };
 }
+

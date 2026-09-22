@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-request-composition.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist2();
 init_agent_pb();
 init_requested_model_pb();
@@ -236,3 +241,4 @@ function resolveCloudAgentEnvironmentFields(repoUrl, environment) {
     }
   }
 }
+

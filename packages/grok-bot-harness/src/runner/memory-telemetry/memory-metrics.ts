@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/memory-telemetry/memory-metrics.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var write = createCounter("grok_bot.memory.write", {
   description: "An update_state memory action settled ok on a harness that wires memory telemetry (Temporal today): one increment per accepted write, forget, promote, or teach, by the scope it landed in (agent, user, conversation)",
@@ -23,3 +28,4 @@ function recordMemoryWrite(metrics2, telemetry, report) {
 `);
   }
 }
+

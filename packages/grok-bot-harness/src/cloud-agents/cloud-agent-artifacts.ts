@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-artifacts.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist2();
+
+// @recovered-fragment 2/2
 init_errors();
 var artifactsReported = createCounter("grok_bot.cloud_agent.artifacts_reported", {
   description: "Artifacts a finished cloud agent run listed under its artifacts dir when Grok Bot read the completion; one increment per listed file",
@@ -246,3 +254,4 @@ ${note}` };
   }
   return args.result;
 }
+

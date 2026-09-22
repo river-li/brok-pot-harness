@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/box/shared-desktop-sand-box.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto47 = require("node:crypto");
 init_scheduling();
 init_errors();
@@ -494,3 +499,4 @@ var SharedDesktopSandBox = class {
     return await this.inner.downloadFile(ctx, this.sharedBoxId, boxPath);
   }
 };
+

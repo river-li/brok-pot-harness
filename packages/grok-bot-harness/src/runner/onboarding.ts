@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/onboarding.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_ONBOARDING_KICKSTART_LINES = [
   "[first run] This is your very first turn. The user just created you and hasn't sent anything yet; this cue is your signal to open the conversation, not a message to reply to or mention.",
   "Greet them and get them going. Open with a short hello (your name and description are already in your profile above, so don't recite them), then start learning how to be useful.",
@@ -28,3 +33,4 @@ var SAND_DISK_SAVER_REAUDIT_PROMPT = [
   DISK_SAVER_TASK,
   "Deliver the fresh findings with SendToUser even if they match your last audit. Don't mention this cue."
 ].join("\n");
+

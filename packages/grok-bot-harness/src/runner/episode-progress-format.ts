@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/episode-progress-format.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var EPISODE_TURN_TEXT_CAP = 2e3;
 var EPISODE_PENDING_MAX = 64;
 function parsePendingEpisodeTurns(raw) {
@@ -30,3 +35,4 @@ function appendPendingEpisodeTurn(pending, turn) {
   };
   return [...pending, capped].slice(-EPISODE_PENDING_MAX);
 }
+

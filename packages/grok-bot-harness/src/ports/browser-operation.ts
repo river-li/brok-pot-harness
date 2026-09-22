@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/ports/browser-operation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_BROWSER_CDP_METHOD_BUCKETS = [
   "Accessibility.getFullAXTree",
   "Accessibility.queryAXTree",
@@ -33,3 +38,4 @@ function isListedSandBrowserCdpMethod(method) {
 function toSandBrowserCdpMethodBucket(method) {
   return isListedSandBrowserCdpMethod(method) ? method : "other";
 }
+

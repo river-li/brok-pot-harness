@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/send-trace-host.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_errors();
+
+// @recovered-fragment 2/2
 function beginSendTrace(traceparent) {
   return adoptRemoteParent(traceparent, "sand.send");
 }
@@ -148,3 +157,4 @@ async function traceSendPhase(ctx, name17, fn) {
     }
   }
 }
+

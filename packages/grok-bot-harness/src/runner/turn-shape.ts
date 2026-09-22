@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/turn-shape.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isDeliveryToolCall(part) {
   return invokesFirstPartyTool(
     part,
@@ -93,3 +98,4 @@ function turnEndedOnSilentToolCalls(rawMessages) {
   }
   return ackedFirst;
 }
+

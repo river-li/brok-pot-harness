@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/origin-repo-reference.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist3();
 function repoReferenceAsUrl(raw) {
   const trimmed = raw?.trim() ?? "";
@@ -24,3 +29,4 @@ function isOriginRepoReference(raw) {
 function normalizeLaunchRepoReference(raw) {
   return portalRepoCloneUrl(raw) ?? raw;
 }
+

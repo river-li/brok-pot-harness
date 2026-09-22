@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/groups/group-chat.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GROUP_CONFIG_VERSION = 1;
 var GROUP_MAX_MEMBERS2 = 6;
 var GROUP_MAX_MEMBER_TURNS = 10;
@@ -163,3 +168,4 @@ function buildGroupTurnPrompt(args) {
   if (isWindingDown === true) lines2.push(GROUP_WIND_DOWN_NOTE);
   return lines2.join("\n");
 }
+

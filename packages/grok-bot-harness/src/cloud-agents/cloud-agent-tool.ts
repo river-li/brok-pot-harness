@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_utils_pb();
+init_esm2();
+init_errors();
+init_zod();
+
+// @recovered-fragment 2/2
 var SandCloudAgentToolInputError = class extends Error {
 };
 function cloudAgentMetricsScope(ctx, deps) {
@@ -1038,3 +1049,4 @@ function createCloudAgentTool(deps) {
     execute: async (ctx, args, toolDeps) => runCloudAgentAction(ctx, args, toolDeps)
   });
 }
+

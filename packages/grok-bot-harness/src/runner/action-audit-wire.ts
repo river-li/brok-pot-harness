@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/action-audit-wire.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dashboard_pb();
 function nonNegativeBigInt(value) {
   return BigInt(Math.max(0, Math.round(value)));
@@ -98,3 +103,4 @@ function toSandAuditEventProto(record2, eventId) {
     }
   }
 }
+

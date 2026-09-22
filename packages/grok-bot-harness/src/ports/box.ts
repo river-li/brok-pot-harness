@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/ports/box.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+
+// @recovered-fragment 2/2
 var sandBoxPullProgressKey = createKey(/* @__PURE__ */ Symbol("sand.box.pull-progress"), void 0);
 var sandBackgroundWorkRegistryKey = createKey(
   /* @__PURE__ */ Symbol("sand.box.background-work-registry"),
@@ -75,3 +83,4 @@ var BoxMcpUnsupportedError = class extends Error {
     this.name = "BoxMcpUnsupportedError";
   }
 };
+

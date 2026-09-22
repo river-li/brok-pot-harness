@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/mcp/host-mcp.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_errors();
+init_mcp_diagnostics();
+
+// @recovered-fragment 2/3
+init_mcp_marketplace();
+
+// @recovered-fragment 3/3
 init_cursor_token();
 function syncPluginSkillsInBackground(pluginSkills, trigger2) {
   void (async () => {
@@ -396,3 +408,4 @@ function createHostMcp(deps) {
     dispose: () => manager.dispose()
   };
 }
+

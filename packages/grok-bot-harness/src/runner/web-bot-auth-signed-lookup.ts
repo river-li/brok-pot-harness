@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/web-bot-auth-signed-lookup.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs100 = require("node:fs");
 init_zod();
 var webBotAuthSignedCacheSchema = external_exports.record(
@@ -42,3 +47,4 @@ function lookupWebBotAuthSignedDetail(origin, options2 = {}) {
 function readCacheFile(path31) {
   return (0, import_node_fs100.readFileSync)(path31, "utf8");
 }
+

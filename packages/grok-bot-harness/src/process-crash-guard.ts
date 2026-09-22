@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/process-crash-guard.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 function toError(value) {
   return value instanceof Error ? value : new Error(String(value));
@@ -25,3 +30,4 @@ function installProcessCrashGuards(options2) {
     }
   };
 }
+

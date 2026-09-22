@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/automation-cloud-definition.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function originServerHosted(listener, options2) {
   return listener.type === "origin" && options2?.originHost !== void 0 && originServerShape(listener) === "supported";
 }
@@ -482,3 +487,4 @@ function sandCloudDefinition({
     workflow
   };
 }
+

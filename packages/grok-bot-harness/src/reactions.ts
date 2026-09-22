@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/reactions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isUserMessageEntry(entry) {
   if (entry.kind === "message") return entry.role === "user";
   return entry.kind === "user-attachment";
@@ -39,3 +44,4 @@ function buildReactionWakePrompt({
   }
   return `[The user reacted ${emoji3} to your message: "${describeReactedMessageQuote(entry)}". You don't need to reply; act on it only if it's useful (e.g. acknowledge, adjust, or continue).]`;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/start-of-turn-ack-reminder-middleware.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger103 = createLogger("sand:start-of-turn-ack-reminder-middleware");
 function chatSilenceRemindersCoverThisTurn({
@@ -90,3 +95,4 @@ function createStartOfTurnAckReminderMiddleware(options2) {
   const message = buildReminderMessage(options2?.message ?? START_OF_TURN_ACK_REMINDER_MESSAGE);
   return (executor) => new StartOfTurnAckReminderMiddleware(executor, threshold, message);
 }
+

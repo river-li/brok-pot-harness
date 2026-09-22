@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/navigation-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var NOOP_AUDITOR = { record: () => {
 } };
 function withNavigationTelemetry(auditor, options2) {
@@ -54,3 +59,4 @@ function withNavigationTelemetry(auditor, options2) {
     botBlockAuditor.wallEpisodeForNavigation
   );
 }
+

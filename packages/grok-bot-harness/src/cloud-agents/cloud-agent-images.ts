@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-images.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises78 = require("node:fs/promises");
 var import_node_path163 = require("node:path");
 init_dist2();
@@ -211,3 +216,4 @@ async function readHostFileWithinLimit(path31, byteLimit) {
     return null;
   }
 }
+

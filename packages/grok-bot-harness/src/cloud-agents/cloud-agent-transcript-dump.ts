@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-transcript-dump.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 function cloudAgentTranscriptDumpPath(bcId) {
   return `cloud-agent-transcripts/${bcId}.jsonl`;
@@ -48,3 +53,4 @@ ${formatCloudAgentDumpCompletionLine(
   }
   return args.result;
 }
+

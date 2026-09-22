@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/shell-terminal-watch.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_buffer9 = require("node:buffer");
+init_agent_pb();
+init_read_exec_pb();
+
+// @recovered-fragment 2/2
 var SandTerminalReadError = class extends Error {
 };
 async function pollShellTerminalFile(host, id, isCancelled, settle) {
@@ -126,3 +136,4 @@ ${message.text}` : message.text;
     dedupeFloorMessageId: lastUserMessageId !== void 0 && lastUserMessageId.length > 0 ? lastUserMessageId : void 0
   };
 }
+

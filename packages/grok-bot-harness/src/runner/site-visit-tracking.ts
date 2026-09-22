@@ -1,4 +1,9 @@
-var import_node_net3 = require("node:net");
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/site-visit-tracking.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var import_node_net = require("node:net");
 var COMMON_PUBLIC_GTLDS = /* @__PURE__ */ new Set([
   "app",
   "biz",
@@ -311,9 +316,9 @@ var MAX_BUCKET_LENGTH = 100;
 function mint(bucket) {
   return bucket;
 }
-function boundedSiteBucket(hostname2) {
-  const host = hostname2.toLowerCase().replace(/\.$/, "");
-  if (host.startsWith("[") || (0, import_node_net3.isIP)(host) !== 0) return mint("ip");
+function boundedSiteBucket(hostname3) {
+  const host = hostname3.toLowerCase().replace(/\.$/, "");
+  if (host.startsWith("[") || (0, import_node_net.isIP)(host) !== 0) return mint("ip");
   if (host === "localhost" || host.endsWith(".localhost")) return mint("local");
   const labels = host.split(".");
   if (labels.length < 2) return mint("private");
@@ -328,8 +333,8 @@ function boundedSiteBucket(hostname2) {
 }
 function visitedSiteBucket(rawUrl) {
   if (!URL.canParse(rawUrl)) return void 0;
-  const hostname2 = new URL(rawUrl).hostname;
-  return hostname2.length === 0 ? void 0 : boundedSiteBucket(hostname2);
+  const hostname3 = new URL(rawUrl).hostname;
+  return hostname3.length === 0 ? void 0 : boundedSiteBucket(hostname3);
 }
 function withSiteVisitTracking(auditor, onVisit, lookupSigned = () => void 0, lookupWallEpisode = () => void 0) {
   return {
@@ -351,3 +356,4 @@ function withSiteVisitTracking(auditor, onVisit, lookupSigned = () => void 0, lo
     }
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/evals/runner-options.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var unavailableWebSearch = async () => ({
   answer: "",
   documents: []
@@ -83,3 +88,4 @@ function buildSandEvalRunnerOptions(options2) {
     gates: composeEvalRunnerGates(options2.evalGateOverrides)
   };
 }
+

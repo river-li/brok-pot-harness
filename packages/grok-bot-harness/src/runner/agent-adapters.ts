@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/agent-adapters.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_mcp_pb();
+init_request_context_exec_pb();
+init_esm();
+
+// @recovered-fragment 2/2
 var SandSubagentDispatchError = class extends Error {
 };
 var SAND_COMPUTER_USE_DESKTOP_BUSY_MESSAGE = "A computerUse subagent is already using the box's desktop. Only one can run at a time \u2014 wait for it to finish (you're notified automatically), then dispatch another.";
@@ -321,3 +332,4 @@ var ForwardingInteractionListener = class extends NoopInteractionListener {
     }
   }
 };
+

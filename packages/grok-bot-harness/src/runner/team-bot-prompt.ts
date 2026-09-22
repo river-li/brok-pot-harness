@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/team-bot-prompt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TEAM_BOT_LINE = "Team bot: you are shared with your owner's whole team, and any teammate can message you in the Grok Bot app, so write for the team rather than for one person.";
 var SLACK_APP_MEANING = "You have no Slack app of your own yet. Having one means teammates can DM you or @mention you in Slack and reach you there, which is what adding you to Slack sets up; reading and posting in Slack is the Slack plugin's job when it is among your tools, with or without an app of your own.";
 var SLACK_NOT_INSTALLED_LINE = `${SLACK_APP_MEANING} Your owner can add you from Team access in the app.`;
@@ -43,3 +48,4 @@ function renderTeamBotPrompt(identity) {
     ...identity.autoReviewOff === true ? [AUTO_REVIEW_OFF_LINE] : []
   ].join("\n");
 }
+

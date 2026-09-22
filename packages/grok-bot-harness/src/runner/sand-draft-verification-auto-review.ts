@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-draft-verification-auto-review.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_smart_mode_classifier_exec_pb();
 init_esm();
 init_errors();
@@ -81,3 +86,4 @@ async function reviewSandDraftRouteVerification(args) {
   );
   return approval.approved ? { allowed: true } : { allowed: false, reason: approval.reason ?? decision.reason };
 }
+

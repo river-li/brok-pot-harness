@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-outbound-call-auto-review.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_OUTBOUND_CALL_UNAVAILABLE_REASON = "Placing a live phone call needs your approval, which is not available in this conversation.";
 var SAND_OUTBOUND_CALL_CANCELLED_REASON = "The phone call was cancelled before it was placed.";
 async function reviewSandOutboundCall(args) {
@@ -30,3 +35,4 @@ ${instructions}`,
   );
   return approval.approved ? { allowed: true } : { allowed: false, reason: approval.reason ?? "The user declined." };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/virtual-card.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function buildVirtualCardApprovalMessage(args) {
   return {
     type: "virtual-card-approval",
@@ -60,3 +65,4 @@ function buildVirtualCardAnswerPrompt(answer) {
   if (!answer.approved) return buildVirtualCardDeniedAck();
   return answer.spendRequestId === void 0 ? buildVirtualCardFailedAck() : buildVirtualCardApprovedAck(answer.spendRequestId);
 }
+

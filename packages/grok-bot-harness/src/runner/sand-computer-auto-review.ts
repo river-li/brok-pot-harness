@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-computer-auto-review.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto53 = require("node:crypto");
+init_smart_mode_classifier_exec_pb();
+init_errors();
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_COMPUTER_CLASSIFIER_TARGET_ACTION = "sand_computer";
 var SAND_COMPUTER_AUTO_REVIEW_MAX_DESCRIPTION_CHARS = 500;
 var SAND_COMPUTER_AUTO_REVIEW_MAX_TEXT_CHARS = 2e3;
@@ -44,7 +55,7 @@ function computeSandComputerPageStateIdentity(stdout) {
     lines2.push(`${pageId}	${rawUrl.trim()}`);
   }
   lines2.sort();
-  return (0, import_node_crypto28.createHash)("sha256").update(lines2.join("\n")).digest("hex");
+  return (0, import_node_crypto53.createHash)("sha256").update(lines2.join("\n")).digest("hex");
 }
 function isSandComputerAutoReviewBypassAction(action) {
   return BYPASS_COMPUTER_ACTIONS.has(action);
@@ -111,7 +122,7 @@ function buildProjectPermissionsContext(args) {
   const blockInstructions = [];
   const seenAllow = /* @__PURE__ */ new Set();
   const seenBlock = /* @__PURE__ */ new Set();
-  const appendUnique2 = (target, seen, values) => {
+  const appendUnique = (target, seen, values) => {
     for (const value of values) {
       const trimmed = value.trim();
       if (trimmed.length === 0 || seen.has(trimmed)) continue;
@@ -119,16 +130,16 @@ function buildProjectPermissionsContext(args) {
       target.push(trimmed);
     }
   };
-  appendUnique2(allowInstructions, seenAllow, args.personalInstructions?.allowInstructions ?? []);
-  appendUnique2(blockInstructions, seenBlock, args.personalInstructions?.blockInstructions ?? []);
-  appendUnique2(allowInstructions, seenAllow, args.userAutoRunInstructions?.allowInstructions ?? []);
-  appendUnique2(blockInstructions, seenBlock, args.userAutoRunInstructions?.blockInstructions ?? []);
-  appendUnique2(
+  appendUnique(allowInstructions, seenAllow, args.personalInstructions?.allowInstructions ?? []);
+  appendUnique(blockInstructions, seenBlock, args.personalInstructions?.blockInstructions ?? []);
+  appendUnique(allowInstructions, seenAllow, args.userAutoRunInstructions?.allowInstructions ?? []);
+  appendUnique(blockInstructions, seenBlock, args.userAutoRunInstructions?.blockInstructions ?? []);
+  appendUnique(
     allowInstructions,
     seenAllow,
     args.projectAutoRunInstructions?.allowInstructions ?? []
   );
-  appendUnique2(
+  appendUnique(
     blockInstructions,
     seenBlock,
     args.projectAutoRunInstructions?.blockInstructions ?? []
@@ -247,10 +258,10 @@ function runShadowClassifier(ctx, args, canonicalTarget) {
         decision: "block",
         reason: decision.reason
       });
-    } catch (error3) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "auto_review_shadow_classify_failed",
-        errorClass: errorLogTag(error3)
+        errorClass: errorLogTag(error42)
       });
     }
   })();
@@ -338,3 +349,4 @@ async function runSandComputerAutoReviewPreflight(args) {
 var sandComputerDeclaredPurposeParameter = external_exports.string().optional().describe(
   "Concise model-facing intent for this action. Required for click and drag in Auto-review enforce mode; include for type/key when it clarifies purpose."
 );
+

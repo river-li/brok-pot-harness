@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/system-prompt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var USER_MESSAGE_REPLY_REMINDER_BODY = "Reply to this message by actually invoking the SendToUser tool \u2014 make a real tool/function call, not text you write. Plain assistant text is NEVER delivered; only a real SendToUser tool invocation reaches the user, so if you don't invoke the tool they just see silence.";
 function wrapSystemReminderBodies(bodies) {
   return `<system_reminder>
@@ -566,3 +571,4 @@ var SAND_PARENT_MEDIATED_AUTOMATION_SUBAGENT_MCP_MULTI_ACCOUNT_PROMPT_SECTION = 
   'An MCP server can be signed in to several accounts (e.g. a work and a personal Notion); GetMcpServerStatus lists one line per account (`account="\u2026"`), each with its own server identifier. When a lifecycle tool takes an account_label, pass the label exactly as the listing shows it.',
   "- Never guess an account. Resolve the choice from available context when the evidence distinguishes one account; if material ambiguity remains, call WakeParent with the verified account options, relevant context, and decision needed."
 ].join("\n");
+

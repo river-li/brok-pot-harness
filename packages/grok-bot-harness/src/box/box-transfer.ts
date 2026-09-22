@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/box/box-transfer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path10 = require("node:path");
 init_errors();
 init_system_errno();
@@ -154,3 +159,4 @@ async function downloadBoxFiles(ctx, box, agentId, boxPaths, opts) {
     })
   );
 }
+

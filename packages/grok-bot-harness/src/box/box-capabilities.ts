@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/box/box-capabilities.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function boxMaxWindows(box) {
   return box.maxWindows?.() ?? 1;
 }
@@ -46,3 +51,4 @@ async function boxMcpResourceAccessor(box, ctx) {
 async function boxAgentMcpHost(box, ctx, agentId) {
   return await box.agentMcpHost?.(ctx, agentId);
 }
+

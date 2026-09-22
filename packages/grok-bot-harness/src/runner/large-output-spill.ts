@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/large-output-spill.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto75 = require("node:crypto");
 var import_node_path162 = require("node:path");
 init_utils_pb2();
@@ -40,3 +45,4 @@ function createSandMcpTextSpiller(opts) {
     return spilled;
   };
 }
+

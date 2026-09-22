@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/evals/web-search-fixtures.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var webSearchDocumentSchema = external_exports.object({
   url: external_exports.string().url(),
@@ -48,3 +53,4 @@ function createFixtureAugmentedWebSearchService(config2, baseService = async () 
     return augmentWebSearchResult(args, baseResult, config2);
   };
 }
+

@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/turn-run-shell.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_scheduling();
+init_agent_pb();
+init_sand_agent_model();
+init_errors();
+
+// @recovered-fragment 2/2
 function loopMitigationOutcomeOf(turnOutcome2) {
   switch (turnOutcome2) {
     case "success":
@@ -943,3 +955,4 @@ function createTurnRunShell(host) {
     cancelPauseForUpgrade
   };
 }
+

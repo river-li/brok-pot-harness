@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/automation-file-format.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path94 = require("node:path");
 init_unknown_record();
 var AUTOMATIONS_DIRNAME = "automations";
@@ -277,3 +282,4 @@ function automationRecordFromConfig(args) {
     filePath: args.filePath
   };
 }
+

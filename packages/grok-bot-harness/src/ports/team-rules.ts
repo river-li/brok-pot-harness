@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/ports/team-rules.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function mergeTeamRulesByFullPath(batches) {
   const seen = /* @__PURE__ */ new Set();
   const merged = [];
@@ -10,3 +15,4 @@ function mergeTeamRulesByFullPath(batches) {
   }
   return merged;
 }
+

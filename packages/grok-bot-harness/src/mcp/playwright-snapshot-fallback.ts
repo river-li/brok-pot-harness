@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/mcp/playwright-snapshot-fallback.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_mcp_exec_pb();
 var UNRESOLVED_TARGET_PHRASES = {
   stale_ref: "is from an older snapshot",
@@ -49,3 +54,4 @@ function withPlaywrightSnapshotFallback(executor, harness) {
     }
   };
 }
+

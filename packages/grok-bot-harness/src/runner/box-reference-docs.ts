@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/box-reference-docs.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises51 = require("node:fs/promises");
+var import_node_path106 = require("node:path");
+
+// @recovered-fragment 2/2
 function settingsRowLink(label, anchor) {
   return `[${label}](${buildSandSettingsDeepLinkUrl(anchor)})`;
 }
@@ -80,3 +89,4 @@ async function provisionSandBoxPromptArtifacts() {
   );
   if (failed2 != null) throw failed2.reason;
 }
+

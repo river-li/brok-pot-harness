@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/bot-block-detection.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_BOT_BLOCK_FAMILIES = [
   "google_sorry",
   "google_signin_rejected",
@@ -320,3 +325,4 @@ function withSignedLookup(hit, url2, lookupSigned) {
     ...detail.source === void 0 ? {} : { webBotAuthSignatureSource: detail.source }
   };
 }
+

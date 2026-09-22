@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/automation-trigger.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_unknown_record();
+
+// @recovered-fragment 2/2
 var TRIGGER_MAX_CHANNEL_LENGTH = 80;
 var TRIGGER_MAX_KEYWORD_LENGTH = 120;
 var TRIGGER_MAX_REPO_LENGTH = 140;
@@ -912,3 +920,4 @@ ${escapeEventText(JSON.stringify(payload, null, 2))}
     }
   }
 }
+

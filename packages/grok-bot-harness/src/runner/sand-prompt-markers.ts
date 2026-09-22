@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-prompt-markers.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_HIDDEN_PROMPT_MARKER = "[SAND_HIDDEN_PROMPT]";
 var SAND_TRUSTED_AUTOMATION_PROMPT_MARKER = "[SAND_TRUSTED_AUTOMATION_PROMPT]";
 function automationWakeTrustMarker(wake) {
@@ -96,3 +101,4 @@ function stripOneLeadingNote(body) {
   }
   return void 0;
 }
+

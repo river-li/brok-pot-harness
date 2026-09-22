@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/stream-tuning.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_HEADLESS_STREAM_RETRY = {
   maxAttempts: 4,
   baseDelayMs: 1e3,
@@ -33,3 +38,4 @@ function resolveSandStreamTuning(env) {
     }
   };
 }
+

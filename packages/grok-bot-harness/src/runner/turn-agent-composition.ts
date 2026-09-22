@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/turn-agent-composition.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist2();
+init_mcp_exec_pb();
+init_request_context_exec_pb();
+init_subagent_exec_pb();
+init_errors();
+init_mcp_diagnostics();
+
+// @recovered-fragment 2/2
 var SandSelfSummaryPromptToolExecutor = class extends SimplePromptToolExecutor {
   executeToolStream(...args) {
     const [
@@ -879,3 +892,4 @@ ${note}`;
   }
   return { buildAgentForRun, dispatchAutomationSubagent };
 }
+

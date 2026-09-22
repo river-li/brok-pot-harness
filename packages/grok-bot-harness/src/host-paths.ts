@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/host-paths.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises2 = require("node:fs/promises");
+var import_node_os = require("node:os");
+var import_node_path2 = require("node:path");
+init_system_errno();
+
+// @recovered-fragment 2/2
 var SAND_DATA_ROOT_ENV = "SAND_DATA_ROOT";
 var SAND_PRODUCTION_DATA_DIRNAME = ".grokbot";
 var SAND_USER_DATA_DIR_ENV = "SAND_USER_DATA_DIR";
@@ -104,3 +115,4 @@ var HTTP_PROXY_NAME_OVERRIDE_BASENAME = ".sand-http-proxy-name.json";
 function getHttpProxyNameOverridePath(homeDir = (0, import_node_os.homedir)()) {
   return (0, import_node_path2.join)(getSandRootDir(homeDir), HTTP_PROXY_NAME_OVERRIDE_BASENAME);
 }
+

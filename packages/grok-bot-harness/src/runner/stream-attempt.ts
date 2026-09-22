@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/stream-attempt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 function classifyStreamActivity(update) {
   if (update.type === "text-delta" || update.type === "thinking-delta") {
@@ -252,3 +257,4 @@ function createStreamAttempt(host) {
   };
   return { run };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-memory.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MEMORY_EVIDENCE_SIDE_CHARS = 8e3;
 function boundMemoryEvidenceText(raw) {
   const normalized = raw.trim();
@@ -574,3 +579,4 @@ function renderUserMemorySystemPrompt(recall, ctx) {
   }
   return lines2.join("\n");
 }
+

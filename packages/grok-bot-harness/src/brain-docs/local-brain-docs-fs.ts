@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/brain-docs/local-brain-docs-fs.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises79 = require("node:fs/promises");
+var import_node_path173 = require("node:path");
+init_system_errno();
+
+// @recovered-fragment 2/2
 var nodeLocalBrainDocsIo = {
   readdir: (path31) => (0, import_promises79.readdir)(path31, { withFileTypes: true }),
   readFile: (path31) => (0, import_promises79.readFile)(path31),
@@ -75,3 +85,4 @@ function createLocalBrainDocsFs(io2 = nodeLocalBrainDocsIo) {
     }
   };
 }
+

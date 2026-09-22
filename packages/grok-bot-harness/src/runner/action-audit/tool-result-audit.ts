@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/action-audit/tool-result-audit.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DENIED_CLASSIFICATIONS = /* @__PURE__ */ new Set(["user_rejected", "hook_denied"]);
 var CANCELLED_CLASSIFICATIONS = /* @__PURE__ */ new Set(["aborted", "timeout"]);
 function toolResultOutcome(event) {
@@ -28,3 +33,4 @@ function toolResultAuditRecord(event, identity) {
     }
   };
 }
+

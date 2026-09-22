@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-agent-profile-prompt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_buffer3 = require("node:buffer");
 init_errors();
 var SAND_AGENT_PROFILE_UPDATE_MARKER = "<<SAND_AGENT_PROFILE_UPDATE:v1:";
@@ -117,3 +122,4 @@ function parseLatestAgentProfileUpdate(text2) {
     searchFrom = markerEnd + 2;
   }
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/model-visible-path-middleware.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function toModelVisibleUserContent(content) {
   if (typeof content === "string") return toModelVisibleText(content);
   return content.map(
@@ -44,3 +49,4 @@ var ModelVisiblePathMiddleware = class extends BaseMiddleware {
 function createModelVisiblePathMiddleware(executor) {
   return new ModelVisiblePathMiddleware(executor);
 }
+

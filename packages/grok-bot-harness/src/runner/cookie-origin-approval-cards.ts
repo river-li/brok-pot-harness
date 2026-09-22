@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/cookie-origin-approval-cards.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto77 = require("node:crypto");
+
+// @recovered-fragment 2/2
 function cookieOriginApprovalCardSettlement(outcome) {
   if (outcome.kind === "listed") return null;
   if (outcome.kind === "refused") {
@@ -72,3 +80,4 @@ function withCookieOriginApprovalCards(port, host) {
     }
   };
 }
+

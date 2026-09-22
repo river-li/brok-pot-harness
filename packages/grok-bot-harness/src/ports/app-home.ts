@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/ports/app-home.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_APP_HOME_ITEM_STATUSES = ["todo", "in_progress", "blocked", "done"];
 var SAND_APP_HOME_LIMITS = {
@@ -63,3 +68,4 @@ function parseSandAppHomeDocument(value) {
   }
   return { ok: true, document: parsed2.data };
 }
+

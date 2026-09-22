@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/turn-usage.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BIGINT_ZERO = BigInt(0);
 var MAX_SAFE_TOKEN_COUNT = BigInt(Number.MAX_SAFE_INTEGER);
 function toSafeTokenCount(value) {
@@ -35,3 +40,4 @@ function mergeTurnUsage(current, next) {
     ...reasoningTokens != null ? { reasoningTokens } : {}
   };
 }
+

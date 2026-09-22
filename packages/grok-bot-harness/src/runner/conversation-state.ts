@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/conversation-state.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_errors();
 var logger101 = createLogger("sand:conversation-state");
@@ -425,3 +430,4 @@ function createSandSummarizationHandler(summarizationSession, options2) {
     preserveLatestImage: options2?.preserveLatestImage ?? false
   });
 }
+

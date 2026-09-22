@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/agents/agent-avatar-format.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path31 = require("node:path");
 var CANONICAL_AVATAR_FILENAME = "avatar.png";
 var CONVENTIONAL_AVATAR_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "gif", "svg"];
@@ -53,3 +58,4 @@ function sniffAvatarMimeType(bytes) {
   if (head.startsWith("<") && head.includes("<svg")) return "image/svg+xml";
   return null;
 }
+

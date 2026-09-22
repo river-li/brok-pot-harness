@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/frozen-tool-descriptions-middleware.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_unknown_record();
+
+// @recovered-fragment 2/2
 function isDescribedTool(tool) {
   return "description" in tool && typeof tool.description === "string" && "parameters" in tool;
 }
@@ -53,3 +61,4 @@ var FrozenToolDescriptionsMiddleware = class extends BaseMiddleware {
 function createFrozenToolDescriptionsMiddleware(deps) {
   return (executor) => new FrozenToolDescriptionsMiddleware(executor, deps);
 }
+

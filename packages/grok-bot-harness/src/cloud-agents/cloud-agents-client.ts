@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/cloud-agents/cloud-agents-client.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist2();
+init_agent_pb();
+init_background_composer_pb();
+init_dashboard_pb();
+init_esm2();
+init_zod();
+
+// @recovered-fragment 2/2
 var MAX_CLOUD_AGENT_FILES = 300;
 var SAVED_ENVIRONMENT_LIST_LIMIT = 500;
 var MAX_LISTED_SAVED_ENVIRONMENTS = 25;
@@ -1099,3 +1112,4 @@ function createCloudAgentsClient(deps) {
     fetchWatchResult
   };
 }
+

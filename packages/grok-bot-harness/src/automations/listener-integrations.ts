@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/listener-integrations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isListenerPlatform(value) {
   return LISTENER_INTEGRATION_PLATFORMS.some((platform2) => platform2 === value);
 }
@@ -39,3 +44,4 @@ function describeScopeIssues(issues) {
   }
   return parts.join(" ");
 }
+

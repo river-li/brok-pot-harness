@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/sand-activity.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_ACTIVITY_DETAIL_CHARS = 80;
 var THINKING_ACTIVITY = { kind: "thinking" };
 var SURFACE_UNRESOLVED_TOOL_CASES = /* @__PURE__ */ new Set([
@@ -218,3 +223,4 @@ function extractShellEditTarget(command) {
   }
   return void 0;
 }
+

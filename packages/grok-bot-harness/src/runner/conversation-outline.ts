@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/conversation-outline.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function stripHiddenMarker(text2) {
   const withoutHidden = text2.startsWith(SAND_HIDDEN_PROMPT_MARKER) ? text2.slice(SAND_HIDDEN_PROMPT_MARKER.length) : text2;
   return withoutHidden.startsWith(SAND_TRUSTED_AUTOMATION_PROMPT_MARKER) ? withoutHidden.slice(SAND_TRUSTED_AUTOMATION_PROMPT_MARKER.length) : withoutHidden;
@@ -161,3 +166,4 @@ function deriveOutlineTurnsFromConversationState(state) {
 function deriveOutlineFromConversationState(state) {
   return deriveOutlineTurnsFromConversationState(state).flatMap((turn) => turn.items);
 }
+

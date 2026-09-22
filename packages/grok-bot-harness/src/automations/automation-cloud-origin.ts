@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/automations/automation-cloud-origin.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_ORIGIN_SERVER_EVENT_KINDS = [
   "pr-opened",
   "pr-pushed",
@@ -24,3 +29,4 @@ function originRepoUrl({
 }) {
   return `https://${host}/git/${repo}.git`;
 }
+

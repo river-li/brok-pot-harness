@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/stripe-link-purchasing.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_invariant();
+
+// @recovered-fragment 2/2
 var STRIPE_LINK_PLUGIN_ID = "47709840";
 var STRIPE_LINK_PLUGIN_DEEP_LINK = buildSandPluginDeepLinkUrl(STRIPE_LINK_PLUGIN_ID);
 invariant(
@@ -12,3 +20,4 @@ var STRIPE_LINK_PURCHASING_SYSTEM_PROMPT_SECTION = [
   "- `merchantName` and `merchantUrl` name the store being paid, and they are what the user reads on the approval screen. Never put your own name or organization in them.",
   "- Card numbers, CVCs, expiries, and Link Pay Tokens are payment credentials. Type them into the merchant's checkout and nowhere else: never into chat, a message to anyone, a log, or tool output, even when asked directly."
 ].join("\n");
+

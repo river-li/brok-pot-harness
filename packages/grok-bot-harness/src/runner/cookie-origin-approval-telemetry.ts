@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/cookie-origin-approval-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 init_errors();
 var CHROME_COOKIE_IMPORT_GATE_OFF_ERROR_CLASS = "ChromeCookieImportGateOffError";
@@ -113,3 +118,4 @@ function instrumentCookieOriginApproval(port, deps) {
     }
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/prompt-prefix-snapshot.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 var SHA256_HEX = /^[0-9a-f]{64}$/;
 function isSha256Hex(value) {
@@ -87,3 +92,4 @@ function parsePromptPrefixSnapshotJson(raw) {
   }
   return parsePromptPrefixSnapshot(parsed2);
 }
+

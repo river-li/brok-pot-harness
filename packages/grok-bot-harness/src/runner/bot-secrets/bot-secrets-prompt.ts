@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/bot-secrets/bot-secrets-prompt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DESCRIPTION_MAX_LENGTH = 500;
 function renderBotSecretsSection(secrets) {
   if (secrets === void 0 || secrets.length === 0) return null;
@@ -12,3 +17,4 @@ function renderBotSecretsSection(secrets) {
     "Never print, echo, or write a secret's value anywhere; any output containing one shows [REDACTED], so do not try to verify a value by looking at it. If a task needs a credential that is not listed here, do not ask for it as a personal secret and do not ask anyone to paste a token. In the owner's Grok Bot app DM, request it with secret-request so it is saved on this bot. Anywhere else, including Slack, tell the owner to continue in the Grok Bot app or add it in the bot's Secrets settings."
   ].join("\n");
 }
+

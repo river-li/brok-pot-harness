@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/mcp/playwright-mcp-tools-list.generated.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PLAYWRIGHT_MCP_TOOLS_LIST = [
   {
     name: "browser_close",
@@ -737,3 +742,4 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     }
   }
 ];
+

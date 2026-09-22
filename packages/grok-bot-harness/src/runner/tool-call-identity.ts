@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tool-call-identity.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createToolCallIdentity(host) {
   const modelToolNamesByCallId = /* @__PURE__ */ new Map();
   const surfaceUnresolvedPendingByCallId = /* @__PURE__ */ new Map();
@@ -34,3 +39,4 @@ function createToolCallIdentity(host) {
     stashSurfaceUnresolvedPending
   };
 }
+

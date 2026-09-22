@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/groups/group-history.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function groupReplyTarget(entriesById, replyToId) {
   const target = replyToId == null ? void 0 : entriesById.get(replyToId);
   if (target == null) return void 0;
@@ -49,3 +54,4 @@ function groupHistoryFromTranscriptEntries(entries) {
   }
   return messages2;
 }
+
