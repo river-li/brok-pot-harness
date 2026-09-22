@@ -1,0 +1,22 @@
+{
+  "platform": "darwin",
+  "arch": "arm64",
+  "required": [
+    "cursor-proclist",
+    "tree-sitter",
+    "tree-sitter-bash"
+  ],
+  "copied": [
+    "cursor-proclist",
+    "node-addon-api",
+    "node-gyp-build",
+    "tree-sitter",
+    "tree-sitter-bash",
+    "web-tree-sitter"
+  ],
+  "nodeFiles": [
+    "cursor-proclist/build/Release/cursor_proclist.node",
+    "tree-sitter-bash/prebuilds/darwin-arm64/tree-sitter-bash.node",
+    "tree-sitter/build/Release/tree_sitter_runtime_binding.node"
+  ]
+}
