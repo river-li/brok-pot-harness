@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "defaultProfile": "local",
+  "profiles": {
+    "local": { "localWorkspace": true },
+    "original": { "localWorkspace": false }
+  }
+}

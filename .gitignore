@@ -3,3 +3,8 @@ node_modules/
 *.log
 .env
 .env.*
+!.env.example
+.runtime/
+/dist/
+__pycache__/
+*.pyc

@@ -1,0 +1,5 @@
+# Recovered fragments retain release bytes, including terminal blank lines.
+/src/** whitespace=-blank-at-eof
+/packages/** whitespace=-blank-at-eof
+/dune/** whitespace=-blank-at-eof
+/reconstruction/** whitespace=-blank-at-eof

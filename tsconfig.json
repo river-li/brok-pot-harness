@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "module": "NodeNext", "moduleResolution": "NodeNext",
+    "rootDir": "packages/grok-bot-harness/src", "outDir": "dist",
+    "strict": true, "skipLibCheck": true, "types": ["node"], "sourceMap": true
+  },
+  "include": ["packages/grok-bot-harness/src/local/**/*.ts"]
+}
