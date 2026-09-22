@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/admin-command-denylist.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist3();
 var ADMIN_COMMAND_DENYLIST_UNANALYZABLE_REASON = `Denied: this command could not be conclusively analyzed against your team's administrator command denylist, so it was blocked (fail-closed) and was not executed. It cannot be approved from this conversation; only a user can run it manually outside the agent. You may continue working on the task.`;
 function deriveAdminCommandDenylistMatchForms({ command, parsingResult }) {
@@ -173,3 +178,4 @@ function getModelShellAdminCommandDenylistBlockReason({ command, parsingResult, 
   });
   return matchedPattern === void 0 ? void 0 : formatAdminCommandDenylistBlockReason(matchedPattern);
 }
+

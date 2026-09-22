@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/utils/read-block-handler.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function resolveFileReadBlock(blockReason, options2) {
   const resolution = await handleBlockReason(blockReason, {
     onNeedsApproval: async (approvalReason, approvalDetails) => {
@@ -26,3 +31,4 @@ async function resolveFileReadBlock(blockReason, options2) {
   });
   return resolution ?? { kind: "proceed" };
 }
+

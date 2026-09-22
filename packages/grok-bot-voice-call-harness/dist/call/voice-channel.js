@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/call/voice-channel.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VOICE_CALL_ENDED_MESSAGE = "The call ended. This channel is closed from now on, so anything still owed goes in the chat.";
 var VOICE_CALL_SENDER = "the call";
 var ADDRESS_PREFIX = `${VOICE_CALL_CHANNEL_PLATFORM}:`;
@@ -39,3 +44,4 @@ var VoiceCallChannelSends = class {
     }
   }
 };
+

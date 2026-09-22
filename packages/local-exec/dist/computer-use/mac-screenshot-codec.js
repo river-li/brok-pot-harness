@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/computer-use/mac-screenshot-codec.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SIDECAR_SCREENSHOT_MIME_TYPE = "image/png";
 var MacScreenshotCodec = {
   async normalize(image2) {
@@ -14,3 +19,4 @@ var MacScreenshotCodec = {
     return webp.toString("base64");
   }
 };
+

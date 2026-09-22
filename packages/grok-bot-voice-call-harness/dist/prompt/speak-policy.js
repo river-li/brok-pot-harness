@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/prompt/speak-policy.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VoiceSpeakPolicy = class _VoiceSpeakPolicy {
   /**
    * How long a spoken update holds the floor against further work news.
@@ -115,3 +120,4 @@ var VoiceSpeakPolicy = class _VoiceSpeakPolicy {
     return { kind: "silent" };
   }
 };
+

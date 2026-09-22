@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/extensibility/agent-skills-service.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_util8 = require("node:util");
+init_dist4();
+
+// @recovered-fragment 2/2
 var __addDisposableResource16 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -165,3 +174,4 @@ function isPathSuffixMatch(fullPath, suffixes) {
   const normalizedPath = fullPath.replace(/\\/g, "/");
   return suffixes.some((suffix) => normalizedPath.endsWith(suffix));
 }
+

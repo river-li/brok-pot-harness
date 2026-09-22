@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/ripgrep-stream.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_os10 = require("node:os");
+init_dist6();
+
+// @recovered-fragment 2/2
 var __addDisposableResource11 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -202,3 +211,4 @@ async function* lines(stream3) {
   if (buffer)
     yield buffer;
 }
+

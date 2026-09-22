@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/mcp-file-system-writer.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto26 = require("node:crypto");
 var import_promises40 = require("node:fs/promises");
 var import_node_os17 = require("node:os");
@@ -1496,3 +1501,4 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
   }
 };
 McpFileSystemWriter.DIVERGENCE_CHECK_COOLDOWN_MS = 1e4;
+

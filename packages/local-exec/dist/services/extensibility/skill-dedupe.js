@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/extensibility/skill-dedupe.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var NO_AGENT_STORE_SKILLS = {
   agentStoreSkillsDirs: [],
   userHomeDirectory: ""
@@ -74,3 +79,4 @@ function dedupePreferringAgentStore(items, context2) {
   }
   return kept.map((entry) => entry.item);
 }
+

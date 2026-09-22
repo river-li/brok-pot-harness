@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/computer-use/input-event-logger.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var X11_CURSOR_MAP = {
   // Arrow cursors
   left_ptr: CursorType.ARROW,
@@ -247,3 +252,4 @@ var InputEventLogger = class {
     return positionBefore;
   }
 };
+

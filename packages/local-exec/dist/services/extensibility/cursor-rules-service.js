@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/extensibility/cursor-rules-service.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_util4 = require("node:util");
+init_dist4();
+
+// @recovered-fragment 2/2
 var __addDisposableResource12 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -151,3 +160,4 @@ var MergedCursorRulesService = class _MergedCursorRulesService {
   }
 };
 MergedCursorRulesService.CHANGE_COALESCE_MS = 1e3;
+

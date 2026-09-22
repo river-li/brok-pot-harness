@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/line-scan.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CharCode = {
   NUL: 0,
   CR: 13,
@@ -44,3 +49,4 @@ function nextRecordLineBounds(s3, start, out) {
 function isDashDashLine(s3, start, end) {
   return end - start === 2 && s3.charCodeAt(start) === CharCode.DASH && s3.charCodeAt(start + 1) === CharCode.DASH;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/harness/rpc-harness.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VoiceCallHarnessRPCError = class extends Error {
   path;
   status;
@@ -56,3 +61,4 @@ var RPCVoiceCallHarness = class _RPCVoiceCallHarness {
     return result.value;
   }
 };
+

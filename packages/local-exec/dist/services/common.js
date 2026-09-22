@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/common.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function findGitRoot(ctx, gitExecutor, startPath) {
   try {
     const result = await gitExecutor.exec(ctx, startPath, ["rev-parse", "--show-toplevel"], {
@@ -62,3 +67,4 @@ var DEFAULT_GLOB_IGNORE_DIRS = [
   "**/tmp/**",
   "**/temp/**"
 ];
+

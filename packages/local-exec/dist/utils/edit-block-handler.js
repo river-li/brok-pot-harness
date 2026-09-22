@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/utils/edit-block-handler.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_shell_exec_pb();
 async function handleBlockReason(blockReason, callbacks) {
   switch (blockReason.type) {
@@ -66,3 +71,4 @@ function shellCommandBlockResult(command, workingDirectory, reason) {
     })
   };
 }
+

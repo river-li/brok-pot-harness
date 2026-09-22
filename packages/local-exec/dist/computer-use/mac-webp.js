@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/computer-use/mac-webp.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs43 = require("node:fs");
 var NodeModuleNs = __toESM(require("node:module"), 1);
 var import_node_path70 = require("node:path");
@@ -147,3 +152,4 @@ var encodeMacLosslessWebp = async (bitmap) => {
     exact: 1
   }));
 };
+

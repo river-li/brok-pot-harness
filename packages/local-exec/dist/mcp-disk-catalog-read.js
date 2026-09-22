@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/mcp-disk-catalog-read.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises41 = require("node:fs/promises");
 var import_node_path73 = require("node:path");
 async function readMcpDiskCatalogToolNamesForProjectDir(projectDir, serverIdentifier) {
@@ -32,3 +37,4 @@ async function readMcpDiskCatalogToolNamesForProjectDir(projectDir, serverIdenti
   const sorted = Array.from(unique).sort((a, b2) => a.localeCompare(b2));
   return { toolNames: sorted, toolsDirExists: true };
 }
+

@@ -1,9 +1,23 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/ignore-service.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises26 = __toESM(require("node:fs/promises"), 1);
+var import_node_os11 = __toESM(require("node:os"), 1);
+var import_node_path46 = require("node:path");
+init_dist4();
+init_dist3();
+var import_ignore2 = __toESM(require_ignore(), 1);
+var import_picomatch = __toESM(require_picomatch2(), 1);
+
+// @recovered-fragment 2/2
 var IGNORE_FILE_NAMES = [".gitignore", ".cursorignore"];
-function makeResolvedIgnorePath(path30) {
-  return path30;
+function makeResolvedIgnorePath(path31) {
+  return path31;
 }
 async function resolvePathForIgnoreService(absolutePath) {
-  if (!(0, import_node_path9.isAbsolute)(absolutePath)) {
+  if (!(0, import_node_path46.isAbsolute)(absolutePath)) {
     return null;
   }
   const resolved = await resolveRealPathStrict(absolutePath);
@@ -11,10 +25,7 @@ async function resolvePathForIgnoreService(absolutePath) {
     return null;
   return makeResolvedIgnorePath(resolved);
 }
-async function resolveShellSandboxIgnoreMapping(ignoreService) {
-  return ignoreService.getShellSandboxIgnoreMapping ? ignoreService.getShellSandboxIgnoreMapping() : ignoreService.getCursorIgnoreMapping();
-}
-var maxConcurrentSearches = Math.min(8, Math.max(1, Math.floor(import_node_os6.default.availableParallelism() / 2)));
+var maxConcurrentSearches = Math.min(8, Math.max(1, Math.floor(import_node_os11.default.availableParallelism() / 2)));
 var LocalIgnoreService = class _LocalIgnoreService {
   constructor(gitExecutor, gitIgnoreMapping, cursorIgnoreMapping, teamSettingsService, rootDirectories) {
     this.gitExecutor = gitExecutor;
@@ -44,11 +55,11 @@ var LocalIgnoreService = class _LocalIgnoreService {
     _LocalIgnoreService.ripwalkCache ??= new RipwalkTtlCache();
     return _LocalIgnoreService.ripwalkCache;
   }
-  getIgnoreInstance(path30, patterns, cache3) {
-    let instance = cache3.get(path30);
+  getIgnoreInstance(path31, patterns, cache3) {
+    let instance = cache3.get(path31);
     if (!instance) {
       instance = (0, import_ignore2.default)().add(patterns);
-      cache3.set(path30, instance);
+      cache3.set(path31, instance);
     }
     return instance;
   }
@@ -93,10 +104,10 @@ var LocalIgnoreService = class _LocalIgnoreService {
   }
   static async preloadHierarchy(startPath, ignoreFileName, mapping, processedDirs) {
     let currentPath = resolvePath(startPath);
-    const rootPath = (0, import_node_path9.parse)(currentPath).root;
+    const rootPath = (0, import_node_path46.parse)(currentPath).root;
     while (currentPath !== rootPath) {
       if (processedDirs?.has(currentPath)) {
-        const parentPath2 = (0, import_node_path9.dirname)(currentPath);
+        const parentPath2 = (0, import_node_path46.dirname)(currentPath);
         if (parentPath2 === currentPath)
           break;
         currentPath = parentPath2;
@@ -106,24 +117,24 @@ var LocalIgnoreService = class _LocalIgnoreService {
         await _LocalIgnoreService.handleHierarchyIgnore(currentPath, ignoreFileName, mapping);
       }
       processedDirs?.add(currentPath);
-      const parentPath = (0, import_node_path9.dirname)(currentPath);
+      const parentPath = (0, import_node_path46.dirname)(currentPath);
       if (parentPath === currentPath)
         break;
       currentPath = parentPath;
     }
   }
   static async handleHierarchyIgnore(dir, ignoreFileName, mapping) {
-    const ignoreFilePath = (0, import_node_path9.join)(dir, ignoreFileName);
+    const ignoreFilePath = (0, import_node_path46.join)(dir, ignoreFileName);
     try {
-      await (0, import_promises8.access)(ignoreFilePath, import_promises8.default.constants.F_OK);
+      await (0, import_promises26.access)(ignoreFilePath, import_promises26.default.constants.F_OK);
       const content = await readText(ignoreFilePath);
       const ignoreRules = _LocalIgnoreService.parseIgnoreRules(content);
       mapping[dir] = ignoreRules;
-    } catch (error3) {
-      if (error3.code === "ENOENT") {
+    } catch (error42) {
+      if (error42.code === "ENOENT") {
         mapping[dir] = [];
       } else {
-        console.error(`Error reading ${ignoreFileName} file at ${ignoreFilePath}:`, error3);
+        console.error(`Error reading ${ignoreFileName} file at ${ignoreFilePath}:`, error42);
         mapping[dir] = [];
       }
     }
@@ -137,18 +148,18 @@ var LocalIgnoreService = class _LocalIgnoreService {
         try {
           const content = await readText(filePath);
           const ignoreRules = _LocalIgnoreService.parseIgnoreRules(content);
-          const ignorePath = (0, import_node_path9.dirname)(filePath);
+          const ignorePath = (0, import_node_path46.dirname)(filePath);
           mapping[ignorePath] = ignoreRules;
-        } catch (error3) {
-          console.error(`Error processing ${ignoreFileName} file at ${filePath}:`, error3);
+        } catch (error42) {
+          console.error(`Error processing ${ignoreFileName} file at ${filePath}:`, error42);
         }
       }));
       const processedDirs = /* @__PURE__ */ new Set();
       for (const root of deduplicatedRoots) {
         await _LocalIgnoreService.preloadHierarchy(root, ignoreFileName, mapping, processedDirs);
       }
-    } catch (error3) {
-      console.error(`Error initializing ignore mapping for ${ignoreFileName}:`, error3);
+    } catch (error42) {
+      console.error(`Error initializing ignore mapping for ${ignoreFileName}:`, error42);
     }
   }
   /**
@@ -168,19 +179,19 @@ var LocalIgnoreService = class _LocalIgnoreService {
       source: "ignore_scan"
     };
     const ripwalkResult = _LocalIgnoreService.getRipwalkCache().walk(ctx, ripwalkOptions);
-    for await (const path30 of ripwalkResult.lines) {
-      if ((0, import_node_path9.basename)(path30) === fileName) {
-        files.push((0, import_node_path9.join)(rootDirectory, path30));
+    for await (const path31 of ripwalkResult.lines) {
+      if ((0, import_node_path46.basename)(path31) === fileName) {
+        files.push((0, import_node_path46.join)(rootDirectory, path31));
       }
     }
     return files;
   }
   async handleManualLookupWhenNoWorkspaceDirs(absolutePath, ignoreFileName) {
     const mapping = {};
-    let cur = (0, import_node_path9.dirname)(absolutePath);
-    const rootPath = (0, import_node_path9.parse)(cur).root;
+    let cur = (0, import_node_path46.dirname)(absolutePath);
+    const rootPath = (0, import_node_path46.parse)(cur).root;
     while (true) {
-      const ignoreFilePath = (0, import_node_path9.join)(cur, ignoreFileName);
+      const ignoreFilePath = (0, import_node_path46.join)(cur, ignoreFileName);
       try {
         const content = await readText(ignoreFilePath);
         const patterns = _LocalIgnoreService.parseIgnoreRules(content);
@@ -191,7 +202,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
       }
       if (cur === rootPath)
         break;
-      cur = (0, import_node_path9.dirname)(cur);
+      cur = (0, import_node_path46.dirname)(cur);
     }
     return this.testIgnored(absolutePath, mapping, (_path, patterns) => (0, import_ignore2.default)().add(patterns));
   }
@@ -258,19 +269,19 @@ var LocalIgnoreService = class _LocalIgnoreService {
     return result;
   }
   async populateHierarchyIfNeeded(filePath, ignoreFileName, mapping) {
-    let currentPath = (0, import_node_path9.dirname)(resolvePath(filePath));
+    let currentPath = (0, import_node_path46.dirname)(resolvePath(filePath));
     const toAdd = [];
-    const rootPath = (0, import_node_path9.parse)(currentPath).root;
+    const rootPath = (0, import_node_path46.parse)(currentPath).root;
     while (currentPath !== rootPath) {
-      if (this.rootDirectories.some((root) => isPathWithin({ basePath: root, targetPath: currentPath }))) {
-        currentPath = (0, import_node_path9.dirname)(currentPath);
+      if (this.rootDirectories.some((root) => isPathWithin2({ basePath: root, targetPath: currentPath }))) {
+        currentPath = (0, import_node_path46.dirname)(currentPath);
         continue;
       }
       if (mapping[currentPath] !== void 0) {
         break;
       }
       toAdd.push(currentPath);
-      const parentPath = (0, import_node_path9.dirname)(currentPath);
+      const parentPath = (0, import_node_path46.dirname)(currentPath);
       if (parentPath === currentPath)
         break;
       currentPath = parentPath;
@@ -293,10 +304,10 @@ var LocalIgnoreService = class _LocalIgnoreService {
       if (patterns.length === 0) {
         continue;
       }
-      if (!isPathWithin({ basePath: ignorePath, targetPath: absolutePath })) {
+      if (!isPathWithin2({ basePath: ignorePath, targetPath: absolutePath })) {
         continue;
       }
-      const relativePath = (0, import_node_path9.relative)(ignorePath, absolutePath);
+      const relativePath = (0, import_node_path46.relative)(ignorePath, absolutePath);
       if (relativePath === "") {
         continue;
       }
@@ -314,7 +325,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
     return false;
   }
   checkIgnored(absolutePath, mapping, cache3) {
-    return this.testIgnored(absolutePath, mapping, (path30, patterns) => this.getIgnoreInstance(path30, patterns, cache3));
+    return this.testIgnored(absolutePath, mapping, (path31, patterns) => this.getIgnoreInstance(path31, patterns, cache3));
   }
   async listCursorIgnoreFilesByRoot(root) {
     const lookupRoot = await this.resolveLookupRoot(root);
@@ -323,12 +334,12 @@ var LocalIgnoreService = class _LocalIgnoreService {
       if (patterns.length === 0) {
         continue;
       }
-      if (!isPathWithin({ basePath: lookupRoot, targetPath: base })) {
+      if (!isPathWithin2({ basePath: lookupRoot, targetPath: base })) {
         continue;
       }
-      const filePath = (0, import_node_path9.join)(base, ".cursorignore");
+      const filePath = (0, import_node_path46.join)(base, ".cursorignore");
       try {
-        await (0, import_promises8.access)(filePath);
+        await (0, import_promises26.access)(filePath);
         ignoreFiles.push(filePath);
       } catch {
       }
@@ -379,7 +390,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
     this.cursorParsedIgnoreCache.clear();
   }
   async handleCursorIgnoreCreated(filePath) {
-    const ignorePath = (0, import_node_path9.dirname)(filePath);
+    const ignorePath = (0, import_node_path46.dirname)(filePath);
     const content = await readText(filePath);
     const ignoreRules = _LocalIgnoreService.parseIgnoreRules(content);
     this.cursorIgnoreMapping[ignorePath] = ignoreRules;
@@ -387,7 +398,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
     this.cursorIgnoreCache.clear();
   }
   async handleCursorIgnoreChanged(filePath) {
-    const ignorePath = (0, import_node_path9.dirname)(filePath);
+    const ignorePath = (0, import_node_path46.dirname)(filePath);
     const content = await readText(filePath);
     const ignoreRules = _LocalIgnoreService.parseIgnoreRules(content);
     this.cursorIgnoreMapping[ignorePath] = ignoreRules;
@@ -395,7 +406,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
     this.cursorIgnoreCache.clear();
   }
   handleCursorIgnoreDeleted(filePath) {
-    const ignorePath = (0, import_node_path9.dirname)(filePath);
+    const ignorePath = (0, import_node_path46.dirname)(filePath);
     this.cursorIgnoreMapping[ignorePath] = [];
     this.cursorParsedIgnoreCache.delete(ignorePath);
     this.cursorIgnoreCache.clear();
@@ -411,28 +422,28 @@ var LocalIgnoreService = class _LocalIgnoreService {
     const pathsToCheck = [];
     const uncachedPaths = [];
     let currentPath = directoryPath;
-    const rootPath = (0, import_node_path9.parse)(currentPath).root;
+    const rootPath = (0, import_node_path46.parse)(currentPath).root;
     while (currentPath !== rootPath) {
       pathsToCheck.push(currentPath);
       if (this.hasGitDirCache.get(currentPath) === void 0) {
         uncachedPaths.push(currentPath);
       }
-      const parentPath = (0, import_node_path9.dirname)(currentPath);
+      const parentPath = (0, import_node_path46.dirname)(currentPath);
       if (parentPath === currentPath)
         break;
       currentPath = parentPath;
     }
     if (uncachedPaths.length > 0) {
-      const checkPromises = uncachedPaths.map((path30) => (0, import_promises8.access)((0, import_node_path9.join)(path30, ".git"), import_promises8.default.constants.F_OK).then(() => [path30, true]).catch(() => [path30, false]));
+      const checkPromises = uncachedPaths.map((path31) => (0, import_promises26.access)((0, import_node_path46.join)(path31, ".git"), import_promises26.default.constants.F_OK).then(() => [path31, true]).catch(() => [path31, false]));
       const results = await Promise.all(checkPromises);
-      for (const [path30, hasGit] of results) {
-        this.hasGitDirCache.set(path30, hasGit);
+      for (const [path31, hasGit] of results) {
+        this.hasGitDirCache.set(path31, hasGit);
       }
     }
-    for (const path30 of pathsToCheck) {
-      const hasGit = this.hasGitDirCache.get(path30);
+    for (const path31 of pathsToCheck) {
+      const hasGit = this.hasGitDirCache.get(path31);
       if (hasGit === true) {
-        gitRoots.push(path30);
+        gitRoots.push(path31);
       }
     }
     this.gitRootCache.set(directoryPath, gitRoots);
@@ -471,7 +482,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
         continue;
       }
       const resolvedRepoUrl = repoUrl;
-      const relativePath = (0, import_node_path9.relative)(gitRoot, absolutePath) || ".";
+      const relativePath = (0, import_node_path46.relative)(gitRoot, absolutePath) || ".";
       for (const repo of blockedRepos) {
         if (!this.doesRepoUrlMatch(repo.url, resolvedRepoUrl)) {
           continue;
@@ -505,7 +516,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
       return false;
     }
     const cursorDataDir = await this.getCursorDataDir();
-    if (isPathWithin({ basePath: cursorDataDir, targetPath: absolutePath })) {
+    if (isPathWithin2({ basePath: cursorDataDir, targetPath: absolutePath })) {
       return false;
     }
     const relativePath = this.getWorkspaceRelativePath(absolutePath);
@@ -544,12 +555,12 @@ var LocalIgnoreService = class _LocalIgnoreService {
   getWorkspaceRelativePath(absolutePath) {
     let bestRoot;
     for (const root of this.rootDirectories) {
-      if (isPathWithin({ basePath: root, targetPath: absolutePath }) && (bestRoot === void 0 || root.length > bestRoot.length)) {
+      if (isPathWithin2({ basePath: root, targetPath: absolutePath }) && (bestRoot === void 0 || root.length > bestRoot.length)) {
         bestRoot = root;
       }
     }
     if (bestRoot !== void 0) {
-      return normalizeToUnixPath((0, import_node_path9.relative)(bestRoot, absolutePath));
+      return normalizeToUnixPath((0, import_node_path46.relative)(bestRoot, absolutePath));
     }
     return normalizeToUnixPath(absolutePath);
   }
@@ -560,7 +571,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
    */
   getCursorDataDir() {
     this.cursorDataDirPromise ??= (async () => {
-      const raw = (0, import_node_path9.join)(import_node_os6.default.homedir(), ".cursor");
+      const raw = (0, import_node_path46.join)(import_node_os11.default.homedir(), ".cursor");
       const resolved = await resolveRealPathStrict(raw);
       return resolved ?? raw;
     })();
@@ -630,7 +641,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
         relativeGitRoot = "";
       } else if (normalizedGitRoot.startsWith(normalizedRoot)) {
         isRelevant = true;
-        relativeGitRoot = (0, import_node_path9.relative)(absoluteRoot, gitRoot);
+        relativeGitRoot = (0, import_node_path46.relative)(absoluteRoot, gitRoot);
       }
       if (!isRelevant)
         continue;
@@ -644,7 +655,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
             continue;
           let glob;
           if (relativeGitRoot) {
-            glob = (0, import_node_path9.join)(relativeGitRoot, trimmedPattern).replace(/\\/g, "/");
+            glob = (0, import_node_path46.join)(relativeGitRoot, trimmedPattern).replace(/\\/g, "/");
           } else {
             glob = trimmedPattern;
           }
@@ -661,8 +672,8 @@ var LocalIgnoreService = class _LocalIgnoreService {
    * Normalize a path for cross-platform comparison.
    * Converts backslashes to forward slashes and lowercases on Windows.
    */
-  normalizePathForComparison(path30) {
-    let normalized = path30.replace(/\\/g, "/");
+  normalizePathForComparison(path31) {
+    let normalized = path31.replace(/\\/g, "/");
     if (normalized.startsWith("/") && normalized.length > 2 && normalized[2] === ":") {
       normalized = normalized.substring(1);
     }
@@ -711,23 +722,23 @@ var LocalIgnoreService = class _LocalIgnoreService {
     for (const rootDir of this.rootDirectories) {
       const resolvedRoot = resolvePath(rootDir);
       try {
-        await (0, import_promises8.access)((0, import_node_path9.join)(resolvedRoot, ".git"), import_promises8.default.constants.F_OK);
+        await (0, import_promises26.access)((0, import_node_path46.join)(resolvedRoot, ".git"), import_promises26.default.constants.F_OK);
         if (!gitRepoLocations.includes(resolvedRoot)) {
           gitRepoLocations.push(resolvedRoot);
         }
       } catch {
       }
-      let currentPath = (0, import_node_path9.dirname)(resolvedRoot);
-      const fsRoot = (0, import_node_path9.parse)(currentPath).root;
+      let currentPath = (0, import_node_path46.dirname)(resolvedRoot);
+      const fsRoot = (0, import_node_path46.parse)(currentPath).root;
       while (currentPath !== fsRoot && currentPath !== "") {
         try {
-          await (0, import_promises8.access)((0, import_node_path9.join)(currentPath, ".git"), import_promises8.default.constants.F_OK);
+          await (0, import_promises26.access)((0, import_node_path46.join)(currentPath, ".git"), import_promises26.default.constants.F_OK);
           if (!gitRepoLocations.includes(currentPath)) {
             gitRepoLocations.push(currentPath);
           }
         } catch {
         }
-        const parentPath = (0, import_node_path9.dirname)(currentPath);
+        const parentPath = (0, import_node_path46.dirname)(currentPath);
         if (parentPath === currentPath)
           break;
         currentPath = parentPath;
@@ -741,10 +752,10 @@ var LocalIgnoreService = class _LocalIgnoreService {
           source: "ignore_scan"
         };
         const ripwalkResult = _LocalIgnoreService.getRipwalkCache().walk(ctx, ripwalkOptions);
-        for await (const path30 of ripwalkResult.lines) {
-          const fullPath = (0, import_node_path9.join)(resolvedRoot, path30);
-          const gitDir = (0, import_node_path9.dirname)(fullPath);
-          const gitRoot = (0, import_node_path9.dirname)(gitDir);
+        for await (const path31 of ripwalkResult.lines) {
+          const fullPath = (0, import_node_path46.join)(resolvedRoot, path31);
+          const gitDir = (0, import_node_path46.dirname)(fullPath);
+          const gitRoot = (0, import_node_path46.dirname)(gitDir);
           if (!gitRepoLocations.includes(gitRoot)) {
             gitRepoLocations.push(gitRoot);
           }
@@ -766,3 +777,4 @@ var LocalIgnoreService = class _LocalIgnoreService {
 LocalIgnoreService.promiseQueue = new PromiseQueue({
   max: maxConcurrentSearches
 });
+

@@ -1,9 +1,13 @@
-var import_node_child_process7 = require("node:child_process");
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/computer-use/display.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var import_node_child_process6 = require("node:child_process");
 var import_node_util6 = require("node:util");
 init_dist3();
-var execFileAsync2 = (0, import_node_util6.promisify)(import_node_child_process7.execFile);
+var execFileAsync2 = (0, import_node_util6.promisify)(import_node_child_process6.execFile);
 var execFileUtf8Async = execFileAsync2;
-var execFileSyncUtf8 = import_node_child_process7.execFileSync;
 function parseDisplayNum(display) {
   const colonIndex = display.lastIndexOf(":");
   if (colonIndex === -1) {
@@ -84,12 +88,6 @@ function resolutionConfigForDisplay(displayWidth, displayHeight, apiWidth, apiHe
     }
   };
 }
-function ffmpegScreenshotScaleArgs(displayWidth, displayHeight, apiWidth, apiHeight) {
-  if (apiWidth === displayWidth && apiHeight === displayHeight) {
-    return [];
-  }
-  return ["-vf", `scale=${apiWidth}:${apiHeight}`];
-}
 async function detectDisplay(display) {
   const { stdout } = await spawnWorkload(execFileUtf8Async, "xrandr", ["--display", display], {
     timeout: 5e3,
@@ -103,46 +101,4 @@ async function detectDisplay(display) {
     resolutionString: `${info2.width}x${info2.height}`
   };
 }
-function detectDisplaySync(display) {
-  const stdout = spawnWorkload(execFileSyncUtf8, "xrandr", ["--display", display], {
-    encoding: "utf-8",
-    timeout: 5e3
-  });
-  const info2 = parseXrandrOutput(stdout);
-  const resolution = resolutionConfigForDisplay(info2.width, info2.height);
-  return {
-    display: info2,
-    resolution,
-    resolutionString: `${info2.width}x${info2.height}`
-  };
-}
-var DEFAULT_WAIT_TIMEOUT_MS = 3e4;
-var POLL_INTERVAL_MS = 500;
-function isX11Installed() {
-  try {
-    spawnWorkload(import_node_child_process7.execFileSync, "xdpyinfo", ["-version"], {
-      stdio: "ignore",
-      timeout: 500
-    });
-    return true;
-  } catch {
-    return false;
-  }
-}
-async function waitForDisplay(display, timeoutMs = DEFAULT_WAIT_TIMEOUT_MS) {
-  if (!isX11Installed()) {
-    throw new Error(`X11 is not installed (xdpyinfo not found in PATH). Cannot wait for display ${display}.`);
-  }
-  const startTime = Date.now();
-  while (Date.now() - startTime < timeoutMs) {
-    try {
-      await spawnWorkload(execFileAsync2, "xdpyinfo", ["-display", display], {
-        timeout: 2e3
-      });
-      return;
-    } catch {
-      await new Promise((resolve14) => setTimeout(resolve14, POLL_INTERVAL_MS));
-    }
-  }
-  throw new Error(`Timed out waiting for X11 display ${display} after ${timeoutMs}ms`);
-}
+

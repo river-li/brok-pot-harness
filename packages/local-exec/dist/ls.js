@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/ls.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises21 = require("node:fs/promises");
 var import_node_path33 = require("node:path");
 init_dist();
@@ -316,3 +321,4 @@ var LocalLsExecutor = class {
     }
   }
 };
+

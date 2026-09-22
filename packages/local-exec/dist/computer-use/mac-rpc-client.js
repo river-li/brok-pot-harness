@@ -1,3 +1,19 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/computer-use/mac-rpc-client.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_child_process8 = require("node:child_process");
+var import_node_crypto25 = require("node:crypto");
+var import_node_fs42 = require("node:fs");
+var import_promises38 = require("node:fs/promises");
+var import_node_net2 = require("node:net");
+var os9 = __toESM(require("node:os"), 1);
+var path18 = __toESM(require("node:path"), 1);
+init_dist4();
+init_dist3();
+
+// @recovered-fragment 2/2
 var MacComputerUseRPCError = class extends Error {
   constructor(message, options2) {
     super(message);
@@ -466,3 +482,4 @@ MacComputerUseRPCClient.defaultCallTimeoutMs = 45e3;
 MacComputerUseRPCClient.launchReadyTimeoutMs = 8e3;
 MacComputerUseRPCClient.launchPollIntervalMs = 200;
 MacComputerUseRPCClient.requestID = 1;
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/record-screen.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process9 = require("node:child_process");
 var fs20 = __toESM(require("node:fs/promises"), 1);
 var path21 = __toESM(require("node:path"), 1);
@@ -1090,3 +1095,4 @@ LocalRecordScreenExecutor.PROXY_CRF = 17;
 LocalRecordScreenExecutor.PROXY_PRESET = "veryfast";
 LocalRecordScreenExecutor.PROXY_PROFILE_VERSION = "render-proxy-h264-all-i-v1";
 LocalRecordScreenExecutor.DEFAULT_REFRESH_RATE = 60;
+

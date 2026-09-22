@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/prompt/session-tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TOOLS = [
   {
     type: "function",
@@ -52,3 +57,4 @@ var VoiceCallSessionTools = class {
     return tools.some((tool) => tool.name === name17);
   }
 };
+

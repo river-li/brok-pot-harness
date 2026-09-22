@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/harness/tools/recall-text-messages.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var INPUT2 = external_exports.object({});
 var OUTPUT2 = external_exports.object({
@@ -25,3 +30,4 @@ var RecallTextMessagesTool = class _RecallTextMessagesTool extends VoiceCallTool
     return { messages: messages2.slice(-VOICE_CALL_SENT_MESSAGE_LIMIT) };
   }
 };
+

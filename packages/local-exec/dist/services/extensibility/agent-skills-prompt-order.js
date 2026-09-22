@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/extensibility/agent-skills-prompt-order.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path76 = require("node:path");
 function normalizeFsPath(p2) {
   return p2.replace(/\\/g, "/");
@@ -66,3 +71,4 @@ function sortAgentSkillsForPromptOrder(skills, ctx) {
   decorated.sort((a, b2) => a.tier - b2.tier || a.index - b2.index);
   return decorated.map((d) => d.skill);
 }
+

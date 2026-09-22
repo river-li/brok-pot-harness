@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/mcp-disk-freshness-on-access.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+
+// @recovered-fragment 2/2
 var logger38 = createLogger("local-exec:mcp-disk-freshness-on-access");
 var MCP_PATH_SEGMENT = "/mcps/";
 var DISK_MCPS_FRESHNESS_DEBOUNCE_MS = 2e3;
@@ -169,3 +177,4 @@ function scheduleDiskMcpDiscoveryFreshnessOnMcpsPathAccess(ctx, mcpStateAccessor
   }, DISK_MCPS_FRESHNESS_DEBOUNCE_MS);
   diskFreshnessDebounceTimers.set(key, timer);
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/messages-mac/dist/page.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MESSAGES_PAGE_LIMITS = {
   items: { default: 50, max: 200 },
   search: { default: 25, max: 100 },
@@ -49,3 +54,4 @@ function byRecency(a, b2) {
     return -1;
   return a.lastDate < b2.lastDate ? 1 : a.lastDate > b2.lastDate ? -1 : 0;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/harness/tools/send-task.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var INPUT3 = external_exports.object({
   request: external_exports.unknown().transform((value, ctx) => {
@@ -55,3 +60,4 @@ var SendTaskTool = class _SendTaskTool extends VoiceCallTool {
     }
   }
 };
+

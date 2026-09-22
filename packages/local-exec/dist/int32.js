@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/int32.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var INT32_MIN2 = -(2 ** 31);
 var INT32_MAX2 = 2 ** 31 - 1;
 function clampInt32(n) {
@@ -12,9 +17,4 @@ function clampInt32(n) {
   }
   return n;
 }
-function toOptionalDurationMsInt32(value) {
-  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
-    return void 0;
-  }
-  return clampInt32(Math.trunc(value));
-}
+

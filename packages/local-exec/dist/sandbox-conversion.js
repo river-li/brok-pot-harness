@@ -1,5 +1,10 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/sandbox-conversion.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_sandbox_pb();
-init_dist4();
+init_dist6();
 function convertProtoToNetworkPolicy(policy) {
   if (!policy)
     return void 0;
@@ -28,23 +33,6 @@ function convertProtoToNetworkPolicy(policy) {
   }
   return result;
 }
-function convertNetworkPolicyToProto(policy) {
-  if (!policy)
-    return void 0;
-  let defaultAction;
-  if (policy.default === "allow") {
-    defaultAction = NetworkPolicy_DefaultAction.ALLOW;
-  } else if (policy.default === "deny") {
-    defaultAction = NetworkPolicy_DefaultAction.DENY;
-  }
-  return new NetworkPolicy({
-    version: policy.version,
-    defaultAction,
-    deny: policy.deny ?? [],
-    allow: policy.allow ?? [],
-    logging: policy.logging ? convertNetworkPolicyLoggingConfigToProto(policy.logging) : void 0
-  });
-}
 function convertProtoToNetworkPolicyLoggingConfig(config2) {
   const result = {};
   if (config2.decisionLogPath) {
@@ -54,12 +42,6 @@ function convertProtoToNetworkPolicyLoggingConfig(config2) {
     result.logFormat = "jsonl";
   }
   return result;
-}
-function convertNetworkPolicyLoggingConfigToProto(config2) {
-  return new NetworkPolicyLoggingConfig({
-    decisionLogPath: config2.decisionLogPath,
-    logFormat: config2.logFormat
-  });
 }
 function resolveNetworkPolicy(policy) {
   const explicit = convertProtoToNetworkPolicy(policy.networkPolicy);
@@ -76,16 +58,6 @@ function convertProtoToReadBoundary(mode) {
     case SandboxPolicy_ReadBoundaryMode.UNSPECIFIED:
     default:
       return void 0;
-  }
-}
-function convertReadBoundaryToProto(boundary) {
-  switch (boundary) {
-    case "system":
-      return SandboxPolicy_ReadBoundaryMode.SYSTEM;
-    case "workspace":
-      return SandboxPolicy_ReadBoundaryMode.WORKSPACE;
-    default:
-      return SandboxPolicy_ReadBoundaryMode.UNSPECIFIED;
   }
 }
 function sandboxedProtoFields(policy) {
@@ -141,50 +113,4 @@ function convertProtoToInternalPolicy(policy) {
       return { type: "insecure_none" };
   }
 }
-function convertInternalToProtoPolicy(policy) {
-  if (!policy)
-    return void 0;
-  if (policy.type === "insecure_none") {
-    return new SandboxPolicy({
-      type: SandboxPolicy_Type.INSECURE_NONE,
-      allowlistEscalated: policy.allowlistEscalated,
-      enableSharedBuildCache: policy.enableSharedBuildCache,
-      debugOutputDir: policy.debugOutputDir,
-      captureDenies: policy.captureDenies
-    });
-  }
-  if (policy.type === "workspace_readwrite") {
-    return new SandboxPolicy({
-      type: SandboxPolicy_Type.WORKSPACE_READWRITE,
-      networkAccess: isNetworkEnabledByPolicy(policy.networkPolicy),
-      skipStatsigDefaults: policy.skipStatsigDefaults,
-      additionalReadwritePaths: policy.additionalReadwritePaths ?? [],
-      additionalReadonlyPaths: policy.additionalReadonlyPaths ?? [],
-      disableTmpWrite: policy.disableTmpWrite,
-      enableSharedBuildCache: policy.enableSharedBuildCache,
-      debugOutputDir: policy.debugOutputDir,
-      captureDenies: policy.captureDenies,
-      networkPolicy: convertNetworkPolicyToProto(policy.networkPolicy),
-      networkPolicyStrict: policy.networkPolicyStrict,
-      readBoundary: convertReadBoundaryToProto(policy.readBoundary),
-      additionalReadPaths: policy.readBoundary === "workspace" ? policy.additionalReadPaths ?? [] : []
-    });
-  }
-  if (policy.type === "workspace_readonly") {
-    return new SandboxPolicy({
-      type: SandboxPolicy_Type.WORKSPACE_READONLY,
-      networkAccess: isNetworkEnabledByPolicy(policy.networkPolicy),
-      skipStatsigDefaults: policy.skipStatsigDefaults,
-      additionalReadonlyPaths: policy.additionalReadonlyPaths ?? [],
-      disableTmpWrite: policy.disableTmpWrite,
-      enableSharedBuildCache: policy.enableSharedBuildCache,
-      debugOutputDir: policy.debugOutputDir,
-      captureDenies: policy.captureDenies,
-      networkPolicy: convertNetworkPolicyToProto(policy.networkPolicy),
-      networkPolicyStrict: policy.networkPolicyStrict,
-      readBoundary: convertReadBoundaryToProto(policy.readBoundary),
-      additionalReadPaths: policy.readBoundary === "workspace" ? policy.additionalReadPaths ?? [] : []
-    });
-  }
-  return new SandboxPolicy({ type: SandboxPolicy_Type.INSECURE_NONE });
-}
+

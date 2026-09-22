@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/grep.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs44 = require("node:fs");
+var import_promises42 = require("node:fs/promises");
+var import_node_path74 = require("node:path");
+init_dist4();
+init_grep_exec_pb();
+init_dist6();
+init_dist3();
+
+// @recovered-fragment 2/2
 var __addDisposableResource14 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -775,3 +789,4 @@ LocalGrepExecutor.INDEXED_GREP_TIMEOUT_MS = 25e3;
 LocalGrepExecutor.INDEXED_GREP_CONTEXT_TIMEOUT_MS = LocalGrepExecutor.INDEXED_GREP_TIMEOUT_MS + 100;
 LocalGrepExecutor.HARD_MAX_OUTPUT_LINES = 1e4;
 LocalGrepExecutor.CLIENT_LIMIT_LINES = 2e3;
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/session/async-update.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VoiceCallAsyncUpdate = class {
   static frame({ topic, eventId, texts, atMs }) {
     return {
@@ -13,3 +18,4 @@ var VoiceCallAsyncUpdate = class {
     };
   }
 };
+

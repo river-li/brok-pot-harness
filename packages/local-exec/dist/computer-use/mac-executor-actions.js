@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/computer-use/mac-executor-actions.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_computer_use_tool_pb();
+
+// @recovered-fragment 2/2
 var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
   constructor({ ctx, actions, sidecar }) {
     this.startTime = Date.now();
@@ -336,3 +345,4 @@ MacComputerUseActionRunner.scrollDirectionNames = {
   [ScrollDirection.LEFT]: "left",
   [ScrollDirection.RIGHT]: "right"
 };
+

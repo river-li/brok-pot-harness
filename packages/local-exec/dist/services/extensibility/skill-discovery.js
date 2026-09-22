@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/services/extensibility/skill-discovery.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path69 = require("node:path");
 var BUILTIN_SKILL_CONFIG_DIR = {
   configDir: ".cursor",
@@ -38,3 +43,4 @@ function getUserExtensibilitySkillRoots(userHomeDirectory, thirdPartyExtensibili
     source: "user"
   }));
 }
+

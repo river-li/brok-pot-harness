@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/harness/tools/stay-silent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var INPUT4 = external_exports.object({});
 var OUTPUT4 = external_exports.discriminatedUnion("plan", [
@@ -25,3 +30,4 @@ var StaySilentTool = class _StaySilentTool extends VoiceCallTool {
     return Promise.resolve(plan.kind === "silent" ? { plan: "silent" } : { plan: "spoken", error: plan.error });
   }
 };
+

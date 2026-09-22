@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/session/seeded-nudge.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SEEDED_TOOL_BY_KIND = {
   ack: VOICE_CALL_WORK_LANDED_TOOL,
   progress: VOICE_CALL_WORK_LANDED_TOOL,
@@ -90,3 +95,4 @@ var VoiceCallItemSeeding = class _VoiceCallItemSeeding {
     ];
   }
 };
+

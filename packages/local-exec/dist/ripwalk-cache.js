@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/ripwalk-cache.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist3();
+
+// @recovered-fragment 2/2
 var DEFAULT_RIPWALK_CACHE_TTL_MS = 2e4;
 var RIPWALK_CACHE_TTL_ENV_VAR = "CURSOR_RIPWALK_CACHE_TTL_MS";
 var ripwalkCacheTtlOverrideMs;
@@ -135,3 +143,4 @@ var RipwalkTtlCache = class {
     };
   }
 };
+

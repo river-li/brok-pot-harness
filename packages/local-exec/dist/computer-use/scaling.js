@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/computer-use/scaling.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CoordinateScaler = class {
   constructor(config2) {
     this.config = config2;
@@ -45,3 +50,4 @@ var CoordinateScaler = class {
     return this.config.display.height;
   }
 };
+

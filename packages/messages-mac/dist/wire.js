@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/messages-mac/dist/wire.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_v4();
+
+// @recovered-fragment 2/2
 var isoDateTime = iso_exports.datetime({ offset: true });
 var MESSAGES_OP_GENERATION = {
   "find-chats": 1,
@@ -224,3 +232,4 @@ ${op.text}`, description: "Send a message" }, subject.kind === "recipient" ? { r
     description: READ_DESCRIPTIONS[op.kind]
   };
 }
+

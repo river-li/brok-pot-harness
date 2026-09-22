@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/prompt/tool-names.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VOICE_CALL_HANGUP_TOOL = "end_the_call";
 var VOICE_CALL_NUDGE_MAIN_TOOL = "send_task";
 var VOICE_CALL_RECALL_TEXTS_TOOL = "recall_text_messages";
@@ -25,3 +30,4 @@ var VoiceCallToolDescriptions = class {
     return `Hang up and end this call. Use it only when the caller says a parting greeting like "all done", "bye", "thanks, that's all", "stop", "go away", "shut up", "stop listening", "leave me alone", "goodbye", or "hang up". An unclear pause, a task still open, "ok" in the middle of work, or a "stop" that cancels that work is not a hang-up. ALWAYS say your goodbye out loud first, including when hanging up is the last step of something else they asked for: the line drops the moment you call this, so nothing after it is heard. Never call it while they are still asking for something.`;
   }
 };
+

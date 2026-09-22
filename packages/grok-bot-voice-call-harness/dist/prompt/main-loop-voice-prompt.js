@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/prompt/main-loop-voice-prompt.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VOICE_CALL_INBOUND_WAKE_CUE = "[inbound]";
 var ADDRESS_SHAPE = `${VOICE_CALL_CHANNEL_PLATFORM}:<call>`;
 var MainLoopVoicePrompt = class _MainLoopVoicePrompt {
@@ -93,3 +98,4 @@ var MainLoopVoicePrompt = class _MainLoopVoicePrompt {
     ].join(" ");
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-voice-call-harness/dist/harness/wire.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var VOICE_CALL_HARNESS_SESSION_PATH = "/aiserver.v1.GrokBotService/VoiceCallHarnessSession";
 var VOICE_CALL_HARNESS_TOOL_PATH = "/aiserver.v1.GrokBotService/VoiceCallHarnessTool";
@@ -95,3 +100,4 @@ var VoiceCallHarnessWire = class {
     return parsed(ToolOutcome.safeParse(value), (outcome) => outcome.kind === "served" ? { kind: "served", output: outcome.output } : outcome);
   }
 };
+

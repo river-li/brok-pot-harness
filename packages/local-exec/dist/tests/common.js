@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/tests/common.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MockIgnoreService = class {
   isCursorIgnored(_filePath) {
     return Promise.resolve(false);
@@ -84,3 +89,4 @@ var MockPermissionsService = class {
     this._shouldBlockShellCommandImpl = impl;
   }
 };
+

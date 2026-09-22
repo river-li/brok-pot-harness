@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/local-exec/dist/forced-egress.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var FORCED_SHELL_EGRESS_ENV = "CURSOR_FORCED_SHELL_EGRESS";
 var FORCED_SHELL_EGRESS_DEPENDENCY_REGEX_ENV = "CURSOR_FORCED_SHELL_EGRESS_DEPENDENCY_REGEX";
 var FORCED_SHELL_EGRESS_EXTRA_DEPENDENCY_REGEX_ENV = "CURSOR_FORCED_SHELL_EGRESS_EXTRA_DEPENDENCY_REGEX";
@@ -147,3 +152,4 @@ function forcedShellSandboxPolicy(command, parsingResult) {
   const allDependency = commands.every((cmd) => dependencyRe.test(cmd.fullText?.trim() || cmd.name?.trim() || ""));
   return allDependency ? forcedDependencyEgressPolicy() : loopback;
 }
+
