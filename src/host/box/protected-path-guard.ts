@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/box/protected-path-guard.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path108 = require("node:path");
 init_errors();
 var SandProtectedPathError = class extends SandDomainError {
@@ -37,3 +42,4 @@ async function assertPathOutsideProtectedRoots(protectedRoots, candidatePath, ba
     }
   }
 }
+

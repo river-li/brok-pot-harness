@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/watched-directory.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs52 = require("node:fs");
 var import_node_path95 = require("node:path");
 init_errors();
@@ -146,3 +151,4 @@ var WatchedDirectory = class {
     this.scheduleNotify();
   }
 };
+

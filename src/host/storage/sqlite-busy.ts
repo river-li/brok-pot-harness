@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/storage/sqlite-busy.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 var SQLITE_BUSY = 5;
 var SQLITE_LOCKED = 6;
@@ -59,3 +64,4 @@ async function retrySqliteBusy(operation, options2 = {}) {
   }
   throw lastError;
 }
+

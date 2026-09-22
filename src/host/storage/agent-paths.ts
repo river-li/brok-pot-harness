@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/storage/agent-paths.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_os6 = require("node:os");
+var import_node_path29 = require("node:path");
+
+// @recovered-fragment 2/2
 init_errors();
 var SandInvalidAgentIdError = class extends SandDomainError {
   name = "SandInvalidAgentIdError";
@@ -20,3 +29,4 @@ function resolveSandAgentDir(agentId, homeDir = (0, import_node_os6.homedir)()) 
   }
   return agentDir;
 }
+

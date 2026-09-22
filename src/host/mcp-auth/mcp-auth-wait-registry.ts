@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/mcp-auth/mcp-auth-wait-registry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_MCP_AUTH_WAIT_TTL_MS = 60 * 60 * 1e3;
 function normalizeConnectorName(value) {
   return value.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -49,3 +54,4 @@ var McpAuthWaitRegistry = class {
     }
   }
 };
+

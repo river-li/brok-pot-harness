@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/automations/automation-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto41 = require("node:crypto");
+var import_node_fs53 = require("node:fs");
+var import_node_path96 = require("node:path");
+init_scheduling();
+
+// @recovered-fragment 2/2
 var CONFIG_FILENAME = AUTOMATION_CONFIG_FILENAME;
 var RUNS_FILENAME = AUTOMATION_RUNS_FILENAME;
 var parseStoredConfig = parseStoredAutomationConfig;
@@ -370,3 +381,4 @@ var FileAutomationStore = class {
     return true;
   }
 };
+

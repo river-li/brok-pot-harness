@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/durable-file-policy.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_UPGRADE_RESUME_FILE_NAME = "host-upgrade-resume.json";
 var SAND_ACK_OBLIGATIONS_FILE_NAME = "ack-obligations.json";
 var SAND_PENDING_WAKE_FILE_NAME = "host-pending-wakes.json";
@@ -14,3 +19,4 @@ var BOX_HOME_FOREIGN_MOUNT_NAMES = ["dev-credentials", "box-store"];
 function isBoxHomeForeignMountPath(relPath) {
   return BOX_HOME_FOREIGN_MOUNT_NAMES.some((name17) => relPath.startsWith(`home/box/${name17}/`));
 }
+

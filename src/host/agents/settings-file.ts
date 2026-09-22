@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agents/settings-file.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs73 = require("node:fs");
 var import_node_path121 = require("node:path");
 function getSandSettingsPath(agentDir) {
@@ -19,3 +24,4 @@ function readSandSettingsFile(path31) {
 function writeSandSettingsFile(path31, update) {
   writeFileAtomicSync(path31, serializeSandSettingsFile(readRawSettings(path31), update));
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/box/box-file-transfer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto48 = require("node:crypto");
 var import_node_path107 = require("node:path");
 init_write_exec_pb();
@@ -127,3 +132,4 @@ async function writeFileBytesViaExecDaemon(ctx, accessor, boxPath, data) {
     `upload to box ${boxPath} failed (${result.result.case}): ${reason}`
   );
 }
+

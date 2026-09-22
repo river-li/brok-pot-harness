@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-crash-marker.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises7 = require("node:fs/promises");
+
+// @recovered-fragment 2/2
 init_scheduling();
 init_errors();
 var HOST_CRASH_EXIT_SIGNALS = [
@@ -159,3 +167,4 @@ function createHostCrashMarkerStore(path31 = getHostCrashMarkerPath()) {
     }
   };
 }
+

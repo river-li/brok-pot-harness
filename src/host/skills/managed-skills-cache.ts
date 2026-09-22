@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/skills/managed-skills-cache.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs64 = require("node:fs");
+var import_node_path112 = require("node:path");
+init_unknown_record();
+
+// @recovered-fragment 2/2
 var MANAGED_SKILLS_DIRNAME = "managed-skills";
 var MANAGED_SKILLS_CACHE_FILENAME = "cache.json";
 var MANAGED_SKILL_FILES_DIRNAME = "skills";
@@ -67,3 +77,4 @@ function materializeManagedSkillFiles(cacheDir, skills) {
     });
   }
 }
+

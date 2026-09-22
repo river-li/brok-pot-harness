@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/transcript-mirror-worker.ts
+ * Bundle: sand-host/agent-isolation/transcript-mirror-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs = require("node:fs");
+var import_node_sqlite = require("node:sqlite");
+var import_node_worker_threads = require("node:worker_threads");
+
+// @recovered-fragment 2/2
 var readConnections = /* @__PURE__ */ new Map();
 var loggedOpenFailures = /* @__PURE__ */ new Set();
 function getBlobConnection(dbPath) {

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agents/agent-profile.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs26 = require("node:fs");
+var import_node_path26 = require("node:path");
+
+// @recovered-fragment 2/2
 function hasPlaceholderProfileName(profile) {
   if (profile == null) return true;
   const name17 = profile.name.trim();
@@ -93,3 +102,4 @@ function writeServerBackedProfileFile(path31, profile, binding) {
     })
   );
 }
+

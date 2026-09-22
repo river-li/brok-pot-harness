@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/agent-worker-pool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path126 = require("node:path");
+var import_node_url14 = require("node:url");
+var import_node_worker_threads3 = require("node:worker_threads");
+
+// @recovered-fragment 2/2
 function defaultWorkerEntryPath2() {
   const here = (0, import_node_path126.dirname)((0, import_node_url14.fileURLToPath)(__import_meta_url));
   return (0, import_node_path126.join)(here, "agent-isolation", "agent-store-worker.cjs");
@@ -415,3 +425,4 @@ var AgentWorkerPool = class {
     if (this.connections.size === 0) this.stopSweep();
   }
 };
+

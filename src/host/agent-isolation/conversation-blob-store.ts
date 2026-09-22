@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/conversation-blob-store.ts
+ * Bundle: sand-host/agent-isolation/agent-store-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto = require("node:crypto");
+var import_node_fs4 = require("node:fs");
+
+// @recovered-fragment 2/2
 var MAX_ROOT_BLOB_BYTES = 8 * 1024 * 1024;
 var MAX_STALE_ROOT_SCAN_BYTES = 64 * 1024 * 1024;
 var EXPORT_CLOSURE_PROGRESS_BLOB_INTERVAL = 128;
@@ -368,3 +377,4 @@ var ConversationBlobStoreDb = class {
     this.db.close();
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/gateway-command-error.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_system_errno();
 var NETWORK_ERRNOS = /* @__PURE__ */ new Set([
   "ECONNRESET",
@@ -74,3 +79,4 @@ function commandSuccessReportToTelemetry(report) {
     }
   };
 }
+

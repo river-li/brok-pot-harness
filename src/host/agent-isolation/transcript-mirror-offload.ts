@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/transcript-mirror-offload.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path178 = require("node:path");
+var import_node_url19 = require("node:url");
+var import_node_worker_threads4 = require("node:worker_threads");
+init_errors();
+
+// @recovered-fragment 2/2
 function defaultMirrorWorkerEntryPath() {
   const here = (0, import_node_path178.dirname)((0, import_node_url19.fileURLToPath)(__import_meta_url));
   return (0, import_node_path178.join)(here, "agent-isolation", "transcript-mirror-worker.cjs");
@@ -237,3 +248,4 @@ var OffloadingTranscriptMirror = class _OffloadingTranscriptMirror {
     return write2;
   }
 };
+

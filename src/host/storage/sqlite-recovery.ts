@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/storage/sqlite-recovery.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs78 = require("node:fs");
 var import_node_sqlite4 = require("node:sqlite");
 init_unknown_record();
@@ -182,3 +187,4 @@ function copySalvageableSqliteRows(source, selectSql, insert, toParams) {
   }
   return copied;
 }
+

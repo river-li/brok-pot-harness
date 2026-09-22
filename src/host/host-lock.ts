@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-lock.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs29 = require("node:fs");
+var import_node_path28 = require("node:path");
+init_system_errno();
+
+// @recovered-fragment 2/2
 var DEFAULT_TAKEOVER_TIMEOUT_MS = 3e3;
 var DEFAULT_POLL_INTERVAL_MS = 100;
 var MAX_ACQUIRE_ATTEMPTS = 5;
@@ -118,3 +128,4 @@ async function acquireHostLock(options2 = {}) {
   (0, import_node_fs29.writeFileSync)(path31, String(pid), "utf8");
   return { outcome, lock: makeHandle(path31, pid), previousPid };
 }
+

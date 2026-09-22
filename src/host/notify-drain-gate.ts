@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/notify-drain-gate.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var NOTIFY_SAFETY_POLL_MS = 12e4;
 var NOTIFY_DRAIN_FLOOR_MS = 4e3;
 function createNotifyDrainGate(deps) {
@@ -28,3 +33,4 @@ function createNotifyDrainGate(deps) {
     }
   };
 }
+

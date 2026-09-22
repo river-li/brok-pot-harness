@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-runner-composition.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_fs101 = require("node:fs");
+var import_node_path180 = require("node:path");
+
+// @recovered-fragment 2/3
+init_errors();
+
+// @recovered-fragment 3/3
 var DEFAULT_SAND_MODEL = "gpt-5.5-high-fast";
 var SandAutomationCompletionCheckpointError = class extends SandDomainError {
   name = "SandAutomationCompletionCheckpointError";
@@ -676,3 +688,4 @@ function createHostRunnerComposition(deps) {
     }
   };
 }
+

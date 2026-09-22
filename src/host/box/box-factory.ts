@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/box/box-factory.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createSandBox(options2 = {}) {
   return new LoopbackSandBox({
     telemetry: options2.telemetry,
@@ -12,3 +17,4 @@ function applySharedDesktop(box, options2 = {}) {
   if (!boxSupportsMultiWindow(box)) return box;
   return new SharedDesktopSandBox(box, options2);
 }
+

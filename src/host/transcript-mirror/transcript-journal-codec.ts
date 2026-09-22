@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/transcript-mirror/transcript-journal-codec.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto86 = require("node:crypto");
 init_zod();
 init_errors();
@@ -131,3 +136,4 @@ function toolParts(step) {
     ...tool.value.result == null ? {} : { result: tool.value.result.toJson() }
   };
 }
+

@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/gateway-protocol.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var GATEWAY_SCHEMES = ["http", "https"];
 var SandGatewayRequestError = class extends SandDomainError {
   name = "SandGatewayRequestError";
@@ -312,3 +320,4 @@ function stripInlineAvatarsFromEvent(event) {
 function refuseSwapRunningTurns(runningTurns) {
   return Math.max(runningTurns, 1);
 }
+

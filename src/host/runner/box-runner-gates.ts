@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/runner/box-runner-gates.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var temporalOnlyExperimentControlArm = () => false;
 function composeBoxRunnerGates(deps) {
   const { experiments } = deps;
@@ -65,3 +70,4 @@ function composeBoxRunnerGates(deps) {
     fiveMinuteAutomationFloor: gate("sand_five_min_automation_floor")
   });
 }
+

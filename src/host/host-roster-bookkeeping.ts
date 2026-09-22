@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-roster-bookkeeping.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createHostRosterBookkeeping(extensions) {
   let latestActiveAgentId = null;
   let runningAgentIds = /* @__PURE__ */ new Set();
@@ -39,3 +44,4 @@ function createHostRosterBookkeeping(extensions) {
     }
   };
 }
+

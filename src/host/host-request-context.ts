@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-request-context.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_os28 = require("node:os");
 function resolveTimeZone() {
   try {
@@ -29,3 +34,4 @@ function createHostRequestContext(options2) {
     resolveRules
   };
 }
+

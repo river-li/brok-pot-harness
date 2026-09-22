@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/sand-host.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises83 = require("node:fs/promises");
+init_dist4();
+init_invariant();
+
+// @recovered-fragment 2/2
 var BOX_READY_STAGE_MARKER_PATH = "/tmp/sand-box-ready-stage";
 var BOX_READY_REPORT_ATTEMPTS = 3;
 var BOX_READY_REPORT_RETRY_MS = 3e4;
@@ -503,3 +513,4 @@ var SandHost = class {
     for (const listener of this.listeners) listener(event);
   }
 };
+

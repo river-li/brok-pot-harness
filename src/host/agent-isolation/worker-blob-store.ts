@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/worker-blob-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var WorkerBlobStore = class {
   constructor(pool, agentId, blobDbPath, legacyBlobDbPath) {
     this.pool = pool;
@@ -21,3 +26,4 @@ var WorkerBlobStore = class {
   async flush(_ctx) {
   }
 };
+

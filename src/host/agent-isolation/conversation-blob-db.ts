@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/conversation-blob-db.ts
+ * Bundle: sand-host/agent-isolation/agent-store-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs2 = require("node:fs");
+var import_node_path = require("node:path");
+var import_node_sqlite3 = require("node:sqlite");
+
+// @recovered-fragment 2/2
 var CONVERSATION_BLOB_SCHEMA = `
 CREATE TABLE IF NOT EXISTS blobs (
   id TEXT PRIMARY KEY,
@@ -494,3 +504,4 @@ function openConversationBlobDb(options) {
   }
   return recoverConversationBlobDb(options);
 }
+

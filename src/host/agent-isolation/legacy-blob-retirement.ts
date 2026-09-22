@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/legacy-blob-retirement.ts
+ * Bundle: sand-host/agent-isolation/agent-store-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs3 = require("node:fs");
 function defer(reason) {
   return { isRetirable: false, reason, legacyRows: 0, legacyBytes: 0 };
@@ -45,3 +50,4 @@ function verifyLegacyBlobRetirement(options) {
     }
   }
 }
+

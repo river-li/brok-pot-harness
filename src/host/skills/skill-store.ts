@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/skills/skill-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs83 = require("node:fs");
 var import_node_path134 = require("node:path");
 init_scheduling();
@@ -387,3 +392,4 @@ var FileSkillStore = class {
     (0, import_node_fs83.rmSync)(legacyDir, { recursive: true, force: true });
   }
 };
+

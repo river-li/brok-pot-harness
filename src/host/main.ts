@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/main.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_invariant();
+
+// @recovered-fragment 3/3
 var BOX_COPY_IN_ARG = "--box-copy-in";
 async function runHostMain() {
   if (process.argv.includes(BOX_COPY_IN_ARG)) {

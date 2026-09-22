@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/groups/group-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs25 = require("node:fs");
+var import_node_path25 = require("node:path");
+
+// @recovered-fragment 2/2
 var SAND_GROUP_FILENAME = "group.json";
 function getSandGroupPath(agentDir) {
   return (0, import_node_path25.join)(agentDir, SAND_GROUP_FILENAME);
@@ -53,3 +62,4 @@ function writeSandGroupConfig(agentDir, config2) {
 function isSandGroupDir(agentDir) {
   return readSandGroupConfig(agentDir) != null;
 }
+

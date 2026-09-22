@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/mcp-auth/host-mcp-auth-completion.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var HostMcpAuthCompletion = class {
   constructor(deps) {
     this.deps = deps;
@@ -23,3 +28,4 @@ var HostMcpAuthCompletion = class {
     this.resolve(completion);
   }
 };
+

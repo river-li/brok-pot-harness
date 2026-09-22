@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/skills/plugin-skills-cache.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs66 = require("node:fs");
 var import_node_path115 = require("node:path");
 init_unknown_record();
@@ -68,3 +73,4 @@ function writePluginSkillsCache(cacheDir, index) {
     mode: AGENT_READABLE_SKILL_FILE_MODE
   });
 }
+

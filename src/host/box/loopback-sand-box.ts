@@ -1,3 +1,20 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/box/loopback-sand-box.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_promises52 = require("node:fs/promises");
+var import_node_os24 = require("node:os");
+var import_node_path109 = require("node:path");
+var import_promises53 = require("node:timers/promises");
+init_dist2();
+init_dist2();
+init_dist4();
+
+// @recovered-fragment 2/3
+init_system_errno();
+
+// @recovered-fragment 3/3
 var EXEC_DAEMON_PORT = SAND_BOX_PORTS.primaryExecDaemon;
 var VNC_PORT = SAND_BOX_PRIMARY_NOVNC_PORT;
 var DEFAULT_AUTH_TOKEN = "local";
@@ -351,3 +368,4 @@ function daemonPingReadinessState(outcome) {
   if (outcome === "timeout") return "up_but_exec_unresponsive";
   return "up_but_exec_disconnected";
 }
+

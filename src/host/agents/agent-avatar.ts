@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agents/agent-avatar.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto56 = require("node:crypto");
 var import_node_fs72 = require("node:fs");
 var import_promises60 = require("node:fs/promises");
@@ -128,3 +133,4 @@ function invalidateAvatarDataUrlCache(agentDir) {
     if (key.startsWith(prefix)) avatarDataUrlCache.delete(key);
   }
 }
+

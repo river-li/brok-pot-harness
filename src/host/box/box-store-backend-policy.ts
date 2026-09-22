@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/box/box-store-backend-policy.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path6 = require("node:path");
 var SAND_BOX_STORE_LOCAL_DIR_ENV = "SAND_BOX_STORE_LOCAL_DIR";
 var SAND_BOX_STORE_BACKEND_ENV = "SAND_BOX_STORE_BACKEND";
@@ -35,3 +40,4 @@ var SAND_BOX_LEGACY_STORE_ABSENT_VALUE = "absent";
 function isLegacyBoxStoreHydrateSkipped(env) {
   return env[SAND_BOX_LEGACY_STORE_ENV]?.trim().toLowerCase() === SAND_BOX_LEGACY_STORE_ABSENT_VALUE;
 }
+

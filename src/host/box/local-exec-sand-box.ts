@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/box/local-exec-sand-box.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises27 = require("node:fs/promises");
+var import_node_os16 = require("node:os");
+var import_node_path68 = require("node:path");
+init_dist4();
+
+// @recovered-fragment 2/2
 function resolveProjectDir(override) {
   const configured2 = override?.trim();
   return configured2 != null && configured2.length > 0 ? configured2 : (0, import_node_os16.homedir)();
@@ -120,3 +131,4 @@ var LocalExecSandBox = class {
     return Number.isSafeInteger(windowIndex) && windowIndex > 0 ? windowIndex : void 0;
   }
 };
+

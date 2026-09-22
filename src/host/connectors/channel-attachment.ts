@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/connectors/channel-attachment.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs32 = require("node:fs");
 var import_node_path37 = require("node:path");
 var import_node_url6 = require("node:url");
@@ -65,3 +70,4 @@ async function resolveChannelAttachment(rawUrl) {
     mime: mime2
   };
 }
+

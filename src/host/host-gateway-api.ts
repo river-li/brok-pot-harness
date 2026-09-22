@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-gateway-api.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/4
+var import_node_crypto14 = require("node:crypto");
+
+// @recovered-fragment 2/4
+init_errors();
+
+// @recovered-fragment 3/4
+init_unknown_record();
+
+// @recovered-fragment 4/4
 var BASE_HOST_CAPABILITIES = [
   ORDERED_REPLICAS_V1,
   "sendAcceptanceV1",
@@ -1345,3 +1359,4 @@ ${args.request.trim()}`;
     activateAgent: (agentId) => manager.announceRemoteActivation(agentId)
   });
 }
+

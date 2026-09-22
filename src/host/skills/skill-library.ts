@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/skills/skill-library.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs68 = require("node:fs");
+var import_node_path116 = require("node:path");
+init_scheduling();
+
+// @recovered-fragment 2/2
 var SKILL_CHANGE_DEBOUNCE_MS = 50;
 var RESERVED_SKILL_FILES = /* @__PURE__ */ new Set([SKILL_FILENAME, LEGACY_WORKFLOW_FILENAME, "runs.json"]);
 var recordParseCache = new StatKeyedParseCache();
@@ -178,3 +188,4 @@ var GlobalSkillLibrary = class {
     return true;
   }
 };
+

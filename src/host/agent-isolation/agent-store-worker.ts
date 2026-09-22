@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/agent-store-worker.ts
+ * Bundle: sand-host/agent-isolation/agent-store-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_worker_threads = require("node:worker_threads");
+
+// @recovered-fragment 2/2
 function post(message, transfer = []) {
   import_node_worker_threads.parentPort?.postMessage(message, transfer);
 }

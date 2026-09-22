@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-environment.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path27 = require("node:path");
+var import_node_url5 = require("node:url");
+init_dist2();
+
+// @recovered-fragment 2/2
 var AGENT_INBOUND_COALESCE_DEFAULT_MS = 1e3;
 function trimmedNonEmpty(raw) {
   const trimmed = raw?.trim();
@@ -107,3 +117,4 @@ function readSandHostEnvironment(env) {
     streamTuning: resolveSandStreamTuning(env)
   };
 }
+

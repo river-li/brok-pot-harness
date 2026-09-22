@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/host-secret-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs5 = require("node:fs");
+init_zod();
+
+// @recovered-fragment 2/2
 var hostSecretsSchema = external_exports.object({ machineId: external_exports.string().min(1) });
 var machineIdCache;
 async function getOrCreateHostMachineId(path31 = getHostSecretsPath()) {
@@ -25,3 +34,4 @@ async function readMachineId(path31) {
 async function writeMachineId(path31, machineId) {
   await writeFileAtomic(path31, JSON.stringify({ machineId }, null, 2));
 }
+

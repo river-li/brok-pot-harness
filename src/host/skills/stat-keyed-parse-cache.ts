@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/skills/stat-keyed-parse-cache.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs67 = require("node:fs");
 var DEFAULT_CAPACITY = 2048;
 var RACY_MTIME_TICK_WINDOW_MS = 2e3;
@@ -50,3 +55,4 @@ var StatKeyedParseCache = class {
     return value;
   }
 };
+

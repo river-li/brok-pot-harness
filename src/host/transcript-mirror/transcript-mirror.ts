@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/transcript-mirror/transcript-mirror.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto87 = require("node:crypto");
+var import_promises82 = require("node:fs/promises");
+var import_node_path179 = require("node:path");
+init_agent_pb();
+init_bounded();
+
+// @recovered-fragment 2/2
 function journalErrno(error42) {
   const code = error42?.code;
   return typeof code === "string" ? brandedErrno(code) : void 0;
@@ -709,3 +721,4 @@ var FileTranscriptMirror = class {
     });
   }
 };
+

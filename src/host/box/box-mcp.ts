@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/box/box-mcp.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_control_service_pb();
 init_esm2();
 init_errors();
@@ -25,3 +30,4 @@ async function loadBoxMcpServersViaTransport(ctx, transport, configJson) {
     throw error42;
   }
 }
+

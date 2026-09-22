@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/conversation-blob-gc.ts
+ * Bundle: sand-host/agent-isolation/agent-store-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var LIVE_BLOB_TYPE_NAMES = {
   "agent.v1.ConversationPlan": "ConversationPlan",
   "agent.v1.ConversationStateStructure": "ConversationStateStructure",
@@ -133,3 +138,4 @@ function collectReachableBlobHexIds({
   visitMessage(ConversationStateStructure.fromBinary(rootBytes));
   return { blobTypeByHexId, unresolvedProtoRefs };
 }
+

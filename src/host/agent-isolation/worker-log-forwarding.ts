@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/agent-isolation/worker-log-forwarding.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_FORWARDED_WORKER_LINE_BYTES = 8 * 1024;
 function forwardStream(stream3, emit) {
   if (stream3 == null) return;
@@ -29,3 +34,4 @@ function forwardStream(stream3, emit) {
   stream3.on("error", () => {
   });
 }
+

@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/gateway-config.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto13 = require("node:crypto");
+var import_node_fs24 = require("node:fs");
+init_errors();
+
+// @recovered-fragment 2/2
 var SandGatewayConfigError = class extends SandDomainError {
   name = "SandGatewayConfigError";
 };
@@ -47,3 +57,4 @@ function resolveGatewayServerConfig(env, generateToken = () => (0, import_node_c
 function gatewayScheme(config2) {
   return config2.tls != null ? "https" : "http";
 }
+

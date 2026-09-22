@@ -1,3 +1,18 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/gateway-server.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_crypto15 = require("node:crypto");
+var import_node_http3 = require("node:http");
+var import_node_https3 = require("node:https");
+var import_node_zlib2 = require("node:zlib");
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_errors();
+
+// @recovered-fragment 3/3
 var DOMAIN_REFUSALS = [
   BotTemplateImportAccessDeniedError,
   BotTemplateStoreNotFound,
@@ -531,3 +546,4 @@ async function handleRequest(deps, req, res, eventStreamEchoes) {
   }
   respondError(res, 404, `not found: ${req.method} ${url2.pathname}`);
 }
+

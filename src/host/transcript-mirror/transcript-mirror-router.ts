@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/transcript-mirror/transcript-mirror-router.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var RoutedTranscriptMirror = class {
   constructor(journal, legacy, isJournalEnabled, routes) {
@@ -101,3 +106,4 @@ var RoutedTranscriptMirror = class {
     this.legacyPending.delete(conversationId);
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/promotable-rooms.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 var flushBudget = createDeadlinePolicy({
   name: "sand-promotable-rooms-flush",
@@ -50,3 +55,4 @@ async function listPromotableRooms(deps) {
   }
   return { rooms, skipped: skipped2 };
 }
+
