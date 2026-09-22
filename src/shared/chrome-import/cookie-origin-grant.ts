@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/chrome-import/cookie-origin-grant.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function parseChromeProfileId(raw) {
   if (typeof raw !== "string") return null;
@@ -30,3 +35,4 @@ function parseCookieOriginGrants(raw) {
 function cookieOriginGrantKey(grant) {
   return JSON.stringify([grant.profileId, grant.origin]);
 }
+

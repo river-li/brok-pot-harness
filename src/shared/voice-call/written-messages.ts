@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/voice-call/written-messages.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VOICE_CALL_RECALL_PAGE_LIMIT = 256;
 var VOICE_CALL_RECALL_MAX_PAGES = 16;
 function typedInTheChat(entry) {
@@ -40,3 +45,4 @@ var VoiceCallWrittenMessages = class _VoiceCallWrittenMessages {
     return _VoiceCallWrittenMessages.ofTranscript(collected, limit);
   }
 };
+

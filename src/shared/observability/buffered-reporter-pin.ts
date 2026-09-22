@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/observability/buffered-reporter-pin.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createBufferedReporterPin(options2) {
   let installed;
   let buffered3 = [];
@@ -33,3 +38,4 @@ function createBufferedReporterPin(options2) {
     }
   };
 }
+

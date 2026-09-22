@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/agent-todo-item.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_proto();
 function statusOf(status) {
   switch (status) {
@@ -24,3 +29,4 @@ function sandAgentTodoFromItem(item) {
     updatedAt: Number(item.updatedAt)
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/box/box-secrets.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_cloud_agent();
 init_locale();
 var ENV_NAME_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
@@ -62,3 +67,4 @@ function buildBoxSecretsEnv(secrets) {
   env[CLOUD_AGENT_INJECTED_SECRET_NAMES_ENV_VAR] = names3.join(",");
   return env;
 }
+

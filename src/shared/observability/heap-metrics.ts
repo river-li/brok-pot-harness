@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/observability/heap-metrics.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function ownDataValue(value, key) {
   const descriptor2 = Object.getOwnPropertyDescriptor(value, key);
   return descriptor2 !== void 0 && "value" in descriptor2 ? descriptor2.value : void 0;
@@ -36,3 +41,4 @@ function parseHeapMetricsReport(value) {
     return null;
   }
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/agent-activity.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function areAwaitingStatesEqual(left, right) {
   if (left === right) return true;
   if (left == null || right == null) return false;
@@ -82,3 +87,4 @@ function overlaidAgentSummaryOf(summary, overlay2) {
   if (overlay2.client != null) next = clientOverlaidSummaryOf(next, overlay2.client);
   return next;
 }
+

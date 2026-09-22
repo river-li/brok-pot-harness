@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/local-exec/local-exec-gateway.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_v4();
+
+// @recovered-fragment 2/2
 var GATEWAY_LOCAL_EXEC_REQUESTS_PATH = "/local-exec/requests";
 var GATEWAY_LOCAL_EXEC_RESPONSES_PATH = "/local-exec/responses";
 var SAND_NO_LOCAL_MACHINE_MESSAGE = "Your local machine isn't connected right now (the Grok Bot desktop app must be open and online to run commands on it). Try again once it's reachable.";
@@ -147,3 +155,4 @@ function parseSandLocalExecResponseBatch(u2) {
   }
   return result.data;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/media-extensions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function extensionOf(name17) {
   const base = name17.slice(Math.max(name17.lastIndexOf("/"), name17.lastIndexOf("\\")) + 1);
   const dot = base.lastIndexOf(".");
@@ -78,3 +83,4 @@ var AUDIO_MIME_FROM_EXTENSION = {
   ".wav": "audio/wav",
   ".weba": "audio/webm"
 };
+

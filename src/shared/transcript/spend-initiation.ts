@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/transcript/spend-initiation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 init_unknown_record();
 var opaqueId = external_exports.string().min(1).max(256).regex(/^\S+$/);
@@ -36,3 +41,4 @@ function createSandSpendInitiationEntry(args) {
     id: `spend-initiation:${args.requestId}`
   };
 }
+

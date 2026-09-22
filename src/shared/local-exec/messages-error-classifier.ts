@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/local-exec/messages-error-classifier.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CODE_BY_MESSAGE = /* @__PURE__ */ new Map([
   [SAND_NO_LOCAL_MACHINE_MESSAGE, "no_local_machine"],
   [SAND_LOCAL_EXEC_UNSUPPORTED_FRAME_MESSAGE, "incompatible_versions"],
@@ -48,3 +53,4 @@ function sandMessagesErrorCode(error42) {
   if (exact !== void 0) return exact;
   return CODE_BY_LABELLED_SUFFIX.find(([suffix]) => error42.message.endsWith(suffix))?.[1] ?? "other";
 }
+

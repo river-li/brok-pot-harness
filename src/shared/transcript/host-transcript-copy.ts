@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/transcript/host-transcript-copy.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TEACH_RECORDING_PERSISTED_PROMPT = "The recording is finished. Learn the task from it.";
 var LEARN_FROM_DEMONSTRATION_PERSISTED_LABEL = "Learn from demonstration";
 var TEACH_RECORDING_NONCE_PREFIX = "teach-recording:";
@@ -8,3 +13,4 @@ function teachRecordingPromptForPersistence() {
 function learnFromDemonstrationLabelForPersistence() {
   return LEARN_FROM_DEMONSTRATION_PERSISTED_LABEL;
 }
+

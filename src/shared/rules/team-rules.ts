@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/rules/team-rules.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createSandTeamRulesResolverFromLoad(options2) {
   let snapshot;
   let inFlight;
@@ -45,3 +50,4 @@ function createSandTeamRulesResolverFromLoad(options2) {
     }
   };
 }
+

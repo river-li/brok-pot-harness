@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/observability/structured-log-transport.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_structured_log();
+init_errors();
+
+// @recovered-fragment 2/3
+init_proto();
+
+// @recovered-fragment 3/3
 var MAX_BUFFER_SIZE = 1e3;
 var STRUCTURED_LOG_SUBMIT_DEADLINE_MS = 15e3;
 var DEADLINE_EXPIRY_CODE = "deadline_exceeded";
@@ -486,3 +498,4 @@ var StructuredLogTransport = class {
     }
   }
 };
+

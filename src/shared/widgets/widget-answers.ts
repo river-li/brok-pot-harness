@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/widgets/widget-answers.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MULTI_SELECT_ANSWER_SEPARATOR = "\n";
 function normalizeMultiSelectAnswerValues(values) {
   return values.map((value) => value.replace(/\s*\n\s*/g, " ").trim()).filter((value) => value.length > 0);
@@ -25,3 +30,4 @@ function getWidgetAnswerLabel(widget, answer) {
   }
   return options2.find((option) => (option.value ?? option.label) === answer)?.label ?? answer;
 }
+

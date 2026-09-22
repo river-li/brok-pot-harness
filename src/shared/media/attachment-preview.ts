@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/attachment-preview.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TEXT_PREVIEWABLE_EXTENSIONS = /* @__PURE__ */ new Set([
   "txt",
   "text",
@@ -100,3 +105,4 @@ function looksLikeBinary(bytes) {
   }
   return controlBytes / sample.byteLength > BINARY_CONTROL_BYTE_RATIO;
 }
+

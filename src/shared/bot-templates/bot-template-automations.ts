@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/bot-templates/bot-template-automations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 var BOT_TEMPLATE_AUTOMATION_FILENAME = "automation.json";
 var SLACK_USER_ID2 = /\bU[A-Z0-9]{6,13}\b/g;
@@ -249,3 +254,4 @@ function packAutomationsFromDefinitions(automations, selected) {
 function packAutomationsIntoRecipe(recipe, automations) {
   return { ...recipe, routines: packAutomationsFromDefinitions(automations, recipe.routines) };
 }
+

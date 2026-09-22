@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/image-dimensions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function toImageDimensions({ width, height }) {
   if (!Number.isFinite(width) || !Number.isFinite(height)) return null;
   if (width <= 0 || height <= 0) return null;
@@ -273,3 +278,4 @@ function readJpegDimensions(buffer) {
 function readImageFileDimensions(buffer) {
   return readWebpOrHeicDimensions(buffer) ?? readPngDimensions(buffer) ?? readGifDimensions(buffer) ?? readJpegDimensions(buffer);
 }
+

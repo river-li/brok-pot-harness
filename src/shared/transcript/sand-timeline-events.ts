@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/transcript/sand-timeline-events.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AUTOMATION_ACTION_VERB = {
   created: "Created",
   updated: "Updated",
@@ -30,3 +35,4 @@ function buildTimelineEventWakePrompt(events) {
   const lines2 = events.map((event) => `- ${describeTimelineEvent(event)}`);
   return [`${TIMELINE_EVENT_WAKE_CUE} Something about this conversation just changed.`, "This is a system event recorded in your timeline, not the user typing in this app, and possibly something you did yourself.", ...lines2, "If it is worth acknowledging to the user, reply with SendToUser; otherwise it is fine to stay silent."].join("\n");
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/transcript/transcript-threads.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function replyToOf(entry) {
   return "replyTo" in entry ? entry.replyTo : void 0;
 }
@@ -28,3 +33,4 @@ function threadDescendants(rootId, branched) {
   const byId = new Map(branched.map((entry) => [entry.id, entry]));
   return branched.filter((entry) => resolveBranchRoot2(entry, byId) === rootId);
 }
+

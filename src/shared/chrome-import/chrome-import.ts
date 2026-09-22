@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/chrome-import/chrome-import.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function brandParsedString(raw) {
   return raw;
@@ -33,3 +38,4 @@ function chromeCookieAllowHost(domain2) {
   return domain2.replace(/^\./, "").toLowerCase();
 }
 var CHROME_COOKIE_IMPORT_UNAVAILABLE = "chrome-cookie-import-unavailable";
+

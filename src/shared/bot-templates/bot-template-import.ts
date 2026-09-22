@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/bot-templates/bot-template-import.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 function importedTemplateSetupFromRecipe(recipe, options2) {
   return {
@@ -43,3 +48,4 @@ var BotTemplateImportAccessDeniedError = class extends SandDomainError {
 function botTemplatePostcardText(source) {
   return source.description?.trim() ?? "";
 }
+

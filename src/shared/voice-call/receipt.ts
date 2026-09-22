@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/voice-call/receipt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var LINE_LIMIT = 96;
 var NO_OP_MAX_DURATION_MS = 8e3;
 var MIN_SPOKEN_TURNS_FOR_CARD = 2;
@@ -59,3 +64,4 @@ function clampLine2(text2) {
   const cut = space >= Math.floor(LINE_LIMIT * 0.55) ? space : slice.length;
   return `${slice.slice(0, cut).trimEnd()}\u2026`;
 }
+

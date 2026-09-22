@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/voice-call/receipt-entry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function voiceCallReceiptEntry(record2, authored) {
   const description9 = authored === void 0 ? void 0 : SandVoiceCallReceipt.parse(authored);
   return {
@@ -22,3 +27,4 @@ function applyVoiceCallCardCopy(entry, authored) {
   if (description9 === void 0) return entry;
   return { ...entry, call: { ...entry.call, description: description9 } };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/markdown-preview.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PREVIEW_SOURCE_MAX_CHARS = 4096;
 var PREVIEW_LINE_MAX_CHARS = 200;
 var INLINE_TAG_PATTERN = /<(\/?)([a-zA-Z]+)\s*(\/)?>/g;
@@ -198,3 +203,4 @@ function capPreviewLine(line) {
 function markdownToPreviewLine(markdown) {
   return capPreviewLine(markdownToPreviewText(boundedPreviewSource(markdown)));
 }
+

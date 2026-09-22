@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/automations/automations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TRIGGER_ANY_SCOPE = "*";
 var GITHUB_EVENT_KINDS = [
   "pr-opened",
@@ -273,3 +278,4 @@ var SandAutomationRunNowRefusedError = class extends Error {
 };
 var AUTOMATION_WAKE_CUE = "[routine]";
 var AUTOMATION_MAX_RUN_HISTORY = 20;
+

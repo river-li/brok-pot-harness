@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/trays/tray-title-fallbacks.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function trayTitleFallback(kind) {
   const descriptor2 = TITLE_BY_KIND[kind];
   return descriptor2.message ?? String(descriptor2.id ?? "");
@@ -17,3 +22,4 @@ function hostTrayTitle(args) {
   }
   return { title: trayTitleFallback(args.kind), titleKind: args.kind };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/errors/errors.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function errorMessage(error42) {
   return error42 instanceof Error ? error42.message : String(error42);
 }
@@ -20,3 +25,4 @@ var init_errors = __esm({
     };
   }
 });
+

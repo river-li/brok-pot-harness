@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/mcp/mcp.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_MCP_ACCOUNT_KEY = "default";
 var DESIGNATED_DANGEROUS_MCP_TOOL_NAMES = /* @__PURE__ */ new Set([
   "notion-create-pages",
@@ -122,3 +127,4 @@ function statusFromMcpRawServerStatus(status, technicalDetail) {
     }
   }
 }
+

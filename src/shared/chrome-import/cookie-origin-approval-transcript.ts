@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/chrome-import/cookie-origin-approval-transcript.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function cookieOriginApprovalItemsFromOrigins(origins) {
   const items = [];
   const seen = /* @__PURE__ */ new Set();
@@ -13,3 +18,4 @@ function cookieOriginApprovalItemsFromOrigins(origins) {
   }
   return items;
 }
+

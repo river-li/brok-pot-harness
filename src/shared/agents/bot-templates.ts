@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/bot-templates.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var SAND_BOT_TEMPLATE_NOT_FOUND = "bot-template/not-found";
 var SAND_BOT_TEMPLATE_NOT_FOUND_MESSAGE = "Grok Bot template not found.";
@@ -60,3 +65,4 @@ function withResolvedBotTemplateAudience(args) {
     ...updatedAtMs == null ? {} : { updatedAtMs }
   };
 }
+

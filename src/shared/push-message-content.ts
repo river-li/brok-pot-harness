@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/push-message-content.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getPushMessageContentFromTranscript(entries) {
   const mainEntries = getMainTranscriptEntries(entries);
   let last;
@@ -42,3 +47,4 @@ function toPushMessageAuthor(author) {
   }
   return { id: author.id, name: author.name, kind: author.kind };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/channels/channel-prompt-lines.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CHANNEL_INBOUND_WAKE_CUE = "[inbound]";
 var CHANNELS_SECRET_LINE = "Never ask the user to paste a token, API key, or password into the chat, and never write one into a file: that would persist it in the transcript or somewhere you can read it back. To collect any credential, send a SendToUser of type secret-request (connector + field + a clear label). The user types it into a masked field and the value goes straight to the secret store; you only learn that it was provided, never the value. You do not need the credential to check status; never cat the connection file expecting one.";
 var SLACK_ADDRESS_SHAPES_LINE = "On Slack, a channel thread is addressed slack:<channel id>:<thread ts>, the channel id and the thread's top-level message ts joined by a colon (e.g. slack:C0123ABCD:1712345678.000100). A bare slack:C\u2026 or slack:G\u2026 channel id posts a new top-level message in that channel, which the whole channel sees and which needs the bot to have been added to the channel; use it only when someone asks for a new post there or a routine says to post to the channel, and answer a message in its own thread otherwise. A person (slack:U\u2026, which opens a DM with them) or an existing DM (slack:D\u2026) is addressed bare. An [inbound] wake or a routine fire hands you the exact address; when you compose one yourself, build it from the channel id and the (ts: \u2026) of the message you are answering.";
@@ -16,3 +21,4 @@ var CHANNELS_SKILL_BODY_LINES = [
   CHANNELS_INBOUND_LINE,
   ...CHANNELS_PROTOCOL_LINES
 ];
+

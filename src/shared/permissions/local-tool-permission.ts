@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/permissions/local-tool-permission.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_LOCAL_TOOL_PERMISSIONS = ["always", "ask", "never"];
 var SAND_DEFAULT_LOCAL_TOOL_PERMISSION = "ask";
 var SAND_LOCAL_TOOL_ASK_TTL_MS = 10 * 60 * 1e3;
@@ -53,3 +58,4 @@ function resolveSandLocalToolPermission(choice, adminCeiling) {
   if (adminCeiling === void 0) return choice;
   return SAND_LOCAL_TOOL_PERMISSION_RANK[choice] <= SAND_LOCAL_TOOL_PERMISSION_RANK[adminCeiling] ? choice : adminCeiling;
 }
+

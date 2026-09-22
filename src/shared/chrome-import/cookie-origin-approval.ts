@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/chrome-import/cookie-origin-approval.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_unknown_record();
+
+// @recovered-fragment 2/2
 function cookieOriginRequestEntryFromWire(entry) {
   return typeof entry === "string" ? { origin: entry, profileId: null } : { origin: entry.origin, profileId: entry.profileId };
 }
@@ -17,3 +25,4 @@ function parseCookieOriginApprovalItem(raw) {
   const profileDisplayName = typeof raw.profileDisplayName === "string" ? raw.profileDisplayName.trim() : "";
   return { profileId, profileDisplayName, origin };
 }
+

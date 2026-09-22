@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/cloud-agent-artifact-citation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ARTIFACTS_ROOT_PREFIX = `${SAND_CLOUD_AGENT_ARTIFACTS_BOX_ROOT}/`;
 function addCitedToken(cited, raw) {
   const token = raw.replace(/^[./]+/u, "").replace(/[.]+$/u, "");
@@ -39,3 +44,4 @@ function citedCloudAgentArtifactPaths(text2, paths) {
     return !TOKEN_SAFE_FILE_NAME.test(fileName) && text2.includes(fileName);
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/bot-templates/bot-template-plugins.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function normalizePluginRef(value) {
   return value.trim().toLowerCase();
 }
@@ -40,3 +45,4 @@ function packPluginsFromInstalled(installed, selected) {
 function packPluginsIntoRecipe(recipe, installed) {
   return { ...recipe, plugins: packPluginsFromInstalled(installed, recipe.plugins) };
 }
+

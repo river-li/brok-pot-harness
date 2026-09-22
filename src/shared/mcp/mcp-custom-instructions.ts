@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/mcp/mcp-custom-instructions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MCP_CUSTOM_INSTRUCTIONS_MAX_LENGTH = 500;
 function clampMcpCustomInstruction(raw) {
   return raw.length > MCP_CUSTOM_INSTRUCTIONS_MAX_LENGTH ? raw.slice(0, MCP_CUSTOM_INSTRUCTIONS_MAX_LENGTH) : raw;
@@ -40,3 +45,4 @@ function buildMcpCustomInstructionsSystemPromptSection(connectedServerNames, ins
     ...entries.map((entry) => `- ${entry.name}: ${entry.instructions}`)
   ].join("\n");
 }
+

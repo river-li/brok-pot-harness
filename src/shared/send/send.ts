@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/send/send.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_CLIENT_SURFACE_DESKTOP = "desktop";
 var SAND_CLIENT_SURFACE_MOBILE = "mobile";
 var SAND_APPROVAL_PLATFORM_DESKTOP = "desktop";
@@ -11,3 +16,4 @@ function isSandApprovalPlatform(value) {
 }
 var SAND_AUTOMATION_WRITE_PROVENANCE_UNTRUSTED = "untrusted";
 var SAND_AUTOMATION_WRITE_PROVENANCE_TEMPLATE_IMPORT = "template_import";
+

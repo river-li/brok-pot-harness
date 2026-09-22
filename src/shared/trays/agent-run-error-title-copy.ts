@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/trays/agent-run-error-title-copy.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TITLE_BY_KIND = {
   model_provider_overloaded: (
     /*i18n*/
@@ -189,3 +194,4 @@ var TITLE_BY_KIND = {
     }
   )
 };
+

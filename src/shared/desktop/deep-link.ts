@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/desktop/deep-link.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GROK_BOT_DEEP_LINK_SCHEME = SAND_BOT_TEMPLATE_LINK.schemes[0];
 var LEGACY_SAND_DEEP_LINK_SCHEME = SAND_BOT_TEMPLATE_LINK.schemes[1];
 var SAND_DEEP_LINK_AUTHORITY = SAND_BOT_TEMPLATE_LINK.authority;
@@ -86,3 +91,4 @@ function buildSandSidebarDeepLinkUrl(target, automationId) {
 }
 var TRANSCRIPT_DEEP_LINK_ROUTES = ["settings", "plugin-add", "sidebar"];
 var TRANSCRIPT_DEEP_LINK_ROUTE_SET = new Set(TRANSCRIPT_DEEP_LINK_ROUTES);
+

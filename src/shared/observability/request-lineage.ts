@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/observability/request-lineage.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function sanitizeHeaderValue(value) {
   return value.replace(/[\r\n]/g, "");
 }
@@ -21,3 +26,4 @@ var init_request_lineage = __esm({
     "use strict";
   }
 });
+

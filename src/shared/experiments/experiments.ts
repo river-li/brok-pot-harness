@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/experiments/experiments.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function sandUsageWarningExperimentAssignmentOf(value) {
   if (!isUnknownRecord(value)) return null;
@@ -20,3 +25,4 @@ function parseGroupChatDiscouragementPolicy(value) {
   const normalized = value?.trim().toLowerCase();
   return SAND_GROUP_CHAT_DISCOURAGEMENT_POLICIES.find((policy) => policy === normalized);
 }
+

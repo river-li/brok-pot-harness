@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/transcript/main-transcript-page.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAIN_TRANSCRIPT_PAGE_KINDS = [
   "send-message",
   "user-attachment",
@@ -9,3 +14,4 @@ function isMainTranscriptPageEntry(entry) {
   if (PAGE_KINDS.has(entry.kind)) return true;
   return entry.kind === "message" && (entry.role === "user" || entry.fromAgent != null || entry.toAgent != null);
 }
+

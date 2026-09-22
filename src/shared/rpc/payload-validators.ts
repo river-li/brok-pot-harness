@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/rpc/payload-validators.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function describeReceived2(value) {
   if (value === null) return "null";
   if (Array.isArray(value)) return "array";
@@ -79,3 +84,4 @@ function describeIssues(issues) {
     return path31.length === 0 ? `args: ${issue2.message}` : `args.${path31}: ${issue2.message}`;
   }).join("; ");
 }
+

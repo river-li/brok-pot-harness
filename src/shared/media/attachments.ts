@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/attachments.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_ATTACHMENT_KINDS = [
   "image",
   "video",
@@ -51,3 +56,4 @@ function formatAttachmentSentSummary(count, kinds) {
   const breakdown = merged.map((entry) => kindPhrase(entry.kind, entry.count)).join(", ");
   return `Sent ${kindPhrase("file", total)} \xB7 ${breakdown}`;
 }
+

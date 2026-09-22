@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/local-exec/messages-error-code.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_MESSAGES_ERROR_CODES = [
   "no_local_machine",
   "computer_unavailable",
@@ -20,3 +25,4 @@ var SAND_MESSAGES_ERROR_CODES = [
   "contacts_denied",
   "other"
 ];
+

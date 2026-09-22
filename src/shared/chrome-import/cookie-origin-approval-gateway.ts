@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/chrome-import/cookie-origin-approval-gateway.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_v4();
 var sandCookieOriginApprovalHelloSchema = external_exports2.object({
   kind: external_exports2.literal("hello"),
@@ -125,3 +130,4 @@ function parseSandCookieOriginApprovalResponseBatch(u2) {
   }
   return result.data.providerId === void 0 ? { frames } : { providerId: result.data.providerId, frames };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/settings/sidebar-sections.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 var AGENTS_SECTION_ID = "__agents__";
 var AGENTS_SECTION_NAME = "Unassigned";
@@ -83,3 +88,4 @@ var SidebarSections = class _SidebarSections {
     }));
   }
 };
+

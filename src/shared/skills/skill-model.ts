@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/skills/skill-model.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist5();
 init_unknown_record();
 init_proto();
@@ -397,3 +402,4 @@ function renderSkillsSystemPrompt(location2, options2) {
   const authoring = options2?.skillPointer != null ? ['Saving a clearly reusable multi-step task as a skill is a normal autonomous action (update_state, target "skill", action "write"); mention a skill as [name](sand-workflow:<id>) so it renders as a pill.', options2.skillPointer] : virtual ? SKILL_FILE_AUTHORING_LINES : SKILLS_AUTHORING_LINES;
   return [...catalog, ...authoring].join("\n");
 }
+

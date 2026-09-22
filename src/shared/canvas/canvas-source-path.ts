@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/canvas/canvas-source-path.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_store_ids();
 var regExpLiteral = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 var USER_STORE_CANVAS_SOURCE_PATH_PATTERN = new RegExp(
@@ -12,3 +17,4 @@ function hasUserStoreCanvasSourcePath(text2) {
   }
   return false;
 }
+

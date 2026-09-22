@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/voice-call/record.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 var SAND_VOICE_CALL_EVENT_KINDS = [
   "caller-speech-started",
@@ -123,3 +128,4 @@ var SandVoiceCallRecords = class _SandVoiceCallRecords {
     return typeof value["id"] === "string" && typeof value["request"] === "string" && typeof value["atMs"] === "number" && (value["answer"] === null || typeof value["answer"] === "string") && (value["answeredAtMs"] == null || typeof value["answeredAtMs"] === "number") && (value["direction"] === void 0 || _SandVoiceCallRecords.isNudgeDirection(value["direction"])) && (value["cut"] == null || _SandVoiceCallRecords.isNudgeCut(value["cut"]));
   }
 };
+

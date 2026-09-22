@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/account/dev-login.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isDevBackendHostname(hostname3) {
   return hostname3 === "localhost" || hostname3 === "127.0.0.1" || hostname3 === "[::1]" || hostname3.endsWith(".lclhst.build") || hostname3 === "dev-staging.cursor.sh";
 }
@@ -7,3 +12,4 @@ var init_dev_login = __esm({
     init_errors();
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/transcript/transcript.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 init_unknown_record();
 var SAND_AUTO_REVIEW_RESOLUTIONS = ["approved", "denied", "always"];
@@ -262,3 +267,4 @@ function entryRaisesUserActivitySignal(entry) {
 function entryRaisesUnreadSignal(entry) {
   return entryRaisesUserActivitySignal(entry) && !(entry.kind === "send-message" && (entry.boxRequestId != null || entry.message.type === "auto-review-approval"));
 }
+

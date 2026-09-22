@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/desktop/settings-anchors.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ANCHOR_ROWS = [
   ["account", "general"],
   ["theme", "general"],
@@ -40,3 +45,4 @@ function settingsAnchorSection(anchor, machines) {
   if (anchor === "local-execution" && machines != null && machines.length > 0) return "computer";
   return SECTION_BY_ANCHOR[anchor];
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/gateway/gateway-wire.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GATEWAY_API_PREFIX = "/api";
 var GATEWAY_EVENTS_PATH = "/events";
 var GATEWAY_EVENTS_ECHO_PATH = "/events/echo";
@@ -11,3 +16,4 @@ var GATEWAY_MINT_DEDUPE_HEADER = "x-sand-mint-dedupe";
 var GATEWAY_TRACEPARENT_HEADER = "traceparent";
 var GATEWAY_AVATARS_PATH = "/avatars";
 var GATEWAY_UNKNOWN_METHOD_FAILURE_CODE = "gateway/unknown-method";
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/bot-templates/bot-template-memories.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MEMORY_EPISODE_PREFIX2 = "[episode] ";
 var MEMORY_NOTE_PREFIX2 = "[note] ";
 var MEMORY_MAX_CONTENT_LENGTH2 = 500;
@@ -42,3 +47,4 @@ function sanitizePackedMemories(selected) {
 function packMemoriesIntoRecipe(recipe) {
   return { ...recipe, memory: sanitizePackedMemories(recipe.memory) };
 }
+

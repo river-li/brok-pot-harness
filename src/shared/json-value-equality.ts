@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/json-value-equality.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function hasPlainPrototype(value) {
   const proto = Object.getPrototypeOf(value);
@@ -18,3 +23,4 @@ function areJsonValuesEqual(a, b2) {
     (key) => Object.hasOwn(b2, key) && b2[key] !== void 0 && areJsonValuesEqual(a[key], b2[key])
   );
 }
+

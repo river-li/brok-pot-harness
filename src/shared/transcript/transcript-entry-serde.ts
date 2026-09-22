@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/transcript/transcript-entry-serde.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 var HIDDEN_TRANSCRIPT_ENTRY_KINDS = /* @__PURE__ */ new Set([
   "spend-initiation",
@@ -76,3 +81,4 @@ function transcriptEntryOfJson(parsed2) {
   if (!isValidTranscriptEntry(parsed2)) return null;
   return withEmailDraftFrom(withVoiceCallNudgeCounts(withBoxEnvSecretTargetKeys(parsed2)));
 }
+

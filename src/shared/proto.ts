@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/proto.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AiService2, BackgroundComposerService2, DashboardService2;
 var init_proto = __esm({
   "src/shared/proto.ts"() {
@@ -95,3 +100,4 @@ var init_proto = __esm({
     };
   }
 });
+

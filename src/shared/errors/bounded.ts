@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/errors/bounded.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function brandedEnumOf(values, fallback2) {
   const admitted = new Set(values);
   return (value) => {
@@ -103,3 +108,4 @@ var init_bounded = __esm({
     brandedTelemetryToken = brandedEnumOf(BOUNDED_TELEMETRY_TOKENS, "unknown");
   }
 });
+

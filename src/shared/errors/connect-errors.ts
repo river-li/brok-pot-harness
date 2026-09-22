@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/errors/connect-errors.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_esm2();
+
+// @recovered-fragment 2/2
 init_bounded();
 init_errors();
 var boundedConnectClass = brandedEnumOf(
@@ -41,3 +49,4 @@ function getConnectRetryAfterMs(error42, nowMs2 = Date.now()) {
   if (!(error42 instanceof ConnectError)) return void 0;
   return parseRetryAfterHeaderMs(error42.metadata.get("retry-after"), nowMs2);
 }
+

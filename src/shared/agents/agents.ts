@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/agents.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var SAND_REQUESTED_AGENT_HARNESS_BOX = "box";
 var SAND_REQUESTED_AGENT_HARNESS_TEMPORAL = "temporal";
 var SAND_AGENT_RENAME_REFUSED = "agent-rename/refused";
@@ -64,3 +72,4 @@ var SandAgentStoreUnreadableError = class extends SandDomainError {
 };
 var SAND_TEMPORAL_HARNESS_UNAVAILABLE_MESSAGE = "The Temporal harness is not enabled for this account";
 var SAND_AGENT_ID_TAKEN_MESSAGE = "This agent id is already taken";
+

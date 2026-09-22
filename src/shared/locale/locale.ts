@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/locale/locale.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isLanguageTag(value) {
   const lower = value.toLowerCase();
   return lower !== "posix" && lower !== "c" && LANGUAGE_TAG_PATTERN.test(value);
@@ -49,3 +54,4 @@ var init_locale = __esm({
     LANGUAGE_TAG_PATTERN = /^[a-z]{2,8}(-[a-z0-9]{1,8})*$/i;
   }
 });
+

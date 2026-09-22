@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/automations/automation-schedule.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_invariant();
+
+// @recovered-fragment 2/2
 var EVERY_PATTERN = /^@every\s+(\d+)\s*(s|m|h|d)(?:\/(\d+)\s*(s|m|h|d))?$/i;
 var TEMPORAL_EVERY_PATTERN = /^@every\s+(\S+)$/i;
 var TEMPORAL_DURATION_PART = /(\d+(?:\.\d+)?)(ms|s|m|h|d)/gi;
@@ -627,3 +635,4 @@ function describeTrigger(trigger2) {
     ...rest.map((member) => decapitalize(describeMember(member)))
   ].join(" or ");
 }
+

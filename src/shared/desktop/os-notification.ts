@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/desktop/os-notification.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function toNotificationSnapshot(agent) {
   return {
     id: agent.id,
@@ -175,3 +180,4 @@ var SandOsNotificationDecider = class {
 function throttleKey(agentId, kind) {
   return `${agentId}:${kind}`;
 }
+

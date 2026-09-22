@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/chrome-import/cookie-origin-approval-frames.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_unknown_record();
+
+// @recovered-fragment 2/2
 var GATEWAY_COOKIE_ORIGIN_APPROVAL_REQUESTS_PATH = "/cookie-origin-approval/requests";
 var GATEWAY_COOKIE_ORIGIN_APPROVAL_RESPONSES_PATH = "/cookie-origin-approval/responses";
 var SAND_NO_COOKIE_ORIGIN_APPROVAL_MACHINE_MESSAGE = "Your computer isn't connected right now, so Chrome cookie origins can't be reached. Open Grok Bot on that machine and try again.";
@@ -26,3 +34,4 @@ function parseCookieOriginApprovalRefusalReason(raw) {
       return void 0;
   }
 }
+

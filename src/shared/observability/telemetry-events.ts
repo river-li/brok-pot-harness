@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/observability/telemetry-events.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_LOG_KEY = "sand";
 var TELEMETRY_DROPPED_EVENT = "sand.telemetry.dropped";
 var TELEMETRY_DROP_REASONS = [
@@ -162,3 +167,4 @@ var WEBAUTHN_SIGN_ERROR_CLASSES = [
   "helper_no_result"
 ];
 var WEBAUTHN_PROVIDER_EVENT = "sand.webauthn_proxy.provider";
+

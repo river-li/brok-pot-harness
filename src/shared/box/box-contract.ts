@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/box/box-contract.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_BOX_PORTS = {
   primaryExecDaemon: 1337,
   primaryPty: 1338,
@@ -29,3 +34,4 @@ var ENABLE_SPOOF_GPU_MARKER_PATH = "/tmp/sand-enable-spoof-gpu";
 var WEB_BOT_AUTH_SIGNED_CACHE_PATH = "/tmp/sand-web-bot-auth-signed.json";
 var WEB_BOT_AUTH_SIGNED_TTL_MS = 12e4;
 var WEB_BOT_AUTH_SIGNATURE_SOURCES = ["fresh", "box_cache", "fleet_cache"];
+

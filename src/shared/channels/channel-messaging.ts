@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/channels/channel-messaging.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist5();
+init_locale();
+
+// @recovered-fragment 2/2
 var sourceCopyI18n = setupI18n({
   locale: DEFAULT_LOCALE,
   messages: { [DEFAULT_LOCALE]: {} }
@@ -246,3 +255,4 @@ function buildChannelDeliveryFailureWakePrompt(failures) {
   ].join("\n");
 }
 var CHANNEL_CREDENTIAL_FIELD = "token";
+

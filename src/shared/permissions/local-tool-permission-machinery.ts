@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/permissions/local-tool-permission-machinery.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var sandLocalToolScopeKey = createKey(/* @__PURE__ */ Symbol("sand.local-tool.scope"), void 0);
 var sandTurnDirectionEpochKey = createKey(/* @__PURE__ */ Symbol("sand.local-tool.direction-epoch"), void 0);
@@ -93,3 +98,4 @@ function localToolApprovalCovers(approval, request5) {
   const wanted = normalizeResourcePath(request5.attachToResourcePath);
   return owned !== void 0 && owned === wanted;
 }
+

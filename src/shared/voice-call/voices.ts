@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/voice-call/voices.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_VOICES = [
   { id: "altair", label: "Altair" },
   { id: "ara", label: "Ara" },
@@ -104,3 +109,4 @@ function normalizeSandVoiceLanguage(raw) {
   const [onlyMatch] = prefixMatches;
   return onlyMatch !== void 0 && prefixMatches.length === 1 ? onlyMatch.id : DEFAULT_SAND_VOICE_LANGUAGE;
 }
+

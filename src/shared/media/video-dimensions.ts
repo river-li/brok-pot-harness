@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/video-dimensions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function toDimensions({ width, height }) {
   if (!Number.isFinite(width) || !Number.isFinite(height)) return null;
   if (width <= 0 || height <= 0) return null;
@@ -103,3 +108,4 @@ var Mp4Dimensions = class _Mp4Dimensions {
     return a === 0 && d === 0 && b2 !== 0 && c !== 0;
   }
 };
+

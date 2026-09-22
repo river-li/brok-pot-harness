@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/parse/unknown-record.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isUnknownRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -15,3 +20,4 @@ var init_unknown_record = __esm({
     "use strict";
   }
 });
+

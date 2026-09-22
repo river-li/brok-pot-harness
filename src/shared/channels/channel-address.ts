@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/channels/channel-address.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DISCORD_PLATFORM = "discord";
 var SLACK_PLATFORM = "slack";
 function formatChannelAddress(address) {
@@ -12,3 +17,4 @@ function parseChannelAddress(raw) {
   if (platform2.length === 0 || chat.length === 0) return null;
   return { platform: platform2, chat };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/async-task-fallbacks.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function asyncTaskFallbackLabel(kind, id) {
   switch (kind) {
     case "subagent":
@@ -22,3 +27,4 @@ function asyncTaskFallbackLabel(kind, id) {
 }
 var ASYNC_TASK_REATTACHED_DETAIL = "reattached after a host restart";
 var ASYNC_TASK_DURABLE_LEDGER_DETAIL = "from the durable pending-wake ledger";
+

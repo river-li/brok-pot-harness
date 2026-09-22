@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/agent-model.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_DEFAULT_MODEL_ID, SAND_DEFAULT_MODEL_SELECTION;
 var init_agent_model = __esm({
   "src/shared/agents/agent-model.ts"() {
@@ -13,3 +18,4 @@ var init_agent_model = __esm({
     };
   }
 });
+

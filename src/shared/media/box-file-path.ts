@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/box-file-path.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BOX_FILE_ROOTS = ["/tmp/", "/workspace/", "/home/", "/root/"];
 var PRIVATE_STORE_MARKERS = [
   "/sand-data/",
@@ -42,3 +47,4 @@ function resolvedBoxFilePath(realPath) {
   const asTmp = `/tmp/${realPath.slice(MACOS_TMP_REALPATH_PREFIX.length)}`;
   return lexicalBoxFilePath(asTmp) == null ? null : realPath;
 }
+

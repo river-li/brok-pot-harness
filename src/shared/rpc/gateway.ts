@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/rpc/gateway.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var idArgs = { id: rpcString() };
 var agentIdAndAutomationId = { id: rpcString(), automationId: rpcString() };
 var idAndSkillArgs = { id: rpcString(), workflowId: rpcString() };
@@ -889,3 +894,4 @@ var gatewayRpcEdge = declareRpcEdge("gateway", {
   capabilities: rpcType(),
   failureCodes: rpcType()
 });
+

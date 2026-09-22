@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/bot-templates/bot-template-recipe.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_grok_bot_templates();
+
+// @recovered-fragment 2/3
+init_zod();
+
+// @recovered-fragment 3/3
 init_errors();
 init_invariant();
 function nonEmptyEnumValues(values) {
@@ -162,3 +173,4 @@ function parseBotTemplateRecipeBlob(blob) {
   }
   return { kind: "recipe", recipe: recipe.data };
 }
+

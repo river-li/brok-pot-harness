@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/messages/permissions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MESSAGES_GRANTS = ["automation", "contacts", "fullDiskAccess"];
 var SAND_MESSAGES_GRANTS_ASK_TTL_MS = 6e4;
 var MESSAGES_OP_GRANTS = {
@@ -40,3 +45,4 @@ function messagesGrantsMissingMessage(grants) {
   const pronoun = grants.length === 1 ? "it" : "them";
   return `The user's Mac has not granted Grok Bot ${listMessagesGrantNames(grants)}, so this cannot run. Ask the user to grant ${pronoun} to Grok Bot in System Settings under Privacy & Security, then try again.`;
 }
+

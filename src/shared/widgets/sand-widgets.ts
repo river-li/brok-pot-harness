@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/widgets/sand-widgets.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var widgetActionStyleSchema = external_exports.enum(SAND_WIDGET_ACTION_STYLES);
 var choiceOptionSchema = external_exports.object({
@@ -22,3 +27,4 @@ var sandWidgetSchema = external_exports.object({
     "When true, this widget auto-dismisses (becomes inert, shows a muted Dismissed state) once the user sends a newer message without answering it. Omit/false to keep the question live and answerable indefinitely. Set true only for low-stakes questions that become moot if the user moves on; keep it off for real decisions you still need answered."
   )
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/grok-bot-secrets.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GROK_BOT_SECRET_NAME_MAX_LENGTH = 128;
 var GROK_BOT_SECRET_VALUE_MIN_LENGTH = 8;
 var GROK_BOT_SECRET_VALUE_MAX_KIB = 4;
@@ -62,3 +67,4 @@ async function carryOneSecret(deps, { serverId, name: name17 }) {
     return "failed";
   }
 }
+

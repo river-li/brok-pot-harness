@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/observability/send-trace.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SEND_TRACE_SAMPLE_RATIO = 1;
 var HEX_TRACE_ID = /^[0-9a-f]{32}$/;
 var HEX_SPAN_ID = /^[0-9a-f]{16}$/;
@@ -41,3 +46,4 @@ function parseTraceparent(traceparent) {
   if (Number.isNaN(traceFlags)) return void 0;
   return { traceId, spanId, traceFlags };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/observability/log-ship-cadence.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var LOG_SHIP_INTERVAL_MS = 15e3;
 var LOG_SHIP_MAX_BATCH_ENTRIES = 128;
 var LOG_SHIP_MAX_BATCH_BYTES = 256 * 1024;
@@ -67,3 +72,4 @@ function takeLogShipBatch(buffer) {
   }
   return { batch: buffer.slice(0, count), remaining: buffer.slice(count) };
 }
+

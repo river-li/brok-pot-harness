@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/model-catalog.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function findCatalogEntry(catalog, modelId) {
   const needle = modelId.trim().toLowerCase();
   if (needle.length === 0) {
@@ -122,3 +127,4 @@ function toSandModelCatalogEntry(model) {
 function mapAvailableModels(models) {
   return models.filter((model) => model.name.trim().length > 0).map(toSandModelCatalogEntry);
 }
+

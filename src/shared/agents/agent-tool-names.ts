@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/agent-tool-names.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_BOX_SHELL_TOOL_NAME = "Shell";
 var SAND_BOX_READ_TOOL_NAME = "Read";
 var SAND_BOX_AWAIT_SHELL_TOOL_NAME = "AwaitShell";
@@ -15,3 +20,4 @@ function sandDualSurfaceToolTelemetry(toolName, targetsUserComputer = false) {
       return void 0;
   }
 }
+

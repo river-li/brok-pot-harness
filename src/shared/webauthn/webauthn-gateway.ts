@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/webauthn/webauthn-gateway.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_v4();
+
+// @recovered-fragment 2/2
 var GATEWAY_WEBAUTHN_REQUESTS_PATH = "/webauthn/requests";
 var GATEWAY_WEBAUTHN_RESPONSES_PATH = "/webauthn/responses";
 var SAND_NO_WEBAUTHN_MACHINE_MESSAGE = "Your computer isn't connected right now, so the security key can't be reached. Open Grok Bot on the machine your key is plugged into and try again.";
@@ -90,3 +98,4 @@ function parseSandWebAuthnResponseBatch(u2) {
   }
   return result.data;
 }
+

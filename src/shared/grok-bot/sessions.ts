@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/grok-bot/sessions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_GROK_BOT_SESSION_ID = "";
 var TRANSCRIPT_REPLICA_PREFIX = "transcript:";
 var TRANSCRIPT_SESSION_SEPARATOR = "\0";
@@ -14,3 +19,4 @@ function grokBotGroupChatRoomIdOf(sessionId) {
 function normalizeGrokBotSessionId(sessionId) {
   return sessionId == null || sessionId.length === 0 ? DEFAULT_GROK_BOT_SESSION_ID : sessionId;
 }
+

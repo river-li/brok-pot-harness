@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/auto-review/sand-auto-review-instructions.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_AUTO_REVIEW_INSTRUCTION_MAX_ENTRIES = 20;
 var SAND_AUTO_REVIEW_INSTRUCTION_MAX_CHARS = 1e3;
 var DEFAULT_SAND_AUTO_REVIEW_INSTRUCTIONS = {
@@ -41,3 +46,4 @@ function normalizeSandAutoReviewInstructions(partial2) {
     blockInstructions: normalizeInstructionList(partial2?.blockInstructions)
   };
 }
+

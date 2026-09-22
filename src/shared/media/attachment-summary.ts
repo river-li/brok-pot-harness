@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/attachment-summary.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var JSON_EXTENSIONS2 = /* @__PURE__ */ new Set(["json", "jsonc", "json5", "ndjson"]);
 var ARCHIVE_EXTENSIONS = /* @__PURE__ */ new Set([
   "zip",
@@ -112,3 +117,4 @@ function countAttachmentKinds(kinds) {
   }
   return [...counts].map(([kind, count]) => ({ kind, count }));
 }
+

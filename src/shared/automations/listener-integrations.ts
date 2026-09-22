@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/automations/listener-integrations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var LISTENER_INTEGRATIONS = [
   {
     platform: "github",
@@ -47,3 +52,4 @@ var SCM_CONNECT_PROVIDERS = ["github", "gitlab", "bitbucket", "azure-devops"];
 function isScmConnectProvider(platform2) {
   return SCM_CONNECT_PROVIDERS.some((provider) => provider === platform2);
 }
+

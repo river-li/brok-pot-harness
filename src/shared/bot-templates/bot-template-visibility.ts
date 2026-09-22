@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/bot-templates/bot-template-visibility.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_BOT_TEMPLATE_VISIBILITIES = ["public", "team"];
 var SAND_SHARE_BOT_EXPORT_POLICY_DEFAULT = "team_only";
 function isSandShareBotExportPolicy(value) {
@@ -28,3 +33,4 @@ function resolveBotTemplateShareScope(args) {
 function grokBotTemplateShareUrl(shareId) {
   return `https://x.ai/bot/${shareId}`;
 }
+

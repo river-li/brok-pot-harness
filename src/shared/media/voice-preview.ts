@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/voice-preview.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_VOICE_GREETINGS = [
   { id: "how-i-sound", text: "Hey, this is how I sound on a call." },
   { id: "how-its-going", text: "Hi, how is it going?" },
@@ -11,3 +16,4 @@ function sandVoiceGreetingText(greetingId) {
   const greeting = SAND_VOICE_GREETINGS.find((entry) => entry.id === greetingId);
   return (greeting ?? GREETING_AN_UNKNOWN_ID_FALLS_BACK_TO).text;
 }
+

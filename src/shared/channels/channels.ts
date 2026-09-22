@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/channels/channels.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CONNECTOR_MANIFESTS = [{
   platform: DISCORD_PLATFORM,
   displayName: "Discord",
@@ -44,3 +49,4 @@ function hasChannelsToShow(manifests, connections) {
   const hasConnectable = manifests.some((manifest) => manifest.availability === "available");
   return hasConnectable || connections.length > 0;
 }
+

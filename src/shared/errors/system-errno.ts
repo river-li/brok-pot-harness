@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/errors/system-errno.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function findSystemErrno(error42) {
   const seen = /* @__PURE__ */ new Set();
   let current = error42;
@@ -18,3 +23,4 @@ var init_system_errno = __esm({
     "use strict";
   }
 });
+

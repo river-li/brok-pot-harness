@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/agents/session-preview-fallbacks.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isSessionPreviewLink(message) {
   if (message.type !== "attachment" || message.file_name != null && message.file_name.length > 0) {
     return false;
@@ -189,3 +194,4 @@ function hostSessionPreview(preview) {
       return "Message";
   }
 }
+

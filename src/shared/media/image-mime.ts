@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/media/image-mime.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function imageMimeFromPath(filePath) {
   return IMAGE_MIME_FROM_EXTENSION[extensionOf(filePath)];
 }
@@ -25,3 +30,4 @@ function mediaKindAndMimeFromPath(filePath) {
   if (document2 !== void 0) return { kind: "document", mimeType: document2 };
   return void 0;
 }
+

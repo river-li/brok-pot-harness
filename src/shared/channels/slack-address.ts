@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/channels/slack-address.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var SLACK_CHANNEL_ID_PATTERN = /^[CG][A-Z0-9]{2,}$/;
 var SLACK_MEMBER_ID_PATTERN = /^[UW][A-Z0-9]{2,}$/;
@@ -43,3 +48,4 @@ function describeChannelAddressProblem(address) {
     return `"${address}" cannot be delivered (${error42.message}), so nothing was sent. ${SLACK_ADDRESS_SHAPES_LINE}`;
   }
 }
+
