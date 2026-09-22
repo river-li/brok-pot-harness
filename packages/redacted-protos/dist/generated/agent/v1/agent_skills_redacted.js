@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/agent_skills_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_skills_pb();
 function toRedactedAgentSkill(msg, privacyMode) {
   return {
@@ -38,3 +43,4 @@ function fromRedactedAgentSkill(msg, purpose, opts) {
     scopedTo: msg.scopedTo
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/selected_context_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_selected_context_pb();
 function toRedactedSelectedImage(msg, privacyMode) {
   return {
@@ -1233,3 +1238,4 @@ function fromRedactedInvocationContext_IdeState_ViewedPullRequest(msg, purpose, 
     description: msg.description?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

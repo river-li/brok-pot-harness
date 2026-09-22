@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/delete_exec_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_delete_exec_pb();
 function toRedactedDeleteArgs(msg, privacyMode) {
   return {
@@ -182,3 +187,4 @@ function fromRedactedDeleteError(msg, purpose, opts) {
     error: msg.error.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

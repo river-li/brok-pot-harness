@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/connect_scm_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_connect_scm_tool_pb();
 function toRedactedConnectScmArgs(msg, privacyMode) {
   return {
@@ -258,3 +263,4 @@ function fromRedactedConnectScmRequestResponse_Failed(msg, purpose, opts) {
     error: msg.error.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

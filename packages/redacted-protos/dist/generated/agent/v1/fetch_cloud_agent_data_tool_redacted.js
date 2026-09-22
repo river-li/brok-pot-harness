@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/fetch_cloud_agent_data_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_fetch_cloud_agent_data_tool_pb();
 function toRedactedFetchCloudAgentDataArgs(msg, privacyMode) {
   return {
@@ -114,3 +119,4 @@ function fromRedactedFetchCloudAgentDataToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedFetchCloudAgentDataResult(msg.result, purpose, opts) : void 0
   });
 }
+

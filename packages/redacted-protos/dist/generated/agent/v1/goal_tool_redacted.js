@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/goal_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_goal_tool_pb();
 function toRedactedCreateGoalArgs(msg, privacyMode) {
   return {
@@ -173,3 +178,4 @@ function fromRedactedUpdateGoalToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedUpdateGoalResult(msg.result, purpose, opts) : void 0
   });
 }
+

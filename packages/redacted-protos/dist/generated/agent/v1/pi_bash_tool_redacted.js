@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/pi_bash_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_pi_bash_tool_pb();
 function toRedactedPiBashToolCall(msg, privacyMode) {
   return {
@@ -104,3 +109,4 @@ function fromRedactedPiBashToolError(msg, purpose, opts) {
     fullOutputPath: msg.fullOutputPath?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

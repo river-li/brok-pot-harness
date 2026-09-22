@@ -1,4 +1,9 @@
-init_utils_pb2();
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/aiserver/v1/utils_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+init_utils_pb();
 function toRedactedCursorPosition(msg, privacyMode) {
   return {
     _privacyMode: privacyMode,
@@ -122,3 +127,4 @@ function fromRedactedFileGit(msg, purpose, opts) {
     commits: msg.commits.map((v2) => fromRedactedGitCommit(v2, purpose, opts))
   });
 }
+

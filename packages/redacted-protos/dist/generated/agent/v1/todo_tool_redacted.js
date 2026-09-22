@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/todo_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_todo_tool_pb();
 function toRedactedTodoItem(msg, privacyMode) {
   return {
@@ -222,3 +227,4 @@ function fromRedactedReadTodosError(msg, purpose, opts) {
     error: msg.error.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

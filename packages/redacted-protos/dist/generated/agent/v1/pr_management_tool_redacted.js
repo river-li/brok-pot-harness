@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/pr_management_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_pr_management_tool_pb();
 function toRedactedPrManagementArgs(msg, privacyMode) {
   return {
@@ -376,3 +381,4 @@ function fromRedactedPrManagementRequestQuery(msg, purpose, opts) {
     args: msg.args !== void 0 ? fromRedactedPrManagementArgs(msg.args, purpose, opts) : void 0
   });
 }
+

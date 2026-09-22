@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/ls_exec_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_ls_exec_pb();
 function toRedactedLsArgs(msg, privacyMode) {
   return {
@@ -201,3 +206,4 @@ function fromRedactedTerminalMetadata_Command(msg, purpose, opts) {
     durationMs: msg.durationMs
   });
 }
+

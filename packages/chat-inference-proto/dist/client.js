@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference-proto/dist/client.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+
+// @recovered-fragment 2/2
 var __asyncValues12 = function(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var m2 = o[Symbol.asyncIterator], i;
@@ -582,3 +590,4 @@ var ProtoSessionProvider = class {
 function createProtoSessionProvider(client, requestedModel, modelConfig, inferenceReason) {
   return new ProtoSessionProvider(client, requestedModel, modelConfig, inferenceReason);
 }
+

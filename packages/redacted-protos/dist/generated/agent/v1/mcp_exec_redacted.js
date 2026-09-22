@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/mcp_exec_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_mcp_exec_pb();
 function toRedactedMcpArgs(msg, privacyMode) {
@@ -435,3 +440,4 @@ function fromRedactedReadMcpResourceNotFound(msg, purpose, opts) {
     uri: msg.uri.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

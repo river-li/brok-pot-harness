@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/hook_additional_context_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_hook_additional_context_pb();
 function toRedactedHookAdditionalContext(msg, privacyMode) {
   return {
@@ -14,3 +19,4 @@ function fromRedactedHookAdditionalContext(msg, purpose, opts) {
     content: msg.content.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

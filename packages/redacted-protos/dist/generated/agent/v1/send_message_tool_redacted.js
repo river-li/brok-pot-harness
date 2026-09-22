@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/send_message_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_send_message_tool_pb();
 function toRedactedSendMessageText(msg, privacyMode) {
   return {
@@ -152,3 +157,4 @@ function fromRedactedSendMessageToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedSendMessageResult(msg.result, purpose, opts) : void 0
   });
 }
+

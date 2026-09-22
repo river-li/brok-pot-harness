@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/pi_ls_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_pi_ls_tool_pb();
 function toRedactedPiLsToolCall(msg, privacyMode) {
   return {
@@ -100,3 +105,4 @@ function fromRedactedPiLsToolError(msg, purpose, opts) {
     error: msg.error.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

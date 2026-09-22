@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/get_mcp_tools_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_get_mcp_tools_tool_pb();
 function toRedactedGetMcpToolsArgs(msg, privacyMode) {
   return {
@@ -102,3 +107,4 @@ function fromRedactedGetMcpToolsToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedGetMcpToolsAgentResult(msg.result, purpose, opts) : void 0
   });
 }
+

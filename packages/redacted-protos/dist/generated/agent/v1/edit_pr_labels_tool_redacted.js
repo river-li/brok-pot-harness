@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/edit_pr_labels_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_edit_pr_labels_tool_pb();
 function toRedactedEditPrLabelsArgs(msg, privacyMode) {
   return {
@@ -104,3 +109,4 @@ function fromRedactedEditPrLabelsToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedEditPrLabelsResult(msg.result, purpose, opts) : void 0
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/record_ci_investigation_findings_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_record_ci_investigation_findings_tool_pb();
 function toRedactedRecordCiInvestigationFinding(msg, privacyMode) {
   return {
@@ -160,3 +165,4 @@ function fromRedactedRecordCiInvestigationFindingsToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedRecordCiInvestigationFindingsResult(msg.result, purpose, opts) : void 0
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/setup_vm_environment_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_setup_vm_environment_tool_pb();
 function toRedactedSetupVmEnvironmentArgs(msg, privacyMode) {
   return {
@@ -78,3 +83,4 @@ function fromRedactedSetupVmEnvironmentToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedSetupVmEnvironmentResult(msg.result, purpose, opts) : void 0
   });
 }
+

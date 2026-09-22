@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/glob_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_glob_tool_pb();
 function toRedactedGlobToolArgs(msg, privacyMode) {
   return {
@@ -106,3 +111,4 @@ function fromRedactedGlobToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedGlobToolResult(msg.result, purpose, opts) : void 0
   });
 }
+

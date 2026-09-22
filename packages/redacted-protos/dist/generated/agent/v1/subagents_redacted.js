@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/subagents_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 function toRedactedSubagentType(msg, privacyMode) {
   return {
@@ -242,3 +247,4 @@ function fromRedactedCustomSubagent(msg, purpose, opts) {
     source: msg.source
   });
 }
+

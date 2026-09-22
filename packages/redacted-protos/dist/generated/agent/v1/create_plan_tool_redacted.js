@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/create_plan_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_create_plan_tool_pb();
 function toRedactedCreatePlanToolCall(msg, privacyMode) {
   return {
@@ -146,3 +151,4 @@ function fromRedactedCreatePlanRequestResponse(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedCreatePlanResult(msg.result, purpose, opts) : void 0
   });
 }
+

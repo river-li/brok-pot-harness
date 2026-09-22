@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/send_final_summary_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_send_final_summary_tool_pb();
 function toRedactedSendFinalSummaryArgs(msg, privacyMode) {
   return {
@@ -94,3 +99,4 @@ function fromRedactedSendFinalSummaryToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedSendFinalSummaryResult(msg.result, purpose, opts) : void 0
   });
 }
+

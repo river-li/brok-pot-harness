@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/system_prompt_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_system_prompt_pb();
 function toRedactedSystemPromptSpec(msg, privacyMode) {
   return {
@@ -40,3 +45,4 @@ function fromRedactedSystemPromptSpec_spec(oneof, purpose, opts) {
       return { case: void 0, value: void 0 };
   }
 }
+

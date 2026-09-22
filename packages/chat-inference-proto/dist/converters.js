@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/chat-inference-proto/dist/converters.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_esm();
+
+// @recovered-fragment 2/2
 function applyToolCallArgs(tc, args, explicitRawToolCallArgs) {
   const isJsonObject2 = typeof args === "object" && args !== null && !Array.isArray(args);
   if (isJsonObject2) {
@@ -358,3 +366,4 @@ function buildStreamRequest(options2) {
   }
   return request5;
 }
+

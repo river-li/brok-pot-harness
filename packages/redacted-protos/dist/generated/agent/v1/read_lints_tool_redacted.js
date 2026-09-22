@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/read_lints_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_read_lints_tool_pb();
 function toRedactedReadLintsToolCall(msg, privacyMode) {
   return {
@@ -153,3 +158,4 @@ function fromRedactedReadLintsToolError(msg, purpose, opts) {
     errorMessage: msg.errorMessage.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

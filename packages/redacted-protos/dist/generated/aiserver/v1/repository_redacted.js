@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/aiserver/v1/repository_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_repository_pb();
+
+// @recovered-fragment 2/2
 function toRedactedCodeResult(msg, privacyMode) {
   return {
     _privacyMode: privacyMode,
@@ -13,3 +21,4 @@ function fromRedactedCodeResult(msg, purpose, opts) {
     score: msg.score
   });
 }
+

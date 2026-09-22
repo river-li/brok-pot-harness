@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/repo_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_repo_pb();
 function toRedactedRepositoryIndexingInfo(msg, privacyMode) {
   return {
@@ -30,3 +35,4 @@ function fromRedactedRepositoryIndexingInfo(msg, purpose, opts) {
     pathEncryptionKey: msg.pathEncryptionKey.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

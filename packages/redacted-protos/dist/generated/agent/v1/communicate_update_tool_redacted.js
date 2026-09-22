@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/communicate_update_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_communicate_update_tool_pb();
 function toRedactedCommunicateUpdateArgs(msg, privacyMode) {
   return {
@@ -100,3 +105,4 @@ function fromRedactedCommunicateUpdateToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedCommunicateUpdateResult(msg.result, purpose, opts) : void 0
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/switch_mode_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_switch_mode_tool_pb();
 function toRedactedSwitchModeArgs(msg, privacyMode) {
   return {
@@ -194,3 +199,4 @@ function fromRedactedSwitchModeRequestResponse_Rejected(msg, purpose, opts) {
     reason: msg.reason.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

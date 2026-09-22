@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/generate_image_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_generate_image_tool_pb();
 function toRedactedGenerateImageArgs(msg, privacyMode) {
   return {
@@ -184,3 +189,4 @@ function fromRedactedGenerateImageRequestResponse_Rejected(msg, purpose, opts) {
     reason: msg.reason.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+

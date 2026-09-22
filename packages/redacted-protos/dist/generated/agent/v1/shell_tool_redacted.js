@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/shell_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_shell_tool_pb();
 function toRedactedShellToolCall(msg, privacyMode) {
   return {
@@ -83,3 +88,4 @@ function fromRedactedShellToolCallDelta_delta(oneof, purpose, opts) {
       return { case: void 0, value: void 0 };
   }
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/mcp_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_mcp_pb();
 function toRedactedMcpToolDefinition(msg, privacyMode) {
@@ -128,3 +133,4 @@ function fromRedactedMcpMetaToolOptions(msg, purpose, opts) {
     mcpDescriptors: msg.mcpDescriptors.map((v2) => fromRedactedMcpDescriptor(v2, purpose, opts))
   });
 }
+

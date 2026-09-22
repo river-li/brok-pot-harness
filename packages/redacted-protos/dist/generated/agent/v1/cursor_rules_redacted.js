@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/cursor_rules_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_cursor_rules_pb();
 function toRedactedCursorRuleTypeGlobal(msg, privacyMode) {
   return {
@@ -135,3 +140,4 @@ function fromRedactedCursorRule(msg, purpose, opts) {
     isRequired: msg.isRequired
   });
 }
+

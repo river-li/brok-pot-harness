@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/send_to_user_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_send_to_user_tool_pb();
 function toRedactedSendToUserArgs(msg, privacyMode) {
   return {
@@ -91,3 +96,4 @@ function fromRedactedSendToUserToolCall(msg, purpose, opts) {
     result: msg.result !== void 0 ? fromRedactedSendToUserResult(msg.result, purpose, opts) : void 0
   });
 }
+

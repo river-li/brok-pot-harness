@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redacted-protos/dist/generated/agent/v1/semsearch_tool_redacted.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_semsearch_tool_pb();
+
+// @recovered-fragment 2/2
 function toRedactedSemSearchToolCall(msg, privacyMode) {
   return {
     _privacyMode: privacyMode,
@@ -99,3 +107,4 @@ function fromRedactedSemSearchToolError(msg, purpose, opts) {
     errorMessage: msg.errorMessage.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
+
