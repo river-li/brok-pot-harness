@@ -1,9 +1,21 @@
 # messages-grants
 
-The messages-grants Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Manages Messages permission requests and their expiry.
 
-Entry points and reference files: [extension.ts](extension.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [extension.ts](extension.ts) | Extension |
+
+## Dependencies and change boundaries
+
+This extension declares no other Host extension dependencies.
+
+Grant records are not a Messages client; local Messages integration still needs adaptation.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

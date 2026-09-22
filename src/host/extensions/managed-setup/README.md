@@ -1,9 +1,23 @@
 # managed-setup
 
-The managed-setup Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Manages deployment settings, team rules, and managed Skills.
 
-Entry points and reference files: [managed-setup-service.ts](managed-setup-service.ts), [sand-managed-setup-client.ts](sand-managed-setup-client.ts), [cursor-skills-marketplace.ts](cursor-skills-marketplace.ts), [managed-skills-service.ts](managed-skills-service.ts), [extension.ts](extension.ts), [sand-managed-skills.ts](sand-managed-skills.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [managed-setup-service.ts](managed-setup-service.ts) | Managed Setup Service |
+| [managed-skills-service.ts](managed-skills-service.ts) | Managed Skills Service |
+| [team-rules.ts](team-rules.ts) | Team Rules |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [settings](../settings/README.md) · [telemetry](../telemetry/README.md).
+
+Distinguish managed configuration from user-imported local plugins without reintroducing account prerequisites.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

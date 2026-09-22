@@ -1,9 +1,21 @@
-# desktop-src
+# Electron main process
 
-Retained desktop main-process bundles with conditional local workspace adapters.
+Maintained desktop main-process bundles and conditional local adapters.
+Original resources stay in `vendor/desktop`; `prepare:desktop` overlays these files into an independent assembly directory.
 
-Entry points and reference files: [main-app.cjs](main-app.cjs), [main.cjs](main.cjs).
+| File | Responsibility |
+| --- | --- |
+| [main.cjs](main.cjs) | Desktop entry |
+| [main-app.cjs](main-app.cjs) | Windows, IPC, workspace, local-mode integration |
+| [local-keychain.cjs](local-keychain.cjs) | Optional encrypted-storage policy and non-secret machine identity |
+| [branding.cjs](branding.cjs) | Development Dock icon |
 
-Build and launch from the [repository root](../../README.md). Current verification and
-limitations are recorded in [migration status](../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+Local mode skips inherited secure-storage initialization and encrypted Gateway caching by default.
+`GROKBOT_LOCAL_KEYCHAIN=1` opts into optional Keychain features; secrets are not persisted as plaintext instead.
+See [Keychain permissions](../../docs/wiki/Permissions.md#keychain).
+
+After edits, build and prepare from the root, then quit and relaunch the desktop.
+Storage changes require `test:desktop-keychain` and `test:desktop-keychain-live`;
+the latter instruments actual Electron safeStorage calls.
+
+[Renderer](../renderer-src/README.md) · [Packaging](../../docs/wiki/Packaging.md) · [Runtime](../README.md)

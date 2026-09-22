@@ -1,9 +1,23 @@
 # telemetry
 
-The telemetry Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Aggregates Host diagnostics, structured logs, metrics, and lifecycle events.
 
-Entry points and reference files: [host-event-bus-telemetry.ts](host-event-bus-telemetry.ts), [turn-telemetry-mappers.ts](turn-telemetry-mappers.ts), [working-state-export-telemetry.ts](working-state-export-telemetry.ts), [analytics-service.ts](analytics-service.ts), [structured-log-telemetry.ts](structured-log-telemetry.ts), [box-log-shipper.ts](box-log-shipper.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [host-telemetry-service.ts](host-telemetry-service.ts) | Host Telemetry Service |
+| [structured-log-telemetry.ts](structured-log-telemetry.ts) | Structured Log Telemetry |
+| [host-tracing.ts](host-tracing.ts) | Host Tracing |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [experiments](../experiments/README.md) · [inference](../inference/README.md) · [settings](../settings/README.md).
+
+Local diagnostics and remote reporting are different controls; respect disable policy and filter secrets.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

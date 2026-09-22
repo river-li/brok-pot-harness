@@ -1,9 +1,22 @@
 # cookie-origin-approval
 
-The cookie-origin-approval Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Provides origin-scoped approval for cookie use.
 
-Entry points and reference files: [cookie-origin-approval-service.ts](cookie-origin-approval-service.ts), [extension.ts](extension.ts), [cookie-origin-approval-bridge.ts](cookie-origin-approval-bridge.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [cookie-origin-approval-service.ts](cookie-origin-approval-service.ts) | Cookie Origin Approval Service |
+| [cookie-origin-approval-bridge.ts](cookie-origin-approval-bridge.ts) | Cookie Origin Approval Bridge |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [chrome-cookie-import](../chrome-cookie-import/README.md) · [transcript](../transcript/README.md) · [telemetry](../telemetry/README.md).
+
+Do not expand one origin's approval to other sites.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

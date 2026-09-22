@@ -19,7 +19,8 @@ instance has no published host port, no vendor login and no inference key.
 `runtime/manage.cjs` generates a separate local instance secret. Edit
 `settings.yml` to change search engines, then restart the search service.
 
-Google and Brave returned relevant results in the local verification run. Bing
-ignored a `site:` restriction in that run, and DuckDuckGo required a CAPTCHA, so
-neither is enabled by default. Provider behavior can change independently of
-the app; search failures are reported rather than converted into empty results.
+The configured engines are listed in [settings.yml](settings.yml). Search engine
+availability, rate limits and CAPTCHA behavior can change independently of GBH;
+failures are reported rather than converted into empty successful results.
+
+[Configuration](../../docs/wiki/Configuration.md) · [WebSearch adapter](../../packages/grok-bot-harness/src/local/web-search.ts)

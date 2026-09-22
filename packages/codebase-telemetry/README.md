@@ -1,7 +1,22 @@
 # codebase-telemetry
 
-Retained codebase-telemetry package, used by the reconstructed bundle dependency graph.
+Codebase telemetry sessions, controllers, channels, and privacy handling.
 
-Build and launch from the [repository root](../../README.md). Current verification and
-limitations are recorded in [migration status](../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+## Start reading
+
+| Entry | Purpose |
+| --- | --- |
+| [dist/controller.js](dist/controller.js) | Controller |
+| [dist/session.js](dist/session.js) | Session |
+| [dist/privacy.js](dist/privacy.js) | Privacy |
+| [dist/feature-gates.js](dist/feature-gates.js) | Feature Gates |
+
+## Change boundaries
+
+Respect profiles, feature gates, and privacy controls when changing diagnostic paths.
+
+Related modules: [analytics-client](../analytics-client/README.md) · [metrics](../metrics/README.md). These are reading links, not npm dependency declarations.
+
+Build from the repository root. See [source recovery](../../docs/wiki/Source-Recovery.md) for bundle-scope rules and [development](../../docs/wiki/Development.md) for verification.
+
+[← Package map](../README.md)

@@ -1,9 +1,21 @@
 # transcript-publish
 
-The transcript-publish Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Publishes transcript entries to subscribers.
 
-Entry points and reference files: [extension.ts](extension.ts), [transcript-entry-publisher.ts](transcript-entry-publisher.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [transcript-entry-publisher.ts](transcript-entry-publisher.ts) | Transcript Entry Publisher |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [box-store-sync](../box-store-sync/README.md) · [experiments](../experiments/README.md) · [telemetry](../telemetry/README.md).
+
+Keep publishing order consistent with transcript persistence.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

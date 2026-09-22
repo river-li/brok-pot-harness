@@ -1,9 +1,21 @@
 # chrome-cookie-import
 
-The chrome-cookie-import Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Retains the Chrome cookie-import service.
 
-Entry points and reference files: [extension.ts](extension.ts), [chrome-cookie-import-service.ts](chrome-cookie-import-service.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [chrome-cookie-import-service.ts](chrome-cookie-import-service.ts) | Chrome Cookie Import Service |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [experiments](../experiments/README.md).
+
+This optional browser integration is separate from model authentication needed to use the workspace.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

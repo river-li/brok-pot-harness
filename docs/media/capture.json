@@ -1,0 +1,12 @@
+{
+  "capturedAt": "2026-09-22T04:11:07.497Z",
+  "hostVersion": "bfe1879",
+  "desktopVersion": "0.44.0",
+  "model": "gpt-5.6-sol",
+  "source": "Live packaged app, real Responses API and isolated Linux sandbox",
+  "prompt": "Create a concise launch checklist for a local-first agent project. Use the Linux sandbox to save it as /workspace/launch-checklist.md, then read the file to verify it. Reply with a short summary and the checklist. Only use that file; do not use my Mac or external websites.",
+  "frames": 54,
+  "frameInterval": "approximately 1 second, plus end hold frames",
+  "artifactVerified": true,
+  "videoPlayback": "4 source frames per second (time-compressed)"
+}

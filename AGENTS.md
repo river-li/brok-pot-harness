@@ -10,7 +10,8 @@ original action approvals. Eval execution is not required for current recovery.
 
 ## Source and build
 
-The repository root is the build root. Read README.md and MIGRATION_STATUS.md.
+The repository root is the build root. Read README.md, docs/wiki/Architecture.md
+and docs/wiki/Source-Recovery.md. Verification evidence is in docs/wiki/Verification.md.
 Recovered files are emitted bundle fragments, not standalone TypeScript modules.
 Preserve `// @recovered-fragment i/n` boundaries, original generated identifiers
 and fragment order. Do not bulk-format legacy sources or add guessed imports.
@@ -27,7 +28,7 @@ Use npm run prepare:desktop after desktop edits. npm start runs only this
 repository's gbh-local stack; gateway 1540, noVNC 6180/6181. Check service readiness
 before live tests. Inspect test coverage before claiming a component works:
 fixture-model tests prove local execution, not external inference. Keep the
-migration status accurate; do not inherit another version's passing claim.
+verification reference accurate; do not inherit another version's passing claim.
 
 ## Isolation and credentials
 
@@ -40,6 +41,8 @@ only useful diagnostics under ignored .runtime/tests.
 
 ## Documentation and changes
 
+English is the default documentation language; keep translations in separate
+language-suffixed files such as README.zh.md. Run npm run docs:check after docs edits.
 README files describe module responsibilities and operational use. Scoped
 AGENTS files add maintenance constraints at component boundaries. Update both
 when their directory's build, ownership or interfaces change. Prefer focused

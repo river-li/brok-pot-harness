@@ -1,9 +1,23 @@
 # automations
 
-The automations Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Automation triggers, manual runs, listener integrations, and retained cloud sync.
 
-Entry points and reference files: [sand-automation-cloud-sync.ts](sand-automation-cloud-sync.ts), [listener-integrations.ts](listener-integrations.ts), [extension.ts](extension.ts), [sand-trigger-hub.ts](sand-trigger-hub.ts), [webhook-credential-service.ts](webhook-credential-service.ts), [sand-automation-fire-consumer.ts](sand-automation-fire-consumer.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [sand-trigger-hub.ts](sand-trigger-hub.ts) | Sand Trigger Hub |
+| [sand-automation-run-now.ts](sand-automation-run-now.ts) | Sand Automation Run Now |
+| [listener-integrations.ts](listener-integrations.ts) | Listener Integrations |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [experiments](../experiments/README.md) · [settings](../settings/README.md) · [telemetry](../telemetry/README.md) · [transcript](../transcript/README.md) · [trays](../trays/README.md) · [turn-execution](../turn-execution/README.md) · [notify-bus](../notify-bus/README.md).
+
+Local scheduling and cloud triggers are different paths; verify each workflow before claiming support.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

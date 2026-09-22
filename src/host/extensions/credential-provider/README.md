@@ -1,9 +1,23 @@
 # credential-provider
 
-The credential-provider Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Coordinates credential providers, browser filling, and verification follow-ups.
 
-Entry points and reference files: [credential-provider-status-reader.ts](credential-provider-status-reader.ts), [credential-fill-remote-holds.ts](credential-fill-remote-holds.ts), [credential-audit.ts](credential-audit.ts), [browser-credential-filler.ts](browser-credential-filler.ts), [extension.ts](extension.ts), [credential-coordinator.ts](credential-coordinator.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [credential-coordinator.ts](credential-coordinator.ts) | Credential Coordinator |
+| [browser-credential-filler.ts](browser-credential-filler.ts) | Browser Credential Filler |
+| [credential-audit.ts](credential-audit.ts) | Credential Audit |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [credential-fill](../credential-fill/README.md) · [experiments](../experiments/README.md) · [telemetry](../telemetry/README.md).
+
+Release leases, approvals, and temporary state when work ends.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

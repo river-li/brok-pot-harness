@@ -27,7 +27,10 @@ shutil.copytree(local, target / 'dist/electron-main/local', dirs_exist_ok=True)
 main = target / 'dist/electron-main'
 write_bootstrap(main, config)
 entrypoint = main / 'main.cjs'
-entrypoint.write_bytes(bootstrap_bundle(entrypoint.read_bytes()))
+shutil.copytree(ROOT / 'assets/branding', main / 'branding', dirs_exist_ok=True)
+entrypoint.write_bytes(bootstrap_bundle(entrypoint.read_bytes()).replace(
+    b'require("./build-profile.cjs");',
+    b'require("./build-profile.cjs");\nrequire("./branding.cjs");', 1))
 renderer = target / 'dist/renderer'
 (renderer / 'build-profile.js').write_text(
     'globalThis.__GROKBOT_BUILD_FEATURES__ = Object.freeze(' + json.dumps(config['features']) + ');\n')

@@ -1,9 +1,22 @@
 # remote-agent-messaging
 
-The remote-agent-messaging Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Retains remote Agent communication and member-turn coordination.
 
-Entry points and reference files: [remote-agent-messaging-service.ts](remote-agent-messaging-service.ts), [remote-agent-messaging-capabilities.ts](remote-agent-messaging-capabilities.ts), [extension.ts](extension.ts), [temporal-member-turns.ts](temporal-member-turns.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [remote-agent-messaging-service.ts](remote-agent-messaging-service.ts) | Remote Agent Messaging Service |
+| [temporal-member-turns.ts](temporal-member-turns.ts) | Temporal Member Turns |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [experiments](../experiments/README.md) · [telemetry](../telemetry/README.md).
+
+Connection prerequisites and authorization still apply; this is not automatically a working local integration.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

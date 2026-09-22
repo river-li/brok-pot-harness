@@ -1,9 +1,22 @@
 # user-skills-cache
 
-The user-skills-cache Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Caches and organizes user Skill files.
 
-Entry points and reference files: [extension.ts](extension.ts), [user-skills-cache-service.ts](user-skills-cache-service.ts), [user-skills-files.ts](user-skills-files.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [user-skills-cache-service.ts](user-skills-cache-service.ts) | User Skills Cache Service |
+| [user-skills-files.ts](user-skills-files.ts) | User Skills Files |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md).
+
+Retain source/version information during refresh and avoid overwriting user-maintained files.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

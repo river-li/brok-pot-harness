@@ -1,9 +1,22 @@
 # resume-ownership
 
-The resume-ownership Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Coordinates run-resume ownership, Box rooms, and migration barriers.
 
-Entry points and reference files: [extension.ts](extension.ts), [box-rooms.ts](box-rooms.ts), [applied-migration-barrier.ts](applied-migration-barrier.ts), [resume-ownership-service.ts](resume-ownership-service.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [resume-ownership-service.ts](resume-ownership-service.ts) | Resume Ownership Service |
+| [applied-migration-barrier.ts](applied-migration-barrier.ts) | Applied Migration Barrier |
+
+## Dependencies and change boundaries
+
+This extension declares no other Host extension dependencies.
+
+Prevent multiple owners from resuming the same execution.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

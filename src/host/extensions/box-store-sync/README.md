@@ -1,12 +1,23 @@
 # box-store-sync
 
-The box-store-sync Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Object-store synchronization, snapshots, packing, and transfer for Box state.
 
-Entry points and reference files: [object-store-port.ts](object-store-port.ts), [box-copy-in-failure.ts](box-copy-in-failure.ts), [claim-set.ts](claim-set.ts), [box-store-sync-error.ts](box-store-sync-error.ts), [box-store-manifest.ts](box-store-manifest.ts), [workspace-ignore.ts](workspace-ignore.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
 
-Local mode disables background cloud sync and skips remote store cleanup when
-deleting a local Agent. The original cleanup path remains for original builds.
+| Implementation | Purpose |
+| --- | --- |
+| [box-store-sync-service.ts](box-store-sync-service.ts) | Box Store Sync Service |
+| [box-store-manifest.ts](box-store-manifest.ts) | Box Store Manifest |
+| [store-db-snapshot-upload.ts](store-db-snapshot-upload.ts) | Store DB Snapshot Upload |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [experiments](../experiments/README.md) · [mcp](../mcp/README.md) · [source-map](../source-map/README.md) · [telemetry](../telemetry/README.md).
+
+Local mode disables remote sync; deletion and cleanup must follow that same policy.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

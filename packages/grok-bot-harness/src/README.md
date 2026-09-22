@@ -1,9 +1,18 @@
-# src
+# Harness source
 
-Recovered harness source fragments. Local adapters form a standalone strict TypeScript subtree.
+Composes the generic Agent into Bot product behavior: prompts, toolsets, memory, and external capability ports.
+Host owns application calls and persistence; Harness decides which capabilities a task receives and how they fit together.
 
-Entry points and reference files: [sand-quiet-work-origin.ts](sand-quiet-work-origin.ts), [sand-multitask.ts](sand-multitask.ts), [selected-image-inputs.ts](selected-image-inputs.ts), [host-diagnostics.ts](host-diagnostics.ts), [sand-activity.ts](sand-activity.ts), [process-crash-guard.ts](process-crash-guard.ts).
+| Directory | Start reading |
+| --- | --- |
+| [runner](runner) | `sand-agent-runner.ts` for composition; prompts, review, and turn lifecycle alongside it |
+| [runner/tools](runner/tools) | Tool implementations and sets; `turn-toolset.ts` is one composition entry |
+| [ports](ports) | Capabilities supplied externally: Box, user computer, transport, and others |
+| [local](local/README.md) | Standalone strict TypeScript adapters for local services |
+| [skills](skills), [brain-docs](brain-docs) | Skills and memory documents |
+| [automations](automations) | Automation definitions, triggers, and execution |
 
-Build and launch from the [repository root](../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+Outside `local`, recovered fragments still depend on original bundle scope; this entire tree is not a standalone TypeScript project.
+Preserve original service paths and select local adapters conditionally.
+
+[Harness](../README.md) · [Agent](../../agent/README.md) · [Development](../../../docs/wiki/Development.md)

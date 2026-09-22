@@ -1,9 +1,22 @@
 # local-tool-permission
 
-The local-tool-permission Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Resolves ask / never / always policies for Mac tools and handles approval requests.
 
-Entry points and reference files: [local-tool-permission-controller.ts](local-tool-permission-controller.ts), [extension.ts](extension.ts), [local-tool-permission-resolution.ts](local-tool-permission-resolution.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [local-tool-permission-controller.ts](local-tool-permission-controller.ts) | Local Tool Permission Controller |
+| [local-tool-permission-resolution.ts](local-tool-permission-resolution.ts) | Local Tool Permission Resolution |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [settings](../settings/README.md) · [telemetry](../telemetry/README.md) · [transcript](../transcript/README.md).
+
+Per-machine and default settings have precedence; Mac permission does not change Docker mounts.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

@@ -1,9 +1,23 @@
 # session
 
-The session Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Creates and recovers Agent sessions, databases, state, and persistence paths.
 
-Entry points and reference files: [session-roster.ts](session-roster.ts), [agent-clone.ts](agent-clone.ts), [conversation-recovery.ts](conversation-recovery.ts), [session-maintenance.ts](session-maintenance.ts), [channel-store.ts](channel-store.ts), [session-diagnostics.ts](session-diagnostics.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [agent-db.ts](agent-db.ts) | Agent DB |
+| [agent-session.ts](agent-session.ts) | Agent Session |
+| [session-recovery.ts](session-recovery.ts) | Session Recovery |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [experiments](../experiments/README.md) · [forever-box](../forever-box/README.md) · [privacy-mode](../privacy-mode/README.md) · [settings](../settings/README.md) · [telemetry](../telemetry/README.md).
+
+Schema changes must account for existing data, recovery, and deletion.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

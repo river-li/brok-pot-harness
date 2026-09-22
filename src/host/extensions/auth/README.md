@@ -1,9 +1,22 @@
 # auth
 
-The auth Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Host identity, credential renewal, and selected-team context.
 
-Entry points and reference files: [identity-mint-client.ts](identity-mint-client.ts), [selected-team-reader.ts](selected-team-reader.ts), [extension.ts](extension.ts), [credential-renewer.ts](credential-renewer.ts), [user-full-name-service.ts](user-full-name-service.ts), [auth-service.ts](auth-service.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [auth-service.ts](auth-service.ts) | Auth Service |
+| [credential-renewer.ts](credential-renewer.ts) | Credential Renewer |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [settings](../settings/README.md).
+
+Keep local identity adapters alongside vendor paths; local mode must not acquire a vendor-login requirement.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

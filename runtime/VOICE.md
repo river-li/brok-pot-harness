@@ -1,14 +1,17 @@
 # Local voice calls
 
-Launch the local services and desktop as described in `README.md`. Open a Bot
+This page describes the voice bridge implementation. For supported workflows,
+see [Features](../docs/wiki/Features.md); full calls still need broader verification
+on the current Host. Launch services using the [build guide](../docs/wiki/Build-Guide.md). Open a Bot
 and click the headphones button (**Start a voice call**). The original call
 controls provide mute, hang up, parking and transcripts. Voice and speaking
 speed remain in Bot settings. English and Mandarin output are currently
 supported; other retained language choices still need local output adapters.
 
 The runtime keeps its original version, interface, task tools, approvals and
-call records. `GROKBOT_LOCAL_VOICE=0 npm run start:desktop` hides the call entry
-while leaving dictation and voice previews available.
+call records. Set `GROKBOT_LOCAL_VOICE=0` in the root `.env` and restart the development desktop
+to hide the call entry. Dictation and previews remain available. A nonempty `.env`
+value takes precedence over the shell; packaged launches use their startup environment.
 
 ## Modules and data flow
 
@@ -50,7 +53,7 @@ while leaving dictation and voice previews available.
 ## Limits and remaining verification
 
 Voice activity currently uses an amplitude threshold. Recognition, synthesis
-and model response time add latency, especially on this Intel CPU; this is not
+and model response time add latency, especially on slower CPUs; this is not
 an audio-native remote realtime model. Background noise, quiet speech and
 physical microphone/speaker echo need hardware testing. Client cancellation
 stops waiting immediately, but a native Whisper/Kokoro inference already running

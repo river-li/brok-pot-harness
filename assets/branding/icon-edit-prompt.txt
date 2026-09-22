@@ -1,0 +1,4 @@
+Tool: built-in imagegen (edit mode)
+Input: icon-source.png
+
+Use case: precise-object-edit. Edit target: the supplied blue-haired character square illustration. Produce a macOS app icon using this exact existing artwork, not a redesign. Change only the exterior silhouette to a large smoothly rounded square, like a standard macOS app icon: corner radius about 22% of the tile width, a small uniform transparent margin about 4% of the canvas. Outside the rounded-square tile must be genuinely transparent alpha, not white, black, or checkerboard. Inside the tile preserve the character, face, hair, proportions, pose, original dark charcoal background, colors, and composition as closely as possible. No added objects, text, outlines, bevels, badges, glow, or shadows. Keep it front-facing, square canvas. The desired change is soft rounded corners and transparent exterior only.

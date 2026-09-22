@@ -1,9 +1,22 @@
 # agent-identity
 
-The agent-identity Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Manages Agent names, identity capabilities, and historical identity backfills.
 
-Entry points and reference files: [generated-room-name-stamps.ts](generated-room-name-stamps.ts), [extension.ts](extension.ts), [agent-identity-service.ts](agent-identity-service.ts), [agent-identity-capabilities.ts](agent-identity-capabilities.ts), [identity-backfill.ts](identity-backfill.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [agent-identity-service.ts](agent-identity-service.ts) | Agent Identity Service |
+| [identity-backfill.ts](identity-backfill.ts) | Identity Backfill |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [experiments](../experiments/README.md) · [telemetry](../telemetry/README.md) · [transcript](../transcript/README.md).
+
+Display names and identity keys are distinct; renaming must preserve session associations.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

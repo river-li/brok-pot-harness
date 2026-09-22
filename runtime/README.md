@@ -1,22 +1,26 @@
-# runtime
+# Build and runtime
 
-Build profiles, Docker/desktop launchers, maintained desktop assets and verification tools.
+Assembles maintained source, upstream assets, and local adapters into Host and Electron artifacts,
+and manages this repository's Docker services. Users should start with [Installation](../docs/wiki/Build-Guide.md).
 
-Entry points and reference files: [manage.cjs](manage.cjs), [box-entrypoint.sh](box-entrypoint.sh), [package.json](package.json), [desktop.cjs](desktop.cjs), [build-profiles.json](build-profiles.json), [plugins.cjs](plugins.cjs).
+| Entry / directory | Responsibility |
+| --- | --- |
+| [manage.cjs](manage.cjs) | Load settings, generate local credentials, manage the `gbh-local` Compose project |
+| [config.cjs](config.cjs) | Root `.env` loading and precedence |
+| [compose.yaml](compose.yaml), [box-entrypoint.sh](box-entrypoint.sh) | Services, mounts, ports, in-Box Host startup |
+| [desktop.cjs](desktop.cjs) | Development Electron launch, profile, Gateway configuration |
+| [packaged-main.cjs](packaged-main.cjs) | Packaged app's local entry |
+| [build-profiles.json](build-profiles.json) | Local/original policy |
+| [desktop-src](desktop-src/README.md), [renderer-src](renderer-src/README.md) | Maintained main-process and UI assets |
+| [tools](tools/README.md) | Reconstruction, desktop assembly, icons, packaging, demonstration capture |
+| [search](search/README.md), [speech](speech/README.md) | Search and speech services |
+| [tests](tests/README.md) | Contract, service, real-model, and desktop verification |
+| [plugins.cjs](plugins.cjs) | Local plugin import and catalog listing |
 
-Build and launch from the [repository root](../README.md). Current verification and
-limitations are recorded in [migration status](../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+## Runtime conventions
 
-## Local launch configuration
+Run commands from the repository root. `.runtime` holds both build output and user data; do not delete it as a cache.
+Use `npm start` to apply launch-configuration changes. Restart affected processes after rebuilding source.
+See [Sandbox](../docs/wiki/Sandbox.md) for data and [Configuration](../docs/wiki/Configuration.md) for precedence.
 
-The root README contains the complete build, API-key, permissions and mount guide.
-`manage.cjs` loads the root `.env`, then starts this repository's Compose project.
-`GROKBOT_SANDBOX_IMAGE` selects a compatible Box image; `GROKBOT_WORKSPACE_DIR`
-selects the host folder mounted at `/workspace` (prefer an absolute path).
-`GROKBOT_COMPOSE_OVERRIDE` adds one overlay file, resolved from the repository
-root. Compose resolves relative mounts from `runtime/`, its first file's directory.
-The same overlay is used for start, stop, status, logs and restart.
-Run `npm start` after environment, image or mount changes; restart alone does not
-recreate the container configuration. Setting `GROKBOT_LOCAL_VOICE=0` hides the
-desktop local call entry point, not the speech container or dictation/preview.
+[Build profiles](BUILD_PROFILES.md) · [Voice bridge](VOICE.md) · [Development](../docs/wiki/Development.md)

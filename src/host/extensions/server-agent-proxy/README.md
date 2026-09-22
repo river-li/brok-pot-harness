@@ -1,9 +1,22 @@
 # server-agent-proxy
 
-The server-agent-proxy Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Proxies server-side Agent interactions and idle lifecycle.
 
-Entry points and reference files: [extension.ts](extension.ts), [server-agent-proxy.ts](server-agent-proxy.ts), [voice-call-server-receipt.ts](voice-call-server-receipt.ts), [idle-destroying-agent.ts](idle-destroying-agent.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [server-agent-proxy.ts](server-agent-proxy.ts) | Server Agent Proxy |
+| [idle-destroying-agent.ts](idle-destroying-agent.ts) | Idle Destroying Agent |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [agent-identity](../agent-identity/README.md) · [auth](../auth/README.md) · [telemetry](../telemetry/README.md) · [transcript](../transcript/README.md).
+
+Preserve pending work and cancellation when releasing proxies.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

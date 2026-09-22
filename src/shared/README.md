@@ -1,9 +1,18 @@
-# shared
+# Shared protocols and services
 
-Shared protocols, settings schemas, Node services and feature registries.
+Protocols, settings, and infrastructure used across Host, Harness, and desktop-related logic.
+Check serialization, defaults, and both sides of an interface before changing cross-boundary data.
 
-Entry points and reference files: [proto.ts](proto.ts), [json-value-equality.ts](json-value-equality.ts), [invariant.ts](invariant.ts), [sand-text.ts](sand-text.ts), [credentials.ts](credentials.ts), [push-message-content.ts](push-message-content.ts).
+| Directory / file | Contents |
+| --- | --- |
+| [gateway](gateway), [rpc](rpc), [proto.ts](proto.ts) | Gateway/RPC representations and protocol entry |
+| [settings](settings), [experiments](experiments) | Settings schemas and retained runtime experiments |
+| [permissions](permissions), [local-exec](local-exec), [auto-review](auto-review) | Shared permission and execution definitions |
+| [agents](agents), [transcript](transcript), [send](send) | Agent, message, and send representations |
+| [mcp](mcp), [skills](skills) | Shared MCP and Skill definitions |
+| [media](media), [voice-call](voice-call) | Media and call protocols |
+| [node](node), [streams](streams), [parse](parse) | Node services, streams, parsing helpers |
 
-Build and launch from the [repository root](../../README.md). Current verification and
-limitations are recorded in [migration status](../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+Electron startup and Docker configuration live elsewhere. Protocol changes require checking Host, clients, and stored-data compatibility.
+
+[Host](../host/README.md) · [Packages](../../packages/README.md) · [Source recovery](../../docs/wiki/Source-Recovery.md)

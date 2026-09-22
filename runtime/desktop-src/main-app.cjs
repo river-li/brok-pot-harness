@@ -16939,6 +16939,12 @@ var Nh = S((r3t, bte) => {
 var wU = S((n3t, vte) => {
   vte.exports = ee()[19];
 });
+function gbhEncryptedStorageAvailable() {
+  return require("./local-keychain.cjs").available(_e);
+}
+function gbhWaitForEncryptedStorage(...args) {
+  return require("./local-keychain.cjs").wait(_e, ...args);
+}
 var _e = {};
 st(_e, { default: () => DZe });
 var Ite,
@@ -16951,6 +16957,7 @@ var Ite,
 var kte = {};
 st(kte, { getOrCreateMachineId: () => lt });
 function lt(e = PZe) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1") return require("./local-keychain.cjs").machineId(require("electron").app.getPath("userData"));
   let t = Uk.get(e);
   if (t !== void 0) return t;
   let r = (async () => {
@@ -16978,7 +16985,7 @@ var wte,
       (PZe = {
         readSecret: _e.readSecret,
         writeSecret: _e.writeSecret,
-        waitForEncryptedStorage: _e.waitForEncryptedStorage,
+        waitForEncryptedStorage: gbhWaitForEncryptedStorage,
       }),
       (Uk = new WeakMap()));
     o(lt, "getOrCreateMachineId");
@@ -34514,7 +34521,7 @@ var JR,
         readSelectedTeamForAccount: _e.readSelectedTeamForAccount,
         writeSecret: _e.writeSecret,
         deleteSecret: _e.deleteSecret,
-        isEncryptedStorageAvailable: _e.isEncryptedStorageAvailable,
+        isEncryptedStorageAvailable: gbhEncryptedStorageAvailable,
         listSavedAccounts: _e.listSavedAccounts,
         updateKnownAccountProfile: _e.updateKnownAccountProfile,
         readCursorAuthTokensForAccount: _e.readCursorAuthTokensForAccount,
@@ -34898,7 +34905,7 @@ var JR,
         }
       }
       async settleSecureStorage(t) {
-        await (0, _e.waitForEncryptedStorage)(
+        await (0, gbhWaitForEncryptedStorage)(
           () => this.secrets.isEncryptedStorageAvailable(),
           {
             intervalMs: this.secureStorageWaitOptions.intervalMs,
@@ -78831,7 +78838,7 @@ function hCe(e) {
         "gateway-descriptor.json",
       ),
       codec: {
-        isAvailable: _e.isEncryptedStorageAvailable,
+        isAvailable: () => process.env.GROKBOT_LOCAL_MODE !== "1" && gbhEncryptedStorageAvailable(),
         encrypt: o(
           (r) => OS.safeStorage.encryptString(r).toString("base64"),
           "encrypt",
@@ -79793,9 +79800,9 @@ var _be = "local-exec-file-key",
   Ebe = !1;
 function $0(
   e = {
-    isEncryptedStorageAvailable: _e.isEncryptedStorageAvailable,
+    isEncryptedStorageAvailable: gbhEncryptedStorageAvailable,
     readSecret: _e.readSecret,
-    waitForEncryptedStorage: _e.waitForEncryptedStorage,
+    waitForEncryptedStorage: gbhWaitForEncryptedStorage,
     writeSecret: _e.writeSecret,
   },
 ) {
@@ -92008,7 +92015,7 @@ var EN = class {
     this.storePath = t;
     this.getAccountScope = r;
     ((this.isEncryptedStorageAvailable =
-      n.isEncryptedStorageAvailable ?? _e.isEncryptedStorageAvailable),
+      n.isEncryptedStorageAvailable ?? gbhEncryptedStorageAvailable),
       (this.safeStorage = n.safeStorage ?? CN.safeStorage));
   }
   storePath;
@@ -97091,7 +97098,7 @@ Ee.app
     let { bootLanguageState: e } = Dr;
     ((0, ZGe.activateMainLocale)(e.resolved),
       $a.markPhase("update_service"),
-      (0, _e.initializeSecureStorage)());
+      (require("./local-keychain.cjs").isAllowed() && (0, _e.initializeSecureStorage)()));
     let t = XE(),
       r = lt().catch(
         (M) => (

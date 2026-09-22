@@ -1,9 +1,22 @@
 # bot-template-share
 
-The bot-template-share Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Stores and shares Bot templates.
 
-Entry points and reference files: [extension.ts](extension.ts), [bot-template-store.ts](bot-template-store.ts), [bot-template-share-service.ts](bot-template-share-service.ts), [grok-bot-template-store.ts](grok-bot-template-store.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [bot-template-store.ts](bot-template-store.ts) | Bot Template Store |
+| [bot-template-share-service.ts](bot-template-share-service.ts) | Bot Template Share Service |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [agent-identity](../agent-identity/README.md) · [auth](../auth/README.md) · [telemetry](../telemetry/README.md).
+
+Local templates and remote sharing have separate conditions; retained sharing code does not prove service availability.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

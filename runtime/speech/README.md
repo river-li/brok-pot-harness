@@ -4,7 +4,7 @@ The original desktop recorder and host `transcribeAudio` route use this CPU
 service in local mode. Recognition runs in Docker using faster-whisper and the
 multilingual Whisper base model. It needs no model API key or vendor account.
 Dictation and the original Bot settings voice previews run locally. The local
-voice-call bridge also uses these speech endpoints; see `../VOICE.md`.
+voice-call bridge also uses these speech endpoints; see [the voice bridge](../VOICE.md).
 
 `npm start` builds the image from the pinned Python base and dependency lock.
 The first start downloads the fixed Whisper snapshot listed in `model.json`
@@ -60,7 +60,7 @@ Text/audio are not saved or logged. The desktop's existing short-preview cache
 lasts for that desktop session. `GROKBOT_TTS_BASE_URL` overrides the host's
 private speech service address, defaulting to `http://speech:8000`.
 
-## Verification
+## Testing
 
 From the project root, after `npm run build` and `npm start`:
 
@@ -89,20 +89,20 @@ Service contracts and real offline cold-start recognition:
 ```sh
 docker run --rm --network none --entrypoint python \
   -v "$PWD/runtime/tests:/tests:ro" \
-  grokbot-local-speech:reconstructed /tests/speech-service-contract.py
+  gbh-local-speech:reconstructed /tests/speech-service-contract.py
 docker run --rm --network none --entrypoint python \
   -v "$PWD/.runtime/models/whisper:/models:ro" \
   -v "$PWD/runtime/tests:/tests:ro" \
   -v "$PWD/.runtime/tests/speech:/fixtures:ro" \
-  grokbot-local-speech:reconstructed /tests/speech-offline-live.py
+  gbh-local-speech:reconstructed /tests/speech-offline-live.py
 docker run --rm --network none --entrypoint python \
   -v "$PWD/runtime/tests:/tests:ro" \
-  grokbot-local-speech:reconstructed /tests/tts-service-contract.py
+  gbh-local-speech:reconstructed /tests/tts-service-contract.py
 docker run --rm --network none --entrypoint python \
   -v "$PWD/.runtime/models/whisper:/models:ro" \
   -v "$PWD/.runtime/models/kokoro:/tts-models:ro" \
   -v "$PWD/runtime/tests:/tests:ro" \
-  grokbot-local-speech:reconstructed /tests/tts-offline-live.py
+  gbh-local-speech:reconstructed /tests/tts-offline-live.py
 ```
 
 ## Provenance
@@ -126,3 +126,5 @@ docker run --rm --network none --entrypoint python \
 
 The retained desktop and host versions are unchanged. This service is an
 explicit local replacement for their unavailable vendor speech endpoints.
+
+[Service configuration](../../docs/wiki/Configuration.md) · [Support and verification scope](../../docs/wiki/Verification.md)

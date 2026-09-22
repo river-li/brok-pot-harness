@@ -1,9 +1,23 @@
 # forever-box
 
-The forever-box Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Manages the long-lived Box and disk-pressure handling.
 
-Entry points and reference files: [disk-pressure-guard.ts](disk-pressure-guard.ts), [extension.ts](extension.ts), [disk-pressure.ts](disk-pressure.ts), [forever-box-service.ts](forever-box-service.ts), [host-box.ts](host-box.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [forever-box-service.ts](forever-box-service.ts) | Forever Box Service |
+| [host-box.ts](host-box.ts) | Host Box |
+| [disk-pressure-guard.ts](disk-pressure-guard.ts) | Disk Pressure Guard |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [box-lifecycle](../box-lifecycle/README.md) · [codebase-telemetry](../codebase-telemetry/README.md) · [telemetry](../telemetry/README.md) · [trays](../trays/README.md).
+
+Manage Box lifecycle separately from the user's workspace data.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

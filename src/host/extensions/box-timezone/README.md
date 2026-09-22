@@ -1,9 +1,21 @@
 # box-timezone
 
-The box-timezone Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Manages Box timezone configuration.
 
-Entry points and reference files: [extension.ts](extension.ts), [box-timezone-service.ts](box-timezone-service.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [box-timezone-service.ts](box-timezone-service.ts) | Box Timezone Service |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [settings](../settings/README.md).
+
+Review task timestamps and display behavior while preserving the source of user settings.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

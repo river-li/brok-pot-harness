@@ -1,9 +1,21 @@
 # turn-execution
 
-The turn-execution Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Provides execution services for an individual turn.
 
-Entry points and reference files: [turn-execution-service.ts](turn-execution-service.ts), [extension.ts](extension.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [turn-execution-service.ts](turn-execution-service.ts) | Turn Execution Service |
+
+## Dependencies and change boundaries
+
+This extension declares no other Host extension dependencies.
+
+Read alongside transcript scheduling and Harness runner composition; avoid duplicating the execution loop.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

@@ -1,9 +1,21 @@
 # state-backstop
 
-The state-backstop Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Provides fallback handling for Host state.
 
-Entry points and reference files: [extension.ts](extension.ts), [state-backstop-service.ts](state-backstop-service.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [state-backstop-service.ts](state-backstop-service.ts) | State Backstop Service |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [box-store-sync](../box-store-sync/README.md) · [source-map](../source-map/README.md).
+
+Review triggers against session recovery so fallback handling does not overwrite newer persistent state.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

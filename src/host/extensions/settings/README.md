@@ -1,9 +1,21 @@
 # settings
 
-The settings Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Persists workspace settings and publishes changes to other extensions.
 
-Entry points and reference files: [extension.ts](extension.ts), [settings-service.ts](settings-service.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [settings-service.ts](settings-service.ts) | Settings Service |
+
+## Dependencies and change boundaries
+
+This extension declares no other Host extension dependencies.
+
+Coordinate changes with shared schemas, desktop controls, and defaults.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

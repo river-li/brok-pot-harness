@@ -1,9 +1,23 @@
 # cloud-agents
 
-The cloud-agents Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Retains cloud Agent polling, update streams, and artifact caching.
 
-Entry points and reference files: [cloud-agent-watch-read.ts](cloud-agent-watch-read.ts), [model-catalog-fetch.ts](model-catalog-fetch.ts), [cloud-agent-updates-stream.ts](cloud-agent-updates-stream.ts), [cloud-agent-artifact-cache.ts](cloud-agent-artifact-cache.ts), [extension.ts](extension.ts), [cloud-agent-poll-loop.ts](cloud-agent-poll-loop.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [cloud-agents-service.ts](cloud-agents-service.ts) | Cloud Agents Service |
+| [cloud-agent-poll-loop.ts](cloud-agent-poll-loop.ts) | Cloud Agent Poll Loop |
+| [cloud-agent-artifact-cache.ts](cloud-agent-artifact-cache.ts) | Cloud Agent Artifact Cache |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [auth](../auth/README.md) · [experiments](../experiments/README.md) · [forever-box](../forever-box/README.md) · [team-admin-policy](../team-admin-policy/README.md).
+
+The local profile disables cloud provisioning; retained source does not establish a usable cloud service.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

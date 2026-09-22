@@ -1,9 +1,22 @@
 # local-exec
 
-The local-exec Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Bridges execution requests to the user's computer through Gateway or server adapters.
 
-Entry points and reference files: [preferring-user-computer.ts](preferring-user-computer.ts), [gateway-local-exec-sand-box.ts](gateway-local-exec-sand-box.ts), [extension.ts](extension.ts), [local-exec-bridge.ts](local-exec-bridge.ts), [server-local-exec-sand-box.ts](server-local-exec-sand-box.ts), [local-exec-error.ts](local-exec-error.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [local-exec-bridge.ts](local-exec-bridge.ts) | Local Exec Bridge |
+| [gateway-local-exec-sand-box.ts](gateway-local-exec-sand-box.ts) | Gateway Local Exec Sand Box |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [local-tool-permission](../local-tool-permission/README.md) · [telemetry](../telemetry/README.md) · [auth](../auth/README.md).
+
+Keep Mac execution separate from Linux Box execution and preserve local-tool-permission checks.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

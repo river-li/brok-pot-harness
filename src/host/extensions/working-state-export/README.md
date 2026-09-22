@@ -1,9 +1,22 @@
 # working-state-export
 
-The working-state-export Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Exports working state and manages warming eligibility.
 
-Entry points and reference files: [working-state-export-telemetry.ts](working-state-export-telemetry.ts), [working-state-export-service.ts](working-state-export-service.ts), [extension.ts](extension.ts), [working-state-warm-eligibility.ts](working-state-warm-eligibility.ts), [working-state-warmer.ts](working-state-warmer.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [working-state-export-service.ts](working-state-export-service.ts) | Working State Export Service |
+| [working-state-warmer.ts](working-state-warmer.ts) | Working State Warmer |
+
+## Dependencies and change boundaries
+
+This extension declares no other Host extension dependencies.
+
+Exports may include work data; preserve destination, mode, and permission boundaries.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)

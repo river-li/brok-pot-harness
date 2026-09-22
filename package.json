@@ -37,7 +37,13 @@
     "test:mac-exec-live": "node runtime/tests/mac-exec-live.cjs",
     "plugins": "node runtime/plugins.cjs",
     "test:plugin-files": "node --test runtime/tests/plugin-files-contract.cjs",
-    "test:plugins-live": "node runtime/tests/plugins-live.cjs"
+    "test:plugins-live": "node runtime/tests/plugins-live.cjs",
+    "build:icons": "python3 runtime/tools/build-icons.py",
+    "package:mac": "npm run prepare:desktop -- --profile local && python3 runtime/tools/package-macos.py",
+    "test:desktop-keychain": "node --test runtime/tests/local-keychain-contract.cjs",
+    "test:desktop-keychain-live": "node runtime/tests/local-keychain-live.cjs",
+    "docs:check": "python3 tools/export-wiki.py --check",
+    "docs:wiki": "python3 tools/export-wiki.py"
   },
   "devDependencies": {
     "@types/node": "^26.6.1",

@@ -1,9 +1,22 @@
 # webauthn-proxy
 
-The webauthn-proxy Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+Proxies browser WebAuthn requests.
 
-Entry points and reference files: [extension.ts](extension.ts), [webauthn-proxy-bridge.ts](webauthn-proxy-bridge.ts), [webauthn-proxy-marker.ts](webauthn-proxy-marker.ts).
+## Entry points and registration
 
-Build and launch from the [repository root](../../../../README.md). Current verification and
-limitations are recorded in [migration status](../../../../MIGRATION_STATUS.md); copied tests or code
-do not establish that this version has passed runtime verification.
+[extension.ts](extension.ts) declares the ID, dependencies, and startup behavior. [registry.ts](../registry.ts) registers the extension.
+
+| Implementation | Purpose |
+| --- | --- |
+| [webauthn-proxy-bridge.ts](webauthn-proxy-bridge.ts) | Webauthn Proxy Bridge |
+| [webauthn-proxy-marker.ts](webauthn-proxy-marker.ts) | Webauthn Proxy Marker |
+
+## Dependencies and change boundaries
+
+Declared Host dependencies: [telemetry](../telemetry/README.md).
+
+Local mode must not bypass user authorization required by authentication bridging.
+
+See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
+
+[← Host extension map](../README.md) · [Host](../../README.md)
