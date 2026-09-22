@@ -1,0 +1,25 @@
+{
+  "platform": "linux",
+  "arch": "x64",
+  "required": [
+    "@anysphere/tree-chunk-napi",
+    "cursor-proclist",
+    "tree-sitter",
+    "tree-sitter-bash"
+  ],
+  "copied": [
+    "@anysphere/tree-chunk-napi",
+    "cursor-proclist",
+    "node-addon-api",
+    "node-gyp-build",
+    "tree-sitter",
+    "tree-sitter-bash",
+    "web-tree-sitter"
+  ],
+  "nodeFiles": [
+    "@anysphere/tree-chunk-napi/tree-chunk-napi.linux-x64-gnu.node",
+    "cursor-proclist/build/Release/cursor_proclist.node",
+    "tree-sitter-bash/prebuilds/linux-x64/tree-sitter-bash.node",
+    "tree-sitter/build/Release/tree_sitter_runtime_binding.node"
+  ]
+}

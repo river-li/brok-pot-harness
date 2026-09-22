@@ -1,0 +1,53 @@
+{
+  "name": "@anysphere/tree-chunk-napi",
+  "version": "0.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "tree-chunk-napi.node",
+    "tree-chunk-napi.*.node",
+    "package.json"
+  ],
+  "napi": {
+    "binaryName": "tree-chunk-napi",
+    "targets": [
+      "x86_64-unknown-linux-gnu",
+      "x86_64-unknown-linux-musl",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-unknown-linux-musl",
+      "x86_64-apple-darwin",
+      "aarch64-apple-darwin",
+      "x86_64-pc-windows-msvc",
+      "aarch64-pc-windows-msvc"
+    ]
+  },
+  "devDependencies": {
+    "@vmg-anysphere/napi-rs-cli": "3.2.0-modules.3",
+    "ava": "^5.1.1",
+    "vitest": "^4.0.18"
+  },
+  "ava": {
+    "timeout": "3m"
+  },
+  "engines": {
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "pnpm": ">= 10.22.0",
+    "node": ">= 18.15.0"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "build": "node scripts/build.cjs",
+    "fix": "npx biome check --write --unsafe .",
+    "build:debug": "napi build --platform",
+    "build:release": "napi build --platform --release",
+    "prepublishOnly": "napi prepublish -t npm",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cargotest": "if [ -z \"$TURBO_HASH\" ]; then turbo run cargotest --output-logs=new-only; else cargo test --features nonapi; fi",
+    "cargolint": "if [ -z \"$TURBO_HASH\" ]; then turbo run cargolint --output-logs=new-only; else EVERYSPHERE_MANUAL_REVIEW_REQUIRED_THIS_LINE_ONLY=1 cargo clippy -- -D clippy::expect_used -D clippy::panic  -D clippy::unwrap_used -A clippy::if_same_then_else --no-deps; fi",
+    "version": "napi version",
+    "build-types": "echo noop"
+  }
+}

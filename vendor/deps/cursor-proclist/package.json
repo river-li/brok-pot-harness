@@ -1,0 +1,14 @@
+{
+  "name": "cursor-proclist",
+  "version": "1.0.0",
+  "description": "Native Node.js module for process listing",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "install": "node rebuild-with-lock.js"
+  },
+  "gypfile": true,
+  "dependencies": {
+    "node-addon-api": "^8.0.0"
+  }
+}
