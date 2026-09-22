@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/sand-automation-cloud-sync.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm2();
 init_system_errno();
 var NO_DESIRED_CLOUD_AUTOMATION_IDS = /* @__PURE__ */ new Set();
@@ -417,3 +422,4 @@ var SandAutomationCloudSync = class {
     });
   }
 };
+

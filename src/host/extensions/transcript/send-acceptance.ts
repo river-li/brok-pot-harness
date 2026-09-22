@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/send-acceptance.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path159 = require("node:path");
+init_dist4();
+
+// @recovered-fragment 2/2
 var persistedSendEchoBrand = /* @__PURE__ */ Symbol("sand.persistedSendEcho");
 function persistedSendEcho(entry, isOnActiveTranscript) {
   return { [persistedSendEchoBrand]: true, entry, isOnActiveTranscript };
@@ -128,3 +137,4 @@ function emitSendAck(args) {
     }
   };
 }
+

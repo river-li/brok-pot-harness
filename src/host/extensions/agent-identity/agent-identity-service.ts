@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/agent-identity/agent-identity-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs30 = require("node:fs");
+var import_node_path32 = require("node:path");
+init_grok_bot_pb();
+init_esm2();
+
+// @recovered-fragment 2/2
 init_invariant();
 var AGENT_IDENTITY_SYNC_ERROR_CODE = "SAND-E0416";
 function isServerTemporalHarnessRefusal(error42) {
@@ -855,3 +866,4 @@ function withGeneratedMark(agentId, fields2) {
   });
   return { ...fields2, avatarShape: mark.shape, avatarColor: mark.color };
 }
+

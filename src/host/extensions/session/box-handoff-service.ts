@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/box-handoff-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_computer_use_tool_pb();
+init_errors();
+
+// @recovered-fragment 2/2
 var SNAPSHOT_TIMEOUT_MS = 5e3;
 var MAX_DOMAIN_LENGTH = 64;
 var WEBAUTHN_ARM_UNTIL_PATH = "/tmp/sand-webauthn-armed-until";
@@ -178,3 +188,4 @@ var BoxHandoffService = class {
     return result.result.value.screenshot ?? null;
   }
 };
+

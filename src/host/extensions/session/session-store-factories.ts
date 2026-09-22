@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-store-factories.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path136 = require("node:path");
+
+// @recovered-fragment 2/2
 function createUnavailableMemoryStore() {
   return {
     recall: () => ({ profile: [], recent: [] }),
@@ -32,3 +40,4 @@ function skillStoreForDbPath(dbPath, resolveUserTimeZone = () => void 0, isFiveM
 function channelStoreForDbPath(dbPath) {
   return new FileChannelStore(getAgentChannelsDir((0, import_node_path136.dirname)(dbPath)));
 }
+

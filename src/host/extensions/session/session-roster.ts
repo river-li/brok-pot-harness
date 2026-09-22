@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-roster.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises68 = require("node:fs/promises");
+
+// @recovered-fragment 2/2
 init_errors();
 async function listAgents(host, activeAgentId) {
   let entries;
@@ -111,3 +119,4 @@ async function summarizeAgentById(host, agentId, activeAgentId) {
     agentHasMemory: (candidate) => host.memory.agentHasContent(candidate)
   });
 }
+

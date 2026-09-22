@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/prompt-acceptance-ledger.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto70 = require("node:crypto");
 var import_node_fs91 = require("node:fs");
 var import_node_path150 = require("node:path");
@@ -375,3 +380,4 @@ var PromptAcceptanceLedger = class {
     }
   }
 };
+

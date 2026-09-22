@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/runner-registry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_invariant();
+
+// @recovered-fragment 2/2
 var RunnerRegistry = class {
   constructor(tm) {
     this.tm = tm;
@@ -191,3 +199,4 @@ var RunnerRegistry = class {
     };
   }
 };
+

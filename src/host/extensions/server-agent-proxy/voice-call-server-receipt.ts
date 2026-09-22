@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/server-agent-proxy/voice-call-server-receipt.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VoiceCallReceiptPublishError = class extends Error {
   name = "VoiceCallReceiptPublishError";
 };
@@ -24,3 +29,4 @@ async function publishVoiceCallReceiptToServer(record2, commit, authored) {
     `voice call ${record2.callId} was saved on the box but its hang-up receipt never reached the server transcript`
   );
 }
+

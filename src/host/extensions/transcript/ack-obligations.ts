@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/ack-obligations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto72 = require("node:crypto");
+
+// @recovered-fragment 2/2
 var MAX_ACK_REDRIVES = 3;
 var ACK_REDRIVE_IDLE_DELAY_MS = 5e3;
 function buildAckRedrivePrompt() {
@@ -232,3 +240,4 @@ var AckObligations = class {
     );
   }
 };
+

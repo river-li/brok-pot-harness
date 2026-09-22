@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/automation-run-path.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_path157 = require("node:path");
+
+// @recovered-fragment 2/3
+init_errors();
+
+// @recovered-fragment 3/3
 var MAX_AGENT_GONE_OBSERVATIONS = 256;
 var SandAutomationSubagentRunIdMissingError = class extends SandDomainError {
   name = "SandAutomationSubagentRunIdMissingError";
@@ -538,3 +549,4 @@ ${spendGuardReminder}`);
     }
   }
 };
+

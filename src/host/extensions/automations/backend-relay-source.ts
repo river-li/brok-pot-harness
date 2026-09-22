@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/backend-relay-source.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_v4();
+init_errors();
+init_cursor_inference();
+init_sand_client_metadata();
+init_unknown_record();
+
+// @recovered-fragment 2/2
 var SandBackendRelayError = class extends SandDomainError {
   name = "SandBackendRelayError";
 };
@@ -521,3 +533,4 @@ function createBackendRelaySources(deps) {
     }
   };
 }
+

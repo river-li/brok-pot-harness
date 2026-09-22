@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/agent-identity/generated-room-name-stamps.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs31 = require("node:fs");
 var import_node_path33 = require("node:path");
 var GENERATED_ROOM_NAME_STAMP_CLEANUP_SENTINEL_FILENAME = "generated-room-name-stamp-cleanup.json";
@@ -26,3 +31,4 @@ async function clearGeneratedRoomNameStamps(args) {
   if (clearedIds.length > 0) await args.publishAgentRoster();
   return { outcome: "cleared", clearedIds };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-projection.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function peerMessageLastEntry(entry) {
   if (entry.toAgent?.kind === "agent") {
     const sessionPreview = {
@@ -180,3 +185,4 @@ function branchChainStaysWithin(entry, byId) {
 function isAttachmentEntry(entry) {
   return entry?.kind === "user-attachment" || entry?.kind === "send-message" && entry.message.type === "attachment";
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-maintenance.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs82 = require("node:fs");
 var import_promises64 = require("node:fs/promises");
 var import_node_path133 = require("node:path");
@@ -305,3 +310,4 @@ async function findLatestDurableRootBlobId(host, {
     throw new ConversationRecoveryScanError(errorLogTag(error42));
   }
 }
+

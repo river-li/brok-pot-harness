@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/trays/trays-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_events3 = require("node:events");
 var MAX_TRAYS = 20;
 var MAX_TRAY_OCCURRENCES = 20;
@@ -169,3 +174,4 @@ var TrayManager = class {
     this.emitter.emit("event", event);
   }
 };
+

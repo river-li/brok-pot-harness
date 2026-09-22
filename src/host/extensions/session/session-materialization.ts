@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-materialization.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_async_hooks2 = require("node:async_hooks");
+var import_promises65 = require("node:fs/promises");
+var import_node_path137 = require("node:path");
+init_errors();
+init_invariant();
+
+// @recovered-fragment 2/2
 var SandAgentMissingError = class extends SandDomainError {
   name = "SandAgentMissingError";
   isAgentMissing = true;
@@ -215,3 +227,4 @@ var SandSessionMaterialization = class {
     };
   }
 };
+

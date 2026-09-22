@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/sand-automation-failure.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isBackgroundAutomationTrigger(trigger2) {
   return trigger2 === "schedule" || trigger2 === "event";
 }
@@ -12,3 +17,4 @@ function shouldNotifyAutomationFailure(occurrence) {
   if (occurrence <= 1) return true;
   return (occurrence & occurrence - 1) === 0;
 }
+

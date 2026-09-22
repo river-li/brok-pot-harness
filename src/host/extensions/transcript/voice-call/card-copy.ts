@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/voice-call/card-copy.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto82 = require("node:crypto");
 init_dist4();
 var VOICE_CALL_CARD_COPY_DEADLINE_MS = 8e3;
@@ -48,3 +53,4 @@ async function streamText2({
     signal.removeEventListener("abort", abort);
   }
 }
+

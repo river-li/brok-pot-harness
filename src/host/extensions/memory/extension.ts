@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/memory/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_grok_bot_connect();
+init_sand_agent_model();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var memoryExtension = defineHostExtension({
   id: "memory",
   dependencies: [
@@ -93,3 +105,4 @@ var memoryExtension = defineHostExtension({
     });
   }
 });
+

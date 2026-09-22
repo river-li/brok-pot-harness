@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/remote-agent-messaging/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto60 = require("node:crypto");
+init_scheduling();
+init_grok_bot_connect();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var REMOTE_AGENT_MESSAGING_GATE = "grok_bot_temporal_harness";
 var remoteAgentMessagingExtension = defineHostExtension({
   id: "remote-agent-messaging",
@@ -77,3 +89,4 @@ function startRemoteAgentMessaging({
     })
   });
 }
+

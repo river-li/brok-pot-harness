@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/user-form-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+
+// @recovered-fragment 2/2
 init_privacy_mode_pb();
 var USER_FORM_DOMAIN_TAG_MAX_LENGTH = 64;
 var userFormRequest = createCounter("grok_bot.user_form.request", {
@@ -517,3 +525,4 @@ function userFormDomainTagAllowed(state) {
       return false;
   }
 }
+

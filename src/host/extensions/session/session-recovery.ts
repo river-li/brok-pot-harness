@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-recovery.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs81 = require("node:fs");
 var import_node_path132 = require("node:path");
 var import_node_util12 = require("node:util");
@@ -64,3 +69,4 @@ function ensureSettingsFile(dbPath) {
     notifyOnAgentUpdates: true
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/send-turn-dispatch.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 async function dispatchUserTurn(args) {
   const {
@@ -119,3 +124,4 @@ ${expandedPrompt}` : expandedPrompt;
     tm.hostLog(`[sand] detached turn failed after send acceptance: ${errorLogTag(error42)}`, "error");
   });
 }
+

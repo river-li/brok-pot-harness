@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-summaries.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises66 = require("node:fs/promises");
+var import_node_path138 = require("node:path");
+var import_node_path139 = require("node:path");
+init_errors();
+
+// @recovered-fragment 2/2
 var PREVIEW_TAIL_FIRST_LIMIT = 64;
 var PREVIEW_TAIL_MAX_LIMIT = 4096;
 function deriveTranscriptExtras(db, agentId, firstLimit = PREVIEW_TAIL_FIRST_LIMIT) {
@@ -198,3 +209,4 @@ async function agentHasQuarantinedStoreDb(agentDir) {
     return false;
   }
 }
+

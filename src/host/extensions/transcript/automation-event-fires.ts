@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/automation-event-fires.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 init_system_errno();
 var EVENT_FIRE_DEBOUNCE_MS = 750;
@@ -182,3 +187,4 @@ var AutomationEventFires = class {
     });
   }
 };
+

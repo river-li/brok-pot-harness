@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/widget-responses.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var WidgetResponses = class {
   constructor(tm) {
@@ -883,3 +888,4 @@ ${modelPrompt}` : modelPrompt, {
     return { before, isAdding };
   }
 };
+

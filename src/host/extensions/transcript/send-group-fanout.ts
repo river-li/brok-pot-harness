@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/send-group-fanout.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 async function dispatchGroupSend(tm, args) {
   const {
@@ -42,3 +47,4 @@ async function dispatchGroupSend(tm, args) {
   }
   return false;
 }
+

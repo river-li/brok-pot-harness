@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/agent-db-schema.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var WINDOW_ENTRY_FILTER_SQL = `json_extract(entry, '$.kind') != 'tool-call'
         AND COALESCE(json_extract(entry, '$.branched'), 0) != 1`;
 var BRANCHED_ENTRY_FILTER_SQL = `COALESCE(json_extract(entry, '$.branched'), 0) = 1`;
@@ -156,3 +161,4 @@ function prepareStatements(db) {
     clearTranscriptEntries: db.prepare("DELETE FROM transcript_entries")
   };
 }
+

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/todos/agent-todos.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_todo_tool_pb();
+
+// @recovered-fragment 2/2
 async function readAgentTodos(session, structure = session.agentStore.getConversationStateStructure()) {
   const ctx = createContext();
   const blobStore = session.agentStore.getBlobStore();
@@ -69,3 +78,4 @@ var AgentTodosRuntime = class {
     this.host.roster.emitter.emit("todos", event);
   }
 };
+

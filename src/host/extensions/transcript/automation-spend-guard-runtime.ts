@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/automation-spend-guard-runtime.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SPEND_GUARD_ANSWER_OUTCOMES = {
   keep: { routines: "resume-guard-paused", snoozes: true, retiresGuard: false },
   resume: { routines: "resume-guard-paused", snoozes: true, retiresGuard: false },
@@ -226,3 +231,4 @@ var AutomationSpendGuardRuntime = class {
     });
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/user-form-responses.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var USER_FORM_TO_BOX_HELP_REASON = {
   auth: "auth",
   checkout: "payment",
@@ -348,3 +353,4 @@ function submitAfterFillDebugProps(submit) {
   if (!submit.attempted) return { submit_after_fill_attempted: false };
   return { submit_after_fill_attempted: true, submit_after_fill_succeeded: submit.succeeded };
 }
+

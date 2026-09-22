@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path142 = require("node:path");
+init_dist4();
+
+// @recovered-fragment 2/2
 var sessionExtension = defineHostExtension({
   id: "session",
   dependencies: [
@@ -95,3 +104,4 @@ var sessionExtension = defineHostExtension({
     };
   }
 });
+

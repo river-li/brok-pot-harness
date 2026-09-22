@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/server-agent-proxy/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto63 = require("node:crypto");
+init_errors();
+
+// @recovered-fragment 2/2
 var serverAgentProxyExtension = defineHostExtension({
   id: "server-agent-proxy",
   dependencies: [
@@ -37,3 +46,4 @@ var serverAgentProxyExtension = defineHostExtension({
     return proxy;
   }
 });
+

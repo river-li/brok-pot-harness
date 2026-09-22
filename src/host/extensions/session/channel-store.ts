@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/channel-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs84 = require("node:fs");
 var import_node_path135 = require("node:path");
 init_scheduling();
@@ -97,3 +102,4 @@ var FileChannelStore = class {
     return true;
   }
 };
+

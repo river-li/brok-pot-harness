@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/turn-runtime.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_dist4();
+
+// @recovered-fragment 2/3
+init_esm2();
+init_bounded();
+init_errors();
+init_system_errno();
+
+// @recovered-fragment 3/3
 var MAX_REPLY_NUDGES = 3;
 var REPLY_NUDGE_PROMPT = SAND_ONBOARDING_REPLY_NUDGE_PROMPT;
 var CLOSING_SEND_NUDGE_PROMPT = "Your previous turn acknowledged the user and then ran tool calls, but ended without a follow-up SendToUser \u2014 the last thing the user saw is that opening acknowledgement, so whatever the tool calls produced after it never reached them. If that work produced the result or answer they are waiting on, deliver it now by actually invoking the SendToUser tool \u2014 make a real tool/function call, not text you write. Plain assistant text is NEVER shown to the user; only a real SendToUser tool invocation reaches them. If the work is genuinely unfinished, continue it and send the result once you have it.";
@@ -854,3 +868,4 @@ var TurnRuntime = class {
     }
   }
 };
+

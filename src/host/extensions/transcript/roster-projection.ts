@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/roster-projection.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_events2 = require("node:events");
+init_scheduling();
+
+// @recovered-fragment 2/2
 var OUTLINE_STREAM_COALESCE_MS = 250;
 var RosterProjection = class {
   constructor(tm) {
@@ -463,3 +472,4 @@ var RosterProjection = class {
     this.reportedSubagentParents.delete(agentId);
   }
 };
+

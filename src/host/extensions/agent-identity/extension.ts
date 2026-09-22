@@ -1,3 +1,24 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/agent-identity/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/4
+var import_node_crypto16 = require("node:crypto");
+var import_node_path35 = require("node:path");
+init_dist2();
+init_scheduling();
+
+// @recovered-fragment 2/4
+init_grok_bot_connect();
+init_grok_bot_pb();
+init_esm2();
+
+// @recovered-fragment 3/4
+init_errors();
+init_invariant();
+init_cursor_inference();
+
+// @recovered-fragment 4/4
 var IDENTITY_BACKFILL_SENTINEL_FILENAME = "agent-identity-backfill.json";
 var TEMPORAL_CREATE_GATE = "sand_create_temporal_agents";
 function harnessKindOf(harness) {
@@ -560,3 +581,4 @@ function startAgentIdentity({
     reconcileBeforeResume: (signal) => reconcileBeforeResume(false, signal)
   };
 }
+

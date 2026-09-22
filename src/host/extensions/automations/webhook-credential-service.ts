@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/webhook-credential-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs54 = require("node:fs");
 var import_node_path97 = require("node:path");
 init_dashboard_pb();
@@ -139,3 +144,4 @@ var SandWebhookCredentialService = class {
     });
   }
 };
+

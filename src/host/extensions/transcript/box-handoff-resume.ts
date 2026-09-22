@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/box-handoff-resume.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BoxHandoffResume = class {
   constructor(tm) {
     this.tm = tm;
@@ -171,3 +176,4 @@ var BoxHandoffResume = class {
     );
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/draft-send-sweep.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function sweepStrandedDraftSends(db, isInFlight) {
   const settledEntries = [];
   for (const entry of db.getTranscriptEntries()) {
@@ -10,3 +15,4 @@ function sweepStrandedDraftSends(db, isInFlight) {
   }
   return settledEntries;
 }
+

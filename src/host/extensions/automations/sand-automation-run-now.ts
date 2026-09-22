@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/sand-automation-run-now.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm2();
 var SAND_AUTOMATION_RUN_NOW_LISTENER_IN_SESSION_MESSAGE = "Only scheduled routines can be run from this conversation; run listener routines from the main conversation.";
 var REFUSAL_CODES = /* @__PURE__ */ new Set([
@@ -31,3 +36,4 @@ async function runSandAutomationNowInSession(deps, args) {
     throw error42;
   }
 }
+

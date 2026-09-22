@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/sand-automation-fire-consumer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 init_errors();
 init_system_errno();
@@ -757,3 +762,4 @@ var MalformedPollReplyError = class extends SandDomainError {
     super(`automation poll ${path31} replied with a malformed body`);
   }
 };
+

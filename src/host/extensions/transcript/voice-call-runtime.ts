@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/voice-call-runtime.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs97 = require("node:fs");
+var import_node_path161 = require("node:path");
+init_errors();
+
+// @recovered-fragment 2/2
 var VOICE_CALLS_DIR = "voice-calls";
 function voiceCallsDir(agentId) {
   return (0, import_node_path161.join)(resolveSandAgentDir(agentId), VOICE_CALLS_DIR);
@@ -514,3 +524,4 @@ async function resolveSessionOrRefusal(tm, agentId) {
     return { kind: "unavailable" };
   }
 }
+

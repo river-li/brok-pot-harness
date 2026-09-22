@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/agent-run-error.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_utils_pb();
+init_esm2();
+
+// @recovered-fragment 2/2
 init_unknown_record();
 var SAND_INCLUDED_LIMIT_REASON = "sand_included_limit";
 var ENTERPRISE_GROK_BOT_TRIAL_CAP_REASON = "enterprise_grok_bot_trial_cap";
@@ -300,3 +309,4 @@ function checkoutDeepControlUrl(action) {
   }
   return url2;
 }
+

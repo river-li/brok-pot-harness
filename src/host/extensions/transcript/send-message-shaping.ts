@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/send-message-shaping.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises77 = require("node:fs/promises");
+var import_node_path155 = require("node:path");
+
+// @recovered-fragment 2/2
 init_selected_context_pb();
 function buildComposedOfflineNote(composedAtMs) {
   if (!Number.isFinite(composedAtMs)) return "";
@@ -348,3 +357,4 @@ async function statAttachedFileSizes(filePaths) {
   );
   return sizes;
 }
+

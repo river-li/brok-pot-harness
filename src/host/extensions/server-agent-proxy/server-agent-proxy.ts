@@ -1,3 +1,19 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/server-agent-proxy/server-agent-proxy.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_crypto62 = require("node:crypto");
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_grok_bot_connect();
+init_esm2();
+init_esm3();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 3/3
 var SERVER_AGENT_PROXY_TAIL_LINGER_MS = 6e4;
 var SERVER_AGENT_PROXY_RECONCILE_MIN_INTERVAL_MS = 3e4;
 var SERVER_AGENT_PROXY_ROOMS_CAPABILITY_TTL_MS = 6e4;
@@ -402,3 +418,4 @@ function createServerAgentProxy(deps) {
     }
   };
 }
+

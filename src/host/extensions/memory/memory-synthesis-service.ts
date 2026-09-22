@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/memory/memory-synthesis-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto57 = require("node:crypto");
+init_dist4();
+init_scheduling();
+
+// @recovered-fragment 2/2
 init_zod();
 init_errors();
 var MEMORY_SYNTHESIS_PROMPT_MARKER = "<<SAND_MEMORY_SYNTHESIS_V1>>";
@@ -449,3 +459,4 @@ var MemorySynthesisService = class {
     });
   }
 };
+

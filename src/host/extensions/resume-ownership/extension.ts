@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/resume-ownership/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_grok_bot_connect();
+init_grok_bot_pb();
+init_esm2();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var HARNESS_MIGRATION_WINDOW_MS = 10 * 6e4;
 var HARNESS_MIGRATION_CUTOVER_DRAIN_MS = 9e4;
 var TERMINAL_MIGRATION_RPC_CODES = /* @__PURE__ */ new Set([
@@ -154,3 +167,4 @@ var resumeOwnershipExtension = defineHostExtension({
     };
   }
 });
+

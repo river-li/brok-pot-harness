@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/transcript-manager.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path172 = require("node:path");
+var import_node_url18 = require("node:url");
+init_scheduling();
+init_invariant();
+
+// @recovered-fragment 2/2
 var UNWIRED_TURN_EXECUTION = {
   canExecute: false,
   canExecuteGroupMember: false,
@@ -871,3 +882,4 @@ var TranscriptManager = class {
     return this.draftSends.discardDraft(...args);
   }
 };
+

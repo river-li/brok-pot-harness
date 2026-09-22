@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-mutations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs85 = require("node:fs");
+var import_promises67 = require("node:fs/promises");
+var import_node_path140 = require("node:path");
+
+// @recovered-fragment 2/2
 async function setAgentAvatarBytes(host, db, dbPath, agentId, pngBytes, activeAgentId) {
   const agentDir = (0, import_node_path140.dirname)(dbPath);
   for (const name17 of listConventionalAvatarFilenames(agentDir)) {
@@ -55,3 +65,4 @@ async function recoverAgentWithMissingDb(host, args) {
     agentHasMemory: (candidate) => host.memory.agentHasContent(candidate)
   });
 }
+

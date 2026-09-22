@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/agent-clone.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs77 = require("node:fs");
 var import_node_path127 = require("node:path");
 init_errors();
@@ -102,3 +107,4 @@ function cloneAgentDir(sourceDir, targetDir, newAgentId, cloneName, createAgentD
     throw error42;
   }
 }
+

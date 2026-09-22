@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/resume-ownership/applied-migration-barrier.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 init_invariant();
 var AppliedMigrationBarrier = class {
@@ -72,3 +77,4 @@ var AppliedMigrationBarrier = class {
     };
   }
 };
+

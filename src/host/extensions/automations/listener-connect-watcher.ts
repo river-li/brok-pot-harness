@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/listener-connect-watcher.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var DEFAULT_WATCH_TIMEOUT_MS = 60 * 60 * 1e3;
 var MAX_REMEMBERED_GRANTED_REPOS = 32;
@@ -175,3 +180,4 @@ var ListenerConnectWatcher = class {
 function watchKey(platform2, agentId) {
   return `${platform2}\0${agentId}`;
 }
+

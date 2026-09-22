@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/server-agent-proxy/idle-destroying-agent.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_http5 = require("node:http");
 var import_node_https4 = require("node:https");
 init_errors();
@@ -39,3 +44,4 @@ function createIdleDestroyingAgent({
 }) {
   return new URL(baseUrl).protocol === "https:" ? new IdleDestroyingHttpsAgent(idleMs) : new IdleDestroyingHttpAgent(idleMs);
 }
+

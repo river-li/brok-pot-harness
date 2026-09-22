@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/sand-pending-wake-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs94 = require("node:fs");
 var import_node_path153 = require("node:path");
 init_unknown_record();
@@ -162,3 +167,4 @@ var SandPendingWakeStore = class {
     }
   }
 };
+

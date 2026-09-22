@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/drafts/draft-sends.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 function isDraftMessage(message) {
   return message.type === "email-draft" || message.type === "slack-draft";
 }
@@ -508,3 +516,4 @@ var DraftSends = class {
     return true;
   }
 };
+

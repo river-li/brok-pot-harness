@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/virtual-card-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_grok_bot_connect();
 init_grok_bot_pb();
 init_utils_pb();
@@ -72,3 +77,4 @@ var VirtualCardService = class {
     };
   }
 };
+

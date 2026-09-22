@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/agent-db.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_fs79 = require("node:fs");
+var import_node_path128 = require("node:path");
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_errors();
+
+// @recovered-fragment 3/3
 var KV_PURPOSE = "purpose";
 var KV_LEGACY_BLOB_RETIREMENT_VERSION = "legacyStoreBlobRetirementVersion";
 function parseEntryRows(rows) {
@@ -852,3 +865,4 @@ var SandAgentDb = class {
     });
   }
 };
+

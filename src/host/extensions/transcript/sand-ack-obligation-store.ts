@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/sand-ack-obligation-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs93 = require("node:fs");
 var import_node_path152 = require("node:path");
 init_unknown_record();
@@ -113,3 +118,4 @@ var SandAckObligationStore = class {
     this.cache = pending;
   }
 };
+

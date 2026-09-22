@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/sand-automation-spend-guard.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SPEND_GUARD_IDLE_TTL_MS = 3 * 24 * 60 * 6e4;
 var SPEND_GUARD_MIN_UNREAD_COUNT = 15;
 var SPEND_GUARD_MIN_FIRES_SINCE_VIEWED = 20;
@@ -102,3 +107,4 @@ function renderSpendGuardNudgeReminder({
     "</system_reminder>"
   ].join("\n");
 }
+

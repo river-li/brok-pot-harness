@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/listener-integrations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto42 = require("node:crypto");
+init_dashboard_connect();
+init_dashboard_pb();
+
+// @recovered-fragment 2/2
 init_errors();
 init_invariant();
 init_cursor_inference();
@@ -216,3 +226,4 @@ function createListenerIntegrationReads(deps) {
     }
   };
 }
+

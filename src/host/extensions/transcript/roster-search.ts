@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/roster-search.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function isStoreUnreadable(error42) {
   return isUnknownRecord(error42) && error42.isSandAgentStoreUnreadable === true;
@@ -73,3 +78,4 @@ var RosterSearch = class {
     return matches.filter((match2) => this.tm.sessionStore.agentExists(match2.agentId));
   }
 };
+

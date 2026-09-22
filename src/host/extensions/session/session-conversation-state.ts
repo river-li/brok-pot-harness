@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-conversation-state.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var SandSessionConversationState = class {
   constructor(host) {
     this.host = host;
@@ -77,3 +85,4 @@ var SandSessionConversationState = class {
     }
   }
 };
+

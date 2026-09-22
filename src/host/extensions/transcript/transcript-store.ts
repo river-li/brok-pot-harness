@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/transcript-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function materialize2(entries) {
   const byId = /* @__PURE__ */ new Map();
   for (const entry of entries) {
@@ -56,3 +61,4 @@ function removeEntry(id) {
 function clearTranscript() {
   mirror = materialize2([]);
 }
+

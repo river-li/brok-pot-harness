@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_dist4();
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_sand_agent_model();
+init_errors();
+
+// @recovered-fragment 3/3
 var transcriptExtension = defineHostExtension({
   id: "transcript",
   dependencies: [
@@ -182,3 +195,4 @@ var transcriptExtension = defineHostExtension({
     return Object.assign(manager, { feedback: new FeedbackEntries(manager) });
   }
 });
+

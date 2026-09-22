@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/agent-db-serde.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_locale();
 init_unknown_record();
 var REQUEST_SOURCES2 = /* @__PURE__ */ new Set([
@@ -208,3 +213,4 @@ function parseMemoryPromptSnapshot(raw) {
   }
   return { render: parsed2.render, compactionEpoch: parsed2.compactionEpoch };
 }
+

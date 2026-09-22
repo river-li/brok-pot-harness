@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/memory/agent-state.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises61 = require("node:fs/promises");
+var import_node_path123 = require("node:path");
+
+// @recovered-fragment 2/2
 function describeAutomationWrite(automation, verb) {
   if (automation == null) {
     return stateWriteFailed(
@@ -197,3 +206,4 @@ function createSandAgentState(deps) {
     }
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-profile-files.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function updateAgentProfile(host, agentId, profile) {
   return await host.withAgentDb(agentId, async (db, dbPath) => {
     host.writeAgentProfileFile(agentId, profile);
@@ -77,3 +82,4 @@ async function getAgentAvatarPng(host, agentId) {
   );
   return await readAvatarBytesWithinDir(agentDir, derived) ?? await readLegacyStoredAvatar(host, agentId, readAvatarBytesWithinDir);
 }
+

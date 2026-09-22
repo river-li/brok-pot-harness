@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/transcript-entry-ids.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BOOT_TURN = "b";
 function nextEntryId(entries, kind) {
   const existingIds = new Set(entries.map((entry) => entry.id));
@@ -71,3 +76,4 @@ function countTrailingSendMessages(entries) {
   }
   return count;
 }
+

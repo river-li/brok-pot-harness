@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/connector-secret-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs80 = require("node:fs");
 var import_node_path129 = require("node:path");
 init_errors();
@@ -44,3 +49,4 @@ var SandConnectorSecretStore = class {
     (0, import_node_fs80.rmSync)(this.filePath(agentId, platform2), { force: true });
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/pending-card-sweeps.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function expirePendingCardEntries(kind, db, options2) {
   const expiredRequestIds = [];
   const onlyRequestId = options2?.onlyRequestId;
@@ -45,3 +50,4 @@ function settleVirtualCardApprovalEntry(db, args) {
   }
   return null;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/drafts/draft-send-calls.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function parseCreatedDraftId(resultText) {
   const parsed2 = parseDraftConnectorJson(resultText.trim());
   if (!parsed2.ok) return null;
@@ -58,3 +63,4 @@ function buildDraftSendCall(route, payload) {
   }
   return null;
 }
+

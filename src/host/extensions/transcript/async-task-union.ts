@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/async-task-union.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function markerLabel(marker17) {
   if (marker17.title != null && marker17.title.length > 0) return marker17.title;
   switch (marker17.kind) {
@@ -33,3 +38,4 @@ function mergeAsyncTasks(liveTasks, ledgerMarkers) {
   }
   return merged.sort((a, b2) => a.startedAtMs - b2.startedAtMs || a.id.localeCompare(b2.id));
 }
+

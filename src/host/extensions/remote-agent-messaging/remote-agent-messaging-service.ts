@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/remote-agent-messaging/remote-agent-messaging-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_grok_bot_pb();
 init_errors();
 var REMOTE_AGENT_MESSAGE_TIMEOUT_MS = 2e4;
@@ -77,3 +82,4 @@ function createRemoteAgentMessagingService(deps) {
     }
   };
 }
+

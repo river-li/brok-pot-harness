@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/send-pipeline.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_path160 = require("node:path");
+var import_node_url15 = require("node:url");
+
+// @recovered-fragment 2/3
+init_invariant();
+
+// @recovered-fragment 3/3
 var SendPipeline = class {
   constructor(tm) {
     this.tm = tm;
@@ -392,3 +404,4 @@ var SendPipeline = class {
     this.appendSendMessageEntry(entry);
   }
 };
+

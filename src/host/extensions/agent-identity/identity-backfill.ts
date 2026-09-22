@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/agent-identity/identity-backfill.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises25 = require("node:fs/promises");
 var import_node_path34 = require("node:path");
 init_dist3();
@@ -189,3 +194,4 @@ async function runIdentityBackfill(deps) {
   }
   return { minted, skipped: skipped2, refused: refused2, failed: failed2, stopped: stopped2 };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/session-paths.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises62 = require("node:fs/promises");
 var import_node_os26 = require("node:os");
 var import_node_path130 = require("node:path");
@@ -37,3 +42,4 @@ async function statIfExists(path31) {
     return void 0;
   }
 }
+

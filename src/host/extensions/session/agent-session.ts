@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/agent-session.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs86 = require("node:fs");
+var import_promises69 = require("node:fs/promises");
+var import_node_path141 = require("node:path");
+var import_node_util13 = require("node:util");
+init_dist4();
+init_errors();
+
+// @recovered-fragment 2/2
 function resolveProfileName(trimmedName, current) {
   if (trimmedName.length > 0) return trimmedName;
   if (current?.name != null && current.name.trim().length > 0) return current.name;
@@ -707,3 +720,4 @@ var SandAgentSessionStore = class {
     });
   }
 };
+

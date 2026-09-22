@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/agent-db-recovery.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_sqlite5 = require("node:sqlite");
+init_errors();
+
+// @recovered-fragment 2/2
 var SandAgentDbIntegrityError = class extends SandDomainError {
   name = "SandAgentDbIntegrityError";
 };
@@ -174,3 +183,4 @@ function salvageStoreDb(sourcePath, freshDb) {
   }
   return counts;
 }
+

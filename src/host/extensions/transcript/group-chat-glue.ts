@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/group-chat-glue.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs96 = require("node:fs");
+var import_node_path158 = require("node:path");
+
+// @recovered-fragment 2/2
 init_errors();
 var SandGroupCreateError = class extends SandDomainError {
   name = "SandGroupCreateError";
@@ -739,3 +748,4 @@ var GroupChatGlue = class {
     return groupHistoryFromTranscriptEntries(entries);
   }
 };
+

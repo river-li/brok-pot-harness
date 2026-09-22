@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/agent-to-agent-messaging.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto73 = require("node:crypto");
 function partitionAgentInbound(messages2) {
   const priority = [];
@@ -429,3 +434,4 @@ var AgentToAgentMessaging = class {
     }
   }
 };
+

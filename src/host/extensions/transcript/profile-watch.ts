@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/profile-watch.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs92 = require("node:fs");
 var import_node_path151 = require("node:path");
 var PROFILE_WATCH_DEBOUNCE_MS = 50;
@@ -135,3 +140,4 @@ var ProfileWatch = class {
     return { name: name17, description: description9, filePath, settingsFilePath };
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/memory/server-shard-sync.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs75 = require("node:fs");
 var import_node_path124 = require("node:path");
 init_grok_bot_pb();
@@ -73,3 +78,4 @@ var ServerShardSync = class {
     await this.pushes;
   }
 };
+

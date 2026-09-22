@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/run-lifecycle.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto74 = require("node:crypto");
+
+// @recovered-fragment 2/2
 var RUN_WATCHDOG_DEFAULT_MS = 12e4;
 var RUN_WATCHDOG_GRACE_DEFAULT_MS = 3e4;
 var FORCED_PAUSE_REAP_DEFAULT_MS = 5 * 6e4;
@@ -552,3 +560,4 @@ var RunLifecycle = class {
     this.tm.roster.watchSessionProfile(session);
   }
 };
+

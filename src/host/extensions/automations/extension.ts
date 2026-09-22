@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/automations/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_path98 = require("node:path");
+
+// @recovered-fragment 2/3
+init_dashboard_connect();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 3/3
 var HUB_RECONCILE_INTERVAL_MS = 15e3;
 var RELAY_POLL_INTERVAL_MS = 4e3;
 var CONNECT_WATCH_POLL_INTERVAL_MS = 5e3;
@@ -339,3 +352,4 @@ var automationsExtension = defineHostExtension({
     };
   }
 });
+

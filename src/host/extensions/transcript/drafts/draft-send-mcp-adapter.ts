@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/drafts/draft-send-mcp-adapter.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_scheduling();
+
+// @recovered-fragment 2/2
 init_errors();
 var draftSendDeadline = createDeadlinePolicy({
   name: "draft-send-call",
@@ -39,3 +48,4 @@ function createDraftExecutionAdapter(mcp) {
     }
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/send-thread-stamping.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function resolveSendReplyThreading(tm, replyToIdOption, isForkOption, readAddressedTranscript) {
   const transcriptForReply = replyToIdOption != null && replyToIdOption.length > 0 ? readAddressedTranscript() : [];
   const replyToId = replyToIdOption != null && replyToIdOption.length > 0 ? tm.turnRuntime.resolveReplyTarget(transcriptForReply, replyToIdOption) : void 0;
@@ -24,3 +29,4 @@ function applyAutoReplyThread(tm, message, session, entries) {
   if (!entries.some((entry) => entry.id === target)) return message;
   return withReplyTo(message, target);
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/voice-call/final-word.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function freshTurn() {
   return { closingText: "", lastWrittenToTheChat: "", spokenOnTheLine: false };
 }
@@ -56,3 +61,4 @@ var VoiceCallFinalWord = class _VoiceCallFinalWord {
     this.turns.delete(agentId);
   }
 };
+

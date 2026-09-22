@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/conversation-size-limits.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises63 = require("node:fs/promises");
+var import_node_path131 = require("node:path");
+init_errors();
+
+// @recovered-fragment 2/2
 var SOFT_LIMIT_DEFAULT_BYTES = 256 * 1024 * 1024;
 var HARD_LIMIT_DEFAULT_BYTES = 1024 * 1024 * 1024;
 var GC_PENDING_WRITE_RETENTION_MS = 6e4;
@@ -164,3 +174,4 @@ async function ensureConversationCapacityForTurn(host, dbPath, db) {
     throw new SandConversationTooLargeError(afterBytes, hardLimitBytes);
   }
 }
+

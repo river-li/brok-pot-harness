@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/session/agent-db-transcript-pages.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function readTranscriptPage(statements, query) {
   const beforeSeq = query.beforeSeq ?? null;
   const sinceMs = query.sinceMs ?? null;
@@ -60,3 +65,4 @@ function readTranscriptTail(statements, query) {
     nextBeforeSeq: hasMore && typeof oldestSeq === "number" ? oldestSeq : void 0
   };
 }
+

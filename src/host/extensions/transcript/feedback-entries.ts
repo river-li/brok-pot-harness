@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/feedback-entries.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function endsOnPlainAgentReply(entries) {
   for (let i = entries.length - 1; i >= 0; i--) {
     const entry = entries[i];
@@ -45,3 +50,4 @@ var FeedbackEntries = class {
     return updated;
   }
 };
+

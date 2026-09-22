@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/memory/memory-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto58 = require("node:crypto");
+var import_node_fs74 = require("node:fs");
+var import_node_path122 = require("node:path");
+
+// @recovered-fragment 2/2
 var PROFILE_FILENAME = MEMORY_PROFILE_FILENAME;
 var LOG_DIRNAME = MEMORY_LOG_DIRNAME;
 var FACT_LINE = MEMORY_FACT_LINE;
@@ -518,3 +528,4 @@ var MemoryService = class {
     return targets.sort((a, b2) => a.agentId.localeCompare(b2.agentId));
   }
 };
+

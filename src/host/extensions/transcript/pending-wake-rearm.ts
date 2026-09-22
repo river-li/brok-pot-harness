@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/transcript/pending-wake-rearm.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist3();
 init_errors();
 var PENDING_WAKE_STALE_MAX_AGE_MS = 48 * 60 * 60 * 1e3;
@@ -241,3 +246,4 @@ var PendingWakeRearm = class {
     return true;
   }
 };
+
