@@ -1,0 +1,1 @@
+import{c as r,j as i,ab as a}from"./index-C6zjACOA.js";function c(n){const t=r.c(2),{description:e}=n;let s;return t[0]!==e?(s=i.jsx(a,{isTruncating:!0,title:e,children:e}),t[0]=e,t[1]=s):s=t[1],s}export{c as default};
