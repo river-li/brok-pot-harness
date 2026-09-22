@@ -1,40 +1,47 @@
-# Repository Guidelines
+# Repository guidance
 
-## Project Structure & Module Organization
+## Scope and fidelity
 
-This repository contains an exported Grokbot Harness snapshot, with esbuild bundles unpacked into their original path structure.
+This is the bfe1879 snapshot. Preserve its package paths, module behavior and
+version. Local functionality is conditional: retain vendor login, billing, cloud
+provisioning and synchronization implementations, disable them with the local
+build profile. Do not restore these services by deleting code or bypassing
+original action approvals. Eval execution is not required for current recovery.
 
-- `src/host/`: host startup, gateway, persistence, and feature extensions.
-- `src/shared/`: shared protocols, settings, media helpers, and Node-specific integrations.
-- `src/sand-eval-runner/`: evaluation runner logic.
-- `packages/`: agent, MCP, shell execution, and harness components; many contain extracted `dist/` JavaScript.
-- `dune/src/`: host extension infrastructure, stores, RPC, and scheduling.
-- `sand-host/`: bundled runtime entry points, workers, and box scripts. No dedicated asset or test directory is present.
+## Source and build
 
-Extracted `.ts` files can contain emitted JavaScript and references resolved only inside the original bundle. Treat them as inspection material unless you restore the missing module/build context.
+The repository root is the build root. Read README.md and MIGRATION_STATUS.md.
+Recovered files are emitted bundle fragments, not standalone TypeScript modules.
+Preserve `// @recovered-fragment i/n` boundaries, original generated identifiers
+and fragment order. Do not bulk-format legacy sources or add guessed imports.
+Local adapters under packages/grok-bot-harness/src/local are strict TypeScript.
+Builds reconstruct .runtime/build from reconstruction-manifest.json; never edit
+.runtime outputs to implement changes. sand-host is the immutable release
+baseline. Native layout and newer upstream changes take precedence over an old
+implementation copied from another checkout.
 
-## Build, Test, and Development Commands
+## Commands and evidence
 
-No root package manifest, dependency lockfile, build scripts, or development server configuration is included. `sand-host/package.json` only declares CommonJS mode; there are no configured `npm run build` or `npm test` commands.
+Use npm run build, npm run check:local and relevant runtime/tests checks.
+Use npm run prepare:desktop after desktop edits. npm start runs only this
+repository's gbh-local stack; gateway 1540, noVNC 6180/6181. Check service readiness
+before live tests. Inspect test coverage before claiming a component works:
+fixture-model tests prove local execution, not external inference. Keep the
+migration status accurate; do not inherit another version's passing claim.
 
-- `git diff --check`: check changes for whitespace errors.
-- `node --check sand-host/host-main.cjs`: check host bundle syntax without executing it.
-- `node --check sand-host/sand-eval-runner.cjs`: check evaluation bundle syntax.
+## Isolation and credentials
 
-The host bundle expects a sibling `deps/` directory that is absent from this snapshot. Local execution requires restoring its dependencies and runtime configuration. Editing extracted files does not automatically update bundled entry points.
+Keep resources needed at runtime inside this repository. Do not symlink to the
+old checkout or installed Grok Bot.app. Never copy .env, gateway tokens, profiles
+or application data from another repository. Use environment variables for model
+keys, never print them or raw environments. Do not change other Compose stacks.
+Tests should use private data/containers, clean up their own processes and retain
+only useful diagnostics under ignored .runtime/tests.
 
-## Coding Style & Naming Conventions
+## Documentation and changes
 
-Match nearby code: two-space indentation, semicolons, double-quoted strings, camelCase functions and variables, and kebab-case filenames. Preserve existing generated identifiers where renaming could break bundle references. Keep patches focused; avoid bulk formatting extracted code. No formatter or linter configuration is included.
-
-## Testing Guidelines
-
-No test framework, test naming convention, or coverage threshold is established. For changes, run applicable syntax checks and document a reproducible validation procedure. Syntax checks do not establish runtime correctness. When adding executable tests, document their runner and command alongside them.
-
-## Commit & Pull Request Guidelines
-
-The history currently contains one commit, `Initial import: sand-host with esbuild bundles unpacked`; no broader convention is established. Use concise, imperative subjects describing the affected component. PRs should explain the behavior changed, affected paths, validation performed, and any runtime limitations. Link relevant issues and include screenshots only for visible UI changes.
-
-## Security & Configuration
-
-Keep credentials and local configuration out of commits. `.gitignore` excludes `.env`, `.env.*`, logs, and `node_modules/`; inspect diffs for embedded secrets before submitting.
+README files describe module responsibilities and operational use. Scoped
+AGENTS files add maintenance constraints at component boundaries. Update both
+when their directory's build, ownership or interfaces change. Prefer focused
+patches, matching nearby naming/style. Run git diff --check before handing off.
+Do not commit or publish unless requested. Existing user changes must be preserved.
