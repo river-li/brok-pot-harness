@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/read-email-attachment-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_url16 = require("node:url");
+init_zod();
+
+// @recovered-fragment 2/2
 var READ_EMAIL_ATTACHMENT_ID_MAX_LENGTH = 32;
 var readEmailAttachmentParameters = external_exports.object({
   attachment_id: external_exports.string().trim().min(1).max(READ_EMAIL_ATTACHMENT_ID_MAX_LENGTH).describe(`An attachment_id listed by ${SAND_READ_EMAIL_THREAD_TOOL_NAME}.`)
@@ -78,3 +87,4 @@ function createReadEmailAttachmentTool(deps) {
     execute: async (_ctx, args, d) => readEmailAttachment(d, args)
   });
 }
+

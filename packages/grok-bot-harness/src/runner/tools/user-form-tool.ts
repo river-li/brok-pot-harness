@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/user-form-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_invariant();
+var import_tldts2 = __toESM(require_cjs3());
+init_zod();
+
+// @recovered-fragment 2/2
 var USER_FORM_MAX_FIELDS = 8;
 var USER_FORM_MAX_TITLE_LENGTH = 120;
 var USER_FORM_MAX_INSTRUCTION_LENGTH = 400;
@@ -227,3 +237,4 @@ ${buildUserFormSkippedFieldsNote(skipped2)}` : "");
     }
   });
 }
+

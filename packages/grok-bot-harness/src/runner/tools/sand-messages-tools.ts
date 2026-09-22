@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-messages-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_buffer10 = require("node:buffer");
+var import_node_path169 = require("node:path");
+init_dist4();
+init_errors();
+
+// @recovered-fragment 2/3
+init_zod();
+
+// @recovered-fragment 3/3
 var logger106 = createLogger("sand:messages-tools");
 function messagesToolAction(toolIdentifier) {
   return toolIdentifier === "SEND_IMESSAGE" ? "send-imessage" : "read-messages";
@@ -368,3 +382,4 @@ function createMessagesTools(deps) {
     })
   ];
 }
+

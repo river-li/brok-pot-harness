@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/team-access-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_OFFER_TEAM_ACCESS_TOOL_NAME = "offer_team_access";
 var SAND_OFFER_SLACK_CONNECT_TOOL_NAME = "offer_slack_connect";
@@ -36,3 +41,4 @@ function createOfferSlackConnectTool(deps) {
     }
   });
 }
+

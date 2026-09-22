@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-app-home-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_UPDATE_APP_HOME_TOOL_NAME = "update_app_home";
 var updateAppHomeParameters = external_exports.object({
   action: external_exports.enum(["set", "clear"]).describe("set replaces the whole board with the fields below; clear empties it."),
@@ -37,3 +45,4 @@ function createUpdateAppHomeTool(appHome) {
     }
   });
 }
+

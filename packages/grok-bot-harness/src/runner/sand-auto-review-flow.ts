@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-auto-review-flow.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 function classify2(args, mode) {
   const { ctx, options: options2, spec, target } = args;
@@ -62,3 +67,4 @@ async function runSandAutoReviewFlow(args) {
   if (cancelledAfterApproval !== void 0) return cancelledAfterApproval;
   return approval.approved ? { allowed: { by: "user" } } : { allowed: false, reason: approval.reason ?? decision.reason };
 }
+

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-auto-review.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto40 = require("node:crypto");
+init_errors();
+
+// @recovered-fragment 2/2
 var SAND_AUTO_REVIEW_APPROVAL_TTL_MS = 10 * 60 * 1e3;
 var SAND_AUTO_REVIEW_MAX_PENDING_PER_AGENT = 4;
 var SAND_AUTO_REVIEW_HOST_GENERATION = (0, import_node_crypto40.randomUUID)();
@@ -317,3 +326,4 @@ var SandAutoReviewController = class {
 function fingerprintSandAutoReviewTarget(target) {
   return (0, import_node_crypto40.createHash)("sha256").update(JSON.stringify(target)).digest("hex");
 }
+

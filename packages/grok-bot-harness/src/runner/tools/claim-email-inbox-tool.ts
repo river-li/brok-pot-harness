@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/claim-email-inbox-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var CLAIM_EMAIL_INBOX_USERNAME_MAX_LENGTH = 64;
 var CLAIM_EMAIL_INBOX_DISPLAY_NAME_MAX_LENGTH = 128;
@@ -84,3 +89,4 @@ function createClaimEmailInboxTool(deps) {
     execute: async (ctx, args, d) => claimEmailInbox({ ...d, signal: ctx.signal }, args)
   });
 }
+

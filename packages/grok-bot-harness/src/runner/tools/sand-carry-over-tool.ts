@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-carry-over-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_CARRY_OVER_TOOL_NAME = "propose_carry_over";
 var SAND_CARRY_OVER_SUBAGENT_TYPE = "carryOver";
@@ -70,3 +75,4 @@ function createCarryOverTool(deps) {
     execute: async (_ctx, args, d) => await d.onProposal(carryOverProposalOf(args))
   });
 }
+

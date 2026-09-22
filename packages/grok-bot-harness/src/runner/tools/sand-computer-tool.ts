@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-computer-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_agent_pb();
+init_computer_use_tool_pb();
+init_invariant();
+init_zod();
+
+// @recovered-fragment 2/2
 var MOUSE_BUTTONS = {
   left: MouseButton.LEFT,
   right: MouseButton.RIGHT,
@@ -581,3 +592,4 @@ function observeComputerTool(tool, name17, deps) {
     }
   };
 }
+

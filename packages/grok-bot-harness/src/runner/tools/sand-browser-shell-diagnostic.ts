@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-browser-shell-diagnostic.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_buffer4 = require("node:buffer");
 init_shell_exec_pb();
 function describeSignal(signal) {
@@ -55,3 +60,4 @@ function describeSandBrowserShellError(result) {
       return "Browser driver shell failed (unknown)";
   }
 }
+

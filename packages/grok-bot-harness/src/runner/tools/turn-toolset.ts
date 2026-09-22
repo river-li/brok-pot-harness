@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/turn-toolset.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_request_context_exec_pb();
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_BOX_READ_TOOL_DESCRIPTION = `Reads a file on your own computer (the box), the same filesystem ${SAND_BOX_SHELL_TOOL_NAME} and CopyToBox act on. This is your default surface, including your own files under /home/box.
 
 Text files include line numbers and support offset/limit paging. Image files (jpeg/jpg, png, gif, webp) are returned inline so you can see them. PDF files are converted to text.`;
@@ -1180,3 +1189,4 @@ function buildTurnTools(host, turn, props) {
     dynamicToolRegistry
   );
 }
+

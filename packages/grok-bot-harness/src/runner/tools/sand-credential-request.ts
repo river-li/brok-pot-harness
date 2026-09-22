@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-credential-request.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var CREDENTIAL_REQUEST_MAX_PURPOSE_LENGTH = 300;
 function clampCredentialPurpose(purpose) {
@@ -36,3 +41,4 @@ function buildCredentialResolvedAck(args) {
       return `[The 1Password login fill failed${detail != null && detail.length > 0 ? `: ${detail}` : ""}. Follow that guidance and inspect the live page before sending the credential-request again. Saved URL paths and queries are never matching constraints.]`;
   }
 }
+

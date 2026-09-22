@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-reaction-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_REACT_TO_MESSAGE_TOOL_NAME = "ReactToMessage";
 var REACT_TO_MESSAGE_DESCRIPTION_LEAD = "React to one of the USER's messages with a single emoji tapback (like an iMessage reaction), attributed to you and shown as a small pill on their message.";
@@ -27,3 +32,4 @@ function createReactToMessageTool(deps) {
     }
   });
 }
+

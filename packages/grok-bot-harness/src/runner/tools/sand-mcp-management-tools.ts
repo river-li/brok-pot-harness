@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-mcp-management-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist2();
+init_zod();
+
+// @recovered-fragment 2/2
 var searchPluginsParameters = external_exports.object({
   query: external_exports.string().trim().optional().describe(
     `Optional. What you're looking for, in natural language (e.g. "manage linear issues" or "write word documents") \u2014 results come back ranked by relevance. Omit to list the whole catalog.`
@@ -714,3 +723,4 @@ function createMcpManagementTools(management, getRequestingAgentId, isAwaitingUs
     ]
   ];
 }
+

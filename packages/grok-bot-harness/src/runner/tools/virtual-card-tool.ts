@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/virtual-card-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_invariant();
 init_zod();
 var VIRTUAL_CARD_MAX_AMOUNT_CENTS = 5e5;
@@ -128,3 +133,4 @@ function createRequestVirtualCardTool(deps) {
     execute: async (_ctx, args, d) => runRequestVirtualCard(args, d)
   });
 }
+

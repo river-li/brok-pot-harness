@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-sort-memories-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto81 = require("node:crypto");
+init_errors();
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_SORT_MEMORIES_TOOL_NAME = "sort_memories";
 var SAND_SORT_MEMORIES_SUBAGENT_TYPE = "sortMemories";
 function isSortMemoriesSubagentType(subagentType) {
@@ -250,3 +260,4 @@ function createSortMemoriesTool(deps) {
     }
   });
 }
+

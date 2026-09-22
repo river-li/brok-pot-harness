@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/draft-email-html.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist3();
 var BARE_URL = /https?:\/\/[^\s<>"]+/g;
 var TRAILING_PROSE_PUNCTUATION = /[.,;:!?]$/;
@@ -26,3 +31,4 @@ function withoutTrailingProsePunctuation(candidate) {
 function closesUnopenedParenthesis(url2) {
   return url2.endsWith(")") && url2.split("(").length < url2.split(")").length;
 }
+

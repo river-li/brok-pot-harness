@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/messages-grants-gate.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto80 = require("node:crypto");
 init_dist4();
 init_errors();
@@ -85,3 +90,4 @@ function gateMessagesOnGrants(messages2, grants, report) {
     }
   };
 }
+

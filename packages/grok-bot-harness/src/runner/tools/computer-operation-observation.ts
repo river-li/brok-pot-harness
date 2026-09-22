@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/computer-operation-observation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto79 = require("node:crypto");
 init_dist4();
 init_scheduling();
@@ -151,3 +156,4 @@ function combinedMode(getSelection) {
 function isTimeout(error42) {
   return error42 instanceof ToolTimeoutError || isFusedStepGuardTimeoutReason(error42) || error42 instanceof Error && error42.name === "TimeoutError" || error42 instanceof ConnectError && error42.code === Code.DeadlineExceeded;
 }
+

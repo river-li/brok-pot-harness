@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/browser-operation-observation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto65 = require("node:crypto");
+
+// @recovered-fragment 2/2
 var durations = createHistogram("sand.browser.operation.duration_ms", {
   description: "Terminal browser tool execution attempts, including admission failures; count is the attempt denominator",
   labelNames: ["operation", "outcome", "stage", "code", "harness", "cdp_method"]
@@ -141,3 +149,4 @@ var BrowserOperationObservation = class {
     }
   }
 };
+

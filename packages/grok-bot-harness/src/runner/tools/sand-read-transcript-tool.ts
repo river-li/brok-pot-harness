@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-read-transcript-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_READ_TRANSCRIPT_TOOL_NAME = "ReadTranscript";
 var optionalId = (description9) => external_exports.string().trim().optional().describe(description9);
 function presentId(value) {
@@ -83,3 +91,4 @@ function createReadTranscriptTool(deps) {
     }
   });
 }
+

@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/request-onepassword-connect-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME = "request_1password_connect";
 var ONEPASSWORD_CONNECT_CARD_HINT = `Nothing was shown to the user. To ask them to connect one, call ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, and only if the task needs their saved logins; otherwise use request_box_help for the sign-in.`;
 var requestOnePasswordConnectParameters = external_exports.object({}).strict();
@@ -30,3 +38,4 @@ function createRequestOnePasswordConnectTool(deps) {
     }
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/screenshot-image.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_buffer5 = require("node:buffer");
 async function shrinkImageForModel(ctx, bytes, options2) {
   const bounded = await boundInlineImageForModel(ctx, bytes, options2);
@@ -6,3 +11,4 @@ async function shrinkImageForModel(ctx, bytes, options2) {
     mimeType: bounded.mimeType
   };
 }
+

@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-browser-driver-source.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto64 = require("node:crypto");
+
+// @recovered-fragment 2/2
 var SAND_BROWSER_DRIVER_BOX_DIR = "/tmp/.sand-browser";
 var SAND_BROWSER_DRIVER_SHELL_TIMEOUT_MS = 12e4;
 function sandBrowserDriverBoxPath(source) {
@@ -9,3 +17,4 @@ var SAND_BROWSER_STALE_REF_ERROR = "Unknown or stale ref";
 var SAND_BROWSER_HIDDEN_TARGET_ERROR = "Hidden target";
 var SAND_BROWSER_DRIVER_SOURCE = sand_browser_driver_default;
 var SAND_BROWSER_DRIVER_BOX_PATH = sandBrowserDriverBoxPath(SAND_BROWSER_DRIVER_SOURCE);
+

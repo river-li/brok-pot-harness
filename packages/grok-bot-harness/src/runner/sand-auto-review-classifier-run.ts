@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-auto-review-classifier-run.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_smart_mode_classifier_exec_pb();
 var SAND_AUTO_REVIEW_BLOCK_REASON = "Blocked by Auto-review";
 var SAND_AUTO_REVIEW_CLASSIFIER_MAX_ATTEMPTS = 1;
@@ -40,3 +45,4 @@ async function runSandAutoReviewClassifier(args) {
     return { kind: "reject", reason: args.errorReason };
   }
 }
+

@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/send-message-encoding.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path170 = require("node:path");
+init_agent_pb();
+init_send_message_tool_pb();
+
+// @recovered-fragment 2/2
 function createSendMessageToolCall(toolCall) {
   return new ToolCall({
     tool: {
@@ -271,3 +281,4 @@ async function resolveBoxMediaAttachment(request5) {
     return null;
   }
 }
+

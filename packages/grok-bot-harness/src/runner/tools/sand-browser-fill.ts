@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-browser-fill.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_buffer7 = require("node:buffer");
+init_scheduling();
+init_background_shell_exec_pb();
+init_errors();
+var import_tldts3 = __toESM(require_cjs3());
+
+// @recovered-fragment 2/2
 var BOX_CDP_PORT_BASE2 = 9222;
 var SENSITIVE_BROWSER_POLL_MS = 100;
 function createSandBrowserOpRunner(deps) {
@@ -955,3 +967,4 @@ async function submitByEnterInLastFilledField(ctx, runner, entry, belt) {
     ...result.opDurationMs !== void 0 ? { opDurationMs: result.opDurationMs } : {}
   };
 }
+

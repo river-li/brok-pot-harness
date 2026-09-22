@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/read-email-thread-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var READ_EMAIL_THREAD_DEFAULT_MAX_MESSAGES = 20;
 var READ_EMAIL_THREAD_MAX_MESSAGES = 50;
@@ -108,3 +113,4 @@ function createReadEmailThreadTool(deps) {
     execute: async (_ctx, args, d) => readEmailThread(d, args)
   });
 }
+

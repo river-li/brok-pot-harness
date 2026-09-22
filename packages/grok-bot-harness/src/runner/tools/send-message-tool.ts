@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/send-message-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path171 = require("node:path");
+var import_node_url17 = require("node:url");
+init_send_message_tool_pb();
+
+// @recovered-fragment 2/2
 var SAND_AWAITING_USER_SEND_MESSAGE_BLOCKED = "This turn is already waiting on the user (you sent a question widget or handed the box back to them), so this message was not delivered. Wait for the user \u2014 their response arrives as the next message \u2014 then say this on your next turn.";
 async function resolveCloudAgentTitleBestEffort(ctx, bcId, deps) {
   if (deps.resolveCloudAgentTitle == null) return void 0;
@@ -346,3 +356,4 @@ function createSendMessageTool2(deps) {
     }
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-auto-review-classifier-context.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function projectSandAutoReviewUserText(text2) {
   const body = stripLeadingSandTurnAssemblyNotes(
     stripSystemReminderBlocks(stripInstructionsUpdates(stripAgentProfileUpdates(text2)))
@@ -49,3 +54,4 @@ function createSandAutoReviewClassifierContextExtractor(getParentConversationSta
     ];
   };
 }
+

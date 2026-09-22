@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/messages-tool-row.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 var DURATION_MS_CAP2 = 24 * 60 * 60 * 1e3;
 function messagesToolCallRow(report, harness) {
@@ -18,3 +23,4 @@ function messagesToolCallRow(report, harness) {
     automation: isPermissions ? report.automation : void 0
   };
 }
+

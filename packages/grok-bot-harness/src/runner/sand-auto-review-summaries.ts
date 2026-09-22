@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-auto-review-summaries.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function compact(value, maxChars) {
   const normalized = value.replace(/\s+/g, " ").trim();
   return normalized.length <= maxChars ? normalized : `${normalized.slice(0, maxChars - 1)}\u2026`;
@@ -332,3 +337,4 @@ function summarizeTypedText(text2) {
 function summarizeSandComputerTypedText(text2) {
   return `${summarizeTypedText(text2)} on Grok Bot's computer`;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/email-turn-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function emailTurnTools(host, review) {
   const email3 = host.email;
   if (email3 == null) return [];
@@ -69,3 +74,4 @@ function emailTurnTools(host, review) {
   );
   return tools;
 }
+

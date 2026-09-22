@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/download-file-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path165 = require("node:path");
+init_invariant();
+init_unknown_record();
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_DOWNLOAD_FILE_TOOL_NAME = "download_file";
 var downloadFileObjectSchema = external_exports.object({
   connection: external_exports.string().trim().min(1).describe(
@@ -165,3 +176,4 @@ function createDownloadFileTool(deps) {
     execute: async (ctx, args, d) => runDownloadFile(args, { ...d, signal: ctx.signal })
   });
 }
+

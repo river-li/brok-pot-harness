@@ -1,4 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-browser-use-subagent.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
 init_subagents_pb();
+
+// @recovered-fragment 2/2
 var BROWSER_USE_SUBAGENT_TYPE2 = "browserUse";
 function isBrowserUseSubagentType(subagentType) {
   return isBuiltinSubagent(subagentType, BROWSER_USE_SUBAGENT_TYPE2);
@@ -23,3 +30,4 @@ function createSandBrowserUseSubagentConfig(options2) {
     subagentSource: "builtin"
   };
 }
+

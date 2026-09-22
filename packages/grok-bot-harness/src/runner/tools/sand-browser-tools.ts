@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-browser-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_buffer6 = require("node:buffer");
+init_dist4();
+init_agent_pb();
+init_communicate_update_tool_pb();
+init_errors();
+init_zod();
+
+// @recovered-fragment 2/2
 var BOX_CDP_PORT_BASE = 9222;
 var browserOperationObservationKey = createKey(
   /* @__PURE__ */ Symbol("browserOperationObservation"),
@@ -867,3 +880,4 @@ function createSandBrowserTools(deps) {
     })
   ];
 }
+

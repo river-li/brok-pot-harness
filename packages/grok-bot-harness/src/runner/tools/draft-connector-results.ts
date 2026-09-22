@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/draft-connector-results.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto69 = require("node:crypto");
 init_mcp_exec_pb();
 init_esm();
@@ -53,3 +58,4 @@ function parseDraftConnectorRecord(text2) {
   if (!parsed2.ok || typeof parsed2.value !== "object" || parsed2.value == null) return null;
   return Object.fromEntries(Object.entries(parsed2.value));
 }
+

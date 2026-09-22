@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/draft-external-message-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_invariant();
+
+// @recovered-fragment 2/2
 var DraftRefusedError = class extends Error {
   toolCallAuditOutcome = "denied";
 };
@@ -84,3 +92,4 @@ function createDraftExternalMessageTool(deps) {
     }
   });
 }
+

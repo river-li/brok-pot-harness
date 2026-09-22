@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-slack-setup-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_SLACK_SETUP_TOOL_NAME = "slack_setup";
 var SLACK_SETUP_NOT_OWNER_LINE = "Only my owner can add me to Slack";
@@ -78,3 +83,4 @@ function createSlackSetupTool(deps) {
     }
   });
 }
+

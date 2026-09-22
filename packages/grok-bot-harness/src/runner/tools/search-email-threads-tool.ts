@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/search-email-threads-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SEARCH_EMAIL_THREADS_DEFAULT_LIMIT = 10;
 var SEARCH_EMAIL_THREADS_MAX_LIMIT = 25;
@@ -103,3 +108,4 @@ function createSearchEmailThreadsTool(deps) {
     execute: async (_ctx, args, d) => searchEmailThreads(d, args)
   });
 }
+

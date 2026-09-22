@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-skills-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_SKILLS_TOOL_NAME = "propose_skills";
 var SAND_SKILLS_SUBAGENT_TYPE = "skills";
@@ -89,3 +94,4 @@ function createSkillsTool(deps) {
     }
   });
 }
+

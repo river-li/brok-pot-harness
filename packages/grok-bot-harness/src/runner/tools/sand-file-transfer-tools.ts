@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-file-transfer-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path168 = require("node:path");
 init_zod();
 function formatBytes3(bytes) {
@@ -128,3 +133,4 @@ function createFileTransferTools(controller, machineIds) {
     })
   ];
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-secret-request.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SECRET_REQUEST_MAX_LABEL_LENGTH = 120;
 var SECRET_REQUEST_MAX_DESCRIPTION_LENGTH = 400;
 function clampSecretLabel(label) {
@@ -85,3 +90,4 @@ function buildSecretSaveFailedAck(request5, reason) {
     "Do not assume the secret exists or that a retry has already happened. The same request card is still open for the user to try again, so do not send secret-request again for it and never ask anyone to paste a token, key, or password into the chat. If the reason is something the user can fix (for example sharing the bot with the team, or using a longer value), briefly tell them what to do; otherwise tell them the save failed on your side and that you will continue once it succeeds."
   ].join("\n");
 }
+

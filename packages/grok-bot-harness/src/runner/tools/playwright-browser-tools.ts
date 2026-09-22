@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/playwright-browser-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_mcp_tool_pb();
 init_unknown_record();
@@ -184,3 +189,4 @@ function createPlaywrightBrowserTools(deps) {
     (row) => rowTool(deps, row, lastPageUrl)
   );
 }
+

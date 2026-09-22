@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-agent-management-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 init_zod();
 var SEND_TO_AGENT_TARGET_ID_ALIASES = ["target", "agentId", "agent_id"];
@@ -211,3 +216,4 @@ function createSetPrimaryBotTool(setPrimaryBot) {
     }
   );
 }
+

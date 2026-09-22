@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/sand-auto-review-tool-escalations.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createSandShellApprovalProvider(args) {
   return {
     requestApproval: async (request5) => {
@@ -64,3 +69,4 @@ function createSandMcpApprovalProvider(args) {
     }
   };
 }
+

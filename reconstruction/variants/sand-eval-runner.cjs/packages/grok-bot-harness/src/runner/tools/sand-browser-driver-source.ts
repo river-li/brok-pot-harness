@@ -1,0 +1,18 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-browser-driver-source.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto29 = require("node:crypto");
+
+// @recovered-fragment 2/2
+var SAND_BROWSER_DRIVER_BOX_DIR = "/tmp/.sand-browser";
+var SAND_BROWSER_DRIVER_SHELL_TIMEOUT_MS = 12e4;
+function sandBrowserDriverBoxPath(source) {
+  const digest = (0, import_node_crypto29.createHash)("sha256").update(source).digest("hex").slice(0, 16);
+  return `${SAND_BROWSER_DRIVER_BOX_DIR}/driver-${digest}.mjs`;
+}
+var SAND_BROWSER_RESULT_MARKER = "__SAND_BROWSER_RESULT__";
+var SAND_BROWSER_DRIVER_SOURCE = sand_browser_driver_default;
+var SAND_BROWSER_DRIVER_BOX_PATH = sandBrowserDriverBoxPath(SAND_BROWSER_DRIVER_SOURCE);
+

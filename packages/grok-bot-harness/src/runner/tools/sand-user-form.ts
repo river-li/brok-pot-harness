@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-user-form.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_REMAP_USER_FORM_TARGETS_TOOL_NAME = "remap_user_form_targets";
 var SAND_REMAP_USER_FORM_TARGETS_CALL_HINT = `CallDynamicTool with namespace "cursor", toolName "${SAND_REMAP_USER_FORM_TARGETS_TOOL_NAME}", and arguments { "targets": [{ "fieldId": "<held id>", "target": { "kind": "ref" | "selector" | "label", "value": "<ref, selector, or label>" } }] } (GetDynamicTools on that namespace shows the schema)`;
 function summarizeUserFormRequest(form) {
@@ -192,3 +197,4 @@ function buildUserFormSkippedFieldsNote(skippedFieldKinds) {
 function buildUserFormDismissedAck(form) {
   return `[The user dismissed your form "${form.title}" without submitting it. Treat it as declined: no values were filled, and do not immediately re-issue the same form. Continue the task without it if you can; if the task cannot proceed, send the user a brief message saying what is blocked, then stop and wait for their reply.]`;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-computer-use-subagent.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var COMPUTER_USE_SUBAGENT_TYPE = "computerUse";
 function isComputerUseSubagentType(subagentType) {
@@ -31,3 +36,4 @@ function createSandComputerUseSubagentConfig(options2 = {}) {
     subagentSource: "builtin"
   };
 }
+

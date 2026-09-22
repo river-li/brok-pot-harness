@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-subscription-usage-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_dist3();
 init_errors();
@@ -85,3 +90,4 @@ function createCheckSubscriptionUsageTool(deps) {
     }
   });
 }
+

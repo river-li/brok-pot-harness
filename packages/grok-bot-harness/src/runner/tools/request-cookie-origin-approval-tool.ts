@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/request-cookie-origin-approval-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_REQUEST_COOKIE_ORIGIN_APPROVAL_TOOL_NAME = "request_cookie_origin_approval";
 var COOKIE_ORIGIN_APPROVAL_MAX_ORIGINS = 32;
 var requestCookieOriginApprovalParameters = external_exports.object({
@@ -121,3 +129,4 @@ function createRequestCookieOriginApprovalTool(deps) {
     }
   });
 }
+

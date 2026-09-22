@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/subagent-toolsets.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function recallMemoryTools(host) {
   if (host.memoryStore == null) return [];
   return [
@@ -50,3 +55,4 @@ function sharePassSubagentTools(host) {
   if (isSkillsSubagentType(host.subagentType)) return skillsSubagentTools(host);
   return void 0;
 }
+

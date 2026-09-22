@@ -1,0 +1,92 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/draft-external-message-tool.ts
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var DraftRefusedError = class extends Error {
+  toolCallAuditOutcome = "denied";
+};
+var SAND_DRAFT_EXTERNAL_MESSAGE_TOOL_NAME = "DraftExternalMessage";
+function nonEmpty3(value) {
+  return value != null && value.length > 0 ? value : void 0;
+}
+function requirePresent(value, field, platform) {
+  invariant(
+    value != null && value.length > 0,
+    () => `DraftExternalMessage cannot emit a platform:${platform} draft without ${field}; the argument schema should have refused this call.`
+  );
+  return value;
+}
+function buildDraftEmission(args) {
+  if (args.platform === "email") {
+    const cc = args.cc != null && args.cc.length > 0 ? args.cc : void 0;
+    const replyToMessageId = nonEmpty3(args.replyToMessageId);
+    return {
+      message: {
+        type: "email-draft",
+        draft: {
+          from: requirePresent(args.from, "from", "email"),
+          to: requirePresent(args.to, "to", "email"),
+          ...cc != null ? { cc } : {},
+          subject: requirePresent(args.subject, "subject", "email"),
+          body: args.body
+        }
+      },
+      route: {
+        platform: "email",
+        providerIdentifier: args.providerIdentifier,
+        ...replyToMessageId != null ? { replyToMessageId } : {}
+      }
+    };
+  }
+  const threadTs = nonEmpty3(args.threadTs);
+  return {
+    message: {
+      type: "slack-draft",
+      draft: {
+        target: requirePresent(args.target, "target", "slack"),
+        body: args.body
+      }
+    },
+    route: {
+      platform: "slack",
+      providerIdentifier: args.providerIdentifier,
+      channelId: requirePresent(args.channelId, "channelId", "slack"),
+      ...threadTs != null ? { threadTs } : {}
+    }
+  };
+}
+function verifyDraftAgainstRoute(draft, resolution) {
+  if (!resolution.ok) {
+    throw new DraftRefusedError(
+      `Draft refused: the routing could not be verified through the connector (${resolution.reason}). Nothing was drafted. Fix the routing (or the connector's connection) and call this tool again.`
+    );
+  }
+  const verification = resolution.verification;
+  if (draft.message.type === "email-draft" && verification.platform === "email" && draft.message.draft.from.toLowerCase() !== verification.sendingAddress.toLowerCase()) {
+    throw new DraftRefusedError(
+      `Draft refused: from (${draft.message.draft.from}) is not the address this account really sends as (${verification.sendingAddress}). Nothing was drafted. Call this tool again with from: ${verification.sendingAddress}.`
+    );
+  }
+  return { ...draft, verification };
+}
+function createDraftExternalMessageTool(deps) {
+  return defineCommunicateTool(deps, {
+    id: "SEND_TO_USER",
+    name: SAND_DRAFT_EXTERNAL_MESSAGE_TOOL_NAME,
+    description: `Draft an email or Slack message for the user to review as an editable composer card in the chat. This is the default way a message leaves under the user's name: use it when they ask for a draft or a review, when a message is how you would get a task done that they did not literally ask you to send, when you are replying to something that arrived, and whenever you are unsure whether they meant send. Use the connector's own send tools directly only when the user explicitly asked, in this conversation, to send that message to those recipients (see the system prompt's rules). You write the draft in the user's voice; they can edit every displayed field on the card and then send or discard it. The send is executed by Sand directly when they click Send, so NEVER follow this call with the connector's own send/draft tools for the same message. You must also provide the routing the send will use, which the user cannot edit: providerIdentifier is the installed MCP server identifier exactly as GetMcpServerStatus lists it for the intended account; for Slack, channelId is the real conversation id resolved with the connector's search tools (never guessed), plus threadTs when replying in a thread; for email, from is required and must be the chosen account's real sending address (a plain email address; if unknown, read a sent message's sender field via the Gmail connector's search_threads with query "in:sent" BEFORE drafting), plus replyToMessageId when replying within an existing thread. Sand verifies the routing through the connector before the card appears (the account's real sending address; the channel behind channelId; the message behind replyToMessageId or threadTs) and displays those verified facts on the card \u2014 it refuses the draft when verification fails or from is not the account's address. Drafting does not end your turn and nothing is sent yet: if the user sends the card (possibly after editing), you are resumed with a summary of what actually went out; if they discard it, you'll see that on your next turn \u2014 treat a discard as a decline and don't redraft unasked.`,
+    parameters: draftExternalMessageParameters,
+    describeActivity: (args) => ({
+      detail: args.platform === "email" ? "email draft" : "Slack draft"
+    }),
+    execute: async (ctx, args, d) => {
+      const draft = buildDraftEmission(args);
+      const resolution = await d.resolveRouteVerification(ctx, draft.route, d.toolCallId);
+      const emission = verifyDraftAgainstRoute(draft, resolution);
+      const draftId = d.onDraftMessage(emission, Date.now());
+      const where = emission.message.type === "email-draft" ? `email to ${emission.message.draft.to.join(", ")}` : `Slack message to ${emission.message.draft.target}`;
+      return `Draft ${where} is now an editable card in the chat` + (draftId != null && draftId.length > 0 ? ` (id: ${draftId})` : "") + ". Nothing has been sent; the user reviews, may edit, and sends or discards it from the card.";
+    }
+  });
+}
+

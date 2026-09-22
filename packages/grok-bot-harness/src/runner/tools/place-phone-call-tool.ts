@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/place-phone-call-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_PLACE_PHONE_CALL_TOOL_NAME = "place_phone_call";
 var E1642 = /^\+[1-9]\d{7,14}$/;
@@ -33,3 +38,4 @@ function createPlacePhoneCallTool(deps) {
     execute: async (ctx, args, d) => placePhoneCall({ ...d, signal: ctx.signal }, args)
   });
 }
+

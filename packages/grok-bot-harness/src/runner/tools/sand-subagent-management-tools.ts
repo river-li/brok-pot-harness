@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-subagent-management-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 function elapsedLabel(elapsedMs3) {
   const totalSeconds = Math.max(0, Math.round(elapsedMs3 / 1e3));
@@ -261,3 +266,4 @@ function createSubagentManagementTools(controller) {
     })
   ];
 }
+

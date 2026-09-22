@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/email-tool-format.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_LIST_EMAIL_INBOXES_TOOL_NAME = "list_email_inboxes";
 var SAND_CLAIM_EMAIL_INBOX_TOOL_NAME = "claim_email_inbox";
 var SAND_SEARCH_EMAIL_THREADS_TOOL_NAME = "search_email_threads";
@@ -30,3 +35,4 @@ function formatEmailDirection(direction) {
       return "direction unknown";
   }
 }
+

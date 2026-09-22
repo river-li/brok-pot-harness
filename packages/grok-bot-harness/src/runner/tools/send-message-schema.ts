@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/send-message-schema.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SEND_MESSAGE_TYPES = [
   "text",
@@ -285,3 +290,4 @@ var sendMessageEndTurnParameters = sendMessageObjectSchema.extend({
 var sendMessageEndTurnParametersWithCredentialRequest = sendMessageObjectSchemaWithCredentialRequest.extend({
   end_turn: external_exports.boolean().optional().describe(SEND_TO_USER_END_TURN_GUIDANCE)
 }).superRefine(refineSendMessage);
+

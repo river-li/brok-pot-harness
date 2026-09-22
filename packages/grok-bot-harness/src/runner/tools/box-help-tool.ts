@@ -1,4 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/box-help-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_invariant();
 init_zod();
+
+// @recovered-fragment 2/2
 var requestBoxHelpParameters = external_exports.object({
   instruction: external_exports.string().trim().min(1).describe(
     'A short instruction shown over the box and in chat, addressed to the user (e.g. "Sign in to your Google account", "Approve the 2FA prompt"). Keep it to one line; no explanatory paragraph.'
@@ -17,8 +25,8 @@ function normalizeBoxHelpDomain(raw) {
   const value = raw.trim().toLowerCase();
   if (value.length === 0) return void 0;
   try {
-    const hostname2 = new URL(value.includes("://") ? value : `https://${value}`).hostname;
-    const host = hostname2.replace(/^www\./, "");
+    const hostname3 = new URL(value.includes("://") ? value : `https://${value}`).hostname;
+    const host = hostname3.replace(/^www\./, "");
     return host.length > 0 ? host : void 0;
   } catch {
     return void 0;
@@ -45,7 +53,7 @@ function createRequestBoxHelpTool(deps) {
       invariant(agentId != null, "request_box_help was called outside an agent run.");
       const handoff = pendingHandoff.then(async () => {
         ctx.signal.throwIfAborted();
-        const domain = args.domain != null ? normalizeBoxHelpDomain(args.domain) : void 0;
+        const domain2 = args.domain != null ? normalizeBoxHelpDomain(args.domain) : void 0;
         const idpDomain = args.idp_domain != null ? normalizeBoxHelpDomain(args.idp_domain) : void 0;
         const turnId = d.getTurnId();
         const subagentAgentId = d.getRevivingSubagentAgentId();
@@ -54,7 +62,7 @@ function createRequestBoxHelpTool(deps) {
           instruction: args.instruction,
           telemetry: {
             ...args.reason != null ? { reason: args.reason } : {},
-            ...domain != null ? { domain } : {},
+            ...domain2 != null ? { domain: domain2 } : {},
             ...idpDomain != null ? { idpDomain } : {},
             ...turnId != null && turnId.length > 0 ? { turnId } : {},
             ...subagentAgentId != null ? { subagentAgentId } : {}
@@ -81,3 +89,4 @@ function createRequestBoxHelpTool(deps) {
     }
   });
 }
+

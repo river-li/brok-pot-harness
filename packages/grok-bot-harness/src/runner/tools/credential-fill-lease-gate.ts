@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/credential-fill-lease-gate.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function readAhead(source) {
   const chunks = [];
   let failure2;
@@ -38,3 +43,4 @@ function gateToolOnCredentialFillLease(tool, lease, resolveWindowIndex) {
     }
   };
 }
+

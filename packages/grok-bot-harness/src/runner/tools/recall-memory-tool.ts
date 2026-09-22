@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/recall-memory-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var RECALL_MEMORY_DEFAULT_LIMIT = 20;
 var RECALL_MEMORY_MAX_LIMIT = 50;
@@ -106,3 +111,4 @@ function createRecallMemoryTool(deps) {
     execute: async (_ctx, args, d) => recallMemory(d, args)
   });
 }
+

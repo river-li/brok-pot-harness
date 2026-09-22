@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-slack-reaction-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_REACT_TO_SLACK_MESSAGE_TOOL_NAME = "react_to_slack_message";
 var reactToSlackMessageParameters = external_exports.object({
   channel: external_exports.string().trim().regex(SLACK_CONVERSATION_ID_PATTERN, "a Slack conversation id like C0123ABCD").describe(
@@ -33,3 +41,4 @@ function createReactToSlackMessageTool(reaction) {
     }
   });
 }
+

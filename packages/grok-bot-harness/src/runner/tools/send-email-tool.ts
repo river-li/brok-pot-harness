@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/send-email-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_SEND_EMAIL_TOOL_NAME = "send_email";
 var SEND_EMAIL_MAX_RECIPIENTS = 50;
 var SEND_EMAIL_MAX_SUBJECT_LENGTH = 998;
@@ -222,3 +230,4 @@ function createSendEmailTool(deps) {
     execute: async (ctx, args, d) => sendEmail({ ...d, signal: ctx.signal }, args)
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/mcp-server-resolution.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function resolveMcpServerRowsByIdentifierOrLegacyId(installed, token) {
   const trimmed = token.trim();
   if (trimmed.length === 0) return [];
@@ -15,3 +20,4 @@ async function readMcpInstalledListing(listInstalled) {
     return { kind: "unreadable" };
   }
 }
+

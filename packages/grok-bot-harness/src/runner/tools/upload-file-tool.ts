@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/upload-file-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path166 = require("node:path");
 init_invariant();
 init_unknown_record();
@@ -184,3 +189,4 @@ function createUploadFileTool(deps) {
     execute: async (ctx, args, d) => runUploadFile(args, { ...d, signal: ctx.signal })
   });
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-channel-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var createChannelParameters = external_exports.object({
   name: external_exports.string().trim().min(1).describe('A short, human-readable name for the channel (e.g. "Launch team").'),
@@ -59,3 +64,4 @@ function createUpdateChannelTool(management) {
     }
   });
 }
+

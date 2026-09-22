@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/scm-connect-cards.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var PROVIDER_DISPLAY_NAMES = {
   github: "GitHub",
   origin: "Origin",
@@ -165,3 +173,4 @@ async function describeScmConnectBlocker({
   }
   return `${leadSentence} Nothing was shown to the user. To ask them to fix it, call ${example}; its result says whether you're woken automatically when they do. Either way, confirm with the owner before retrying the blocked action (${blockedAction}) \u2014 do not reuse a parked prompt or repo URL unless they ask.`;
 }
+

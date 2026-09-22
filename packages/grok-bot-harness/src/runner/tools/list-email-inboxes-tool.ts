@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/list-email-inboxes-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var description3 = [
   `List the email addresses you own. These are the inboxes you can search with ${SAND_SEARCH_EMAIL_THREADS_TOOL_NAME} and send from with send_email.`,
@@ -22,3 +27,4 @@ function createListEmailInboxesTool(deps) {
     execute: async (_ctx, _args, d) => renderEmailInboxes(await d.email.listInboxes())
   });
 }
+

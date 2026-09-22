@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/sand-feedback-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_privacy_mode_pb();
 init_zod();
 var SAND_SEND_FEEDBACK_TOOL_NAME = "SendFeedback";
@@ -84,3 +89,4 @@ function createSendFeedbackTool(deps) {
     }
   });
 }
+

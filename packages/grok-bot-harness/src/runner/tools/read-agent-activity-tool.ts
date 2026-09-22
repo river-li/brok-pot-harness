@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/grok-bot-harness/src/runner/tools/read-agent-activity-tool.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist3();
+init_zod();
+
+// @recovered-fragment 2/2
 var SAND_READ_AGENT_ACTIVITY_TOOL_NAME = "read_agent_activity";
 var READ_AGENT_ACTIVITY_DESCRIPTION = "Read a bounded summary of what this user's other bots have been doing recently: per bot, when the user and the bot last spoke, its open todos, questions it asked the user that got no reply, and a short excerpt of the recent conversation, newest last. It sees only bots this user owns (team-shared and group bots are out of scope), only each bot's main conversation (never DM or Slack threads), and never this bot itself. It is read-only: nothing on the other bots is marked seen, answered, or touched. Use it to decide whether anything across the user's bots is worth raising.";
 var readAgentActivityParameters = external_exports.object({
@@ -72,3 +81,4 @@ function createReadAgentActivityTool(deps) {
     }
   });
 }
+
