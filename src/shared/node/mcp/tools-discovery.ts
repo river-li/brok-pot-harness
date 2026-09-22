@@ -1,3 +1,19 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/tools-discovery.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_crypto52 = require("node:crypto");
+init_dist4();
+init_scheduling();
+init_esm();
+init_errors();
+init_proto();
+
+// @recovered-fragment 2/3
+init_mcp_diagnostics();
+
+// @recovered-fragment 3/3
 var MCP_TOOLS_CACHE_TTL_MS = 24 * 60 * 60 * 1e3;
 var TOOLS_DISCOVERY_DEADLINE_MS = 12e4;
 var TOOLS_DISCOVERY_DEADLINE = createDeadlinePolicy({
@@ -603,3 +619,4 @@ var SandMcpExecutor = class {
     return await augmentMcpResultWithSavedImages(spilled, this.persistImage);
   }
 };
+

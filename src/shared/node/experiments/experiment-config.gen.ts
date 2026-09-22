@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/experiment-config.gen.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist2();
 init_zod();
 var ModelLifecycleTypeSchema = external_exports.enum([
@@ -9865,3 +9870,4 @@ function parseStringArray(value) {
   }
   return value.map(parseString);
 }
+

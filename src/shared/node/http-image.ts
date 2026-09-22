@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/http-image.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function imageContentType(response) {
   const contentType = response.headers.get("content-type")?.split(";")[0]?.trim() ?? "";
   return contentType.startsWith("image/") ? contentType : null;
@@ -35,3 +40,4 @@ var init_http_image = __esm({
     "use strict";
   }
 });
+

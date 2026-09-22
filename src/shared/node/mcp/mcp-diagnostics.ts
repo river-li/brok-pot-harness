@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-diagnostics.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function pinMcpDiagnosticsReporter(reporter) {
   pinnedReporter3 = reporter;
   reportedBoxStdioStatuses.clear();
@@ -66,3 +71,4 @@ var init_mcp_diagnostics = __esm({
     );
   }
 });
+

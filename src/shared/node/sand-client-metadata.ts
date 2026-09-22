@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/sand-client-metadata.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function stampedVersionBaseOf(stamped) {
   return STAMPED_VERSION_BASE.exec(stamped?.trim() ?? "")?.[1];
 }
@@ -64,3 +69,4 @@ var init_sand_client_metadata = __esm({
     SAND_BOX_NAMESPACE_HEADER = "x-sand-box-namespace";
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-listing-summaries.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function displayTransport(server) {
   return server.config == null ? "http" : getTransport(server.config);
 }
@@ -166,3 +171,4 @@ var SandMcpListingSummaries = class {
     );
   }
 };
+

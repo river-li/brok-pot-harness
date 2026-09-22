@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/feature-flag-overrides.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs59 = require("node:fs");
 var import_node_path103 = require("node:path");
 init_scheduling();
@@ -123,3 +128,4 @@ var SandFeatureFlagOverrideStore = class {
     }
   }
 };
+

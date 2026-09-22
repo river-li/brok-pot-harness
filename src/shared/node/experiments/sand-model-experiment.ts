@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/sand-model-experiment.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_MODEL_EXPERIMENT_NAME = "sand_model_selection";
 var SAND_MODEL_EXPERIMENT_OPUS_MEDIUM_SELECTION = {
   modelId: "claude-opus-4-8",
@@ -39,3 +44,4 @@ function selectSandExperimentTurnModel(inputs) {
   const configuredModel = requestSource === SAND_AUTOMATION_REQUEST_SOURCE ? inputs.readConfiguredAutomationsModel() ?? inputs.readConfiguredDefaultModel() : inputs.readConfiguredDefaultModel();
   return selectSandModelExperimentModel(state, requestSource, configuredModel);
 }
+

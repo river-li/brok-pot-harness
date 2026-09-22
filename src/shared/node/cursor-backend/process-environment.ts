@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-backend/process-environment.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_cursor_token();
+
+// @recovered-fragment 2/2
 init_sand_client_metadata();
 function settledOnFirstRead(compute) {
   let settled;
@@ -83,3 +91,4 @@ function readSandProcessEnvironment(env, platform2 = process.platform) {
     childProcessEnvironment: env
   };
 }
+

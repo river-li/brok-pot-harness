@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/gate-overrides.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function parseGateOverrides(raw) {
   if (raw == null || raw.length === 0) return {};
   const overrides = {};
@@ -8,3 +13,4 @@ function parseGateOverrides(raw) {
   }
   return overrides;
 }
+

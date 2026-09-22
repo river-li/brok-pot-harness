@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/host-process-probe.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process2 = require("node:child_process");
 var import_node_fs28 = require("node:fs");
 init_dist3();
@@ -18,3 +23,4 @@ function isSandHostProcess(pid) {
   const command = readProcessCommand(pid);
   return command != null && command.includes("host-main");
 }
+

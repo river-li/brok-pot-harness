@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/server-transcript/server-agent-action-core.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm2();
 init_dist5();
 init_unknown_record();
@@ -818,3 +823,4 @@ function createServerAgentActionCore(client) {
     }
   };
 }
+

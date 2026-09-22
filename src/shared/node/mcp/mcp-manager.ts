@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-manager.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_scheduling();
+
+// @recovered-fragment 2/3
+init_mcp_diagnostics();
+
+// @recovered-fragment 3/3
 var EMPTY_MCP_SETTINGS = {
   getActiveAccountScope: () => void 0,
   migrateMcpCustomInstructionToServerId: () => {
@@ -577,3 +588,4 @@ var SandMcpManager = class {
     this.boxRuntime?.resetPushState();
   }
 };
+

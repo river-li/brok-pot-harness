@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/server-transcript/server-transcript-client.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto61 = require("node:crypto");
+init_scheduling();
+init_grok_bot_connect();
+init_esm2();
+init_errors();
+
+// @recovered-fragment 2/2
 var ServerTranscriptTailDisabledError = class extends SandDomainError {
   name = "ServerTranscriptTailDisabledError";
 };
@@ -161,3 +173,4 @@ function createServerTranscriptClient(deps) {
     }
   };
 }
+

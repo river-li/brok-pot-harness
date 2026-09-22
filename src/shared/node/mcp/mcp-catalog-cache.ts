@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-catalog-cache.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CATALOG_CACHE_TTL_MS = 30 * 1e3;
 function isLoopbackHostname2(hostname3) {
   return hostname3 === "localhost" || hostname3 === "127.0.0.1";
@@ -23,3 +28,4 @@ function validateAuthorizationUrl(authUrl, serverUrl) {
   }
   return void 0;
 }
+

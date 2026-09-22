@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-plugin-variables.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isSecretVariableName(name17) {
   return name17.replace(/([a-z\d])([A-Z])/g, "$1_$2").replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2").replace(/[^a-z\d]+/gi, "_").toUpperCase().split("_").some((segment) => SECRET_WORDS2.has(segment));
 }
@@ -115,3 +120,4 @@ var init_mcp_plugin_variables = __esm({
     ]);
   }
 });
+

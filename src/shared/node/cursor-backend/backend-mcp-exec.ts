@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-backend/backend-mcp-exec.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_mcp_tool_annotations();
 init_esm();
@@ -250,3 +255,4 @@ function createDashboardSandBackendMcpExec(deps) {
     }
   };
 }
+

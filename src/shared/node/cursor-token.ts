@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-token.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function parseJwtPayload(token) {
   const [, payload] = token.split(".");
   if (payload == null || payload.length === 0) return null;
@@ -74,3 +79,4 @@ var init_cursor_token = __esm({
     }).passthrough();
   }
 });
+

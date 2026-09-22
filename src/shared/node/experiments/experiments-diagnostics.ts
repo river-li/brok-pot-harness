@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/experiments-diagnostics.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PRE_PIN_BUFFER_CAP2 = 64;
 var pinnedReporter4 = null;
 var buffered2 = [];
@@ -23,3 +28,4 @@ function reportExperimentsDiagnostic(diagnostic) {
   }
   buffered2.push(diagnostic);
 }
+

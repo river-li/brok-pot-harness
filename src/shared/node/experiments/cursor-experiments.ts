@@ -1,3 +1,19 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/cursor-experiments.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/4
+init_scheduling();
+var import_js_client = __toESM(require_src9(), 1);
+init_errors();
+
+// @recovered-fragment 2/4
+init_invariant();
+
+// @recovered-fragment 3/4
+init_unknown_record();
+
+// @recovered-fragment 4/4
 var BASE_POLL_INTERVAL_MS = 5 * 60 * 1e3;
 var MIN_POLL_INTERVAL_MS = 30 * 1e3;
 var POLL_JITTER_FRACTION = 0.3;
@@ -865,3 +881,4 @@ var SandExperimentService = class extends SandExperimentServiceCore {
     super({ ...options2, registry: SAND_EXPERIMENT_REGISTRY });
   }
 };
+

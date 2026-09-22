@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/builtin-mcp.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs4 = require("node:fs");
 var import_node_path5 = __toESM(require("node:path"), 1);
 var import_node_url3 = require("node:url");
@@ -85,3 +90,4 @@ function getBuiltinMcpServers(environment) {
     }
   };
 }
+

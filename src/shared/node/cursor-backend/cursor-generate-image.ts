@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-backend/cursor-generate-image.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 init_proto();
 init_cursor_inference();
@@ -51,3 +56,4 @@ function createCursorGenerateImageService(options2) {
     }
   };
 }
+

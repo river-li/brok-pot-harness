@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-marketplace.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var mcp_marketplace_exports = {};
 __export(mcp_marketplace_exports, {
   bestEffortToken: () => bestEffortToken,
@@ -193,3 +198,4 @@ var init_mcp_marketplace = __esm({
     DEFAULT_TEAM_MARKETPLACE_NAME = "__DEFAULT__";
   }
 });
+

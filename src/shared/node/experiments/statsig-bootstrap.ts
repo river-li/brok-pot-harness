@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/statsig-bootstrap.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs60 = require("node:fs");
+var import_node_path104 = require("node:path");
+init_request();
+
+// @recovered-fragment 2/2
 init_errors();
 init_unknown_record();
 init_cursor_inference();
@@ -143,3 +153,4 @@ async function saveCachedBootstrap(cacheDir, cache3) {
     return false;
   }
 }
+

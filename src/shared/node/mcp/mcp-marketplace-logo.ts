@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-marketplace-logo.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function withLogoFetchSlot(run) {
   if (activeLogoFetches >= LOGO_FETCH_CONCURRENCY) {
     await new Promise((resolve29) => pendingLogoFetches.push(resolve29));
@@ -61,3 +66,4 @@ var init_mcp_marketplace_logo = __esm({
     });
   }
 });
+

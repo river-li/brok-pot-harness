@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-auth-watch-lifecycle.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_rest_mcp_provider_metadata();
+init_bounded();
+
+// @recovered-fragment 2/2
 init_mcp_diagnostics();
 function httpUrlOfMcpConfig(config2) {
   if (config2 == null || !("url" in config2)) return void 0;
@@ -495,3 +505,4 @@ var SandMcpAuthWatchLifecycle = class {
     }
   }
 };
+

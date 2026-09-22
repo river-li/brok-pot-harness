@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/paths.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises = require("node:fs/promises");
 var import_node_path = require("node:path");
 var import_node_url = require("node:url");
@@ -52,3 +57,4 @@ async function realpathNearestExisting(p2) {
     }
   }
 }
+

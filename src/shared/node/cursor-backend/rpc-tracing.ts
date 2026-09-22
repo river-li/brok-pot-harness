@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-backend/rpc-tracing.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function resolveTraceDecision() {
   if (configured === void 0) return void 0;
   try {
@@ -99,3 +104,4 @@ var init_rpc_tracing = __esm({
     });
   }
 });
+

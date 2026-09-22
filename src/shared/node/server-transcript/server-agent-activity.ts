@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/server-transcript/server-agent-activity.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+
+// @recovered-fragment 2/2
 init_errors();
 init_invariant();
 var SERVER_AGENT_ACTIVITY_GATE_RECHECK_MS = 6e4;
@@ -344,3 +352,4 @@ function createServerAgentActivity(deps) {
     }
   };
 }
+

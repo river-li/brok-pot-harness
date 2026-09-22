@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-backend/account-mcp.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_proto();
 init_cursor_token();
@@ -343,3 +348,4 @@ function createAccountMcpWriter(deps) {
     }
   };
 }
+

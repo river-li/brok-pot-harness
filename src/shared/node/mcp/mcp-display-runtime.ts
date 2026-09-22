@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-display-runtime.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function normalizeAccountKey(rawAccountKey) {
   const accountKey = normalizeMcpAccountLabel(rawAccountKey);
   if (accountKey.length === 0) {
@@ -52,3 +57,4 @@ function statusFromBoxListStatus(status, discoveryUnavailable = false, statusDet
   if (read.kind === "known") return statusFromMcpRawServerStatus(read.status, statusDetail);
   return discoveryUnavailable ? { status: "error", statusDetail: { kind: "bot_computer_unreachable" } } : { status: "error", statusDetail: { kind: "not_reported_by_bot_computer" } };
 }
+

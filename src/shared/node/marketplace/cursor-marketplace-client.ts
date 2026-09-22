@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/marketplace/cursor-marketplace-client.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function bestEffortToken(getAccessToken) {
   try {
     const token = await getAccessToken();
@@ -47,3 +52,4 @@ var init_cursor_marketplace_client = __esm({
     CURSOR_MARKETPLACE_REQUEST_TIMEOUT_MS = 12e3;
   }
 });
+

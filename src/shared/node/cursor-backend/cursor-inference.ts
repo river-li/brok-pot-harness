@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-backend/cursor-inference.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function enhancedObfuscate(bytes) {
   let lastByte = 165;
   for (let i = 0; i < bytes.length; i++) {
@@ -322,3 +327,4 @@ var init_cursor_inference = __esm({
     PRIVACY_MODE_FETCH_TIMEOUT_MS = 3e3;
   }
 });
+

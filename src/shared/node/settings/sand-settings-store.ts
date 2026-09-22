@@ -1,3 +1,16 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/settings/sand-settings-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_fs69 = require("node:fs");
+init_zod();
+init_sand_agent_model();
+
+// @recovered-fragment 2/3
+init_locale();
+
+// @recovered-fragment 3/3
 var SETTINGS_VERSION = 1;
 var autoReviewInstructionsSchema = external_exports.object({
   isEnabled: external_exports.boolean().default(true),
@@ -728,3 +741,4 @@ var SandSettingsStore = class _SandSettingsStore {
     });
   }
 };
+

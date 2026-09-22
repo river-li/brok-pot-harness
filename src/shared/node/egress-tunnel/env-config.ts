@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/egress-tunnel/env-config.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ANYRUN_NETWORK_TOKEN_HEADER = "x-anyrun-network-token";
 function resolveEgressTunnelEnvConfig(env) {
   const url2 = env.SAND_EGRESS_TUNNEL_URL;
@@ -11,3 +16,4 @@ function resolveEgressTunnelEnvConfig(env) {
     allowPrivateTargets: env.SAND_EGRESS_TUNNEL_ALLOW_PRIVATE === "1"
   };
 }
+

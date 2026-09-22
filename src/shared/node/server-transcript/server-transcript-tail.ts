@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/server-transcript/server-transcript-tail.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_errors();
+init_invariant();
+init_unknown_record();
+
+// @recovered-fragment 2/2
 var SERVER_TRANSCRIPT_TAIL_MAX_CURSORS = 256;
 var SERVER_TRANSCRIPT_TAIL_INLINE_BODY_MAX_BYTES = 256 * 1024;
 var SERVER_TRANSCRIPT_TAIL_DISABLED_RECHECK_MS = 6e4;
@@ -1161,3 +1172,4 @@ function createServerTranscriptTail(deps) {
     })
   };
 }
+

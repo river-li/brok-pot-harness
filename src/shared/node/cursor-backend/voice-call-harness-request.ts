@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/cursor-backend/voice-call-harness-request.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_invariant();
 init_proto();
 init_cursor_inference();
@@ -46,3 +51,4 @@ function toolOutcomeKindOf(kind) {
       return void 0;
   }
 }
+

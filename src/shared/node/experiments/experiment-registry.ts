@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/experiment-registry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_unknown_record();
+
+// @recovered-fragment 2/2
 var SAND_LESS_SUBAGENT_FANOUT_EXPERIMENT_NAME = "sand_less_subagent_fanout";
 var GROK_BOT_UPDATE_COMMUNICATION_EXPERIMENT_NAME = "grok_bot_update_communication";
 var GROK_BOT_BROWSER_USE_PLAYWRIGHT_EXPERIMENT_NAME = "grok_bot_browser_use_playwright_ab";
@@ -64,3 +72,4 @@ var SAND_EXPERIMENT_REGISTRY = {
     (name17) => schemaConfigEntry(DYNAMIC_CONFIGS[name17].fallbackValues, DYNAMIC_CONFIG_SCHEMAS[name17])
   )
 };
+

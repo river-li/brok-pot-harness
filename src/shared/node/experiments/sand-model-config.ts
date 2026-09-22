@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/experiments/sand-model-config.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var SAND_DEFAULT_MODEL_CONFIG_NAME = "sand_default_model";
 var SAND_AUTOMATIONS_MODEL_CONFIG_NAME = "sand_automations_model";
@@ -53,3 +58,4 @@ function resolveSandDefaultModelConfig(inputs) {
     rejection: void 0
   };
 }
+

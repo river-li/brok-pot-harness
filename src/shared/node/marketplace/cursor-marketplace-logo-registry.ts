@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/marketplace/cursor-marketplace-logo-registry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function rememberPluginLogoUrl(url2) {
   knownLogoUrls.add(url2);
 }
@@ -11,3 +16,4 @@ var init_cursor_marketplace_logo_registry = __esm({
     knownLogoUrls = /* @__PURE__ */ new Set();
   }
 });
+

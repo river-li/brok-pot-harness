@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-validation.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var RESERVED_SERVER_NAMES = /* @__PURE__ */ new Set(["__proto__", "constructor", "prototype"]);
 function getTransport(config2) {
   if ("command" in config2) return "stdio";
@@ -34,3 +39,4 @@ function toJsonArgs(args) {
   }
   return result;
 }
+

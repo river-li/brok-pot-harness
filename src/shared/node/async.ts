@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/async.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 function delay3(ms2, signal) {
   return delayWith(realClock, ms2, signal);
@@ -19,3 +24,4 @@ function delayWith(clock, ms2, signal) {
     signal?.addEventListener("abort", onAbort, { once: true });
   });
 }
+

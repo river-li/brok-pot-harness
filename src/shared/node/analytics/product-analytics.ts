@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/analytics/product-analytics.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_proto();
 init_cursor_inference();
 var MAX_DEFERRED_EVENTS = 256;
@@ -127,3 +132,4 @@ var SandProductAnalytics = class {
     };
   }
 };
+

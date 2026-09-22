@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/server-transcript/server-transcript-tail-phase.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_invariant();
 var SERVER_TRANSCRIPT_TAIL_INITIAL_PHASE = {
   kind: "idle",
@@ -90,3 +95,4 @@ function stopped(phase) {
     }
   };
 }
+

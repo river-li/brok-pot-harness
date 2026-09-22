@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-auth-cleanup.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises58 = require("node:fs/promises");
 var import_node_path114 = require("node:path");
 init_system_errno();
@@ -33,3 +38,4 @@ async function cleanupLegacyMcpAuthCredentials(rootDir) {
 function isLegacyMcpAuthFile(name17) {
   return name17 === LEGACY_MCP_AUTH_FILENAME || name17.startsWith(`${LEGACY_MCP_AUTH_FILENAME}.`);
 }
+

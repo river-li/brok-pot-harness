@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/shared/node/mcp/mcp-catalog-flow.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_invariant();
 init_cursor_marketplace_client();
 init_mcp_diagnostics();
@@ -121,3 +126,4 @@ var SandMcpCatalogFlow = class {
     }
   }
 };
+
