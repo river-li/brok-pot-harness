@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/admin-command-denylist.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isAdminCommandDenylistSeparator(character) {
   return character === " " || character === "	" || character === "\n" || character === "\r" || character === "\xA0" || character === "\u200B" || character === "\u200C" || character === "\u200D" || character === "\uFEFF";
 }
@@ -63,3 +68,4 @@ var init_admin_command_denylist = __esm({
     ADMIN_COMMAND_DENYLIST_MAX_RULE_LENGTH = 512;
   }
 });
+

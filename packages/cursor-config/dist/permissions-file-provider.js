@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-config/dist/permissions-file-provider.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs45 = require("node:fs");
+var import_promises43 = require("node:fs/promises");
+var import_node_path78 = require("node:path");
+
+// @recovered-fragment 2/2
 var __awaiter66 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -102,3 +112,4 @@ var PermissionsFileProvider = class _PermissionsFileProvider {
     });
   }
 };
+

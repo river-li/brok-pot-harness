@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/scheduling/dist/internal/clock.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function elapsedMs(since, now) {
   return now - since;
 }
@@ -43,3 +48,4 @@ var init_clock = __esm({
     };
   }
 });
+

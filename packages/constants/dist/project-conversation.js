@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/project-conversation.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isRootProjectDetails(projectDetails) {
   return projectDetails !== void 0 && projectDetails !== null && projectDetails.subagent === void 0 && projectDetails.sideChat === void 0;
 }
@@ -14,3 +19,4 @@ var init_project_conversation = __esm({
     ].join("\n");
   }
 });
+

@@ -1,14 +1,19 @@
-var __awaiter3, __classPrivateFieldSet, __classPrivateFieldGet, __rest, _a17, _b, _Stack_constructing, _LRUCache_instances, _LRUCache_max, _LRUCache_maxSize, _LRUCache_dispose, _LRUCache_onInsert, _LRUCache_disposeAfter, _LRUCache_fetchMethod, _LRUCache_memoMethod, _LRUCache_perf, _LRUCache_size, _LRUCache_calculatedSize, _LRUCache_keyMap, _LRUCache_keyList, _LRUCache_valList, _LRUCache_next, _LRUCache_prev, _LRUCache_head, _LRUCache_tail, _LRUCache_free, _LRUCache_disposed, _LRUCache_sizes, _LRUCache_starts, _LRUCache_ttls, _LRUCache_hasDispose, _LRUCache_hasFetchMethod, _LRUCache_hasDisposeAfter, _LRUCache_hasOnInsert, _LRUCache_initializeTTLTracking, _LRUCache_updateItemAge, _LRUCache_statusTTL, _LRUCache_setItemTTL, _LRUCache_isStale, _LRUCache_initializeSizeTracking, _LRUCache_removeItemSize, _LRUCache_addItemSize, _LRUCache_requireSize, _LRUCache_indexes, _LRUCache_rindexes, _LRUCache_isValidIndex, _LRUCache_evict, _LRUCache_backgroundFetch, _LRUCache_isBackgroundFetch, _LRUCache_connect, _LRUCache_moveToTail, _LRUCache_delete, _LRUCache_clear, _c, defaultPerf, warned, PROCESS, emitWarning, AC, AS, shouldWarn, isPosInt, getUintArray, ZeroArray, Stack, LRUCache;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/lru-cache.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __awaiter11, __classPrivateFieldSet, __classPrivateFieldGet, __rest2, _a, _b, _Stack_constructing, _LRUCache_instances, _LRUCache_max, _LRUCache_maxSize, _LRUCache_dispose, _LRUCache_onInsert, _LRUCache_disposeAfter, _LRUCache_fetchMethod, _LRUCache_memoMethod, _LRUCache_perf, _LRUCache_size, _LRUCache_calculatedSize, _LRUCache_keyMap, _LRUCache_keyList, _LRUCache_valList, _LRUCache_next, _LRUCache_prev, _LRUCache_head, _LRUCache_tail, _LRUCache_free, _LRUCache_disposed, _LRUCache_sizes, _LRUCache_starts, _LRUCache_ttls, _LRUCache_hasDispose, _LRUCache_hasFetchMethod, _LRUCache_hasDisposeAfter, _LRUCache_hasOnInsert, _LRUCache_initializeTTLTracking, _LRUCache_updateItemAge, _LRUCache_statusTTL, _LRUCache_setItemTTL, _LRUCache_isStale, _LRUCache_initializeSizeTracking, _LRUCache_removeItemSize, _LRUCache_addItemSize, _LRUCache_requireSize, _LRUCache_indexes, _LRUCache_rindexes, _LRUCache_isValidIndex, _LRUCache_evict, _LRUCache_backgroundFetch, _LRUCache_isBackgroundFetch, _LRUCache_connect, _LRUCache_moveToTail, _LRUCache_delete, _LRUCache_clear, _c, defaultPerf, warned, PROCESS, emitWarning, AC, AS, shouldWarn, isPosInt, getUintArray, ZeroArray, Stack, LRUCache;
 var init_lru_cache = __esm({
   "../packages/utils/dist/lru-cache.js"() {
     "use strict";
-    __awaiter3 = function(thisArg, _arguments, P2, generator) {
+    __awaiter11 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
-        return value instanceof P2 ? value : new P2(function(resolve14) {
-          resolve14(value);
+        return value instanceof P2 ? value : new P2(function(resolve29) {
+          resolve29(value);
         });
       }
-      return new (P2 || (P2 = Promise))(function(resolve14, reject2) {
+      return new (P2 || (P2 = Promise))(function(resolve29, reject2) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -24,7 +29,7 @@ var init_lru_cache = __esm({
           }
         }
         function step(result) {
-          result.done ? resolve14(result.value) : adopt(result.value).then(fulfilled, rejected3);
+          result.done ? resolve29(result.value) : adopt(result.value).then(fulfilled, rejected3);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -40,7 +45,7 @@ var init_lru_cache = __esm({
       if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
       return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
     };
-    __rest = function(s3, e) {
+    __rest2 = function(s3, e) {
       var t = {};
       for (var p2 in s3) if (Object.prototype.hasOwnProperty.call(s3, p2) && e.indexOf(p2) < 0)
         t[p2] = s3[p2];
@@ -75,7 +80,7 @@ var init_lru_cache = __esm({
           warnACPolyfill();
         }
         abort(reason) {
-          var _a20, _d;
+          var _a19, _d;
           if (this.signal.aborted)
             return;
           this.signal.reason = reason;
@@ -83,10 +88,10 @@ var init_lru_cache = __esm({
           for (const fn of this.signal._onabort) {
             fn(reason);
           }
-          (_d = (_a20 = this.signal).onabort) === null || _d === void 0 ? void 0 : _d.call(_a20, reason);
+          (_d = (_a19 = this.signal).onabort) === null || _d === void 0 ? void 0 : _d.call(_a19, reason);
         }
       };
-      let printACPolyfillWarning = ((_a17 = PROCESS.env) === null || _a17 === void 0 ? void 0 : _a17.LRU_CACHE_IGNORE_AC_WARNING) !== "1";
+      let printACPolyfillWarning = ((_a = PROCESS.env) === null || _a === void 0 ? void 0 : _a.LRU_CACHE_IGNORE_AC_WARNING) !== "1";
       const warnACPolyfill = () => {
         if (!printACPolyfillWarning)
           return;
@@ -787,7 +792,7 @@ var init_lru_cache = __esm({
        * `cache.delete(key)`. `undefined` is never stored in the cache.
        */
       set(k2, v2, setOptions = {}) {
-        var _a20, _d, _e2, _f, _g, _h, _j;
+        var _a19, _d, _e2, _f, _g, _h, _j;
         var _l;
         if (v2 === void 0) {
           this.delete(k2);
@@ -819,7 +824,7 @@ var init_lru_cache = __esm({
             status.set = "add";
           noUpdateTTL = false;
           if (__classPrivateFieldGet(this, _LRUCache_hasOnInsert, "f")) {
-            (_a20 = __classPrivateFieldGet(this, _LRUCache_onInsert, "f")) === null || _a20 === void 0 ? void 0 : _a20.call(this, v2, k2, "add");
+            (_a19 = __classPrivateFieldGet(this, _LRUCache_onInsert, "f")) === null || _a19 === void 0 ? void 0 : _a19.call(this, v2, k2, "add");
           }
         } else {
           __classPrivateFieldGet(this, _LRUCache_instances, "m", _LRUCache_moveToTail).call(this, index);
@@ -884,7 +889,7 @@ var init_lru_cache = __esm({
        * `undefined` if cache is empty.
        */
       pop() {
-        var _a20;
+        var _a19;
         try {
           while (__classPrivateFieldGet(this, _LRUCache_size, "f")) {
             const val = __classPrivateFieldGet(this, _LRUCache_valList, "f")[__classPrivateFieldGet(this, _LRUCache_head, "f")];
@@ -903,7 +908,7 @@ var init_lru_cache = __esm({
             const dt2 = __classPrivateFieldGet(this, _LRUCache_disposed, "f");
             let task;
             while (task = dt2 === null || dt2 === void 0 ? void 0 : dt2.shift()) {
-              (_a20 = __classPrivateFieldGet(this, _LRUCache_disposeAfter, "f")) === null || _a20 === void 0 ? void 0 : _a20.call(this, ...task);
+              (_a19 = __classPrivateFieldGet(this, _LRUCache_disposeAfter, "f")) === null || _a19 === void 0 ? void 0 : _a19.call(this, ...task);
             }
           }
         }
@@ -967,7 +972,7 @@ var init_lru_cache = __esm({
         return __classPrivateFieldGet(this, _LRUCache_instances, "m", _LRUCache_isBackgroundFetch).call(this, v2) ? v2.__staleWhileFetching : v2;
       }
       fetch(k_1) {
-        return __awaiter3(this, arguments, void 0, function* (k2, fetchOptions = {}) {
+        return __awaiter11(this, arguments, void 0, function* (k2, fetchOptions = {}) {
           const {
             // get options
             allowStale = this.allowStale,
@@ -1057,7 +1062,7 @@ var init_lru_cache = __esm({
         });
       }
       forceFetch(k_1) {
-        return __awaiter3(this, arguments, void 0, function* (k2, fetchOptions = {}) {
+        return __awaiter11(this, arguments, void 0, function* (k2, fetchOptions = {}) {
           const v2 = yield this.fetch(k2, fetchOptions);
           if (v2 === void 0)
             throw new Error("fetch() returned undefined");
@@ -1069,7 +1074,7 @@ var init_lru_cache = __esm({
         if (!memoMethod) {
           throw new Error("no memoMethod provided to constructor");
         }
-        const { context: context2, forceRefresh } = memoOptions, options2 = __rest(memoOptions, ["context", "forceRefresh"]);
+        const { context: context2, forceRefresh } = memoOptions, options2 = __rest2(memoOptions, ["context", "forceRefresh"]);
         const v2 = this.get(k2, options2);
         if (!forceRefresh && v2 !== void 0)
           return v2;
@@ -1143,7 +1148,7 @@ var init_lru_cache = __esm({
       }
     };
     _c = Symbol.toStringTag, _LRUCache_evict = function _LRUCache_evict2(free) {
-      var _a20, _d;
+      var _a19, _d;
       var _e2;
       const head = __classPrivateFieldGet(this, _LRUCache_head, "f");
       const k2 = __classPrivateFieldGet(this, _LRUCache_keyList, "f")[head];
@@ -1152,7 +1157,7 @@ var init_lru_cache = __esm({
         v2.__abortController.abort(new Error("evicted"));
       } else if (__classPrivateFieldGet(this, _LRUCache_hasDispose, "f") || __classPrivateFieldGet(this, _LRUCache_hasDisposeAfter, "f")) {
         if (__classPrivateFieldGet(this, _LRUCache_hasDispose, "f")) {
-          (_a20 = __classPrivateFieldGet(this, _LRUCache_dispose, "f")) === null || _a20 === void 0 ? void 0 : _a20.call(this, v2, k2, "evict");
+          (_a19 = __classPrivateFieldGet(this, _LRUCache_dispose, "f")) === null || _a19 === void 0 ? void 0 : _a19.call(this, v2, k2, "evict");
         }
         if (__classPrivateFieldGet(this, _LRUCache_hasDisposeAfter, "f")) {
           (_d = __classPrivateFieldGet(this, _LRUCache_disposed, "f")) === null || _d === void 0 ? void 0 : _d.push([v2, k2, "evict"]);
@@ -1253,8 +1258,8 @@ var init_lru_cache = __esm({
         return void 0;
       };
       const pcall = (res, rej) => {
-        var _a20;
-        const fmp = (_a20 = __classPrivateFieldGet(this, _LRUCache_fetchMethod, "f")) === null || _a20 === void 0 ? void 0 : _a20.call(this, k2, v2, fetchOpts);
+        var _a19;
+        const fmp = (_a19 = __classPrivateFieldGet(this, _LRUCache_fetchMethod, "f")) === null || _a19 === void 0 ? void 0 : _a19.call(this, k2, v2, fetchOpts);
         if (fmp && fmp instanceof Promise) {
           fmp.then((v3) => res(v3 === void 0 ? void 0 : v3), rej);
         }
@@ -1302,7 +1307,7 @@ var init_lru_cache = __esm({
         __classPrivateFieldSet(this, _LRUCache_tail, index, "f");
       }
     }, _LRUCache_delete = function _LRUCache_delete2(k2, reason) {
-      var _a20, _d, _e2, _f;
+      var _a19, _d, _e2, _f;
       var _g;
       let deleted = false;
       if (__classPrivateFieldGet(this, _LRUCache_size, "f") !== 0) {
@@ -1318,7 +1323,7 @@ var init_lru_cache = __esm({
               v2.__abortController.abort(new Error("deleted"));
             } else if (__classPrivateFieldGet(this, _LRUCache_hasDispose, "f") || __classPrivateFieldGet(this, _LRUCache_hasDisposeAfter, "f")) {
               if (__classPrivateFieldGet(this, _LRUCache_hasDispose, "f")) {
-                (_a20 = __classPrivateFieldGet(this, _LRUCache_dispose, "f")) === null || _a20 === void 0 ? void 0 : _a20.call(this, v2, k2, reason);
+                (_a19 = __classPrivateFieldGet(this, _LRUCache_dispose, "f")) === null || _a19 === void 0 ? void 0 : _a19.call(this, v2, k2, reason);
               }
               if (__classPrivateFieldGet(this, _LRUCache_hasDisposeAfter, "f")) {
                 (_d = __classPrivateFieldGet(this, _LRUCache_disposed, "f")) === null || _d === void 0 ? void 0 : _d.push([v2, k2, reason]);
@@ -1351,7 +1356,7 @@ var init_lru_cache = __esm({
       }
       return deleted;
     }, _LRUCache_clear = function _LRUCache_clear2(reason) {
-      var _a20, _d, _e2;
+      var _a19, _d, _e2;
       for (const index of __classPrivateFieldGet(this, _LRUCache_instances, "m", _LRUCache_rindexes).call(this, { allowStale: true })) {
         const v2 = __classPrivateFieldGet(this, _LRUCache_valList, "f")[index];
         if (__classPrivateFieldGet(this, _LRUCache_instances, "m", _LRUCache_isBackgroundFetch).call(this, v2)) {
@@ -1359,7 +1364,7 @@ var init_lru_cache = __esm({
         } else {
           const k2 = __classPrivateFieldGet(this, _LRUCache_keyList, "f")[index];
           if (__classPrivateFieldGet(this, _LRUCache_hasDispose, "f")) {
-            (_a20 = __classPrivateFieldGet(this, _LRUCache_dispose, "f")) === null || _a20 === void 0 ? void 0 : _a20.call(this, v2, k2, reason);
+            (_a19 = __classPrivateFieldGet(this, _LRUCache_dispose, "f")) === null || _a19 === void 0 ? void 0 : _a19.call(this, v2, k2, reason);
           }
           if (__classPrivateFieldGet(this, _LRUCache_hasDisposeAfter, "f")) {
             (_d = __classPrivateFieldGet(this, _LRUCache_disposed, "f")) === null || _d === void 0 ? void 0 : _d.push([v2, k2, reason]);
@@ -1391,3 +1396,4 @@ var init_lru_cache = __esm({
     };
   }
 });
+

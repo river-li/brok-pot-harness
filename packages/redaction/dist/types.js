@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redaction/dist/types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __classPrivateFieldSet2 = function(receiver, state, value, kind, f2) {
   if (kind === "m") throw new TypeError("Private method is not writable");
   if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
@@ -436,3 +441,4 @@ function isRedactedString(value) {
   return value instanceof RedactedString;
 }
 _RedactedValue_value = /* @__PURE__ */ new WeakMap(), _RedactedValue_privacyContext = /* @__PURE__ */ new WeakMap();
+

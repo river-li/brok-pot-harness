@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/internal/deep-links/declaration.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ROUTE_PATH = /^\/v(0|[1-9]\d*)(?:\/[a-z0-9-]+)+$/;
 var PARAM_NAME = /^[a-z][a-zA-Z0-9]*$/;
 var RESERVED_PARAM_NAMES = /* @__PURE__ */ new Set(["version", "route", "source"]);
@@ -95,3 +100,4 @@ function declareDeepLinkSurface(options2) {
     isDeepLink: (value) => isDeepLinkValue(grammar, value)
   });
 }
+

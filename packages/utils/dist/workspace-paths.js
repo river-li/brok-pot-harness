@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/workspace-paths.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getSafeConversationId(conversationId) {
   let safe = encodeURIComponent(conversationId);
   safe = safe.replace(/%/g, "_");
@@ -14,3 +19,4 @@ var init_workspace_paths = __esm({
     MAX_CONVERSATION_ID_LENGTH = 200;
   }
 });
+

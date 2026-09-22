@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/context/dist/browser-bridge.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BYTE_TO_HEX, ID_ENTROPY_POOL, idEntropyPoolOffset;
 var init_browser_bridge = __esm({
   "../packages/context/dist/browser-bridge.js"() {
@@ -7,3 +12,4 @@ var init_browser_bridge = __esm({
     idEntropyPoolOffset = ID_ENTROPY_POOL.length;
   }
 });
+

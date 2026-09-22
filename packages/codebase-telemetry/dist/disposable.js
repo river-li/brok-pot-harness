@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/codebase-telemetry/dist/disposable.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DisposableStore = class {
   constructor() {
     this.disposables = /* @__PURE__ */ new Set();
@@ -65,3 +70,4 @@ var DisposableStore = class {
     }
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/codebase-telemetry/dist/channels.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createEventChannel(options2) {
   const subscribers = new SubscriberList(options2.onSubscriberError);
   let isDisposed = false;
@@ -109,3 +114,4 @@ var SubscriberList = class {
     this.subscribers.length = 0;
   }
 };
+

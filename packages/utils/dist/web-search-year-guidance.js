@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/web-search-year-guidance.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getIsoDateYearString(dateString) {
   if (dateString.length !== 10 || dateString[4] !== "-" || dateString[7] !== "-") {
     throw new Error(`Expected ISO date string, got: ${dateString}`);
@@ -17,3 +22,4 @@ var init_web_search_year_guidance = __esm({
     "use strict";
   }
 });
+

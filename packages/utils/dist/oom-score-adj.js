@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/oom-score-adj.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function resetChildOomScoreAdj(pid) {
   if (process.platform !== "linux" || pid === void 0 || pid <= 0) {
     return;
@@ -14,3 +19,4 @@ var init_oom_score_adj = __esm({
     import_node_fs = require("node:fs");
   }
 });
+

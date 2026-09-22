@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/internal/deep-links/schema.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function routeString(input) {
   const options2 = input instanceof RegExp ? { pattern: input } : input ?? {};
   if (options2.pattern !== void 0 && options2.oneOf !== void 0) {
@@ -55,3 +60,4 @@ function describeExpectation(options2, matcher) {
 function rejected2(path31, expected, value) {
   return { ok: false, path: path31, expected, received: typeof value };
 }
+

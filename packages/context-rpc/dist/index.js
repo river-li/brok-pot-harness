@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/context-rpc/dist/index.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_esm2();
 init_esm4();
@@ -246,3 +251,4 @@ function createContextPropagatingClient(service, transport, options2 = {}) {
   const base = createClient(service, transport);
   return addContextPropagation(base, options2);
 }
+

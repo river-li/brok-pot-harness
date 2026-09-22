@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/ask-question.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createAskQuestionAutoAnswerIdentity(kind = "timeout") {
   return {
     marker: ASK_QUESTION_AUTO_ANSWER_MARKER,
@@ -31,3 +36,4 @@ var init_ask_question = __esm({
     ASK_QUESTION_AUTO_ANSWER_REASON = formatAskQuestionAutoAnswerReason();
   }
 });
+

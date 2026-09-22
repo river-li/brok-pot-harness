@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-analytics/dist/commit-scoring/git-repo-utils.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function parseGitUrl2(urlString) {
   try {
     let normalizedUrl = urlString;
@@ -79,3 +84,4 @@ function extractRepoNameFromGitUrl(upstreamURL) {
   }
   return void 0;
 }
+

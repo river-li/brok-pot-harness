@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent-analytics/dist/commit-scoring/types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AISource;
 (function(AISource2) {
   AISource2["TAB"] = "tab";
@@ -10,3 +15,4 @@ var AICodeOperationType;
   AICodeOperationType2["ADDITION"] = "addition";
   AICodeOperationType2["DELETION"] = "deletion";
 })(AICodeOperationType || (AICodeOperationType = {}));
+

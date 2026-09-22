@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/agent-store-ids.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isReservedAgentStorePathSegment(segment) {
   return segment.slice(0, AGENT_STORE_RESERVED_CURSOR_PATH_PREFIX.length).toLowerCase() === AGENT_STORE_RESERVED_CURSOR_PATH_PREFIX;
 }
@@ -67,3 +72,4 @@ var init_agent_store_ids = __esm({
     ];
   }
 });
+

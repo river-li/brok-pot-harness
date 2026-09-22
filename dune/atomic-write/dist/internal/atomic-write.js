@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/atomic-write/dist/internal/atomic-write.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs3 = require("node:fs");
 var import_node_path4 = require("node:path");
 var import_write_file_atomic = __toESM(require_lib2(), 1);
@@ -50,3 +55,4 @@ function freshLibraryOptions(options2) {
     chown: false
   };
 }
+

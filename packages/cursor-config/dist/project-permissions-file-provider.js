@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-config/dist/project-permissions-file-provider.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function filterStrings(value) {
   if (!Array.isArray(value)) {
     return void 0;
@@ -32,3 +37,4 @@ function parseProjectPermissionsFileConfig(raw) {
     autoRun: parsePermissionsAutoRunConfig(autoRunConfig)
   };
 }
+

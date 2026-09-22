@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/auto-spillover-ui.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AUTO_SPILLOVER_UI_DEFAULTS;
 var init_auto_spillover_ui = __esm({
   "../packages/constants/dist/auto-spillover-ui.js"() {
@@ -19,3 +24,4 @@ var init_auto_spillover_ui = __esm({
     };
   }
 });
+

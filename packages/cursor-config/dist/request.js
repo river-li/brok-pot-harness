@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-config/dist/request.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isLocalCliMode() {
   var _a19;
   return typeof process !== "undefined" && ((_a19 = process.env) === null || _a19 === void 0 ? void 0 : _a19[LOCAL_CLI_MODE_ENV]) === "true";
@@ -15,3 +20,4 @@ var init_request = __esm({
     LOCAL_CLI_MODE_HEADER = "local-cli-mode";
   }
 });
+

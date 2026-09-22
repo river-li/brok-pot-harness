@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/git-core/dist/process-env.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_os12 = require("node:os");
 var PINNED_GIT_CONFIG_ENTRIES = [
   ["safe.bareRepository", "explicit"],
@@ -52,3 +57,4 @@ function createGitProcessEnv(options2) {
   }
   return applyPinnedGitConfig(merged);
 }
+

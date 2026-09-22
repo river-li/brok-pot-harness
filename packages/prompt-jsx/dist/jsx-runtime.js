@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/prompt-jsx/dist/jsx-runtime.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function jsx(type2, props, ...children) {
   const normalizedProps = props || {};
   const allChildren = normalizedProps.children ? Array.isArray(normalizedProps.children) ? normalizedProps.children : [normalizedProps.children] : children;
@@ -14,3 +19,4 @@ function Fragment(props) {
 function jsxs(type2, props) {
   return jsx(type2, props);
 }
+

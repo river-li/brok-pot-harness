@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/codebase-telemetry/dist/logging.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createNonThrowingLogger(logger108) {
   return {
     error: (message, error42) => {
@@ -114,3 +119,4 @@ ${formattedErrors.join("\n")}`);
   seen.delete(value);
   return formatted;
 }
+

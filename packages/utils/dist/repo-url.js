@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/repo-url.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function trimRemotePath(pathname) {
   let end = pathname.length;
   while (end > 0 && pathname.charCodeAt(end - 1) === 47) {
@@ -176,3 +181,4 @@ var init_repo_url = __esm({
     AGENT_TEMP_DRAFT_REPO_NAME_PATTERN = new RegExp(`^${AGENT_TEMP_DRAFT_REPO_NAME_PREFIX}[0-9a-f]{${AGENT_TEMP_DRAFT_REPO_NAME_HEX_LENGTH}}$`);
   }
 });
+

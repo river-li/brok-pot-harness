@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/async-iterator.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getFirstItem(iterable) {
   return __awaiter9(this, void 0, void 0, function* () {
     const iterator = iterable[Symbol.asyncIterator]();
@@ -97,3 +102,4 @@ var init_async_iterator = __esm({
     };
   }
 });
+

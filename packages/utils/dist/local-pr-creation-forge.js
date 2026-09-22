@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/local-pr-creation-forge.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function shouldRerenderUserInfoForLocalPrCreationForge(args) {
   if (args.forgeRuleContent === void 0 || args.forgeRuleContent.length === 0) {
     return [
@@ -22,3 +27,4 @@ var init_local_pr_creation_forge = __esm({
     ].join("\n");
   }
 });
+

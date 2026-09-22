@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/mcp.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function cursorScmMcpServerIdentifier(provider) {
   return `${CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX}${provider}`;
 }
@@ -9,16 +14,16 @@ function parseRestMcpScmToolError(args) {
   if (boundProvider === void 0) {
     return void 0;
   }
-  let parsed;
+  let parsed2;
   try {
-    parsed = JSON.parse(args.text);
-  } catch (_a20) {
+    parsed2 = JSON.parse(args.text);
+  } catch (_a19) {
     return void 0;
   }
-  if (typeof parsed !== "object" || parsed === null) {
+  if (typeof parsed2 !== "object" || parsed2 === null) {
     return void 0;
   }
-  const body = parsed;
+  const body = parsed2;
   if (typeof body.error !== "string" || !REST_MCP_SCM_ERROR_CODE_SET.has(body.error) || body.provider !== boundProvider) {
     return void 0;
   }
@@ -31,7 +36,7 @@ function getRestMcpProviderIdForUrlPath(serverUrl) {
   let url2;
   try {
     url2 = new URL(serverUrl);
-  } catch (_a20) {
+  } catch (_a19) {
     return void 0;
   }
   const match2 = /^\/rest-mcp\/([^/]+)\/mcp\/?$/.exec(url2.pathname);
@@ -54,70 +59,29 @@ function parseRestMcpProviderMetadataFromPrm(document2) {
   }
   return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, clientId !== void 0 ? { clientId } : {}), fields2.cursor_omit_resource_indicator === true ? { omitResourceIndicator: true } : {}), fields2.cursor_omit_consent_prompt === true ? { omitConsentPrompt: true } : {}), authorizationParams !== void 0 ? { authorizationParams } : {}), fields2.cursor_rejects_custom_scheme_redirects === true ? { rejectsCustomSchemeRedirects: true } : {}), fields2.cursor_unauthenticated_connect === true ? { unauthenticatedConnect: true } : {}), fields2.cursor_loopback_ipv4 === true ? { loopbackIpv4: true } : {}), fields2.cursor_backend_only_token_exchange === true ? { backendOnlyTokenExchange: true } : {});
 }
-function getMcpOAuthProviderPolicy(hostname2) {
-  return MCP_OAUTH_PROVIDER_POLICIES.get(hostname2.toLowerCase());
-}
-function getMcpOAuthProviderPolicyForUrl(serverUrl) {
-  if (serverUrl === void 0) {
-    return void 0;
-  }
-  let hostname2;
-  try {
-    hostname2 = new URL(serverUrl).hostname;
-  } catch (_a20) {
-    return void 0;
-  }
-  return getMcpOAuthProviderPolicy(hostname2);
-}
-function applyMcpOAuthProviderAuthorizationParams(authorizationUrl, mcpServerUrl) {
-  var _a20;
-  const params = (_a20 = getMcpOAuthProviderPolicyForUrl(mcpServerUrl)) === null || _a20 === void 0 ? void 0 : _a20.authorizationParams;
-  if (params === void 0) {
-    return;
-  }
-  for (const [key, value] of Object.entries(params)) {
-    authorizationUrl.searchParams.set(key, value);
-  }
-}
 function isLoopbackHttpUri(uri) {
   try {
-    const parsed = new URL(uri);
-    if (parsed.protocol !== "http:") {
+    const parsed2 = new URL(uri);
+    if (parsed2.protocol !== "http:") {
       return false;
     }
-    const host = parsed.hostname;
+    const host = parsed2.hostname;
     return host === "localhost" || host === "127.0.0.1" || host === "[::1]";
-  } catch (_a20) {
+  } catch (_a19) {
     return false;
   }
 }
 function mcpOAuthLoopbackRedirectUrl(args) {
-  var _a20;
-  const redirectUrl = (_a20 = args.redirectUrl) !== null && _a20 !== void 0 ? _a20 : MCP_OAUTH_LOOPBACK_CALLBACK_URL;
+  var _a19;
+  const redirectUrl = (_a19 = args.redirectUrl) !== null && _a19 !== void 0 ? _a19 : MCP_OAUTH_LOOPBACK_CALLBACK_URL;
   if (args.loopbackIpv4 !== true || !isLoopbackHttpUri(redirectUrl)) {
     return redirectUrl;
   }
-  const parsed = new URL(redirectUrl);
-  parsed.hostname = MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME;
-  return parsed.toString();
+  const parsed2 = new URL(redirectUrl);
+  parsed2.hostname = MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME;
+  return parsed2.toString();
 }
-function getCanonicalMcpOAuthRedirectUris(currentRedirectUri) {
-  const redirectUris = /* @__PURE__ */ new Set();
-  const isCurrentLoopbackHttp = currentRedirectUri !== void 0 && isLoopbackHttpUri(currentRedirectUri);
-  if (currentRedirectUri && !isCurrentLoopbackHttp) {
-    redirectUris.add(currentRedirectUri);
-  }
-  redirectUris.add(MCP_OAUTH_PORTAL_CALLBACK_URL);
-  if (currentRedirectUri === MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL) {
-    redirectUris.add(MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL);
-  }
-  redirectUris.add(MCP_OAUTH_LOOPBACK_CALLBACK_URL);
-  if (currentRedirectUri && isCurrentLoopbackHttp) {
-    redirectUris.add(currentRedirectUri);
-  }
-  return Array.from(redirectUris);
-}
-var GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
+var GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_SCM_ERROR_CODES, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
 var init_mcp = __esm({
   "../packages/constants/dist/mcp.js"() {
     "use strict";
@@ -143,7 +107,6 @@ var init_mcp = __esm({
       unauthenticatedConnect: false,
       backendOnlyTokenExchange: true
     };
-    REST_MCP_CURSOR_AUTH_HEADER = "x-cursor-auth";
     REST_MCP_SCM_ERROR_CODES = {
       /** The Cursor account has no connection for `provider`. */
       notConnected: "scm_not_connected",
@@ -249,14 +212,10 @@ var init_mcp = __esm({
       ["mcp.money-staging.x.com", X_MONEY_POLICY_BASE],
       ["mcp.money.x.com", X_MONEY_POLICY_BASE]
     ]);
-    GOOGLE_WORKSPACE_MCP_HOSTS = new Set([...MCP_OAUTH_PROVIDER_POLICIES].filter(([, policy]) => policy.provider === "google-workspace").map(([hostname2]) => hostname2));
-    MCP_OAUTH_CLIENT_LOGO_URI = "https://ptht05hbb1ssoooe.public.blob.vercel-storage.com/assets/uploads/cursorlogomcpv3.svg";
+    GOOGLE_WORKSPACE_MCP_HOSTS = new Set([...MCP_OAUTH_PROVIDER_POLICIES].filter(([, policy]) => policy.provider === "google-workspace").map(([hostname3]) => hostname3));
     MCP_OAUTH_EXTENSION_ID = "anysphere.cursor-mcp";
     MCP_OAUTH_RETURN_PATH = "/oauth/return";
     MCP_OAUTH_DESKTOP_RETURN_URL = `cursor://${MCP_OAUTH_EXTENSION_ID}${MCP_OAUTH_RETURN_PATH}`;
-    MCP_OAUTH_PORTAL_CALLBACK_URL = "https://www.cursor.com/agents/mcp/oauth/callback";
-    MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL = "https://www.cursor.com/bot/mcp/oauth/callback";
-    MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL = "grokbot://mcp/oauth/callback";
     MCP_OAUTH_LOOPBACK_CALLBACK_URL = "http://localhost:8787/callback";
     MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME = "127.0.0.1";
     MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL = mcpOAuthLoopbackRedirectUrl({
@@ -264,3 +223,4 @@ var init_mcp = __esm({
     });
   }
 });
+

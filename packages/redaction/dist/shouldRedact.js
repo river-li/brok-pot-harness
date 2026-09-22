@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redaction/dist/shouldRedact.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function shouldRedact(privacyMode, classification) {
   if (classification === DataClassification.CREDENTIALS || classification === DataClassification.UNSPECIFIED) {
     return true;
@@ -35,3 +40,4 @@ function getRedactionAwareDisplayValue(options2) {
   }
   return shouldRedact(privacyMode, classification) ? formatRedacted(fieldName) : unredactedValue;
 }
+

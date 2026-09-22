@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/codebase-telemetry/dist/types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var CodebaseKind = {
   UNSPECIFIED: 0,
   WORKSPACE_ROOT: 10,
@@ -23,3 +28,4 @@ var CODEBASE_ENVIRONMENTS = new Set(Object.values(CodebaseEnvironment));
 function isCodebaseEnvironment(environment) {
   return CODEBASE_ENVIRONMENTS.has(environment);
 }
+

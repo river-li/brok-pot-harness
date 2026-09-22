@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redaction/dist/core-message.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var RedactedTextPart = class {
   constructor(text2, providerOptions) {
     this.text = text2;
@@ -410,3 +415,4 @@ function fromRedactedSystemMessage(message, purpose, opts) {
     providerOptions: message.providerOptions
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redaction/dist/schema.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var rawSchema = REDACTION_SCHEMA;
 var REDACTION_SCHEMA2 = Object.fromEntries(Object.entries(rawSchema).map(([msgName, fields2]) => [
   msgName,
@@ -31,3 +36,4 @@ function stringToClassification(str3) {
       return DataClassification.CODE;
   }
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/cloud-canvas-links.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isCloudCanvasStoreId(value) {
   return PATH_SAFE_STORE_ID_PATTERN.test(value);
 }
@@ -32,3 +37,4 @@ var init_cloud_canvas_links = __esm({
     PATH_SAFE_STORE_ID_PATTERN = /^[0-9A-Za-z][0-9A-Za-z._-]{0,199}$/;
   }
 });
+

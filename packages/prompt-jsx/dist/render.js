@@ -1,4 +1,9 @@
-var __rest5 = function(s3, e) {
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/prompt-jsx/dist/render.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __rest3 = function(s3, e) {
   var t = {};
   for (var p2 in s3) if (Object.prototype.hasOwnProperty.call(s3, p2) && e.indexOf(p2) < 0)
     t[p2] = s3[p2];
@@ -169,8 +174,8 @@ var RenderContext = class {
       const itemContent = this.renderContent(element.props.children);
       return `- ${itemContent}`;
     }
-    const messages = this.renderToMessages(element);
-    return messages.map((msg) => msg.content).join("\n");
+    const messages2 = this.renderToMessages(element);
+    return messages2.map((msg) => msg.content).join("\n");
   }
   /**
    * Renders content with paragraph-aware spacing
@@ -311,8 +316,8 @@ ${curr.content}`;
    * Renders an x element as XML with proper attribute and content formatting
    */
   renderXElement(props) {
-    const { children, key: _key, tag } = props, attributes = __rest5(props, ["children", "key", "tag"]);
-    const tagName = tag || "x";
+    const { children, key: _key, tag } = props, attributes = __rest3(props, ["children", "key", "tag"]);
+    const tagName2 = tag || "x";
     const content = this.renderContent(children);
     const attributeString = Object.keys(attributes).filter((attr) => attributes[attr] != null).map((attr) => {
       const value = attributes[attr];
@@ -323,9 +328,9 @@ ${curr.content}`;
     }).filter((attr) => attr).join(" ");
     const attributePrefix = attributeString ? ` ${attributeString}` : "";
     if (!content.trim()) {
-      return `<${tagName}${attributePrefix} />`;
+      return `<${tagName2}${attributePrefix} />`;
     } else {
-      return `<${tagName}${attributePrefix}>${content}</${tagName}>`;
+      return `<${tagName2}${attributePrefix}>${content}</${tagName2}>`;
     }
   }
   /**
@@ -333,8 +338,8 @@ ${curr.content}`;
    * Sections have newlines after opening tag and before closing tag
    */
   renderSection(props) {
-    const { children, key: _key, title } = props, attributes = __rest5(props, ["children", "key", "title"]);
-    const tagName = String(title).toLowerCase().replace(/\s+/g, "-");
+    const { children, key: _key, title } = props, attributes = __rest3(props, ["children", "key", "title"]);
+    const tagName2 = String(title).toLowerCase().replace(/\s+/g, "-");
     const content = this.renderContent(children);
     const attributeString = Object.keys(attributes).filter((attr) => attributes[attr] != null).map((attr) => {
       const value = attributes[attr];
@@ -345,11 +350,11 @@ ${curr.content}`;
     }).filter((attr) => attr).join(" ");
     const attributePrefix = attributeString ? ` ${attributeString}` : "";
     if (!content.trim()) {
-      return `<${tagName}${attributePrefix} />`;
+      return `<${tagName2}${attributePrefix} />`;
     } else {
-      return `<${tagName}${attributePrefix}>
+      return `<${tagName2}${attributePrefix}>
 ${content}
-</${tagName}>`;
+</${tagName2}>`;
     }
   }
   /**
@@ -368,10 +373,10 @@ ${content}
       if (child && typeof child === "object" && !Array.isArray(child) && "type" in child) {
         const element = child;
         if (element.type === "li") {
-          const { textContent: textContent2, nestedLists } = this.extractListItemContent(element.props.children, indent + 1, baseIndentWidth + markerWidth);
-          if (textContent2.trim() || nestedLists.length > 0) {
-            if (textContent2.trim()) {
-              items.push(`${indentStr}${itemNumber}. ${textContent2.trim()}`);
+          const { textContent, nestedLists } = this.extractListItemContent(element.props.children, indent + 1, baseIndentWidth + markerWidth);
+          if (textContent.trim() || nestedLists.length > 0) {
+            if (textContent.trim()) {
+              items.push(`${indentStr}${itemNumber}. ${textContent.trim()}`);
               items.push(...nestedLists);
             } else if (nestedLists.length > 0) {
               const combinedNested = nestedLists.join("\n");
@@ -422,10 +427,10 @@ ${content}
       if (child && typeof child === "object" && !Array.isArray(child) && "type" in child) {
         const element = child;
         if (element.type === "li") {
-          const { textContent: textContent2, nestedLists } = this.extractListItemContent(element.props.children, indent + 1, baseIndentWidth + markerWidth);
-          if (textContent2.trim() || nestedLists.length > 0) {
-            if (textContent2.trim()) {
-              items.push(`${indentStr}- ${textContent2.trim()}`);
+          const { textContent, nestedLists } = this.extractListItemContent(element.props.children, indent + 1, baseIndentWidth + markerWidth);
+          if (textContent.trim() || nestedLists.length > 0) {
+            if (textContent.trim()) {
+              items.push(`${indentStr}- ${textContent.trim()}`);
             }
             items.push(...nestedLists);
           }
@@ -573,3 +578,4 @@ function renderContent(element, options2) {
   const context2 = new RenderContext(options2 || {});
   return context2.renderContent(element);
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/host-extensions/boot.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist();
 var HOST_EXTENSION_START_DEADLINE = "host-extension-start";
 var HostExtensionGraphError = class extends Error {
@@ -125,3 +130,4 @@ function describeCycle(peersOf, started2) {
   }
   return unsettled.join(" \u2192 ");
 }
+

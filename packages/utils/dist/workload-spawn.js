@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/workload-spawn.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function buildPlacementShimScript(workloadCgroupDir) {
   return `echo $$ 2>/dev/null > '${workloadCgroupDir}/cgroup.procs'; echo 0 2>/dev/null > /proc/$$/oom_score_adj; exec "$0" "$@"`;
 }
@@ -54,3 +59,4 @@ var init_workload_spawn = __esm({
     spawnWorkload = createSpawnWorkload(capturedWorkloadPlacement);
   }
 });
+

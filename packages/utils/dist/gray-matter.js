@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/gray-matter.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_gray_matter = __toESM(require_gray_matter(), 1);
 var parseJavascriptFrontmatterAsPlaintext = () => {
   return {};
@@ -13,3 +18,4 @@ function grayMatter(content, options2) {
 function grayMatterStringify(content, data, options2) {
   return import_gray_matter.default.stringify({ content, data: {} }, data, options2);
 }
+

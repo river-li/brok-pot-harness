@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/image-resize.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_webp_codec();
 var __awaiter24 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -197,3 +202,4 @@ var resizeImageBufferIfNeeded = (imageData, options2) => __awaiter24(void 0, voi
   }
   return { data: toUint8Array(resultBuffer), mimeType: outputMimeType };
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/codebase-telemetry/dist/controller-machine.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createInitialControllerState(auth2) {
   return { kind: "inactive", auth: auth2 };
 }
@@ -478,3 +483,4 @@ function stopTelemetry(state, reason) {
     }
   }
 }
+

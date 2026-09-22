@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/origin-git-auth.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function base64Ascii(input) {
   return typeof Buffer !== "undefined" ? Buffer.from(input).toString("base64") : btoa(input);
 }
@@ -32,3 +37,4 @@ var init_origin_git_auth = __esm({
     ]);
   }
 });
+

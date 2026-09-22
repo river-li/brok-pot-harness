@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/cloud-agent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isComputerUseGuidedSkill(skill) {
   var _a19, _b2;
   return COMPUTER_USE_GUIDED_SKILL_PATTERN.test(`${(_a19 = skill.fullPath) !== null && _a19 !== void 0 ? _a19 : ""}
@@ -24,3 +29,4 @@ var init_cloud_agent = __esm({
     CLOUD_AGENT_ARTIFACTS_DIR = "/opt/cursor/artifacts/";
   }
 });
+

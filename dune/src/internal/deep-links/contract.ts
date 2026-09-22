@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/internal/deep-links/contract.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function hasDeepLinkControlCharacters(value) {
   for (let index = 0; index < value.length; index++) {
     const code = value.charCodeAt(index);
@@ -17,3 +22,4 @@ var DeepLinkBuildError = class extends Error {
     this.name = "DeepLinkBuildError";
   }
 };
+

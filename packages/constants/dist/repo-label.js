@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/repo-label.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isKnownGitHostingDomain(hostname3) {
   const lowerHostname = hostname3.toLowerCase();
   if (KNOWN_GIT_HOSTING_DOMAINS.has(lowerHostname)) {
@@ -136,3 +141,4 @@ var init_repo_label = __esm({
     ORIGIN_WEB_HOST_PATTERN = /^origin(?:-[a-z0-9]+)?\.cursor\.com$/i;
   }
 });
+

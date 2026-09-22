@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/internal/rpc/declaration.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function rpcType() {
   return {};
 }
@@ -35,3 +40,4 @@ function declareRpcEdge(edge, options2) {
     hasEvents: options2.events != null
   });
 }
+

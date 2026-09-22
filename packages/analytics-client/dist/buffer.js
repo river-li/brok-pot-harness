@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/analytics-client/dist/buffer.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_analytics_pb();
+
+// @recovered-fragment 2/2
 var __awaiter73 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -156,3 +164,4 @@ var AnalyticsBuffer = class {
     (_b2 = (_a19 = this.flushTimer).unref) === null || _b2 === void 0 ? void 0 : _b2.call(_a19);
   }
 };
+

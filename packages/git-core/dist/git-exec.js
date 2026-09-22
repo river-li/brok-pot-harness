@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/git-core/dist/git-exec.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_child_process5 = require("node:child_process");
+var import_node_util2 = require("node:util");
+
+// @recovered-fragment 2/2
 var __awaiter52 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -68,3 +77,4 @@ function gitExecFile(file2, args, options2) {
     };
   });
 }
+

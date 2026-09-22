@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/commit-identity.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function hasCursorCommitAttribution(text2) {
   const lower = text2.toLowerCase();
   return lower.includes(`co-authored-by: ${CURSOR_COAUTHOR_NAME.toLowerCase()}`) || lower.includes(LEGACY_MADE_WITH_TRAILER.toLowerCase());
@@ -12,3 +17,4 @@ var init_commit_identity = __esm({
     LEGACY_MADE_WITH_TRAILER = "Made-with: Cursor";
   }
 });
+

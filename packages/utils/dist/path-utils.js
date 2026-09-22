@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/path-utils.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function untildify(path31) {
   return path31.replace(/^~(?=$|\/|\\)/, (0, import_node_os2.homedir)());
 }
@@ -150,3 +155,4 @@ var init_path_utils = __esm({
     WORKTREE_GUARD_ERROR = "You cannot search other worktrees for this repository, stay within your workspace paths.";
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/sand-supervisor.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isSandHostBundleChannel(value) {
   return typeof value === "string" && SAND_HOST_BUNDLE_CHANNELS.includes(value);
 }
@@ -70,3 +75,4 @@ var init_sand_supervisor = __esm({
     SAND_HOST_UPGRADE_MAX_DEFER_MS = 6 * 60 * 60 * 1e3;
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/spawn-promise.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function spawn(exe, params, opts) {
   var _a20;
   opts = opts !== null && opts !== void 0 ? opts : {};
@@ -220,3 +225,4 @@ var init_spawn_promise = __esm({
     };
   }
 });
+

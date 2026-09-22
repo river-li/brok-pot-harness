@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/sand-box-archive.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_BOX_PERSIST_ARCHIVE_EXCLUDES, SAND_WORKSPACE_IGNORE_FILE_NAME, SAND_BOX_WORKSPACE_DEFAULT_IGNORE_PATTERNS;
 var init_sand_box_archive = __esm({
   "../packages/constants/dist/sand-box-archive.js"() {
@@ -49,3 +54,4 @@ var init_sand_box_archive = __esm({
     ];
   }
 });
+

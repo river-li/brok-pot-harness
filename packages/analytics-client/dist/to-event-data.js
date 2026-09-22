@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/analytics-client/dist/to-event-data.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_analytics_pb();
 function toEventData(props) {
   const out = {};
@@ -16,3 +21,4 @@ function toEventData(props) {
   }
   return out;
 }
+

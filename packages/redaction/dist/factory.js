@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/redaction/dist/factory.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createRedactedString(value, classification, fieldName, modeOrContext) {
   return new RedactedString(value, classification, fieldName, modeOrContext);
 }
@@ -22,3 +27,4 @@ var PRIVACY_MODE_STRICTNESS = {
   [PrivacyMode2.USAGE_DATA_TRAINING_ALLOWED]: 2,
   [PrivacyMode2.USAGE_CODEBASE_TRAINING_ALLOWED]: 1
 };
+

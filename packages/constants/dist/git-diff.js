@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/git-diff.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GIT_DIFF_APPROXIMATE_MAX_TOKENS, GIT_DIFF_CHARS_PER_TOKEN, MAX_GIT_DIFF_CHAR_LENGTH, GIT_DIFF_INTRO, GIT_DIFF_UNCOMMITTED_INTRO, GIT_DIFF_TRUNCATION_NOTICE;
 var init_git_diff = __esm({
   "../packages/constants/dist/git-diff.js"() {
@@ -10,3 +15,4 @@ var init_git_diff = __esm({
     GIT_DIFF_TRUNCATION_NOTICE = "\n\n[diff truncated due to size; run `git diff` locally for the full output]";
   }
 });
+

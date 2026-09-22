@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/promise-extras.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function asyncMapValues(array2, selector, options2) {
   return __awaiter14(this, void 0, void 0, function* () {
     const { max = 4 } = options2 !== null && options2 !== void 0 ? options2 : {};
@@ -125,3 +130,4 @@ var init_promise_extras = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/codebase-telemetry/dist/privacy.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PrivacyMode3 = {
   UNSPECIFIED: 0,
   NO_STORAGE: 1,
@@ -19,3 +24,4 @@ function toPrivacyMode(value) {
 function isCodebaseTelemetryAllowed(mode) {
   return mode === PrivacyMode3.USAGE_CODEBASE_TRAINING_ALLOWED;
 }
+

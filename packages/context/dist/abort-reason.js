@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/context/dist/abort-reason.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getAbortReasonInfo(reason) {
   if (reason instanceof Error) {
     return {
@@ -19,3 +24,4 @@ var init_abort_reason = __esm({
     "use strict";
   }
 });
+

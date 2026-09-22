@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/permissions.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TeamPermission, TEAM_PERMISSIONS, OrganizationPermission, ORGANIZATION_PERMISSIONS, AgentStorePermission, AGENT_STORE_PERMISSIONS, AgentStoreSharePermission, AGENT_STORE_SHARE_PERMISSIONS, GrokBotTemplatePermission, GROK_BOT_TEMPLATE_PERMISSIONS, KeyringPermission, KEYRING_PERMISSIONS, EnvironmentPermission, ENVIRONMENT_PERMISSIONS;
 var init_permissions = __esm({
   "../packages/constants/dist/permissions.js"() {
@@ -101,3 +106,4 @@ var init_permissions = __esm({
     ENVIRONMENT_PERMISSIONS = Object.values(EnvironmentPermission);
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/git-provider-url.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function stripGitSuffix(segment) {
   return segment.replace(GIT_SUFFIX, "");
 }
@@ -112,3 +117,4 @@ var init_git_provider_url = __esm({
     BITBUCKET_NON_REPOSITORY_ROOT_PATHS = /* @__PURE__ */ new Set(["account", "dashboard"]);
   }
 });
+

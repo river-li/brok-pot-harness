@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/scheduling/dist/internal/policies.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function failedStop(policyName, reason, cause) {
   return { policyName, reason, errorClass: cause instanceof Error ? cause.name : typeof cause };
 }
@@ -476,3 +481,4 @@ var init_policies = __esm({
     POLICY_NAME_PATTERN = /^[a-z0-9]+([-.][a-z0-9]+)*$/;
   }
 });
+

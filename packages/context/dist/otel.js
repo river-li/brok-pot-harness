@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/context/dist/otel.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getTracer(name17 = "context-tracer") {
   return trace.getTracer(name17);
 }
@@ -41,7 +46,7 @@ function withInheritableAttribute(ctx, key, value) {
   return ctx.with(INHERITABLE_SPAN_ATTRIBUTES_KEY, Object.assign(Object.assign({}, existing), { [key]: value }));
 }
 function getSpanContextData(ctx) {
-  var _a20;
+  var _a19;
   try {
     const span = getSpan2(ctx);
     if (!span) {
@@ -53,36 +58,28 @@ function getSpanContextData(ctx) {
       traceId: sc.traceId,
       spanId: sc.spanId,
       traceFlags: isSuppressed ? 0 : sc.traceFlags,
-      traceState: (_a20 = sc.traceState) === null || _a20 === void 0 ? void 0 : _a20.toString()
+      traceState: (_a19 = sc.traceState) === null || _a19 === void 0 ? void 0 : _a19.toString()
     };
   } catch (_b2) {
     return void 0;
   }
 }
-function reportEvent(ctx, name17) {
-  var _a20;
-  try {
-    const tracer = getTracer();
-    const parentSpan = getSpan2(ctx);
-    if (!parentSpan) {
-      return;
-    }
-    const parentCtx = trace.setSpan(context.active(), parentSpan);
-    const eventSpan = tracer.startSpan(name17, void 0, parentCtx);
-    const inherited = ctx.get(INHERITABLE_SPAN_ATTRIBUTES_KEY);
-    for (const key in inherited) {
-      eventSpan.setAttribute(key, inherited[key]);
-    }
-    const now = Date.now();
-    const rootStart = ctx.get(ROOT_SPAN_START_MS_KEY);
-    const delta = typeof rootStart === "number" ? now - rootStart : 0;
-    const attrKey = `event.${name17}`;
-    const rootSpan = (_a20 = ctx.get(ROOT_SPAN_KEY)) !== null && _a20 !== void 0 ? _a20 : parentSpan;
-    rootSpan.setAttribute(attrKey, delta);
-    eventSpan.setAttribute(attrKey, delta);
-    eventSpan.end();
-  } catch (_b2) {
-  }
+function createContextFromSpanContext(spanContext, name17, existingContext) {
+  const tracer = getTracer();
+  const remoteSpanContext = {
+    traceId: spanContext.traceId,
+    spanId: spanContext.spanId,
+    traceFlags: spanContext.traceFlags,
+    isRemote: true
+  };
+  const otelCtx = trace.setSpanContext(context.active(), remoteSpanContext);
+  const spanName = name17 || "child.span";
+  const span = tracer.startSpan(spanName, {
+    kind: SpanKind2.INTERNAL
+  }, otelCtx);
+  const parentCtx = existingContext !== null && existingContext !== void 0 ? existingContext : createContext();
+  const ctx = name17 ? parentCtx.withName(name17) : parentCtx;
+  return ctx.with(SPAN_KEY2, span);
 }
 function createContextFromRemoteSpanContext(spanContext, name17, existingContext) {
   const span = trace.wrapSpanContext({
@@ -115,8 +112,8 @@ var SPAN_KEY2, ROOT_SPAN_KEY, ROOT_SPAN_START_MS_KEY, SUPPRESS_CHILD_SPANS_KEY, 
 var init_otel = __esm({
   "../packages/context/dist/otel.js"() {
     "use strict";
-    init_esm();
-    init_core();
+    init_esm4();
+    init_core3();
     SPAN_KEY2 = createKey(/* @__PURE__ */ Symbol("otel.span"), void 0);
     ROOT_SPAN_KEY = createKey(/* @__PURE__ */ Symbol("otel.root_span"), void 0);
     ROOT_SPAN_START_MS_KEY = createKey(/* @__PURE__ */ Symbol("otel.root_start_ms"), void 0);
@@ -136,3 +133,4 @@ var init_otel = __esm({
     };
   }
 });
+

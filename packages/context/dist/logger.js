@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/context/dist/logger.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function shouldUseColors(useColors) {
   var _a19;
   var _b2;
@@ -384,3 +389,4 @@ var init_logger = __esm({
     loggerKey = createKey(/* @__PURE__ */ Symbol("loggerBackend"), defaultLoggerBackend);
   }
 });
+

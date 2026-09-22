@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/host-extensions/events.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createHostEvents(options2) {
   const handlers = /* @__PURE__ */ new Map();
   return {
@@ -32,3 +37,4 @@ function createHostEvents(options2) {
     }
   };
 }
+

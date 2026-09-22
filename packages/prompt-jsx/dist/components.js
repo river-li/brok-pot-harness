@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/prompt-jsx/dist/components.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var System = (props) => {
   return jsx("System", props);
 };
@@ -21,3 +26,4 @@ var builtinComponents = {
   Conversation,
   Fragment
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/context/dist/core.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createKey(name17, defaultValue) {
   return { symbol: name17, defaultValue };
 }
@@ -114,3 +119,4 @@ var init_core3 = __esm({
     };
   }
 });
+

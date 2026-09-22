@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/raster-dimensions.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PNG_SIGNATURE2 = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 var PNG_IHDR_CHUNK_BYTES = 25;
 var PNG_IEND_TRAILER = Buffer.from([
@@ -74,3 +79,4 @@ var readRasterDimensions = (buffer) => {
   var _a19;
   return (_a19 = readPngDimensions2(buffer)) !== null && _a19 !== void 0 ? _a19 : readJpegDimensions2(buffer);
 };
+

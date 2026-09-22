@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/glass-perf-vote-config.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GLASS_PERF_VOTE_CONFIG_DEFAULTS;
 var init_glass_perf_vote_config = __esm({
   "../packages/constants/dist/glass-perf-vote-config.js"() {
@@ -17,3 +22,4 @@ var init_glass_perf_vote_config = __esm({
     };
   }
 });
+

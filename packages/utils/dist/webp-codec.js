@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/webp-codec.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var registeredCodec, hasWebpCodec, requireCodec, isWebp, readWebpDimensions, decodeWebp, encodeWebp;
 var init_webp_codec = __esm({
   "../packages/utils/dist/webp-codec.js"() {
@@ -49,3 +54,4 @@ var init_webp_codec = __esm({
     encodeWebp = (bitmap) => requireCodec().encode(bitmap);
   }
 });
+

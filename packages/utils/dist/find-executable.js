@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/find-executable.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function statSyncNoException(file) {
   try {
     return sfs.statSync(
@@ -110,3 +115,4 @@ var init_find_executable = __esm({
     runDownPathCache = new LRUCache({ max: 512 });
   }
 });
+

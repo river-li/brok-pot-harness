@@ -1,60 +1,32 @@
-function getFileExtension(filePath) {
-  const lowerCasePath = filePath.toLowerCase();
-  const lastDotIndex = lowerCasePath.lastIndexOf(".");
-  if (lastDotIndex === -1) {
-    return "";
-  }
-  return lowerCasePath.substring(lastDotIndex);
-}
-function isVideoFilePath(filePath) {
-  const ext2 = getFileExtension(filePath);
-  return VIDEO_EXTENSIONS.has(ext2);
-}
-function readText(file, encodingHint) {
-  return __awaiter2(this, void 0, void 0, function* () {
-    const buf = yield (0, import_promises.readFile)(file);
-    const format2 = getFormatForBuffer(buf);
-    if (format2.isBinaryFile) {
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/encoding.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+function readText(file2, encodingHint) {
+  return __awaiter10(this, void 0, void 0, function* () {
+    const buf = yield (0, import_promises3.readFile)(file2);
+    const format4 = getFormatForBuffer(buf);
+    if (format4.isBinaryFile) {
       throw new Error("Binary file cannot be decoded as text");
     }
-    const cachedEncoding = _FILE_TO_ENCODING.get(file);
+    const cachedEncoding = _FILE_TO_ENCODING.get(file2);
     let encodingToUse;
     if (encodingHint) {
       encodingToUse = encodingHint;
     } else if (cachedEncoding) {
       encodingToUse = cachedEncoding;
     } else {
-      encodingToUse = format2.encoding;
+      encodingToUse = format4.encoding;
     }
     const { text: text2, encoding } = decodeBufferWithEncoding(buf, encodingToUse);
     const str3 = stripUtf8Bom(text2);
-    setFileEncoding(file, encoding === UTF8_ENCODING && hasUtf8Bom(buf) ? UTF8_BOM_ENCODING : encoding);
-    if (format2.lineEnding === LineEnding.CRLF) {
+    setFileEncoding(file2, encoding === UTF8_ENCODING && hasUtf8Bom(buf) ? UTF8_BOM_ENCODING : encoding);
+    if (format4.lineEnding === LineEnding.CRLF) {
       return str3.replaceAll("\r\n", "\n");
     }
     return str3;
   });
-}
-function getFormatForFile(file) {
-  return __awaiter2(this, void 0, void 0, function* () {
-    const header = yield readFirstBytes(file);
-    const format2 = getFormatForBuffer(header);
-    if (!format2.isBinaryFile) {
-      return Object.assign(Object.assign({}, format2), { isVideoFile: false });
-    }
-    return Object.assign(Object.assign({}, format2), { isVideoFile: isVideoFilePath(file) });
-  });
-}
-function countLines(data) {
-  if (data === "")
-    return 1;
-  let lines2 = 1;
-  for (let i = 0; i < data.length; i++) {
-    if (data[i] === "\n") {
-      lines2++;
-    }
-  }
-  return lines2;
 }
 function getFormatForBuffer(header) {
   if (header.length === 0) {
@@ -181,18 +153,6 @@ function isBufferAnImage(buffer) {
   }
   return false;
 }
-function readFirstBytes(file) {
-  return __awaiter2(this, void 0, void 0, function* () {
-    const fileHandle = yield (0, import_promises.open)(file, "r");
-    try {
-      const buffer = Buffer.allocUnsafe(8192);
-      const { bytesRead } = yield fileHandle.read(buffer, 0, 8192, 0);
-      return buffer.subarray(0, bytesRead);
-    } finally {
-      yield fileHandle.close();
-    }
-  });
-}
 function getDefaultTextFormatForOS() {
   return {
     encoding: UTF8_ENCODING,
@@ -202,11 +162,11 @@ function getDefaultTextFormatForOS() {
     isVideoFile: false
   };
 }
-function setFileEncoding(path30, encoding) {
-  if (_FILE_TO_ENCODING.has(path30)) {
-    _FILE_TO_ENCODING.delete(path30);
+function setFileEncoding(path31, encoding) {
+  if (_FILE_TO_ENCODING.has(path31)) {
+    _FILE_TO_ENCODING.delete(path31);
   }
-  _FILE_TO_ENCODING.set(path30, encoding);
+  _FILE_TO_ENCODING.set(path31, encoding);
   if (_FILE_TO_ENCODING.size <= MAX_FILE_ENCODINGS) {
     return;
   }
@@ -218,7 +178,7 @@ function setFileEncoding(path30, encoding) {
 function decodeWithUtf8Fallback(buffer) {
   try {
     return { text: UTF8_DECODER.decode(buffer), encoding: UTF8_ENCODING };
-  } catch (_a20) {
+  } catch (_a19) {
     return { text: LATIN1_DECODER.decode(buffer), encoding: LATIN1_ENCODING };
   }
 }
@@ -240,7 +200,7 @@ function decodeBufferWithEncoding(buffer, encoding) {
       const decoded = import_iconv_lite.default.decode(buffer, iconvEncoding);
       return { text: decoded, encoding: normalizedEncoding };
     }
-  } catch (_a20) {
+  } catch (_a19) {
   }
   return decodeWithUtf8Fallback(buffer);
 }
@@ -321,23 +281,23 @@ function detectUTF32Encoding(buffer) {
   }
   return null;
 }
-var import_node_buffer, import_promises, import_node_util, import_iconv_lite, import_jschardet, __awaiter2, LineEnding, VIDEO_EXTENSION_LIST, VIDEO_EXTENSIONS, UTF8_DECODER, LATIN1_DECODER, MAX_FILE_ENCODINGS, UTF8_BOM_BYTES, ESCAPE_BYTE, DETECTED_UTF8_ENCODING, _FILE_TO_ENCODING, BINARY_EXTENSIONS;
+var import_node_buffer, import_promises3, import_node_util, import_iconv_lite, import_jschardet, __awaiter10, LineEnding, VIDEO_EXTENSION_LIST, VIDEO_EXTENSIONS, UTF8_DECODER, LATIN1_DECODER, MAX_FILE_ENCODINGS, UTF8_BOM_BYTES, ESCAPE_BYTE, DETECTED_UTF8_ENCODING, _FILE_TO_ENCODING, BINARY_EXTENSIONS;
 var init_encoding = __esm({
   "../packages/utils/dist/encoding.js"() {
     "use strict";
     import_node_buffer = require("node:buffer");
-    import_promises = require("node:fs/promises");
+    import_promises3 = require("node:fs/promises");
     import_node_util = require("node:util");
     import_iconv_lite = __toESM(require_lib(), 1);
     import_jschardet = __toESM(require_jschardet(), 1);
     init_encoding_browser();
-    __awaiter2 = function(thisArg, _arguments, P2, generator) {
+    __awaiter10 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
-        return value instanceof P2 ? value : new P2(function(resolve14) {
-          resolve14(value);
+        return value instanceof P2 ? value : new P2(function(resolve29) {
+          resolve29(value);
         });
       }
-      return new (P2 || (P2 = Promise))(function(resolve14, reject2) {
+      return new (P2 || (P2 = Promise))(function(resolve29, reject2) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -353,7 +313,7 @@ var init_encoding = __esm({
           }
         }
         function step(result) {
-          result.done ? resolve14(result.value) : adopt(result.value).then(fulfilled, rejected3);
+          result.done ? resolve29(result.value) : adopt(result.value).then(fulfilled, rejected3);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -402,3 +362,4 @@ var init_encoding = __esm({
     ]);
   }
 });
+

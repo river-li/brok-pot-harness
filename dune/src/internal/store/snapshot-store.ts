@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/internal/store/snapshot-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createSnapshotStore(initial) {
   let snapshot = initial;
   const listeners2 = /* @__PURE__ */ new Set();
@@ -18,3 +23,4 @@ function createSnapshotStore(initial) {
     update: (map4) => publish(map4(snapshot))
   };
 }
+

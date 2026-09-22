@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/format-duration.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function formatDurationMs(duration3, options2 = {}) {
   const { alwaysShowSeconds = true, wholeSeconds = false } = options2;
   if (duration3 === void 0) {
@@ -74,3 +79,4 @@ var init_format_duration = __esm({
     "use strict";
   }
 });
+

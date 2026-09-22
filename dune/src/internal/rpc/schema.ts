@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../dune/src/internal/rpc/schema.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function describeReceived(value) {
   if (value === null) return "null";
   if (Array.isArray(value)) return "array";
@@ -128,3 +133,4 @@ function rpcRecord(value) {
 function rpcUnknown() {
   return toValidator("unknown", (value) => ({ ok: true, value }));
 }
+

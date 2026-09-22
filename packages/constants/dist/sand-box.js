@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/constants/dist/sand-box.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SAND_BOX_SESSION_ENV, SAND_BOX_SESSION_ON_VALUE, SAND_BOX_IMAGE_TAG_PREFIX, SAND_BOX_IMAGE_TAG_LATEST, SHORT_GIT_SHA_REGEX, SAND_BOX_PRIMARY_NOVNC_PORT, SAND_BOX_FORK_NOVNC_PORT;
 var init_sand_box = __esm({
   "../packages/constants/dist/sand-box.js"() {
@@ -11,3 +16,4 @@ var init_sand_box = __esm({
     SAND_BOX_FORK_NOVNC_PORT = 6081;
   }
 });
+

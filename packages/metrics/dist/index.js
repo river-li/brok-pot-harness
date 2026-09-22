@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/metrics/dist/index.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var defaultMetricsBackend = {
   record: () => {
@@ -67,3 +72,4 @@ function createHistogram(name17, options2) {
     }
   };
 }
+

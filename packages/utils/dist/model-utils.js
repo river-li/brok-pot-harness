@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/utils/dist/model-utils.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isCursorBigModel(modelName) {
   if (!modelName)
     return false;
@@ -32,3 +37,4 @@ var init_model_utils = __esm({
     ];
   }
 });
+
