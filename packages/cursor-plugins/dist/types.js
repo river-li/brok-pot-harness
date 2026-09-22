@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var noopPluginMetricsLogger = {
   log: () => {
@@ -37,3 +42,4 @@ var mcpServerConfigSchema = external_exports.object({
 var mcpConfigSchema = external_exports.object({
   mcpServers: external_exports.record(external_exports.string(), mcpServerConfigSchema).optional()
 });
+

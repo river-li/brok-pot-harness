@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/schema-version.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SUPPORTED_SCHEMA_IDS = /* @__PURE__ */ new Set([
   "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
@@ -46,3 +51,4 @@ function schemaVersionsDisagree(pluginSchemaId, mcpSchemaId) {
   }
   return pluginVersion !== mcpVersion;
 }
+

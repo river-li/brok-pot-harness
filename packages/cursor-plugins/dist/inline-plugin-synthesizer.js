@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/inline-plugin-synthesizer.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises31 = require("node:fs/promises");
 var import_node_os13 = require("node:os");
 var import_node_path59 = require("node:path");
@@ -151,3 +156,4 @@ function yamlQuote(value) {
   }
   return value;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/mcp-core/dist/fsm/error-classification.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var init_error_classification = __esm({
   "../packages/mcp-core/dist/fsm/error-classification.js"() {
     "use strict";
@@ -8,3 +13,4 @@ var init_error_classification = __esm({
     init_reconnect_manager();
   }
 });
+

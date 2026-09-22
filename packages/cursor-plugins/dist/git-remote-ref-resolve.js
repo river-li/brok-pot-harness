@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/git-remote-ref-resolve.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __awaiter54 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -108,3 +113,4 @@ function resolveGitRemoteRef(gitUrl, ref, options2) {
     return { fullSha: commitSha.toLowerCase() };
   });
 }
+

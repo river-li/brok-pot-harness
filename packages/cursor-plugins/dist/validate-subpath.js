@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/validate-subpath.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path60 = require("node:path");
 function validateAndResolveSubpath(baseDir, subPath) {
   const resolvedBase = (0, import_node_path60.resolve)(baseDir);
@@ -8,3 +13,4 @@ function validateAndResolveSubpath(baseDir, subPath) {
   }
   return resolved;
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/primitive-manifest.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var primitiveSkillSchema = external_exports.object({
   /** Plugin-root-relative path to the SKILL.md file. */
@@ -67,3 +72,4 @@ var pluginPrimitiveManifestSchema = external_exports.object({
   capabilities: external_exports.array(external_exports.string()),
   variablesSchema: variablesJsonSchema.optional()
 });
+

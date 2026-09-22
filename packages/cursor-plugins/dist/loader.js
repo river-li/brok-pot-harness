@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/loader.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises34 = require("node:fs/promises");
+var import_node_path64 = require("node:path");
+var import_node_url7 = require("node:url");
+
+// @recovered-fragment 2/2
 var __awaiter60 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -887,3 +897,4 @@ function loadFromMarketplaceSource(options2) {
     return { plugins, failures, sourceUnavailable: false };
   });
 }
+

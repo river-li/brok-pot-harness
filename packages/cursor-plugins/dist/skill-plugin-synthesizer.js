@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/skill-plugin-synthesizer.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises37 = require("node:fs/promises");
 var import_node_path68 = require("node:path");
 var __awaiter63 = function(thisArg, _arguments, P2, generator) {
@@ -81,3 +86,4 @@ function synthesizeSkillPluginDir(options2) {
     return pluginDir;
   });
 }
+

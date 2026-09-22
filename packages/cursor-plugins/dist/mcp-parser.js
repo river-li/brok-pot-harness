@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/mcp-parser.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __awaiter50 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -274,3 +279,4 @@ function resolvePluginMcpConfigWithManifestLookup(readFileContent_1) {
     return resolvePluginMcpConfigFromReader(readFileContent, manifestMcpServers, manifestSourcePath, resolvedOptions);
   });
 }
+

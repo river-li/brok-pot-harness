@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/env-expansion.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ENV_VAR_PATTERN = /\$\{(?:env:([A-Za-z_][A-Za-z0-9_]*)|([^:}]+)(?::-([^}]*))?)\}/g;
 function recordToCaseInsensitiveLookup(variables) {
   const variablesByLowercaseKey = new Map(Object.entries(variables).map(([key, value]) => [key.toLowerCase(), value]));
@@ -39,3 +44,4 @@ function expandWithLookup(obj, lookup3) {
   }
   return obj;
 }
+

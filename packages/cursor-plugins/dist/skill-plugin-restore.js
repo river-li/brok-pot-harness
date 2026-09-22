@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/skill-plugin-restore.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises36 = require("node:fs/promises");
 var import_node_path67 = require("node:path");
 var __awaiter62 = function(thisArg, _arguments, P2, generator) {
@@ -83,3 +88,4 @@ function pathEntryExists(path31) {
     }
   });
 }
+

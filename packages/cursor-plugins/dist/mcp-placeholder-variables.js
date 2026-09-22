@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/mcp-placeholder-variables.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PLACEHOLDER = /\$\{(?:env:([A-Z][A-Z0-9_]*)|([A-Z][A-Z0-9_]*)(?::-([^}]*))?)\}/g;
 var LOADER_PROVIDED = /* @__PURE__ */ new Set(["CURSOR_PLUGIN_ROOT", "CLAUDE_PLUGIN_ROOT"]);
 var ACRONYMS = /* @__PURE__ */ new Set([
@@ -61,3 +66,4 @@ function inferMcpPlaceholderVariables(config2) {
   }
   return { type: "object", properties };
 }
+

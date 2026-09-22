@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/tarball.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises35 = require("node:fs/promises");
 var import_node_os16 = require("node:os");
 var import_node_path66 = require("node:path");
@@ -51,3 +56,4 @@ function packPluginArtifact(dirPath) {
     }
   });
 }
+

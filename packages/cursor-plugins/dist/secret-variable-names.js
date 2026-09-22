@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/secret-variable-names.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SECRET_WORDS = /* @__PURE__ */ new Set([
   "CREDENTIAL",
   "CREDENTIALS",
@@ -13,3 +18,4 @@ function toSegments(name17) {
 function isSecretPluginVariableName(name17) {
   return toSegments(name17).some((segment) => SECRET_WORDS.has(segment));
 }
+

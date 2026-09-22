@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/mcp-core/dist/oauth/rest-mcp-provider-metadata.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function resolveRestMcpProviderMetadataFromPrm(serverUrl_1) {
   return __awaiter64(this, arguments, void 0, function* (serverUrl, fetchImpl = fetch) {
     if (getRestMcpProviderIdForUrlPath(serverUrl) === void 0) {
@@ -71,3 +76,4 @@ var init_rest_mcp_provider_metadata = __esm({
     cache2 = /* @__PURE__ */ new Map();
   }
 });
+

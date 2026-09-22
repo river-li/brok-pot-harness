@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/manifest-parser.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto21 = require("node:crypto");
+var import_node_path47 = require("node:path");
+init_zod();
+
+// @recovered-fragment 2/2
 var MAX_MANIFEST_SIZE_BYTES = 10 * 1024 * 1024;
 var KEBAB_CASE_PATTERN = /^[a-z0-9]([a-z0-9.-]*[a-z0-9])?$/;
 var PLUGIN_MANIFEST_PATHS = [
@@ -618,3 +628,4 @@ function isPathSafe(path31) {
   }
   return true;
 }
+

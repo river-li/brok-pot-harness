@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/marketplace-cache.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto23 = require("node:crypto");
+var import_promises32 = require("node:fs/promises");
+var import_node_path61 = require("node:path");
+init_dist3();
+
+// @recovered-fragment 2/2
 var __awaiter57 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -693,3 +704,4 @@ function discoverPluginsFromManifest(manifest) {
   }
   return plugins;
 }
+

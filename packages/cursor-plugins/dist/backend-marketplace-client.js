@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/backend-marketplace-client.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto24 = require("node:crypto");
+var import_promises33 = require("node:fs/promises");
+var import_node_os14 = require("node:os");
+var import_node_path62 = require("node:path");
+var import_node_util3 = require("node:util");
+
+// @recovered-fragment 2/2
 var __awaiter58 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -1087,3 +1099,4 @@ var BackendMarketplaceClient = class {
 function createBackendMarketplaceClient(getEffectiveUserPlugins, marketplaceCacheRoot, pluginLogger, marketplaceCacheOptions, listOptions) {
   return new BackendMarketplaceClient(getEffectiveUserPlugins, marketplaceCacheRoot, pluginLogger, marketplaceCacheOptions, listOptions);
 }
+

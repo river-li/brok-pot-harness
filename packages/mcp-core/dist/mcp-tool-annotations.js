@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/mcp-core/dist/mcp-tool-annotations.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function isDeclaredReadOnlyMcpTool(annotations) {
   if (annotations === void 0) {
     return false;
@@ -50,3 +55,4 @@ var init_mcp_tool_annotations = __esm({
     MAX_TOOL_ANNOTATION_TITLE_LENGTH = 256;
   }
 });
+

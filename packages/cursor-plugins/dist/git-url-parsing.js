@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/cursor-plugins/dist/git-url-parsing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist3();
 function detectNonGitHubProvider(host) {
   const lowerHost = host.toLowerCase();
@@ -226,3 +231,4 @@ function canonicalRepoHost(host) {
   }
   return host;
 }
+
