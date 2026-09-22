@@ -75,6 +75,8 @@ function shouldSkipApproval(parsed2) {
   return parsed2.hostname === "cursor.com" && (parsed2.pathname === "/docs" || parsed2.pathname === "/docs.md" || parsed2.pathname === "/llms.txt" || parsed2.pathname.startsWith("/docs/"));
 }
 function getLocalNetworkRejectionMessage(parsed2) {
+  // In local mode the approved fetch executes in our own host sandbox.
+  if (process.env.GROKBOT_LOCAL_MODE === "1") return void 0;
   const hostname3 = parsed2.hostname.toLowerCase();
   const hostDisplay = parsed2.port ? `${hostname3}:${parsed2.port}` : hostname3;
   if (hostname3 === "localhost" || hostname3.endsWith(".localhost")) {
@@ -252,7 +254,7 @@ function buildFetchToolDescription(allTools) {
 - This fetch tries to return live results but may return previously cached content.
 - Authentication is not supported, and an error will be returned if the URL requires authentication.
 - If the URL is returning a non-200 status code, e.g. 404, the tool will not return the content and will instead return an error message.
-- This fetch runs from an isolated server. Hosts like localhost or private IPs will not work.
+- ${process.env.GROKBOT_LOCAL_MODE === "1" ? "This fetch runs in the local host's sandbox. Localhost refers to that sandbox; private network URLs are supported." : "This fetch runs from an isolated server. Hosts like localhost or private IPs will not work."}
 - This tool does not support fetching binary content, e.g. media or PDFs.${shellLine ? `
 ${shellLine}` : ""}
 `;
@@ -614,4 +616,3 @@ ${options2.descriptionSuffix}` : base;
     }
   });
 };
-

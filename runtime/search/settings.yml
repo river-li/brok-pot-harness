@@ -1,0 +1,24 @@
+# Local metasearch; HTTP access stays inside the Compose network.
+use_default_settings:
+  engines:
+    keep_only:
+      - google
+      - brave
+general:
+  instance_name: Grok Bot local search
+search:
+  formats:
+    - html
+    - json
+server:
+  limiter: false
+  public_instance: false
+  image_proxy: false
+outgoing:
+  request_timeout: 8.0
+  max_request_timeout: 15.0
+engines:
+  - name: google
+    disabled: false
+  - name: brave
+    disabled: false
