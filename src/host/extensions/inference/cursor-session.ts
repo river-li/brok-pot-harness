@@ -67,6 +67,7 @@ function createScriptedMockSession(script, modelId) {
   };
 }
 function createCursorSandInference(options2) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1") return require("./local/responses.js").createLocalInference();
   let labelingClient;
   const geminiVideoAttachedMediaUrlProvider = createSandAttachedMediaUrlProvider({
     backend: options2.backend,

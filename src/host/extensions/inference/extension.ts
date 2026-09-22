@@ -12,7 +12,7 @@ var inferenceExtension = defineHostExtension({
     const environment = context2.host.environment;
     const { backend } = environment;
     return {
-      isReady: async () => environment.agentMockResponse != null || auth2.peekAccessToken() !== null,
+      isReady: async () => process.env.GROKBOT_LOCAL_MODE === "1" || environment.agentMockResponse != null || auth2.peekAccessToken() !== null,
       port: createHostInference({
         environment,
         auth: context2.deps.auth,

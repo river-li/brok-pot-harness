@@ -11,7 +11,23 @@ init_cursor_inference();
 var SandSmartModeClassifierError = class extends SandDomainError {
   name = "SandSmartModeClassifierError";
 };
-function createSandBackendSmartModeClassifierExecutor(options2, client = createSandCursorBackendClient(DashboardService, options2)) {
+function createSandBackendSmartModeClassifierExecutor(options2, client) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1") {
+    const local = require("./local/auto-review.js").createLocalAutoReview({
+      systemPrompt: SAND_AUTO_REVIEW_CLASSIFIER_SYSTEM_PROMPT,
+      tool: CLASSIFY_SAND_AUTO_REVIEW_ACTION_TOOL
+    });
+    return {
+      async execute(ctx, args) {
+        const success = await local.execute(ctx, {
+          target: args.target?.toJson(),
+          conversationContext: args.conversationContext
+        });
+        return new SmartModeClassifierResult({result: {case: "success", value: new SmartModeClassifierSuccess(success)}});
+      }
+    };
+  }
+  client ??= createSandCursorBackendClient(DashboardService, options2);
   return {
     async execute(ctx, args) {
       const attemptIndex = ctx.get(smartModeClassifierAttemptIndexKey);
@@ -39,4 +55,3 @@ function createSandBackendSmartModeClassifierExecutor(options2, client = createS
     }
   };
 }
-
