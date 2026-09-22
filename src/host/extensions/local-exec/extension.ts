@@ -13,6 +13,9 @@ function startLocalExec(context2, createClient2 = createSandCursorBackendClient)
   const gate = context2.deps["local-tool-permission"];
   const logs = context2.deps.telemetry.logs;
   const bridge = new SandLocalExecBridge({
+    ...(process.env.GROKBOT_LOCAL_MODE === "1" ? {
+      getLabel: (computerId, fallback) => require("./local/machine-labels.js").createLocalMachineLabels(getSandRootDir()).get(computerId) ?? fallback
+    } : {}),
     clock: realClock,
     responseWatchdog: createIdleWatchdogPolicy({
       name: "sand-local-exec-response",
@@ -25,6 +28,23 @@ function startLocalExec(context2, createClient2 = createSandCursorBackendClient)
     }
   });
   const reportFailure = (report) => logs.reportLocalExecFailed(report);
+  if (process.env.GROKBOT_LOCAL_MODE === "1") {
+    context2.onStop(context2.host.events.on("local-tool-permission.approval-retired", ({ approvalId }) => {
+      bridge.retireApproval(approvalId);
+    }));
+    return {
+      box: new GatewayLocalExecSandBox(bridge, { gate, reportFailure }),
+      userComputers: createBridgeUserComputers(bridge, gate, reportFailure),
+      registerProvider: (send) => {
+        const unregister = bridge.registerProvider(send);
+        void context2.host.events.emit("local-exec.computer-attached", {});
+        return unregister;
+      },
+      submitResponses: (batch) => bridge.submitResponses(batch),
+      checkLiveComputerForAsk: (agentId) => bridge.checkLiveComputerForAsk(agentId),
+      runMessagesOp: (ctx, op, computerId, display) => runBridgeMessagesOp(bridge, gate, ctx, op, computerId, display)
+    };
+  }
   const client = createClient2(GrokBotService, {
     backend: context2.host.environment.backend,
     getAccessToken: context2.deps.auth.getAccessToken,
@@ -117,4 +137,3 @@ var localExecExtension = defineHostExtension({
   dependencies: [HostExtensions.LocalToolPermission, HostExtensions.Telemetry, HostExtensions.Auth],
   start: startLocalExec
 });
-

@@ -149,6 +149,9 @@ var SandLocalExecBridge = class {
   providerComputerId(provider) {
     return provider.computerId ?? DEFAULT_SAND_COMPUTER_ID;
   }
+  providerLabel(provider) {
+    return this.deps.getLabel?.(this.providerComputerId(provider), provider.label) ?? provider.label;
+  }
   isLive(provider, now) {
     if (!provider.hasHeartbeat) return true;
     return now - provider.lastSeenAt <= SAND_LOCAL_EXEC_LIVENESS_WINDOW_MS;
@@ -184,7 +187,7 @@ var SandLocalExecBridge = class {
     }
     return [...byComputerId.entries()].map(([id, provider]) => ({
       id,
-      label: provider.label ?? "this computer",
+      label: this.providerLabel(provider) ?? "this computer",
       connected: this.isLive(provider, now)
     }));
   }
@@ -194,7 +197,7 @@ var SandLocalExecBridge = class {
     if (provider === void 0) return void 0;
     return {
       id: this.providerComputerId(provider),
-      label: provider.label ?? "this computer",
+      label: this.providerLabel(provider) ?? "this computer",
       connected: true
     };
   }
@@ -207,11 +210,12 @@ var SandLocalExecBridge = class {
   routeLabel(computerId) {
     if (computerId !== void 0) {
       for (const provider of this.providers) {
-        if (this.providerComputerId(provider) === computerId) return provider.label;
+        if (this.providerComputerId(provider) === computerId) return this.providerLabel(provider);
       }
       return computerId;
     }
-    return this.best([...this.providers])?.label;
+    const provider = this.best([...this.providers]);
+    return provider === void 0 ? void 0 : this.providerLabel(provider);
   }
   resolveProvider(computerId, live = this.liveProviders()) {
     if (computerId === void 0) return this.best(live);
@@ -353,7 +357,7 @@ var SandLocalExecBridge = class {
         yield responseFrame;
       }
       if (timedOut) {
-        throw new SandLocalExecError(sandComputerTemporarilyUnreachableMessage(provider.label));
+        throw new SandLocalExecError(sandComputerTemporarilyUnreachableMessage(this.providerLabel(provider)));
       }
     } finally {
       watchdog?.dispose();
@@ -364,4 +368,3 @@ var SandLocalExecBridge = class {
     }
   }
 };
-

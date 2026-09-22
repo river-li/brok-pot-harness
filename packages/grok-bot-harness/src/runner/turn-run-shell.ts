@@ -187,7 +187,8 @@ function createTurnRunShell(host) {
     let outcome = "error";
     let failure2;
     try {
-      const result = await runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation);
+      const invoke = () => runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation);
+      const result = host.mcp()?.withConfigScope != null ? await host.mcp().withConfigScope(options2.mcpConfigJson, invoke) : await invoke();
       outcome = resolveTurnTraceOutcome(result);
       return result;
     } catch (error42) {
@@ -955,4 +956,3 @@ function createTurnRunShell(host) {
     cancelPauseForUpgrade
   };
 }
-
