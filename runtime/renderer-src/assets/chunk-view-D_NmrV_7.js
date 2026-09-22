@@ -1,0 +1,9322 @@
+import {
+  c as J,
+  o as Sa,
+  d0 as mt,
+  cD as kn,
+  h3 as ft,
+  j as n,
+  e as se,
+  cK as wa,
+  aw as Qe,
+  r as Q,
+  p as me,
+  a7 as Ns,
+  u as re,
+  aQ as pe,
+  f0 as pt,
+  h4 as ht,
+  h5 as cn,
+  h6 as yt,
+  dn as za,
+  cv as gt,
+  g as he,
+  B as We,
+  au as kt,
+  bC as $n,
+  h7 as _a,
+  f as bt,
+  d6 as qa,
+  dB as Fn,
+  dC as vt,
+  t as w,
+  V as Se,
+  h8 as jt,
+  q as ss,
+  dd as xt,
+  i as Nt,
+  k as St,
+  dt as wt,
+  h9 as ta,
+  dA as qs,
+  dL as as,
+  ha as Dn,
+  hb as Ia,
+  v as zt,
+  hc as on,
+  hd as zs,
+  aq as Be,
+  U as Ca,
+  b2 as ws,
+  he as _t,
+  hf as qt,
+  hg as It,
+  hh as Ma,
+  hi as Ct,
+  hj as un,
+  hk as la,
+  hl as Pa,
+  hm as Mt,
+  dq as Pt,
+  gZ as $t,
+  e7 as Tt,
+  hn as At,
+  ho as Rt,
+  hp as Et,
+  hq as $a,
+  hr as Lt,
+  cb as Ot,
+  hs as Bt,
+  cG as pn,
+  cH as Kt,
+  cL as hn,
+  cI as Ft,
+  cJ as da,
+  cM as xs,
+  ht as Dt,
+  hu as Ta,
+  hv as Ut,
+  hw as Vt,
+  hx as Wt,
+  hy as Gt,
+  bS as Zt,
+  s as Tn,
+  hz as Aa,
+  hA as Ht,
+  hB as Qt,
+  hC as Un,
+  hD as Yt,
+  M as Ne,
+  hE as Jt,
+  hF as Xt,
+  d1 as el,
+  n as ia,
+  dG as sl,
+  hG as nl,
+  hH as al,
+  cz as tl,
+  cx as ll,
+  ft as ra,
+  fu as dl,
+  hI as il,
+  cA as rl,
+  hJ as cl,
+  cB as ol,
+  hK as ul,
+  hL as ml,
+  hM as fl,
+  hN as pl,
+  hO as hl,
+  hP as yl,
+  hQ as gl,
+  hR as kl,
+  hS as ca,
+  cO as bl,
+  hT as vl,
+  hU as jl,
+  hV as xl,
+  cP as Nl,
+  cQ as Sl,
+  cN as wl,
+  hW as oa,
+  W as zl,
+  aR as _l,
+  aS as ql,
+  aT as Il,
+  hX as Cl,
+} from "./index-C6zjACOA.js";
+import { S as An, a as Ra } from "./chunk-pane-header-BvfeoVJD.js";
+import { A as Ea, S as Rn } from "./chunk-scroll-pane-CuFTKjpy.js";
+import { b as La, a as ua } from "./chunk-mcp-renderer-copy-B4mevizF.js";
+import { a as Ml, g as Pl } from "./chunk-mcp-connector-status-73RtsW66.js";
+import { r as Ve } from "./chunk-notice-Br1lIXB6.js";
+function $l() {
+  const t = J.c(3),
+    e = Sa().botMarketplace,
+    s = mt(e.snapshots);
+  let a;
+  return (
+    t[0] !== e.retry || t[1] !== s
+      ? ((a = { state: s, retry: e.retry }),
+        (t[0] = e.retry),
+        (t[1] = s),
+        (t[2] = a))
+      : (a = t[2]),
+    a
+  );
+}
+function Oa(t) {
+  const e = J.c(13),
+    { server: s, isBusy: a, onAuthenticate: l } = t,
+    d = kn(),
+    i = ft(s.serverIdentifier);
+  if (s.status !== "needsAuth") return null;
+  let c;
+  e: {
+    if (i == null) {
+      let f;
+      (e[0] === Symbol.for("react.memo_cache_sentinel")
+        ? ((f = n.jsx(se, { id: "OX6vme" })), (e[0] = f))
+        : (f = e[0]),
+        (c = f));
+      break e;
+    }
+    if (i.status === "waiting") {
+      let f;
+      (e[1] === Symbol.for("react.memo_cache_sentinel")
+        ? ((f = n.jsx(se, { id: "M7SqjM" })), (e[1] = f))
+        : (f = e[1]),
+        (c = f));
+      break e;
+    }
+    let r;
+    (e[2] === Symbol.for("react.memo_cache_sentinel")
+      ? ((r = n.jsx(se, { id: "6gRgw8" })), (e[2] = r))
+      : (r = e[2]),
+      (c = r));
+  }
+  const u = c;
+  let o;
+  e[3] !== i?.status ||
+  e[4] !== l ||
+  e[5] !== d ||
+  e[6] !== s.id ||
+  e[7] !== s.serverIdentifier
+    ? ((o = () =>
+        i?.status === "waiting" ? wa(s.serverIdentifier, d) : l(s.id)),
+      (e[3] = i?.status),
+      (e[4] = l),
+      (e[5] = d),
+      (e[6] = s.id),
+      (e[7] = s.serverIdentifier),
+      (e[8] = o))
+    : (o = e[8]);
+  let m;
+  return (
+    e[9] !== a || e[10] !== u || e[11] !== o
+      ? ((m = n.jsx(Qe, {
+          disabled: a,
+          onClick: o,
+          size: "sm",
+          type: "button",
+          variant: "secondary",
+          children: u,
+        })),
+        (e[9] = a),
+        (e[10] = u),
+        (e[11] = o),
+        (e[12] = m))
+      : (m = e[12]),
+    m
+  );
+}
+function yn(t) {
+  return t.slug === "seed-a91e4c";
+}
+function _s(t) {
+  const e = new Set(),
+    s = [],
+    a = t.categories.length > 0 ? t.categories : [t.category];
+  for (const l of a) {
+    const d = l.trim();
+    d.length === 0 || e.has(d) || (e.add(d), s.push(d));
+  }
+  return s;
+}
+const ma = new Set(),
+  fa = {
+    root: {
+      kVAEAm: "sand-1n2onr6",
+      k1xSpc: "sand-3nfvp2",
+      kmuXW: "sand-2lah0s",
+      kaIpWk: "sand-149ho13",
+      kVQacm: "sand-b3r6kr",
+      $$css: !0,
+    },
+    size: (t) => [
+      {
+        kzqmXN: t != null ? "sand-5lhr3w" : t,
+        kZKoxP: t != null ? "sand-16ye13r" : t,
+        $$css: !0,
+      },
+      {
+        "--x-width": ((e) => (typeof e == "number" ? e + "px" : (e ?? void 0)))(
+          t,
+        ),
+        "--x-height": ((e) =>
+          typeof e == "number" ? e + "px" : (e ?? void 0))(t),
+      },
+    ],
+  };
+function Ba(t) {
+  const e = J.c(19),
+    { sizePx: s, src: a } = t;
+  let l;
+  e[0] !== a
+    ? ((l = () => (ma.has(a) ? a : null)), (e[0] = a), (e[1] = l))
+    : (l = e[1]);
+  const [d, i] = Q.useState(l),
+    c = d === a;
+  let u;
+  e[2] !== a
+    ? ((u = () => {
+        (ma.add(a), i((y) => (y === a ? y : a)));
+      }),
+      (e[2] = a),
+      (e[3] = u))
+    : (u = e[3]);
+  const o = u;
+  let m;
+  e[4] !== o
+    ? ((m = (y) => {
+        y?.complete === !0 && y.naturalWidth > 0 && o();
+      }),
+      (e[4] = o),
+      (e[5] = m))
+    : (m = e[5]);
+  const r = m;
+  let f;
+  e[6] !== s
+    ? ((f = me(fa.root, fa.size(s))), (e[6] = s), (e[7] = f))
+    : (f = e[7]);
+  let p;
+  e[8] !== s
+    ? ((p = n.jsx(Ns, { icon: "person", ring: !1, sizePx: s })),
+      (e[8] = s),
+      (e[9] = p))
+    : (p = e[9]);
+  let g;
+  e[10] !== r || e[11] !== c || e[12] !== o || e[13] !== a
+    ? ((g =
+        a.length === 0
+          ? null
+          : n.jsx("img", {
+              alt: "",
+              draggable: !1,
+              onLoad: o,
+              ref: r,
+              src: a,
+              ...{
+                0: {
+                  className:
+                    "sand-10l6tqk sand-10a8y8t sand-h8yej3 sand-5yr21d sand-149ho13 sand-l1xv1r sand-g01cxk sand-19991ni sand-7pq1vu sand-6tor67",
+                },
+                1: {
+                  className:
+                    "sand-10l6tqk sand-10a8y8t sand-h8yej3 sand-5yr21d sand-149ho13 sand-l1xv1r sand-19991ni sand-7pq1vu sand-6tor67 sand-1hc1fzr",
+                },
+              }[!!c << 0],
+            })),
+      (e[10] = r),
+      (e[11] = c),
+      (e[12] = o),
+      (e[13] = a),
+      (e[14] = g))
+    : (g = e[14]);
+  let h;
+  return (
+    e[15] !== f || e[16] !== p || e[17] !== g
+      ? ((h = n.jsxs("span", { "aria-hidden": !0, ...f, children: [p, g] })),
+        (e[15] = f),
+        (e[16] = p),
+        (e[17] = g),
+        (e[18] = h))
+      : (h = e[18]),
+    h
+  );
+}
+const Tl = "grok-bot-team",
+  Al = { mark: { kMwMTN: "sand-n3e42v", $$css: !0 } };
+function Rl(t) {
+  return t
+    .trim()
+    .toLocaleLowerCase("en-US")
+    .split(/[\s_]+/u)
+    .join("-");
+}
+function Ka(t) {
+  const e = J.c(8),
+    { categories: s } = t,
+    { _: a } = re();
+  if (!s.some(El)) return null;
+  let l;
+  e[0] !== a ? ((l = a({ id: "Qcynxc" })), (e[0] = a), (e[1] = l)) : (l = e[1]);
+  const d = l;
+  let i;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = { className: "sand-3nfvp2 sand-2lah0s" }), (e[2] = i))
+    : (i = e[2]);
+  let c;
+  e[3] !== d
+    ? ((c = n.jsx("span", {
+        ...i,
+        children: n.jsx(pe, {
+          "aria-label": d,
+          name: "check-circle",
+          size: 12,
+          style: Al.mark,
+          title: "",
+        }),
+      })),
+      (e[3] = d),
+      (e[4] = c))
+    : (c = e[4]);
+  let u;
+  return (
+    e[5] !== d || e[6] !== c
+      ? ((u = n.jsx(pt, { content: d, children: c })),
+        (e[5] = d),
+        (e[6] = c),
+        (e[7] = u))
+      : (u = e[7]),
+    u
+  );
+}
+function El(t) {
+  return Rl(t) === Tl;
+}
+const Fa = ["instructions", "memories", "skills", "routines", "integrations"],
+  Ze = {
+    instructions: { label: { id: "NxHkkp" }, description: { id: "qKxciE" } },
+    memories: { label: { id: "QCEzof" }, description: { id: "zm5NjC" } },
+    skills: { label: { id: "PCSkw2" }, description: { id: "2BI6+v" } },
+    routines: { label: { id: "dmYV6f" }, description: { id: "en+L+E" } },
+    integrations: { label: { id: "nbfdhU" }, description: { id: "okHDuo" } },
+  };
+function Ll() {
+  const t = J.c(41),
+    { _: e } = re();
+  let s;
+  t[0] !== e
+    ? ((s = e(Ze.instructions.label)), (t[0] = e), (t[1] = s))
+    : (s = t[1]);
+  let a;
+  t[2] !== e
+    ? ((a = e(Ze.instructions.description)), (t[2] = e), (t[3] = a))
+    : (a = t[3]);
+  let l;
+  t[4] !== s || t[5] !== a
+    ? ((l = { label: s, description: a }), (t[4] = s), (t[5] = a), (t[6] = l))
+    : (l = t[6]);
+  let d;
+  t[7] !== e
+    ? ((d = e(Ze.memories.label)), (t[7] = e), (t[8] = d))
+    : (d = t[8]);
+  let i;
+  t[9] !== e
+    ? ((i = e(Ze.memories.description)), (t[9] = e), (t[10] = i))
+    : (i = t[10]);
+  let c;
+  t[11] !== d || t[12] !== i
+    ? ((c = { label: d, description: i }),
+      (t[11] = d),
+      (t[12] = i),
+      (t[13] = c))
+    : (c = t[13]);
+  let u;
+  t[14] !== e
+    ? ((u = e(Ze.skills.label)), (t[14] = e), (t[15] = u))
+    : (u = t[15]);
+  let o;
+  t[16] !== e
+    ? ((o = e(Ze.skills.description)), (t[16] = e), (t[17] = o))
+    : (o = t[17]);
+  let m;
+  t[18] !== u || t[19] !== o
+    ? ((m = { label: u, description: o }),
+      (t[18] = u),
+      (t[19] = o),
+      (t[20] = m))
+    : (m = t[20]);
+  let r;
+  t[21] !== e
+    ? ((r = e(Ze.routines.label)), (t[21] = e), (t[22] = r))
+    : (r = t[22]);
+  let f;
+  t[23] !== e
+    ? ((f = e(Ze.routines.description)), (t[23] = e), (t[24] = f))
+    : (f = t[24]);
+  let p;
+  t[25] !== f || t[26] !== r
+    ? ((p = { label: r, description: f }),
+      (t[25] = f),
+      (t[26] = r),
+      (t[27] = p))
+    : (p = t[27]);
+  let g;
+  t[28] !== e
+    ? ((g = e(Ze.integrations.label)), (t[28] = e), (t[29] = g))
+    : (g = t[29]);
+  let h;
+  t[30] !== e
+    ? ((h = e(Ze.integrations.description)), (t[30] = e), (t[31] = h))
+    : (h = t[31]);
+  let y;
+  t[32] !== g || t[33] !== h
+    ? ((y = { label: g, description: h }),
+      (t[32] = g),
+      (t[33] = h),
+      (t[34] = y))
+    : (y = t[34]);
+  let b;
+  return (
+    t[35] !== p || t[36] !== y || t[37] !== l || t[38] !== c || t[39] !== m
+      ? ((b = {
+          instructions: l,
+          memories: c,
+          skills: m,
+          routines: p,
+          integrations: y,
+        }),
+        (t[35] = p),
+        (t[36] = y),
+        (t[37] = l),
+        (t[38] = c),
+        (t[39] = m),
+        (t[40] = b))
+      : (b = t[40]),
+    b
+  );
+}
+const Ke = {
+  title: {
+    kogj98: "sand-1ghz6dp",
+    kMwMTN: "sand-tyxrsu",
+    kLWn49: "sand-101yacv",
+    $$css: !0,
+  },
+  byline: {
+    k1xSpc: "sand-78zum5",
+    kGNEyG: "sand-6s0dn4",
+    kOIVth: "sand-1jnr06f",
+    kMwMTN: "sand-1o0liin",
+    $$css: !0,
+  },
+  description: {
+    kogj98: "sand-1ghz6dp",
+    kzqmXN: "sand-h8yej3",
+    kMwMTN: "sand-tyxrsu",
+    $$css: !0,
+  },
+  sectionRailScroll: {
+    kSGwAc: "sand-kh2ocl",
+    kmuXW: "sand-2lah0s",
+    kzqmXN: "sand-ehuqhz",
+    kAzted: "sand-2lwn1j",
+    $$css: !0,
+  },
+  sectionRow: {
+    kAzted: "sand-2lwn1j",
+    kLKAdn: "sand-889kno",
+    kwRFfy: "sand-pdmqnj",
+    kGO01o: "sand-1a8lsjc",
+    kZCmMZ: "sand-1g0dm76",
+    kaIpWk: "sand-1qmwy7c",
+    $$css: !0,
+  },
+  contentScroll: {
+    kzQI83: "sand-1iyjqo2",
+    kmuXW: "sand-s83m0k",
+    kCS8Yb: "sand-dl72j9",
+    k7Eaqz: "sand-euugli",
+    kAzted: "sand-2lwn1j",
+    $$css: !0,
+  },
+  item: {
+    kLKAdn: "sand-exx8yu",
+    kwRFfy: "sand-yri2b",
+    kGO01o: "sand-18d9i69",
+    kZCmMZ: "sand-1c1uobl",
+    $$css: !0,
+  },
+  memoryItem: {
+    kogj98: "sand-1ghz6dp",
+    kMwMTN: "sand-1o0liin",
+    khDVqt: "sand-126k92a",
+    kHjlTd: "sand-1mzt3pk",
+    $$css: !0,
+  },
+  instructions: {
+    kogj98: "sand-1ghz6dp",
+    kMwMTN: "sand-1o0liin",
+    kLWn49: "sand-1qoy3rc",
+    khDVqt: "sand-126k92a",
+    kHjlTd: "sand-1mzt3pk",
+    $$css: !0,
+  },
+  status: {
+    k1xSpc: "sand-78zum5",
+    kzQI83: "sand-1iyjqo2",
+    kXwgrk: "sand-dt5ytf",
+    kGNEyG: "sand-6s0dn4",
+    kjj79g: "sand-l56j7k",
+    kOIVth: "sand-1v2ro7d",
+    kMwMTN: "sand-1o0liin",
+    $$css: !0,
+  },
+};
+function Da(t, e) {
+  switch (t) {
+    case "instructions":
+      return e.description.trim().length > 0 ? 1 : 0;
+    case "memories":
+      return e.memory?.length ?? 0;
+    case "skills":
+      return e.skills?.length ?? 0;
+    case "routines":
+      return e.routines?.length ?? 0;
+    case "integrations":
+      return e.plugins?.length ?? 0;
+  }
+}
+function Ol(t) {
+  const e = J.c(60),
+    { listing: s, avatarSrc: a, shareUrl: l, onAdd: d, titleRef: i } = t,
+    { _: c } = re();
+  let u, o;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((u = {
+        className:
+          "sand-1n2onr6 sand-78zum5 sand-dt5ytf sand-2lah0s sand-ou54vl sand-euugli sand-v54qhq sand-f7dkkf",
+      }),
+      (o = { className: "sand-10l6tqk sand-13vifvy sand-dg88n9 sand-78zum5" }),
+      (e[0] = u),
+      (e[1] = o))
+    : ((u = e[0]), (o = e[1]));
+  const m = d == null;
+  let r;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((r = n.jsx(se, { id: "7++OwZ" })), (e[2] = r))
+    : (r = e[2]);
+  let f;
+  e[3] !== d || e[4] !== m
+    ? ((f = n.jsx("span", {
+        ...o,
+        children: n.jsx(We, {
+          disabled: m,
+          onClick: d,
+          shape: "pill",
+          size: "lg",
+          children: r,
+        }),
+      })),
+      (e[3] = d),
+      (e[4] = m),
+      (e[5] = f))
+    : (f = e[5]);
+  let p, g;
+  e[6] === Symbol.for("react.memo_cache_sentinel")
+    ? ((p = { className: "sand-1n2onr6 sand-2lah0s sand-29ncy0 sand-y75621" }),
+      (g = { className: "sand-10l6tqk sand-1v1hl4c sand-13vifvy" }),
+      (e[6] = p),
+      (e[7] = g))
+    : ((p = e[6]), (g = e[7]));
+  let h;
+  e[8] !== a || e[9] !== s.avatar.kind
+    ? ((h = n.jsx("span", {
+        ...g,
+        children:
+          s.avatar.kind === "default"
+            ? n.jsx(Ns, { "aria-hidden": !0, bare: !0, sizePx: 64, src: a })
+            : n.jsx(Ns, { "aria-hidden": !0, ring: !1, sizePx: 64, src: a }),
+      })),
+      (e[8] = a),
+      (e[9] = s.avatar.kind),
+      (e[10] = h))
+    : (h = e[10]);
+  let y;
+  e[11] === Symbol.for("react.memo_cache_sentinel")
+    ? ((y = {
+        className:
+          "sand-10l6tqk sand-yx8ycp sand-117b58n sand-78zum5 sand-6s0dn4 sand-l56j7k sand-100vrsf sand-1vqgdyp",
+      }),
+      (e[11] = y))
+    : (y = e[11]);
+  let b;
+  e[12] === Symbol.for("react.memo_cache_sentinel")
+    ? ((b = n.jsx("span", {
+        "aria-hidden": !0,
+        className:
+          "sand-10l6tqk sand-10a8y8t sand-149ho13 sand-10e981r sand-47corl",
+      })),
+      (e[12] = b))
+    : (b = e[12]);
+  let j;
+  e[13] !== s.creator.profilePhotoUrl
+    ? ((j = n.jsxs("span", {
+        ...y,
+        children: [
+          b,
+          n.jsx(Ba, { sizePx: 36, src: s.creator.profilePhotoUrl }),
+        ],
+      })),
+      (e[13] = s.creator.profilePhotoUrl),
+      (e[14] = j))
+    : (j = e[14]);
+  let k;
+  e[15] !== j || e[16] !== h
+    ? ((k = n.jsxs("div", { ...p, children: [h, j] })),
+      (e[15] = j),
+      (e[16] = h),
+      (e[17] = k))
+    : (k = e[17]);
+  let v, S, N;
+  e[18] === Symbol.for("react.memo_cache_sentinel")
+    ? ((v = {
+        className:
+          "sand-9f619 sand-78zum5 sand-dt5ytf sand-1v2ro7d sand-h8yej3 sand-euugli",
+      }),
+      (S = { className: "sand-78zum5 sand-dt5ytf sand-195vfkc sand-euugli" }),
+      (N = {
+        className:
+          "sand-1n2onr6 sand-78zum5 sand-qcrz7y sand-6s0dn4 sand-euugli sand-1xr8qbc sand-jodmca",
+      }),
+      (e[18] = v),
+      (e[19] = S),
+      (e[20] = N))
+    : ((v = e[18]), (S = e[19]), (N = e[20]));
+  let z;
+  e[21] !== s
+    ? ((z = yn(s) ? _a(s.name) : void 0), (e[21] = s), (e[22] = z))
+    : (z = e[22]);
+  let _;
+  e[23] === Symbol.for("react.memo_cache_sentinel")
+    ? ((_ = me(he.heading2, bt.medium, Ke.title)), (e[23] = _))
+    : (_ = e[23]);
+  let I;
+  e[24] !== s.name || e[25] !== z || e[26] !== i
+    ? ((I = n.jsx("h2", {
+        "aria-label": z,
+        ref: i,
+        tabIndex: -1,
+        ..._,
+        children: s.name,
+      })),
+      (e[24] = s.name),
+      (e[25] = z),
+      (e[26] = i),
+      (e[27] = I))
+    : (I = e[27]);
+  let T;
+  e[28] !== c || e[29] !== l
+    ? ((T =
+        l == null
+          ? null
+          : n.jsx("span", {
+              className:
+                "sand-10l6tqk sand-2hswfz sand-78zum5 sand-6s0dn4 sand-dwrcjd",
+              children: n.jsx(Ea, {
+                label: c({ id: "ZjAU9n" }),
+                url: l,
+                variant: "secondary",
+              }),
+            })),
+      (e[28] = c),
+      (e[29] = l),
+      (e[30] = T))
+    : (T = e[30]);
+  let R;
+  e[31] !== I || e[32] !== T
+    ? ((R = n.jsxs("div", { ...N, children: [I, T] })),
+      (e[31] = I),
+      (e[32] = T),
+      (e[33] = R))
+    : (R = e[33]);
+  let $;
+  e[34] === Symbol.for("react.memo_cache_sentinel")
+    ? (($ = me(he.body2, Ke.byline)), (e[34] = $))
+    : ($ = e[34]);
+  let C;
+  e[35] !== s.creator.name
+    ? ((C = n.jsx(se, { id: "aavdrC", values: { 0: s.creator.name } })),
+      (e[35] = s.creator.name),
+      (e[36] = C))
+    : (C = e[36]);
+  let M;
+  e[37] !== s ? ((M = _s(s)), (e[37] = s), (e[38] = M)) : (M = e[38]);
+  let D;
+  e[39] !== M
+    ? ((D = n.jsx(Ka, { categories: M })), (e[39] = M), (e[40] = D))
+    : (D = e[40]);
+  let U;
+  e[41] !== s
+    ? ((U = yn(s)
+        ? n.jsx("span", { "aria-hidden": !0, children: n.jsx(qa, {}) })
+        : null),
+      (e[41] = s),
+      (e[42] = U))
+    : (U = e[42]);
+  let O;
+  e[43] !== C || e[44] !== D || e[45] !== U
+    ? ((O = n.jsxs("span", { ...$, children: [C, D, U] })),
+      (e[43] = C),
+      (e[44] = D),
+      (e[45] = U),
+      (e[46] = O))
+    : (O = e[46]);
+  let P;
+  e[47] !== R || e[48] !== O
+    ? ((P = n.jsxs("div", { ...S, children: [R, O] })),
+      (e[47] = R),
+      (e[48] = O),
+      (e[49] = P))
+    : (P = e[49]);
+  let Z;
+  e[50] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Z = me(he.body1, Ke.description)), (e[50] = Z))
+    : (Z = e[50]);
+  let K;
+  e[51] !== s.description
+    ? ((K = n.jsx("p", { ...Z, children: s.description })),
+      (e[51] = s.description),
+      (e[52] = K))
+    : (K = e[52]);
+  let V;
+  e[53] !== P || e[54] !== K
+    ? ((V = n.jsxs("div", { ...v, children: [P, K] })),
+      (e[53] = P),
+      (e[54] = K),
+      (e[55] = V))
+    : (V = e[55]);
+  let F;
+  return (
+    e[56] !== k || e[57] !== V || e[58] !== f
+      ? ((F = n.jsxs("div", { ...u, children: [f, k, V] })),
+        (e[56] = k),
+        (e[57] = V),
+        (e[58] = f),
+        (e[59] = F))
+      : (F = e[59]),
+    F
+  );
+}
+function Bl(t) {
+  const e = J.c(14),
+    { template: s, selected: a, onSelect: l } = t,
+    d = Ll();
+  let i;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = {
+        className:
+          "sand-78zum5 sand-dt5ytf sand-qcrz7y sand-2lah0s sand-ehuqhz sand-1nn3v0j sand-1120s5i",
+      }),
+      (e[0] = i))
+    : (i = e[0]);
+  let c;
+  if (e[1] !== d || e[2] !== l || e[3] !== a || e[4] !== s) {
+    let o;
+    e[6] !== s
+      ? ((o = (r) => Da(r, s) > 0), (e[6] = s), (e[7] = o))
+      : (o = e[7]);
+    let m;
+    (e[8] !== d || e[9] !== l || e[10] !== a
+      ? ((m = (r) =>
+          n.jsx(
+            vt,
+            {
+              "data-marketplace-section": r,
+              description: d[r].description,
+              isSelected: r === a,
+              label: d[r].label,
+              onClick: () => l(r),
+              size: "lg",
+              style: Ke.sectionRow,
+            },
+            r,
+          )),
+        (e[8] = d),
+        (e[9] = l),
+        (e[10] = a),
+        (e[11] = m))
+      : (m = e[11]),
+      (c = Fa.filter(o).map(m)),
+      (e[1] = d),
+      (e[2] = l),
+      (e[3] = a),
+      (e[4] = s),
+      (e[5] = c));
+  } else c = e[5];
+  let u;
+  return (
+    e[12] !== c
+      ? ((u = n.jsx("nav", { ...i, children: c })), (e[12] = c), (e[13] = u))
+      : (u = e[13]),
+    u
+  );
+}
+function Kl(t) {
+  const e = J.c(19),
+    { section: s, template: a } = t;
+  if (s === "instructions") {
+    let i;
+    e[0] === Symbol.for("react.memo_cache_sentinel")
+      ? ((i = me(he.body1, Ke.instructions)), (e[0] = i))
+      : (i = e[0]);
+    let c;
+    return (
+      e[1] !== a.description
+        ? ((c = n.jsx("p", { ...i, children: a.description })),
+          (e[1] = a.description),
+          (e[2] = c))
+        : (c = e[2]),
+      c
+    );
+  }
+  if (s === "memories") {
+    let i;
+    e[3] !== a.memory
+      ? ((i = a.memory ?? []), (e[3] = a.memory), (e[4] = i))
+      : (i = e[4]);
+    let c;
+    return (
+      e[5] !== i ? ((c = i.map(Vl)), (e[5] = i), (e[6] = c)) : (c = e[6]),
+      c
+    );
+  }
+  if (s === "skills") {
+    let i;
+    e[7] !== a.skills
+      ? ((i = a.skills ?? []), (e[7] = a.skills), (e[8] = i))
+      : (i = e[8]);
+    let c;
+    return (
+      e[9] !== i ? ((c = i.map(Ul)), (e[9] = i), (e[10] = c)) : (c = e[10]),
+      c
+    );
+  }
+  if (s === "routines") {
+    let i;
+    e[11] !== a.routines
+      ? ((i = a.routines ?? []), (e[11] = a.routines), (e[12] = i))
+      : (i = e[12]);
+    let c;
+    return (
+      e[13] !== i ? ((c = i.map(Dl)), (e[13] = i), (e[14] = c)) : (c = e[14]),
+      c
+    );
+  }
+  let l;
+  e[15] !== a.plugins
+    ? ((l = a.plugins ?? []), (e[15] = a.plugins), (e[16] = l))
+    : (l = e[16]);
+  let d;
+  return (
+    e[17] !== l ? ((d = l.map(Fl)), (e[17] = l), (e[18] = d)) : (d = e[18]),
+    d
+  );
+}
+function Fl(t) {
+  return n.jsx(
+    Fn,
+    {
+      label: t.name,
+      size: "lg",
+      style: Ke.item,
+      ...(t.description == null ? {} : { description: t.description }),
+    },
+    t.pluginId,
+  );
+}
+function Dl(t) {
+  return n.jsx(
+    Fn,
+    { description: t.description, label: t.name, size: "lg", style: Ke.item },
+    t.slug,
+  );
+}
+function Ul(t) {
+  return n.jsx(
+    Fn,
+    { description: t.description, label: t.name, size: "lg", style: Ke.item },
+    t.name,
+  );
+}
+function Vl(t, e) {
+  return n.jsx(
+    "p",
+    { dir: "auto", ...me(he.body1, Ke.memoryItem), children: t.content },
+    `${e}:${t.content}`,
+  );
+}
+function Mn(t) {
+  const e = J.c(28),
+    { template: s, contentScrollRef: a } = t;
+  let l;
+  e[0] !== s ? ((l = (S) => Da(S, s) > 0), (e[0] = s), (e[1] = l)) : (l = e[1]);
+  const d = Fa.filter(l),
+    [i, c] = Q.useState(null),
+    [u, o] = Q.useState(!1),
+    m = i != null && d.includes(i) ? i : (d[0] ?? null);
+  if (m == null) return null;
+  let r;
+  e[2] !== a || e[3] !== m || e[4] !== o || e[5] !== c
+    ? ((r = (S) => {
+        S !== m && (c(S), o(!0), a.current?.scrollToTop());
+      }),
+      (e[2] = a),
+      (e[3] = m),
+      (e[4] = o),
+      (e[5] = c),
+      (e[6] = r))
+    : (r = e[6]);
+  const f = r;
+  let p;
+  e[7] === Symbol.for("react.memo_cache_sentinel")
+    ? ((p = {
+        className:
+          "sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-1cy8zhl sand-1665zp3 sand-h8yej3 sand-euugli sand-2lwn1j sand-b3r6kr",
+      }),
+      (e[7] = p))
+    : (p = e[7]);
+  let g;
+  e[8] !== f || e[9] !== m || e[10] !== s
+    ? ((g = n.jsx($n, {
+        rootStyle: Ke.sectionRailScroll,
+        scrollbarVisibility: "hover",
+        children: n.jsx(Bl, { onSelect: f, selected: m, template: s }),
+      })),
+      (e[8] = f),
+      (e[9] = m),
+      (e[10] = s),
+      (e[11] = g))
+    : (g = e[11]);
+  let h;
+  e[12] === Symbol.for("react.memo_cache_sentinel")
+    ? ((h = {
+        className:
+          "sand-78zum5 sand-1iyjqo2 sand-qcrz7y sand-euugli sand-2lwn1j sand-mz0i5r sand-b3r6kr sand-ixl9f9 sand-s6r99b",
+      }),
+      (e[12] = h))
+    : (h = e[12]);
+  let y;
+  e[13] !== u
+    ? ((y = {
+        0: {
+          className:
+            "sand-78zum5 sand-1iyjqo2 sand-dt5ytf sand-ou54vl sand-yamay9 sand-1x5flf6 sand-1l90r2v sand-wn43p0",
+        },
+        1: {
+          className:
+            "sand-78zum5 sand-1iyjqo2 sand-dt5ytf sand-ou54vl sand-yamay9 sand-1x5flf6 sand-1l90r2v sand-wn43p0 sand-r1vbnl sand-gyzkii sand-1yruv16 sand-1u6ievf",
+        },
+      }[!!u << 0]),
+      (e[13] = u),
+      (e[14] = y))
+    : (y = e[14]);
+  let b;
+  e[15] !== m || e[16] !== s
+    ? ((b = n.jsx(Kl, { section: m, template: s })),
+      (e[15] = m),
+      (e[16] = s),
+      (e[17] = b))
+    : (b = e[17]);
+  let j;
+  e[18] !== m || e[19] !== y || e[20] !== b
+    ? ((j = n.jsx("div", { ...y, children: b }, m)),
+      (e[18] = m),
+      (e[19] = y),
+      (e[20] = b),
+      (e[21] = j))
+    : (j = e[21]);
+  let k;
+  e[22] !== a || e[23] !== j
+    ? ((k = n.jsx("div", {
+        ...h,
+        children: n.jsx($n, {
+          ref: a,
+          rootStyle: Ke.contentScroll,
+          scrollbarVisibility: "hover",
+          children: j,
+        }),
+      })),
+      (e[22] = a),
+      (e[23] = j),
+      (e[24] = k))
+    : (k = e[24]);
+  let v;
+  return (
+    e[25] !== g || e[26] !== k
+      ? ((v = n.jsxs("div", { ...p, children: [g, k] })),
+        (e[25] = g),
+        (e[26] = k),
+        (e[27] = v))
+      : (v = e[27]),
+    v
+  );
+}
+function Wl(t) {
+  const e = J.c(23),
+    { state: s, retry: a, contentScrollRef: l } = t;
+  if (s.status === "ready") {
+    let o;
+    e[0] !== s.value
+      ? ((o = cn(s.value)), (e[0] = s.value), (e[1] = o))
+      : (o = e[1]);
+    let m;
+    return (
+      e[2] !== l || e[3] !== o
+        ? ((m = n.jsx(Mn, { contentScrollRef: l, template: o })),
+          (e[2] = l),
+          (e[3] = o),
+          (e[4] = m))
+        : (m = e[4]),
+      m
+    );
+  }
+  if (s.status === "loading" && s.previous != null) {
+    let o;
+    e[5] !== s.previous
+      ? ((o = cn(s.previous)), (e[5] = s.previous), (e[6] = o))
+      : (o = e[6]);
+    let m;
+    return (
+      e[7] !== l || e[8] !== o
+        ? ((m = n.jsx(Mn, { contentScrollRef: l, template: o })),
+          (e[7] = l),
+          (e[8] = o),
+          (e[9] = m))
+        : (m = e[9]),
+      m
+    );
+  }
+  if (s.status === "failed" && s.previous != null) {
+    let o;
+    e[10] !== s.previous
+      ? ((o = cn(s.previous)), (e[10] = s.previous), (e[11] = o))
+      : (o = e[11]);
+    let m;
+    return (
+      e[12] !== l || e[13] !== o
+        ? ((m = n.jsx(Mn, { contentScrollRef: l, template: o })),
+          (e[12] = l),
+          (e[13] = o),
+          (e[14] = m))
+        : (m = e[14]),
+      m
+    );
+  }
+  if (s.status === "loading") {
+    let o;
+    e[15] === Symbol.for("react.memo_cache_sentinel")
+      ? ((o = {
+          className:
+            "sand-78zum5 sand-1iyjqo2 sand-dt5ytf sand-6s0dn4 sand-l56j7k sand-1v2ro7d sand-1o0liin",
+        }),
+        (e[15] = o))
+      : (o = e[15]);
+    let m;
+    return (
+      e[16] === Symbol.for("react.memo_cache_sentinel")
+        ? ((m = n.jsx("div", {
+            ...o,
+            role: "status",
+            children: n.jsx(gt, { size: 20 }),
+          })),
+          (e[16] = m))
+        : (m = e[16]),
+      m
+    );
+  }
+  if (s.status === "empty") {
+    let o;
+    return (
+      e[17] === Symbol.for("react.memo_cache_sentinel")
+        ? ((o = n.jsx("p", {
+            ...me(he.body1, Ke.status),
+            children: n.jsx(se, { id: "MRYMge" }),
+          })),
+          (e[17] = o))
+        : (o = e[17]),
+      o
+    );
+  }
+  let d;
+  e[18] === Symbol.for("react.memo_cache_sentinel")
+    ? ((d = {
+        className:
+          "sand-78zum5 sand-1iyjqo2 sand-dt5ytf sand-6s0dn4 sand-l56j7k sand-1v2ro7d sand-1o0liin",
+      }),
+      (e[18] = d))
+    : (d = e[18]);
+  let i;
+  e[19] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = n.jsx(se, { id: "szUMIH" })), (e[19] = i))
+    : (i = e[19]);
+  let c;
+  e[20] === Symbol.for("react.memo_cache_sentinel")
+    ? ((c = n.jsx(se, { id: "qJb6G2" })), (e[20] = c))
+    : (c = e[20]);
+  let u;
+  return (
+    e[21] !== a
+      ? ((u = n.jsxs("div", {
+          ...d,
+          role: "alert",
+          children: [
+            i,
+            n.jsx(We, {
+              onClick: a,
+              size: "sm",
+              variant: "secondary",
+              children: c,
+            }),
+          ],
+        })),
+        (e[21] = a),
+        (e[22] = u))
+      : (u = e[22]),
+    u
+  );
+}
+function Gl(t) {
+  const e = J.c(22),
+    { listing: s, avatarSrc: a, onAdd: l, titleRef: d } = t,
+    i = ht(s.shareId),
+    c = Q.useRef(null),
+    u = Q.useRef(!0);
+  let o, m;
+  if (
+    e[0] !== s.shareId ||
+    e[1] !== l ||
+    e[2] !== i.state.status ||
+    e[3] !== i.state.value
+  ) {
+    const j = i.state.status === "ready" ? cn(i.state.value) : void 0;
+    ((o = l != null && j != null ? () => l(s.shareId) : void 0),
+      (m = j == null ? null : yt(j)),
+      (e[0] = s.shareId),
+      (e[1] = l),
+      (e[2] = i.state.status),
+      (e[3] = i.state.value),
+      (e[4] = o),
+      (e[5] = m));
+  } else ((o = e[4]), (m = e[5]));
+  const r = m;
+  let f;
+  (e[6] !== d
+    ? ((f = () => {
+        u.current &&
+          ((u.current = !1), d.current?.focus({ preventScroll: !0 }));
+      }),
+      (e[6] = d),
+      (e[7] = f))
+    : (f = e[7]),
+    za(f));
+  let p;
+  e[8] === Symbol.for("react.memo_cache_sentinel")
+    ? ((p = {
+        className:
+          "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-dt5ytf sand-1665zp3 sand-h8yej3 sand-2lwn1j sand-b3r6kr sand-1iorvi4 sand-sfy40s sand-1gan7if sand-1mfogq2",
+      }),
+      (e[8] = p))
+    : (p = e[8]);
+  let g;
+  e[9] !== o || e[10] !== a || e[11] !== s || e[12] !== r || e[13] !== d
+    ? ((g = n.jsx(Ol, {
+        avatarSrc: a,
+        listing: s,
+        onAdd: o,
+        shareUrl: r,
+        titleRef: d,
+      })),
+      (e[9] = o),
+      (e[10] = a),
+      (e[11] = s),
+      (e[12] = r),
+      (e[13] = d),
+      (e[14] = g))
+    : (g = e[14]);
+  let h;
+  e[15] === Symbol.for("react.memo_cache_sentinel")
+    ? ((h = n.jsx(kt, {})), (e[15] = h))
+    : (h = e[15]);
+  let y;
+  e[16] !== i.retry || e[17] !== i.state
+    ? ((y = n.jsx(Wl, { contentScrollRef: c, retry: i.retry, state: i.state })),
+      (e[16] = i.retry),
+      (e[17] = i.state),
+      (e[18] = y))
+    : (y = e[18]);
+  let b;
+  return (
+    e[19] !== g || e[20] !== y
+      ? ((b = n.jsxs("div", { ...p, children: [g, h, y] })),
+        (e[19] = g),
+        (e[20] = y),
+        (e[21] = b))
+      : (b = e[21]),
+    b
+  );
+}
+const Ss = {
+  chip: {
+    kB7OPa: "sand-9f619",
+    k1xSpc: "sand-3nfvp2",
+    kGNEyG: "sand-6s0dn4",
+    kmuXW: "sand-2lah0s",
+    kOIVth: "sand-1jnr06f",
+    kZKoxP: "sand-1fgtraw",
+    kwRFfy: "sand-pdmqnj",
+    kZCmMZ: "sand-1g0dm76",
+    kMzoRj: "sand-c342km",
+    ksu8eU: "sand-ng3xce",
+    kaIpWk: "sand-149ho13",
+    kWkggS: "sand-1tiofj7 sand-4hlgfw",
+    kMwMTN: "sand-19aaqeu",
+    kMv6JI: "sand-jb2p0i",
+    khDVqt: "sand-uxw1ft",
+    kkrTdU: "sand-1ypdohk",
+    k3XXqK: "sand-1t137rt sand-9v5kkp",
+    kMeerF: "sand-1k57tk5 sand-784prv",
+    kjBf7l: "sand-1uczgqu sand-1lt2dyn",
+    $$css: !0,
+  },
+  chipSelected: {
+    kWkggS: "sand-1wclgxm sand-1etmwcz",
+    kMwMTN: "sand-xcaa6e",
+    $$css: !0,
+  },
+  toggle: { kMwMTN: "sand-tyxrsu", $$css: !0 },
+};
+function Zl(t) {
+  const { availableWidth: e, itemWidths: s, gap: a, triggerWidth: l } = t;
+  if (s.reduce((i, c, u) => i + c + (u === 0 ? 0 : a), 0) <= e) return s.length;
+  for (let i = s.length - 1; i >= 0; i -= 1)
+    if (
+      s.slice(0, i).reduce((o, m, r) => o + m + (r === 0 ? 0 : a), 0) +
+        (i === 0 ? 0 : a) +
+        l <=
+      e
+    )
+      return i;
+  return 0;
+}
+function Pn(t) {
+  const e = J.c(14),
+    { mode: s, option: a, selectedKey: l, onSelect: d } = t,
+    i = l === a.key,
+    c = s === "measurement" || void 0,
+    u = s === "measurement" ? "item" : void 0;
+  let o;
+  e[0] !== i || e[1] !== d || e[2] !== a.key
+    ? ((o = () => d(i && a.key != null ? null : a.key)),
+      (e[0] = i),
+      (e[1] = d),
+      (e[2] = a.key),
+      (e[3] = o))
+    : (o = e[3]);
+  const m = s === "measurement" ? -1 : void 0;
+  let r;
+  e[4] !== i
+    ? ((r = me(he.body1, Ss.chip, i && Ss.chipSelected)),
+      (e[4] = i),
+      (e[5] = r))
+    : (r = e[5]);
+  let f;
+  return (
+    e[6] !== i ||
+    e[7] !== a.label ||
+    e[8] !== c ||
+    e[9] !== u ||
+    e[10] !== o ||
+    e[11] !== m ||
+    e[12] !== r
+      ? ((f = n.jsx("button", {
+          "aria-hidden": c,
+          "aria-pressed": i,
+          "data-marketplace-category-measure": u,
+          onClick: o,
+          tabIndex: m,
+          type: "button",
+          ...r,
+          children: a.label,
+        })),
+        (e[6] = i),
+        (e[7] = a.label),
+        (e[8] = c),
+        (e[9] = u),
+        (e[10] = o),
+        (e[11] = m),
+        (e[12] = r),
+        (e[13] = f))
+      : (f = e[13]),
+    f
+  );
+}
+function pa(t) {
+  const e = J.c(7),
+    { label: s, measurement: a } = t;
+  let l;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((l = me(he.body1, Ss.chip, Ss.toggle)), (e[0] = l))
+    : (l = e[0]);
+  const d = a === "more" ? "chevron-down" : "chevron-up";
+  let i;
+  e[1] !== d
+    ? ((i = n.jsx(pe, { "aria-hidden": !0, name: d, size: 12 })),
+      (e[1] = d),
+      (e[2] = i))
+    : (i = e[2]);
+  let c;
+  return (
+    e[3] !== s || e[4] !== a || e[5] !== i
+      ? ((c = n.jsxs("button", {
+          "aria-hidden": !0,
+          "data-marketplace-category-measure": a,
+          tabIndex: -1,
+          type: "button",
+          ...l,
+          children: [s, i],
+        })),
+        (e[3] = s),
+        (e[4] = a),
+        (e[5] = i),
+        (e[6] = c))
+      : (c = e[6]),
+    c
+  );
+}
+function Hl(t) {
+  const e = J.c(66),
+    { categories: s, label: a, selectedKey: l, onSelect: d } = t,
+    { _: i } = re();
+  let c;
+  e[0] !== l
+    ? ((c = {
+        isExpanded: !1,
+        selectedKey: l,
+        visibleCount: Number.POSITIVE_INFINITY,
+      }),
+      (e[0] = l),
+      (e[1] = c))
+    : (c = e[1]);
+  const [u, o] = Q.useState(c),
+    [m, r] = Q.useState(Number.POSITIVE_INFINITY);
+  let f;
+  e[2] !== i ? ((f = i({ id: "N40H+G" })), (e[2] = i), (e[3] = f)) : (f = e[3]);
+  let p;
+  e[4] !== f
+    ? ((p = { key: null, label: f }), (e[4] = f), (e[5] = p))
+    : (p = e[5]);
+  let g;
+  e[6] !== s || e[7] !== p
+    ? ((g = [p, ...s]), (e[6] = s), (e[7] = p), (e[8] = g))
+    : (g = e[8]);
+  const h = g;
+  let y;
+  e[9] !== h ? ((y = h.map(Jl)), (e[9] = h), (e[10] = y)) : (y = e[10]);
+  const b = y.join("|");
+  let j;
+  e[11] === Symbol.for("react.memo_cache_sentinel")
+    ? ((j = (A) => {
+        if (A == null) return;
+        const B = A.parentElement ?? A,
+          ie = () => {
+            const te = Array.from(
+                A.querySelectorAll(
+                  '[data-marketplace-category-measure="item"]',
+                ),
+                Yl,
+              ),
+              ue =
+                A.querySelector('[data-marketplace-category-measure="more"]')
+                  ?.offsetWidth ?? 0,
+              le =
+                A.querySelector('[data-marketplace-category-measure="hide"]')
+                  ?.offsetWidth ?? 0,
+              ve = Number.parseFloat(getComputedStyle(A).gap) || 0,
+              ye = Zl({
+                availableWidth: B.clientWidth,
+                itemWidths: te,
+                gap: ve,
+                triggerWidth: Math.max(ue, le),
+              });
+            r((ge) => (ge === ye ? ge : ye));
+          };
+        ie();
+        const ae = new ResizeObserver(ie);
+        return (ae.observe(B), ae.observe(A), () => ae.disconnect());
+      }),
+      (e[11] = j))
+    : (j = e[11]);
+  const k = j;
+  let v;
+  e[12] !== h || e[13] !== m
+    ? ((v = h.slice(0, m)), (e[12] = h), (e[13] = m), (e[14] = v))
+    : (v = e[14]);
+  const S = v;
+  let N;
+  e[15] !== S.length || e[16] !== h
+    ? ((N = h.slice(S.length)), (e[15] = S.length), (e[16] = h), (e[17] = N))
+    : (N = e[17]);
+  const z = N,
+    _ = z.length > 0;
+  let I;
+  e[18] !== z || e[19] !== l
+    ? ((I = l != null && z.some((A) => A.key === l)),
+      (e[18] = z),
+      (e[19] = l),
+      (e[20] = I))
+    : (I = e[20]);
+  const T = I,
+    R = u.selectedKey !== l,
+    $ = u.visibleCount !== m,
+    C = u.isExpanded || (T && (R || $));
+  (R || $) && o({ isExpanded: C, selectedKey: l, visibleCount: m });
+  let M;
+  e[21] !== i || e[22] !== C
+    ? ((M = i(C ? { id: "vLyv1R" } : { id: "2FYpfJ" })),
+      (e[21] = i),
+      (e[22] = C),
+      (e[23] = M))
+    : (M = e[23]);
+  const D = M;
+  let U, O;
+  e[24] === Symbol.for("react.memo_cache_sentinel")
+    ? ((U = {
+        className:
+          "sand-1n2onr6 sand-9f619 sand-78zum5 sand-dt5ytf sand-167g77z sand-euugli",
+      }),
+      (O = {
+        className:
+          "sand-9f619 sand-78zum5 sand-6s0dn4 sand-ozqiw3 sand-167g77z sand-euugli sand-b3r6kr",
+      }),
+      (e[24] = U),
+      (e[25] = O))
+    : ((U = e[24]), (O = e[25]));
+  let P;
+  e[26] !== S || e[27] !== d || e[28] !== l
+    ? ((P = S.map((A) =>
+        n.jsx(
+          Pn,
+          { mode: "interactive", onSelect: d, option: A, selectedKey: l },
+          A.key == null ? "marketplace-all" : `category-${A.key}`,
+        ),
+      )),
+      (e[26] = S),
+      (e[27] = d),
+      (e[28] = l),
+      (e[29] = P))
+    : (P = e[29]);
+  let Z;
+  e[30] !== _ || e[31] !== C || e[32] !== D
+    ? ((Z = _
+        ? n.jsxs("button", {
+            "aria-expanded": C,
+            onClick: () => o(Ql),
+            type: "button",
+            ...me(he.body1, Ss.chip, Ss.toggle),
+            children: [
+              D,
+              n.jsx(pe, {
+                "aria-hidden": !0,
+                name: C ? "chevron-up" : "chevron-down",
+                size: 12,
+              }),
+            ],
+          })
+        : null),
+      (e[30] = _),
+      (e[31] = C),
+      (e[32] = D),
+      (e[33] = Z))
+    : (Z = e[33]);
+  let K;
+  e[34] !== P || e[35] !== Z
+    ? ((K = n.jsxs("div", { ...O, children: [P, Z] })),
+      (e[34] = P),
+      (e[35] = Z),
+      (e[36] = K))
+    : (K = e[36]);
+  let V;
+  e[37] !== _ || e[38] !== C || e[39] !== d || e[40] !== z || e[41] !== l
+    ? ((V =
+        C && _
+          ? n.jsx("div", {
+              className:
+                "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1a02dak sand-167g77z sand-euugli",
+              children: z.map((A) =>
+                n.jsx(
+                  Pn,
+                  {
+                    mode: "interactive",
+                    onSelect: d,
+                    option: A,
+                    selectedKey: l,
+                  },
+                  A.key == null ? "marketplace-all" : `category-${A.key}`,
+                ),
+              ),
+            })
+          : null),
+      (e[37] = _),
+      (e[38] = C),
+      (e[39] = d),
+      (e[40] = z),
+      (e[41] = l),
+      (e[42] = V))
+    : (V = e[42]);
+  let F;
+  e[43] === Symbol.for("react.memo_cache_sentinel")
+    ? ((F = {
+        className:
+          "sand-10l6tqk sand-13vifvy sand-1o0tod sand-78zum5 sand-6s0dn4 sand-167g77z sand-ezivpi sand-lshs6z sand-47corl",
+      }),
+      (e[43] = F))
+    : (F = e[43]);
+  let X;
+  e[44] !== d || e[45] !== h || e[46] !== l
+    ? ((X = h.map((A) =>
+        n.jsx(
+          Pn,
+          { mode: "measurement", onSelect: d, option: A, selectedKey: l },
+          A.key == null ? "marketplace-all" : `category-${A.key}`,
+        ),
+      )),
+      (e[44] = d),
+      (e[45] = h),
+      (e[46] = l),
+      (e[47] = X))
+    : (X = e[47]);
+  let E;
+  e[48] !== i
+    ? ((E = i({ id: "2FYpfJ" })), (e[48] = i), (e[49] = E))
+    : (E = e[49]);
+  let q;
+  e[50] !== E
+    ? ((q = n.jsx(pa, { label: E, measurement: "more" })),
+      (e[50] = E),
+      (e[51] = q))
+    : (q = e[51]);
+  let W;
+  e[52] !== i
+    ? ((W = i({ id: "vLyv1R" })), (e[52] = i), (e[53] = W))
+    : (W = e[53]);
+  let H;
+  e[54] !== W
+    ? ((H = n.jsx(pa, { label: W, measurement: "hide" })),
+      (e[54] = W),
+      (e[55] = H))
+    : (H = e[55]);
+  let ee;
+  e[56] !== b || e[57] !== X || e[58] !== q || e[59] !== H
+    ? ((ee = n.jsxs(
+        "div",
+        {
+          "aria-hidden": !0,
+          "data-marketplace-category-measure": "row",
+          ref: k,
+          ...F,
+          children: [X, q, H],
+        },
+        b,
+      )),
+      (e[56] = b),
+      (e[57] = X),
+      (e[58] = q),
+      (e[59] = H),
+      (e[60] = ee))
+    : (ee = e[60]);
+  let Y;
+  return (
+    e[61] !== a || e[62] !== K || e[63] !== V || e[64] !== ee
+      ? ((Y = n.jsxs("div", {
+          "aria-label": a,
+          role: "group",
+          ...U,
+          children: [K, V, ee],
+        })),
+        (e[61] = a),
+        (e[62] = K),
+        (e[63] = V),
+        (e[64] = ee),
+        (e[65] = Y))
+      : (Y = e[65]),
+    Y
+  );
+}
+function Ql(t) {
+  return { ...t, isExpanded: !t.isExpanded };
+}
+function Yl(t) {
+  return t.offsetWidth;
+}
+function Jl(t) {
+  return `${t.key ?? "all"}:${t.label}`;
+}
+const En = {
+  searchIcon: { kMwMTN: "sand-169k319", $$css: !0 },
+  searchInput: {
+    kB7OPa: "sand-9f619",
+    kzQI83: "sand-1iyjqo2",
+    kmuXW: "sand-s83m0k",
+    kCS8Yb: "sand-dl72j9",
+    k7Eaqz: "sand-euugli",
+    kMzoRj: "sand-c342km",
+    ksu8eU: "sand-ng3xce",
+    k3XXqK: "sand-1t137rt",
+    kWkggS: "sand-jbqb8w",
+    kMwMTN: "sand-1wd3ewq",
+    kMv6JI: "sand-jb2p0i",
+    k8Qsv1: "sand-ltfok3",
+    $$css: !0,
+  },
+  groupTitle: {
+    kogj98: "sand-1ghz6dp",
+    kLKAdn: "sand-1y1aw1k",
+    kwRFfy: "sand-f159sx",
+    kGO01o: "sand-10b6aqq",
+    kZCmMZ: "sand-mzvs34",
+    kMwMTN: "sand-1wd3ewq",
+    k63SB2: "sand-1rhlpx6",
+    $$css: !0,
+  },
+};
+function Ua(t) {
+  const e = J.c(32),
+    {
+      aboveSearch: s,
+      categories: a,
+      categoriesLabel: l,
+      groups: d,
+      query: i,
+      searchInputRef: c,
+      searchLabel: u,
+      searchPlaceholder: o,
+      selectedCategoryKey: m,
+      onCategoryChange: r,
+      onSearchKeyDown: f,
+      onQueryChange: p,
+    } = t;
+  let g;
+  e[0] !== p
+    ? ((g = (C) => {
+        p(C.currentTarget.value);
+      }),
+      (e[0] = p),
+      (e[1] = g))
+    : (g = e[1]);
+  const h = g;
+  let y, b;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((y = { className: "sand-9f619 sand-78zum5 sand-dt5ytf sand-euugli" }),
+      (b = { className: "sand-9f619 sand-euugli sand-ieb3on" }),
+      (e[2] = y),
+      (e[3] = b))
+    : ((y = e[2]), (b = e[3]));
+  let j;
+  e[4] !== s
+    ? ((j = n.jsx("div", { ...b, children: s })), (e[4] = s), (e[5] = j))
+    : (j = e[5]);
+  let k, v, S;
+  e[6] === Symbol.for("react.memo_cache_sentinel")
+    ? ((k = {
+        className:
+          "sand-7wzq59 sand-13vifvy sand-1vjfegm sand-9f619 sand-78zum5 sand-dt5ytf sand-1v2ro7d sand-euugli sand-x6bls6 sand-10e981r",
+      }),
+      (v = {
+        className:
+          "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1jnr06f sand-10w6t97 sand-euugli sand-exx8yu sand-f159sx sand-18d9i69 sand-mzvs34 sand-qjedn3 sand-1y0btm7 sand-q03nf1 sand-1jt0dse sand-149ho13 sand-1tiofj7",
+      }),
+      (S = n.jsx(pe, { name: "search", size: 14, style: En.searchIcon })),
+      (e[6] = k),
+      (e[7] = v),
+      (e[8] = S))
+    : ((k = e[6]), (v = e[7]), (S = e[8]));
+  let N;
+  e[9] === Symbol.for("react.memo_cache_sentinel")
+    ? ((N = me(he.body1, En.searchInput)), (e[9] = N))
+    : (N = e[9]);
+  let z;
+  e[10] !== h ||
+  e[11] !== f ||
+  e[12] !== i ||
+  e[13] !== c ||
+  e[14] !== u ||
+  e[15] !== o
+    ? ((z = n.jsxs("label", {
+        ...v,
+        children: [
+          S,
+          n.jsx("input", {
+            "aria-label": u,
+            ...N,
+            onChange: h,
+            onKeyDown: f,
+            placeholder: o,
+            ref: c,
+            spellCheck: !1,
+            type: "search",
+            value: i,
+          }),
+        ],
+      })),
+      (e[10] = h),
+      (e[11] = f),
+      (e[12] = i),
+      (e[13] = c),
+      (e[14] = u),
+      (e[15] = o),
+      (e[16] = z))
+    : (z = e[16]);
+  let _;
+  e[17] !== a || e[18] !== l || e[19] !== r || e[20] !== m
+    ? ((_ =
+        a.length === 0
+          ? null
+          : n.jsx(Hl, {
+              categories: a,
+              label: l,
+              onSelect: r,
+              selectedKey: m,
+            })),
+      (e[17] = a),
+      (e[18] = l),
+      (e[19] = r),
+      (e[20] = m),
+      (e[21] = _))
+    : (_ = e[21]);
+  let I;
+  e[22] !== _ || e[23] !== z
+    ? ((I = n.jsxs("div", { ...k, children: [z, _] })),
+      (e[22] = _),
+      (e[23] = z),
+      (e[24] = I))
+    : (I = e[24]);
+  let T;
+  e[25] === Symbol.for("react.memo_cache_sentinel")
+    ? ((T = {
+        className:
+          "sand-9f619 sand-78zum5 sand-dt5ytf sand-1665zp3 sand-euugli",
+      }),
+      (e[25] = T))
+    : (T = e[25]);
+  let R;
+  e[26] !== d
+    ? ((R = n.jsx("div", { ...T, children: d })), (e[26] = d), (e[27] = R))
+    : (R = e[27]);
+  let $;
+  return (
+    e[28] !== I || e[29] !== R || e[30] !== j
+      ? (($ = n.jsxs("div", { ...y, children: [j, I, R] })),
+        (e[28] = I),
+        (e[29] = R),
+        (e[30] = j),
+        (e[31] = $))
+      : ($ = e[31]),
+    $
+  );
+}
+function Vn(t) {
+  const e = J.c(8),
+    { action: s, children: a, title: l, titleId: d } = t;
+  let i;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = {
+        className:
+          "sand-9f619 sand-78zum5 sand-dt5ytf sand-167g77z sand-euugli",
+      }),
+      (e[0] = i))
+    : (i = e[0]);
+  let c;
+  e[1] !== s || e[2] !== l || e[3] !== d
+    ? ((c =
+        l == null
+          ? null
+          : n.jsxs("div", {
+              className:
+                "sand-9f619 sand-78zum5 sand-1pha0wt sand-1qughib sand-167g77z sand-euugli",
+              children: [
+                n.jsx("h3", {
+                  id: d,
+                  ...me(he.heading3, En.groupTitle),
+                  children: l,
+                }),
+                s,
+              ],
+            })),
+      (e[1] = s),
+      (e[2] = l),
+      (e[3] = d),
+      (e[4] = c))
+    : (c = e[4]);
+  let u;
+  return (
+    e[5] !== a || e[6] !== c
+      ? ((u = n.jsxs("section", { ...i, children: [c, a] })),
+        (e[5] = a),
+        (e[6] = c),
+        (e[7] = u))
+      : (u = e[7]),
+    u
+  );
+}
+const dn = {
+  status: {
+    kB7OPa: "sand-9f619",
+    kGuDYH: "sand-4z9k3i",
+    kLWn49: "sand-d4r4e8",
+    kb6lSQ: "sand-12oo3zp",
+    kMwMTN: "sand-4b2ntj",
+    khDVqt: "sand-uxw1ft",
+    $$css: !0,
+  },
+  statusConnected: { kMwMTN: "sand-98zg7y", $$css: !0 },
+  statusWarn: { kMwMTN: "sand-1izesbo", $$css: !0 },
+  statusError: { kMwMTN: "sand-pmgbkh", $$css: !0 },
+};
+function Ln(t) {
+  const e = J.c(13),
+    { title: s, titleId: a, action: l, children: d } = t;
+  let i, c;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = w(
+        "sand-plugins__group",
+        "sand-9f619 sand-78zum5 sand-dt5ytf sand-xhr3t",
+      )),
+      (c = w("sand-9f619 sand-78zum5 sand-1pha0wt sand-1qughib sand-167g77z")),
+      (e[0] = i),
+      (e[1] = c))
+    : ((i = e[0]), (c = e[1]));
+  let u;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((u = {
+        className:
+          "sand-9f619 sand-1y1aw1k sand-f159sx sand-10b6aqq sand-mzvs34 sand-4b2ntj",
+      }),
+      (e[2] = u))
+    : (u = e[2]);
+  let o;
+  e[3] !== s || e[4] !== a
+    ? ((o = n.jsx(Se, {
+        as: "h3",
+        className: u.className,
+        id: a,
+        size: "sm",
+        children: s,
+      })),
+      (e[3] = s),
+      (e[4] = a),
+      (e[5] = o))
+    : (o = e[5]);
+  const m = l ?? null;
+  let r;
+  e[6] !== o || e[7] !== m
+    ? ((r = n.jsxs("div", { className: c, children: [o, m] })),
+      (e[6] = o),
+      (e[7] = m),
+      (e[8] = r))
+    : (r = e[8]);
+  let f;
+  return (
+    e[9] !== d || e[10] !== r || e[11] !== a
+      ? ((f = n.jsxs("section", {
+          "aria-labelledby": a,
+          className: i,
+          children: [r, d],
+        })),
+        (e[9] = d),
+        (e[10] = r),
+        (e[11] = a),
+        (e[12] = f))
+      : (f = e[12]),
+    f
+  );
+}
+function Va(t) {
+  const e = J.c(4),
+    { label: s, onAction: a } = t;
+  let l;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((l = w(
+        "sand-plugins__group-action",
+        "sand-9f619 sand-1c4vz4f sand-2lah0s sand-dl72j9 sand-1iorvi4 sand-f159sx sand-jkvuk6 sand-mzvs34 sand-c342km sand-ng3xce sand-jbqb8w sand-19aaqeu sand-7gh5u8 sand-jb2p0i sand-fifm61 sand-1ypdohk",
+      )),
+      (e[0] = l))
+    : (l = e[0]);
+  let d;
+  return (
+    e[1] !== s || e[2] !== a
+      ? ((d = n.jsx("button", {
+          className: l,
+          onClick: a,
+          type: "button",
+          children: s,
+        })),
+        (e[1] = s),
+        (e[2] = a),
+        (e[3] = d))
+      : (d = e[3]),
+    d
+  );
+}
+function On(t) {
+  const e = J.c(6),
+    { labelledBy: s, isFullWidth: a, children: l } = t,
+    d = a === void 0 ? !1 : a;
+  let i;
+  e[0] !== d
+    ? ((i = w(
+        "sand-plugins__grid",
+        {
+          0: {
+            className:
+              "sand-9f619 sand-rvj5dj sand-nby9oq sand-fex06f sand-1dbijih sand-3ct3a4 sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-exx8yu sand-yri2b sand-18d9i69 sand-1c1uobl",
+          },
+          1: {
+            className:
+              "sand-9f619 sand-rvj5dj sand-fex06f sand-1dbijih sand-3ct3a4 sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-exx8yu sand-yri2b sand-18d9i69 sand-1c1uobl sand-1mkdm3x",
+          },
+        }[!!d << 0].className,
+      )),
+      (e[0] = d),
+      (e[1] = i))
+    : (i = e[1]);
+  let c;
+  return (
+    e[2] !== l || e[3] !== s || e[4] !== i
+      ? ((c = n.jsx("ul", { "aria-labelledby": s, className: i, children: l })),
+        (e[2] = l),
+        (e[3] = s),
+        (e[4] = i),
+        (e[5] = c))
+      : (c = e[5]),
+    c
+  );
+}
+function mn(t) {
+  const e = J.c(33),
+    {
+      icon: s,
+      name: a,
+      byline: l,
+      badge: d,
+      subtitle: i,
+      trailing: c,
+      onOpen: u,
+    } = t,
+    { _: o } = re(),
+    m = Q.useId();
+  let r, f, p;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((r = w(
+        "sand-plugins-row__main",
+        "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-dt5ytf sand-12mrbbr sand-euugli",
+      )),
+      (f = w("sand-9f619 sand-78zum5 sand-6s0dn4 sand-17d4w8g sand-euugli")),
+      (p = w(
+        "sand-plugins-row__name",
+        "sand-9f619 sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1rhlpx6 sand-1wd3ewq sand-lyipyv sand-uxw1ft",
+      )),
+      (e[0] = r),
+      (e[1] = f),
+      (e[2] = p))
+    : ((r = e[0]), (f = e[1]), (p = e[2]));
+  let g;
+  e[3] !== a || e[4] !== m
+    ? ((g = n.jsx("span", { className: p, id: m, children: a })),
+      (e[3] = a),
+      (e[4] = m),
+      (e[5] = g))
+    : (g = e[5]);
+  let h;
+  e[6] !== l
+    ? ((h =
+        l != null && l.length > 0
+          ? n.jsx("span", {
+              className: w(
+                "sand-plugins-row__byline",
+                "sand-9f619 sand-b3r6kr sand-1c4vz4f sand-s83m0k sand-dl72j9 sand-fifm61 sand-d4r4e8 sand-12oo3zp sand-4b2ntj sand-lyipyv sand-uxw1ft",
+              ),
+              children: l,
+            })
+          : null),
+      (e[6] = l),
+      (e[7] = h))
+    : (h = e[7]);
+  const y = d ?? null;
+  let b;
+  e[8] !== g || e[9] !== h || e[10] !== y
+    ? ((b = n.jsxs("span", { className: f, children: [g, h, y] })),
+      (e[8] = g),
+      (e[9] = h),
+      (e[10] = y),
+      (e[11] = b))
+    : (b = e[11]);
+  let j;
+  e[12] !== i
+    ? ((j =
+        i != null && i.length > 0
+          ? n.jsx("span", {
+              className: w(
+                "sand-plugins-row__subtitle",
+                "sand-9f619 sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-19aaqeu sand-lyipyv sand-uxw1ft",
+              ),
+              children: i,
+            })
+          : null),
+      (e[12] = i),
+      (e[13] = j))
+    : (j = e[13]);
+  let k;
+  e[14] !== b || e[15] !== j
+    ? ((k = n.jsxs("span", { className: r, children: [b, j] })),
+      (e[14] = b),
+      (e[15] = j),
+      (e[16] = k))
+    : (k = e[16]);
+  let v;
+  e[17] !== s || e[18] !== k
+    ? ((v = n.jsxs(n.Fragment, { children: [s, k] })),
+      (e[17] = s),
+      (e[18] = k),
+      (e[19] = v))
+    : (v = e[19]);
+  const S = v;
+  let N;
+  e[20] === Symbol.for("react.memo_cache_sentinel")
+    ? ((N = w(
+        "sand-plugins-row",
+        "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1v2ro7d sand-euugli sand-z9dl7a sand-pdmqnj sand-sag5q8 sand-1g0dm76 sand-gqmno8 sand-jbqb8w sand-1q5pob1",
+      )),
+      (e[20] = N))
+    : (N = e[20]);
+  let z;
+  e[21] !== o || e[22] !== S || e[23] !== a || e[24] !== u
+    ? ((z =
+        u != null
+          ? n.jsx("button", {
+              "aria-label": o({ id: "T9mwDN", values: { name: a } }),
+              className: w(
+                "sand-plugins-row__open",
+                "sand-9f619 sand-78zum5 sand-6s0dn4 sand-883omv sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-euugli sand-exx8yu sand-yri2b sand-18d9i69 sand-1c1uobl sand-c342km sand-ng3xce sand-jbqb8w sand-1heor9g sand-jb2p0i sand-1yc453h sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-2d6ogt sand-1wfwxd8 sand-7s97pk sand-1kogg8i",
+              ),
+              onClick: u,
+              type: "button",
+              children: S,
+            })
+          : S),
+      (e[21] = o),
+      (e[22] = S),
+      (e[23] = a),
+      (e[24] = u),
+      (e[25] = z))
+    : (z = e[25]);
+  let _;
+  e[26] === Symbol.for("react.memo_cache_sentinel")
+    ? ((_ = w(
+        "sand-plugins-row__trailing",
+        "sand-9f619 sand-78zum5 sand-6s0dn4 sand-17d4w8g sand-1c4vz4f sand-2lah0s sand-dl72j9",
+      )),
+      (e[26] = _))
+    : (_ = e[26]);
+  let I;
+  e[27] !== c
+    ? ((I = n.jsx("span", { className: _, children: c })),
+      (e[27] = c),
+      (e[28] = I))
+    : (I = e[28]);
+  let T;
+  return (
+    e[29] !== z || e[30] !== I || e[31] !== m
+      ? ((T = n.jsxs("li", {
+          "aria-labelledby": m,
+          className: N,
+          children: [z, I],
+        })),
+        (e[29] = z),
+        (e[30] = I),
+        (e[31] = m),
+        (e[32] = T))
+      : (T = e[32]),
+    T
+  );
+}
+function Wa(t) {
+  const e = J.c(16),
+    { server: s } = t,
+    { _: a } = re(),
+    { i18n: l } = re();
+  let d, i;
+  if (e[0] !== l || e[1] !== s.status || e[2] !== s.statusDetail) {
+    const m = {
+      connected: dn.statusConnected,
+      warn: dn.statusWarn,
+      danger: dn.statusError,
+      neutral: null,
+    }[Ml(s.status)];
+    let r;
+    (e[5] !== l || e[6] !== s.statusDetail
+      ? ((r = La(s.statusDetail, l)),
+        (e[5] = l),
+        (e[6] = s.statusDetail),
+        (e[7] = r))
+      : (r = e[7]),
+      (d = r),
+      (i = w("sand-plugins__status", me(dn.status, m).className)),
+      (e[0] = l),
+      (e[1] = s.status),
+      (e[2] = s.statusDetail),
+      (e[3] = d),
+      (e[4] = i));
+  } else ((d = e[3]), (i = e[4]));
+  const c = s.status;
+  let u;
+  e[8] !== a || e[9] !== s.status
+    ? ((u = Pl(a, s.status)), (e[8] = a), (e[9] = s.status), (e[10] = u))
+    : (u = e[10]);
+  let o;
+  return (
+    e[11] !== s.status || e[12] !== d || e[13] !== i || e[14] !== u
+      ? ((o = n.jsx("span", {
+          className: i,
+          "data-status": c,
+          role: "status",
+          title: d,
+          children: u,
+        })),
+        (e[11] = s.status),
+        (e[12] = d),
+        (e[13] = i),
+        (e[14] = u),
+        (e[15] = o))
+      : (o = e[15]),
+    o
+  );
+}
+function Xl() {
+  const t = J.c(2);
+  let e;
+  t[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((e = w(
+        "sand-plugins__added",
+        "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-1nejdyq sand-1nn3v0j sand-f159sx sand-1120s5i sand-25sj25 sand-149ho13 sand-4b2ntj sand-fifm61 sand-1d3mw78 sand-uxw1ft",
+      )),
+      (t[0] = e))
+    : (e = t[0]);
+  let s;
+  return (
+    t[1] === Symbol.for("react.memo_cache_sentinel")
+      ? ((s = n.jsxs("span", {
+          className: e,
+          children: [
+            n.jsx(pe, {
+              className: "sand-9f619 sand-98zg7y",
+              name: "check",
+              size: 12,
+            }),
+            n.jsx(se, { id: "hp8OtS" }),
+          ],
+        })),
+        (t[1] = s))
+      : (s = t[1]),
+    s
+  );
+}
+function Ga(t) {
+  const e = J.c(5),
+    { title: s } = t;
+  let a;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((a = w(
+        "sand-plugins__team-badge",
+        "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-1jnr06f sand-1c4vz4f sand-2lah0s sand-dl72j9 sand-4p5aij sand-1icxu4v sand-1j85h84 sand-aso8d8 sand-149ho13 sand-jdhboh sand-4b2ntj sand-1j6dyjg sand-1d3mw78 sand-uxw1ft",
+      )),
+      (e[0] = a))
+    : (a = e[0]);
+  let l, d;
+  e[1] === Symbol.for("react.memo_cache_sentinel")
+    ? ((l = n.jsx(pe, { name: "people", size: 12 })),
+      (d = n.jsx(se, { id: "KM6m8p" })),
+      (e[1] = l),
+      (e[2] = d))
+    : ((l = e[1]), (d = e[2]));
+  let i;
+  return (
+    e[3] !== s
+      ? ((i = n.jsxs("span", { className: a, title: s, children: [l, d] })),
+        (e[3] = s),
+        (e[4] = i))
+      : (i = e[4]),
+    i
+  );
+}
+function Za(t) {
+  const e = J.c(4),
+    { label: s } = t;
+  let a;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((a = w(
+        "sand-plugins__add-pending",
+        "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-l56j7k sand-d7y6wv sand-2vl965 sand-e2zdcy",
+      )),
+      (e[0] = a))
+    : (a = e[0]);
+  let l;
+  e[1] === Symbol.for("react.memo_cache_sentinel")
+    ? ((l = n.jsx("span", {
+        "aria-hidden": !0,
+        className: w(
+          "sand-9f619 sand-6jxa94 sand-1v9usgg sand-16rqkct sand-dh2fpr sand-1y0btm7 sand-zewv6b sand-4usyfx sand-r5sbw0 sand-1aquc0h sand-5orbwg sand-1esw782 sand-a4qsjk",
+        ),
+      })),
+      (e[1] = l))
+    : (l = e[1]);
+  let d;
+  return (
+    e[2] !== s
+      ? ((d = n.jsx("span", {
+          "aria-label": s,
+          className: a,
+          role: "status",
+          children: l,
+        })),
+        (e[2] = s),
+        (e[3] = d))
+      : (d = e[3]),
+    d
+  );
+}
+function ed(t) {
+  const e = J.c(4),
+    { hiddenLabel: s, onShowAll: a } = t;
+  let l;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((l = w(
+        "sand-plugins__show-all",
+        "sand-9f619 sand-qcrz7y sand-1iorvi4 sand-f159sx sand-jkvuk6 sand-mzvs34 sand-c342km sand-ng3xce sand-jbqb8w sand-19aaqeu sand-7gh5u8 sand-jb2p0i sand-fifm61 sand-1ypdohk",
+      )),
+      (e[0] = l))
+    : (l = e[0]);
+  let d;
+  return (
+    e[1] !== s || e[2] !== a
+      ? ((d = n.jsx("button", {
+          className: l,
+          onClick: a,
+          type: "button",
+          children: s,
+        })),
+        (e[1] = s),
+        (e[2] = a),
+        (e[3] = d))
+      : (d = e[3]),
+    d
+  );
+}
+const sd = 128;
+function nd(t, e = sd) {
+  const s = new Set();
+  return {
+    warm: (a) => {
+      if (!s.has(a)) {
+        if (s.size >= e) {
+          const l = s.values().next().value;
+          l != null && s.delete(l);
+        }
+        (s.add(a), t(a));
+      }
+    },
+  };
+}
+function ad(t) {
+  const e = new Image();
+  e.src = t;
+}
+const td = nd(ad);
+function ld(t) {
+  td.warm(t.creator.profilePhotoUrl);
+}
+const Ee = {
+  scroll: {
+    kB7OPa: "sand-9f619",
+    kzQI83: "sand-1iyjqo2",
+    kmuXW: "sand-s83m0k",
+    kCS8Yb: "sand-dl72j9",
+    kAzted: "sand-2lwn1j",
+    k9g6sI: "sand-pqogu8",
+    $$css: !0,
+  },
+  detailViewport: { kORKVm: "sand-10wlt62", $$css: !0 },
+  detailOuterContent: {
+    kZKoxP: "sand-5yr21d",
+    kAzted: "sand-2lwn1j",
+    $$css: !0,
+  },
+  truncatedText: {
+    ks0D6T: "sand-193iq5w",
+    kVQacm: "sand-b3r6kr",
+    kg5iWk: "sand-lyipyv",
+    khDVqt: "sand-uxw1ft",
+    $$css: !0,
+  },
+  creatorName: { kMwMTN: "sand-1wd3ewq", k63SB2: "sand-1rhlpx6", $$css: !0 },
+  botName: { kMwMTN: "sand-1wd3ewq", k63SB2: "sand-1rhlpx6", $$css: !0 },
+  listCopy: {
+    k1xSpc: "sand-78zum5",
+    kXwgrk: "sand-dt5ytf",
+    kzQI83: "sand-1iyjqo2",
+    k7Eaqz: "sand-euugli",
+    kVQacm: "sand-b3r6kr",
+    $$css: !0,
+  },
+  status: {
+    k1xSpc: "sand-78zum5",
+    kXwgrk: "sand-dt5ytf",
+    kGNEyG: "sand-1cy8zhl",
+    kOIVth: "sand-1v2ro7d",
+    kMwMTN: "sand-19aaqeu",
+    $$css: !0,
+  },
+};
+function Wn(t) {
+  if (t.avatar.kind === "image") return t.avatar.url;
+  const e = {
+    id: t.slug,
+    avatarShape: t.avatar.shape,
+    avatarColor: t.avatar.color,
+  };
+  return xt(t.slug, { shape: St(e), color: Nt(e) });
+}
+function dd(t) {
+  const e = J.c(6),
+    { listing: s } = t;
+  if (s.avatar.kind === "image") {
+    let d;
+    return (
+      e[0] !== s.avatar.url
+        ? ((d = n.jsx(Ns, {
+            "aria-hidden": !0,
+            ring: !1,
+            sizePx: 64,
+            src: s.avatar.url,
+          })),
+          (e[0] = s.avatar.url),
+          (e[1] = d))
+        : (d = e[1]),
+      d
+    );
+  }
+  let a;
+  e[2] !== s ? ((a = Wn(s)), (e[2] = s), (e[3] = a)) : (a = e[3]);
+  let l;
+  return (
+    e[4] !== a
+      ? ((l = n.jsx(Ns, { "aria-hidden": !0, bare: !0, sizePx: 64, src: a })),
+        (e[4] = a),
+        (e[5] = l))
+      : (l = e[5]),
+    l
+  );
+}
+function Ha(t, e) {
+  const s = e.trim();
+  if (wt(ta, s)) return t(ta[s]);
+  const a = qs();
+  return s
+    .split(/[-_]/u)
+    .filter((l) => l.length > 0)
+    .map((l) => `${l[0]?.toLocaleUpperCase(a) ?? ""}${l.slice(1)}`)
+    .join(" ");
+}
+function id(t) {
+  const e = new Map();
+  for (const s of [...t.featuredListings, ...t.listings])
+    e.has(s.slug) || e.set(s.slug, s);
+  return [...e.values()];
+}
+function rd(t) {
+  const e = new Set(),
+    s = [];
+  for (const a of t) for (const l of _s(a)) e.has(l) || (e.add(l), s.push(l));
+  return s;
+}
+function cd(t) {
+  const e = rd(t.listings);
+  if (t.allCategoriesOrder.length === 0) return e;
+  const s = new Set(e),
+    a = [],
+    l = new Set();
+  for (const d of t.allCategoriesOrder) {
+    const i = d.trim();
+    i.length === 0 || !s.has(i) || l.has(i) || (l.add(i), a.push(i));
+  }
+  for (const d of e) l.has(d) || a.push(d);
+  return a;
+}
+function od(t, e, s, a = []) {
+  const l = qs(),
+    d = as(e.trim(), l),
+    i = t.filter(
+      (m) =>
+        (s == null || _s(m).includes(s)) &&
+        (d.length === 0 ||
+          as(m.name, l).includes(d) ||
+          as(m.creator.name, l).includes(d)),
+    ),
+    c = new Map();
+  for (const m of i) {
+    const r = _s(m),
+      f = s != null ? [s] : r.length === 0 ? [""] : r;
+    for (const p of f) {
+      const g = c.get(p);
+      g == null ? c.set(p, [m]) : g.push(m);
+    }
+  }
+  const u = [...c].map(([m, r]) => ({ category: m, listings: r }));
+  if (s != null || a.length === 0) return u;
+  const o = new Map(a.map((m, r) => [m, r]));
+  return u.sort((m, r) => {
+    const f = o.get(m.category),
+      p = o.get(r.category);
+    return f == null && p == null ? 0 : f == null ? 1 : p == null ? -1 : f - p;
+  });
+}
+function ha(t, e) {
+  for (const s of [...t.featuredListings, ...t.listings])
+    if (s.slug === e) return s;
+  return null;
+}
+function ud(t, e) {
+  if (t.status === "ready") {
+    const s = ha(t.value, e);
+    return s == null ? { kind: "missing" } : { kind: "found", listing: s };
+  }
+  if (t.status === "loading" || t.status === "failed") {
+    if (t.previous == null) return { kind: "wait" };
+    const s = ha(t.previous, e);
+    return s == null ? { kind: "wait" } : { kind: "found", listing: s };
+  }
+  return { kind: "missing" };
+}
+function md(t) {
+  const e = J.c(15),
+    { listings: s, intent: a } = t,
+    { _: l } = re();
+  if (s.length === 0) return null;
+  let d;
+  e[0] !== l ? ((d = l({ id: "FkMol5" })), (e[0] = l), (e[1] = d)) : (d = e[1]);
+  let i;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = { className: "sand-rvj5dj sand-1sipb5g sand-ou54vl" }), (e[2] = i))
+    : (i = e[2]);
+  let c;
+  if (e[3] !== l || e[4] !== a || e[5] !== s) {
+    let m;
+    (e[7] !== l || e[8] !== a
+      ? ((m = (r) => {
+          const f = r.creator.name,
+            p = a.openingSlug === r.slug;
+          return n.jsxs(
+            "button",
+            {
+              "aria-busy": p || void 0,
+              "aria-label": l({ id: "HWAICJ", values: { 0: r.name } }),
+              "data-marketplace-listing": r.slug,
+              "data-marketplace-placement": "featured",
+              onClick: () => a.open(r, "featured"),
+              onFocus: () => a.prepare(r),
+              onPointerEnter: () => a.prepare(r),
+              type: "button",
+              ...{
+                0: {
+                  className:
+                    "sand-9f619 sand-78zum5 sand-dt5ytf sand-6s0dn4 sand-1v2ro7d sand-euugli sand-yamay9 sand-pdmqnj sand-1l90r2v sand-1g0dm76 sand-qjedn3 sand-1y0btm7 sand-fnq37j sand-hojbe8 sand-10e981r sand-4hlgfw sand-tyxrsu sand-jb2p0i sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn",
+                },
+                1: {
+                  className:
+                    "sand-9f619 sand-78zum5 sand-dt5ytf sand-6s0dn4 sand-1v2ro7d sand-euugli sand-yamay9 sand-pdmqnj sand-1l90r2v sand-1g0dm76 sand-qjedn3 sand-1y0btm7 sand-fnq37j sand-hojbe8 sand-10e981r sand-4hlgfw sand-tyxrsu sand-jb2p0i sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn sand-19v85br",
+                },
+              }[!!p << 0],
+              children: [
+                n.jsxs("div", {
+                  className: "sand-1n2onr6 sand-ni59qk sand-14z7g9a",
+                  children: [
+                    n.jsx(dd, { listing: r }),
+                    n.jsxs("span", {
+                      className:
+                        "sand-10l6tqk sand-18zu7yx sand-qmqy1e sand-78zum5 sand-6s0dn4 sand-l56j7k sand-100vrsf sand-1vqgdyp",
+                      children: [
+                        n.jsx("span", {
+                          "aria-hidden": !0,
+                          className:
+                            "sand-10l6tqk sand-10a8y8t sand-149ho13 sand-10e981r sand-47corl",
+                        }),
+                        n.jsx(Ba, {
+                          sizePx: 36,
+                          src: r.creator.profilePhotoUrl,
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                n.jsxs("div", {
+                  className:
+                    "sand-78zum5 sand-dt5ytf sand-6s0dn4 sand-195vfkc sand-h8yej3 sand-euugli sand-2b8uid",
+                  children: [
+                    n.jsx("span", {
+                      ...me(he.body2, Ee.truncatedText, Ee.creatorName),
+                      children: l({ id: "qm+BLE", values: { creatorName: f } }),
+                    }),
+                    n.jsx("span", {
+                      ...me(he.body1, Ee.truncatedText, Ee.botName),
+                      children: r.name,
+                    }),
+                  ],
+                }),
+              ],
+            },
+            r.slug,
+          );
+        }),
+        (e[7] = l),
+        (e[8] = a),
+        (e[9] = m))
+      : (m = e[9]),
+      (c = s.slice(0, 4).map(m)),
+      (e[3] = l),
+      (e[4] = a),
+      (e[5] = s),
+      (e[6] = c));
+  } else c = e[6];
+  let u;
+  e[10] !== c
+    ? ((u = n.jsx("div", { ...i, children: c })), (e[10] = c), (e[11] = u))
+    : (u = e[11]);
+  let o;
+  return (
+    e[12] !== d || e[13] !== u
+      ? ((o = n.jsx(Vn, { title: d, children: u })),
+        (e[12] = d),
+        (e[13] = u),
+        (e[14] = o))
+      : (o = e[14]),
+    o
+  );
+}
+function fd(t) {
+  const e = J.c(26),
+    {
+      listings: s,
+      query: a,
+      category: l,
+      intent: d,
+      onSelectCategory: i,
+      categoryOrder: c,
+    } = t,
+    { _: u } = re(),
+    { _: o } = re();
+  let m;
+  e[0] !== a ? ((m = as(a.trim(), qs())), (e[0] = a), (e[1] = m)) : (m = e[1]);
+  const r = m;
+  let f, p;
+  if (
+    e[2] !== u ||
+    e[3] !== o ||
+    e[4] !== l ||
+    e[5] !== c ||
+    e[6] !== d ||
+    e[7] !== s ||
+    e[8] !== r ||
+    e[9] !== i ||
+    e[10] !== a
+  ) {
+    p = Symbol.for("react.early_return_sentinel");
+    e: {
+      const g = od(s, a, l, c);
+      if (g.length === 0) {
+        let y;
+        e[13] === Symbol.for("react.memo_cache_sentinel")
+          ? ((y = me(he.body1, Ee.status)), (e[13] = y))
+          : (y = e[13]);
+        let b;
+        e[14] !== o || e[15] !== a
+          ? ((b =
+              a.trim().length > 0
+                ? o({ id: "lzI/Ku", values: { 0: a.trim() } })
+                : o({ id: "VOWUXW" })),
+            (e[14] = o),
+            (e[15] = a),
+            (e[16] = b))
+          : (b = e[16]);
+        let j;
+        (e[17] !== b
+          ? ((j = n.jsx("div", { ...y, role: "status", children: b })),
+            (e[17] = b),
+            (e[18] = j))
+          : (j = e[18]),
+          (p = j));
+        break e;
+      }
+      let h;
+      (e[19] !== u ||
+      e[20] !== o ||
+      e[21] !== l ||
+      e[22] !== d ||
+      e[23] !== r ||
+      e[24] !== i
+        ? ((h = (y) => {
+            const { category: b, listings: j } = y,
+              k = r.length === 0 && l == null && b.length > 0,
+              { visible: v, hiddenCount: S } = Dn(j, !k, Ia);
+            return n.jsx(
+              Vn,
+              {
+                action:
+                  S > 0
+                    ? n.jsx(Va, {
+                        label: o({ id: "N6Pxr9" }),
+                        onAction: () => i(b),
+                      })
+                    : void 0,
+                title: b.length === 0 ? null : Ha(u, b),
+                children: n.jsx("ul", {
+                  className:
+                    "sand-rvj5dj sand-nby9oq sand-195vfkc sand-1ghz6dp sand-1717udv sand-3ct3a4",
+                  children: v.map((N) => {
+                    const z = d.openingSlug === N.slug;
+                    return n.jsx(
+                      "li",
+                      {
+                        children: n.jsxs("button", {
+                          "aria-busy": z || void 0,
+                          "aria-label": yn(N)
+                            ? _a(o({ id: "HWAICJ", values: { 0: N.name } }))
+                            : o({ id: "HWAICJ", values: { 0: N.name } }),
+                          "data-marketplace-listing": N.slug,
+                          "data-marketplace-placement": "list",
+                          onClick: () => d.open(N, "list"),
+                          onFocus: () => d.prepare(N),
+                          onPointerEnter: () => d.prepare(N),
+                          type: "button",
+                          ...{
+                            0: {
+                              className:
+                                "sand-78zum5 sand-6s0dn4 sand-1v2ro7d sand-h8yej3 sand-euugli sand-9f619 sand-z9dl7a sand-f159sx sand-sag5q8 sand-mzvs34 sand-c342km sand-ng3xce sand-hojbe8 sand-jbqb8w sand-aalx5g sand-tyxrsu sand-jb2p0i sand-1yc453h sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1iolv91 sand-2ssjo2",
+                            },
+                            1: {
+                              className:
+                                "sand-78zum5 sand-6s0dn4 sand-1v2ro7d sand-h8yej3 sand-euugli sand-9f619 sand-z9dl7a sand-f159sx sand-sag5q8 sand-mzvs34 sand-c342km sand-ng3xce sand-hojbe8 sand-jbqb8w sand-aalx5g sand-tyxrsu sand-jb2p0i sand-1yc453h sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1iolv91 sand-2ssjo2 sand-19v85br",
+                            },
+                          }[!!z << 0],
+                          children: [
+                            n.jsx(Ns, {
+                              "aria-hidden": !0,
+                              bare: !0,
+                              sizePx: 40,
+                              src: Wn(N),
+                            }),
+                            n.jsxs("span", {
+                              ...me(he.body2, Ee.listCopy),
+                              children: [
+                                n.jsxs("span", {
+                                  className:
+                                    "sand-78zum5 sand-6s0dn4 sand-1jnr06f sand-euugli sand-uxw1ft",
+                                  children: [
+                                    n.jsx("span", {
+                                      className:
+                                        "sand-euugli sand-b3r6kr sand-tyxrsu sand-1rhlpx6 sand-lyipyv",
+                                      children: N.name,
+                                    }),
+                                    n.jsxs("span", {
+                                      className:
+                                        "sand-78zum5 sand-6s0dn4 sand-1jnr06f sand-1iyjqo2 sand-s83m0k sand-1r8uery sand-euugli sand-b3r6kr sand-169k319",
+                                      children: [
+                                        n.jsx("span", {
+                                          className:
+                                            "sand-euugli sand-b3r6kr sand-lyipyv",
+                                          children: n.jsx(se, {
+                                            id: "t490IT",
+                                            values: { 0: N.creator.name },
+                                          }),
+                                        }),
+                                        n.jsx(Ka, { categories: _s(N) }),
+                                        yn(N)
+                                          ? n.jsx("span", {
+                                              "aria-hidden": !0,
+                                              children: n.jsx(qa, {}),
+                                            })
+                                          : null,
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                                n.jsx("span", {
+                                  className:
+                                    "sand-b3r6kr sand-1o0liin sand-lyipyv sand-uxw1ft",
+                                  children: N.description,
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                      },
+                      N.slug,
+                    );
+                  }),
+                }),
+              },
+              b,
+            );
+          }),
+          (e[19] = u),
+          (e[20] = o),
+          (e[21] = l),
+          (e[22] = d),
+          (e[23] = r),
+          (e[24] = i),
+          (e[25] = h))
+        : (h = e[25]),
+        (f = g.map(h)));
+    }
+    ((e[2] = u),
+      (e[3] = o),
+      (e[4] = l),
+      (e[5] = c),
+      (e[6] = d),
+      (e[7] = s),
+      (e[8] = r),
+      (e[9] = i),
+      (e[10] = a),
+      (e[11] = f),
+      (e[12] = p));
+  } else ((f = e[11]), (p = e[12]));
+  return p !== Symbol.for("react.early_return_sentinel") ? p : f;
+}
+function pd(t) {
+  const e = J.c(38),
+    {
+      page: s,
+      intent: a,
+      query: l,
+      category: d,
+      onQueryChange: i,
+      onCategoryChange: c,
+    } = t,
+    { _: u } = re(),
+    { _: o } = re();
+  let m, r, f, p, g;
+  if (e[0] !== u || e[1] !== a || e[2] !== s) {
+    ((f = id(s)),
+      (r = cd({ listings: f, allCategoriesOrder: s.allCategoriesOrder })),
+      (m = Ua),
+      e[8] !== a || e[9] !== s.featuredListings
+        ? ((p = n.jsx(md, { intent: a, listings: s.featuredListings })),
+          (e[8] = a),
+          (e[9] = s.featuredListings),
+          (e[10] = p))
+        : (p = e[10]));
+    let v;
+    (e[11] !== u
+      ? ((v = (S) => ({ key: S, label: Ha(u, S) })), (e[11] = u), (e[12] = v))
+      : (v = e[12]),
+      (g = r.map(v)),
+      (e[0] = u),
+      (e[1] = a),
+      (e[2] = s),
+      (e[3] = m),
+      (e[4] = r),
+      (e[5] = f),
+      (e[6] = p),
+      (e[7] = g));
+  } else ((m = e[3]), (r = e[4]), (f = e[5]), (p = e[6]), (g = e[7]));
+  let h;
+  e[13] !== o
+    ? ((h = o({ id: "jN7j4D" })), (e[13] = o), (e[14] = h))
+    : (h = e[14]);
+  let y;
+  e[15] !== r ||
+  e[16] !== d ||
+  e[17] !== a ||
+  e[18] !== f ||
+  e[19] !== c ||
+  e[20] !== l
+    ? ((y = n.jsx(fd, {
+        category: d,
+        categoryOrder: r,
+        intent: a,
+        listings: f,
+        onSelectCategory: c,
+        query: l,
+      })),
+      (e[15] = r),
+      (e[16] = d),
+      (e[17] = a),
+      (e[18] = f),
+      (e[19] = c),
+      (e[20] = l),
+      (e[21] = y))
+    : (y = e[21]);
+  let b;
+  e[22] !== o
+    ? ((b = o({ id: "YjO4Og" })), (e[22] = o), (e[23] = b))
+    : (b = e[23]);
+  let j;
+  e[24] !== o
+    ? ((j = o({ id: "5MCtV1" })), (e[24] = o), (e[25] = j))
+    : (j = e[25]);
+  let k;
+  return (
+    e[26] !== m ||
+    e[27] !== d ||
+    e[28] !== c ||
+    e[29] !== i ||
+    e[30] !== l ||
+    e[31] !== p ||
+    e[32] !== g ||
+    e[33] !== h ||
+    e[34] !== y ||
+    e[35] !== b ||
+    e[36] !== j
+      ? ((k = n.jsx(m, {
+          aboveSearch: p,
+          categories: g,
+          categoriesLabel: h,
+          groups: y,
+          onCategoryChange: c,
+          onQueryChange: i,
+          query: l,
+          searchLabel: b,
+          searchPlaceholder: j,
+          selectedCategoryKey: d,
+        })),
+        (e[26] = m),
+        (e[27] = d),
+        (e[28] = c),
+        (e[29] = i),
+        (e[30] = l),
+        (e[31] = p),
+        (e[32] = g),
+        (e[33] = h),
+        (e[34] = y),
+        (e[35] = b),
+        (e[36] = j),
+        (e[37] = k))
+      : (k = e[37]),
+    k
+  );
+}
+function hd(t) {
+  const e = J.c(24),
+    {
+      state: s,
+      retry: a,
+      intent: l,
+      query: d,
+      category: i,
+      onQueryChange: c,
+      onCategoryChange: u,
+    } = t;
+  let o;
+  e[0] !== i || e[1] !== l || e[2] !== u || e[3] !== c || e[4] !== d
+    ? ((o = (h) =>
+        n.jsx(pd, {
+          category: i,
+          intent: l,
+          onCategoryChange: u,
+          onQueryChange: c,
+          page: h,
+          query: d,
+        })),
+      (e[0] = i),
+      (e[1] = l),
+      (e[2] = u),
+      (e[3] = c),
+      (e[4] = d),
+      (e[5] = o))
+    : (o = e[5]);
+  const m = o;
+  if (s.status === "ready") {
+    let h;
+    return (
+      e[6] !== m || e[7] !== s.value
+        ? ((h = m(s.value)), (e[6] = m), (e[7] = s.value), (e[8] = h))
+        : (h = e[8]),
+      h
+    );
+  }
+  if (s.status === "loading" && s.previous != null) {
+    let h;
+    return (
+      e[9] !== m || e[10] !== s.previous
+        ? ((h = m(s.previous)), (e[9] = m), (e[10] = s.previous), (e[11] = h))
+        : (h = e[11]),
+      h
+    );
+  }
+  if (s.status === "failed" && s.previous != null) {
+    let h;
+    return (
+      e[12] !== m || e[13] !== s.previous
+        ? ((h = m(s.previous)), (e[12] = m), (e[13] = s.previous), (e[14] = h))
+        : (h = e[14]),
+      h
+    );
+  }
+  if (s.status === "loading") {
+    let h;
+    e[15] === Symbol.for("react.memo_cache_sentinel")
+      ? ((h = me(he.body1, Ee.status)), (e[15] = h))
+      : (h = e[15]);
+    let y;
+    return (
+      e[16] === Symbol.for("react.memo_cache_sentinel")
+        ? ((y = n.jsx("div", {
+            ...h,
+            role: "status",
+            children: n.jsx(se, { id: "Q5EvQ+" }),
+          })),
+          (e[16] = y))
+        : (y = e[16]),
+      y
+    );
+  }
+  if (s.status === "empty" || s.status === "unavailable") {
+    let h;
+    e[17] === Symbol.for("react.memo_cache_sentinel")
+      ? ((h = me(he.body1, Ee.status)), (e[17] = h))
+      : (h = e[17]);
+    let y;
+    return (
+      e[18] === Symbol.for("react.memo_cache_sentinel")
+        ? ((y = n.jsx("div", {
+            ...h,
+            role: "status",
+            children: n.jsx(se, { id: "VOWUXW" }),
+          })),
+          (e[18] = y))
+        : (y = e[18]),
+      y
+    );
+  }
+  let r;
+  e[19] === Symbol.for("react.memo_cache_sentinel")
+    ? ((r = me(he.body1, Ee.status)), (e[19] = r))
+    : (r = e[19]);
+  let f;
+  e[20] === Symbol.for("react.memo_cache_sentinel")
+    ? ((f = n.jsx(se, { id: "TKw27L" })), (e[20] = f))
+    : (f = e[20]);
+  let p;
+  e[21] === Symbol.for("react.memo_cache_sentinel")
+    ? ((p = n.jsx(se, { id: "qJb6G2" })), (e[21] = p))
+    : (p = e[21]);
+  let g;
+  return (
+    e[22] !== a
+      ? ((g = n.jsxs("div", {
+          ...r,
+          role: "alert",
+          children: [
+            f,
+            n.jsx(We, {
+              onClick: a,
+              size: "sm",
+              variant: "secondary",
+              children: p,
+            }),
+          ],
+        })),
+        (e[22] = a),
+        (e[23] = g))
+      : (g = e[23]),
+    g
+  );
+}
+function yd(t) {
+  const e = J.c(2),
+    { onBack: s } = t;
+  let a;
+  return (
+    e[0] !== s
+      ? ((a = n.jsx(Ra, { onBack: s, title: null })), (e[0] = s), (e[1] = a))
+      : (a = e[1]),
+    a
+  );
+}
+function gd(t) {
+  const e = J.c(38);
+  let s;
+  e[0] !== t
+    ? ((s = t === void 0 ? {} : t), (e[0] = t), (e[1] = s))
+    : (s = e[1]);
+  const { focusBot: a, headerTrailing: l, onAdd: d, title: i } = s,
+    { _: c } = re(),
+    u = $l(),
+    o = jt();
+  let m;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((m = { kind: "list" }), (e[2] = m))
+    : (m = e[2]);
+  const [r, f] = Q.useState(m),
+    [p, g] = Q.useState(""),
+    [h, y] = Q.useState(null),
+    b = Q.useRef(null),
+    j = Q.useRef(null),
+    k = Q.useRef(0),
+    v = Q.useRef(null),
+    S = Q.useRef("list"),
+    N = Q.useRef(null),
+    z = ss(o.load);
+  let _;
+  e[3] !== o
+    ? ((_ = (Y) => {
+        if (o.isFresh(Y.shareId))
+          return (
+            (N.current = null),
+            f({ kind: "detail", listing: Y }),
+            Promise.resolve()
+          );
+        const A = { kind: "opening", listing: Y };
+        return (
+          (N.current = A),
+          f(A),
+          o.load(Y.shareId).then(
+            () => {
+              N.current === A &&
+                ((N.current = null), f({ kind: "detail", listing: Y }));
+            },
+            (B) => {
+              throw (
+                N.current === A && ((N.current = null), f({ kind: "list" })),
+                B
+              );
+            },
+          )
+        );
+      }),
+      (e[3] = o),
+      (e[4] = _))
+    : (_ = e[4]);
+  const { dispatch: I, failure: T } = ss(_),
+    R = a == null ? null : ud(u.state, a.botSlug),
+    [$, C] = Q.useState(null);
+  a != null &&
+    $ !== a.arrival &&
+    R != null &&
+    R.kind !== "wait" &&
+    (C(a.arrival),
+    f(
+      R.kind === "missing"
+        ? { kind: "list" }
+        : { kind: "detail", listing: R.listing },
+    ));
+  let M;
+  e[5] !== z
+    ? ((M = (Y) => {
+        (z.dispatch(Y.shareId), ld(Y));
+      }),
+      (e[5] = z),
+      (e[6] = M))
+    : (M = e[6]);
+  let D;
+  e[7] !== I
+    ? ((D = (Y, A) => {
+        ((k.current = b.current?.viewportElement?.scrollTop ?? 0),
+          (v.current = { placement: A, slug: Y.slug }),
+          I(Y));
+      }),
+      (e[7] = I),
+      (e[8] = D))
+    : (D = e[8]);
+  const U = r.kind === "opening" ? r.listing.slug : null;
+  let O;
+  e[9] !== M || e[10] !== D || e[11] !== U
+    ? ((O = { prepare: M, open: D, openingSlug: U }),
+      (e[9] = M),
+      (e[10] = D),
+      (e[11] = U),
+      (e[12] = O))
+    : (O = e[12]);
+  const P = O;
+  let Z;
+  e[13] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Z = () => {
+        ((N.current = null), f({ kind: "list" }));
+      }),
+      (e[13] = Z))
+    : (Z = e[13]);
+  const K = Z;
+  let V;
+  (e[14] !== r.kind
+    ? ((V = () => {
+        const Y = S.current;
+        if (((S.current = r.kind), Y === r.kind)) return;
+        const A = b.current?.viewportElement;
+        if (r.kind === "detail") {
+          A != null && (A.scrollTop = 0);
+          return;
+        }
+        if (Y !== "detail") return;
+        A != null && (A.scrollTop = k.current);
+        const B = v.current,
+          ie = b.current?.rootElement;
+        if (B == null || ie == null) return;
+        Array.from(ie.querySelectorAll("[data-marketplace-listing]"))
+          .find(
+            (te) =>
+              te.dataset.marketplaceListing === B.slug &&
+              te.dataset.marketplacePlacement === B.placement,
+          )
+          ?.focus({ preventScroll: !0 });
+      }),
+      (e[14] = r.kind),
+      (e[15] = V))
+    : (V = e[15]),
+    za(V));
+  let F;
+  e[16] !== c || e[17] !== l || e[18] !== r.kind || e[19] !== i
+    ? ((F =
+        r.kind === "detail"
+          ? n.jsx(yd, { onBack: K })
+          : n.jsx(An, { title: i ?? c({ id: "Zt5PUS" }), trailing: l })),
+      (e[16] = c),
+      (e[17] = l),
+      (e[18] = r.kind),
+      (e[19] = i),
+      (e[20] = F))
+    : (F = e[20]);
+  const X = r.kind === "detail" ? Ee.detailOuterContent : void 0,
+    E = r.kind === "detail" ? "never" : "hover",
+    q = r.kind === "detail" ? Ee.detailViewport : void 0;
+  let W;
+  e[21] !== h ||
+  e[22] !== P ||
+  e[23] !== u ||
+  e[24] !== d ||
+  e[25] !== T ||
+  e[26] !== r.kind ||
+  e[27] !== r.listing ||
+  e[28] !== p
+    ? ((W =
+        r.kind === "detail"
+          ? n.jsx(Gl, {
+              avatarSrc: Wn(r.listing),
+              listing: r.listing,
+              onAdd: d,
+              titleRef: j,
+            })
+          : n.jsxs("div", {
+              className:
+                "sand-9f619 sand-1xy6bms sand-sfy40s sand-84yb8i sand-1mfogq2",
+              children: [
+                T == null
+                  ? null
+                  : n.jsx("div", {
+                      ...me(he.body1, Ee.status),
+                      role: "alert",
+                      children: n.jsx(se, { id: "szUMIH" }),
+                    }),
+                n.jsx(hd, {
+                  category: h,
+                  intent: P,
+                  onCategoryChange: y,
+                  onQueryChange: g,
+                  query: p,
+                  retry: u.retry,
+                  state: u.state,
+                }),
+              ],
+            })),
+      (e[21] = h),
+      (e[22] = P),
+      (e[23] = u),
+      (e[24] = d),
+      (e[25] = T),
+      (e[26] = r.kind),
+      (e[27] = r.listing),
+      (e[28] = p),
+      (e[29] = W))
+    : (W = e[29]);
+  let H;
+  e[30] !== X || e[31] !== E || e[32] !== q || e[33] !== W
+    ? ((H = n.jsx($n, {
+        contentStyle: X,
+        ref: b,
+        rootStyle: Ee.scroll,
+        scrollbarVisibility: E,
+        viewportStyle: q,
+        children: W,
+      })),
+      (e[30] = X),
+      (e[31] = E),
+      (e[32] = q),
+      (e[33] = W),
+      (e[34] = H))
+    : (H = e[34]);
+  let ee;
+  return (
+    e[35] !== F || e[36] !== H
+      ? ((ee = n.jsxs(n.Fragment, { children: [F, H] })),
+        (e[35] = F),
+        (e[36] = H),
+        (e[37] = ee))
+      : (ee = e[37]),
+    ee
+  );
+}
+const He = 0,
+  ns = 1,
+  kd = {
+    flat: on["--sand-text-on-primary"],
+    gradientFrom: on["--sand-text-on-primary"],
+    gradientTo: on["--sand-text-on-primary"],
+  },
+  rn = {
+    tabButton: {
+      kZKoxP: "sand-1fgtraw",
+      kLKAdn: "sand-exx8yu",
+      kwRFfy: "sand-2vl965",
+      kGO01o: "sand-18d9i69",
+      kZCmMZ: "sand-e2zdcy",
+      $$css: !0,
+    },
+    unselectedTab: {
+      kMzoRj: "sand-qjedn3",
+      ksu8eU: "sand-1y0btm7",
+      kVAM5u: "sand-fnq37j",
+      $$css: !0,
+    },
+  };
+function ya(t) {
+  const e = J.c(3),
+    { children: s } = t;
+  let a;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((a = { className: "sand-78zum5 sand-6s0dn4 sand-1nejdyq" }), (e[0] = a))
+    : (a = e[0]);
+  let l;
+  return (
+    e[1] !== s
+      ? ((l = n.jsx("span", { ...a, children: s })), (e[1] = s), (e[2] = l))
+      : (l = e[2]),
+    l
+  );
+}
+function bd(t) {
+  const e = J.c(35),
+    { defaultMode: s, mode: a, onChange: l } = t,
+    { _: d } = re(),
+    i = a === ns;
+  let c;
+  e[0] !== l ? ((c = () => l(ns)), (e[0] = l), (e[1] = c)) : (c = e[1]);
+  const u = a === ns ? void 0 : rn.unselectedTab;
+  let o;
+  e[2] !== u ? ((o = [rn.tabButton, u]), (e[2] = u), (e[3] = o)) : (o = e[3]);
+  const m = a === ns ? "primary" : "tertiary";
+  let r;
+  e[4] === Symbol.for("react.memo_cache_sentinel")
+    ? ((r = n.jsxs(ya, {
+        children: [
+          n.jsx(pe, { name: "plug", size: 14 }),
+          n.jsx(se, { id: "ohUJJM" }),
+        ],
+      })),
+      (e[4] = r))
+    : (r = e[4]);
+  let f;
+  e[5] !== i || e[6] !== c || e[7] !== o || e[8] !== m
+    ? ((f = n.jsx(We, {
+        "aria-selected": i,
+        onClick: c,
+        role: "tab",
+        shape: "pill",
+        size: "md",
+        style: o,
+        variant: m,
+        children: r,
+      })),
+      (e[5] = i),
+      (e[6] = c),
+      (e[7] = o),
+      (e[8] = m),
+      (e[9] = f))
+    : (f = e[9]);
+  const p = f,
+    g = a === He;
+  let h;
+  e[10] !== l ? ((h = () => l(He)), (e[10] = l), (e[11] = h)) : (h = e[11]);
+  const y = a === He ? void 0 : rn.unselectedTab;
+  let b;
+  e[12] !== y
+    ? ((b = [rn.tabButton, y]), (e[12] = y), (e[13] = b))
+    : (b = e[13]);
+  const j = a === He ? "primary" : "tertiary";
+  let k;
+  e[14] !== a
+    ? ((k = n.jsx(zt, {
+        "aria-hidden": !0,
+        color: "black",
+        paused: !0,
+        sizePx: 14,
+        ...(a === He ? { eyeColor: on["--sand-fill-primary"], ink: kd } : {}),
+      })),
+      (e[14] = a),
+      (e[15] = k))
+    : (k = e[15]);
+  let v;
+  e[16] === Symbol.for("react.memo_cache_sentinel")
+    ? ((v = n.jsx(se, { id: "BIDT9R" })), (e[16] = v))
+    : (v = e[16]);
+  let S;
+  e[17] !== k
+    ? ((S = n.jsxs(ya, { children: [k, v] })), (e[17] = k), (e[18] = S))
+    : (S = e[18]);
+  let N;
+  e[19] !== b || e[20] !== j || e[21] !== S || e[22] !== g || e[23] !== h
+    ? ((N = n.jsx(We, {
+        "aria-selected": g,
+        onClick: h,
+        role: "tab",
+        shape: "pill",
+        size: "md",
+        style: b,
+        variant: j,
+        children: S,
+      })),
+      (e[19] = b),
+      (e[20] = j),
+      (e[21] = S),
+      (e[22] = g),
+      (e[23] = h),
+      (e[24] = N))
+    : (N = e[24]);
+  const z = N;
+  let _;
+  e[25] !== d
+    ? ((_ = d({ id: "VOR1pG" })), (e[25] = d), (e[26] = _))
+    : (_ = e[26]);
+  let I;
+  e[27] === Symbol.for("react.memo_cache_sentinel")
+    ? ((I = { className: "sand-78zum5 sand-6s0dn4 sand-167g77z sand-1sc9c76" }),
+      (e[27] = I))
+    : (I = e[27]);
+  let T;
+  e[28] !== z || e[29] !== s || e[30] !== p
+    ? ((T =
+        s === He
+          ? n.jsxs(n.Fragment, { children: [z, p] })
+          : n.jsxs(n.Fragment, { children: [p, z] })),
+      (e[28] = z),
+      (e[29] = s),
+      (e[30] = p),
+      (e[31] = T))
+    : (T = e[31]);
+  let R;
+  return (
+    e[32] !== _ || e[33] !== T
+      ? ((R = n.jsx("div", {
+          "aria-label": _,
+          role: "tablist",
+          ...I,
+          children: T,
+        })),
+        (e[32] = _),
+        (e[33] = T),
+        (e[34] = R))
+      : (R = e[34]),
+    R
+  );
+}
+const vd = [
+  { select: (t) => t.displayName, weight: 1 },
+  { select: (t) => t.description, weight: 0.5 },
+  { select: (t) => t.category, weight: 0.4 },
+  {
+    select: (t) => (t.skills ?? []).map((e) => e.name).join(" "),
+    weight: 0.45,
+  },
+  { select: (t) => t.marketplace?.displayName ?? "", weight: 0.4 },
+];
+function jd(t, e) {
+  if (e.length === 0) return 0;
+  let s = null;
+  for (const a of vd) {
+    const l = zs(a.select(t), e);
+    if (l == null) continue;
+    const d = l * a.weight;
+    (s == null || d > s) && (s = d);
+  }
+  return s;
+}
+function xd(t, e) {
+  const s = e.trim().toLowerCase(),
+    a = s.length > 0,
+    l = [];
+  for (const d of t) {
+    const i = a ? jd(d, s) : 0;
+    i != null &&
+      l.push({ entry: d, sortKey: d.displayName.toLowerCase(), score: i });
+  }
+  return (
+    l.sort((d, i) =>
+      a && i.score !== d.score
+        ? i.score - d.score
+        : d.sortKey.localeCompare(i.sortKey, qs()),
+    ),
+    l.map((d) => d.entry)
+  );
+}
+function Nd(t, e) {
+  if (e.length === 0) return 0;
+  const s = [],
+    a = zs(t.name, e);
+  a != null && s.push(a);
+  const l = t.url != null ? zs(t.url, e) : null;
+  l != null && s.push(l * 0.3);
+  const d = t.command != null ? zs(t.command, e) : null;
+  d != null && s.push(d * 0.3);
+  const i = zs(t.serverIdentifier, e);
+  return (i != null && s.push(i * 0.4), s.length > 0 ? Math.max(...s) : null);
+}
+function Sd(t, e) {
+  const s = e.trim().toLowerCase();
+  if (s.length === 0) return [...t];
+  const a = [];
+  for (const l of t) {
+    const d = Nd(l, s);
+    d != null && a.push({ server: l, score: d });
+  }
+  return (
+    a.sort((l, d) =>
+      d.score !== l.score
+        ? d.score - l.score
+        : l.server.name.localeCompare(d.server.name, qs()),
+    ),
+    a.map((l) => l.server)
+  );
+}
+function wd(t) {
+  switch (t.status) {
+    case "already-authenticated":
+      return { kind: "success", text: Be._({ id: "JYlWRx" }) };
+    case "not-configured":
+      return { kind: "error", text: Be._({ id: "E0z8bW" }) };
+    case "not-supported":
+      return { kind: "error", text: ua(t) };
+    case "unreachable":
+      return { kind: "error", text: ua(t) };
+    case "started":
+      return { kind: "success", text: Be._({ id: "Ea8un6" }) };
+    default:
+      return t;
+  }
+}
+function ga(t, e) {
+  if (e.errorMessage != null || e.failed.length > 0) {
+    const s =
+      e.errorMessage ?? Be._({ id: "dvqHOH", values: { 0: Ca(e.failed) } });
+    return {
+      kind: "error",
+      text: Be._({ id: "5rP8is", values: { displayName: t, detail: s } }),
+    };
+  }
+  return e.added > 0
+    ? {
+        kind: "success",
+        text: Be._({ id: "DgU3Gy", values: { 0: e.added, displayName: t } }),
+      }
+    : {
+        kind: "success",
+        text: Be._({ id: "7JUrva", values: { displayName: t } }),
+      };
+}
+function ka(t, e) {
+  return e.removed
+    ? { kind: "success", text: Be._({ id: "zP4Hk3", values: { name: t } }) }
+    : e.reason === "team-server"
+      ? { kind: "error", text: Be._({ id: "Qrm3GU", values: { name: t } }) }
+      : { kind: "error", text: Be._({ id: "FTYeAo", values: { name: t } }) };
+}
+const zd = 4;
+function ba(t) {
+  const e = J.c(26),
+    { installedItems: s, privateCount: a, resolveServerIcon: l, onOpen: d } = t,
+    { _: i } = re(),
+    { ToolIcon: c, catalogEntryIcon: u } = ws();
+  let o;
+  if (e[0] !== u || e[1] !== s || e[2] !== l) {
+    let v;
+    e[4] !== u || e[5] !== l
+      ? ((v = (_) =>
+          _.kind === "plugin"
+            ? {
+                key: `plugin-${_.entry.id}`,
+                name: _.entry.displayName,
+                icon: u(_.entry),
+              }
+            : {
+                key: _.server.id,
+                name: _.server.name,
+                icon: l(_.server.name, _.server.url) ?? {},
+              }),
+        (e[4] = u),
+        (e[5] = l),
+        (e[6] = v))
+      : (v = e[6]);
+    const S = s.map(v),
+      N = [],
+      z = [];
+    for (const _ of S)
+      _.icon.iconUrl != null || _.icon.iconId != null ? N.push(_) : z.push(_);
+    ((o = [...N, ...z].slice(0, zd)),
+      (e[0] = u),
+      (e[1] = s),
+      (e[2] = l),
+      (e[3] = o));
+  } else o = e[3];
+  const m = o;
+  let r;
+  if (e[7] !== i || e[8] !== s.length || e[9] !== a) {
+    const v = i({ id: "OtZro4", values: { 0: s.length } });
+    ((r =
+      a > 0
+        ? i({ id: "bo/M6B", values: { installedLabel: v, privateCount: a } })
+        : v),
+      (e[7] = i),
+      (e[8] = s.length),
+      (e[9] = a),
+      (e[10] = r));
+  } else r = e[10];
+  const f = r;
+  let p;
+  e[11] !== i
+    ? ((p = i({ id: "KtaVdF" })), (e[11] = i), (e[12] = p))
+    : (p = e[12]);
+  let g;
+  e[13] === Symbol.for("react.memo_cache_sentinel")
+    ? ((g = w(
+        "sand-plugins__installed-preview",
+        "sand-9f619 sand-78zum5 sand-6s0dn4 sand-qcrz7y sand-167g77z sand-euugli sand-1iorvi4 sand-f159sx sand-jkvuk6 sand-135b78x sand-c342km sand-ng3xce sand-1qmwy7c sand-jbqb8w sand-aalx5g sand-1o0liin sand-jb2p0i sand-fifm61 sand-1d3mw78 sand-12oo3zp sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn",
+      )),
+      (e[13] = g))
+    : (g = e[13]);
+  let h;
+  e[14] !== c || e[15] !== m
+    ? ((h =
+        m.length > 0
+          ? n.jsx("span", {
+              "aria-hidden": !0,
+              className: w(
+                "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1c4vz4f sand-2lah0s sand-dl72j9",
+              ),
+              children: m.map((v, S) =>
+                n.jsx(
+                  "span",
+                  {
+                    className: w(
+                      {
+                        0: {
+                          className:
+                            "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-l56j7k sand-vy4d1p sand-xk0z11 sand-qjedn3 sand-1y0btm7 sand-q03nf1 sand-t9pb60 sand-13l7odt sand-b3r6kr",
+                        },
+                        1: {
+                          className:
+                            "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-l56j7k sand-vy4d1p sand-xk0z11 sand-qjedn3 sand-1y0btm7 sand-q03nf1 sand-t9pb60 sand-13l7odt sand-b3r6kr sand-165d6jo",
+                        },
+                      }[(S > 0) << 0].className,
+                    ),
+                    children: n.jsx(c, {
+                      iconId: v.icon.iconId,
+                      iconUrl: v.icon.iconUrl,
+                      name: v.name,
+                      size: 24,
+                    }),
+                  },
+                  v.key,
+                ),
+              ),
+            })
+          : null),
+      (e[14] = c),
+      (e[15] = m),
+      (e[16] = h))
+    : (h = e[16]);
+  let y;
+  e[17] === Symbol.for("react.memo_cache_sentinel")
+    ? ((y = w("sand-9f619 sand-b3r6kr sand-lyipyv sand-uxw1ft")), (e[17] = y))
+    : (y = e[17]);
+  let b;
+  e[18] !== f
+    ? ((b = n.jsx("span", { className: y, children: f })),
+      (e[18] = f),
+      (e[19] = b))
+    : (b = e[19]);
+  let j;
+  e[20] === Symbol.for("react.memo_cache_sentinel")
+    ? ((j = n.jsx(pe, {
+        className: "sand-9f619 sand-169k319",
+        name: "chevron-right",
+        size: 12,
+      })),
+      (e[20] = j))
+    : (j = e[20]);
+  let k;
+  return (
+    e[21] !== d || e[22] !== p || e[23] !== h || e[24] !== b
+      ? ((k = n.jsxs("button", {
+          "aria-label": p,
+          className: g,
+          onClick: d,
+          type: "button",
+          children: [h, b, j],
+        })),
+        (e[21] = d),
+        (e[22] = p),
+        (e[23] = h),
+        (e[24] = b),
+        (e[25] = k))
+      : (k = e[25]),
+    k
+  );
+}
+function Bn(t) {
+  return `entry:${t}`;
+}
+function _d(t, e) {
+  if (e.isLoading) return t(qt);
+  const s = e.query.trim();
+  return s.length > 0 ? t({ id: "mLyVIn", values: { trimmed: s } }) : t(It);
+}
+function qd(t) {
+  const e = J.c(31),
+    {
+      title: s,
+      items: a,
+      isCollapsible: l,
+      isFullWidth: d,
+      layout: i,
+      onViewAll: c,
+      renderRow: u,
+    } = t,
+    { _: o } = re(),
+    m = Q.useId();
+  let r, f, p, g, h;
+  if (
+    e[0] !== o ||
+    e[1] !== l ||
+    e[2] !== d ||
+    e[3] !== a ||
+    e[4] !== c ||
+    e[5] !== u ||
+    e[6] !== m
+  ) {
+    const { visible: k, hiddenCount: v } = Dn(a, !l, Ia);
+    let S;
+    (e[12] !== o || e[13] !== v || e[14] !== c
+      ? ((S =
+          v > 0 && c != null
+            ? n.jsx(Va, { label: o({ id: "N6Pxr9" }), onAction: c })
+            : void 0),
+        (e[12] = o),
+        (e[13] = v),
+        (e[14] = c),
+        (e[15] = S))
+      : (S = e[15]),
+      (f = S),
+      (r = On),
+      (p = d),
+      (g = m),
+      (h = k.map(u)),
+      (e[0] = o),
+      (e[1] = l),
+      (e[2] = d),
+      (e[3] = a),
+      (e[4] = c),
+      (e[5] = u),
+      (e[6] = m),
+      (e[7] = r),
+      (e[8] = f),
+      (e[9] = p),
+      (e[10] = g),
+      (e[11] = h));
+  } else ((r = e[7]), (f = e[8]), (p = e[9]), (g = e[10]), (h = e[11]));
+  let y;
+  e[16] !== r || e[17] !== p || e[18] !== g || e[19] !== h
+    ? ((y = n.jsx(r, { isFullWidth: p, labelledBy: g, children: h })),
+      (e[16] = r),
+      (e[17] = p),
+      (e[18] = g),
+      (e[19] = h),
+      (e[20] = y))
+    : (y = e[20]);
+  const b = y;
+  if (i === "marketplace-frame") {
+    let k;
+    return (
+      e[21] !== f || e[22] !== b || e[23] !== s || e[24] !== m
+        ? ((k = n.jsx(Vn, { action: f, title: s, titleId: m, children: b })),
+          (e[21] = f),
+          (e[22] = b),
+          (e[23] = s),
+          (e[24] = m),
+          (e[25] = k))
+        : (k = e[25]),
+      k
+    );
+  }
+  let j;
+  return (
+    e[26] !== f || e[27] !== b || e[28] !== s || e[29] !== m
+      ? ((j = n.jsx(Ln, { action: f, title: s, titleId: m, children: b })),
+        (e[26] = f),
+        (e[27] = b),
+        (e[28] = s),
+        (e[29] = m),
+        (e[30] = j))
+      : (j = e[30]),
+    j
+  );
+}
+function Id(t) {
+  const e = J.c(39),
+    {
+      items: s,
+      query: a,
+      isLoading: l,
+      isBusy: d,
+      selectedSectionKey: i,
+      servers: c,
+      installedByKey: u,
+      effectivePluginsById: o,
+      pendingAddKey: m,
+      layout: r,
+      onAdd: f,
+      onOpenPlugin: p,
+      onSelectSection: g,
+    } = t,
+    h = r === void 0 ? "plugins" : r,
+    { _: y } = re(),
+    { _: b } = re(),
+    { ToolIcon: j, catalogEntryIcon: k } = ws();
+  let v;
+  e[0] !== a ? ((v = a.trim()), (e[0] = a), (e[1] = v)) : (v = e[1]);
+  const S = v.length > 0;
+  if (s.length === 0) {
+    let $;
+    e[2] !== y || e[3] !== l || e[4] !== a
+      ? (($ = _d(y, { isLoading: l, query: a })),
+        (e[2] = y),
+        (e[3] = l),
+        (e[4] = a),
+        (e[5] = $))
+      : ($ = e[5]);
+    let C;
+    return (
+      e[6] !== $
+        ? ((C = n.jsx(Se, {
+            as: "p",
+            color: "tertiary",
+            size: "sm",
+            children: $,
+          })),
+          (e[6] = $),
+          (e[7] = C))
+        : (C = e[7]),
+      C
+    );
+  }
+  let N;
+  e[8] !== j ||
+  e[9] !== b ||
+  e[10] !== k ||
+  e[11] !== o ||
+  e[12] !== u ||
+  e[13] !== d ||
+  e[14] !== f ||
+  e[15] !== p ||
+  e[16] !== m ||
+  e[17] !== c
+    ? ((N = ($) => {
+        const C = k($),
+          { isInstalled: M } = Ma($, c, u, o),
+          D = Ct($),
+          U = D == null ? $.marketplace : void 0,
+          O = M
+            ? n.jsx(Xl, {})
+            : m === Bn($.id)
+              ? n.jsx(Za, {
+                  label: b({ id: "xcwvFe", values: { 0: $.displayName } }),
+                })
+              : n.jsx(Qe, {
+                  disabled: d,
+                  onClick: () => f($),
+                  size: "sm",
+                  type: "button",
+                  variant: "secondary",
+                  children: n.jsx(se, { id: "m16xKo" }),
+                });
+        return n.jsx(
+          mn,
+          {
+            badge: U != null ? n.jsx(Ga, { title: U.displayName }) : void 0,
+            icon: n.jsx(j, {
+              iconId: C.iconId,
+              iconUrl: C.iconUrl,
+              name: $.displayName,
+              size: 40,
+            }),
+            name: $.displayName,
+            onOpen: () => p($.id),
+            subtitle: $.description,
+            trailing: O,
+            ...(D != null
+              ? { byline: b({ id: "t490IT", values: { 0: D.displayName } }) }
+              : {}),
+          },
+          $.id,
+        );
+      }),
+      (e[8] = j),
+      (e[9] = b),
+      (e[10] = k),
+      (e[11] = o),
+      (e[12] = u),
+      (e[13] = d),
+      (e[14] = f),
+      (e[15] = p),
+      (e[16] = m),
+      (e[17] = c),
+      (e[18] = N))
+    : (N = e[18]);
+  const z = N,
+    _ = i != null;
+  let I, T;
+  if (
+    e[19] !== y ||
+    e[20] !== b ||
+    e[21] !== S ||
+    e[22] !== _ ||
+    e[23] !== s ||
+    e[24] !== h ||
+    e[25] !== g ||
+    e[26] !== z
+  ) {
+    const $ = S
+      ? [{ sectionKey: "results", category: b({ id: "kx0s+n" }), items: s }]
+      : _t(y, s);
+    e[29] === Symbol.for("react.memo_cache_sentinel")
+      ? ((I = w(
+          "sand-plugins__marketplace",
+          "sand-9f619 sand-78zum5 sand-dt5ytf sand-1665zp3",
+        )),
+        (e[29] = I))
+      : (I = e[29]);
+    let C;
+    (e[30] !== S || e[31] !== _ || e[32] !== h || e[33] !== g || e[34] !== z
+      ? ((C = (M) =>
+          n.jsx(
+            qd,
+            {
+              isCollapsible: !S && !_,
+              isFullWidth: _ && !S,
+              items: M.items,
+              layout: h,
+              renderRow: z,
+              title: M.category,
+              ...(S || _ ? {} : { onViewAll: () => g(M.sectionKey) }),
+            },
+            M.sectionKey,
+          )),
+        (e[30] = S),
+        (e[31] = _),
+        (e[32] = h),
+        (e[33] = g),
+        (e[34] = z),
+        (e[35] = C))
+      : (C = e[35]),
+      (T = $.map(C)),
+      (e[19] = y),
+      (e[20] = b),
+      (e[21] = S),
+      (e[22] = _),
+      (e[23] = s),
+      (e[24] = h),
+      (e[25] = g),
+      (e[26] = z),
+      (e[27] = I),
+      (e[28] = T));
+  } else ((I = e[27]), (T = e[28]));
+  let R;
+  return (
+    e[36] !== I || e[37] !== T
+      ? ((R = n.jsx("div", { className: I, children: T })),
+        (e[36] = I),
+        (e[37] = T),
+        (e[38] = R))
+      : (R = e[38]),
+    R
+  );
+}
+function Cd(t) {
+  const e = J.c(24),
+    { options: s, selectedKey: a, onSelect: l } = t,
+    { _: d } = re();
+  if (s.length === 0) return null;
+  let i;
+  e[0] !== d ? ((i = d({ id: "jj4zKl" })), (e[0] = d), (e[1] = i)) : (i = e[1]);
+  let c;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((c = w(
+        "sand-plugins__chips",
+        "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1a02dak sand-167g77z sand-euugli sand-l8qfz3 sand-1odjw0f",
+      )),
+      (e[2] = c))
+    : (c = e[2]);
+  const u = a == null;
+  let o;
+  e[3] !== a
+    ? ((o = w(
+        "sand-plugins__chip",
+        {
+          0: {
+            className:
+              "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-2lah0s sand-d7y6wv sand-f159sx sand-mzvs34 sand-qjedn3 sand-1y0btm7 sand-q03nf1 sand-149ho13 sand-jbqb8w sand-aalx5g sand-tyxrsu sand-jb2p0i sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-uxw1ft sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn",
+          },
+          1: {
+            className:
+              "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-2lah0s sand-d7y6wv sand-f159sx sand-mzvs34 sand-qjedn3 sand-1y0btm7 sand-149ho13 sand-tyxrsu sand-jb2p0i sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-uxw1ft sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn sand-9r1u3d sand-1tiofj7 sand-4hlgfw",
+          },
+        }[(a == null) << 0].className,
+      )),
+      (e[3] = a),
+      (e[4] = o))
+    : (o = e[4]);
+  let m;
+  e[5] !== l ? ((m = () => l(null)), (e[5] = l), (e[6] = m)) : (m = e[6]);
+  let r;
+  e[7] === Symbol.for("react.memo_cache_sentinel")
+    ? ((r = n.jsx(se, { id: "N40H+G" })), (e[7] = r))
+    : (r = e[7]);
+  let f;
+  e[8] !== u || e[9] !== o || e[10] !== m
+    ? ((f = n.jsx("button", {
+        "aria-pressed": u,
+        className: o,
+        onClick: m,
+        type: "button",
+        children: r,
+      })),
+      (e[8] = u),
+      (e[9] = o),
+      (e[10] = m),
+      (e[11] = f))
+    : (f = e[11]);
+  let p;
+  if (e[12] !== l || e[13] !== s || e[14] !== a) {
+    let h;
+    (e[16] !== l || e[17] !== a
+      ? ((h = (y) =>
+          n.jsx(
+            "button",
+            {
+              "aria-pressed": a === y.key,
+              className: w(
+                "sand-plugins__chip",
+                {
+                  0: {
+                    className:
+                      "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-2lah0s sand-d7y6wv sand-f159sx sand-mzvs34 sand-qjedn3 sand-1y0btm7 sand-q03nf1 sand-149ho13 sand-jbqb8w sand-aalx5g sand-tyxrsu sand-jb2p0i sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-uxw1ft sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn",
+                  },
+                  1: {
+                    className:
+                      "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-2lah0s sand-d7y6wv sand-f159sx sand-mzvs34 sand-qjedn3 sand-1y0btm7 sand-149ho13 sand-tyxrsu sand-jb2p0i sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-uxw1ft sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn sand-9r1u3d sand-1tiofj7 sand-4hlgfw",
+                  },
+                }[(a === y.key) << 0].className,
+              ),
+              onClick: () => l(a === y.key ? null : y.key),
+              type: "button",
+              children: y.label,
+            },
+            y.key,
+          )),
+        (e[16] = l),
+        (e[17] = a),
+        (e[18] = h))
+      : (h = e[18]),
+      (p = s.map(h)),
+      (e[12] = l),
+      (e[13] = s),
+      (e[14] = a),
+      (e[15] = p));
+  } else p = e[15];
+  let g;
+  return (
+    e[19] !== i || e[20] !== c || e[21] !== f || e[22] !== p
+      ? ((g = n.jsxs("div", {
+          "aria-label": i,
+          className: c,
+          role: "group",
+          children: [f, p],
+        })),
+        (e[19] = i),
+        (e[20] = c),
+        (e[21] = f),
+        (e[22] = p),
+        (e[23] = g))
+      : (g = e[23]),
+    g
+  );
+}
+function gn(t) {
+  return t.isTeamServer ||
+    t.isRequired === !0 ||
+    t.managedByTeamPluginPolicy === !0
+    ? "team-required"
+    : "user";
+}
+function Kn(t) {
+  switch (t.installMode) {
+    case "team-required":
+      return "team-required";
+    case "team-default":
+      return "team-default";
+    case "user":
+    case "unknown":
+      return "user";
+  }
+}
+function Qa(t, e, s = []) {
+  const a = new Map();
+  for (const i of s) a.set(i.pluginId, i);
+  const l = [],
+    d = new Map();
+  for (const i of t) {
+    const c = un(i, e),
+      u = c == null ? void 0 : a.get(c.id);
+    if (
+      c == null ||
+      (i.pluginId !== c.id && !i.isTeamServer) ||
+      (u != null && !la(u))
+    ) {
+      l.push({ kind: "connector", server: i, installMode: gn(i) });
+      continue;
+    }
+    const o = u,
+      m = d.get(c.id);
+    if (m == null) {
+      const p = {
+        kind: "plugin",
+        entry: c,
+        installMode: o != null ? Kn(o) : gn(i),
+        pluginId: c.id,
+        connectors: [i],
+        configuredVariables: null,
+        configuredVariableKeys: o?.configuredVariableKeys ?? [],
+      };
+      (d.set(c.id, p), l.push(p));
+      continue;
+    }
+    const r = i.isTeamServer ? [...m.connectors, i] : [i, ...m.connectors],
+      f = {
+        ...m,
+        connectors: r,
+        installMode: o != null || i.isTeamServer ? m.installMode : "user",
+      };
+    (d.set(c.id, f), (l[l.indexOf(m)] = f));
+  }
+  for (const i of a.values()) {
+    if (!la(i) || d.has(i.pluginId)) continue;
+    const c = e.find((u) => u.id === i.pluginId);
+    c != null &&
+      l.push({
+        kind: "plugin",
+        entry: c,
+        installMode: Kn(i),
+        pluginId: i.pluginId,
+        connectors: [],
+        configuredVariables: null,
+        configuredVariableKeys: i.configuredVariableKeys ?? [],
+      });
+  }
+  return l;
+}
+function Md(t, e, s) {
+  if (t.kind === "connector" || t.connectors.length > 0) return !0;
+  const a = as(e, s);
+  return (
+    as(t.entry.displayName, s).includes(a) || as(t.entry.name, s).includes(a)
+  );
+}
+function Pd(t, e) {
+  for (const s of t) if (s.kind === "plugin" && s.entry.id === e) return s;
+}
+function Ya(t) {
+  switch (t) {
+    case "team-required":
+      return { id: "q1LJYo" };
+    case "team-default":
+      return { id: "MoPMW6" };
+    case "user":
+      return null;
+  }
+}
+function $d(t) {
+  switch (t) {
+    case "team-required":
+      return [];
+    case "team-default":
+      return [{ id: "remove", label: { id: "t/YqKh" } }];
+    case "user":
+      return [{ id: "uninstall", label: { id: "fo0VXg" } }];
+  }
+}
+const va = {
+  bannerTitle: { kMwMTN: "sand-vak8d5", $$css: !0 },
+  bannerDetail: { kMwMTN: "sand-19aaqeu", $$css: !0 },
+};
+async function Td(t, e) {
+  try {
+    return await t();
+  } catch (s) {
+    throw (e.fail(), s);
+  }
+}
+function Ad(t) {
+  const e = J.c(12),
+    { roster: s, launcher: a } = Sa(),
+    { sendPrompt: l } = Pt(),
+    d = $t(),
+    i = Tt(),
+    c = At(),
+    [u, o] = Q.useState(!1),
+    { onOpened: m, onFailure: r } = t;
+  let f;
+  e[0] !== i ||
+  e[1] !== c ||
+  e[2] !== a ||
+  e[3] !== r ||
+  e[4] !== m ||
+  e[5] !== s ||
+  e[6] !== d ||
+  e[7] !== l
+    ? ((f = () => {
+        (o(!0),
+          Lt.launch({
+            agents: i,
+            isRosterComplete: c,
+            launchNewAgent: async (h) => {
+              const y = a.beginCreation({
+                name: h.name,
+                expectsContent: !0,
+                kind: "plugin-auth",
+              });
+              return await Td(async () => {
+                const { agent: b } = await s.createAgent({
+                  clientNonce: y.clientNonce,
+                  name: h.name,
+                  description: h.description,
+                  purpose: h.purpose,
+                  isIntroductionSuppressed: !0,
+                });
+                return (
+                  y.setAgentId(b.id),
+                  y.isAbandoned() || d(b.id),
+                  y.noteSendingFirstMessage(),
+                  await l({ agentId: b.id, prompt: h.request }),
+                  b.id
+                );
+              }, y);
+            },
+            selectAgent: d,
+          }).then(
+            (h) => {
+              (o(!1), h.agentId != null && m());
+            },
+            (h) => {
+              (o(!1), r(Ot(h)));
+            },
+          ));
+      }),
+      (e[0] = i),
+      (e[1] = c),
+      (e[2] = a),
+      (e[3] = r),
+      (e[4] = m),
+      (e[5] = s),
+      (e[6] = d),
+      (e[7] = l),
+      (e[8] = f))
+    : (f = e[8]);
+  const p = f;
+  let g;
+  return (
+    e[9] !== p || e[10] !== u
+      ? ((g = { isLaunching: u, fix: p }), (e[9] = p), (e[10] = u), (e[11] = g))
+      : (g = e[11]),
+    g
+  );
+}
+function Rd(t, e) {
+  const s = e.source === "plugin" ? t({ id: "u3wRF+" }) : t({ id: "bA96vw" }),
+    a = e.description.length > 0 ? e.description : t({ id: "OZJeTZ" });
+  return t({ id: "DDJfVt", values: { provenance: s, hint: a } });
+}
+function Ed(t, e) {
+  return Et(t, { ...$a(e.entry), commands: null });
+}
+function Ld(t) {
+  const e = J.c(62),
+    {
+      agentId: s,
+      servers: a,
+      catalog: l,
+      effectivePlugins: d,
+      skills: i,
+      query: c,
+      isBusy: u,
+      authBlocked: o,
+      resolveServerIcon: m,
+      resolveServerSubtitle: r,
+      onOpenSkill: f,
+      onOpenServer: p,
+      onOpenPlugin: g,
+      onAuthenticate: h,
+      onFixHandedOff: y,
+      onFixFailed: b,
+    } = t,
+    { _: j } = re(),
+    { i18n: k, _: v } = re();
+  let S;
+  e[0] !== b || e[1] !== y
+    ? ((S = { onOpened: y, onFailure: b }), (e[0] = b), (e[1] = y), (e[2] = S))
+    : (S = e[2]);
+  const N = Ad(S),
+    z = Q.useId(),
+    _ = Q.useId(),
+    { ToolIcon: I, catalogEntryIcon: T } = ws(),
+    [R, $] = Q.useState(!1);
+  let C, M, D, U, O, P, Z;
+  if (
+    e[3] !== I ||
+    e[4] !== j ||
+    e[5] !== v ||
+    e[6] !== s ||
+    e[7] !== o ||
+    e[8] !== l ||
+    e[9] !== T ||
+    e[10] !== d ||
+    e[11] !== k ||
+    e[12] !== z ||
+    e[13] !== u ||
+    e[14] !== R ||
+    e[15] !== h ||
+    e[16] !== g ||
+    e[17] !== p ||
+    e[18] !== f ||
+    e[19] !== N ||
+    e[20] !== _ ||
+    e[21] !== c ||
+    e[22] !== m ||
+    e[23] !== r ||
+    e[24] !== a ||
+    e[25] !== i
+  ) {
+    const F = c.trim(),
+      X = F.length > 0,
+      E = Qa(Sd(a, c), l, d),
+      q = X ? E.filter((ae) => Md(ae, F, k.locale)) : E,
+      { visible: W, hiddenCount: H } = Dn(q, R || X, Rt),
+      ee = Pa(i),
+      Y = as(F, k.locale),
+      A = X ? ee.filter((ae) => as(ae.name, k.locale).includes(Y)) : ee;
+    (e[33] === Symbol.for("react.memo_cache_sentinel")
+      ? ((O = w(
+          "sand-plugins__yours",
+          "sand-9f619 sand-78zum5 sand-dt5ytf sand-1665zp3",
+        )),
+        (e[33] = O))
+      : (O = e[33]),
+      e[34] !== v || e[35] !== o || e[36] !== N
+        ? ((P =
+            o.length > 0
+              ? n.jsxs("section", {
+                  "aria-label": v({ id: "q0LYU5" }),
+                  className:
+                    "sand-9f619 sand-78zum5 sand-6s0dn4 sand-ou54vl sand-2lah0s sand-889kno sand-2vl965 sand-1a8lsjc sand-1g0dm76 sand-1q4ynmn sand-1xv9fit sand-1o5m0de",
+                  role: "status",
+                  children: [
+                    n.jsxs("span", {
+                      className:
+                        "sand-78zum5 sand-dt5ytf sand-195vfkc sand-1iyjqo2 sand-s83m0k sand-euugli",
+                      children: [
+                        n.jsx("span", {
+                          className: me(he.label, va.bannerTitle).className,
+                          children: n.jsx(se, { id: "NRJNSR" }),
+                        }),
+                        n.jsx("span", {
+                          className: me(he.body2, va.bannerDetail).className,
+                          children: Mt(o),
+                        }),
+                      ],
+                    }),
+                    n.jsx(Qe, {
+                      disabled: N.isLaunching,
+                      onClick: () => N.fix(),
+                      size: "sm",
+                      type: "button",
+                      variant: "secondary",
+                      children: N.isLaunching
+                        ? v({ id: "598XO1" })
+                        : v({ id: "JCCOLE" }),
+                    }),
+                  ],
+                })
+              : null),
+          (e[34] = v),
+          (e[35] = o),
+          (e[36] = N),
+          (e[37] = P))
+        : (P = e[37]));
+    let B;
+    e[38] !== v
+      ? ((B = v({ id: "eQkgKV" })), (e[38] = v), (e[39] = B))
+      : (B = e[39]);
+    const ie =
+      q.length === 0
+        ? n.jsx(Se, {
+            as: "p",
+            className: "sand-9f619 sand-f159sx sand-mzvs34",
+            color: "tertiary",
+            size: "xs",
+            children: v(
+              X
+                ? { id: "+Pji+h", values: { trimmedQuery: F } }
+                : { id: "ZyWE2h" },
+            ),
+          })
+        : n.jsxs(n.Fragment, {
+            children: [
+              n.jsx(On, {
+                labelledBy: z,
+                children: W.map((ae) => {
+                  const te =
+                      ae.kind === "plugin" ? ae.connectors[0] : ae.server,
+                    ue =
+                      te == null
+                        ? null
+                        : te.status === "needsAuth"
+                          ? n.jsx(Oa, {
+                              isBusy: u,
+                              onAuthenticate: h,
+                              server: te,
+                            })
+                          : n.jsx(Wa, { server: te }),
+                    le = Ya(ae.installMode),
+                    ve = le != null ? n.jsx(Ga, { title: k._(le) }) : null;
+                  if (ae.kind === "plugin") {
+                    const we = T(ae.entry);
+                    return n.jsx(
+                      mn,
+                      {
+                        badge: ve,
+                        icon: n.jsx(I, {
+                          iconId: we.iconId,
+                          iconUrl: we.iconUrl,
+                          name: ae.entry.displayName,
+                          size: 40,
+                        }),
+                        name: ae.entry.displayName,
+                        onOpen: () => g(ae.entry.id),
+                        subtitle: Ed(j, ae),
+                        trailing: ue,
+                      },
+                      `plugin-${ae.entry.id}`,
+                    );
+                  }
+                  const { server: ye } = ae,
+                    ge = m(ye.name, ye.url);
+                  return n.jsx(
+                    mn,
+                    {
+                      badge: ve,
+                      icon: n.jsx(I, {
+                        iconId: ge?.iconId,
+                        iconUrl: ge?.iconUrl,
+                        name: ye.name,
+                        size: 40,
+                      }),
+                      name: ye.name,
+                      onOpen: () => p(ye.id),
+                      subtitle: r(ye),
+                      trailing: ue,
+                    },
+                    ye.id,
+                  );
+                }),
+              }),
+              H > 0
+                ? n.jsx(ed, {
+                    hiddenLabel: v({ id: "Wy8KR2", values: { 0: q.length } }),
+                    onShowAll: () => $(!0),
+                  })
+                : null,
+            ],
+          });
+    (e[40] !== z || e[41] !== B || e[42] !== ie
+      ? ((Z = n.jsx(Ln, { title: B, titleId: z, children: ie })),
+        (e[40] = z),
+        (e[41] = B),
+        (e[42] = ie),
+        (e[43] = Z))
+      : (Z = e[43]),
+      (C = Ln),
+      e[44] !== v
+        ? ((M = v({ id: "zwBp5t" })), (e[44] = v), (e[45] = M))
+        : (M = e[45]),
+      (D = _));
+    e: {
+      if (s == null) {
+        let te;
+        e[46] === Symbol.for("react.memo_cache_sentinel")
+          ? ((te = { className: "sand-9f619 sand-f159sx sand-mzvs34" }),
+            (e[46] = te))
+          : (te = e[46]);
+        let ue;
+        (e[47] === Symbol.for("react.memo_cache_sentinel")
+          ? ((ue = n.jsx(Se, {
+              as: "p",
+              className: te.className,
+              color: "tertiary",
+              size: "xs",
+              children: n.jsx(se, { id: "RmL2Fy" }),
+            })),
+            (e[47] = ue))
+          : (ue = e[47]),
+          (U = ue));
+        break e;
+      }
+      if (A.length === 0) {
+        let te;
+        (e[48] === Symbol.for("react.memo_cache_sentinel")
+          ? ((te = { className: "sand-9f619 sand-f159sx sand-mzvs34" }),
+            (e[48] = te))
+          : (te = e[48]),
+          (U = n.jsx(Se, {
+            as: "p",
+            className: te.className,
+            color: "tertiary",
+            size: "xs",
+            children: v(
+              X
+                ? { id: "hvwZWn", values: { trimmedQuery: F } }
+                : { id: "W0GRSo" },
+            ),
+          })));
+        break e;
+      }
+      let ae;
+      (e[49] !== j || e[50] !== f
+        ? ((ae = (te) =>
+            n.jsx(
+              mn,
+              {
+                icon: n.jsx("span", {
+                  className: w(
+                    "sand-9f619 sand-78zum5 sand-6s0dn4 sand-l56j7k sand-100vrsf sand-1vqgdyp sand-2lah0s sand-1kogg8i sand-arj5zm",
+                  ),
+                  children: n.jsx(pe, {
+                    color: "tertiary",
+                    name: "file-list",
+                    size: "sm",
+                  }),
+                }),
+                name: te.name,
+                onOpen: () => f(te.id),
+                subtitle: Rd(j, te),
+              },
+              te.id,
+            )),
+          (e[49] = j),
+          (e[50] = f),
+          (e[51] = ae))
+        : (ae = e[51]),
+        (U = n.jsx(On, {
+          isFullWidth: !0,
+          labelledBy: _,
+          children: A.map(ae),
+        })));
+    }
+    ((e[3] = I),
+      (e[4] = j),
+      (e[5] = v),
+      (e[6] = s),
+      (e[7] = o),
+      (e[8] = l),
+      (e[9] = T),
+      (e[10] = d),
+      (e[11] = k),
+      (e[12] = z),
+      (e[13] = u),
+      (e[14] = R),
+      (e[15] = h),
+      (e[16] = g),
+      (e[17] = p),
+      (e[18] = f),
+      (e[19] = N),
+      (e[20] = _),
+      (e[21] = c),
+      (e[22] = m),
+      (e[23] = r),
+      (e[24] = a),
+      (e[25] = i),
+      (e[26] = C),
+      (e[27] = M),
+      (e[28] = D),
+      (e[29] = U),
+      (e[30] = O),
+      (e[31] = P),
+      (e[32] = Z));
+  } else
+    ((C = e[26]),
+      (M = e[27]),
+      (D = e[28]),
+      (U = e[29]),
+      (O = e[30]),
+      (P = e[31]),
+      (Z = e[32]));
+  let K;
+  e[52] !== C || e[53] !== M || e[54] !== D || e[55] !== U
+    ? ((K = n.jsx(C, { title: M, titleId: D, children: U })),
+      (e[52] = C),
+      (e[53] = M),
+      (e[54] = D),
+      (e[55] = U),
+      (e[56] = K))
+    : (K = e[56]);
+  let V;
+  return (
+    e[57] !== O || e[58] !== P || e[59] !== Z || e[60] !== K
+      ? ((V = n.jsxs("div", { className: O, children: [P, Z, K] })),
+        (e[57] = O),
+        (e[58] = P),
+        (e[59] = Z),
+        (e[60] = K),
+        (e[61] = V))
+      : (V = e[61]),
+    V
+  );
+}
+function Od(t) {
+  // Imported local bundles have no vendor marketplace page to share.
+  if (t.category === "Local") return null;
+  if (t.marketplace?.ownership === "user") return null;
+  const e = Bt(t.id);
+  return e == null
+    ? null
+    : t.isPublicListed === !0
+      ? `https://x.ai/bot/plugin/${t.id}`
+      : e;
+}
+function Bd(t) {
+  return hn(t);
+}
+function Kd(t) {
+  return t.accountKey !== xs || t.status !== "needsAuth";
+}
+function Ja(t) {
+  const e = J.c(76),
+    {
+      slots: s,
+      isBusy: a,
+      onAuthenticate: l,
+      onAddAccount: d,
+      onRenameAccount: i,
+      onRemoveAccount: c,
+    } = t,
+    { i18n: u, _: o } = re(),
+    m = pn("mcp_multi_account"),
+    r = kn(),
+    f = Kt(),
+    [p, g] = Q.useState(null),
+    [h, y] = Q.useState(null),
+    b = s[0];
+  if (b == null) return null;
+  const j = b.id,
+    k = m && b.url != null,
+    v = b.rowServerIdentifier;
+  let S;
+  e[0] !== s ? ((S = new Set(s.map(Dd))), (e[0] = s), (e[1] = S)) : (S = e[1]);
+  const N = S;
+  let z;
+  e[2] !== s ? ((z = new Set(s.map(Fd))), (e[2] = s), (e[3] = z)) : (z = e[3]);
+  const _ = z;
+  let I, T, R, $, C;
+  if (
+    e[4] !== o ||
+    e[5] !== h ||
+    e[6] !== k ||
+    e[7] !== p ||
+    e[8] !== f ||
+    e[9] !== u ||
+    e[10] !== a ||
+    e[11] !== d ||
+    e[12] !== l ||
+    e[13] !== c ||
+    e[14] !== i ||
+    e[15] !== r ||
+    e[16] !== v ||
+    e[17] !== j ||
+    e[18] !== _ ||
+    e[19] !== N ||
+    e[20] !== s
+  ) {
+    const O = [],
+      P = `${v}--`;
+    for (const [E, q] of f) {
+      if (!E.startsWith(P) || N.has(E) || q.status !== "waiting") continue;
+      const W = E.slice(P.length);
+      _.has(W) || O.push({ key: E, label: W });
+    }
+    let Z;
+    e[26] !== p || e[27] !== i || e[28] !== j
+      ? ((Z = () => {
+          if (p == null) return;
+          const E = da(p.draft);
+          (g(null),
+            !(E.length === 0 || E === p.accountKey) &&
+              i({ serverId: j, accountKey: p.accountKey, newAccountKey: E }));
+        }),
+        (e[26] = p),
+        (e[27] = i),
+        (e[28] = j),
+        (e[29] = Z))
+      : (Z = e[29]);
+    const K = Z;
+    let V;
+    (e[30] !== h || e[31] !== d || e[32] !== l || e[33] !== j || e[34] !== _
+      ? ((V = () => {
+          if (h == null) return;
+          const E = da(h);
+          if (E.length !== 0) {
+            if ((y(null), _.has(E))) {
+              l({ serverId: j, accountKey: E });
+              return;
+            }
+            d({ serverId: j, label: E });
+          }
+        }),
+        (e[30] = h),
+        (e[31] = d),
+        (e[32] = l),
+        (e[33] = j),
+        (e[34] = _),
+        (e[35] = V))
+      : (V = e[35]),
+      (I = V));
+    let F;
+    e[36] === Symbol.for("react.memo_cache_sentinel")
+      ? ((F = w(
+          "sand-9f619 sand-1y1aw1k sand-1pic42t sand-10b6aqq sand-1onr9mi",
+        )),
+        (e[36] = F))
+      : (F = e[36]);
+    let X;
+    if (
+      (e[37] === Symbol.for("react.memo_cache_sentinel")
+        ? ((X = n.jsx(se, { id: "bPwFdf" })), (e[37] = X))
+        : (X = e[37]),
+      e[38] !== F
+        ? ((C = n.jsx(Se, {
+            as: "h3",
+            className: F,
+            color: "tertiary",
+            size: "sm",
+            children: X,
+          })),
+          (e[38] = F),
+          (e[39] = C))
+        : (C = e[39]),
+      e[40] === Symbol.for("react.memo_cache_sentinel")
+        ? ((T = w(
+            "sand-plugins-detail__accounts",
+            "sand-9f619 sand-ixl9f9 sand-i07v4r",
+          )),
+          (e[40] = T))
+        : (T = e[40]),
+      e[41] !== o ||
+        e[42] !== k ||
+        e[43] !== p ||
+        e[44] !== u ||
+        e[45] !== a ||
+        e[46] !== l ||
+        e[47] !== c ||
+        e[48] !== j ||
+        e[49] !== s ||
+        e[50] !== K)
+    ) {
+      let E;
+      (e[52] !== o ||
+      e[53] !== k ||
+      e[54] !== p ||
+      e[55] !== u ||
+      e[56] !== a ||
+      e[57] !== l ||
+      e[58] !== c ||
+      e[59] !== j ||
+      e[60] !== K
+        ? ((E = (q, W) => {
+            const H = Bd(q.accountKey),
+              ee = p?.accountKey === q.accountKey ? p : null,
+              Y = La(q.statusDetail, u);
+            return n.jsxs(
+              "div",
+              {
+                children: [
+                  W > 0
+                    ? n.jsx("div", {
+                        "aria-hidden": !0,
+                        className: w(
+                          "sand-9f619 sand-28ko6u sand-1diwwjn sand-bmvrgn sand-1m4ooaa",
+                        ),
+                      })
+                    : null,
+                  n.jsxs("div", {
+                    className: w(
+                      "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi",
+                    ),
+                    children: [
+                      n.jsxs("span", {
+                        className: w(
+                          "sand-9f619 sand-78zum5 sand-dt5ytf sand-12mrbbr sand-euugli",
+                        ),
+                        children: [
+                          n.jsxs("span", {
+                            className: w(
+                              "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1nejdyq sand-euugli",
+                            ),
+                            children: [
+                              ee != null
+                                ? n.jsx("input", {
+                                    "aria-label": o({
+                                      id: "BJ7R7v",
+                                      values: { label: H },
+                                    }),
+                                    autoFocus: !0,
+                                    className: w(
+                                      "sand-9f619 sand-5f5z56 sand-15kz4h8 sand-193iq5w sand-1717udv sand-c342km sand-ng3xce sand-jbqb8w sand-1wd3ewq sand-jb2p0i sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1t137rt",
+                                    ),
+                                    onChange: (A) =>
+                                      g({ ...ee, draft: A.target.value }),
+                                    onKeyDown: (A) => {
+                                      (A.key === "Enter" && K(),
+                                        A.key === "Escape" && g(null));
+                                    },
+                                    type: "text",
+                                    value: ee.draft,
+                                  })
+                                : n.jsx("span", {
+                                    className: w(
+                                      "sand-9f619 sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1wd3ewq sand-lyipyv sand-uxw1ft",
+                                    ),
+                                    children: H,
+                                  }),
+                              k
+                                ? n.jsx("button", {
+                                    "aria-expanded": ee != null,
+                                    "aria-label":
+                                      ee != null
+                                        ? o({
+                                            id: "xzJ6xV",
+                                            values: { label: H },
+                                          })
+                                        : o({
+                                            id: "tT4tWM",
+                                            values: { label: H },
+                                          }),
+                                    className: w(
+                                      "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-1c4vz4f sand-2lah0s sand-dl72j9 sand-1717udv sand-c342km sand-ng3xce sand-jbqb8w sand-4b2ntj sand-7gh5u8 sand-1ypdohk",
+                                    ),
+                                    disabled: a,
+                                    onClick: () => {
+                                      if (ee != null) {
+                                        K();
+                                        return;
+                                      }
+                                      g({
+                                        accountKey: q.accountKey,
+                                        draft: q.accountKey,
+                                        isConfirmingRemove: !1,
+                                      });
+                                    },
+                                    type: "button",
+                                    children: n.jsx(pe, {
+                                      "aria-hidden": !0,
+                                      name:
+                                        ee != null ? "check" : "pencil-square",
+                                      size: "xs",
+                                    }),
+                                  })
+                                : null,
+                            ],
+                          }),
+                          q.status === "error" && Y != null
+                            ? n.jsx("span", {
+                                className: w(
+                                  "sand-plugins-detail__account-error",
+                                  "sand-9f619 sand-fifm61 sand-1d3mw78 sand-12oo3zp sand-19aaqeu sand-j0a0fe sand-eaf4i8 sand-1hx0egp sand-1ed109x",
+                                ),
+                                children: Y,
+                              })
+                            : null,
+                        ],
+                      }),
+                      n.jsx("span", {
+                        className: w(
+                          "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-167g77z sand-1c4vz4f sand-2lah0s sand-dl72j9",
+                        ),
+                        children:
+                          ee == null
+                            ? n.jsxs(n.Fragment, {
+                                children: [
+                                  n.jsx(Wa, { server: q }),
+                                  n.jsx(Oa, {
+                                    isBusy: a,
+                                    onAuthenticate: (A) =>
+                                      l({
+                                        serverId: A,
+                                        accountKey: q.accountKey,
+                                      }),
+                                    server: q,
+                                  }),
+                                ],
+                              })
+                            : Kd(q)
+                              ? ee.isConfirmingRemove
+                                ? n.jsx(We, {
+                                    "aria-label": o({
+                                      id: "XjTWWS",
+                                      values: { label: H },
+                                    }),
+                                    disabled: a,
+                                    onClick: () => {
+                                      (g(null),
+                                        c({
+                                          serverId: j,
+                                          accountKey: q.accountKey,
+                                        }));
+                                    },
+                                    sentiment: "danger",
+                                    size: "sm",
+                                    type: "button",
+                                    children: n.jsx(se, { id: "tIBXVv" }),
+                                  })
+                                : n.jsx(We, {
+                                    "aria-label": o({
+                                      id: "Z+kvAO",
+                                      values: { label: H },
+                                    }),
+                                    disabled: a,
+                                    onClick: () =>
+                                      g({ ...ee, isConfirmingRemove: !0 }),
+                                    sentiment: "danger",
+                                    size: "sm",
+                                    type: "button",
+                                    variant: "secondary",
+                                    children: n.jsx(se, { id: "t/YqKh" }),
+                                  })
+                              : null,
+                      }),
+                    ],
+                  }),
+                ],
+              },
+              q.serverIdentifier,
+            );
+          }),
+          (e[52] = o),
+          (e[53] = k),
+          (e[54] = p),
+          (e[55] = u),
+          (e[56] = a),
+          (e[57] = l),
+          (e[58] = c),
+          (e[59] = j),
+          (e[60] = K),
+          (e[61] = E))
+        : (E = e[61]),
+        (R = s.map(E)),
+        (e[41] = o),
+        (e[42] = k),
+        (e[43] = p),
+        (e[44] = u),
+        (e[45] = a),
+        (e[46] = l),
+        (e[47] = c),
+        (e[48] = j),
+        (e[49] = s),
+        (e[50] = K),
+        (e[51] = R));
+    } else R = e[51];
+    (($ = O.map((E) => {
+      const { key: q, label: W } = E;
+      return n.jsxs(
+        "div",
+        {
+          children: [
+            n.jsx("div", {
+              "aria-hidden": !0,
+              className: w(
+                "sand-9f619 sand-28ko6u sand-1diwwjn sand-bmvrgn sand-1m4ooaa",
+              ),
+            }),
+            n.jsxs("div", {
+              className: w(
+                "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi",
+              ),
+              children: [
+                n.jsx("span", {
+                  className: w(
+                    "sand-9f619 sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1wd3ewq sand-lyipyv sand-uxw1ft",
+                  ),
+                  children: hn(W),
+                }),
+                n.jsxs("span", {
+                  className: w(
+                    "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-167g77z sand-1c4vz4f sand-2lah0s sand-dl72j9",
+                  ),
+                  children: [
+                    n.jsx(pe, {
+                      "aria-hidden": !0,
+                      modifier: "spin",
+                      name: "loading",
+                      size: "sm",
+                    }),
+                    n.jsx(Qe, {
+                      disabled: a,
+                      onClick: () => wa(q, r),
+                      size: "sm",
+                      type: "button",
+                      variant: "secondary",
+                      children: n.jsx(se, { id: "M7SqjM" }),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        },
+        q,
+      );
+    })),
+      (e[4] = o),
+      (e[5] = h),
+      (e[6] = k),
+      (e[7] = p),
+      (e[8] = f),
+      (e[9] = u),
+      (e[10] = a),
+      (e[11] = d),
+      (e[12] = l),
+      (e[13] = c),
+      (e[14] = i),
+      (e[15] = r),
+      (e[16] = v),
+      (e[17] = j),
+      (e[18] = _),
+      (e[19] = N),
+      (e[20] = s),
+      (e[21] = I),
+      (e[22] = T),
+      (e[23] = R),
+      (e[24] = $),
+      (e[25] = C));
+  } else ((I = e[21]), (T = e[22]), (R = e[23]), ($ = e[24]), (C = e[25]));
+  let M;
+  e[62] !== o || e[63] !== h || e[64] !== k || e[65] !== a || e[66] !== I
+    ? ((M = k
+        ? n.jsxs(n.Fragment, {
+            children: [
+              n.jsx("div", {
+                "aria-hidden": !0,
+                className: w(
+                  "sand-9f619 sand-28ko6u sand-1diwwjn sand-bmvrgn sand-1m4ooaa",
+                ),
+              }),
+              h == null
+                ? n.jsxs("button", {
+                    className: w(
+                      "sand-plugins-detail__add-account",
+                      "sand-9f619 sand-78zum5 sand-6s0dn4 sand-17d4w8g sand-h8yej3 sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi sand-c342km sand-ng3xce sand-jbqb8w sand-19aaqeu sand-7gh5u8 sand-jb2p0i sand-4z9k3i sand-12oo3zp sand-1yc453h sand-1ypdohk",
+                    ),
+                    disabled: a,
+                    onClick: () => y(""),
+                    type: "button",
+                    children: [
+                      n.jsx(pe, {
+                        "aria-hidden": !0,
+                        name: "plus",
+                        size: "xs",
+                      }),
+                      n.jsx(se, { id: "FGnQEW" }),
+                    ],
+                  })
+                : n.jsxs("div", {
+                    className: w(
+                      "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi",
+                    ),
+                    children: [
+                      n.jsx("input", {
+                        "aria-label": o({ id: "R2hekE" }),
+                        autoFocus: !0,
+                        className: w(
+                          "sand-9f619 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-1i9suas sand-1fgtraw sand-mzvs34 sand-f159sx sand-ur7f20 sand-mkeg23 sand-1y0btm7 sand-qz0629 sand-18gyud7 sand-1wd3ewq sand-jb2p0i sand-fifm61 sand-1t137rt",
+                        ),
+                        onChange: (O) => y(O.target.value),
+                        onKeyDown: (O) => {
+                          (O.key === "Enter" && I(),
+                            O.key === "Escape" && y(null));
+                        },
+                        placeholder: o({ id: "mwTfIH" }),
+                        type: "text",
+                        value: h,
+                      }),
+                      n.jsx(Qe, {
+                        disabled: a,
+                        onClick: I,
+                        size: "sm",
+                        type: "button",
+                        children: n.jsx(se, { id: "yIVrHZ" }),
+                      }),
+                      n.jsx(Qe, {
+                        onClick: () => y(null),
+                        size: "sm",
+                        type: "button",
+                        variant: "ghost",
+                        children: n.jsx(se, { id: "dEgA5A" }),
+                      }),
+                    ],
+                  }),
+            ],
+          })
+        : null),
+      (e[62] = o),
+      (e[63] = h),
+      (e[64] = k),
+      (e[65] = a),
+      (e[66] = I),
+      (e[67] = M))
+    : (M = e[67]);
+  let D;
+  e[68] !== T || e[69] !== R || e[70] !== $ || e[71] !== M
+    ? ((D = n.jsxs("div", { className: T, children: [R, $, M] })),
+      (e[68] = T),
+      (e[69] = R),
+      (e[70] = $),
+      (e[71] = M),
+      (e[72] = D))
+    : (D = e[72]);
+  let U;
+  return (
+    e[73] !== C || e[74] !== D
+      ? ((U = n.jsxs("div", { children: [C, D] })),
+        (e[73] = C),
+        (e[74] = D),
+        (e[75] = U))
+      : (U = e[75]),
+    U
+  );
+}
+function Fd(t) {
+  return t.accountKey;
+}
+function Dd(t) {
+  return Ft(t.serverIdentifier);
+}
+const fn = {
+    description: {
+      kB7OPa: "sand-9f619",
+      keoZOQ: "sand-dj266r",
+      k71WvV: "sand-14z9mp",
+      k1K539: "sand-at24cr",
+      keTefX: "sand-1lziwak",
+      kMwMTN: "sand-19aaqeu",
+      $$css: !0,
+    },
+    detailsRow: {
+      kB7OPa: "sand-9f619",
+      k1xSpc: "sand-78zum5",
+      kGNEyG: "sand-6s0dn4",
+      kjj79g: "sand-1qughib",
+      kOIVth: "sand-167g77z",
+      kLKAdn: "sand-z9dl7a",
+      kwRFfy: "sand-1pic42t",
+      kGO01o: "sand-sag5q8",
+      kZCmMZ: "sand-1onr9mi",
+      $$css: !0,
+    },
+    summaryRow: {
+      kysU6D: "sand-jyslct",
+      k3lkva: "sand-1lugfcp",
+      kzqmXN: "sand-h8yej3",
+      keoZOQ: "sand-dj266r",
+      k71WvV: "sand-14z9mp",
+      k1K539: "sand-at24cr",
+      keTefX: "sand-1lziwak",
+      kMzoRj: "sand-c342km",
+      ksu8eU: "sand-ng3xce",
+      kaIpWk: "sand-ixl9f9",
+      kMv6JI: "sand-jb2p0i",
+      kGuDYH: "sand-1qlqyl8",
+      k9WMMc: "sand-1yc453h",
+      kkrTdU: "sand-1ypdohk",
+      $$css: !0,
+    },
+    summaryRowExpanded: {
+      kVL7Gh: "sand-biv7yw",
+      kT0f0o: "sand-16uus16",
+      $$css: !0,
+    },
+  },
+  Ud = "—";
+function Vd(t) {
+  const e = J.c(11),
+    { label: s, rows: a } = t;
+  let l;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((l = w(
+        "sand-9f619 sand-1y1aw1k sand-1pic42t sand-10b6aqq sand-1onr9mi",
+      )),
+      (e[0] = l))
+    : (l = e[0]);
+  let d;
+  e[1] !== s
+    ? ((d = n.jsx(Se, {
+        as: "h3",
+        className: l,
+        color: "tertiary",
+        size: "sm",
+        children: s,
+      })),
+      (e[1] = s),
+      (e[2] = d))
+    : (d = e[2]);
+  let i;
+  e[3] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = w(
+        "sand-plugins-detail__list",
+        "sand-ixl9f9 sand-i07v4r sand-9f619 sand-78zum5 sand-dt5ytf sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak",
+      )),
+      (e[3] = i))
+    : (i = e[3]);
+  let c;
+  e[4] !== a ? ((c = a.map(Wd)), (e[4] = a), (e[5] = c)) : (c = e[5]);
+  let u;
+  e[6] !== c
+    ? ((u = n.jsx("dl", { className: i, children: c })), (e[6] = c), (e[7] = u))
+    : (u = e[7]);
+  let o;
+  return (
+    e[8] !== d || e[9] !== u
+      ? ((o = n.jsxs("div", { children: [d, u] })),
+        (e[8] = d),
+        (e[9] = u),
+        (e[10] = o))
+      : (o = e[10]),
+    o
+  );
+}
+function Wd(t, e) {
+  return n.jsxs(
+    Q.Fragment,
+    {
+      children: [
+        e > 0
+          ? n.jsx("div", {
+              "aria-hidden": !0,
+              className: w(
+                "sand-9f619 sand-28ko6u sand-1diwwjn sand-bmvrgn sand-1m4ooaa",
+              ),
+            })
+          : null,
+        n.jsxs("div", {
+          className: w(
+            "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi",
+          ),
+          children: [
+            n.jsx("dt", {
+              className: w(
+                "sand-9f619 sand-2lah0s sand-thy2uy sand-b3r6kr sand-uxw1ft sand-lyipyv sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1wd3ewq",
+              ),
+              children: t.term,
+            }),
+            n.jsx("dd", {
+              className: w(
+                "sand-9f619 sand-dj266r sand-2fvf9 sand-at24cr sand-1lziwak sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-4b2ntj sand-p4054r sand-lyipyv sand-uxw1ft",
+              ),
+              title: t.value ?? void 0,
+              children: t.value ?? Ud,
+            }),
+          ],
+        }),
+      ],
+    },
+    t.term,
+  );
+}
+const Gd = {
+  http: { id: "LUTGt0" },
+  sse: { id: "bdyjwx" },
+  stdio: { id: "sjVfrA" },
+};
+function Xa(t) {
+  const e = J.c(16),
+    { mode: s, isBusy: a, shareButton: l, onAction: d } = t,
+    { i18n: i } = re();
+  let c, u, o;
+  if (e[0] !== i || e[1] !== a || e[2] !== s || e[3] !== d || e[4] !== l) {
+    const r = Ya(s),
+      f = $d(s);
+    ((c =
+      r != null
+        ? n.jsx(We, {
+            disabled: !0,
+            shape: "pill",
+            size: "lg",
+            type: "button",
+            variant: "tertiary",
+            children: i._(r),
+          })
+        : null),
+      (u = l));
+    let p;
+    (e[8] !== i || e[9] !== a || e[10] !== d
+      ? ((p = (g) =>
+          n.jsx(
+            We,
+            {
+              disabled: a,
+              onClick: () => d(g.id),
+              shape: "pill",
+              size: "lg",
+              type: "button",
+              variant: "secondary",
+              children: i._(g.label),
+            },
+            g.id,
+          )),
+        (e[8] = i),
+        (e[9] = a),
+        (e[10] = d),
+        (e[11] = p))
+      : (p = e[11]),
+      (o = f.map(p)),
+      (e[0] = i),
+      (e[1] = a),
+      (e[2] = s),
+      (e[3] = d),
+      (e[4] = l),
+      (e[5] = c),
+      (e[6] = u),
+      (e[7] = o));
+  } else ((c = e[5]), (u = e[6]), (o = e[7]));
+  let m;
+  return (
+    e[12] !== c || e[13] !== u || e[14] !== o
+      ? ((m = n.jsxs(n.Fragment, { children: [c, u, o] })),
+        (e[12] = c),
+        (e[13] = u),
+        (e[14] = o),
+        (e[15] = m))
+      : (m = e[15]),
+    m
+  );
+}
+function Zd(t) {
+  const e = J.c(13),
+    { url: s } = t,
+    { _: a } = re(),
+    { status: l, copy: d } = Aa();
+  let i;
+  e[0] !== a ? ((i = a({ id: "Z8lGw6" })), (e[0] = a), (e[1] = i)) : (i = e[1]);
+  let c = i;
+  if (l === "copied") {
+    let r;
+    (e[2] !== a
+      ? ((r = a({ id: "6V3Ea3" })), (e[2] = a), (e[3] = r))
+      : (r = e[3]),
+      (c = r));
+  } else if (l === "error") {
+    let r;
+    (e[4] !== a
+      ? ((r = a({ id: "9sj0G8" })), (e[4] = a), (e[5] = r))
+      : (r = e[5]),
+      (c = r));
+  }
+  const u = l === "copied" ? "check" : "link";
+  let o;
+  e[6] !== d || e[7] !== s
+    ? ((o = () => d(s)), (e[6] = d), (e[7] = s), (e[8] = o))
+    : (o = e[8]);
+  let m;
+  return (
+    e[9] !== c || e[10] !== u || e[11] !== o
+      ? ((m = n.jsx(We, {
+          leadingIcon: u,
+          onClick: o,
+          shape: "pill",
+          size: "lg",
+          type: "button",
+          variant: "secondary",
+          children: c,
+        })),
+        (e[9] = c),
+        (e[10] = u),
+        (e[11] = o),
+        (e[12] = m))
+      : (m = e[12]),
+    m
+  );
+}
+function et(t) {
+  const e = J.c(33),
+    { label: s, summary: a, cardClassName: l, children: d } = t,
+    [i, c] = Q.useState(!1),
+    u = Q.useId();
+  let o;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((o = w(
+        "sand-9f619 sand-1y1aw1k sand-1pic42t sand-10b6aqq sand-1onr9mi",
+      )),
+      (e[0] = o))
+    : (o = e[0]);
+  let m;
+  e[1] !== s
+    ? ((m = n.jsx(Se, {
+        as: "h3",
+        className: o,
+        color: "tertiary",
+        size: "sm",
+        children: s,
+      })),
+      (e[1] = s),
+      (e[2] = m))
+    : (m = e[2]);
+  let r;
+  e[3] !== l
+    ? ((r = w(l, "sand-9f619 sand-ixl9f9 sand-i07v4r")), (e[3] = l), (e[4] = r))
+    : (r = e[4]);
+  const f = i ? u : void 0;
+  let p;
+  e[5] !== i
+    ? ((p = w(
+        me(
+          fn.detailsRow,
+          fn.summaryRow,
+          i && fn.summaryRowExpanded,
+          Tn.interactive,
+          Tn.keyboardFocus,
+        ).className,
+      )),
+      (e[5] = i),
+      (e[6] = p))
+    : (p = e[6]);
+  let g;
+  e[7] === Symbol.for("react.memo_cache_sentinel")
+    ? ((g = () => c(Hd)), (e[7] = g))
+    : (g = e[7]);
+  let h;
+  e[8] === Symbol.for("react.memo_cache_sentinel")
+    ? ((h = w(
+        "sand-9f619 sand-2lah0s sand-thy2uy sand-b3r6kr sand-uxw1ft sand-lyipyv sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1wd3ewq",
+      )),
+      (e[8] = h))
+    : (h = e[8]);
+  let y;
+  e[9] !== a
+    ? ((y = n.jsx("span", { className: h, children: a })),
+      (e[9] = a),
+      (e[10] = y))
+    : (y = e[10]);
+  let b;
+  e[11] !== i
+    ? ((b = w(
+        {
+          0: {
+            className:
+              "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-4b2ntj sand-11xpdln sand-1firant sand-wji4o3",
+          },
+          1: {
+            className:
+              "sand-9f619 sand-3nfvp2 sand-6s0dn4 sand-4b2ntj sand-11xpdln sand-1firant sand-wji4o3 sand-19jd1h0",
+          },
+        }[!!i << 0].className,
+      )),
+      (e[11] = i),
+      (e[12] = b))
+    : (b = e[12]);
+  let j;
+  e[13] === Symbol.for("react.memo_cache_sentinel")
+    ? ((j = n.jsx(pe, { name: "chevron-down", size: "xs" })), (e[13] = j))
+    : (j = e[13]);
+  let k;
+  e[14] !== b
+    ? ((k = n.jsx("span", { "aria-hidden": !0, className: b, children: j })),
+      (e[14] = b),
+      (e[15] = k))
+    : (k = e[15]);
+  let v;
+  e[16] !== i || e[17] !== k || e[18] !== f || e[19] !== p || e[20] !== y
+    ? ((v = n.jsxs("button", {
+        "aria-controls": f,
+        "aria-expanded": i,
+        className: p,
+        onClick: g,
+        type: "button",
+        children: [y, k],
+      })),
+      (e[16] = i),
+      (e[17] = k),
+      (e[18] = f),
+      (e[19] = p),
+      (e[20] = y),
+      (e[21] = v))
+    : (v = e[21]);
+  let S;
+  e[22] !== u || e[23] !== d || e[24] !== i
+    ? ((S = i ? n.jsx("div", { id: u, children: d }) : null),
+      (e[22] = u),
+      (e[23] = d),
+      (e[24] = i),
+      (e[25] = S))
+    : (S = e[25]);
+  let N;
+  e[26] !== v || e[27] !== S || e[28] !== r
+    ? ((N = n.jsxs("div", { className: r, children: [v, S] })),
+      (e[26] = v),
+      (e[27] = S),
+      (e[28] = r),
+      (e[29] = N))
+    : (N = e[29]);
+  let z;
+  return (
+    e[30] !== N || e[31] !== m
+      ? ((z = n.jsxs("div", { children: [m, N] })),
+        (e[30] = N),
+        (e[31] = m),
+        (e[32] = z))
+      : (z = e[32]),
+    z
+  );
+}
+function Hd(t) {
+  return !t;
+}
+async function Qd({
+  toggle: t,
+  serverId: e,
+  toolName: s,
+  applyOptimisticToggle: a,
+  setToggleFailure: l,
+}) {
+  a(s);
+  try {
+    (await t({ serverId: e, toolName: s }), l(null));
+  } catch (d) {
+    l(d instanceof Error ? d.message : String(d));
+  }
+}
+function st(t) {
+  const e = J.c(22),
+    { serverId: s } = t,
+    { _: a } = re(),
+    { tools: l } = Ta(s),
+    { toggle: d } = Wt(),
+    [i, c] = Q.useState(null),
+    [u, o] = Q.useOptimistic(l, Jd),
+    [, m] = Q.useTransition();
+  if (u.length === 0) return null;
+  let r, f, p, g, h;
+  if (
+    e[0] !== a ||
+    e[1] !== o ||
+    e[2] !== u ||
+    e[3] !== s ||
+    e[4] !== m ||
+    e[5] !== d
+  ) {
+    const j = u.filter(Yd).length,
+      k = Gt(u);
+    ((r = et),
+      (f = "sand-plugins-detail__tools"),
+      e[11] !== a
+        ? ((p = a({ id: "xdA/+p" })), (e[11] = a), (e[12] = p))
+        : (p = e[12]),
+      (g = a({ id: "bWyJ+b", values: { 0: u.length, enabledCount: j } })),
+      (h = u.map((v) =>
+        n.jsxs(
+          Q.Fragment,
+          {
+            children: [
+              n.jsx("div", {
+                "aria-hidden": !0,
+                className: w(
+                  "sand-9f619 sand-28ko6u sand-1diwwjn sand-bmvrgn sand-1m4ooaa",
+                ),
+              }),
+              n.jsxs("div", {
+                className: w(
+                  "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi",
+                ),
+                children: [
+                  n.jsx("span", {
+                    className: w(
+                      "sand-9f619 sand-2lah0s sand-thy2uy sand-b3r6kr sand-uxw1ft sand-lyipyv sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1wd3ewq",
+                    ),
+                    title: v.description,
+                    children: k.get(v.name) ?? v.name,
+                  }),
+                  n.jsx(Zt, {
+                    isChecked: !v.isDisabled,
+                    label: v.isDisabled
+                      ? a({
+                          id: "FZtBeR",
+                          values: { 0: k.get(v.name) ?? v.name },
+                        })
+                      : a({
+                          id: "y5UgU8",
+                          values: { 0: k.get(v.name) ?? v.name },
+                        }),
+                    onToggle: () => {
+                      m(() =>
+                        Qd({
+                          toggle: d,
+                          serverId: s,
+                          toolName: v.name,
+                          applyOptimisticToggle: o,
+                          setToggleFailure: c,
+                        }),
+                      );
+                    },
+                  }),
+                ],
+              }),
+            ],
+          },
+          v.name,
+        ),
+      )),
+      (e[0] = a),
+      (e[1] = o),
+      (e[2] = u),
+      (e[3] = s),
+      (e[4] = m),
+      (e[5] = d),
+      (e[6] = r),
+      (e[7] = f),
+      (e[8] = p),
+      (e[9] = g),
+      (e[10] = h));
+  } else ((r = e[6]), (f = e[7]), (p = e[8]), (g = e[9]), (h = e[10]));
+  let y;
+  e[13] !== i
+    ? ((y =
+        i != null
+          ? n.jsxs(n.Fragment, {
+              children: [
+                n.jsx("div", {
+                  "aria-hidden": !0,
+                  className: w(
+                    "sand-9f619 sand-28ko6u sand-1diwwjn sand-bmvrgn sand-1m4ooaa",
+                  ),
+                }),
+                n.jsx("p", {
+                  className: w(
+                    "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-pmgbkh",
+                  ),
+                  role: "alert",
+                  children: i,
+                }),
+              ],
+            })
+          : null),
+      (e[13] = i),
+      (e[14] = y))
+    : (y = e[14]);
+  let b;
+  return (
+    e[15] !== r ||
+    e[16] !== f ||
+    e[17] !== p ||
+    e[18] !== g ||
+    e[19] !== h ||
+    e[20] !== y
+      ? ((b = n.jsxs(r, {
+          cardClassName: f,
+          label: p,
+          summary: g,
+          children: [h, y],
+        })),
+        (e[15] = r),
+        (e[16] = f),
+        (e[17] = p),
+        (e[18] = g),
+        (e[19] = h),
+        (e[20] = y),
+        (e[21] = b))
+      : (b = e[21]),
+    b
+  );
+}
+function Yd(t) {
+  return !t.isDisabled;
+}
+function Jd(t, e) {
+  return t.map((s) => (s.name === e ? { ...s, isDisabled: !s.isDisabled } : s));
+}
+function ja(t) {
+  const e = J.c(16),
+    { label: s, noun: a, cardClassName: l, items: d } = t,
+    { _: i } = re();
+  if (d.length === 0) return null;
+  let c;
+  e[0] !== i || e[1] !== a
+    ? ((c = i(a === "connector" ? { id: "cQpGeE" } : { id: "OZJeTZ" })),
+      (e[0] = i),
+      (e[1] = a),
+      (e[2] = c))
+    : (c = e[2]);
+  const u = c;
+  let o;
+  e[3] !== d.length || e[4] !== a
+    ? ((o = Ht(d.length, a)), (e[3] = d.length), (e[4] = a), (e[5] = o))
+    : (o = e[5]);
+  let m;
+  if (e[6] !== d || e[7] !== u) {
+    let f;
+    (e[9] !== u
+      ? ((f = (p) =>
+          n.jsxs(
+            Q.Fragment,
+            {
+              children: [
+                n.jsx("div", {
+                  "aria-hidden": !0,
+                  className: w(
+                    "sand-9f619 sand-28ko6u sand-1diwwjn sand-bmvrgn sand-1m4ooaa",
+                  ),
+                }),
+                n.jsxs("div", {
+                  className: w(
+                    "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi",
+                  ),
+                  children: [
+                    n.jsx("span", {
+                      className: w(
+                        "sand-9f619 sand-2lah0s sand-thy2uy sand-b3r6kr sand-uxw1ft sand-lyipyv sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1wd3ewq",
+                      ),
+                      children: p.name,
+                    }),
+                    n.jsx("span", {
+                      className: w(
+                        "sand-9f619 sand-dj266r sand-2fvf9 sand-at24cr sand-1lziwak sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-4b2ntj sand-p4054r sand-lyipyv sand-uxw1ft",
+                      ),
+                      title: p.description,
+                      children: p.description.length > 0 ? p.description : u,
+                    }),
+                  ],
+                }),
+              ],
+            },
+            p.name,
+          )),
+        (e[9] = u),
+        (e[10] = f))
+      : (f = e[10]),
+      (m = d.map(f)),
+      (e[6] = d),
+      (e[7] = u),
+      (e[8] = m));
+  } else m = e[8];
+  let r;
+  return (
+    e[11] !== l || e[12] !== s || e[13] !== o || e[14] !== m
+      ? ((r = n.jsx(et, {
+          cardClassName: l,
+          label: s,
+          summary: o,
+          children: m,
+        })),
+        (e[11] = l),
+        (e[12] = s),
+        (e[13] = o),
+        (e[14] = m),
+        (e[15] = r))
+      : (r = e[15]),
+    r
+  );
+}
+function Xd(t) {
+  const e = J.c(9),
+    { isBusy: s, onEditSetup: a } = t;
+  let l;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((l = w(
+        "sand-9f619 sand-1y1aw1k sand-1pic42t sand-10b6aqq sand-1onr9mi",
+      )),
+      (e[0] = l))
+    : (l = e[0]);
+  let d, i, c, u;
+  e[1] === Symbol.for("react.memo_cache_sentinel")
+    ? ((d = n.jsx(Se, {
+        as: "h3",
+        className: l,
+        color: "tertiary",
+        size: "sm",
+        children: n.jsx(se, { id: "RDjuBN" }),
+      })),
+      (i = w(
+        "sand-plugins-detail__setup",
+        "sand-9f619 sand-ixl9f9 sand-i07v4r",
+      )),
+      (c = w(
+        "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1qughib sand-167g77z sand-z9dl7a sand-1pic42t sand-sag5q8 sand-1onr9mi",
+      )),
+      (u = n.jsx("span", {
+        className: w(
+          "sand-9f619 sand-2lah0s sand-thy2uy sand-b3r6kr sand-uxw1ft sand-lyipyv sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1wd3ewq",
+        ),
+        children: n.jsx(se, { id: "mrRDVU" }),
+      })),
+      (e[1] = d),
+      (e[2] = i),
+      (e[3] = c),
+      (e[4] = u))
+    : ((d = e[1]), (i = e[2]), (c = e[3]), (u = e[4]));
+  let o;
+  e[5] === Symbol.for("react.memo_cache_sentinel")
+    ? ((o = n.jsx(se, { id: "kDCdbL" })), (e[5] = o))
+    : (o = e[5]);
+  let m;
+  return (
+    e[6] !== s || e[7] !== a
+      ? ((m = n.jsxs("div", {
+          children: [
+            d,
+            n.jsx("div", {
+              className: i,
+              children: n.jsxs("div", {
+                className: c,
+                children: [
+                  u,
+                  n.jsx(Qe, {
+                    disabled: s,
+                    onClick: a,
+                    size: "sm",
+                    type: "button",
+                    variant: "secondary",
+                    children: o,
+                  }),
+                ],
+              }),
+            }),
+          ],
+        })),
+        (e[6] = s),
+        (e[7] = a),
+        (e[8] = m))
+      : (m = e[8]),
+    m
+  );
+}
+function ei(t) {
+  const e = J.c(98),
+    {
+      server: s,
+      accountSlots: a,
+      isBusy: l,
+      accountActions: d,
+      onUninstall: i,
+    } = t,
+    { i18n: c, _: u } = re(),
+    { ToolIcon: o } = ws();
+  let m;
+  e[0] !== s.url
+    ? ((m = Dt(void 0, s.url)), (e[0] = s.url), (e[1] = m))
+    : (m = e[1]);
+  const r = m,
+    { tools: f } = Ta(s.id);
+  let p, g, h, y, b, j, k, v, S, N, z;
+  if (
+    e[2] !== o ||
+    e[3] !== u ||
+    e[4] !== d ||
+    e[5] !== a ||
+    e[6] !== r ||
+    e[7] !== c ||
+    e[8] !== l ||
+    e[9] !== i ||
+    e[10] !== s ||
+    e[11] !== f
+  ) {
+    const $ = f.filter(si).length;
+    let C;
+    e[23] !== s ? ((C = gn(s)), (e[23] = s), (e[24] = C)) : (C = e[24]);
+    const M = C;
+    let D;
+    e[25] === Symbol.for("react.memo_cache_sentinel")
+      ? ((N = w(
+          "sand-plugins-detail",
+          "sand-9f619 sand-78zum5 sand-dt5ytf sand-1665zp3",
+        )),
+        (D = w(
+          "sand-plugins-detail__header",
+          "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1v2ro7d sand-1xr8qbc sand-jodmca",
+        )),
+        (e[25] = D),
+        (e[26] = N))
+      : ((D = e[25]), (N = e[26]));
+    let U;
+    e[27] !== o || e[28] !== s.name
+      ? ((U = n.jsx(o, { name: s.name, size: 56 })),
+        (e[27] = o),
+        (e[28] = s.name),
+        (e[29] = U))
+      : (U = e[29]);
+    let O;
+    e[30] === Symbol.for("react.memo_cache_sentinel")
+      ? ((O = w(
+          "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-dt5ytf sand-195vfkc sand-euugli",
+        )),
+        (e[30] = O))
+      : (O = e[30]);
+    let P;
+    e[31] === Symbol.for("react.memo_cache_sentinel")
+      ? ((P = w("sand-19d36u7 sand-1o2sk6j sand-1deyeav sand-1rhlpx6")),
+        (e[31] = P))
+      : (P = e[31]);
+    let Z;
+    e[32] !== s.name
+      ? ((Z = n.jsx(Se, { as: "h3", className: P, children: s.name })),
+        (e[32] = s.name),
+        (e[33] = Z))
+      : (Z = e[33]);
+    let K;
+    e[34] !== r
+      ? ((K =
+          r != null
+            ? n.jsx("span", {
+                className: w(
+                  "sand-9f619 sand-78zum5 sand-6s0dn4 sand-17d4w8g sand-euugli sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-19aaqeu sand-uxw1ft",
+                ),
+                children: n.jsx("span", {
+                  className: w(
+                    "sand-9f619 sand-euugli sand-b3r6kr sand-lyipyv",
+                  ),
+                  children: r,
+                }),
+              })
+            : null),
+        (e[34] = r),
+        (e[35] = K))
+      : (K = e[35]);
+    let V;
+    e[36] !== Z || e[37] !== K
+      ? ((V = n.jsxs("div", { className: O, children: [Z, K] })),
+        (e[36] = Z),
+        (e[37] = K),
+        (e[38] = V))
+      : (V = e[38]);
+    let F;
+    e[39] !== i || e[40] !== s.id
+      ? ((F = (ee) => {
+          switch (ee) {
+            case "uninstall": {
+              i(s.id);
+              return;
+            }
+            case "remove":
+              return;
+            default:
+              return ee;
+          }
+        }),
+        (e[39] = i),
+        (e[40] = s.id),
+        (e[41] = F))
+      : (F = e[41]);
+    let X;
+    (e[42] !== l || e[43] !== M || e[44] !== F
+      ? ((X = n.jsx(Xa, {
+          isBusy: l,
+          mode: M,
+          shareButton: null,
+          onAction: F,
+        })),
+        (e[42] = l),
+        (e[43] = M),
+        (e[44] = F),
+        (e[45] = X))
+      : (X = e[45]),
+      e[46] !== U || e[47] !== V || e[48] !== X
+        ? ((z = n.jsxs("header", { className: D, children: [U, V, X] })),
+          (e[46] = U),
+          (e[47] = V),
+          (e[48] = X),
+          (e[49] = z))
+        : (z = e[49]),
+      e[50] !== d || e[51] !== a || e[52] !== l
+        ? ((g = n.jsx(Ja, { isBusy: l, slots: a, ...d })),
+          (e[50] = d),
+          (e[51] = a),
+          (e[52] = l),
+          (e[53] = g))
+        : (g = e[53]),
+      e[54] !== s.id
+        ? ((h = n.jsx(st, { serverId: s.id })), (e[54] = s.id), (e[55] = h))
+        : (h = e[55]),
+      (p = Vd),
+      e[56] !== u
+        ? ((S = u({ id: "URmyfc" })), (e[56] = u), (e[57] = S))
+        : (S = e[57]));
+    let E;
+    e[58] !== u
+      ? ((E = u({ id: "wdxz7K" })), (e[58] = u), (e[59] = E))
+      : (E = e[59]);
+    let q;
+    (e[60] !== u || e[61] !== s.isTeamServer
+      ? ((q = s.isTeamServer ? u({ id: "vhSOwR" }) : u({ id: "hO1TWp" })),
+        (e[60] = u),
+        (e[61] = s.isTeamServer),
+        (e[62] = q))
+      : (q = e[62]),
+      e[63] !== E || e[64] !== q
+        ? ((j = { term: E, value: q }), (e[63] = E), (e[64] = q), (e[65] = j))
+        : (j = e[65]));
+    let W;
+    e[66] !== u
+      ? ((W = u({ id: "bv4cFj" })), (e[66] = u), (e[67] = W))
+      : (W = e[67]);
+    let H;
+    (e[68] !== c || e[69] !== s.transport
+      ? ((H = c._(Gd[s.transport])),
+        (e[68] = c),
+        (e[69] = s.transport),
+        (e[70] = H))
+      : (H = e[70]),
+      e[71] !== W || e[72] !== H
+        ? ((k = { term: W, value: H }), (e[71] = W), (e[72] = H), (e[73] = k))
+        : (k = e[73]),
+      e[74] !== u || e[75] !== s.command || e[76] !== s.url
+        ? ((v =
+            s.url != null
+              ? { term: u({ id: "IagCbF" }), value: s.url }
+              : { term: u({ id: "sjVfrA" }), value: s.command ?? null }),
+          (e[74] = u),
+          (e[75] = s.command),
+          (e[76] = s.url),
+          (e[77] = v))
+        : (v = e[77]),
+      e[78] !== u
+        ? ((y = u({ id: "xdA/+p" })), (e[78] = u), (e[79] = y))
+        : (y = e[79]),
+      (b =
+        f.length > 0
+          ? u({ id: "CzixCu", values: { 0: f.length, enabledToolCount: $ } })
+          : String(s.toolCount)),
+      (e[2] = o),
+      (e[3] = u),
+      (e[4] = d),
+      (e[5] = a),
+      (e[6] = r),
+      (e[7] = c),
+      (e[8] = l),
+      (e[9] = i),
+      (e[10] = s),
+      (e[11] = f),
+      (e[12] = p),
+      (e[13] = g),
+      (e[14] = h),
+      (e[15] = y),
+      (e[16] = b),
+      (e[17] = j),
+      (e[18] = k),
+      (e[19] = v),
+      (e[20] = S),
+      (e[21] = N),
+      (e[22] = z));
+  } else
+    ((p = e[12]),
+      (g = e[13]),
+      (h = e[14]),
+      (y = e[15]),
+      (b = e[16]),
+      (j = e[17]),
+      (k = e[18]),
+      (v = e[19]),
+      (S = e[20]),
+      (N = e[21]),
+      (z = e[22]));
+  let _;
+  e[80] !== y || e[81] !== b
+    ? ((_ = { term: y, value: b }), (e[80] = y), (e[81] = b), (e[82] = _))
+    : (_ = e[82]);
+  let I;
+  e[83] !== _ || e[84] !== j || e[85] !== k || e[86] !== v
+    ? ((I = [j, k, v, _]),
+      (e[83] = _),
+      (e[84] = j),
+      (e[85] = k),
+      (e[86] = v),
+      (e[87] = I))
+    : (I = e[87]);
+  let T;
+  e[88] !== p || e[89] !== I || e[90] !== S
+    ? ((T = n.jsx(p, { label: S, rows: I })),
+      (e[88] = p),
+      (e[89] = I),
+      (e[90] = S),
+      (e[91] = T))
+    : (T = e[91]);
+  let R;
+  return (
+    e[92] !== g || e[93] !== h || e[94] !== T || e[95] !== N || e[96] !== z
+      ? ((R = n.jsxs("div", { className: N, children: [z, g, h, T] })),
+        (e[92] = g),
+        (e[93] = h),
+        (e[94] = T),
+        (e[95] = N),
+        (e[96] = z),
+        (e[97] = R))
+      : (R = e[97]),
+    R
+  );
+}
+function si(t) {
+  return !t.isDisabled;
+}
+function ni(t) {
+  const e = J.c(118),
+    {
+      entry: s,
+      installedServer: a,
+      accountSlots: l,
+      installedPlugin: d,
+      installMode: i,
+      isBusy: c,
+      isAddPending: u,
+      accountActions: o,
+      onAdd: m,
+      onUninstall: r,
+      onUninstallPlugin: f,
+      onEditSetup: p,
+    } = t,
+    g = i === void 0 ? null : i,
+    h = u === void 0 ? !1 : u,
+    { _: y } = re(),
+    { ToolIcon: b, catalogEntryIcon: j, externalLinkHandlers: k } = ws(),
+    v = kn(),
+    S = Ut();
+  let N;
+  e[0] !== j || e[1] !== s
+    ? ((N = j(s)), (e[0] = j), (e[1] = s), (e[2] = N))
+    : (N = e[2]);
+  const z = N,
+    _ = s.marketplace?.displayName;
+  let I;
+  e[3] !== y
+    ? ((I = (oe) => y({ id: "bCbNMB", values: { count: oe } })),
+      (e[3] = y),
+      (e[4] = I))
+    : (I = e[4]);
+  const T = I,
+    R = S[s.id],
+    $ = R != null && R > 0,
+    C = s.homepage != null;
+  let M;
+  e[5] !== s ? ((M = Vt(s)), (e[5] = s), (e[6] = M)) : (M = e[6]);
+  const D = M;
+  let U;
+  e[7] !== s.skills
+    ? ((U = s.skills ?? []), (e[7] = s.skills), (e[8] = U))
+    : (U = e[8]);
+  const O = U;
+  let P;
+  e: {
+    if (d != null) {
+      let oe;
+      (e[9] !== d ? ((oe = Kn(d)), (e[9] = d), (e[10] = oe)) : (oe = e[10]),
+        (P = oe));
+      break e;
+    }
+    if (a != null) {
+      let oe;
+      (e[11] !== a ? ((oe = gn(a)), (e[11] = a), (e[12] = oe)) : (oe = e[12]),
+        (P = oe));
+      break e;
+    }
+    P = null;
+  }
+  const K = g ?? P;
+  let V;
+  e[13] !== s ? ((V = Od(s)), (e[13] = s), (e[14] = V)) : (V = e[14]);
+  const F = V;
+  let X, E, q;
+  e[15] === Symbol.for("react.memo_cache_sentinel")
+    ? ((q = w(
+        "sand-plugins-detail",
+        "sand-9f619 sand-78zum5 sand-dt5ytf sand-1665zp3",
+      )),
+      (X = w("sand-9f619 sand-78zum5 sand-dt5ytf sand-1v2ro7d")),
+      (E = w(
+        "sand-plugins-detail__header",
+        "sand-9f619 sand-78zum5 sand-6s0dn4 sand-1v2ro7d sand-1xr8qbc sand-jodmca",
+      )),
+      (e[15] = X),
+      (e[16] = E),
+      (e[17] = q))
+    : ((X = e[15]), (E = e[16]), (q = e[17]));
+  let W;
+  e[18] !== b ||
+  e[19] !== s.displayName ||
+  e[20] !== z.iconId ||
+  e[21] !== z.iconUrl
+    ? ((W = n.jsx(b, {
+        iconId: z.iconId,
+        iconUrl: z.iconUrl,
+        name: s.displayName,
+        size: 56,
+      })),
+      (e[18] = b),
+      (e[19] = s.displayName),
+      (e[20] = z.iconId),
+      (e[21] = z.iconUrl),
+      (e[22] = W))
+    : (W = e[22]);
+  let H, ee;
+  e[23] === Symbol.for("react.memo_cache_sentinel")
+    ? ((H = w(
+        "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-dt5ytf sand-195vfkc sand-euugli",
+      )),
+      (ee = w("sand-9f619 sand-78zum5 sand-6s0dn4 sand-1jnr06f sand-euugli")),
+      (e[23] = H),
+      (e[24] = ee))
+    : ((H = e[23]), (ee = e[24]));
+  let Y;
+  e[25] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Y = w("sand-19d36u7 sand-1o2sk6j sand-1deyeav sand-1rhlpx6")),
+      (e[25] = Y))
+    : (Y = e[25]);
+  let A;
+  e[26] !== s.displayName
+    ? ((A = n.jsx(Se, { as: "h3", className: Y, children: s.displayName })),
+      (e[26] = s.displayName),
+      (e[27] = A))
+    : (A = e[27]);
+  let B;
+  e[28] !== y || e[29] !== F
+    ? ((B =
+        F != null ? n.jsx(Ea, { label: y({ id: "bXJKzj" }), url: F }) : null),
+      (e[28] = y),
+      (e[29] = F),
+      (e[30] = B))
+    : (B = e[30]);
+  let ie;
+  e[31] !== A || e[32] !== B
+    ? ((ie = n.jsxs("div", { className: ee, children: [A, B] })),
+      (e[31] = A),
+      (e[32] = B),
+      (e[33] = ie))
+    : (ie = e[33]);
+  let ae;
+  e[34] !== s.homepage ||
+  e[35] !== k ||
+  e[36] !== C ||
+  e[37] !== $ ||
+  e[38] !== _ ||
+  e[39] !== v ||
+  e[40] !== R ||
+  e[41] !== T
+    ? ((ae =
+        _ != null || $ || C
+          ? n.jsxs("span", {
+              className: w(
+                "sand-9f619 sand-78zum5 sand-6s0dn4 sand-17d4w8g sand-euugli sand-b3r6kr sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-19aaqeu sand-uxw1ft",
+              ),
+              children: [
+                _ != null
+                  ? n.jsx("span", {
+                      className: w(
+                        "sand-9f619 sand-euugli sand-b3r6kr sand-lyipyv",
+                      ),
+                      children: _,
+                    })
+                  : null,
+                _ != null && $
+                  ? n.jsx("span", {
+                      "aria-hidden": !0,
+                      className: w(
+                        "sand-9f619 sand-1c4vz4f sand-2lah0s sand-dl72j9",
+                      ),
+                      children: "·",
+                    })
+                  : null,
+                $
+                  ? n.jsx("span", {
+                      className: w(
+                        "sand-9f619 sand-1c4vz4f sand-2lah0s sand-dl72j9",
+                      ),
+                      children: T(R),
+                    })
+                  : null,
+                (_ != null || $) && C
+                  ? n.jsx("span", {
+                      "aria-hidden": !0,
+                      className: w(
+                        "sand-9f619 sand-1c4vz4f sand-2lah0s sand-dl72j9",
+                      ),
+                      children: "·",
+                    })
+                  : null,
+                s.homepage != null
+                  ? n.jsxs("a", {
+                      ...k(s.homepage, v),
+                      className: w(
+                        "sand-3nfvp2 sand-6s0dn4 sand-1jnr06f sand-19aaqeu sand-7gh5u8 sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-krqix3 sand-1ypdohk sand-9f619 sand-1c4vz4f sand-2lah0s sand-dl72j9",
+                      ),
+                      href: s.homepage,
+                      rel: "noopener noreferrer",
+                      target: "_blank",
+                      children: [
+                        n.jsx(se, { id: "HMUxPu" }),
+                        n.jsx(pe, { name: "arrow-right-up", size: 13 }),
+                      ],
+                    })
+                  : null,
+              ],
+            })
+          : null),
+      (e[34] = s.homepage),
+      (e[35] = k),
+      (e[36] = C),
+      (e[37] = $),
+      (e[38] = _),
+      (e[39] = v),
+      (e[40] = R),
+      (e[41] = T),
+      (e[42] = ae))
+    : (ae = e[42]);
+  let te;
+  e[43] !== ie || e[44] !== ae
+    ? ((te = n.jsxs("div", { className: H, children: [ie, ae] })),
+      (e[43] = ie),
+      (e[44] = ae),
+      (e[45] = te))
+    : (te = e[45]);
+  let ue;
+  e: {
+    let oe;
+    e[46] !== F
+      ? ((oe = F != null ? n.jsx(Zd, { url: F }) : null),
+        (e[46] = F),
+        (e[47] = oe))
+      : (oe = e[47]);
+    const je = oe;
+    if (K != null) {
+      let ke;
+      e[48] !== d || e[49] !== a || e[50] !== r || e[51] !== f
+        ? ((ke = (_e) => {
+            switch (_e) {
+              case "uninstall":
+              case "remove": {
+                d != null ? f?.(d.pluginId) : a != null && r(a.id);
+                return;
+              }
+              default:
+                return _e;
+            }
+          }),
+          (e[48] = d),
+          (e[49] = a),
+          (e[50] = r),
+          (e[51] = f),
+          (e[52] = ke))
+        : (ke = e[52]);
+      let be;
+      (e[53] !== c || e[54] !== K || e[55] !== je || e[56] !== ke
+        ? ((be = n.jsx(Xa, {
+            isBusy: c,
+            mode: K,
+            shareButton: je,
+            onAction: ke,
+          })),
+          (e[53] = c),
+          (e[54] = K),
+          (e[55] = je),
+          (e[56] = ke),
+          (e[57] = be))
+        : (be = e[57]),
+        (ue = be));
+      break e;
+    }
+    if (h) {
+      let ke;
+      e[58] !== y || e[59] !== s.displayName
+        ? ((ke = y({ id: "xcwvFe", values: { 0: s.displayName } })),
+          (e[58] = y),
+          (e[59] = s.displayName),
+          (e[60] = ke))
+        : (ke = e[60]);
+      let be;
+      e[61] !== ke
+        ? ((be = n.jsx(Za, { label: ke })), (e[61] = ke), (e[62] = be))
+        : (be = e[62]);
+      let _e;
+      (e[63] !== je || e[64] !== be
+        ? ((_e = n.jsxs(n.Fragment, { children: [je, be] })),
+          (e[63] = je),
+          (e[64] = be),
+          (e[65] = _e))
+        : (_e = e[65]),
+        (ue = _e));
+      break e;
+    }
+    let Pe;
+    e[66] !== s || e[67] !== m
+      ? ((Pe = () => m(s)), (e[66] = s), (e[67] = m), (e[68] = Pe))
+      : (Pe = e[68]);
+    let Re;
+    e[69] === Symbol.for("react.memo_cache_sentinel")
+      ? ((Re = n.jsx(se, { id: "m16xKo" })), (e[69] = Re))
+      : (Re = e[69]);
+    let Le;
+    e[70] !== c || e[71] !== Pe
+      ? ((Le = n.jsx(We, {
+          disabled: c,
+          onClick: Pe,
+          shape: "pill",
+          size: "lg",
+          type: "button",
+          variant: "primary",
+          children: Re,
+        })),
+        (e[70] = c),
+        (e[71] = Pe),
+        (e[72] = Le))
+      : (Le = e[72]);
+    let De;
+    (e[73] !== je || e[74] !== Le
+      ? ((De = n.jsxs(n.Fragment, { children: [je, Le] })),
+        (e[73] = je),
+        (e[74] = Le),
+        (e[75] = De))
+      : (De = e[75]),
+      (ue = De));
+  }
+  let le;
+  e[76] !== W || e[77] !== te || e[78] !== ue
+    ? ((le = n.jsxs("header", { className: E, children: [W, te, ue] })),
+      (e[76] = W),
+      (e[77] = te),
+      (e[78] = ue),
+      (e[79] = le))
+    : (le = e[79]);
+  let ve;
+  e[80] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ve = w(
+        "sand-plugins-detail__desc",
+        me(he.body1, fn.description).className,
+      )),
+      (e[80] = ve))
+    : (ve = e[80]);
+  let ye;
+  e[81] !== s.description
+    ? ((ye = n.jsx("p", { className: ve, children: s.description })),
+      (e[81] = s.description),
+      (e[82] = ye))
+    : (ye = e[82]);
+  let ge;
+  e[83] !== le || e[84] !== ye
+    ? ((ge = n.jsxs("div", { className: X, children: [le, ye] })),
+      (e[83] = le),
+      (e[84] = ye),
+      (e[85] = ge))
+    : (ge = e[85]);
+  let we;
+  e[86] === Symbol.for("react.memo_cache_sentinel")
+    ? ((we = w("sand-9f619 sand-78zum5 sand-dt5ytf sand-ou54vl")), (e[86] = we))
+    : (we = e[86]);
+  let qe;
+  e[87] !== o || e[88] !== l || e[89] !== a || e[90] !== c
+    ? ((qe = a != null ? n.jsx(Ja, { isBusy: c, slots: l, ...o }) : null),
+      (e[87] = o),
+      (e[88] = l),
+      (e[89] = a),
+      (e[90] = c),
+      (e[91] = qe))
+    : (qe = e[91]);
+  let Ie;
+  e[92] !== a
+    ? ((Ie = a != null ? n.jsx(st, { serverId: a.id }) : null),
+      (e[92] = a),
+      (e[93] = Ie))
+    : (Ie = e[93]);
+  let Ce;
+  e[94] !== d || e[95] !== a || e[96] !== c || e[97] !== p
+    ? ((Ce =
+        (d != null || a != null) && p != null
+          ? n.jsx(Xd, { isBusy: c, onEditSetup: p })
+          : null),
+      (e[94] = d),
+      (e[95] = a),
+      (e[96] = c),
+      (e[97] = p),
+      (e[98] = Ce))
+    : (Ce = e[98]);
+  let Me;
+  e[99] !== y
+    ? ((Me = y({ id: "Jkj2bb" })), (e[99] = y), (e[100] = Me))
+    : (Me = e[100]);
+  let Ae;
+  e[101] !== D || e[102] !== Me
+    ? ((Ae = n.jsx(ja, {
+        cardClassName: "sand-plugins-detail__connectors",
+        items: D,
+        label: Me,
+        noun: "connector",
+      })),
+      (e[101] = D),
+      (e[102] = Me),
+      (e[103] = Ae))
+    : (Ae = e[103]);
+  let $e;
+  e[104] !== y
+    ? (($e = y({ id: "PCSkw2" })), (e[104] = y), (e[105] = $e))
+    : ($e = e[105]);
+  let ze;
+  e[106] !== O || e[107] !== $e
+    ? ((ze = n.jsx(ja, {
+        cardClassName: "sand-plugins-detail__skills",
+        items: O,
+        label: $e,
+        noun: "skill",
+      })),
+      (e[106] = O),
+      (e[107] = $e),
+      (e[108] = ze))
+    : (ze = e[108]);
+  let Te;
+  e[109] !== qe ||
+  e[110] !== Ie ||
+  e[111] !== Ce ||
+  e[112] !== Ae ||
+  e[113] !== ze
+    ? ((Te = n.jsxs("div", { className: we, children: [qe, Ie, Ce, Ae, ze] })),
+      (e[109] = qe),
+      (e[110] = Ie),
+      (e[111] = Ce),
+      (e[112] = Ae),
+      (e[113] = ze),
+      (e[114] = Te))
+    : (Te = e[114]);
+  let Fe;
+  return (
+    e[115] !== ge || e[116] !== Te
+      ? ((Fe = n.jsxs("div", { className: q, children: [ge, Te] })),
+        (e[115] = ge),
+        (e[116] = Te),
+        (e[117] = Fe))
+      : (Fe = e[117]),
+    Fe
+  );
+}
+const xa = "••••••••",
+  ai = {
+    intro: {
+      kB7OPa: "sand-9f619",
+      keoZOQ: "sand-dj266r",
+      k71WvV: "sand-14z9mp",
+      k1K539: "sand-at24cr",
+      keTefX: "sand-1lziwak",
+      kMwMTN: "sand-19aaqeu",
+      $$css: !0,
+    },
+  };
+function ti(t, e, s = []) {
+  const a = new Set(s),
+    l = {};
+  for (const d of t) {
+    const i = e[d.key];
+    if (i !== void 0) {
+      l[d.key] = i;
+      continue;
+    }
+    l[d.key] =
+      d.defaultValue !== void 0 && !a.has(d.key)
+        ? d.defaultValue
+        : d.type === "boolean"
+          ? !1
+          : "";
+  }
+  return l;
+}
+function li(t) {
+  return typeof t == "string" ? t.trim().length === 0 : t === void 0;
+}
+function di(t, e) {
+  return t.filter(
+    (s) => s.isRequired === !0 && s.type !== "boolean" && li(e[s.key]),
+  );
+}
+function ii(t, e) {
+  return t.filter((s) => {
+    if ((s.type !== "number" && s.type !== "integer") || s.options != null)
+      return !1;
+    const a = e[s.key];
+    if (typeof a != "string" || a.trim().length === 0) return !1;
+    const l = Number(a);
+    return (
+      !Number.isFinite(l) || (s.type === "integer" && !Number.isInteger(l))
+    );
+  });
+}
+function ri(t, e) {
+  const s = {};
+  for (const a of t) {
+    const l = e[a.key];
+    if (a.type === "boolean") {
+      typeof l == "boolean" && (s[a.key] = l);
+      continue;
+    }
+    if (!(typeof l != "string" || l.trim().length === 0)) {
+      if (a.options != null) {
+        const d = Qt(l);
+        (typeof d == "string" ||
+          typeof d == "number" ||
+          typeof d == "boolean") &&
+          (s[a.key] = d);
+        continue;
+      }
+      if (a.type === "string") {
+        s[a.key] = l.trim();
+        continue;
+      }
+      s[a.key] = Number(l);
+    }
+  }
+  return s;
+}
+function ci(t) {
+  const e = J.c(52),
+    {
+      intro: s,
+      fields: a,
+      unsupportedFieldKeys: l,
+      initialValues: d,
+      configuredKeys: i,
+      submitLabel: c,
+      isBusy: u,
+      onSubmit: o,
+    } = t,
+    { _: m } = re(),
+    r = Q.useId();
+  let f;
+  e[0] !== i || e[1] !== a || e[2] !== d
+    ? ((f = () => ti(a, d, i)), (e[0] = i), (e[1] = a), (e[2] = d), (e[3] = f))
+    : (f = e[3]);
+  const [p, g] = Q.useState(f),
+    [h, y] = Q.useState(!1);
+  let b, j, k, v, S, N, z;
+  if (
+    e[4] !== m ||
+    e[5] !== i ||
+    e[6] !== a ||
+    e[7] !== r ||
+    e[8] !== s ||
+    e[9] !== o ||
+    e[10] !== h ||
+    e[11] !== l ||
+    e[12] !== p
+  ) {
+    const R = di(a, p),
+      $ = ii(a, p),
+      C = new Set(R.map(mi)),
+      M = new Set($.map(ui));
+    let D;
+    e[20] !== i ? ((D = i ?? []), (e[20] = i), (e[21] = D)) : (D = e[21]);
+    let U;
+    e[22] !== D ? ((U = new Set(D)), (e[22] = D), (e[23] = U)) : (U = e[23]);
+    const O = U;
+    let P;
+    e[24] === Symbol.for("react.memo_cache_sentinel")
+      ? ((P = (q, W) => {
+          g((H) => ({ ...H, [q]: W }));
+        }),
+        (e[24] = P))
+      : (P = e[24]);
+    const Z = P,
+      K = (q) => {
+        if ((q.preventDefault(), R.length > 0 || $.length > 0)) {
+          y(!0);
+          return;
+        }
+        o(ri(a, p));
+      };
+    (e[25] === Symbol.for("react.memo_cache_sentinel")
+      ? ((k = { className: "sand-9f619 sand-78zum5 sand-dt5ytf sand-ou54vl" }),
+        (e[25] = k))
+      : (k = e[25]),
+      (v = K));
+    let V;
+    e[26] === Symbol.for("react.memo_cache_sentinel")
+      ? ((V = me(he.body1, ai.intro)), (e[26] = V))
+      : (V = e[26]);
+    let F;
+    (e[27] !== O.size
+      ? ((F =
+          O.size > 0
+            ? n.jsxs(n.Fragment, {
+                children: [" ", n.jsx(se, { id: "+CwemP" })],
+              })
+            : null),
+        (e[27] = O.size),
+        (e[28] = F))
+      : (F = e[28]),
+      e[29] !== s || e[30] !== F
+        ? ((S = n.jsxs("p", { ...V, children: [s, F] })),
+          (e[29] = s),
+          (e[30] = F),
+          (e[31] = S))
+        : (S = e[31]));
+    let X;
+    e[32] === Symbol.for("react.memo_cache_sentinel")
+      ? ((X = { className: "sand-9f619 sand-78zum5 sand-dt5ytf sand-1af02g3" }),
+        (e[32] = X))
+      : (X = e[32]);
+    const E = a.map((q) => {
+      const W = `${r}-${q.key}`,
+        H = h && (C.has(q.key) || M.has(q.key)),
+        ee = O.has(q.key),
+        Y = p[q.key];
+      return n.jsxs(
+        "div",
+        {
+          className: "sand-9f619 sand-78zum5 sand-dt5ytf sand-1jnr06f",
+          children: [
+            n.jsxs("label", {
+              htmlFor: W,
+              className:
+                "sand-9f619 sand-4z9k3i sand-d4r4e8 sand-12oo3zp sand-1rhlpx6 sand-1wd3ewq",
+              children: [
+                q.label,
+                q.isRequired === !0
+                  ? null
+                  : n.jsxs("span", {
+                      className: "sand-4b2ntj sand-1k6tqyu",
+                      children: [" ", n.jsx(se, { id: "NzluOx" })],
+                    }),
+              ],
+            }),
+            q.type === "boolean"
+              ? n.jsx("input", {
+                  checked: Y === !0,
+                  id: W,
+                  onChange: (A) => Z(q.key, A.currentTarget.checked),
+                  type: "checkbox",
+                  className:
+                    "sand-9f619 sand-qcrz7y sand-1kky2od sand-lup9mm sand-r9ek0c sand-4xkrpc",
+                })
+              : q.options != null
+                ? n.jsxs("select", {
+                    "aria-invalid": H || void 0,
+                    id: W,
+                    onChange: (A) => Z(q.key, A.currentTarget.value),
+                    value: typeof Y == "string" ? Y : "",
+                    ...{
+                      0: {
+                        className:
+                          "sand-9f619 sand-10w6t97 sand-exx8yu sand-2vl965 sand-18d9i69 sand-e2zdcy sand-mkeg23 sand-1y0btm7 sand-9r1u3d sand-1ubt8my sand-ur7f20 sand-1t137rt sand-i07v4r sand-1wd3ewq sand-jb2p0i sand-4z9k3i sand-12oo3zp sand-ltfok3",
+                      },
+                      1: {
+                        className:
+                          "sand-9f619 sand-10w6t97 sand-exx8yu sand-2vl965 sand-18d9i69 sand-e2zdcy sand-mkeg23 sand-1y0btm7 sand-ur7f20 sand-1t137rt sand-i07v4r sand-1wd3ewq sand-jb2p0i sand-4z9k3i sand-12oo3zp sand-ltfok3 sand-yerb3",
+                      },
+                    }[!!H << 0],
+                    children: [
+                      n.jsx("option", {
+                        value: "",
+                        children: ee
+                          ? xa
+                          : m({ id: "02ePaq", values: { 0: q.label } }),
+                      }),
+                      q.options.map(oi),
+                    ],
+                  })
+                : n.jsx("input", {
+                    "aria-invalid": H || void 0,
+                    id: W,
+                    onChange: (A) => Z(q.key, A.currentTarget.value),
+                    placeholder: ee ? xa : (q.placeholder ?? q.key),
+                    spellCheck: !1,
+                    type:
+                      q.type === "number" || q.type === "integer"
+                        ? "number"
+                        : q.isSecret === !0
+                          ? "password"
+                          : "text",
+                    value: typeof Y == "string" ? Y : "",
+                    ...{
+                      0: {
+                        className:
+                          "sand-9f619 sand-10w6t97 sand-exx8yu sand-2vl965 sand-18d9i69 sand-e2zdcy sand-mkeg23 sand-1y0btm7 sand-9r1u3d sand-1ubt8my sand-ur7f20 sand-1t137rt sand-i07v4r sand-1wd3ewq sand-jb2p0i sand-4z9k3i sand-12oo3zp sand-ltfok3",
+                      },
+                      1: {
+                        className:
+                          "sand-9f619 sand-10w6t97 sand-exx8yu sand-2vl965 sand-18d9i69 sand-e2zdcy sand-mkeg23 sand-1y0btm7 sand-ur7f20 sand-1t137rt sand-i07v4r sand-1wd3ewq sand-jb2p0i sand-4z9k3i sand-12oo3zp sand-ltfok3 sand-yerb3",
+                      },
+                    }[!!H << 0],
+                  }),
+            h && C.has(q.key)
+              ? n.jsx("p", {
+                  className:
+                    "sand-9f619 sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-fifm61 sand-1d3mw78 sand-pmgbkh",
+                  children: n.jsx(se, { id: "MbjbEk", values: { 0: q.label } }),
+                })
+              : h && M.has(q.key)
+                ? n.jsx("p", {
+                    className:
+                      "sand-9f619 sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-fifm61 sand-1d3mw78 sand-pmgbkh",
+                    children:
+                      q.type === "integer"
+                        ? n.jsx(se, { id: "zbchr9", values: { 0: q.label } })
+                        : n.jsx(se, { id: "mUusO3", values: { 0: q.label } }),
+                  })
+                : q.hint != null
+                  ? n.jsx("p", {
+                      title: q.hint,
+                      className:
+                        "sand-9f619 sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-j0a0fe sand-fifm61 sand-1d3mw78 sand-4b2ntj",
+                      children: q.hint,
+                    })
+                  : null,
+          ],
+        },
+        q.key,
+      );
+    });
+    (e[33] !== E
+      ? ((N = n.jsx("div", { ...X, children: E })), (e[33] = E), (e[34] = N))
+      : (N = e[34]),
+      e[35] !== l
+        ? ((z =
+            l != null && l.length > 0
+              ? n.jsx("p", {
+                  className:
+                    "sand-9f619 sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-j0a0fe sand-fifm61 sand-1d3mw78 sand-4b2ntj",
+                  children: n.jsx(se, { id: "Xjpu13", values: { 0: Ca(l) } }),
+                })
+              : null),
+          (e[35] = l),
+          (e[36] = z))
+        : (z = e[36]),
+      e[37] === Symbol.for("react.memo_cache_sentinel")
+        ? ((b = {
+            className:
+              "sand-9f619 sand-78zum5 sand-6s0dn4 sand-13a6bvl sand-167g77z",
+          }),
+          (e[37] = b))
+        : (b = e[37]),
+      (j =
+        R.length > 0 && h
+          ? n.jsx(Se, {
+              as: "span",
+              color: "tertiary",
+              size: "sm",
+              children: m({ id: "Cu9Y0x", values: { 0: R.length } }),
+            })
+          : null),
+      (e[4] = m),
+      (e[5] = i),
+      (e[6] = a),
+      (e[7] = r),
+      (e[8] = s),
+      (e[9] = o),
+      (e[10] = h),
+      (e[11] = l),
+      (e[12] = p),
+      (e[13] = b),
+      (e[14] = j),
+      (e[15] = k),
+      (e[16] = v),
+      (e[17] = S),
+      (e[18] = N),
+      (e[19] = z));
+  } else
+    ((b = e[13]),
+      (j = e[14]),
+      (k = e[15]),
+      (v = e[16]),
+      (S = e[17]),
+      (N = e[18]),
+      (z = e[19]));
+  let _;
+  e[38] !== u || e[39] !== c
+    ? ((_ = n.jsx(Qe, {
+        disabled: u,
+        size: "sm",
+        type: "submit",
+        variant: "primary",
+        children: c,
+      })),
+      (e[38] = u),
+      (e[39] = c),
+      (e[40] = _))
+    : (_ = e[40]);
+  let I;
+  e[41] !== b || e[42] !== j || e[43] !== _
+    ? ((I = n.jsxs("div", { ...b, children: [j, _] })),
+      (e[41] = b),
+      (e[42] = j),
+      (e[43] = _),
+      (e[44] = I))
+    : (I = e[44]);
+  let T;
+  return (
+    e[45] !== I ||
+    e[46] !== k ||
+    e[47] !== v ||
+    e[48] !== S ||
+    e[49] !== N ||
+    e[50] !== z
+      ? ((T = n.jsxs("form", { ...k, onSubmit: v, children: [S, N, z, I] })),
+        (e[45] = I),
+        (e[46] = k),
+        (e[47] = v),
+        (e[48] = S),
+        (e[49] = N),
+        (e[50] = z),
+        (e[51] = T))
+      : (T = e[51]),
+    T
+  );
+}
+function oi(t) {
+  return n.jsx("option", { value: t.rawValue, children: t.label }, t.rawValue);
+}
+function ui(t) {
+  return t.key;
+}
+function mi(t) {
+  return t.key;
+}
+async function fi(t) {
+  try {
+    const e = await t();
+    return e.teams.length > 0
+      ? { kind: "ready", teams: e.teams }
+      : {
+          kind: "unavailable",
+          reason: Xt({
+            fallback: e.unavailableReason ?? Be._({ id: "jqXlJu" }),
+            ...(e.unavailableReasonKind === void 0
+              ? {}
+              : { kind: e.unavailableReasonKind }),
+          }),
+        };
+  } catch (e) {
+    return {
+      kind: "unavailable",
+      reason: e instanceof Error ? e.message : String(e),
+    };
+  }
+}
+function pi(t) {
+  const e = J.c(73),
+    {
+      skill: s,
+      agentId: a,
+      isEnabled: l,
+      onNotice: d,
+      onSkillMoved: i,
+      onClosed: c,
+    } = t,
+    { _: u } = re(),
+    o = Un(),
+    m = ss(o.publishSkill),
+    r = ss(o.resyncPublishedSkill),
+    f = ss(o.unpublishSkill),
+    p = ss(o.skillPublishTargets),
+    { status: g, copy: h } = Aa();
+  let y;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((y = { kind: "loading" }), (e[0] = y))
+    : (y = e[0]);
+  const [b, j] = Q.useState(y);
+  let k;
+  e[1] === Symbol.for("react.memo_cache_sentinel")
+    ? ((k = { durationMs: 2e3 }), (e[1] = k))
+    : (k = e[1]);
+  const [v, S] = Yt(k);
+  if (!l) return null;
+  const N = s.source === "plugin" && s.publishedByCurrentUser,
+    z = s.pluginId;
+  let _ = null;
+  if (m.isPending) {
+    let B;
+    (e[2] !== u
+      ? ((B = u({ id: "baaWCJ" })), (e[2] = u), (e[3] = B))
+      : (B = e[3]),
+      (_ = B));
+  } else if (r.isPending) {
+    let B;
+    (e[4] !== u
+      ? ((B = u({ id: "ZDY7Fy" })), (e[4] = u), (e[5] = B))
+      : (B = e[5]),
+      (_ = B));
+  } else if (f.isPending) {
+    let B;
+    (e[6] !== u
+      ? ((B = u({ id: "jvDsYK" })), (e[6] = u), (e[7] = B))
+      : (B = e[7]),
+      (_ = B));
+  }
+  const I = _ != null;
+  let T;
+  e[8] !== s.description
+    ? ((T = s.description.trim()), (e[8] = s.description), (e[9] = T))
+    : (T = e[9]);
+  const R = T.length === 0;
+  let $;
+  e[10] !== u
+    ? (($ = u({ id: "y1eoq1" })), (e[10] = u), (e[11] = $))
+    : ($ = e[11]);
+  let C = $;
+  if (g === "copied") {
+    let B;
+    (e[12] !== u
+      ? ((B = u({ id: "6V3Ea3" })), (e[12] = u), (e[13] = B))
+      : (B = e[13]),
+      (C = B));
+  } else if (g === "error") {
+    let B;
+    (e[14] !== u
+      ? ((B = u({ id: "9sj0G8" })), (e[14] = u), (e[15] = B))
+      : (B = e[15]),
+      (C = B));
+  }
+  let M;
+  e[16] !== p
+    ? ((M = async () => {
+        (j({ kind: "loading" }), j(await fi(() => p.run())));
+      }),
+      (e[16] = p),
+      (e[17] = M))
+    : (M = e[17]);
+  const D = M;
+  let U;
+  e[18] !== R || e[19] !== N || e[20] !== D
+    ? ((U = (B) => {
+        B && !N && !R && D();
+      }),
+      (e[18] = R),
+      (e[19] = N),
+      (e[20] = D),
+      (e[21] = U))
+    : (U = e[21]);
+  const O = U;
+  let P;
+  e[22] !== u ||
+  e[23] !== a ||
+  e[24] !== d ||
+  e[25] !== i ||
+  e[26] !== m ||
+  e[27] !== s.id ||
+  e[28] !== s.name
+    ? ((P = async (B) => {
+        (d(null),
+          await Ve(async () => {
+            const ie = await m.run({ agentId: a, workflowId: s.id, teamId: B });
+            if (ie.promotedWorkflowId != null) {
+              i?.(ie.promotedWorkflowId);
+              return;
+            }
+            d({
+              kind: "error",
+              text: u({ id: "Gd7j9e", values: { 0: s.name } }),
+            });
+          }, d));
+      }),
+      (e[22] = u),
+      (e[23] = a),
+      (e[24] = d),
+      (e[25] = i),
+      (e[26] = m),
+      (e[27] = s.id),
+      (e[28] = s.name),
+      (e[29] = P))
+    : (P = e[29]);
+  const Z = P;
+  let K;
+  e[30] !== a || e[31] !== S || e[32] !== d || e[33] !== r || e[34] !== s.id
+    ? ((K = async () => {
+        (d(null),
+          await Ve(async () => {
+            (await r.run({ agentId: a, workflowId: s.id }), S());
+          }, d));
+      }),
+      (e[30] = a),
+      (e[31] = S),
+      (e[32] = d),
+      (e[33] = r),
+      (e[34] = s.id),
+      (e[35] = K))
+    : (K = e[35]);
+  const V = K;
+  let F;
+  e[36] !== a ||
+  e[37] !== c ||
+  e[38] !== d ||
+  e[39] !== i ||
+  e[40] !== s.id ||
+  e[41] !== f
+    ? ((F = async () => {
+        (d(null),
+          await Ve(async () => {
+            const B = await f.run({ agentId: a, workflowId: s.id });
+            if (B.restoredWorkflowId != null) {
+              i?.(B.restoredWorkflowId);
+              return;
+            }
+            c?.();
+          }, d));
+      }),
+      (e[36] = a),
+      (e[37] = c),
+      (e[38] = d),
+      (e[39] = i),
+      (e[40] = s.id),
+      (e[41] = f),
+      (e[42] = F))
+    : (F = e[42]);
+  const X = F;
+  let E;
+  e[43] !== _ || e[44] !== N || e[45] !== v
+    ? ((E = n.jsx(hi, { busyLabel: _, isPublished: N, isSyncConfirmed: v })),
+      (e[43] = _),
+      (e[44] = N),
+      (e[45] = v),
+      (e[46] = E))
+    : (E = e[46]);
+  let q;
+  e[47] !== I || e[48] !== E
+    ? ((q = n.jsx(Qe, {
+        "aria-busy": I,
+        disabled: I,
+        size: "sm",
+        type: "button",
+        variant: "outline",
+        children: E,
+      })),
+      (e[47] = I),
+      (e[48] = E),
+      (e[49] = q))
+    : (q = e[49]);
+  let W;
+  e[50] !== I || e[51] !== q
+    ? ((W = n.jsx(Ne.Trigger, { disabled: I, children: q })),
+      (e[50] = I),
+      (e[51] = q),
+      (e[52] = W))
+    : (W = e[52]);
+  let H;
+  e[53] !== u
+    ? ((H = u({ id: "rYZrJD" })), (e[53] = u), (e[54] = H))
+    : (H = e[54]);
+  let ee;
+  e[55] !== u ||
+  e[56] !== h ||
+  e[57] !== C ||
+  e[58] !== Z ||
+  e[59] !== V ||
+  e[60] !== X ||
+  e[61] !== R ||
+  e[62] !== N ||
+  e[63] !== z ||
+  e[64] !== b
+    ? ((ee =
+        N && z != null
+          ? n.jsxs(Ne.Section, {
+              children: [
+                n.jsx(Ne.Item, {
+                  description: u({ id: "eFMPR0" }),
+                  leading: n.jsx(pe, { name: "refresh", size: "base" }),
+                  onSelect: () => {
+                    V();
+                  },
+                  children: n.jsx(se, { id: "Nu4DdT" }),
+                }),
+                n.jsx(Ne.Item, {
+                  closeOnSelect: !1,
+                  leading: n.jsx(pe, { name: "copy", size: "base" }),
+                  onSelect: () => h(Jt(z)),
+                  children: C,
+                }),
+                n.jsx(Ne.Item, {
+                  leading: n.jsx(pe, { name: "lock", size: "base" }),
+                  onSelect: () => {
+                    X();
+                  },
+                  children: n.jsx(se, { id: "4DLZUa" }),
+                }),
+              ],
+            })
+          : n.jsx(yi, { isDescriptionMissing: R, onPublish: Z, targets: b })),
+      (e[55] = u),
+      (e[56] = h),
+      (e[57] = C),
+      (e[58] = Z),
+      (e[59] = V),
+      (e[60] = X),
+      (e[61] = R),
+      (e[62] = N),
+      (e[63] = z),
+      (e[64] = b),
+      (e[65] = ee))
+    : (ee = e[65]);
+  let Y;
+  e[66] !== H || e[67] !== ee
+    ? ((Y = n.jsx(Ne.Content, {
+        "aria-label": H,
+        minWidth: 240,
+        size: "md",
+        children: ee,
+      })),
+      (e[66] = H),
+      (e[67] = ee),
+      (e[68] = Y))
+    : (Y = e[68]);
+  let A;
+  return (
+    e[69] !== O || e[70] !== W || e[71] !== Y
+      ? ((A = n.jsxs(Ne, {
+          onOpenChange: O,
+          placement: "bottom-end",
+          children: [W, Y],
+        })),
+        (e[69] = O),
+        (e[70] = W),
+        (e[71] = Y),
+        (e[72] = A))
+      : (A = e[72]),
+    A
+  );
+}
+function hi(t) {
+  const e = J.c(11),
+    { busyLabel: s, isSyncConfirmed: a, isPublished: l } = t,
+    { _: d } = re();
+  if (s != null) {
+    let m;
+    e[0] === Symbol.for("react.memo_cache_sentinel")
+      ? ((m = n.jsx(pe, {
+          "aria-hidden": !0,
+          modifier: "spin",
+          name: "loading",
+          size: "xs",
+        })),
+        (e[0] = m))
+      : (m = e[0]);
+    let r;
+    return (
+      e[1] !== s
+        ? ((r = n.jsxs(n.Fragment, { children: [m, s] })),
+          (e[1] = s),
+          (e[2] = r))
+        : (r = e[2]),
+      r
+    );
+  }
+  if (a) {
+    let m;
+    return (
+      e[3] === Symbol.for("react.memo_cache_sentinel")
+        ? ((m = n.jsxs(n.Fragment, {
+            children: [
+              n.jsx(pe, { "aria-hidden": !0, name: "check", size: "xs" }),
+              n.jsx(se, { id: "N2FcBE" }),
+            ],
+          })),
+          (e[3] = m))
+        : (m = e[3]),
+      m
+    );
+  }
+  let i;
+  e[4] === Symbol.for("react.memo_cache_sentinel")
+    ? ((i = n.jsx(pe, { "aria-hidden": !0, name: "link", size: "xs" })),
+      (e[4] = i))
+    : (i = e[4]);
+  let c;
+  e[5] !== d || e[6] !== l
+    ? ((c = d(l ? { id: "u3wRF+" } : { id: "EEYbdt" })),
+      (e[5] = d),
+      (e[6] = l),
+      (e[7] = c))
+    : (c = e[7]);
+  let u;
+  e[8] === Symbol.for("react.memo_cache_sentinel")
+    ? ((u = n.jsx(pe, { "aria-hidden": !0, name: "chevron-down", size: "xs" })),
+      (e[8] = u))
+    : (u = e[8]);
+  let o;
+  return (
+    e[9] !== c
+      ? ((o = n.jsxs(n.Fragment, { children: [i, c, u] })),
+        (e[9] = c),
+        (e[10] = o))
+      : (o = e[10]),
+    o
+  );
+}
+function yi(t) {
+  const e = J.c(28),
+    { targets: s, isDescriptionMissing: a, onPublish: l } = t,
+    { _: d } = re();
+  if (a) {
+    let r;
+    e[0] !== d
+      ? ((r = d({ id: "cX+3Oq" })), (e[0] = d), (e[1] = r))
+      : (r = e[1]);
+    let f;
+    e[2] === Symbol.for("react.memo_cache_sentinel")
+      ? ((f = n.jsx(se, { id: "lz2dGc" })), (e[2] = f))
+      : (f = e[2]);
+    let p;
+    return (
+      e[3] !== r
+        ? ((p = n.jsx(Ne.Section, {
+            children: n.jsx(Ne.Item, {
+              description: r,
+              disabled: !0,
+              children: f,
+            }),
+          })),
+          (e[3] = r),
+          (e[4] = p))
+        : (p = e[4]),
+      p
+    );
+  }
+  if (s.kind === "loading") {
+    let r;
+    return (
+      e[5] === Symbol.for("react.memo_cache_sentinel")
+        ? ((r = n.jsx(Ne.Section, { children: n.jsx(Ne.LoadingState, {}) })),
+          (e[5] = r))
+        : (r = e[5]),
+      r
+    );
+  }
+  if (s.kind === "unavailable") {
+    let r;
+    return (
+      e[6] !== s.reason
+        ? ((r = n.jsx(Ne.Section, {
+            children: n.jsx(Ne.Item, { disabled: !0, children: s.reason }),
+          })),
+          (e[6] = s.reason),
+          (e[7] = r))
+        : (r = e[7]),
+      r
+    );
+  }
+  const [i, ...c] = s.teams;
+  if (i != null && c.length === 0) {
+    let r;
+    e[8] !== d
+      ? ((r = d({ id: "Z8YJXX" })), (e[8] = d), (e[9] = r))
+      : (r = e[9]);
+    let f;
+    e[10] === Symbol.for("react.memo_cache_sentinel")
+      ? ((f = n.jsx(pe, { name: "share", size: "base" })), (e[10] = f))
+      : (f = e[10]);
+    let p;
+    e[11] !== l || e[12] !== i.teamId
+      ? ((p = () => {
+          l(i.teamId);
+        }),
+        (e[11] = l),
+        (e[12] = i.teamId),
+        (e[13] = p))
+      : (p = e[13]);
+    let g;
+    e[14] === Symbol.for("react.memo_cache_sentinel")
+      ? ((g = n.jsx(se, { id: "EEYbdt" })), (e[14] = g))
+      : (g = e[14]);
+    let h;
+    return (
+      e[15] !== r || e[16] !== p
+        ? ((h = n.jsx(Ne.Section, {
+            children: n.jsx(Ne.Item, {
+              description: r,
+              leading: f,
+              onSelect: p,
+              children: g,
+            }),
+          })),
+          (e[15] = r),
+          (e[16] = p),
+          (e[17] = h))
+        : (h = e[17]),
+      h
+    );
+  }
+  let u;
+  e[18] !== d
+    ? ((u = d({ id: "VmT3pr" })), (e[18] = d), (e[19] = u))
+    : (u = e[19]);
+  let o;
+  if (e[20] !== l || e[21] !== s.teams) {
+    let r;
+    (e[23] !== l
+      ? ((r = (f) =>
+          n.jsx(
+            Ne.Item,
+            {
+              leading: n.jsx(pe, { name: "people", size: "base" }),
+              onSelect: () => {
+                l(f.teamId);
+              },
+              children: f.name,
+            },
+            f.teamId,
+          )),
+        (e[23] = l),
+        (e[24] = r))
+      : (r = e[24]),
+      (o = s.teams.map(r)),
+      (e[20] = l),
+      (e[21] = s.teams),
+      (e[22] = o));
+  } else o = e[22];
+  let m;
+  return (
+    e[25] !== u || e[26] !== o
+      ? ((m = n.jsx(Ne.Section, { title: u, children: o })),
+        (e[25] = u),
+        (e[26] = o),
+        (e[27] = m))
+      : (m = e[27]),
+    m
+  );
+}
+const js = {
+  deleteDanger: {
+    kWkggS: "sand-6y9aml sand-tly4hf",
+    kMwMTN: "sand-6rl5ky",
+    $$css: !0,
+  },
+  description: {
+    kB7OPa: "sand-9f619",
+    keoZOQ: "sand-dj266r",
+    k71WvV: "sand-14z9mp",
+    k1K539: "sand-at24cr",
+    keTefX: "sand-1lziwak",
+    kMwMTN: "sand-19aaqeu",
+    $$css: !0,
+  },
+  input: {
+    kB7OPa: "sand-9f619",
+    kzqmXN: "sand-h8yej3",
+    kLKAdn: "sand-z9dl7a",
+    kwRFfy: "sand-v54qhq",
+    kGO01o: "sand-sag5q8",
+    kZCmMZ: "sand-f7dkkf",
+    kMzoRj: "sand-mkeg23",
+    ksu8eU: "sand-1y0btm7",
+    kVAM5u: "sand-9r1u3d sand-1ubt8my",
+    kaIpWk: "sand-ixl9f9",
+    k3XXqK: "sand-1t137rt",
+    kWkggS: "sand-i07v4r",
+    kMwMTN: "sand-1wd3ewq",
+    kMv6JI: "sand-jb2p0i",
+    $$css: !0,
+  },
+  textarea: {
+    kB7OPa: "sand-9f619",
+    kzqmXN: "sand-h8yej3",
+    kOwNse: "sand-5f5z56",
+    kAzted: "sand-jgen18",
+    kskxy: "sand-1sslpiy",
+    kHenm0: "sand-tt52l0",
+    kORKVm: "sand-1odjw0f",
+    kLKAdn: "sand-z9dl7a",
+    kwRFfy: "sand-v54qhq",
+    kGO01o: "sand-sag5q8",
+    kZCmMZ: "sand-f7dkkf",
+    kMzoRj: "sand-mkeg23",
+    ksu8eU: "sand-1y0btm7",
+    kVAM5u: "sand-9r1u3d sand-1ubt8my",
+    kaIpWk: "sand-ixl9f9",
+    k3XXqK: "sand-1t137rt",
+    kWkggS: "sand-i07v4r",
+    kMwMTN: "sand-1wd3ewq",
+    kMv6JI: "sand-jb2p0i",
+    kGuDYH: "sand-if65rj",
+    kLWn49: "sand-1fc57z9",
+    kb6lSQ: "sand-12oo3zp",
+    $$css: !0,
+  },
+  footerRule: {
+    kEafiO: "sand-t8cgyo",
+    kPef9Z: "sand-13fuv20",
+    kLZC3w: "sand-s351rv",
+    $$css: !0,
+  },
+};
+function gi(t) {
+  const e = J.c(135),
+    { skill: s, agentId: a, onNotice: l, onClosed: d, onSkillMoved: i } = t,
+    { _: c } = re(),
+    u = el(),
+    o = Un(),
+    m = pn("publish_user_skills"),
+    r = Q.useId(),
+    f = ss(o.update),
+    p = ss(o.remove),
+    [g, h] = Q.useState(s.name),
+    [y, b] = Q.useState(s.description),
+    [j, k] = Q.useState(s.body),
+    [v, S] = Q.useState(!1),
+    N = Q.useRef(0);
+  let z;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((z = () => {
+        ((N.current = N.current + 1), S(!1));
+      }),
+      (e[0] = z))
+    : (z = e[0]);
+  const _ = z,
+    [I, T] = Q.useState(s);
+  s !== I &&
+    (T(s),
+    (s.name !== I.name ||
+      s.description !== I.description ||
+      s.body !== I.body) &&
+      (h(s.name), b(s.description), k(s.body)));
+  const R = g !== s.name || y !== s.description || j !== s.body,
+    $ = f.isPending || p.isPending,
+    C = s.source === "plugin",
+    M = s.source === "managed";
+  let D;
+  e[1] !== c ? ((D = c({ id: "V1Vjra" })), (e[1] = c), (e[2] = D)) : (D = e[2]);
+  let U = D;
+  if (M) {
+    let ce;
+    (e[3] !== c
+      ? ((ce = c({ id: "7eKKjp" })), (e[3] = c), (e[4] = ce))
+      : (ce = e[4]),
+      (U = ce));
+  } else if (C) {
+    let ce;
+    (e[5] !== c
+      ? ((ce = c({ id: "quCEII" })), (e[5] = c), (e[6] = ce))
+      : (ce = e[6]),
+      (U = ce));
+  }
+  let O;
+  e[7] !== y ? ((O = y.trim()), (e[7] = y), (e[8] = O)) : (O = e[8]);
+  const P = O.length === 0;
+  let Z;
+  e[9] !== a ||
+  e[10] !== j ||
+  e[11] !== $ ||
+  e[12] !== P ||
+  e[13] !== R ||
+  e[14] !== M ||
+  e[15] !== g
+    ? ((Z =
+        !M &&
+        a != null &&
+        R &&
+        g.trim().length > 0 &&
+        !P &&
+        j.trim().length > 0 &&
+        !$),
+      (e[9] = a),
+      (e[10] = j),
+      (e[11] = $),
+      (e[12] = P),
+      (e[13] = R),
+      (e[14] = M),
+      (e[15] = g),
+      (e[16] = Z))
+    : (Z = e[16]);
+  const K = Z;
+  let V;
+  e[17] !== a ||
+  e[18] !== j ||
+  e[19] !== y ||
+  e[20] !== g ||
+  e[21] !== l ||
+  e[22] !== f ||
+  e[23] !== s.id ||
+  e[24] !== s.sourceRef ||
+  e[25] !== s.trigger
+    ? ((V = async () => {
+        if (a == null) return;
+        const ce = g.trim(),
+          Is = y.trim(),
+          ms = N.current;
+        (l(null),
+          await Ve(async () => {
+            (await f.run({
+              agentId: a,
+              workflowId: s.id,
+              spec: {
+                name: ce,
+                description: Is,
+                body: j,
+                trigger: s.trigger,
+                sourceRef: s.sourceRef,
+              },
+            }),
+              N.current === ms && (h(ce), b(Is), S(!0)));
+          }, l));
+      }),
+      (e[17] = a),
+      (e[18] = j),
+      (e[19] = y),
+      (e[20] = g),
+      (e[21] = l),
+      (e[22] = f),
+      (e[23] = s.id),
+      (e[24] = s.sourceRef),
+      (e[25] = s.trigger),
+      (e[26] = V))
+    : (V = e[26]);
+  const F = V;
+  let X;
+  e[27] === Symbol.for("react.memo_cache_sentinel")
+    ? ((X = n.jsx(se, { id: "tfDRzk" })), (e[27] = X))
+    : (X = e[27]);
+  let E = X;
+  if (f.isPending) {
+    let ce;
+    (e[28] === Symbol.for("react.memo_cache_sentinel")
+      ? ((ce = n.jsx(se, { id: "uF9ruK" })), (e[28] = ce))
+      : (ce = e[28]),
+      (E = ce));
+  } else if (v) {
+    let ce;
+    (e[29] === Symbol.for("react.memo_cache_sentinel")
+      ? ((ce = n.jsx(se, { id: "idD8Ev" })), (e[29] = ce))
+      : (ce = e[29]),
+      (E = ce));
+  }
+  let q;
+  e[30] !== c ||
+  e[31] !== a ||
+  e[32] !== u ||
+  e[33] !== d ||
+  e[34] !== l ||
+  e[35] !== p ||
+  e[36] !== s.id ||
+  e[37] !== s.name
+    ? ((q = async () => {
+        a != null &&
+          (l(null),
+          await u({
+            title: c({ id: "9fF32Y" }),
+            description: c({ id: "2xOCJW" }),
+            confirmLabel: c({ id: "rvJGTw" }),
+            cancelLabel: c({ id: "dEgA5A" }),
+            destructive: !0,
+            perform: async () => (
+              await p.run({ agentId: a, workflowId: s.id }),
+              l({
+                kind: "success",
+                text: c({ id: "NHHKzo", values: { 0: s.name } }),
+              }),
+              d?.(),
+              null
+            ),
+          }));
+      }),
+      (e[30] = c),
+      (e[31] = a),
+      (e[32] = u),
+      (e[33] = d),
+      (e[34] = l),
+      (e[35] = p),
+      (e[36] = s.id),
+      (e[37] = s.name),
+      (e[38] = q))
+    : (q = e[38]);
+  const W = q;
+  let H;
+  e[39] === Symbol.for("react.memo_cache_sentinel")
+    ? ((H = w(
+        "sand-plugins-skill-detail",
+        "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-dt5ytf sand-2lwn1j",
+      )),
+      (e[39] = H))
+    : (H = e[39]);
+  let ee, Y, A;
+  e[40] === Symbol.for("react.memo_cache_sentinel")
+    ? ((A = w("sand-9f619 sand-78zum5 sand-dt5ytf sand-1665zp3")),
+      (ee = w("sand-9f619 sand-78zum5 sand-dt5ytf sand-1v2ro7d")),
+      (Y = w("sand-9f619 sand-78zum5 sand-6s0dn4 sand-1v2ro7d")),
+      (e[40] = ee),
+      (e[41] = Y),
+      (e[42] = A))
+    : ((ee = e[40]), (Y = e[41]), (A = e[42]));
+  let B, ie;
+  e[43] === Symbol.for("react.memo_cache_sentinel")
+    ? ((B = n.jsx("span", {
+        "aria-hidden": !0,
+        className: w(
+          "sand-9f619 sand-78zum5 sand-6s0dn4 sand-l56j7k sand-15yg21f sand-nnlda6 sand-2lah0s sand-4hv7ue sand-1y0btm7 sand-qz0629 sand-1kogg8i sand-r7npkh",
+        ),
+        children: n.jsx(pe, { color: "primary", name: "file-list", size: 18 }),
+      })),
+      (ie = w(
+        "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-dt5ytf sand-195vfkc sand-euugli",
+      )),
+      (e[43] = B),
+      (e[44] = ie))
+    : ((B = e[43]), (ie = e[44]));
+  let ae;
+  e[45] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ae = w(
+        "sand-9f619 sand-dj266r sand-14z9mp sand-at24cr sand-1lziwak sand-19d36u7 sand-1o2sk6j sand-1deyeav sand-1rhlpx6 sand-1wd3ewq",
+      )),
+      (e[45] = ae))
+    : (ae = e[45]);
+  let te;
+  e[46] !== s.name
+    ? ((te = n.jsx(Se, { as: "h3", className: ae, children: s.name })),
+      (e[46] = s.name),
+      (e[47] = te))
+    : (te = e[47]);
+  let ue;
+  e[48] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ue = w("sand-9f619 sand-4z9k3i sand-1d3mw78 sand-19aaqeu")),
+      (e[48] = ue))
+    : (ue = e[48]);
+  let le;
+  e[49] !== U
+    ? ((le = n.jsx("span", { className: ue, children: U })),
+      (e[49] = U),
+      (e[50] = le))
+    : (le = e[50]);
+  let ve;
+  e[51] !== te || e[52] !== le
+    ? ((ve = n.jsxs("div", { className: ie, children: [te, le] })),
+      (e[51] = te),
+      (e[52] = le),
+      (e[53] = ve))
+    : (ve = e[53]);
+  let ye;
+  e[54] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ye = w("sand-9f619 sand-78zum5 sand-6s0dn4 sand-2lah0s sand-167g77z")),
+      (e[54] = ye))
+    : (ye = e[54]);
+  let ge;
+  e[55] !== a ||
+  e[56] !== m ||
+  e[57] !== M ||
+  e[58] !== d ||
+  e[59] !== l ||
+  e[60] !== i ||
+  e[61] !== s
+    ? ((ge = M
+        ? null
+        : n.jsx(pi, {
+            agentId: a,
+            isEnabled: m,
+            onNotice: l,
+            onClosed: d,
+            onSkillMoved: i,
+            skill: s,
+          })),
+      (e[55] = a),
+      (e[56] = m),
+      (e[57] = M),
+      (e[58] = d),
+      (e[59] = l),
+      (e[60] = i),
+      (e[61] = s),
+      (e[62] = ge))
+    : (ge = e[62]);
+  let we;
+  e[63] !== a ||
+  e[64] !== W ||
+  e[65] !== $ ||
+  e[66] !== C ||
+  e[67] !== M ||
+  e[68] !== p
+    ? ((we =
+        a != null && !C && !M
+          ? n.jsx(Qe, {
+              "aria-busy": p.isPending,
+              disabled: $,
+              onClick: () => {
+                W();
+              },
+              rootStyle: js.deleteDanger,
+              size: "sm",
+              type: "button",
+              variant: "secondary",
+              children: n.jsx(se, { id: "rvJGTw" }),
+            })
+          : null),
+      (e[63] = a),
+      (e[64] = W),
+      (e[65] = $),
+      (e[66] = C),
+      (e[67] = M),
+      (e[68] = p),
+      (e[69] = we))
+    : (we = e[69]);
+  let qe;
+  e[70] !== ge || e[71] !== we
+    ? ((qe = n.jsxs("div", { className: ye, children: [ge, we] })),
+      (e[70] = ge),
+      (e[71] = we),
+      (e[72] = qe))
+    : (qe = e[72]);
+  let Ie;
+  e[73] !== ve || e[74] !== qe
+    ? ((Ie = n.jsxs("header", { className: Y, children: [B, ve, qe] })),
+      (e[73] = ve),
+      (e[74] = qe),
+      (e[75] = Ie))
+    : (Ie = e[75]);
+  let Ce;
+  e[76] !== s.description
+    ? ((Ce =
+        s.description.length > 0
+          ? n.jsx("p", {
+              className: w(me(he.body1, js.description).className),
+              children: s.description,
+            })
+          : null),
+      (e[76] = s.description),
+      (e[77] = Ce))
+    : (Ce = e[77]);
+  let Me;
+  e[78] !== Ie || e[79] !== Ce
+    ? ((Me = n.jsxs("div", { className: ee, children: [Ie, Ce] })),
+      (e[78] = Ie),
+      (e[79] = Ce),
+      (e[80] = Me))
+    : (Me = e[80]);
+  let Ae;
+  e[81] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Ae = w("sand-9f619 sand-78zum5 sand-dt5ytf sand-ou54vl")), (e[81] = Ae))
+    : (Ae = e[81]);
+  let $e;
+  e[82] === Symbol.for("react.memo_cache_sentinel")
+    ? (($e = w(
+        "sand-9f619 sand-1lliihq sand-1y1aw1k sand-f159sx sand-10b6aqq sand-mzvs34",
+      )),
+      (e[82] = $e))
+    : ($e = e[82]);
+  let ze, Te, Fe;
+  e[83] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ze = n.jsx(Se, {
+        as: "span",
+        className: $e,
+        color: "tertiary",
+        size: "sm",
+        children: n.jsx(se, { id: "6YtxFj" }),
+      })),
+      (Te = w(me(he.body1, js.input).className)),
+      (Fe = (ce) => {
+        (_(), h(ce.currentTarget.value));
+      }),
+      (e[83] = ze),
+      (e[84] = Te),
+      (e[85] = Fe))
+    : ((ze = e[83]), (Te = e[84]), (Fe = e[85]));
+  let oe;
+  e[86] !== M || e[87] !== g
+    ? ((oe = n.jsxs("label", {
+        children: [
+          ze,
+          n.jsx("input", {
+            className: Te,
+            onChange: Fe,
+            readOnly: M,
+            spellCheck: !1,
+            type: "text",
+            value: g,
+          }),
+        ],
+      })),
+      (e[86] = M),
+      (e[87] = g),
+      (e[88] = oe))
+    : (oe = e[88]);
+  let je;
+  e[89] === Symbol.for("react.memo_cache_sentinel")
+    ? ((je = w("sand-9f619 sand-78zum5 sand-dt5ytf")), (e[89] = je))
+    : (je = e[89]);
+  let Pe;
+  e[90] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Pe = w(
+        "sand-9f619 sand-1lliihq sand-1y1aw1k sand-f159sx sand-10b6aqq sand-mzvs34",
+      )),
+      (e[90] = Pe))
+    : (Pe = e[90]);
+  let Re;
+  e[91] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Re = n.jsx(Se, {
+        as: "span",
+        className: Pe,
+        color: "tertiary",
+        size: "sm",
+        children: n.jsx(se, { id: "Nu4oKW" }),
+      })),
+      (e[91] = Re))
+    : (Re = e[91]);
+  const Le = P ? r : void 0;
+  let De, ke;
+  e[92] === Symbol.for("react.memo_cache_sentinel")
+    ? ((De = w(me(he.body1, js.input).className)),
+      (ke = (ce) => {
+        (_(), b(ce.currentTarget.value));
+      }),
+      (e[92] = De),
+      (e[93] = ke))
+    : ((De = e[92]), (ke = e[93]));
+  let be;
+  e[94] !== c
+    ? ((be = c({ id: "BbUcGY" })), (e[94] = c), (e[95] = be))
+    : (be = e[95]);
+  let _e;
+  e[96] !== y || e[97] !== M || e[98] !== Le || e[99] !== be
+    ? ((_e = n.jsxs("label", {
+        children: [
+          Re,
+          n.jsx("input", {
+            "aria-describedby": Le,
+            className: De,
+            onChange: ke,
+            placeholder: be,
+            readOnly: M,
+            type: "text",
+            value: y,
+          }),
+        ],
+      })),
+      (e[96] = y),
+      (e[97] = M),
+      (e[98] = Le),
+      (e[99] = be),
+      (e[100] = _e))
+    : (_e = e[100]);
+  let Ye;
+  e[101] !== r || e[102] !== P || e[103] !== M
+    ? ((Ye =
+        P && !M
+          ? n.jsx(Se, {
+              as: "span",
+              className: w(
+                "sand-9f619 sand-1lliihq sand-1yrsyyn sand-f159sx sand-18d9i69 sand-mzvs34",
+              ),
+              color: "tertiary",
+              id: r,
+              size: "sm",
+              children: n.jsx(se, { id: "5ijqLV" }),
+            })
+          : null),
+      (e[101] = r),
+      (e[102] = P),
+      (e[103] = M),
+      (e[104] = Ye))
+    : (Ye = e[104]);
+  let ts;
+  e[105] !== _e || e[106] !== Ye
+    ? ((ts = n.jsxs("div", { className: je, children: [_e, Ye] })),
+      (e[105] = _e),
+      (e[106] = Ye),
+      (e[107] = ts))
+    : (ts = e[107]);
+  let ls;
+  e[108] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ls = w(
+        "sand-9f619 sand-1lliihq sand-1y1aw1k sand-f159sx sand-10b6aqq sand-mzvs34",
+      )),
+      (e[108] = ls))
+    : (ls = e[108]);
+  let ys, ds, gs;
+  e[109] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ys = n.jsx(Se, {
+        as: "span",
+        className: ls,
+        color: "tertiary",
+        size: "sm",
+        children: n.jsx(se, { id: "NxHkkp" }),
+      })),
+      (ds = w(me(js.textarea, Tn.thinScrollbar).className)),
+      (gs = (ce) => {
+        (_(), k(ce.currentTarget.value));
+      }),
+      (e[109] = ys),
+      (e[110] = ds),
+      (e[111] = gs))
+    : ((ys = e[109]), (ds = e[110]), (gs = e[111]));
+  let is;
+  e[112] !== c
+    ? ((is = c({ id: "2Boc9B" })), (e[112] = c), (e[113] = is))
+    : (is = e[113]);
+  let rs;
+  e[114] !== j || e[115] !== M || e[116] !== is
+    ? ((rs = n.jsxs("label", {
+        children: [
+          ys,
+          n.jsx("textarea", {
+            className: ds,
+            onChange: gs,
+            placeholder: is,
+            readOnly: M,
+            spellCheck: !1,
+            value: j,
+          }),
+        ],
+      })),
+      (e[114] = j),
+      (e[115] = M),
+      (e[116] = is),
+      (e[117] = rs))
+    : (rs = e[117]);
+  let cs;
+  e[118] !== oe || e[119] !== ts || e[120] !== rs
+    ? ((cs = n.jsxs("div", { className: Ae, children: [oe, ts, rs] })),
+      (e[118] = oe),
+      (e[119] = ts),
+      (e[120] = rs),
+      (e[121] = cs))
+    : (cs = e[121]);
+  let Je;
+  e[122] !== Me || e[123] !== cs
+    ? ((Je = n.jsx(Rn, {
+        children: n.jsxs("div", { className: A, children: [Me, cs] }),
+      })),
+      (e[122] = Me),
+      (e[123] = cs),
+      (e[124] = Je))
+    : (Je = e[124]);
+  let Ge;
+  e[125] !== K ||
+  e[126] !== F ||
+  e[127] !== M ||
+  e[128] !== v ||
+  e[129] !== E ||
+  e[130] !== f.isPending
+    ? ((Ge = M
+        ? null
+        : n.jsx(ia.ActionBar, {
+            style: js.footerRule,
+            children: n.jsx(ia.Action, {
+              disabled: !K || v,
+              onClick: () => {
+                F();
+              },
+              pending: f.isPending,
+              variant: "primary",
+              ...(f.isPending
+                ? { leadingIcon: "spinner", leadingIconModifier: "spin" }
+                : {}),
+              children: E,
+            }),
+          })),
+      (e[125] = K),
+      (e[126] = F),
+      (e[127] = M),
+      (e[128] = v),
+      (e[129] = E),
+      (e[130] = f.isPending),
+      (e[131] = Ge))
+    : (Ge = e[131]);
+  let os;
+  return (
+    e[132] !== Je || e[133] !== Ge
+      ? ((os = n.jsxs("div", { className: H, children: [Je, Ge] })),
+        (e[132] = Je),
+        (e[133] = Ge),
+        (e[134] = os))
+      : (os = e[134]),
+    os
+  );
+}
+const ki = { authBlocked: [] };
+async function Na(t, e, s, a) {
+  let l = !1;
+  return (
+    await Ve(async () => {
+      (await t({
+        entryId: e,
+        values: {},
+        ...(a === !0 ? { hasTeamConfiguredVariables: !0 } : {}),
+      }),
+        (l = !0));
+    }, s),
+    l
+  );
+}
+async function bi(t, e) {
+  try {
+    return {
+      added: (await t()).filter((a) => a.pluginId === e).length,
+      failed: [],
+      errorMessage: null,
+    };
+  } catch (s) {
+    return {
+      added: 0,
+      failed: [],
+      errorMessage: s instanceof Error ? s.message : String(s),
+    };
+  }
+}
+async function vi(t, e) {
+  try {
+    await t(e);
+  } catch {}
+}
+async function ji(t) {
+  try {
+    await t();
+  } catch {}
+}
+async function xi(t, e, s) {
+  s(e);
+  try {
+    await t();
+  } finally {
+    s(null);
+  }
+}
+function Ni(t, e) {
+  switch (t.kind) {
+    case "id":
+      return t.pluginId;
+    case "name":
+      return (
+        e.find((s) => s.isPublicListed === !0 && s.pluginName === t.pluginName)
+          ?.id ?? null
+      );
+  }
+}
+function Si(t) {
+  const e = J.c(136),
+    {
+      agentId: s,
+      headingId: a,
+      title: l,
+      headerTrailing: d,
+      focusSkillId: i,
+      focusServerId: c,
+      focusBrowseQuery: u,
+      focusPlugin: o,
+      browseLayout: m,
+      onNotice: r,
+      onCloseSettings: f,
+    } = t,
+    p = i === void 0 ? null : i,
+    g = c === void 0 ? null : c,
+    h = u === void 0 ? null : u,
+    y = o === void 0 ? null : o,
+    b = m === void 0 ? "section" : m,
+    { _: j } = re(),
+    { _: k } = re(),
+    [v, S] = Q.useState(!1),
+    [N, z] = Q.useState(""),
+    [_, I] = Q.useState(null);
+  let T;
+  e[0] === Symbol.for("react.memo_cache_sentinel")
+    ? ((T = []), (e[0] = T))
+    : (T = e[0]);
+  const [R, $] = Q.useState(T),
+    [C, M] = Q.useState(null),
+    [D, U] = Q.useState(null),
+    O = Q.useRef(null),
+    P = R.at(-1) ?? null;
+  let Z;
+  e[1] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Z = (x) => {
+        $((L) => [...L, x]);
+      }),
+      (e[1] = Z))
+    : (Z = e[1]);
+  const K = Z;
+  let V;
+  e[2] === Symbol.for("react.memo_cache_sentinel")
+    ? ((V = (x) => {
+        $((L) => (L.length === 0 ? L : [...L.slice(0, -1), x]));
+      }),
+      (e[2] = V))
+    : (V = e[2]);
+  const F = V;
+  let X;
+  e[3] === Symbol.for("react.memo_cache_sentinel")
+    ? ((X = () => {
+        $(qi);
+      }),
+      (e[3] = X))
+    : (X = e[3]);
+  const E = X,
+    q = Q.useRef(null);
+  let W;
+  e[4] === Symbol.for("react.memo_cache_sentinel")
+    ? ((W = () => {
+        const x = q.current;
+        x != null && (x.focus(), x.select());
+      }),
+      (e[4] = W))
+    : (W = e[4]);
+  const H = W,
+    { platform: ee } = sl(),
+    Y = ee === "darwin";
+  let A;
+  e[5] !== Y ? ((A = nl("mod+f", Y)), (e[5] = Y), (e[6] = A)) : (A = e[6]);
+  let B, ie, ae;
+  (e[7] === Symbol.for("react.memo_cache_sentinel")
+    ? ((B = (x) => {
+        (x.preventDefault(), H());
+      }),
+      (ie = { enableOnFormTags: !0, preventDefault: !0 }),
+      (ae = [H]),
+      (e[7] = B),
+      (e[8] = ie),
+      (e[9] = ae))
+    : ((B = e[7]), (ie = e[8]), (ae = e[9])),
+    al(A, B, ie, ae));
+  let te;
+  e[10] !== N
+    ? ((te = (x) => {
+        if (x.key === "Escape") {
+          if ((x.preventDefault(), x.stopPropagation(), N.length > 0)) {
+            z("");
+            return;
+          }
+          q.current?.blur();
+        }
+      }),
+      (e[10] = N),
+      (e[11] = te))
+    : (te = e[11]);
+  const ue = te,
+    { catalog: le, isLoading: ve } = tl(),
+    [ye, ge] = Q.useState(null);
+  p != null &&
+    ye !== p &&
+    (ge(p), S(!0), $([{ kind: "skill", workflowId: p }]));
+  const [we, qe] = Q.useState(null);
+  g != null &&
+    we !== g &&
+    (qe(g), S(!0), $([{ kind: "installed", serverId: g }]));
+  const [Ie, Ce] = Q.useState(null);
+  h != null && Ie !== h && (Ce(h), S(!1), z(h), I(null), $([]));
+  const [Me, Ae] = Q.useState(null),
+    $e = y == null ? null : Ni(y, le);
+  y != null &&
+    $e != null &&
+    Me !== y.arrival &&
+    (Ae(y.arrival), S(!1), $([{ kind: "plugin", entryId: $e }]));
+  let ze;
+  e[12] === Symbol.for("react.memo_cache_sentinel")
+    ? ((ze = { refetchInterval: jl }), (e[12] = ze))
+    : (ze = e[12]);
+  const { state: Te, refetch: Fe } = ll(ze),
+    oe = ra(dl(s), []),
+    je = ws(),
+    { plugins: Pe } = il(),
+    { install: Re, isPending: Le } = rl(),
+    { update: De, isPending: ke } = cl(),
+    { authenticate: be, isPending: _e } = ol(),
+    { remove: Ye, isPending: ts } = ul(),
+    { rename: ls, isPending: ys } = ml(),
+    { remove: ds, isPending: gs } = fl(),
+    { uninstall: is, isPending: rs } = pl(),
+    cs = kn(),
+    Je = Un(),
+    Ge = ss(Je.syncPluginSkills),
+    os = hl();
+  let ce;
+  e[13] !== os ? ((ce = ra(os, ki)), (e[13] = os), (e[14] = ce)) : (ce = e[14]);
+  const Is = ce.authBlocked,
+    ms = Le || ke || _e || ts || ys || gs || rs || Ge.isPending,
+    nt = Te?.servers ?? [],
+    bn = new Map();
+  for (const x of nt) {
+    const L = bn.get(x.id);
+    (L == null || (L.accountKey !== xs && x.accountKey === xs)) &&
+      bn.set(x.id, x);
+  }
+  const Xe = [...bn.values()],
+    Cs = new Map();
+  for (const x of Te?.servers ?? []) {
+    const L = Cs.get(x.id);
+    L == null ? Cs.set(x.id, [x]) : L.push(x);
+  }
+  for (const x of Cs.values()) x.sort(_i);
+  const vn = Cs,
+    Gn = new Map();
+  for (const x of Pe) Gn.set(x.pluginId, x);
+  const Ms = Gn,
+    Zn = yl(Xe);
+  let us, Ps;
+  e[15] !== j || e[16] !== le || e[17] !== _
+    ? ((us = gl(j, le)),
+      (Ps = us.some((x) => x.key === _) ? _ : null),
+      (e[15] = j),
+      (e[16] = le),
+      (e[17] = _),
+      (e[18] = us),
+      (e[19] = Ps))
+    : ((us = e[18]), (Ps = e[19]));
+  const es = Ps;
+  let $s;
+  e[20] !== j || e[21] !== le || e[22] !== es
+    ? (($s = es == null ? le : le.filter((x) => kl(j, x) === es)),
+      (e[20] = j),
+      (e[21] = le),
+      (e[22] = es),
+      (e[23] = $s))
+    : ($s = e[23]);
+  const jn = $s;
+  let Ts;
+  e[24] !== N || e[25] !== jn
+    ? ((Ts = xd(jn, N)), (e[24] = N), (e[25] = jn), (e[26] = Ts))
+    : (Ts = e[26]);
+  const at = Ts,
+    fs = Qa(Xe, le, Pe),
+    ks = Pa(oe).length;
+  let As;
+  e[27] !== le || e[28] !== je
+    ? ((As = je.buildServerIconResolver(le)),
+      (e[27] = le),
+      (e[28] = je),
+      (e[29] = As))
+    : (As = e[29]);
+  const ps = As;
+  let Rs;
+  e[30] !== j || e[31] !== le
+    ? ((Rs = (x) => xl(j, x, le)), (e[30] = j), (e[31] = le), (e[32] = Rs))
+    : (Rs = e[32]);
+  const tt = Rs,
+    Hn = async (x) => {
+      if (s == null || x == null) return;
+      const L = new Set((x.skills ?? []).flatMap(zi));
+      if (L.size !== 0)
+        for (const ne of oe)
+          ne.sourceRef != null &&
+            L.has(ne.sourceRef) &&
+            (await vi((G) => Je.remove(G), { agentId: s, workflowId: ne.id }));
+    },
+    xn = async (x) => (await Hn(x), bi(() => Ge.run(s), x.id)),
+    lt = async (x) => {
+      r(null);
+      const L = Ms.get(x.id),
+        ne = L?.hasTeamConfiguredVariables === !0;
+      if ($a(x).connectors === 0) {
+        if (s == null) {
+          r({ kind: "error", text: k({ id: "3IrDfA" }) });
+          return;
+        }
+        if (!(await Na(Re, x.id, r, ne))) return;
+        const de = await xn(x);
+        if (de.errorMessage != null) {
+          r({
+            kind: "error",
+            text: k({
+              id: "4ZEFvP",
+              values: { 0: x.displayName, 1: de.errorMessage },
+            }),
+          });
+          return;
+        }
+        r({
+          kind: "success",
+          text:
+            de.added > 0
+              ? Be._({
+                  id: "MunE46",
+                  values: { 0: de.added, 1: x.displayName, 2: x.displayName },
+                })
+              : k({ id: "e5wMU/", values: { 0: x.displayName } }),
+        });
+        return;
+      }
+      const G = x.fields ?? [];
+      if (vl(x, L)) {
+        (M({
+          entryId: x.id,
+          mode: "install",
+          fields: G,
+          unsupportedFieldKeys: x.unsupportedFieldKeys ?? [],
+          initialValues: {},
+          configuredKeys: [],
+        }),
+          K({ kind: "setup", entryId: x.id }));
+        return;
+      }
+      (await Na(Re, x.id, r, ne)) && r(ga(x.displayName, await xn(x)));
+    },
+    Es = (x) => xi(() => lt(x), Bn(x.id), U);
+  let Ls;
+  e[33] !== r || e[34] !== K
+    ? ((Ls = (x) => {
+        r(null);
+        const L = x.entry.fields ?? [];
+        L.length !== 0 &&
+          (M({
+            entryId: x.entry.id,
+            mode: "edit",
+            fields: L,
+            unsupportedFieldKeys: x.entry.unsupportedFieldKeys ?? [],
+            initialValues: x.configuredVariables ?? {},
+            configuredKeys: x.configuredVariableKeys,
+          }),
+          K({ kind: "setup", entryId: x.entry.id }));
+      }),
+      (e[33] = r),
+      (e[34] = K),
+      (e[35] = Ls))
+    : (Ls = e[35]);
+  const dt = Ls,
+    it = async (x) => {
+      const L = C;
+      if (L == null) return;
+      const ne = le.find((de) => de.id === L.entryId),
+        G = ne?.displayName ?? k({ id: "QMBQ8e" });
+      (r(null),
+        await Ve(async () => {
+          (L.mode === "install"
+            ? (await Re({ entryId: L.entryId, values: x }),
+              r(
+                ne != null
+                  ? ga(G, await xn(ne))
+                  : {
+                      kind: "success",
+                      text: k({ id: "7JUrva", values: { displayName: G } }),
+                    },
+              ))
+            : (await De({ pluginId: L.entryId, values: x }),
+              r({
+                kind: "success",
+                text: k({ id: "equGn7", values: { displayName: G } }),
+              })),
+            M(null),
+            E());
+        }, r));
+    },
+    Nn = async (x, L) => {
+      const ne = L === void 0 ? xs : L,
+        G = vn.get(x) ?? [],
+        de = G[0] ?? Xe.find((fe) => fe.id === x);
+      (bl({ serverName: de?.name, serverId: x }),
+        de != null &&
+          (r(null),
+          await Ve(async () => {
+            const fe = await be(x, ne);
+            if (fe.status === "started") {
+              const Ue = G.find((xe) => xe.accountKey === ne);
+              Nl(
+                {
+                  connector:
+                    Ue?.serverIdentifier ?? wl(de.rowServerIdentifier, ne),
+                  displayName: Sl(de.name, ne),
+                  authorizationUrl: fe.authorizationUrl,
+                },
+                cs,
+              );
+            }
+            (r(wd(fe)), Fe());
+          }, r)));
+    };
+  let Os;
+  e[36] !== k || e[37] !== r || e[38] !== ls
+    ? ((Os = async (x) => {
+        (r(null),
+          await Ve(async () => {
+            (await ls(x),
+              r({
+                kind: "success",
+                text: k({ id: "S/M1/r", values: { 0: hn(x.newAccountKey) } }),
+              }));
+          }, r));
+      }),
+      (e[36] = k),
+      (e[37] = r),
+      (e[38] = ls),
+      (e[39] = Os))
+    : (Os = e[39]);
+  const Sn = Os;
+  let Bs;
+  e[40] !== k || e[41] !== r || e[42] !== ds
+    ? ((Bs = async (x) => {
+        (r(null),
+          await Ve(async () => {
+            (await ds(x),
+              r({
+                kind: "success",
+                text: k({ id: "3qCh1E", values: { 0: hn(x.accountKey) } }),
+              }));
+          }, r));
+      }),
+      (e[40] = k),
+      (e[41] = r),
+      (e[42] = ds),
+      (e[43] = Bs))
+    : (Bs = e[43]);
+  const wn = Bs;
+  let Ks;
+  e[44] !== Sn
+    ? ((Ks = (x) => {
+        Sn(x);
+      }),
+      (e[44] = Sn),
+      (e[45] = Ks))
+    : (Ks = e[45]);
+  let Fs;
+  e[46] !== wn
+    ? ((Fs = (x) => {
+        wn(x);
+      }),
+      (e[46] = wn),
+      (e[47] = Fs))
+    : (Fs = e[47]);
+  const Qn = {
+      onAuthenticate: (x) => {
+        Nn(x.serverId, x.accountKey);
+      },
+      onAddAccount: (x) => {
+        Nn(x.serverId, x.label);
+      },
+      onRenameAccount: Ks,
+      onRemoveAccount: Fs,
+    },
+    Yn = async (x) => {
+      x != null && (await Hn(x), await ji(() => Ge.run(s)));
+    },
+    Jn = async (x) => {
+      const L = Xe.find((ne) => ne.id === x);
+      L != null &&
+        (r(null),
+        await Ve(async () => {
+          const ne = await Ye(x);
+          r(ka(L.name, ne));
+          const G = un(L, le);
+          (G != null && oa(ne) && (await Yn(G)),
+            ne.removed && G == null && E());
+        }, r));
+    },
+    rt = async (x) => {
+      const L = le.find((G) => G.id === x),
+        ne = L?.displayName ?? Ms.get(x)?.displayName ?? k({ id: "QMBQ8e" });
+      (r(null),
+        await Ve(async () => {
+          const G = await is(x);
+          (r(ka(ne, G)), oa(G) && (await Yn(L)));
+        }, r));
+    };
+  let Ds;
+  e[48] !== K
+    ? ((Ds = (x) => {
+        K({ kind: "plugin", entryId: x });
+      }),
+      (e[48] = K),
+      (e[49] = Ds))
+    : (Ds = e[49]);
+  const Xn = Ds;
+  let Us;
+  e[50] !== K
+    ? ((Us = (x) => {
+        K({ kind: "installed", serverId: x });
+      }),
+      (e[50] = K),
+      (e[51] = Us))
+    : (Us = e[51]);
+  const ct = Us;
+  if (P?.kind === "skill") {
+    const x = oe.find((L) => L.id === P.workflowId);
+    x != null && !ca(x) && $((L) => L.filter((ne) => ne !== P));
+  }
+  const ea = (x, L) => {
+    const ne = Pd(fs, x.id),
+      G = Ma(x, Xe, Zn, Ms),
+      de = G.server ?? L;
+    return n.jsx(ni, {
+      accountActions: Qn,
+      accountSlots: de == null ? [] : (vn.get(de.id) ?? [de]),
+      entry: x,
+      installedPlugin: G.plugin,
+      installedServer: de,
+      installMode: G.plugin != null ? null : (ne?.installMode ?? null),
+      isAddPending: D === Bn(x.id),
+      isBusy: ms,
+      onAdd: (fe) => {
+        Es(fe);
+      },
+      onUninstall: (fe) => {
+        Jn(fe);
+      },
+      onUninstallPlugin: (fe) => {
+        rt(fe);
+      },
+      ...(ne != null && (x.fields?.length ?? 0) > 0
+        ? { onEditSetup: () => dt(ne) }
+        : {}),
+    });
+  };
+  let Oe;
+  e: {
+    if (P == null) {
+      Oe = null;
+      break e;
+    }
+    if (P.kind === "plugin") {
+      const G = le.find((de) => de.id === P.entryId);
+      if (G == null) {
+        Oe = null;
+        break e;
+      }
+      Oe = ea(G);
+      break e;
+    }
+    if (P.kind === "installed") {
+      const G = Xe.find((fe) => fe.id === P.serverId);
+      if (G == null) {
+        Oe = null;
+        break e;
+      }
+      const de = un(G, le);
+      if (de != null) {
+        Oe = ea(de, G);
+        break e;
+      }
+      Oe = n.jsx(ei, {
+        accountActions: Qn,
+        accountSlots: vn.get(G.id) ?? [G],
+        isBusy: ms,
+        onUninstall: (fe) => {
+          Jn(fe);
+        },
+        server: G,
+      });
+      break e;
+    }
+    if (P.kind === "setup") {
+      if (C == null || C.entryId !== P.entryId) {
+        Oe = null;
+        break e;
+      }
+      const G = le.find((de) => de.id === P.entryId);
+      if (G == null) {
+        Oe = null;
+        break e;
+      }
+      Oe = n.jsx(ci, {
+        configuredKeys: C.configuredKeys,
+        fields: C.fields,
+        unsupportedFieldKeys: C.unsupportedFieldKeys,
+        initialValues: C.initialValues,
+        intro:
+          C.mode === "install"
+            ? k({ id: "lI611B", values: { 0: G.displayName } })
+            : k({ id: "xjb7gZ", values: { 0: G.displayName } }),
+        isBusy: ms,
+        onSubmit: (de) => {
+          it(de);
+        },
+        submitLabel:
+          C.mode === "install"
+            ? k({ id: "3nLdaX", values: { 0: G.displayName } })
+            : k({ id: "NQPY4Z" }),
+      });
+      break e;
+    }
+    const x = oe.find((G) => G.id === P.workflowId);
+    if (x == null || !ca(x)) {
+      Oe = null;
+      break e;
+    }
+    let L;
+    e[52] === Symbol.for("react.memo_cache_sentinel")
+      ? ((L = (G) => F({ kind: "skill", workflowId: G })), (e[52] = L))
+      : (L = e[52]);
+    let ne;
+    (e[53] !== s || e[54] !== r || e[55] !== E || e[56] !== x
+      ? ((ne = n.jsx(gi, {
+          agentId: s,
+          onClosed: E,
+          onNotice: r,
+          onSkillMoved: L,
+          skill: x,
+        })),
+        (e[53] = s),
+        (e[54] = r),
+        (e[55] = E),
+        (e[56] = x),
+        (e[57] = ne))
+      : (ne = e[57]),
+      (Oe = ne));
+  }
+  const hs = Oe,
+    zn = (x) => {
+      const L = Xe.find((ne) => ne.id === x);
+      return L == null ? null : (un(L, le)?.displayName ?? L.name);
+    };
+  let Vs;
+  e[58] !== le || e[59] !== zn || e[60] !== oe
+    ? ((Vs = (x) =>
+        x.kind === "plugin" || x.kind === "setup"
+          ? (le.find((L) => L.id === x.entryId)?.displayName ?? null)
+          : x.kind === "installed"
+            ? zn(x.serverId)
+            : (oe.find((L) => L.id === x.workflowId)?.name ?? null)),
+      (e[58] = le),
+      (e[59] = zn),
+      (e[60] = oe),
+      (e[61] = Vs))
+    : (Vs = e[61]);
+  const ot = Vs,
+    _n = P == null ? null : ot(P),
+    ut = wi,
+    Ws =
+      hs != null && P != null
+        ? `detail:${R.length}:${P.kind}:${ut(P)}`
+        : `list:${v}`;
+  let Gs;
+  e[62] !== v
+    ? ((Gs = (x) => {
+        const L = x?.viewportElement;
+        if (L == null) return;
+        const ne = O.current,
+          G = ne != null && ne.isYours === v ? ne.top : 0;
+        ((L.scrollTop = G), (O.current = { isYours: v, top: G }));
+        const de = () => {
+          O.current = { isYours: v, top: L.scrollTop };
+        };
+        return (
+          L.addEventListener("scroll", de, { passive: !0 }),
+          () => L.removeEventListener("scroll", de)
+        );
+      }),
+      (e[62] = v),
+      (e[63] = Gs))
+    : (Gs = e[63]);
+  const sa = Gs;
+  let Zs, Hs;
+  e[64] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Zs = w(
+        "sand-plugins__search-row",
+        "sand-9f619 sand-78zum5 sand-1c4vz4f sand-2lah0s sand-dl72j9 sand-6s0dn4 sand-167g77z sand-euugli",
+      )),
+      (Hs = w(
+        "sand-plugins__search",
+        "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-6s0dn4 sand-1jnr06f sand-10w6t97 sand-euugli sand-exx8yu sand-11lfxj5 sand-18d9i69 sand-mzvs34 sand-qjedn3 sand-1y0btm7 sand-q03nf1 sand-y3c8in sand-149ho13 sand-1tiofj7",
+      )),
+      (e[64] = Zs),
+      (e[65] = Hs))
+    : ((Zs = e[64]), (Hs = e[65]));
+  let Qs;
+  e[66] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Qs = n.jsx(pe, {
+        className: "sand-9f619 sand-169k319",
+        name: "search",
+        size: 14,
+      })),
+      (e[66] = Qs))
+    : (Qs = e[66]);
+  let bs;
+  e[67] !== k
+    ? ((bs = k({ id: "S4qZX0" })), (e[67] = k), (e[68] = bs))
+    : (bs = e[68]);
+  let Ys, Js;
+  e[69] === Symbol.for("react.memo_cache_sentinel")
+    ? ((Ys = w(
+        "sand-plugins__search-input",
+        "sand-9f619 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-euugli sand-c342km sand-ng3xce sand-1t137rt sand-jbqb8w sand-1wd3ewq sand-jb2p0i sand-if65rj sand-12oo3zp sand-ltfok3",
+      )),
+      (Js = (x) => z(x.currentTarget.value)),
+      (e[69] = Ys),
+      (e[70] = Js))
+    : ((Ys = e[69]), (Js = e[70]));
+  let vs;
+  e[71] !== k
+    ? ((vs = k({ id: "S4qZX0" })), (e[71] = k), (e[72] = vs))
+    : (vs = e[72]);
+  let Xs;
+  e[73] !== ue || e[74] !== N || e[75] !== bs || e[76] !== vs
+    ? ((Xs = n.jsx("div", {
+        className: Zs,
+        children: n.jsxs("div", {
+          className: Hs,
+          children: [
+            Qs,
+            n.jsx("input", {
+              "aria-label": bs,
+              className: Ys,
+              onChange: Js,
+              onKeyDown: ue,
+              placeholder: vs,
+              ref: q,
+              spellCheck: !1,
+              type: "text",
+              value: N,
+            }),
+          ],
+        }),
+      })),
+      (e[73] = ue),
+      (e[74] = N),
+      (e[75] = bs),
+      (e[76] = vs),
+      (e[77] = Xs))
+    : (Xs = e[77]);
+  const qn = Xs;
+  let en;
+  e[78] !== Es
+    ? ((en = (x) => {
+        Es(x);
+      }),
+      (e[78] = Es),
+      (e[79] = en))
+    : (en = e[79]);
+  const na = n.jsx(Id, {
+      effectivePluginsById: Ms,
+      installedByKey: Zn,
+      isBusy: ms,
+      isLoading: ve,
+      items: at,
+      layout: b === "marketplace-frame" ? "marketplace-frame" : "plugins",
+      onAdd: en,
+      onOpenPlugin: Xn,
+      onSelectSection: I,
+      pendingAddKey: D,
+      query: N,
+      selectedSectionKey: es,
+      servers: Xe,
+    }),
+    aa = b === "marketplace-frame" && !v && hs == null;
+  let sn;
+  e: {
+    if (hs != null) {
+      let xe;
+      (e[80] !== _n || e[81] !== a || e[82] !== E
+        ? ((xe = n.jsx(Ra, { headingId: a, onBack: E, title: _n })),
+          (e[80] = _n),
+          (e[81] = a),
+          (e[82] = E),
+          (e[83] = xe))
+        : (xe = e[83]),
+        (sn = xe));
+      break e;
+    }
+    if (aa) {
+      let xe;
+      e[84] !== k || e[85] !== l
+        ? ((xe = l ?? k({ id: "ohUJJM" })),
+          (e[84] = k),
+          (e[85] = l),
+          (e[86] = xe))
+        : (xe = e[86]);
+      let ln;
+      (e[87] !== d || e[88] !== a || e[89] !== xe
+        ? ((ln = n.jsx(An, { headingId: a, title: xe, trailing: d })),
+          (e[87] = d),
+          (e[88] = a),
+          (e[89] = xe),
+          (e[90] = ln))
+        : (ln = e[90]),
+        (sn = ln));
+      break e;
+    }
+    let x;
+    e[91] !== k || e[92] !== l
+      ? ((x = l ?? k({ id: "ohUJJM" })), (e[91] = k), (e[92] = l), (e[93] = x))
+      : (x = e[93]);
+    let L;
+    e[94] !== d || e[95] !== a || e[96] !== x
+      ? ((L = n.jsx(An, { headingId: a, title: x, trailing: d })),
+        (e[94] = d),
+        (e[95] = a),
+        (e[96] = x),
+        (e[97] = L))
+      : (L = e[97]);
+    let ne;
+    e[98] === Symbol.for("react.memo_cache_sentinel")
+      ? ((ne = w(
+          "sand-plugins__bar",
+          "sand-9f619 sand-78zum5 sand-1c4vz4f sand-2lah0s sand-dl72j9 sand-dt5ytf sand-1qjc9v5 sand-1v2ro7d sand-yinxu5 sand-sfy40s sand-10b6aqq sand-1mfogq2",
+        )),
+        (e[98] = ne))
+      : (ne = e[98]);
+    let G;
+    e[99] !== k ||
+    e[100] !== fs ||
+    e[101] !== v ||
+    e[102] !== ks ||
+    e[103] !== ps
+      ? ((G = v
+          ? n.jsxs("button", {
+              className: w(
+                "sand-plugins__back-to-marketplace",
+                "sand-9f619 sand-78zum5 sand-6s0dn4 sand-qcrz7y sand-17d4w8g sand-10w6t97 sand-euugli sand-1iorvi4 sand-f159sx sand-jkvuk6 sand-135b78x sand-c342km sand-ng3xce sand-1qmwy7c sand-jbqb8w sand-aalx5g sand-1o0liin sand-jb2p0i sand-fifm61 sand-1d3mw78 sand-12oo3zp sand-1ypdohk sand-1t137rt sand-9v5kkp sand-1k57tk5 sand-784prv sand-1uczgqu sand-1lt2dyn",
+              ),
+              onClick: () => S(!1),
+              type: "button",
+              children: [
+                n.jsx(pe, {
+                  className: "sand-9f619 sand-169k319",
+                  name: "chevron-left",
+                  size: 12,
+                }),
+                k({ id: "R7wvKw" }),
+              ],
+            })
+          : n.jsx(ba, {
+              installedItems: fs,
+              onOpen: () => S(!0),
+              privateCount: ks,
+              resolveServerIcon: ps,
+            })),
+        (e[99] = k),
+        (e[100] = fs),
+        (e[101] = v),
+        (e[102] = ks),
+        (e[103] = ps),
+        (e[104] = G))
+      : (G = e[104]);
+    let de;
+    e[105] !== v || e[106] !== us || e[107] !== es
+      ? ((de = v
+          ? null
+          : n.jsx(Cd, { onSelect: I, options: us, selectedKey: es })),
+        (e[105] = v),
+        (e[106] = us),
+        (e[107] = es),
+        (e[108] = de))
+      : (de = e[108]);
+    let fe;
+    e[109] !== qn || e[110] !== ne || e[111] !== G || e[112] !== de
+      ? ((fe = n.jsxs("div", { className: ne, children: [G, qn, de] })),
+        (e[109] = qn),
+        (e[110] = ne),
+        (e[111] = G),
+        (e[112] = de),
+        (e[113] = fe))
+      : (fe = e[113]);
+    let Ue;
+    (e[114] !== L || e[115] !== fe
+      ? ((Ue = n.jsxs(n.Fragment, { children: [L, fe] })),
+        (e[114] = L),
+        (e[115] = fe),
+        (e[116] = Ue))
+      : (Ue = e[116]),
+      (sn = Ue));
+  }
+  const In = sn;
+  let nn;
+  e: {
+    if (P?.kind === "skill" && hs != null) {
+      nn = hs;
+      break e;
+    }
+    if (aa) {
+      let G;
+      e[117] === Symbol.for("react.memo_cache_sentinel")
+        ? ((G = () => S(!0)), (e[117] = G))
+        : (G = e[117]);
+      let de;
+      e[118] !== fs || e[119] !== ks || e[120] !== ps
+        ? ((de = n.jsx(ba, {
+            installedItems: fs,
+            onOpen: G,
+            privateCount: ks,
+            resolveServerIcon: ps,
+          })),
+          (e[118] = fs),
+          (e[119] = ks),
+          (e[120] = ps),
+          (e[121] = de))
+        : (de = e[121]);
+      let fe;
+      e[122] !== k
+        ? ((fe = k({ id: "jj4zKl" })), (e[122] = k), (e[123] = fe))
+        : (fe = e[123]);
+      let Ue;
+      e[124] !== k
+        ? ((Ue = k({ id: "S4qZX0" })), (e[124] = k), (e[125] = Ue))
+        : (Ue = e[125]);
+      let xe;
+      (e[126] !== k
+        ? ((xe = k({ id: "S4qZX0" })), (e[126] = k), (e[127] = xe))
+        : (xe = e[127]),
+        (nn = n.jsx(
+          Rn,
+          {
+            ref: sa,
+            children: n.jsx(Ua, {
+              aboveSearch: de,
+              categories: us,
+              categoriesLabel: fe,
+              groups: na,
+              onCategoryChange: I,
+              onQueryChange: z,
+              onSearchKeyDown: ue,
+              query: N,
+              searchInputRef: q,
+              searchLabel: Ue,
+              searchPlaceholder: xe,
+              selectedCategoryKey: es,
+            }),
+          },
+          Ws,
+        )));
+      break e;
+    }
+    const x = hs == null ? sa : void 0,
+      L =
+        hs ??
+        (v
+          ? n.jsx(Ld, {
+              agentId: s,
+              authBlocked: Is,
+              catalog: le,
+              effectivePlugins: Pe,
+              isBusy: ms,
+              onAuthenticate: (G) => {
+                Nn(G);
+              },
+              onFixFailed: (G) =>
+                r({
+                  kind: "error",
+                  text: k({ id: "BGZNuY", values: { message: G } }),
+                }),
+              onFixHandedOff: () => f?.(),
+              onOpenPlugin: Xn,
+              onOpenServer: ct,
+              onOpenSkill: (G) => K({ kind: "skill", workflowId: G }),
+              query: N,
+              resolveServerIcon: ps,
+              resolveServerSubtitle: tt,
+              servers: Xe,
+              skills: oe,
+            })
+          : na);
+    let ne;
+    (e[128] !== Ws || e[129] !== x || e[130] !== L
+      ? ((ne = n.jsx(Rn, { ref: x, children: L }, Ws)),
+        (e[128] = Ws),
+        (e[129] = x),
+        (e[130] = L),
+        (e[131] = ne))
+      : (ne = e[131]),
+      (nn = ne));
+  }
+  const Cn = nn;
+  let an;
+  e[132] === Symbol.for("react.memo_cache_sentinel")
+    ? ((an = w(
+        "sand-plugins",
+        "sand-9f619 sand-78zum5 sand-1iyjqo2 sand-s83m0k sand-dl72j9 sand-dt5ytf sand-2lwn1j",
+      )),
+      (e[132] = an))
+    : (an = e[132]);
+  let tn;
+  return (
+    e[133] !== Cn || e[134] !== In
+      ? ((tn = n.jsxs("div", { className: an, children: [In, Cn] })),
+        (e[133] = Cn),
+        (e[134] = In),
+        (e[135] = tn))
+      : (tn = e[135]),
+    tn
+  );
+}
+function wi(t) {
+  return t.kind === "plugin" || t.kind === "setup"
+    ? t.entryId
+    : t.kind === "installed"
+      ? t.serverId
+      : t.workflowId;
+}
+function zi(t) {
+  return t.sourceUrl != null ? [t.sourceUrl] : [];
+}
+function _i(t, e) {
+  return (t.accountKey === xs ? 0 : 1) - (e.accountKey === xs ? 0 : 1);
+}
+function qi(t) {
+  return t.slice(0, -1);
+}
+const Ii = {
+    closeFloating: {
+      kVAEAm: "sand-10l6tqk",
+      k87sOh: "sand-1eu8d0j",
+      kt4wiu: "sand-o2ifbc",
+      kY2c9j: "sand-zkaem6",
+      $$css: !0,
+    },
+  },
+  Ci = "sand-plugins-modal-heading";
+function Mi(t) {
+  if (t == null) return null;
+  switch (t.kind) {
+    case "plugin":
+      return ns;
+    case "bot":
+      return He;
+    case "modal":
+      return t.tab === "plugins" ? ns : t.tab === "bots" ? He : null;
+  }
+}
+function Pi(t) {
+  const e = J.c(54),
+    {
+      agentId: s,
+      presentation: a,
+      isOpen: l,
+      focusSkillId: d,
+      focusServerId: i,
+      focusBrowseQuery: c,
+      focusPlugin: u,
+      marketplaceFocus: o,
+      onAddBot: m,
+      onClose: r,
+    } = t,
+    f = d === void 0 ? null : d,
+    p = i === void 0 ? null : i,
+    g = c === void 0 ? null : c,
+    h = u === void 0 ? null : u,
+    y = o === void 0 ? null : o,
+    { _: b } = re(),
+    j = Q.useRef(null),
+    [k, v] = Q.useState(null),
+    S = pn("sand_marketplace_bots_v2"),
+    z = pn("sand_marketplace_default_bots_tab") ? He : ns;
+  let _;
+  e[0] !== z || e[1] !== y
+    ? ((_ = Mi(y) ?? z), (e[0] = z), (e[1] = y), (e[2] = _))
+    : (_ = e[2]);
+  const [I, T] = Q.useState(_),
+    [R, $] = Q.useState(null);
+  let C;
+  e[3] !== y
+    ? ((C =
+        y?.kind === "plugin"
+          ? { kind: "name", pluginName: y.pluginName, arrival: y.arrival }
+          : null),
+      (e[3] = y),
+      (e[4] = C))
+    : (C = e[4]);
+  const M = C,
+    D = y?.kind === "bot" && y.arrival !== R ? y : null,
+    U = h ?? M,
+    O = f != null || p != null || g != null || U != null,
+    P = S && !O ? I : ns;
+  let Z;
+  e[5] !== y
+    ? ((Z = (le) => {
+        (T(le), le === ns && y?.kind === "bot" && $(y.arrival));
+      }),
+      (e[5] = y),
+      (e[6] = Z))
+    : (Z = e[6]);
+  const K = Z;
+  let V;
+  e[7] !== z || e[8] !== K || e[9] !== O || e[10] !== S || e[11] !== P
+    ? ((V =
+        S && !O ? n.jsx(bd, { defaultMode: z, mode: P, onChange: K }) : null),
+      (e[7] = z),
+      (e[8] = K),
+      (e[9] = O),
+      (e[10] = S),
+      (e[11] = P),
+      (e[12] = V))
+    : (V = e[12]);
+  const F = V;
+  let X;
+  e[13] !== r
+    ? ((X = (le) => {
+        le || r();
+      }),
+      (e[13] = r),
+      (e[14] = X))
+    : (X = e[14]);
+  const E = X;
+  let q;
+  e[15] !== b || e[16] !== S
+    ? ((q = b(S ? { id: "Zt5PUS" } : { id: "ohUJJM" })),
+      (e[15] = b),
+      (e[16] = S),
+      (e[17] = q))
+    : (q = e[17]);
+  let W;
+  e[18] === Symbol.for("react.memo_cache_sentinel")
+    ? ((W = w("sand-plugins-dialog", "sand-h6vr4k sand-1gy1zxj sand-1717udv")),
+      (e[18] = W))
+    : (W = e[18]);
+  let H;
+  e[19] === Symbol.for("react.memo_cache_sentinel")
+    ? ((H = w(
+        "sand-plugins-layout",
+        "sand-9f619 sand-1n2onr6 sand-78zum5 sand-dt5ytf sand-z03ioa sand-2lwn1j",
+      )),
+      (e[19] = H))
+    : (H = e[19]);
+  let ee;
+  e[20] !== b
+    ? ((ee = b({ id: "yz7wBu" })), (e[20] = b), (e[21] = ee))
+    : (ee = e[21]);
+  let Y;
+  e[22] !== r || e[23] !== ee
+    ? ((Y = n.jsx(zl, {
+        "aria-label": ee,
+        className: "sand-plugins-dialog__close",
+        icon: "close",
+        onClick: r,
+        shape: "circle",
+        size: "md",
+        style: Ii.closeFloating,
+      })),
+      (e[22] = r),
+      (e[23] = ee),
+      (e[24] = Y))
+    : (Y = e[24]);
+  let A;
+  e[25] !== b ||
+  e[26] !== s ||
+  e[27] !== U ||
+  e[28] !== g ||
+  e[29] !== p ||
+  e[30] !== f ||
+  e[31] !== O ||
+  e[32] !== D ||
+  e[33] !== S ||
+  e[34] !== P ||
+  e[35] !== m ||
+  e[36] !== r ||
+  e[37] !== F
+    ? ((A =
+        P === He
+          ? n.jsx("div", {
+              className: "sand-78zum5 sand-1iyjqo2 sand-dt5ytf sand-2lwn1j",
+              children: n.jsx(gd, {
+                focusBot: D,
+                headerTrailing: F,
+                onAdd: m,
+                title: b({ id: "Zt5PUS" }),
+              }),
+            })
+          : n.jsx(Si, {
+              agentId: s,
+              browseLayout: S && !O ? "marketplace-frame" : "section",
+              focusBrowseQuery: g,
+              focusPlugin: U,
+              focusServerId: p,
+              focusSkillId: f,
+              headerTrailing: F,
+              headingId: Ci,
+              onCloseSettings: r,
+              onNotice: v,
+              title: b(S ? { id: "Zt5PUS" } : { id: "ohUJJM" }),
+            })),
+      (e[25] = b),
+      (e[26] = s),
+      (e[27] = U),
+      (e[28] = g),
+      (e[29] = p),
+      (e[30] = f),
+      (e[31] = O),
+      (e[32] = D),
+      (e[33] = S),
+      (e[34] = P),
+      (e[35] = m),
+      (e[36] = r),
+      (e[37] = F),
+      (e[38] = A))
+    : (A = e[38]);
+  let B;
+  e[39] === Symbol.for("react.memo_cache_sentinel")
+    ? ((B = () => v(null)), (e[39] = B))
+    : (B = e[39]);
+  let ie;
+  e[40] !== k
+    ? ((ie = n.jsx(_l, { notice: k, onDismiss: B })), (e[40] = k), (e[41] = ie))
+    : (ie = e[41]);
+  let ae;
+  e[42] !== Y || e[43] !== A || e[44] !== ie
+    ? ((ae = n.jsxs("div", { className: H, children: [Y, A, ie] })),
+      (e[42] = Y),
+      (e[43] = A),
+      (e[44] = ie),
+      (e[45] = ae))
+    : (ae = e[45]);
+  let te;
+  e[46] !== E || e[47] !== l || e[48] !== q || e[49] !== ae
+    ? ((te = n.jsx(ql, {
+        "aria-label": q,
+        className: W,
+        initialFocus: j,
+        onOpenChange: E,
+        open: l,
+        ref: j,
+        size: "xxl",
+        children: ae,
+      })),
+      (e[46] = E),
+      (e[47] = l),
+      (e[48] = q),
+      (e[49] = ae),
+      (e[50] = te))
+    : (te = e[50]);
+  let ue;
+  return (
+    e[51] !== a || e[52] !== te
+      ? ((ue = n.jsx(Il, { presentation: a, children: te })),
+        (e[51] = a),
+        (e[52] = te),
+        (e[53] = ue))
+      : (ue = e[53]),
+    ue
+  );
+}
+function Oi(t) {
+  const e = J.c(8),
+    { params: s } = t,
+    a = Cl(),
+    l = s.marketplaceFocus?.arrival ?? "plugins",
+    d = s.focusBrowseQuery ?? null,
+    i = s.focusPlugin ?? null,
+    c = s.focusServerId ?? null,
+    u = s.focusSkillId ?? null,
+    o = s.marketplaceFocus ?? null;
+  let m;
+  return (
+    e[0] !== a ||
+    e[1] !== l ||
+    e[2] !== d ||
+    e[3] !== i ||
+    e[4] !== c ||
+    e[5] !== u ||
+    e[6] !== o
+      ? ((m = Q.createElement(Pi, {
+          ...a,
+          isOpen: !0,
+          key: l,
+          focusBrowseQuery: d,
+          focusPlugin: i,
+          focusServerId: c,
+          focusSkillId: u,
+          marketplaceFocus: o,
+        })),
+        (e[0] = a),
+        (e[1] = l),
+        (e[2] = d),
+        (e[3] = i),
+        (e[4] = c),
+        (e[5] = u),
+        (e[6] = o),
+        (e[7] = m))
+      : (m = e[7]),
+    m
+  );
+}
+export { Oi as default };

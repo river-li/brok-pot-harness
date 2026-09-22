@@ -6,3 +6,5 @@
 # Imported upstream resources retain their original formatting and bytes.
 /vendor/** -whitespace
 /reconstruction/vendor/** -whitespace
+# Retained renderer strings include significant upstream trailing spaces.
+/runtime/renderer-src/assets/index-C6zjACOA.js whitespace=-blank-at-eof,-trailing-space
