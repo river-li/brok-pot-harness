@@ -1,3 +1,3 @@
-function summarizePermissionRequest(request3) {
-  return `Legacy permission request (no longer actionable): ${request3.title} \u2014 ${request3.reason}`;
+function summarizePermissionRequest(request5) {
+  return `Legacy permission request (no longer actionable): ${request5.title} \u2014 ${request5.reason}`;
 }

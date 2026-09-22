@@ -52,11 +52,11 @@ var __disposeResources26 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger67 = createLogger("@anysphere/agent:execute-plan");
+var logger68 = createLogger("@anysphere/agent:execute-plan");
 function sanitizePlanFileName(candidate) {
   const lastSegment = candidate.split(/[/\\]/).pop() ?? "";
   const sanitized = lastSegment.replace(/[^A-Za-z0-9._-]/g, "_");
@@ -118,7 +118,7 @@ var ExecutePlanActionHandler = class extends AbstractUserMessageActionHandler {
         returnFileContentAfterWrite: false
       }));
       if (writeResult.result.case !== "success") {
-        logger67.warn(ctx, "agent.execute_plan.plan_file_recreate_failed", {
+        logger68.warn(ctx, "agent.execute_plan.plan_file_recreate_failed", {
           planId: action.planId,
           hasProvidedPlanFilePath: providedPlanFilePath !== void 0,
           readResultCase,
@@ -131,7 +131,7 @@ var ExecutePlanActionHandler = class extends AbstractUserMessageActionHandler {
           availability: "unavailable"
         };
       }
-      logger67.info(ctx, "agent.execute_plan.plan_file_recreated", {
+      logger68.info(ctx, "agent.execute_plan.plan_file_recreated", {
         planId: action.planId,
         hasProvidedPlanFilePath: providedPlanFilePath !== void 0,
         readResultCase
@@ -142,8 +142,8 @@ var ExecutePlanActionHandler = class extends AbstractUserMessageActionHandler {
         shouldUpsertPlanRegistryEntry: true,
         availability: "on_disk"
       };
-    } catch (error41) {
-      logger67.error(ctx, "agent.execute_plan.plan_file_resolution_failed", error41, {
+    } catch (error42) {
+      logger68.error(ctx, "agent.execute_plan.plan_file_resolution_failed", error42, {
         planId: action.planId,
         hasProvidedPlanFilePath: providedPlanFilePath !== void 0,
         readResultCase
@@ -295,7 +295,7 @@ var ExecutePlanActionHandler = class extends AbstractUserMessageActionHandler {
         if (needsProjectCoordinatorPromptingRerender) {
           reasons.push("project_coordinator_prompting_change");
         }
-        logger67.info(ctx, "agent.user_info.rerendered", { reasons });
+        logger68.info(ctx, "agent.user_info.rerendered", { reasons });
         recordUserInfoRerendered(ctx, reasons, this.config.modelInfo);
       }
       newMessages.push({
@@ -380,12 +380,7 @@ var ExecutePlanActionHandler = class extends AbstractUserMessageActionHandler {
           rawTodos = frontmatter.todos;
         }
         if (rawTodos.length > 0) {
-          const validStatuses = /* @__PURE__ */ new Set([
-            "pending",
-            "in_progress",
-            "completed",
-            "cancelled"
-          ]);
+          const validStatuses = /* @__PURE__ */ new Set(["pending", "in_progress", "completed", "cancelled"]);
           const todoItems = rawTodos.filter((t) => t.id && t.content).map((t) => new TodoItem({
             id: t.id,
             content: t.content,

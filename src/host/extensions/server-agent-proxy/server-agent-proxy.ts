@@ -13,9 +13,9 @@ var SEND_TASK_LINE = {
 var ServerVoiceHarnessRefusedError = class extends SandDomainError {
   name = "ServerVoiceHarnessRefusedError";
 };
-function isTransientRoomCreateFailure(error41) {
-  if (!(error41 instanceof ConnectError)) return true;
-  return error41.code === Code.Unavailable || error41.code === Code.DeadlineExceeded;
+function isTransientRoomCreateFailure(error42) {
+  if (!(error42 instanceof ConnectError)) return true;
+  return error42.code === Code.Unavailable || error42.code === Code.DeadlineExceeded;
 }
 function createSameIdRoomCreateRetryPolicy(clock) {
   return createRetryPolicy({
@@ -82,8 +82,8 @@ function createServerAgentProxy(deps) {
     const sinceLast = lastReconcileFinishedAtMs == null ? reconcileMinIntervalMs : clock.monotonicNow() - lastReconcileFinishedAtMs;
     const delayMs = Math.max(0, reconcileMinIntervalMs - sinceLast);
     reconcileWait = clock.schedule(delayMs, () => {
-      void deps.reconcileNow().catch((error41) => {
-        deps.log(`server-agent-proxy roster reconcile failed: ${errorLogTag(error41)}`);
+      void deps.reconcileNow().catch((error42) => {
+        deps.log(`server-agent-proxy roster reconcile failed: ${errorLogTag(error42)}`);
       }).finally(() => {
         lastReconcileFinishedAtMs = clock.monotonicNow();
         reconcileWait = null;
@@ -106,7 +106,7 @@ function createServerAgentProxy(deps) {
     createTransport: ({ baseUrl, interceptors }) => createConnectTransport({
       baseUrl,
       httpVersion: "1.1",
-      ...interceptors === void 0 ? {} : { interceptors },
+      interceptors,
       nodeOptions: {
         agent: createIdleDestroyingAgent({
           baseUrl,
@@ -143,12 +143,12 @@ function createServerAgentProxy(deps) {
     getMachineId: deps.auth.getMachineId
   });
   const voiceHarness = deps.voiceHarness ?? new RPCVoiceCallHarness(
-    (request3) => requestVoiceCallHarness({
+    (request5) => requestVoiceCallHarness({
       backend: deps.backend,
       getAccessToken: deps.auth.getAccessToken,
       getTeamId: deps.auth.getTeamId,
       getMachineId: deps.auth.getMachineId,
-      request: request3
+      request: request5
     })
   );
   const transcriptWriteClient = deps.transcriptWriteClient ?? createSandCursorBackendClient(GrokBotService, {
@@ -170,8 +170,8 @@ function createServerAgentProxy(deps) {
         { timeoutMs: SERVER_AGENT_ACTION_TIMEOUT_MS }
       );
       enabled = response.capabilities?.serverRoomsEnabled === true;
-    } catch (error41) {
-      deps.log(`server-agent-proxy: rooms capability check failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      deps.log(`server-agent-proxy: rooms capability check failed: ${errorLogTag(error42)}`);
     }
     roomsCapability = { enabled, checkedAtMs: now };
     return enabled;
@@ -226,11 +226,11 @@ function createServerAgentProxy(deps) {
       refreshRoster();
       return requiredAgents.has(agentId);
     },
-    performAction: async (request3) => {
+    performAction: async (request5) => {
       ensureTailStarted();
-      const reply2 = await actionCore(request3);
-      if (reply2.status === "ok" && request3.method === "setAgentUnread") {
-        const { id, isUnread } = request3.args;
+      const reply2 = await actionCore(request5);
+      if (reply2.status === "ok" && request5.method === "setAgentUnread") {
+        const { id, isUnread } = request5.args;
         patchClientOverlay(
           id,
           (client) => isUnread ? { ...client, hasUnread: true, unreadCount: Math.max(1, client.unreadCount) } : { ...client, hasUnread: false, unreadCount: 0 }
@@ -247,8 +247,8 @@ function createServerAgentProxy(deps) {
         await deps.ensureServerRoomMembers(
           memberAgentIds.filter((id) => roster.get(id)?.harness !== "temporal")
         );
-      } catch (error41) {
-        return classifyServerAgentActionError(error41);
+      } catch (error42) {
+        return classifyServerAgentActionError(error42);
       }
       const agentId = (0, import_node_crypto62.randomUUID)();
       let confirmed;
@@ -274,8 +274,8 @@ function createServerAgentProxy(deps) {
           };
         }
         confirmed = response.agent;
-      } catch (error41) {
-        if (error41 instanceof ConnectError && error41.code === Code.FailedPrecondition) {
+      } catch (error42) {
+        if (error42 instanceof ConnectError && error42.code === Code.FailedPrecondition) {
           roomsCapability = { enabled: false, checkedAtMs: clock.monotonicNow() };
           return attempts2 > 1 ? {
             status: "refused",
@@ -283,7 +283,7 @@ function createServerAgentProxy(deps) {
             failureCode: SAND_ROOM_CREATED_NOT_YET_VISIBLE
           } : { status: "unimplemented" };
         }
-        return classifyServerAgentActionError(error41);
+        return classifyServerAgentActionError(error42);
       }
       const agent = await roomSummaryAfterAdopt(confirmed);
       if (agent === null) {
@@ -312,8 +312,8 @@ function createServerAgentProxy(deps) {
           };
         }
         confirmed = response.agent;
-      } catch (error41) {
-        return classifyServerAgentActionError(error41);
+      } catch (error42) {
+        return classifyServerAgentActionError(error42);
       }
       const agent = await roomSummaryAfterAdopt(confirmed) ?? roomRowFromFallback(confirmed, previous);
       return { status: "ok", value: agent };
@@ -325,8 +325,8 @@ function createServerAgentProxy(deps) {
           { agentId, hiddenFromSidebar: isHidden },
           { timeoutMs: SERVER_AGENT_ACTION_TIMEOUT_MS }
         );
-      } catch (error41) {
-        return classifyServerAgentActionError(error41);
+      } catch (error42) {
+        return classifyServerAgentActionError(error42);
       }
       patchClientOverlay(agentId, (client) => ({ ...client, isHiddenFromSidebar: isHidden }));
       return { status: "ok", value: null };
@@ -365,12 +365,12 @@ function createServerAgentProxy(deps) {
         authored
       );
     },
-    relayVoiceCallNudge: async ({ agentId, callId, request: request3 }) => {
+    relayVoiceCallNudge: async ({ agentId, callId, request: request5 }) => {
       const outcome = await voiceHarness.callTool({
         agentId,
         callId,
         name: VOICE_CALL_NUDGE_MAIN_TOOL,
-        input: { request: request3 },
+        input: { request: request5 },
         line: SEND_TASK_LINE
       });
       if (outcome.kind !== "served") {

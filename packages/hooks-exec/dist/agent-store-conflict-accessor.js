@@ -1,6 +1,6 @@
 init_shell_exec_pb();
-init_dist2();
-var __awaiter33 = function(thisArg, _arguments, P2, generator) {
+init_dist3();
+var __awaiter35 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -27,7 +27,7 @@ var __awaiter33 = function(thisArg, _arguments, P2, generator) {
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 };
-var __asyncValues12 = function(o) {
+var __asyncValues11 = function(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var m2 = o[Symbol.asyncIterator], i;
   return m2 ? m2.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
@@ -46,10 +46,10 @@ var __asyncValues12 = function(o) {
     }, reject2);
   }
 };
-var __await13 = function(v2) {
-  return this instanceof __await13 ? (this.v = v2, this) : new __await13(v2);
+var __await12 = function(v2) {
+  return this instanceof __await12 ? (this.v = v2, this) : new __await12(v2);
 };
-var __asyncGenerator13 = function(thisArg, _arguments, generator) {
+var __asyncGenerator12 = function(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g2 = generator.apply(thisArg, _arguments || []), i, q2 = [];
   return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function() {
@@ -78,7 +78,7 @@ var __asyncGenerator13 = function(thisArg, _arguments, generator) {
     }
   }
   function step(r) {
-    r.value instanceof __await13 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
+    r.value instanceof __await12 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
   }
   function fulfill(value) {
     resume("next", value);
@@ -124,7 +124,7 @@ function wakeBehaviorFor(resourceSymbol) {
 }
 var DEFAULT_WRITE_BARRIER_TIMEOUT_MS = 2e3;
 function awaitForceWrittenPathBeforeDrain(force, args, wake, options2) {
-  return __awaiter33(this, void 0, void 0, function* () {
+  return __awaiter35(this, void 0, void 0, function* () {
     const report = (event) => {
       var _a19;
       try {
@@ -239,7 +239,7 @@ var AgentStoreConflictDrainResourceAccessor = class _AgentStoreConflictDrainReso
     const cacheCarriersForExecId = this.cacheCarriersForExecId.bind(this);
     const carriersByExecId = this.carriersByExecId;
     const inFlightByExecId = this.inFlightByExecId;
-    const appendDrain = (ctx, options2) => __awaiter33(this, void 0, void 0, function* () {
+    const appendDrain = (ctx, options2) => __awaiter35(this, void 0, void 0, function* () {
       const collector = options2 === null || options2 === void 0 ? void 0 : options2.hookContextCollector;
       if (collector === void 0) {
         return [];
@@ -265,7 +265,7 @@ var AgentStoreConflictDrainResourceAccessor = class _AgentStoreConflictDrainReso
           return carriers;
         }
       }
-      const runPeek = (attachTo) => __awaiter33(this, void 0, void 0, function* () {
+      const runPeek = (attachTo) => __awaiter35(this, void 0, void 0, function* () {
         const drain = resolveDrain(ctx);
         let claimedIds = [];
         try {
@@ -315,24 +315,24 @@ var AgentStoreConflictDrainResourceAccessor = class _AgentStoreConflictDrainReso
           const result = target.execute.call(target, ctx, args, options2);
           if (isAsyncIterable(result)) {
             return (function wrapped() {
-              return __asyncGenerator13(this, arguments, function* wrapped_1() {
+              return __asyncGenerator12(this, arguments, function* wrapped_1() {
                 var _a19, e_1, _b2, _c2;
                 let drained = false;
                 let failed2 = false;
                 let completedNormally = false;
                 try {
                   try {
-                    for (var _d = true, result_1 = __asyncValues12(result), result_1_1; result_1_1 = yield __await13(result_1.next()), _a19 = result_1_1.done, !_a19; _d = true) {
+                    for (var _d = true, result_1 = __asyncValues11(result), result_1_1; result_1_1 = yield __await12(result_1.next()), _a19 = result_1_1.done, !_a19; _d = true) {
                       _c2 = result_1_1.value;
                       _d = false;
                       const event = _c2;
                       if (resourceSymbol === shellStreamExecutorResource.symbol && isShellBackgroundedStreamEvent(event)) {
                         if (!drained) {
                           fireWake(args, ctx);
-                          const carriers = yield __await13(appendDrain(ctx, options2));
+                          const carriers = yield __await12(appendDrain(ctx, options2));
                           drained = true;
                           if (carriers.length > 0) {
-                            yield yield __await13(new ShellStream({
+                            yield yield __await12(new ShellStream({
                               event: {
                                 case: "hookContext",
                                 value: new ShellStreamHookContext({
@@ -342,35 +342,35 @@ var AgentStoreConflictDrainResourceAccessor = class _AgentStoreConflictDrainReso
                             }));
                           }
                         }
-                        yield yield __await13(event);
+                        yield yield __await12(event);
                         continue;
                       }
-                      yield yield __await13(event);
+                      yield yield __await12(event);
                     }
                   } catch (e_1_1) {
                     e_1 = { error: e_1_1 };
                   } finally {
                     try {
-                      if (!_d && !_a19 && (_b2 = result_1.return)) yield __await13(_b2.call(result_1));
+                      if (!_d && !_a19 && (_b2 = result_1.return)) yield __await12(_b2.call(result_1));
                     } finally {
                       if (e_1) throw e_1.error;
                     }
                   }
                   completedNormally = true;
-                } catch (error41) {
+                } catch (error42) {
                   failed2 = true;
-                  throw error41;
+                  throw error42;
                 } finally {
                   fireWake(args, ctx);
                   if (!drained && !failed2 && completedNormally) {
-                    yield __await13(appendDrain(ctx, options2));
+                    yield __await12(appendDrain(ctx, options2));
                   }
                 }
               });
             })();
           }
           if (isPromiseLike(result)) {
-            return (() => __awaiter33(this, void 0, void 0, function* () {
+            return (() => __awaiter35(this, void 0, void 0, function* () {
               try {
                 const value = yield result;
                 fireWake(args, ctx);
@@ -383,9 +383,9 @@ var AgentStoreConflictDrainResourceAccessor = class _AgentStoreConflictDrainReso
                   yield appendDrain(ctx, options2);
                 }
                 return value;
-              } catch (error41) {
+              } catch (error42) {
                 fireWake(args, ctx);
-                throw error41;
+                throw error42;
               }
             }))();
           }

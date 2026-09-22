@@ -2,11 +2,11 @@ var TEAM_RULES_REQUEST_TIMEOUT_MS = 1e4;
 function appliesToSand(rule) {
   return rule.agentType === TeamRuleAgentType.SAND || rule.agentType === TeamRuleAgentType.ALL;
 }
-function errorLabel2(error41) {
-  if (error41 instanceof ConnectError) {
-    return `ConnectError(code=${error41.code})`;
+function errorLabel2(error42) {
+  if (error42 instanceof ConnectError) {
+    return `ConnectError(code=${error42.code})`;
   }
-  return errorClassOf(error41);
+  return errorClassOf(error42);
 }
 function directMemberTeamIds(response) {
   return response.teams.filter((team) => team.id > 0 && team.isDirectMember).map((team) => team.id);
@@ -28,11 +28,11 @@ function createSandTeamRulesResolver(options2) {
       if (selectedTeamId !== void 0) {
         try {
           return { outcome: "rules", rules: await fetchTeamRules(selectedTeamId) };
-        } catch (error41) {
+        } catch (error42) {
           report({
             extension: "managed_setup",
             kind: "team_rules_fetch",
-            errorClass: errorLabel2(error41)
+            errorClass: errorLabel2(error42)
           });
           return { outcome: "incomplete" };
         }
@@ -43,11 +43,11 @@ function createSandTeamRulesResolver(options2) {
           timeoutMs: TEAM_RULES_REQUEST_TIMEOUT_MS
         });
         teamIds = directMemberTeamIds(teamsResponse);
-      } catch (error41) {
+      } catch (error42) {
         report({
           extension: "managed_setup",
           kind: "team_rules_membership",
-          errorClass: errorLabel2(error41)
+          errorClass: errorLabel2(error42)
         });
         return { outcome: "incomplete" };
       }
@@ -60,20 +60,20 @@ function createSandTeamRulesResolver(options2) {
           outcome: "rules",
           rules: mergeTeamRulesByFullPath(batches)
         };
-      } catch (error41) {
+      } catch (error42) {
         report({
           extension: "managed_setup",
           kind: "team_rules_fetch",
-          errorClass: errorLabel2(error41)
+          errorClass: errorLabel2(error42)
         });
         return { outcome: "incomplete" };
       }
     },
-    reportLoadFailure: (error41) => {
+    reportLoadFailure: (error42) => {
       report({
         extension: "managed_setup",
         kind: "team_rules_retry",
-        errorClass: errorLabel2(error41)
+        errorClass: errorLabel2(error42)
       });
     }
   });

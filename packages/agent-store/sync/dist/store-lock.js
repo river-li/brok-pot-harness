@@ -1,4 +1,4 @@
-var __awaiter3 = function(thisArg, _arguments, P2, generator) {
+var __awaiter4 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -59,7 +59,7 @@ var StoreLock = class {
    * or unparseable file also reads as not-owned.
    */
   verifyStillOwned() {
-    return __awaiter3(this, void 0, void 0, function* () {
+    return __awaiter4(this, void 0, void 0, function* () {
       if (this.disposed) {
         return false;
       }
@@ -80,7 +80,7 @@ var StoreLock = class {
     this.clearTimer();
   }
   dispose() {
-    return __awaiter3(this, void 0, void 0, function* () {
+    return __awaiter4(this, void 0, void 0, function* () {
       if (this.disposed) {
         return;
       }
@@ -96,7 +96,7 @@ var StoreLock = class {
     });
   }
   refreshMtime() {
-    return __awaiter3(this, void 0, void 0, function* () {
+    return __awaiter4(this, void 0, void 0, function* () {
       if (this.disposed || this.unhealthy) {
         return;
       }
@@ -119,7 +119,7 @@ var StoreLock = class {
   }
 };
 function tryAcquireStoreLock(options2) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     const resolved = resolveOptions(options2);
     ensureSecureDirectoryChain(path5.dirname(resolved.lockPath));
     assertNoSymlinkInPath(resolved.lockPath);
@@ -127,7 +127,7 @@ function tryAcquireStoreLock(options2) {
   });
 }
 function readActiveStoreLockOwner(options2) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     const resolved = resolveOptions(Object.assign(Object.assign({}, options2), { windowId: "read-active-owner", mtimeUpdateMs: 0 }));
     assertNoSymlinkInPath(resolved.lockPath);
     const owner = yield readLockfileContents(resolved.lockPath, {
@@ -168,14 +168,14 @@ function getCurrentStoreLockIdentity(platform2 = process.platform) {
   return { uid };
 }
 function tryAcquire(options2, isSecondAttempt) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     const owner = createOwner(options2);
     try {
       yield options2.fs.writeLockExclusive(options2.lockPath, JSON.stringify(owner), PRIVATE_LOCKFILE_MODE);
       return { kind: "acquired", lock: new StoreLock(options2, owner) };
-    } catch (error41) {
-      if (!(error41 instanceof Error) || getErrorCode(error41) !== "EEXIST") {
-        throw error41;
+    } catch (error42) {
+      if (!(error42 instanceof Error) || getErrorCode(error42) !== "EEXIST") {
+        throw error42;
       }
     }
     const contents = yield readLockfileContents(options2.lockPath, {
@@ -208,7 +208,7 @@ function tryAcquire(options2, isSecondAttempt) {
   });
 }
 function stealLock(options2) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     yield ignoreNotFound(() => options2.fs.unlink(options2.lockPath));
     return yield tryAcquire(options2, true);
   });
@@ -224,15 +224,15 @@ function createOwner(options2) {
   };
 }
 function readLockfileContents(lockPath, options2) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     let raw;
     try {
       raw = yield options2.fs.readFile(lockPath, "utf8");
-    } catch (error41) {
-      if (error41 instanceof Error && getErrorCode(error41) === "ENOENT") {
+    } catch (error42) {
+      if (error42 instanceof Error && getErrorCode(error42) === "ENOENT") {
         return void 0;
       }
-      if (error41 instanceof Error && (getErrorCode(error41) === "EACCES" || getErrorCode(error41) === "EPERM")) {
+      if (error42 instanceof Error && (getErrorCode(error42) === "EACCES" || getErrorCode(error42) === "EPERM")) {
         if (options2.throwOnInvalid === false) {
           return void 0;
         }
@@ -242,7 +242,7 @@ function readLockfileContents(lockPath, options2) {
           lockPath
         });
       }
-      throw error41;
+      throw error42;
     }
     let parsed2;
     try {
@@ -272,15 +272,15 @@ function readLockfileContents(lockPath, options2) {
   });
 }
 function readMtime(options2) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     try {
       const stat28 = yield options2.fs.stat(options2.lockPath);
       return stat28.mtimeMs;
-    } catch (error41) {
-      if (error41 instanceof Error && getErrorCode(error41) === "ENOENT") {
+    } catch (error42) {
+      if (error42 instanceof Error && getErrorCode(error42) === "ENOENT") {
         return 0;
       }
-      throw error41;
+      throw error42;
     }
   });
 }
@@ -344,23 +344,23 @@ function defaultProcessExists(pid) {
   try {
     process.kill(pid, 0);
     return true;
-  } catch (error41) {
-    return error41 instanceof Error && getErrorCode(error41) === "EPERM";
+  } catch (error42) {
+    return error42 instanceof Error && getErrorCode(error42) === "EPERM";
   }
 }
 function ignoreNotFound(operation) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     try {
       yield operation();
-    } catch (error41) {
-      if (!(error41 instanceof Error) || getErrorCode(error41) !== "ENOENT") {
-        throw error41;
+    } catch (error42) {
+      if (!(error42 instanceof Error) || getErrorCode(error42) !== "ENOENT") {
+        throw error42;
       }
     }
   });
 }
 function delay(ms2) {
-  return __awaiter3(this, void 0, void 0, function* () {
+  return __awaiter4(this, void 0, void 0, function* () {
     if (ms2 <= 0) {
       return;
     }
@@ -389,9 +389,9 @@ function storeLockOwnerFromJson(value) {
 function isJsonObject(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
-function getErrorCode(error41) {
-  if ("code" in error41 && typeof error41.code === "string") {
-    return error41.code;
+function getErrorCode(error42) {
+  if ("code" in error42 && typeof error42.code === "string") {
+    return error42.code;
   }
   return void 0;
 }

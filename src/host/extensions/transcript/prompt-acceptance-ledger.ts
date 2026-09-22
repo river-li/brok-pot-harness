@@ -1,6 +1,6 @@
 var import_node_crypto70 = require("node:crypto");
-var import_node_fs92 = require("node:fs");
-var import_node_path151 = require("node:path");
+var import_node_fs91 = require("node:fs");
+var import_node_path150 = require("node:path");
 init_scheduling();
 init_errors();
 init_unknown_record();
@@ -154,7 +154,7 @@ var PromptAcceptanceLedger = class {
     delayMs: 0
   })) {
     this.nowMs = nowMs2;
-    this.filePath = rootDir == null ? null : (0, import_node_path151.join)(rootDir, SAND_SEND_ACCEPTANCE_FILE_NAME);
+    this.filePath = rootDir == null ? null : (0, import_node_path150.join)(rootDir, SAND_SEND_ACCEPTANCE_FILE_NAME);
     this.persistDeferredFlip = flipPersistPolicy.wrap(() => {
       if (this.hasDeferredFlip) this.persist();
     });
@@ -273,9 +273,9 @@ var PromptAcceptanceLedger = class {
     let raw = null;
     if (this.filePath != null) {
       try {
-        raw = (0, import_node_fs92.readFileSync)(this.filePath, "utf8");
-      } catch (error41) {
-        reportFallbackUnlessAbsent("prompt_acceptance_ledger", error41);
+        raw = (0, import_node_fs91.readFileSync)(this.filePath, "utf8");
+      } catch (error42) {
+        reportFallbackUnlessAbsent("prompt_acceptance_ledger", error42);
         raw = null;
       }
     }
@@ -284,7 +284,7 @@ var PromptAcceptanceLedger = class {
     let repairNeeded = false;
     if (parsed2.damaged && this.filePath != null) {
       try {
-        (0, import_node_fs92.copyFileSync)(this.filePath, `${this.filePath}.corrupt-${this.nowMs()}`);
+        (0, import_node_fs91.copyFileSync)(this.filePath, `${this.filePath}.corrupt-${this.nowMs()}`);
       } catch {
       }
       gaps = withCorruptReset(gaps, this.nowMs());
@@ -313,9 +313,9 @@ var PromptAcceptanceLedger = class {
     if (markerPath == null) return null;
     let raw;
     try {
-      raw = (0, import_node_fs92.readFileSync)(markerPath, "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("prompt_acceptance_ledger", error41);
+      raw = (0, import_node_fs91.readFileSync)(markerPath, "utf8");
+    } catch (error42) {
+      reportFallbackUnlessAbsent("prompt_acceptance_ledger", error42);
       return null;
     }
     try {
@@ -341,25 +341,25 @@ var PromptAcceptanceLedger = class {
     };
     try {
       writeFileAtomicSync(this.filePath, JSON.stringify(file2));
-    } catch (error41) {
-      this.enterDegraded(nowMs2, error41);
+    } catch (error42) {
+      this.enterDegraded(nowMs2, error42);
       return;
     }
     loaded.gaps = gaps;
     this.degradedSinceMs = null;
     this.removeDegradedMarker();
   }
-  enterDegraded(nowMs2, error41) {
+  enterDegraded(nowMs2, error42) {
     this.degradedSinceMs ??= nowMs2;
     reportHostDiagnostic({
       kind: "send_ledger_degraded",
-      errorClass: errorLogTag(error41)
+      errorClass: errorLogTag(error42)
     });
     if (this.markerMayExist) return;
     const markerPath = this.markerPath();
     if (markerPath == null) return;
     try {
-      (0, import_node_fs92.writeFileSync)(markerPath, JSON.stringify({ version: 1, sinceMs: this.degradedSinceMs }));
+      (0, import_node_fs91.writeFileSync)(markerPath, JSON.stringify({ version: 1, sinceMs: this.degradedSinceMs }));
       this.markerMayExist = true;
     } catch {
     }
@@ -369,7 +369,7 @@ var PromptAcceptanceLedger = class {
     const markerPath = this.markerPath();
     if (markerPath == null) return;
     try {
-      (0, import_node_fs92.rmSync)(markerPath, { force: true });
+      (0, import_node_fs91.rmSync)(markerPath, { force: true });
       this.markerMayExist = false;
     } catch {
     }

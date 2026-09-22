@@ -52,9 +52,9 @@ var __disposeResources11 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var DEFAULT_MAX_RIPWALK_THREADS = 2;
 var RIPWALK_THREADS_ENV_VAR = "CURSOR_RIPWALK_THREADS";

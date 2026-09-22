@@ -23,11 +23,11 @@ var memoryExtension = defineHostExtension({
             getTeamId: context2.deps.auth.getTeamId,
             getMachineId: context2.deps.auth.getMachineId
           }),
-          report: (_event, error41) => {
+          report: (_event, error42) => {
             context2.deps.telemetry.logs.reportHostDiagnostic({
               kind: "fallback_taken",
               stage: "memory_service",
-              errorClass: errorLogTag(error41)
+              errorClass: errorLogTag(error42)
             });
           }
         });
@@ -88,7 +88,6 @@ var memoryExtension = defineHostExtension({
       createAgentState: (options2) => createSandAgentState({
         ...options2,
         sandRoot,
-        membership: new AgentProjectMembership(options2.agentDir),
         onUserMemoryWritten: () => serverShards?.pushUserShard(options2.agentId)
       })
     });

@@ -53,7 +53,7 @@ function pluginVariablesSchemaToFields(schema2) {
       continue;
     }
     const title = typeof value.title === "string" ? value.title : void 0;
-    const description10 = typeof value.description === "string" ? value.description : void 0;
+    const description9 = typeof value.description === "string" ? value.description : void 0;
     const defaultValue = toDefaultValue(value.default, type2, options2);
     const isSecret = type2 === "string" && options2 == null && (value.format === "password" || value.writeOnly === true || isSecretVariableName(key));
     fields2.push({
@@ -65,7 +65,7 @@ function pluginVariablesSchemaToFields(schema2) {
       isSecret,
       ...options2 != null ? { options: options2 } : {},
       ...defaultValue != null ? { defaultValue } : {},
-      ...description10 != null ? { hint: description10 } : {}
+      ...description9 != null ? { hint: description9 } : {}
     });
   }
   return { fields: fields2, unsupportedFieldKeys };
@@ -88,7 +88,7 @@ var SECRET_WORDS2, ACRONYMS2;
 var init_mcp_plugin_variables = __esm({
   "src/shared/node/mcp/mcp-plugin-variables.ts"() {
     "use strict";
-    init_dist4();
+    init_dist5();
     init_locale();
     init_unknown_record();
     SECRET_WORDS2 = /* @__PURE__ */ new Set([

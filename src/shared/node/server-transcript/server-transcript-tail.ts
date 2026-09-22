@@ -7,6 +7,14 @@ var SERVER_TRANSCRIPT_TAIL_CLEAN_RECONNECT_MIN_MS = 500;
 var SERVER_TRANSCRIPT_TAIL_CLEAN_RECONNECT_MAX_MS = 3e3;
 var SERVER_TRANSCRIPT_TAIL_RETRY_INITIAL_MS = 1e3;
 var SERVER_TRANSCRIPT_TAIL_RETRY_MAX_MS = 6e4;
+var SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_MIN_WAIT_MS = 4e3;
+var SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_INTERVAL_MS = 4e3;
+var SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_FAST_MS = 6e4;
+var SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_LAST_STEP = 4;
+var SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_RETRY_MARGIN_MS = 2e3;
+var SERVER_TRANSCRIPT_TAIL_BACKEND_WAKE_JITTER_MS = 1e3;
+var SERVER_TRANSCRIPT_TAIL_BACKEND_WAKE_JITTER_MAX_MS = 2e3;
+var SERVER_TRANSCRIPT_TAIL_HEALTHY_AFTER_MS = 5e3;
 var SERVER_TRANSCRIPT_TAIL_REHYDRATE_LIMIT = 500;
 var SERVER_TRANSCRIPT_TAIL_BODY_RETRY_MAX = 5;
 var SERVER_TRANSCRIPT_TAIL_BODY_RETRY_INITIAL_MS = 2e3;
@@ -66,6 +74,26 @@ function createServerTranscriptTail(deps) {
     maxDelayMs: SERVER_TRANSCRIPT_TAIL_RETRY_MAX_MS,
     clock
   });
+  const backendWatchPace = deps.backendWatchPace ?? createRetryPolicy({
+    name: "server-transcript-tail-backend-watch",
+    mode: "until-signal",
+    initialDelayMs: SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_INTERVAL_MS,
+    maxDelayMs: SERVER_TRANSCRIPT_TAIL_RETRY_MAX_MS,
+    backoffFactor: 2,
+    jitter: "equal",
+    clock,
+    random
+  });
+  const backendWakeJitter = deps.backendWakeJitter ?? createRetryPolicy({
+    name: "server-transcript-tail-backend-wake",
+    mode: "until-signal",
+    initialDelayMs: SERVER_TRANSCRIPT_TAIL_BACKEND_WAKE_JITTER_MS,
+    maxDelayMs: SERVER_TRANSCRIPT_TAIL_BACKEND_WAKE_JITTER_MAX_MS,
+    backoffFactor: 2,
+    jitter: "full",
+    clock,
+    random
+  });
   const bodyRetryBackoff = deps.bodyRetryBackoff ?? createRetryPolicy({
     name: "server-transcript-tail-body-retry",
     maxAttempts: SERVER_TRANSCRIPT_TAIL_BODY_RETRY_MAX,
@@ -95,6 +123,11 @@ function createServerTranscriptTail(deps) {
   let epochBumpFloor = 0;
   let mountedAgentId = null;
   let streamLifetime = null;
+  let pendingRetryWait = null;
+  let backendSeenDown = false;
+  let lastBackendWakeAt = null;
+  let outageStartedAt = null;
+  let backendProbeStep = 1;
   const transition = (next) => {
     const previous = phase;
     phase = next;
@@ -271,9 +304,9 @@ function createServerTranscriptTail(deps) {
     let parsed2;
     try {
       parsed2 = JSON.parse(decoder2.decode(body));
-    } catch (error41) {
+    } catch (error42) {
       droppedRows += 1;
-      deps.log(`server transcript row body is not JSON: ${errorLogTag(error41)}`);
+      deps.log(`server transcript row body is not JSON: ${errorLogTag(error42)}`);
       return null;
     }
     const entry = transcriptEntryOfJson(parsed2);
@@ -306,8 +339,8 @@ function createServerTranscriptTail(deps) {
           );
           const row = listed.entries.find((candidate) => candidate.seq === seq2);
           outcomes.set(seq2, row == null ? { kind: "missing" } : { kind: "found", row });
-        } catch (error41) {
-          outcomes.set(seq2, { kind: "failed", error: error41 });
+        } catch (error42) {
+          outcomes.set(seq2, { kind: "failed", error: error42 });
         }
       }
     };
@@ -336,7 +369,7 @@ function createServerTranscriptTail(deps) {
       const failures = [...fetched.values()].flatMap(
         (outcome) => outcome.kind === "failed" ? [outcome.error] : []
       );
-      const gateOff = failures.find((error41) => error41 instanceof ServerTranscriptTailDisabledError);
+      const gateOff = failures.find((error42) => error42 instanceof ServerTranscriptTailDisabledError);
       if (gateOff !== void 0) throw gateOff;
       if (failures.length > 0) {
         if (signal?.aborted === true) throw failures[0];
@@ -537,9 +570,9 @@ function createServerTranscriptTail(deps) {
   const retryPendingBodiesAfter = async (state, handle) => {
     try {
       await handle.elapsed;
-    } catch (error41) {
+    } catch (error42) {
       if (state.bodyRetry?.handle !== handle) return;
-      throw error41;
+      throw error42;
     }
     if (state.bodyRetry?.handle !== handle) return;
     const { attempt } = state.bodyRetry;
@@ -566,10 +599,10 @@ function createServerTranscriptTail(deps) {
           },
           signal
         );
-      } catch (error41) {
-        if (signal.aborted || error41 instanceof ServerTranscriptTailReadSupersededError || !acceptsAgent(state.agentId))
+      } catch (error42) {
+        if (signal.aborted || error42 instanceof ServerTranscriptTailReadSupersededError || !acceptsAgent(state.agentId))
           return;
-        deps.log(`server transcript body retry for ${state.agentId} failed: ${errorLogTag(error41)}`);
+        deps.log(`server transcript body retry for ${state.agentId} failed: ${errorLogTag(error42)}`);
       } finally {
         if (!signal.aborted && readGeneration === readGenerationFor(state.agentId) && acceptsAgent(state.agentId) && agents.get(stateKey) === state) {
           scheduleBodyRetry(state, attempt + 1);
@@ -760,9 +793,11 @@ function createServerTranscriptTail(deps) {
       case "rosterChanged":
         deps.onRosterChanged?.(frame.frame.value);
         return;
+      case "turnFailed":
+        deps.onTurnFailed?.(frame.frame.value);
+        return;
       case "connected":
       case "heartbeat":
-      case "turnFailed":
       case "boxState":
       case void 0:
         return;
@@ -835,8 +870,8 @@ function createServerTranscriptTail(deps) {
   const settle = async (delay5, signal) => {
     try {
       await delay5.elapsed;
-    } catch (error41) {
-      if (!signal.aborted) throw error41;
+    } catch (error42) {
+      if (!signal.aborted) throw error42;
     }
   };
   const recheckGateWhileOpen = (signal) => {
@@ -859,9 +894,9 @@ function createServerTranscriptTail(deps) {
             updateLegacyEnabled({ enabled });
             if (enabled || hasRequiredAgents()) tick();
           },
-          (error41) => {
+          (error42) => {
             if (cancelled || signal.aborted) return;
-            deps.log(`server transcript tail gate recheck failed: ${errorLogTag(error41)}`);
+            deps.log(`server transcript tail gate recheck failed: ${errorLogTag(error42)}`);
             tick();
           }
         );
@@ -871,7 +906,7 @@ function createServerTranscriptTail(deps) {
     tick();
     return cancel;
   };
-  const runOnce = async (signal) => {
+  const runOnce = async (signal, onProvenHealthy) => {
     const enabled = await deps.client.isEnabled();
     if (signal.aborted) return "clean";
     updateLegacyEnabled({ enabled });
@@ -888,7 +923,7 @@ function createServerTranscriptTail(deps) {
       AbortSignal.any([signal, lifetime.signal])
     );
     const stopRecheck = recheckGateWhileOpen(signal);
-    let streamConnected = false;
+    let connectedAt = null;
     let stalled = false;
     let idle = null;
     const disarmStall = () => {
@@ -909,15 +944,17 @@ function createServerTranscriptTail(deps) {
       for await (const frame of stream3) {
         disarmStall();
         if (signal.aborted) break;
+        const arrivedLateEnoughToProveHealth = frame.frame.case !== "connected" && connectedAt !== null && clock.monotonicNow() - connectedAt >= SERVER_TRANSCRIPT_TAIL_HEALTHY_AFTER_MS;
         if (frame.frame.case === "connected") {
-          streamConnected = true;
+          connectedAt = clock.monotonicNow();
           activate();
         }
-        if (streamConnected) await handleFrame(frame, signal);
+        if (connectedAt !== null) await handleFrame(frame, signal);
+        if (arrivedLateEnoughToProveHealth) onProvenHealthy();
         armStall();
       }
-    } catch (error41) {
-      if (!stalled && !lifetime.signal.aborted) throw error41;
+    } catch (error42) {
+      if (!stalled && !lifetime.signal.aborted) throw error42;
     } finally {
       signal.removeEventListener("abort", disarmStall);
       disarmStall();
@@ -931,24 +968,74 @@ function createServerTranscriptTail(deps) {
     }
     return "clean";
   };
+  const nextBackendProbeStep = () => {
+    const outageAge = outageStartedAt === null ? 0 : elapsedMs(outageStartedAt, clock.monotonicNow());
+    if (outageAge >= SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_FAST_MS) backendProbeStep += 1;
+    return backendProbeStep;
+  };
+  const endOutage = () => {
+    backendSeenDown = false;
+    outageStartedAt = null;
+    backendProbeStep = 1;
+    lastBackendWakeAt = null;
+  };
+  const watchForBackendReturn = async (signal, retry2, wake) => {
+    while (!signal.aborted) {
+      const step = nextBackendProbeStep();
+      if (step > SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_LAST_STEP) return;
+      const pace = backendWatchPace.schedule(step, signal);
+      const untilRetryMs = retry2.delayMs - elapsedMs(retry2.scheduledAt, clock.monotonicNow());
+      if (untilRetryMs - pace.delayMs < SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_RETRY_MARGIN_MS) {
+        pace.dispose();
+        return;
+      }
+      await settle(pace, signal);
+      if (signal.aborted) return;
+      const probe = await deps.client.probeBackend(signal);
+      if (probe === "down") {
+        backendSeenDown = true;
+        continue;
+      }
+      if (signal.aborted) return;
+      if (probe === "up" && backendSeenDown) {
+        backendSeenDown = false;
+        if (lastBackendWakeAt !== null && elapsedMs(lastBackendWakeAt, clock.monotonicNow()) < SERVER_TRANSCRIPT_TAIL_RETRY_MAX_MS) {
+          return;
+        }
+        const wakeDelay = backendWakeJitter.schedule(step, signal);
+        if (wakeDelay.delayMs > 0) await settle(wakeDelay, signal);
+        wakeDelay.dispose();
+        if (signal.aborted) return;
+        lastBackendWakeAt = clock.monotonicNow();
+        deps.log("server transcript tail: the backend answers again; retrying now");
+        wake();
+      }
+      return;
+    }
+  };
   const loop = async (signal) => {
     let failures = 0;
     while (!signal.aborted) {
       let outcome;
       try {
-        outcome = await runOnce(signal);
+        outcome = await runOnce(signal, () => {
+          failures = 0;
+          endOutage();
+        });
         failures = 0;
-      } catch (error41) {
+        endOutage();
+      } catch (error42) {
         if (signal.aborted) return;
-        if (error41 instanceof ServerTranscriptTailReadSupersededError) {
+        if (error42 instanceof ServerTranscriptTailReadSupersededError) {
           failures = 0;
           outcome = "clean";
-        } else if (error41 instanceof ServerTranscriptTailDisabledError) {
+        } else if (error42 instanceof ServerTranscriptTailDisabledError) {
           outcome = "disabled";
         } else {
           failures += 1;
+          outageStartedAt ??= clock.monotonicNow();
           outcome = "failed";
-          deps.log(`server transcript tail dropped (attempt ${failures}): ${errorLogTag(error41)}`);
+          deps.log(`server transcript tail dropped (attempt ${failures}): ${errorLogTag(error42)}`);
           if (failures >= SERVER_TRANSCRIPT_TAIL_FALLBACK_AFTER_FAILURES && fallBack({ reason: `${failures} consecutive stream failures`, recoverable: true })) {
             return;
           }
@@ -967,15 +1054,33 @@ function createServerTranscriptTail(deps) {
           signal
         );
       } else {
-        await settle(retryBackoff.schedule(failures, signal), signal);
+        const retryWait = new AbortController();
+        pendingRetryWait = retryWait;
+        const waitSignal = AbortSignal.any([signal, retryWait.signal]);
+        const delay5 = retryBackoff.schedule(failures, waitSignal);
+        const retry2 = { scheduledAt: clock.monotonicNow(), delayMs: delay5.delayMs };
+        const watchLifetime = new AbortController();
+        if (delay5.delayMs >= SERVER_TRANSCRIPT_TAIL_BACKEND_WATCH_MIN_WAIT_MS) {
+          const watchSignal = AbortSignal.any([waitSignal, watchLifetime.signal]);
+          void watchForBackendReturn(watchSignal, retry2, () => retryWait.abort()).catch(
+            (error42) => {
+              if (watchSignal.aborted) return;
+              deps.log(`server transcript tail backend watch failed: ${errorLogTag(error42)}`);
+            }
+          );
+        }
+        await settle(delay5, waitSignal);
+        watchLifetime.abort();
+        if (pendingRetryWait === retryWait) pendingRetryWait = null;
+        if (retryWait.signal.aborted) failures = 0;
       }
     }
   };
-  const readFailure = (error41) => {
-    if (error41 instanceof ServerTranscriptTailDisabledError) {
+  const readFailure = (error42) => {
+    if (error42 instanceof ServerTranscriptTailDisabledError) {
       fallBack({ reason: "gate off during a read" });
     }
-    throw new ServerTranscriptTailReadError(error41 instanceof Error ? error41.message : String(error41));
+    throw new ServerTranscriptTailReadError(error42 instanceof Error ? error42.message : String(error42));
   };
   const start = () => {
     if (phase.kind === "running") {
@@ -984,9 +1089,9 @@ function createServerTranscriptTail(deps) {
     }
     const controller = new AbortController();
     transition(started(phase, controller));
-    void loop(controller.signal).catch((error41) => {
+    void loop(controller.signal).catch((error42) => {
       if (controller.signal.aborted) return;
-      deps.log(`server transcript tail loop ended: ${errorLogTag(error41)}`);
+      deps.log(`server transcript tail loop ended: ${errorLogTag(error42)}`);
     });
   };
   const serverRead = (args, read) => {
@@ -1004,11 +1109,11 @@ function createServerTranscriptTail(deps) {
       let value;
       try {
         value = await read(state);
-      } catch (error41) {
+      } catch (error42) {
         if (readGeneration !== readGenerationFor(agentId)) {
           throw new ServerTranscriptTailReadError("server transcript read superseded");
         }
-        return readFailure(error41);
+        return readFailure(error42);
       }
       if (readGeneration !== readGenerationFor(agentId)) {
         throw new ServerTranscriptTailReadError("server transcript read superseded");
@@ -1020,7 +1125,13 @@ function createServerTranscriptTail(deps) {
     start,
     stop() {
       transition(stopped(phase));
+      endOutage();
       for (const state of agents.values()) cancelBodyRetry(state);
+    },
+    noteNetworkReturn: () => {
+      endOutage();
+      pendingRetryWait?.abort();
+      streamLifetime?.abort();
     },
     isActive: (args) => args === void 0 ? isLegacyActive(phase) : requiresServer(args.agentId) || isLegacyActive(phase),
     noteMountedAgent: (args) => pin(args.id),

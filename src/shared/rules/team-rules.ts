@@ -5,8 +5,8 @@ function createSandTeamRulesResolverFromLoad(options2) {
     let result;
     try {
       result = await options2.load();
-    } catch (error41) {
-      options2.reportLoadFailure(error41);
+    } catch (error42) {
+      options2.reportLoadFailure(error42);
       return;
     }
     if (result.outcome === "rules") {

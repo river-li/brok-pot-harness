@@ -23,16 +23,16 @@ async function createSmartModeShellApprovalRequest(ctx, store, target) {
     throw new Error(SMART_MODE_APPROVAL_MISSING_CONVERSATION_REASON);
   }
   const fingerprint = computeSmartModeShellApprovalTargetFingerprint(target);
-  const request3 = {
+  const request5 = {
     id: (0, import_node_crypto36.randomUUID)(),
     conversationId,
     createdAtMs: Date.now(),
     fingerprint,
     blockReason: target.blockReason
   };
-  await store.createPendingRequest(ctx, request3);
+  await store.createPendingRequest(ctx, request5);
   return {
-    requestId: request3.id,
+    requestId: request5.id,
     fingerprint,
     conversationId,
     blockReason: target.blockReason

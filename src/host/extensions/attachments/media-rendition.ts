@@ -3,7 +3,7 @@ var import_node_crypto38 = require("node:crypto");
 var import_node_fs49 = require("node:fs");
 var import_node_os22 = require("node:os");
 var import_node_path91 = require("node:path");
-init_dist2();
+init_dist3();
 init_errors();
 init_system_errno();
 var MEDIA_TOOL_TIMEOUT_MS = 2 * 60 * 1e3;
@@ -20,9 +20,9 @@ function runMediaTool(tool, args) {
         maxBuffer: MEDIA_TOOL_MAX_OUTPUT_BYTES,
         timeout: MEDIA_TOOL_TIMEOUT_MS
       },
-      (error41, stdout) => {
-        if (error41 != null) {
-          reject2(error41);
+      (error42, stdout) => {
+        if (error42 != null) {
+          reject2(error42);
           return;
         }
         resolve29(stdout);
@@ -34,9 +34,9 @@ function stepFor(medium, reportFailure) {
   return {
     attempt: (stage, operation, isExpected = () => false) => operation().then(
       (value) => value,
-      (error41) => {
-        if (!isExpected(error41)) {
-          reportFailure({ medium, stage, errorClass: errorLogTag(error41) });
+      (error42) => {
+        if (!isExpected(error42)) {
+          reportFailure({ medium, stage, errorClass: errorLogTag(error42) });
         }
         return null;
       }
@@ -44,8 +44,8 @@ function stepFor(medium, reportFailure) {
     run: runMediaTool
   };
 }
-function isMissingPath(error41) {
-  return findSystemErrno(error41) === "ENOENT";
+function isMissingPath(error42) {
+  return findSystemErrno(error42) === "ENOENT";
 }
 async function hasRendition(renditionPath, step) {
   const stat28 = await step.attempt("cache_stat", () => import_node_fs49.promises.stat(renditionPath), isMissingPath);

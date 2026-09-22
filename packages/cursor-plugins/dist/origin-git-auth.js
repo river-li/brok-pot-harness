@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 var ORIGIN_GIT_HOSTS = ["origin.cursor.com"];
 var PREFER_ORIGIN_READS_HEADER = "x-prefer-origin-reads: true";
 function buildOriginTokenGitConfig(token, extraOriginHosts = []) {

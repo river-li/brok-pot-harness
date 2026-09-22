@@ -333,10 +333,10 @@ var DraftSends = class {
     let agentIds;
     try {
       agentIds = await this.tm.sessionStore.listAgentIds();
-    } catch (error41) {
+    } catch (error42) {
       this.tm.telemetry.reportAgentError({
         source: "draft_boot_sweep",
-        error: classifyAgentError(error41)
+        error: classifyAgentError(error42)
       });
       return;
     }
@@ -347,11 +347,11 @@ var DraftSends = class {
           agentId,
           (entryId) => this.inFlightSends.has(`${agentId}:${entryId}`)
         );
-      } catch (error41) {
+      } catch (error42) {
         this.tm.telemetry.reportAgentError({
           source: "draft_boot_sweep",
           conversationId: agentId,
-          error: classifyAgentError(error41)
+          error: classifyAgentError(error42)
         });
         continue;
       }
@@ -372,18 +372,18 @@ var DraftSends = class {
         toolName: spec.toolName,
         args: spec.args
       });
-    } catch (error41) {
-      return { outcome: "failed", error: errorMessage(error41) };
+    } catch (error42) {
+      return { outcome: "failed", error: errorMessage(error42) };
     }
   }
-  async verifyExecute(request3) {
+  async verifyExecute(request5) {
     const outcome = await this.executeCall({
-      execution: request3.execution,
-      agentId: request3.agentId,
-      providerIdentifier: request3.providerIdentifier,
+      execution: request5.execution,
+      agentId: request5.agentId,
+      providerIdentifier: request5.providerIdentifier,
       spec: {
-        toolName: request3.toolName,
-        args: request3.args
+        toolName: request5.toolName,
+        args: request5.args
       }
     });
     if (outcome.outcome === "sent") return { ok: true, text: outcome.resultText };

@@ -229,8 +229,8 @@ function toPackedAutomation(source, ref) {
     ref.description,
     overrideOrFallback(source.description, source.triggerDescription?.trim() ?? "")
   );
-  const description10 = fileDescription.length > 0 ? applyReplacements(fileDescription, collector.replacements) : name17;
-  return { name: name17, slug, description: description10, content };
+  const description9 = fileDescription.length > 0 ? applyReplacements(fileDescription, collector.replacements) : name17;
+  return { name: name17, slug, description: description9, content };
 }
 function packAutomationsFromDefinitions(automations, selected) {
   const packable = automations.filter(isPackableAutomation);

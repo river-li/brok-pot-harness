@@ -24,7 +24,7 @@ function appendAddressedEcho(tm, session, isAddressedChatOnScreen, buildEntry, a
 }
 function applySendRosterSideEffects(tm, session, trimmedPrompt, readAddressedTranscript) {
   let needsRosterRefresh = false;
-  const agentDir = (0, import_node_path160.dirname)(session.dbPath);
+  const agentDir = (0, import_node_path159.dirname)(session.dbPath);
   const profilePath = getSandProfilePath(agentDir);
   const currentProfile = readSandProfileFile(profilePath);
   const seededName = conversationNameFromPrompt(trimmedPrompt);

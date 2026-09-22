@@ -1,6 +1,6 @@
 var import_promises36 = require("node:fs/promises");
 var import_node_path67 = require("node:path");
-var __awaiter60 = function(thisArg, _arguments, P2, generator) {
+var __awaiter62 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -28,7 +28,7 @@ var __awaiter60 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function restoreSkillsFromPluginDir(options2) {
-  return __awaiter60(this, void 0, void 0, function* () {
+  return __awaiter62(this, void 0, void 0, function* () {
     const { skillDirs, pluginSkillsRoot, skillsRoot } = options2;
     if (skillDirs.length === 0) {
       throw new Error("At least one skill directory is required");
@@ -65,7 +65,7 @@ function restoreSkillsFromPluginDir(options2) {
   });
 }
 function isDirectory(path31) {
-  return __awaiter60(this, void 0, void 0, function* () {
+  return __awaiter62(this, void 0, void 0, function* () {
     try {
       return (yield (0, import_promises36.stat)(path31)).isDirectory();
     } catch (_a19) {
@@ -74,7 +74,7 @@ function isDirectory(path31) {
   });
 }
 function pathEntryExists(path31) {
-  return __awaiter60(this, void 0, void 0, function* () {
+  return __awaiter62(this, void 0, void 0, function* () {
     try {
       yield (0, import_promises36.lstat)(path31);
       return true;

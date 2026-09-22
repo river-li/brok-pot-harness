@@ -1,5 +1,5 @@
 init_dist5();
-var __awaiter32 = function(thisArg, _arguments, P2, generator) {
+var __awaiter33 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve14) {
       resolve14(value);
@@ -49,7 +49,7 @@ function captureStdioStderr(stderr) {
     read: () => sanitizeErrorMessageForLog(captured.replace(/\s+/g, " ").trim(), {
       maxLength: STDIO_CONNECT_STDERR_CAPTURE_MAX_BYTES
     }),
-    waitForFlush: () => __awaiter32(this, void 0, void 0, function* () {
+    waitForFlush: () => __awaiter33(this, void 0, void 0, function* () {
       if (ended || stderr === null) {
         return;
       }

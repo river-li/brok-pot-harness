@@ -1,6 +1,6 @@
-init_dist3();
+init_dist4();
 init_agent_pb();
-var logger68 = createLogger("@anysphere/agent/actions/shell-command-action-handler");
+var logger69 = createLogger("@anysphere/agent/actions/shell-command-action-handler");
 var ShellCommandActionHandler = class {
   constructor(config2, resourceAccessor, interactionListener, summarizationHandler, conversationActionReceiver) {
     this.config = config2;
@@ -88,8 +88,8 @@ var ShellCommandActionHandler = class {
             break;
         }
       }
-    } catch (error41) {
-      logger68.error(ctx, "Shell command action handler error", error41);
+    } catch (error42) {
+      logger69.error(ctx, "Shell command action handler error", error42);
     }
     turn.recordShellOutput(createRedactedShellOutput(action._privacyMode, {
       stdout,

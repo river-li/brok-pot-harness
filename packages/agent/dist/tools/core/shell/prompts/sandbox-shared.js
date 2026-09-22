@@ -17,5 +17,8 @@ function getRequiredPermissionsSchema({ isReadonly, strict = false }) {
       primitiveItems: true
     }).optional().describe("Optional list of permissions to request if the command needs them (full_network, all).");
   }
-  return lenientArray(external_exports.array(external_exports.enum(["git_write", "full_network", "network", "all"])), { field: "required_permissions", primitiveItems: true }).optional().describe("Optional list of permissions to request if the command needs them (full_network, all).");
+  return lenientArray(external_exports.array(external_exports.enum(["git_write", "full_network", "network", "all"])), {
+    field: "required_permissions",
+    primitiveItems: true
+  }).optional().describe("Optional list of permissions to request if the command needs them (full_network, all).");
 }

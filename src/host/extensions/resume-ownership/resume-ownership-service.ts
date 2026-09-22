@@ -141,9 +141,9 @@ var ResumeOwnershipService = class {
   startRecovery() {
     if (this.disposed || this.recovery !== void 0) return;
     const controller = new AbortController();
-    const completed = this.recoverUntilSuccessful(controller.signal).catch((error41) => {
+    const completed = this.recoverUntilSuccessful(controller.signal).catch((error42) => {
       if (!controller.signal.aborted) {
-        this.deps.log(`[sand:resume-ownership] recovery stopped (${errorLogTag(error41)})`);
+        this.deps.log(`[sand:resume-ownership] recovery stopped (${errorLogTag(error42)})`);
       }
     }).finally(() => {
       if (this.recovery?.controller === controller) this.recovery = void 0;
@@ -287,8 +287,8 @@ var ResumeOwnershipService = class {
     const current = this.lane.then(operation, operation);
     this.lane = current.then(
       () => void 0,
-      (error41) => {
-        this.deps.log(`[sand:resume-ownership] operation failed (${errorLogTag(error41)})`);
+      (error42) => {
+        this.deps.log(`[sand:resume-ownership] operation failed (${errorLogTag(error42)})`);
       }
     );
     return current;

@@ -76,11 +76,7 @@ function validateSandboxPolicyJson(value) {
   }
   const json2 = value;
   if (json2.type !== void 0) {
-    const validTypes = [
-      "insecure_none",
-      "workspace_readwrite",
-      "workspace_readonly"
-    ];
+    const validTypes = ["insecure_none", "workspace_readwrite", "workspace_readonly"];
     if (typeof json2.type !== "string" || !validTypes.includes(json2.type)) {
       return `Invalid type: expected one of ${validTypes.join(", ")}`;
     }

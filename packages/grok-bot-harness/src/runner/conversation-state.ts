@@ -1,6 +1,6 @@
-init_dist3();
+init_dist4();
 init_errors();
-var logger100 = createLogger("sand:conversation-state");
+var logger101 = createLogger("sand:conversation-state");
 function selectUnconfirmedUserMessages(params) {
   const { recentUserMessages, currentMessageId, lastTurnUserMessageId, hasConfirmedTurns } = params;
   if (currentMessageId == null || currentMessageId.length === 0) return [];
@@ -144,11 +144,11 @@ function composeSandPromptStreamObservers(...observers) {
   if (present.length === 0) return void 0;
   if (present.length === 1) return present[0];
   return {
-    onRequestStart(ctx, request3) {
+    onRequestStart(ctx, request5) {
       const requestObservers = [];
       for (const observer of present) {
         safelyObservePromptStream(ctx, () => {
-          const requestObserver = observer.onRequestStart(ctx, request3);
+          const requestObserver = observer.onRequestStart(ctx, request5);
           if (requestObserver !== void 0) requestObservers.push(requestObserver);
         });
       }
@@ -169,6 +169,11 @@ function composeSandPromptStreamObservers(...observers) {
             safelyObservePromptStream(ctx, () => observer.onStreamEnd(outcome));
           }
         },
+        onServedModel(modelId) {
+          for (const observer of requestObservers) {
+            safelyObservePromptStream(ctx, () => observer.onServedModel?.(modelId));
+          }
+        },
         onUsage(usage) {
           for (const observer of requestObservers) {
             safelyObservePromptStream(ctx, () => observer.onUsage?.(usage));
@@ -182,8 +187,8 @@ function safelyObservePromptStream(ctx, callback) {
   try {
     callback();
     return true;
-  } catch (error41) {
-    logger100.warn(ctx, `Prompt stream observer failed (${errorLogTag(error41)})`);
+  } catch (error42) {
+    logger101.warn(ctx, `Prompt stream observer failed (${errorLogTag(error42)})`);
     return false;
   }
 }
@@ -233,9 +238,9 @@ async function* sanitizeFullStream(ctx, fullStream, observer) {
       throw streamError;
     }
     outcome = "success";
-  } catch (error41) {
+  } catch (error42) {
     outcome = "error";
-    throw error41;
+    throw error42;
   } finally {
     if (observer !== void 0) {
       safelyObservePromptStream(ctx, () => observer.onStreamEnd(outcome));
@@ -247,6 +252,9 @@ function sanitizeStreamResult(ctx, result, modelId, onResolvedModelId, streamObs
     ([response2, usage]) => {
       const resolvedModelId = response2.modelId.trim();
       if (resolvedModelId.length > 0) {
+        if (streamObserver?.onServedModel !== void 0) {
+          safelyObservePromptStream(ctx, () => streamObserver.onServedModel?.(resolvedModelId));
+        }
         onResolvedModelId?.(resolvedModelId, response2, usage);
         if (response2.supportsSelfSummary !== void 0) {
           selfSummarySupportByModelForHostLifetime.set(
@@ -329,9 +337,9 @@ var UsageSanitizingMiddleware = class extends BaseMiddleware {
     let streamResult;
     try {
       streamResult = this.innerExecutor.stream(ctx, invocationId, tools, options2);
-    } catch (error41) {
+    } catch (error42) {
       safelyObservePromptStream(ctx, () => requestObserver?.onStreamEnd("error"));
-      throw error41;
+      throw error42;
     }
     return sanitizeStreamResult(
       ctx,
@@ -399,6 +407,9 @@ var DEPRECATED_CURSOR_GROK_4_5_MODELS = /* @__PURE__ */ new Set([
   "grok-4.5-xhigh",
   "grok-4.5-fast-xhigh"
 ]);
+function sandSelfSummarySupported(modelId) {
+  return lastReportedSelfSummarySupport(modelId) ?? shouldUseSandSelfSummary(modelId);
+}
 function shouldUseSandSelfSummary(modelId) {
   const model = modelId.split("#", 1)[0] ?? modelId;
   const xaiExternalParts = model.startsWith("XAIEXTERNAL--") ? model.split("--") : [];

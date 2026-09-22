@@ -1,4 +1,4 @@
-var __awaiter72 = function(thisArg, _arguments, P2, generator) {
+var __awaiter74 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -33,7 +33,7 @@ var DeferredAnalyticsBuffer = class {
     this.events.push({ eventName, props, timestamp: timestamp3 });
   }
   flush(_timeoutMs) {
-    return __awaiter72(this, void 0, void 0, function* () {
+    return __awaiter74(this, void 0, void 0, function* () {
     });
   }
   getEvents() {

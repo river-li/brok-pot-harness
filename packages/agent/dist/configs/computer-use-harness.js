@@ -2,16 +2,7 @@ init_computer_use_tool_pb();
 init_zod();
 var pixel = external_exports.number().int().min(0);
 var parameters = external_exports.object({
-  action: external_exports.enum([
-    "screenshot",
-    "click",
-    "move",
-    "drag",
-    "type",
-    "key",
-    "scroll",
-    "wait"
-  ]).describe("Action to perform."),
+  action: external_exports.enum(["screenshot", "click", "move", "drag", "type", "key", "scroll", "wait"]).describe("Action to perform."),
   x: pixel.optional().describe("Target/start x coordinate; pair with y. Required for move/drag."),
   y: pixel.optional().describe("Target/start y coordinate; pair with x. Required for move/drag."),
   x2: pixel.optional().describe("Drag destination x coordinate; required for drag."),

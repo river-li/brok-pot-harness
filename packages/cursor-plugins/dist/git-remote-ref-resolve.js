@@ -1,4 +1,4 @@
-var __awaiter52 = function(thisArg, _arguments, P2, generator) {
+var __awaiter54 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -46,15 +46,9 @@ function parseResolvedCommitSha(stdout) {
   return (_b2 = (_a19 = shaLines.find((line) => line.refName.endsWith("^{}"))) === null || _a19 === void 0 ? void 0 : _a19.sha) !== null && _b2 !== void 0 ? _b2 : shaLines[0].sha;
 }
 function resolveExactRemoteNamedHexRef(gitUrl, ref, options2) {
-  return __awaiter52(this, void 0, void 0, function* () {
+  return __awaiter54(this, void 0, void 0, function* () {
     var _a19;
-    const { stdout } = yield execGitNonInteractive([
-      "ls-remote",
-      gitUrl,
-      `refs/heads/${ref}`,
-      `refs/tags/${ref}`,
-      `refs/tags/${ref}^{}`
-    ], {
+    const { stdout } = yield execGitNonInteractive(["ls-remote", gitUrl, `refs/heads/${ref}`, `refs/tags/${ref}`, `refs/tags/${ref}^{}`], {
       sshBatchMode: options2 === null || options2 === void 0 ? void 0 : options2.sshBatchMode,
       extraGitConfig: options2 === null || options2 === void 0 ? void 0 : options2.extraGitConfig,
       timeoutMs: options2 === null || options2 === void 0 ? void 0 : options2.timeoutMs
@@ -63,7 +57,7 @@ function resolveExactRemoteNamedHexRef(gitUrl, ref, options2) {
   });
 }
 function resolveGitRemoteRef(gitUrl, ref, options2) {
-  return __awaiter52(this, void 0, void 0, function* () {
+  return __awaiter54(this, void 0, void 0, function* () {
     const r = ref.trim();
     if (FULL_SHA_REGEX.test(r)) {
       return { fullSha: r.toLowerCase() };

@@ -28,8 +28,8 @@ var CredentialCoordinator = class {
       this.setDirectory(
         await this.options.loadDirectory(mode === "cached" || mode === "fresh" ? void 0 : mode)
       );
-    } catch (error41) {
-      const reason = error41 instanceof Error ? error41.name : "unknown";
+    } catch (error42) {
+      const reason = error42 instanceof Error ? error42.name : "unknown";
       this.log(`credentials: backend directory refresh failed (${reason})`);
     } finally {
       this.refreshedAtMs = Date.now();
@@ -66,14 +66,14 @@ var CredentialCoordinator = class {
     let result;
     try {
       result = await this.options.resolveBrowserTarget(item, siteHint);
-    } catch (error41) {
+    } catch (error42) {
       this.auditAgentAccess({
         outcome: "failed",
         reason: "target-resolution-failed",
         targetUrl: siteHint,
         credentialId: item.credentialId
       });
-      throw error41;
+      throw error42;
     }
     this.auditAgentAccess({
       outcome: result.ok ? "success" : "refused",

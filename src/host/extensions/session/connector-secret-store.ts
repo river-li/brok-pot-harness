@@ -1,5 +1,5 @@
-var import_node_fs81 = require("node:fs");
-var import_node_path130 = require("node:path");
+var import_node_fs80 = require("node:fs");
+var import_node_path129 = require("node:path");
 init_errors();
 var SandConnectorSecretStore = class {
   constructor(secretsRoot) {
@@ -7,19 +7,19 @@ var SandConnectorSecretStore = class {
   }
   secretsRoot;
   filePath(agentId, platform2) {
-    return (0, import_node_path130.join)(this.secretsRoot, agentId, `${platform2}.json`);
+    return (0, import_node_path129.join)(this.secretsRoot, agentId, `${platform2}.json`);
   }
   read(agentId, platform2) {
     try {
-      const parsed2 = JSON.parse((0, import_node_fs81.readFileSync)(this.filePath(agentId, platform2), "utf8"));
+      const parsed2 = JSON.parse((0, import_node_fs80.readFileSync)(this.filePath(agentId, platform2), "utf8"));
       return parsed2 != null && typeof parsed2 === "object" ? parsed2 : {};
-    } catch (error41) {
-      if (error41.code !== "ENOENT") {
+    } catch (error42) {
+      if (error42.code !== "ENOENT") {
         reportSessionDiagnostic({
           family: "store_db",
           kind: "connector_secrets_unreadable",
           agentId,
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
       return {};
@@ -41,6 +41,6 @@ var SandConnectorSecretStore = class {
   }
   removeAgentPlatform(agentId, platform2) {
     if (!isSafeFolderId(agentId) || !isSafeFolderId(platform2)) return;
-    (0, import_node_fs81.rmSync)(this.filePath(agentId, platform2), { force: true });
+    (0, import_node_fs80.rmSync)(this.filePath(agentId, platform2), { force: true });
   }
 };

@@ -127,8 +127,8 @@ async function fetchPrivateMarketplaceSide(client) {
       { timeoutMs: CURSOR_MARKETPLACE_REQUEST_TIMEOUT_MS }
     );
     marketplaces = response.marketplaces.filter(isPrivateMarketplace);
-  } catch (error41) {
-    reportMcpHostEdgeFailure("marketplace-fetch", error41);
+  } catch (error42) {
+    reportMcpHostEdgeFailure("marketplace-fetch", error42);
     return { plugins: [], memberPublishMarketplaces: void 0 };
   }
   const lists = await Promise.all(
@@ -139,8 +139,8 @@ async function fetchPrivateMarketplaceSide(client) {
           { timeoutMs: CURSOR_MARKETPLACE_REQUEST_TIMEOUT_MS }
         );
         return response.plugins;
-      } catch (error41) {
-        reportMcpHostEdgeFailure("marketplace-fetch", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("marketplace-fetch", error42);
         return [];
       }
     })
@@ -181,7 +181,7 @@ var DEFAULT_TEAM_MARKETPLACE_NAME;
 var init_mcp_marketplace = __esm({
   "src/shared/node/mcp/mcp-marketplace.ts"() {
     "use strict";
-    init_dist4();
+    init_dist5();
     init_locale();
     init_proto();
     init_cursor_marketplace_client();

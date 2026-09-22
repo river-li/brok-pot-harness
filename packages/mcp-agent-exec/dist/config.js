@@ -1,4 +1,4 @@
-var __awaiter30 = function(thisArg, _arguments, P2, generator) {
+var __awaiter31 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve14) {
       resolve14(value);
@@ -41,10 +41,7 @@ var MAX_CA_BUNDLE_LENGTH = 128 * 1024;
 var mcpTlsConfig = external_exports.object({
   caBundle: external_exports.string().trim().min(1).max(MAX_CA_BUNDLE_LENGTH)
 }).strict();
-var mcpPlacementSchema = external_exports.enum([
-  "server",
-  "client"
-]);
+var mcpPlacementSchema = external_exports.enum(["server", "client"]);
 var remoteMcpServer = external_exports.object({
   type: external_exports.enum(["http", "sse"]).optional(),
   url: external_exports.string(),
@@ -58,7 +55,7 @@ var mcpConfigSchema2 = external_exports.object({
   mcpServers: external_exports.record(external_exports.string(), mcpServerSchema)
 });
 function getMcpConfig(configPath_1) {
-  return __awaiter30(this, arguments, void 0, function* (configPath, envLookup = (key) => process.env[key]) {
+  return __awaiter31(this, arguments, void 0, function* (configPath, envLookup = (key) => process.env[key]) {
     try {
       const configString = yield (0, import_promises15.readFile)(configPath, "utf8");
       const raw = parse5(configString);

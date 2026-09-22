@@ -112,11 +112,11 @@ var GatewayLocalExecManager = class {
             ...cwdState !== void 0 ? { cwdState } : {},
             ...scope?.agentId !== void 0 ? { conversationId: scope.agentId } : {}
           });
-          const error41 = new Error(thrown.error);
+          const error42 = new Error(thrown.error);
           if (thrown.stackTrace !== void 0 && thrown.stackTrace.length > 0) {
-            error41.stack = thrown.stackTrace;
+            error42.stack = thrown.stackTrace;
           }
-          throw error41;
+          throw error42;
         }
         if (control.message.case === "streamClose") {
           return;

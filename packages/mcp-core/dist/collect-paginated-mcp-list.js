@@ -1,5 +1,5 @@
 function collectPaginatedMcpList(args) {
-  return __awaiter25(this, void 0, void 0, function* () {
+  return __awaiter26(this, void 0, void 0, function* () {
     const items = [];
     const seenCursors = /* @__PURE__ */ new Set();
     let cursor;
@@ -19,11 +19,11 @@ function collectPaginatedMcpList(args) {
     }
   });
 }
-var __awaiter25, MAX_MCP_LIST_PAGES;
+var __awaiter26, MAX_MCP_LIST_PAGES;
 var init_collect_paginated_mcp_list = __esm({
   "../packages/mcp-core/dist/collect-paginated-mcp-list.js"() {
     "use strict";
-    __awaiter25 = function(thisArg, _arguments, P2, generator) {
+    __awaiter26 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve14) {
           resolve14(value);

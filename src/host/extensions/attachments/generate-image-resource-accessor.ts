@@ -54,13 +54,13 @@ function createSandGenerateImageResourceAccessor(agentDir) {
             })
           }
         });
-      } catch (error41) {
+      } catch (error42) {
         return new ReadResult({
           result: {
             case: "error",
             value: new ReadError({
               path: args.path,
-              error: errorMessage(error41)
+              error: errorMessage(error42)
             })
           }
         });

@@ -2,8 +2,8 @@ async function bestEffortToken(getAccessToken) {
   try {
     const token = await getAccessToken();
     return token != null && token.length > 0 ? token : void 0;
-  } catch (error41) {
-    reportMcpHostEdgeFailure("marketplace-token", error41);
+  } catch (error42) {
+    reportMcpHostEdgeFailure("marketplace-token", error42);
     return void 0;
   }
 }
@@ -11,8 +11,8 @@ async function bestEffortMachineId(getMachineId) {
   if (getMachineId == null) return "";
   try {
     return await getMachineId() ?? "";
-  } catch (error41) {
-    reportMcpHostEdgeFailure("marketplace-machine-id", error41);
+  } catch (error42) {
+    reportMcpHostEdgeFailure("marketplace-machine-id", error42);
     return "";
   }
 }

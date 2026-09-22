@@ -9,8 +9,7 @@ function computerUseSubagentDescription(options2) {
     ...combined ? [
       "Delegate a self-contained browser or desktop task to a background subagent that operates your box's browser and desktop \u2014 websites, GUI apps, file dialogs, and drag interactions. It shares the box browser's persistent logins."
     ] : [
-      "Delegate a self-contained desktop task to a background subagent that drives your box's desktop \u2014 GUI apps, file dialogs, drag interactions, and sites that defeat page-level automation \u2014 by screenshot, click, drag, type, key, scroll, and wait.",
-      "For browser-only work, dispatch browserUse instead; use computerUse when the task needs the desktop itself or a browserUse dispatch reported a site it could not operate."
+      "Delegate a self-contained browser or desktop task to a background subagent that drives your box's desktop \u2014 websites, GUI apps, file dialogs, and drag interactions \u2014 by screenshot, click, drag, type, key, scroll, and wait."
     ],
     displaySpaceSentence(),
     "It runs in the background like any Task: you are notified when it finishes, so do not poll or await it.",

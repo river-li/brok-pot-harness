@@ -1,5 +1,5 @@
 var import_node_crypto34 = require("node:crypto");
-init_dist3();
+init_dist4();
 init_agent_pb();
 var __addDisposableResource25 = function(env, value, async) {
   if (value !== null && value !== void 0) {
@@ -55,41 +55,43 @@ var __disposeResources25 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger66 = createLogger("@anysphere/agent");
+var logger67 = createLogger("@anysphere/agent");
 var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageActionHandler {
   async handle(parentCtx, action, rootPromptExecutor, stateHandler, mcpTools, onStateUpdate) {
     const env_1 = { stack: [], error: void 0, hasError: false };
     try {
       const span = __addDisposableResource25(env_1, createSpan(parentCtx.withName("handleAsyncAskQuestionCompletionAction")), false);
       const ctx = span.ctx;
-      logger66.info(ctx, "Handling async ask-question completion", {
+      logger67.info(ctx, "Handling async ask-question completion", {
         originalToolCallId: action.originalToolCallId,
         resultCase: action.result?.result.case,
         questionsCount: action.originalArgs?.questions.length ?? 0
       });
       if (!isValidAskQuestionCompletion(action)) {
-        logger66.warn(ctx, "Skipping invalid async ask-question completion", {
+        logger67.warn(ctx, "Skipping invalid async ask-question completion", {
           originalToolCallId: action.originalToolCallId,
           resultCase: action.result?.result.case
         });
         return await stateHandler.computeNewStructure(ctx);
       }
       if (hasAppliedAskQuestionCompletion(stateHandler, action.originalToolCallId)) {
-        logger66.info(ctx, "Skipping duplicate async ask-question completion (already applied)", { originalToolCallId: action.originalToolCallId });
+        logger67.info(ctx, "Skipping duplicate async ask-question completion (already applied)", {
+          originalToolCallId: action.originalToolCallId
+        });
         return await stateHandler.computeNewStructure(ctx);
       }
       const lastTurnRef = stateHandler.turns.at(-1);
       if (!lastTurnRef) {
-        logger66.error(ctx, "No turns available");
+        logger67.error(ctx, "No turns available");
         return await stateHandler.computeNewStructure(ctx);
       }
       const lastTurn = await lastTurnRef.get(ctx);
       if (!(lastTurn instanceof AgentConversationTurnHandle)) {
-        logger66.error(ctx, "Last turn is not an agent turn");
+        logger67.error(ctx, "Last turn is not an agent turn");
         return await stateHandler.computeNewStructure(ctx);
       }
       const isTurnFinished = lastTurn.steps.length === 0 || await (async () => {
@@ -102,7 +104,7 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
       const requestContext = await getRedactedRequestContext(ctx, void 0, this.resourceAccessor, buildRequestContextOptions(this.config));
       const mergedMcpTools = this.mergeRequestContextTools(mcpTools, requestContext.tools);
       if (isTurnFinished) {
-        logger66.info(ctx, "Current turn is finished, creating new turn", {
+        logger67.info(ctx, "Current turn is finished, creating new turn", {
           lastTurnSteps: lastTurn.steps.length
         });
         const lastUserMessage = await lastTurn.userMessage.get(ctx);
@@ -128,13 +130,13 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
         if (application.outcome !== "applied") {
           return await stateHandler.computeNewStructure(ctx);
         }
-        logger66.info(ctx, "Created new turn with tool call and result", {
+        logger67.info(ctx, "Created new turn with tool call and result", {
           messageId: syntheticUserMessage.messageId,
           toolCallId: application.recordedToolCallId
         });
         await this.runTurnLoop(ctx, rootPromptExecutor, stateHandler, newTurn, this.config.toolsGenerator, mergedMcpTools, requestContext.repositoryInfo.map((ri2) => fromRedactedRepositoryIndexingInfo(ri2, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED)), fromRedactedRequestContext(requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED), onStateUpdate);
       } else {
-        logger66.info(ctx, "Current turn is active, appending to existing turn");
+        logger67.info(ctx, "Current turn is active, appending to existing turn");
         const application = await applyAskQuestionCompletion(ctx, {
           action,
           stateHandler,
@@ -145,10 +147,10 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
         if (application.outcome !== "applied") {
           return await stateHandler.computeNewStructure(ctx);
         }
-        logger66.info(ctx, "Appended tool call and result to existing turn");
+        logger67.info(ctx, "Appended tool call and result to existing turn");
         await this.runTurnLoop(ctx, rootPromptExecutor, stateHandler, lastTurn, this.config.toolsGenerator, mergedMcpTools, requestContext.repositoryInfo.map((ri2) => fromRedactedRepositoryIndexingInfo(ri2, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED)), fromRedactedRequestContext(requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED), onStateUpdate);
       }
-      logger66.info(ctx, "Async ask-question completion action handled successfully");
+      logger67.info(ctx, "Async ask-question completion action handled successfully");
       return await stateHandler.computeNewStructure(ctx);
     } catch (e_1) {
       env_1.error = e_1;

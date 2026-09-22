@@ -1,4 +1,4 @@
-var __protoPackage150, __protoMessage3143, GrokBotSessionBoxPodState, GrokBotSessionBoxCredentialState, GrokBotMarketplaceListingStatus, GrokBotMarketplaceImageKind, GrokBotAgentSessionKind, GrokBotTurnFailureCode, GrokBotRosterChangeKind, GrokBotUserSettingsField, GrokBotBoxDiskPressureLevel, GrokBotAgentKind, GrokBotPullRequestChatBlockReason, GrokBotAgentHarnessKind, GrokBotAgentVisibility, SetGrokBotAgentVisibilityOutcome, GrokBotEmailDirection, GrokBotEmailSearchMode, GrokBotEmailBodyStatus, GrokBotConnectorType, GrokBotTemplateVisibility, GrokBotTemplateOwnerType, GrokBotFirstPartyTemplate, GrokBotClientSurface, GrokBotUserMessageDelivery, GrokBotTemporalHarnessMode, GrokBotCloudAgentWatchKind, GrokBotSendStatus, GrokBotCredentialRequestResolution, GrokBotUserFormClientPlatform, GrokBotUserFormDismissMode, GrokBotFeedbackAction, GrokBotAgentMessageDelivery, GrokBotAutoReviewApprovalResolution, GrokBotLocalToolPermissionCardResolution, GrokBotVirtualCardRaiseOutcome, GrokBotVirtualCardResolution, GrokBotVirtualCardOutcome, GrokBotStripeLinkPaymentMethodKind, GrokBotStripeLinkPaymentMethodsOutcome, GrokBotUserComputerMessagesConsentVerdict, GrokBotBoxHandBackTrigger, GrokBotRoomMemberTurnDispatch, GrokBotRoomMemberTurnOutcome, GrokBotRoomMemberTurnResultIntake, GrokBotSlackInstallStatus, GrokBotSlackConnectOutcome, GrokBotSlackInstallOutcome, GrokBotSlackReinstallOutcome, GrokBotSlackUninstallOutcome, GrokBotBoxHarnessMigrationPassState, VoiceCallHarnessToolOutcomeKind, GrokBotMemoryFolder, GrokBotMemoryShard, ListGrokBotMemoryShardsRequest, ListGrokBotMemoryShardsResponse, PutGrokBotMemoryShardRequest, PutGrokBotMemoryShardResponse, GrokBotSessionBoxPod, GrokBotSessionBox, AdminListGrokBotSessionBoxesRequest, AdminListGrokBotSessionBoxesResponse, AdminGetGrokBotSessionBoxRequest, AdminGetGrokBotSessionBoxResponse, AdminReapGrokBotSessionBoxNowRequest, AdminReapGrokBotSessionBoxNowResponse, AdminHibernateGrokBotSessionBoxRequest, AdminHibernateGrokBotSessionBoxResponse, AdminForceDeleteGrokBotSessionBoxRequest, AdminForceDeleteGrokBotSessionBoxResponse, GrokBotMarketplaceDefaultAvatar, PublicGrokBotMarketplaceCreator, PublicGrokBotMarketplaceListing, ListPublicGrokBotMarketplaceListingsRequest, ListPublicGrokBotMarketplaceListingsResponse, GetPublicGrokBotMarketplaceListingRequest, GetPublicGrokBotMarketplaceListingResponse, GrokBotMarketplaceListing, CreateGrokBotMarketplaceListingInternalRequest, ListGrokBotMarketplaceListingsInternalRequest, ListGrokBotMarketplaceListingsInternalResponse, GetGrokBotMarketplaceListingInternalRequest, UpdateGrokBotMarketplaceListingInternalRequest, GrokBotMarketplaceCreator, CreateGrokBotMarketplaceCreatorInternalRequest, ListGrokBotMarketplaceCreatorsInternalRequest, ListGrokBotMarketplaceCreatorsInternalResponse, GetGrokBotMarketplaceCreatorInternalRequest, UpdateGrokBotMarketplaceCreatorInternalRequest, GrokBotMarketplaceCategory, CreateGrokBotMarketplaceCategoryInternalRequest, ListGrokBotMarketplaceCategoriesInternalRequest, ListGrokBotMarketplaceCategoriesInternalResponse, GetGrokBotMarketplaceCategoryInternalRequest, UpdateGrokBotMarketplaceCategoryInternalRequest, GetGrokBotMarketplaceListingTemplateInternalRequest, GetGrokBotMarketplaceListingTemplateInternalResponse, GetGrokBotMarketplaceListingSourceTemplateInternalRequest, GetGrokBotMarketplaceListingSourceTemplateInternalResponse, DeleteGrokBotMarketplaceListingInternalRequest, DeleteGrokBotMarketplaceListingInternalResponse, UpdateGrokBotMarketplaceListingTemplateInternalRequest, SetGrokBotMarketplaceListingStatusInternalRequest, PresignGrokBotMarketplaceImageUploadInternalRequest, PresignGrokBotMarketplaceImageUploadInternalResponse, PresignGrokBotMarketplaceCreatorProfileUploadInternalRequest, PreviewGrokBotMarketplaceSourceInternalRequest, PreviewGrokBotMarketplaceSourceInternalResponse, GrokBotTranscriptEntry, GrokBotTranscriptEntryDelete, GrokBotTranscriptCursor, WatchGrokBotTranscriptsRequest, GrokBotTranscriptWatchConnected, GrokBotTranscriptWatchRows, GrokBotTranscriptWatchCleared, GrokBotTranscriptWatchCursorTooOld, GrokBotTranscriptWatchHeartbeat, GrokBotAgentLiveActivity, GrokBotAgentAwaitingState, GrokBotAgentLiveState, GrokBotAgentClientState, GrokBotAgentEntryPreview, GrokBotAgentEntryPreview_Text, GrokBotAgentEntryPreview_AgentMessage, GrokBotAgentEntryPreview_AttachmentKindCount, GrokBotAgentEntryPreview_Attachments, GrokBotAgentEntryPreview_Link, GrokBotAgentEntryPreview_WidgetPrompt, GrokBotAgentEntryPreview_WidgetAnswered, GrokBotAgentEntryPreview_WidgetOptions, GrokBotAgentSession, ListGrokBotAgentSessionsRequest, ListGrokBotAgentSessionsResponse, GrokBotTranscriptWatchAgentState, SetGrokBotAgentClientStateRequest, SetGrokBotAgentClientStateResponse, ReadGrokBotAgentAttachmentChunkRequest, ReadGrokBotAgentAttachmentChunkResponse, UploadGrokBotAgentAttachmentChunkRequest, UploadGrokBotAgentAttachmentChunkResponse, GrokBotComputerAction, GrokBotTranscriptWatchComputerActions, GrokBotTranscriptWatchAgentStateChanged, GrokBotTranscriptWatchTurnFailed, GrokBotTranscriptWatchRosterChanged, ReportGrokBotClientPresenceRequest, ReportGrokBotClientPresenceResponse, GrokBotBoxState, GrokBotTranscriptWatchBoxState, ReportSandBoxHostStateRequest, ReportSandBoxHostStateResponse, ListGrokBotAgentAutomationsRequest, GrokBotAgentAutomation, ListGrokBotAgentAutomationsResponse, ListGrokBotAccountAutomationsRequest, GrokBotAccountAutomationGroup, ListGrokBotAccountAutomationsResponse, ListGrokBotAgentTodosRequest, ListGrokBotAgentTodosResponse, SetGrokBotAgentAutomationEnabledRequest, SetGrokBotAgentAutomationEnabledResponse, DeleteGrokBotAgentAutomationRequest, DeleteGrokBotAgentAutomationResponse, ListGrokBotAgentSkillsRequest, GrokBotAgentSkill, ListGrokBotAgentSkillsResponse, GrokBotUserMcpServerSettings, GrokBotUserAutoReviewInstructions, GrokBotUserMcpSettings, GetGrokBotUserMcpSettingsRequest, GetGrokBotUserMcpSettingsResponse, SetGrokBotUserMcpSettingsRequest, SetGrokBotUserMcpSettingsResponse, GrokBotPinnedAgents, GrokBotSidebarSection, GrokBotSidebarSections, GrokBotUserRuntimeSettings, GetGrokBotUserRuntimeSettingsRequest, GetGrokBotUserRuntimeSettingsResponse, UpdateGrokBotUserRuntimeSettingsRequest, UpdateGrokBotUserRuntimeSettingsResponse, SetGrokBotMainAgentRequest, SetGrokBotMainAgentResponse, MarkGrokBotTermsSeenRequest, MarkGrokBotTermsSeenResponse, GrokBotTranscriptWatchFrame, CommitGrokBotTranscriptEntriesRequest, CommitGrokBotTranscriptEntriesResponse, GrokBotTranscriptEntryRejection, ListGrokBotTranscriptEntriesRequest, ListGrokBotTranscriptEntriesResponse, GrokBotAgent, GrokBotRoomPerson, CreateGrokBotRoomRequest, CreateGrokBotRoomResponse, SetGrokBotRoomMembersRequest, SetGrokBotRoomMembersResponse, EnsureGrokBotPullRequestChatRequest, GrokBotPullRequestChatBlocked, GrokBotPullRequestChatRoom, EnsureGrokBotPullRequestChatResponse, ListGrokBotPullRequestChatEntriesRequest, SendGrokBotPullRequestChatMessageRequest, SendGrokBotPullRequestChatMessageResponse, AddGrokBotRoomPeopleRequest, AddGrokBotRoomPeopleResponse, CreateGrokBotAgentRequest, CreateGrokBotAgentResponse, ListGrokBotAgentsRequest, ListGrokBotAgentsResponse, ListGrokBotTeamAgentsRequest, GrokBotAgentTeamSignals, GrokBotTeamAgentEntry, ListGrokBotTeamAgentsResponse, SetGrokBotAgentVisibilityRequest, SetGrokBotAgentVisibilityResponse, UpdateGrokBotAgentRequest, UpdateGrokBotAgentResponse, DeleteGrokBotAgentRequest, DeleteGrokBotAgentResponse, GrokBotSecret, ListGrokBotSecretsRequest, ListGrokBotSecretsResponse, PutGrokBotSecretRequest, PutGrokBotSecretResponse, DeleteGrokBotSecretRequest, DeleteGrokBotSecretResponse, GrokBotEmailInbox, CreateGrokBotEmailInboxRequest, CreateGrokBotEmailInboxResponse, ListGrokBotEmailInboxesRequest, ListGrokBotEmailInboxesResponse, DeleteGrokBotEmailInboxRequest, DeleteGrokBotEmailInboxResponse, SendGrokBotEmailRequest, SendGrokBotEmailResponse, GrokBotEmailAddress, SearchGrokBotEmailThreadsRequest, GrokBotEmailMatchingMessage, GrokBotEmailThreadSummary, SearchGrokBotEmailThreadsResponse, ReadGrokBotEmailThreadRequest, GrokBotEmailAttachmentSummary, GrokBotEmailThreadMessage, ReadGrokBotEmailThreadResponse, ReadGrokBotEmailAttachmentRequest, GrokBotEmailAttachmentText, ReadGrokBotEmailAttachmentResponse, GrokBotAgentMarketplace, GetGrokBotAgentPluginsRequest, GrokBotAgentPlugin, GrokBotAgentPluginSkill, GetGrokBotAgentPluginsResponse, GrokBotAgentPluginEntry, GrokBotAgentInlinePlugin, GrokBotAgentPluginConfigUpdate, SetGrokBotAgentPluginsRequest, SetGrokBotAgentPluginsResponse, SetGrokBotAgentPluginVariablesRequest, SetGrokBotAgentPluginVariablesResponse, UpdateGrokBotAgentMarketplaceRequest, UpdateGrokBotAgentMarketplaceResponse, AddGrokBotAgentSkillRequest, AddGrokBotAgentSkillResponse, UpdateGrokBotAgentSkillRequest, UpdateGrokBotAgentSkillResponse, RemoveGrokBotAgentSkillRequest, RemoveGrokBotAgentSkillResponse, GetGrokBotAgentPluginFileRequest, GetGrokBotAgentPluginFileResponse, GrokBotTemplate, CreateGrokBotTemplateRequest, CreateGrokBotTemplateResponse, ListGrokBotTemplatesRequest, ListGrokBotTemplatesResponse, DeleteGrokBotTemplateRequest, DeleteGrokBotTemplateResponse, SetGrokBotTemplateVisibilityRequest, SetGrokBotTemplateVisibilityResponse, ActivateGrokBotTemplateVersionRequest, ActivateGrokBotTemplateVersionResponse, GetGrokBotTemplateVersionRequest, GetGrokBotTemplateVersionResponse, GetGrokBotTemplateForSourceAgentRequest, GetGrokBotTemplateForSourceAgentResponse, GetGrokBotTemplateExportPolicyRequest, GetGrokBotTemplateExportPolicyResponse, GetPublicGrokBotTemplateRequest, GetPublicGrokBotTemplateResponse, GetGrokBotTemplateImportDetailsRequest, GetGrokBotTemplateImportDetailsResponse, CreateGrokBotAgentFromTemplateRequest, CreateGrokBotAgentFromTemplateResponse, SendGrokBotUserMessageRequest, GrokBotHarnessRefusal, SendGrokBotUserMessageResponse, GetGrokBotSendStatusRequest, GetGrokBotCloudAgentWatchersRequest, GrokBotCloudAgentWatcher, GetGrokBotCloudAgentWatchersResponse, GetGrokBotSendStatusResponse, InterruptGrokBotAgentRunRequest, InterruptGrokBotAgentRunResponse, RespondGrokBotWidgetRequest, RespondGrokBotWidgetResponse, SubmitGrokBotSecretRequest, SubmitGrokBotSecretResponse, ResolveGrokBotCredentialRequestRequest, ResolveGrokBotCredentialRequestResponse, DismissGrokBotWidgetRequest, DismissGrokBotWidgetResponse, SubmitGrokBotUserFormRequest, SubmitGrokBotUserFormResponse, DismissGrokBotUserFormRequest, DismissGrokBotUserFormResponse, GrokBotEmailDraft, GrokBotSlackDraft, SendGrokBotDraftRequest, SendGrokBotDraftResponse, DiscardGrokBotDraftRequest, DiscardGrokBotDraftResponse, ReactToGrokBotMessageRequest, ReactToGrokBotMessageResponse, VoteGrokBotFeedbackRequest, VoteGrokBotFeedbackResponse, SendGrokBotAgentMessageRequest, SendGrokBotAgentMessageResponse, ResolveGrokBotAutoReviewApprovalRequest, ResolveGrokBotAutoReviewApprovalResponse, ResolveGrokBotLocalToolPermissionRequest, ResolveGrokBotLocalToolPermissionResponse, RaiseGrokBotVirtualCardRequest, RaiseGrokBotVirtualCardResponse, ResolveGrokBotVirtualCardApprovalRequest, ResolveGrokBotVirtualCardApprovalResponse, ListGrokBotStripeLinkPaymentMethodsRequest, GrokBotStripeLinkPaymentMethod, ListGrokBotStripeLinkPaymentMethodsResponse, GrokBotUserComputerRequestFrame, GrokBotUserComputerExec, GrokBotUserComputerUpload, GrokBotUserComputerDownload, GrokBotUserComputerRetireApproval, GrokBotUserComputerCancel, GrokBotUserComputerMessagesOp, GrokBotUserComputerResponseFrame, GrokBotUserComputerClientMessage, GrokBotUserComputerControlMessage, GrokBotUserComputerFile, GrokBotUserComputerFileError, GrokBotUserComputerMessagesResult, GrokBotUserComputerMessagesError, GrokBotUserComputerMessagesAccepted, GrokBotUserComputerMessagesConsentResult, GrokBotUserComputerCapabilities, GrokBotUserComputerHello, GrokBotUserComputerPresence, IssueGrokBotUserComputerCredentialRequest, IssueGrokBotUserComputerCredentialResponse, WatchGrokBotUserComputerRequestsRequest, WatchGrokBotUserComputerRequestsEvent, WatchGrokBotUserComputerConnected, WatchGrokBotUserComputerNotify, WatchGrokBotUserComputerHeartbeat, PollGrokBotUserComputerRequestsRequest, GrokBotUserComputerQueuedRequest, PollGrokBotUserComputerRequestsResponse, SubmitGrokBotUserComputerResponsesRequest, SubmitGrokBotUserComputerResponsesResponse, ListGrokBotUserComputersRequest, ListGrokBotUserComputersResponse, OpenGrokBotUserComputerRequestRequest, CancelGrokBotUserComputerRequestRequest, CancelGrokBotUserComputerRequestResponse, EndGrokBotBoxHandoffRequest, EndGrokBotBoxHandoffResponse, GrokBotRoomMemberTurnRoom, GrokBotRoomMemberTurnPeer, GrokBotRoomMemberTurnMessage, GrokBotRoomMemberTurnMessage_SpeakerKind, GrokBotRoomMemberTurnMessage_ReplyTarget, RequestGrokBotRoomMemberTurnRequest, RequestGrokBotRoomMemberTurnResponse, CancelGrokBotRoomMemberTurnRequest, CancelGrokBotRoomMemberTurnResponse, DeliverGrokBotRoomMemberTurnResultRequest, DeliverGrokBotRoomMemberTurnResultResponse, GrokBotSlackConnection, GrokBotSlackWorkspace, GetGrokBotSlackInstallStateRequest, GetGrokBotSlackInstallStateResponse, GrokBotSlackCursorApprovalRequired, StartGrokBotSlackConnectRequest, StartGrokBotSlackConnectResponse, InstallGrokBotSlackAppRequest, InstallGrokBotSlackAppResponse, ReinstallGrokBotSlackAppRequest, ReinstallGrokBotSlackAppResponse, UninstallGrokBotSlackAppRequest, UninstallGrokBotSlackAppResponse, GetGrokBotRuntimeCapabilitiesRequest, GrokBotRuntimeCapabilities, GetGrokBotRuntimeCapabilitiesResponse, GetGrokBotHarnessMigrationStatusInternalRequest, GrokBotHarnessMigrationRolloutStatus, GrokBotHarnessMigrationAgentStatus, GrokBotHarnessMigrationPassAgentResult, GrokBotHarnessMigrationPassStatus, GetGrokBotHarnessMigrationStatusInternalResponse, ClearGrokBotHarnessMigrationHoldInternalRequest, ClearGrokBotHarnessMigrationHoldInternalResponse, EnsureGrokBotBoxHarnessMigrationPassRequest, GrokBotBoxRoomSummary, EnsureGrokBotBoxHarnessMigrationPassResponse, GrokBotUserFormVaultEntry, ListGrokBotUserFormVaultEntriesRequest, ListGrokBotUserFormVaultEntriesResponse, UpsertGrokBotUserFormVaultEntryRequest, UpsertGrokBotUserFormVaultEntryResponse, DeleteGrokBotUserFormVaultEntryRequest, DeleteGrokBotUserFormVaultEntryResponse, GrokBotUserFormVaultKey, ListGrokBotUserFormVaultKeysRequest, ListGrokBotUserFormVaultKeysResponse, GetGrokBotEgressPolicyRequest, GrokBotAllowedTcpDestination, GetGrokBotEgressPolicyResponse, AdminGetGrokBotAgentDefinitionRequest, AdminGetGrokBotAgentDefinitionResponse, GrokBotAgentDefinitionIdentity, GrokBotAgentDefinitionSlack, GrokBotAgentDefinition, GrokBotAgentDefinitionAgentRef, GrokBotAgentDefinitionSession, GrokBotAgentDefinitionTemplateImport, GrokBotAgentDefinitionMemoryShard, GrokBotAgentDefinitionSkill, GrokBotAgentDefinitionMcpServer, AdminListGrokBotTeamAgentsRequest, AdminListGrokBotTeamAgentsResponse, GrokBotOrphanedSlackApp, GrokBotSlackAppRemoval, GrokBotTeamAgent, GrokBotTeamAgentSessionCounts, GrokBotTeamAgentRoutineCounts, AdminDeleteGrokBotAgentRequest, AdminDeleteGrokBotAgentResponse, AdminRetryGrokBotSlackAppRemovalRequest, AdminRetryGrokBotSlackAppRemovalResponse, AdminGetGrokBotTeamAgentSharedStateRequest, AdminGetGrokBotTeamAgentSharedStateResponse, AdminListGrokBotEmailInboxesRequest, AdminGrokBotEmailInbox, AdminListGrokBotEmailInboxesResponse, AdminListGrokBotEmailMessagesRequest, AdminGrokBotEmailMessage, AdminListGrokBotEmailMessagesResponse, AdminSendGrokBotTestEmailRequest, AdminSendGrokBotTestEmailResponse, GrokBotTeamAgentSharedState, GrokBotTeamAgentParticipant, GrokBotTeamAgentSharedRoutine, GrokBotTeamAgentSharedBox, PublishGrokBotUserSkillsSnapshotRequest, PublishGrokBotUserSkillsSnapshotResponse, InvalidateGrokBotUserSkillsCacheRequest, InvalidateGrokBotUserSkillsCacheResponse, VoiceCallHarnessSessionRequest, VoiceCallToolDescriptor, VoiceCallGreeting, VoiceCallReceiptOutput, VoiceCallReceipt, VoiceCallHarnessSessionResponse, VoiceCallLineState, VoiceCallHarnessToolRequest, VoiceCallHarnessToolResponse;
+var __protoPackage150, __protoMessage3143, GrokBotSessionBoxPodState, GrokBotSessionBoxCredentialState, GrokBotMarketplaceListingStatus, GrokBotMarketplaceImageKind, GrokBotAgentSessionKind, GrokBotTurnFailureCode, GrokBotRosterChangeKind, GrokBotUserSettingsField, GrokBotBoxDiskPressureLevel, GrokBotAgentKind, GrokBotPullRequestChatBlockReason, GrokBotAgentHarnessKind, GrokBotAgentVisibility, SetGrokBotAgentVisibilityOutcome, GrokBotEmailSuppressionReason, GrokBotEmailDirection, GrokBotEmailSearchMode, GrokBotEmailBodyStatus, GrokBotConnectorType, GrokBotTemplateVisibility, GrokBotTemplateOwnerType, GrokBotFirstPartyTemplate, GrokBotClientSurface, GrokBotUserMessageDelivery, GrokBotTemporalHarnessMode, GrokBotCloudAgentWatchKind, GrokBotSendStatus, GrokBotCredentialRequestResolution, GrokBotUserFormClientPlatform, GrokBotUserFormDismissMode, GrokBotFeedbackAction, GrokBotAgentMessageDelivery, GrokBotAutoReviewApprovalResolution, GrokBotLocalToolPermissionCardResolution, GrokBotVirtualCardRaiseOutcome, GrokBotVirtualCardResolution, GrokBotVirtualCardOutcome, GrokBotStripeLinkPaymentMethodKind, GrokBotStripeLinkPaymentMethodsOutcome, PasskeyCeremonyKind, PasskeyCeremonyStatus, GrokBotUserComputerMessagesConsentVerdict, GrokBotBoxHandBackTrigger, GrokBotRoomMemberTurnDispatch, GrokBotRoomMemberTurnOutcome, GrokBotRoomMemberTurnResultIntake, GrokBotSlackInstallStatus, GrokBotSlackConnectOutcome, GrokBotSlackInstallOutcome, GrokBotSlackReinstallOutcome, GrokBotSlackUninstallOutcome, GrokBotBoxHarnessMigrationPassState, VoiceCallHarnessToolOutcomeKind, GrokBotMemoryFolder, GrokBotMemoryShard, ListGrokBotMemoryShardsRequest, ListGrokBotMemoryShardsResponse, PutGrokBotMemoryShardRequest, PutGrokBotMemoryShardResponse, GrokBotSessionBoxPod, GrokBotSessionBox, AdminListGrokBotSessionBoxesRequest, AdminListGrokBotSessionBoxesResponse, AdminGetGrokBotSessionBoxRequest, AdminGetGrokBotSessionBoxResponse, AdminReapGrokBotSessionBoxNowRequest, AdminReapGrokBotSessionBoxNowResponse, AdminHibernateGrokBotSessionBoxRequest, AdminHibernateGrokBotSessionBoxResponse, AdminForceDeleteGrokBotSessionBoxRequest, AdminForceDeleteGrokBotSessionBoxResponse, GrokBotMarketplaceDefaultAvatar, PublicGrokBotMarketplaceCreator, PublicGrokBotMarketplaceListing, ListPublicGrokBotMarketplaceListingsRequest, ListPublicGrokBotMarketplaceListingsResponse, GetPublicGrokBotMarketplaceListingRequest, GetPublicGrokBotMarketplaceListingResponse, GrokBotMarketplaceListing, CreateGrokBotMarketplaceListingInternalRequest, ListGrokBotMarketplaceListingsInternalRequest, ListGrokBotMarketplaceListingsInternalResponse, GetGrokBotMarketplaceListingInternalRequest, UpdateGrokBotMarketplaceListingInternalRequest, GrokBotMarketplaceCreator, CreateGrokBotMarketplaceCreatorInternalRequest, ListGrokBotMarketplaceCreatorsInternalRequest, ListGrokBotMarketplaceCreatorsInternalResponse, GetGrokBotMarketplaceCreatorInternalRequest, UpdateGrokBotMarketplaceCreatorInternalRequest, GrokBotMarketplaceCategory, CreateGrokBotMarketplaceCategoryInternalRequest, ListGrokBotMarketplaceCategoriesInternalRequest, ListGrokBotMarketplaceCategoriesInternalResponse, GetGrokBotMarketplaceCategoryInternalRequest, UpdateGrokBotMarketplaceCategoryInternalRequest, GetGrokBotMarketplaceListingTemplateInternalRequest, GetGrokBotMarketplaceListingTemplateInternalResponse, GetGrokBotMarketplaceListingSourceTemplateInternalRequest, GetGrokBotMarketplaceListingSourceTemplateInternalResponse, DeleteGrokBotMarketplaceListingInternalRequest, DeleteGrokBotMarketplaceListingInternalResponse, UpdateGrokBotMarketplaceListingTemplateInternalRequest, SetGrokBotMarketplaceListingStatusInternalRequest, PresignGrokBotMarketplaceImageUploadInternalRequest, PresignGrokBotMarketplaceImageUploadInternalResponse, PresignGrokBotMarketplaceCreatorProfileUploadInternalRequest, PreviewGrokBotMarketplaceSourceInternalRequest, PreviewGrokBotMarketplaceSourceInternalResponse, GrokBotTranscriptEntry, GrokBotTranscriptEntryDelete, GrokBotTranscriptCursor, WatchGrokBotTranscriptsRequest, GrokBotTranscriptWatchConnected, GrokBotTranscriptWatchRows, GrokBotTranscriptWatchCleared, GrokBotTranscriptWatchCursorTooOld, GrokBotTranscriptWatchHeartbeat, GrokBotAgentLiveActivity, GrokBotAgentAwaitingState, GrokBotAgentLiveState, GrokBotAgentClientState, GrokBotAgentEntryPreview, GrokBotAgentEntryPreview_Text, GrokBotAgentEntryPreview_AgentMessage, GrokBotAgentEntryPreview_AttachmentKindCount, GrokBotAgentEntryPreview_Attachments, GrokBotAgentEntryPreview_Link, GrokBotAgentEntryPreview_WidgetPrompt, GrokBotAgentEntryPreview_WidgetAnswered, GrokBotAgentEntryPreview_WidgetOptions, GrokBotAgentSession, ListGrokBotAgentSessionsRequest, ListGrokBotAgentSessionsResponse, GrokBotTranscriptWatchAgentState, SetGrokBotAgentClientStateRequest, SetGrokBotAgentClientStateResponse, ReadGrokBotAgentAttachmentChunkRequest, ReadGrokBotAgentAttachmentChunkResponse, UploadGrokBotAgentAttachmentChunkRequest, UploadGrokBotAgentAttachmentChunkResponse, GrokBotComputerAction, GrokBotTranscriptWatchComputerActions, GrokBotTranscriptWatchAgentStateChanged, GrokBotTranscriptWatchTurnFailed, GrokBotTranscriptWatchRosterChanged, ReportGrokBotClientPresenceRequest, ReportGrokBotClientPresenceResponse, GrokBotBoxState, GrokBotTranscriptWatchBoxState, ReportSandBoxHostStateRequest, ReportSandBoxHostStateResponse, ListGrokBotAgentAutomationsRequest, GrokBotAgentAutomation, ListGrokBotAgentAutomationsResponse, ListGrokBotAccountAutomationsRequest, GrokBotAccountAutomationGroup, ListGrokBotAccountAutomationsResponse, ListGrokBotAgentTodosRequest, ListGrokBotAgentTodosResponse, SetGrokBotAgentAutomationEnabledRequest, SetGrokBotAgentAutomationEnabledResponse, DeleteGrokBotAgentAutomationRequest, DeleteGrokBotAgentAutomationResponse, ListGrokBotAgentSkillsRequest, GrokBotAgentSkill, ListGrokBotAgentSkillsResponse, GrokBotUserMcpServerSettings, GrokBotUserAutoReviewInstructions, GrokBotUserMcpSettings, GetGrokBotUserMcpSettingsRequest, GetGrokBotUserMcpSettingsResponse, SetGrokBotUserMcpSettingsRequest, SetGrokBotUserMcpSettingsResponse, GrokBotPinnedAgents, GrokBotSidebarSection, GrokBotSidebarSections, GrokBotUserRuntimeSettings, GetGrokBotUserRuntimeSettingsRequest, GetGrokBotUserRuntimeSettingsResponse, UpdateGrokBotUserRuntimeSettingsRequest, UpdateGrokBotUserRuntimeSettingsResponse, SetGrokBotMainAgentRequest, SetGrokBotMainAgentResponse, MarkGrokBotTermsSeenRequest, MarkGrokBotTermsSeenResponse, GrokBotTranscriptWatchFrame, CommitGrokBotTranscriptEntriesRequest, CommitGrokBotTranscriptEntriesResponse, GrokBotTranscriptEntryRejection, ListGrokBotTranscriptEntriesRequest, ListGrokBotTranscriptEntriesResponse, GrokBotAgent, GrokBotRoomPerson, CreateGrokBotRoomRequest, CreateGrokBotRoomResponse, SetGrokBotRoomMembersRequest, SetGrokBotRoomMembersResponse, EnsureGrokBotPullRequestChatRequest, GrokBotPullRequestChatBlocked, GrokBotPullRequestChatRoom, EnsureGrokBotPullRequestChatResponse, ListGrokBotPullRequestChatEntriesRequest, SendGrokBotPullRequestChatMessageRequest, SendGrokBotPullRequestChatMessageResponse, AddGrokBotRoomPeopleRequest, AddGrokBotRoomPeopleResponse, CreateGrokBotAgentRequest, CreateGrokBotAgentResponse, ListGrokBotAgentsRequest, ListGrokBotAgentsResponse, ListGrokBotTeamAgentsRequest, GrokBotAgentTeamSignals, GrokBotTeamAgentEntry, ListGrokBotTeamAgentsResponse, SetGrokBotAgentVisibilityRequest, SetGrokBotAgentVisibilityResponse, UpdateGrokBotAgentRequest, UpdateGrokBotAgentResponse, DeleteGrokBotAgentRequest, DeleteGrokBotAgentResponse, GrokBotSecret, ListGrokBotSecretsRequest, ListGrokBotSecretsResponse, PutGrokBotSecretRequest, PutGrokBotSecretResponse, DeleteGrokBotSecretRequest, DeleteGrokBotSecretResponse, GrokBotEmailInbox, CreateGrokBotEmailInboxRequest, CreateGrokBotEmailInboxResponse, ListGrokBotEmailInboxesRequest, ListGrokBotEmailInboxesResponse, DeleteGrokBotEmailInboxRequest, DeleteGrokBotEmailInboxResponse, SendGrokBotEmailRequest, SendGrokBotEmailResponse, GrokBotEmailSuppressedRecipient, GrokBotEmailAddress, SearchGrokBotEmailThreadsRequest, GrokBotEmailMatchingMessage, GrokBotEmailThreadSummary, SearchGrokBotEmailThreadsResponse, ReadGrokBotEmailThreadRequest, GrokBotEmailAttachmentSummary, GrokBotEmailThreadMessage, ReadGrokBotEmailThreadResponse, ReadGrokBotEmailAttachmentRequest, GrokBotEmailAttachmentText, ReadGrokBotEmailAttachmentResponse, GrokBotAgentMarketplace, GetGrokBotAgentPluginsRequest, GrokBotAgentPlugin, GrokBotAgentPluginSkill, GetGrokBotAgentPluginsResponse, GrokBotAgentPluginEntry, GrokBotAgentInlinePlugin, GrokBotAgentPluginConfigUpdate, SetGrokBotAgentPluginsRequest, SetGrokBotAgentPluginsResponse, SetGrokBotAgentPluginVariablesRequest, SetGrokBotAgentPluginVariablesResponse, UpdateGrokBotAgentMarketplaceRequest, UpdateGrokBotAgentMarketplaceResponse, AddGrokBotAgentSkillRequest, AddGrokBotAgentSkillResponse, UpdateGrokBotAgentSkillRequest, UpdateGrokBotAgentSkillResponse, RemoveGrokBotAgentSkillRequest, RemoveGrokBotAgentSkillResponse, GrokBotTeamContextLearnedEntry, GrokBotTeamContextSummary, GetGrokBotTeamContextSummaryRequest, GetGrokBotTeamContextSummaryResponse, SetGrokBotTeamContextVisibilityRequest, SetGrokBotTeamContextVisibilityResponse, GetGrokBotAgentPluginFileRequest, GetGrokBotAgentPluginFileResponse, GrokBotTemplate, CreateGrokBotTemplateRequest, CreateGrokBotTemplateResponse, ListGrokBotTemplatesRequest, ListGrokBotTemplatesResponse, DeleteGrokBotTemplateRequest, DeleteGrokBotTemplateResponse, SetGrokBotTemplateVisibilityRequest, SetGrokBotTemplateVisibilityResponse, ActivateGrokBotTemplateVersionRequest, ActivateGrokBotTemplateVersionResponse, GetGrokBotTemplateVersionRequest, GetGrokBotTemplateVersionResponse, GetGrokBotTemplateForSourceAgentRequest, GetGrokBotTemplateForSourceAgentResponse, GetGrokBotTemplateExportPolicyRequest, GetGrokBotTemplateExportPolicyResponse, GetPublicGrokBotTemplateRequest, GetPublicGrokBotTemplateResponse, GetGrokBotTemplateImportDetailsRequest, GetGrokBotTemplateImportDetailsResponse, CreateGrokBotAgentFromTemplateRequest, CreateGrokBotAgentFromTemplateResponse, SendGrokBotUserMessageRequest, GrokBotHarnessRefusal, SendGrokBotUserMessageResponse, GetGrokBotSendStatusRequest, GetGrokBotCloudAgentWatchersRequest, GrokBotCloudAgentWatcher, GetGrokBotCloudAgentWatchersResponse, GetGrokBotSendStatusResponse, InterruptGrokBotAgentRunRequest, InterruptGrokBotAgentRunResponse, RespondGrokBotWidgetRequest, RespondGrokBotWidgetResponse, SubmitGrokBotSecretRequest, SubmitGrokBotSecretResponse, ResolveGrokBotCredentialRequestRequest, ResolveGrokBotCredentialRequestResponse, DismissGrokBotWidgetRequest, DismissGrokBotWidgetResponse, SubmitGrokBotUserFormRequest, SubmitGrokBotUserFormResponse, DismissGrokBotUserFormRequest, DismissGrokBotUserFormResponse, GrokBotEmailDraft, GrokBotSlackDraft, SendGrokBotDraftRequest, SendGrokBotDraftResponse, DiscardGrokBotDraftRequest, DiscardGrokBotDraftResponse, ReactToGrokBotMessageRequest, ReactToGrokBotMessageResponse, VoteGrokBotFeedbackRequest, VoteGrokBotFeedbackResponse, SendGrokBotAgentMessageRequest, SendGrokBotAgentMessageResponse, ResolveGrokBotAutoReviewApprovalRequest, ResolveGrokBotAutoReviewApprovalResponse, ResolveGrokBotLocalToolPermissionRequest, ResolveGrokBotLocalToolPermissionResponse, RaiseGrokBotVirtualCardRequest, RaiseGrokBotVirtualCardResponse, ResolveGrokBotVirtualCardApprovalRequest, ResolveGrokBotVirtualCardApprovalResponse, ListGrokBotStripeLinkPaymentMethodsRequest, GrokBotStripeLinkPaymentMethod, ListGrokBotStripeLinkPaymentMethodsResponse, StartPasskeyEnrollmentRequest, StartPasskeyEnrollmentResponse, VerifyPasskeyEnrollmentCodeRequest, VerifyPasskeyEnrollmentCodeResponse, BeginPasskeyRegistrationRequest, BeginPasskeyRegistrationResponse, FinishPasskeyRegistrationRequest, FinishPasskeyRegistrationResponse, GetPasskeyCeremonyRequest, SpendSummary, GetPasskeyCeremonyResponse, GetPasskeyCeremonyStatusRequest, GetPasskeyCeremonyStatusResponse, ListPasskeysRequest, Passkey, ListPasskeysResponse, RevokePasskeyRequest, RevokePasskeyResponse, GrokBotUserComputerRequestFrame, GrokBotUserComputerExec, GrokBotUserComputerUpload, GrokBotUserComputerDownload, GrokBotUserComputerRetireApproval, GrokBotUserComputerCancel, GrokBotUserComputerMessagesOp, GrokBotUserComputerResponseFrame, GrokBotUserComputerClientMessage, GrokBotUserComputerControlMessage, GrokBotUserComputerFile, GrokBotUserComputerFileError, GrokBotUserComputerMessagesResult, GrokBotUserComputerMessagesError, GrokBotUserComputerMessagesAccepted, GrokBotUserComputerMessagesConsentResult, GrokBotUserComputerCapabilities, GrokBotUserComputerHello, GrokBotUserComputerPresence, IssueGrokBotUserComputerCredentialRequest, IssueGrokBotUserComputerCredentialResponse, WatchGrokBotUserComputerRequestsRequest, WatchGrokBotUserComputerRequestsEvent, WatchGrokBotUserComputerConnected, WatchGrokBotUserComputerNotify, WatchGrokBotUserComputerHeartbeat, PollGrokBotUserComputerRequestsRequest, GrokBotUserComputerQueuedRequest, PollGrokBotUserComputerRequestsResponse, SubmitGrokBotUserComputerResponsesRequest, SubmitGrokBotUserComputerResponsesResponse, ListGrokBotUserComputersRequest, ListGrokBotUserComputersResponse, OpenGrokBotUserComputerRequestRequest, CancelGrokBotUserComputerRequestRequest, CancelGrokBotUserComputerRequestResponse, EndGrokBotBoxHandoffRequest, EndGrokBotBoxHandoffResponse, GrokBotRoomMemberTurnRoom, GrokBotRoomMemberTurnPeer, GrokBotRoomMemberTurnMessage, GrokBotRoomMemberTurnMessage_SpeakerKind, GrokBotRoomMemberTurnMessage_ReplyTarget, RequestGrokBotRoomMemberTurnRequest, RequestGrokBotRoomMemberTurnResponse, CancelGrokBotRoomMemberTurnRequest, CancelGrokBotRoomMemberTurnResponse, DeliverGrokBotRoomMemberTurnResultRequest, DeliverGrokBotRoomMemberTurnResultResponse, GrokBotSlackConnection, GrokBotSlackWorkspace, GetGrokBotSlackInstallStateRequest, GetGrokBotSlackInstallStateResponse, GrokBotSlackCursorApprovalRequired, StartGrokBotSlackConnectRequest, StartGrokBotSlackConnectResponse, InstallGrokBotSlackAppRequest, InstallGrokBotSlackAppResponse, ReinstallGrokBotSlackAppRequest, ReinstallGrokBotSlackAppResponse, UninstallGrokBotSlackAppRequest, UninstallGrokBotSlackAppResponse, GetGrokBotRuntimeCapabilitiesRequest, GrokBotRuntimeCapabilities, GetGrokBotRuntimeCapabilitiesResponse, GetGrokBotHarnessMigrationStatusInternalRequest, GrokBotHarnessMigrationRolloutStatus, GrokBotHarnessMigrationAgentStatus, GrokBotHarnessMigrationPassAgentResult, GrokBotHarnessMigrationPassRoomResult, GrokBotHarnessMigrationPassStatus, GetGrokBotHarnessMigrationStatusInternalResponse, ClearGrokBotHarnessMigrationHoldInternalRequest, ClearGrokBotHarnessMigrationHoldInternalResponse, PreviewInternalPrimaryBotMigrationRequest, InternalPrimaryBotMigrationOwner, InternalPrimaryBotMigrationPreviewAggregate, PreviewInternalPrimaryBotMigrationResponse, ExecuteInternalPrimaryBotMigrationRequest, InternalPrimaryBotMigrationOutcome, InternalPrimaryBotMigrationExecuteAggregate, ExecuteInternalPrimaryBotMigrationResponse, EnsureGrokBotBoxHarnessMigrationPassRequest, GrokBotBoxRoomSummary, EnsureGrokBotBoxHarnessMigrationPassResponse, GrokBotUserFormVaultEntry, ListGrokBotUserFormVaultEntriesRequest, ListGrokBotUserFormVaultEntriesResponse, UpsertGrokBotUserFormVaultEntryRequest, UpsertGrokBotUserFormVaultEntryResponse, DeleteGrokBotUserFormVaultEntryRequest, DeleteGrokBotUserFormVaultEntryResponse, GrokBotUserFormVaultKey, ListGrokBotUserFormVaultKeysRequest, ListGrokBotUserFormVaultKeysResponse, GetGrokBotEgressPolicyRequest, GrokBotAllowedTcpDestination, GetGrokBotEgressPolicyResponse, AdminGetGrokBotAgentDefinitionRequest, AdminGetGrokBotAgentDefinitionResponse, GrokBotAgentDefinitionIdentity, GrokBotAgentDefinitionSlack, GrokBotAgentDefinition, GrokBotAgentDefinitionAgentRef, GrokBotAgentDefinitionSession, GrokBotAgentDefinitionTemplateImport, GrokBotAgentDefinitionMemoryShard, GrokBotAgentDefinitionSkill, GrokBotAgentDefinitionMcpServer, AdminListGrokBotTeamAgentsRequest, AdminListGrokBotTeamAgentsResponse, GrokBotOrphanedSlackApp, GrokBotSlackAppRemoval, GrokBotTeamAgent, GrokBotTeamAgentSessionCounts, GrokBotTeamAgentRoutineCounts, AdminDeleteGrokBotAgentRequest, AdminDeleteGrokBotAgentResponse, AdminRetryGrokBotSlackAppRemovalRequest, AdminRetryGrokBotSlackAppRemovalResponse, AdminGetGrokBotTeamAgentSharedStateRequest, AdminGetGrokBotTeamAgentSharedStateResponse, AdminListGrokBotEmailInboxesRequest, AdminGrokBotEmailInbox, AdminListGrokBotEmailInboxesResponse, AdminListGrokBotEmailMessagesRequest, AdminGrokBotEmailMessage, AdminListGrokBotEmailMessagesResponse, AdminSendGrokBotTestEmailRequest, AdminSendGrokBotTestEmailResponse, GrokBotTeamAgentSharedState, GrokBotTeamAgentParticipant, GrokBotTeamAgentSharedRoutine, GrokBotTeamAgentSharedBox, PublishGrokBotUserSkillsSnapshotRequest, PublishGrokBotUserSkillsSnapshotResponse, InvalidateGrokBotUserSkillsCacheRequest, InvalidateGrokBotUserSkillsCacheResponse, VoiceCallHarnessSessionRequest, VoiceCallToolDescriptor, VoiceCallGreeting, VoiceCallReceiptOutput, VoiceCallReceipt, VoiceCallHarnessSessionResponse, VoiceCallLineState, VoiceCallHarnessToolRequest, VoiceCallHarnessToolResponse;
 var init_grok_bot_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/grok_bot_pb.js"() {
     "use strict";
@@ -29,6 +29,7 @@ var init_grok_bot_pb = __esm({
     GrokBotAgentHarnessKind = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotAgentHarnessKind", [[0, "UNSPECIFIED"], [1, "BOX"], [2, "TEMPORAL"]], 1);
     GrokBotAgentVisibility = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotAgentVisibility", [[0, "UNSPECIFIED"], [1, "OWNER"], [2, "TEAM"]], 1);
     SetGrokBotAgentVisibilityOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "SetGrokBotAgentVisibilityOutcome", [[0, "UNSPECIFIED"], [1, "UPDATED"], [2, "UNSUPPORTED_HARNESS"], [3, "NO_TEAM"], [4, "BUSY"]], 1);
+    GrokBotEmailSuppressionReason = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotEmailSuppressionReason", [[0, "UNSPECIFIED"], [1, "PERMANENT_BOUNCE"], [2, "COMPLAINT"], [3, "UNSUBSCRIBE_REQUEST"], [4, "MANUAL"]], 1);
     GrokBotEmailDirection = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotEmailDirection", [[0, "UNSPECIFIED"], [1, "INBOUND"], [2, "OUTBOUND"]], 1);
     GrokBotEmailSearchMode = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotEmailSearchMode", [[0, "UNSPECIFIED"], [1, "HYBRID"], [2, "KEYWORD"], [3, "SEMANTIC"]], 1);
     GrokBotEmailBodyStatus = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotEmailBodyStatus", [[0, "UNSPECIFIED"], [1, "AVAILABLE"], [2, "NOT_INDEXED"], [3, "PURGED"], [4, "REJECTED"]], 1);
@@ -53,6 +54,8 @@ var init_grok_bot_pb = __esm({
     GrokBotVirtualCardOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotVirtualCardOutcome", [[0, "UNSPECIFIED"], [1, "APPROVED"], [2, "DENIED"], [3, "NEEDS_AUTH"], [4, "FAILED"]], 1);
     GrokBotStripeLinkPaymentMethodKind = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotStripeLinkPaymentMethodKind", [[0, "UNSPECIFIED"], [1, "CARD"], [2, "BANK_ACCOUNT"]], 1);
     GrokBotStripeLinkPaymentMethodsOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotStripeLinkPaymentMethodsOutcome", [[0, "UNSPECIFIED"], [1, "OK"], [2, "NEEDS_AUTH"], [3, "UNAVAILABLE"]], 1);
+    PasskeyCeremonyKind = /* @__PURE__ */ enumType(proto3, __protoPackage150, "PasskeyCeremonyKind", [[0, "UNSPECIFIED"], [1, "REGISTER"], [2, "APPROVE"]], 1);
+    PasskeyCeremonyStatus = /* @__PURE__ */ enumType(proto3, __protoPackage150, "PasskeyCeremonyStatus", [[0, "UNSPECIFIED"], [1, "PENDING"], [2, "COMPLETED"], [3, "FAILED"], [4, "EXPIRED"]], 1);
     GrokBotUserComputerMessagesConsentVerdict = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotUserComputerMessagesConsentVerdict", [[0, "UNSPECIFIED"], [1, "STANDING"], [2, "ASK"], [3, "REFUSED"]], 1);
     GrokBotBoxHandBackTrigger = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotBoxHandBackTrigger", [[0, "UNSPECIFIED"], [1, "BUTTON"], [2, "VIEWER_CLOSED"], [3, "DISMISSED"]], 1);
     GrokBotRoomMemberTurnDispatch = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotRoomMemberTurnDispatch", [[0, "UNSPECIFIED"], [1, "ACCEPTED"], [2, "DUPLICATE"], [3, "NOT_TEMPORAL"], [4, "TARGET_NOT_FOUND"], [5, "TEMPORAL_UNAVAILABLE"]], 1);
@@ -61,7 +64,7 @@ var init_grok_bot_pb = __esm({
     GrokBotSlackInstallStatus = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotSlackInstallStatus", [[0, "UNSPECIFIED"], [1, "NOT_CONNECTED"], [2, "APP_CREATED"], [3, "CONNECTED"], [4, "UNSUPPORTED_HARNESS"]], 1);
     GrokBotSlackConnectOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotSlackConnectOutcome", [[0, "UNSPECIFIED"], [1, "STARTED"], [2, "UNSUPPORTED_HARNESS"]], 1);
     GrokBotSlackInstallOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotSlackInstallOutcome", [[0, "UNSPECIFIED"], [1, "INSTALLED"], [2, "PENDING_ADMIN_APPROVAL"], [3, "NOT_CONNECTED"], [4, "WORKSPACE_REQUIRED"], [5, "MANAGER_REAUTH_REQUIRED"], [6, "INSUFFICIENT_SCOPES"], [7, "INSTALL_CONFLICT"], [8, "RATELIMITED"], [9, "SLACK_REJECTED"], [10, "UNSUPPORTED_HARNESS"]], 1);
-    GrokBotSlackReinstallOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotSlackReinstallOutcome", [[0, "UNSPECIFIED"], [1, "UPDATED"], [2, "UP_TO_DATE"], [3, "RECREATE_REQUIRED"], [4, "PENDING_ADMIN_APPROVAL"], [5, "NOT_CONNECTED"], [6, "MANAGER_REAUTH_REQUIRED"], [7, "INSUFFICIENT_SCOPES"], [8, "RATELIMITED"], [9, "SLACK_REJECTED"], [10, "UNSUPPORTED_HARNESS"]], 1);
+    GrokBotSlackReinstallOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotSlackReinstallOutcome", [[0, "UNSPECIFIED"], [1, "UPDATED"], [2, "UP_TO_DATE"], [3, "RECREATE_REQUIRED"], [4, "PENDING_ADMIN_APPROVAL"], [5, "NOT_CONNECTED"], [6, "MANAGER_REAUTH_REQUIRED"], [7, "INSUFFICIENT_SCOPES"], [8, "RATELIMITED"], [9, "SLACK_REJECTED"], [10, "UNSUPPORTED_HARNESS"], [11, "THROTTLED"]], 1);
     GrokBotSlackUninstallOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotSlackUninstallOutcome", [[0, "UNSPECIFIED"], [1, "REMOVED"], [2, "NOT_CONNECTED"], [3, "MANAGER_REAUTH_REQUIRED"], [4, "RATELIMITED"], [5, "SLACK_REJECTED"], [6, "UNSUPPORTED_HARNESS"]], 1);
     GrokBotBoxHarnessMigrationPassState = /* @__PURE__ */ enumType(proto3, __protoPackage150, "GrokBotBoxHarnessMigrationPassState", [[0, "UNSPECIFIED"], [1, "DISABLED"], [2, "DONE"], [3, "PENDING"]], 1);
     VoiceCallHarnessToolOutcomeKind = /* @__PURE__ */ enumType(proto3, __protoPackage150, "VoiceCallHarnessToolOutcomeKind", [[0, "UNSPECIFIED"], [1, "SERVED"], [2, "UNKNOWN_TOOL"], [3, "INVALID_INPUT"]], 1);
@@ -4358,6 +4361,7 @@ var init_grok_bot_pb = __esm({
         this.messageId = "";
         this.threadId = "";
         this.providerMessageId = "";
+        this.suppressedRecipients = [];
         proto3.util.initPartial(data, this);
       }
       static fromBinary(bytes, options2) {
@@ -4373,7 +4377,30 @@ var init_grok_bot_pb = __esm({
         return proto3.util.equals(_SendGrokBotEmailResponse, a, b2);
       }
       static $() {
-        return ["SendGrokBotEmailResponse|1 message_id 9|2 thread_id 9|3 provider_message_id 9"];
+        return ["SendGrokBotEmailResponse|1 message_id 9|2 thread_id 9|3 provider_message_id 9|4 suppressed_recipients #0*", GrokBotEmailSuppressedRecipient];
+      }
+    };
+    GrokBotEmailSuppressedRecipient = class _GrokBotEmailSuppressedRecipient extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.address = "";
+        this.reason = GrokBotEmailSuppressionReason.UNSPECIFIED;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GrokBotEmailSuppressedRecipient().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GrokBotEmailSuppressedRecipient().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GrokBotEmailSuppressedRecipient().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GrokBotEmailSuppressedRecipient, a, b2);
+      }
+      static $() {
+        return ["GrokBotEmailSuppressedRecipient|1 address 9|2 reason #0", GrokBotEmailSuppressionReason];
       }
     };
     GrokBotEmailAddress = class _GrokBotEmailAddress extends __protoMessage3143 {
@@ -5135,6 +5162,149 @@ var init_grok_bot_pb = __esm({
       }
       static $() {
         return ["RemoveGrokBotAgentSkillResponse|1 marketplace #0|2 plugins #1*", GrokBotAgentMarketplace, GrokBotAgentPlugin];
+      }
+    };
+    GrokBotTeamContextLearnedEntry = class _GrokBotTeamContextLearnedEntry extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.factId = "";
+        this.text = "";
+        this.learnedAtMs = protoInt64.zero;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GrokBotTeamContextLearnedEntry().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GrokBotTeamContextLearnedEntry().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GrokBotTeamContextLearnedEntry().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GrokBotTeamContextLearnedEntry, a, b2);
+      }
+      static $() {
+        return ["GrokBotTeamContextLearnedEntry|1 fact_id 9|2 text 9|3 learned_at_ms 3"];
+      }
+    };
+    GrokBotTeamContextSummary = class _GrokBotTeamContextSummary extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.memoryVersion = 0;
+        this.generatedAtMs = protoInt64.zero;
+        this.prose = "";
+        this.summaryModel = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GrokBotTeamContextSummary().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GrokBotTeamContextSummary().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GrokBotTeamContextSummary().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GrokBotTeamContextSummary, a, b2);
+      }
+      static $() {
+        return ["GrokBotTeamContextSummary|1 memory_version 13|2 generated_at_ms 3|3 prose 9|4 summary_model 9"];
+      }
+    };
+    GetGrokBotTeamContextSummaryRequest = class _GetGrokBotTeamContextSummaryRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.agentId = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GetGrokBotTeamContextSummaryRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GetGrokBotTeamContextSummaryRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GetGrokBotTeamContextSummaryRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GetGrokBotTeamContextSummaryRequest, a, b2);
+      }
+      static $() {
+        return ["GetGrokBotTeamContextSummaryRequest|1 agent_id 9"];
+      }
+    };
+    GetGrokBotTeamContextSummaryResponse = class _GetGrokBotTeamContextSummaryResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.showContextNotesToMembers = false;
+        this.viewerIsOwner = false;
+        this.stale = false;
+        this.skills = [];
+        this.learned = [];
+        this.memoryCount = 0;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GetGrokBotTeamContextSummaryResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GetGrokBotTeamContextSummaryResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GetGrokBotTeamContextSummaryResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GetGrokBotTeamContextSummaryResponse, a, b2);
+      }
+      static $() {
+        return ["GetGrokBotTeamContextSummaryResponse|1 summary #0?|2 show_context_notes_to_members 8|3 viewer_is_owner 8|4 stale 8|5 skills #1*|6 learned #2*|7 memory_count 13", GrokBotTeamContextSummary, GrokBotAgentPluginSkill, GrokBotTeamContextLearnedEntry];
+      }
+    };
+    SetGrokBotTeamContextVisibilityRequest = class _SetGrokBotTeamContextVisibilityRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.agentId = "";
+        this.showContextNotesToMembers = false;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _SetGrokBotTeamContextVisibilityRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _SetGrokBotTeamContextVisibilityRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _SetGrokBotTeamContextVisibilityRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_SetGrokBotTeamContextVisibilityRequest, a, b2);
+      }
+      static $() {
+        return ["SetGrokBotTeamContextVisibilityRequest|1 agent_id 9|2 show_context_notes_to_members 8"];
+      }
+    };
+    SetGrokBotTeamContextVisibilityResponse = class _SetGrokBotTeamContextVisibilityResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.showContextNotesToMembers = false;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _SetGrokBotTeamContextVisibilityResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _SetGrokBotTeamContextVisibilityResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _SetGrokBotTeamContextVisibilityResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_SetGrokBotTeamContextVisibilityResponse, a, b2);
+      }
+      static $() {
+        return ["SetGrokBotTeamContextVisibilityResponse|1 show_context_notes_to_members 8"];
       }
     };
     GetGrokBotAgentPluginFileRequest = class _GetGrokBotAgentPluginFileRequest extends __protoMessage3143 {
@@ -6775,6 +6945,410 @@ var init_grok_bot_pb = __esm({
         return ["ListGrokBotStripeLinkPaymentMethodsResponse|1 outcome #0|2 payment_methods #1*|3 unavailable_count 13", GrokBotStripeLinkPaymentMethodsOutcome, GrokBotStripeLinkPaymentMethod];
       }
     };
+    StartPasskeyEnrollmentRequest = class _StartPasskeyEnrollmentRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _StartPasskeyEnrollmentRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _StartPasskeyEnrollmentRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _StartPasskeyEnrollmentRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_StartPasskeyEnrollmentRequest, a, b2);
+      }
+      static $() {
+        return ["StartPasskeyEnrollmentRequest"];
+      }
+    };
+    StartPasskeyEnrollmentResponse = class _StartPasskeyEnrollmentResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _StartPasskeyEnrollmentResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _StartPasskeyEnrollmentResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _StartPasskeyEnrollmentResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_StartPasskeyEnrollmentResponse, a, b2);
+      }
+      static $() {
+        return ["StartPasskeyEnrollmentResponse"];
+      }
+    };
+    VerifyPasskeyEnrollmentCodeRequest = class _VerifyPasskeyEnrollmentCodeRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.code = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _VerifyPasskeyEnrollmentCodeRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _VerifyPasskeyEnrollmentCodeRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _VerifyPasskeyEnrollmentCodeRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_VerifyPasskeyEnrollmentCodeRequest, a, b2);
+      }
+      static $() {
+        return ["VerifyPasskeyEnrollmentCodeRequest|1 code 9"];
+      }
+    };
+    VerifyPasskeyEnrollmentCodeResponse = class _VerifyPasskeyEnrollmentCodeResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.enrollmentTicket = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _VerifyPasskeyEnrollmentCodeResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _VerifyPasskeyEnrollmentCodeResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _VerifyPasskeyEnrollmentCodeResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_VerifyPasskeyEnrollmentCodeResponse, a, b2);
+      }
+      static $() {
+        return ["VerifyPasskeyEnrollmentCodeResponse|1 enrollment_ticket 9"];
+      }
+    };
+    BeginPasskeyRegistrationRequest = class _BeginPasskeyRegistrationRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.enrollmentTicket = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _BeginPasskeyRegistrationRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _BeginPasskeyRegistrationRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _BeginPasskeyRegistrationRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_BeginPasskeyRegistrationRequest, a, b2);
+      }
+      static $() {
+        return ["BeginPasskeyRegistrationRequest|1 enrollment_ticket 9"];
+      }
+    };
+    BeginPasskeyRegistrationResponse = class _BeginPasskeyRegistrationResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.ceremonyId = "";
+        this.creationOptionsJson = "";
+        this.ceremonyPath = "";
+        this.ceremonyToken = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _BeginPasskeyRegistrationResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _BeginPasskeyRegistrationResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _BeginPasskeyRegistrationResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_BeginPasskeyRegistrationResponse, a, b2);
+      }
+      static $() {
+        return ["BeginPasskeyRegistrationResponse|1 ceremony_id 9|2 creation_options_json 9|3 ceremony_path 9|4 ceremony_token 9"];
+      }
+    };
+    FinishPasskeyRegistrationRequest = class _FinishPasskeyRegistrationRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.ceremonyToken = "";
+        this.attestationJson = "";
+        this.name = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _FinishPasskeyRegistrationRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _FinishPasskeyRegistrationRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _FinishPasskeyRegistrationRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_FinishPasskeyRegistrationRequest, a, b2);
+      }
+      static $() {
+        return ["FinishPasskeyRegistrationRequest|1 ceremony_token 9|2 attestation_json 9|3 name 9"];
+      }
+    };
+    FinishPasskeyRegistrationResponse = class _FinishPasskeyRegistrationResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.credentialId = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _FinishPasskeyRegistrationResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _FinishPasskeyRegistrationResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _FinishPasskeyRegistrationResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_FinishPasskeyRegistrationResponse, a, b2);
+      }
+      static $() {
+        return ["FinishPasskeyRegistrationResponse|1 credential_id 9"];
+      }
+    };
+    GetPasskeyCeremonyRequest = class _GetPasskeyCeremonyRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.ceremonyToken = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GetPasskeyCeremonyRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GetPasskeyCeremonyRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GetPasskeyCeremonyRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GetPasskeyCeremonyRequest, a, b2);
+      }
+      static $() {
+        return ["GetPasskeyCeremonyRequest|1 ceremony_token 9"];
+      }
+    };
+    SpendSummary = class _SpendSummary extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.amountCents = protoInt64.zero;
+        this.currency = "";
+        this.merchantName = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _SpendSummary().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _SpendSummary().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _SpendSummary().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_SpendSummary, a, b2);
+      }
+      static $() {
+        return ["SpendSummary|1 amount_cents 3|2 currency 9|3 merchant_name 9"];
+      }
+    };
+    GetPasskeyCeremonyResponse = class _GetPasskeyCeremonyResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.kind = PasskeyCeremonyKind.UNSPECIFIED;
+        this.optionsJson = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GetPasskeyCeremonyResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GetPasskeyCeremonyResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GetPasskeyCeremonyResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GetPasskeyCeremonyResponse, a, b2);
+      }
+      static $() {
+        return ["GetPasskeyCeremonyResponse|1 kind #0|2 options_json 9|3 spend #1?", PasskeyCeremonyKind, SpendSummary];
+      }
+    };
+    GetPasskeyCeremonyStatusRequest = class _GetPasskeyCeremonyStatusRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.ceremonyId = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GetPasskeyCeremonyStatusRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GetPasskeyCeremonyStatusRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GetPasskeyCeremonyStatusRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GetPasskeyCeremonyStatusRequest, a, b2);
+      }
+      static $() {
+        return ["GetPasskeyCeremonyStatusRequest|1 ceremony_id 9"];
+      }
+    };
+    GetPasskeyCeremonyStatusResponse = class _GetPasskeyCeremonyStatusResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.status = PasskeyCeremonyStatus.UNSPECIFIED;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GetPasskeyCeremonyStatusResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GetPasskeyCeremonyStatusResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GetPasskeyCeremonyStatusResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GetPasskeyCeremonyStatusResponse, a, b2);
+      }
+      static $() {
+        return ["GetPasskeyCeremonyStatusResponse|1 status #0", PasskeyCeremonyStatus];
+      }
+    };
+    ListPasskeysRequest = class _ListPasskeysRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _ListPasskeysRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _ListPasskeysRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _ListPasskeysRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_ListPasskeysRequest, a, b2);
+      }
+      static $() {
+        return ["ListPasskeysRequest"];
+      }
+    };
+    Passkey = class _Passkey extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.credentialId = "";
+        this.name = "";
+        this.createdAtMs = protoInt64.zero;
+        this.deviceType = "";
+        this.backedUp = false;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _Passkey().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _Passkey().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _Passkey().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_Passkey, a, b2);
+      }
+      static $() {
+        return ["Passkey|1 credential_id 9|2 name 9|3 created_at_ms 3|4 last_used_at_ms 3?|5 device_type 9|6 backed_up 8"];
+      }
+    };
+    ListPasskeysResponse = class _ListPasskeysResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.passkeys = [];
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _ListPasskeysResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _ListPasskeysResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _ListPasskeysResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_ListPasskeysResponse, a, b2);
+      }
+      static $() {
+        return ["ListPasskeysResponse|1 passkeys #0*", Passkey];
+      }
+    };
+    RevokePasskeyRequest = class _RevokePasskeyRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.credentialId = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _RevokePasskeyRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _RevokePasskeyRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _RevokePasskeyRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_RevokePasskeyRequest, a, b2);
+      }
+      static $() {
+        return ["RevokePasskeyRequest|1 credential_id 9"];
+      }
+    };
+    RevokePasskeyResponse = class _RevokePasskeyResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _RevokePasskeyResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _RevokePasskeyResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _RevokePasskeyResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_RevokePasskeyResponse, a, b2);
+      }
+      static $() {
+        return ["RevokePasskeyResponse"];
+      }
+    };
     GrokBotUserComputerRequestFrame = class _GrokBotUserComputerRequestFrame extends __protoMessage3143 {
       constructor(data) {
         super();
@@ -8089,6 +8663,7 @@ var init_grok_bot_pb = __esm({
       constructor(data) {
         super();
         this.agentId = "";
+        this.automatic = false;
         proto3.util.initPartial(data, this);
       }
       static fromBinary(bytes, options2) {
@@ -8104,7 +8679,7 @@ var init_grok_bot_pb = __esm({
         return proto3.util.equals(_ReinstallGrokBotSlackAppRequest, a, b2);
       }
       static $() {
-        return ["ReinstallGrokBotSlackAppRequest|1 agent_id 9"];
+        return ["ReinstallGrokBotSlackAppRequest|1 agent_id 9|2 automatic 8"];
       }
     };
     ReinstallGrokBotSlackAppResponse = class _ReinstallGrokBotSlackAppResponse extends __protoMessage3143 {
@@ -8286,7 +8861,7 @@ var init_grok_bot_pb = __esm({
         return proto3.util.equals(_GrokBotHarnessMigrationRolloutStatus, a, b2);
       }
       static $() {
-        return ["GrokBotHarnessMigrationRolloutStatus|1 migration_gate_enabled 8|2 identity_reads_enabled 8|3 temporal_harness_mode 9|4 host_update_trigger_enabled 8|5 ineligibility 9"];
+        return ["GrokBotHarnessMigrationRolloutStatus|1 migration_gate_enabled 8|2 identity_reads_enabled 8|3 temporal_harness_mode 9|4 host_update_trigger_enabled 8|5 ineligibility 9|6 room_promotion_enabled 8?|7 empty_flip_enabled 8?"];
       }
     };
     GrokBotHarnessMigrationAgentStatus = class _GrokBotHarnessMigrationAgentStatus extends __protoMessage3143 {
@@ -8344,6 +8919,30 @@ var init_grok_bot_pb = __esm({
         return ["GrokBotHarnessMigrationPassAgentResult|1 agent_row_id 9|2 outcome 9|3 deferral_reason 9|4 duration_ms 13|5 copied_blobs 13|6 copied_bytes 4|7 closure_blobs 13|8 prewarmed_blobs 13"];
       }
     };
+    GrokBotHarnessMigrationPassRoomResult = class _GrokBotHarnessMigrationPassRoomResult extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.roomId = "";
+        this.outcome = "";
+        this.deferralReason = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _GrokBotHarnessMigrationPassRoomResult().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _GrokBotHarnessMigrationPassRoomResult().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _GrokBotHarnessMigrationPassRoomResult().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_GrokBotHarnessMigrationPassRoomResult, a, b2);
+      }
+      static $() {
+        return ["GrokBotHarnessMigrationPassRoomResult|1 room_id 9|2 outcome 9|3 deferral_reason 9"];
+      }
+    };
     GrokBotHarnessMigrationPassStatus = class _GrokBotHarnessMigrationPassStatus extends __protoMessage3143 {
       constructor(data) {
         super();
@@ -8355,6 +8954,8 @@ var init_grok_bot_pb = __esm({
         this.skippedReason = "";
         this.budgetExhausted = false;
         this.agents = [];
+        this.rooms = [];
+        this.resultAvailable = false;
         proto3.util.initPartial(data, this);
       }
       static fromBinary(bytes, options2) {
@@ -8370,7 +8971,7 @@ var init_grok_bot_pb = __esm({
         return proto3.util.equals(_GrokBotHarnessMigrationPassStatus, a, b2);
       }
       static $() {
-        return ["GrokBotHarnessMigrationPassStatus|1 workflow_id 9|2 run_id 9|3 status 9|4 started_at_ms 3|5 closed_at_ms 3|6 skipped_reason 9|7 budget_exhausted 8|8 agents #0*", GrokBotHarnessMigrationPassAgentResult];
+        return ["GrokBotHarnessMigrationPassStatus|1 workflow_id 9|2 run_id 9|3 status 9|4 started_at_ms 3|5 closed_at_ms 3|6 skipped_reason 9|7 budget_exhausted 8|8 agents #0*|9 rooms #1*|10 result_available 8", GrokBotHarnessMigrationPassAgentResult, GrokBotHarnessMigrationPassRoomResult];
       }
     };
     GetGrokBotHarnessMigrationStatusInternalResponse = class _GetGrokBotHarnessMigrationStatusInternalResponse extends __protoMessage3143 {
@@ -8440,6 +9041,209 @@ var init_grok_bot_pb = __esm({
       }
       static $() {
         return ["ClearGrokBotHarnessMigrationHoldInternalResponse|1 cleared 8"];
+      }
+    };
+    PreviewInternalPrimaryBotMigrationRequest = class _PreviewInternalPrimaryBotMigrationRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.teamIds = [];
+        this.emailSuffixes = [];
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _PreviewInternalPrimaryBotMigrationRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _PreviewInternalPrimaryBotMigrationRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _PreviewInternalPrimaryBotMigrationRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_PreviewInternalPrimaryBotMigrationRequest, a, b2);
+      }
+      static $() {
+        return ["PreviewInternalPrimaryBotMigrationRequest|1 team_ids 5*|2 email_suffixes 9*"];
+      }
+    };
+    InternalPrimaryBotMigrationOwner = class _InternalPrimaryBotMigrationOwner extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.userId = 0;
+        this.teamIds = [];
+        this.primaryAgentId = "";
+        this.migrationStatus = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _InternalPrimaryBotMigrationOwner().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _InternalPrimaryBotMigrationOwner().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _InternalPrimaryBotMigrationOwner().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_InternalPrimaryBotMigrationOwner, a, b2);
+      }
+      static $() {
+        return ["InternalPrimaryBotMigrationOwner|1 user_id 5|2 auth_id 9?|3 email 9?|4 team_ids 5*|5 primary_agent_id 9|6 migration_status 9"];
+      }
+    };
+    InternalPrimaryBotMigrationPreviewAggregate = class _InternalPrimaryBotMigrationPreviewAggregate extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.filteredCount = 0;
+        this.currentPrimaryCount = 0;
+        this.readyCount = 0;
+        this.customizedCount = 0;
+        this.missingSystemBotCount = 0;
+        this.ambiguousSystemBotsCount = 0;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _InternalPrimaryBotMigrationPreviewAggregate().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _InternalPrimaryBotMigrationPreviewAggregate().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _InternalPrimaryBotMigrationPreviewAggregate().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_InternalPrimaryBotMigrationPreviewAggregate, a, b2);
+      }
+      static $() {
+        return ["InternalPrimaryBotMigrationPreviewAggregate|1 filtered_count 13|2 current_primary_count 13|3 ready_count 13|4 customized_count 13|5 missing_system_bot_count 13|6 ambiguous_system_bots_count 13"];
+      }
+    };
+    PreviewInternalPrimaryBotMigrationResponse = class _PreviewInternalPrimaryBotMigrationResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.owners = [];
+        this.filteredCount = 0;
+        this.cohortHash = "";
+        this.previewToken = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _PreviewInternalPrimaryBotMigrationResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _PreviewInternalPrimaryBotMigrationResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _PreviewInternalPrimaryBotMigrationResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_PreviewInternalPrimaryBotMigrationResponse, a, b2);
+      }
+      static $() {
+        return ["PreviewInternalPrimaryBotMigrationResponse|1 owners #0*|2 filtered_count 13|3 cohort_hash 9|4 preview_token 9|5 aggregate #1", InternalPrimaryBotMigrationOwner, InternalPrimaryBotMigrationPreviewAggregate];
+      }
+    };
+    ExecuteInternalPrimaryBotMigrationRequest = class _ExecuteInternalPrimaryBotMigrationRequest extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.teamIds = [];
+        this.emailSuffixes = [];
+        this.selectedUserIds = [];
+        this.cohortHash = "";
+        this.previewToken = "";
+        this.confirmation = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _ExecuteInternalPrimaryBotMigrationRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _ExecuteInternalPrimaryBotMigrationRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _ExecuteInternalPrimaryBotMigrationRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_ExecuteInternalPrimaryBotMigrationRequest, a, b2);
+      }
+      static $() {
+        return ["ExecuteInternalPrimaryBotMigrationRequest|1 team_ids 5*|2 email_suffixes 9*|3 selected_user_ids 5*|4 cohort_hash 9|5 preview_token 9|6 confirmation 9"];
+      }
+    };
+    InternalPrimaryBotMigrationOutcome = class _InternalPrimaryBotMigrationOutcome extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.userId = 0;
+        this.outcome = "";
+        this.detail = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _InternalPrimaryBotMigrationOutcome().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _InternalPrimaryBotMigrationOutcome().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _InternalPrimaryBotMigrationOutcome().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_InternalPrimaryBotMigrationOutcome, a, b2);
+      }
+      static $() {
+        return ["InternalPrimaryBotMigrationOutcome|1 user_id 5|2 outcome 9|3 detail 9"];
+      }
+    };
+    InternalPrimaryBotMigrationExecuteAggregate = class _InternalPrimaryBotMigrationExecuteAggregate extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.selectedCount = 0;
+        this.migratedCount = 0;
+        this.alreadyMigratedCount = 0;
+        this.skippedIneligibleCount = 0;
+        this.ambiguousSystemBotsCount = 0;
+        this.failedCount = 0;
+        this.systemBotsConverted = 0;
+        this.defaultNamesRenamed = 0;
+        this.defaultIconsChanged = 0;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _InternalPrimaryBotMigrationExecuteAggregate().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _InternalPrimaryBotMigrationExecuteAggregate().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _InternalPrimaryBotMigrationExecuteAggregate().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_InternalPrimaryBotMigrationExecuteAggregate, a, b2);
+      }
+      static $() {
+        return ["InternalPrimaryBotMigrationExecuteAggregate|1 selected_count 13|2 migrated_count 13|3 already_migrated_count 13|4 skipped_ineligible_count 13|5 ambiguous_system_bots_count 13|6 failed_count 13|7 system_bots_converted 13|8 default_names_renamed 13|9 default_icons_changed 13"];
+      }
+    };
+    ExecuteInternalPrimaryBotMigrationResponse = class _ExecuteInternalPrimaryBotMigrationResponse extends __protoMessage3143 {
+      constructor(data) {
+        super();
+        this.outcomes = [];
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _ExecuteInternalPrimaryBotMigrationResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _ExecuteInternalPrimaryBotMigrationResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _ExecuteInternalPrimaryBotMigrationResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_ExecuteInternalPrimaryBotMigrationResponse, a, b2);
+      }
+      static $() {
+        return ["ExecuteInternalPrimaryBotMigrationResponse|1 outcomes #0*|2 aggregate #1", InternalPrimaryBotMigrationOutcome, InternalPrimaryBotMigrationExecuteAggregate];
       }
     };
     EnsureGrokBotBoxHarnessMigrationPassRequest = class _EnsureGrokBotBoxHarnessMigrationPassRequest extends __protoMessage3143 {

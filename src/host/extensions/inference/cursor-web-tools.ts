@@ -42,9 +42,9 @@ function createCursorWebFetchService(options2, createClient2 = createSandCursorB
         return { content };
       }
       case "error": {
-        const error41 = response.result.value.error;
+        const error42 = response.result.value.error;
         return {
-          error: WEB_FETCH_BLOCKED_ERROR_PATTERN.test(error41) ? `${error41}${WEB_FETCH_BLOCKED_HINT}` : error41,
+          error: WEB_FETCH_BLOCKED_ERROR_PATTERN.test(error42) ? `${error42}${WEB_FETCH_BLOCKED_HINT}` : error42,
           isTimeout: response.result.value.isTimeout
         };
       }

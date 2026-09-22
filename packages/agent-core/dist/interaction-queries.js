@@ -6,7 +6,7 @@ init_mcp_auth_tool_pb();
 init_switch_mode_tool_pb();
 init_web_fetch_tool_pb();
 init_web_search_tool_pb();
-var __awaiter23 = function(thisArg, _arguments, P2, generator) {
+var __awaiter21 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -43,7 +43,7 @@ var DeferredInteractionResponseError = class extends Error {
   }
 };
 function queryWebSearch(listener, ctx, args) {
-  return __awaiter23(this, void 0, void 0, function* () {
+  return __awaiter21(this, void 0, void 0, function* () {
     const resp = yield listener.query(ctx, new InteractionQuery({
       query: {
         case: "webSearchRequestQuery",
@@ -57,7 +57,7 @@ function queryWebSearch(listener, ctx, args) {
   });
 }
 function queryWebFetch(listener, ctx, args, options2) {
-  return __awaiter23(this, void 0, void 0, function* () {
+  return __awaiter21(this, void 0, void 0, function* () {
     var _a19;
     const queryOptions = typeof options2 === "boolean" ? { skipApproval: options2 } : options2 !== null && options2 !== void 0 ? options2 : {};
     const resp = yield listener.query(ctx, new InteractionQuery({
@@ -77,7 +77,7 @@ function queryWebFetch(listener, ctx, args, options2) {
   });
 }
 function queryMcpAuth(listener, ctx, args) {
-  return __awaiter23(this, void 0, void 0, function* () {
+  return __awaiter21(this, void 0, void 0, function* () {
     const resp = yield listener.query(ctx, new InteractionQuery({
       query: {
         case: "mcpAuthRequestQuery",
@@ -295,7 +295,7 @@ var Responses = {
       }
     });
   },
-  connectScmFailed(queryId, error41) {
+  connectScmFailed(queryId, error42) {
     return new InteractionResponse({
       id: queryId,
       result: {
@@ -304,7 +304,7 @@ var Responses = {
           result: {
             case: "failed",
             value: new ConnectScmRequestResponse_Failed({
-              error: error41 !== null && error41 !== void 0 ? error41 : "Failed to connect GitHub"
+              error: error42 !== null && error42 !== void 0 ? error42 : "Failed to connect GitHub"
             })
           }
         })
@@ -312,7 +312,7 @@ var Responses = {
     });
   },
   // -- Generate Image --
-  generateImageApproved(queryId, description10) {
+  generateImageApproved(queryId, description9) {
     return new InteractionResponse({
       id: queryId,
       result: {
@@ -321,7 +321,7 @@ var Responses = {
           result: {
             case: "approved",
             value: new GenerateImageRequestResponse_Approved({
-              description: description10 !== null && description10 !== void 0 ? description10 : ""
+              description: description9 !== null && description9 !== void 0 ? description9 : ""
             })
           }
         })

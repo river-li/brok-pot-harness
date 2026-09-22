@@ -149,8 +149,8 @@ var ListenerConnectWatcher = class {
         if (isConnected === void 0) {
           isConnected = await this.deps.isPlatformConnected(watch4.platform).then(
             (connected2) => connected2,
-            (error41) => {
-              watch4.lastProbeFailure = errorLogTag(error41);
+            (error42) => {
+              watch4.lastProbeFailure = errorLogTag(error42);
               return null;
             }
           );

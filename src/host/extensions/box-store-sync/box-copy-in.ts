@@ -83,7 +83,7 @@ var COPY_IN_MANIFEST_RETRY = createRetryPolicy({
   maxAttempts: BOX_STORE_MANIFEST_RETRY_ATTEMPTS,
   initialDelayMs: BOX_STORE_MANIFEST_RETRY_DELAY_MS,
   maxDelayMs: BOX_STORE_MANIFEST_RETRY_DELAY_MS,
-  shouldRetry: (error41) => error41 instanceof BoxStoreCanonicalWriteConflictError,
+  shouldRetry: (error42) => error42 instanceof BoxStoreCanonicalWriteConflictError,
   keepEventLoopAliveDuringWaits: true
 });
 var COPY_IN_HYDRATE_ATTEMPTS = 8;
@@ -134,22 +134,22 @@ async function resolveCopyInDownloadOwner(deps) {
   try {
     const home = await (deps?.statHomeDir ?? (() => (0, import_promises23.stat)(BOX_HOME_DIR)))();
     return home.uid > 0 ? { uid: home.uid, gid: home.gid } : void 0;
-  } catch (error41) {
-    if (!isMissingPathError(error41)) {
+  } catch (error42) {
+    if (!isMissingPathError(error42)) {
       reportBoxStoreDiagnostic({
         extension: "box_store",
         kind: "home_dir_stat_failed",
-        errorClass: boundedErrorClass(error41)
+        errorClass: boundedErrorClass(error42)
       });
     }
     return void 0;
   }
 }
-function boundedErrorClass(error41) {
-  return brandedErrorClass(findSystemErrno(error41) ?? connectErrorClassOf(error41));
+function boundedErrorClass(error42) {
+  return brandedErrorClass(findSystemErrno(error42) ?? connectErrorClassOf(error42));
 }
-function reportTelemetryTokenUnavailable(reported2, error41) {
-  const errorClass = boundedErrorClass(error41);
+function reportTelemetryTokenUnavailable(reported2, error42) {
+  const errorClass = boundedErrorClass(error42);
   if (reported2.has(errorClass)) return;
   reported2.add(errorClass);
   reportBoxStoreDiagnostic({
@@ -171,8 +171,8 @@ async function pruneRestoredOriginCliStoredLogins(targetDir) {
         credentialDirs.push((0, import_node_path24.join)(mirrorDir, ".by-home", entry.name, ".config/origin-cli"));
       }
     }
-  } catch (error41) {
-    if (findSystemErrno(error41) !== "ENOENT") errors.push(error41);
+  } catch (error42) {
+    if (findSystemErrno(error42) !== "ENOENT") errors.push(error42);
   }
   const removals = await Promise.allSettled(
     credentialDirs.map((credentialDir) => (0, import_promises23.rm)(credentialDir, { recursive: true, force: true }))
@@ -196,18 +196,18 @@ async function runBoxCopyIn(deps) {
       manifest,
       fullyHydrated: primaryFullyHydrated
     } = await deps.sync.readManifestStrictDetailed());
-  } catch (error41) {
+  } catch (error42) {
     return {
       outcome: "failed",
       reasonCode: "primary-manifest-unreadable",
-      failure: copyInFailureOf(error41),
-      reason: `store manifest unreadable: ${errorMessage(error41)}`,
+      failure: copyInFailureOf(error42),
+      reason: `store manifest unreadable: ${errorMessage(error42)}`,
       manifestEntries: 0,
       storeDbEntries: 0,
       files: 0,
       bytes: 0,
       verified: 0,
-      failures: [errorMessage(error41)]
+      failures: [errorMessage(error42)]
     };
   }
   let downloadVia = deps.sync;
@@ -219,22 +219,22 @@ async function runBoxCopyIn(deps) {
     let legacyManifest;
     try {
       legacyManifest = await deps.legacySync.readManifestStrict();
-    } catch (error41) {
-      if (!manifestPresent && error41 instanceof ConnectError && error41.code === Code.NotFound) {
+    } catch (error42) {
+      if (!manifestPresent && error42 instanceof ConnectError && error42.code === Code.NotFound) {
         log4("legacy store is unavailable (not_found); booting the fresh V2 store");
         return empty("legacy-source-not-found", "legacy source unavailable: not_found; first boot");
       }
       return {
         outcome: "failed",
         reasonCode: "legacy-manifest-unreadable",
-        failure: copyInFailureOf(error41),
-        reason: `legacy store manifest unreadable: ${errorMessage(error41)}`,
+        failure: copyInFailureOf(error42),
+        reason: `legacy store manifest unreadable: ${errorMessage(error42)}`,
         manifestEntries: 0,
         storeDbEntries: 0,
         files: 0,
         bytes: 0,
         verified: 0,
-        failures: [errorMessage(error41)],
+        failures: [errorMessage(error42)],
         hydrateSource: "legacy"
       };
     }
@@ -323,18 +323,18 @@ async function runBoxCopyIn(deps) {
         });
       }
       await deps.sync.markLegacyHydrationIncomplete();
-    } catch (error41) {
+    } catch (error42) {
       return {
         outcome: "failed",
         reasonCode: "legacy-hydration-mark-error",
-        failure: copyInFailureOf(error41),
-        reason: `failed to mark legacy hydrate incomplete: ${errorMessage(error41)}`,
+        failure: copyInFailureOf(error42),
+        reason: `failed to mark legacy hydrate incomplete: ${errorMessage(error42)}`,
         manifestEntries: manifest.size,
         storeDbEntries: countStoreDbManifestEntries(manifest),
         files: 0,
         bytes: 0,
         verified: 0,
-        failures: [errorMessage(error41)],
+        failures: [errorMessage(error42)],
         hydrateSource
       };
     }
@@ -348,7 +348,7 @@ async function runBoxCopyIn(deps) {
       onTrace: deps.onTrace,
       ...deps.downloadOwner
     });
-  } catch (error41) {
+  } catch (error42) {
     try {
       await pruneRestoredOriginCliStoredLogins(deps.targetDir);
     } catch (pruneError) {
@@ -357,33 +357,33 @@ async function runBoxCopyIn(deps) {
     return {
       outcome: "failed",
       reasonCode: "download-error",
-      failure: copyInFailureOf(error41),
-      reason: `download threw: ${errorMessage(error41)}`,
+      failure: copyInFailureOf(error42),
+      reason: `download threw: ${errorMessage(error42)}`,
       manifestEntries: manifest.size,
       storeDbEntries: advertisedStoreDbEntries,
       restoredStoreDbEntries: 0,
       files: 0,
       bytes: 0,
       verified: 0,
-      failures: [errorMessage(error41)],
+      failures: [errorMessage(error42)],
       hydrateSource
     };
   }
   try {
     await pruneRestoredOriginCliStoredLogins(deps.targetDir);
-  } catch (error41) {
+  } catch (error42) {
     return {
       outcome: "failed",
       reasonCode: "origin-cli-login-prune-error",
-      failure: copyInFailureOf(error41),
-      reason: `origin-cli stored-login prune failed: ${errorMessage(error41)}`,
+      failure: copyInFailureOf(error42),
+      reason: `origin-cli stored-login prune failed: ${errorMessage(error42)}`,
       manifestEntries: manifest.size,
       storeDbEntries: advertisedStoreDbEntries,
       restoredStoreDbEntries: 0,
       files: summary.files,
       bytes: summary.bytes,
       verified: summary.verified,
-      failures: [errorMessage(error41)],
+      failures: [errorMessage(error42)],
       hydrateSource
     };
   }
@@ -428,9 +428,9 @@ async function runBoxCopyIn(deps) {
         throw new SandBoxStoreSyncError("primary sync cannot persist legacy hydrate handoff");
       }
       await deps.sync.markLegacyHydrationCompleteForHandoff();
-    } catch (error41) {
+    } catch (error42) {
       log4(
-        `failed to persist legacy hydrate handoff after complete restore: ${errorMessage(error41)}`
+        `failed to persist legacy hydrate handoff after complete restore: ${errorMessage(error42)}`
       );
     }
   }
@@ -553,8 +553,8 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
       if (accessToken == null) return "";
       try {
         return await accessToken();
-      } catch (error41) {
-        reportTelemetryTokenUnavailable(reportedTokenClasses, error41);
+      } catch (error42) {
+        reportTelemetryTokenUnavailable(reportedTokenClasses, error42);
         return "";
       }
     },
@@ -714,18 +714,18 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
       }
       reportCopyIn(result);
       return outcomeToExitCode(result.outcome);
-    } catch (error41) {
+    } catch (error42) {
       const thrown = {
         outcome: "failed",
         reasonCode: "copy-in-error",
-        failure: copyInFailureOf(error41),
-        reason: `copy-in threw: ${errorMessage(error41)}`,
+        failure: copyInFailureOf(error42),
+        reason: `copy-in threw: ${errorMessage(error42)}`,
         manifestEntries: 0,
         storeDbEntries: 0,
         files: 0,
         bytes: 0,
         verified: 0,
-        failures: [errorMessage(error41)]
+        failures: [errorMessage(error42)]
       };
       writeStatus(buildCopyInStatusFromResult(thrown), { force: true });
       reportCopyIn(thrown);
@@ -868,8 +868,8 @@ async function acquireCopyInLock(lockPath, log4) {
       `box-store lock held by ${result.owner?.windowId ?? "an unknown holder"} with a live heartbeat`
     );
     return null;
-  } catch (error41) {
-    log4(`store lock error: ${errorMessage(error41)}`);
+  } catch (error42) {
+    log4(`store lock error: ${errorMessage(error42)}`);
     return null;
   }
 }
@@ -882,9 +882,9 @@ async function judgeExistingLockByHeartbeat(lockPath) {
     try {
       raw = await (0, import_promises23.readFile)(lockPath, "utf8");
       mtimeMs = (await (0, import_promises23.stat)(lockPath)).mtimeMs;
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") return { kind: "absent" };
-      throw error41;
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") return { kind: "absent" };
+      throw error42;
     }
     const owner = parseLockOwnerFields(raw);
     if (owner == null) return { kind: "absent" };
@@ -926,13 +926,13 @@ async function withRetry(label, fn, log4) {
   return COPY_IN_CREDENTIAL_RETRY.runWithRetry(async (attempt) => {
     try {
       return await fn();
-    } catch (error41) {
+    } catch (error42) {
       if (attempt < COPY_IN_RETRY_ATTEMPTS) {
         log4(
-          `${label} failed (attempt ${attempt}/${COPY_IN_RETRY_ATTEMPTS}): ${errorMessage(error41)}; retrying`
+          `${label} failed (attempt ${attempt}/${COPY_IN_RETRY_ATTEMPTS}): ${errorMessage(error42)}; retrying`
         );
       }
-      throw error41;
+      throw error42;
     }
   });
 }

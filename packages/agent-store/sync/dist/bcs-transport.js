@@ -1,4 +1,4 @@
-var __awaiter = function(thisArg, _arguments, P2, generator) {
+var __awaiter2 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -51,23 +51,21 @@ var BcsAgentStoreTransport = class {
     }
   }
   mintToken(target, options2) {
-    return __awaiter(this, void 0, void 0, function* () {
+    return __awaiter2(this, void 0, void 0, function* () {
       try {
         const response = yield this.invokeRpc((callOptions) => this.client.mintAgentStoreToken(mintAgentStoreTokenRequestForTarget(target), callOptions), Object.assign(Object.assign({}, this.mintTokenHeaders === void 0 ? {} : { headers: Object.assign({}, this.mintTokenHeaders) }), (options2 === null || options2 === void 0 ? void 0 : options2.signal) === void 0 ? {} : { signal: options2.signal }));
         return {
           token: response.token,
           expiresAtMs: Number(response.expiresAtMs),
-          storeIds: [
-            ...response.storeIds.length > 0 ? response.storeIds : response.agentIds
-          ]
+          storeIds: [...response.storeIds.length > 0 ? response.storeIds : response.agentIds]
         };
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       }
     });
   }
   listFiles(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, relPath, shareId, signal, tombstoneMode, tombstonesSinceMs }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, relPath, shareId, signal, tombstoneMode, tombstonesSinceMs }) {
       return yield this.fetchCachedDirectoryList({
         token,
         storeId,
@@ -80,7 +78,7 @@ var BcsAgentStoreTransport = class {
     });
   }
   presignReads(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, relPaths, shareId, signal }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, relPaths, shareId, signal }) {
       try {
         const response = yield this.invokeRpc((options2) => this.client.presignAgentStoreReads(new PresignAgentStoreReadsRequest(shareId !== void 0 ? { shareId, relPaths: [...relPaths] } : { storeId, relPaths: [...relPaths] }), options2), agentStoreCallOptions(token.token, signal));
         return response.instructions.map((instruction) => ({
@@ -88,13 +86,13 @@ var BcsAgentStoreTransport = class {
           url: instruction.url,
           expiresAtMs: Number(instruction.expiresAtMs)
         }));
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       }
     });
   }
   presignWrites(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, files, signal }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, files, signal }) {
       this.invalidateListCache({ storeId });
       const shaByRelPath = new Map(files.map((file2) => [normalizeRelPath(file2.relPath), file2.sha]));
       for (const file2 of files) {
@@ -158,13 +156,13 @@ var BcsAgentStoreTransport = class {
             }
           } : {}), instruction.conflict !== void 0 ? { conflict: mapConflictWriteInstruction(instruction.conflict) } : {});
         });
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       }
     });
   }
   completeMultipartWrites(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, completions, signal }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, completions, signal }) {
       this.invalidateListCache({ storeId });
       try {
         const response = yield this.invokeRpc((options2) => this.client.completeAgentStoreMultipartWrites(new CompleteAgentStoreMultipartWritesRequest({
@@ -175,15 +173,15 @@ var BcsAgentStoreTransport = class {
           inputs: completions,
           results: response.results
         });
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       } finally {
         this.invalidateListCache({ storeId });
       }
     });
   }
   abortMultipartWrites(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, uploads, signal }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, uploads, signal }) {
       try {
         const response = yield this.invokeRpc((options2) => this.client.abortAgentStoreMultipartWrites(new AbortAgentStoreMultipartWritesRequest({
           storeId,
@@ -193,8 +191,8 @@ var BcsAgentStoreTransport = class {
           inputs: uploads,
           results: response.results
         });
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       }
     });
   }
@@ -265,12 +263,12 @@ var BcsAgentStoreTransport = class {
           this.directoryListCache.delete(cacheKey3);
         }
         return listing;
-      }).catch((error41) => {
+      }).catch((error42) => {
         var _a20;
         if (((_a20 = this.directoryListCache.get(cacheKey3)) === null || _a20 === void 0 ? void 0 : _a20.promise) === promise2) {
           this.directoryListCache.delete(cacheKey3);
         }
-        throw error41;
+        throw error42;
       });
       entry = {
         promise: promise2,
@@ -281,7 +279,7 @@ var BcsAgentStoreTransport = class {
     return entry.promise;
   }
   fetchDirectoryList(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, relPath, shareId, signal, tombstoneMode, tombstonesSinceMs }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, relPath, shareId, signal, tombstoneMode, tombstonesSinceMs }) {
       var _b2, _c2, _d;
       try {
         const files = /* @__PURE__ */ new Map();
@@ -411,13 +409,13 @@ var BcsAgentStoreTransport = class {
           // Paginated without hitting caps (those throw); treat as complete.
           listingComplete: true
         }, tombstoneWatermarkMs !== void 0 ? { tombstoneWatermarkMs } : {}), tombstoneFloorMs !== void 0 ? { tombstoneFloorMs } : {});
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       }
     });
   }
   deleteFiles(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, files, signal }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, files, signal }) {
       for (const file2 of files) {
         if (normalizeS3Etag(file2.baseEtag).length === 0) {
           throw new Error(`Agent store delete for ${file2.relPath} carries an empty baseEtag`);
@@ -453,13 +451,13 @@ var BcsAgentStoreTransport = class {
         });
         this.invalidateListCache({ storeId });
         return outcomes;
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       }
     });
   }
   rmdir(_a19) {
-    return __awaiter(this, arguments, void 0, function* ({ token, storeId, relPath, signal }) {
+    return __awaiter2(this, arguments, void 0, function* ({ token, storeId, relPath, signal }) {
       this.invalidateListCache({ storeId });
       try {
         yield this.invokeRpc((options2) => this.client.rmdirAgentStore(new RmdirAgentStoreRequest({
@@ -467,8 +465,8 @@ var BcsAgentStoreTransport = class {
           relPath
         }), options2), agentStoreCallOptions(token.token, signal));
         this.invalidateListCache({ storeId });
-      } catch (error41) {
-        throw mapConnectError(error41);
+      } catch (error42) {
+        throw mapConnectError(error42);
       }
     });
   }
@@ -488,7 +486,7 @@ var BcsAgentStoreTransport = class {
     };
   }
   invokeRpc(invoke, base) {
-    return __awaiter(this, void 0, void 0, function* () {
+    return __awaiter2(this, void 0, void 0, function* () {
       const { options: options2, timeoutSignal } = this.buildCallOptions(base);
       return yield rejectWhenAborted(invoke(options2), {
         signal: options2 === null || options2 === void 0 ? void 0 : options2.signal,
@@ -525,13 +523,13 @@ function rejectWhenAborted(promise2, { signal, timeoutSignal }) {
     promise2.then((value) => {
       cleanup();
       resolve29(value);
-    }, (error41) => {
+    }, (error42) => {
       cleanup();
-      if ((timeoutSignal === null || timeoutSignal === void 0 ? void 0 : timeoutSignal.aborted) && isAbortShapedRpcError(error41)) {
+      if ((timeoutSignal === null || timeoutSignal === void 0 ? void 0 : timeoutSignal.aborted) && isAbortShapedRpcError(error42)) {
         reject2(rpcDeadlineExceededError(timeoutSignal));
         return;
       }
-      reject2(error41);
+      reject2(error42);
     });
   });
 }
@@ -557,12 +555,12 @@ function rpcDeadlineExceededError(signal) {
   const message = reason instanceof Error && reason.message.length > 0 ? reason.message : "agent store RPC deadline exceeded";
   return new ConnectError(message, Code.DeadlineExceeded);
 }
-function isAbortShapedRpcError(error41) {
-  if (error41 instanceof Error && error41.name === "AbortError") {
+function isAbortShapedRpcError(error42) {
+  if (error42 instanceof Error && error42.name === "AbortError") {
     return true;
   }
-  if (error41 instanceof ConnectError) {
-    return error41.code === Code.Canceled || error41.code === Code.DeadlineExceeded;
+  if (error42 instanceof ConnectError) {
+    return error42.code === Code.Canceled || error42.code === Code.DeadlineExceeded;
   }
   return false;
 }
@@ -676,7 +674,9 @@ function multipartWriteAbortToProto(upload) {
   });
 }
 function correlateMultipartCompletionResults({ inputs, results }) {
-  const ordered = Array.from({ length: inputs.length });
+  const ordered = Array.from({
+    length: inputs.length
+  });
   for (const result of results) {
     const inputIndex = validateMultipartResultIndex({
       inputCount: inputs.length,
@@ -704,7 +704,9 @@ function correlateMultipartCompletionResults({ inputs, results }) {
   });
 }
 function correlateMultipartAbortResults({ inputs, results }) {
-  const ordered = Array.from({ length: inputs.length });
+  const ordered = Array.from({
+    length: inputs.length
+  });
   for (const result of results) {
     const inputIndex = validateMultipartResultIndex({
       inputCount: inputs.length,
@@ -887,15 +889,15 @@ function isUncacheableAllUnsafeListing(listing) {
   var _a19;
   return ((_a19 = listing.skippedUnsafeEntries) !== null && _a19 !== void 0 ? _a19 : 0) > 0 && listing.files.length === 0;
 }
-function mapConnectError(error41) {
-  if (!(error41 instanceof ConnectError)) {
-    return error41;
+function mapConnectError(error42) {
+  if (!(error42 instanceof ConnectError)) {
+    return error42;
   }
-  if (error41.code === Code.Unauthenticated || error41.code === Code.PermissionDenied) {
-    return new AgentStoreUnauthorizedError(error41.message);
+  if (error42.code === Code.Unauthenticated || error42.code === Code.PermissionDenied) {
+    return new AgentStoreUnauthorizedError(error42.message);
   }
-  if (isAgentStoreDirNotEmptyConnectError(error41)) {
-    return new AgentStoreDirectoryNotEmptyError(error41.message);
+  if (isAgentStoreDirNotEmptyConnectError(error42)) {
+    return new AgentStoreDirectoryNotEmptyError(error42.message);
   }
-  return error41;
+  return error42;
 }

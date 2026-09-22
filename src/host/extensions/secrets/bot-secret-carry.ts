@@ -9,7 +9,7 @@ async function carryBoxSecretsToBot(deps, args) {
         { id: serverId, ...secret },
         { timeoutMs: BOT_SECRET_PUT_TIMEOUT_MS }
       ),
-      reportFailure: (error41) => deps.log(`box secrets: carry to bot ${args.serverId} failed (${errorLogTag(error41)})`)
+      reportFailure: (error42) => deps.log(`box secrets: carry to bot ${args.serverId} failed (${errorLogTag(error42)})`)
     },
     args
   );

@@ -77,8 +77,8 @@ var StoreDbCapture = class {
     let roster;
     try {
       roster = await (0, import_promises21.readdir)(agentsRoot, { withFileTypes: true });
-    } catch (error41) {
-      const complete2 = findSystemErrno(error41) === "ENOENT";
+    } catch (error42) {
+      const complete2 = findSystemErrno(error42) === "ENOENT";
       if (!complete2) recordStoreDbCaptureFailure(captureTrace, "capture");
       return {
         summary,
@@ -109,10 +109,10 @@ var StoreDbCapture = class {
         let fileStat;
         try {
           fileStat = await this.fs.stat(absPath);
-        } catch (error41) {
-          if (findSystemErrno(error41) === "ENOENT") {
+        } catch (error42) {
+          if (findSystemErrno(error42) === "ENOENT") {
           } else {
-            this.log(`agent db ${relPath} stat failed: ${errorMessage(error41)}`);
+            this.log(`agent db ${relPath} stat failed: ${errorMessage(error42)}`);
             summary.failures += 1;
             recordStoreDbCaptureFailure(captureTrace, "capture");
             bundleBlocked = true;
@@ -156,8 +156,8 @@ var StoreDbCapture = class {
           summary,
           captureTrace
         });
-      } catch (error41) {
-        this.log(`agent db bundle ${bundle.agentId} capture failed: ${errorMessage(error41)}`);
+      } catch (error42) {
+        this.log(`agent db bundle ${bundle.agentId} capture failed: ${errorMessage(error42)}`);
         recordStoreDbCaptureFailure(captureTrace, "capture");
       }
       if (committed) {
@@ -190,8 +190,8 @@ var StoreDbCapture = class {
     let entries;
     try {
       entries = await (0, import_promises21.readdir)(agentsRoot, { withFileTypes: true });
-    } catch (error41) {
-      return findSystemErrno(error41) === "ENOENT";
+    } catch (error42) {
+      return findSystemErrno(error42) === "ENOENT";
     }
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
@@ -205,8 +205,8 @@ var StoreDbCapture = class {
         let fileStat;
         try {
           fileStat = await this.fs.stat(absPath);
-        } catch (error41) {
-          if (findSystemErrno(error41) === "ENOENT") continue;
+        } catch (error42) {
+          if (findSystemErrno(error42) === "ENOENT") continue;
           return false;
         }
         if (!await this.bundleCapture.isAgentDbSnapshotDurable(
@@ -230,12 +230,12 @@ var StoreDbCapture = class {
     try {
       const entries = await (0, import_promises21.readdir)(agentsRoot, { withFileTypes: true });
       existing = new Set(entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name));
-    } catch (error41) {
-      if (!isMissingPathError(error41))
+    } catch (error42) {
+      if (!isMissingPathError(error42))
         reportBoxStoreDiagnostic({
           extension: "box_store",
           kind: "agent_prune_scan_failed",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       return 0;
     }
@@ -323,10 +323,10 @@ var StoreDbCapture = class {
         let fileStat;
         try {
           fileStat = await this.fs.stat(absPath);
-        } catch (error41) {
-          if (findSystemErrno(error41) === "ENOENT") {
+        } catch (error42) {
+          if (findSystemErrno(error42) === "ENOENT") {
           } else {
-            this.log(`agent db ${relPath} stat failed: ${errorMessage(error41)}`);
+            this.log(`agent db ${relPath} stat failed: ${errorMessage(error42)}`);
             summary.failures += 1;
             recordStoreDbCaptureFailure(captureTrace, "capture");
             bundleBlocked = true;
@@ -368,8 +368,8 @@ var StoreDbCapture = class {
       }
       try {
         await this.fs.stat(agentDir);
-      } catch (error41) {
-        if (findSystemErrno(error41) === "ENOENT") {
+      } catch (error42) {
+        if (findSystemErrno(error42) === "ENOENT") {
           for (const basename24 of AGENT_STORE_DB_BASENAMES) {
             const relPath = `${category.relPrefix}/agents/${agentId}/${basename24}`;
             if (this.manifestStore.deleteManifestEntry(manifest, relPath)) {
@@ -387,9 +387,9 @@ var StoreDbCapture = class {
             isForced: summary.failures > 0,
             captureTrace
           });
-        } catch (error41) {
+        } catch (error42) {
           recordStoreDbCaptureFailure(captureTrace, "manifest_commit");
-          throw error41;
+          throw error42;
         }
       }
       if (targets.some((target) => this.manifestStore.uncommittedStoreDbEntries.has(target.relPath))) {
@@ -403,8 +403,8 @@ var StoreDbCapture = class {
       }
       if (outcome === "uploaded") this.log(`agent db bundle ${agentId} uploaded`);
       return finish(outcome, isCommitted);
-    } catch (error41) {
-      this.log(`store.db ${agentId} failed: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`store.db ${agentId} failed: ${errorMessage(error42)}`);
       recordStoreDbCaptureFailure(captureTrace, "capture");
       return finish("error", false);
     }

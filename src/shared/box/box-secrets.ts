@@ -1,3 +1,6 @@
+init_cloud_agent();
+init_locale();
+var ENV_NAME_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
 var RESERVED_EXACT_NAMES2 = /* @__PURE__ */ new Set([
   "PATH",
   "HOME",

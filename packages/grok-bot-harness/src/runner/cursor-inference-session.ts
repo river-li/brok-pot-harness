@@ -30,13 +30,13 @@ function createSandComputerUseRequestedModel(modelId) {
 function createSandAttachedMediaUrlProvider(options2) {
   const client = createSandCursorBackendClient(AgentService, options2);
   return {
-    getSignedUrlForAttachedMedia: async (ctx, request3) => {
+    getSignedUrlForAttachedMedia: async (ctx, request5) => {
       const response = await client.getSignedUrlForAttachedMedia(
         new GetSignedUrlForAttachedMediaRequest({
-          conversationId: request3.conversationId,
-          key: request3.key,
-          mimeType: request3.mimeType,
-          contentLengthBytes: request3.contentLengthBytes !== void 0 ? BigInt(request3.contentLengthBytes) : void 0
+          conversationId: request5.conversationId,
+          key: request5.key,
+          mimeType: request5.mimeType,
+          contentLengthBytes: request5.contentLengthBytes !== void 0 ? BigInt(request5.contentLengthBytes) : void 0
         }),
         { signal: ctx.signal }
       );

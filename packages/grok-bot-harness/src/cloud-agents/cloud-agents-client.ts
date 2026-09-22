@@ -117,14 +117,14 @@ function exchangeConversationReads(bcId) {
     new GetBackgroundComposerConversationRequest({ bcId })
   ];
 }
-function refusesExchangeProjection(error41) {
-  return error41 instanceof ConnectError && (error41.code === Code.Unimplemented || error41.code === Code.InvalidArgument);
+function refusesExchangeProjection(error42) {
+  return error42 instanceof ConnectError && (error42.code === Code.Unimplemented || error42.code === Code.InvalidArgument);
 }
-function classifyReadFailure(error41) {
-  if (!(error41 instanceof ConnectError)) {
+function classifyReadFailure(error42) {
+  if (!(error42 instanceof ConnectError)) {
     return "internal";
   }
-  switch (error41.code) {
+  switch (error42.code) {
     case Code.Unavailable:
     case Code.DeadlineExceeded:
     case Code.Canceled:
@@ -326,16 +326,16 @@ function formatDiffStats(detailed) {
 async function fetchCloudAgentReport(backend, bcId, options2) {
   try {
     return await readCloudAgentReport(backend, bcId, options2);
-  } catch (error41) {
+  } catch (error42) {
     process.stderr.write(
-      `sand.cloud_agent.report_read_failed bc_id=${bcId} error_class=${error41 instanceof ConnectError ? Code[error41.code] : "unknown"}
+      `sand.cloud_agent.report_read_failed bc_id=${bcId} error_class=${error42 instanceof ConnectError ? Code[error42.code] : "unknown"}
 `
     );
     return void 0;
   }
 }
-function isNoReportError(error41) {
-  return error41 instanceof ConnectError && (error41.code === Code.InvalidArgument || error41.code === Code.FailedPrecondition);
+function isNoReportError(error42) {
+  return error42 instanceof ConnectError && (error42.code === Code.InvalidArgument || error42.code === Code.FailedPrecondition);
 }
 async function readCloudAgentReport(backend, bcId, options2) {
   try {
@@ -345,9 +345,9 @@ async function readCloudAgentReport(backend, bcId, options2) {
     );
     const report = response.summary.trim();
     return report.length > 0 ? report : void 0;
-  } catch (error41) {
-    if (isNoReportError(error41)) return void 0;
-    throw error41;
+  } catch (error42) {
+    if (isNoReportError(error42)) return void 0;
+    throw error42;
   }
 }
 var MAX_QUOTED_CLOUD_AGENT_REPORT_CHARS = 12e3;
@@ -508,10 +508,10 @@ async function fetchLivePrState(client, prUrl, storedState) {
     status = await client.getPullRequestMergeStatus(
       new GetPullRequestMergeStatusRequest({ prUrl })
     );
-  } catch (error41) {
+  } catch (error42) {
     return {
       state: storedState,
-      source: { kind: "failed", reason: classifyReadFailure(error41) },
+      source: { kind: "failed", reason: classifyReadFailure(error42) },
       mergeableState: "unknown"
     };
   }
@@ -538,8 +538,8 @@ async function fetchFileChanges(client, bcId) {
         excludeBeforeAfterDiffs: true
       })
     );
-  } catch (error41) {
-    return { kind: "failed", reason: classifyReadFailure(error41) };
+  } catch (error42) {
+    return { kind: "failed", reason: classifyReadFailure(error42) };
   }
   const files = [];
   for (const diff of response.diff?.diffs ?? []) {
@@ -608,7 +608,7 @@ function createCloudAgentsClient(deps) {
         messageId: args.identity?.messageId
       })
     );
-    const request3 = new StartBackgroundComposerFromSnapshotRequest({
+    const request5 = new StartBackgroundComposerFromSnapshotRequest({
       bcId,
       snapshotNameOrId: repo.sanitizedRepoUrl,
       devcontainerStartingPoint: new DevcontainerStartingPoint({
@@ -646,7 +646,7 @@ function createCloudAgentsClient(deps) {
         })
       } : {}
     });
-    const response = await client().startBackgroundComposerFromSnapshot(request3);
+    const response = await client().startBackgroundComposerFromSnapshot(request5);
     newRepo?.markLaunched();
     const id = response.composer?.bcId || bcId;
     return { bcId: id, url: cloudAgentUrl(id) };
@@ -780,8 +780,8 @@ function createCloudAgentsClient(deps) {
     try {
       const infoResponse = await backend.getBackgroundComposerInfo(infoRequest(bcId));
       run = { kind: "status", status: mapRunStatus(infoResponse.composer?.composer?.status) };
-    } catch (error41) {
-      run = { kind: "failed", reason: classifyReadFailure(error41) };
+    } catch (error42) {
+      run = { kind: "failed", reason: classifyReadFailure(error42) };
     }
     return { jsonl, lineCount, run };
   }
@@ -794,17 +794,17 @@ function createCloudAgentsClient(deps) {
     const reads = exchangeConversationReads(bcId);
     let conversation = [];
     try {
-      for (const [index, request3] of reads.entries()) {
+      for (const [index, request5] of reads.entries()) {
         try {
-          conversation = (await backend.getBackgroundComposerConversation(request3)).conversation;
+          conversation = (await backend.getBackgroundComposerConversation(request5)).conversation;
           break;
-        } catch (error41) {
+        } catch (error42) {
           const isLastRead = index === reads.length - 1;
-          if (isLastRead || !refusesExchangeProjection(error41)) throw error41;
+          if (isLastRead || !refusesExchangeProjection(error42)) throw error42;
         }
       }
-    } catch (error41) {
-      return { kind: "failed", reason: classifyReadFailure(error41) };
+    } catch (error42) {
+      return { kind: "failed", reason: classifyReadFailure(error42) };
     }
     return { kind: "read", messages: toCloudAgentMessages(conversation) };
   }
@@ -812,8 +812,8 @@ function createCloudAgentsClient(deps) {
     let summary;
     try {
       summary = await readCloudAgentReport(backend, bcId);
-    } catch (error41) {
-      return { kind: "failed", reason: classifyReadFailure(error41) };
+    } catch (error42) {
+      return { kind: "failed", reason: classifyReadFailure(error42) };
     }
     if (summary === void 0) {
       return { kind: "skipped" };
@@ -821,11 +821,11 @@ function createCloudAgentsClient(deps) {
     let listed;
     try {
       listed = await listArtifacts(bcId);
-    } catch (error41) {
-      if (error41 instanceof ConnectError && (error41.code === Code.InvalidArgument || error41.code === Code.FailedPrecondition || error41.code === Code.NotFound)) {
+    } catch (error42) {
+      if (error42 instanceof ConnectError && (error42.code === Code.InvalidArgument || error42.code === Code.FailedPrecondition || error42.code === Code.NotFound)) {
         return { kind: "unavailable" };
       }
-      return { kind: "failed", reason: classifyReadFailure(error41) };
+      return { kind: "failed", reason: classifyReadFailure(error42) };
     }
     const plan = planCloudAgentArtifacts({ bcId, summary, artifacts: listed });
     return { kind: "listed", files: plannedCloudAgentArtifactFiles(bcId, plan.planned) };
@@ -840,11 +840,11 @@ function createCloudAgentsClient(deps) {
     let response;
     try {
       response = await backend.getBackgroundComposerInfo(infoRequest(trimmedBcId));
-    } catch (error41) {
-      if (error41 instanceof ConnectError && (error41.code === Code.NotFound || error41.code === Code.PermissionDenied)) {
+    } catch (error42) {
+      if (error42 instanceof ConnectError && (error42.code === Code.NotFound || error42.code === Code.PermissionDenied)) {
         return null;
       }
-      throw error41;
+      throw error42;
     }
     const detailed = response.composer;
     const composer = detailed?.composer;

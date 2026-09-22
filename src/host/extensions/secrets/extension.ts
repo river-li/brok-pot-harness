@@ -28,7 +28,7 @@ var secretsExtension = defineHostExtension({
     return {
       set: ({ secrets }) => service.setSecrets(ctx, secrets),
       setSecret: (secret) => service.setSecret(ctx, secret),
-      syncUserSecrets: (request3) => service.syncUserSecrets(ctx, request3),
+      syncUserSecrets: (request5) => service.syncUserSecrets(ctx, request5),
       getStatus: () => service.getStatus(),
       carryToBot: (args) => carryBoxSecretsToBot(
         {

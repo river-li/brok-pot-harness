@@ -5,9 +5,9 @@ var SandLocalToolPermissionResolutionError = class extends SandDomainError {
 async function settleLocalToolPermissionCard(deps, args) {
   try {
     return await deps.transcript.widgetResponses.settleStaleLocalToolPermissionCard(args);
-  } catch (error41) {
+  } catch (error42) {
     deps.onCardWriteFailure?.();
-    throw error41;
+    throw error42;
   }
 }
 async function resolveLocalToolPermissionAsk(deps, args) {

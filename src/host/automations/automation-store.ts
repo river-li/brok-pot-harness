@@ -11,16 +11,16 @@ function inspectAgentAutomationDefinitions(agentDir) {
     if (!(0, import_node_fs53.statSync)(agentDir).isDirectory()) {
       return { state: "agent_missing", validDefinitionCount: 0 };
     }
-  } catch (error41) {
-    reportFallbackUnlessAbsent("automation_store", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("automation_store", error42);
     return { state: "agent_missing", validDefinitionCount: 0 };
   }
   const automationsDir = getAgentAutomationsDir(agentDir);
   let entries;
   try {
     entries = (0, import_node_fs53.readdirSync)(automationsDir, { withFileTypes: true });
-  } catch (error41) {
-    reportFallbackUnlessAbsent("automation_store", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("automation_store", error42);
     return { state: "dir_missing", validDefinitionCount: 0 };
   }
   let candidateCount = 0;
@@ -103,8 +103,8 @@ var FileAutomationStore = class {
     let raw;
     try {
       raw = (0, import_node_fs53.readFileSync)(this.runsPath(id), "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("automation_store", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("automation_store", error42);
       return [];
     }
     return parseStoredAutomationRuns(raw);
@@ -117,8 +117,8 @@ var FileAutomationStore = class {
     let raw;
     try {
       raw = (0, import_node_fs53.readFileSync)(path31, "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("automation_store", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("automation_store", error42);
       return null;
     }
     let fallbackCreatedAt = Date.now();
@@ -360,8 +360,8 @@ var FileAutomationStore = class {
     let existed = false;
     try {
       existed = (0, import_node_fs53.statSync)(automationDir).isDirectory();
-    } catch (error41) {
-      reportFallbackUnlessAbsent("automation_store", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("automation_store", error42);
       return false;
     }
     if (!existed) return false;

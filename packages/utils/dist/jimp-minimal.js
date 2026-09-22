@@ -1,4 +1,4 @@
-var __awaiter18 = function(thisArg, _arguments, P2, generator) {
+var __awaiter23 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -26,7 +26,7 @@ var __awaiter18 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function createJimpInstance() {
-  return __awaiter18(this, void 0, void 0, function* () {
+  return __awaiter23(this, void 0, void 0, function* () {
     const [{ createJimp: createJimp2 }, { default: png2 }, { default: jpeg2 }, { default: bmp2, msBmp: msBmp2 }, { default: gif2 }, { default: tiff2 }, { methods: resizeMethods }] = yield Promise.all([
       Promise.resolve().then(() => (init_esm9(), esm_exports3)),
       Promise.resolve().then(() => (init_esm10(), esm_exports4)),
@@ -45,11 +45,11 @@ function createJimpInstance() {
 var jimpPromise;
 function getMinimalJimp() {
   if (jimpPromise === void 0) {
-    const initPromise = createJimpInstance().catch((error41) => {
+    const initPromise = createJimpInstance().catch((error42) => {
       if (jimpPromise === initPromise) {
         jimpPromise = void 0;
       }
-      throw error41;
+      throw error42;
     });
     jimpPromise = initPromise;
   }

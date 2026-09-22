@@ -326,10 +326,10 @@ var automationsExtension = defineHostExtension({
               ...watch4.repoSlug == null ? {} : { repoSlug: watch4.repoSlug },
               ...watch4.cardProvider == null ? {} : { cardProvider: watch4.cardProvider }
             });
-          } catch (error41) {
-            if (completesOnlyOnPushedGrant) throw error41;
+          } catch (error42) {
+            if (completesOnlyOnPushedGrant) throw error42;
             context2.host.log(
-              `scm-connect wait not registered with the backend: ${errorLogTag(error41)}`
+              `scm-connect wait not registered with the backend: ${errorLogTag(error42)}`
             );
           }
         }

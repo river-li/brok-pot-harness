@@ -22,8 +22,8 @@ function getTaskSummary(taskToolCall) {
   if (result?.result.case === "error") {
     return result.result.value.error;
   }
-  const description10 = taskToolCall.args?.description?.trim();
-  if (description10 != null && description10.length > 0) return description10;
+  const description9 = taskToolCall.args?.description?.trim();
+  if (description9 != null && description9.length > 0) return description9;
   const prompt = taskToolCall.args?.prompt?.trim();
   return prompt != null && prompt.length > 0 ? prompt : void 0;
 }

@@ -36,15 +36,15 @@ var DECLINED_MESSAGES = /* @__PURE__ */ new Set([
   SAND_LOCAL_TOOLS_ASK_EXPIRED_MESSAGE,
   SAND_LOCAL_TOOLS_ASK_CANCELLED_MESSAGE
 ]);
-function isMessagesDecline(error41) {
-  return error41 instanceof Error && DECLINED_MESSAGES.has(error41.message);
+function isMessagesDecline(error42) {
+  return error42 instanceof Error && DECLINED_MESSAGES.has(error42.message);
 }
-function sandMessagesErrorCode(error41) {
-  if (!(error41 instanceof Error)) return "other";
-  if ("code" in error41 && error41.code !== void 0) {
-    return SAND_MESSAGES_ERROR_CODES.find((code) => code === error41.code) ?? "other";
+function sandMessagesErrorCode(error42) {
+  if (!(error42 instanceof Error)) return "other";
+  if ("code" in error42 && error42.code !== void 0) {
+    return SAND_MESSAGES_ERROR_CODES.find((code) => code === error42.code) ?? "other";
   }
-  const exact = CODE_BY_MESSAGE.get(error41.message);
+  const exact = CODE_BY_MESSAGE.get(error42.message);
   if (exact !== void 0) return exact;
-  return CODE_BY_LABELLED_SUFFIX.find(([suffix]) => error41.message.endsWith(suffix))?.[1] ?? "other";
+  return CODE_BY_LABELLED_SUFFIX.find(([suffix]) => error42.message.endsWith(suffix))?.[1] ?? "other";
 }

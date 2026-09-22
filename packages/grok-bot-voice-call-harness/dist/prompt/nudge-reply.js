@@ -5,8 +5,8 @@ var VoiceCallRequests = class _VoiceCallRequests {
     if (typeof value !== "string" || value.trim().length === 0) {
       return { kind: "rejected", error: VOICE_CALL_MISSING_REQUEST_ERROR };
     }
-    const request3 = value.trim();
-    return request3.length > VOICE_CALL_REQUEST_CHAR_LIMIT ? { kind: "rejected", error: VOICE_CALL_REQUEST_TOO_LONG_ERROR } : { kind: "accepted", request: request3 };
+    const request5 = value.trim();
+    return request5.length > VOICE_CALL_REQUEST_CHAR_LIMIT ? { kind: "rejected", error: VOICE_CALL_REQUEST_TOO_LONG_ERROR } : { kind: "accepted", request: request5 };
   }
   static fromToolArguments(argumentsJson) {
     let value;

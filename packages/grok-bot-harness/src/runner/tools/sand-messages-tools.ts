@@ -1,8 +1,8 @@
-var logger105 = createLogger("sand:messages-tools");
+var logger106 = createLogger("sand:messages-tools");
 function messagesToolAction(toolIdentifier) {
   return toolIdentifier === "SEND_IMESSAGE" ? "send-imessage" : "read-messages";
 }
-var MESSAGES_ATTACHMENT_BOX_DIR = import_node_path171.posix.join(SAND_BOX_UPLOADS_DIR, "messages");
+var MESSAGES_ATTACHMENT_BOX_DIR = import_node_path169.posix.join(SAND_BOX_UPLOADS_DIR, "messages");
 var INLINE_IMAGE_MIMES = /* @__PURE__ */ new Set([
   "image/jpeg",
   "image/png",
@@ -13,8 +13,8 @@ function decodeAttachmentEnvelope(raw) {
   let parsed2;
   try {
     parsed2 = JSON.parse(raw);
-  } catch (error41) {
-    if (!(error41 instanceof SyntaxError)) throw error41;
+  } catch (error42) {
+    if (!(error42 instanceof SyntaxError)) throw error42;
     return { text: raw };
   }
   if (parsed2 === null || typeof parsed2 !== "object") return { text: raw };
@@ -42,7 +42,7 @@ function renderAttachment(output, inflightImages) {
   return createImageResult(image2.base64, image2.mime, envelope.text);
 }
 function boxFileName(filename) {
-  const cleaned = import_node_path171.posix.basename(filename).replace(/[^a-zA-Z0-9._-]/g, "_");
+  const cleaned = import_node_path169.posix.basename(filename).replace(/[^a-zA-Z0-9._-]/g, "_");
   return cleaned.length > 0 && cleaned !== "." && cleaned !== ".." ? cleaned : `attachment-${Date.now()}`;
 }
 function sendOp(args) {
@@ -83,7 +83,7 @@ async function fetchAttachment(ctx, args, deps, inflightImages) {
       imageKey: deps.toolCallId
     });
   }
-  const boxPath = import_node_path171.posix.join(MESSAGES_ATTACHMENT_BOX_DIR, boxFileName(filename));
+  const boxPath = import_node_path169.posix.join(MESSAGES_ATTACHMENT_BOX_DIR, boxFileName(filename));
   await deps.agentBox.uploadFile(ctx, deps.getBoxId(), boxPath, import_node_buffer10.Buffer.from(bytesBase64, "base64"));
   return JSON.stringify({
     text: `${filename} (${mime2}) is on your box at ${boxPath}. Open it with Read.`
@@ -211,8 +211,8 @@ var MESSAGES_ERROR_CLASSES = [
   "AbortError",
   "Error"
 ];
-function boundErrorClass(error41) {
-  const name17 = errorClassOf(error41);
+function boundErrorClass(error42) {
+  const name17 = errorClassOf(error42);
   return MESSAGES_ERROR_CLASSES.find((known) => known === name17) ?? "other";
 }
 function okToolUse(result, durationMs) {
@@ -237,21 +237,21 @@ function okToolUse(result, durationMs) {
   }
   return { op: result.kind, outcome: "ok", durationMs };
 }
-function failedToolUse(op, error41, durationMs) {
-  if (isMessagesDecline(error41)) return { op, outcome: "declined", durationMs };
+function failedToolUse(op, error42, durationMs) {
+  if (isMessagesDecline(error42)) return { op, outcome: "declined", durationMs };
   return {
     op,
     outcome: "error",
-    errorClass: boundErrorClass(error41),
-    errorCode: sandMessagesErrorCode(error41),
+    errorClass: boundErrorClass(error42),
+    errorCode: sandMessagesErrorCode(error42),
     durationMs
   };
 }
 function reportMessagesToolUse(ctx, report, makeUse) {
   try {
     report(makeUse());
-  } catch (error41) {
-    logger105.warn(ctx, `Messages tool-use report failed (${errorLogTag(error41)})`);
+  } catch (error42) {
+    logger106.warn(ctx, `Messages tool-use report failed (${errorLogTag(error42)})`);
   }
 }
 function instrumentMessages(messages2, report) {
@@ -262,15 +262,17 @@ function instrumentMessages(messages2, report) {
       let result;
       try {
         result = await messages2.run(ctx, op, display);
-      } catch (error41) {
-        if (!(ctx.canceled && isIntentionalAbortReason(ctx.reason))) {
+      } catch (error42) {
+        const paused = error42 instanceof DeferredInteractionResponseError;
+        const interrupted = ctx.canceled && isIntentionalAbortReason(ctx.reason);
+        if (!paused && !interrupted) {
           reportMessagesToolUse(
             ctx,
             report,
-            () => failedToolUse(op.kind, error41, performance.now() - startedAt)
+            () => failedToolUse(op.kind, error42, performance.now() - startedAt)
           );
         }
-        throw error41;
+        throw error42;
       }
       reportMessagesToolUse(ctx, report, () => okToolUse(result, performance.now() - startedAt));
       return result;

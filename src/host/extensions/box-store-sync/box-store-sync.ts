@@ -87,8 +87,8 @@ var BoxStoreSync = class {
       this.log("writer lock is no longer ours (removed or taken); dropping it before any write");
       const lost = this.writerLock;
       this.writerLock = void 0;
-      await lost.release().catch((error41) => {
-        this.log(`writer lock release after loss failed: ${errorMessage(error41)}`);
+      await lost.release().catch((error42) => {
+        this.log(`writer lock release after loss failed: ${errorMessage(error42)}`);
       });
     }
     const acquire = this.deps.acquireWriterLock ?? defaultAcquireWriterLock;
@@ -100,8 +100,8 @@ var BoxStoreSync = class {
       if (lock == null) return false;
       this.writerLock = lock;
       return true;
-    } catch (error41) {
-      this.log(`writer lock error: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`writer lock error: ${errorMessage(error42)}`);
       return false;
     }
   }
@@ -147,8 +147,8 @@ var BoxStoreSync = class {
         if (category.idleOnly && !options2.includeIdleOnly) continue;
         try {
           categories.push(await this.transfer.syncCategory(storeId, category));
-        } catch (error41) {
-          this.log(`category ${category.name} failed: ${errorMessage(error41)}`);
+        } catch (error42) {
+          this.log(`category ${category.name} failed: ${errorMessage(error42)}`);
           categories.push({
             name: category.name,
             filesScanned: 0,
@@ -173,8 +173,8 @@ var BoxStoreSync = class {
             storeId,
             options2.skipLiveHandleStoreDbs === true
           );
-        } catch (error41) {
-          this.log(`store.db flush failed: ${errorMessage(error41)}`);
+        } catch (error42) {
+          this.log(`store.db flush failed: ${errorMessage(error42)}`);
           const captureTrace = createStoreDbCaptureTrace();
           recordStoreDbCaptureFailure(captureTrace, "capture");
           sweep = {
@@ -225,11 +225,11 @@ var BoxStoreSync = class {
           hydrationUpdate: promoteFullyHydrated ? "promote-complete" : void 0,
           captureTrace: storeDbCapture?.sweep.captureTrace
         });
-      } catch (error41) {
+      } catch (error42) {
         if (storeDbCapture != null) {
           recordStoreDbCaptureFailure(storeDbCapture.sweep.captureTrace, "manifest_commit");
         }
-        throw error41;
+        throw error42;
       }
       if (storeDbCapture != null) {
         const outcome = aggregateStoreDbSweepOutcome(storeDbCapture.sweep.summary);
@@ -242,23 +242,23 @@ var BoxStoreSync = class {
         isStoreDbCaptureReported = true;
       }
       if (promoteFullyHydrated) {
-        await removeHydrationHandoffMarker(markerPath).catch((error41) => {
-          this.log(`hydration handoff marker cleanup failed: ${errorMessage(error41)}`);
+        await removeHydrationHandoffMarker(markerPath).catch((error42) => {
+          this.log(`hydration handoff marker cleanup failed: ${errorMessage(error42)}`);
         });
       }
       if (options2.includePacks === true && this.deps.packBuildEnabled) {
         categories.push(await this.transfer.syncPacks(storeId));
       }
       return this.report(this.buildSummary(storeId, start, categories, storeDbComplete));
-    } catch (error41) {
+    } catch (error42) {
       if (storeDbCapture != null && !isStoreDbCaptureReported) {
         recordStoreDbCaptureFailure(storeDbCapture.sweep.captureTrace, "capture");
         this.reportStoreDbSweepCapture(storeDbCapture, "error", {
           isCommitted: false
         });
       }
-      this.log(`cycle failed: ${errorMessage(error41)}`);
-      return this.report(this.emptyCycle(errorMessage(error41), start));
+      this.log(`cycle failed: ${errorMessage(error42)}`);
+      return this.report(this.emptyCycle(errorMessage(error42), start));
     }
   }
   scheduleStoreDbSnapshot(agentId) {
@@ -266,8 +266,8 @@ var BoxStoreSync = class {
     let trigger2 = this.pendingStoreDb.get(agentId);
     if (trigger2 === void 0) {
       trigger2 = this.deps.storeDbDebounce.wrap(() => {
-        void this.snapshotStoreDb(agentId).catch((error41) => {
-          this.log(`turn-end store.db snapshot rejected: ${errorMessage(error41)}`);
+        void this.snapshotStoreDb(agentId).catch((error42) => {
+          this.log(`turn-end store.db snapshot rejected: ${errorMessage(error42)}`);
         });
       });
       this.pendingStoreDb.set(agentId, trigger2);
@@ -341,8 +341,8 @@ var BoxStoreSync = class {
         totalBytes,
         lastSnapshotAtMs: snapshot.updatedAtMs
       };
-    } catch (error41) {
-      this.log(`readStoreStatus failed: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`readStoreStatus failed: ${errorMessage(error42)}`);
       return empty2;
     }
   }
@@ -367,8 +367,8 @@ var BoxStoreSync = class {
         hydrationUpdate: "reset-complete"
       });
       return { ok: true };
-    } catch (error41) {
-      return { ok: false, reason: errorMessage(error41) };
+    } catch (error42) {
+      return { ok: false, reason: errorMessage(error42) };
     }
   }
   async forgetAgent(agentId) {
@@ -399,9 +399,9 @@ var BoxStoreSync = class {
         this.log(`forgot ${agentId} (${removed} entries)`);
       }
       return { ok: true };
-    } catch (error41) {
-      this.log(`forget ${agentId} failed: ${errorMessage(error41)}`);
-      return { ok: false, reason: errorMessage(error41) };
+    } catch (error42) {
+      this.log(`forget ${agentId} failed: ${errorMessage(error42)}`);
+      return { ok: false, reason: errorMessage(error42) };
     }
   }
   async dispose() {
@@ -409,8 +409,8 @@ var BoxStoreSync = class {
     for (const trigger2 of this.pendingStoreDb.values()) trigger2.dispose();
     this.pendingStoreDb.clear();
     await this.manifestStore.writeQueue;
-    await this.writerLock?.release().catch((error41) => {
-      this.log(`writer lock release failed: ${errorMessage(error41)}`);
+    await this.writerLock?.release().catch((error42) => {
+      this.log(`writer lock release failed: ${errorMessage(error42)}`);
     });
     this.writerLock = void 0;
   }

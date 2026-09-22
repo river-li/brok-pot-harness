@@ -23,8 +23,8 @@ function readManagedSkillsCache(cacheDir) {
       return null;
     }
     return { fetchedAt: parsed2.fetchedAt, skills: parsed2.skills };
-  } catch (error41) {
-    reportFallbackUnlessAbsent("managed_skills_cache", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("managed_skills_cache", error42);
     return null;
   }
 }

@@ -79,14 +79,7 @@ function findActualExecutable(exe, args, pathMustMatch) {
       "v1.0",
       "PowerShell.exe"
     );
-    const psargs = [
-      "-ExecutionPolicy",
-      "Unrestricted",
-      "-NoLogo",
-      "-NonInteractive",
-      "-File",
-      exe
-    ];
+    const psargs = ["-ExecutionPolicy", "Unrestricted", "-NoLogo", "-NonInteractive", "-File", exe];
     return { cmd, args: psargs.concat(args) };
   }
   if (exe.match(/\.(bat|cmd)$/i)) {

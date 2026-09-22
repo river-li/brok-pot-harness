@@ -1,5 +1,5 @@
 function resolveRestMcpProviderMetadataFromPrm(serverUrl_1) {
-  return __awaiter62(this, arguments, void 0, function* (serverUrl, fetchImpl = fetch) {
+  return __awaiter64(this, arguments, void 0, function* (serverUrl, fetchImpl = fetch) {
     if (getRestMcpProviderIdForUrlPath(serverUrl) === void 0) {
       return void 0;
     }
@@ -27,7 +27,7 @@ function resolveRestMcpProviderMetadataFromPrm(serverUrl_1) {
   });
 }
 function resolveMcpOAuthLoopbackRedirectUrl(args) {
-  return __awaiter62(this, void 0, void 0, function* () {
+  return __awaiter64(this, void 0, void 0, function* () {
     const metadata = yield resolveRestMcpProviderMetadataFromPrm(args.serverUrl, args.fetchImpl);
     return mcpOAuthLoopbackRedirectUrl({
       loopbackIpv4: metadata === null || metadata === void 0 ? void 0 : metadata.loopbackIpv4,
@@ -35,12 +35,12 @@ function resolveMcpOAuthLoopbackRedirectUrl(args) {
     });
   });
 }
-var __awaiter62, PRM_CACHE_TTL_MS, cache2;
+var __awaiter64, PRM_CACHE_TTL_MS, cache2;
 var init_rest_mcp_provider_metadata = __esm({
   "../packages/mcp-core/dist/oauth/rest-mcp-provider-metadata.js"() {
     "use strict";
-    init_dist();
-    __awaiter62 = function(thisArg, _arguments, P2, generator) {
+    init_dist2();
+    __awaiter64 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve29) {
           resolve29(value);

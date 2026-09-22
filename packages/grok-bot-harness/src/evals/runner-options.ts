@@ -26,10 +26,9 @@ function composeEvalRunnerGates(overrides = {}) {
     cloudAgentDurableWatch: fixedGate(false, EVAL_RUNNER_PIN),
     cloudAgentReplyModes: fixedGate(false, EVAL_RUNNER_PIN),
     frozenToolDescriptions: fixedGate(false, EVAL_RUNNER_PIN),
+    summaryTurnEndHold: fixedGate(false, EVAL_RUNNER_PIN),
     checkSubscriptionUsage: fixedGate(false, EVAL_RUNNER_PIN),
     connectedActivity: fixedGate(false, EVAL_RUNNER_PIN),
-    canvases: fixedGate(false, EVAL_RUNNER_PIN),
-    cloudAgentProjects: fixedGate(false, EVAL_RUNNER_PIN),
     cloudAgentExchange: fixedGate(false, EVAL_RUNNER_PIN),
     cloudCanvasTools: fixedGate(false, EVAL_RUNNER_PIN),
     lessSubagentFanout: fixedGate(false, EVAL_RUNNER_PIN),
@@ -49,7 +48,9 @@ function composeEvalRunnerGates(overrides = {}) {
     chromeCookieImport: fixedGate(false, EVAL_RUNNER_PIN),
     boxEgressTunnel: fixedGate(false, EVAL_RUNNER_PIN),
     onePasswordIntegration: fixedGate(false, EVAL_RUNNER_PIN),
-    agentEmail: fixedGate(false, EVAL_RUNNER_PIN)
+    agentEmail: fixedGate(false, EVAL_RUNNER_PIN),
+    agentEmailMultipleInboxes: fixedGate(false, EVAL_RUNNER_PIN),
+    generalizedSelfSummaryPrompt: fixedGate(false, EVAL_RUNNER_PIN)
   });
   const gates = { ...baseline };
   for (const name17 in overrides) {

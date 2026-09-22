@@ -1,4 +1,4 @@
-var logger99 = createLogger("sand:send-message-reminder-middleware");
+var logger100 = createLogger("sand:send-message-reminder-middleware");
 function isSandUserDeliveryToolCall(part) {
   return invokesFirstPartyTool(part, isSandUserDeliveryToolName);
 }
@@ -33,9 +33,8 @@ function isSendMessageReminderMessage(message) {
   if (text2 === void 0) return false;
   return text2.includes(SEND_MESSAGE_REMINDER_MESSAGE) || text2.includes(SEND_MESSAGE_REMINDER_MESSAGE_UPDATE_COMMUNICATION);
 }
-function isInjectedReminderMessage(message) {
-  const cursor = message.providerOptions?.cursor;
-  return cursor?.sandSendMessageReminder === true || cursor?.sandEarlyResultReminder === true || cursor?.sandStartOfTurnAckReminder === true || cursor?.sandDiskPressureReminder === true || cursor?.loopReminder === true || isSendMessageReminderMessage(message) || (getUserMessageText(message)?.includes(EARLY_RESULT_REMINDER_MESSAGE) ?? false);
+function isInjectedReminderMessage2(message) {
+  return isInjectedReminderMessage(message) || isSendMessageReminderMessage(message) || (getUserMessageText(message)?.includes(EARLY_RESULT_REMINDER_MESSAGE) ?? false);
 }
 function hasSendMessageCall(message) {
   if (message.role !== "assistant" || typeof message.content === "string") {
@@ -70,7 +69,7 @@ function countToolCallsSinceLastSendMessage(messages2) {
 function hasSendMessageSinceRealTurnStart(messages2) {
   for (let index = messages2.length - 1; index >= 0; index--) {
     const message = messages2[index];
-    if (isInjectedReminderMessage(message)) {
+    if (isInjectedReminderMessage2(message)) {
       continue;
     }
     if (message.role === "user" || message.role === "system") {
@@ -85,7 +84,7 @@ function hasSendMessageSinceRealTurnStart(messages2) {
 function hasReminderFiredThisSilentStreak(messages2) {
   for (let index = messages2.length - 1; index >= 0; index--) {
     const message = messages2[index];
-    if (isInjectedReminderMessage(message)) {
+    if (isInjectedReminderMessage2(message)) {
       return true;
     }
     if (message.role === "user" || message.role === "system") {
@@ -165,7 +164,7 @@ var SendMessageReminderMiddleware = class extends BaseMiddleware {
     }
     const toolCallsSinceLastSend = countToolCallsSinceLastSendMessage(messages2);
     if (toolCallsSinceLastSend > this.threshold) {
-      logger99.info(ctx, "[sand-send-message-reminder] injecting reminder", {
+      logger100.info(ctx, "[sand-send-message-reminder] injecting reminder", {
         toolCallsSinceLastSend,
         threshold: this.threshold,
         messageCount: messages2.length
@@ -174,7 +173,7 @@ var SendMessageReminderMiddleware = class extends BaseMiddleware {
         createSendMessageReminderMessage(this.updateCommunication() === true)
       );
     } else if (toolCallsSinceLastSend > this.earlyResultThreshold && hasSendMessageSinceRealTurnStart(messages2) && !hasReminderFiredThisSilentStreak(messages2)) {
-      logger99.info(ctx, "[sand-send-message-reminder] injecting early result reminder", {
+      logger100.info(ctx, "[sand-send-message-reminder] injecting early result reminder", {
         toolCallsSinceLastSend,
         earlyResultThreshold: this.earlyResultThreshold,
         messageCount: messages2.length

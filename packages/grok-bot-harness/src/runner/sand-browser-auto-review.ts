@@ -17,14 +17,19 @@ function isSandBrowserAutoReviewMutatingAction(action) {
   return !BYPASS_BROWSER_OPS.has(action.op);
 }
 var SandBrowserAutoReviewBlockedError = class extends Error {
-  constructor(message) {
+  constructor(message, telemetryCode = "policy_denied") {
     super(message);
+    this.telemetryCode = telemetryCode;
     this.name = "SandBrowserAutoReviewBlockedError";
+    this.toolCallAuditOutcome = reviewFailureAuditOutcome(telemetryCode);
   }
+  telemetryCode;
+  toolCallAuditOutcome;
 };
 function rejectOversizedField2(field, maxChars) {
   throw new SandBrowserAutoReviewBlockedError(
-    `Browser Auto-review rejected oversized ${field} (max ${maxChars} characters).`
+    `Browser Auto-review rejected oversized ${field} (max ${maxChars} characters).`,
+    "invalid_arguments"
   );
 }
 function assertBounded(value, field, maxChars) {
@@ -155,7 +160,8 @@ async function runSandBrowserAutoReviewPreflight(args) {
     const element = normalizeSandBrowserElement(args.exactAction.element);
     if (element === void 0) {
       throw new SandBrowserAutoReviewBlockedError(
-        "Browser click and drag actions require an element field: a concise description of the intended target and purpose."
+        "Browser click and drag actions require an element field: a concise description of the intended target and purpose.",
+        "invalid_arguments"
       );
     }
   }
@@ -170,14 +176,15 @@ async function runSandBrowserAutoReviewPreflight(args) {
     if (currentDisplayStateIdentity !== canonicalTarget.displayStateIdentity) {
       options2.autoReviewController?.reportDisplayRecheckFailed(options2.agentId);
       throw new SandBrowserAutoReviewBlockedError(
-        "The page changed after review; take a fresh browser_snapshot and retry the action."
+        "The page changed after review; take a fresh browser_snapshot and retry the action.",
+        "state_changed"
       );
     }
   };
   if (mode === "shadow") {
-    void runClassifier2(args.ctx, args, "shadow", canonicalTarget).catch((error41) => {
-      if (!(error41 instanceof Error && error41.name === "AbortError")) {
-        throw error41;
+    void runClassifier2(args.ctx, args, "shadow", canonicalTarget).catch((error42) => {
+      if (!(error42 instanceof Error && error42.name === "AbortError")) {
+        throw error42;
       }
     });
     return;
@@ -207,13 +214,13 @@ async function runSandBrowserAutoReviewPreflight(args) {
       })
     );
     if (args.signal?.aborted === true) {
-      throw new SandBrowserAutoReviewBlockedError("The browser action was cancelled.");
+      throw new SandBrowserAutoReviewBlockedError("The browser action was cancelled.", "cancelled");
     }
     if (approval.approved) {
       await assertDisplayStateUnchanged();
       return;
     }
-    throw new SandBrowserAutoReviewBlockedError(approval.reason ?? blockReason);
+    throw new SandBrowserAutoReviewBlockedError(approval.reason ?? blockReason, "approval_denied");
   }
   throw new SandBrowserAutoReviewBlockedError(blockReason);
 }

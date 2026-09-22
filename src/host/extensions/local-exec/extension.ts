@@ -27,10 +27,10 @@ function startLocalExec(context2, createClient2 = createSandCursorBackendClient)
       name: "sand-server-user-computer-presence-refresh",
       timeoutMs: SERVER_USER_COMPUTER_PRESENCE_TIMEOUT_MS
     }),
-    (error41) => logs.reportHostExtensionDiagnostic({
+    (error42) => logs.reportHostExtensionDiagnostic({
       extension: "local_exec",
       kind: "server_presence",
-      errorClass: errorLogTag(error41)
+      errorClass: errorLogTag(error42)
     })
   );
   const serverBox = new ServerUserComputerSandBox({ client, presence, gate, reportFailure });
@@ -53,10 +53,10 @@ function startLocalExec(context2, createClient2 = createSandCursorBackendClient)
         approvalId,
         deadline: retireDeadline
       }).catch(
-        (error41) => logs.reportHostExtensionDiagnostic({
+        (error42) => logs.reportHostExtensionDiagnostic({
           extension: "local_exec",
           kind: "server_retire_approval",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         })
       );
     }

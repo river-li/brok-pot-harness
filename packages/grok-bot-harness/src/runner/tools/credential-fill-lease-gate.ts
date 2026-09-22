@@ -4,8 +4,8 @@ function readAhead(source) {
   const drained = (async () => {
     try {
       for await (const chunk of source) chunks.push(chunk);
-    } catch (error41) {
-      failure2 = { error: error41 };
+    } catch (error42) {
+      failure2 = { error: error42 };
     }
   })();
   return {

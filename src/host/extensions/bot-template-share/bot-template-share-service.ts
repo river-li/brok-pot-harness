@@ -38,11 +38,11 @@ var BotTemplateShareService = class {
   async run(call) {
     try {
       return await call();
-    } catch (error41) {
-      if (!(error41 instanceof BotTemplateStoreNotFound)) {
-        this.reportFailure(errorLogTag(error41));
+    } catch (error42) {
+      if (!(error42 instanceof BotTemplateStoreNotFound)) {
+        this.reportFailure(errorLogTag(error42));
       }
-      throw error41;
+      throw error42;
     }
   }
   async create(input, signal) {
@@ -69,11 +69,11 @@ var BotTemplateShareService = class {
           this.reportFailure(errorLogTag(failure2));
           throw failure2;
         }
-      } catch (error41) {
-        if (!(error41 instanceof BotTemplateShareBlobUploadFailed)) {
-          this.reportFailure(errorLogTag(error41));
+      } catch (error42) {
+        if (!(error42 instanceof BotTemplateShareBlobUploadFailed)) {
+          this.reportFailure(errorLogTag(error42));
         }
-        throw error41;
+        throw error42;
       }
     }
     this.remember(templateView(record2));

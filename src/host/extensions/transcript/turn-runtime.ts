@@ -18,8 +18,8 @@ var connectCodeTag = brandedEnumOf(
   Object.values(Code).filter((value) => typeof value === "string"),
   "Other"
 );
-function connectCodeOf(error41) {
-  const connectError = findBackendConnectError(error41, false);
+function connectCodeOf(error42) {
+  const connectError = findBackendConnectError(error42, false);
   return connectError == null ? void 0 : connectCodeTag(Code[connectError.code]);
 }
 function turnTrayTitleKind(errorKind) {
@@ -32,39 +32,39 @@ function turnTrayTitleKind(errorKind) {
       return "bot_failed_to_respond";
   }
 }
-function classifyAgentError(error41) {
-  if (isCheckpointPublicationFailure(error41)) {
+function classifyAgentError(error42) {
+  if (isCheckpointPublicationFailure(error42)) {
     return SandError.checkpointPublicationFailed();
   }
-  if (isBackendUnreachableError(error41)) {
-    return SandError.turnBackendUnreachable({ errno: brandedErrno(findSystemErrno(error41)) });
+  if (isBackendUnreachableError(error42)) {
+    return SandError.turnBackendUnreachable({ errno: brandedErrno(findSystemErrno(error42)) });
   }
-  if (isProviderCapacityError(error41)) {
-    const retryAfterMs = serverRetryAfterMsFromError(error41);
+  if (isProviderCapacityError(error42)) {
+    const retryAfterMs = serverRetryAfterMsFromError(error42);
     if (retryAfterMs !== void 0) {
       return SandError.backendCapacityDeferred({
-        connectCode: connectCodeOf(error41),
+        connectCode: connectCodeOf(error42),
         retryAfterMs
       });
     }
-    return SandError.providerOverloaded({ connectCode: connectCodeOf(error41) });
+    return SandError.providerOverloaded({ connectCode: connectCodeOf(error42) });
   }
-  if (isFirstTokenStallError(error41)) {
+  if (isFirstTokenStallError(error42)) {
     return SandError.firstTokenStall();
   }
-  if (isStreamIdleError(error41)) {
+  if (isStreamIdleError(error42)) {
     return SandError.streamIdleStall();
   }
-  if (isContextOverflowDeadEnd(error41)) {
+  if (isContextOverflowDeadEnd(error42)) {
     return SandError.contextWindowOverflow();
   }
-  if (isConversationTooLargeRefusal(error41)) {
+  if (isConversationTooLargeRefusal(error42)) {
     return SandError.conversationTooLarge();
   }
-  const connectCode = connectCodeOf(error41);
-  if (isRetryableProviderError(error41)) {
-    if (isTransientStreamError(error41)) {
-      return SandError.streamReset({ connectCode, errno: brandedErrno(findSystemErrno(error41)) });
+  const connectCode = connectCodeOf(error42);
+  if (isRetryableProviderError(error42)) {
+    if (isTransientStreamError(error42)) {
+      return SandError.streamReset({ connectCode, errno: brandedErrno(findSystemErrno(error42)) });
     }
     return SandError.turnRetryable({ connectCode });
   }
@@ -198,10 +198,10 @@ var TurnRuntime = class {
     return botBlock;
   }
   settleClientTurn(session, clientNonce, outcome, options2) {
-    const error41 = options2?.error;
+    const error42 = options2?.error;
     const botBlock = options2?.botBlock;
     if (clientNonce == null || clientNonce.length === 0) return;
-    const errorTags = error41 === void 0 ? void 0 : sandErrorTags(error41);
+    const errorTags = error42 === void 0 ? void 0 : sandErrorTags(error42);
     try {
       session.db.setLastTurnSettlement({
         clientNonce,
@@ -214,11 +214,11 @@ var TurnRuntime = class {
         },
         ...botBlock === void 0 ? {} : { botBlock }
       });
-    } catch (error42) {
+    } catch (error43) {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "transcript_manager",
-        errorClass: errorLogTag(error42)
+        errorClass: errorLogTag(error43)
       });
     }
   }
@@ -496,24 +496,24 @@ var TurnRuntime = class {
         }
         await this.tm.roster.emitAgentUpdate(session.id);
         this.tm.automationRuntime.emitAutomations(session);
-      } catch (error41) {
+      } catch (error42) {
         await runner.drainNavigationAudit();
-        const classified = classifyAgentError(error41);
-        turn.finalize("error", classified, sandErrorDetail(error41));
+        const classified = classifyAgentError(error42);
+        turn.finalize("error", classified, sandErrorDetail(error42));
         const erroredBotBlock = this.takeLiveTurnBotBlock(session);
         this.settleClientTurn(session, options2.clientNonce, "error", {
           error: classified,
           ...erroredBotBlock === void 0 ? {} : { botBlock: erroredBotBlock }
         });
-        markTurnTraceError(turnTrace, error41);
+        markTurnTraceError(turnTrace, error42);
         if (epoch === this.tm.sendPipeline.currentTurnEpoch(session)) {
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           const requestId2 = session.db.getRequestIds().at(-1)?.id;
           this.tm.trayErrors.pushError({
             agentId: session.id,
             requestId: requestId2,
-            ...description10,
-            ...hostTrayTitle({ kind: turnTrayTitleKind(description10.errorKind), description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: turnTrayTitleKind(description9.errorKind), description: description9 })
           });
         }
         await this.tm.roster.emitAgentUpdate(session.id);
@@ -552,6 +552,7 @@ var TurnRuntime = class {
   async ensureUserReply(runner, result, session, epoch, options2 = {}) {
     const nudgeRunOptions = {
       hidden: true,
+      continuesTurn: true,
       advanceChainOnDelivery: options2.advanceChainOnDelivery,
       ackToken: options2.ackToken,
       traceCtx: options2.traceCtx,

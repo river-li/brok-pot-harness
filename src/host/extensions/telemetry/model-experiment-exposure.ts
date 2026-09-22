@@ -5,9 +5,9 @@ function createModelExperimentExposureLatch(deps) {
     if (logged) return;
     const envOverride = deps.modelExperimentOverride;
     if (envOverride == null && !deps.experiments.hasHydratedStatsigUserId()) {
-      const ready2 = await deps.experiments.waitForHydratedStatsigUserId(HYDRATION_WAIT_MS);
+      const ready3 = await deps.experiments.waitForHydratedStatsigUserId(HYDRATION_WAIT_MS);
       if (logged) return;
-      if (!ready2) return;
+      if (!ready3) return;
     }
     const state = envOverride ?? deps.experiments.getSandModelExperimentState();
     if (state == null || !state.active) return;

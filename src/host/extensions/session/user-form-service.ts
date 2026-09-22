@@ -58,10 +58,12 @@ var RUNNER_RETRY = createRetryPolicy({
 var UserFormService = class {
   constructor(deps) {
     this.deps = deps;
+    this.clock = deps.clock ?? realClock;
   }
   deps;
   pendingByAgent = /* @__PURE__ */ new Map();
   remapHoldByAgent = /* @__PURE__ */ new Map();
+  clock;
   forget(agentId) {
     this.pendingByAgent.delete(agentId);
     this.remapHoldByAgent.delete(agentId);
@@ -112,27 +114,27 @@ var UserFormService = class {
     this.remapHoldByAgent.delete(agentId);
     return hold.settlement ?? { kind: "not_remapped" };
   }
-  start(request3) {
+  start(request5) {
     const requestId2 = crypto.randomUUID();
-    const pending = this.pendingByAgent.get(request3.agentId) ?? /* @__PURE__ */ new Map();
+    const pending = this.pendingByAgent.get(request5.agentId) ?? /* @__PURE__ */ new Map();
     pending.set(requestId2, {
       requestId: requestId2,
-      form: request3.form
+      form: request5.form
     });
-    this.pendingByAgent.set(request3.agentId, pending);
-    if (request3.form.domain == null) {
-      this.reportRequest(request3, "shown", "not_applicable");
-      this.markShown(request3.agentId, requestId2);
+    this.pendingByAgent.set(request5.agentId, pending);
+    if (request5.form.domain == null) {
+      this.reportRequest(request5, "shown", "not_applicable");
+      this.markShown(request5.agentId, requestId2);
       return { kind: "started", requestId: requestId2 };
     }
-    const hostPreflightStartedAt = performance.now();
-    return this.probeLiveHostAndPreflightFailingOpen(request3.agentId, request3.form).then(
+    const hostPreflightStartedAt = this.clock.monotonicNow();
+    return this.probeLiveHostAndPreflightFailingOpen(request5.agentId, request5.form).then(
       ({ liveHost, preflight, uncheckedReason, driverUnavailable }) => {
-        const hostPreflightMs = Math.max(0, performance.now() - hostPreflightStartedAt);
-        const preflightOutcome = classifyUserFormPreflight(request3.form, preflight);
-        if (this.pendingByAgent.get(request3.agentId)?.has(requestId2) !== true) {
+        const hostPreflightMs = Math.max(0, this.clock.monotonicNow() - hostPreflightStartedAt);
+        const preflightOutcome = classifyUserFormPreflight(request5.form, preflight);
+        if (this.pendingByAgent.get(request5.agentId)?.has(requestId2) !== true) {
           this.reportRequest(
-            request3,
+            request5,
             "canceled",
             preflightOutcome,
             uncheckedReason,
@@ -140,10 +142,10 @@ var UserFormService = class {
           );
           return { kind: "canceled" };
         }
-        if (driverUnavailable && hasHostFillableUserFormTargets(request3.form.fields)) {
-          this.end(request3.agentId, requestId2);
+        if (driverUnavailable && hasHostFillableUserFormTargets(request5.form.fields)) {
+          this.end(request5.agentId, requestId2);
           this.reportRequest(
-            request3,
+            request5,
             "driver_unavailable",
             preflightOutcome,
             uncheckedReason,
@@ -152,9 +154,9 @@ var UserFormService = class {
           return { kind: "driver_unavailable" };
         }
         if (preflightOutcome === "unfillable") {
-          this.end(request3.agentId, requestId2);
+          this.end(request5.agentId, requestId2);
           this.reportRequest(
-            request3,
+            request5,
             "preflight_unfillable",
             preflightOutcome,
             uncheckedReason,
@@ -163,8 +165,8 @@ var UserFormService = class {
           return { kind: "unfillable", fieldKinds: preflight.doomedFieldKinds };
         }
         const skipped2 = Object.keys(preflight.doomedFieldKinds).length > 0;
-        this.reportRequest(request3, "shown", preflightOutcome, uncheckedReason, hostPreflightMs);
-        this.markShown(request3.agentId, requestId2);
+        this.reportRequest(request5, "shown", preflightOutcome, uncheckedReason, hostPreflightMs);
+        this.markShown(request5.agentId, requestId2);
         return {
           kind: "started",
           requestId: requestId2,
@@ -174,19 +176,19 @@ var UserFormService = class {
       }
     );
   }
-  reportRequest(request3, outcome, preflightOutcome, uncheckedReason, hostPreflightMs) {
-    const domainTag = this.domainTag(request3.form.domain);
+  reportRequest(request5, outcome, preflightOutcome, uncheckedReason, hostPreflightMs) {
+    const domainTag = this.domainTag(request5.form.domain);
     userFormRequest.increment(this.deps.ctx, 1, {
-      reason: request3.form.reason,
+      reason: request5.form.reason,
       outcome,
       preflight_outcome: preflightOutcome,
-      has_fill_target: String(request3.form.fields.some((field) => field.target != null)),
-      submit_after_fill: String(request3.form.submitAfterFill === true),
+      has_fill_target: String(request5.form.fields.some((field) => field.target != null)),
+      submit_after_fill: String(request5.form.submitAfterFill === true),
       ...domainTag
     });
     if (preflightOutcome === "unchecked" && uncheckedReason != null) {
       userFormPreflightUnchecked.increment(this.deps.ctx, 1, {
-        reason: request3.form.reason,
+        reason: request5.form.reason,
         outcome,
         unchecked_reason: uncheckedReason
       });
@@ -194,7 +196,7 @@ var UserFormService = class {
     if (hostPreflightMs !== void 0) {
       userFormStageDuration.histogram(this.deps.ctx, hostPreflightMs, {
         stage: "host_request_preflight",
-        reason: request3.form.reason,
+        reason: request5.form.reason,
         outcome,
         client_platform: "unknown",
         failure_reason: "none",
@@ -323,8 +325,8 @@ var UserFormService = class {
           uncheckedReason: observed.firstFailureStage() ?? "page_unavailable_or_mismatch"
         } : {}
       };
-    } catch (error41) {
-      reportFallback("user_form_service", error41);
+    } catch (error42) {
+      reportFallback("user_form_service", error42);
       return {
         liveHost: void 0,
         preflight: unchecked,
@@ -342,7 +344,7 @@ var UserFormService = class {
     return live;
   }
   async fill(agentId, values, consentedHost, submitAfterFill) {
-    const timing = createUserFormHostFillTiming();
+    const timing = createUserFormHostFillTiming(this.clock);
     const runnerStart = await this.createRunner(agentId);
     if (runnerStart.kind === "unavailable") {
       return {
@@ -359,7 +361,8 @@ var UserFormService = class {
         values,
         consentedHost,
         submitAfterFill,
-        timing.observe
+        timing.observe,
+        this.clock
       );
       const stage = observed.firstFailureStage();
       const driverRemainedUnavailable = Object.values(result.fillFailureKinds ?? {}).includes(
@@ -370,8 +373,8 @@ var UserFormService = class {
         ...stage != null && driverRemainedUnavailable ? { driverFailureStage: stage } : {},
         hostTiming: timing.finish()
       };
-    } catch (error41) {
-      reportFallback("user_form_service", error41);
+    } catch (error42) {
+      reportFallback("user_form_service", error42);
       return {
         ...driverUnavailableFillResult(values, submitAfterFill),
         driverFailureStage: observed.firstFailureStage() ?? "fill_exception",
@@ -380,10 +383,10 @@ var UserFormService = class {
     }
   }
   async runRemap(agentId, values, consentedHost) {
-    const startedAt = performance.now();
+    const startedAt = this.clock.monotonicNow();
     const finish = (result2) => ({
       ...result2,
-      hostRemapMs: Math.max(0, performance.now() - startedAt)
+      hostRemapMs: Math.max(0, this.clock.monotonicNow() - startedAt)
     });
     const runnerStart = await this.createRunner(agentId);
     if (runnerStart.kind === "unavailable") {
@@ -412,8 +415,8 @@ var UserFormService = class {
     let connection;
     try {
       connection = await this.deps.box.ensureReady(this.deps.ctx, agentId);
-    } catch (error41) {
-      reportFallback("user_form_service", error41);
+    } catch (error42) {
+      reportFallback("user_form_service", error42);
       return { kind: "unavailable", stage: "ensure_ready" };
     }
     const windowIndex = boxAgentWindowIndex(this.deps.box, agentId);
@@ -431,8 +434,8 @@ var UserFormService = class {
     };
   }
 };
-function createUserFormHostFillTiming() {
-  const startedAt = performance.now();
+function createUserFormHostFillTiming(clock) {
+  const startedAt = clock.monotonicNow();
   const durations2 = /* @__PURE__ */ new Map();
   return {
     observe: (stage, durationMs) => {
@@ -440,7 +443,7 @@ function createUserFormHostFillTiming() {
       durations2.set(stage, (durations2.get(stage) ?? 0) + duration3);
     },
     finish: () => {
-      const totalMs = Math.max(0, performance.now() - startedAt);
+      const totalMs = Math.max(0, clock.monotonicNow() - startedAt);
       const writeMs = durations2.get("write");
       const healMs = durations2.get("heal");
       const submitMs = durations2.get("submit");

@@ -252,8 +252,8 @@ function createServerAgentActivity(deps) {
   const gateCheck = createSingleFlight({
     read: async () => await deps.isEnabled().then((enabled) => {
       gate = { enabled, checkedAt: clock.now() };
-    }).catch((error41) => {
-      deps.log(`server agent activity gate read failed: ${errorLogTag(error41)}`);
+    }).catch((error42) => {
+      deps.log(`server agent activity gate read failed: ${errorLogTag(error42)}`);
       gate = { enabled: false, checkedAt: clock.now() };
     }),
     install: () => {

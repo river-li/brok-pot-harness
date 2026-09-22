@@ -3,10 +3,10 @@ function toError(value) {
   return value instanceof Error ? value : new Error(String(value));
 }
 function handleProcessCrash(options2, kind, value) {
-  const error41 = toError(value);
-  console.error(`[${options2.scope}] ${kind} (kept alive): ${errorLogTag(error41)}`);
+  const error42 = toError(value);
+  console.error(`[${options2.scope}] ${kind} (kept alive): ${errorLogTag(error42)}`);
   try {
-    options2.onError?.(error41, kind);
+    options2.onError?.(error42, kind);
   } catch (reporterError) {
     process.stderr.write(
       `sand.host.crash_reporter_failed kind=${kind} error_class=${errorLogTag(reporterError)}

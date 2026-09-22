@@ -118,20 +118,20 @@ function collectToolAndSubagentSegments(tools, descriptionProps) {
   }
   return { tools: toolSegments, subagents: subagentSegments };
 }
-function splitSubagentDescriptionFromTool(tool, description10, descriptionProps) {
+function splitSubagentDescriptionFromTool(tool, description9, descriptionProps) {
   if (tool.toolIdentifier !== "TASK" || !("descriptionTokenPartsGenerator" in tool)) {
-    return { toolDescription: description10, subagentText: "" };
+    return { toolDescription: description9, subagentText: "" };
   }
   const subagentText = tool.descriptionTokenPartsGenerator?.(descriptionProps).subagentDescriptionText ?? "";
   if (subagentText.length === 0) {
-    return { toolDescription: description10, subagentText: "" };
+    return { toolDescription: description9, subagentText: "" };
   }
-  const lastOccurrence = description10.lastIndexOf(subagentText);
+  const lastOccurrence = description9.lastIndexOf(subagentText);
   if (lastOccurrence === -1) {
-    return { toolDescription: description10, subagentText: "" };
+    return { toolDescription: description9, subagentText: "" };
   }
   return {
-    toolDescription: description10.slice(0, lastOccurrence) + description10.slice(lastOccurrence + subagentText.length),
+    toolDescription: description9.slice(0, lastOccurrence) + description9.slice(lastOccurrence + subagentText.length),
     subagentText
   };
 }
@@ -593,6 +593,8 @@ var promptTokenBreakdownCategoryEstimatedTokens = createHistogram("agent.prompt_
 });
 function emitCategoryEstimatedTokensMetric(ctx, sources) {
   for (const category of PROMPT_TOKEN_BREAKDOWN_CATEGORIES) {
-    promptTokenBreakdownCategoryEstimatedTokens.histogram(ctx, sumRawTokens(sources[category.id]), { category: category.id });
+    promptTokenBreakdownCategoryEstimatedTokens.histogram(ctx, sumRawTokens(sources[category.id]), {
+      category: category.id
+    });
   }
 }

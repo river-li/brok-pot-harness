@@ -24,8 +24,8 @@ async function refusalCodeOf(response) {
   try {
     const body = await response.json();
     return typeof body === "object" && body !== null && "error" in body && body.error === "agent_feedback_privacy_mode" ? "privacy-mode" : "access-denied";
-  } catch (error41) {
-    reportFallback("product_feedback", error41);
+  } catch (error42) {
+    reportFallback("product_feedback", error42);
     return "access-denied";
   }
 }
@@ -39,8 +39,8 @@ function createSandProductFeedbackSubmitter(deps) {
         accessToken,
         getTeamId: deps.getTeamId
       });
-    } catch (error41) {
-      deps.log(`product feedback token unavailable (${errorLogTag(error41)})`);
+    } catch (error42) {
+      deps.log(`product feedback token unavailable (${errorLogTag(error42)})`);
       return { result: { ok: false, code: "not-signed-in" } };
     }
     try {
@@ -80,8 +80,8 @@ function createSandProductFeedbackSubmitter(deps) {
       }
       if (!response.ok) return { result: { ok: false, code: "unavailable" } };
       return { result: { ok: true } };
-    } catch (error41) {
-      deps.log(`product feedback submit failed (${errorLogTag(error41)})`);
+    } catch (error42) {
+      deps.log(`product feedback submit failed (${errorLogTag(error42)})`);
       return { result: { ok: false, code: "unavailable" } };
     }
   };

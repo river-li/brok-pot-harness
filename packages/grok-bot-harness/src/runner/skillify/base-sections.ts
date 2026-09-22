@@ -2,7 +2,6 @@ var SKILLIFY_SKILL_IDS = {
   automations: "routines",
   codeChanges: "code-changes",
   boxDesktop: "box-desktop",
-  canvases: "canvases",
   noConnectorFallback: "no-connector-fallback",
   inChatForms: "in-chat-forms",
   channels: "channels",
@@ -15,10 +14,12 @@ var SKILLIFY_SKILL_IDS = {
   sourceControl: "source-control"
 };
 var ADD_CONNECTOR_SKILL_ID = "add-connector";
+var REMOVED_CLOUD_AGENT_CANVAS_SKILL_ID = "canvases";
 var RESERVED_MANAGED_SKILL_IDS = /* @__PURE__ */ new Set([
   ...Object.values(SKILLIFY_SKILL_IDS),
   ADD_CONNECTOR_SKILL_ID,
-  "shared-bot-plugins"
+  "shared-bot-plugins",
+  REMOVED_CLOUD_AGENT_CANVAS_SKILL_ID
 ]);
 function skillifyPointer(when, id) {
   return `${when}, Read the Cursor-managed \`${id}\` skill first and follow it.`;
@@ -34,7 +35,6 @@ var SKILLIFY_BASE_HEADINGS = /* @__PURE__ */ new Set([
   "## Writing on the user's behalf",
   "## Cursor Origin",
   "## Code changes",
-  "## Canvases",
   "## Voice calls"
 ]);
 function skillifyBaseSections(sections, options2) {

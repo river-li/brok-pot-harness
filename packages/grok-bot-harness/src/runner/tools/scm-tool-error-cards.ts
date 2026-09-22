@@ -1,14 +1,14 @@
-init_dist();
+init_dist2();
 init_mcp_exec_pb();
 function scmToolErrorFromMcpResult(result, emittingServerIdentifier) {
   if (result.result.case !== "success" || !result.result.value.isError) return void 0;
   for (const item of result.result.value.content) {
     if (item.content.case !== "text") continue;
-    const error41 = parseRestMcpScmToolError({
+    const error42 = parseRestMcpScmToolError({
       text: item.content.value.text,
       emittingServerIdentifier
     });
-    if (error41 != null) return error41;
+    if (error42 != null) return error42;
   }
   return void 0;
 }
@@ -41,11 +41,11 @@ function repoUrlFor(provider, repo) {
       return void 0;
   }
 }
-async function describeScmToolError(error41, toolName) {
-  const provider = scmProviderOf(error41.provider);
+async function describeScmToolError(error42, toolName) {
+  const provider = scmProviderOf(error42.provider);
   if (provider == null) return null;
   const blockedAction = `the ${toolName} call`;
-  switch (error41.code) {
+  switch (error42.code) {
     case REST_MCP_SCM_ERROR_CODES.notConnected:
       return describeScmConnectBlocker({ provider, knownIntent: "connect", blockedAction });
     case REST_MCP_SCM_ERROR_CODES.tokenRejected:
@@ -55,7 +55,7 @@ async function describeScmToolError(error41, toolName) {
         blockedAction
       });
     case REST_MCP_SCM_ERROR_CODES.repoNotAccessible: {
-      const repoUrl = error41.repo == null ? void 0 : repoUrlFor(provider, error41.repo);
+      const repoUrl = error42.repo == null ? void 0 : repoUrlFor(provider, error42.repo);
       return describeScmConnectBlocker({
         provider,
         knownIntent: "access",

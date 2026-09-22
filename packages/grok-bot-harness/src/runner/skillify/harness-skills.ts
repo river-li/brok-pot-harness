@@ -3,7 +3,7 @@ function reachingServicesSkillLines(credentialFillEnabled, agentEmailEnabled = f
     "When the user wants something from a service you can't reach, with no connector for it and nothing readable on their computer, the box is your default, not a refusal: reach for it the moment it would help, without first asking permission, proposing it, or offering it as a choice. This covers chat apps (Facebook Messenger, WhatsApp, Instagram), webmail, and SaaS dashboards.",
     `- Don't ask a go-ahead for something they already asked for. When they've requested the thing ("pull my Amazon orders"), a "Want me to pull them using my browser?" confirmation widget is exactly the over-asking to avoid: they already said yes by asking. Just dispatch a subagent to open the service (see "The box desktop" for which type), then follow that skill's typed-login path when it reaches the login. The only thing you surface first is that unavoidable login step (which only they can do), never a yes/no on the task itself.`,
     "- But first confirm there really is no connector \u2014 for ANY service the task touches, not just data dashboards. Run SearchPlugins before reaching for the box: if a connector is connected or installable, prefer pulling the data through it (CSV/export or raw query results) over reading charts or tables off the screen, which you are unreliable at. SearchPlugins also surfaces any usage guidance a connector advertises, so check it and follow that guidance. A connector that merely needs authentication is still the right path \u2014 start it with AuthenticateMcpServer instead of working around it; a box browser that is not signed in is gated by the same sign-in, so it is not a fallback for a service whose auth is pending, and if its auth fails or keeps erroring, ask the user for help rather than quietly switching to the browser. Use the box only when no connector exists or is installable.",
-    credentialFillEnabled ? `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. The user's 1Password logins reach you through the 1Password integration: you can see only the items in their 1Password vault named "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" (titles and sites, never values), and items land in that vault only when the user adds or moves them there by hand. At a direct username/password login, FIRST call ListCredentials with the exact current URL, before any in-chat form, request_box_help, or asking the user to type: a matching 1Password login is the default path, and each result says whether it carries a one-time code in 1Password. Then fill it with SendToUser type credential-request for that item; you learn only whether it was filled, declined, or failed, and one request covers the whole login: a username-first page's password step and any one-time code the login carries are filled for you as the site asks for them, so a verification-code page is not a handoff. When no 1Password login matches, tell the user the login was not found in the "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" vault and that they may need to add or move it into that vault in 1Password. On their next request to log in or retry, call ListCredentials with forceRefresh true before reporting it missing again; they do not need to mention 1Password. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, captcha, or payment.` : "- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service and use request_box_help for the user-only authentication step.",
+    credentialFillEnabled ? `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. ${ONEPASSWORD_LOGIN_GUIDANCE} To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, captcha, or payment.` : "- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service and use request_box_help for the user-only authentication step.",
     credentialFillEnabled ? "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Credential values never enter your context: your credential-request fills a 1Password login into the page, and manual authentication happens on the box desktop. The browser session persists there." : "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Authentication happens on the box desktop, and the browser session persists there.",
     '- Once they are signed in, do the work: hand the interactive steps to the subagent, use Shell for commands, and use Read for files, then report what you found. See "The box desktop" for how delegation and sign-in handoffs work.',
     "- This covers logged-in tools and CLIs on the box, not just websites: when a task is blocked or would go smoother with one that isn't authed (e.g. `gh` for GitHub work, `glab` for GitLab work, a CLI missing credentials), be proactive about setting it up there instead of failing or working around it. Box logins and credentials persist across turns, so it's a one-time setup that unblocks every future run, worth doing or offering early: kick off the flow yourself where you safely can (run `gh auth login` or `glab auth login`), and where it needs the user (a password, OAuth approval, 2FA, a device code) hand the box over with request_box_help proactively rather than waiting to be asked. You never see their credentials. That login is for reads and for provider work the user asks for directly, never for creating a pull request that a Cursor PR tool refused.",
@@ -92,27 +92,6 @@ function skillMarkdown(title, ...parts) {
 function subsection(title, lines2) {
   return [`## ${title}`, ...lines2];
 }
-var BOX_DESKTOP_LINES = [
-  "You have your own desktop on the box (your screen alone \u2014 see Your box), with a browser, and you hold the read-only Screenshot tool to see its current screen, confirm where a flow landed, or check on a running subagent. You cannot click, move, type, press keys, scroll, or wait on the desktop yourself. Delegate every browser and desktop interaction to a subagent; like any Task it runs in the background, so you keep working and are revived with its result. Do not bypass this boundary with Shell-driven GUI automation such as xdotool, or by driving the box browser from Shell \u2014 no CDP attach, no Playwright, Puppeteer, or `websocket-client`, no `/json/new`, no cookie-DB scraping, and no page JS eval over DevTools.",
-  ...subsection("Which subagent", [
-    "- When Task offers `browserUse`, reach for it first for anything that happens in the browser: reading pages, filling forms, pulling data from sites, clicking through web apps. It drives the box's signed-in Chrome at the page level with element references instead of pixel clicks, so it is faster and more reliable than desktop automation, and it never touches the desktop's mouse, so it can run alongside other work.",
-    "- Use `computerUse` when the task needs the desktop itself \u2014 GUI apps, file dialogs, drag interactions \u2014 or when a site defeats page-level automation, and for all browser and GUI work when Task does not offer `browserUse`. If a `browserUse` dispatch reports it could not operate a site, re-dispatch that same task to `computerUse` rather than retrying `browserUse` harder. Logins and files persist in the box across turns, so a sign-in is a one-time step."
-  ]),
-  ...subsection("Scoping a dispatch", [
-    "- Scope it tight \u2014 a narrow, well-defined task is your main defense against a subagent that stalls or wanders. Break a big GUI goal into the smallest concrete step(s) and dispatch those one at a time; several tightly-scoped dispatches beat one broad, open-ended objective. It runs headless and can't ask you follow-ups, so each task must stand on its own: the exact step, the specifics it needs (which site or account, exact values to enter, which button to land on), what \"done\" looks like and where to stop, and what to report back. A vague or sprawling task is how it gets lost. When you know the destination URL \u2014 one the user pasted, or one you can construct (a site's search/filter URL like `https://www.amazon.com/s?k=bread+flour`) \u2014 put that exact URL in the task, as specific as the site's query params allow, so the subagent opens it directly instead of clicking through the site to rebuild it.",
-    "- For bulk or structured data, don't type it in by hand: generate the file with Shell (e.g. a CSV), inspect it with Read when useful, then have the subagent import or upload it, far faster and more reliable than entering values one by one."
-  ]),
-  ...subsection("While it runs", [
-    "- If it's running long or might be looping, look in with CheckSubagent rather than waiting it out; MessageSubagent redirects a stuck one mid-run (point it at the right element, or tell it the user just signed in) and StopSubagent aborts one that's wedged. When it returns, read its report before acting \u2014 if it stopped short or hit a step only the user can do, that's your cue to follow up or hand off the box.",
-    "- You share your desktop's single screen with the computerUse subagent, so only one runs at a time; while one is running, leave the screen to it and limit yourself to a screenshot to check in rather than clicking or typing. (The user's other agents have their own desktops, so their work never appears on yours.)"
-  ]),
-  ...subsection("Steps only the user can do", [
-    "When a page needs the USER to type (login, address, phone, OTP) and `request_user_form` is among your tools, Read and follow the `in-chat-forms` skill first. Default path: open the page \u2192 take a fresh snapshot \u2192 `request_user_form` only if the fields look fillable (solid ref/selector/label targets, same-origin or pierceable). Do **not** jump to `request_box_help` just because a site needs a password \u2014 and do **not** put up a form that cannot fill. When `request_user_form` is not among your tools, use `request_box_help` for those typed steps.",
-    "When `request_cookie_origin_approval` is among your tools: for a sign-in, try the user's Chrome cookies first \u2014 list origins, and if the site is listed, request it. Only when that path is exhausted (not listed, denied, or page still wants a fresh login) do the sign-in in the box browser.",
-    `Exception \u2014 ${COOKIE_IMPORT_SKIP_SITES.join(", ")}: imported sessions only stick if Chrome already has a live one. If listed, request cookies as usual. If not listed, skip import (never send the user to log in to Chrome just to feed it) and handle the typed login in the box browser like any other site \u2014 form when \`request_user_form\` is among your tools and the snapshot shows fillable fields, \`request_box_help\` when it does not.`,
-    "Use `request_box_help` when a form cannot express the step: captcha, passkey, device 2FA / push approval, 3DS confirmation, QR code, or an unusual custom widget \u2014 or when fields are clearly untargetable (no snapshot, no usable targets, cross-origin frame, closed shadow root, custom widget) or host preflight/receipt says unreachable. Never show a form card that is doomed to fill-fail; a preflight refusal is final \u2014 don't re-issue the same form. Don't pre-ask \"hand you the box?\" \u2014 the handoff is the ask. Pass one short instruction; after they hand back, resume with a browser/desktop subagent."
-  ])
-];
 function combinedBoxDesktopLines(includeHumanSteps = true) {
   return [
     "You hold the read-only Screenshot tool to see its current screen, confirm where a flow landed, or check on a running subagent. You cannot click, move, type, press keys, scroll, or wait on the desktop yourself. Delegate every browser and desktop interaction to a subagent. Do not bypass this boundary with Shell-driven GUI automation such as xdotool, or by driving the box browser from Shell \u2014 no CDP attach, no Playwright, Puppeteer, or `websocket-client`, no `/json/new`, no cookie-DB scraping, and no page JS eval over DevTools.",
@@ -183,12 +162,7 @@ var SKILLIFY_HARNESS_SKILLS = [
   {
     id: SKILLIFY_SKILL_IDS.boxDesktop,
     description: "When a task needs your own desktop or browser \u2014 a website with no connector, a GUI app, a sign-in only the user can complete \u2014 before you dispatch the first browser or desktop subagent.",
-    body: skillMarkdown("The box desktop", BOX_DESKTOP_LINES)
-  },
-  {
-    id: SKILLIFY_SKILL_IDS.canvases,
-    description: "When the user asks for a canvas, or the deliverable is a durable interactive artifact they'll revisit \u2014 a report, dashboard, or explorable analysis \u2014 before you launch its cloud agent, and again when that agent finishes or the user asks for a revision.",
-    body: skillMarkdown("Canvases", SAND_CANVASES_PROMPT_SECTION.body)
+    body: ["# The box desktop", ...combinedBoxDesktopLines()].join("\n\n")
   },
   {
     id: SKILLIFY_SKILL_IDS.noConnectorFallback,
@@ -248,7 +222,7 @@ var SKILLIFY_HARNESS_SKILLS = [
   {
     id: SKILLIFY_SKILL_IDS.sendOnBehalf,
     description: "When the user asks you to write, draft, reply to, or send an email or message as them on an outside platform (Slack, email, another chat app).",
-    body: sendOnBehalfSkillBody(false)
+    body: sendOnBehalfSkillBody({ agentEmailEnabled: false, multipleInboxesEnabled: false })
   },
   {
     id: SKILLIFY_SKILL_IDS.sourceControl,
@@ -261,15 +235,13 @@ var SKILLIFY_HARNESS_SKILLS = [
     body: skillMarkdown("Skill authoring", SKILLS_AUTHORING_LINES)
   }
 ];
-function boxDesktopSkill(combined) {
-  const stock = SKILLIFY_HARNESS_SKILLS.find((skill) => skill.id === SKILLIFY_SKILL_IDS.boxDesktop);
-  if (stock === void 0) throw new Error("Missing box-desktop harness skill");
-  return combined ? { ...stock, body: ["# The box desktop", ...combinedBoxDesktopLines()].join("\n\n") } : stock;
-}
 var CODE_CHANGES_REPLY_MODES_LINE = `- ${CLOUD_AGENT_REPLY_MODES_GUIDANCE}`;
 var SEND_ON_BEHALF_DESCRIPTION = "When the user asks you to write, draft, reply to, or send an email or message as them on an outside platform (Slack, email, another chat app).";
 var SEND_ON_BEHALF_DESCRIPTION_WITH_AGENT_EMAIL = `${SEND_ON_BEHALF_DESCRIPTION.slice(0, -1)}, or to give yourself an email address.`;
-function sendOnBehalfSkillBody(agentEmailEnabled) {
+function sendOnBehalfSkillBody({
+  agentEmailEnabled,
+  multipleInboxesEnabled
+}) {
   return skillMarkdown(
     "Writing and sending on the user's behalf",
     subsection(
@@ -280,17 +252,6 @@ function sendOnBehalfSkillBody(agentEmailEnabled) {
       "When DraftExternalMessage is among your tools:",
       ...sectionBodyLines(SAND_DRAFT_EXTERNAL_MESSAGE_PROMPT_SECTION)
     ]),
-    ...agentEmailEnabled ? [subsection("Agent email", SAND_AGENT_EMAIL_PROMPT_SECTION.body)] : []
+    ...agentEmailEnabled ? [subsection("Agent email", sandAgentEmailPromptSection(multipleInboxesEnabled).body)] : []
   );
-}
-function serializeSkillifyHarnessSkill(skill) {
-  return [
-    "---",
-    `name: ${skill.id}`,
-    `description: ${JSON.stringify(skill.description)}`,
-    "---",
-    "",
-    skill.body,
-    ""
-  ].join("\n");
 }

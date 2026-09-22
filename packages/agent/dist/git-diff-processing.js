@@ -6,11 +6,7 @@ function buildGitDiffContent(content, fullContentLengthCharCount, tagName2, intr
     diffContent = formatGitDiffWithTruncation(diffContent, MAX_GIT_DIFF_CHAR_LENGTH);
   }
   const formattedDiff = wasTruncated && !diffContent.endsWith(GIT_DIFF_TRUNCATION_NOTICE) ? diffContent + GIT_DIFF_TRUNCATION_NOTICE : diffContent;
-  const text2 = [
-    `<${tagName2}>`,
-    `  ${intro}${formattedDiff}`,
-    `  </${tagName2}>`
-  ].join("\n");
+  const text2 = [`<${tagName2}>`, `  ${intro}${formattedDiff}`, `  </${tagName2}>`].join("\n");
   return {
     type: "text",
     text: text2

@@ -1090,6 +1090,7 @@ var ChangeAssignment = class _ChangeAssignment extends __protoMessage3157 {
     this.createdVia = ChangeAssignmentCreatedVia.UNSPECIFIED;
     this.cursorUserId = protoInt64.zero;
     this.cursorGroupId = protoInt64.zero;
+    this.assignedServiceAccountId = "";
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1105,7 +1106,7 @@ var ChangeAssignment = class _ChangeAssignment extends __protoMessage3157 {
     return proto3.util.equals(_ChangeAssignment, a, b2);
   }
   static $() {
-    return ["ChangeAssignment|1 id 9|2 change_id 9|3 kind #0|5 assigned_group_id 9|6 created_via #1|8 created_at #2|9 updated_at #2|10 cursor_user_id 3|11 cursor_group_id 3|12 assigned_user #3|13 assigned_group #4|14 created_by #5", ChangeAssignmentKind, ChangeAssignmentCreatedVia, Timestamp, OriginReviewerCandidateUser, OriginReviewerCandidateGroup, ActorWithDisplay];
+    return ["ChangeAssignment|1 id 9|2 change_id 9|3 kind #0|5 assigned_group_id 9|6 created_via #1|8 created_at #2|9 updated_at #2|10 cursor_user_id 3|11 cursor_group_id 3|12 assigned_user #3|13 assigned_group #4|14 created_by #5|15 assigned_service_account #6|16 assigned_service_account_id 9", ChangeAssignmentKind, ChangeAssignmentCreatedVia, Timestamp, OriginReviewerCandidateUser, OriginReviewerCandidateGroup, ActorWithDisplay, OriginReviewerCandidateServiceAccount];
   }
 };
 var ReviewRequestEvent = class _ReviewRequestEvent extends __protoMessage3157 {
@@ -1536,11 +1537,36 @@ var ListOriginRepoReviewerCandidatesRequest = class _ListOriginRepoReviewerCandi
     return ["ListOriginRepoReviewerCandidatesRequest|1 repo #0", ClientRepoIdentifier];
   }
 };
+var OriginReviewerCandidateServiceAccount = class _OriginReviewerCandidateServiceAccount extends __protoMessage3157 {
+  constructor(data) {
+    super();
+    this.serviceAccountId = "";
+    this.displayName = "";
+    this.avatarUrl = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _OriginReviewerCandidateServiceAccount().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _OriginReviewerCandidateServiceAccount().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _OriginReviewerCandidateServiceAccount().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_OriginReviewerCandidateServiceAccount, a, b2);
+  }
+  static $() {
+    return ["OriginReviewerCandidateServiceAccount|1 service_account_id 9|2 display_name 9|3 avatar_url 9"];
+  }
+};
 var ListOriginRepoReviewerCandidatesResponse = class _ListOriginRepoReviewerCandidatesResponse extends __protoMessage3157 {
   constructor(data) {
     super();
     this.users = [];
     this.groups = [];
+    this.serviceAccounts = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1556,7 +1582,7 @@ var ListOriginRepoReviewerCandidatesResponse = class _ListOriginRepoReviewerCand
     return proto3.util.equals(_ListOriginRepoReviewerCandidatesResponse, a, b2);
   }
   static $() {
-    return ["ListOriginRepoReviewerCandidatesResponse|1 users #0*|2 groups #1*", OriginReviewerCandidateUser, OriginReviewerCandidateGroup];
+    return ["ListOriginRepoReviewerCandidatesResponse|1 users #0*|2 groups #1*|3 service_accounts #2*", OriginReviewerCandidateUser, OriginReviewerCandidateGroup, OriginReviewerCandidateServiceAccount];
   }
 };
 var GetChangeRequest = class _GetChangeRequest extends __protoMessage3157 {
@@ -2590,7 +2616,7 @@ var SectionOfChanges = class _SectionOfChanges extends __protoMessage3157 {
     return proto3.util.equals(_SectionOfChanges, a, b2);
   }
   static $() {
-    return ["SectionOfChanges|1 id 9|2 number 5|3 repo_id 9|4 title 9|5 description 9|6 head_ref 9|7 base_ref 9|9 status #0|10 created_at #1|11 updated_at #1|12 merged_at #1?|13 closed_at #1?|14 head_sha 9|15 base_sha 9|16 additions 5|17 deletions 5|18 changed_files 5|19 version_count 5|20 review_decision 9?|21 reviewers #2*|22 total_thread_count 5|23 unresolved_thread_count 5|24 parent_change_id 9?|25 stack_id 9?|26 repo_namespace 9|27 repo_name 9|31 author #3|32 viewer_last_viewed_at #1?", SectionOfChangesStatus, Timestamp, SectionOfChangesReviewer, ActorWithDisplay];
+    return ["SectionOfChanges|1 id 9|2 number 5|3 repo_id 9|4 title 9|5 description 9|6 head_ref 9|7 base_ref 9|9 status #0|10 created_at #1|11 updated_at #1|12 merged_at #1?|13 closed_at #1?|14 head_sha 9|15 base_sha 9|16 additions 5|17 deletions 5|18 changed_files 5|19 version_count 5|20 review_decision 9?|21 reviewers #2*|22 total_thread_count 5|23 unresolved_thread_count 5|24 parent_change_id 9?|25 stack_id 9?|26 repo_namespace 9|27 repo_name 9|31 author #3|32 viewer_last_viewed_at #1?|33 discussion_comment_count 5?|34 agent_wrote 8?", SectionOfChangesStatus, Timestamp, SectionOfChangesReviewer, ActorWithDisplay];
   }
 };
 var SectionOfChangesReviewer = class _SectionOfChangesReviewer extends __protoMessage3157 {

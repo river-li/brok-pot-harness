@@ -1,6 +1,6 @@
 var import_promises78 = require("node:fs/promises");
-var import_node_path164 = require("node:path");
-init_dist();
+var import_node_path163 = require("node:path");
+init_dist2();
 var CLOUD_AGENT_DOCUMENT_BYTE_LIMIT = ATTACHMENT_BYTE_LIMIT;
 var CLOUD_AGENT_VIDEO_BYTE_LIMIT = Math.min(
   VIDEO_BYTE_LIMIT,
@@ -28,7 +28,7 @@ function formatCloudAgentAttachmentsOverTotalNotice(over) {
   return `'${over.url}' would take the attachments on this call past ${CLOUD_AGENT_ATTACHMENTS_TOTAL_LIMIT_LABEL} in total (the ${over.alreadyAttached} before it already add up to ${formatMegabytes(over.bytesSoFar)}; the backend accepts one ${formatMegabytes(BACKEND_REQUEST_BODY_SIZE_LIMIT_BYTES)} request and the prompt needs headroom). Attach fewer or smaller files, or split them between the launch and a follow-up reply.`;
 }
 function isEnvFileName(name17) {
-  const base = import_node_path164.posix.basename(name17).toLowerCase();
+  const base = import_node_path163.posix.basename(name17).toLowerCase();
   return base === ".env" || base.startsWith(".env.") || base.endsWith(".env");
 }
 function envFileRefusedMessage(url2) {
@@ -36,15 +36,15 @@ function envFileRefusedMessage(url2) {
 }
 function normalizedBoxPathFromFileUrl(url2) {
   const rawBoxPath = posixPathFromFileUrl(url2);
-  return rawBoxPath == null ? null : import_node_path164.posix.normalize(rawBoxPath);
+  return rawBoxPath == null ? null : import_node_path163.posix.normalize(rawBoxPath);
 }
 function toPhysicalBoxPath(boxPath) {
-  const normalized = import_node_path164.posix.normalize(boxPath);
+  const normalized = import_node_path163.posix.normalize(boxPath);
   const aliasPrefix = `${SAND_BOX_MODEL_VISIBLE_DATA_ROOT}/`;
   return normalized.startsWith(aliasPrefix) ? `${SAND_BOX_DATA_ROOT}/${normalized.slice(aliasPrefix.length)}` : normalized;
 }
 function toAliasBoxPath(boxPath) {
-  const normalized = import_node_path164.posix.normalize(boxPath);
+  const normalized = import_node_path163.posix.normalize(boxPath);
   const physicalPrefix = `${SAND_BOX_DATA_ROOT}/`;
   return normalized.startsWith(physicalPrefix) ? `${SAND_BOX_MODEL_VISIBLE_DATA_ROOT}/${normalized.slice(physicalPrefix.length)}` : normalized;
 }
@@ -145,7 +145,7 @@ async function loadCloudAgentAttachments({
               kind: media.kind === "video" ? "video" : "document",
               data: read.data,
               path: read.path,
-              filename: import_node_path164.posix.basename(boxPath),
+              filename: import_node_path163.posix.basename(boxPath),
               mimeType: media.mimeType
             });
           }
@@ -194,8 +194,8 @@ async function readCloudAgentAttachment({
     });
     if (data.byteLength > byteLimit) return { kind: "too-large" };
     return { kind: "loaded", data, path: boxPath };
-  } catch (error41) {
-    if (error41 instanceof BoxFileTooLargeError) {
+  } catch (error42) {
+    if (error42 instanceof BoxFileTooLargeError) {
       return { kind: "too-large" };
     }
     return { kind: "unreadable" };

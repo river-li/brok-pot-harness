@@ -35,7 +35,7 @@ var boxStoreSyncExtension = defineHostExtension({
         maxAttempts: BOX_STORE_MANIFEST_RETRY_ATTEMPTS,
         initialDelayMs: BOX_STORE_MANIFEST_RETRY_DELAY_MS,
         maxDelayMs: BOX_STORE_MANIFEST_RETRY_DELAY_MS,
-        shouldRetry: (error41) => error41 instanceof BoxStoreCanonicalWriteConflictError
+        shouldRetry: (error42) => error42 instanceof BoxStoreCanonicalWriteConflictError
       }),
       chromeStageRetry: createRetryPolicy({
         name: "box-store-sync-chrome-stage",

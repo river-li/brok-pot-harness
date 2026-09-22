@@ -28,7 +28,7 @@ function splitRestMcpCursorAuthHeader(serverUrl, headers) {
   };
 }
 function wrapFetchWithRestMcpCursorAuthHeader(supplier, allowedOrigin, baseFetch) {
-  return (url2, init) => __awaiter29(this, void 0, void 0, function* () {
+  return (url2, init) => __awaiter30(this, void 0, void 0, function* () {
     let requestOrigin;
     try {
       requestOrigin = new URL(typeof url2 === "string" ? url2 : url2.toString()).origin;
@@ -47,12 +47,12 @@ function wrapFetchWithRestMcpCursorAuthHeader(supplier, allowedOrigin, baseFetch
     return baseFetch(url2, Object.assign(Object.assign({}, init), { headers: requestHeaders, redirect: "manual" }));
   });
 }
-var __awaiter29;
+var __awaiter30;
 var init_rest_mcp_cursor_auth = __esm({
   "../packages/mcp-core/dist/transport/rest-mcp-cursor-auth.js"() {
     "use strict";
     init_dist2();
-    __awaiter29 = function(thisArg, _arguments, P2, generator) {
+    __awaiter30 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve14) {
           resolve14(value);

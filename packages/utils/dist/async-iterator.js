@@ -1,5 +1,5 @@
 function getFirstItem(iterable) {
-  return __awaiter8(this, void 0, void 0, function* () {
+  return __awaiter9(this, void 0, void 0, function* () {
     const iterator = iterable[Symbol.asyncIterator]();
     const first = yield iterator.next();
     if (first.done) {
@@ -20,11 +20,11 @@ function getFirstItem(iterable) {
     return { firstItem: first.value, rest };
   });
 }
-var __awaiter8, __await4, __asyncGenerator4;
+var __awaiter9, __await4, __asyncGenerator4;
 var init_async_iterator = __esm({
   "../packages/utils/dist/async-iterator.js"() {
     "use strict";
-    __awaiter8 = function(thisArg, _arguments, P2, generator) {
+    __awaiter9 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve29) {
           resolve29(value);

@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 init_zod();
 init_system_errno();
 var X11_UNIX_DIR = "/tmp/.X11-unix";
@@ -77,8 +77,8 @@ async function discoverMonitorPorts(reportFailure) {
   let entries;
   try {
     entries = await (0, import_promises50.readdir)(X11_UNIX_DIR);
-  } catch (error41) {
-    reportFailure("discover-monitor-ports", error41);
+  } catch (error42) {
+    reportFailure("discover-monitor-ports", error42);
     return { ok: false };
   }
   const ports = [];
@@ -133,9 +133,9 @@ async function listPageTargetsOnPort(port, fetchImpl) {
       });
     }
     return { ok: true, targets };
-  } catch (error41) {
-    if (findSystemErrno(error41) === "ECONNREFUSED") return { ok: true, targets: [] };
-    return { ok: false, error: error41 };
+  } catch (error42) {
+    if (findSystemErrno(error42) === "ECONNREFUSED") return { ok: true, targets: [] };
+    return { ok: false, error: error42 };
   }
 }
 async function listTargetsOnPort(port, item, fetchImpl) {
@@ -185,12 +185,12 @@ async function evaluateOnTarget(target, expression) {
       const socket = new WebSocket(target.webSocketDebuggerUrl);
       let settled = false;
       const abort = () => finish(new Error("CDP command timed out"));
-      const finish = (error41, value) => {
+      const finish = (error42, value) => {
         if (settled) return;
         settled = true;
         signal.removeEventListener("abort", abort);
         socket.close();
-        if (error41 != null) reject2(error41);
+        if (error42 != null) reject2(error42);
         else resolve29(value);
       };
       signal.addEventListener("abort", abort, { once: true });
@@ -208,8 +208,8 @@ async function evaluateOnTarget(target, expression) {
         let message;
         try {
           message = JSON.parse(event.data);
-        } catch (error41) {
-          finish(new Error("CDP response was not valid JSON", { cause: error41 }));
+        } catch (error42) {
+          finish(new Error("CDP response was not valid JSON", { cause: error42 }));
           return;
         }
         const envelope = cdpMessageIdSchema.safeParse(message);
@@ -578,8 +578,8 @@ async function inspectTarget(target, reportFailure) {
   let value;
   try {
     value = await evaluateOnTarget(target, `(${inspectBrowserDocument.toString()})()`);
-  } catch (error41) {
-    reportFailure("inspect-target", error41);
+  } catch (error42) {
+    reportFailure("inspect-target", error42);
     return null;
   }
   const parsed2 = browserPageStateSchema.safeParse(value);
@@ -594,11 +594,11 @@ function hostFromSite(raw) {
 function normalizedCredentialPathname(pathname) {
   return pathname.length > 1 ? pathname.replace(/\/+$/, "") || "/" : pathname;
 }
-function filledWhatFor(request3) {
-  return request3.username == null || request3.username.trim().length === 0 ? "the saved password" : "the saved login";
+function filledWhatFor(request5) {
+  return request5.username == null || request5.username.trim().length === 0 ? "the saved password" : "the saved login";
 }
-function unconfirmedSubmitDetail(request3, host) {
-  return `Filled ${filledWhatFor(request3)} in ${host} and submitted it, but the page kept the sign-in form up, which async logins do while the request is in flight. Continue with a computerUse subagent to check whether the sign-in went through before doing anything else; if it is still on the sign-in form, use request_box_help rather than requesting this credential again.`;
+function unconfirmedSubmitDetail(request5, host) {
+  return `Filled ${filledWhatFor(request5)} in ${host} and submitted it, but the page kept the sign-in form up, which async logins do while the request is in flight. Continue with a computerUse subagent to check whether the sign-in went through before doing anything else; if it is still on the sign-in form, use request_box_help rather than requesting this credential again.`;
 }
 function trustedBrowserOrigin(raw) {
   const value = raw.trim();
@@ -736,7 +736,7 @@ var BrowserCredentialFiller = class {
     this.discoverTargets = options2.discoverTargets ?? ((item) => discoverMatchingTargets(item, reportFailure));
     const runInspection = options2.inspectTarget ?? ((target) => inspectTarget(target, reportFailure));
     this.inspectTarget = (target) => this.enqueueCdpOperation(target, () => runInspection(target));
-    this.executeFill = (request3) => this.enqueueCdpOperation(request3, () => options2.executeFill(request3));
+    this.executeFill = (request5) => this.enqueueCdpOperation(request5, () => options2.executeFill(request5));
     this.audit = options2.audit ?? (() => void 0);
   }
   async enqueueCdpOperation(target, operation) {
@@ -763,18 +763,18 @@ var BrowserCredentialFiller = class {
     return await this.inspectTarget(target);
   }
   auditFill(args) {
-    const { request: request3 } = args;
-    const sensitiveValues = "password" in request3 ? [request3.username, request3.password, request3.oneTimeCode] : [request3.oneTimeCode];
+    const { request: request5 } = args;
+    const sensitiveValues = "password" in request5 ? [request5.username, request5.password, request5.oneTimeCode] : [request5.oneTimeCode];
     this.audit(
       {
         event: args.event,
-        operation: args.operation ?? ("password" in request3 ? "browser-fill" : "browser-one-time-code-fill"),
+        operation: args.operation ?? ("password" in request5 ? "browser-fill" : "browser-one-time-code-fill"),
         outcome: args.outcome,
         reason: args.reason,
         fillRefusalReason: args.fillRefusalReason,
         inForm: args.inForm,
         targetUrl: args.targetUrl,
-        credentialId: request3.item.credentialId,
+        credentialId: request5.item.credentialId,
         elements: args.elements ?? [],
         submitRequested: true,
         approvalMode: args.event === "auto-fill" ? "always-allow" : "allow-once"
@@ -782,7 +782,7 @@ var BrowserCredentialFiller = class {
       sensitiveValues.filter((value) => value !== void 0)
     );
   }
-  async fillSelectedTarget(targetWebSocketDebuggerUrl, request3, event = "allow-once", options2 = {}) {
+  async fillSelectedTarget(targetWebSocketDebuggerUrl, request5, event = "allow-once", options2 = {}) {
     const operation = options2.operation ?? "browser-fill";
     const discovery = await this.listPages();
     const target = discovery.targets.find(
@@ -791,11 +791,11 @@ var BrowserCredentialFiller = class {
     if (target == null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         operation,
         outcome: "refused",
         reason: "target-closed",
-        targetUrl: request3.targetSite
+        targetUrl: request5.targetSite
       });
       return {
         filled: false,
@@ -803,10 +803,10 @@ var BrowserCredentialFiller = class {
         cleared: true
       };
     }
-    if (trustedBrowserOrigin(target.url) !== trustedBrowserOrigin(request3.targetSite) || matchCredentialItemToSite(request3.item, target.url) == null) {
+    if (trustedBrowserOrigin(target.url) !== trustedBrowserOrigin(request5.targetSite) || matchCredentialItemToSite(request5.item, target.url) == null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         operation,
         outcome: "refused",
         reason: "target-changed",
@@ -818,11 +818,11 @@ var BrowserCredentialFiller = class {
         cleared: true
       };
     }
-    const execution = await this.executeTargetFill(target, request3, options2.steps);
+    const execution = await this.executeTargetFill(target, request5, options2.steps);
     const audit = credentialFillAuditResult(execution.result);
     this.auditFill({
       event,
-      request: request3,
+      request: request5,
       operation,
       ...audit,
       targetUrl: execution.audit?.targetUrl ?? target.url,
@@ -839,14 +839,14 @@ var BrowserCredentialFiller = class {
       ...stepOf(execution),
       ...result.submitConfirmed === false ? {
         detail: unconfirmedSubmitDetail(
-          request3,
+          request5,
           hostFromSite(target.url) ?? "the sign-in page"
         )
       } : {},
       ...clearanceOf(result)
     };
   }
-  async fillOneTimeCodeOnTarget(targetWebSocketDebuggerUrl, request3, event) {
+  async fillOneTimeCodeOnTarget(targetWebSocketDebuggerUrl, request5, event) {
     const discovery = await this.listPages();
     const target = discovery.targets.find(
       (candidate) => candidate.webSocketDebuggerUrl === targetWebSocketDebuggerUrl
@@ -854,18 +854,18 @@ var BrowserCredentialFiller = class {
     if (target == null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "refused",
         reason: "target-closed",
-        targetUrl: request3.targetSite
+        targetUrl: request5.targetSite
       });
       return { filled: false, detail: "the verification page is no longer open", cleared: true };
     }
     const expectedOrigin = trustedBrowserOrigin(target.url);
-    if (expectedOrigin == null || expectedOrigin !== trustedBrowserOrigin(request3.targetSite) || matchCredentialItemToSite(request3.item, target.url) == null) {
+    if (expectedOrigin == null || expectedOrigin !== trustedBrowserOrigin(request5.targetSite) || matchCredentialItemToSite(request5.item, target.url) == null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "refused",
         reason: "target-changed",
         targetUrl: target.url
@@ -880,7 +880,7 @@ var BrowserCredentialFiller = class {
     if (state === null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "failed",
         reason: "page-unavailable",
         targetUrl: target.url
@@ -893,10 +893,10 @@ var BrowserCredentialFiller = class {
     }
     const liveUrl = state.audit?.targetUrl ?? target.url;
     const livePage = URL.canParse(liveUrl) ? new URL(liveUrl) : null;
-    if (livePage == null || trustedBrowserOrigin(liveUrl) !== expectedOrigin || matchCredentialItemToSite(request3.item, liveUrl) == null) {
+    if (livePage == null || trustedBrowserOrigin(liveUrl) !== expectedOrigin || matchCredentialItemToSite(request5.item, liveUrl) == null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "refused",
         reason: "target-changed",
         targetUrl: liveUrl
@@ -910,7 +910,7 @@ var BrowserCredentialFiller = class {
     if (state.formKind !== "one-time-code") {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "refused",
         reason: "no-one-time-code-field",
         targetUrl: liveUrl,
@@ -931,14 +931,14 @@ var BrowserCredentialFiller = class {
       targetId: target.targetId,
       expectedOrigin,
       expectedPathname: normalizedCredentialPathname(livePage.pathname),
-      allowedFormActionOrigins: allowedFormActionOriginsFor(request3.item, expectedOrigin),
+      allowedFormActionOrigins: allowedFormActionOriginsFor(request5.item, expectedOrigin),
       step: "one-time-code",
-      oneTimeCode: request3.oneTimeCode,
+      oneTimeCode: request5.oneTimeCode,
       submit: true
     });
     this.auditFill({
       event,
-      request: request3,
+      request: request5,
       ...credentialFillAuditResult(result),
       targetUrl: liveUrl,
       elements: state.audit?.elements
@@ -1016,36 +1016,36 @@ var BrowserCredentialFiller = class {
       targetWebSocketDebuggerUrl: target.webSocketDebuggerUrl
     };
   }
-  async fill(request3, event = "allow-once") {
-    const picked = await this.pickFillTarget(request3, event);
-    return picked.ok ? await this.fillPickedTarget(picked.target, request3, event) : picked.result;
+  async fill(request5, event = "allow-once") {
+    const picked = await this.pickFillTarget(request5, event);
+    return picked.ok ? await this.fillPickedTarget(picked.target, request5, event) : picked.result;
   }
-  async pickFillTarget(request3, event = "allow-once") {
-    const requestedOrigin = trustedBrowserOrigin(request3.targetSite);
-    const requestedHost = hostFromSite(request3.targetSite);
+  async pickFillTarget(request5, event = "allow-once") {
+    const requestedOrigin = trustedBrowserOrigin(request5.targetSite);
+    const requestedHost = hostFromSite(request5.targetSite);
     if (requestedOrigin == null || requestedHost == null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "refused",
         reason: "invalid-target-url",
-        targetUrl: request3.targetSite
+        targetUrl: request5.targetSite
       });
       return {
         ok: false,
         result: { filled: false, detail: "the requested login URL is invalid", cleared: true }
       };
     }
-    const targets = (await this.discoverTargets(request3.item)).filter(
+    const targets = (await this.discoverTargets(request5.item)).filter(
       (target2) => trustedBrowserOrigin(target2.url) === requestedOrigin && hostFromSite(target2.url) === requestedHost
     );
     if (targets.length === 0) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "refused",
         reason: "no-matching-page",
-        targetUrl: request3.targetSite
+        targetUrl: request5.targetSite
       });
       return {
         ok: false,
@@ -1058,16 +1058,16 @@ var BrowserCredentialFiller = class {
     }
     const target = await chooseBrowserCredentialTarget(
       targets,
-      request3.targetSite,
+      request5.targetSite,
       this.inspectTarget
     );
     if (target == null) {
       this.auditFill({
         event,
-        request: request3,
+        request: request5,
         outcome: "refused",
         reason: "ambiguous-page",
-        targetUrl: request3.targetSite
+        targetUrl: request5.targetSite
       });
       return {
         ok: false,
@@ -1080,12 +1080,12 @@ var BrowserCredentialFiller = class {
     }
     return { ok: true, target };
   }
-  async fillPickedTarget(target, request3, event = "allow-once") {
-    const execution = await this.executeTargetFill(target, request3);
+  async fillPickedTarget(target, request5, event = "allow-once") {
+    const execution = await this.executeTargetFill(target, request5);
     const audit = credentialFillAuditResult(execution.result);
     this.auditFill({
       event,
-      request: request3,
+      request: request5,
       ...audit,
       targetUrl: execution.audit?.targetUrl ?? target.url,
       elements: execution.audit?.elements
@@ -1105,10 +1105,10 @@ var BrowserCredentialFiller = class {
     }
     const filled = { filled: true, submitted: result.submitted, target, ...stepOf(execution) };
     if (execution.step === "username-first") return { ...filled, ...clearance };
-    const filledWhat = filledWhatFor(request3);
+    const filledWhat = filledWhatFor(request5);
     let detail;
     if (result.submitConfirmed === false) {
-      detail = unconfirmedSubmitDetail(request3, host);
+      detail = unconfirmedSubmitDetail(request5, host);
     } else if (result.submitted) {
       detail = `Filled ${filledWhat} in ${host}.`;
     } else {
@@ -1116,10 +1116,10 @@ var BrowserCredentialFiller = class {
     }
     return { ...filled, detail, ...clearance };
   }
-  async executeTargetFill(target, request3, steps = ["login", "username-first"]) {
+  async executeTargetFill(target, request5, steps = ["login", "username-first"]) {
     const targetUrl = URL.canParse(target.url) ? new URL(target.url) : null;
     const expectedOrigin = trustedBrowserOrigin(target.url);
-    if (targetUrl == null || expectedOrigin == null || expectedOrigin !== trustedBrowserOrigin(request3.targetSite) || matchCredentialItemToSite(request3.item, target.url) == null) {
+    if (targetUrl == null || expectedOrigin == null || expectedOrigin !== trustedBrowserOrigin(request5.targetSite) || matchCredentialItemToSite(request5.item, target.url) == null) {
       return { result: { kind: "refused", reason: "origin-mismatch", cleared: true } };
     }
     const state = await this.inspectTarget(target);
@@ -1142,7 +1142,7 @@ var BrowserCredentialFiller = class {
         audit: state.audit
       };
     }
-    if (state.formKind === "username-first" && (request3.username == null || request3.username.trim().length === 0)) {
+    if (state.formKind === "username-first" && (request5.username == null || request5.username.trim().length === 0)) {
       return {
         result: { kind: "refused", reason: "username-field-missing", cleared: true },
         audit: state.audit
@@ -1155,14 +1155,14 @@ var BrowserCredentialFiller = class {
         expectedOrigin,
         expectedPathname: normalizedCredentialPathname(targetUrl.pathname),
         allowedFormActionOrigins: allowedFormActionOriginsForFill(
-          request3.item,
+          request5.item,
           expectedOrigin,
           state
         ),
         step: state.formKind,
-        ...request3.username == null || request3.username.trim().length === 0 ? {} : { username: request3.username },
-        password: request3.password,
-        ...state.formKind === "login" && request3.oneTimeCode !== void 0 ? { oneTimeCode: request3.oneTimeCode } : {},
+        ...request5.username == null || request5.username.trim().length === 0 ? {} : { username: request5.username },
+        password: request5.password,
+        ...state.formKind === "login" && request5.oneTimeCode !== void 0 ? { oneTimeCode: request5.oneTimeCode } : {},
         submit: true
       }),
       audit: state.audit,

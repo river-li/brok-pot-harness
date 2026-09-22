@@ -65,7 +65,7 @@ ${completion.result}${origin}${roomOrigin}`;
     instruction = AUTOMATION_PARENT_WAKE_INSTRUCTION;
   } else if (isAllQuietOrigin(completions)) {
     instruction = QUIET_REVIVAL_INSTRUCTION;
-  } else if (context2.gates.canvases() && completions.length === 1 && isCanvasProductionCompletion(completions[0], context2.canvasCursorAgentIds)) {
+  } else if (completions.length === 1 && isCanvasProductionCompletion(completions[0], context2.canvasCursorAgentIds)) {
     instruction = CANVAS_REVIVAL_INSTRUCTION;
   }
   return [

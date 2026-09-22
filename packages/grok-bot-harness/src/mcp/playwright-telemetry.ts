@@ -37,20 +37,20 @@ var PlaywrightWindowUnavailableError = class extends CustomToolCallError {
     });
   }
 };
-function playwrightToolCallErrorClass(error41) {
-  if (error41 instanceof PlaywrightWindowUnavailableError) return "window_unavailable";
-  if (error41 instanceof SandBrowserAutoReviewBlockedError) return "auto_review_blocked";
-  if (error41 instanceof McpServerDoesNotExistError) return "server_missing";
-  if (error41 instanceof CustomToolCallError) return AGENT_CLASSIFICATION_CLASS[error41.classification];
-  if (error41 instanceof ConnectError) {
-    if (error41.code === Code.Canceled) return "cancelled";
-    if (error41.code === Code.DeadlineExceeded) return "timeout";
+function playwrightToolCallErrorClass(error42) {
+  if (error42 instanceof PlaywrightWindowUnavailableError) return "window_unavailable";
+  if (error42 instanceof SandBrowserAutoReviewBlockedError) return "auto_review_blocked";
+  if (error42 instanceof McpServerDoesNotExistError) return "server_missing";
+  if (error42 instanceof CustomToolCallError) return AGENT_CLASSIFICATION_CLASS[error42.classification];
+  if (error42 instanceof ConnectError) {
+    if (error42.code === Code.Canceled) return "cancelled";
+    if (error42.code === Code.DeadlineExceeded) return "timeout";
     return "connect_error";
   }
-  if (error41 instanceof ToolCallAbortedError) return "cancelled";
-  if (error41 instanceof ToolTimeoutError) return "timeout";
-  if (error41 instanceof Error && error41.name === "AbortError") return "cancelled";
-  if (error41 instanceof Error && error41.name === "TimeoutError") return "timeout";
+  if (error42 instanceof ToolCallAbortedError) return "cancelled";
+  if (error42 instanceof ToolTimeoutError) return "timeout";
+  if (error42 instanceof Error && error42.name === "AbortError") return "cancelled";
+  if (error42 instanceof Error && error42.name === "TimeoutError") return "timeout";
   return "unexpected_error";
 }
 var attaches = createCounter("sand.playwright.attach", {
@@ -65,6 +65,13 @@ var toolCalls = createHistogram("sand.playwright.tool_call_ms", {
   description: "Terminal Playwright browser tool attempts, admission failures included",
   labelNames: ["tool", "outcome", "stage", "error_class", "harness"]
 });
+var snapshotRecoveries = createCounter("sand.playwright.snapshot_recovered", {
+  description: "Scoped snapshots answered with the whole page after the target failed to resolve",
+  labelNames: ["reason", "harness"]
+});
+function recordPlaywrightSnapshotRecovery(ctx, args) {
+  snapshotRecoveries.increment(ctx, 1, args);
+}
 function recordPlaywrightAttach(ctx, args) {
   const { outcome, source, boxImageSha } = args;
   attaches.increment(ctx, 1, { outcome, source, box_image_sha: boxImageSha });

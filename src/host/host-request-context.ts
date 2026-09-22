@@ -1,4 +1,4 @@
-var import_node_os30 = require("node:os");
+var import_node_os28 = require("node:os");
 function resolveTimeZone() {
   try {
     return new Intl.DateTimeFormat().resolvedOptions().timeZone || void 0;
@@ -18,7 +18,7 @@ function createHostRequestContext(options2) {
     resolve: () => {
       const userFullName = normalizeSandUserFullName(resolveUserFullName());
       return {
-        osVersion: `${(0, import_node_os30.type)()} ${(0, import_node_os30.release)()}`,
+        osVersion: `${(0, import_node_os28.type)()} ${(0, import_node_os28.release)()}`,
         shell,
         timeZone: resolveUserTimeZone() ?? resolveTimeZone(),
         transcriptsFolder,

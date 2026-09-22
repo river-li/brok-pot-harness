@@ -7,10 +7,10 @@ var SandHostEventBus = class {
   reportFailure;
   listeners = /* @__PURE__ */ new Set();
   capabilityEvents = createHostEvents({
-    onHandlerFailure: (topic, error41) => this.reportFailure({
+    onHandlerFailure: (topic, error42) => this.reportFailure({
       kind: "subscriber_failed",
       topic,
-      errorClass: errorLogTag(error41)
+      errorClass: errorLogTag(error42)
     })
   });
   emit(...args) {
@@ -21,8 +21,8 @@ var SandHostEventBus = class {
     for (const listener of this.listeners) {
       try {
         listener(event);
-      } catch (error41) {
-        this.reportFailure({ kind: "listener_failed", errorClass: errorLogTag(error41) });
+      } catch (error42) {
+        this.reportFailure({ kind: "listener_failed", errorClass: errorLogTag(error42) });
       }
     }
   }

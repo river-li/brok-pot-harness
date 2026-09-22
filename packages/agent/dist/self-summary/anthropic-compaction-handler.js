@@ -52,9 +52,9 @@ var __disposeResources7 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger19 = createLogger("@anysphere/agent");
 var MODE_LABELS = { mode: "explicit" };
@@ -230,8 +230,8 @@ ${rawSummary.text}
             this.stateHandler.incrementSelfSummaryCount();
           }
         };
-      } catch (error41) {
-        const errorKind = getRetryDirective(error41, {
+      } catch (error42) {
+        const errorKind = getRetryDirective(error42, {
           transientRetryDelayMs: 0
         }).errorType;
         compactionStatus.increment(innerCtx, 1, {
@@ -239,7 +239,7 @@ ${rawSummary.text}
           errorKind,
           ...MODE_LABELS
         });
-        throw error41;
+        throw error42;
       } finally {
         compactionTimeTakenMs.histogram(innerCtx, performance.now() - startTime, MODE_LABELS);
       }

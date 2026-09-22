@@ -1,6 +1,6 @@
 var import_promises37 = require("node:fs/promises");
 var import_node_path68 = require("node:path");
-var __awaiter61 = function(thisArg, _arguments, P2, generator) {
+var __awaiter63 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -38,7 +38,7 @@ function skillPathSegments(relativePath) {
   return segments;
 }
 function synthesizeSkillPluginDir(options2) {
-  return __awaiter61(this, void 0, void 0, function* () {
+  return __awaiter63(this, void 0, void 0, function* () {
     var _a19;
     const { skills, targetDir, pluginName } = options2;
     if (skills.length === 0) {

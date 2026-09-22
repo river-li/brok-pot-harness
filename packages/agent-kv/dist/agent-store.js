@@ -1,4 +1,4 @@
-var __awaiter43 = function(thisArg, _arguments, P2, generator) {
+var __awaiter45 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -26,11 +26,7 @@ var __awaiter43 = function(thisArg, _arguments, P2, generator) {
   });
 };
 var AgentModes = ["default", "plan", "debug", "search"];
-var ApprovalModeSettings = [
-  "allowlist",
-  "unrestricted",
-  "auto-review"
-];
+var ApprovalModeSettings = ["allowlist", "unrestricted", "auto-review"];
 var BLOB_ENCRYPTION_KEY_LENGTH_BYTES = 32;
 var BLOB_ENCRYPTION_KEY_HEX_PATTERN = /^[0-9a-f]+$/;
 function generateBlobEncryptionKeyHex() {
@@ -149,7 +145,7 @@ var conversationSummarySerde = new ProtoSerde(ConversationSummary);
 var shellCommandSerde = new ProtoSerde(ShellCommand);
 var shellOutputSerde = new ProtoSerde(ShellOutput);
 function deriveConversationStateFromStructure(ctx, structure, blobStore) {
-  return __awaiter43(this, void 0, void 0, function* () {
+  return __awaiter45(this, void 0, void 0, function* () {
     const newState = new ConversationState();
     const turns = [];
     const turnBlobs = structure.turns;
@@ -254,7 +250,7 @@ var AgentStore2 = class {
   }
   /** Last agent turn's request_id, if any. */
   getLastRequestIdFromConversation(ctx) {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       const turns = this.conversationStateStructure.turns;
       if (turns.length === 0)
         return null;
@@ -273,7 +269,7 @@ var AgentStore2 = class {
     });
   }
   getFullConversation(ctx) {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       return this.deserializeConversationStateStructure(ctx, this.conversationStateStructure);
     });
   }
@@ -282,7 +278,7 @@ var AgentStore2 = class {
    * This resolves all blob IDs into actual data.
    */
   deserializeConversationStateStructure(ctx, structure) {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       return deriveConversationStateFromStructure(ctx, structure, this.blobStore);
     });
   }
@@ -292,7 +288,7 @@ var AgentStore2 = class {
    * subagent states, enabling complete UI reconstruction from checkpoint.
    */
   getFullConversationWithSubagents(ctx) {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       const structureSnapshot = this.conversationStateStructure;
       const conversationState = yield this.deserializeConversationStateStructure(ctx, structureSnapshot);
       const subagentStates = {};
@@ -318,7 +314,7 @@ var AgentStore2 = class {
     return this.getConversationStateStructure();
   }
   handleCheckpoint(ctx, checkpoint) {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       var _a19;
       const bytes = this.serde.serialize(checkpoint);
       const blobId = (_a19 = this.fixedRootBlobId) !== null && _a19 !== void 0 ? _a19 : yield getBlobId(bytes);
@@ -328,12 +324,12 @@ var AgentStore2 = class {
     });
   }
   resetFromDb(ctx) {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       yield this.tryResetFromDb(ctx);
     });
   }
   tryResetFromDb(ctx) {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       try {
         const rootBlobId = this.getMetadata("latestRootBlobId");
         if (!rootBlobId || rootBlobId.length === 0) {
@@ -355,7 +351,7 @@ var AgentStore2 = class {
     });
   }
   dispose() {
-    return __awaiter43(this, void 0, void 0, function* () {
+    return __awaiter45(this, void 0, void 0, function* () {
       if (this.blobStore instanceof Disposable) {
         yield this.blobStore.dispose();
       }

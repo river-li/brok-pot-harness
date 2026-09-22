@@ -1,4 +1,4 @@
-var import_node_fs101 = require("node:fs");
+var import_node_fs100 = require("node:fs");
 init_zod();
 var webBotAuthSignedCacheSchema = external_exports.record(
   external_exports.object({
@@ -40,5 +40,5 @@ function lookupWebBotAuthSignedDetail(origin, options2 = {}) {
   return source === void 0 ? { signed: entry.signed } : { signed: entry.signed, source };
 }
 function readCacheFile(path31) {
-  return (0, import_node_fs101.readFileSync)(path31, "utf8");
+  return (0, import_node_fs100.readFileSync)(path31, "utf8");
 }

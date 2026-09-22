@@ -17,8 +17,8 @@ function toPackedPlugin(source) {
   const pluginId = source.pluginId.trim();
   if (pluginId.length === 0) return null;
   const name17 = packedName(source, pluginId);
-  const description10 = source.description.trim();
-  if (description10.length > 0) return { name: name17, pluginId, description: description10 };
+  const description9 = source.description.trim();
+  if (description9.length > 0) return { name: name17, pluginId, description: description9 };
   return { name: name17, pluginId };
 }
 function packPluginsFromInstalled(installed, selected) {

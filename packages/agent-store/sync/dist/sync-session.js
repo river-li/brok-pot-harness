@@ -1,5 +1,5 @@
 init_esm2();
-var __awaiter17 = function(thisArg, _arguments, P2, generator) {
+var __awaiter18 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -52,7 +52,7 @@ function noop3() {
 var UNWIND_HARD_CAP_MULTIPLIER = 3;
 var RESUME_CHECK_INTERVAL_MS = 3e4;
 function waitForSettlement(promise2, timeoutMs) {
-  return __awaiter17(this, void 0, void 0, function* () {
+  return __awaiter18(this, void 0, void 0, function* () {
     let timer;
     const deadline = new Promise((resolve29) => {
       var _a19;
@@ -85,7 +85,7 @@ function rejectSettledRoundAsAborted(signal, outcome) {
   throw new AgentStoreSyncError(Object.assign({ code: "round_aborted", message: "sync round aborted before completion" }, reason !== void 0 ? { cause: reason } : {}));
 }
 function awaitBounded(promise2, timeoutMs) {
-  return __awaiter17(this, void 0, void 0, function* () {
+  return __awaiter18(this, void 0, void 0, function* () {
     if (timeoutMs <= 0) {
       yield promise2;
       return "settled";
@@ -106,14 +106,14 @@ function awaitBounded(promise2, timeoutMs) {
     }
   });
 }
-function isTimeoutClassifiedRoundError(error41) {
-  if (hasCooperativeRoundAbortInChain(error41)) {
+function isTimeoutClassifiedRoundError(error42) {
+  if (hasCooperativeRoundAbortInChain(error42)) {
     return false;
   }
-  if (error41 instanceof AgentStoreSyncError) {
-    return error41.code === "round_aborted" || error41.timeoutClass !== void 0;
+  if (error42 instanceof AgentStoreSyncError) {
+    return error42.code === "round_aborted" || error42.timeoutClass !== void 0;
   }
-  return isDeadlineExceededShaped(error41);
+  return isDeadlineExceededShaped(error42);
 }
 function isLifecycleRoundAbortMessage(message) {
   return message === "session closing" || message === "host resumed from suspend";
@@ -121,8 +121,8 @@ function isLifecycleRoundAbortMessage(message) {
 function isCooperativeRoundAbortMessage(message) {
   return isLifecycleRoundAbortMessage(message) || message.includes("still draining after watchdog abandon");
 }
-function hasRoundAbortInChain(error41, matches) {
-  let current = error41;
+function hasRoundAbortInChain(error42, matches) {
+  let current = error42;
   const seen = /* @__PURE__ */ new Set();
   while (typeof current === "object" && current !== null && !seen.has(current)) {
     seen.add(current);
@@ -133,14 +133,14 @@ function hasRoundAbortInChain(error41, matches) {
   }
   return false;
 }
-function hasCooperativeRoundAbortInChain(error41) {
-  return hasRoundAbortInChain(error41, isCooperativeRoundAbortMessage);
+function hasCooperativeRoundAbortInChain(error42) {
+  return hasRoundAbortInChain(error42, isCooperativeRoundAbortMessage);
 }
-function hasLifecycleRoundAbortInChain(error41) {
-  return hasRoundAbortInChain(error41, isLifecycleRoundAbortMessage);
+function hasLifecycleRoundAbortInChain(error42) {
+  return hasRoundAbortInChain(error42, isLifecycleRoundAbortMessage);
 }
-function isDeadlineExceededShaped(error41) {
-  let current = error41;
+function isDeadlineExceededShaped(error42) {
+  let current = error42;
   const seen = /* @__PURE__ */ new Set();
   while (typeof current === "object" && current !== null && !seen.has(current)) {
     seen.add(current);
@@ -155,25 +155,25 @@ function isDeadlineExceededShaped(error41) {
   return false;
 }
 function allSummaryErrorsTimeoutClassified(errors) {
-  return errors.length > 0 && errors.every((error41) => {
-    if (error41.code === "round_aborted") {
-      if (isCooperativeRoundAbortMessage(error41.message)) {
+  return errors.length > 0 && errors.every((error42) => {
+    if (error42.code === "round_aborted") {
+      if (isCooperativeRoundAbortMessage(error42.message)) {
         return false;
       }
     }
-    return error41.timeoutClass === "round" || error41.timeoutClass === "rpc";
+    return error42.timeoutClass === "round" || error42.timeoutClass === "rpc";
   });
 }
 var AgentStoreSyncSession = class _AgentStoreSyncSession {
   static open(options2) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       const session = new _AgentStoreSyncSession(options2);
       try {
         yield session.initialize();
         yield session.awaitOpenSettlement();
-      } catch (error41) {
+      } catch (error42) {
         yield session.awaitTeardown();
-        throw error41;
+        throw error42;
       }
       if (session.isClosing()) {
         yield session.awaitTeardown();
@@ -382,7 +382,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     return (_b2 = (_a19 = this.client).getResolvedStoreId) === null || _b2 === void 0 ? void 0 : _b2.call(_a19, { agentId: this.key });
   }
   awaitTeardown() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       if (this.teardownPromise !== void 0) {
         yield this.teardownPromise;
       }
@@ -390,7 +390,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
   }
   /** Waits for the unpause-triggered initial sync round, if any. */
   awaitOpenSettlement() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       const syncing = this.syncing;
       if (syncing !== void 0) {
         const abandoned = this.activeRoundAbandoned;
@@ -404,7 +404,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
    * when a round completes, otherwise `undefined`.
    */
   forceSync() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19;
       if (this.isClosing()) {
         return void 0;
@@ -417,7 +417,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
   }
   /** Path-scoped push for one relative path. */
   syncPath(relPath, options2) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       return yield this.syncPaths([relPath], options2);
     });
   }
@@ -426,7 +426,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
    * inbox request (or becomes holder and syncs locally).
    */
   syncPaths(relPaths, options2) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       if (this.isClosing()) {
         return void 0;
       }
@@ -443,8 +443,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
           const summary = yield engine.syncPaths(relPaths);
           this.emitSyncMetrics(summary);
           return summary;
-        } catch (error41) {
-          this.emitThrownSyncMetrics(error41);
+        } catch (error42) {
+          this.emitThrownSyncMetrics(error42);
           return void 0;
         }
       }
@@ -465,7 +465,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
    * what made a click poll a dead mount for the whole budget.
    */
   pullPaths(relPaths) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       if (this.isClosing()) {
         return { kind: "unavailable" };
       }
@@ -487,8 +487,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
         const summary = yield engine.pullPaths(relPaths);
         this.emitSyncMetrics(summary);
         return pullPathsAttemptFromRound(summary, engine.getState());
-      } catch (error41) {
-        this.emitThrownSyncMetrics(error41);
+      } catch (error42) {
+        this.emitThrownSyncMetrics(error42);
         return { kind: "failed" };
       }
     });
@@ -526,7 +526,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     void this.runSync();
   }
   recontendForLock() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19;
       if (this.isClosing() || ((_a19 = this.engine) === null || _a19 === void 0 ? void 0 : _a19.getState()) !== "passive") {
         return;
@@ -535,12 +535,12 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     });
   }
   close(options2) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       yield this.beginTeardown({ kind: "close", options: options2 });
     });
   }
   initialize() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       this.assertPathsSafe();
       const index = this.openIndex(this.paths.indexPath);
       this.index = index;
@@ -580,7 +580,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
           multipartMaxExpiryRefreshes: this.multipartMaxExpiryRefreshes,
           onPassiveIndexUpdated: this.onPassiveIndexUpdatedCallback,
           onStateChanged: (event) => this.onEngineStateChanged(event),
-          onWarn: (message, error41) => this.onEngineWarn(message, error41),
+          onWarn: (message, error42) => this.onEngineWarn(message, error42),
           tombstoneFullRefreshRounds: this.tombstoneFullRefreshRounds,
           tombstoneFullRefreshIntervalMs: this.tombstoneFullRefreshIntervalMs,
           tombstonePruneSlackMs: this.tombstonePruneSlackMs
@@ -588,9 +588,9 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
         this.engine = engine;
         yield engine.unpause();
         this.startResumeDetector();
-      } catch (error41) {
+      } catch (error42) {
         yield this.disposeConstructedResources(engine, index);
-        throw error41;
+        throw error42;
       }
     });
   }
@@ -634,7 +634,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     }
   }
   drainResumeRecovery(initialGapMs) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       let nextGapMs = initialGapMs;
       while (nextGapMs !== void 0 && !this.isClosing()) {
         const gapMs = nextGapMs;
@@ -646,7 +646,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
   }
   /** Abort the in-flight round, re-check lock ownership, and wake. */
   handleResume(gapMs) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       if (this.isClosing()) {
         return;
       }
@@ -689,7 +689,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
    * @returns true when a hard-cap abandon stopped the lock heartbeat.
    */
   drainRoundsForResume() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19, _b2, _c2;
       let sawTrackedRound = false;
       let abandonedUnhealthy = false;
@@ -765,7 +765,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
    * @returns true when the heartbeat was stopped as a last resort.
    */
   recoverWedgedScopedRound() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       const engine = this.engine;
       if (engine === void 0) {
         return false;
@@ -792,7 +792,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     return this.unwindHardCapMs() * (_AgentStoreSyncSession.RESUME_DRAIN_MAX_LAPS + 1);
   }
   beginTeardown(args) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19, _b2;
       if (this.lifecycle === "closed") {
         return;
@@ -820,7 +820,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     });
   }
   teardownInternal(options2) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19, _b2;
       this.clearSyncTimer();
       this.stopPathSyncRequestPolling();
@@ -943,12 +943,12 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
   }
   /** Best-effort engine teardown; swallows failures onto the error callback. */
   disposeEngine(engine_1, options_1) {
-    return __awaiter17(this, arguments, void 0, function* (engine, options2, deferLockRelease = false) {
+    return __awaiter18(this, arguments, void 0, function* (engine, options2, deferLockRelease = false) {
       if (options2.flush && this.guardedPathsSafe({ invalidateOnFailure: false })) {
         try {
           yield engine.dispose({ deferLockRelease });
-        } catch (error41) {
-          safeInvokeCallback(this.onSyncErrorCallback, error41);
+        } catch (error42) {
+          safeInvokeCallback(this.onSyncErrorCallback, error42);
         }
         return;
       }
@@ -958,8 +958,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
       }
       try {
         yield engine.dispose({ deferLockRelease });
-      } catch (error41) {
-        safeInvokeCallback(this.onSyncErrorCallback, error41);
+      } catch (error42) {
+        safeInvokeCallback(this.onSyncErrorCallback, error42);
       }
     });
   }
@@ -970,7 +970,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     (_a19 = this.activeRoundAbortController) === null || _a19 === void 0 ? void 0 : _a19.abort(new AgentStoreSyncError(Object.assign({ code: "round_aborted", message: reason }, cooperative ? {} : { timeoutClass: "round" })));
   }
   disposeConstructedResources(engine, index) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       this.stopResumeDetector();
       if (engine !== void 0) {
         try {
@@ -979,8 +979,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
         }
         try {
           yield engine.dispose();
-        } catch (error41) {
-          safeInvokeCallback(this.onSyncErrorCallback, error41);
+        } catch (error42) {
+          safeInvokeCallback(this.onSyncErrorCallback, error42);
         }
       }
       try {
@@ -1002,7 +1002,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     this.stopPathSyncRequestPolling();
   }
   awaitLockHolderPathSync(relPaths, options2) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19;
       const requestId2 = yield enqueuePathSyncRequest({
         filesDir: this.filesDir,
@@ -1040,8 +1040,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
           });
           this.emitSyncMetrics(summary);
           return summary;
-        } catch (error41) {
-          this.emitThrownSyncMetrics(error41);
+        } catch (error42) {
+          this.emitThrownSyncMetrics(error42);
           return void 0;
         }
       }
@@ -1069,7 +1069,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     }
   }
   checkExclusiveMutationClaim() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       const active = this.exclusiveMutationClaimCheck;
       if (active !== void 0) {
         yield active;
@@ -1079,8 +1079,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
       this.exclusiveMutationClaimCheck = operation;
       try {
         yield operation;
-      } catch (error41) {
-        this.onEngineWarn("exclusive mutation claim check failed", error41);
+      } catch (error42) {
+        this.onEngineWarn("exclusive mutation claim check failed", error42);
       } finally {
         if (this.exclusiveMutationClaimCheck === operation) {
           this.exclusiveMutationClaimCheck = void 0;
@@ -1089,7 +1089,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     });
   }
   checkExclusiveMutationClaimInternal() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19, _b2;
       const lockOwnerId = this.lockOwnerId;
       if (lockOwnerId === void 0 || this.isClosing() || ((_a19 = this.engine) === null || _a19 === void 0 ? void 0 : _a19.getState()) !== "running") {
@@ -1147,7 +1147,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     this.pathSyncRequestRetryNotBeforeMs = 0;
   }
   drainPathSyncRequests() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19;
       if (this.pathSyncRequestDrain !== void 0) {
         yield this.pathSyncRequestDrain;
@@ -1159,7 +1159,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
       if (Date.now() < this.pathSyncRequestRetryNotBeforeMs) {
         return;
       }
-      this.pathSyncRequestDrain = (() => __awaiter17(this, void 0, void 0, function* () {
+      this.pathSyncRequestDrain = (() => __awaiter18(this, void 0, void 0, function* () {
         var _a20;
         for (; ; ) {
           if (this.isClosing() || ((_a20 = this.engine) === null || _a20 === void 0 ? void 0 : _a20.getState()) !== "running") {
@@ -1171,8 +1171,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
             return;
           }
           const relPaths = /* @__PURE__ */ new Set();
-          for (const request3 of requests) {
-            for (const relPath of request3.relPaths) {
+          for (const request5 of requests) {
+            for (const relPath of request5.relPaths) {
               relPaths.add(relPath);
             }
           }
@@ -1188,14 +1188,14 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
             this.emitSyncMetrics(summary);
             const failedRelPaths = /* @__PURE__ */ new Set();
             let hasUnscopedError = false;
-            for (const error41 of summary.errors) {
-              if (error41.relPath === void 0) {
+            for (const error42 of summary.errors) {
+              if (error42.relPath === void 0) {
                 hasUnscopedError = true;
               } else {
-                failedRelPaths.add(error41.relPath);
+                failedRelPaths.add(error42.relPath);
               }
             }
-            const ackedIds = hasUnscopedError ? [] : requests.filter((request3) => request3.relPaths.every((relPath) => !failedRelPaths.has(relPath))).map((request3) => request3.id);
+            const ackedIds = hasUnscopedError ? [] : requests.filter((request5) => request5.relPaths.every((relPath) => !failedRelPaths.has(relPath))).map((request5) => request5.id);
             if (ackedIds.length === 0) {
               this.notePathSyncRequestDrainFailure();
               return;
@@ -1205,8 +1205,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
               filesDir: this.filesDir,
               requestIds: ackedIds
             });
-          } catch (error41) {
-            this.emitThrownSyncMetrics(error41);
+          } catch (error42) {
+            this.emitThrownSyncMetrics(error42);
             this.notePathSyncRequestDrainFailure();
             return;
           }
@@ -1217,13 +1217,13 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
       yield this.pathSyncRequestDrain;
     });
   }
-  onEngineWarn(message, error41) {
+  onEngineWarn(message, error42) {
     const callback = this.onWarnCallback;
     if (callback === void 0) {
       return;
     }
     try {
-      callback(message, error41);
+      callback(message, error42);
     } catch (_a19) {
     }
   }
@@ -1302,7 +1302,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     this.activeRoundAbandoned = void 0;
   }
   runSync() {
-    return __awaiter17(this, arguments, void 0, function* (options2 = { kind: "periodic" }) {
+    return __awaiter18(this, arguments, void 0, function* (options2 = { kind: "periodic" }) {
       if (this.isClosing()) {
         return void 0;
       }
@@ -1321,7 +1321,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     });
   }
   runFollowUpRound(explicitWaiters) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       const summary = yield this.executeSyncRound(true);
       this.resolveExplicitFollowUp(explicitWaiters, summary);
       if (!this.isClosing() && this.syncing === void 0 && this.syncTimer === void 0) {
@@ -1359,10 +1359,10 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     throw new AgentStoreSyncError(Object.assign({ code: "round_aborted", message: "host resumed from suspend" }, reason !== void 0 ? { cause: reason } : {}));
   }
   forceSyncWithWatchdog(engine, abortController, roundGeneration) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       const startedAt = monotonicNowMs();
       this.emitRoundLifecycle({ kind: "started" });
-      const observed = engine.forceSync({ signal: abortController.signal }).then((summary) => ({ kind: "fulfilled", summary }), (error41) => ({ kind: "rejected", error: error41 }));
+      const observed = engine.forceSync({ signal: abortController.signal }).then((summary) => ({ kind: "fulfilled", summary }), (error42) => ({ kind: "rejected", error: error42 }));
       if (this.syncRoundTimeoutMs === 0) {
         const settled = yield observed;
         if (abortController.signal.aborted || this.roundGeneration !== roundGeneration) {
@@ -1467,7 +1467,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
    * can take over. Best-effort; the engine drops to `passive` (`lock_lost`).
    */
   relinquishEngineLock() {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       var _a19;
       try {
         yield (_a19 = this.engine) === null || _a19 === void 0 ? void 0 : _a19.relinquishLock("lock_lost");
@@ -1477,7 +1477,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
   }
   /** Relinquish after a watchdog unwind or consecutive timeout failures. */
   applyRoundFailurePolicy(args) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       if (this.isClosing()) {
         return;
       }
@@ -1509,7 +1509,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     });
   }
   executeSyncRound(returnSummary) {
-    return __awaiter17(this, void 0, void 0, function* () {
+    return __awaiter18(this, void 0, void 0, function* () {
       if (this.isClosing()) {
         return void 0;
       }
@@ -1529,7 +1529,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
       this.activeRoundResumeRecoveryPending = false;
       const roundGeneration = ++this.roundGeneration;
       let roundPromise;
-      roundPromise = (() => __awaiter17(this, void 0, void 0, function* () {
+      roundPromise = (() => __awaiter18(this, void 0, void 0, function* () {
         let failed2 = false;
         let stoodAside = false;
         try {
@@ -1550,22 +1550,22 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
               failureTimeoutClassified: allSummaryErrorsTimeoutClassified(summary.errors)
             });
           }
-        } catch (error41) {
-          if (isSyncRoundStoodAsideError(error41)) {
+        } catch (error42) {
+          if (isSyncRoundStoodAsideError(error42)) {
             stoodAside = true;
             roundSummary = void 0;
           } else {
-            failed2 = !hasCooperativeRoundAbortInChain(error41);
+            failed2 = !hasCooperativeRoundAbortInChain(error42);
             roundSummary = void 0;
             const resumeOwnedRound = this.activeRoundResumeRecoveryPending;
-            if (!resumeOwnedRound && !hasLifecycleRoundAbortInChain(error41)) {
-              this.emitThrownSyncMetrics(error41);
-              safeInvokeCallback(this.onSyncErrorCallback, error41);
+            if (!resumeOwnedRound && !hasLifecycleRoundAbortInChain(error42)) {
+              this.emitThrownSyncMetrics(error42);
+              safeInvokeCallback(this.onSyncErrorCallback, error42);
             }
             if (this.isRoundOwner(roundPromise, roundGeneration)) {
               yield this.applyRoundFailurePolicy({
                 roundFailed: true,
-                failureTimeoutClassified: isTimeoutClassifiedRoundError(error41)
+                failureTimeoutClassified: isTimeoutClassifiedRoundError(error42)
               });
             }
           }
@@ -1644,12 +1644,12 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     try {
       this.validatePathsHook();
       return true;
-    } catch (error41) {
+    } catch (error42) {
       if (options2.invalidateOnFailure) {
         void this.beginTeardown({
           kind: "invalidate",
           options: { flush: false },
-          reason: String(error41)
+          reason: String(error42)
         });
       }
       return false;
@@ -1697,14 +1697,14 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     } catch (_c2) {
     }
   }
-  emitThrownSyncMetrics(error41) {
+  emitThrownSyncMetrics(error42) {
     var _a19, _b2;
     const metricsEmitter = this.metricsEmitter;
     if (metricsEmitter === void 0) {
       return;
     }
-    const errorClass = error41 instanceof AgentStoreSyncError ? error41.code : "unknown";
-    const timeoutClass = hasCooperativeRoundAbortInChain(error41) ? void 0 : error41 instanceof AgentStoreSyncError && error41.timeoutClass !== void 0 ? error41.timeoutClass : isDeadlineExceededShaped(error41) ? "rpc" : void 0;
+    const errorClass = error42 instanceof AgentStoreSyncError ? error42.code : "unknown";
+    const timeoutClass = hasCooperativeRoundAbortInChain(error42) ? void 0 : error42 instanceof AgentStoreSyncError && error42.timeoutClass !== void 0 ? error42.timeoutClass : isDeadlineExceededShaped(error42) ? "rpc" : void 0;
     try {
       (_a19 = metricsEmitter.onError) === null || _a19 === void 0 ? void 0 : _a19.call(metricsEmitter, Object.assign({ agentId: this.key, op: "unknown", errorClass }, timeoutClass !== void 0 ? { timeoutClass } : {}));
       (_b2 = metricsEmitter.onRoundCompleted) === null || _b2 === void 0 ? void 0 : _b2.call(metricsEmitter, {

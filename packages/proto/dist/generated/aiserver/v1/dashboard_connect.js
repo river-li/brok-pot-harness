@@ -76,6 +76,42 @@ var init_dashboard_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * @generated from rpc aiserver.v1.DashboardService.StartUnifyXLogin
+         */
+        startUnifyXLogin: {
+          name: "StartUnifyXLogin",
+          I: StartUnifyXLoginRequest,
+          O: StartUnifyXLoginResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.CompleteUnifyXLogin
+         */
+        completeUnifyXLogin: {
+          name: "CompleteUnifyXLogin",
+          I: CompleteUnifyXLoginRequest,
+          O: CompleteUnifyXLoginResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.StartCollapseSourceProof
+         */
+        startCollapseSourceProof: {
+          name: "StartCollapseSourceProof",
+          I: StartCollapseSourceProofRequest,
+          O: StartCollapseSourceProofResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.CompleteCollapseSourceProof
+         */
+        completeCollapseSourceProof: {
+          name: "CompleteCollapseSourceProof",
+          I: CompleteCollapseSourceProofRequest,
+          O: CompleteCollapseSourceProofResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.DashboardService.ProvisionUnifyGrokAccount
          */
         provisionUnifyGrokAccount: {
@@ -97,10 +133,10 @@ var init_dashboard_connect = __esm({
          * Partner-auth (xAI identity assertion) twins of the Cursor-session
          * individual-unification RPCs, so Grok's backend can drive the same funnel
          * for its own signed-in user. The person is always the assertion's subject;
-         * request bodies never carry an xAI identity. All five reuse the Cursor-entry
-         * step machine (DRAFT -> AWAITING_PAYMENT -> COLLAPSING -> FINALIZING ->
-         * DONE); payment stays on the Grok side and is observed via the shared
-         * identitydb billing row.
+         * request bodies never carry an xAI identity. The funnel RPCs reuse the
+         * Cursor-entry step machine (DRAFT -> AWAITING_PAYMENT -> COLLAPSING ->
+         * FINALIZING -> DONE); payment stays on the Grok side and is observed via
+         * the shared identitydb billing row.
          *
          * @generated from rpc aiserver.v1.DashboardService.GetOrCreateXaiUnificationIntent
          */
@@ -138,6 +174,28 @@ var init_dashboard_connect = __esm({
           name: "ListXaiUnificationCollapseCandidates",
           I: ListXaiUnificationCollapseCandidatesRequest,
           O: ListCollapseCandidatesResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.StartXaiUnificationCursorAccountProof
+         */
+        startXaiUnificationCursorAccountProof: {
+          name: "StartXaiUnificationCursorAccountProof",
+          I: StartXaiUnificationCursorAccountProofRequest,
+          O: StartXaiUnificationCursorAccountProofResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * The Cursor callback first calls without a bearer to exchange the WorkOS
+         * code and obtain an opaque continuation. It sends only that continuation
+         * to Grok, whose backend calls again with the receiving user's xAI assertion.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.CompleteXaiUnificationCursorAccountProof
+         */
+        completeXaiUnificationCursorAccountProof: {
+          name: "CompleteXaiUnificationCursorAccountProof",
+          I: CompleteXaiUnificationCursorAccountProofRequest,
+          O: CompleteXaiUnificationCursorAccountProofResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -1851,7 +1909,7 @@ var init_dashboard_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
-         * Partner (Grok / Unified Dash) account-collapse control plane. Both RPCs
+         * Partner (Grok) account-collapse control plane. Both RPCs
          * are authenticated by a per-user xAI identity assertion carried as the
          * bearer token and pinned to a dedicated audience (no Cursor session), and
          * the assertion's subject must hold a live identity join to the target
@@ -1876,6 +1934,36 @@ var init_dashboard_connect = __esm({
           name: "GetCursorAccountCollapseByTarget",
           I: GetCursorAccountCollapseByTargetRequest,
           O: GetCursorAccountCollapseByTargetResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Cursor-session twins for the Unified Dashboard. The target is always the
+         * authenticated, merged Cursor user and is never accepted from the request.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.StartCursorSessionAccountCollapse
+         */
+        startCursorSessionAccountCollapse: {
+          name: "StartCursorSessionAccountCollapse",
+          I: StartCursorSessionAccountCollapseRequest,
+          O: StartCursorAccountCollapseResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.GetCursorSessionAccountCollapse
+         */
+        getCursorSessionAccountCollapse: {
+          name: "GetCursorSessionAccountCollapse",
+          I: GetCursorSessionAccountCollapseRequest,
+          O: GetCursorAccountCollapseByTargetResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.ListCursorSessionAccountCollapseCandidates
+         */
+        listCursorSessionAccountCollapseCandidates: {
+          name: "ListCursorSessionAccountCollapseCandidates",
+          I: ListCursorSessionAccountCollapseCandidatesRequest,
+          O: ListCollapseCandidatesResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -2248,6 +2336,29 @@ var init_dashboard_connect = __esm({
           name: "MoveUserMcpServerToTeam",
           I: MoveUserMcpServerToTeamRequest,
           O: MoveUserMcpServerToTeamResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * The team-wide MCP placement default (`mcpPlacementDefault` in team admin
+         * settings): a dedicated pair, not a slice of UpdateTeamAdminSettings, so
+         * the bulk save can never echo it and only an explicit admin action writes
+         * it. Both require ManageTeamMcpServers on the active team.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.GetTeamMcpPlacementDefault
+         */
+        getTeamMcpPlacementDefault: {
+          name: "GetTeamMcpPlacementDefault",
+          I: GetTeamMcpPlacementDefaultRequest,
+          O: GetTeamMcpPlacementDefaultResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.UpdateTeamMcpPlacementDefault
+         */
+        updateTeamMcpPlacementDefault: {
+          name: "UpdateTeamMcpPlacementDefault",
+          I: UpdateTeamMcpPlacementDefaultRequest,
+          O: UpdateTeamMcpPlacementDefaultResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -3387,6 +3498,25 @@ var init_dashboard_connect = __esm({
           name: "SetXaiUserPrepaidAutoTopUp",
           I: SetUserPrepaidAutoTopUpRequest,
           O: SetUserPrepaidAutoTopUpResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Mints the signed-in user's xAI commerce bearer: the Cursor-signed partner
+         * JWT for their linked Grok account, plus the origin the commerce RPCs go
+         * to, for clients that drive xAI's commerce surfaces themselves (the
+         * browser-hosted `@x-clients/commerce-ui` pages, the IDE's Buy Credits
+         * modal topping up through the Grok billing service). Typed successor of
+         * the `xaiCommerceBearerToken` ClientAction verb: same 5-minute credential,
+         * same per-minute limit, gate chosen by `purpose`. Refusals come back in
+         * the response, not as errors, so a caller can branch on the reason (an
+         * unlinked account starts account linking) without matching copy.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.GetXaiCommerceBearerToken
+         */
+        getXaiCommerceBearerToken: {
+          name: "GetXaiCommerceBearerToken",
+          I: GetXaiCommerceBearerTokenRequest,
+          O: GetXaiCommerceBearerTokenResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -5854,6 +5984,44 @@ var init_dashboard_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * Pay-first team Unify: freezes the seat picks into an authoritative cart
+         * and moves the TEAM intent to AWAITING_PAYMENT before the browser checkout.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.PrepareXaiCursorTeamMergeCheckout
+         */
+        prepareXaiCursorTeamMergeCheckout: {
+          name: "PrepareXaiCursorTeamMergeCheckout",
+          I: PrepareXaiCursorTeamMergeCheckoutRequest,
+          O: PrepareXaiCursorTeamMergeCheckoutResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Server-verifies the ComPlat purchase and advances the TEAM intent out of
+         * AWAITING_PAYMENT. The durable team mapping is written only after this.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.FinalizeXaiCursorTeamMergeCheckout
+         */
+        finalizeXaiCursorTeamMergeCheckout: {
+          name: "FinalizeXaiCursorTeamMergeCheckout",
+          I: FinalizeXaiCursorTeamMergeCheckoutRequest,
+          O: FinalizeXaiCursorTeamMergeCheckoutResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Cursor-only team: creates (or returns) the xAI team mirroring this Cursor
+         * team through xAI's partner ensure-team RPC, owned by the paying admin's
+         * xAI user, and records it as the intent's intended xAI team before
+         * checkout. Never writes the live team mapping.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.EnsureXaiCursorTeamForMerge
+         */
+        ensureXaiCursorTeamForMerge: {
+          name: "EnsureXaiCursorTeamForMerge",
+          I: EnsureXaiCursorTeamForMergeRequest,
+          O: EnsureXaiCursorTeamForMergeResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.DashboardService.CancelXaiCursorTeamMergeProposal
          */
         cancelXaiCursorTeamMergeProposal: {
@@ -6274,6 +6442,30 @@ var init_dashboard_connect = __esm({
           name: "SubmitFeedbackAnon",
           I: SubmitFeedbackRequest,
           O: SubmitFeedbackResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Token-gated repository-protection claim. No Cursor account. The token is
+         * the credential; the form must not write live CodebaseProtection rows.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.SubmitRepositoryProtectionClaim
+         */
+        submitRepositoryProtectionClaim: {
+          name: "SubmitRepositoryProtectionClaim",
+          I: SubmitRepositoryProtectionClaimRequest,
+          O: SubmitRepositoryProtectionClaimResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Anytool Activate. Internal service + acting employee. Writes hashed
+         * MANUAL PRIVATE CodebaseProtection rows; submit must not.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.ActivateRepositoryProtectionInvite
+         */
+        activateRepositoryProtectionInvite: {
+          name: "ActivateRepositoryProtectionInvite",
+          I: ActivateRepositoryProtectionInviteRequest,
+          O: ActivateRepositoryProtectionInviteResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -6983,6 +7175,50 @@ var init_dashboard_connect = __esm({
           name: "SetJobData",
           I: SetJobDataRequest,
           O: SetJobDataResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Linked bank / brokerage connections for the signed-in user. Proxies
+         * ConnectorManager PartnerListFinancialConnections / PartnerListFinancialAccounts
+         * (and PartnerDeleteFinancialConnection). User identity rides the partner JWT;
+         * these RPCs are personal, not team-scoped.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.ListFinancialConnections
+         */
+        listFinancialConnections: {
+          name: "ListFinancialConnections",
+          I: ListFinancialConnectionsRequest,
+          O: ListFinancialConnectionsResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.ListFinancialAccounts
+         */
+        listFinancialAccounts: {
+          name: "ListFinancialAccounts",
+          I: ListFinancialAccountsRequest,
+          O: ListFinancialAccountsResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.DeleteFinancialConnection
+         */
+        deleteFinancialConnection: {
+          name: "DeleteFinancialConnection",
+          I: DeleteFinancialConnectionRequest,
+          O: DeleteFinancialConnectionResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Mints a Grok-hosted Plaid Link page for connecting another institution.
+         * Grok holds the Plaid token; the page returns the browser to return_to.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.StartFinancialLink
+         */
+        startFinancialLink: {
+          name: "StartFinancialLink",
+          I: StartFinancialLinkRequest,
+          O: StartFinancialLinkResponse,
           kind: MethodKind.Unary
         }
       }

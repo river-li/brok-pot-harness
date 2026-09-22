@@ -1,12 +1,12 @@
 var import_node_path84 = __toESM(require("node:path"), 1);
-init_dist3();
+init_dist4();
 init_agent_pb();
 init_read_exec_pb();
 init_request_context_exec_pb();
 init_selected_context_pb();
 init_subagents_pb();
 var import_mime_types2 = __toESM(require_mime_types(), 1);
-var logger71 = createLogger("task-subagent-preparation");
+var logger72 = createLogger("task-subagent-preparation");
 function isExecutedChildState(state) {
   return (state.cloudSubagent?.bcId?.trim() ?? "") !== "" || (state.firstClassBcId?.trim() ?? "") !== "" || (state.modelId?.trim() ?? "") !== "";
 }
@@ -142,10 +142,7 @@ function resolveTrustedAttachmentPath(args) {
   const canonicalPath = import_node_path84.default.resolve(args.attachmentPath);
   const env = args.requestContext.env;
   const allowedPrefixes = [
-    ...env?.projectFolder ? [
-      import_node_path84.default.join(env.projectFolder, "uploads"),
-      import_node_path84.default.join(env.projectFolder, "attachments")
-    ] : [],
+    ...env?.projectFolder ? [import_node_path84.default.join(env.projectFolder, "uploads"), import_node_path84.default.join(env.projectFolder, "attachments")] : [],
     ...env?.workspacePaths.flatMap((workspacePath) => [
       import_node_path84.default.join(workspacePath, "uploads"),
       import_node_path84.default.join(workspacePath, "attachments")
@@ -303,7 +300,7 @@ async function resolveSubagentConversationState(ctx, subagentConfig, parentState
   if (subagentIdToResume) {
     const restoredState = parentState.restoreSubagentState(ctx, subagentIdToResume);
     if (restoredState?.conversationState) {
-      logger71.info(ctx, "Restored subagent conversation state", {
+      logger72.info(ctx, "Restored subagent conversation state", {
         toolCallId,
         subagentType: typeName,
         subagentIdToResume,
@@ -314,7 +311,7 @@ async function resolveSubagentConversationState(ctx, subagentConfig, parentState
     if (restoredState?.cloudSubagent !== void 0) {
       return new ConversationStateStructure();
     }
-    logger71.info(ctx, "Created new conversation state (restore failed)", {
+    logger72.info(ctx, "Created new conversation state (restore failed)", {
       toolCallId,
       subagentType: typeName
     });
@@ -437,7 +434,7 @@ async function resolveTaskSubagentConfig(params) {
 async function prepareTaskSubagent(params) {
   const { resolved, ctx, rawArgs, meta, parentState, resourceAccessor, parentModelInfo, subagentCredentials, enableExecuteHookExec, configuredSteps, readonlyShellEnabled, toolName, parentCursorCommands, privacyMode, attachedMediaUrlProvider, geminiVideoAttachedMediaUrlProvider, inlineVideoMaxBytes, signedUrlVideoMaxBytes } = params;
   const { subagentConfig, typeName, resolvedModelId, subagentIdToResume, subagentId, isResume, isSelfForkRequested, useAskModeForSubagent: useAskMode, effectiveReadonly, analyticsSubagentType, parentRequestId, rootParentRequestId, subagentRequestId, cloudSubagentBcId, cloudRequestedEnvironmentBuildId } = resolved;
-  logger71.info(ctx, "Task subagent preparation starting", {
+  logger72.info(ctx, "Task subagent preparation starting", {
     toolCallId: meta.toolCallId,
     subagentType: typeName,
     promptLength: rawArgs.prompt.length,

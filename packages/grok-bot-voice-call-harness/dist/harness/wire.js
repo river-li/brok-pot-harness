@@ -56,12 +56,12 @@ function parsed(result, shape) {
 }
 var VoiceCallHarnessWire = class {
   static parseSessionRequest(value) {
-    return parsed(SessionRequest.safeParse(value), (request3) => ({
-      agentId: request3.agentId,
-      agentName: request3.agentName,
-      ...request3.userName === void 0 ? {} : { userName: request3.userName },
-      ...request3.description === void 0 ? {} : { description: request3.description },
-      ...request3.spokenLanguage === void 0 ? {} : { spokenLanguage: request3.spokenLanguage }
+    return parsed(SessionRequest.safeParse(value), (request5) => ({
+      agentId: request5.agentId,
+      agentName: request5.agentName,
+      ...request5.userName === void 0 ? {} : { userName: request5.userName },
+      ...request5.description === void 0 ? {} : { description: request5.description },
+      ...request5.spokenLanguage === void 0 ? {} : { spokenLanguage: request5.spokenLanguage }
     }));
   }
   static parseSessionPlan(value) {
@@ -83,12 +83,12 @@ var VoiceCallHarnessWire = class {
     }));
   }
   static parseToolRequest(value) {
-    return parsed(ToolRequest.safeParse(value), (request3) => ({
-      agentId: request3.agentId,
-      callId: request3.callId,
-      name: request3.name,
-      input: request3.input ?? {},
-      line: request3.line
+    return parsed(ToolRequest.safeParse(value), (request5) => ({
+      agentId: request5.agentId,
+      callId: request5.callId,
+      name: request5.name,
+      input: request5.input ?? {},
+      line: request5.line
     }));
   }
   static parseToolOutcome(value) {

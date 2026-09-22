@@ -1,3 +1,4 @@
+var CONNECTOR_CONNECTION_ARGUMENT_DESCRIPTION = "connection is the connection's identifier: the same one GetMcpServerStatus lists and that connection's own tools are prefixed with (for example user-onedrive, dashboard-team-1-Google-drive or user-Gmail--personal). The service short name (google-drive, onedrive, gmail or slack) is accepted when exactly one account of that service is connected; with several accounts, name the identifier so the right account is used. Supported today:";
 function serviceKey(name17) {
   return name17.trim().toLowerCase().replaceAll(/[^a-z0-9]+/g, "-").replaceAll(/^-+|-+$/g, "");
 }

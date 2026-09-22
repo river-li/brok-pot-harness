@@ -1,4 +1,4 @@
-var __awaiter64 = function(thisArg, _arguments, P2, generator) {
+var __awaiter66 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -47,7 +47,7 @@ var PermissionsFileProvider = class _PermissionsFileProvider {
     return (0, import_node_path78.join)(getConfigDir(), "permissions.json");
   }
   static load(filePath) {
-    return __awaiter64(this, void 0, void 0, function* () {
+    return __awaiter66(this, void 0, void 0, function* () {
       var _a19, _b2, _c2;
       const path31 = filePath !== null && filePath !== void 0 ? filePath : _PermissionsFileProvider.getPermissionsFilePath();
       if (!(0, import_node_fs45.existsSync)(path31)) {
@@ -81,7 +81,7 @@ var PermissionsFileProvider = class _PermissionsFileProvider {
     });
   }
   getPermissions() {
-    return __awaiter64(this, void 0, void 0, function* () {
+    return __awaiter66(this, void 0, void 0, function* () {
       return {
         allow: this.permissions.allow,
         deny: this.permissions.deny,
@@ -97,7 +97,7 @@ var PermissionsFileProvider = class _PermissionsFileProvider {
     };
   }
   updatePermissions(transformer) {
-    return __awaiter64(this, void 0, void 0, function* () {
+    return __awaiter66(this, void 0, void 0, function* () {
       void transformer;
     });
   }

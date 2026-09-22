@@ -52,35 +52,25 @@ var __disposeResources23 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger64 = createLogger("@anysphere/agent");
+var logger65 = createLogger("@anysphere/agent");
 var DEFAULT_CLI_REFLECT_GENERAL_REMINDER_INTERVAL = 10;
 var DEFAULT_CLI_REFLECT_GENERAL_MAX_FOLLOW_UPS_PER_TURN = -1;
 var DEFAULT_CLI_REFLECT_GENERAL_REMINDER_TEXT = "<system_reminder>You MUST now use the Reflect tool to reflect on your current progress</system_reminder>";
 var IMAGE_SUMMARIZATION_TRIGGER_COUNT = 85;
 var AGENT_RESPONSE_COMPARISON_TIMEOUT_MS = 6e4;
 var MAX_RESPONSE_COMPARISON_WARMUPS_PER_TURN = 5;
+function getSignificantOverageThreshold(maxTokens) {
+  return Math.min(0.25 * maxTokens, 5e4);
+}
+function isSignificantlyOverTokenLimit({ usedTokens, maxTokens }) {
+  return maxTokens > 0 && usedTokens > maxTokens + getSignificantOverageThreshold(maxTokens);
+}
 function alternateModelIdForAnalytics(selection) {
   return selection.alternate === "parent" ? "same_as_parent" : selection.alternate.modelId;
-}
-function hasAutoRunInstructions(instructions) {
-  return instructions !== void 0 && (instructions.allowInstructions.length > 0 || instructions.blockInstructions.length > 0);
-}
-async function loadUserPermissionsFileAutoRunInstructions(ctx) {
-  try {
-    const provider = await PermissionsFileProvider.load();
-    const instructions = provider?.getAutoRunInstructions();
-    const result = hasAutoRunInstructions(instructions) ? instructions : void 0;
-    return result;
-  } catch (error41) {
-    logger64.warn(ctx, "Failed to load user permissions auto-run instructions", {
-      error: error41 instanceof Error ? error41.message : String(error41)
-    });
-    return void 0;
-  }
 }
 function countAssistantMessages(responseMessages) {
   return responseMessages.filter((message) => message.role === "assistant").length;
@@ -553,13 +543,7 @@ var agentTurnResult = createCounter("agent.turn.result", {
 });
 var agentToolCallsPerTurn = createHistogram("agent.turn.tool_calls", {
   description: "Total number of tool calls executed in a turn",
-  labelNames: [
-    "outcome",
-    "clientversion",
-    "clienttype",
-    "sdkflavor",
-    "user.is_dev"
-  ]
+  labelNames: ["outcome", "clientversion", "clienttype", "sdkflavor", "user.is_dev"]
 });
 var finalAssistantMessageCharacters = createHistogram("agent.turn.final_assistant_message_chars", {
   description: "Character count of the final assistant message when a turn completes"
@@ -713,7 +697,7 @@ var AbstractUserMessageActionHandler = class {
     this.responseComparisonWarmupsInTurn = 0;
   }
   resolveWriteBarrierTimeoutMs() {
-    return this.config.resolveWriteBarrierTimeoutMs?.() ?? this.config.featureFlags?.writeBarrierTimeoutMs;
+    return resolveWriteBarrierTimeoutMs(this.config);
   }
   getAutomationTriggerContext(messages2) {
     if (this.config.automationInstructions === void 0) {
@@ -727,21 +711,10 @@ var AbstractUserMessageActionHandler = class {
     return result;
   }
   getUserPermissionsFileAutoRunInstructions(ctx, requestContext) {
-    if (!this.config.smartModeClassifierMode && !this.config.smartModeClassifierShadowMode) {
-      return Promise.resolve(void 0);
-    }
-    const { userAutoRunInstructions, hasAdminOverride } = smartModeAutoRunInstructionsFromProtos(requestContext);
-    if (hasAdminOverride) {
-      return Promise.resolve(void 0);
-    }
-    if (userAutoRunInstructions !== void 0) {
-      return Promise.resolve(userAutoRunInstructions);
-    }
-    return loadUserPermissionsFileAutoRunInstructions(ctx);
+    return getUserPermissionsFileAutoRunInstructions(ctx, this.config, requestContext);
   }
   getProjectPermissionsFileAutoRunInstructions(requestContext) {
-    const { projectAutoRunInstructions } = smartModeAutoRunInstructionsFromProtos(requestContext);
-    return projectAutoRunInstructions;
+    return getProjectPermissionsFileAutoRunInstructions(requestContext);
   }
   /**
    * Wraps a model stream so the first text delta of a step triggers a
@@ -781,9 +754,9 @@ var AbstractUserMessageActionHandler = class {
       selection: pending.preparedAttempt.selection,
       messages: messages2,
       tools
-    }).catch((error41) => {
-      logger64.warn(ctx, "Agent response comparison warmup failed open", {
-        error: error41
+    }).catch((error42) => {
+      logger65.warn(ctx, "Agent response comparison warmup failed open", {
+        error: error42
       });
     });
   }
@@ -799,8 +772,8 @@ var AbstractUserMessageActionHandler = class {
         isByok: getIsUserApiKeyFromContext(args.ctx),
         isSubagent: getIsSubagentFromContext(args.ctx)
       });
-    } catch (error41) {
-      logger64.warn(args.ctx, "Agent response comparison preselection failed open", { error: error41 });
+    } catch (error42) {
+      logger65.warn(args.ctx, "Agent response comparison preselection failed open", { error: error42 });
       return;
     }
     if (preparedAttempt === void 0) {
@@ -831,9 +804,9 @@ var AbstractUserMessageActionHandler = class {
           })
         }
       });
-    } catch (error41) {
+    } catch (error42) {
       this.pendingResponseComparison = void 0;
-      logger64.warn(args.ctx, "Agent response comparison pending update failed open", { error: error41 });
+      logger65.warn(args.ctx, "Agent response comparison pending update failed open", { error: error42 });
     }
   }
   async finalizePendingAgentResponseComparison(shouldCompare) {
@@ -876,8 +849,8 @@ var AbstractUserMessageActionHandler = class {
           value: new ResponseComparisonSkipped({ reason })
         }
       });
-    } catch (error41) {
-      logger64.warn(pending.ctx, "Agent response comparison skip update failed open", { error: error41 });
+    } catch (error42) {
+      logger65.warn(pending.ctx, "Agent response comparison skip update failed open", { error: error42 });
     }
   }
   async checkpointToolResultsCompletedBeforeDeferral({ ctx, stateHandler, pendingToolCalls, completedToolResults, onStateUpdate }) {
@@ -891,8 +864,8 @@ var AbstractUserMessageActionHandler = class {
         ...completedToolResults.map((message) => JSON.stringify(message))
       ].map((p2) => createRedactedString(p2, DataClassification.CODE, "pendingToolCalls", PrivacyMode.UNSPECIFIED));
       await onStateUpdate(ctx, current);
-    } catch (error41) {
-      logger64.error(ctx, "Failed to checkpoint tool results completed before the deferred interaction", { error: error41 });
+    } catch (error42) {
+      logger65.error(ctx, "Failed to checkpoint tool results completed before the deferred interaction", { error: error42 });
     }
   }
   async enqueueAgentResponseComparisonIfEligible(args) {
@@ -984,8 +957,8 @@ var AbstractUserMessageActionHandler = class {
         isByok: getIsUserApiKeyFromContext(candidate.ctx),
         isSubagent: getIsSubagentFromContext(candidate.ctx)
       });
-    } catch (error41) {
-      logger64.warn(candidate.ctx, "Agent response comparison selection failed open", { error: error41 });
+    } catch (error42) {
+      logger65.warn(candidate.ctx, "Agent response comparison selection failed open", { error: error42 });
       return;
     }
     if (preparedAttempt === void 0) {
@@ -1043,8 +1016,10 @@ var AbstractUserMessageActionHandler = class {
             return;
           }
           selection = refined;
-        } catch (error41) {
-          logger64.warn(args.ctx, "Agent response comparison selection refinement failed open", { error: error41 });
+        } catch (error42) {
+          logger65.warn(args.ctx, "Agent response comparison selection refinement failed open", {
+            error: error42
+          });
         }
       }
       if (!args.pendingUi) {
@@ -1162,7 +1137,7 @@ var AbstractUserMessageActionHandler = class {
         case: "completed",
         value: new ResponseComparisonCompleted()
       });
-    } catch (error41) {
+    } catch (error42) {
       const reason = args.ctx.signal.aborted ? ResponseComparisonSkipReason.CANCELLED : comparisonCtx.signal.aborted ? ResponseComparisonSkipReason.TIMEOUT : ResponseComparisonSkipReason.INFERENCE_ERROR;
       try {
         await sendEvent({
@@ -1170,8 +1145,8 @@ var AbstractUserMessageActionHandler = class {
           value: new ResponseComparisonSkipped({ reason })
         }, args.ctx);
       } catch (sendError2) {
-        logger64.warn(args.ctx, "Agent response comparison failed open", {
-          error: error41,
+        logger65.warn(args.ctx, "Agent response comparison failed open", {
+          error: error42,
           sendError: sendError2
         });
       }
@@ -1244,7 +1219,7 @@ var AbstractUserMessageActionHandler = class {
       isLastRetryLoopIteration,
       shouldRetry
     };
-    logger64.warn(args.ctx, "nal.project_send_message_missing", retryInfo);
+    logger65.warn(args.ctx, "nal.project_send_message_missing", retryInfo);
     emptyResponseRetryClassification.increment(args.ctx, 1, {
       retryAction: "retry_missing_send_message",
       didRetry: shouldRetry ? "true" : "false"
@@ -1263,7 +1238,7 @@ var AbstractUserMessageActionHandler = class {
       const invocationId = getInvocationId(ctx);
       stateHandler.lastStepInvocationId = invocationId;
       spanCtxt.span.setAttribute("invocationId", invocationId);
-      logger64.info(ctx, "Running step");
+      logger65.info(ctx, "Running step");
       const stepSetupStart = performance.now();
       const isFirstStep = turn.steps.length === 0;
       const isResponseComparisonFirstModelStep = !this.responseComparisonModelStepStarted;
@@ -1384,8 +1359,10 @@ var AbstractUserMessageActionHandler = class {
                 if (onStateUpdate) {
                   await onStateUpdate(ctx, current);
                 }
-              }).catch((error41) => {
-                logger64.error(ctx, "Failed to persist checkpoint with pending tool calls", { error: error41 });
+              }).catch((error42) => {
+                logger65.error(ctx, "Failed to persist checkpoint with pending tool calls", {
+                  error: error42
+                });
               });
             } else {
               const current = await stateHandler.computeNewStructure(ctx);
@@ -1396,9 +1373,9 @@ var AbstractUserMessageActionHandler = class {
             }
           }
         );
-      } catch (error41) {
+      } catch (error42) {
         await this.cancelPendingAgentResponseComparison();
-        throw error41;
+        throw error42;
       }
       const tokenDetails = stateHandler.tokenDetails;
       const isCloudAgentSingleStep = this.config.maxSteps === 1;
@@ -1406,7 +1383,7 @@ var AbstractUserMessageActionHandler = class {
       const shouldStartBg = !isCloudAgentSingleStep && !stateHandler.tokenDetailsStaleAfterSummarization && !shouldSuppressSelfSummaryAfterInputLimitFailure && this.orchestrator.shouldStartBackgroundSummarization(tokenDetails, rootPromptExecutor.getMessages(), ctx);
       const startBackgroundSummary = async (canStartBackgroundSummary, launchTokenDetails) => {
         const accounting = launchTokenDetails ?? tokenDetails;
-        logger64.info(ctx, "[summarization-trigger] Triggering background summarization since we are below free token threshold", {
+        logger65.info(ctx, "[summarization-trigger] Triggering background summarization since we are below free token threshold", {
           usedTokens: accounting.usedTokens,
           maxTokens: accounting.maxTokens,
           backgroundSummarizationConfig: this.config.backgroundSummarizationProps
@@ -1451,12 +1428,14 @@ var AbstractUserMessageActionHandler = class {
       }
       let stepClosed = false;
       let responseSummarySetup;
-      const reportResponseSummaryFailure = (error41) => {
-        logger64.warn(ctx, "Failed to start response-time background summarization", { error: error41 });
+      const reportResponseSummaryFailure = (error42) => {
+        logger65.warn(ctx, "Failed to start response-time background summarization", { error: error42 });
       };
       const responseSummaryLaunch = result.extendedUsage.then((currentUsage) => {
         const threshold = this.config.backgroundSummarizationProps.usedTokensThresholdToStartBackgroundSummarization;
-        const canStart = () => !stepClosed && !ctx.signal.aborted && !isCloudAgentSingleStep && stateHandler.backgroundSummarizationPromiseInfo === null && (this.config.selfSummaryConfig?.canUseSelfSummary?.() ?? false) && this.config.backgroundSummarizationProps.usedTokensThresholdToStartBackgroundSummarization === threshold && !stateHandler.shouldSuppressSelfSummaryAfterInputLimitFailure(currentUsage.inputTokens + currentUsage.outputTokens) && shouldStartBackgroundSummarization(currentUsage.inputTokens, currentUsage.maxTokens, { usedTokensThresholdToStartBackgroundSummarization: threshold });
+        const canStart = () => !stepClosed && !ctx.signal.aborted && !isCloudAgentSingleStep && stateHandler.backgroundSummarizationPromiseInfo === null && (this.config.selfSummaryConfig?.canUseSelfSummary?.() ?? false) && this.config.backgroundSummarizationProps.usedTokensThresholdToStartBackgroundSummarization === threshold && !stateHandler.shouldSuppressSelfSummaryAfterInputLimitFailure(currentUsage.inputTokens + currentUsage.outputTokens) && shouldStartBackgroundSummarization(currentUsage.inputTokens, currentUsage.maxTokens, {
+          usedTokensThresholdToStartBackgroundSummarization: threshold
+        });
         if (canStart()) {
           responseSummarySetup = startBackgroundSummary(canStart, {
             usedTokens: currentUsage.inputTokens + currentUsage.outputTokens,
@@ -1478,31 +1457,31 @@ var AbstractUserMessageActionHandler = class {
           interactionHandler.consumeStream(ctx, this.tapAgentResponseComparisonWarmup(ctx, result.fullStream, responseComparisonMessages, responseComparisonTools), turn),
           responseSummaryLaunch
         ]);
-      } catch (error41) {
+      } catch (error42) {
         stepClosed = true;
         await this.cancelPendingAgentResponseComparison();
-        if (error41 instanceof DeferredInteractionResponseError && checkpointedPendingToolCalls !== void 0) {
+        if (error42 instanceof DeferredInteractionResponseError && checkpointedPendingToolCalls !== void 0) {
           await pendingToolCallsCheckpointWrite;
           await this.checkpointToolResultsCompletedBeforeDeferral({
             ctx,
             stateHandler,
             pendingToolCalls: checkpointedPendingToolCalls,
-            completedToolResults: getToolResultsCompletedBeforeDeferral(error41),
+            completedToolResults: getToolResultsCompletedBeforeDeferral(error42),
             onStateUpdate
           });
         }
-        throw error41;
+        throw error42;
       } finally {
         stepClosed = true;
         await responseSummarySetup;
       }
       if (finalInvocationId !== invocationId) {
-        logger64.error(ctx, "Invocation ID mismatch. Bug in executeToolStream", void 0, {
+        logger65.error(ctx, "Invocation ID mismatch. Bug in executeToolStream", void 0, {
           initialInvocationId: invocationId,
           finalInvocationId
         });
       }
-      logger64.info(ctx, "Setting token details for client token ring", {
+      logger65.info(ctx, "Setting token details for client token ring", {
         usedTokens: usage.totalTokens,
         maxTokens: extendedUsage.maxTokens,
         inputTokens: extendedUsage.inputTokens,
@@ -1639,18 +1618,18 @@ var AbstractUserMessageActionHandler = class {
           }
         };
         if (lastExecutorMsgRole === "assistant") {
-          logger64.warn(ctx, "nal.empty_response.sent_assistant_message", emptyResponseAttrs);
+          logger65.warn(ctx, "nal.empty_response.sent_assistant_message", emptyResponseAttrs);
         }
         if (lastExecutorMsgRole === "tool") {
-          logger64.warn(ctx, "nal.empty_response.sent_tool", emptyResponseAttrs);
+          logger65.warn(ctx, "nal.empty_response.sent_tool", emptyResponseAttrs);
         }
         if (thinkingChars > 0) {
-          logger64.warn(ctx, "nal.empty_response.received_only_thinking", emptyResponseAttrs);
+          logger65.warn(ctx, "nal.empty_response.received_only_thinking", emptyResponseAttrs);
         }
         if (extendedUsage.outputTokens === 0) {
-          logger64.warn(ctx, "nal.empty_response.received_no_output_tokens", emptyResponseAttrs);
+          logger65.warn(ctx, "nal.empty_response.received_no_output_tokens", emptyResponseAttrs);
         }
-        logger64.warn(ctx, "nal.empty_response", emptyResponseAttrs);
+        logger65.warn(ctx, "nal.empty_response", emptyResponseAttrs);
         let retryAction;
         if (this.constructor.name === "ResumeActionHandler") {
           retryAction = "ok_resume_action";
@@ -1695,7 +1674,7 @@ var AbstractUserMessageActionHandler = class {
           turnBudgetExhausted,
           maxEmptyResponseRetriesPerTurn: MAX_EMPTY_RESPONSE_RETRIES_PER_TURN
         };
-        logger64.warn(ctx, "nal.empty_response.retry_dry_run", {
+        logger65.warn(ctx, "nal.empty_response.retry_dry_run", {
           ...emptyResponseAttrs,
           retryInfo,
           shouldRetry
@@ -1709,12 +1688,12 @@ var AbstractUserMessageActionHandler = class {
           throw new EmptyResponseRetryError(retryAction, needsContinuationMessage2);
         } else {
           if (turnBudgetExhausted) {
-            logger64.warn(ctx, "nal.empty_response.turn_budget_exceeded", {
+            logger65.warn(ctx, "nal.empty_response.turn_budget_exceeded", {
               ...emptyResponseAttrs,
               retryInfo
             });
           }
-          logger64.warn(ctx, "nal.empty_response.did_not_retry", {
+          logger65.warn(ctx, "nal.empty_response.did_not_retry", {
             ...emptyResponseAttrs,
             retryInfo
           });
@@ -1769,8 +1748,8 @@ var AbstractUserMessageActionHandler = class {
             incrementLoopRetryOutcome(ctx, "recovered", lastSingleMessageLoopKind);
           }
           return result;
-        } catch (error41) {
-          if (error41 instanceof OutputTokensLimitExceededError) {
+        } catch (error42) {
+          if (error42 instanceof OutputTokensLimitExceededError) {
             outputTokenLimitRetryCount += 1;
             if (!didAddOutputTokenReminder) {
               didAddOutputTokenReminder = true;
@@ -1780,61 +1759,61 @@ var AbstractUserMessageActionHandler = class {
                   content: "<system_reminder>Your response was cut off because it exceeded the output token limit. Please break your work into smaller pieces. Continue from where you left off.</system_reminder>"
                 }
               ], PrivacyMode.UNSPECIFIED));
-              logger64.info(ctx, "Hit max tokens error, added reminder");
+              logger65.info(ctx, "Hit max tokens error, added reminder");
             } else {
-              logger64.info(ctx, "Hit max tokens error, but already added reminder");
+              logger65.info(ctx, "Hit max tokens error, but already added reminder");
             }
-          } else if (error41 instanceof EmptyResponseRetryError && !didRetryAfterEmptyResponse) {
+          } else if (error42 instanceof EmptyResponseRetryError && !didRetryAfterEmptyResponse) {
             didRetryAfterEmptyResponse = true;
             if (emptyResponseRetryTurnBudget !== void 0) {
               emptyResponseRetryTurnBudget.retriesUsed += 1;
             }
-            if (error41.needsContinuationMessage) {
-              const continuationMessage = error41.retryAction === "retry_missing_send_message" ? createProjectSendMessageVisibilityReminder() : {
+            if (error42.needsContinuationMessage) {
+              const continuationMessage = error42.retryAction === "retry_missing_send_message" ? createProjectSendMessageVisibilityReminder() : {
                 role: "user",
                 content: EMPTY_RESPONSE_CONTINUATION_MESSAGE
               };
               rootPromptExecutor.appendMessages(toRedactedCoreMessages([continuationMessage], PrivacyMode.UNSPECIFIED));
             }
-            logger64.info(ctx, "nal.empty_response.retrying", {
-              retryAction: error41.retryAction,
-              needsContinuationMessage: error41.needsContinuationMessage,
+            logger65.info(ctx, "nal.empty_response.retrying", {
+              retryAction: error42.retryAction,
+              needsContinuationMessage: error42.needsContinuationMessage,
               turnRetriesUsed: emptyResponseRetryTurnBudget?.retriesUsed,
               maxEmptyResponseRetriesPerTurn: MAX_EMPTY_RESPONSE_RETRIES_PER_TURN
             });
-          } else if (isSingleMessageLoopRetryEnabled && error41 instanceof AgentLoopError && error41.loopType === "singleMessage") {
+          } else if (isSingleMessageLoopRetryEnabled && error42 instanceof AgentLoopError && error42.loopType === "singleMessage") {
             if (didRetryAfterSingleMessageLoop) {
-              incrementLoopRetryOutcome(ctx, "looped_again", error41.singleMessageLoopKind);
+              incrementLoopRetryOutcome(ctx, "looped_again", error42.singleMessageLoopKind);
               reportSingleMessageLoopStage("looped_again");
-              lastSingleMessageLoopKind = error41.singleMessageLoopKind;
-              logger64.warn(ctx, "Single-message loop detected again after retry", {
-                loopKind: error41.singleMessageLoopKind,
-                repetitions: error41.repetitions,
-                period: error41.period
+              lastSingleMessageLoopKind = error42.singleMessageLoopKind;
+              logger65.warn(ctx, "Single-message loop detected again after retry", {
+                loopKind: error42.singleMessageLoopKind,
+                repetitions: error42.repetitions,
+                period: error42.period
               });
-              throw error41;
+              throw error42;
             }
             didRetryAfterSingleMessageLoop = true;
-            lastSingleMessageLoopKind = error41.singleMessageLoopKind;
-            lastSingleMessageLoopFingerprint = error41.evidenceFingerprint;
+            lastSingleMessageLoopKind = error42.singleMessageLoopKind;
+            lastSingleMessageLoopFingerprint = error42.evidenceFingerprint;
             incrementLoopRetryOutcome(ctx, "retried", lastSingleMessageLoopKind);
             reportSingleMessageLoopStage("applied");
             const reminder = createLoopReminderMessage({
-              kind: error41.singleMessageLoopKind ?? "single_message_multi_line"
+              kind: error42.singleMessageLoopKind ?? "single_message_multi_line"
             });
             rootPromptExecutor.appendMessages(toRedactedCoreMessages([reminder], PrivacyMode.UNSPECIFIED));
-            logger64.info(ctx, "Single-message loop detected, added reminder and retrying", {
-              loopKind: error41.singleMessageLoopKind,
-              repetitions: error41.repetitions,
-              period: error41.period
+            logger65.info(ctx, "Single-message loop detected, added reminder and retrying", {
+              loopKind: error42.singleMessageLoopKind,
+              repetitions: error42.repetitions,
+              period: error42.period
             });
           } else {
             if (didRetryAfterSingleMessageLoop) {
               reportSingleMessageLoopStage("failed");
             }
-            throw error41;
+            throw error42;
           }
-          lastRetryError = error41;
+          lastRetryError = error42;
         }
       }
       if (didRetryAfterSingleMessageLoop) {
@@ -1863,7 +1842,10 @@ var AbstractUserMessageActionHandler = class {
           const evalCompletionMode = EVAL_ENFORCED_WAIT_FOR_SUMMARIZATION_COMPLETION(ctx);
           const forcedSummarizationMode = shouldForceSummarizationForTesting(fromRedactedCoreMessages(rootPromptExecutor.getMessages(), PrivacyCapability.UNSAFE_ALWAYS_ALLOWED), evalCompletionMode);
           if (forcedSummarizationMode !== void 0) {
-            logger64.info(ctx, "[summarization-trigger] Force summarization triggered", { evalCompletionMode, mode: forcedSummarizationMode });
+            logger65.info(ctx, "[summarization-trigger] Force summarization triggered", {
+              evalCompletionMode,
+              mode: forcedSummarizationMode
+            });
             await this.orchestrator.handleSummarization(ctx, stateHandler, rootPromptExecutor, this.interactionListener, this.config, requestContext, {
               backgroundSummarizationMode: forcedSummarizationMode,
               fullSummarization: true,
@@ -1883,8 +1865,8 @@ var AbstractUserMessageActionHandler = class {
             const requireTriggerThreshold = this.config.backgroundSummarizationProps.requireTriggerThresholdForMidLoopPersist === true;
             const imageCountMidLoop = countImagePartsInMessages(fromRedactedCoreMessages(rootPromptExecutor.getMessages(), PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
             const shouldPersistForImageThresholdMidLoop = imageCountMidLoop >= IMAGE_SUMMARIZATION_TRIGGER_COUNT;
-            const shouldPersistMidLoop = shouldPersistForImageThresholdMidLoop || !requireTriggerThreshold || wouldMeetTriggerThreshold;
-            logger64.info(ctx, "[summarization-persist] Mid-loop background summarization persistence: checking persist threshold", {
+            const shouldPersistMidLoop = shouldPersistForImageThresholdMidLoop || !requireTriggerThreshold || wouldMeetTriggerThreshold || persistsWithoutThreshold(stateHandler.backgroundSummarizationPromiseInfo);
+            logger65.info(ctx, "[summarization-persist] Mid-loop background summarization persistence: checking persist threshold", {
               usedTokens: midLoopTokenDetails.usedTokens,
               maxTokens: midLoopTokenDetails.maxTokens,
               unusedTokens: midLoopTokenDetails.maxTokens - midLoopTokenDetails.usedTokens,
@@ -1918,12 +1900,11 @@ var AbstractUserMessageActionHandler = class {
           }
           if (stateHandler.backgroundSummarizationPromiseInfo !== null && !stateHandler.backgroundSummarizationHasCompleted) {
             const currentTokenDetails = stateHandler.tokenDetails;
-            const overageThreshold = Math.min(0.25 * currentTokenDetails.maxTokens, 5e4);
-            if (currentTokenDetails.maxTokens > 0 && currentTokenDetails.usedTokens > currentTokenDetails.maxTokens + overageThreshold) {
-              logger64.info(ctx, "[summarization-persist] Blocking on background summarization because token usage significantly exceeds max tokens", {
+            if (isSignificantlyOverTokenLimit(currentTokenDetails)) {
+              logger65.info(ctx, "[summarization-persist] Blocking on background summarization because token usage significantly exceeds max tokens", {
                 usedTokens: currentTokenDetails.usedTokens,
                 maxTokens: currentTokenDetails.maxTokens,
-                overageThreshold
+                overageThreshold: getSignificantOverageThreshold(currentTokenDetails.maxTokens)
               });
               await withCloudAgentPreAgentTurnPrepPhase(ctx, "preAgentSummarizationMs", () => this.orchestrator.handleSummarization(ctx, stateHandler, rootPromptExecutor, this.interactionListener, this.config, requestContext, {
                 backgroundSummarizationMode: BackgroundSummarizationMode.WaitForCompletion,
@@ -1940,7 +1921,7 @@ var AbstractUserMessageActionHandler = class {
           const messagesBeforeImageCompaction = fromRedactedCoreMessages(rootPromptExecutor.getMessages(), PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
           const imageCount = countImagePartsInMessages(messagesBeforeImageCompaction);
           if (imageCount >= IMAGE_SUMMARIZATION_TRIGGER_COUNT) {
-            logger64.info(ctx, "Image count reached threshold; starting background summarization", {
+            logger65.info(ctx, "Image count reached threshold; starting background summarization", {
               imageCount,
               triggerCount: IMAGE_SUMMARIZATION_TRIGGER_COUNT
             });
@@ -1957,9 +1938,9 @@ var AbstractUserMessageActionHandler = class {
           }
           if (this.config.maxSteps === 1 && this.config.featureFlags?.cloudAgentProactiveTokenLimitError === true && !stateHandler.tokenDetailsStaleAfterSummarization) {
             const td = stateHandler.tokenDetails;
-            if (shouldPersistBackgroundSummarization(td.usedTokens, td.maxTokens, this.config.backgroundSummarizationProps)) {
+            if (shouldPersistBackgroundSummarization(td.usedTokens, td.maxTokens, this.config.backgroundSummarizationProps) && !await this.shouldDeferProactiveCompaction(ctx, td)) {
               const useProactiveSelfSummarization = this.config.featureFlags?.cloudAgentProactiveSelfSummarization === true;
-              logger64.info(ctx, useProactiveSelfSummarization ? "[cloud-summarization] Token usage hit configured threshold, throwing ProactiveSummarizationThresholdError to trigger compaction" : "[cloud-summarization] Token usage hit configured threshold, throwing InputTokenLimitError to trigger external compaction", {
+              logger65.info(ctx, useProactiveSelfSummarization ? "[cloud-summarization] Token usage hit configured threshold, throwing ProactiveSummarizationThresholdError to trigger compaction" : "[cloud-summarization] Token usage hit configured threshold, throwing InputTokenLimitError to trigger external compaction", {
                 usedTokens: td.usedTokens,
                 maxTokens: td.maxTokens,
                 useProactiveSelfSummarization
@@ -1968,16 +1949,16 @@ var AbstractUserMessageActionHandler = class {
             }
           }
           return await fn(ctx);
-        } catch (error41) {
-          const isProactiveSummarizationThresholdError = error41 instanceof ProactiveSummarizationThresholdError;
-          const isTokenLimitError = SummarizationHandler.isTokenLimitError(error41);
-          const isImagePartsLimitError = isTooManyImagesOrDocumentsError(error41);
+        } catch (error42) {
+          const isProactiveSummarizationThresholdError = error42 instanceof ProactiveSummarizationThresholdError;
+          const isTokenLimitError = SummarizationHandler.isTokenLimitError(error42);
+          const isImagePartsLimitError = isTooManyImagesOrDocumentsError(error42);
           if (isProactiveSummarizationThresholdError || isTokenLimitError || isImagePartsLimitError) {
             const wouldUseSelfSummary = this.orchestrator.canUseSelfSummary({
               tools,
               extraT
             });
-            logger64.info(ctx, isImagePartsLimitError ? "[summarization-trigger] Hit image limit error, running blocking summarization in order to compress context" : isProactiveSummarizationThresholdError ? "[summarization-trigger] Hit configured summarization threshold, running blocking summarization in order to compress context" : "[summarization-trigger] Hit token limit error, running blocking summarization in order to compress context");
+            logger65.info(ctx, isImagePartsLimitError ? "[summarization-trigger] Hit image limit error, running blocking summarization in order to compress context" : isProactiveSummarizationThresholdError ? "[summarization-trigger] Hit configured summarization threshold, running blocking summarization in order to compress context" : "[summarization-trigger] Hit token limit error, running blocking summarization in order to compress context");
             const forceExternalModel = isTokenLimitError || isImagePartsLimitError ? true : void 0;
             const summarizationOptions = {
               // Block until the summarization has completed since we have no tokens remaining
@@ -1999,7 +1980,7 @@ var AbstractUserMessageActionHandler = class {
                 if (!shouldFallbackToExternalSummarization) {
                   throw summarizationError;
                 }
-                logger64.info(ctx, "[summarization-trigger] Self-summary hit token limit, falling back to external summarization");
+                logger65.info(ctx, "[summarization-trigger] Self-summary hit token limit, falling back to external summarization");
                 await this.orchestrator.handleSummarization(ctx, stateHandler, rootPromptExecutor, this.interactionListener, this.config, requestContext, {
                   ...summarizationOptions,
                   triggerReason: "fallback_on_limit_error",
@@ -2007,10 +1988,10 @@ var AbstractUserMessageActionHandler = class {
                 });
               }
             });
-            lastRetryError = error41;
+            lastRetryError = error42;
             continue;
           }
-          throw error41;
+          throw error42;
         }
       }
       throw new StepRetriesExhaustedError("summarization-retries", {
@@ -2073,7 +2054,7 @@ var AbstractUserMessageActionHandler = class {
             const currentMode = stateHandler.mode;
             if (previousMode !== void 0 && currentMode !== void 0 && currentMode !== previousMode) {
               const modeReminder = stateHandler.generateModeChangeContent(this.config, requestContext, previousMode);
-              logger64.info(ctx, "Mode changed, adding nudge", {
+              logger65.info(ctx, "Mode changed, adding nudge", {
                 previousMode,
                 newMode: currentMode
               });
@@ -2106,7 +2087,7 @@ var AbstractUserMessageActionHandler = class {
             let updatedMcpTools = currentMcpTools;
             const queuedAction = await this.conversationActionReceiver.peek(ctx);
             if (queuedAction?.action.case === "asyncAskQuestionCompletionAction") {
-              logger64.info(ctx, "Found queued AsyncAskQuestionCompletionAction - processing immediately", {
+              logger65.info(ctx, "Found queued AsyncAskQuestionCompletionAction - processing immediately", {
                 originalToolCallId: queuedAction.action.value.originalToolCallId
               });
               await this.conversationActionReceiver.pop(ctx);
@@ -2122,7 +2103,7 @@ var AbstractUserMessageActionHandler = class {
                 const syntheticModelCallId = (0, import_node_crypto32.randomUUID)();
                 await this.interactionListener.sendUpdate(ctx, RedactedUpdates.toolCallStarted(application.recordedToolCallId, application.toolCall, syntheticModelCallId));
                 await this.interactionListener.sendUpdate(ctx, RedactedUpdates.toolCallCompleted(application.recordedToolCallId, application.toolCall, syntheticModelCallId));
-                logger64.info(ctx, "Injected async completion into current turn", {
+                logger65.info(ctx, "Injected async completion into current turn", {
                   originalToolCallId: completionAction.originalToolCallId,
                   resultCase: completionAction.result?.result.case
                 });
@@ -2130,7 +2111,7 @@ var AbstractUserMessageActionHandler = class {
                 hasQueuedMessages = true;
                 queuedMessageSource = "asyncAskQuestionCompletion";
               } else {
-                logger64.info(ctx, "Dropped queued async completion", {
+                logger65.info(ctx, "Dropped queued async completion", {
                   originalToolCallId: completionAction.originalToolCallId,
                   outcome: application.outcome
                 });
@@ -2153,7 +2134,7 @@ var AbstractUserMessageActionHandler = class {
               hasQueuedMessages = true;
               queuedMessageSource = "cliReflectGeneralFollowUp";
               cliReflectGeneralFollowUpsSentInTurn += 1;
-              logger64.info(ctx, "Injected CLI reflect-general follow-up", {
+              logger65.info(ctx, "Injected CLI reflect-general follow-up", {
                 assistantMessagesSinceLastReflectGeneral,
                 cliReflectGeneralFollowUpsSentInTurn,
                 cliReflectGeneralMaxFollowUpsPerTurn
@@ -2161,7 +2142,8 @@ var AbstractUserMessageActionHandler = class {
             }
             turn = updatedTurn;
             currentMcpTools = updatedMcpTools;
-            const hasEnded = !hasToolCall && !hasQueuedMessages || isLastIteration;
+            const hostRequestedTurnEnd = this.config.isTurnEndRequested?.() === true;
+            const hasEnded = !hasToolCall && !hasQueuedMessages || isLastIteration || hostRequestedTurnEnd;
             if (!hasToolCall && !hasQueuedMessages && conflictBarrierInjectionsRemaining > 0 && !isLastIteration && this.config.featureFlags?.enableAgentStoreConflictNotices === true && await this.maybeInjectPreFinalConflictBarrier(ctx, rootPromptExecutor, stateHandler.getPrivacyMode())) {
               conflictBarrierInjectionsRemaining -= 1;
               this.responseComparisonCandidate = void 0;
@@ -2176,15 +2158,15 @@ var AbstractUserMessageActionHandler = class {
             if (hasEnded) {
               try {
                 finalAssistantMessageCharacterCount = getFinalAssistantMessageCharacterCount(responseMessages);
-              } catch (error41) {
-                logger64.error(ctx, "Failed to count final assistant message characters", error41);
+              } catch (error42) {
+                logger65.error(ctx, "Failed to count final assistant message characters", error42);
                 finalAssistantMessageCharacterCount = void 0;
               }
               if (this.config.featureFlags?.collectModelUxStats !== false) {
                 try {
                   finalAssistantMessageUxStats = getFinalAssistantMessageUxStats(responseMessages);
-                } catch (error41) {
-                  logger64.error(ctx, "Failed to analyze final assistant message UX stats", error41);
+                } catch (error42) {
+                  logger65.error(ctx, "Failed to analyze final assistant message UX stats", error42);
                   finalAssistantMessageUxStats = void 0;
                 }
               }
@@ -2198,13 +2180,13 @@ var AbstractUserMessageActionHandler = class {
               const endOfTurnMessages = fromRedactedCoreMessages(rootPromptExecutor.getMessages(), PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
               const imageCountAtTurnEnd = countImagePartsInMessages(endOfTurnMessages);
               const shouldPersistForImageThreshold = imageCountAtTurnEnd >= IMAGE_SUMMARIZATION_TRIGGER_COUNT;
-              const shouldPersist = shouldPersistForTokenThreshold || shouldPersistForImageThreshold;
+              const shouldPersist = shouldPersistForTokenThreshold || shouldPersistForImageThreshold || persistsWithoutThreshold(backgroundSummarizationPromiseInfo);
               const completedPersistTriggerReason = shouldPersistForImageThreshold ? "approaching_image_limit" : isSelfSummary ? "self_summary_completed" : "threshold_met";
               if (shouldPersist) {
-                if (stateHandler.backgroundSummarizationHasCompleted) {
+                const persistCompletedSummarization = async () => {
                   if (stateHandler.shouldSuppressSelfSummaryAfterInputLimitFailure(tokenDetails.usedTokens)) {
                     emitSummaryLifecycleDeferred(ctx, backgroundSummarizationPromiseInfo, "self_summary_suppressed_after_input_limit");
-                    logger64.info(ctx, "[summarization-discard] At end of turn, suppressing completed self-summary persistence after input-limit failure", {
+                    logger65.info(ctx, "[summarization-discard] At end of turn, suppressing completed self-summary persistence after input-limit failure", {
                       usedTokens: tokenDetails.usedTokens,
                       selfSummaryInputLimitFailureTokenCount: stateHandler.selfSummaryInputLimitFailureTokenCount,
                       imageCountAtTurnEnd,
@@ -2212,7 +2194,7 @@ var AbstractUserMessageActionHandler = class {
                       shouldPersistForImageThreshold
                     });
                   } else {
-                    logger64.info(ctx, "[summarization-persist] At end of turn, background summarization has completed and persistence threshold has been hit. Persisting summarization.", {
+                    logger65.info(ctx, "[summarization-persist] At end of turn, background summarization has completed and persistence threshold has been hit. Persisting summarization.", {
                       usedTokens: tokenDetails.usedTokens,
                       maxTokens: tokenDetails.maxTokens,
                       imageCountAtTurnEnd,
@@ -2228,12 +2210,15 @@ var AbstractUserMessageActionHandler = class {
                       resourceAccessor: this.resourceAccessor
                     });
                   }
+                };
+                if (stateHandler.backgroundSummarizationHasCompleted) {
+                  await persistCompletedSummarization();
                 } else {
-                  const overageThreshold = Math.min(0.25 * tokenDetails.maxTokens, 5e4);
-                  const shouldBlockForTokenOverage = tokenDetails.maxTokens > 0 && tokenDetails.usedTokens > tokenDetails.maxTokens + overageThreshold;
+                  const overageThreshold = getSignificantOverageThreshold(tokenDetails.maxTokens);
+                  const shouldBlockForTokenOverage = isSignificantlyOverTokenLimit(tokenDetails);
                   const shouldBlockForImageThreshold = shouldPersistForImageThreshold;
                   if (shouldBlockForTokenOverage || shouldBlockForImageThreshold) {
-                    logger64.info(ctx, shouldBlockForImageThreshold ? "[summarization-persist] At end of turn, blocking on background summarization before persistence because image count reached threshold" : "[summarization-persist] At end of turn, blocking on background summarization because token usage significantly exceeds max tokens", {
+                    logger65.info(ctx, shouldBlockForImageThreshold ? "[summarization-persist] At end of turn, blocking on background summarization before persistence because image count reached threshold" : "[summarization-persist] At end of turn, blocking on background summarization because token usage significantly exceeds max tokens", {
                       usedTokens: tokenDetails.usedTokens,
                       maxTokens: tokenDetails.maxTokens,
                       overageThreshold,
@@ -2250,24 +2235,47 @@ var AbstractUserMessageActionHandler = class {
                       resourceAccessor: this.resourceAccessor
                     });
                   } else {
-                    emitSummaryLifecycleDeferred(ctx, backgroundSummarizationPromiseInfo, "generation_running_at_turn_end");
-                    logger64.info(ctx, "[summarization-discard] At end of turn, persistence threshold is met, but we are discarding background summarization as it has not completed", {
-                      usedTokens: tokenDetails.usedTokens,
-                      maxTokens: tokenDetails.maxTokens,
-                      imageCountAtTurnEnd,
-                      imageThreshold: IMAGE_SUMMARIZATION_TRIGGER_COUNT,
-                      shouldPersistForImageThreshold
-                    });
-                    backgroundSummarizationDiscarded.increment(ctx, 1, {
-                      reason: "not_completed",
-                      model: backgroundSummarizationPromiseInfo.modelId
-                    });
+                    const holdOutcome = await this.holdForInFlightSummarizationAtTurnEnd(ctx, stateHandler, backgroundSummarizationPromiseInfo);
+                    if (holdOutcome === "aborted") {
+                      emitSummaryLifecycleAbandoned(ctx, backgroundSummarizationPromiseInfo, "turn_end_hold_aborted");
+                      logger65.info(ctx, "[summarization-discard] The turn was cancelled during the turn-end hold; the in-flight background summarization ends with it", {
+                        usedTokens: tokenDetails.usedTokens,
+                        maxTokens: tokenDetails.maxTokens
+                      });
+                      throw new ConnectError("User aborted request", Code.Canceled);
+                    }
+                    if (holdOutcome === "completed") {
+                      await persistCompletedSummarization();
+                    } else if (holdOutcome === "failed") {
+                      logger65.info(ctx, "[summarization-discard] At end of turn, the in-flight background summarization failed during the turn-end hold", {
+                        usedTokens: tokenDetails.usedTokens,
+                        maxTokens: tokenDetails.maxTokens
+                      });
+                    } else {
+                      if (holdOutcome === "timed_out") {
+                        emitSummaryLifecycleAbandoned(ctx, backgroundSummarizationPromiseInfo, "turn_end_hold_timed_out");
+                      } else {
+                        emitSummaryLifecycleDeferred(ctx, backgroundSummarizationPromiseInfo, "generation_running_at_turn_end");
+                      }
+                      logger65.info(ctx, "[summarization-discard] At end of turn, persistence threshold is met, but we are discarding background summarization as it has not completed", {
+                        usedTokens: tokenDetails.usedTokens,
+                        maxTokens: tokenDetails.maxTokens,
+                        imageCountAtTurnEnd,
+                        imageThreshold: IMAGE_SUMMARIZATION_TRIGGER_COUNT,
+                        shouldPersistForImageThreshold,
+                        turnEndHoldOutcome: holdOutcome
+                      });
+                      backgroundSummarizationDiscarded.increment(ctx, 1, {
+                        reason: "not_completed",
+                        model: backgroundSummarizationPromiseInfo.modelId
+                      });
+                    }
                   }
                 }
               } else {
                 if (isSelfSummary) {
                   emitSummaryLifecycleDeferred(ctx, backgroundSummarizationPromiseInfo, "persistence_threshold_not_met");
-                  logger64.info(ctx, "[summarization-discard] At end of turn, discarding self-summary as persistence threshold is not met", {
+                  logger65.info(ctx, "[summarization-discard] At end of turn, discarding self-summary as persistence threshold is not met", {
                     usedTokens: tokenDetails.usedTokens,
                     maxTokens: tokenDetails.maxTokens,
                     imageCountAtTurnEnd,
@@ -2280,7 +2288,7 @@ var AbstractUserMessageActionHandler = class {
                     model: backgroundSummarizationPromiseInfo.modelId
                   });
                 } else {
-                  logger64.info(ctx, "[summarization-discard] At end of turn, we are discarding background summarization as persistence threshold is not met", {
+                  logger65.info(ctx, "[summarization-discard] At end of turn, we are discarding background summarization as persistence threshold is not met", {
                     usedTokens: tokenDetails.usedTokens,
                     maxTokens: tokenDetails.maxTokens,
                     imageCountAtTurnEnd,
@@ -2319,7 +2327,7 @@ var AbstractUserMessageActionHandler = class {
                 stateHandler.backgroundSummarizationCancellationToken.onCancelled?.();
               }
               backgroundSummarizationPromiseInfo.promise.catch((err) => {
-                logger64.error(ctx, "Background summarization failed", {
+                logger65.error(ctx, "Background summarization failed", {
                   error: err,
                   summarizationMode: "unspecified",
                   triggerReason: "unspecified",
@@ -2334,11 +2342,15 @@ var AbstractUserMessageActionHandler = class {
             if (lastTurn instanceof AgentConversationTurnHandle) {
               const lastStep = await lastTurn.steps.at(-1)?.get(ctx);
               if (lastStep?.message.case === "toolCall" && lastStep.message.value.tool.case === "createPlanToolCall" && lastStep.message.value.tool.value.result?.result?.case === "success") {
-                logger64.info(ctx, "Plan created, breaking out of turn loop");
+                logger65.info(ctx, "Plan created, breaking out of turn loop");
                 this.responseComparisonCandidate = void 0;
                 await this.cancelPendingAgentResponseComparison();
                 break;
               }
+            }
+            if (hostRequestedTurnEnd) {
+              logger65.info(ctx, "Host requested turn end after this step");
+              break;
             }
             if (!hasToolCall && !hasQueuedMessages) {
               break;
@@ -2355,7 +2367,7 @@ var AbstractUserMessageActionHandler = class {
           const unfinishedTodoCount = finalTodos.filter((todo) => todo.status === TodoStatus.PENDING || todo.status === TodoStatus.IN_PROGRESS).length;
           if (unfinishedTodoCount > 0) {
             unfinishedTodosMetric.increment(ctx, unfinishedTodoCount);
-            logger64.info(ctx, "Turn ended with unfinished todos", {
+            logger65.info(ctx, "Turn ended with unfinished todos", {
               unfinishedTodoCount
             });
           }
@@ -2377,8 +2389,8 @@ var AbstractUserMessageActionHandler = class {
               unfinishedTodosAtStart
             });
           }
-        } catch (error41) {
-          logger64.error(ctx, "Failed to track unfinished todos metric", error41);
+        } catch (error42) {
+          logger65.error(ctx, "Failed to track unfinished todos metric", error42);
         }
         const turnDuration2 = performance.now() - turnStartTime;
         agentTurnDuration.histogram(ctx, turnDuration2);
@@ -2395,17 +2407,19 @@ var AbstractUserMessageActionHandler = class {
         if (finalAssistantMessageCharacterCount !== void 0) {
           try {
             finalAssistantMessageCharacters.histogram(ctx, finalAssistantMessageCharacterCount);
-          } catch (error41) {
-            logger64.error(ctx, "Failed to record final assistant message character metric", error41);
+          } catch (error42) {
+            logger65.error(ctx, "Failed to record final assistant message character metric", error42);
           }
         }
         if (finalAssistantMessageUxStats !== void 0) {
           try {
             for (const stat28 of FINAL_ASSISTANT_MESSAGE_UX_STAT_NAMES) {
-              finalAssistantMessageUxStatsMetric.histogram(ctx, finalAssistantMessageUxStats[stat28], { stat: stat28 });
+              finalAssistantMessageUxStatsMetric.histogram(ctx, finalAssistantMessageUxStats[stat28], {
+                stat: stat28
+              });
             }
-          } catch (error41) {
-            logger64.error(ctx, "Failed to record final assistant message UX stats metric", error41);
+          } catch (error42) {
+            logger65.error(ctx, "Failed to record final assistant message UX stats metric", error42);
           }
         }
         await this.interactionListener.sendUpdate(ctx, RedactedUpdates.stepCompleted(stateHandler.getPrivacyMode(), turn.steps.length, Math.round(turnDuration2)));
@@ -2441,11 +2455,11 @@ var AbstractUserMessageActionHandler = class {
                   getModelInputCostForContext: costChecker
                 });
               } catch (err) {
-                logger64.error(ctx, "Failed to request prompt suggestion", err);
+                logger65.error(ctx, "Failed to request prompt suggestion", err);
               }
             });
           } catch (err) {
-            logger64.error(ctx, "Failed to setup prompt suggestion", err);
+            logger65.error(ctx, "Failed to setup prompt suggestion", err);
           }
         }
         const getFeedbackRequestDetails = this.config.featureFlags?.getFeedbackRequestDetails;
@@ -2469,7 +2483,7 @@ var AbstractUserMessageActionHandler = class {
                   commentPlaceholder: feedbackRequestDetails.commentPlaceholder
                 }));
               } catch (err) {
-                logger64.error(ctx, "Failed to emit feedback request", err);
+                logger65.error(ctx, "Failed to emit feedback request", err);
               }
             });
           }
@@ -2495,7 +2509,7 @@ var AbstractUserMessageActionHandler = class {
           numberOfUnexpectedToolCallErrors: turnToolCountingState.getUnexpectedToolCallErrorCount(),
           success: true
         });
-      } catch (error41) {
+      } catch (error42) {
         await this.cancelPendingAgentResponseComparison();
         const turnDuration2 = performance.now() - turnStartTime;
         agentTurnDuration.histogram(ctx, turnDuration2);
@@ -2521,7 +2535,7 @@ var AbstractUserMessageActionHandler = class {
           "user.is_dev": getIsDevFromContext(ctx) ? "true" : "false"
         });
         const modelName = this.config.modelId ?? "unknown";
-        const errorName = error41 instanceof Error ? error41.constructor.name : "unknown";
+        const errorName = error42 instanceof Error ? error42.constructor.name : "unknown";
         unifiedHandlerNumberOfToolCalls.histogram(ctx, totalToolCallsInTurn, {
           model: modelName,
           hasFailedToolCalls: turnToolCountingState.hasFailedToolCalls(),
@@ -2536,7 +2550,7 @@ var AbstractUserMessageActionHandler = class {
           numberOfUnexpectedToolCallErrors: turnToolCountingState.getUnexpectedToolCallErrorCount(),
           success: false
         });
-        throw error41;
+        throw error42;
       }
     } catch (e_5) {
       env_5.error = e_5;
@@ -2552,7 +2566,7 @@ var AbstractUserMessageActionHandler = class {
     while (true) {
       const queuedAction = await this.conversationActionReceiver.peek(ctx);
       if (queuedAction?.action.case === "asyncAskQuestionCompletionAction") {
-        logger64.warn(ctx, "Found AsyncAskQuestionCompletionAction in queue handler - should have been handled by inline handler", {
+        logger65.warn(ctx, "Found AsyncAskQuestionCompletionAction in queue handler - should have been handled by inline handler", {
           originalToolCallId: queuedAction.action.value.originalToolCallId
         });
         break;
@@ -2572,7 +2586,7 @@ var AbstractUserMessageActionHandler = class {
       const turnMsg = await turn.userMessage.get(ctx);
       const shouldCreateNewTurn = turnMsg.messageId !== queuedMsg.messageId;
       if (!shouldCreateNewTurn || queuedReqContext === void 0) {
-        logger64.info(ctx, "Queued user message consumption decision", {
+        logger65.info(ctx, "Queued user message consumption decision", {
           queuedMessageId: queuedMsg.messageId,
           currentTurnMessageId: turnMsg.messageId,
           decision: shouldCreateNewTurn ? "new_turn_created" : "already_has_turn",
@@ -2590,11 +2604,11 @@ var AbstractUserMessageActionHandler = class {
           }
           await this.interactionListener.sendUpdate(ctx, RedactedUpdates.userMessageAppended(consumedClaimedInjection ? toRedactedUserMessage2(persistedUserMessage, stateHandler.getPrivacyMode()) : queuedMsg));
           turn = await stateHandler.createAgentTurn(ctx, persistedUserMessage, queuedReqContext ? fromRedactedRequestContext(queuedReqContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED) : new RequestContext(), this.config, this.resourceAccessor);
-        } catch (error41) {
+        } catch (error42) {
           if (consumedClaimedInjection) {
             this.conversationActionReceiver.failConsumedInjectionDelivery?.();
           }
-          throw error41;
+          throw error42;
         }
         hasQueuedMessages = true;
         if (this.config.immediatelyUpdateStateOnNewTurn) {
@@ -2603,8 +2617,10 @@ var AbstractUserMessageActionHandler = class {
               if (onStateUpdate) {
                 await onStateUpdate(ctx, newState);
               }
-            }).catch((error41) => {
-              logger64.error(ctx, "Failed to persist checkpoint after creating queued turn", { error: error41 });
+            }).catch((error42) => {
+              logger65.error(ctx, "Failed to persist checkpoint after creating queued turn", {
+                error: error42
+              });
             });
           } else {
             const newState = await stateHandler.computeNewStructure(ctx);
@@ -2670,7 +2686,7 @@ var AbstractUserMessageActionHandler = class {
       try {
         await conflictNoticeRelease(executor, ctx, eventIds, this.config.conversationId !== void 0 ? { conversationId: this.config.conversationId } : void 0);
       } catch (releaseError) {
-        logger64.warn(ctx, "Conflict barrier release failed", {
+        logger65.warn(ctx, "Conflict barrier release failed", {
           error: releaseError
         });
       }
@@ -2710,31 +2726,31 @@ ${sanitizedReminder}
 </system_reminder>`
           }
         ], privacyMode));
-      } catch (error41) {
+      } catch (error42) {
         await releaseConflictNoticeEvents(eventIds);
-        throw error41;
+        throw error42;
       }
       try {
         await conflictNoticeAck(executor, ctx, eventIds, this.config.conversationId !== void 0 ? { conversationId: this.config.conversationId } : void 0);
-      } catch (error41) {
-        logger64.warn(ctx, "Conflict barrier ack failed", { error: error41 });
+      } catch (error42) {
+        logger65.warn(ctx, "Conflict barrier ack failed", { error: error42 });
         await releaseConflictNoticeEvents(eventIds);
       }
       agentStoreConflictBarrier.increment(ctx, 1, {
         outcome: "rescued",
         timed_out: timedOut
       });
-      logger64.info(ctx, "Local-sync conflict turn-end barrier injected", {
+      logger65.info(ctx, "Local-sync conflict turn-end barrier injected", {
         eventCount: eventIds.length,
         timedOut: result.kind === "timed-out"
       });
       return true;
-    } catch (error41) {
+    } catch (error42) {
       agentStoreConflictBarrier.increment(ctx, 1, {
         outcome: "error",
         timed_out: "false"
       });
-      logger64.warn(ctx, "Conflict turn-end barrier failed", { error: error41 });
+      logger65.warn(ctx, "Conflict turn-end barrier failed", { error: error42 });
       return false;
     }
   }
@@ -2753,8 +2769,8 @@ ${sanitizedReminder}
           if (onStateUpdate) {
             await onStateUpdate(ctx, newState);
           }
-        }).catch((error41) => {
-          logger64.error(ctx, "Failed to persist checkpoint after creating CLI reflect-general follow-up turn", { error: error41 });
+        }).catch((error42) => {
+          logger65.error(ctx, "Failed to persist checkpoint after creating CLI reflect-general follow-up turn", { error: error42 });
         });
       } else {
         const newState = await stateHandler.computeNewStructure(ctx);
@@ -2764,6 +2780,25 @@ ${sanitizedReminder}
       }
     }
     return newTurn;
+  }
+  async shouldDeferProactiveCompaction(ctx, tokenDetails) {
+    const shouldDefer = this.config.shouldDeferProactiveCompaction;
+    if (shouldDefer === void 0 || isSignificantlyOverTokenLimit(tokenDetails)) {
+      return false;
+    }
+    try {
+      const deferred = await shouldDefer(ctx, tokenDetails);
+      if (deferred) {
+        logger65.info(ctx, "[cloud-summarization] Deferring proactive compaction while a background summarization is in flight", {
+          usedTokens: tokenDetails.usedTokens,
+          maxTokens: tokenDetails.maxTokens
+        });
+      }
+      return deferred;
+    } catch (error42) {
+      logger65.warn(ctx, "[cloud-summarization] Proactive compaction deferral check failed; compacting", { error: error42 });
+      return false;
+    }
   }
   /**
    * Detect that the tokenDetails restored with this request predate a
@@ -2802,12 +2837,64 @@ ${sanitizedReminder}
       return;
     }
     stateHandler.tokenDetailsStaleAfterSummarization = true;
-    logger64.info(ctx, "[summarization-trigger] Restored token details predate the last compaction (no model call since); suppressing turn-start trigger until fresh usage arrives", {
+    logger65.info(ctx, "[summarization-trigger] Restored token details predate the last compaction (no model call since); suppressing turn-start trigger until fresh usage arrives", {
       restoredUsedTokens: tokenDetails.usedTokens,
       maxTokens: tokenDetails.maxTokens,
       messageCountAtLastCompaction: stateHandler.messageCountAtLastCompaction,
       messageCount: messages2.length
     });
+  }
+  /**
+   * Keeps the turn open for the host-configured bound so an in-flight
+   * background summary can land instead of dying with the turn. Presence is
+   * flipped to idle first, so the hold is not rendered as the agent working.
+   */
+  async holdForInFlightSummarizationAtTurnEnd(ctx, stateHandler, promiseInfo) {
+    const hold = this.config.turnEndSummaryHold;
+    const holdDisabled = hold === void 0 || hold.maxWaitMs <= 0;
+    if (holdDisabled) {
+      return "skipped";
+    }
+    if (ctx.signal.aborted) {
+      return "aborted";
+    }
+    const labels = {
+      model: promiseInfo.modelId,
+      summarizer: promiseInfo.summarizerType
+    };
+    logger65.info(ctx, "[summarization-persist] At end of turn, holding the turn open for the in-flight background summarization", { maxWaitMs: hold.maxWaitMs, ...labels });
+    try {
+      hold.onHoldStart?.(ctx);
+    } catch (error42) {
+      logger65.warn(ctx, "Turn-end summarization hold start hook failed", {
+        error: error42
+      });
+    }
+    const startedAt = performance.now();
+    const waitEnd = await settledAbortedOrTimedOut(promiseInfo.promise, ctx.signal, hold.maxWaitMs);
+    const waitedMs = performance.now() - startedAt;
+    const generationFailed = stateHandler.backgroundSummarizationPromiseInfo === null;
+    const generationLanded = stateHandler.backgroundSummarizationPromiseInfo === promiseInfo && stateHandler.backgroundSummarizationHasCompleted;
+    let outcome;
+    if (waitEnd === "aborted") {
+      outcome = "aborted";
+    } else if (generationFailed) {
+      outcome = "failed";
+    } else if (generationLanded) {
+      outcome = "completed";
+    } else {
+      outcome = waitEnd === "timed_out" ? "timed_out" : "failed";
+    }
+    backgroundSummarizationTurnEndHoldMs.histogram(ctx, waitedMs, {
+      outcome,
+      ...labels
+    });
+    logger65.info(ctx, "[summarization-persist] Turn-end hold for background summarization ended", {
+      outcome,
+      waitedMs: Math.round(waitedMs),
+      ...labels
+    });
+    return outcome;
   }
   /**
    * Adopt a completed summary stashed by a previous turn of this
@@ -2838,7 +2925,9 @@ ${sanitizedReminder}
     const pendingGeneration = store.claimPendingGeneration?.(conversationId);
     if (pendingGeneration !== void 0) {
       const { promiseInfo, messagesSummarized } = pendingGeneration;
-      stateHandler.setBackgroundSummarizationState(promiseInfo, messagesSummarized, { cancelled: false });
+      stateHandler.setBackgroundSummarizationState(promiseInfo, messagesSummarized, {
+        cancelled: false
+      });
       return;
     }
     let adoptedModelId = "unknown";
@@ -2851,6 +2940,9 @@ ${sanitizedReminder}
         privacyMode: stateHandler.getPrivacyMode(),
         currentMessages,
         stillWarrantsCompaction: (record3) => {
+          if (persistsWithoutThreshold(record3)) {
+            return true;
+          }
           const tokenDetails = stateHandler.tokenDetails;
           const backgroundSummarizationProps = {
             ...this.config.backgroundSummarizationProps,
@@ -2875,7 +2967,14 @@ ${sanitizedReminder}
         summarizerType: record2.summarizerType,
         startInvocationId: record2.startInvocationId,
         startUsedTokens: record2.startUsedTokens,
-        startMaxTokens: record2.startMaxTokens
+        startMaxTokens: record2.startMaxTokens,
+        triggerReason: record2.triggerReason,
+        lifecycle: record2.summaryLifecycleId === void 0 ? void 0 : resumeSummaryLifecycle({
+          summaryLifecycleId: record2.summaryLifecycleId,
+          summarizationModelId: record2.modelId,
+          mainModelId: this.config.modelId,
+          summarizerType: record2.summarizerType
+        })
       }, prefixMessages, { cancelled: false });
       stateHandler.setBackgroundSummarizationHasCompleted(0);
       const persistedSummary = await this.orchestrator.handleSummarization(ctx, stateHandler, rootPromptExecutor, this.interactionListener, this.config, requestContext, {
@@ -2889,18 +2988,18 @@ ${sanitizedReminder}
         model: record2.modelId,
         outcome: persisted ? "adopted" : "persist_declined"
       });
-      logger64.info(ctx, persisted ? "[summarization-adopt] Adopted pending summary" : "[summarization-adopt] Pending summary passed validation but was not persisted", {
+      logger65.info(ctx, persisted ? "[summarization-adopt] Adopted pending summary" : "[summarization-adopt] Pending summary passed validation but was not persisted", {
         model: record2.modelId,
         summarizerType: record2.summarizerType,
         messagesSummarizedCount: record2.messagesSummarizedCount,
         stashAgeMs: Date.now() - record2.createdAtMs
       });
-    } catch (error41) {
+    } catch (error42) {
       pendingSummaryAdoption.increment(ctx, 1, {
         model: adoptedModelId,
         outcome: "error"
       });
-      logger64.warn(ctx, "[summarization-adopt] Failed to adopt pending summary; falling back to normal behavior", { error: error41 });
+      logger65.warn(ctx, "[summarization-adopt] Failed to adopt pending summary; falling back to normal behavior", { error: error42 });
       stateHandler.clearBackgroundSummarizationState();
     }
   }
@@ -2932,49 +3031,23 @@ ${sanitizedReminder}
   }
   async buildStepSummarizationContext(ctx, turn, stateHandler, toolsGenerator, mcpTools, repositoryInfo, requestContext, fileOperationLockManager) {
     const userMessage2 = await turn.userMessage.get(ctx);
-    const mode = stateHandler.resolveStepMode(userMessage2);
-    const toolsBuildStartMs = performance.now();
-    const toolSetHandle = toolsGenerator({
+    const { tools, extraT, descriptionProps, toolSetHandle } = await buildSummarizationToolContext({
+      ctx,
+      config: this.config,
+      toolsGenerator,
       resourceAccessor: this.resourceAccessor,
       stateHandler,
-      agentSessionId: this.config.agentSessionId,
+      mode: stateHandler.resolveStepMode(userMessage2),
       mcpTools,
       repositoryInfos: repositoryInfo,
-      blobStore: stateHandler.getBlobStore(),
-      mode,
-      loggingContext: ctx,
       requestContext,
       fileOperationLockManager,
-      smartModeClassifierMode: this.config.smartModeClassifierMode,
-      smartModeClassifierShadowMode: this.config.smartModeClassifierShadowMode,
-      autoRejectFirstAskQuestion: this.config.autoRejectFirstAskQuestion
-    });
-    ctx.get(cloudAgentTurnPrepGlueMsRecorderKey)?.("toolsBuildMs", performance.now() - toolsBuildStartMs);
-    const tools = toolSetHandle.getStaticTools();
-    const userAutoRunInstructions = await this.getUserPermissionsFileAutoRunInstructions(ctx, requestContext);
-    const projectAutoRunInstructions = this.getProjectPermissionsFileAutoRunInstructions(requestContext);
-    const extraT = {
-      repositoryInfos: repositoryInfo,
-      shouldQueryProd: requestContext.repositoryInfoShouldQueryProd,
-      stateHandler,
-      modelVendor: this.config.modelInfo?.vendor,
-      enableToolArgPreservation: this.config.enableToolArgPreservation === true,
-      enableHookAdditionalContext: this.config.featureFlags?.enableHookAdditionalContext === true,
-      enableAgentStoreConflictNoticeCollector: this.config.featureFlags?.enableAgentStoreConflictNotices === true,
-      enableAgentStoreConflictNotices: this.config.featureFlags?.enableAgentStoreConflictNotices === true,
-      writeBarrierTimeoutMs: this.resolveWriteBarrierTimeoutMs(),
-      onWriteBarrier: this.config.recordAgentStoreWriteBarrier,
-      workspacePaths: requestContext.env?.workspacePaths,
-      userAutoRunInstructions,
-      projectAutoRunInstructions,
-      cursorRules: getAllRules(requestContext, this.config.nonFileRules, this.config.featureFlags),
-      agentSkills: requestContext.agentSkills ?? [],
       contextInjectionSignal: this.conversationActionReceiver.getContextInjectionToolSignal?.()
-    };
+    });
     return {
       tools,
       extraT,
-      descriptionProps: toolSetHandle.getDescriptionProps(),
+      descriptionProps,
       toolCallIdentityResolver: toolSetHandle
     };
   }
@@ -3033,9 +3106,9 @@ ${sanitizedReminder}
     if (this.config.fireAndForgetCheckpoints) {
       persisted = stateHandler.computeNewStructure(ctx).then(async (currentState) => {
         await onStateUpdate(ctx, currentState);
-      }).catch((error41) => {
-        logger64.error(ctx, "Failed to persist checkpoint after step", {
-          error: error41
+      }).catch((error42) => {
+        logger65.error(ctx, "Failed to persist checkpoint after step", {
+          error: error42
         });
       });
     } else {
@@ -3156,7 +3229,7 @@ ${sanitizedReminder}
     const mergedMcpTools = this.mergeRequestContextTools(mcpTools, requestContext.tools);
     const executionContext = await this.buildToolExecutionContext(ctx, splitStateHandler, toolCallRecorder, mergedMcpTools, requestContext.repositoryInfo, requestContext, fileOperationLockManager, allowedToolNames, admittedEffectiveToolName);
     if (allowedToolNames !== void 0 && !allowedToolNames.has(descriptor2.toolName) && !executionContext.directDynamicToolNames.has(getEffectiveToolCallName(descriptor2))) {
-      logger64.warn(ctx, logMessage, {
+      logger65.warn(ctx, logMessage, {
         toolCallId: descriptor2.toolCallId,
         toolName: descriptor2.toolName,
         allowedToolCount: allowedToolNames.size
@@ -3272,7 +3345,7 @@ ${sanitizedReminder}
       const invocationId = getInvocationId(ctx);
       stateHandler.lastStepInvocationId = invocationId;
       spanCtxt.span.setAttribute("invocationId", invocationId);
-      logger64.info(ctx, "Running model-only step");
+      logger65.info(ctx, "Running model-only step");
       const stepSetupStart = performance.now();
       const isFirstStep = turn.steps.length === 0;
       const isResponseComparisonFirstModelStep = !this.responseComparisonModelStepStarted;
@@ -3335,10 +3408,10 @@ ${sanitizedReminder}
       let result;
       try {
         result = rootPromptExecutor.executeModelStreamOnly(streamCtx, stateHandler, interactionHandler, toolSetHandle.getToolExecutionSet(), toolSetHandle.getDescriptionProps(), void 0);
-      } catch (error41) {
+      } catch (error42) {
         idleSamplePreempter?.stop();
         await this.cancelPendingAgentResponseComparison();
-        throw error41;
+        throw error42;
       }
       const isCloudAgentSingleStep = this.config.maxSteps === 1;
       const tokenDetails = stateHandler.tokenDetails;
@@ -3346,7 +3419,7 @@ ${sanitizedReminder}
       const shouldStartBg = !isCloudAgentSingleStep && !stateHandler.tokenDetailsStaleAfterSummarization && !shouldSuppressSelfSummaryAfterInputLimitFailure && this.orchestrator.shouldStartBackgroundSummarization(tokenDetails, rootPromptExecutor.getMessages(), ctx);
       if (shouldStartBg) {
         const wouldMeetPersistThreshold = shouldPersistBackgroundSummarization(tokenDetails.usedTokens, tokenDetails.maxTokens, this.config.backgroundSummarizationProps);
-        logger64.info(ctx, "Mid-loop background summarization trigger (model-stream-only): checking persist threshold", {
+        logger65.info(ctx, "Mid-loop background summarization trigger (model-stream-only): checking persist threshold", {
           usedTokens: tokenDetails.usedTokens,
           maxTokens: tokenDetails.maxTokens,
           unusedTokens: tokenDetails.maxTokens - tokenDetails.usedTokens,
@@ -3394,7 +3467,7 @@ ${sanitizedReminder}
       const finishPreemptedSample = async (preempter, rejectedAfterCancel) => {
         await this.cancelPendingAgentResponseComparison();
         const preemptedAfterMs = preempter.preemptedAfterMs ?? 0;
-        logger64.info(ctx, "Model sample preempted by pending steer", {
+        logger65.info(ctx, "Model sample preempted by pending steer", {
           invocationId,
           phase: preempter.phase,
           preemptedAfterMs,
@@ -3418,12 +3491,12 @@ ${sanitizedReminder}
           result.invocationId,
           interactionHandler.consumeStream(streamCtx, this.tapAgentResponseComparisonWarmup(ctx, result.fullStream, responseComparisonMessages, responseComparisonTools), turn)
         ]);
-      } catch (error41) {
+      } catch (error42) {
         if (idleSamplePreempter?.preempted === true) {
           return await finishPreemptedSample(idleSamplePreempter, true);
         }
         await this.cancelPendingAgentResponseComparison();
-        throw error41;
+        throw error42;
       } finally {
         idleSamplePreempter?.stop();
       }
@@ -3431,12 +3504,12 @@ ${sanitizedReminder}
         return await finishPreemptedSample(idleSamplePreempter, false);
       }
       if (finalInvocationId !== invocationId) {
-        logger64.error(ctx, "Invocation ID mismatch. Bug in executeModelStreamOnly", void 0, {
+        logger65.error(ctx, "Invocation ID mismatch. Bug in executeModelStreamOnly", void 0, {
           initialInvocationId: invocationId,
           finalInvocationId
         });
       }
-      logger64.info(ctx, "Setting token details for client token ring (model-stream-only)", {
+      logger65.info(ctx, "Setting token details for client token ring (model-stream-only)", {
         usedTokens: usage.totalTokens,
         maxTokens: extendedUsage.maxTokens,
         inputTokens: extendedUsage.inputTokens,

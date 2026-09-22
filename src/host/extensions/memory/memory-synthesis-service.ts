@@ -339,7 +339,7 @@ var MemorySynthesisService = class {
     try {
       const proposal = await this.options.retry.runWithRetry(
         () => this.options.deadline.run(async (deadlineSignal) => {
-          const request3 = JSON.stringify({
+          const request5 = JSON.stringify({
             today: currentDate(startedAt),
             currentMemories: snapshot.memories,
             newEvidence: evidence
@@ -347,7 +347,7 @@ var MemorySynthesisService = class {
           const synthesisText = await streamText({
             executor: this.options.createExecutor("synthesis"),
             system: synthesisSystemPrompt(),
-            user: request3,
+            user: request5,
             signal: deadlineSignal,
             isDisposed: () => this.disposed
           });
@@ -406,9 +406,9 @@ var MemorySynthesisService = class {
       }
       this.report(outcome, evidence.length, snapshot.memories.length, proposal.length, startedAt);
       return outcome;
-    } catch (error41) {
+    } catch (error42) {
       if (this.disposed) return "no-work";
-      const failure2 = error41 instanceof RetryExhaustedError ? error41.cause : error41;
+      const failure2 = error42 instanceof RetryExhaustedError ? error42.cause : error42;
       const attempt = failure2 instanceof MemorySynthesisAttemptError ? failure2 : null;
       if (temporal) target.markTemporalReview(startedAt);
       finish();

@@ -76,9 +76,7 @@ var CANCELLED_CODES = /* @__PURE__ */ new Set([
   ErrorDetails_Error.USER_ABORTED_REQUEST,
   ErrorDetails_Error.DEBOUNCED
 ]);
-var TERMINAL_MESSAGE_CODES = /* @__PURE__ */ new Set([
-  ErrorDetails_Error.CUSTOM_MESSAGE
-]);
+var TERMINAL_MESSAGE_CODES = /* @__PURE__ */ new Set([ErrorDetails_Error.CUSTOM_MESSAGE]);
 var TRANSPORT_PATTERNS = [
   "NGHTTP2",
   "ECONNRESET",
@@ -115,18 +113,18 @@ var NETWORK_ERRNO_CODES = /* @__PURE__ */ new Set([
 var NETWORK_ERRNO_RE = new RegExp(`\\b(${[...NETWORK_ERRNO_CODES].join("|")})\\b`);
 var INFERENCE_REQUEST_ERROR_TYPE_HEADER = "x-cursor-inference-request-error-type";
 var AGENT_WEBSOCKET_DELIVERY_AMBIGUOUS_ERROR_NAME = "AgentWebSocketDeliveryAmbiguousError";
-function classifyError2(error41, options2 = {}) {
+function classifyError2(error42, options2 = {}) {
   const { requestId: requestId2 } = options2;
-  if (error41 instanceof AgentError) {
-    return error41;
+  if (error42 instanceof AgentError) {
+    return error42;
   }
-  if (isConnectError(error41)) {
-    return classifyConnectError(error41, requestId2);
+  if (isConnectError(error42)) {
+    return classifyConnectError(error42, requestId2);
   }
-  const blobNotFound = findBlobNotFoundError(error41);
+  const blobNotFound = findBlobNotFoundError(error42);
   if (blobNotFound !== void 0) {
     return new NonRetriableError(blobNotFound.message, {
-      cause: error41 instanceof Error ? error41 : void 0,
+      cause: error42 instanceof Error ? error42 : void 0,
       requestId: requestId2,
       displayInfo: {
         title: "Conversation data missing",
@@ -135,108 +133,108 @@ function classifyError2(error41, options2 = {}) {
       }
     });
   }
-  if (error41 instanceof Error) {
-    if (error41.name === "AbortError") {
-      return new CancelledError(error41.message, { cause: error41, requestId: requestId2 });
+  if (error42 instanceof Error) {
+    if (error42.name === "AbortError") {
+      return new CancelledError(error42.message, { cause: error42, requestId: requestId2 });
     }
-    if (error41.name === AGENT_WEBSOCKET_DELIVERY_AMBIGUOUS_ERROR_NAME) {
-      return new RetriableError(error41.message, {
-        cause: error41,
+    if (error42.name === AGENT_WEBSOCKET_DELIVERY_AMBIGUOUS_ERROR_NAME) {
+      return new RetriableError(error42.message, {
+        cause: error42,
         requestId: requestId2,
         isTransport: true
       });
     }
-    if (matchesTransportPattern(error41)) {
-      return new RetriableError(error41.message, { cause: error41, requestId: requestId2 });
+    if (matchesTransportPattern(error42)) {
+      return new RetriableError(error42.message, { cause: error42, requestId: requestId2 });
     }
   }
-  const message = error41 instanceof Error ? error41.message : String(error41);
+  const message = error42 instanceof Error ? error42.message : String(error42);
   return new RetriableError(message, {
-    cause: error41 instanceof Error ? error41 : void 0,
+    cause: error42 instanceof Error ? error42 : void 0,
     requestId: requestId2
   });
 }
-function isConnectError(error41) {
-  return error41 !== null && typeof error41 === "object" && "code" in error41 && "name" in error41 && error41.name === "ConnectError";
+function isConnectError(error42) {
+  return error42 !== null && typeof error42 === "object" && "code" in error42 && "name" in error42 && error42.name === "ConnectError";
 }
-function classifyConnectError(error41, requestId2) {
+function classifyConnectError(error42, requestId2) {
   var _a19, _b2, _c2, _d, _e2, _f, _g;
   var _h;
-  const details = getErrorDetails(error41);
+  const details = getErrorDetails(error42);
   const displayInfo = {
     title: (_a19 = details === null || details === void 0 ? void 0 : details.details) === null || _a19 === void 0 ? void 0 : _a19.title,
     detail: (_b2 = details === null || details === void 0 ? void 0 : details.details) === null || _b2 === void 0 ? void 0 : _b2.detail,
     isRetryable: (_c2 = details === null || details === void 0 ? void 0 : details.details) === null || _c2 === void 0 ? void 0 : _c2.isRetryable,
-    connectCode: error41.code,
+    connectCode: error42.code,
     errorCode: details === null || details === void 0 ? void 0 : details.error,
-    inferenceRequestErrorType: (_h = error41.metadata.get(INFERENCE_REQUEST_ERROR_TYPE_HEADER)) !== null && _h !== void 0 ? _h : void 0,
+    inferenceRequestErrorType: (_h = error42.metadata.get(INFERENCE_REQUEST_ERROR_TYPE_HEADER)) !== null && _h !== void 0 ? _h : void 0,
     errorDetails: details
   };
-  const opts = { cause: error41, requestId: requestId2, displayInfo };
-  if (error41.code === Code.Canceled || error41.code === Code.Aborted) {
-    if (matchesTransportPattern(error41)) {
-      return new RetriableError(error41.message, opts);
+  const opts = { cause: error42, requestId: requestId2, displayInfo };
+  if (error42.code === Code.Canceled || error42.code === Code.Aborted) {
+    if (matchesTransportPattern(error42)) {
+      return new RetriableError(error42.message, opts);
     }
-    return new CancelledError(error41.message, opts);
+    return new CancelledError(error42.message, opts);
   }
   if ((details === null || details === void 0 ? void 0 : details.error) !== void 0) {
     const code = details.error;
     if (CANCELLED_CODES.has(code)) {
-      return new CancelledError(extractMessage(error41, details), opts);
+      return new CancelledError(extractMessage(error42, details), opts);
     }
     const backendAction = (_e2 = (_d = details.details) === null || _d === void 0 ? void 0 : _d.analyticsMetadata) === null || _e2 === void 0 ? void 0 : _e2.actionRequired;
     if (backendAction !== void 0 && backendAction !== "") {
-      return new ActionRequiredError(extractMessage(error41, details), backendAction, opts);
+      return new ActionRequiredError(extractMessage(error42, details), backendAction, opts);
     }
     if (AUTH_CODES.has(code)) {
-      return new ActionRequiredError(extractMessage(error41, details), "login", opts);
+      return new ActionRequiredError(extractMessage(error42, details), "login", opts);
     }
     if (UPGRADE_CODES.has(code)) {
-      return new ActionRequiredError(extractMessage(error41, details), "upgrade", opts);
+      return new ActionRequiredError(extractMessage(error42, details), "upgrade", opts);
     }
     if (PAYMENT_CODES.has(code)) {
-      return new ActionRequiredError(extractMessage(error41, details), "payment", opts);
+      return new ActionRequiredError(extractMessage(error42, details), "payment", opts);
     }
     if (CONFIG_CODES.has(code)) {
-      return new ActionRequiredError(extractMessage(error41, details), "config", opts);
+      return new ActionRequiredError(extractMessage(error42, details), "config", opts);
     }
     if (TERMINAL_MESSAGE_CODES.has(code) && ((_f = details.details) === null || _f === void 0 ? void 0 : _f.isRetryable) !== true) {
-      return new NonRetriableError(extractMessage(error41, details), opts);
+      return new NonRetriableError(extractMessage(error42, details), opts);
     }
     if (((_g = details.details) === null || _g === void 0 ? void 0 : _g.isRetryable) === false) {
-      return new NonRetriableError(extractMessage(error41, details), opts);
+      return new NonRetriableError(extractMessage(error42, details), opts);
     }
   }
-  if (error41.code === Code.Unauthenticated) {
-    return new ActionRequiredError(error41.message, "login", opts);
+  if (error42.code === Code.Unauthenticated) {
+    return new ActionRequiredError(error42.message, "login", opts);
   }
-  return new RetriableError(error41.message, opts);
+  return new RetriableError(error42.message, opts);
 }
-function getErrorDetails(error41) {
+function getErrorDetails(error42) {
   var _a19, _b2;
-  const details = error41.findDetails(ErrorDetails);
+  const details = error42.findDetails(ErrorDetails);
   if (details.length > 0) {
     return details[0];
   }
   try {
-    const causeDetails = (_b2 = (_a19 = error41.cause) === null || _a19 === void 0 ? void 0 : _a19.findDetails) === null || _b2 === void 0 ? void 0 : _b2.call(_a19, ErrorDetails);
+    const causeDetails = (_b2 = (_a19 = error42.cause) === null || _a19 === void 0 ? void 0 : _a19.findDetails) === null || _b2 === void 0 ? void 0 : _b2.call(_a19, ErrorDetails);
     return causeDetails === null || causeDetails === void 0 ? void 0 : causeDetails[0];
   } catch (_c2) {
     return void 0;
   }
 }
-function extractMessage(error41, details) {
+function extractMessage(error42, details) {
   if (details === null || details === void 0 ? void 0 : details.details) {
     const { title, detail } = details.details;
     if (title && detail)
       return `${title} ${detail}`;
-    return title || detail || error41.message;
+    return title || detail || error42.message;
   }
-  return error41.message;
+  return error42.message;
 }
-function matchesTransportPattern(error41) {
+function matchesTransportPattern(error42) {
   const seen = /* @__PURE__ */ new Set();
-  let current = error41;
+  let current = error42;
   while (current instanceof Error && !seen.has(current)) {
     seen.add(current);
     const errorString = `${current.name}: ${current.message}`;

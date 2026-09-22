@@ -13,9 +13,9 @@ function addCitedToken(cited, raw) {
 function decodedTokenOrNull(raw) {
   try {
     return decodeURIComponent(raw);
-  } catch (error41) {
-    if (error41 instanceof URIError) return null;
-    throw error41;
+  } catch (error42) {
+    if (error42 instanceof URIError) return null;
+    throw error42;
   }
 }
 function citedFileTokens(text2) {

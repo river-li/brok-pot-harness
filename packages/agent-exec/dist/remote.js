@@ -1,7 +1,7 @@
-init_dist3();
+init_dist4();
 init_exec_pb();
-init_dist2();
-var __awaiter29 = function(thisArg, _arguments, P2, generator) {
+init_dist3();
+var __awaiter31 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -82,11 +82,11 @@ var __disposeResources2 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var __asyncValues11 = function(o) {
+var __asyncValues10 = function(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var m2 = o[Symbol.asyncIterator], i;
   return m2 ? m2.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
@@ -105,10 +105,10 @@ var __asyncValues11 = function(o) {
     }, reject2);
   }
 };
-var __await11 = function(v2) {
-  return this instanceof __await11 ? (this.v = v2, this) : new __await11(v2);
+var __await10 = function(v2) {
+  return this instanceof __await10 ? (this.v = v2, this) : new __await10(v2);
 };
-var __asyncGenerator11 = function(thisArg, _arguments, generator) {
+var __asyncGenerator10 = function(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g2 = generator.apply(thisArg, _arguments || []), i, q2 = [];
   return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function() {
@@ -137,7 +137,7 @@ var __asyncGenerator11 = function(thisArg, _arguments, generator) {
     }
   }
   function step(r) {
-    r.value instanceof __await11 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
+    r.value instanceof __await10 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
   }
   function fulfill(value) {
     resume("next", value);
@@ -161,7 +161,7 @@ var ExecutorResource = class {
     this.deserializeResult = deserializeResult;
   }
   execute(parentCtx, args, options2) {
-    return __awaiter29(this, void 0, void 0, function* () {
+    return __awaiter31(this, void 0, void 0, function* () {
       const env_1 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource2(env_1, createSpan(parentCtx.withName("ExecutorResource.execute")), false);
@@ -209,11 +209,11 @@ var ExecutorResource = class {
           pushHookContexts(result);
           resultValue = this.deserializeResult(result);
         }
-        void (() => __awaiter29(this, void 0, void 0, function* () {
+        void (() => __awaiter31(this, void 0, void 0, function* () {
           var _a19, e_2, _b2, _c2;
           try {
             try {
-              for (var _d = true, rest_1 = __asyncValues11(rest), rest_1_1; rest_1_1 = yield rest_1.next(), _a19 = rest_1_1.done, !_a19; _d = true) {
+              for (var _d = true, rest_1 = __asyncValues10(rest), rest_1_1; rest_1_1 = yield rest_1.next(), _a19 = rest_1_1.done, !_a19; _d = true) {
                 _c2 = rest_1_1.value;
                 _d = false;
                 const message = _c2;
@@ -228,8 +228,8 @@ var ExecutorResource = class {
                 if (e_2) throw e_2.error;
               }
             }
-          } catch (error41) {
-            logger12.info(ctx, "Ignoring exec stream shutdown during detached drain", { error: error41 });
+          } catch (error42) {
+            logger12.info(ctx, "Ignoring exec stream shutdown during detached drain", { error: error42 });
           }
         }))().catch(() => {
         });
@@ -250,7 +250,7 @@ var StreamExecutorResource = class {
     this.deserializeStream = deserializeStream;
   }
   execute(parentCtx, args, options2) {
-    return __asyncGenerator11(this, arguments, function* execute_1() {
+    return __asyncGenerator10(this, arguments, function* execute_1() {
       var _a19, e_3, _b2, _c2;
       const env_2 = { stack: [], error: void 0, hasError: false };
       try {
@@ -270,7 +270,7 @@ var StreamExecutorResource = class {
           });
         });
         try {
-          for (var _d = true, messageStream_1 = __asyncValues11(messageStream), messageStream_1_1; messageStream_1_1 = yield __await11(messageStream_1.next()), _a19 = messageStream_1_1.done, !_a19; _d = true) {
+          for (var _d = true, messageStream_1 = __asyncValues10(messageStream), messageStream_1_1; messageStream_1_1 = yield __await10(messageStream_1.next()), _a19 = messageStream_1_1.done, !_a19; _d = true) {
             _c2 = messageStream_1_1.value;
             _d = false;
             const message = _c2;
@@ -279,14 +279,14 @@ var StreamExecutorResource = class {
             }
             const streamValue = this.deserializeStream(message);
             if (streamValue !== void 0) {
-              yield yield __await11(streamValue);
+              yield yield __await10(streamValue);
             }
           }
         } catch (e_3_1) {
           e_3 = { error: e_3_1 };
         } finally {
           try {
-            if (!_d && !_a19 && (_b2 = messageStream_1.return)) yield __await11(_b2.call(messageStream_1));
+            if (!_d && !_a19 && (_b2 = messageStream_1.return)) yield __await10(_b2.call(messageStream_1));
           } finally {
             if (e_3) throw e_3.error;
           }

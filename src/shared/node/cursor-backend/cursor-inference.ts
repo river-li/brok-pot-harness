@@ -36,9 +36,9 @@ function sandRunPrivacyModeFallback() {
 function getSandGhostModeHeaderFromPrivacyMode(privacyMode) {
   return privacyMode === PrivacyMode.USAGE_DATA_TRAINING_ALLOWED || privacyMode === PrivacyMode.USAGE_CODEBASE_TRAINING_ALLOWED ? "false" : "true";
 }
-function privacyLookupErrorLabel(error41) {
-  if (error41 instanceof ConnectError) return Code[error41.code];
-  return error41 instanceof Error ? error41.name : typeof error41;
+function privacyLookupErrorLabel(error42) {
+  if (error42 instanceof ConnectError) return Code[error42.code];
+  return error42 instanceof Error ? error42.name : typeof error42;
 }
 async function fetchSandPrivacyMode({
   backend,
@@ -63,9 +63,9 @@ async function fetchSandPrivacyMode({
 async function settlePrivacyMode(fetchPrivacyMode, options2) {
   try {
     return await fetchPrivacyMode(options2);
-  } catch (error41) {
+  } catch (error42) {
     console.info(
-      `[sand:privacy] privacy-mode lookup failed, using privacy-safe fallback backend=${options2.backend.backendUrl} error=${privacyLookupErrorLabel(error41)}`
+      `[sand:privacy] privacy-mode lookup failed, using privacy-safe fallback backend=${options2.backend.backendUrl} error=${privacyLookupErrorLabel(error42)}`
     );
     return void 0;
   }
@@ -259,14 +259,14 @@ function createSandInferenceInterceptor(options2) {
     const sessionBearer = bearerOf(headers.get("authorization"));
     try {
       return await next(req);
-    } catch (error41) {
-      if (onUnauthenticatedResponse != null && sessionBearer != null && error41 instanceof ConnectError && error41.code === Code.Unauthenticated) {
+    } catch (error42) {
+      if (onUnauthenticatedResponse != null && sessionBearer != null && error42 instanceof ConnectError && error42.code === Code.Unauthenticated) {
         onUnauthenticatedResponse({
           backendUrl: options2.backend.backendUrl,
           accessToken: sessionBearer
         });
       }
-      throw error41;
+      throw error42;
     }
   };
 }
@@ -278,8 +278,8 @@ function createSafeHttp1ConnectTransport(options2) {
   const httpClient = createNodeHttpClient({ httpVersion: "1.1" });
   return createTransport({
     baseUrl: options2.baseUrl,
-    httpClient: (request3) => httpClient(
-      request3.signal !== void 0 ? request3 : { ...request3, signal: new AbortController().signal }
+    httpClient: (request5) => httpClient(
+      request5.signal !== void 0 ? request5 : { ...request5, signal: new AbortController().signal }
     ),
     useBinaryFormat: options2.useBinaryFormat ?? true,
     interceptors: options2.interceptors,

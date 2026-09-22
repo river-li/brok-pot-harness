@@ -52,9 +52,9 @@ var __disposeResources18 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 function filterRequestContextByActorIdentity(requestContext, actorIdentity) {
   const filteredRules = filterByActorIdentity(requestContext.rules, actorIdentity);

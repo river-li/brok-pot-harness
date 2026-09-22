@@ -1,5 +1,5 @@
 init_read_exec_pb();
-var __awaiter38 = function(thisArg, _arguments, P2, generator) {
+var __awaiter40 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -75,7 +75,7 @@ var readHooksConfig = {
    * This allows hooks to inspect the file content and potentially block the read.
    * Throws HookDeniedError if the hook denies the read, or FailClosedError if hook infrastructure fails.
    */
-  runPostExecutionHooks: (params) => __awaiter38(void 0, void 0, void 0, function* () {
+  runPostExecutionHooks: (params) => __awaiter40(void 0, void 0, void 0, function* () {
     const { args, result, baseHookRequest, hookExecutor } = params;
     if (result.result.case !== "success") {
       return void 0;

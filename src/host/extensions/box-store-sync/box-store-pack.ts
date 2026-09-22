@@ -84,11 +84,11 @@ async function buildPackFile(destPath, sources, shouldAbort) {
   let skipped2 = 0;
   const out = (0, import_node_fs12.createWriteStream)(destPath);
   let outError;
-  out.on("error", (error41) => {
-    outError ??= error41;
+  out.on("error", (error42) => {
+    outError ??= error42;
   });
-  const write = (buf) => new Promise((resolve29, reject2) => {
-    out.write(buf, (error41) => error41 == null ? resolve29() : reject2(error41));
+  const write2 = (buf) => new Promise((resolve29, reject2) => {
+    out.write(buf, (error42) => error42 == null ? resolve29() : reject2(error42));
   });
   try {
     for (const source of sources) {
@@ -108,7 +108,7 @@ async function buildPackFile(destPath, sources, shouldAbort) {
         continue;
       }
       const compressed = (0, import_node_zlib.gzipSync)(bytes);
-      await write(compressed);
+      await write2(compressed);
       members.push({
         sha: source.sha,
         size: source.size,
@@ -122,9 +122,9 @@ async function buildPackFile(destPath, sources, shouldAbort) {
       out.end(() => resolve29());
     });
     if (outError != null) throw outError;
-  } catch (error41) {
+  } catch (error42) {
     out.destroy();
-    throw error41;
+    throw error42;
   }
   const fileBytes = (await (0, import_promises16.stat)(destPath)).size;
   return { members, fileBytes, skipped: skipped2 };

@@ -1,4 +1,4 @@
-var __awaiter68 = function(thisArg, _arguments, P2, generator) {
+var __awaiter70 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -45,7 +45,7 @@ var TaskTracker = class {
    * while it was waiting. Those tasks remain tracked for a later drain.
    */
   drain(signal) {
-    return __awaiter68(this, void 0, void 0, function* () {
+    return __awaiter70(this, void 0, void 0, function* () {
       do {
         yield Promise.all(this.inflight);
         signal === null || signal === void 0 ? void 0 : signal.throwIfAborted();

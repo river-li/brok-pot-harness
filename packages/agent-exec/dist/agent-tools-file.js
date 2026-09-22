@@ -3,7 +3,7 @@ var import_node_path40 = __toESM(require("node:path"), 1);
 init_mcp_exec_pb();
 init_utils_pb2();
 init_write_exec_pb();
-var __awaiter35 = function(thisArg, _arguments, P2, generator) {
+var __awaiter37 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -36,13 +36,13 @@ var BIDI_APPEND_HEADROOM_BYTES = 1024 * 1024;
 var MAX_OUTPUT_FILE_SIZE = BIDI_APPEND_LIMIT_BYTES - BIDI_APPEND_HEADROOM_BYTES;
 var MCP_TEXT_FILE_THRESHOLD_BYTES = 4e4;
 function materializeMcpTextOutput(_a19) {
-  return __awaiter35(this, arguments, void 0, function* ({ contentItems, thresholdBytes, write }) {
+  return __awaiter37(this, arguments, void 0, function* ({ contentItems, thresholdBytes, write: write2 }) {
     const inlineTextItems = contentItems.filter((item) => item.content.case === "text" && item.content.value.outputLocation === void 0);
     const aggregateText = inlineTextItems.map((item) => item.content.case === "text" ? item.content.value.text : "").join("\n\n");
     if (thresholdBytes <= 0 || Buffer.byteLength(aggregateText, "utf8") <= thresholdBytes) {
       return contentItems;
     }
-    const outputLocation = yield write(aggregateText);
+    const outputLocation = yield write2(aggregateText);
     if (outputLocation === void 0) {
       return void 0;
     }
@@ -77,7 +77,7 @@ function truncateUtf8(text2, maxBytes) {
   return decoded.endsWith("\uFFFD") ? decoded.slice(0, -1) : decoded;
 }
 function writeToAgentToolsFile(ctx_1, writeExecutor_1, _a19) {
-  return __awaiter35(this, arguments, void 0, function* (ctx, writeExecutor, { content, projectDir, osPlatform, toolCallId, maxSize }) {
+  return __awaiter37(this, arguments, void 0, function* (ctx, writeExecutor, { content, projectDir, osPlatform, toolCallId, maxSize }) {
     const maxBytes = Math.min(maxSize !== null && maxSize !== void 0 ? maxSize : MAX_OUTPUT_FILE_SIZE, MAX_OUTPUT_FILE_SIZE);
     const contentToWrite = truncateUtf8(content, maxBytes);
     const joinFn = osPlatform === "win32" ? import_node_path40.default.win32.join : import_node_path40.default.posix.join;

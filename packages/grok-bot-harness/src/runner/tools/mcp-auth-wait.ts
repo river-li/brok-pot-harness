@@ -4,11 +4,11 @@ function armMcpAuthWait(register, emission) {
   let pending;
   try {
     pending = register({ serverId: emission.serverId, connector: emission.connector });
-  } catch (error41) {
-    reportHostDiagnostic({ kind: "mcp_connect_card_failed", errorClass: errorClassOf(error41) });
+  } catch (error42) {
+    reportHostDiagnostic({ kind: "mcp_connect_card_failed", errorClass: errorClassOf(error42) });
     return;
   }
-  void pending.catch((error41) => {
-    reportHostDiagnostic({ kind: "mcp_connect_card_failed", errorClass: errorClassOf(error41) });
+  void pending.catch((error42) => {
+    reportHostDiagnostic({ kind: "mcp_connect_card_failed", errorClass: errorClassOf(error42) });
   });
 }

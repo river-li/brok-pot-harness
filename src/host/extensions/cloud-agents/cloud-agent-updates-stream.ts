@@ -44,9 +44,9 @@ function snapshotToCloudAgentUpdateEvent(composer) {
   if (bcId.length === 0 || !(updatedAtMs > 0)) return null;
   return { bcId, status: mapRunStatus(composer.status), updatedAtMs };
 }
-function errorClassOf2(error41) {
-  if (error41 instanceof ConnectError) return `ConnectError.${Code[error41.code]}`;
-  if (error41 instanceof Error) return error41.name;
+function errorClassOf2(error42) {
+  if (error42 instanceof ConnectError) return `ConnectError.${Code[error42.code]}`;
+  if (error42 instanceof Error) return error42.name;
   return "Error";
 }
 var CloudAgentUpdatesStream = class {
@@ -77,12 +77,12 @@ var CloudAgentUpdatesStream = class {
   start() {
     if (this.started || this.abort.signal.aborted) return;
     this.started = true;
-    void this.run().catch((error41) => {
+    void this.run().catch((error42) => {
       if (this.abort.signal.aborted) return;
       reportPolicyStop({
         policyName: CLOUD_AGENT_UPDATES_STREAM_POLICY_NAME,
         reason: "run-failed",
-        errorClass: errorClassOf2(error41)
+        errorClass: errorClassOf2(error42)
       });
     });
   }
@@ -134,8 +134,8 @@ var CloudAgentUpdatesStream = class {
   async wait(attempt, signal, hint) {
     try {
       await this.reconnect.schedule(attempt, signal, hint).elapsed;
-    } catch (error41) {
-      if (!signal.aborted) throw error41;
+    } catch (error42) {
+      if (!signal.aborted) throw error42;
     }
   }
   async connectOnce(parent) {
@@ -160,9 +160,9 @@ var CloudAgentUpdatesStream = class {
         this.ingest(response);
       }
       return "ended";
-    } catch (error41) {
+    } catch (error42) {
       if (parent.aborted) return "ended";
-      return { errorClass: connection.signal.aborted ? "IdleTimeout" : errorClassOf2(error41) };
+      return { errorClass: connection.signal.aborted ? "IdleTimeout" : errorClassOf2(error42) };
     } finally {
       idle.dispose();
       parent.removeEventListener("abort", onParentAbort);

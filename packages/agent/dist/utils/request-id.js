@@ -40,21 +40,11 @@ var getShouldBubbleRetryableTaskErrorsFromContext = (ctx) => {
 };
 var clientVersionKey = createKey(/* @__PURE__ */ Symbol("clientVersion"), void 0);
 var CLIENT_VERSION_SEMVER_REGEX = /^v?\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
-var CLIENT_VERSION_PRODUCT_PREFIXES = [
-  "sdk-python-",
-  "sdk-",
-  "agentkit-"
-];
+var CLIENT_VERSION_PRODUCT_PREFIXES = ["sdk-python-", "sdk-", "agentkit-"];
 var clientTypeKey = createKey(/* @__PURE__ */ Symbol("clientType"), void 0);
 var clientRemoteTypeKey = createKey(/* @__PURE__ */ Symbol("clientRemoteType"), void 0);
 var clientOsKey = createKey(/* @__PURE__ */ Symbol("clientOs"), void 0);
-var CLIENT_OS_METRIC_VALUES = /* @__PURE__ */ new Set([
-  "darwin",
-  "win32",
-  "linux",
-  "ios",
-  "android"
-]);
+var CLIENT_OS_METRIC_VALUES = /* @__PURE__ */ new Set(["darwin", "win32", "linux", "ios", "android"]);
 function normalizeClientOsMetricTag(rawOs) {
   if (rawOs === void 0 || rawOs.trim() === "") {
     return "unknown";

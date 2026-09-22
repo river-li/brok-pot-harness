@@ -12,7 +12,8 @@ function scmConnectPlatformForState(state) {
   return provider === "gitlab" || provider === "bitbucket" || provider === "azure-devops" ? provider : "github";
 }
 function createListenerIntegrationReads(deps) {
-  const dashboard = () => createSandCursorBackendClient(DashboardService, {
+  const createClient2 = deps.createClient ?? createSandCursorBackendClient;
+  const dashboard = () => createClient2(DashboardService, {
     backend: deps.backend,
     getAccessToken: deps.auth.getAccessToken,
     getTeamId: deps.auth.getTeamId,
@@ -95,8 +96,8 @@ function createListenerIntegrationReads(deps) {
       const counts = countListenerPlatforms(
         (await deps.transcript.listAllAutomationDefinitions()).map((entry) => entry.automation)
       );
-      const readConnected = (platform2) => readPlatformConnection(platform2).catch((error41) => {
-        deps.log(`${platform2} connection read degraded to disconnected: ${errorLogTag(error41)}`);
+      const readConnected = (platform2) => readPlatformConnection(platform2).catch((error42) => {
+        deps.log(`${platform2} connection read degraded to disconnected: ${errorLogTag(error42)}`);
         return { connected: false };
       });
       const neededCounts = counts;
@@ -107,9 +108,9 @@ function createListenerIntegrationReads(deps) {
       const desktopScmConnect = deps.isDesktopScmConnectEnabled();
       const scmProviders = desktopScmConnect ? cardPlatforms.filter(isScmConnectProvider) : [];
       const scmConnections = await readScmConnections(scmProviders).catch(
-        async (error41) => {
-          if (!isUnimplementedConnectError(error41)) {
-            deps.log(`batched SCM connection read failed: ${errorLogTag(error41)}`);
+        async (error42) => {
+          if (!isUnimplementedConnectError(error42)) {
+            deps.log(`batched SCM connection read failed: ${errorLogTag(error42)}`);
           }
           const fallback2 = await Promise.all(scmProviders.map(readConnected));
           return new Map(scmProviders.map((provider, index) => [provider, fallback2[index]]));
@@ -191,8 +192,8 @@ function createListenerIntegrationReads(deps) {
             setupAction: args.setupAction ?? ""
           })
         );
-      } catch (error41) {
-        deps.log(`scm pkce connect complete failed: ${errorLogTag(error41)}`);
+      } catch (error42) {
+        deps.log(`scm pkce connect complete failed: ${errorLogTag(error42)}`);
         return { outcome: "failed" };
       }
       verifierByMintedState.delete(args.state);

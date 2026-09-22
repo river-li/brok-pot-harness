@@ -1,5 +1,5 @@
 var import_node_crypto82 = require("node:crypto");
-init_dist3();
+init_dist4();
 var VOICE_CALL_CARD_COPY_DEADLINE_MS = 8e3;
 async function authorVoiceCallCardCopy({
   record: record2,
@@ -13,8 +13,8 @@ async function authorVoiceCallCardCopy({
       (signal) => streamText2({ executor: createExecutor(), prompt, signal })
     );
     return SandVoiceCallReceipt.parse(raw);
-  } catch (error41) {
-    reportFallback("voice_call_runtime", error41);
+  } catch (error42) {
+    reportFallback("voice_call_runtime", error42);
     return void 0;
   }
 }

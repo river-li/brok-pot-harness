@@ -55,16 +55,7 @@ var geminiComputerInputSchema = external_exports.object({
   })
 });
 var openaiComputerInputSchema = external_exports.object({
-  type: external_exports.enum([
-    "click",
-    "double_click",
-    "scroll",
-    "type",
-    "wait",
-    "move",
-    "keypress",
-    "drag"
-  ]),
+  type: external_exports.enum(["click", "double_click", "scroll", "type", "wait", "move", "keypress", "drag"]),
   x: external_exports.number().optional(),
   y: external_exports.number().optional(),
   button: external_exports.enum(["left", "right", "middle"]).optional(),

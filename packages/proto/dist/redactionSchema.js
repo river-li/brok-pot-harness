@@ -244,6 +244,53 @@ var REDACTION_SCHEMA = {
   "agent.v1.AgentHostSurfacePluginsResult": {},
   "agent.v1.AgentHostSurfaceAgentStoreRequest": {},
   "agent.v1.AgentHostSurfaceAgentStoreResult": {},
+  "agent.v1.AgentHostCCPluginSourceInfo": {
+    "name": "SAFE",
+    "marketplace": "SAFE",
+    "github_repo": "PATH",
+    "git_url": "PATH",
+    "local_path": "PATH",
+    "version": "SAFE",
+    "raw": "CODE"
+  },
+  "agent.v1.AgentHostCursorPluginSourceInfo": {
+    "name": "SAFE",
+    "version": "SAFE",
+    "plugin_db_id": "SAFE",
+    "configured_variables": "CREDENTIALS",
+    "marketplace": "SAFE",
+    "marketplace_db_id": "SAFE"
+  },
+  "agent.v1.AgentHostUserLocalPluginSourceInfo": {
+    "name": "SAFE",
+    "local_path": "PATH"
+  },
+  "agent.v1.AgentHostExtensionPluginSourceInfo": {
+    "name": "SAFE",
+    "local_path": "PATH",
+    "extension_id": "SAFE"
+  },
+  "agent.v1.AgentHostPluginIdentifier": {},
+  "agent.v1.AgentHostPluginDescriptor": {
+    "install_path": "PATH",
+    "load_error": "CODE",
+    "display_name": "SAFE",
+    "version": "SAFE",
+    "description": "CODE",
+    "author_name": "SAFE",
+    "configured_variables": "CREDENTIALS"
+  },
+  "agent.v1.AgentHostPluginLoadFailure": {
+    "plugin_name": "SAFE",
+    "plugin_id": "SAFE",
+    "plugin_db_id": "SAFE",
+    "marketplace_name": "SAFE",
+    "error_message": "CODE"
+  },
+  "agent.v1.AgentHostPluginsSnapshotArgs": {},
+  "agent.v1.AgentHostPluginsSnapshotResult": {},
+  "agent.v1.AgentHostPluginsReloadArgs": {},
+  "agent.v1.AgentHostPluginsReloadResult": {},
   "agent.v1.AgentHostSurfaceMcpWriterRequest": {},
   "agent.v1.AgentHostSurfaceMcpWriterResult": {},
   "agent.v1.AgentHostSurfaceCloudSubagentCreateOrResume": {},
@@ -333,7 +380,9 @@ var REDACTION_SCHEMA = {
   "agent.v1.GetAgentHostDaemonInfoResponse": {
     "daemon_version": "SAFE",
     "api_schema_revision": "SAFE",
-    "listen_address": "PATH"
+    "listen_address": "PATH",
+    "build_identity": "SAFE",
+    "capabilities": "SAFE"
   },
   "agent.v1.ShutdownAgentHostDaemonRequest": {
     "reason": "CODE"
@@ -417,11 +466,6 @@ var REDACTION_SCHEMA = {
     "request_context_dynamic_inline_max_bytes": "SAFE",
     "suggest_next_prompt": "SAFE",
     "blob_encryption_key": "CREDENTIALS",
-    "client_supports_inline_images": "SAFE",
-    "client_supports_preview_card": "SAFE",
-    "client_supports_send_to_user": "SAFE",
-    "client_supports_prompt_context_usage_rpc": "SAFE",
-    "client_supports_routed_model_update": "SAFE",
     "request_headers": {
       "key": "SAFE",
       "value": "CREDENTIALS"
@@ -554,7 +598,8 @@ var REDACTION_SCHEMA = {
   "agent.v1.LocalAgentMailboxGap": {
     "conversation_id": "SAFE",
     "after_offset": "SAFE",
-    "resume_offset": "SAFE"
+    "resume_offset": "SAFE",
+    "reason": "SAFE"
   },
   "agent.v1.LocalAgentMailboxEnded": {
     "conversation_id": "SAFE",
@@ -2829,7 +2874,8 @@ var REDACTION_SCHEMA = {
     "path": "PATH",
     "alias": "PATH",
     "kind": "SAFE",
-    "read_only": "SAFE"
+    "read_only": "SAFE",
+    "inherited_from_path": "PATH"
   },
   "agent.v1.UserAgentStoreWebContext": {
     "store_id": "SAFE",
@@ -3708,11 +3754,18 @@ var REDACTION_SCHEMA = {
     "hash": "SAFE"
   },
   "agent.v1.BatchGetDiffItem": {
-    "fetch_branches": "SAFE"
+    "fetch_branches": "SAFE",
+    "known_base_sha": "SAFE",
+    "known_head_sha": "SAFE",
+    "known_workspace_hash": "SAFE",
+    "use_cat_file_batch": "SAFE"
   },
   "agent.v1.BatchGetDiffResult": {
     "fetched_branches": "SAFE",
-    "failed_branches": "SAFE"
+    "failed_branches": "SAFE",
+    "resolved_base_sha": "SAFE",
+    "resolved_head_sha": "SAFE",
+    "resolved_workspace_hash": "SAFE"
   },
   "agent.v1.BatchGetDiffError": {
     "message": "CODE"
@@ -3872,14 +3925,6 @@ var REDACTION_SCHEMA = {
     "current": "SAFE",
     "history": "SAFE",
     "next_cursor": "SAFE"
-  },
-  "agent.v1.ResourcePressureEvent": {
-    "bc_id": "SAFE",
-    "at_ms": "SAFE",
-    "to": "SAFE",
-    "scope": "SAFE",
-    "memory_limit_bytes": "SAFE",
-    "recent": "SAFE"
   },
   "agent.v1.CursorPackagePrompt": {
     "name": "SAFE",

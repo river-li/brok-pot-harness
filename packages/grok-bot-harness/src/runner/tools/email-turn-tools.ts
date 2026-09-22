@@ -1,6 +1,7 @@
 function emailTurnTools(host, review) {
   const email3 = host.email;
   if (email3 == null) return [];
+  const refusing = email3.unavailableReason !== void 0;
   const getApprovalExpiryPolicy = () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource());
   const tools = [];
   if (!host.isParentMediatedAutomationSubagent) {
@@ -8,7 +9,7 @@ function emailTurnTools(host, review) {
       createSendEmailTool({
         email: email3,
         ...host.getAgentDirImpl === void 0 ? {} : { getAgentDir: host.getAgentDirImpl },
-        ...review.mode === "off" ? {} : {
+        ...refusing || review.mode === "off" ? {} : {
           reviewSend: async ({ toolCallId, target, signal }) => {
             host.assertNoPendingAutoReviewApproval();
             return reviewSandEmailSend({
@@ -23,6 +24,11 @@ function emailTurnTools(host, review) {
                 stateHandler: review.stateHandler,
                 autoReviewController: host.autoReviewController,
                 getApprovalExpiryPolicy,
+                provenance: {
+                  requestSource: host.activeTurnRequestSource(),
+                  wakeEmbedsExternalEvent: host.activeTurnAutomationWakeEmbedsExternalEvent(),
+                  wakeEmail: host.activeTurnAutomationWakeEmail()
+                },
                 personalInstructions: host.getAutoReviewInstructions?.(),
                 userAutoRunInstructions: review.getUserInstructions(),
                 extractConversationContext: review.extractConversationContext
@@ -36,18 +42,21 @@ function emailTurnTools(host, review) {
   tools.push(
     createClaimEmailInboxTool({
       email: email3,
-      reviewClaim: async ({ target, signal }) => {
-        host.assertNoPendingAutoReviewApproval();
-        return reviewSandEmailClaim({
-          ctx: host.ctx,
-          target,
-          ...signal !== void 0 ? { signal } : {},
-          options: {
-            agentId: host.getConversationId(),
-            autoReviewController: host.autoReviewController,
-            getApprovalExpiryPolicy
-          }
-        });
+      multipleInboxesEnabled: host.gates.agentEmailMultipleInboxes(),
+      ...refusing ? {} : {
+        reviewClaim: async ({ target, signal }) => {
+          host.assertNoPendingAutoReviewApproval();
+          return reviewSandEmailClaim({
+            ctx: host.ctx,
+            target,
+            ...signal !== void 0 ? { signal } : {},
+            options: {
+              agentId: host.getConversationId(),
+              autoReviewController: host.autoReviewController,
+              getApprovalExpiryPolicy
+            }
+          });
+        }
       }
     }),
     createListEmailInboxesTool({ email: email3 }),

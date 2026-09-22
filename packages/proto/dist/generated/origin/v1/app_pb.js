@@ -1,17 +1,17 @@
 init_esm();
 init_compact();
-var __protoPackage175 = "origin.v1.";
-var __protoMessage3166 = class extends CompactMessage {
+var __protoPackage176 = "origin.v1.";
+var __protoMessage3167 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage175;
+    return __protoPackage176;
   }
 };
-var RepoSelectionMode = /* @__PURE__ */ enumType(proto3, __protoPackage175, "RepoSelectionMode", [[0, "UNSPECIFIED"], [1, "ALL"], [2, "SELECTED"]], 1);
-var AppInstallRequestOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage175, "AppInstallRequestOutcome", [[0, "UNSPECIFIED"], [1, "CREATED"], [2, "ALREADY_PENDING"], [3, "DENIED_COOLDOWN"], [4, "ALREADY_INSTALLED"]], 1);
-var App = class _App extends __protoMessage3166 {
+var RepoSelectionMode = /* @__PURE__ */ enumType(proto3, __protoPackage176, "RepoSelectionMode", [[0, "UNSPECIFIED"], [1, "ALL"], [2, "SELECTED"]], 1);
+var AppInstallRequestOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage176, "AppInstallRequestOutcome", [[0, "UNSPECIFIED"], [1, "CREATED"], [2, "ALREADY_PENDING"], [3, "DENIED_COOLDOWN"], [4, "ALREADY_INSTALLED"]], 1);
+var App = class _App extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -47,7 +47,7 @@ var App = class _App extends __protoMessage3166 {
     return ["App|1 id 9|3 display_name 9|4 webhook_url 9|6 is_public 8|7 namespace_slug 9|8 events 9*|10 created_at 9|11 updated_at 9|12 installation_redirect_uris 9*|13 icon_url 9|14 description 9|15 website_url 9|16 default_scopes 9*|17 created_by #0|18 updated_by #0|19 webhook_disabled_at 9|20 webhook_delivery_state 9|21 marketplace_listing #1", ActorWithDisplay, AppMarketplaceListing];
   }
 };
-var AppStats = class _AppStats extends __protoMessage3166 {
+var AppStats = class _AppStats extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installationCount = 0;
@@ -69,7 +69,7 @@ var AppStats = class _AppStats extends __protoMessage3166 {
     return ["AppStats|1 installation_count 13"];
   }
 };
-var AppSigningKey = class _AppSigningKey extends __protoMessage3166 {
+var AppSigningKey = class _AppSigningKey extends __protoMessage3167 {
   constructor(data) {
     super();
     this.kid = "";
@@ -92,7 +92,7 @@ var AppSigningKey = class _AppSigningKey extends __protoMessage3166 {
     return ["AppSigningKey|1 kid 9|2 created_at 9"];
   }
 };
-var CreateAppRequest = class _CreateAppRequest extends __protoMessage3166 {
+var CreateAppRequest = class _CreateAppRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.displayName = "";
@@ -123,7 +123,7 @@ var CreateAppRequest = class _CreateAppRequest extends __protoMessage3166 {
     return ["CreateAppRequest|2 display_name 9|3 webhook_url 9|6 namespace_slug 9|7 public_key 9|8 events 9*|10 installation_redirect_uris 9*|11 description 9|12 website_url 9|13 default_scopes 9*|14 workload_identity_policies #0*", AppWorkloadIdentityPolicy];
   }
 };
-var CreateAppResponse = class _CreateAppResponse extends __protoMessage3166 {
+var CreateAppResponse = class _CreateAppResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -144,7 +144,7 @@ var CreateAppResponse = class _CreateAppResponse extends __protoMessage3166 {
     return ["CreateAppResponse|1 app #0", App];
   }
 };
-var GetAppRequest = class _GetAppRequest extends __protoMessage3166 {
+var GetAppRequest = class _GetAppRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -166,7 +166,7 @@ var GetAppRequest = class _GetAppRequest extends __protoMessage3166 {
     return ["GetAppRequest|1 id 9"];
   }
 };
-var GetAppResponse = class _GetAppResponse extends __protoMessage3166 {
+var GetAppResponse = class _GetAppResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.signingKeys = [];
@@ -190,7 +190,7 @@ var GetAppResponse = class _GetAppResponse extends __protoMessage3166 {
     return ["GetAppResponse|1 app #0|2 stats #1|3 signing_keys #2*|4 workload_identity_policies #3*|5 workload_identity_enabled 8", App, AppStats, AppSigningKey, AppWorkloadIdentityPolicy];
   }
 };
-var AddAppSigningKeyRequest = class _AddAppSigningKeyRequest extends __protoMessage3166 {
+var AddAppSigningKeyRequest = class _AddAppSigningKeyRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.appId = "";
@@ -213,7 +213,7 @@ var AddAppSigningKeyRequest = class _AddAppSigningKeyRequest extends __protoMess
     return ["AddAppSigningKeyRequest|1 app_id 9|2 public_key 9"];
   }
 };
-var AddAppSigningKeyResponse = class _AddAppSigningKeyResponse extends __protoMessage3166 {
+var AddAppSigningKeyResponse = class _AddAppSigningKeyResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -234,7 +234,7 @@ var AddAppSigningKeyResponse = class _AddAppSigningKeyResponse extends __protoMe
     return ["AddAppSigningKeyResponse|1 key #0", AppSigningKey];
   }
 };
-var RevokeAppSigningKeyRequest = class _RevokeAppSigningKeyRequest extends __protoMessage3166 {
+var RevokeAppSigningKeyRequest = class _RevokeAppSigningKeyRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.appId = "";
@@ -257,7 +257,7 @@ var RevokeAppSigningKeyRequest = class _RevokeAppSigningKeyRequest extends __pro
     return ["RevokeAppSigningKeyRequest|1 app_id 9|2 kid 9"];
   }
 };
-var RevokeAppSigningKeyResponse = class _RevokeAppSigningKeyResponse extends __protoMessage3166 {
+var RevokeAppSigningKeyResponse = class _RevokeAppSigningKeyResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -278,7 +278,7 @@ var RevokeAppSigningKeyResponse = class _RevokeAppSigningKeyResponse extends __p
     return ["RevokeAppSigningKeyResponse"];
   }
 };
-var ListNamespaceAppsRequest = class _ListNamespaceAppsRequest extends __protoMessage3166 {
+var ListNamespaceAppsRequest = class _ListNamespaceAppsRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceSlug = "";
@@ -302,7 +302,7 @@ var ListNamespaceAppsRequest = class _ListNamespaceAppsRequest extends __protoMe
     return ["ListNamespaceAppsRequest|1 namespace_slug 9|2 page_size 13|3 page_token 9"];
   }
 };
-var ListNamespaceAppsResponse = class _ListNamespaceAppsResponse extends __protoMessage3166 {
+var ListNamespaceAppsResponse = class _ListNamespaceAppsResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.nextPageToken = "";
@@ -325,7 +325,7 @@ var ListNamespaceAppsResponse = class _ListNamespaceAppsResponse extends __proto
     return ["ListNamespaceAppsResponse|2 next_page_token 9|3 app_metadata #0*", AppDisplayMetadata];
   }
 };
-var AppMarketplaceListing = class _AppMarketplaceListing extends __protoMessage3166 {
+var AppMarketplaceListing = class _AppMarketplaceListing extends __protoMessage3167 {
   constructor(data) {
     super();
     this.slug = "";
@@ -349,7 +349,7 @@ var AppMarketplaceListing = class _AppMarketplaceListing extends __protoMessage3
     return ["AppMarketplaceListing|1 slug 9|2 listed_at 9|3 tags 9*|4 publisher_id 3?"];
   }
 };
-var AppDisplayMetadata = class _AppDisplayMetadata extends __protoMessage3166 {
+var AppDisplayMetadata = class _AppDisplayMetadata extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -373,7 +373,7 @@ var AppDisplayMetadata = class _AppDisplayMetadata extends __protoMessage3166 {
     return ["AppDisplayMetadata|1 id 9|3 display_name 9|4 icon_url 9?|5 description 9?|7 marketplace_listing #0|8 owner_namespace 9", AppMarketplaceListing];
   }
 };
-var ListPublicAppsRequest = class _ListPublicAppsRequest extends __protoMessage3166 {
+var ListPublicAppsRequest = class _ListPublicAppsRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.pageSize = 0;
@@ -397,7 +397,7 @@ var ListPublicAppsRequest = class _ListPublicAppsRequest extends __protoMessage3
     return ["ListPublicAppsRequest|1 page_size 13|2 page_token 9|3 tag 9"];
   }
 };
-var ListPublicAppsResponse = class _ListPublicAppsResponse extends __protoMessage3166 {
+var ListPublicAppsResponse = class _ListPublicAppsResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.apps = [];
@@ -420,7 +420,7 @@ var ListPublicAppsResponse = class _ListPublicAppsResponse extends __protoMessag
     return ["ListPublicAppsResponse|1 apps #0*|2 next_page_token 9", AppDisplayMetadata];
   }
 };
-var Installation = class _Installation extends __protoMessage3166 {
+var Installation = class _Installation extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -449,7 +449,7 @@ var Installation = class _Installation extends __protoMessage3166 {
     return ["Installation|1 id 9|2 app_id 9|3 namespace_slug 9|4 created_at 9|5 updated_at 9|6 repo_selection_mode #0|7 repo_ids 9*|8 accepted_scopes 9*|9 suspended_at 9?", RepoSelectionMode];
   }
 };
-var InstallationReference = class _InstallationReference extends __protoMessage3166 {
+var InstallationReference = class _InstallationReference extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -472,7 +472,7 @@ var InstallationReference = class _InstallationReference extends __protoMessage3
     return ["InstallationReference|1 id 9|2 app_id 9|3 app_metadata #0", AppDisplayMetadata];
   }
 };
-var CreateInstallationRequest = class _CreateInstallationRequest extends __protoMessage3166 {
+var CreateInstallationRequest = class _CreateInstallationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.appId = "";
@@ -497,7 +497,7 @@ var CreateInstallationRequest = class _CreateInstallationRequest extends __proto
     return ["CreateInstallationRequest|1 app_id 9|2 namespace_slug 9|3 repo_ids 9*|4 requested_scopes 9*|5 state 9?"];
   }
 };
-var CreateInstallationResponse = class _CreateInstallationResponse extends __protoMessage3166 {
+var CreateInstallationResponse = class _CreateInstallationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installationReceipt = "";
@@ -519,7 +519,7 @@ var CreateInstallationResponse = class _CreateInstallationResponse extends __pro
     return ["CreateInstallationResponse|1 installation #0|2 installation_receipt 9", Installation];
   }
 };
-var GetInstallationRequest = class _GetInstallationRequest extends __protoMessage3166 {
+var GetInstallationRequest = class _GetInstallationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -541,7 +541,7 @@ var GetInstallationRequest = class _GetInstallationRequest extends __protoMessag
     return ["GetInstallationRequest|1 id 9"];
   }
 };
-var GetInstallationResponse = class _GetInstallationResponse extends __protoMessage3166 {
+var GetInstallationResponse = class _GetInstallationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -562,7 +562,7 @@ var GetInstallationResponse = class _GetInstallationResponse extends __protoMess
     return ["GetInstallationResponse|1 installation #0", Installation];
   }
 };
-var ListNamespaceInstallationsRequest = class _ListNamespaceInstallationsRequest extends __protoMessage3166 {
+var ListNamespaceInstallationsRequest = class _ListNamespaceInstallationsRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceSlug = "";
@@ -586,7 +586,7 @@ var ListNamespaceInstallationsRequest = class _ListNamespaceInstallationsRequest
     return ["ListNamespaceInstallationsRequest|1 namespace_slug 9|2 page_size 13|3 page_token 9"];
   }
 };
-var ListNamespaceInstallationsResponse = class _ListNamespaceInstallationsResponse extends __protoMessage3166 {
+var ListNamespaceInstallationsResponse = class _ListNamespaceInstallationsResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installations = [];
@@ -610,7 +610,7 @@ var ListNamespaceInstallationsResponse = class _ListNamespaceInstallationsRespon
     return ["ListNamespaceInstallationsResponse|1 installations #0*|2 next_page_token 9|3 installation_references #1*", Installation, InstallationReference];
   }
 };
-var UpdateAppRequest = class _UpdateAppRequest extends __protoMessage3166 {
+var UpdateAppRequest = class _UpdateAppRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -632,7 +632,7 @@ var UpdateAppRequest = class _UpdateAppRequest extends __protoMessage3166 {
     return ["UpdateAppRequest|1 id 9|2 display_name 9?|3 webhook_url 9?|5 events #0?|6 is_public 8?|8 installation_redirect_uris #1?|9 description 9?|10 website_url 9?|11 default_scopes #2?|12 workload_identity_policies #3?", AppEventsReplace, AppInstallationRedirectUrisReplace, AppDefaultScopesReplace, AppWorkloadIdentityPoliciesReplace];
   }
 };
-var AppEventsReplace = class _AppEventsReplace extends __protoMessage3166 {
+var AppEventsReplace = class _AppEventsReplace extends __protoMessage3167 {
   constructor(data) {
     super();
     this.events = [];
@@ -654,7 +654,7 @@ var AppEventsReplace = class _AppEventsReplace extends __protoMessage3166 {
     return ["AppEventsReplace|1 events 9*"];
   }
 };
-var AppInstallationRedirectUrisReplace = class _AppInstallationRedirectUrisReplace extends __protoMessage3166 {
+var AppInstallationRedirectUrisReplace = class _AppInstallationRedirectUrisReplace extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installationRedirectUris = [];
@@ -676,7 +676,7 @@ var AppInstallationRedirectUrisReplace = class _AppInstallationRedirectUrisRepla
     return ["AppInstallationRedirectUrisReplace|1 installation_redirect_uris 9*"];
   }
 };
-var AppDefaultScopesReplace = class _AppDefaultScopesReplace extends __protoMessage3166 {
+var AppDefaultScopesReplace = class _AppDefaultScopesReplace extends __protoMessage3167 {
   constructor(data) {
     super();
     this.scopes = [];
@@ -698,7 +698,7 @@ var AppDefaultScopesReplace = class _AppDefaultScopesReplace extends __protoMess
     return ["AppDefaultScopesReplace|1 scopes 9*"];
   }
 };
-var AppWorkloadIdentityClaimMatcher = class _AppWorkloadIdentityClaimMatcher extends __protoMessage3166 {
+var AppWorkloadIdentityClaimMatcher = class _AppWorkloadIdentityClaimMatcher extends __protoMessage3167 {
   constructor(data) {
     super();
     this.path = "";
@@ -720,7 +720,7 @@ var AppWorkloadIdentityClaimMatcher = class _AppWorkloadIdentityClaimMatcher ext
     return ["AppWorkloadIdentityClaimMatcher|1 path 9|2 exact 9?|3 regex 9?"];
   }
 };
-var AppWorkloadIdentityPolicy = class _AppWorkloadIdentityPolicy extends __protoMessage3166 {
+var AppWorkloadIdentityPolicy = class _AppWorkloadIdentityPolicy extends __protoMessage3167 {
   constructor(data) {
     super();
     this.issuerFamily = "";
@@ -744,7 +744,7 @@ var AppWorkloadIdentityPolicy = class _AppWorkloadIdentityPolicy extends __proto
     return ["AppWorkloadIdentityPolicy|1 issuer_family 9|2 issuer 9|3 subject_exact 9?|4 subject_regex 9?|5 claims #0*|6 enabled 8?", AppWorkloadIdentityClaimMatcher];
   }
 };
-var AppWorkloadIdentityPoliciesReplace = class _AppWorkloadIdentityPoliciesReplace extends __protoMessage3166 {
+var AppWorkloadIdentityPoliciesReplace = class _AppWorkloadIdentityPoliciesReplace extends __protoMessage3167 {
   constructor(data) {
     super();
     this.policies = [];
@@ -766,7 +766,7 @@ var AppWorkloadIdentityPoliciesReplace = class _AppWorkloadIdentityPoliciesRepla
     return ["AppWorkloadIdentityPoliciesReplace|1 policies #0*", AppWorkloadIdentityPolicy];
   }
 };
-var SetAppWebhookDeliveryEnabledRequest = class _SetAppWebhookDeliveryEnabledRequest extends __protoMessage3166 {
+var SetAppWebhookDeliveryEnabledRequest = class _SetAppWebhookDeliveryEnabledRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.appId = "";
@@ -789,7 +789,7 @@ var SetAppWebhookDeliveryEnabledRequest = class _SetAppWebhookDeliveryEnabledReq
     return ["SetAppWebhookDeliveryEnabledRequest|1 app_id 9|2 enabled 8"];
   }
 };
-var SetAppWebhookDeliveryEnabledResponse = class _SetAppWebhookDeliveryEnabledResponse extends __protoMessage3166 {
+var SetAppWebhookDeliveryEnabledResponse = class _SetAppWebhookDeliveryEnabledResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.transitioned = false;
@@ -811,7 +811,7 @@ var SetAppWebhookDeliveryEnabledResponse = class _SetAppWebhookDeliveryEnabledRe
     return ["SetAppWebhookDeliveryEnabledResponse|1 app #0|2 transitioned 8", App];
   }
 };
-var SendAppWebhookTestDeliveryRequest = class _SendAppWebhookTestDeliveryRequest extends __protoMessage3166 {
+var SendAppWebhookTestDeliveryRequest = class _SendAppWebhookTestDeliveryRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.appId = "";
@@ -833,7 +833,7 @@ var SendAppWebhookTestDeliveryRequest = class _SendAppWebhookTestDeliveryRequest
     return ["SendAppWebhookTestDeliveryRequest|1 app_id 9"];
   }
 };
-var SendAppWebhookTestDeliveryResponse = class _SendAppWebhookTestDeliveryResponse extends __protoMessage3166 {
+var SendAppWebhookTestDeliveryResponse = class _SendAppWebhookTestDeliveryResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.delivered = false;
@@ -857,7 +857,7 @@ var SendAppWebhookTestDeliveryResponse = class _SendAppWebhookTestDeliveryRespon
     return ["SendAppWebhookTestDeliveryResponse|1 delivered 8|2 response_status_code 5|3 delivery_id 9"];
   }
 };
-var UpdateAppResponse = class _UpdateAppResponse extends __protoMessage3166 {
+var UpdateAppResponse = class _UpdateAppResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -878,7 +878,7 @@ var UpdateAppResponse = class _UpdateAppResponse extends __protoMessage3166 {
     return ["UpdateAppResponse|1 app #0", App];
   }
 };
-var SetAppIconRequest = class _SetAppIconRequest extends __protoMessage3166 {
+var SetAppIconRequest = class _SetAppIconRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.appId = "";
@@ -901,7 +901,7 @@ var SetAppIconRequest = class _SetAppIconRequest extends __protoMessage3166 {
     return ["SetAppIconRequest|1 app_id 9|2 icon 12"];
   }
 };
-var SetAppIconResponse = class _SetAppIconResponse extends __protoMessage3166 {
+var SetAppIconResponse = class _SetAppIconResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -922,7 +922,50 @@ var SetAppIconResponse = class _SetAppIconResponse extends __protoMessage3166 {
     return ["SetAppIconResponse|1 app #0", App];
   }
 };
-var DeleteInstallationRequest = class _DeleteInstallationRequest extends __protoMessage3166 {
+var DeleteAppRequest = class _DeleteAppRequest extends __protoMessage3167 {
+  constructor(data) {
+    super();
+    this.id = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DeleteAppRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DeleteAppRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DeleteAppRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DeleteAppRequest, a, b2);
+  }
+  static $() {
+    return ["DeleteAppRequest|1 id 9"];
+  }
+};
+var DeleteAppResponse = class _DeleteAppResponse extends __protoMessage3167 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DeleteAppResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DeleteAppResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DeleteAppResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DeleteAppResponse, a, b2);
+  }
+  static $() {
+    return ["DeleteAppResponse"];
+  }
+};
+var DeleteInstallationRequest = class _DeleteInstallationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -944,7 +987,7 @@ var DeleteInstallationRequest = class _DeleteInstallationRequest extends __proto
     return ["DeleteInstallationRequest|1 id 9"];
   }
 };
-var DeleteInstallationResponse = class _DeleteInstallationResponse extends __protoMessage3166 {
+var DeleteInstallationResponse = class _DeleteInstallationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -965,7 +1008,7 @@ var DeleteInstallationResponse = class _DeleteInstallationResponse extends __pro
     return ["DeleteInstallationResponse"];
   }
 };
-var PreviewAppInstallationOptions = class _PreviewAppInstallationOptions extends __protoMessage3166 {
+var PreviewAppInstallationOptions = class _PreviewAppInstallationOptions extends __protoMessage3167 {
   constructor(data) {
     super();
     this.includeGrantedScopes = false;
@@ -987,7 +1030,7 @@ var PreviewAppInstallationOptions = class _PreviewAppInstallationOptions extends
     return ["PreviewAppInstallationOptions|1 include_granted_scopes 8"];
   }
 };
-var PreviewAppInstallationRequest = class _PreviewAppInstallationRequest extends __protoMessage3166 {
+var PreviewAppInstallationRequest = class _PreviewAppInstallationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceSlug = "";
@@ -1012,7 +1055,7 @@ var PreviewAppInstallationRequest = class _PreviewAppInstallationRequest extends
     return ["PreviewAppInstallationRequest|1 namespace_slug 9|2 app_id 9|3 requested_scopes 9*|4 summary 9|5 redirect_uri 9?|6 options #0", PreviewAppInstallationOptions];
   }
 };
-var PreviewAppInstallationScope = class _PreviewAppInstallationScope extends __protoMessage3166 {
+var PreviewAppInstallationScope = class _PreviewAppInstallationScope extends __protoMessage3167 {
   constructor(data) {
     super();
     this.scope = "";
@@ -1034,7 +1077,7 @@ var PreviewAppInstallationScope = class _PreviewAppInstallationScope extends __p
     return ["PreviewAppInstallationScope|1 scope 9"];
   }
 };
-var PreviewAppInstallationResponse = class _PreviewAppInstallationResponse extends __protoMessage3166 {
+var PreviewAppInstallationResponse = class _PreviewAppInstallationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.summary = "";
@@ -1059,7 +1102,7 @@ var PreviewAppInstallationResponse = class _PreviewAppInstallationResponse exten
     return ["PreviewAppInstallationResponse|12 app #0|5 summary 9|6 requested_scopes #1*|7 granted_scopes #1*|8 existing_installation #2|10 app_website_url 9", AppDisplayMetadata, PreviewAppInstallationScope, ExistingInstallation];
   }
 };
-var ExistingInstallation = class _ExistingInstallation extends __protoMessage3166 {
+var ExistingInstallation = class _ExistingInstallation extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installationId = "";
@@ -1083,7 +1126,7 @@ var ExistingInstallation = class _ExistingInstallation extends __protoMessage316
     return ["ExistingInstallation|1 installation_id 9|2 repo_selection_mode #0|3 repo_ids 9*", RepoSelectionMode];
   }
 };
-var AppMetadata = class _AppMetadata extends __protoMessage3166 {
+var AppMetadata = class _AppMetadata extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -1112,7 +1155,7 @@ var AppMetadata = class _AppMetadata extends __protoMessage3166 {
     return ["AppMetadata|1 id 9|3 display_name 9|4 namespace_slug 9|5 icon_url 9|6 description 9|7 website_url 9|8 default_scopes 9*|9 install_redirect_uri 9|10 is_public 8?|11 marketplace_listing #0", AppMarketplaceListing];
   }
 };
-var GetAppMetadataRequest = class _GetAppMetadataRequest extends __protoMessage3166 {
+var GetAppMetadataRequest = class _GetAppMetadataRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -1134,7 +1177,7 @@ var GetAppMetadataRequest = class _GetAppMetadataRequest extends __protoMessage3
     return ["GetAppMetadataRequest|1 id 9"];
   }
 };
-var GetAppMetadataResponse = class _GetAppMetadataResponse extends __protoMessage3166 {
+var GetAppMetadataResponse = class _GetAppMetadataResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -1155,7 +1198,7 @@ var GetAppMetadataResponse = class _GetAppMetadataResponse extends __protoMessag
     return ["GetAppMetadataResponse|1 app #0|2 stats #1", AppMetadata, AppStats];
   }
 };
-var SuspendInstallationRequest = class _SuspendInstallationRequest extends __protoMessage3166 {
+var SuspendInstallationRequest = class _SuspendInstallationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -1177,7 +1220,7 @@ var SuspendInstallationRequest = class _SuspendInstallationRequest extends __pro
     return ["SuspendInstallationRequest|1 id 9"];
   }
 };
-var SuspendInstallationResponse = class _SuspendInstallationResponse extends __protoMessage3166 {
+var SuspendInstallationResponse = class _SuspendInstallationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -1198,7 +1241,7 @@ var SuspendInstallationResponse = class _SuspendInstallationResponse extends __p
     return ["SuspendInstallationResponse"];
   }
 };
-var UnsuspendInstallationRequest = class _UnsuspendInstallationRequest extends __protoMessage3166 {
+var UnsuspendInstallationRequest = class _UnsuspendInstallationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -1220,7 +1263,7 @@ var UnsuspendInstallationRequest = class _UnsuspendInstallationRequest extends _
     return ["UnsuspendInstallationRequest|1 id 9"];
   }
 };
-var UnsuspendInstallationResponse = class _UnsuspendInstallationResponse extends __protoMessage3166 {
+var UnsuspendInstallationResponse = class _UnsuspendInstallationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -1241,7 +1284,7 @@ var UnsuspendInstallationResponse = class _UnsuspendInstallationResponse extends
     return ["UnsuspendInstallationResponse"];
   }
 };
-var ListRepoInstallationsRequest = class _ListRepoInstallationsRequest extends __protoMessage3166 {
+var ListRepoInstallationsRequest = class _ListRepoInstallationsRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.repoId = "";
@@ -1265,7 +1308,7 @@ var ListRepoInstallationsRequest = class _ListRepoInstallationsRequest extends _
     return ["ListRepoInstallationsRequest|1 repo_id 9|2 page_size 13|3 page_token 9"];
   }
 };
-var ListRepoInstallationsResponse = class _ListRepoInstallationsResponse extends __protoMessage3166 {
+var ListRepoInstallationsResponse = class _ListRepoInstallationsResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installations = [];
@@ -1288,7 +1331,7 @@ var ListRepoInstallationsResponse = class _ListRepoInstallationsResponse extends
     return ["ListRepoInstallationsResponse|1 installations #0*|2 next_page_token 9", InstallationReference];
   }
 };
-var RequestAppInstallRequest = class _RequestAppInstallRequest extends __protoMessage3166 {
+var RequestAppInstallRequest = class _RequestAppInstallRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceId = "";
@@ -1311,7 +1354,7 @@ var RequestAppInstallRequest = class _RequestAppInstallRequest extends __protoMe
     return ["RequestAppInstallRequest|1 namespace_id 9|2 app_id 9"];
   }
 };
-var RequestAppInstallResponse = class _RequestAppInstallResponse extends __protoMessage3166 {
+var RequestAppInstallResponse = class _RequestAppInstallResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.outcome = AppInstallRequestOutcome.UNSPECIFIED;
@@ -1333,7 +1376,7 @@ var RequestAppInstallResponse = class _RequestAppInstallResponse extends __proto
     return ["RequestAppInstallResponse|1 outcome #0|2 cool_down_expires_at 9?", AppInstallRequestOutcome];
   }
 };
-var GetMyAppInstallRequestRequest = class _GetMyAppInstallRequestRequest extends __protoMessage3166 {
+var GetMyAppInstallRequestRequest = class _GetMyAppInstallRequestRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceId = "";
@@ -1356,7 +1399,7 @@ var GetMyAppInstallRequestRequest = class _GetMyAppInstallRequestRequest extends
     return ["GetMyAppInstallRequestRequest|1 namespace_id 9|2 app_id 9"];
   }
 };
-var GetMyAppInstallRequestResponse = class _GetMyAppInstallRequestResponse extends __protoMessage3166 {
+var GetMyAppInstallRequestResponse = class _GetMyAppInstallRequestResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.hasPendingRequest = false;
@@ -1378,7 +1421,7 @@ var GetMyAppInstallRequestResponse = class _GetMyAppInstallRequestResponse exten
     return ["GetMyAppInstallRequestResponse|1 has_pending_request 8"];
   }
 };
-var CancelMyAppInstallRequestRequest = class _CancelMyAppInstallRequestRequest extends __protoMessage3166 {
+var CancelMyAppInstallRequestRequest = class _CancelMyAppInstallRequestRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceId = "";
@@ -1401,7 +1444,7 @@ var CancelMyAppInstallRequestRequest = class _CancelMyAppInstallRequestRequest e
     return ["CancelMyAppInstallRequestRequest|1 namespace_id 9|2 app_id 9"];
   }
 };
-var CancelMyAppInstallRequestResponse = class _CancelMyAppInstallRequestResponse extends __protoMessage3166 {
+var CancelMyAppInstallRequestResponse = class _CancelMyAppInstallRequestResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.canceled = false;
@@ -1423,7 +1466,7 @@ var CancelMyAppInstallRequestResponse = class _CancelMyAppInstallRequestResponse
     return ["CancelMyAppInstallRequestResponse|1 canceled 8"];
   }
 };
-var AppInstallRequest = class _AppInstallRequest extends __protoMessage3166 {
+var AppInstallRequest = class _AppInstallRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.id = "";
@@ -1446,7 +1489,7 @@ var AppInstallRequest = class _AppInstallRequest extends __protoMessage3166 {
     return ["AppInstallRequest|1 id 9|2 requester #0|4 created_at 9", ActorWithDisplay];
   }
 };
-var AppInstallRequestGroup = class _AppInstallRequestGroup extends __protoMessage3166 {
+var AppInstallRequestGroup = class _AppInstallRequestGroup extends __protoMessage3167 {
   constructor(data) {
     super();
     this.requests = [];
@@ -1468,7 +1511,7 @@ var AppInstallRequestGroup = class _AppInstallRequestGroup extends __protoMessag
     return ["AppInstallRequestGroup|1 app #0|2 requests #1*", AppDisplayMetadata, AppInstallRequest];
   }
 };
-var ListAppInstallRequestsRequest = class _ListAppInstallRequestsRequest extends __protoMessage3166 {
+var ListAppInstallRequestsRequest = class _ListAppInstallRequestsRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceId = "";
@@ -1492,7 +1535,7 @@ var ListAppInstallRequestsRequest = class _ListAppInstallRequestsRequest extends
     return ["ListAppInstallRequestsRequest|1 namespace_id 9|2 page_size 13|3 page_token 9"];
   }
 };
-var ListAppInstallRequestsResponse = class _ListAppInstallRequestsResponse extends __protoMessage3166 {
+var ListAppInstallRequestsResponse = class _ListAppInstallRequestsResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.groups = [];
@@ -1515,7 +1558,7 @@ var ListAppInstallRequestsResponse = class _ListAppInstallRequestsResponse exten
     return ["ListAppInstallRequestsResponse|1 groups #0*|2 next_page_token 9", AppInstallRequestGroup];
   }
 };
-var DenyAppInstallRequestsRequest = class _DenyAppInstallRequestsRequest extends __protoMessage3166 {
+var DenyAppInstallRequestsRequest = class _DenyAppInstallRequestsRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.namespaceId = "";
@@ -1538,7 +1581,7 @@ var DenyAppInstallRequestsRequest = class _DenyAppInstallRequestsRequest extends
     return ["DenyAppInstallRequestsRequest|1 namespace_id 9|2 app_id 9"];
   }
 };
-var DenyAppInstallRequestsResponse = class _DenyAppInstallRequestsResponse extends __protoMessage3166 {
+var DenyAppInstallRequestsResponse = class _DenyAppInstallRequestsResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.deniedCount = 0;
@@ -1560,7 +1603,7 @@ var DenyAppInstallRequestsResponse = class _DenyAppInstallRequestsResponse exten
     return ["DenyAppInstallRequestsResponse|1 denied_count 13"];
   }
 };
-var PreviewAppUserConfirmationRequest = class _PreviewAppUserConfirmationRequest extends __protoMessage3166 {
+var PreviewAppUserConfirmationRequest = class _PreviewAppUserConfirmationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installationId = "";
@@ -1583,7 +1626,7 @@ var PreviewAppUserConfirmationRequest = class _PreviewAppUserConfirmationRequest
     return ["PreviewAppUserConfirmationRequest|1 installation_id 9|2 redirect_uri 9|3 state 9?"];
   }
 };
-var AppUserConfirmationDisclosure = class _AppUserConfirmationDisclosure extends __protoMessage3166 {
+var AppUserConfirmationDisclosure = class _AppUserConfirmationDisclosure extends __protoMessage3167 {
   constructor(data) {
     super();
     this.userId = "";
@@ -1607,7 +1650,7 @@ var AppUserConfirmationDisclosure = class _AppUserConfirmationDisclosure extends
     return ["AppUserConfirmationDisclosure|1 user_id 9|2 email 9|3 namespace_id 9"];
   }
 };
-var PreviewAppUserConfirmationResponse = class _PreviewAppUserConfirmationResponse extends __protoMessage3166 {
+var PreviewAppUserConfirmationResponse = class _PreviewAppUserConfirmationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installationId = "";
@@ -1630,7 +1673,7 @@ var PreviewAppUserConfirmationResponse = class _PreviewAppUserConfirmationRespon
     return ["PreviewAppUserConfirmationResponse|1 app #0|2 installation_id 9|3 namespace_slug 9|4 disclosure #1", AppDisplayMetadata, AppUserConfirmationDisclosure];
   }
 };
-var ConfirmAppUserConfirmationRequest = class _ConfirmAppUserConfirmationRequest extends __protoMessage3166 {
+var ConfirmAppUserConfirmationRequest = class _ConfirmAppUserConfirmationRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.installationId = "";
@@ -1653,7 +1696,7 @@ var ConfirmAppUserConfirmationRequest = class _ConfirmAppUserConfirmationRequest
     return ["ConfirmAppUserConfirmationRequest|1 installation_id 9|2 redirect_uri 9|3 state 9?"];
   }
 };
-var ConfirmAppUserConfirmationResponse = class _ConfirmAppUserConfirmationResponse extends __protoMessage3166 {
+var ConfirmAppUserConfirmationResponse = class _ConfirmAppUserConfirmationResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.confirmationReceipt = "";

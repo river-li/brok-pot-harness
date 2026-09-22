@@ -1,5 +1,5 @@
-var import_node_fs78 = require("node:fs");
-var import_node_path128 = require("node:path");
+var import_node_fs77 = require("node:fs");
+var import_node_path127 = require("node:path");
 init_errors();
 var SandAgentCloneError = class extends SandDomainError {
   name = "SandAgentCloneError";
@@ -9,22 +9,22 @@ var AUTOMATION_CONFIG_FILENAME2 = "automation.json";
 function listAgentAutomationConfigFiles(automationsDir) {
   let entries;
   try {
-    entries = (0, import_node_fs78.readdirSync)(automationsDir, { withFileTypes: true });
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_clone", error41);
+    entries = (0, import_node_fs77.readdirSync)(automationsDir, { withFileTypes: true });
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_clone", error42);
     return [];
   }
   const configs = [];
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
-    const configPath = (0, import_node_path128.join)(automationsDir, entry.name, AUTOMATION_CONFIG_FILENAME2);
-    if (!(0, import_node_fs78.existsSync)(configPath)) continue;
+    const configPath = (0, import_node_path127.join)(automationsDir, entry.name, AUTOMATION_CONFIG_FILENAME2);
+    if (!(0, import_node_fs77.existsSync)(configPath)) continue;
     configs.push({ folderName: entry.name, configPath });
   }
   return configs;
 }
 function rewriteClonedAgentIdentity(targetDir, newAgentId, includesChatHistory, createAgentDb) {
-  const db = createAgentDb((0, import_node_path128.join)(targetDir, STORE_FILENAME), {
+  const db = createAgentDb((0, import_node_path127.join)(targetDir, STORE_FILENAME), {
     recoverOnCorruption: false,
     rejectIfCorrupt: true
   });
@@ -34,26 +34,26 @@ function rewriteClonedAgentIdentity(targetDir, newAgentId, includesChatHistory, 
     db.clearAgentPurpose();
     db.clearTransientState();
     if (!includesChatHistory) db.clearConversation();
-    const avatarPath = (0, import_node_path128.join)(targetDir, CANONICAL_AVATAR_FILENAME);
+    const avatarPath = (0, import_node_path127.join)(targetDir, CANONICAL_AVATAR_FILENAME);
     const existing = db.getSandProfile();
     db.setSandProfile({
       description: existing.description,
-      avatarPath: (0, import_node_fs78.existsSync)(avatarPath) ? avatarPath : null
+      avatarPath: (0, import_node_fs77.existsSync)(avatarPath) ? avatarPath : null
     });
   } finally {
     db.close();
   }
 }
 function copyIfPresent(sourcePath, targetPath) {
-  if ((0, import_node_fs78.existsSync)(sourcePath)) (0, import_node_fs78.copyFileSync)(sourcePath, targetPath);
+  if ((0, import_node_fs77.existsSync)(sourcePath)) (0, import_node_fs77.copyFileSync)(sourcePath, targetPath);
 }
 function cloneStoreDb(sourceDir, targetDir) {
-  const sourceDbPath = (0, import_node_path128.join)(sourceDir, STORE_FILENAME);
-  if (!(0, import_node_fs78.existsSync)(sourceDbPath)) {
+  const sourceDbPath = (0, import_node_path127.join)(sourceDir, STORE_FILENAME);
+  if (!(0, import_node_fs77.existsSync)(sourceDbPath)) {
     throw new SandAgentCloneError("This agent's data is missing and can't be duplicated.");
   }
   checkpointSandAgentDb(sourceDbPath);
-  (0, import_node_fs78.copyFileSync)(sourceDbPath, (0, import_node_path128.join)(targetDir, STORE_FILENAME));
+  (0, import_node_fs77.copyFileSync)(sourceDbPath, (0, import_node_path127.join)(targetDir, STORE_FILENAME));
 }
 function writeClonedProfile(sourceDir, targetDir, cloneName) {
   const source = readSandProfileFile(getSandProfilePath(sourceDir));
@@ -71,9 +71,9 @@ function cloneAutomations(sourceDir, targetDir) {
   for (const { folderName, configPath } of listAgentAutomationConfigFiles(
     getAgentAutomationsDir(sourceDir)
   )) {
-    const destDir = (0, import_node_path128.join)(targetAutomationsDir, folderName);
-    (0, import_node_fs78.mkdirSync)(destDir, { recursive: true });
-    (0, import_node_fs78.copyFileSync)(configPath, (0, import_node_path128.join)(destDir, AUTOMATION_CONFIG_FILENAME2));
+    const destDir = (0, import_node_path127.join)(targetAutomationsDir, folderName);
+    (0, import_node_fs77.mkdirSync)(destDir, { recursive: true });
+    (0, import_node_fs77.copyFileSync)(configPath, (0, import_node_path127.join)(destDir, AUTOMATION_CONFIG_FILENAME2));
   }
 }
 function cloneAvatarFiles(sourceDir, targetDir) {
@@ -82,11 +82,11 @@ function cloneAvatarFiles(sourceDir, targetDir) {
     readLegacyProfileAvatarField(getSandProfilePath(sourceDir))
   );
   for (const name17 of listConventionalAvatarFilenames(sourceDir)) {
-    (0, import_node_fs78.copyFileSync)((0, import_node_path128.join)(sourceDir, name17), (0, import_node_path128.join)(targetDir, name17));
+    (0, import_node_fs77.copyFileSync)((0, import_node_path127.join)(sourceDir, name17), (0, import_node_path127.join)(targetDir, name17));
   }
 }
 function cloneAgentDir(sourceDir, targetDir, newAgentId, cloneName, createAgentDb) {
-  (0, import_node_fs78.mkdirSync)(targetDir, { recursive: true });
+  (0, import_node_fs77.mkdirSync)(targetDir, { recursive: true });
   try {
     cloneStoreDb(sourceDir, targetDir);
     writeClonedProfile(sourceDir, targetDir, cloneName);
@@ -97,8 +97,8 @@ function cloneAgentDir(sourceDir, targetDir, newAgentId, cloneName, createAgentD
     cloneAvatarFiles(sourceDir, targetDir);
     cloneAutomations(sourceDir, targetDir);
     rewriteClonedAgentIdentity(targetDir, newAgentId, false, createAgentDb);
-  } catch (error41) {
-    (0, import_node_fs78.rmSync)(targetDir, { recursive: true, force: true });
-    throw error41;
+  } catch (error42) {
+    (0, import_node_fs77.rmSync)(targetDir, { recursive: true, force: true });
+    throw error42;
   }
 }

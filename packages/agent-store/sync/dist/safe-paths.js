@@ -265,11 +265,11 @@ function safeStatChild({ base, relPath, fs: fsOverride }) {
     let stat28;
     try {
       stat28 = fsModule.lstatSync(currentAbs);
-    } catch (error41) {
-      if (isNodeError(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError(error42) && error42.code === "ENOENT") {
         return { kind: "absent" };
       }
-      throw error41;
+      throw error42;
     }
     if (stat28.isSymbolicLink()) {
       return {
@@ -294,11 +294,11 @@ function safeStatChild({ base, relPath, fs: fsOverride }) {
     let postStat;
     try {
       postStat = fsModule.lstatSync(intermediate.abs);
-    } catch (error41) {
-      if (isNodeError(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError(error42) && error42.code === "ENOENT") {
         return { kind: "absent" };
       }
-      throw error41;
+      throw error42;
     }
     if (postStat.isSymbolicLink() || !postStat.isDirectory() || postStat.dev !== intermediate.dev || postStat.ino !== intermediate.ino) {
       return {
@@ -313,11 +313,11 @@ function safeStatChild({ base, relPath, fs: fsOverride }) {
   let leafStat;
   try {
     leafStat = fsModule.lstatSync(absPath);
-  } catch (error41) {
-    if (isNodeError(error41) && error41.code === "ENOENT") {
+  } catch (error42) {
+    if (isNodeError(error42) && error42.code === "ENOENT") {
       return { kind: "absent" };
     }
-    throw error41;
+    throw error42;
   }
   if (leafStat.isSymbolicLink()) {
     return {
@@ -381,11 +381,11 @@ function safeLstatDirectory({ base, relPath, fs: fsOverride }) {
     let stat28;
     try {
       stat28 = fsModule.lstatSync(currentAbs);
-    } catch (error41) {
-      if (isNodeError(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError(error42) && error42.code === "ENOENT") {
         return { kind: "absent" };
       }
-      throw error41;
+      throw error42;
     }
     if (stat28.isSymbolicLink()) {
       return {
@@ -410,11 +410,11 @@ function safeLstatDirectory({ base, relPath, fs: fsOverride }) {
     let postStat;
     try {
       postStat = fsModule.lstatSync(intermediate.abs);
-    } catch (error41) {
-      if (isNodeError(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError(error42) && error42.code === "ENOENT") {
         return { kind: "absent" };
       }
-      throw error41;
+      throw error42;
     }
     if (postStat.isSymbolicLink() || !postStat.isDirectory() || postStat.dev !== intermediate.dev || postStat.ino !== intermediate.ino) {
       return {
@@ -431,11 +431,11 @@ function safeLstatDirectory({ base, relPath, fs: fsOverride }) {
     let parentRecheck;
     try {
       parentRecheck = fsModule.lstatSync(lastParent.abs);
-    } catch (error41) {
-      if (isNodeError(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError(error42) && error42.code === "ENOENT") {
         return { kind: "absent" };
       }
-      throw error41;
+      throw error42;
     }
     if (parentRecheck.isSymbolicLink() || !parentRecheck.isDirectory() || parentRecheck.dev !== lastParent.dev || parentRecheck.ino !== lastParent.ino) {
       return {
@@ -457,11 +457,11 @@ function safeLstatDirectory({ base, relPath, fs: fsOverride }) {
   let leafStat;
   try {
     leafStat = fsModule.lstatSync(leafAbs);
-  } catch (error41) {
-    if (isNodeError(error41) && error41.code === "ENOENT") {
+  } catch (error42) {
+    if (isNodeError(error42) && error42.code === "ENOENT") {
       return { kind: "absent" };
     }
-    throw error41;
+    throw error42;
   }
   if (leafStat.isSymbolicLink()) {
     return {
@@ -507,14 +507,14 @@ function rmdirLocalEmptyAncestors(args) {
       } else {
         removedCount += 1;
       }
-    } catch (error41) {
-      if (!isNodeError(error41)) {
+    } catch (error42) {
+      if (!isNodeError(error42)) {
         return { removedCount };
       }
-      if (error41.code === "ENOTEMPTY") {
+      if (error42.code === "ENOTEMPTY") {
         return { removedCount };
       }
-      if (error41.code !== "ENOENT") {
+      if (error42.code !== "ENOENT") {
         return { removedCount };
       }
     }
@@ -553,16 +553,16 @@ function supportsFdRelativePaths() {
 }
 function nofollowDirectoryFlags() {
   var _a19;
-  const constants11 = fs.constants;
-  let flags = (_a19 = constants11.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
-  if (typeof constants11.O_DIRECTORY === "number") {
-    flags |= constants11.O_DIRECTORY;
+  const constants12 = fs.constants;
+  let flags = (_a19 = constants12.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
+  if (typeof constants12.O_DIRECTORY === "number") {
+    flags |= constants12.O_DIRECTORY;
   }
-  if (typeof constants11.O_NOFOLLOW === "number") {
-    flags |= constants11.O_NOFOLLOW;
+  if (typeof constants12.O_NOFOLLOW === "number") {
+    flags |= constants12.O_NOFOLLOW;
   }
-  if (typeof constants11.O_CLOEXEC === "number") {
-    flags |= constants11.O_CLOEXEC;
+  if (typeof constants12.O_CLOEXEC === "number") {
+    flags |= constants12.O_CLOEXEC;
   }
   return flags;
 }
@@ -615,8 +615,8 @@ function emptyAndRmdirFd(args) {
   let childFd;
   try {
     childFd = fs.openSync(fdChildPath(args.parentFd, args.name), flags);
-  } catch (error41) {
-    return isNodeError(error41) && error41.code === "ENOENT";
+  } catch (error42) {
+    return isNodeError(error42) && error42.code === "ENOENT";
   }
   try {
     if (args.recursive) {
@@ -648,8 +648,8 @@ function emptyAndRmdirFd(args) {
   try {
     fs.rmdirSync(fdChildPath(args.parentFd, args.name));
     return true;
-  } catch (error41) {
-    return isNodeError(error41) && error41.code === "ENOENT";
+  } catch (error42) {
+    return isNodeError(error42) && error42.code === "ENOENT";
   }
 }
 function rmdirEmptyTreeViaVerifiedWalk(args) {
@@ -717,36 +717,36 @@ function rmdirEmptyTreeViaVerifiedWalk(args) {
   try {
     fs.rmdirSync(path.join(parentAbs, leafName));
     return true;
-  } catch (error41) {
-    return isNodeError(error41) && error41.code === "ENOENT";
+  } catch (error42) {
+    return isNodeError(error42) && error42.code === "ENOENT";
   }
 }
 function walkDirectory({ fsModule, absDir, relDir, base, result, expectedDev, expectedIno }) {
   let entries;
   try {
     entries = fsModule.readdirSync(absDir, { withFileTypes: true });
-  } catch (error41) {
-    if (isNodeError(error41) && error41.code === "ENOENT") {
+  } catch (error42) {
+    if (isNodeError(error42) && error42.code === "ENOENT") {
       result.refusals.push({
         relPath: relDir.length === 0 ? "." : relDir,
         reason: "not_regular_file"
       });
       return;
     }
-    throw error41;
+    throw error42;
   }
   let postStat;
   try {
     postStat = fsModule.lstatSync(absDir);
-  } catch (error41) {
-    if (isNodeError(error41) && error41.code === "ENOENT") {
+  } catch (error42) {
+    if (isNodeError(error42) && error42.code === "ENOENT") {
       result.refusals.push({
         relPath: relDir.length === 0 ? "." : relDir,
         reason: "not_regular_file"
       });
       return;
     }
-    throw error41;
+    throw error42;
   }
   if (postStat.isSymbolicLink() || !postStat.isDirectory() || postStat.dev !== expectedDev || postStat.ino !== expectedIno) {
     result.refusals.push({
@@ -781,11 +781,11 @@ function walkDirectory({ fsModule, absDir, relDir, base, result, expectedDev, ex
     let childStat;
     try {
       childStat = fsModule.lstatSync(childAbs);
-    } catch (error41) {
-      if (isNodeError(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError(error42) && error42.code === "ENOENT") {
         continue;
       }
-      throw error41;
+      throw error42;
     }
     if (childStat.isSymbolicLink()) {
       result.refusals.push({ relPath: childRel, reason: "symlink_refused" });
@@ -823,8 +823,8 @@ function walkDirectory({ fsModule, absDir, relDir, base, result, expectedDev, ex
 function posixJoin({ dir, segment }) {
   return dir.length === 0 ? segment : `${dir}/${segment}`;
 }
-function isNodeError(error41) {
-  return error41 instanceof Error && typeof error41.code === "string";
+function isNodeError(error42) {
+  return error42 instanceof Error && typeof error42.code === "string";
 }
 function assertAncestorChainNoSymlinks(absPath, fsModule) {
   const parsed2 = path.parse(absPath);
@@ -836,11 +836,11 @@ function assertAncestorChainNoSymlinks(absPath, fsModule) {
     let stat28;
     try {
       stat28 = fsModule.lstatSync(current);
-    } catch (error41) {
-      if (isNodeError(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError(error42) && error42.code === "ENOENT") {
         return;
       }
-      throw error41;
+      throw error42;
     }
     if (stat28.isSymbolicLink()) {
       throw new UnsafeAgentStorePathError({

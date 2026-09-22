@@ -177,9 +177,14 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     if (boxMcpExec == null) {
       throw new SandMcpConfigError("This surface has no box MCP execution port.");
     }
-    await core2.definitionSource.ensureConfigLoaded();
+    const { accountConfigAdopted = false, ...listOptions } = options2 ?? {};
+    if (accountConfigAdopted) {
+      core2.definitionSource.reloadBoxServers();
+    } else {
+      await core2.definitionSource.ensureConfigLoaded();
+    }
     await _ensureBoxServersPushed();
-    const servers = await boxMcpExec.listTools(serverIdentifiers, options2);
+    const servers = await boxMcpExec.listTools(serverIdentifiers, listOptions);
     return servers.map((server) => {
       const row = _displayRowForIdentifier(server.serverIdentifier);
       if (row == null || server.tools.length === 0) return server;
@@ -203,8 +208,8 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     let stdioConfigs;
     try {
       stdioConfigs = await core2.definitionSource.getPushedServerConfigs();
-    } catch (error41) {
-      reportMcpHostEdgeFailure("box-config-push", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("box-config-push", error42);
       return;
     }
     const configJson = JSON.stringify({ mcpServers: stdioConfigs });
@@ -222,8 +227,8 @@ function createMcpToolsDiscovery(core2, deps = {}) {
       lastPushedBoxConfigJson = configJson;
       hasEverPushedBoxConfig = true;
     });
-    boxPushChain = push.catch((error41) => {
-      reportMcpHostEdgeFailure("box-config-push", error41);
+    boxPushChain = push.catch((error42) => {
+      reportMcpHostEdgeFailure("box-config-push", error42);
     });
     await push;
   }
@@ -281,7 +286,7 @@ function createMcpToolsDiscovery(core2, deps = {}) {
           entry.fulfilled = { tools, statuses, resolvedKey, atMs: Date.now() };
         }
       },
-      (error41) => {
+      (error42) => {
         if (toolsCacheEntry === entry) {
           if (entry.stale === void 0) {
             toolsCacheEntry = null;
@@ -294,7 +299,7 @@ function createMcpToolsDiscovery(core2, deps = {}) {
             };
           }
         }
-        const errorClass = errorClassOf(error41);
+        const errorClass = errorClassOf(error42);
         deps.onDiscoveryFailed?.({
           errorClass,
           elapsedMs: Date.now() - startedAtMs,
@@ -375,12 +380,12 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     if (boxMcpExec != null && boxProviderKind !== void 0) {
       try {
         await _ensureBoxServersPushed();
-      } catch (error41) {
+      } catch (error42) {
         return new McpResult({
           result: {
             case: "error",
             value: new McpError({
-              error: `Could not load MCP servers onto Grok Bot's computer: ${errorMessage(error41)}`
+              error: `Could not load MCP servers onto Grok Bot's computer: ${errorMessage(error42)}`
             })
           }
         });
@@ -461,8 +466,8 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     if (stdioServerNames.length === 0) {
       try {
         await _ensureBoxServersPushed();
-      } catch (error41) {
-        reportMcpHostEdgeFailure("box-config-reconcile", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("box-config-reconcile", error42);
       }
       return _noDiscoveredServers();
     }
@@ -511,8 +516,8 @@ function createMcpToolsDiscovery(core2, deps = {}) {
       }
       const rowPublishedByAwaitedConfigLoad = _displayRowForIdentifier(providerIdentifier);
       return rowPublishedByAwaitedConfigLoad != null ? _isBackendDisplayServer(rowPublishedByAwaitedConfigLoad) : false;
-    } catch (error41) {
-      reportMcpHostEdgeFailure("definition-read", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("definition-read", error42);
       return false;
     }
   }
@@ -525,8 +530,8 @@ function createMcpToolsDiscovery(core2, deps = {}) {
         return "account";
       }
       return providerIdentifier in await core2.definitionSource.getPushedServerConfigs() ? "pushed" : void 0;
-    } catch (error41) {
-      reportMcpHostEdgeFailure("definition-read", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("definition-read", error42);
       return void 0;
     }
   }

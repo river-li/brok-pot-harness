@@ -43,16 +43,16 @@ async function resolveChannelAttachment(rawUrl) {
     const stat28 = await import_node_fs32.promises.stat(resolved);
     if (!stat28.isFile()) return null;
     size = stat28.size;
-  } catch (error41) {
-    reportFallbackUnlessAbsent("channel_attachment", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("channel_attachment", error42);
     return null;
   }
   if (size === 0 || size > CHANNEL_ATTACHMENT_MAX_UPLOAD_BYTES) return null;
   let data;
   try {
     data = await import_node_fs32.promises.readFile(resolved);
-  } catch (error41) {
-    reportFallbackUnlessAbsent("channel_attachment", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("channel_attachment", error42);
     return null;
   }
   const imageMime = imageMimeFromPath(resolved);

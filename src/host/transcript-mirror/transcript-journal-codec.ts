@@ -27,8 +27,8 @@ function checkpointIdentity(checkpoint) {
   };
   return sha2562(`${checkpoint.turns.length}:${turnHex(-2)}:${turnHex(-1)}`);
 }
-function isMissingFile(error41) {
-  return error41 instanceof Error && "code" in error41 && error41.code === "ENOENT";
+function isMissingFile(error42) {
+  return error42 instanceof Error && "code" in error42 && error42.code === "ENOENT";
 }
 function fileIdentity(stats) {
   return {
@@ -50,8 +50,8 @@ var pendingCheckpointSchema = external_exports.object({
   lines: external_exports.array(external_exports.string()),
   cursor: external_exports.object({ turnCount: journalCountSchema, deferredStep: deferredStepSchema.nullish() }).strict()
 }).strict();
-function describeIssues2(error41) {
-  return error41.issues.map(
+function describeIssues2(error42) {
+  return error42.issues.map(
     (issue2) => issue2.path.length === 0 ? issue2.message : `${issue2.path.join(".")}: ${issue2.message}`
   ).join("; ");
 }

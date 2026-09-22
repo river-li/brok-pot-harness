@@ -26,7 +26,7 @@ function jsonReplacer3(_key, value) {
   return value;
 }
 async function writeResult(path30, result) {
-  await (0, import_promises28.mkdir)((0, import_node_path70.dirname)(path30), { recursive: true });
+  await (0, import_promises28.mkdir)((0, import_node_path69.dirname)(path30), { recursive: true });
   const temporaryPath = `${path30}.${process.pid}.tmp`;
   await (0, import_promises28.writeFile)(temporaryPath, `${JSON.stringify(result, jsonReplacer3)}
 `, "utf8");

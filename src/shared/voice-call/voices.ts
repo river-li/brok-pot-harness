@@ -36,7 +36,8 @@ var SAND_VOICE_SPEEDS = [
   { value: 0.75, label: "0.75x" },
   { value: 1, label: "1x" },
   { value: 1.25, label: "1.25x" },
-  { value: 1.5, label: "1.5x" }
+  { value: 1.5, label: "1.5x" },
+  { value: 2, label: "2x" }
 ];
 var DEFAULT_SAND_VOICE_SPEED = 1;
 var SAND_VOICE_LANGUAGE_AUTO = "auto";

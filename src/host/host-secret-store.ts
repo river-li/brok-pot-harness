@@ -17,8 +17,8 @@ async function readMachineId(path31) {
     const raw = await import_node_fs5.promises.readFile(path31, "utf8");
     const parsed2 = hostSecretsSchema.safeParse(JSON.parse(raw));
     return parsed2.success ? parsed2.data.machineId : null;
-  } catch (error41) {
-    reportFallbackUnlessAbsent("host_secret_store", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("host_secret_store", error42);
     return null;
   }
 }

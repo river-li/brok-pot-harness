@@ -22,6 +22,40 @@ var SandTurnInterruptedBeforeDispatchError = class extends Error {
 var RESUME_TURN_ACTION = new ConversationAction({
   action: { case: "resumeAction", value: new ResumeAction() }
 });
+var SUMMARIZE_ACTION = new ConversationAction({
+  action: { case: "summarizeAction", value: new SummarizeAction() }
+});
+function createIdleCompactionCollector() {
+  const requestIds = /* @__PURE__ */ new Set();
+  let servedModel;
+  const usage = { inputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, outputTokens: 0 };
+  const observer = {
+    onRequestStart: () => ({
+      onStreamEnd: () => {
+      },
+      onServedModel: (modelId) => {
+        servedModel = modelId;
+      },
+      onUsage: (call) => {
+        usage.inputTokens += call.inputTokens;
+        usage.cacheReadTokens += call.cacheReadTokens;
+        usage.cacheWriteTokens += call.cacheWriteTokens;
+        usage.outputTokens += call.outputTokens;
+      }
+    })
+  };
+  return {
+    observer,
+    noteRequestId: (requestId2) => {
+      requestIds.add(requestId2);
+    },
+    summary: () => ({
+      requestIds: [...requestIds],
+      ...servedModel === void 0 ? {} : { servedModel },
+      usage: { ...usage }
+    })
+  };
+}
 var mcpStartupDeadline = createDeadlinePolicy({
   name: "mcp-turn-start-discovery",
   timeoutMs: 5e3
@@ -104,15 +138,15 @@ function createTurnRunShell(host) {
               () => mcp.getTools(discoveryCtx, mcpConfigJson),
               childCtx.signal
             );
-          } catch (error41) {
-            cancelDiscovery(error41);
-            throw error41;
+          } catch (error42) {
+            cancelDiscovery(error42);
+            throw error42;
           }
         })
       ];
-    } catch (error41) {
-      if (ctx.canceled) return { kind: "canceled", error: error41 };
-      host.noteMcpToolDiscoveryFailed(error41);
+    } catch (error42) {
+      if (ctx.canceled) return { kind: "canceled", error: error42 };
+      host.noteMcpToolDiscoveryFailed(error42);
     }
     mcp.refreshAccountConfig();
     return { kind: "resolved", tools };
@@ -120,7 +154,7 @@ function createTurnRunShell(host) {
   async function run(prompt, options2 = {}) {
     const conversationId = host.getConversationId();
     beginTurnBotBlock({ conversationId });
-    const hostReceiptPerfMs = performance.now();
+    const hostReceiptPerfMs = host.metricsClock.monotonicNow();
     const performanceObservation = createTurnPerformanceObservation({
       ctx: host.ctx,
       harness: host.metricsHarness,
@@ -133,7 +167,10 @@ function createTurnRunShell(host) {
         requestSource: options2.requestSource ?? host.inheritedRequestSource
       }),
       startedAt: hostReceiptPerfMs,
-      activityStartedAt: host.metricsActivityStartedAt
+      activityStartedAt: host.metricsActivityStartedAt,
+      runRole: options2.metricsRunRole ?? "other",
+      ...options2.metricsRunRole === "turn_start" && host.metricsUserMessageSentAt !== void 0 ? { userMessageSentAt: host.metricsUserMessageSentAt } : {},
+      clock: host.metricsClock
     });
     let outcome = "error";
     let failure2;
@@ -141,9 +178,9 @@ function createTurnRunShell(host) {
       const result = await runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation);
       outcome = resolveTurnTraceOutcome(result);
       return result;
-    } catch (error41) {
-      failure2 = error41;
-      throw error41;
+    } catch (error42) {
+      failure2 = error42;
+      throw error42;
     } finally {
       const tags = resolveTurnOutcomeTags({ conversationId, outcome, error: failure2 });
       performanceObservation.complete(tags.outcome, tags.errorType);
@@ -154,7 +191,22 @@ function createTurnRunShell(host) {
     try {
       const turnRequestSource = options2.requestSource ?? host.inheritedRequestSource;
       host.setActiveTurnRequestSource(turnRequestSource);
+      if (turnRequestSource !== void 0 || options2.continuesTurn !== true) {
+        host.setActiveTurnInitiatedBy(
+          sandAuditInitiatedByOf({
+            isSubagentRunner: host.isSubagentRunner,
+            isTopLevelAutomationSubagent: host.isParentMediatedAutomationSubagent,
+            isGroupMemberTurn: options2.isGroupMemberTurn,
+            isConnectorWake: options2.isConnectorWake,
+            requestSource: turnRequestSource
+          })
+        );
+      }
       host.setActiveTurnAutomationWakeId(options2.automationWake?.id);
+      host.setActiveTurnAutomationWakeEmbedsExternalEvent(
+        options2.automationWake === void 0 ? void 0 : options2.automationWake.untrusted === true
+      );
+      host.setActiveTurnAutomationWakeEmail(options2.automationWake?.email);
       if (!host.isSubagentRunner && options2.autoReviewEpoch !== "continue") {
         host.beginAutoReviewUserMessageEpoch();
       }
@@ -163,11 +215,15 @@ function createTurnRunShell(host) {
       const attachedFilePaths = options2.attachedFilePaths ?? [];
       const selectedVideoInputs = options2.selectedVideos ?? [];
       const resumeTurn = options2.resumeTurn === true;
-      if (!resumeTurn && trimmedPrompt.length === 0 && selectedImageInputs.length === 0 && attachedFilePaths.length === 0 && selectedVideoInputs.length === 0) {
+      const idleCompaction = options2.idleCompaction === true ? createIdleCompactionCollector() : void 0;
+      const lastServedModel = options2.lastServedModel;
+      const promptlessAction = idleCompaction !== void 0 ? SUMMARIZE_ACTION : RESUME_TURN_ACTION;
+      const actionOnly = resumeTurn || idleCompaction !== void 0;
+      if (!actionOnly && trimmedPrompt.length === 0 && selectedImageInputs.length === 0 && attachedFilePaths.length === 0 && selectedVideoInputs.length === 0) {
         throw new SandEmptyPromptError();
       }
       const inferenceRequestId = options2.inferenceRequestId ?? crypto.randomUUID();
-      const skipLabeling = host.isSubagentRunner || options2.hidden === true || options2.isGroupMemberTurn === true;
+      const skipLabeling = host.isSubagentRunner || options2.hidden === true || options2.isGroupMemberTurn === true || idleCompaction !== void 0;
       const advanceChainOnDelivery = options2.hidden === true && !host.isSubagentRunner && options2.isGroupMemberTurn !== true && options2.advanceChainOnDelivery !== false;
       bindTurnBotBlock({
         conversationId: host.getConversationId(),
@@ -250,7 +306,7 @@ function createTurnRunShell(host) {
       const conversationId = host.getConversationId();
       const generation = host.runGeneration();
       const turnSeq = ++nextTurnSeq;
-      const diskPressureReminder = host.isSubagentRunner ? void 0 : host.diskPressureReminder;
+      const diskPressureReminder = host.isSubagentRunner || idleCompaction !== void 0 ? void 0 : host.diskPressureReminder;
       const diskPressureReminderClaim = {
         agentId: conversationId,
         claimId: inferenceRequestId
@@ -284,6 +340,14 @@ function createTurnRunShell(host) {
         [Symbol.dispose]: () => cancelRun(new SandRunAbortError({ intentional: true, reason: "turn run settled" }))
       });
       const streamWatchdog = createStreamWatchdog();
+      const armedHold = host.armedTurnEndSummaryHold();
+      const turnEndSummaryHold = armedHold === void 0 ? void 0 : {
+        maxWaitMs: armedHold.maxWaitMs(),
+        onHoldStart: () => {
+          streamWatchdog.resetDeadline();
+          armedHold.onHoldStart?.();
+        }
+      };
       let supersededByUser = false;
       let stopRequest = { kind: "none" };
       let deferredFollowupLabeling;
@@ -341,6 +405,7 @@ function createTurnRunShell(host) {
       host.setActiveRunIsCanceled(() => ctx.canceled);
       host.setActiveRunInterrupted(false);
       const isRunAwaitingUserSelection = () => stopRequest.kind === "awaiting-user";
+      const isRunCompletionRequested = () => stopRequest.kind === "complete";
       const isRunStopped = () => stopRequest.kind !== "none";
       const completeThisRun = (requestId2 = inferenceRequestId) => {
         if (!ctx.canceled && cancelActiveRun === cancelRun && stopRequest.kind === "none") {
@@ -377,6 +442,9 @@ function createTurnRunShell(host) {
       const stopRunIfRequested = () => {
         if (ctx.canceled) return;
         if (isRunStopped()) {
+          if (isRunCompletionRequested() && turnEndSummaryHold !== void 0) {
+            return;
+          }
           cancelRun(
             new SandRunAbortError({
               intentional: true,
@@ -421,21 +489,21 @@ function createTurnRunShell(host) {
           host.profilePromptSnapshots()
         );
         settle.setProfileSnapshot(profilePromptSnapshot);
-        const profileUpdateForTurn = host.systemPromptAssembly.getAgentProfileUpdateForTurn(profilePromptSnapshot);
+        const profileUpdateForTurn = idleCompaction !== void 0 ? null : host.systemPromptAssembly.getAgentProfileUpdateForTurn(profilePromptSnapshot);
         if (profileUpdateForTurn != null) {
           settle.noteProfileUpdateAppended(profileUpdateForTurn.identity);
         }
-        const frozenSectionUpdate = resumeTurn ? null : host.systemPromptAssembly.getFrozenSectionUpdatesForTurn();
-        const toolDescriptionUpdate = resumeTurn ? null : getToolDescriptionUpdatesForTurn(host);
+        const frozenSectionUpdate = actionOnly ? null : host.systemPromptAssembly.getFrozenSectionUpdatesForTurn();
+        const toolDescriptionUpdate = actionOnly ? null : getToolDescriptionUpdatesForTurn(host);
         const instructionsUpdateForTurn = [frozenSectionUpdate?.text, toolDescriptionUpdate?.text].filter((text2) => text2 !== void 0).join("\n\n");
-        const appendUnfinishedTasksReminder = !resumeTurn && (unfinishedTasksReminderPending || options2.unfinishedTasksReminder === true);
+        const appendUnfinishedTasksReminder = !actionOnly && (unfinishedTasksReminderPending || options2.unfinishedTasksReminder === true);
         const {
           action,
           automationStatusReminder,
           automationStatusCompactionEpoch,
           prependedUserMessageDedupeFloorMessageId
-        } = resumeTurn ? {
-          action: RESUME_TURN_ACTION,
+        } = actionOnly ? {
+          action: promptlessAction,
           automationStatusReminder: null,
           automationStatusCompactionEpoch: 0,
           prependedUserMessageDedupeFloorMessageId: void 0
@@ -454,6 +522,7 @@ function createTurnRunShell(host) {
         const boxId = host.resolveBoxId();
         const emitRequestId = (requestId2) => {
           options2.onRequestId?.(requestId2);
+          idleCompaction?.noteRequestId(requestId2);
           host.emitUpdate({ type: "request-id", requestId: requestId2 });
         };
         const executorProfile = host.subagentType === "executor" ? host.subagentModelId : void 0;
@@ -491,9 +560,13 @@ function createTurnRunShell(host) {
           },
           composeSandPromptStreamObservers(
             performanceObservation.streamObserver,
-            promptPrefixObservation.streamObserver
+            promptPrefixObservation.streamObserver,
+            idleCompaction?.observer
           ),
-          promptPrefixObservation.streamObserver
+          composeSandPromptStreamObservers(
+            promptPrefixObservation.streamObserver,
+            idleCompaction?.observer
+          )
         );
         sessionForLabeling = session;
         options2.onModelResolved?.(session.getModelId());
@@ -503,6 +576,7 @@ function createTurnRunShell(host) {
         const summarizationSession = sanitizePromptSessionUsage(
           host.inference.createSession(
             (requestId2) => {
+              idleCompaction?.noteRequestId(requestId2);
               host.emitUpdate({ type: "request-id", requestId: requestId2 });
             },
             {
@@ -513,7 +587,10 @@ function createTurnRunShell(host) {
           ),
           void 0,
           void 0,
-          promptPrefixObservation.streamObserver
+          composeSandPromptStreamObservers(
+            promptPrefixObservation.streamObserver,
+            idleCompaction?.observer
+          )
         );
         const turnStartedAtMs = Date.now();
         const baseState = ConversationStateStructure.fromBinary(
@@ -539,9 +616,9 @@ function createTurnRunShell(host) {
         if (ctx.canceled) {
           throw new SandTurnInterruptedBeforeDispatchError();
         }
-        const userFormVaultKeysPromise = host.resolveUserFormVaultKeysForRun?.().catch((error41) => {
+        const userFormVaultKeysPromise = host.resolveUserFormVaultKeysForRun?.().catch((error42) => {
           console.warn(
-            `[sand:user-form-vault] keys-catalog fetch failed; request_user_form carries no catalog this run: ${errorLogTag(error41)}`
+            `[sand:user-form-vault] keys-catalog fetch failed; request_user_form carries no catalog this run: ${errorLogTag(error42)}`
           );
           return void 0;
         }) ?? Promise.resolve(void 0);
@@ -554,12 +631,12 @@ function createTurnRunShell(host) {
               ),
               boxId
             );
-          } catch (error41) {
-            if (error41 instanceof SandBoxDaemonUnreachableError) {
-              const reason = boxNotReadyReasonForError(error41);
-              throw new SandBoxNotReadyError(reason.errorKind, reason.message, { cause: error41 });
+          } catch (error42) {
+            if (error42 instanceof SandBoxDaemonUnreachableError) {
+              const reason = boxNotReadyReasonForError(error42);
+              throw new SandBoxNotReadyError(reason.errorKind, reason.message, { cause: error42 });
             }
-            throw error41;
+            throw error42;
           }
         });
         const emittedConnectorCards = /* @__PURE__ */ new Set();
@@ -581,8 +658,11 @@ function createTurnRunShell(host) {
             {
               agent: turnSession,
               canUseSelfSummary: () => {
-                const modelId = turnSession.getResolvedModelId() ?? turnSession.getModelId();
-                return lastReportedSelfSummarySupport(modelId) ?? shouldUseSandSelfSummary(modelId);
+                const resolved = turnSession.getResolvedModelId();
+                if (resolved === void 0 && lastServedModel !== void 0) {
+                  return lastServedModel.selfSummary;
+                }
+                return sandSelfSummarySupported(resolved ?? turnSession.getModelId());
               },
               summarization: summarizationSession
             },
@@ -606,6 +686,8 @@ function createTurnRunShell(host) {
               streamWatchdog,
               updateObservers,
               isRunAwaitingUserSelection,
+              isRunCompletionRequested,
+              turnEndSummaryHold,
               isTeamSetupUnderway: () => options2.teamSetupUnderway === true,
               endThisRunAwaitingUser,
               requestAutomationParentWake,
@@ -617,6 +699,7 @@ function createTurnRunShell(host) {
               emittedConnectorCards,
               performanceObservation,
               conversationActionReceiver: steerInbox.receiver(privacyMode),
+              ...idleCompaction === void 0 ? {} : { summarizeActionMode: "threshold" },
               ...skipLabeling || host.inference.recordFollowupLabeling == null ? {} : {
                 captureFollowupLabelingMessages: settle.captureFollowupLabelingMessages
               }
@@ -726,6 +809,21 @@ function createTurnRunShell(host) {
           if (cancelActiveRun === cancelRun) steerInbox.endRun();
           performanceObservation.stopObservingInference();
           promptPrefixObservation.finalize();
+          if (cancelActiveRun === cancelRun && !host.isSubagentRunner && idleCompaction === void 0) {
+            const parentPrompt = promptPrefixObservation.parentTurnPrompt(session.getModelId());
+            const resolvedModelId = session.getResolvedModelId();
+            if (parentPrompt !== void 0) {
+              host.noteParentTurnPrompt?.({
+                ...parentPrompt,
+                ...resolvedModelId === void 0 ? {} : {
+                  servedModel: {
+                    modelId: resolvedModelId,
+                    selfSummary: sandSelfSummarySupported(resolvedModelId)
+                  }
+                }
+              });
+            }
+          }
         }
         aborted2 = ctx.canceled && !isRunStopped() && !pausedForUpgrade;
         endRunLifecycle();
@@ -746,12 +844,12 @@ function createTurnRunShell(host) {
             advanceChainOnDelivery
           });
         }
-      } catch (error41) {
+      } catch (error42) {
         endRunLifecycle();
         if (!ctx.canceled) {
-          markTurnTraceError(runSpan, error41);
-          markTurnTraceError(turnTrace, error41);
-          throw error41;
+          markTurnTraceError(runSpan, error42);
+          markTurnTraceError(turnTrace, error42);
+          throw error42;
         }
         aborted2 = !isRunStopped() && !pausedForUpgrade;
       } finally {
@@ -816,6 +914,9 @@ function createTurnRunShell(host) {
       }
       if (deferredFollowupLabeling !== void 0) {
         result.deferredFollowupLabeling = deferredFollowupLabeling;
+      }
+      if (idleCompaction !== void 0) {
+        result.idleCompactionSummary = idleCompaction.summary;
       }
       const traceOutcome = resolveTurnTraceOutcome(result);
       const turnOutcome2 = adjustTurnOutcomeForBotBlock({

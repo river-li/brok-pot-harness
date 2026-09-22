@@ -50,11 +50,11 @@ var SandManagedSkillsService = class {
           if (normalized != null) skills.push(normalized);
         }
         writeManagedSkillsCache(this.options.getCacheDir(), skills);
-      } catch (error41) {
+      } catch (error42) {
         this.options.report?.({
           extension: "managed_setup",
           kind: "managed_skills",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       } finally {
         nextTrigger = this.pendingTrigger;

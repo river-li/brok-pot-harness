@@ -1,4 +1,4 @@
-var __awaiter25 = function(thisArg, _arguments, P2, generator) {
+var __awaiter27 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -79,9 +79,9 @@ var __disposeResources = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var TRANSCRIPTS_SUBDIR2 = TRANSCRIPTS_SUBDIR;
 var getSafeConversationId2 = getSafeConversationId;
@@ -182,7 +182,7 @@ function isSummaryMessage(message) {
   return ((_a19 = providerOptions === null || providerOptions === void 0 ? void 0 : providerOptions.cursor) === null || _a19 === void 0 ? void 0 : _a19.isSummary) === true;
 }
 function hydrateBlobIds(ctx, blobStore, blobIds) {
-  return __awaiter25(this, void 0, void 0, function* () {
+  return __awaiter27(this, void 0, void 0, function* () {
     const messages2 = [];
     let hydratedBlobCount = 0;
     let hydratedBlobBytes = 0;
@@ -227,7 +227,7 @@ function hydrateBlobIds(ctx, blobStore, blobIds) {
   });
 }
 function hydrateMessages(ctx, blobStore, state) {
-  return __awaiter25(this, void 0, void 0, function* () {
+  return __awaiter27(this, void 0, void 0, function* () {
     const env_1 = { stack: [], error: void 0, hasError: false };
     try {
       const span = __addDisposableResource(env_1, createSpan(ctx.withName("hydrateSummaryArchives")), false);
@@ -241,7 +241,7 @@ function hydrateMessages(ctx, blobStore, state) {
       let omittedArchivedBlobCount = 0;
       let omittedArchivedBlobBytes = 0;
       let largestOmittedArchivedBlobBytes = 0;
-      const summaryArchives = yield Promise.all(state.summaryArchives.map((summaryArchiveRef) => __awaiter25(this, void 0, void 0, function* () {
+      const summaryArchives = yield Promise.all(state.summaryArchives.map((summaryArchiveRef) => __awaiter27(this, void 0, void 0, function* () {
         getBlobCount++;
         const archiveBlob = yield blobStore.getBlob(quietCtx, summaryArchiveRef);
         if (archiveBlob) {
@@ -617,7 +617,7 @@ var TranscriptStore = class {
    *   avoid advancing past content that never reached disk.
    */
   writeFromStateFull(ctx_1, state_1, conversationId_1) {
-    return __awaiter25(this, arguments, void 0, function* (ctx, state, conversationId, options2 = {}) {
+    return __awaiter27(this, arguments, void 0, function* (ctx, state, conversationId, options2 = {}) {
       const env_2 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource(env_2, createSpan(ctx.withName("writeFromState")), false);
@@ -667,8 +667,8 @@ ${terminalMarkers.textSuffixes.join("\n")}` : terminalMarkers.textSuffixes.join(
             }
           }
           return true;
-        } catch (error41) {
-          console.error("[TranscriptStore] Failed to write transcript:", error41);
+        } catch (error42) {
+          console.error("[TranscriptStore] Failed to write transcript:", error42);
           return false;
         }
       } catch (e_2) {
@@ -700,7 +700,7 @@ ${terminalMarkers.textSuffixes.join("\n")}` : terminalMarkers.textSuffixes.join(
    *   instead of appending past content that never reached disk.
    */
   writeFromStateIncremental(ctx_1, state_1, conversationId_1, previousRootPromptCount_1) {
-    return __awaiter25(this, arguments, void 0, function* (ctx, state, conversationId, previousRootPromptCount, options2 = {}) {
+    return __awaiter27(this, arguments, void 0, function* (ctx, state, conversationId, previousRootPromptCount, options2 = {}) {
       const env_3 = { stack: [], error: void 0, hasError: false };
       try {
         const currentCount = state.rootPromptMessagesJson.length;
@@ -720,8 +720,8 @@ ${terminalMarkers.textSuffixes.join("\n")}` : terminalMarkers.textSuffixes.join(
           try {
             yield appendFile3(this.resolveFilePath(conversationId, "jsonl"), ensureTrailingNewline(terminalMarkers.jsonlLines.join("\n")));
             return currentCount;
-          } catch (error41) {
-            console.error(this.options.fallbackToFullWriteOnIncrementalFailure ? "[TranscriptStore] Failed to append transcript, falling back to full write:" : "[TranscriptStore] Failed to append transcript:", error41);
+          } catch (error42) {
+            console.error(this.options.fallbackToFullWriteOnIncrementalFailure ? "[TranscriptStore] Failed to append transcript, falling back to full write:" : "[TranscriptStore] Failed to append transcript:", error42);
             if (!this.options.fallbackToFullWriteOnIncrementalFailure) {
               return 0;
             }
@@ -752,8 +752,8 @@ ${terminalMarkers.textSuffixes.join("\n")}` : terminalMarkers.textSuffixes.join(
             yield appendFile3(this.resolveFilePath(conversationId, "jsonl"), content);
           }
           return currentCount;
-        } catch (error41) {
-          console.error(this.options.fallbackToFullWriteOnIncrementalFailure ? "[TranscriptStore] Failed to append transcript, falling back to full write:" : "[TranscriptStore] Failed to append transcript:", error41);
+        } catch (error42) {
+          console.error(this.options.fallbackToFullWriteOnIncrementalFailure ? "[TranscriptStore] Failed to append transcript, falling back to full write:" : "[TranscriptStore] Failed to append transcript:", error42);
           if (!this.options.fallbackToFullWriteOnIncrementalFailure) {
             return 0;
           }

@@ -7,7 +7,6 @@ function hostDiagnosticTelemetry(diagnostic) {
 }
 function hostDiagnosticMetadata(diagnostic) {
   switch (diagnostic.kind) {
-    case "brain_docs_compensation_failed":
     case "computer_use_prewarm_skipped":
     case "fallback_taken":
     case "labeling_failed":
@@ -48,6 +47,10 @@ function hostDiagnosticMetadata(diagnostic) {
       };
     case "auto_review_shadow_classify_failed":
     case "automation_floor_probe_failed":
+    case "box_fork_window_release_failed":
+    case "box_monitor_busy_lease_touch_failed":
+    case "box_window_assignment_refresh_failed":
+    case "brain_docs_avatar_source_read_failed":
     case "brain_docs_channel_config_corrupt":
     case "loop_mitigation_report_failed":
     case "cloud_agent_updates_stream_failed":

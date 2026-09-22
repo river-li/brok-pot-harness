@@ -12,6 +12,7 @@ var SandAgentRunner = class _SandAgentRunner {
   diskPressureReminder;
   conversationSizeGuard;
   backgroundSummarizationPropsOverride;
+  summaryLifecycle = new SandSummaryLifecycleWatch();
   box;
   remoteBox;
   preparedRemoteBoxConnection;
@@ -30,7 +31,6 @@ var SandAgentRunner = class _SandAgentRunner {
   onMessagesGrantsAsk;
   requestContext;
   transcriptMirror;
-  systemPrompt;
   isSubagentRunner;
   subagentSendMessageEnabled;
   isAutomationSubagent;
@@ -40,11 +40,14 @@ var SandAgentRunner = class _SandAgentRunner {
   subagentModelId;
   inheritedRequestSource;
   activeTurnRequestSource;
+  activeTurnInitiatedBy;
   inheritedAutomationId;
   secretScopeId;
   botSecrets;
   activeTurnAutomationId;
   activeTurnAutomationWakeId;
+  activeTurnAutomationWakeEmbedsExternalEvent;
+  activeTurnAutomationWakeEmail;
   loopDetection;
   readVideoAttachmentBytes;
   readMediaDimensions;
@@ -56,6 +59,7 @@ var SandAgentRunner = class _SandAgentRunner {
   runShell;
   automationCompletions;
   subagentTranscriptId;
+  lastParentTurnPrompt;
   persistedCheckpointHandler;
   onComputerUseUsage;
   onSubagentStalled;
@@ -68,7 +72,7 @@ var SandAgentRunner = class _SandAgentRunner {
   metricsSessionKind;
   metricsTurnKind;
   fireAndForgetCheckpoints;
-  metricsActivityStartedAt;
+  metricsClock;
   steerReach;
   fallbackConversationId = `sand-${crypto.randomUUID()}`;
   webSearchService;
@@ -111,7 +115,6 @@ var SandAgentRunner = class _SandAgentRunner {
   skills;
   agentState;
   userMemory;
-  projectMemory;
   memorySnapshots;
   episodeProgress;
   automationStore;
@@ -140,6 +143,7 @@ var SandAgentRunner = class _SandAgentRunner {
   autoReviewClassifierExecutor;
   getAutoReviewInstructions;
   actionAuditor;
+  actionAuditSequencer;
   attachBoxServers;
   computerUse;
   autoReviewGate;
@@ -179,20 +183,24 @@ var SandAgentRunner = class _SandAgentRunner {
     this.metricsTurnKind = options2.metricsTurnKind;
     this.fireAndForgetCheckpoints = options2.fireAndForgetCheckpoints === true;
     this.steerReach = options2.steerReach ?? { kind: "in-process" };
-    this.metricsActivityStartedAt = options2.metricsActivityStartedAt;
+    this.metricsClock = options2.metricsClock ?? realClock;
     let metricsCtx = createContext().with(loggerKey, options2.loggerBackend ?? { log: () => {
     } });
     if (options2.metricsBackend !== void 0) {
       metricsCtx = metricsCtx.with(metricsKey, options2.metricsBackend);
     }
-    this.ctx = options2.summaryTelemetry === void 0 ? metricsCtx : metricsCtx.with(
-      agentEventTrackerKey,
-      createSandAgentEventTracker({
-        telemetry: options2.summaryTelemetry,
-        fallback: getAgentEventTracker(metricsCtx),
-        getConversationId: () => this.getConversationId()
-      })
-    );
+    const eventTracker = options2.summaryTelemetry === void 0 ? getAgentEventTracker(metricsCtx) : createSandAgentEventTracker({
+      telemetry: options2.summaryTelemetry,
+      fallback: getAgentEventTracker(metricsCtx),
+      getConversationId: () => this.getConversationId()
+    });
+    this.ctx = metricsCtx.with(agentEventTrackerKey, {
+      ...eventTracker,
+      trackSummaryLifecycle: (ctx, event) => {
+        this.summaryLifecycle.note(event);
+        eventTracker.trackSummaryLifecycle(ctx, event);
+      }
+    });
     this.agentStore = options2.agentStore;
     this.confirmedUserTurnWatermarkStore = options2.confirmedUserTurnWatermarkStore;
     this.inference = options2.inference;
@@ -220,7 +228,6 @@ var SandAgentRunner = class _SandAgentRunner {
     this.onToolCallEvents = options2.onToolCallEvents;
     this.requestContext = options2.requestContext;
     this.transcriptMirror = options2.transcriptMirror;
-    this.systemPrompt = options2.systemPrompt ?? DEFAULT_SAND_SYSTEM_PROMPT;
     this.isSystemPromptOverridden = options2.systemPrompt != null;
     this.isSubagentRunner = options2.isSubagent ?? false;
     this.subagentSendMessageEnabled = options2.subagentSendMessageEnabled ?? false;
@@ -260,7 +267,6 @@ var SandAgentRunner = class _SandAgentRunner {
     this.skills = options2.skills;
     this.agentState = options2.agentState;
     this.userMemory = options2.userMemory;
-    this.projectMemory = options2.projectMemory;
     this.memorySnapshots = options2.memorySnapshots;
     this.profilePromptSnapshots = options2.profilePromptSnapshots;
     this.promptPrefixSnapshots = options2.promptPrefixSnapshots;
@@ -282,12 +288,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.streamDeadlineConfig = options2.streamDeadlineConfig;
     this.streamDeadlineClock = options2.streamDeadlineClock;
     this.skillStore = options2.skillStore;
-    const readManagedSkill = options2.readManagedSkill;
-    this.readManagedSkill = createBoxDesktopSkillReader({
-      combined: this.combinedComputerUse.read,
-      skills: () => this.skillStore,
-      fallback: readManagedSkill
-    });
+    this.readManagedSkill = options2.readManagedSkill;
     this.channelStore = options2.channelStore;
     this.connectorManifests = options2.connectorManifests ?? CONNECTOR_MANIFESTS;
     this.localToolPermission = options2.localToolPermission;
@@ -300,10 +301,13 @@ var SandAgentRunner = class _SandAgentRunner {
     this.autoReviewClassifierExecutor = options2.autoReviewClassifierExecutor;
     this.getAutoReviewInstructions = options2.getAutoReviewInstructions;
     this.attachBoxServers = options2.attachBoxServers;
-    this.actionAuditor = withNavigationTelemetry(
+    this.actionAuditSequencer = options2.actionAuditSequencer ?? createActionAuditSequencer();
+    const auditedActions = withNavigationTelemetry(
       options2.actionAuditor,
       options2.navigationTelemetry
     );
+    const sequenced = auditedActions && withEventSequence(auditedActions, this.actionAuditSequencer);
+    this.actionAuditor = sequenced && withInitiatedBy(sequenced, () => this.activeTurnInitiatedBy);
     this.createCloudAgentTool = options2.createCloudAgentTool;
     this.connectedActivity = options2.connectedActivity;
     this.cloudCanvas = options2.cloudCanvas;
@@ -333,7 +337,8 @@ var SandAgentRunner = class _SandAgentRunner {
     this.slackSetup = options2.slackSetup;
     this.systemPromptAssembly = createSystemPromptAssembly({
       activeTurnRequestSource: () => this.activeTurnRequestSource,
-      basePrompt: this.systemPrompt,
+      basePrompt: options2.systemPrompt ?? "",
+      baseSystemPromptOverride: options2.baseSystemPromptOverride,
       isSubagentRunner: this.isSubagentRunner,
       isParentMediatedAutomationSubagent: this.isParentMediatedAutomationSubagent,
       isComputerUseSubagent: this.isComputerUseSubagent,
@@ -356,7 +361,6 @@ var SandAgentRunner = class _SandAgentRunner {
       agentStore: () => this.agentStore,
       memoryStore: () => this.memoryStore,
       userMemory: () => this.userMemory,
-      projectMemory: () => this.projectMemory,
       memorySnapshots: () => this.memorySnapshots,
       promptSectionSnapshots: () => this.promptSectionSnapshots,
       automationStore: () => this.automationStore,
@@ -405,16 +409,19 @@ var SandAgentRunner = class _SandAgentRunner {
         return self2.onSubagentStalled;
       }
     });
-    this.observation = createTurnObservation({
-      getConversationId: () => this.getConversationId(),
-      isActiveRunCanceled: () => this.activeRunIsCanceled(),
-      isActiveRunInterrupted: () => this.activeRunInterrupted,
-      subagentRegistryEntries: () => this.subagents.registryEntries(),
-      isSubagentAborting: (subagentAgentId) => this.subagents.isAborting(subagentAgentId),
-      listBackgroundShellWork: (query) => this.backgroundWatches.listRegisteredShellWork(query),
-      shellRewatchEntries: () => this.backgroundWatches.shellRewatchEntries(),
-      cloudAgentWatchEntries: () => this.backgroundWatches.cloudAgentWatchEntries()
-    });
+    this.observation = createTurnObservation(
+      {
+        getConversationId: () => this.getConversationId(),
+        isActiveRunCanceled: () => this.activeRunIsCanceled(),
+        isActiveRunInterrupted: () => this.activeRunInterrupted,
+        subagentRegistryEntries: () => this.subagents.registryEntries(),
+        isSubagentAborting: (subagentAgentId) => this.subagents.isAborting(subagentAgentId),
+        listBackgroundShellWork: (query) => this.backgroundWatches.listRegisteredShellWork(query),
+        shellRewatchEntries: () => this.backgroundWatches.shellRewatchEntries(),
+        cloudAgentWatchEntries: () => this.backgroundWatches.cloudAgentWatchEntries()
+      },
+      { clock: this.metricsClock }
+    );
     this.backgroundWatches = createBackgroundWatches({
       getConversationId: () => this.getConversationId(),
       emitAsyncTasksChanged: () => this.observation.emitAsyncTasksChanged(),
@@ -499,6 +506,8 @@ var SandAgentRunner = class _SandAgentRunner {
     const self2 = this;
     this.turnToolHost = {
       browserOperationHarness: this.browserOperationHarness,
+      metricsHarness: this.metricsHarness,
+      memoryTelemetry: options2.memoryTelemetry,
       reportBrowserOperation: (report) => options2.browserTelemetry?.reportBrowserOperation(report),
       reportComputerOperation: (report) => options2.computerTelemetry?.reportComputerOperation(report),
       getCombinedComputerUseSelection: this.combinedComputerUse.peek,
@@ -707,6 +716,8 @@ var SandAgentRunner = class _SandAgentRunner {
       },
       activeTurnRequestSource: () => self2.activeTurnRequestSource,
       activeTurnAutomationWakeId: () => self2.activeTurnAutomationWakeId,
+      activeTurnAutomationWakeEmbedsExternalEvent: () => self2.activeTurnAutomationWakeEmbedsExternalEvent,
+      activeTurnAutomationWakeEmail: () => self2.activeTurnAutomationWakeEmail,
       get getAgentDirImpl() {
         return self2.getAgentDirImpl;
       },
@@ -737,7 +748,7 @@ var SandAgentRunner = class _SandAgentRunner {
       detachedSubagents: this.detachedSubagents
     };
     const parentTransport = this.transport;
-    this.turnAgentComposition = createTurnAgentComposition({
+    this.turnAgentComposition = (options2.createTurnAgentComposition ?? createTurnAgentComposition)({
       isCombinedComputerUseAvailable: this.combinedComputerUse.read,
       toolDescriptionSnapshots: () => this.frozenToolDescriptionSnapshots(),
       compactionEpoch: () => this.getConversationState().summaryArchives.length,
@@ -756,6 +767,7 @@ var SandAgentRunner = class _SandAgentRunner {
       metricsBackend: this.metricsBackend,
       metricsHarness: this.metricsHarness,
       metricsSessionKind: this.metricsSessionKind,
+      metricsClock: this.metricsClock,
       fireAndForgetCheckpoints: this.fireAndForgetCheckpoints,
       streamTuning: this.streamTuning,
       box: this.box,
@@ -785,6 +797,7 @@ var SandAgentRunner = class _SandAgentRunner {
       autoReviewClassifierExecutor: this.autoReviewClassifierExecutor,
       getAutoReviewInstructions: this.getAutoReviewInstructions,
       actionAuditor: this.actionAuditor,
+      actionAuditSequencer: this.actionAuditSequencer,
       attachBoxServers: this.attachBoxServers,
       createCloudAgentTool: this.createCloudAgentTool,
       detachedSubagents: this.detachedSubagents,
@@ -822,7 +835,6 @@ var SandAgentRunner = class _SandAgentRunner {
           inheritedOptions = {
             memoryStore: this.memoryStore,
             userMemory: this.userMemory,
-            projectMemory: this.projectMemory,
             memorySnapshots: this.memorySnapshots,
             profilePromptSnapshots: this.profilePromptSnapshots,
             episodeProgress: this.episodeProgress,
@@ -865,15 +877,15 @@ var SandAgentRunner = class _SandAgentRunner {
           inheritedOptions = {
             memoryStore: this.memoryStore,
             userMemory: this.userMemory,
-            projectMemory: this.projectMemory,
             memorySnapshots: this.memorySnapshots
           };
         }
         return new _SandAgentRunner({
-          readManagedSkill,
+          readManagedSkill: options2.readManagedSkill,
           summaryTelemetry: options2.summaryTelemetry,
           browserTelemetry: options2.browserTelemetry,
           computerTelemetry: options2.computerTelemetry,
+          memoryTelemetry: options2.memoryTelemetry,
           scmWriteBlockedReason: options2.scmWriteBlockedReason,
           ...childOptions,
           ...inheritedOptions,
@@ -881,7 +893,7 @@ var SandAgentRunner = class _SandAgentRunner {
         });
       }
     });
-    this.runShell = createTurnRunShell({
+    this.runShell = (options2.createTurnRunShell ?? createTurnRunShell)({
       isSubagentRunner: this.isSubagentRunner,
       isParentMediatedAutomationSubagent: this.isParentMediatedAutomationSubagent,
       isComputerUseSubagent: this.isComputerUseSubagent,
@@ -896,7 +908,9 @@ var SandAgentRunner = class _SandAgentRunner {
       metricsHarness: this.metricsHarness,
       metricsSessionKind: this.metricsSessionKind,
       metricsTurnKind: this.metricsTurnKind,
-      metricsActivityStartedAt: this.metricsActivityStartedAt,
+      metricsActivityStartedAt: options2.metricsActivityStartedAt,
+      metricsUserMessageSentAt: options2.metricsUserMessageSentAt,
+      metricsClock: this.metricsClock,
       steerReach: this.steerReach,
       diskPressureReminder: this.diskPressureReminder,
       conversationSizeGuard: this.conversationSizeGuard,
@@ -910,15 +924,15 @@ var SandAgentRunner = class _SandAgentRunner {
       observation: this.observation,
       backgroundWatches: this.backgroundWatches,
       turnAgentComposition: this.turnAgentComposition,
+      armedTurnEndSummaryHold: () => this.gates.summaryTurnEndHold() ? options2.turnEndSummaryHold : void 0,
       subagents: this.subagents,
       resolveUserFormVaultKeysForRun: async () => this.userForm?.listVaultKeys != null && this.gates.userForm() && this.gates.formVault() ? await this.userForm.listVaultKeys() : void 0,
       getConversationId: () => this.getConversationId(),
       getTranscriptId: () => this.getTranscriptId(),
       resolveBoxId: () => this.resolveBoxId(),
       getConversationState: () => this.getConversationState(),
-      onPersistedCheckpoint: () => {
-        this.persistedCheckpointHandler?.();
-      },
+      onPersistedCheckpoint: () => void this.persistedCheckpointHandler?.(),
+      noteParentTurnPrompt: (prompt) => void (this.lastParentTurnPrompt = prompt),
       getBlobStore: () => this.getBlobStore(),
       shellWatchHost: () => this.shellWatchHost(),
       emitUpdate: (update) => this.emitUpdate(update),
@@ -957,6 +971,7 @@ var SandAgentRunner = class _SandAgentRunner {
       setActiveTurnRequestSource: (source) => {
         this.activeTurnRequestSource = source;
       },
+      setActiveTurnInitiatedBy: (initiatedBy) => void (this.activeTurnInitiatedBy = initiatedBy),
       resolveTurnLoopDetection: this.loopDetection.resolveTurn,
       setActiveTurnAutomationId: (automationId) => {
         this.activeTurnAutomationId = automationId;
@@ -964,13 +979,19 @@ var SandAgentRunner = class _SandAgentRunner {
       setActiveTurnAutomationWakeId: (automationWakeId) => {
         this.activeTurnAutomationWakeId = automationWakeId;
       },
+      setActiveTurnAutomationWakeEmbedsExternalEvent: (embedsExternalEvent) => {
+        this.activeTurnAutomationWakeEmbedsExternalEvent = embedsExternalEvent;
+      },
+      setActiveTurnAutomationWakeEmail: (email3) => {
+        this.activeTurnAutomationWakeEmail = email3;
+      },
       streamTuning: this.streamTuning,
       streamDeadlineConfig: () => this.streamDeadlineConfig?.(),
       streamDeadlineClock: this.streamDeadlineClock,
       setMcpDiscoveryUnavailableForTurn: (value) => {
         this.mcpDiscoveryUnavailableForTurn = value;
       },
-      noteMcpToolDiscoveryFailed: (error41) => this.noteMcpToolDiscoveryFailed(error41),
+      noteMcpToolDiscoveryFailed: (error42) => this.noteMcpToolDiscoveryFailed(error42),
       setMcpConnectedServerNamesForTurn: (names3) => {
         this.mcpConnectedServerNamesForTurn = names3;
       },
@@ -1026,9 +1047,6 @@ var SandAgentRunner = class _SandAgentRunner {
   }
   setUserMemory(userMemory) {
     this.userMemory = userMemory;
-  }
-  setProjectMemory(projectMemory) {
-    this.projectMemory = projectMemory;
   }
   setMemorySnapshotStore(memorySnapshots) {
     this.memorySnapshots = memorySnapshots;
@@ -1349,9 +1367,9 @@ var SandAgentRunner = class _SandAgentRunner {
     const probe = this.computerUse.getOrCreateNavigationProbe();
     if (probe == null) return;
     await Promise.race([
-      probe.flush().catch((error41) => {
+      probe.flush().catch((error42) => {
         process.stderr.write(
-          `sand.turn.navigation_audit_drain_failed error_class=${errorLogTag(error41)}
+          `sand.turn.navigation_audit_drain_failed error_class=${errorLogTag(error42)}
 `
         );
       }),
@@ -1403,6 +1421,19 @@ var SandAgentRunner = class _SandAgentRunner {
     if (!this.isSubagentRunner) this.combinedComputerUse.reset();
     return this.runShell.run(prompt, options2);
   }
+  getLastParentTurnPrompt() {
+    return this.lastParentTurnPrompt;
+  }
+  hasSummarySinceLastParentCall() {
+    const state = this.getConversationState();
+    return this.summaryLifecycle.hasUnsettledOrPersistedSince(this.lastParentTurnPrompt, state);
+  }
+  onSummaryLifecycle(listener) {
+    return this.summaryLifecycle.listen(listener);
+  }
+  compactIdle(options2) {
+    return startIdleCompaction(this, options2);
+  }
   steer(prompt, options2 = {}) {
     return this.runShell.steer(prompt, options2);
   }
@@ -1417,9 +1448,9 @@ var SandAgentRunner = class _SandAgentRunner {
       if (this.isSubagentRunner && this.subagentType != null) {
         runCtx = withInheritableAttribute(runCtx, "sand.subagent_type", this.subagentType);
       }
-    } catch (error41) {
+    } catch (error42) {
       process.stderr.write(
-        `sand.turn.run_attribute_stamp_failed error_class=${errorLogTag(error41)}
+        `sand.turn.run_attribute_stamp_failed error_class=${errorLogTag(error42)}
 `
       );
     }
@@ -1428,9 +1459,9 @@ var SandAgentRunner = class _SandAgentRunner {
   stampCallerTurnRootRequestId(span, inferenceRequestId) {
     try {
       span.setAttribute("sand.request_id", inferenceRequestId);
-    } catch (error41) {
+    } catch (error42) {
       process.stderr.write(
-        `sand.turn.caller_span_attribute_failed error_class=${errorLogTag(error41)}
+        `sand.turn.caller_span_attribute_failed error_class=${errorLogTag(error42)}
 `
       );
     }

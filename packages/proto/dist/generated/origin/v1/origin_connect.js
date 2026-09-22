@@ -642,6 +642,19 @@ var OriginService = {
       kind: MethodKind.Unary
     },
     /**
+     * The grants one organization group holds in a namespace (its direct
+     * namespace grant plus its per-repository grants), for the group page.
+     * Edits go through SetNamespaceGroupAccess / SetRepoGroupAccess.
+     *
+     * @generated from rpc origin.v1.OriginService.ListGroupGrantsInNamespace
+     */
+    listGroupGrantsInNamespace: {
+      name: "ListGroupGrantsInNamespace",
+      I: ListGroupGrantsInNamespaceRequest,
+      O: ListGroupGrantsInNamespaceResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * `ALREADY_EXISTS` on a known fingerprint, without saying whose it is.
      *
      * @generated from rpc origin.v1.OriginService.AddSshPublicKey
@@ -1632,6 +1645,90 @@ var OriginService = {
       kind: MethodKind.Unary
     },
     /**
+     * -- Merge queue (v0). The Merge button on a queue-enabled repo lands here
+     * instead of MergeStack (D15); the queue lands the pull request later.
+     *
+     * @generated from rpc origin.v1.OriginService.EnqueueForMerge
+     */
+    enqueueForMerge: {
+      name: "EnqueueForMerge",
+      I: EnqueueForMergeRequest,
+      O: EnqueueForMergeResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.CancelMergeQueueEntry
+     */
+    cancelMergeQueueEntry: {
+      name: "CancelMergeQueueEntry",
+      I: CancelMergeQueueEntryRequest,
+      O: CancelMergeQueueEntryResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.GetMergeQueueStatus
+     */
+    getMergeQueueStatus: {
+      name: "GetMergeQueueStatus",
+      I: GetMergeQueueStatusRequest,
+      O: GetMergeQueueStatusResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * The whole queue for one target ref: live entries in order, every node
+     * with its tested commit, the ledger. What a queue page and the traffic
+     * run's live oracle read.
+     *
+     * @generated from rpc origin.v1.OriginService.GetMergeQueue
+     */
+    getMergeQueue: {
+      name: "GetMergeQueue",
+      I: GetMergeQueueRequest,
+      O: GetMergeQueueResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * Repository-admin configuration of a queue (repository:settings). Each
+     * also requires the repository's merge-queue rollout gate; a queue row
+     * exists only because one of these (or the operator's internal lever)
+     * wrote it.
+     *
+     * @generated from rpc origin.v1.OriginService.GetMergeQueueConfig
+     */
+    getMergeQueueConfig: {
+      name: "GetMergeQueueConfig",
+      I: GetMergeQueueConfigRequest,
+      O: GetMergeQueueConfigResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.EnableMergeQueue
+     */
+    enableMergeQueue: {
+      name: "EnableMergeQueue",
+      I: EnableMergeQueueRequest,
+      O: EnableMergeQueueResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.DisableMergeQueue
+     */
+    disableMergeQueue: {
+      name: "DisableMergeQueue",
+      I: DisableMergeQueueRequest,
+      O: DisableMergeQueueResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.UpdateMergeQueueConfig
+     */
+    updateMergeQueueConfig: {
+      name: "UpdateMergeQueueConfig",
+      I: UpdateMergeQueueConfigRequest,
+      O: UpdateMergeQueueConfigResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * @generated from rpc origin.v1.OriginService.GetChange
      */
     getChange: {
@@ -2057,6 +2154,15 @@ var OriginService = {
       name: "SendAppWebhookTestDelivery",
       I: SendAppWebhookTestDeliveryRequest,
       O: SendAppWebhookTestDeliveryResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.DeleteApp
+     */
+    deleteApp: {
+      name: "DeleteApp",
+      I: DeleteAppRequest,
+      O: DeleteAppResponse,
       kind: MethodKind.Unary
     },
     /**

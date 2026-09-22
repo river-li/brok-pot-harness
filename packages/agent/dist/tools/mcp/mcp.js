@@ -52,19 +52,19 @@ var __disposeResources17 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger53 = createLogger("tools/mcp");
 var McpPermissionDeniedError = class extends CustomToolCallError {
-  constructor(error41, isReadonly) {
+  constructor(error42, isReadonly) {
     super(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
-      error: error41,
-      clientVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error41}`,
-      modelVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error41}`
+      error: error42,
+      clientVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error42}`,
+      modelVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error42}`
     });
-    this.error = error41;
+    this.error = error42;
     this.isReadonly = isReadonly;
   }
 };
@@ -143,34 +143,34 @@ function getMcpToolOrigin(serverIdentifier) {
   return "external";
 }
 var McpWithoutReadToolDefinitionError = class extends CustomToolCallError {
-  constructor(error41, readToolDefReminder, classification = ToolErrorClassification.OTHER_ERROR) {
-    const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+  constructor(error42, readToolDefReminder, classification = ToolErrorClassification.OTHER_ERROR) {
+    const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
     super(classification, {
       error: `Error in call_mcp_tool: ${errorMessage6} without reading the tool definition`,
       clientVisibleErrorMessage: "Tool execution error",
       modelVisibleErrorMessage: `${errorMessage6}. ${readToolDefReminder}`
     });
-    this.error = error41;
+    this.error = error42;
     this.readToolDefReminder = readToolDefReminder;
   }
 };
 var McpInvalidArgsToolDefinitionReminderError = class extends CustomToolCallError {
-  constructor(error41, readToolDefReminder) {
+  constructor(error42, readToolDefReminder) {
     super(ToolErrorClassification.INVALID_ARGS, {
-      error: error41.message,
+      error: error42.message,
       clientVisibleErrorMessage: "Tool execution error",
-      modelVisibleErrorMessage: `${error41.message}. ${readToolDefReminder}`
+      modelVisibleErrorMessage: `${error42.message}. ${readToolDefReminder}`
     });
   }
 };
-function getWrappedMcpErrorClassification(error41) {
-  if (error41 instanceof CustomToolCallError) {
-    return error41.classification;
+function getWrappedMcpErrorClassification(error42) {
+  if (error42 instanceof CustomToolCallError) {
+    return error42.classification;
   }
   return ToolErrorClassification.OTHER_ERROR;
 }
-function isInvalidMcpArgumentsError(error41) {
-  return getWrappedMcpErrorClassification(error41) === ToolErrorClassification.INVALID_ARGS;
+function isInvalidMcpArgumentsError(error42) {
+  return getWrappedMcpErrorClassification(error42) === ToolErrorClassification.INVALID_ARGS;
 }
 function createMcpTransportError(errorMessage6, cause) {
   const classification = classifyMcpErrorMessage(errorMessage6);
@@ -207,8 +207,8 @@ function isCustomUserMcpTool(tool) {
 }
 function buildCustomUserToolsServerUseInstructions(customTools, toolNames) {
   const toolLines = customTools.map((tool) => {
-    const description10 = typeof tool.description === "string" && tool.description.length > 0 ? tool.description : "(no description provided)";
-    return `- ${tool.toolName}: ${description10}`;
+    const description9 = typeof tool.description === "string" && tool.description.length > 0 ? tool.description : "(no description provided)";
+    return `- ${tool.toolName}: ${description9}`;
   }).join("\n");
   const discoveryInvocationLine = toolNames ? `Discover tool schemas with \`${toolNames.discoveryToolName}\`, then invoke via \`${toolNames.invocationToolName}\` with ${toolNames.useDynamicToolNamespaces ? "namespace" : "server"} "${CUSTOM_USER_TOOLS_PROVIDER_ID}".` : `Discover tool schemas via MCP meta-tool discovery for server "${CUSTOM_USER_TOOLS_PROVIDER_ID}", then invoke via the MCP invocation meta-tool with that server.`;
   return `User-defined tools for this session. ${discoveryInvocationLine}
@@ -441,7 +441,7 @@ async function raceMcpExecAgainstSteerRelease(args) {
         scheduleRelease();
       });
     }
-    const execPromise = run(execCtx).then((execResult) => ({ kind: "settled", execResult }), (error41) => ({ kind: "errored", error: error41 }));
+    const execPromise = run(execCtx).then((execResult) => ({ kind: "settled", execResult }), (error42) => ({ kind: "errored", error: error42 }));
     const raced = await Promise.race([
       execPromise,
       drainExpired.then(() => ({ kind: "drain_expired" }))
@@ -558,9 +558,9 @@ async function getSmartModeMcpPreflightDecision(ctx, args) {
         reason: formatSmartModeMcpClassifierErrorReason()
       };
     }
-  } catch (error41) {
-    if (error41 instanceof Error && error41.name === "AbortError") {
-      throw error41;
+  } catch (error42) {
+    if (error42 instanceof Error && error42.name === "AbortError") {
+      throw error42;
     }
     return { kind: "reject", reason: SMART_MODE_MCP_CLASSIFIER_ERROR_REASON };
   }
@@ -590,7 +590,7 @@ function runShadowSmartModeMcpPreflight(ctx, args) {
   })();
 }
 function buildSmartModeMcpApprovalTarget(args, blockReason, options2) {
-  const description10 = args.description?.trim();
+  const description9 = args.description?.trim();
   return {
     serverIdentifier: args.target.serverIdentifier,
     serverName: args.target.serverName,
@@ -601,7 +601,7 @@ function buildSmartModeMcpApprovalTarget(args, blockReason, options2) {
     toolDefinitionIdentity: args.toolDefinitionBinding?.identity,
     toolDefinitionHash: args.toolDefinitionBinding?.hash,
     blockReason,
-    ...description10 !== void 0 && description10.length > 0 ? { description: description10 } : {},
+    ...description9 !== void 0 && description9.length > 0 ? { description: description9 } : {},
     ...options2?.proposedAllowRule !== void 0 && options2.proposedAllowRule.length > 0 ? { proposedAllowRule: options2.proposedAllowRule } : {}
   };
 }
@@ -617,9 +617,9 @@ async function rejectSmartModeMcpPreflightBlock(ctx, args) {
   if (args.enabled && args.requestSmartModeApproval === true && args.approvalProvider === void 0) {
     const parentBlockReason = args.smartModeBlockReason !== void 0 && args.smartModeBlockReason.trim().length > 0 ? args.smartModeBlockReason.trim() : SMART_MODE_MCP_PARENT_REQUESTED_APPROVAL_FALLBACK_REASON;
     if (args.agentType === AgentType.BACKGROUND) {
-      const error42 = new ToolCallRejectedError(parentBlockReason);
-      await args.onRejectWithoutNativeApproval?.(error42);
-      throw error42;
+      const error43 = new ToolCallRejectedError(parentBlockReason);
+      await args.onRejectWithoutNativeApproval?.(error43);
+      throw error43;
     }
     return createSmartModeMcpApprovalForParentRequest(ctx, args, parentBlockReason);
   }
@@ -643,9 +643,9 @@ async function rejectSmartModeMcpPreflightBlock(ctx, args) {
     return void 0;
   }
   if (decision.kind === "reject") {
-    const error42 = new ToolCallRejectedError(decision.reason);
-    await args.onRejectWithoutNativeApproval?.(error42);
-    throw error42;
+    const error43 = new ToolCallRejectedError(decision.reason);
+    await args.onRejectWithoutNativeApproval?.(error43);
+    throw error43;
   }
   if (args.approvalProvider !== void 0 && args.requestSmartModeApproval === true) {
     const target = buildSmartModeMcpApprovalTarget(args, decision.reason, {
@@ -666,13 +666,13 @@ async function rejectSmartModeMcpPreflightBlock(ctx, args) {
     if (approvalDecision.approved) {
       return void 0;
     }
-    const error42 = new ToolCallRejectedError(approvalDecision.reason ?? decision.reason);
-    await args.onRejectWithoutNativeApproval?.(error42);
-    throw error42;
+    const error43 = new ToolCallRejectedError(approvalDecision.reason ?? decision.reason);
+    await args.onRejectWithoutNativeApproval?.(error43);
+    throw error43;
   }
-  const error41 = new ToolCallRejectedError(createSmartModeMcpBlockedAutonomousReason(decision.reason, args.useNestedMcpDetails === true));
-  await args.onRejectWithoutNativeApproval?.(error41);
-  throw error41;
+  const error42 = new ToolCallRejectedError(createSmartModeMcpBlockedAutonomousReason(decision.reason, args.useNestedMcpDetails === true));
+  await args.onRejectWithoutNativeApproval?.(error42);
+  throw error42;
 }
 var createMcpTool = (resourceAccessor, mcpToolDefinition, options2 = {}) => {
   const executor = resourceAccessor.get(mcpExecutorResource);
@@ -781,44 +781,44 @@ The MCP server rejected these arguments as invalid. Before retrying, inspect thi
     })),
     render: renderMcpTool,
     execute: withSafeParsedArgs(external_exports.unknown(), execute, createMcpToolCall(new McpToolCall())),
-    serializeError: (error41) => {
-      if (error41 instanceof McpPermissionDeniedError) {
+    serializeError: (error42) => {
+      if (error42 instanceof McpPermissionDeniedError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "permissionDenied",
               value: new McpPermissionDenied({
-                error: error41.error,
-                isReadonly: error41.isReadonly
+                error: error42.error,
+                isReadonly: error42.isReadonly
               })
             }
           })
         }));
       }
-      if (error41 instanceof ToolCallRejectedError) {
+      if (error42 instanceof ToolCallRejectedError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "rejected",
-              value: new McpRejected({ reason: error41.message })
+              value: new McpRejected({ reason: error42.message })
             }
           })
         }));
       }
-      if (error41 instanceof CustomToolCallError) {
+      if (error42 instanceof CustomToolCallError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "error",
               value: new McpToolError({
-                error: error41.clientVisibleErrorMessage,
-                readToolDefReminder: error41.modelVisibleErrorMessage
+                error: error42.clientVisibleErrorMessage,
+                readToolDefReminder: error42.modelVisibleErrorMessage
               })
             }
           })
         }));
       }
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createMcpToolCall(new McpToolCall({
         result: new McpToolResult({
           result: {
@@ -1058,7 +1058,7 @@ var createCallMcpTool = (options2) => {
         }
       };
       const emitErrorMetrics = (ctx, input) => {
-        const { failureReason, retryable, calledWithoutReadDef: calledWithoutReadDef2, error: error41 } = input;
+        const { failureReason, retryable, calledWithoutReadDef: calledWithoutReadDef2, error: error42 } = input;
         const durationMs = Date.now() - startTime;
         emitCallMcpToolMetrics(ctx, {
           mcpMode,
@@ -1068,8 +1068,8 @@ var createCallMcpTool = (options2) => {
           retryable,
           calledWithoutReadDef: calledWithoutReadDef2
         });
-        if (error41 !== void 0) {
-          reportMcpMetaToolFailure(ctx, error41, {
+        if (error42 !== void 0) {
+          reportMcpMetaToolFailure(ctx, error42, {
             tool: name17,
             failureReason,
             retryable,
@@ -1169,7 +1169,7 @@ var createCallMcpTool = (options2) => {
             emitMcpSearchThenCallResult(spanCtxt.ctx, "success");
           }
           return result;
-        } catch (error41) {
+        } catch (error42) {
           emitCallMcpToolMetrics(spanCtxt.ctx, {
             mcpMode: "meta_tool",
             durationMs: Date.now() - startTime,
@@ -1179,7 +1179,7 @@ var createCallMcpTool = (options2) => {
           if (precededByGetMcpToolsSearch) {
             emitMcpSearchThenCallResult(spanCtxt.ctx, "error");
           }
-          throw error41;
+          throw error42;
         }
       }
       if (validateMcpToolDescriptors) {
@@ -1312,30 +1312,27 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
             })
           })), meta.hookContextCollector);
           return authResult;
-        } catch (error41) {
+        } catch (error42) {
           tracker.trackMcpToolCallResult(spanCtxt.ctx, {
             toolName: args.toolName,
             mcpServerName: serverDisplayName,
             paramsJson,
             success: false,
-            errorMessage: error41 instanceof Error ? error41.message : String(error41),
-            errorClassification: error41 instanceof Error ? getWrappedMcpErrorClassification(error41) : ToolErrorClassification.OTHER_ERROR
+            errorMessage: error42 instanceof Error ? error42.message : String(error42),
+            errorClassification: error42 instanceof Error ? getWrappedMcpErrorClassification(error42) : ToolErrorClassification.OTHER_ERROR
           });
           emitErrorMetrics(spanCtxt.ctx, {
-            failureReason: error41 instanceof ToolCallRejectedError ? CALL_MCP_TOOL_FAILURE_REASONS.REJECTED : CALL_MCP_TOOL_FAILURE_REASONS.OTHER,
+            failureReason: error42 instanceof ToolCallRejectedError ? CALL_MCP_TOOL_FAILURE_REASONS.REJECTED : CALL_MCP_TOOL_FAILURE_REASONS.OTHER,
             retryable: false,
             calledWithoutReadDef,
-            error: error41
+            error: error42
           });
-          throw error41;
+          throw error42;
         }
       }
       const toolArgs = new McpArgs({
         name: `${args.server}-${args.toolName}`,
-        args: Object.fromEntries(Object.entries(args.arguments ?? {}).map(([key, value]) => [
-          key,
-          Value.fromJson(value)
-        ])),
+        args: Object.fromEntries(Object.entries(args.arguments ?? {}).map(([key, value]) => [key, Value.fromJson(value)])),
         toolCallId: meta.toolCallId,
         providerIdentifier: serverDisplayName,
         toolName: args.toolName,
@@ -1383,15 +1380,15 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
                 annotationsJson: toolDescriptor?.annotationsJson
               }));
               allowlistedByPrecheck = precheck.allowlisted;
-            } catch (error41) {
-              if (error41 instanceof Error && error41.name === "AbortError") {
-                throw error41;
+            } catch (error42) {
+              if (error42 instanceof Error && error42.name === "AbortError") {
+                throw error42;
               }
-              if (isAgentStreamStartTimeoutError(error41)) {
-                throw error41;
+              if (isAgentStreamStartTimeoutError(error42)) {
+                throw error42;
               }
               logger53.warn(ctx, "MCP allowlist precheck failed", {
-                error: error41 instanceof Error ? error41.message : String(error41)
+                error: error42 instanceof Error ? error42.message : String(error42)
               });
             }
           }
@@ -1399,9 +1396,11 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
         const abortSignal = interactionHandler.getAbortSignal?.(ctx) ?? ctx.signal;
         const toolDefinitionDescription = toolDescriptor?.description ?? "";
         const toolDefinitionInputSchemaText = JSON.stringify(toolDescriptor?.inputSchema?.toJson() ?? null);
+        const toolDefinitionAnnotations = parseMcpToolAnnotations(toolDescriptor?.annotationsJson);
         const toolDefinitionText = JSON.stringify({
           description: toolDefinitionDescription,
-          inputSchema: toolDescriptor?.inputSchema?.toJson() ?? null
+          inputSchema: toolDescriptor?.inputSchema?.toJson() ?? null,
+          annotations: toolDefinitionAnnotations ?? null
         });
         const toolDefinitionBinding = smartModeApprovalProvider === void 0 ? void 0 : {
           identity: toolDefinitionPath ?? `${args.server}:${args.toolName}`,
@@ -1410,6 +1409,9 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
         const toolDefinitionMetadata = smartModeApprovalProvider === void 0 ? void 0 : {
           description: toolDefinitionDescription.slice(0, 4e3),
           input_schema_json: toolDefinitionInputSchemaText.slice(0, 12e3),
+          ...toolDefinitionAnnotations === void 0 ? {} : {
+            annotations: toolDefinitionAnnotations
+          },
           definition_hash: toolDefinitionBinding?.hash ?? "",
           truncated: toolDefinitionDescription.length > 4e3 || toolDefinitionInputSchemaText.length > 12e3
         };
@@ -1453,7 +1455,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
             mcpArguments: args.arguments,
             toolDefinitionMetadata
           },
-          onRejectWithoutNativeApproval: (error41) => {
+          onRejectWithoutNativeApproval: (error42) => {
             const telemetryError = new ToolCallRejectedError(SMART_MODE_MCP_PREFLIGHT_REJECTED_TELEMETRY_REASON);
             tracker.trackMcpToolCallResult(ctx, {
               toolName: args.toolName,
@@ -1566,7 +1568,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
             emitSuccessMetrics(ctx, releasedResult, calledWithoutReadDef);
             return releasedResult;
           }
-        } catch (error41) {
+        } catch (error42) {
           if (smartModeApproval !== void 0) {
             try {
               await cancelSmartModeMcpApprovalRequest(ctx, resourceAccessor.get(smartModeMcpApprovalStoreResource), smartModeApproval.requestId);
@@ -1577,7 +1579,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
               });
             }
           }
-          const classifiedError = error41 instanceof ToolCallError ? error41 : createMcpTransportError(error41 instanceof Error ? error41.message : String(error41), error41);
+          const classifiedError = error42 instanceof ToolCallError ? error42 : createMcpTransportError(error42 instanceof Error ? error42.message : String(error42), error42);
           tracker.trackMcpToolCallResult(ctx, {
             toolName: args.toolName,
             mcpServerName: serverDisplayName,
@@ -1593,7 +1595,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
             error: classifiedError
           });
           if (readToolDefReminder !== void 0) {
-            logger53.error(spanCtxt.ctx, "Error in call_mcp_tool", { error: error41 });
+            logger53.error(spanCtxt.ctx, "Error in call_mcp_tool", { error: error42 });
             throw new McpWithoutReadToolDefinitionError(classifiedError, readToolDefReminder, getWrappedMcpErrorClassification(classifiedError));
           }
           if (isInvalidMcpArgumentsError(classifiedError)) {
@@ -1717,83 +1719,83 @@ Example:
     parameters: parametersSchema29,
     render: renderMcpTool,
     execute: withSafeParsedArgs(parsingParametersSchema, execute, createMcpToolCall(new McpToolCall())),
-    serializeError: (error41) => {
-      if (error41 instanceof McpWithoutReadToolDefinitionError) {
+    serializeError: (error42) => {
+      if (error42 instanceof McpWithoutReadToolDefinitionError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "error",
               value: new McpToolError({
-                error: error41.clientVisibleErrorMessage,
-                readToolDefReminder: error41.modelVisibleErrorMessage
+                error: error42.clientVisibleErrorMessage,
+                readToolDefReminder: error42.modelVisibleErrorMessage
               })
             }
           })
         }));
       }
-      if (error41 instanceof McpServerDoesNotExistError) {
+      if (error42 instanceof McpServerDoesNotExistError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "error",
               value: new McpToolError({
-                error: error41.clientVisibleErrorMessage,
-                readToolDefReminder: error41.readServerDefReminder
+                error: error42.clientVisibleErrorMessage,
+                readToolDefReminder: error42.readServerDefReminder
               })
             }
           })
         }));
       }
-      if (error41 instanceof McpToolDoesNotExistError) {
+      if (error42 instanceof McpToolDoesNotExistError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "error",
               value: new McpToolError({
-                error: error41.clientVisibleErrorMessage,
-                readToolDefReminder: error41.readToolDefReminder
+                error: error42.clientVisibleErrorMessage,
+                readToolDefReminder: error42.readToolDefReminder
               })
             }
           })
         }));
       }
-      if (error41 instanceof McpPermissionDeniedError) {
+      if (error42 instanceof McpPermissionDeniedError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "permissionDenied",
               value: new McpPermissionDenied({
-                error: error41.error,
-                isReadonly: error41.isReadonly
+                error: error42.error,
+                isReadonly: error42.isReadonly
               })
             }
           })
         }));
       }
-      if (error41 instanceof ToolCallRejectedError) {
+      if (error42 instanceof ToolCallRejectedError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "rejected",
-              value: new McpRejected({ reason: error41.message })
+              value: new McpRejected({ reason: error42.message })
             }
           })
         }));
       }
-      if (error41 instanceof CustomToolCallError) {
+      if (error42 instanceof CustomToolCallError) {
         return createMcpToolCall(new McpToolCall({
           result: new McpToolResult({
             result: {
               case: "error",
               value: new McpToolError({
-                error: error41.clientVisibleErrorMessage,
-                readToolDefReminder: error41.modelVisibleErrorMessage
+                error: error42.clientVisibleErrorMessage,
+                readToolDefReminder: error42.modelVisibleErrorMessage
               })
             }
           })
         }));
       }
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createMcpToolCall(new McpToolCall({
         result: new McpToolResult({
           result: {

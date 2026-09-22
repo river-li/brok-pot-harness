@@ -3,12 +3,12 @@ var MAX_DOMAIN_LENGTH = 64;
 var WEBAUTHN_ARM_UNTIL_PATH = "/tmp/sand-webauthn-armed-until";
 var WEBAUTHN_HANDOFF_ARM_MS = 45 * 60 * 1e3;
 var boxHelpRequest = createCounter("grok_bot.box_help.request");
-function boxHelpFacts(request3) {
-  const reason = request3.telemetry?.reason;
-  const domain2 = request3.telemetry?.domain;
-  const idpDomain = request3.telemetry?.idpDomain;
-  const turnId = request3.telemetry?.turnId;
-  const subagentAgentId = request3.telemetry?.subagentAgentId;
+function boxHelpFacts(request5) {
+  const reason = request5.telemetry?.reason;
+  const domain2 = request5.telemetry?.domain;
+  const idpDomain = request5.telemetry?.idpDomain;
+  const turnId = request5.telemetry?.turnId;
+  const subagentAgentId = request5.telemetry?.subagentAgentId;
   let boundedReason;
   if (reason === "auth" || reason === "captcha" || reason === "payment") {
     boundedReason = reason;
@@ -35,9 +35,9 @@ var BoxHandoffService = class {
   forget(agentId) {
     this.pending.delete(agentId);
   }
-  start(request3) {
-    void this.armWebAuthnForHandoff(request3.agentId);
-    const live = this.pending.get(request3.agentId);
+  start(request5) {
+    void this.armWebAuthnForHandoff(request5.agentId);
+    const live = this.pending.get(request5.agentId);
     if (live != null) {
       boxHelpRequest.increment(this.deps.ctx, 1, { result: "already_pending" });
       return {
@@ -47,9 +47,9 @@ var BoxHandoffService = class {
       };
     }
     const requestId2 = crypto.randomUUID();
-    const facts = boxHelpFacts(request3);
-    this.pending.set(request3.agentId, {
-      info: { instruction: request3.instruction, requestId: requestId2 },
+    const facts = boxHelpFacts(request5);
+    this.pending.set(request5.agentId, {
+      info: { instruction: request5.instruction, requestId: requestId2 },
       facts,
       startedAtMs: Date.now()
     });
@@ -59,11 +59,11 @@ var BoxHandoffService = class {
       ...this.domainTags(facts)
     });
     this.deps.onStarted({
-      agentId: request3.agentId,
-      instruction: request3.instruction
+      agentId: request5.agentId,
+      instruction: request5.instruction
     });
-    this.deps.onStatusChanged(request3.agentId);
-    void this.captureSnapshot(request3, requestId2, facts);
+    this.deps.onStatusChanged(request5.agentId);
+    void this.captureSnapshot(request5, requestId2, facts);
     return { kind: "started", requestId: requestId2 };
   }
   async armWebAuthnForHandoff(agentId) {
@@ -76,13 +76,13 @@ var BoxHandoffService = class {
         new TextEncoder().encode(`${until}
 `)
       );
-    } catch (error41) {
+    } catch (error42) {
       this.deps.ctx.get(loggerKey).log(this.deps.ctx, {
         level: "warn",
-        message: `webauthn handoff arm failed: ${errorLogTag(error41)}`,
+        message: `webauthn handoff arm failed: ${errorLogTag(error42)}`,
         timestamp: /* @__PURE__ */ new Date(),
         context: this.deps.ctx,
-        error: error41
+        error: error42
       });
     }
   }
@@ -100,8 +100,8 @@ var BoxHandoffService = class {
     });
     this.deps.onStatusChanged(agentId);
   }
-  async captureSnapshot(request3, requestId2, facts) {
-    const agentId = request3.agentId;
+  async captureSnapshot(request5, requestId2, facts) {
+    const agentId = request5.agentId;
     let snapshotCaptured = false;
     try {
       const screenshot = await Promise.race([
@@ -124,19 +124,19 @@ var BoxHandoffService = class {
       }
     } catch {
     } finally {
-      this.reportBoxHelp(request3, requestId2, facts, snapshotCaptured);
+      this.reportBoxHelp(request5, requestId2, facts, snapshotCaptured);
     }
   }
-  reportBoxHelp(request3, requestId2, facts, snapshotCaptured) {
+  reportBoxHelp(request5, requestId2, facts, snapshotCaptured) {
     this.deps.telemetry.reportBoxHelp({
-      conversationId: request3.agentId,
+      conversationId: request5.agentId,
       turnId: facts.turn_id,
       subagentId: facts.subagent_agent_id,
       snapshotCaptured,
-      reason: request3.telemetry?.reason
+      reason: request5.telemetry?.reason
     });
     this.deps.telemetry.trackEvent("sand.box_help", {
-      agent_id: request3.agentId,
+      agent_id: request5.agentId,
       request_id: requestId2,
       snapshot_captured: snapshotCaptured,
       ...facts

@@ -104,14 +104,8 @@ async function loadSmartModeProjectPermissionsContext(_ctx, workspacePaths, user
   const userBlockInstructions = truncateInstructions(userBlockInstructionsAggregate, MAX_USER_AUTO_RUN_INSTRUCTIONS);
   return {
     auto_run: {
-      allow_instructions: [
-        ...projectAllowInstructions.values,
-        ...userAllowInstructions.values
-      ],
-      block_instructions: [
-        ...projectBlockInstructions.values,
-        ...userBlockInstructions.values
-      ]
+      allow_instructions: [...projectAllowInstructions.values, ...userAllowInstructions.values],
+      block_instructions: [...projectBlockInstructions.values, ...userBlockInstructions.values]
     },
     truncated: projectAllowInstructions.truncated || projectBlockInstructions.truncated || userAllowInstructions.truncated || userBlockInstructions.truncated
   };

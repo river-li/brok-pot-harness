@@ -1,8 +1,12 @@
 var logger61 = createLogger("tools/ask-question");
 var askQuestionDegenerate = createCounter("ask_question.degenerate", {
   description: "AskQuestion calls whose title, prompt, or options are placeholder-shaped",
-  labelNames: ["reason", "vendor", "model", "user.is_dev"]
+  labelNames: ["reason", "vendor", "model", "user.is_dev", "outcome"]
 });
+var PLACEHOLDER_ASK_QUESTION_CLIENT_ERROR_MESSAGE = "Placeholder question not shown";
+function buildPlaceholderAskQuestionModelMessage(askQuestionToolName) {
+  return `This question was not shown to the user because it looks like a placeholder. Some tools are no longer direct tools; call GetDynamicTools with namespace "cursor" to see them, and invoke them with CallDynamicTool. If you really need the user's input, call ${askQuestionToolName} again with a real prompt and options.`;
+}
 var FIRST_ASK_QUESTION_CLIENT_ERROR_MESSAGE = "Tool call failed";
 var FIRST_ASK_QUESTION_MODEL_ERROR_MESSAGE = "Rejected: you must research first (codebase, filesystem, and other tools) before asking the user. Do not use this tool to inquire into details, solicit feedback on suggestions, or ask for confirmations. Only call this again if you absolutely need user input (i.e. you are doing some destructive action, making a major architectural decision, or the user requested it in their workflow). Don't mention this to the user.";
 function shouldReceiptAskQuestionResult(result) {
@@ -27,7 +31,7 @@ var questionSchema = external_exports.object({
   })).min(2).describe("Array of answer options (minimum 2 required)"),
   allow_multiple: external_exports.boolean().optional().describe("If true, user can select multiple options. Defaults to false.")
 });
-function formatAskQuestionResultAsString(result) {
+function formatAskQuestionResultAsString(result, askQuestionToolName = "AskQuestion") {
   switch (result.result.case) {
     case "success": {
       const answerDescriptions = result.result.value.answers.map((answer) => {
@@ -56,6 +60,9 @@ ${answerDescriptions?.join("\n") ?? ""}`;
       const errorMessage6 = result.result.value.errorMessage;
       if (errorMessage6 === FIRST_ASK_QUESTION_CLIENT_ERROR_MESSAGE) {
         return `Error: ${FIRST_ASK_QUESTION_MODEL_ERROR_MESSAGE}`;
+      }
+      if (errorMessage6 === PLACEHOLDER_ASK_QUESTION_CLIENT_ERROR_MESSAGE) {
+        return buildPlaceholderAskQuestionModelMessage(askQuestionToolName);
       }
       return `Error: ${errorMessage6}`;
     }

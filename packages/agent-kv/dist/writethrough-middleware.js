@@ -1,5 +1,5 @@
 init_dist();
-var __awaiter51 = function(thisArg, _arguments, P2, generator) {
+var __awaiter52 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve14) {
       resolve14(value);
@@ -100,7 +100,7 @@ var WritethroughBlobStore = class {
     this.secondaryStore = secondaryStore;
   }
   getBlob(ctx, blobId) {
-    return __awaiter51(this, void 0, void 0, function* () {
+    return __awaiter52(this, void 0, void 0, function* () {
       const env_1 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource29(env_1, createSpan(ctx.withName("WritethroughBlobStore.getBlob")), false);
@@ -120,7 +120,7 @@ var WritethroughBlobStore = class {
     });
   }
   setBlob(ctx, blobId, blobData) {
-    return __awaiter51(this, void 0, void 0, function* () {
+    return __awaiter52(this, void 0, void 0, function* () {
       const env_2 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource29(env_2, createSpan(ctx.withName("WritethroughBlobStore.setBlob")), false);
@@ -146,7 +146,7 @@ var WritethroughBlobStore = class {
    * Use when a blob id may be read from the secondary store before the next flush.
    */
   setBlobAwaitingSecondary(ctx, blobId, blobData) {
-    return __awaiter51(this, void 0, void 0, function* () {
+    return __awaiter52(this, void 0, void 0, function* () {
       const env_3 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource29(env_3, createSpan(ctx.withName("WritethroughBlobStore.setBlobAwaitingSecondary")), false);
@@ -168,7 +168,7 @@ var WritethroughBlobStore = class {
     });
   }
   writeBothStores(ctx, blobId, blobData, options2) {
-    return __awaiter51(this, void 0, void 0, function* () {
+    return __awaiter52(this, void 0, void 0, function* () {
       const primaryWritePromise = this.primaryStore.setBlob(ctx, blobId, blobData);
       const secondaryWritePromise = this.secondaryStore.setBlob(ctx, blobId, blobData).catch((error3) => {
         logger44.error(ctx, "Secondary store write failed in WritethroughBlobStore", error3);
@@ -185,7 +185,7 @@ var WritethroughBlobStore = class {
     });
   }
   setBlobLocallyOnly(ctx, blobId, blobData) {
-    return __awaiter51(this, void 0, void 0, function* () {
+    return __awaiter52(this, void 0, void 0, function* () {
       const env_4 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource29(env_4, createSpan(ctx.withName("WritethroughBlobStore.setBlobLocallyOnly")), false);
@@ -199,7 +199,7 @@ var WritethroughBlobStore = class {
     });
   }
   flush(ctx) {
-    return __awaiter51(this, void 0, void 0, function* () {
+    return __awaiter52(this, void 0, void 0, function* () {
       const env_5 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource29(env_5, createSpan(ctx.withName("WritethroughBlobStore.flush")), false);

@@ -1,9 +1,9 @@
-init_dist3();
+init_dist4();
 init_exec_pb();
-var __await10 = function(v2) {
-  return this instanceof __await10 ? (this.v = v2, this) : new __await10(v2);
+var __await9 = function(v2) {
+  return this instanceof __await9 ? (this.v = v2, this) : new __await9(v2);
 };
-var __asyncGenerator10 = function(thisArg, _arguments, generator) {
+var __asyncGenerator9 = function(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g2 = generator.apply(thisArg, _arguments || []), i, q2 = [];
   return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function() {
@@ -32,7 +32,7 @@ var __asyncGenerator10 = function(thisArg, _arguments, generator) {
     }
   }
   function step(r) {
-    r.value instanceof __await10 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
+    r.value instanceof __await9 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
   }
   function fulfill(value) {
     resume("next", value);
@@ -44,7 +44,7 @@ var __asyncGenerator10 = function(thisArg, _arguments, generator) {
     if (f2(v2), q2.shift(), q2.length) resume(q2[0][0], q2[0][1]);
   }
 };
-var __asyncValues10 = function(o) {
+var __asyncValues9 = function(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var m2 = o[Symbol.asyncIterator], i;
   return m2 ? m2.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
@@ -90,10 +90,10 @@ var SimpleControlledExecHandler = class {
     }
     const { id, args } = r;
     function generator(self2) {
-      return __asyncGenerator10(this, arguments, function* generator_1() {
+      return __asyncGenerator9(this, arguments, function* generator_1() {
         const startTime = performance.now();
         const hookContextCollector = [];
-        const result = yield __await10(self2.exec.execute(ctx, args, {
+        const result = yield __await9(self2.exec.execute(ctx, args, {
           execId: serverMessage.execId,
           hookContextCollector,
           deliverAgentStoreConflictNotices: serverMessage.acceptHookAdditionalContexts === true
@@ -103,7 +103,7 @@ var SimpleControlledExecHandler = class {
         if (hookContextCollector.length > 0) {
           message.hookAdditionalContexts = hookContextCollector;
         }
-        yield yield __await10(message);
+        yield yield __await9(message);
       });
     }
     return generator(this);
@@ -122,7 +122,7 @@ var SimpleControlledStreamExecHandler = class {
     }
     const { id, args } = r;
     function generator(self2) {
-      return __asyncGenerator10(this, arguments, function* generator_2() {
+      return __asyncGenerator9(this, arguments, function* generator_2() {
         var _a19, e_1, _b2, _c2;
         const startTime = performance.now();
         const hookContextCollector = [];
@@ -133,19 +133,19 @@ var SimpleControlledStreamExecHandler = class {
         });
         try {
           try {
-            for (var _d = true, stream_1 = __asyncValues10(stream3), stream_1_1; stream_1_1 = yield __await10(stream_1.next()), _a19 = stream_1_1.done, !_a19; _d = true) {
+            for (var _d = true, stream_1 = __asyncValues9(stream3), stream_1_1; stream_1_1 = yield __await9(stream_1.next()), _a19 = stream_1_1.done, !_a19; _d = true) {
               _c2 = stream_1_1.value;
               _d = false;
               const event = _c2;
               const message = self2.serializeStream(id, event);
               message.localExecutionTimeMs = Math.round(Math.max(0, performance.now() - startTime));
-              yield yield __await10(message);
+              yield yield __await9(message);
             }
           } catch (e_1_1) {
             e_1 = { error: e_1_1 };
           } finally {
             try {
-              if (!_d && !_a19 && (_b2 = stream_1.return)) yield __await10(_b2.call(stream_1));
+              if (!_d && !_a19 && (_b2 = stream_1.return)) yield __await9(_b2.call(stream_1));
             } finally {
               if (e_1) throw e_1.error;
             }
@@ -153,7 +153,7 @@ var SimpleControlledStreamExecHandler = class {
         } finally {
           const conflictCarriers = hookContextCollector.filter((c) => c.hookEventName === AGENT_STORE_CONFLICT_HOOK_EVENT_NAME2);
           if (conflictCarriers.length > 0) {
-            yield yield __await10(new ExecClientMessage({
+            yield yield __await9(new ExecClientMessage({
               id,
               hookAdditionalContexts: conflictCarriers
             }));

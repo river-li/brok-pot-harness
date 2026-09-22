@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 init_todo_tool_pb();
 init_zod();
 var __addDisposableResource34 = function(env, value, async) {
@@ -55,9 +55,9 @@ var __disposeResources34 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var FINISHED_TODO_CLEANUP_REMINDER = "You have many finished todos. Consider cleaning up old ones.";
 var FINISHED_TODO_CLEANUP_REMINDER_THRESHOLD = 20;
@@ -477,14 +477,14 @@ When in doubt, use this tool. Proactive task management demonstrates attentivene
     }
   }
   const toolName = getToolName5(promptVersion);
-  const description10 = getDescription4(promptVersion);
+  const description9 = getDescription4(promptVersion);
   return createZodAgentTool("TODO_WRITE", {
     name: toolName,
     contextType: {
       type: "dynamic",
       conciseStaticContext: "Use this tool to manage complex multi-step tasks."
     },
-    descriptionGenerator: (_props) => description10,
+    descriptionGenerator: (_props) => description9,
     // Model-facing schema has minTodos: 2 to encourage the model to create at least 2 todos.
     // dsv3 versions ignore minTodos (they return early in createSchemaTowardsModel).
     // Actual validation (todoToolSchemaForParsing in execute) does not enforce this minimum.
@@ -494,8 +494,8 @@ When in doubt, use this tool. Proactive task management demonstrates attentivene
     }),
     execute,
     render: render2,
-    serializeError: (error41) => {
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+    serializeError: (error42) => {
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createUpdateTodosToolCall(new UpdateTodosToolCall({
         result: new UpdateTodosResult({
           result: {

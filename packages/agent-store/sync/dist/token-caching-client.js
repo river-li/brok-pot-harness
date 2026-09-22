@@ -1,5 +1,5 @@
-init_dist();
-var __awaiter7 = function(thisArg, _arguments, P2, generator) {
+init_dist2();
+var __awaiter8 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -53,130 +53,130 @@ var TokenCachingAgentStoreClient = class {
     this.onSyncDisabledMint = options2.onSyncDisabledMint;
     const completeMultipartWrites = transport.completeMultipartWrites;
     if (completeMultipartWrites !== void 0) {
-      this.completeMultipartWrites = (request3) => this.callWithRefresh({
-        cacheKey: request3.agentId,
-        mintAgentId: request3.agentId,
-        mintSourceKind: request3.mintSourceKind,
+      this.completeMultipartWrites = (request5) => this.callWithRefresh({
+        cacheKey: request5.agentId,
+        mintAgentId: request5.agentId,
+        mintSourceKind: request5.mintSourceKind,
         opName: "completeMultipartWrites",
         op: (token, storeId) => completeMultipartWrites.call(transport, {
-          completions: request3.completions,
+          completions: request5.completions,
           storeId,
           token,
-          signal: request3.signal
+          signal: request5.signal
         })
       });
     }
     const abortMultipartWrites = transport.abortMultipartWrites;
     if (abortMultipartWrites !== void 0) {
-      this.abortMultipartWrites = (request3) => this.callWithRefresh({
-        cacheKey: request3.agentId,
-        mintAgentId: request3.agentId,
-        mintSourceKind: request3.mintSourceKind,
+      this.abortMultipartWrites = (request5) => this.callWithRefresh({
+        cacheKey: request5.agentId,
+        mintAgentId: request5.agentId,
+        mintSourceKind: request5.mintSourceKind,
         opName: "abortMultipartWrites",
         op: (token, storeId) => abortMultipartWrites.call(transport, {
-          uploads: request3.uploads,
+          uploads: request5.uploads,
           storeId,
           token,
-          signal: request3.signal
+          signal: request5.signal
         })
       });
     }
     const rmdir = transport.rmdir;
     if (rmdir !== void 0) {
-      this.rmdir = (request3) => this.callWithRefresh({
-        cacheKey: request3.agentId,
-        mintAgentId: request3.agentId,
-        mintSourceKind: request3.mintSourceKind,
+      this.rmdir = (request5) => this.callWithRefresh({
+        cacheKey: request5.agentId,
+        mintAgentId: request5.agentId,
+        mintSourceKind: request5.mintSourceKind,
         opName: "rmdir",
-        signal: request3.signal,
+        signal: request5.signal,
         op: (token, storeId) => rmdir.call(transport, {
-          relPath: request3.relPath,
+          relPath: request5.relPath,
           storeId,
           token,
-          signal: request3.signal
+          signal: request5.signal
         })
       });
     }
   }
-  getResolvedStoreId(request3) {
-    return this.resolvedStoreIds.get(tokenCacheKey(request3));
+  getResolvedStoreId(request5) {
+    return this.resolvedStoreIds.get(tokenCacheKey(request5));
   }
-  listFiles(request3) {
-    return __awaiter7(this, void 0, void 0, function* () {
+  listFiles(request5) {
+    return __awaiter8(this, void 0, void 0, function* () {
       return yield this.callWithRefresh({
-        cacheKey: tokenCacheKey(request3),
-        mintAgentId: request3.agentId,
-        shareId: request3.shareId,
-        mintSourceKind: request3.mintSourceKind,
+        cacheKey: tokenCacheKey(request5),
+        mintAgentId: request5.agentId,
+        shareId: request5.shareId,
+        mintSourceKind: request5.mintSourceKind,
         opName: "listFiles",
-        signal: request3.signal,
+        signal: request5.signal,
         op: (token, storeId) => this.transport.listFiles({
-          relPath: request3.relPath,
-          shareId: request3.shareId,
+          relPath: request5.relPath,
+          shareId: request5.shareId,
           storeId,
           token,
-          signal: request3.signal,
-          tombstoneMode: request3.tombstoneMode,
-          tombstonesSinceMs: request3.tombstonesSinceMs
+          signal: request5.signal,
+          tombstoneMode: request5.tombstoneMode,
+          tombstonesSinceMs: request5.tombstonesSinceMs
         })
       });
     });
   }
-  presignReads(request3) {
-    return __awaiter7(this, void 0, void 0, function* () {
+  presignReads(request5) {
+    return __awaiter8(this, void 0, void 0, function* () {
       return yield this.callWithRefresh({
-        cacheKey: tokenCacheKey(request3),
-        mintAgentId: request3.agentId,
-        shareId: request3.shareId,
-        mintSourceKind: request3.mintSourceKind,
+        cacheKey: tokenCacheKey(request5),
+        mintAgentId: request5.agentId,
+        shareId: request5.shareId,
+        mintSourceKind: request5.mintSourceKind,
         opName: "presignReads",
-        signal: request3.signal,
+        signal: request5.signal,
         op: (token, storeId) => this.transport.presignReads({
-          relPaths: request3.relPaths,
-          shareId: request3.shareId,
+          relPaths: request5.relPaths,
+          shareId: request5.shareId,
           storeId,
           token,
-          signal: request3.signal
+          signal: request5.signal
         })
       });
     });
   }
-  presignWrites(request3) {
-    return __awaiter7(this, void 0, void 0, function* () {
+  presignWrites(request5) {
+    return __awaiter8(this, void 0, void 0, function* () {
       return yield this.callWithRefresh({
-        cacheKey: request3.agentId,
-        mintAgentId: request3.agentId,
-        mintSourceKind: request3.mintSourceKind,
+        cacheKey: request5.agentId,
+        mintAgentId: request5.agentId,
+        mintSourceKind: request5.mintSourceKind,
         opName: "presignWrites",
-        signal: request3.signal,
+        signal: request5.signal,
         op: (token, storeId) => this.transport.presignWrites({
-          files: request3.files,
+          files: request5.files,
           storeId,
           token,
-          signal: request3.signal
+          signal: request5.signal
         })
       });
     });
   }
   /** Same token path as writes — deletes reuse the `write` capability. */
-  deleteFiles(request3) {
-    return __awaiter7(this, void 0, void 0, function* () {
+  deleteFiles(request5) {
+    return __awaiter8(this, void 0, void 0, function* () {
       var _a19;
       const deleteFiles = (_a19 = this.transport.deleteFiles) === null || _a19 === void 0 ? void 0 : _a19.bind(this.transport);
       if (deleteFiles === void 0) {
         throw new Error("TokenCachingAgentStoreClient: transport does not support deleteFiles");
       }
       return yield this.callWithRefresh({
-        cacheKey: request3.agentId,
-        mintAgentId: request3.agentId,
-        mintSourceKind: request3.mintSourceKind,
+        cacheKey: request5.agentId,
+        mintAgentId: request5.agentId,
+        mintSourceKind: request5.mintSourceKind,
         opName: "deleteFiles",
-        signal: request3.signal,
+        signal: request5.signal,
         op: (token, storeId) => deleteFiles({
-          files: request3.files,
+          files: request5.files,
           storeId,
           token,
-          signal: request3.signal
+          signal: request5.signal
         })
       });
     });
@@ -187,9 +187,9 @@ var TokenCachingAgentStoreClient = class {
    * storeId requires a token; when none is cached there has been no listing
    * through this client either, so there is nothing to invalidate.
    */
-  invalidateListCache(request3) {
+  invalidateListCache(request5) {
     var _a19, _b2;
-    const token = this.tokens.get(tokenCacheKey(request3));
+    const token = this.tokens.get(tokenCacheKey(request5));
     if (token === void 0) {
       return;
     }
@@ -199,11 +199,11 @@ var TokenCachingAgentStoreClient = class {
     }
     (_b2 = (_a19 = this.transport).invalidateListCache) === null || _b2 === void 0 ? void 0 : _b2.call(_a19, {
       storeId,
-      shareId: request3.shareId
+      shareId: request5.shareId
     });
   }
   callWithRefresh(args) {
-    return __awaiter7(this, void 0, void 0, function* () {
+    return __awaiter8(this, void 0, void 0, function* () {
       const token = yield this.getValidToken({
         cacheKey: args.cacheKey,
         mintAgentId: args.mintAgentId,
@@ -215,9 +215,9 @@ var TokenCachingAgentStoreClient = class {
       this.setResolvedStoreId(args, storeId);
       try {
         return yield args.op(token, storeId);
-      } catch (error41) {
-        if (!(error41 instanceof Error && isAgentStoreUnauthorized(error41) || typeof error41 === "object" && error41 !== null && isAgentStoreUnauthorized(error41))) {
-          throw error41;
+      } catch (error42) {
+        if (!(error42 instanceof Error && isAgentStoreUnauthorized(error42) || typeof error42 === "object" && error42 !== null && isAgentStoreUnauthorized(error42))) {
+          throw error42;
         }
         this.metrics.tokenRefreshUnauthorized({
           agentId: args.mintAgentId,
@@ -268,7 +268,7 @@ var TokenCachingAgentStoreClient = class {
     }
   }
   getValidToken(args) {
-    return __awaiter7(this, void 0, void 0, function* () {
+    return __awaiter8(this, void 0, void 0, function* () {
       const { cacheKey: cacheKey3, mintAgentId, shareId, mintSourceKind, mintReason, signal } = args;
       this.throwIfMintNegativeCached({ cacheKey: cacheKey3, mintAgentId });
       const existing = this.tokens.get(cacheKey3);
@@ -291,9 +291,9 @@ var TokenCachingAgentStoreClient = class {
             reason
           });
           return token;
-        }, (error41) => {
-          this.recordMintFailure({ cacheKey: cacheKey3, agentId: mintAgentId, error: error41 });
-          throw error41;
+        }, (error42) => {
+          this.recordMintFailure({ cacheKey: cacheKey3, agentId: mintAgentId, error: error42 });
+          throw error42;
         }).finally(() => {
           this.inFlightMints.delete(cacheKey3);
         });
@@ -322,8 +322,8 @@ var TokenCachingAgentStoreClient = class {
   recordMintFailure(args) {
     var _a19, _b2, _c2, _d;
     var _e2, _f;
-    const { cacheKey: cacheKey3, agentId, error: error41 } = args;
-    const syncDisabled = isAgentStoreSyncDisabledError(error41);
+    const { cacheKey: cacheKey3, agentId, error: error42 } = args;
+    const syncDisabled = isAgentStoreSyncDisabledError(error42);
     if (syncDisabled) {
       const existing2 = this.mintNegativeCache.get(cacheKey3);
       const backoff3 = (_e2 = existing2 === null || existing2 === void 0 ? void 0 : existing2.backoff) !== null && _e2 !== void 0 ? _e2 : new BackoffScheduler({
@@ -332,7 +332,7 @@ var TokenCachingAgentStoreClient = class {
         jitter: 0.2
       });
       this.mintNegativeCache.set(cacheKey3, {
-        error: error41,
+        error: error42,
         untilMs: SYNC_DISABLED_UNTIL_MS,
         backoff: backoff3
       });
@@ -342,11 +342,11 @@ var TokenCachingAgentStoreClient = class {
       });
       this.safeNotifySyncDisabledMint({
         agentId,
-        message: error41 instanceof Error ? error41.message : String(error41)
+        message: error42 instanceof Error ? error42.message : String(error42)
       });
       return;
     }
-    if (!isAgentStoreMintNegativeCacheable(error41)) {
+    if (!isAgentStoreMintNegativeCacheable(error42)) {
       return;
     }
     const existing = this.mintNegativeCache.get(cacheKey3);
@@ -358,7 +358,7 @@ var TokenCachingAgentStoreClient = class {
     const delayMs = backoff2.recordFailure();
     const untilMs = this.now() + delayMs;
     this.mintNegativeCache.set(cacheKey3, {
-      error: error41,
+      error: error42,
       untilMs,
       backoff: backoff2
     });
@@ -391,7 +391,7 @@ function abortReason2(signal) {
   return new DOMException("The operation was aborted", "AbortError");
 }
 function awaitWithAbortSignal(promise2, signal) {
-  return __awaiter7(this, void 0, void 0, function* () {
+  return __awaiter8(this, void 0, void 0, function* () {
     if (signal === void 0) {
       return yield promise2;
     }
@@ -410,9 +410,9 @@ function awaitWithAbortSignal(promise2, signal) {
       promise2.then((value) => {
         cleanup();
         resolve29(value);
-      }, (error41) => {
+      }, (error42) => {
         cleanup();
-        reject2(error41);
+        reject2(error42);
       });
     });
   });
@@ -424,9 +424,9 @@ function getTokenStoreId(token) {
   }
   return storeId;
 }
-function tokenCacheKey(request3) {
+function tokenCacheKey(request5) {
   var _a19;
-  return (_a19 = request3.shareId) !== null && _a19 !== void 0 ? _a19 : request3.agentId;
+  return (_a19 = request5.shareId) !== null && _a19 !== void 0 ? _a19 : request5.agentId;
 }
 function agentStoreMintTarget(args) {
   if (args.shareId !== void 0) {
@@ -456,14 +456,14 @@ function agentStoreMintTarget(args) {
   }
   throw new AgentStoreUnauthorizedError("Agent store target is not a valid store or source id");
 }
-function isAgentStoreUnauthorized(error41) {
-  if (error41 instanceof AgentStoreUnauthorizedError) {
+function isAgentStoreUnauthorized(error42) {
+  if (error42 instanceof AgentStoreUnauthorizedError) {
     return true;
   }
-  const status = "status" in error41 ? error41.status : void 0;
+  const status = "status" in error42 ? error42.status : void 0;
   if (status === 401 || status === 403) {
     return true;
   }
-  const code = "code" in error41 ? error41.code : void 0;
+  const code = "code" in error42 ? error42.code : void 0;
   return code === 7 || code === 16 || code === "PermissionDenied" || code === "Unauthenticated" || code === "PERMISSION_DENIED" || code === "UNAUTHENTICATED";
 }

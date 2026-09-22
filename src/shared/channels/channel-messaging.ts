@@ -108,10 +108,30 @@ function formatChannelReactionSummary(reaction) {
   }
   return `reacted ${reaction.emoji} to a message`;
 }
+function groupEnvelopesByAddress(envelopes) {
+  const grouped = /* @__PURE__ */ new Map();
+  for (const envelope of envelopes) {
+    const key = formatChannelAddress(envelope.address);
+    const bucket = grouped.get(key) ?? [];
+    bucket.push(envelope);
+    grouped.set(key, bucket);
+  }
+  return grouped;
+}
 function isVoiceCallCloseOnlyWake(envelopes) {
-  return envelopes.length > 0 && envelopes.every(
-    (envelope) => envelope.address.platform === VOICE_CALL_CHANNEL_PLATFORM && VoiceCallChannel.callIdOf(formatChannelAddress(envelope.address)) !== null && envelope.reaction == null && (envelope.images?.length ?? 0) === 0
+  if (envelopes.length === 0) return false;
+  const [first] = envelopes;
+  if (first == null) return false;
+  const line = formatChannelAddress(first.address);
+  return envelopes.every(
+    (envelope) => formatChannelAddress(envelope.address) === line && envelope.address.platform === VOICE_CALL_CHANNEL_PLATFORM && VoiceCallChannel.callIdOf(formatChannelAddress(envelope.address)) !== null && envelope.reaction == null && (envelope.images?.length ?? 0) === 0
   ) && envelopes.some((envelope) => envelope.text === VOICE_CALL_ENDED_MESSAGE);
+}
+function anyVoiceCallCloseOnlyWake(envelopes) {
+  for (const bucket of groupEnvelopesByAddress(envelopes).values()) {
+    if (isVoiceCallCloseOnlyWake(bucket)) return true;
+  }
+  return false;
 }
 function voiceLineAwaitingAnAnswer(envelopes) {
   if (envelopes.length === 0) return null;
@@ -123,19 +143,20 @@ function voiceLineAwaitingAnAnswer(envelopes) {
   }
   return addresses[0] ?? null;
 }
+function firstVoiceLineAwaitingAnAnswer(envelopes) {
+  for (const bucket of groupEnvelopesByAddress(envelopes).values()) {
+    const line = voiceLineAwaitingAnAnswer(bucket);
+    if (line !== null) return line;
+  }
+  return null;
+}
 var SLACK_INBOUND_WAKE_CLOSING = [
   "Reply to them by calling SendToUser with the channel target set to the address shown above",
   "While you work, Slack shows a live status line in this conversation with what you are doing, so people here already see the checking, searching and drafting as it happens; a message that narrates the same step only adds a bubble they scroll past",
   "People read the conversation as one exchange in which the result lands once, when it is ready, and a brief acknowledgement before a long task is the only split that reads naturally; keep working the rest of your task too, but do not leave them hanging"
 ].join("\n");
 function buildChannelInboundWakePrompt(envelopes) {
-  const grouped = /* @__PURE__ */ new Map();
-  for (const envelope of envelopes) {
-    const key = formatChannelAddress(envelope.address);
-    const bucket = grouped.get(key) ?? [];
-    bucket.push(envelope);
-    grouped.set(key, bucket);
-  }
+  const grouped = groupEnvelopesByAddress(envelopes);
   const blocks = [];
   for (const [addressToken, bucket] of grouped) {
     const [head] = bucket;
@@ -156,17 +177,25 @@ ${transcript}`);
   );
   const slackOnly = envelopes.every((envelope) => envelope.address.platform === SLACK_PLATFORM);
   const closing = hasMessage ? slackOnly ? SLACK_INBOUND_WAKE_CLOSING : "Reply to them by calling SendToUser with the channel target set to the address shown above. Open with a quick one-line acknowledgement first, then send progress and the result as separate messages as they happen, never one long message at the end. Keep each message short: this is a messaging app, so reply in brief, chat-style messages (lead with the answer, a sentence or two), not long ones. Keep working the rest of your task too, but do not leave them hanging." : "You don't need to reply; act on a reaction only if it's useful (e.g. acknowledge, adjust, or continue). If you do choose to respond, use SendToUser with the channel target shown above.";
-  const line = voiceLineAwaitingAnAnswer(envelopes);
-  const fromTheCall = line === null ? null : MainLoopVoicePrompt.wakeClosing({ sendTool: "SendToUser", address: line });
-  const fromTheEndedCall = isVoiceCallCloseOnlyWake(envelopes) ? MainLoopVoicePrompt.callEndedClosing({ sendTool: "SendToUser" }) : null;
+  const voiceClosings = [];
+  for (const bucket of grouped.values()) {
+    const line = voiceLineAwaitingAnAnswer(bucket);
+    if (line !== null) {
+      voiceClosings.push(
+        MainLoopVoicePrompt.wakeClosing({ sendTool: "SendToUser", address: line })
+      );
+    }
+    if (isVoiceCallCloseOnlyWake(bucket)) {
+      voiceClosings.push(MainLoopVoicePrompt.callEndedClosing({ sendTool: "SendToUser" }));
+    }
+  }
   return [
     opening,
     ...fromAnOutsidePlatform ? ["This is activity from someone on an outside platform, not the user typing in this app."] : [],
     "",
     blocks.join("\n\n"),
     ...fromAnOutsidePlatform ? ["", closing] : [],
-    ...fromTheCall === null ? [] : ["", fromTheCall],
-    ...fromTheEndedCall === null ? [] : ["", fromTheEndedCall]
+    ...voiceClosings.flatMap((text2) => ["", text2])
   ].join("\n");
 }
 var CHANNEL_DELIVERY_FAILED_WAKE_CUE = "[channel-delivery-failed]";

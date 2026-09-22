@@ -78,7 +78,7 @@ function createTurnAgentComposition(host) {
   function createSubagentRunner(agentId, args, directionEpoch, loopDetection, inherited) {
     host.subagentOwnership?.assertOpen();
     const boxId = host.resolveBoxId();
-    const remoteBoxPrewarm = remoteBoxPrewarmFor(args.subagentType, host.gates);
+    const remoteBoxPrewarm = host.remoteBoxHasDesktop ? remoteBoxPrewarmFor(args.subagentType, host.gates) : void 0;
     const preparedRemoteBoxConnection = remoteBoxPrewarm === void 0 ? void 0 : host.computerUse.prepareRemoteBox({ agentId, boxId, ...remoteBoxPrewarm });
     const isMediaReview = isMediaReviewSubagentType(args.subagentType);
     const mediaReviewSystemPrompt = isMediaReview ? findSubagentConfigByName(subagentConfigsForRun ?? [], args.subagentType)?.systemReminder?.(
@@ -98,6 +98,7 @@ function createTurnAgentComposition(host) {
       metricsBackend: host.metricsBackend,
       metricsHarness: host.metricsHarness,
       metricsSessionKind: host.metricsSessionKind,
+      metricsClock: host.metricsClock,
       streamTuning: host.streamTuning,
       backgroundSummarizationPropsOverride: host.backgroundSummarizationPropsOverride,
       box: host.box,
@@ -117,6 +118,7 @@ function createTurnAgentComposition(host) {
       webFetchService: host.webFetchService,
       ...host.disabledToolIdentifiers === void 0 ? {} : { disabledToolIdentifiers: host.disabledToolIdentifiers },
       actionAuditor: host.actionAuditor,
+      actionAuditSequencer: host.actionAuditSequencer,
       ...host.attachBoxServers === void 0 ? {} : { attachBoxServers: host.attachBoxServers },
       navigationProbe: host.computerUse.getOrCreateNavigationProbe(),
       mcp: host.mcp(),
@@ -215,7 +217,6 @@ function createTurnAgentComposition(host) {
         if (completions.length === 0) continue;
         result = await runner.run(
           buildSubagentRevivalPrompt(completions, {
-            gates: host.gates,
             canvasCursorAgentIds: host.canvasCursorAgentIds
           }),
           revivalRunOptions
@@ -276,6 +277,8 @@ function createTurnAgentComposition(host) {
       streamWatchdog,
       updateObservers,
       isRunAwaitingUserSelection: isThisRunAwaitingUser,
+      isRunCompletionRequested,
+      turnEndSummaryHold,
       isTeamSetupUnderway,
       endThisRunAwaitingUser,
       requestAutomationParentWake,
@@ -319,13 +322,13 @@ function createTurnAgentComposition(host) {
       surface: "host_shell",
       getExpiryPolicy: getApprovalExpiryPolicy,
       ...localToolPermission2 !== void 0 ? {
-        beforeApproval: (request3) => localToolPermission2.awaitDesktopStandingDecision({
+        beforeApproval: (request5) => localToolPermission2.awaitDesktopStandingDecision({
           agentId: host.getConversationId(),
-          toolCallId: request3.toolCallId,
-          signal: request3.signal,
-          command: request3.command,
-          ...request3.description !== void 0 ? { description: request3.description } : {},
-          ...request3.machineId !== void 0 ? { machineId: request3.machineId } : {}
+          toolCallId: request5.toolCallId,
+          signal: request5.signal,
+          command: request5.command,
+          ...request5.description !== void 0 ? { description: request5.description } : {},
+          ...request5.machineId !== void 0 ? { machineId: request5.machineId } : {}
         })
       } : {}
     }) : void 0;
@@ -353,15 +356,25 @@ function createTurnAgentComposition(host) {
     const applyStartOfTurnAckReminder = createStartOfTurnAckReminderMiddleware();
     const applyLoopNudge = loopDetection.kind === "active" ? createLoopNudgeMiddleware(loopDetection.multiMessage) : void 0;
     const onToolCallEvents = host.onToolCallEvents;
-    const applyToolCallTelemetry = onToolCallEvents === void 0 ? void 0 : createToolCallEventMiddleware({
+    const actionAuditor = host.actionAuditor;
+    const applyToolCallTelemetry = onToolCallEvents === void 0 && actionAuditor === void 0 ? void 0 : createToolCallEventMiddleware({
       getModelId: () => session.getModelId(),
-      onEvents: (events) => onToolCallEvents(
-        events.map((event) => ({
-          ...event,
-          conversationId: host.getTranscriptId(),
-          ...host.subagentType !== void 0 ? { subagentType: host.subagentType } : {}
-        }))
-      )
+      onEvents: (events) => {
+        if (actionAuditor !== void 0) {
+          const identity = { agentId: host.getConversationId(), boxId: host.resolveBoxId() };
+          for (const event of events) {
+            const record2 = toolResultAuditRecord(event, identity);
+            if (record2 !== void 0) actionAuditor.record(record2);
+          }
+        }
+        onToolCallEvents?.(
+          events.map((event) => ({
+            ...event,
+            conversationId: host.getTranscriptId(),
+            ...host.subagentType !== void 0 ? { subagentType: host.subagentType } : {}
+          }))
+        );
+      }
     });
     const toolSession = {
       getExecutor: () => {
@@ -403,7 +416,8 @@ function createTurnAgentComposition(host) {
       host.detachedSubagents,
       quietOrigin,
       childRequestLineage,
-      () => executorProfileNamesForRun
+      () => executorProfileNamesForRun,
+      host.actionAuditSequencer
     );
     const isUserFacingRunner = hasParentToolParity;
     const emitConnectorCard = (emission) => {
@@ -458,9 +472,14 @@ function createTurnAgentComposition(host) {
       const mcp = mcpForTurn;
       const auditedMcpExecutor = host.actionAuditor != null ? wrapMcpExecutorForAudit(mcpExecutor, {
         auditor: host.actionAuditor,
+        sequencer: host.actionAuditSequencer,
         agentId: host.getConversationId(),
         resolveTransport: (providerIdentifier) => mcp.resolveToolTransport(providerIdentifier)
       }) : mcpExecutor;
+      const turnMcpExecutor = withPlaywrightSnapshotFallback(
+        auditedMcpExecutor,
+        host.turnToolHost.browserOperationHarness ?? "unavailable"
+      );
       const connectCardEmittedForServer = /* @__PURE__ */ new Set();
       const surfaceNeedsAuthCard = async (providerIdentifier) => {
         if (!hasParentToolParity || mcp.resolveNeedsAuthSlot == null) {
@@ -524,14 +543,14 @@ function createTurnAgentComposition(host) {
             const attribution = { errorClass: null };
             let result;
             try {
-              result = await auditedMcpExecutor.execute(
+              result = await turnMcpExecutor.execute(
                 ctx.with(mcpExecAttributionKey, attribution),
                 args,
                 options2
               );
-            } catch (error41) {
-              settleMcpExecObservation({ kind: "error", errorClass: mcpErrorClassOf(error41) });
-              throw error41;
+            } catch (error42) {
+              settleMcpExecObservation({ kind: "error", errorClass: mcpErrorClassOf(error42) });
+              throw error42;
             }
             if (result.result.case !== "error") {
               settleMcpExecObservation({
@@ -665,9 +684,6 @@ ${note}`;
       subagentConfigs.push(
         createSandComputerUseSubagentConfig({ combined, credentialFillEnabled })
       );
-      if (!combined) {
-        subagentConfigs.push(createSandBrowserUseSubagentConfig({ credentialFillEnabled }));
-      }
     }
     if (subagentConfigs != null && !host.isSystemPromptOverridden) {
       const generalPurposeIndex = subagentConfigs.findIndex(
@@ -703,7 +719,9 @@ ${note}`;
         )
       },
       canUseSelfSummary,
-      enableTranscriptEnrichment: true
+      enableTranscriptEnrichment: true,
+      promptVariant: host.gates.generalizedSelfSummaryPrompt() ? "generalized" : "coding",
+      ...host.isSubagentRunner ? {} : { preserveUserDeliveryTail: SAND_IDLE_DELIVERY_TAIL }
     };
     const config2 = {
       maxSteps: SAND_AGENT_MAX_STEPS,
@@ -717,6 +735,8 @@ ${note}`;
         host.backgroundSummarizationPropsOverride
       ),
       pendingSummaryStore: host.pendingSummaryStore,
+      turnEndSummaryHold,
+      ...turnEndSummaryHold === void 0 ? {} : { isTurnEndRequested: isRunCompletionRequested },
       agentType: AgentType.IDE,
       featureFlags: {
         enableWatchVideoInIdeSubagent: true,
@@ -814,6 +834,7 @@ ${note}`;
       },
       enableTerminalFiles: false,
       enableTranscriptInSummary: true,
+      ...turnScope.summarizeActionMode === void 0 ? {} : { summarizeActionMode: turnScope.summarizeActionMode },
       prependedUserMessageDedupeFloorMessageId,
       fireAndForgetCheckpoints: host.fireAndForgetCheckpoints,
       afterStepCheckpoint: (_ctx, persisted) => afterStepCheckpoint(persisted)
@@ -835,7 +856,11 @@ ${note}`;
                 toolCall,
                 isThisRunAwaitingUser()
               );
-              performanceObservation.toolCall({ event, callId });
+              performanceObservation.toolCall({
+                event,
+                callId,
+                toolName: toolCall.tool.case ?? "unknown"
+              });
             },
             resolveToolName: (event, callId, outlineName) => host.toolCallIdentity.resolveModelToolName(event, callId, outlineName),
             onSurfaceUnresolvedPending: (callId, update) => host.toolCallIdentity.stashSurfaceUnresolvedPending(callId, update),

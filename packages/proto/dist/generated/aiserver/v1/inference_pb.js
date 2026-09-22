@@ -1,19 +1,19 @@
 init_esm();
 init_compact();
-var __protoPackage151 = "aiserver.v1.";
-var __protoMessage3144 = class extends CompactMessage {
+var __protoPackage153 = "aiserver.v1.";
+var __protoMessage3145 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage151;
+    return __protoPackage153;
   }
 };
-var InferenceReason = /* @__PURE__ */ enumType(proto3, __protoPackage151, "InferenceReason", [[0, "UNSPECIFIED"], [1, "GEMINI_VIDEO_SUBAGENT"]], 1);
-var InferenceMessageRole = /* @__PURE__ */ enumType(proto3, __protoPackage151, "InferenceMessageRole", [[0, "UNSPECIFIED"], [1, "USER"], [2, "ASSISTANT"], [3, "TOOL"], [4, "SYSTEM"]], 1);
-var InferenceStreamErrorType = /* @__PURE__ */ enumType(proto3, __protoPackage151, "InferenceStreamErrorType", [[0, "UNSPECIFIED"], [1, "UNKNOWN"], [2, "INPUT_TOKEN_LIMIT"], [3, "OUTPUT_TOKEN_LIMIT"], [4, "RATE_LIMIT"], [5, "AUTHENTICATION"], [6, "PERMISSION"], [7, "OVERLOADED"], [8, "CONTENT_FILTER"]], 1);
-var RunInferenceRoutingRole = /* @__PURE__ */ enumType(proto3, __protoPackage151, "RunInferenceRoutingRole", [[0, "UNSPECIFIED"], [1, "USER"], [2, "ASSISTANT"]], 1);
-var InferenceStreamRequest = class _InferenceStreamRequest extends __protoMessage3144 {
+var InferenceReason = /* @__PURE__ */ enumType(proto3, __protoPackage153, "InferenceReason", [[0, "UNSPECIFIED"], [1, "GEMINI_VIDEO_SUBAGENT"]], 1);
+var InferenceMessageRole = /* @__PURE__ */ enumType(proto3, __protoPackage153, "InferenceMessageRole", [[0, "UNSPECIFIED"], [1, "USER"], [2, "ASSISTANT"], [3, "TOOL"], [4, "SYSTEM"]], 1);
+var InferenceStreamErrorType = /* @__PURE__ */ enumType(proto3, __protoPackage153, "InferenceStreamErrorType", [[0, "UNSPECIFIED"], [1, "UNKNOWN"], [2, "INPUT_TOKEN_LIMIT"], [3, "OUTPUT_TOKEN_LIMIT"], [4, "RATE_LIMIT"], [5, "AUTHENTICATION"], [6, "PERMISSION"], [7, "OVERLOADED"], [8, "CONTENT_FILTER"]], 1);
+var RunInferenceRoutingRole = /* @__PURE__ */ enumType(proto3, __protoPackage153, "RunInferenceRoutingRole", [[0, "UNSPECIFIED"], [1, "USER"], [2, "ASSISTANT"]], 1);
+var InferenceStreamRequest = class _InferenceStreamRequest extends __protoMessage3145 {
   constructor(data) {
     super();
     this.messages = [];
@@ -38,7 +38,7 @@ var InferenceStreamRequest = class _InferenceStreamRequest extends __protoMessag
     return ["InferenceStreamRequest|1 messages #0*|2 tools #1*|3 provider_defined_tools #2*|4 model_config #3?|5 model_id 9?|6 invocation_id 9?|7 requested_model #4?|8 conversation_id 9?|9 accepted_unadvertised_tool_names 9*|10 automation_id 9?|11 inference_reason #5?|12 conversation_group_id 9?|13 parent_request_id 9?|14 root_parent_request_id 9?|15 parent_agent_tool_call_id 9?|16 subagent_type 9?|17 compaction_epoch 5?", InferenceCoreMessage, InferenceAgentTool, InferenceNamedProviderDefinedTool, InferenceModelConfig, InferenceRequestedModel, InferenceReason];
   }
 };
-var InferenceRequestedModel = class _InferenceRequestedModel extends __protoMessage3144 {
+var InferenceRequestedModel = class _InferenceRequestedModel extends __protoMessage3145 {
   constructor(data) {
     super();
     this.modelId = "";
@@ -64,7 +64,7 @@ var InferenceRequestedModel = class _InferenceRequestedModel extends __protoMess
     return ["InferenceRequestedModel|1 model_id 9|2 max_mode 8|3 parameters #0*|4 built_in_model 8|5 is_variant_string_representation 8", InferenceModelParameterValue];
   }
 };
-var InferenceModelParameterValue = class _InferenceModelParameterValue extends __protoMessage3144 {
+var InferenceModelParameterValue = class _InferenceModelParameterValue extends __protoMessage3145 {
   constructor(data) {
     super();
     this.id = "";
@@ -87,7 +87,7 @@ var InferenceModelParameterValue = class _InferenceModelParameterValue extends _
     return ["InferenceModelParameterValue|1 id 9|2 value 9"];
   }
 };
-var InferenceCoreMessage = class _InferenceCoreMessage extends __protoMessage3144 {
+var InferenceCoreMessage = class _InferenceCoreMessage extends __protoMessage3145 {
   constructor(data) {
     super();
     this.role = InferenceMessageRole.UNSPECIFIED;
@@ -112,7 +112,7 @@ var InferenceCoreMessage = class _InferenceCoreMessage extends __protoMessage314
     return ["InferenceCoreMessage|1 role #0|2 text 9 content|3 parts #1 content|6 tool_content #2 content|4 tool_calls #3*|7 reasoning_parts #4*|8 model_provider_message_id 9?|9 openai_phase 9?|10 openai_phase_null 8?|11 cursor_inference_reason 9?|12 cursor_feature_type 9?|13 cursor_is_summary 8?", InferenceMessageRole, InferenceContentParts, InferenceToolResultContent, InferenceToolCall, InferenceReasoningPart];
   }
 };
-var InferenceReasoningPart = class _InferenceReasoningPart extends __protoMessage3144 {
+var InferenceReasoningPart = class _InferenceReasoningPart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.isRedacted = false;
@@ -135,7 +135,7 @@ var InferenceReasoningPart = class _InferenceReasoningPart extends __protoMessag
     return ["InferenceReasoningPart|1 is_redacted 8|2 text 9|3 signature 9?|4 redacted_data 9?|5 model_name 9?"];
   }
 };
-var InferenceContentParts = class _InferenceContentParts extends __protoMessage3144 {
+var InferenceContentParts = class _InferenceContentParts extends __protoMessage3145 {
   constructor(data) {
     super();
     this.parts = [];
@@ -157,7 +157,7 @@ var InferenceContentParts = class _InferenceContentParts extends __protoMessage3
     return ["InferenceContentParts|1 parts #0*", InferenceContentPart];
   }
 };
-var InferenceContentPart = class _InferenceContentPart extends __protoMessage3144 {
+var InferenceContentPart = class _InferenceContentPart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.part = { case: void 0 };
@@ -179,7 +179,7 @@ var InferenceContentPart = class _InferenceContentPart extends __protoMessage314
     return ["InferenceContentPart|1 text #0 part|2 image #1 part|3 file #2 part", InferenceTextPart, InferenceImagePart, InferenceFilePart];
   }
 };
-var InferenceTextPart = class _InferenceTextPart extends __protoMessage3144 {
+var InferenceTextPart = class _InferenceTextPart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.text = "";
@@ -201,7 +201,7 @@ var InferenceTextPart = class _InferenceTextPart extends __protoMessage3144 {
     return ["InferenceTextPart|1 text 9|2 provider_options #0?", InferenceProviderOptions];
   }
 };
-var InferenceImagePart = class _InferenceImagePart extends __protoMessage3144 {
+var InferenceImagePart = class _InferenceImagePart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.data = "";
@@ -223,7 +223,7 @@ var InferenceImagePart = class _InferenceImagePart extends __protoMessage3144 {
     return ["InferenceImagePart|1 data 9|2 mime_type 9?|3 provider_options #0?", InferenceProviderOptions];
   }
 };
-var InferenceFilePart = class _InferenceFilePart extends __protoMessage3144 {
+var InferenceFilePart = class _InferenceFilePart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.data = "";
@@ -246,7 +246,7 @@ var InferenceFilePart = class _InferenceFilePart extends __protoMessage3144 {
     return ["InferenceFilePart|1 data 9|2 media_type 9|3 filename 9?|4 provider_options #0?", InferenceProviderOptions];
   }
 };
-var InferenceToolCall = class _InferenceToolCall extends __protoMessage3144 {
+var InferenceToolCall = class _InferenceToolCall extends __protoMessage3145 {
   constructor(data) {
     super();
     this.toolCallId = "";
@@ -269,7 +269,7 @@ var InferenceToolCall = class _InferenceToolCall extends __protoMessage3144 {
     return ["InferenceToolCall|1 tool_call_id 9|2 tool_name 9|3 args #0|4 raw_tool_call_args 9?", Struct];
   }
 };
-var InferenceAgentTool = class _InferenceAgentTool extends __protoMessage3144 {
+var InferenceAgentTool = class _InferenceAgentTool extends __protoMessage3145 {
   constructor(data) {
     super();
     this.name = "";
@@ -292,7 +292,7 @@ var InferenceAgentTool = class _InferenceAgentTool extends __protoMessage3144 {
     return ["InferenceAgentTool|1 name 9|2 description 9|3 parameters #0|4 custom_tool_format #1?", Struct, InferenceCustomToolFormat];
   }
 };
-var InferenceCustomToolFormat = class _InferenceCustomToolFormat extends __protoMessage3144 {
+var InferenceCustomToolFormat = class _InferenceCustomToolFormat extends __protoMessage3145 {
   constructor(data) {
     super();
     this.type = "";
@@ -316,7 +316,7 @@ var InferenceCustomToolFormat = class _InferenceCustomToolFormat extends __proto
     return ["InferenceCustomToolFormat|1 type 9|2 definition 9|3 syntax 9"];
   }
 };
-var InferenceNamedProviderDefinedTool = class _InferenceNamedProviderDefinedTool extends __protoMessage3144 {
+var InferenceNamedProviderDefinedTool = class _InferenceNamedProviderDefinedTool extends __protoMessage3145 {
   constructor(data) {
     super();
     this.name = "";
@@ -340,7 +340,7 @@ var InferenceNamedProviderDefinedTool = class _InferenceNamedProviderDefinedTool
     return ["InferenceNamedProviderDefinedTool|1 name 9|2 id 9|3 type 9|4 options #0", Struct];
   }
 };
-var InferenceModelConfig = class _InferenceModelConfig extends __protoMessage3144 {
+var InferenceModelConfig = class _InferenceModelConfig extends __protoMessage3145 {
   constructor(data) {
     super();
     this.stopSequences = [];
@@ -362,7 +362,7 @@ var InferenceModelConfig = class _InferenceModelConfig extends __protoMessage314
     return ["InferenceModelConfig|1 max_tokens 5?|2 temperature 2?|3 top_p 2?|4 stop_sequences 9*"];
   }
 };
-var InferenceStreamResponse = class _InferenceStreamResponse extends __protoMessage3144 {
+var InferenceStreamResponse = class _InferenceStreamResponse extends __protoMessage3145 {
   constructor(data) {
     super();
     this.response = { case: void 0 };
@@ -384,7 +384,7 @@ var InferenceStreamResponse = class _InferenceStreamResponse extends __protoMess
     return ["InferenceStreamResponse|1 text_part #0 response|2 tool_call_part #1 response|3 usage #2 response|4 response_info #3 response|5 extended_usage #4 response|6 provider_metadata #5 response|7 invocation_id #6 response|8 error #7 response|9 thinking_part #8 response|10 image_descriptions #9 response", InferenceTextStreamPart, InferenceToolCallStreamPart, InferenceUsageInfo, InferenceResponseInfo, InferenceExtendedUsageInfo, InferenceProviderMetadataInfo, InferenceInvocationIdInfo, InferenceStreamError, InferenceThinkingStreamPart, InferenceImageDescriptionsInfo];
   }
 };
-var InferenceImageDescriptionsInfo = class _InferenceImageDescriptionsInfo extends __protoMessage3144 {
+var InferenceImageDescriptionsInfo = class _InferenceImageDescriptionsInfo extends __protoMessage3145 {
   constructor(data) {
     super();
     this.descriptions = [];
@@ -406,7 +406,7 @@ var InferenceImageDescriptionsInfo = class _InferenceImageDescriptionsInfo exten
     return ["InferenceImageDescriptionsInfo|1 descriptions #0*", InferenceImageDescription];
   }
 };
-var InferenceImageDescription = class _InferenceImageDescription extends __protoMessage3144 {
+var InferenceImageDescription = class _InferenceImageDescription extends __protoMessage3145 {
   constructor(data) {
     super();
     this.messageIndex = 0;
@@ -430,7 +430,7 @@ var InferenceImageDescription = class _InferenceImageDescription extends __proto
     return ["InferenceImageDescription|1 message_index 5|2 part_index 5|3 exp_content_index 5?|4 description 9"];
   }
 };
-var InferenceTextStreamPart = class _InferenceTextStreamPart extends __protoMessage3144 {
+var InferenceTextStreamPart = class _InferenceTextStreamPart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.text = "";
@@ -453,7 +453,7 @@ var InferenceTextStreamPart = class _InferenceTextStreamPart extends __protoMess
     return ["InferenceTextStreamPart|1 text 9|2 is_final 8"];
   }
 };
-var InferenceThinkingStreamPart = class _InferenceThinkingStreamPart extends __protoMessage3144 {
+var InferenceThinkingStreamPart = class _InferenceThinkingStreamPart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.text = "";
@@ -476,7 +476,7 @@ var InferenceThinkingStreamPart = class _InferenceThinkingStreamPart extends __p
     return ["InferenceThinkingStreamPart|1 text 9|2 signature 9?|3 is_final 8"];
   }
 };
-var InferenceToolCallStreamPart = class _InferenceToolCallStreamPart extends __protoMessage3144 {
+var InferenceToolCallStreamPart = class _InferenceToolCallStreamPart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.toolCallId = "";
@@ -501,7 +501,7 @@ var InferenceToolCallStreamPart = class _InferenceToolCallStreamPart extends __p
     return ["InferenceToolCallStreamPart|1 tool_call_id 9|2 tool_name 9|3 args 9|4 is_complete 8|5 tool_index 5?"];
   }
 };
-var InferenceUsageInfo = class _InferenceUsageInfo extends __protoMessage3144 {
+var InferenceUsageInfo = class _InferenceUsageInfo extends __protoMessage3145 {
   constructor(data) {
     super();
     this.promptTokens = 0;
@@ -524,7 +524,7 @@ var InferenceUsageInfo = class _InferenceUsageInfo extends __protoMessage3144 {
     return ["InferenceUsageInfo|1 prompt_tokens 5|2 completion_tokens 5|3 total_tokens 5?"];
   }
 };
-var InferenceExtendedUsageInfo = class _InferenceExtendedUsageInfo extends __protoMessage3144 {
+var InferenceExtendedUsageInfo = class _InferenceExtendedUsageInfo extends __protoMessage3145 {
   constructor(data) {
     super();
     this.inputTokens = 0;
@@ -550,7 +550,7 @@ var InferenceExtendedUsageInfo = class _InferenceExtendedUsageInfo extends __pro
     return ["InferenceExtendedUsageInfo|1 input_tokens 5|2 output_tokens 5|3 cache_read_tokens 5|4 cache_write_tokens 5|5 max_tokens 5"];
   }
 };
-var InferenceResponseInfo = class _InferenceResponseInfo extends __protoMessage3144 {
+var InferenceResponseInfo = class _InferenceResponseInfo extends __protoMessage3145 {
   constructor(data) {
     super();
     this.id = "";
@@ -575,7 +575,7 @@ var InferenceResponseInfo = class _InferenceResponseInfo extends __protoMessage3
     return ["InferenceResponseInfo|1 id 9|2 model 9|3 created_at 3|4 messages #0*|5 error_message 9?|6 inference_extra_data #1?|7 supports_self_summary 8?|8 early_compaction_context_token_threshold 5?", InferenceResponseMessage, InferenceExtraData];
   }
 };
-var InferenceResponseMessage = class _InferenceResponseMessage extends __protoMessage3144 {
+var InferenceResponseMessage = class _InferenceResponseMessage extends __protoMessage3145 {
   constructor(data) {
     super();
     this.id = "";
@@ -600,7 +600,7 @@ var InferenceResponseMessage = class _InferenceResponseMessage extends __protoMe
     return ["InferenceResponseMessage|1 id 9|2 role #0|3 content 9?|4 tool_calls #1*|5 tool_result #2?|6 reasoning_parts #3*|7 model_provider_message_id 9?|8 openai_phase 9?|9 openai_phase_null 8?", InferenceMessageRole, InferenceToolCall, InferenceToolResultContent, InferenceReasoningPart];
   }
 };
-var InferenceToolResultContent = class _InferenceToolResultContent extends __protoMessage3144 {
+var InferenceToolResultContent = class _InferenceToolResultContent extends __protoMessage3145 {
   constructor(data) {
     super();
     this.parts = [];
@@ -622,7 +622,7 @@ var InferenceToolResultContent = class _InferenceToolResultContent extends __pro
     return ["InferenceToolResultContent|1 parts #0*", InferenceToolResultPart];
   }
 };
-var InferenceToolResultPart = class _InferenceToolResultPart extends __protoMessage3144 {
+var InferenceToolResultPart = class _InferenceToolResultPart extends __protoMessage3145 {
   constructor(data) {
     super();
     this.toolCallId = "";
@@ -647,7 +647,7 @@ var InferenceToolResultPart = class _InferenceToolResultPart extends __protoMess
     return ["InferenceToolResultPart|1 tool_call_id 9|2 tool_name 9|3 result #0|4 is_error 8|5 experimental_content #1*|6 provider_options #2?|7 cursor_tool_call_is_error 8?", Value, InferenceContentPart, InferenceProviderOptions];
   }
 };
-var InferenceExtraData = class _InferenceExtraData extends __protoMessage3144 {
+var InferenceExtraData = class _InferenceExtraData extends __protoMessage3145 {
   constructor(data) {
     super();
     this.tokenLogprobs = [];
@@ -674,7 +674,7 @@ var InferenceExtraData = class _InferenceExtraData extends __protoMessage3144 {
     return ["InferenceExtraData|1 token_logprobs #0*|2 token_ids #1*|3 prompt_token_ids #1*|4 extra_tokens #1*|5 extra_logprobs #0*|6 routing_matrix #2*", InferenceTokenLogprobs, InferenceTokenIds, InferenceRoutingRow];
   }
 };
-var InferenceTokenLogprobs = class _InferenceTokenLogprobs extends __protoMessage3144 {
+var InferenceTokenLogprobs = class _InferenceTokenLogprobs extends __protoMessage3145 {
   constructor(data) {
     super();
     this.values = [];
@@ -696,7 +696,7 @@ var InferenceTokenLogprobs = class _InferenceTokenLogprobs extends __protoMessag
     return ["InferenceTokenLogprobs|1 values 1*"];
   }
 };
-var InferenceTokenIds = class _InferenceTokenIds extends __protoMessage3144 {
+var InferenceTokenIds = class _InferenceTokenIds extends __protoMessage3145 {
   constructor(data) {
     super();
     this.values = [];
@@ -718,7 +718,7 @@ var InferenceTokenIds = class _InferenceTokenIds extends __protoMessage3144 {
     return ["InferenceTokenIds|1 values 3*"];
   }
 };
-var InferenceRoutingRow = class _InferenceRoutingRow extends __protoMessage3144 {
+var InferenceRoutingRow = class _InferenceRoutingRow extends __protoMessage3145 {
   constructor(data) {
     super();
     this.values = [];
@@ -740,7 +740,7 @@ var InferenceRoutingRow = class _InferenceRoutingRow extends __protoMessage3144 
     return ["InferenceRoutingRow|1 values 9*"];
   }
 };
-var InferenceProviderMetadataInfo = class _InferenceProviderMetadataInfo extends __protoMessage3144 {
+var InferenceProviderMetadataInfo = class _InferenceProviderMetadataInfo extends __protoMessage3145 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -761,7 +761,7 @@ var InferenceProviderMetadataInfo = class _InferenceProviderMetadataInfo extends
     return ["InferenceProviderMetadataInfo|1 metadata #0", Struct];
   }
 };
-var InferenceInvocationIdInfo = class _InferenceInvocationIdInfo extends __protoMessage3144 {
+var InferenceInvocationIdInfo = class _InferenceInvocationIdInfo extends __protoMessage3145 {
   constructor(data) {
     super();
     this.invocationId = "";
@@ -783,7 +783,7 @@ var InferenceInvocationIdInfo = class _InferenceInvocationIdInfo extends __proto
     return ["InferenceInvocationIdInfo|1 invocation_id 9"];
   }
 };
-var InferenceStreamError = class _InferenceStreamError extends __protoMessage3144 {
+var InferenceStreamError = class _InferenceStreamError extends __protoMessage3145 {
   constructor(data) {
     super();
     this.message = "";
@@ -809,7 +809,7 @@ var InferenceStreamError = class _InferenceStreamError extends __protoMessage314
     return ["InferenceStreamError|1 message 9|2 code 9|3 is_input_token_limit_error 8|4 is_output_token_limit_error 8|5 error_type #0", InferenceStreamErrorType];
   }
 };
-var InferenceProviderOptions = class _InferenceProviderOptions extends __protoMessage3144 {
+var InferenceProviderOptions = class _InferenceProviderOptions extends __protoMessage3145 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -830,7 +830,7 @@ var InferenceProviderOptions = class _InferenceProviderOptions extends __protoMe
     return ["InferenceProviderOptions|1 anthropic #0?|2 cursor #1?", InferenceAnthropicOptions, InferenceCursorOptions];
   }
 };
-var InferenceCursorOptions = class _InferenceCursorOptions extends __protoMessage3144 {
+var InferenceCursorOptions = class _InferenceCursorOptions extends __protoMessage3145 {
   constructor(data) {
     super();
     this.imageDescriptions = {};
@@ -852,7 +852,7 @@ var InferenceCursorOptions = class _InferenceCursorOptions extends __protoMessag
     return ["InferenceCursorOptions|1 image_description 9?|2 image_descriptions 5,9"];
   }
 };
-var InferenceAnthropicOptions = class _InferenceAnthropicOptions extends __protoMessage3144 {
+var InferenceAnthropicOptions = class _InferenceAnthropicOptions extends __protoMessage3145 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -873,7 +873,7 @@ var InferenceAnthropicOptions = class _InferenceAnthropicOptions extends __proto
     return ["InferenceAnthropicOptions|1 cache_control #0?", InferenceCacheControl];
   }
 };
-var InferenceCacheControl = class _InferenceCacheControl extends __protoMessage3144 {
+var InferenceCacheControl = class _InferenceCacheControl extends __protoMessage3145 {
   constructor(data) {
     super();
     this.type = "";
@@ -895,7 +895,7 @@ var InferenceCacheControl = class _InferenceCacheControl extends __protoMessage3
     return ["InferenceCacheControl|1 type 9"];
   }
 };
-var AgentFollowupCategorizationRequest = class _AgentFollowupCategorizationRequest extends __protoMessage3144 {
+var AgentFollowupCategorizationRequest = class _AgentFollowupCategorizationRequest extends __protoMessage3145 {
   constructor(data) {
     super();
     this.requestId = "";
@@ -919,7 +919,7 @@ var AgentFollowupCategorizationRequest = class _AgentFollowupCategorizationReque
     return ["AgentFollowupCategorizationRequest|1 request_id 9|2 replying_to_request_id 9|3 messages #0*|4 conversation_id 9?|5 agent_mode 9?|6 model_name 9?", InferenceCoreMessage];
   }
 };
-var AgentPostTurnLabelingRequest = class _AgentPostTurnLabelingRequest extends __protoMessage3144 {
+var AgentPostTurnLabelingRequest = class _AgentPostTurnLabelingRequest extends __protoMessage3145 {
   constructor(data) {
     super();
     this.requestId = "";
@@ -942,7 +942,7 @@ var AgentPostTurnLabelingRequest = class _AgentPostTurnLabelingRequest extends _
     return ["AgentPostTurnLabelingRequest|1 request_id 9|2 messages #0*|3 conversation_id 9?|4 agent_mode 9?|5 model_name 9?", InferenceCoreMessage];
   }
 };
-var RunInferenceClientMessage = class _RunInferenceClientMessage extends __protoMessage3144 {
+var RunInferenceClientMessage = class _RunInferenceClientMessage extends __protoMessage3145 {
   constructor(data) {
     super();
     this.message = { case: void 0 };
@@ -964,7 +964,7 @@ var RunInferenceClientMessage = class _RunInferenceClientMessage extends __proto
     return ["RunInferenceClientMessage|1 run_request #0 message|2 invoke_model #1 message|3 cancel_invocation #2 message|4 finish_run #3 message", RunInferenceRunRequest, RunInferenceInvokeModel, RunInferenceCancelInvocation, RunInferenceFinishRun];
   }
 };
-var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessage3144 {
+var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessage3145 {
   constructor(data) {
     super();
     this.conversationId = "";
@@ -987,7 +987,7 @@ var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessag
     return ["RunInferenceRunRequest|1 conversation_id 9|2 conversation_group_id 9?|3 requested_model #0|4 routing_conversation #1*|5 agent_mode 9?|6 subagent_type_name 9?", InferenceRequestedModel, RunInferenceRoutingMessage];
   }
 };
-var RunInferenceRoutingMessage = class _RunInferenceRoutingMessage extends __protoMessage3144 {
+var RunInferenceRoutingMessage = class _RunInferenceRoutingMessage extends __protoMessage3145 {
   constructor(data) {
     super();
     this.role = RunInferenceRoutingRole.UNSPECIFIED;
@@ -1010,7 +1010,7 @@ var RunInferenceRoutingMessage = class _RunInferenceRoutingMessage extends __pro
     return ["RunInferenceRoutingMessage|1 role #0|2 text 9", RunInferenceRoutingRole];
   }
 };
-var RunInferenceInvokeModel = class _RunInferenceInvokeModel extends __protoMessage3144 {
+var RunInferenceInvokeModel = class _RunInferenceInvokeModel extends __protoMessage3145 {
   constructor(data) {
     super();
     this.invocationId = "";
@@ -1032,7 +1032,7 @@ var RunInferenceInvokeModel = class _RunInferenceInvokeModel extends __protoMess
     return ["RunInferenceInvokeModel|1 invocation_id 9|2 request #0", InferenceStreamRequest];
   }
 };
-var RunInferenceCancelInvocation = class _RunInferenceCancelInvocation extends __protoMessage3144 {
+var RunInferenceCancelInvocation = class _RunInferenceCancelInvocation extends __protoMessage3145 {
   constructor(data) {
     super();
     this.invocationId = "";
@@ -1054,7 +1054,7 @@ var RunInferenceCancelInvocation = class _RunInferenceCancelInvocation extends _
     return ["RunInferenceCancelInvocation|1 invocation_id 9"];
   }
 };
-var RunInferenceFinishRun = class _RunInferenceFinishRun extends __protoMessage3144 {
+var RunInferenceFinishRun = class _RunInferenceFinishRun extends __protoMessage3145 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -1075,7 +1075,7 @@ var RunInferenceFinishRun = class _RunInferenceFinishRun extends __protoMessage3
     return ["RunInferenceFinishRun"];
   }
 };
-var RunInferenceServerMessage = class _RunInferenceServerMessage extends __protoMessage3144 {
+var RunInferenceServerMessage = class _RunInferenceServerMessage extends __protoMessage3145 {
   constructor(data) {
     super();
     this.message = { case: void 0 };
@@ -1097,7 +1097,7 @@ var RunInferenceServerMessage = class _RunInferenceServerMessage extends __proto
     return ["RunInferenceServerMessage|1 heartbeat #0 message|2 run_ready #1 message|3 invocation_response #2 message|4 invocation_end #3 message", RunInferenceHeartbeat, RunInferenceRunReady, RunInferenceInvocationResponse, RunInferenceInvocationEnd];
   }
 };
-var RunInferenceHeartbeat = class _RunInferenceHeartbeat extends __protoMessage3144 {
+var RunInferenceHeartbeat = class _RunInferenceHeartbeat extends __protoMessage3145 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -1118,7 +1118,7 @@ var RunInferenceHeartbeat = class _RunInferenceHeartbeat extends __protoMessage3
     return ["RunInferenceHeartbeat"];
   }
 };
-var RunInferenceRunReady = class _RunInferenceRunReady extends __protoMessage3144 {
+var RunInferenceRunReady = class _RunInferenceRunReady extends __protoMessage3145 {
   constructor(data) {
     super();
     this.supportsSelfSummary = false;
@@ -1140,7 +1140,7 @@ var RunInferenceRunReady = class _RunInferenceRunReady extends __protoMessage314
     return ["RunInferenceRunReady|1 resolved_model #0|2 supports_self_summary 8|3 routed_model_display_name 9?|4 prompt_model_metadata #1", InferenceRequestedModel, RunInferencePromptModelMetadata];
   }
 };
-var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata extends __protoMessage3144 {
+var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata extends __protoMessage3145 {
   constructor(data) {
     super();
     this.vendor = "";
@@ -1181,6 +1181,7 @@ var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata ext
     this.enableLineNumbers = false;
     this.useSparseReadLineNumbers = false;
     this.selfIdentityName = "";
+    this.agentModeConfigs = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1196,10 +1197,78 @@ var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata ext
     return proto3.util.equals(_RunInferencePromptModelMetadata, a, b2);
   }
   static $() {
-    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig];
+    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?|46 agent_mode_configs #2*|47 use_new_plan_mode_prompts 8?|48 ask_question_config #3?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig, RunInferenceAgentModeConfig, RunInferenceAskQuestionConfig];
   }
 };
-var RunInferenceFlagValue = class _RunInferenceFlagValue extends __protoMessage3144 {
+var RunInferenceAskQuestionConfig = class _RunInferenceAskQuestionConfig extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.toolName = "";
+    this.autoRejectFirst = false;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceAskQuestionConfig().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceAskQuestionConfig().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceAskQuestionConfig().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceAskQuestionConfig, a, b2);
+  }
+  static $() {
+    return ["RunInferenceAskQuestionConfig|1 tool_name 9|2 auto_reject_first 8"];
+  }
+};
+var RunInferenceAgentModeConfig = class _RunInferenceAgentModeConfig extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.modeId = "";
+    this.enableAskQuestionTool = false;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceAgentModeConfig().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceAgentModeConfig().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceAgentModeConfig().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceAgentModeConfig, a, b2);
+  }
+  static $() {
+    return ["RunInferenceAgentModeConfig|1 mode_id 9|2 enable_ask_question_tool 8|3 switch_mode_tool_config #0?", RunInferenceSwitchModeToolConfig];
+  }
+};
+var RunInferenceSwitchModeToolConfig = class _RunInferenceSwitchModeToolConfig extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.targetModes = [];
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceSwitchModeToolConfig().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceSwitchModeToolConfig().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceSwitchModeToolConfig().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceSwitchModeToolConfig, a, b2);
+  }
+  static $() {
+    return ["RunInferenceSwitchModeToolConfig|1 target_modes 9*"];
+  }
+};
+var RunInferenceFlagValue = class _RunInferenceFlagValue extends __protoMessage3145 {
   constructor(data) {
     super();
     this.value = { case: void 0 };
@@ -1221,7 +1290,7 @@ var RunInferenceFlagValue = class _RunInferenceFlagValue extends __protoMessage3
     return ["RunInferenceFlagValue|1 bool_value 8 value|2 number_value 1 value|3 string_value 9 value"];
   }
 };
-var RunInferenceLoopNudgeConfig = class _RunInferenceLoopNudgeConfig extends __protoMessage3144 {
+var RunInferenceLoopNudgeConfig = class _RunInferenceLoopNudgeConfig extends __protoMessage3145 {
   constructor(data) {
     super();
     this.minRepetitions = 0;
@@ -1245,7 +1314,7 @@ var RunInferenceLoopNudgeConfig = class _RunInferenceLoopNudgeConfig extends __p
     return ["RunInferenceLoopNudgeConfig|1 min_repetitions 5|2 min_message_length 5|3 inject_reminder 8"];
   }
 };
-var RunInferenceInvocationResponse = class _RunInferenceInvocationResponse extends __protoMessage3144 {
+var RunInferenceInvocationResponse = class _RunInferenceInvocationResponse extends __protoMessage3145 {
   constructor(data) {
     super();
     this.invocationId = "";
@@ -1267,7 +1336,7 @@ var RunInferenceInvocationResponse = class _RunInferenceInvocationResponse exten
     return ["RunInferenceInvocationResponse|1 invocation_id 9|2 response #0", InferenceStreamResponse];
   }
 };
-var RunInferenceInvocationEnd = class _RunInferenceInvocationEnd extends __protoMessage3144 {
+var RunInferenceInvocationEnd = class _RunInferenceInvocationEnd extends __protoMessage3145 {
   constructor(data) {
     super();
     this.invocationId = "";
@@ -1289,7 +1358,7 @@ var RunInferenceInvocationEnd = class _RunInferenceInvocationEnd extends __proto
     return ["RunInferenceInvocationEnd|1 invocation_id 9|2 error #0?", RunInferenceInvocationError];
   }
 };
-var RunInferenceInvocationError = class _RunInferenceInvocationError extends __protoMessage3144 {
+var RunInferenceInvocationError = class _RunInferenceInvocationError extends __protoMessage3145 {
   constructor(data) {
     super();
     this.code = 0;
@@ -1313,7 +1382,7 @@ var RunInferenceInvocationError = class _RunInferenceInvocationError extends __p
     return ["RunInferenceInvocationError|1 code 5|2 message 9|3 details #0*", RunInferenceErrorDetail];
   }
 };
-var RunInferenceErrorDetail = class _RunInferenceErrorDetail extends __protoMessage3144 {
+var RunInferenceErrorDetail = class _RunInferenceErrorDetail extends __protoMessage3145 {
   constructor(data) {
     super();
     this.type = "";

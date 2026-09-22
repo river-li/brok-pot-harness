@@ -12,8 +12,8 @@ var AppliedMigrationBarrier = class {
       if (operation === void 0) return { kind: "none" };
       this.deps.retainOperation(operation);
       return { kind: "ready", operation };
-    } catch (error41) {
-      return { kind: "failed", errorClass: errorLogTag(error41) };
+    } catch (error42) {
+      return { kind: "failed", errorClass: errorLogTag(error42) };
     }
   }
   async run(prepared, signal) {
@@ -34,10 +34,10 @@ var AppliedMigrationBarrier = class {
       let state;
       try {
         state = await this.deps.runWindow(operation, signal);
-      } catch (error41) {
+      } catch (error42) {
         signal.throwIfAborted();
         this.deps.log(
-          `[sand:resume-ownership] harness migration abandoned (${errorLogTag(error41)})`
+          `[sand:resume-ownership] harness migration abandoned (${errorLogTag(error42)})`
         );
         return await this.abandon(operation, signal, true);
       }

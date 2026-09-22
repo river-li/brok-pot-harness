@@ -30,8 +30,8 @@ function grantedItems(items, grants) {
 }
 function withCookieOriginApprovalCards(port, host) {
   return {
-    request: async (request3) => {
-      if (request3.origins.length === 0) return await port.request(request3);
+    request: async (request5) => {
+      if (request5.origins.length === 0) return await port.request(request5);
       const requestId2 = (0, import_node_crypto77.randomUUID)();
       host.transport?.onUpdate({
         type: "send-message",
@@ -39,7 +39,7 @@ function withCookieOriginApprovalCards(port, host) {
           type: "cookie-origin-approval",
           approval: {
             requestId: requestId2,
-            items: cookieOriginApprovalItemsFromOrigins(request3.origins),
+            items: cookieOriginApprovalItemsFromOrigins(request5.origins),
             status: "pending"
           }
         },
@@ -57,13 +57,13 @@ function withCookieOriginApprovalCards(port, host) {
       let outcome;
       try {
         outcome = await port.request({
-          ...request3,
+          ...request5,
           requestId: requestId2,
           agentId: host.getConversationId()
         });
-      } catch (error41) {
+      } catch (error42) {
         settleCard({ status: "expired", approvedItems: [] });
-        throw error41;
+        throw error42;
       }
       settleCard(
         cookieOriginApprovalCardSettlement(outcome) ?? { status: "expired", approvedItems: [] }

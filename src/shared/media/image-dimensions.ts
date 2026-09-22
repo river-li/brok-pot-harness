@@ -203,7 +203,7 @@ function readWebpDimensions2(buffer) {
 function readWebpOrHeicDimensions(buffer) {
   return readWebpDimensions2(buffer) ?? HeicDimensions.read(buffer);
 }
-var PNG_SIGNATURE2 = [137, 80, 78, 71, 13, 10, 26, 10];
+var PNG_SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
 var JPEG_SEGMENTLESS_MARKERS = /* @__PURE__ */ new Set([
   1,
   208,
@@ -218,8 +218,8 @@ var JPEG_SEGMENTLESS_MARKERS = /* @__PURE__ */ new Set([
   217
 ]);
 var JPEG_NON_FRAME_MARKERS = /* @__PURE__ */ new Set([196, 200, 204]);
-function readPngDimensions2(buffer) {
-  if (!PNG_SIGNATURE2.every((byte, index) => buffer[index] === byte)) {
+function readPngDimensions(buffer) {
+  if (!PNG_SIGNATURE.every((byte, index) => buffer[index] === byte)) {
     return null;
   }
   const view = dataViewOf(buffer);
@@ -238,7 +238,7 @@ function readGifDimensions(buffer) {
     height: view.getUint16(8, true)
   });
 }
-function readJpegDimensions2(buffer) {
+function readJpegDimensions(buffer) {
   if (buffer.length < 2 || buffer[0] !== 255 || buffer[1] !== 216) return null;
   const view = dataViewOf(buffer);
   let offset = 2;
@@ -271,5 +271,5 @@ function readJpegDimensions2(buffer) {
   return null;
 }
 function readImageFileDimensions(buffer) {
-  return readWebpOrHeicDimensions(buffer) ?? readPngDimensions2(buffer) ?? readGifDimensions(buffer) ?? readJpegDimensions2(buffer);
+  return readWebpOrHeicDimensions(buffer) ?? readPngDimensions(buffer) ?? readGifDimensions(buffer) ?? readJpegDimensions(buffer);
 }

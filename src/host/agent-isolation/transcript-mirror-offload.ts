@@ -1,6 +1,6 @@
 function defaultMirrorWorkerEntryPath() {
-  const here = (0, import_node_path180.dirname)((0, import_node_url19.fileURLToPath)(__import_meta_url));
-  return (0, import_node_path180.join)(here, "agent-isolation", "transcript-mirror-worker.cjs");
+  const here = (0, import_node_path178.dirname)((0, import_node_url19.fileURLToPath)(__import_meta_url));
+  return (0, import_node_path178.join)(here, "agent-isolation", "transcript-mirror-worker.cjs");
 }
 var DEFAULT_MIRROR_WORKERS = 2;
 var MirrorWorkerConnection = class {
@@ -16,7 +16,7 @@ var MirrorWorkerConnection = class {
       if (response.kind === "error") entry.reject(new Error(response.message));
       else entry.resolve(response);
     });
-    this.worker.on("error", (error41) => this.die(error41));
+    this.worker.on("error", (error42) => this.die(error42));
     this.worker.on("exit", (code) => {
       this.die(new Error(`mirror worker exited with code ${code}`));
     });
@@ -26,10 +26,10 @@ var MirrorWorkerConnection = class {
   pending = /* @__PURE__ */ new Map();
   nextRequestId = 1;
   isDead = false;
-  die(error41) {
+  die(error42) {
     if (this.isDead) return;
     this.isDead = true;
-    for (const [, entry] of this.pending) entry.reject(error41);
+    for (const [, entry] of this.pending) entry.reject(error42);
     this.pending.clear();
     this.onExit(this);
   }
@@ -41,13 +41,13 @@ var MirrorWorkerConnection = class {
       return Promise.reject(new Error("mirror worker is no longer running"));
     }
     const requestId2 = this.nextRequestId++;
-    const request3 = build2(requestId2);
+    const request5 = build2(requestId2);
     return new Promise((resolve29, reject2) => {
       this.pending.set(requestId2, {
         resolve: (response) => resolve29(response),
         reject: reject2
       });
-      this.worker.postMessage(request3, transfer);
+      this.worker.postMessage(request5, transfer);
     });
   }
   async write(job) {
@@ -135,8 +135,8 @@ var TranscriptMirrorOffloadPool = class {
     try {
       const written = await this.connectionFor(entry.job.conversationId).write(entry.job);
       for (const resolver of entry.resolvers) resolver.resolve(written);
-    } catch (error41) {
-      const failure2 = error41 instanceof Error ? error41 : new Error(String(error41));
+    } catch (error42) {
+      const failure2 = error42 instanceof Error ? error42 : new Error(String(error42));
       for (const resolver of entry.resolvers) resolver.reject(failure2);
     } finally {
       const next = lane.queued;
@@ -156,12 +156,12 @@ var TranscriptMirrorOffloadPool = class {
     await Promise.all(open9.map((worker) => worker.close()));
   }
 };
-function warnStaleMirror(conversationId, reason, error41) {
+function warnStaleMirror(conversationId, reason, error42) {
   reportHostDiagnostic({
     kind: "transcript_mirror_stale",
     agentId: conversationId,
     reason,
-    errorClass: error41 !== void 0 ? errorLogTag(error41) : void 0
+    errorClass: error42 !== void 0 ? errorLogTag(error42) : void 0
   });
 }
 var OffloadingTranscriptMirror = class _OffloadingTranscriptMirror {
@@ -222,18 +222,18 @@ var OffloadingTranscriptMirror = class _OffloadingTranscriptMirror {
         return;
       }
       warnStaleMirror(conversationId, "worker-write-failed");
-    } catch (error41) {
-      warnStaleMirror(conversationId, "worker-write-failed", error41);
+    } catch (error42) {
+      warnStaleMirror(conversationId, "worker-write-failed", error42);
     }
   }
   write(ctx, conversationId, state, blobStore, stateBlobId) {
-    const write = this.writeLane.then(
+    const write2 = this.writeLane.then(
       () => this.writeSerialized(ctx, conversationId, state, blobStore, stateBlobId)
     );
-    this.writeLane = write.then(
+    this.writeLane = write2.then(
       () => void 0,
       () => void 0
     );
-    return write;
+    return write2;
   }
 };

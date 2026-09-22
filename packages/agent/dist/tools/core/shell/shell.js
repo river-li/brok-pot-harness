@@ -52,11 +52,11 @@ var __disposeResources33 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger87 = createLogger("tools/shell");
+var logger88 = createLogger("tools/shell");
 var zshStateErrorCounter = createCounter("shell.zsh_state_error", {
   description: "Count of 'command not found: dump_zsh_state' errors in shell output",
   labelNames: []
@@ -142,15 +142,15 @@ var SmartModeShellBlockedAutonomousError = class extends ShellRejectedError {
   }
 };
 var ShellPermissionDeniedError = class extends CustomToolCallError {
-  constructor(command, workingDirectory, error41, isReadonly) {
+  constructor(command, workingDirectory, error42, isReadonly) {
     super(ToolErrorClassification.USER_REJECTED, {
-      error: error41,
-      clientVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error41}`,
-      modelVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error41}`
+      error: error42,
+      clientVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error42}`,
+      modelVisibleErrorMessage: isReadonly ? ASK_MODE_MODEL_ERROR : `Permission denied: ${error42}`
     });
     this.command = command;
     this.workingDirectory = workingDirectory;
-    this.error = error41;
+    this.error = error42;
     this.isReadonly = isReadonly;
   }
 };
@@ -238,7 +238,7 @@ function getRequestedShellPermissions(rawArgs) {
 function shouldBypassSmartModePreflightForSandboxAutorun({ rawArgs, requestedSandboxPolicy, sandboxEnabled }) {
   return sandboxEnabled && requestedSandboxPolicy !== void 0 && requestedSandboxPolicy.type !== SandboxPolicy_Type.INSECURE_NONE && hasNoRequestedShellPermissions(rawArgs);
 }
-function buildSmartModeShellRiskTarget({ command, workingDirectory, shell, description: description10, rawArgs, executionPlan, requestedSandboxPolicy, sandboxEnabled, isReadonly, surfaceLabel, projectPermissions }) {
+function buildSmartModeShellRiskTarget({ command, workingDirectory, shell, description: description9, rawArgs, executionPlan, requestedSandboxPolicy, sandboxEnabled, isReadonly, surfaceLabel, projectPermissions }) {
   const requestedPermissions = "required_permissions" in rawArgs ? rawArgs.required_permissions ?? [] : [];
   const requestedTimeoutMs = "timeout" in rawArgs ? rawArgs.timeout : void 0;
   const requestedBlockUntilMs = "block_until_ms" in rawArgs ? rawArgs.block_until_ms : void 0;
@@ -250,7 +250,7 @@ function buildSmartModeShellRiskTarget({ command, workingDirectory, shell, descr
       working_directory: workingDirectory,
       shell,
       execution_surface: surfaceLabel,
-      description: description10,
+      description: description9,
       background: {
         requested: requestedBackground,
         start_in_background: executionPlan.shouldStartInBackground
@@ -329,12 +329,12 @@ async function getSmartModeShellPreflightDecision(ctx, args) {
         reason: formatSmartModeShellClassifierErrorReason()
       };
     }
-  } catch (error41) {
-    if (error41 instanceof Error && error41.name === "AbortError") {
-      throw error41;
+  } catch (error42) {
+    if (error42 instanceof Error && error42.name === "AbortError") {
+      throw error42;
     }
-    if (error41 instanceof ShellRejectedError) {
-      throw error41;
+    if (error42 instanceof ShellRejectedError) {
+      throw error42;
     }
     return {
       kind: "reject",
@@ -374,7 +374,7 @@ function buildOutputNotificationConfig(rawArgs, ctx, toolCallId, notificationLim
     return void 0;
   }
   const emitConfigOutcome = (outcome, fields2) => {
-    logger87.info(ctx, "agent.shell_output_notification_config", {
+    logger88.info(ctx, "agent.shell_output_notification_config", {
       event: "agent.shell_output_notification_config",
       outcome,
       conversation_id: getConversationId(ctx),
@@ -402,8 +402,8 @@ function buildOutputNotificationConfig(rawArgs, ctx, toolCallId, notificationLim
   }
   try {
     RE2JS.compile(pattern, RE2JS.MULTILINE);
-  } catch (error41) {
-    throw rejectConfig("bad_pattern", `Invalid notify_on_output pattern: ${error41 instanceof Error ? error41.message : String(error41)}`);
+  } catch (error42) {
+    throw rejectConfig("bad_pattern", `Invalid notify_on_output pattern: ${error42 instanceof Error ? error42.message : String(error42)}`);
   }
   if (typeof rawReason !== "string") {
     throw rejectConfig("bad_reason", "notify_on_output.reason must be a string");
@@ -597,16 +597,16 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         throw new ShellRejectedError(command, workingDirectory, preflightGuardDecision.reason);
       }
       const hasClassifierService = !!options2?.commandClassifierService;
-      logger87.info(spanCtxt.ctx, "Shell tool executing", {
+      logger88.info(spanCtxt.ctx, "Shell tool executing", {
         commandLength: command.length,
         hasClassifierService,
         isBackground
       });
-      const classifierPromise = options2?.commandClassifierService ? options2.commandClassifierService.classifyCommand(spanCtxt.ctx, { command, shell: shellType }).catch((error41) => {
-        logger87.warn(spanCtxt.ctx, "Command classifier failed", { error: error41 });
+      const classifierPromise = options2?.commandClassifierService ? options2.commandClassifierService.classifyCommand(spanCtxt.ctx, { command, shell: shellType }).catch((error42) => {
+        logger88.warn(spanCtxt.ctx, "Command classifier failed", { error: error42 });
         return null;
       }) : Promise.resolve(null);
-      const description10 = ("description" in rawArgs ? rawArgs.description : void 0) ?? ("explanation" in rawArgs ? rawArgs.explanation : void 0);
+      const description9 = ("description" in rawArgs ? rawArgs.description : void 0) ?? ("explanation" in rawArgs ? rawArgs.explanation : void 0);
       const outputNotification = options2?.enableJobProgressNotifications === true ? buildOutputNotificationConfig(rawArgs, spanCtxt.ctx, meta.toolCallId, options2?.outputNotificationLimit) : void 0;
       const analysis = analyzeShellCommand(command);
       const conversationId = getConversationId(spanCtxt.ctx);
@@ -616,7 +616,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         const transcriptFilename = getTranscriptFilename(conversationId);
         const matchesOwnTranscript = command.includes(transcriptFilename);
         if (matchesOwnTranscript) {
-          logger87.info(spanCtxt.ctx, "Model accessed agent transcript path", {
+          logger88.info(spanCtxt.ctx, "Model accessed agent transcript path", {
             tool: "shell",
             toolCallId: meta.toolCallId,
             wasOwnTranscript: true
@@ -667,7 +667,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           isReadonly: options2?.isReadonly ?? false,
           executionPlan,
           blockReason,
-          ...description10 !== void 0 && description10.trim().length > 0 ? { description: description10.trim() } : {},
+          ...description9 !== void 0 && description9.trim().length > 0 ? { description: description9.trim() } : {},
           ...bindings?.proposedAllowRule !== void 0 && bindings.proposedAllowRule.length > 0 ? { proposedAllowRule: bindings.proposedAllowRule } : {}
         };
       };
@@ -707,7 +707,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         const devSmartModeClassifierBlockState = smartModeClassifierState.devBlockState;
         const devSmartModeClassifierDelayState = smartModeClassifierState.devDelayState;
         const requestedPermissions = getRequestedShellPermissions(rawArgs);
-        logger87.info(ctx, "Smart Mode shell preflight state", {
+        logger88.info(ctx, "Smart Mode shell preflight state", {
           toolCallId: meta.toolCallId,
           conversationId,
           isBackground,
@@ -726,7 +726,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         });
         if (isSmartModeNativeApprovalRequested(rawArgs) && smartModeClassifierEnabled && options2?.smartModeApprovalProvider === void 0) {
           const parentBlockReason = getSmartModeBlockReasonFromArgs(rawArgs) ?? SMART_MODE_SHELL_PARENT_REQUESTED_APPROVAL_FALLBACK_REASON;
-          logger87.info(ctx, "Smart Mode shell native approval requested", {
+          logger88.info(ctx, "Smart Mode shell native approval requested", {
             toolCallId: meta.toolCallId,
             conversationId,
             hasParentBlockReason: getSmartModeBlockReasonFromArgs(rawArgs) !== void 0,
@@ -736,7 +736,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         }
         if ((smartModeClassifierEnabled || smartModeClassifierShadowEnabled) && options2?.disableSmartModeAllowlistPrecheck !== true) {
           const precheckExecutor = resourceAccessor.get(shellAllowlistPrecheckExecutorResource);
-          logger87.info(ctx, "Smart Mode shell allowlist precheck starting", {
+          logger88.info(ctx, "Smart Mode shell allowlist precheck starting", {
             toolCallId: meta.toolCallId,
             conversationId,
             hasPrecheckExecutor: precheckExecutor !== void 0,
@@ -754,7 +754,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
                 execId: generateShellExecId(ctx, `${meta.toolCallId}:allowlist-precheck`),
                 machineId
               } : void 0);
-              logger87.info(ctx, "Smart Mode shell allowlist precheck completed", {
+              logger88.info(ctx, "Smart Mode shell allowlist precheck completed", {
                 toolCallId: meta.toolCallId,
                 conversationId,
                 allowlisted: precheck.allowlisted
@@ -762,15 +762,15 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
               if (precheck.allowlisted) {
                 return void 0;
               }
-            } catch (error41) {
-              if (error41 instanceof Error && error41.name === "AbortError") {
-                throw error41;
+            } catch (error42) {
+              if (error42 instanceof Error && error42.name === "AbortError") {
+                throw error42;
               }
-              if (isAgentStreamStartTimeoutError(error41)) {
-                throw error41;
+              if (isAgentStreamStartTimeoutError(error42)) {
+                throw error42;
               }
-              logger87.warn(ctx, "Shell allowlist precheck failed", {
-                error: error41 instanceof Error ? error41.message : String(error41)
+              logger88.warn(ctx, "Shell allowlist precheck failed", {
+                error: error42 instanceof Error ? error42.message : String(error42)
               });
             }
           }
@@ -781,7 +781,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           sandboxEnabled: options2?.sandboxEnabled ?? false
         });
         if (bypassSmartModePreflightForSandboxAutorun) {
-          logger87.info(ctx, "Smart Mode shell sandbox autorun bypass", {
+          logger88.info(ctx, "Smart Mode shell sandbox autorun bypass", {
             toolCallId: meta.toolCallId,
             conversationId,
             sandboxEnabled: options2?.sandboxEnabled === true,
@@ -798,7 +798,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           command,
           workingDirectory,
           shell: shellType,
-          description: description10,
+          description: description9,
           rawArgs,
           executionPlan,
           isBackground,
@@ -819,7 +819,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         });
         if (decision.kind === "allow") {
           smartModeClassifierAllowed = smartModeClassifierEnabled;
-          logger87.info(ctx, "Smart Mode shell classifier allowed", {
+          logger88.info(ctx, "Smart Mode shell classifier allowed", {
             toolCallId: meta.toolCallId,
             conversationId,
             smartModeClassifierEnabled,
@@ -829,7 +829,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           return void 0;
         }
         if (decision.kind === "reject") {
-          logger87.info(ctx, "Smart Mode shell classifier rejected", {
+          logger88.info(ctx, "Smart Mode shell classifier rejected", {
             toolCallId: meta.toolCallId,
             conversationId,
             hasReason: decision.reason.length > 0,
@@ -837,7 +837,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           });
           throw new ShellRejectedError(command, workingDirectory, decision.reason);
         }
-        logger87.info(ctx, "Smart Mode shell classifier blocked", {
+        logger88.info(ctx, "Smart Mode shell classifier blocked", {
           toolCallId: meta.toolCallId,
           conversationId,
           hasReason: decision.reason.length > 0,
@@ -864,7 +864,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
             throw new ShellRejectedError(command, workingDirectory, approvalDecision.reason ?? decision.reason);
           }
           smartModeApprovalProviderApproved = true;
-          logger87.info(ctx, "Smart Mode shell approval provider allowed", {
+          logger88.info(ctx, "Smart Mode shell approval provider allowed", {
             toolCallId: meta.toolCallId,
             conversationId,
             isBackground
@@ -891,7 +891,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
             updateArgs.shellArgs.smartModeApproval = smartModeApproval;
             updateArgs.shellArgs.skipApproval = skipApproval;
           }
-          logger87.info(ctx, "Smart Mode shell background handoff", {
+          logger88.info(ctx, "Smart Mode shell background handoff", {
             toolCallId: meta.toolCallId,
             conversationId,
             smartModeClassifierAllowed,
@@ -913,7 +913,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
             terminalsFolder: options2?.terminalsFolder,
             machineId
           }),
-          description: description10,
+          description: description9,
           ...machineId !== void 0 ? { machineId } : {},
           classifierResult: protoClassifierResult,
           smartModeApproval,
@@ -946,7 +946,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         fileOutputThresholdBytes: options2?.fileOutputThresholdBytes,
         timeoutBehavior: executionPlan.timeoutBehavior,
         hardTimeout: executionPlan.hardTimeoutMs,
-        description: description10,
+        description: description9,
         outputNotification,
         classifierResult: protoClassifierResult,
         conversationId,
@@ -958,7 +958,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
       const baseToolCall = new ShellToolCall({
         args,
         result: void 0,
-        description: description10
+        description: description9
       });
       const streamingHandler = createStreamingShellHandler(interactionHandler, meta, args, {
         suppressOutputDeltas: options2?.disableTerminalOutputUiStreaming === true
@@ -974,7 +974,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
         if (wentThroughEnforcingClassifier && options2?.isReadonly !== true) {
           args.requestedSandboxPolicy = buildClassifierEscalatedSandboxPolicy(requestedSandboxPolicy, options2?.enableSandboxSharedBuildCache);
         }
-        logger87.info(ctx, "Smart Mode shell foreground handoff", {
+        logger88.info(ctx, "Smart Mode shell foreground handoff", {
           toolCallId: meta.toolCallId,
           conversationId,
           smartModeClassifierAllowed,
@@ -986,15 +986,15 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           isReadonly: options2?.isReadonly === true
         });
       };
-      const rethrowShellAbort = (error41) => {
-        if (error41 instanceof ShellAbortedError || !(error41 instanceof ToolCallAbortedError) && !(error41 instanceof Error && error41.name === "AbortError")) {
-          throw error41;
+      const rethrowShellAbort = (error42) => {
+        if (error42 instanceof ShellAbortedError || !(error42 instanceof ToolCallAbortedError) && !(error42 instanceof Error && error42.name === "AbortError")) {
+          throw error42;
         }
         throw new ShellAbortedError({
           command,
           workingDirectory,
           elapsedMs: Date.now() - shellExecuteStartMs,
-          cause: interactionHandler.getAbortSignal(spanCtxt.ctx).reason ?? error41
+          cause: interactionHandler.getAbortSignal(spanCtxt.ctx).reason ?? error42
         });
       };
       let execResult;
@@ -1036,8 +1036,11 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
                   if (forceBackgroundResult.status === ForceBackgroundShellStatus.ACCEPTED) {
                     handoffAccepted = true;
                   }
-                } catch (error41) {
-                  logger87.debug(ctx, "Steer-driven shell background handoff failed", { toolCallId: meta.toolCallId, error: error41 });
+                } catch (error42) {
+                  logger88.debug(ctx, "Steer-driven shell background handoff failed", {
+                    toolCallId: meta.toolCallId,
+                    error: error42
+                  });
                 } finally {
                   handoffInFlight = false;
                   if (!stopped2 && !handoffAccepted && retryTimer === void 0 && steerSignal.hasPendingUserInjections()) {
@@ -1076,12 +1079,12 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
               })) {
                 yield shellStream;
               }
-            } catch (error41) {
+            } catch (error42) {
               if (ctx.canceled) {
                 aborted2 = true;
                 return;
               }
-              throw error41;
+              throw error42;
             } finally {
               stopSteerHandoff?.();
             }
@@ -1172,7 +1175,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
               aborted2 = true;
             } else {
               shellMissingExitCounter.increment(ctx, 1, {});
-              logger87.error(ctx, "Shell exec stream closed without an exit event; surfacing exec-backend-unavailable instead of a fabricated exit-0 success", {
+              logger88.error(ctx, "Shell exec stream closed without an exit event; surfacing exec-backend-unavailable instead of a fabricated exit-0 success", {
                 toolCallId: meta.toolCallId,
                 hadPartialOutput: interleavedOutput.length > 0
               });
@@ -1221,8 +1224,8 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           ...baseToolCall,
           result: new ShellResult({ result, isBackground })
         })), meta.hookContextCollector);
-      } catch (error41) {
-        return rethrowShellAbort(error41);
+      } catch (error42) {
+        return rethrowShellAbort(error42);
       }
       clearInterruptedShellOutputSnapshot(meta.toolCallId);
       const wasBackgroundedMidExecution = execResult.result.case === "success" && execResult.result.value.shellId !== void 0 && execResult.result.value.shellId !== 0;
@@ -1339,41 +1342,41 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
     parameters: parametersSchema29,
     execute: fileOperationLockManager !== void 0 ? executeWithExclusiveLock : innerExecute,
     render: render2,
-    serializeError: (error41) => {
-      if (error41 instanceof ShellRejectedError) {
+    serializeError: (error42) => {
+      if (error42 instanceof ShellRejectedError) {
         return createShellToolCall(new ShellToolCall({
           result: new ShellResult({
             result: {
               case: "rejected",
               value: new ShellRejected({
-                command: error41.command,
-                workingDirectory: error41.workingDirectory,
-                reason: error41.reason
+                command: error42.command,
+                workingDirectory: error42.workingDirectory,
+                reason: error42.reason
               })
             }
           })
         }));
       }
-      if (error41 instanceof ShellPermissionDeniedError) {
+      if (error42 instanceof ShellPermissionDeniedError) {
         return createShellToolCall(new ShellToolCall({
           result: new ShellResult({
             result: {
               case: "permissionDenied",
               value: new ShellPermissionDenied({
-                command: error41.command,
-                workingDirectory: error41.workingDirectory,
-                error: error41.error,
-                isReadonly: error41.isReadonly
+                command: error42.command,
+                workingDirectory: error42.workingDirectory,
+                error: error42.error,
+                isReadonly: error42.isReadonly
               })
             }
           })
         }));
       }
-      if (error41 instanceof ShellAbortedError) {
-        const cause = error41.cause;
+      if (error42 instanceof ShellAbortedError) {
+        const cause = error42.cause;
         const args = new ShellArgs({
-          command: error41.command,
-          workingDirectory: error41.workingDirectory
+          command: error42.command,
+          workingDirectory: error42.workingDirectory
         });
         if (isFusedStepGuardTimeoutReason(cause)) {
           return createShellToolCall(new ShellToolCall({
@@ -1382,8 +1385,8 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
               result: {
                 case: "timeout",
                 value: new ShellTimeout({
-                  command: error41.command,
-                  workingDirectory: error41.workingDirectory,
+                  command: error42.command,
+                  workingDirectory: error42.workingDirectory,
                   timeoutMs: cause.fuseGuardMs
                 })
               }
@@ -1396,15 +1399,15 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
             result: {
               case: "spawnError",
               value: new ShellSpawnError({
-                command: error41.command,
-                workingDirectory: error41.workingDirectory,
+                command: error42.command,
+                workingDirectory: error42.workingDirectory,
                 error: "Aborted"
               })
             }
           })
         }));
       }
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createShellToolCall(new ShellToolCall({
         result: new ShellResult({
           result: {

@@ -8,8 +8,8 @@ async function readAgentTodos(session, structure = session.agentStore.getConvers
     let item;
     try {
       item = TodoItem.fromBinary(blob);
-    } catch (error41) {
-      reportFallback("transcript_manager", error41);
+    } catch (error42) {
+      reportFallback("transcript_manager", error42);
       continue;
     }
     const todo = sandAgentTodoFromItem(item);
@@ -38,14 +38,14 @@ var AgentTodosRuntime = class {
     try {
       const session = await this.host.sessions.resolveBackgroundSession(agentId);
       return await readAgentTodos(session);
-    } catch (error41) {
-      if (error41 instanceof AgentGoneError) return [];
-      throw error41;
+    } catch (error42) {
+      if (error42 instanceof AgentGoneError) return [];
+      throw error42;
     }
   }
   publishFromSession(session) {
     const previous = this.publishing.get(session.id) ?? Promise.resolve();
-    const next = previous.then(() => this.publishLatest(session)).catch((error41) => reportFallback("transcript_manager", error41));
+    const next = previous.then(() => this.publishLatest(session)).catch((error42) => reportFallback("transcript_manager", error42));
     this.publishing.set(session.id, next);
     return next.finally(() => {
       if (this.publishing.get(session.id) === next) this.publishing.delete(session.id);

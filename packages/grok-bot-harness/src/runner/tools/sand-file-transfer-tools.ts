@@ -1,4 +1,4 @@
-var import_node_path170 = require("node:path");
+var import_node_path168 = require("node:path");
 init_zod();
 function formatBytes3(bytes) {
   if (bytes < 1024) return `${bytes} bytes`;
@@ -16,8 +16,8 @@ function resolveComputerOrThrow(controller, machineId) {
     return resolveSandUserComputer(controller.userComputers, machineId, {
       agentId: controller.getComputerAgentId()
     });
-  } catch (error41) {
-    throw new BoxTransferError(error41 instanceof Error ? error41.message : String(error41));
+  } catch (error42) {
+    throw new BoxTransferError(error42 instanceof Error ? error42.message : String(error42));
   }
 }
 function assertBoxReady(controller) {
@@ -29,7 +29,7 @@ async function copyFileToBox(ctx, args, controller) {
   assertBoxReady(controller);
   const computer = resolveComputerOrThrow(controller, args.machineId);
   const boxPath = resolveBoxWorkspacePath(
-    args.box_path ?? import_node_path170.posix.join(SAND_BOX_UPLOADS_DIR, import_node_path170.posix.basename(args.computer_path))
+    args.box_path ?? import_node_path168.posix.join(SAND_BOX_UPLOADS_DIR, import_node_path168.posix.basename(args.computer_path))
   );
   const bytes = await transferFileBetweenBoxes(ctx, {
     source: {
@@ -51,7 +51,7 @@ async function copyFileFromBox(ctx, args, controller) {
   assertBoxReady(controller);
   const computer = resolveComputerOrThrow(controller, args.machineId);
   const boxPath = resolveBoxWorkspacePath(args.box_path);
-  const computerPath = args.computer_path ?? import_node_path170.posix.basename(boxPath);
+  const computerPath = args.computer_path ?? import_node_path168.posix.basename(boxPath);
   const bytes = await transferFileBetweenBoxes(ctx, {
     source: {
       box: controller.agentBox,

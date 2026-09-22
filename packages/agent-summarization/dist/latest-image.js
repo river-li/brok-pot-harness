@@ -1,8 +1,8 @@
-var DEFAULT_IMAGE_MIME_TYPE2 = "image/png";
+var DEFAULT_IMAGE_MIME_TYPE = "image/png";
 var DATA_OR_REMOTE_URL_PREFIX = /^(data:|https?:|blob:)/i;
 function resolveImageMimeType(mimeType) {
   const trimmed = mimeType === null || mimeType === void 0 ? void 0 : mimeType.trim();
-  return trimmed !== void 0 && trimmed !== "" ? trimmed : DEFAULT_IMAGE_MIME_TYPE2;
+  return trimmed !== void 0 && trimmed !== "" ? trimmed : DEFAULT_IMAGE_MIME_TYPE;
 }
 function toUserMessageImagePart(part) {
   if (typeof part.image !== "string") {

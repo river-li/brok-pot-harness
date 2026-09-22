@@ -44,7 +44,7 @@ function cookieOriginApprovalLevel(outcome, refusalReason) {
 function cookieOriginApprovalTelemetry(report) {
   const outcome = boundedOutcome(report.outcome) ?? OFF_VOCABULARY;
   const refusalReason = boundedRefusalReason(report.refusalReason);
-  const error41 = cookieOriginApprovalSandErrorOf(report);
+  const error42 = cookieOriginApprovalSandErrorOf(report);
   return {
     level: cookieOriginApprovalLevel(outcome, refusalReason),
     event: COOKIE_ORIGIN_APPROVAL_EVENT,
@@ -62,7 +62,7 @@ function cookieOriginApprovalTelemetry(report) {
       duration_ms: cappedInteger(report.durationMs, COOKIE_ORIGIN_APPROVAL_DURATION_MS_CAP),
       agent_id: brandedId(report.agentId),
       request_id: brandedId(report.requestId),
-      ...error41 === void 0 ? {} : sandErrorTags(error41)
+      ...error42 === void 0 ? {} : sandErrorTags(error42)
     }
   };
 }

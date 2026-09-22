@@ -22,10 +22,10 @@ async function runSandAutoReviewFlow(args) {
   const { ctx, target, options: options2, spec } = args;
   if (options2.mode === "off") return { allowed: { by: "unreviewed" } };
   if (options2.mode === "shadow") {
-    void classify2(args, "shadow").catch((error41) => {
+    void classify2(args, "shadow").catch((error42) => {
       reportHostDiagnostic({
         kind: "auto_review_shadow_classify_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     });
     return { allowed: { by: "unreviewed" } };

@@ -18,8 +18,8 @@ function readSandGroupConfig(agentDir) {
   let raw;
   try {
     raw = (0, import_node_fs25.readFileSync)(getSandGroupPath(agentDir), "utf8");
-  } catch (error41) {
-    reportFallbackUnlessAbsent("group_store", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("group_store", error42);
     return null;
   }
   let parsed2;

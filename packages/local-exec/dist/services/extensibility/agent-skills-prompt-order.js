@@ -23,9 +23,7 @@ var SkillPromptTier;
   SkillPromptTier2[SkillPromptTier2["Plugin"] = 4] = "Plugin";
 })(SkillPromptTier || (SkillPromptTier = {}));
 function buildPromptSortPrefixes(ctx) {
-  const builtinDirs = [
-    getBuiltinExtensibilitySkillRoot(ctx.userHomeDirectory).dirPath
-  ];
+  const builtinDirs = [getBuiltinExtensibilitySkillRoot(ctx.userHomeDirectory).dirPath];
   const userDirs = getUserExtensibilitySkillRoots(ctx.userHomeDirectory, true).map((r) => r.dirPath);
   const workspaceDirs = [];
   for (const ws2 of ctx.workspacePaths) {

@@ -1,6 +1,6 @@
 var import_node_path81 = require("node:path");
 init_cursor_rules_pb();
-init_dist2();
+init_dist3();
 var SEP2 = "/";
 var normalizePath2 = (value) => {
   const normalized = import_node_path81.posix.normalize(normalizeToUnixPath(value));

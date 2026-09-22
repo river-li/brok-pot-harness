@@ -46,9 +46,9 @@ function turnAwaitTelemetry(report) {
     }
   };
 }
-function privacyModeRetryErrorProjection(error41) {
-  const code = sandErrorWireCode(error41);
-  const connectCode = sandErrorTags(error41).connect_code;
+function privacyModeRetryErrorProjection(error42) {
+  const code = sandErrorWireCode(error42);
+  const connectCode = sandErrorTags(error42).connect_code;
   const errorType = connectCode === void 0 ? SAND_ERROR_DEFINITIONS[code].name : "connect_error";
   return {
     error_type: brandLiteralEnum(errorType),

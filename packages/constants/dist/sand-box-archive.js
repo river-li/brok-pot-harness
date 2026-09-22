@@ -43,7 +43,9 @@ var init_sand_box_archive = __esm({
       // Coredumps. Only the pid-suffixed (`core.1234`) and `*.core` forms — a bare
       // `core` is intentionally excluded from this list (see SAFETY CONTRACT above).
       "core.[0-9]*",
-      "*.core"
+      "*.core",
+      "/browser-cdp/",
+      "/screenshots/"
     ];
   }
 });

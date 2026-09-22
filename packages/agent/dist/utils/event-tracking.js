@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var skillApplied = createCounter("skill.applied", {
   description: "Skill applications (e.g. SKILL.md reads), tagged by the catalog truncation that ran for the current turn, the skill source, and the entrypoint that triggered the application",
   labelNames: ["truncation", "skill_source", "entrypoint"]

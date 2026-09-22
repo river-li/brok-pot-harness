@@ -67,8 +67,8 @@ function createChromeCookieImporter(deps) {
         const stdout = await deps.runImportScript(batchPath);
         return parseImportOutcome(stdout);
       } finally {
-        await deps.removeBatchFile(batchPath).catch((error41) => {
-          deps.log(`chrome cookie import: could not remove the batch file (${errorLogTag(error41)})`);
+        await deps.removeBatchFile(batchPath).catch((error42) => {
+          deps.log(`chrome cookie import: could not remove the batch file (${errorLogTag(error42)})`);
         });
       }
     }

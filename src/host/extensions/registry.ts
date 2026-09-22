@@ -60,7 +60,7 @@ async function startHostPluginRegistry(options2) {
     extensions: hostExtensionRegistry,
     host,
     startTimeoutMs,
-    onStopFailure: (extensionId, error41) => host.log(`host extension "${extensionId}" failed to stop: ${errorLogTag(error41)}`)
+    onStopFailure: (extensionId, error42) => host.log(`host extension "${extensionId}" failed to stop: ${errorLogTag(error42)}`)
   });
   return {
     order: started2.order,

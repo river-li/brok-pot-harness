@@ -31,8 +31,6 @@ var SAND_RUNNER_GATE_DEFAULTS = {
    * has no steer port and pins it off.
    */
   cloudAgentReplyModes: false,
-  canvases: false,
-  cloudAgentProjects: false,
   cloudAgentExchange: false,
   cloudCanvasTools: false,
   lessSubagentFanout: false,
@@ -89,7 +87,10 @@ var SAND_RUNNER_GATE_DEFAULTS = {
    * Off, that copy is absent so the model is not steered at tools it does not
    * have. Same flag as the email port and Settings Email row.
    */
-  agentEmail: false
+  agentEmail: false,
+  agentEmailMultipleInboxes: false,
+  summaryTurnEndHold: false,
+  generalizedSelfSummaryPrompt: false
 };
 var SAND_RUNNER_GATE_NAMES = Object.keys(SAND_RUNNER_GATE_DEFAULTS).filter(
   (name17) => isKeyOf(SAND_RUNNER_GATE_DEFAULTS, name17)
@@ -131,8 +132,6 @@ var SUBAGENT_GATE_POLICY = {
   cloudAgentArtifacts: "inherited",
   cloudAgentDurableWatch: "inherited",
   cloudAgentReplyModes: "inherited",
-  canvases: "inherited",
-  cloudAgentProjects: "inherited",
   cloudAgentExchange: "default",
   cloudCanvasTools: "default",
   lessSubagentFanout: "default",
@@ -155,7 +154,10 @@ var SUBAGENT_GATE_POLICY = {
   onePasswordIntegration: "default",
   checkSubscriptionUsage: "default",
   connectedActivity: "default",
-  agentEmail: "inherited"
+  agentEmail: "inherited",
+  agentEmailMultipleInboxes: "inherited",
+  summaryTurnEndHold: "default",
+  generalizedSelfSummaryPrompt: "inherited"
 };
 function pickSubagentGates(parent) {
   return composeSandRunnerGates(

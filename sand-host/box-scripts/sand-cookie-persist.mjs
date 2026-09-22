@@ -23,16 +23,14 @@ import {
 } from "./cdp-cookies.mjs";
 
 const SEED_PATH =
-  process.env.SAND_COOKIE_SEED_PATH ??
-  "/home/box/sand-data/chrome-cookie-seed.json";
+  process.env.SAND_COOKIE_SEED_PATH ?? "/home/box/sand-data/chrome-cookie-seed.json";
 const CAPTURE_INTERVAL_MS = Number.parseInt(
   process.env.SAND_COOKIE_PERSIST_INTERVAL_MS ?? "5000",
-  10
+  10,
 );
 const MAX_RESTORE_ATTEMPTS = 3;
 const SEED_VERSION = 1;
-const TELEMETRY_LOG_PATH =
-  process.env.SAND_BOX_TELEMETRY_LOG ?? "/tmp/sand-box-telemetry.log";
+const TELEMETRY_LOG_PATH = process.env.SAND_BOX_TELEMETRY_LOG ?? "/tmp/sand-box-telemetry.log";
 
 function log(message) {
   process.stderr.write(`sand-cookie-persist ${message}\n`);
@@ -47,7 +45,7 @@ function emitTelemetry(event) {
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function dropToBoxUser() {
@@ -60,7 +58,7 @@ export function dropToBoxUser() {
   } catch (error) {
     log(
       `could not drop to the box user (${String(error)}); refusing to run as ` +
-        "root writing into box-owned data"
+        "root writing into box-owned data",
     );
     return false;
   }
@@ -191,14 +189,8 @@ export function parseSeed(text) {
 }
 
 export function cookiesDigest(cookies) {
-  const parts = cookies.map(c =>
-    [
-      cookieKey(c),
-      c.value,
-      c.secure ? 1 : 0,
-      c.httpOnly ? 1 : 0,
-      c.sameSite ?? "",
-    ].join("\u0001")
+  const parts = cookies.map((c) =>
+    [cookieKey(c), c.value, c.secure ? 1 : 0, c.httpOnly ? 1 : 0, c.sameSite ?? ""].join("\u0001"),
   );
   parts.sort();
   return parts.join("\u0002");
@@ -206,7 +198,7 @@ export function cookiesDigest(cookies) {
 
 export function selectMissingCookies(seedCookies, liveKeys) {
   const present = liveKeys instanceof Set ? liveKeys : new Set(liveKeys);
-  return seedCookies.filter(cookie => !present.has(cookieKey(cookie)));
+  return seedCookies.filter((cookie) => !present.has(cookieKey(cookie)));
 }
 
 export function classifyRestoreOutcome(seedCount, missingAfter, corrupt = false) {
@@ -244,7 +236,7 @@ export async function captureToSeed(deps, lastDigest) {
     async () => {
       const jar = await readFirstLiveJar(deps);
       if (jar == null) return lastDigest;
-      const cookies = [...jar.values()].filter(c => !isRotatingAuthCookie(c.name));
+      const cookies = [...jar.values()].filter((c) => !isRotatingAuthCookie(c.name));
       const digest = cookiesDigest(cookies);
       if (digest === lastDigest) return lastDigest;
       writeSeedFile(deps, serializeSeed(cookies, deps.now?.() ?? Date.now()));
@@ -257,7 +249,7 @@ export async function captureToSeed(deps, lastDigest) {
       });
       return digest;
     },
-    { fs: deps.fs }
+    { fs: deps.fs },
   );
 }
 
@@ -277,10 +269,8 @@ export async function restoreFromSeed(deps) {
     return { injected: 0, missingAfter: 0, seedCount: 0 };
   }
   const seedCookies = parseSeed(text);
-  if (seedCookies === null)
-    return { injected: 0, missingAfter: 0, seedCount: 0, corrupt: true };
-  if (seedCookies.length === 0)
-    return { injected: 0, missingAfter: 0, seedCount: 0 };
+  if (seedCookies === null) return { injected: 0, missingAfter: 0, seedCount: 0, corrupt: true };
+  if (seedCookies.length === 0) return { injected: 0, missingAfter: 0, seedCount: 0 };
 
   let injected = 0;
   let missingAfter = seedCookies.length;
@@ -300,10 +290,7 @@ export async function restoreFromSeed(deps) {
         injected += missing.length;
       }
       const after = await readCookies(browser);
-      const stillMissing = selectMissingCookies(
-        seedCookies,
-        new Set(after.keys())
-      ).length;
+      const stillMissing = selectMissingCookies(seedCookies, new Set(after.keys())).length;
       missingAfter = Math.min(missingAfter, stillMissing);
     } catch (error) {
       log(`injecting the seed into CDP port ${port} failed: ${String(error)}`);
@@ -332,9 +319,7 @@ async function isAnyChromeUp(deps) {
 async function main() {
   if (!dropToBoxUser()) return;
   if (!isCookiePersistEnabled()) {
-    log(
-      "durable box store not enabled (SAND_BOX_STORE_COPY_IN / SAND_BOX_STORE_SYNC); no-op"
-    );
+    log("durable box store not enabled (SAND_BOX_STORE_COPY_IN / SAND_BOX_STORE_SYNC); no-op");
     return;
   }
   log(`starting; seed=${SEED_PATH} capture-interval=${CAPTURE_INTERVAL_MS}ms`);
@@ -362,8 +347,7 @@ async function main() {
     try {
       if (!restored) {
         if (await isAnyChromeUp(deps)) {
-          const { injected, missingAfter, seedCount, corrupt } =
-            await restoreFromSeed(deps);
+          const { injected, missingAfter, seedCount, corrupt } = await restoreFromSeed(deps);
           if (injected > 0) {
             log(`restored ${injected} cookie(s) from seed into live Chrome`);
           }
@@ -382,7 +366,7 @@ async function main() {
             if (missingAfter > 0) {
               log(
                 `proceeding to capture after ${restoreAttempts} restore attempt(s); ` +
-                  `${missingAfter} seed cookie(s) still absent from the live jar`
+                  `${missingAfter} seed cookie(s) still absent from the live jar`,
               );
             }
           }
@@ -397,9 +381,6 @@ async function main() {
   }
 }
 
-if (
-  process.argv[1] != null &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+if (process.argv[1] != null && import.meta.url === pathToFileURL(process.argv[1]).href) {
   void main();
 }

@@ -1,5 +1,5 @@
 init_scheduling();
-init_dist2();
+init_dist3();
 function takeNextUserTask(pending) {
   if (pending.length === 0) return void 0;
   const preferred = pending.findIndex((item) => item.source !== "group-member");
@@ -185,16 +185,16 @@ var SandRunScheduler = class {
     let taskPromise;
     try {
       taskPromise = next.task();
-    } catch (error41) {
-      taskPromise = Promise.reject(error41);
+    } catch (error42) {
+      taskPromise = Promise.reject(error42);
     }
     void taskPromise.then(
       () => {
         this.onTaskSettled(agentId, queue, active, void 0);
         markSettled();
       },
-      (error41) => {
-        this.onTaskSettled(agentId, queue, active, { error: error41 });
+      (error42) => {
+        this.onTaskSettled(agentId, queue, active, { error: error42 });
         markSettled();
       }
     );

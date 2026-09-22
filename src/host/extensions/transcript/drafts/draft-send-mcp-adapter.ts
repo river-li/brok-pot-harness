@@ -26,9 +26,9 @@ function createDraftExecutionAdapter(mcp) {
         );
         failure2 = describeDraftCallFailure(result);
         if (failure2 == null) resultText = draftCallResultText(result);
-      } catch (error41) {
-        if (error41 instanceof DeadlineExceededError) return { outcome: "unconfirmed" };
-        failure2 = errorMessage(error41);
+      } catch (error42) {
+        if (error42 instanceof DeadlineExceededError) return { outcome: "unconfirmed" };
+        failure2 = errorMessage(error42);
       }
       if (failure2 == null) return { outcome: "sent", resultText };
       const slot = await mcp.resolveNeedsAuthSlot?.(call.providerIdentifier) ?? null;

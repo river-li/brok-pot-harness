@@ -52,16 +52,12 @@ var __disposeResources5 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger17 = createLogger("interaction-handler");
-var THINKING_RELATED_CHUNK_TYPES = [
-  "reasoning",
-  "reasoning-signature",
-  "redacted-reasoning"
-];
+var THINKING_RELATED_CHUNK_TYPES = ["reasoning", "reasoning-signature", "redacted-reasoning"];
 var toolCallLatency = createHistogram("agent.tool_call.latency_ms", {
   description: "Latency of tool calls in milliseconds",
   labelNames: ["tool_name"]
@@ -210,14 +206,14 @@ var InteractionHandler = class {
     }
   }
   /** Checks if an error is consumer-side (e.g. Redis push failures) rather than model-side. */
-  isConsumerSideError(error41) {
-    if (!(error41 instanceof Error)) {
+  isConsumerSideError(error42) {
+    if (!(error42 instanceof Error)) {
       return false;
     }
-    if (error41.name === "CacheRuntimeError" || error41.message.includes("Cache operation") || error41.message.includes("Redis") || error41.message.includes("xadd")) {
+    if (error42.name === "CacheRuntimeError" || error42.message.includes("Cache operation") || error42.message.includes("Redis") || error42.message.includes("xadd")) {
       return true;
     }
-    const stack = error41.stack ?? "";
+    const stack = error42.stack ?? "";
     const stackFrames = stack.split("\n").slice(1).join("\n");
     return stackFrames.includes("sendUpdate") || stackFrames.includes("appendUpdateToConversationStreamAsync") || stackFrames.includes("pushAsync") || stackFrames.includes("conversationStream");
   }
@@ -271,9 +267,9 @@ var InteractionHandler = class {
       void this.onThinkingCompleted?.(ctx, {
         text: completedThinkingText,
         durationMs: duration3
-      }).catch((error41) => {
+      }).catch((error42) => {
         logger17.warn(ctx, "afterAgentThought hook callback failed", {
-          error: error41 instanceof Error ? error41.message : String(error41)
+          error: error42 instanceof Error ? error42.message : String(error42)
         });
       });
     };
@@ -350,27 +346,27 @@ var InteractionHandler = class {
           await this.emitTokenDeltaFromChars(ctx, chunk.argsTextDelta);
         }
       }
-    } catch (error41) {
-      if (error41 instanceof AgentLoopError && error41.loopType === "singleMessage") {
-        throw error41;
+    } catch (error42) {
+      if (error42 instanceof AgentLoopError && error42.loopType === "singleMessage") {
+        throw error42;
       }
-      if (error41 instanceof InputTokenLimitError) {
-        logger17.warn(ctx, "InputTokenLimitError will trigger blocking summarization", { error: error41 });
+      if (error42 instanceof InputTokenLimitError) {
+        logger17.warn(ctx, "InputTokenLimitError will trigger blocking summarization", { error: error42 });
         return;
       }
       const streamAbortReason = ctx.reason;
       const isStreamIntentionalAbort = ctx.canceled && streamAbortReason?.intentional === true;
       if (isStreamIntentionalAbort) {
         logger17.info(ctx, "consumeStream aborted (intentional cancellation)", {
-          error: error41,
+          error: error42,
           intentionalAbort: true,
           abortReason: streamAbortReason?.reason
         });
       } else {
-        logger17.error(ctx, "Error in consumeStream", error41);
+        logger17.error(ctx, "Error in consumeStream", error42);
       }
-      if (this.isConsumerSideError(error41)) {
-        throw error41;
+      if (this.isConsumerSideError(error42)) {
+        throw error42;
       }
     } finally {
       await sealCurrentThinking();
@@ -511,10 +507,13 @@ var InteractionHandler = class {
           newToolCall2.hookAdditionalContexts.push(...hookContextCollector);
         }
         resolvers.resolve(newToolCall2);
-      }).catch((error41) => {
-        resolvers.reject(error41);
+      }).catch((error42) => {
+        resolvers.reject(error42);
       });
-      const newToolCall = this.withToolCallMetadata(callId, await resolvers.promise, { startedAtMs: toolCallStartedAtMs, completedAtMs: Date.now() });
+      const newToolCall = this.withToolCallMetadata(callId, await resolvers.promise, {
+        startedAtMs: toolCallStartedAtMs,
+        completedAtMs: Date.now()
+      });
       this.toolCallStartedAtMsByCallId.delete(callId);
       this.rememberLatestToolCall(callId, newToolCall);
       const toolExecutionMs = Date.now() - startTime;

@@ -41,13 +41,13 @@ function tallyMetadataFailure(summary) {
 function tallySkippedInaccessible(summary) {
   summary.skippedInaccessible = (summary.skippedInaccessible ?? 0) + 1;
 }
-function isPermissionDenied(error41) {
-  const errno = findSystemErrno(error41);
+function isPermissionDenied(error42) {
+  const errno = findSystemErrno(error42);
   return errno === "EACCES" || errno === "EPERM";
 }
-function isSnapshotNodeRace(error41) {
-  const errno = findSystemErrno(error41);
-  return errno === "ENOENT" || errno === "ELOOP" || error41 instanceof SandBoxStoreSyncError;
+function isSnapshotNodeRace(error42) {
+  const errno = findSystemErrno(error42);
+  return errno === "ENOENT" || errno === "ELOOP" || error42 instanceof SandBoxStoreSyncError;
 }
 function classifyFileFailure(existing, mode, fallback2) {
   return existing != null && (existing.kind === "symlink" || existing.kind === "file" && existing.mode !== mode) ? "metadata-error" : fallback2;
@@ -108,9 +108,9 @@ var BoxStoreTransfer = class {
   async discardTemp(args) {
     try {
       await (0, import_promises18.unlink)(args.tmpPath);
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") return;
-      this.log(`temp cleanup failed ${args.label}: ${errorMessage(error41)}`);
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") return;
+      this.log(`temp cleanup failed ${args.label}: ${errorMessage(error42)}`);
     }
   }
   async hasDiskSpaceForLargeObject(path31, objectBytes) {
@@ -166,12 +166,12 @@ var BoxStoreTransfer = class {
       } finally {
         await handle.close();
       }
-    } catch (error41) {
-      if (this.skipInaccessibleEnabled() && isPermissionDenied(error41)) {
+    } catch (error42) {
+      if (this.skipInaccessibleEnabled() && isPermissionDenied(error42)) {
         return "skipped-inaccessible";
       }
-      this.log(`read failed ${relPath}: ${errorMessage(error41)}`);
-      return isSnapshotNodeRace(error41) ? "metadata-error" : classifyFileFailure(existing, mode, "error");
+      this.log(`read failed ${relPath}: ${errorMessage(error42)}`);
+      return isSnapshotNodeRace(error42) ? "metadata-error" : classifyFileFailure(existing, mode, "error");
     }
     const sha = sha256Hex(bytes);
     this.localStat.set(relPath, {
@@ -193,8 +193,8 @@ var BoxStoreTransfer = class {
       await this.objectStore(storeId).put(`${BOX_STORE_BLOBS_PREFIX}/${sha}`, bytes, {
         contentAddressed: true
       });
-    } catch (error41) {
-      this.log(`upload failed ${relPath}: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`upload failed ${relPath}: ${errorMessage(error42)}`);
       return classifyFileFailure(existing, mode, "error");
     }
     this.manifestStore.setManifestEntry(manifest, relPath, {
@@ -239,13 +239,13 @@ var BoxStoreTransfer = class {
       sha = copied.sha;
       size = copied.size;
       mode = (modeOverride ?? copied.mode) & 511;
-    } catch (error41) {
+    } catch (error42) {
       await this.discardTemp({ tmpPath, label: relPath });
-      if (this.skipInaccessibleEnabled() && isPermissionDenied(error41)) {
+      if (this.skipInaccessibleEnabled() && isPermissionDenied(error42)) {
         return "skipped-inaccessible";
       }
-      this.log(`read failed ${relPath}: ${errorMessage(error41)}`);
-      return isSnapshotNodeRace(error41) ? "metadata-error" : classifyFileFailure(existing, expectedMode, "error");
+      this.log(`read failed ${relPath}: ${errorMessage(error42)}`);
+      return isSnapshotNodeRace(error42) ? "metadata-error" : classifyFileFailure(existing, expectedMode, "error");
     }
     try {
       if (size > this.maxObjectBytes) {
@@ -269,8 +269,8 @@ var BoxStoreTransfer = class {
       });
       await this.rememberLargeLocalStat(relPath, absPath, sha, size, mode);
       return alreadyStored ? "unchanged" : "uploaded";
-    } catch (error41) {
-      this.log(`upload failed ${relPath}: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`upload failed ${relPath}: ${errorMessage(error42)}`);
       return classifyFileFailure(existing, mode, "error");
     } finally {
       await this.discardTemp({ tmpPath, label: relPath });
@@ -318,8 +318,8 @@ var BoxStoreTransfer = class {
       });
       this.localStat.delete(relPath);
       return changed ? "uploaded" : "unchanged";
-    } catch (error41) {
-      this.log(`readlink failed ${relPath}: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`readlink failed ${relPath}: ${errorMessage(error42)}`);
       return "metadata-error";
     }
   }
@@ -340,8 +340,8 @@ var BoxStoreTransfer = class {
     if (category.stage != null && treeExists) {
       try {
         staged = await category.stage();
-      } catch (error41) {
-        this.log(`stage ${category.name} failed: ${errorMessage(error41)}`);
+      } catch (error42) {
+        this.log(`stage ${category.name} failed: ${errorMessage(error42)}`);
       }
     }
     try {
@@ -391,9 +391,9 @@ var BoxStoreTransfer = class {
           let fileStat;
           try {
             fileStat = await this.fs.lstat(absPath);
-          } catch (error41) {
+          } catch (error42) {
             seen.add(relPath);
-            if (this.skipInaccessibleEnabled() && isPermissionDenied(error41)) {
+            if (this.skipInaccessibleEnabled() && isPermissionDenied(error42)) {
               tallySkippedInaccessible(summary);
             } else {
               tallyMetadataFailure(summary);
@@ -429,8 +429,8 @@ var BoxStoreTransfer = class {
         let fileStat;
         try {
           fileStat = await this.fs.lstat(file2.absPath);
-        } catch (error41) {
-          if (this.skipInaccessibleEnabled() && isPermissionDenied(error41)) {
+        } catch (error42) {
+          if (this.skipInaccessibleEnabled() && isPermissionDenied(error42)) {
             seen.add(file2.relPath);
             tallySkippedInaccessible(summary);
           } else {
@@ -482,8 +482,8 @@ var BoxStoreTransfer = class {
       }
       return summary;
     } finally {
-      await staged?.cleanup().catch((error41) => {
-        this.log(`stage cleanup ${category.name} failed: ${errorMessage(error41)}`);
+      await staged?.cleanup().catch((error42) => {
+        this.log(`stage cleanup ${category.name} failed: ${errorMessage(error42)}`);
       });
     }
   }
@@ -497,8 +497,8 @@ var BoxStoreTransfer = class {
       let fileStat;
       try {
         fileStat = await this.fs.lstat(candidate.absPath);
-      } catch (error41) {
-        if (this.skipInaccessibleEnabled() && isPermissionDenied(error41)) {
+      } catch (error42) {
+        if (this.skipInaccessibleEnabled() && isPermissionDenied(error42)) {
           tallySkippedInaccessible(summary);
           return;
         }
@@ -576,8 +576,8 @@ async function* walkNodes(root, fs33, shouldSkipDir) {
     let entries;
     try {
       entries = await fs33.readdir(dir, { withFileTypes: true });
-    } catch (error41) {
-      yield { kind: "readdir-error", error: error41 };
+    } catch (error42) {
+      yield { kind: "readdir-error", error: error42 };
       return;
     }
     for (const entry of entries) {

@@ -9,8 +9,8 @@ function createCredentialFillRemoteHolds(lease, options2 = {}) {
   const holds = /* @__PURE__ */ new Map();
   const bounded = (value, fallback2, max) => Math.min(Math.max(1, Math.round(value ?? fallback2)), max);
   return {
-    acquire: async (request3) => {
-      if (request3.holdId.length === 0 || holds.has(request3.holdId)) {
+    acquire: async (request5) => {
+      if (request5.holdId.length === 0 || holds.has(request5.holdId)) {
         return {
           kind: "refused",
           reason: "unavailable",
@@ -18,15 +18,15 @@ function createCredentialFillRemoteHolds(lease, options2 = {}) {
         };
       }
       const ttlMs = bounded(
-        request3.ttlMs,
+        request5.ttlMs,
         CREDENTIAL_FILL_REMOTE_HOLD_DEFAULT_TTL_MS,
         CREDENTIAL_FILL_REMOTE_HOLD_MAX_TTL_MS
       );
       const acquisition = await lease.acquireAgentTool({
-        toolName: request3.toolName,
-        ...request3.windowIndex === void 0 ? {} : { windowIndex: request3.windowIndex },
+        toolName: request5.toolName,
+        ...request5.windowIndex === void 0 ? {} : { windowIndex: request5.windowIndex },
         waitMs: bounded(
-          request3.waitMs,
+          request5.waitMs,
           CREDENTIAL_FILL_REMOTE_HOLD_DEFAULT_WAIT_MS,
           CREDENTIAL_FILL_REMOTE_HOLD_MAX_WAIT_MS
         )
@@ -34,7 +34,7 @@ function createCredentialFillRemoteHolds(lease, options2 = {}) {
       if (!acquisition.ok) {
         return { kind: "refused", reason: acquisition.reason, detail: acquisition.detail };
       }
-      if (holds.has(request3.holdId)) {
+      if (holds.has(request5.holdId)) {
         acquisition.release();
         return {
           kind: "refused",
@@ -43,13 +43,13 @@ function createCredentialFillRemoteHolds(lease, options2 = {}) {
         };
       }
       const expiry = clock.schedule(ttlMs, () => {
-        if (!holds.delete(request3.holdId)) return;
+        if (!holds.delete(request5.holdId)) return;
         log4(
-          `credentials: remote ${request3.toolName} hold lapsed after ${ttlMs}ms without a release`
+          `credentials: remote ${request5.toolName} hold lapsed after ${ttlMs}ms without a release`
         );
         acquisition.release();
       });
-      holds.set(request3.holdId, () => {
+      holds.set(request5.holdId, () => {
         expiry.dispose();
         acquisition.release();
       });

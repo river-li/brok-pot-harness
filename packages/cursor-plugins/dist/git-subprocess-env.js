@@ -1,4 +1,4 @@
-var __awaiter51 = function(thisArg, _arguments, P2, generator) {
+var __awaiter53 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -26,12 +26,7 @@ var __awaiter51 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function gitNonInteractiveLeadingArgs() {
-  const args = [
-    "-c",
-    "credential.interactive=false",
-    "-c",
-    "core.fsmonitor=false"
-  ];
+  const args = ["-c", "credential.interactive=false", "-c", "core.fsmonitor=false"];
   if (process.platform === "win32") {
     args.push("-c", "core.longpaths=true");
   }
@@ -74,7 +69,7 @@ function resolveExtraGitConfig(provider) {
   return typeof provider === "function" ? provider() : provider;
 }
 function execGitNonInteractive(args, options2) {
-  return __awaiter51(this, void 0, void 0, function* () {
+  return __awaiter53(this, void 0, void 0, function* () {
     const execOptions = gitNonInteractiveExecOptions({
       cwd: options2 === null || options2 === void 0 ? void 0 : options2.cwd,
       sshBatchMode: options2 === null || options2 === void 0 ? void 0 : options2.sshBatchMode,

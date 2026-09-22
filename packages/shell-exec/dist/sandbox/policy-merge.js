@@ -182,7 +182,9 @@ async function resolveSandboxPolicyForWorkspace(workspaceDir, sources) {
   if (getSandboxPolicyType(sources) === "workspace_readwrite") {
     let gitDirParent = workspaceDir;
     if (isWorktree) {
-      const commonDir = await spawnPromise("git", ["rev-parse", "--git-common-dir"], { cwd: workspaceDir }).then((x) => (0, import_node_path6.resolve)(workspaceDir, x.trim()), () => null);
+      const commonDir = await spawnPromise("git", ["rev-parse", "--git-common-dir"], {
+        cwd: workspaceDir
+      }).then((x) => (0, import_node_path6.resolve)(workspaceDir, x.trim()), () => null);
       if (commonDir) {
         gitDirParent = (0, import_node_path6.dirname)(commonDir);
         const p2 = sources.perRepo;
@@ -192,10 +194,7 @@ async function resolveSandboxPolicyForWorkspace(workspaceDir, sources) {
           perRepo: {
             ...p2,
             type: "workspace_readwrite",
-            additionalReadwritePaths: [
-              ...p2?.additionalReadwritePaths ?? [],
-              commonDir
-            ],
+            additionalReadwritePaths: [...p2?.additionalReadwritePaths ?? [], commonDir],
             ignoreMapping: ig,
             writeProtectionMapping: mergeIgnoreMappings(p2?.writeProtectionMapping, getWorktreeWriteProtectionMapping(workspaceDir))
           }

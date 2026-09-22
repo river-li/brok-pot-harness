@@ -2,7 +2,7 @@ var READ_EMAIL_ATTACHMENT_ID_MAX_LENGTH = 32;
 var readEmailAttachmentParameters = external_exports.object({
   attachment_id: external_exports.string().trim().min(1).max(READ_EMAIL_ATTACHMENT_ID_MAX_LENGTH).describe(`An attachment_id listed by ${SAND_READ_EMAIL_THREAD_TOOL_NAME}.`)
 });
-var description5 = [
+var description4 = [
   `Open one email attachment by the attachment_id that ${SAND_READ_EMAIL_THREAD_TOOL_NAME} listed. Do not invent attachment ids.`,
   `Text-like attachments (plain text, CSV, JSON, calendar files) come back as text, cut off at ${Math.round(READ_EMAIL_ATTACHMENT_TEXT_MAX_BYTES / 1024)} KB.`,
   "Anything else (PDFs, images, spreadsheets, archives) is saved into your attachments folder on the box and the result gives you its path; read it there with the box Read tool or Shell, or attach it to a message by that path.",
@@ -72,7 +72,7 @@ function createReadEmailAttachmentTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_READ_EMAIL_ATTACHMENT_TOOL_NAME,
-    description: description5,
+    description: description4,
     parameters: readEmailAttachmentParameters,
     describeActivity: (args) => ({ detail: args.attachment_id }),
     execute: async (_ctx, args, d) => readEmailAttachment(d, args)

@@ -103,8 +103,8 @@ var StoreDbBundleCapture = class {
         if (result.outcome === "error" || result.outcome === "oversize") {
           complete = false;
         }
-      } catch (error41) {
-        this.log(`agent db ${target.relPath} capture failed: ${errorMessage(error41)}`);
+      } catch (error42) {
+        this.log(`agent db ${target.relPath} capture failed: ${errorMessage(error42)}`);
         args.summary.failures += 1;
         recordStoreDbCaptureFailure(args.captureTrace, "capture");
         complete = false;
@@ -148,8 +148,8 @@ var StoreDbBundleCapture = class {
       let fileStat;
       try {
         fileStat = await (0, import_promises19.stat)((0, import_node_path16.join)(args.agentDir, basename24));
-      } catch (error41) {
-        if (findSystemErrno(error41) !== "ENOENT") return null;
+      } catch (error42) {
+        if (findSystemErrno(error42) !== "ENOENT") return null;
       }
       const present = fileStat != null;
       if (present !== targetPaths.has(relPath)) return null;
@@ -163,12 +163,12 @@ var StoreDbBundleCapture = class {
     let names3;
     try {
       names3 = await (0, import_promises19.readdir)(agentDir);
-    } catch (error41) {
-      if (!isMissingPathError(error41))
+    } catch (error42) {
+      if (!isMissingPathError(error42))
         reportBoxStoreDiagnostic({
           extension: "box_store",
           kind: "pending_recovery_scan_failed",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       return true;
     }
@@ -210,9 +210,9 @@ var StoreDbBundleCapture = class {
       size: -1,
       mtimeMs: -1
     };
-    const capturedMainStat = await (0, import_promises19.stat)(absPath).catch((error41) => {
-      if (findSystemErrno(error41) !== "ENOENT") {
-        this.log(`store.db ${relPath} pre-snapshot stat failed: ${errorMessage(error41)}`);
+    const capturedMainStat = await (0, import_promises19.stat)(absPath).catch((error42) => {
+      if (findSystemErrno(error42) !== "ENOENT") {
+        this.log(`store.db ${relPath} pre-snapshot stat failed: ${errorMessage(error42)}`);
       }
       return void 0;
     });
@@ -227,8 +227,8 @@ var StoreDbBundleCapture = class {
         tmpPath,
         fileStat.mode
       );
-    } catch (error41) {
-      this.log(`store.db ${relPath} snapshot failed; uncaptured: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`store.db ${relPath} snapshot failed; uncaptured: ${errorMessage(error42)}`);
       if (this.storeDbCaptures.get(relPath) === previousCapture) {
         this.storeDbCaptures.delete(relPath);
       }
@@ -274,8 +274,8 @@ var StoreDbBundleCapture = class {
     try {
       const s3 = await (0, import_promises19.stat)(`${dbPath}-wal`);
       return { size: s3.size, mtimeMs: s3.mtimeMs };
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") return { size: 0, mtimeMs: 0 };
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") return { size: 0, mtimeMs: 0 };
       return null;
     }
   }

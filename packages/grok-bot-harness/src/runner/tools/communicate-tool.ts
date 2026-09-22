@@ -107,11 +107,11 @@ function defineCommunicateTool(deps, spec) {
               toolCallId: meta.toolCallId
             });
             return buildSuccessResult(text2);
-          } catch (error41) {
-            if (error41 instanceof DeferredInteractionResponseError) {
-              throw error41;
+          } catch (error42) {
+            if (error42 instanceof DeferredInteractionResponseError) {
+              throw error42;
             }
-            return buildErrorResult(errorMessage(error41));
+            return buildErrorResult(errorMessage(error42));
           }
         },
         (result) => {
@@ -154,16 +154,16 @@ function defineCommunicateTool(deps, spec) {
     return async (ctx, interactionHandler, argsStream, meta) => {
       try {
         return await parseAndExecute(ctx, interactionHandler, argsStream, meta);
-      } catch (error41) {
-        if (error41 instanceof ToolCallArgParseError) {
-          const zodIssues = error41.issues ?? [];
+      } catch (error42) {
+        if (error42 instanceof ToolCallArgParseError) {
+          const zodIssues = error42.issues ?? [];
           try {
             onArgsRejected({
               kind: "args_rejected",
               toolCallId: meta.toolCallId,
               toolName: spec.name,
               schemaVariant,
-              rejection: error41.issues === void 0 ? "unparsed" : "schema",
+              rejection: error42.issues === void 0 ? "unparsed" : "schema",
               issueCount: zodIssues.length,
               issues: foldIssues(zodIssues),
               requestId: getRequestId(ctx)
@@ -175,7 +175,7 @@ function defineCommunicateTool(deps, spec) {
             );
           }
         }
-        throw error41;
+        throw error42;
       }
     };
   }
@@ -185,8 +185,8 @@ function defineCommunicateTool(deps, spec) {
     parameters: spec.parameters,
     execute,
     render: render2,
-    serializeError: (error41) => {
-      const message = errorMessage(error41);
+    serializeError: (error42) => {
+      const message = errorMessage(error42);
       return new ToolCall({
         tool: {
           case: "communicateUpdateToolCall",

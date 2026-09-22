@@ -1,13 +1,13 @@
-var import_node_fs88 = require("node:fs");
-var import_node_path145 = require("node:path");
+var import_node_fs87 = require("node:fs");
+var import_node_path144 = require("node:path");
 init_errors();
 var SAND_STATE_BACKSTOP_REL_PATH = "state/store.db";
 var DEFAULT_MAX_SNAPSHOT_BYTES = 64 * 1024 * 1024;
 var STATE_BACKSTOP_DEBOUNCE_MS = 5e3;
 function readStoreDbBytes(dbPath) {
-  if (!(0, import_node_fs88.existsSync)(dbPath)) return null;
+  if (!(0, import_node_fs87.existsSync)(dbPath)) return null;
   checkpointSandAgentDb(dbPath);
-  return (0, import_node_fs88.readFileSync)(dbPath);
+  return (0, import_node_fs87.readFileSync)(dbPath);
 }
 var SandStateBackstop = class {
   constructor(deps) {
@@ -25,15 +25,15 @@ var SandStateBackstop = class {
   pending = /* @__PURE__ */ new Map();
   disposed = false;
   dbPathFor(agentId) {
-    return (0, import_node_path145.join)(this.agentsRootDir, agentId, "store.db");
+    return (0, import_node_path144.join)(this.agentsRootDir, agentId, "store.db");
   }
   scheduleSnapshot(agentId) {
     if (this.disposed) return;
     let trigger2 = this.pending.get(agentId);
     if (trigger2 === void 0) {
       trigger2 = this.deps.debounce.wrap(() => {
-        void this.snapshotNow(agentId).catch((error41) => {
-          this.log(`snapshot rejected for ${agentId}: ${errorMessage(error41)}`);
+        void this.snapshotNow(agentId).catch((error42) => {
+          this.log(`snapshot rejected for ${agentId}: ${errorMessage(error42)}`);
         });
       });
       this.pending.set(agentId, trigger2);
@@ -55,8 +55,8 @@ var SandStateBackstop = class {
       await this.deps.objectStoreProvider.forStore(sourceId).put(SAND_STATE_BACKSTOP_REL_PATH, bytes);
       this.log(`uploaded ${agentId} (${bytes.byteLength}B)`);
       return { status: "uploaded", bytes: bytes.byteLength };
-    } catch (error41) {
-      const message = errorMessage(error41);
+    } catch (error42) {
+      const message = errorMessage(error42);
       this.log(`snapshot ${agentId} failed: ${message}`);
       return { status: "error", error: message };
     }

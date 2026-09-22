@@ -1,12 +1,12 @@
-var import_node_fs85 = require("node:fs");
-var import_node_path136 = require("node:path");
+var import_node_fs84 = require("node:fs");
+var import_node_path135 = require("node:path");
 init_scheduling();
 init_errors();
 init_system_errno();
 var CHANNELS_DIRNAME = "channels";
 var CHANNEL_CHANGE_DEBOUNCE_MS = 50;
 function getAgentChannelsDir(agentDir) {
-  return (0, import_node_path136.join)(agentDir, CHANNELS_DIRNAME);
+  return (0, import_node_path135.join)(agentDir, CHANNELS_DIRNAME);
 }
 function labelFor(platform2, raw) {
   const clamped = raw != null ? clampChannelLabel(raw) : "";
@@ -21,12 +21,12 @@ function channelConfigLabel(raw) {
   const label = parsed2.label;
   return typeof label === "string" ? label : void 0;
 }
-function degradedConnection(platform2, fault, error41) {
+function degradedConnection(platform2, fault, error42) {
   return {
     platform: platform2,
     label: labelFor(platform2, void 0),
     status: "error",
-    detail: `${fault} ${CHANNEL_CONFIG_FILENAME}: ${errorLogTag(error41)}`
+    detail: `${fault} ${CHANNEL_CONFIG_FILENAME}: ${errorLogTag(error42)}`
   };
 }
 var FileChannelStore = class {
@@ -49,21 +49,21 @@ var FileChannelStore = class {
     this.dir.setOnChange(onChange);
   }
   configPath(platform2) {
-    return (0, import_node_path136.join)(this.channelsDir, platform2, CHANNEL_CONFIG_FILENAME);
+    return (0, import_node_path135.join)(this.channelsDir, platform2, CHANNEL_CONFIG_FILENAME);
   }
   readConnection(platform2) {
     let raw;
     try {
-      raw = (0, import_node_fs85.readFileSync)(this.configPath(platform2), "utf8");
-    } catch (error41) {
-      if (isMissingPathError(error41)) return null;
-      return degradedConnection(platform2, "unreadable", error41);
+      raw = (0, import_node_fs84.readFileSync)(this.configPath(platform2), "utf8");
+    } catch (error42) {
+      if (isMissingPathError(error42)) return null;
+      return degradedConnection(platform2, "unreadable", error42);
     }
     let label;
     try {
       label = channelConfigLabel(raw);
-    } catch (error41) {
-      return degradedConnection(platform2, "corrupt", error41);
+    } catch (error42) {
+      return degradedConnection(platform2, "corrupt", error42);
     }
     return { platform: platform2, label: labelFor(platform2, label), status: "configured" };
   }
@@ -85,14 +85,14 @@ var FileChannelStore = class {
   }
   remove(platform2) {
     if (!isSafeFolderId(platform2)) return false;
-    const platformDir = (0, import_node_path136.join)(this.channelsDir, platform2);
+    const platformDir = (0, import_node_path135.join)(this.channelsDir, platform2);
     try {
-      if (!(0, import_node_fs85.statSync)(platformDir).isDirectory()) return false;
-    } catch (error41) {
-      reportFallbackUnlessAbsent("channel_store", error41);
+      if (!(0, import_node_fs84.statSync)(platformDir).isDirectory()) return false;
+    } catch (error42) {
+      reportFallbackUnlessAbsent("channel_store", error42);
       return false;
     }
-    (0, import_node_fs85.rmSync)(platformDir, { recursive: true, force: true });
+    (0, import_node_fs84.rmSync)(platformDir, { recursive: true, force: true });
     this.dir.scheduleNotify();
     return true;
   }

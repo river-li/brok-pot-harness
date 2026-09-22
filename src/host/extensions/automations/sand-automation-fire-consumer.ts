@@ -360,20 +360,20 @@ function completionOfOutcome(outcome) {
     errorMessage: outcome === "interrupted" ? "Automation run was interrupted by a Sand host update; the box resumes it locally" : "Automation run failed on the Sand box"
   };
 }
-function classifyDeliveryError(error41) {
-  if (error41 instanceof BackendStatusError) {
-    return SandError.backendHttpStatus({ httpStatus: error41.status });
+function classifyDeliveryError(error42) {
+  if (error42 instanceof BackendStatusError) {
+    return SandError.backendHttpStatus({ httpStatus: error42.status });
   }
-  const errno = findSystemErrno(error41);
+  const errno = findSystemErrno(error42);
   if (errno !== void 0) {
     return SandError.backendUnreachable({ errno: brandedErrno(errno) });
   }
   return SandError.backendDeliveryFailed();
 }
-function coarseDeliveryErrorTypeAndCode(error41) {
-  const errorCode = error41 instanceof BackendStatusError ? String(error41.status) : findSystemErrno(error41);
+function coarseDeliveryErrorTypeAndCode(error42) {
+  const errorCode = error42 instanceof BackendStatusError ? String(error42.status) : findSystemErrno(error42);
   return {
-    errorType: error41 instanceof Error ? error41.constructor.name : typeof error41,
+    errorType: error42 instanceof Error ? error42.constructor.name : typeof error42,
     ...errorCode != null ? { errorCode } : {}
   };
 }
@@ -475,7 +475,7 @@ var SandAutomationFireConsumer = class {
         }
         const automations = await this.deps.listAutomations();
         observedServerSchedulable = automations.some(
-          ({ automation }) => isServerSchedulable(automation)
+          ({ agentId, automation }) => automation.isEnabled && this.deps.isBoxHostedAgent(agentId) && isServerSchedulable(automation)
         );
         if (!observedServerSchedulable && this.drainedWhileUnschedulable) {
           return;
@@ -537,12 +537,12 @@ var SandAutomationFireConsumer = class {
       } else {
         this.pollNotBeforeMs = events.length === 0 && this.states.size === 0 && typeof nextPollAfterMs === "number" && Number.isFinite(nextPollAfterMs) && nextPollAfterMs > 0 ? this.now() + Math.min(nextPollAfterMs, MAX_NEXT_POLL_DELAY_MS) : 0;
       }
-    } catch (error41) {
+    } catch (error42) {
       this.backoffUntilMs = this.now() + ERROR_BACKOFF_MS2;
       this.telemetry.reportAgentError({
         source: "automation_fire_poll",
-        error: classifyDeliveryError(error41),
-        detail: sandErrorDetail(error41)
+        error: classifyDeliveryError(error42),
+        detail: sandErrorDetail(error42)
       });
     } finally {
       this.isTicking = false;
@@ -648,9 +648,9 @@ var SandAutomationFireConsumer = class {
         }
         completed = completionOfOutcome(outcome);
       }
-    } catch (error41) {
+    } catch (error42) {
       this.states.delete(event.id);
-      this.reportRejectedFire({ event, reason: "delivery_error", error: error41 });
+      this.reportRejectedFire({ event, reason: "delivery_error", error: error42 });
       return;
     }
     this.states.set(event.id, completed);
@@ -672,7 +672,7 @@ var SandAutomationFireConsumer = class {
   reportRejectedFire({
     event,
     reason,
-    error: error41,
+    error: error42,
     trigger: trigger2 = event.event != null ? "event" : "schedule"
   }) {
     if (this.reportedRejectedFireUuids.has(event.id)) return;
@@ -695,7 +695,7 @@ var SandAutomationFireConsumer = class {
       fireAgeMs: Math.max(0, Date.now() - event.timestampMs),
       hasDefinitionRevision: event.definitionRevision !== void 0,
       ...boxUptimeMs !== void 0 ? { boxUptimeMs } : {},
-      ...error41 !== void 0 ? coarseDeliveryErrorTypeAndCode(error41) : {}
+      ...error42 !== void 0 ? coarseDeliveryErrorTypeAndCode(error42) : {}
     });
   }
   async reportCompletion(runUuid, completed) {
@@ -709,8 +709,8 @@ var SandAutomationFireConsumer = class {
       for (const resolve29 of this.completionReportWaiters.get(runUuid) ?? []) resolve29();
       this.completionReportWaiters.delete(runUuid);
       return true;
-    } catch (error41) {
-      const status = error41 instanceof BackendStatusError ? error41.status : 0;
+    } catch (error42) {
+      const status = error42 instanceof BackendStatusError ? error42.status : 0;
       if (status === 409 || status === 404) {
         this.states.set(runUuid, { phase: "reported" });
         for (const resolve29 of this.completionReportWaiters.get(runUuid) ?? []) resolve29();

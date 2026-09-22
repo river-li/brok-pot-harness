@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 init_agent_pb();
 init_get_mcp_tools_tool_pb();
 init_mcp_exec_pb();
@@ -59,9 +59,9 @@ var __disposeResources37 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var DEFAULT_GET_MCP_TOOLS_NAME = "GetMcpTools";
 var MCP_AUTH_TOOL_NAME2 = "mcp_auth";
@@ -151,10 +151,10 @@ function sanitizeAndTruncateDescription(raw) {
 function descriptorToToolPayload(tool, options2) {
   const schema2 = options2?.includeSchema === true ? mcpInputSchemaToJson(tool) : void 0;
   const detail = options2?.descriptionDetail ?? "short";
-  const description10 = detail === "fullVerbatim" ? tool.description?.trim() || void 0 : detail === "full" ? sanitizeDescription(tool.description) : sanitizeAndTruncateDescription(tool.description);
+  const description9 = detail === "fullVerbatim" ? tool.description?.trim() || void 0 : detail === "full" ? sanitizeDescription(tool.description) : sanitizeAndTruncateDescription(tool.description);
   return {
     tool: tool.toolName,
-    description: description10,
+    description: description9,
     ...options2?.includeSchema && schema2 !== void 0 ? { inputSchema: schema2 } : {}
   };
 }
@@ -250,11 +250,11 @@ function createSuccessResult2(content, outputFilePath) {
     }
   });
 }
-function createErrorResult(error41) {
+function createErrorResult(error42) {
   return new GetMcpToolsAgentResult({
     result: {
       case: "error",
-      value: new GetMcpToolsError({ error: error41 })
+      value: new GetMcpToolsError({ error: error42 })
     }
   });
 }
@@ -345,8 +345,8 @@ function compileSearchRegex(pattern) {
         return compiled.matcher(input).find();
       }
     };
-  } catch (error41) {
-    const message = error41 instanceof Error ? error41.message : String(error41);
+  } catch (error42) {
+    const message = error42 instanceof Error ? error42.message : String(error42);
     throw new CustomToolCallError(ToolErrorClassification.INVALID_ARGS, {
       error: `Invalid regex pattern: ${message}`,
       clientVisibleErrorMessage: `Invalid regex pattern: ${message}`,
@@ -456,7 +456,7 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
           wroteToFile: dims.wroteToFile
         });
       };
-      const emitErrorMetrics = (ctx, failureReason, error41) => {
+      const emitErrorMetrics = (ctx, failureReason, error42) => {
         const durationMs = Date.now() - startTime;
         emitGetMcpToolsMetrics(ctx, {
           mode,
@@ -464,8 +464,8 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
           success: false,
           failureReason
         });
-        if (error41 !== void 0) {
-          reportMcpMetaToolFailure(ctx, error41, {
+        if (error42 !== void 0) {
+          reportMcpMetaToolFailure(ctx, error42, {
             tool: getMcpToolsToolName,
             failureReason,
             retryable: false,
@@ -476,9 +476,9 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
       };
       try {
         validateArgs(args, useDynamicToolNamespaces);
-      } catch (error41) {
-        emitErrorMetrics(spanCtxt.ctx, GET_MCP_TOOLS_FAILURE_REASONS.INVALID_ARGS, error41);
-        throw error41;
+      } catch (error42) {
+        emitErrorMetrics(spanCtxt.ctx, GET_MCP_TOOLS_FAILURE_REASONS.INVALID_ARGS, error42);
+        throw error42;
       }
       const baseArgs = createCallArgs(meta.toolCallId, args);
       const baseToolCall = createToolCallProto2(baseArgs);
@@ -492,18 +492,18 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
           let regex;
           try {
             regex = compileSearchRegex(args.pattern);
-          } catch (error41) {
-            emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.INVALID_REGEX, error41);
-            throw error41;
+          } catch (error42) {
+            emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.INVALID_REGEX, error42);
+            throw error42;
           }
           let serversToSearch = servers;
           if (args.server !== void 0) {
             const resolvedServer2 = servers.find((server) => server.descriptor.serverIdentifier === args.server);
             if (resolvedServer2 === void 0) {
               const availableServers = servers.map((server) => server.descriptor.serverIdentifier).sort();
-              const error41 = serverNotFoundError(args.server, availableServers, useDynamicToolNamespaces);
-              emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.SERVER_NOT_FOUND, error41);
-              throw error41;
+              const error42 = serverNotFoundError(args.server, availableServers, useDynamicToolNamespaces);
+              emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.SERVER_NOT_FOUND, error42);
+              throw error42;
             }
             serversToSearch = [resolvedServer2];
           }
@@ -564,9 +564,9 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
         const resolvedServer = servers.find((server) => server.descriptor.serverIdentifier === args.server);
         if (resolvedServer === void 0) {
           const availableServers = servers.map((server) => server.descriptor.serverIdentifier).sort();
-          const error41 = serverNotFoundError(args.server, availableServers, useDynamicToolNamespaces);
-          emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.SERVER_NOT_FOUND, error41);
-          throw error41;
+          const error42 = serverNotFoundError(args.server, availableServers, useDynamicToolNamespaces);
+          emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.SERVER_NOT_FOUND, error42);
+          throw error42;
         }
         const serverPayload = descriptorToServerPayload(resolvedServer, {
           includeSchema: true,
@@ -589,32 +589,32 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
         if (tool === void 0) {
           if (serverPayload.serverStatus !== void 0 && serverPayload.serverStatus !== "ready") {
             const serverError = serverPayload.serverError ?? `${useDynamicToolNamespaces ? "Namespace" : "MCP server"} "${args.server}" is ${serverPayload.serverStatus}.`;
-            const error42 = new CustomToolCallError(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
+            const error43 = new CustomToolCallError(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
               error: serverError,
               clientVisibleErrorMessage: serverError,
               modelVisibleErrorMessage: `${serverError} Available tools: ${resolvedServer.descriptor.tools.map((t) => t.toolName).join(", ")}`
             });
-            emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.TOOL_NOT_FOUND, error42);
-            throw error42;
+            emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.TOOL_NOT_FOUND, error43);
+            throw error43;
           }
           if (useDynamicToolNamespaces && isReservedDynamicToolsNamespace(args.server) && dynamicToolRegistry?.usesDirectToolRecovery() === true && dynamicToolRegistry?.isStaticTool(args.toolName) === true) {
             const directToolMessage = `Tool "${args.toolName}" is already available directly and is not part of dynamic namespace "${args.server}". Invoke "${args.toolName}" directly instead of using dynamic tool discovery or invocation.`;
-            const error42 = new CustomToolCallError(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
+            const error43 = new CustomToolCallError(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
               error: directToolMessage,
               clientVisibleErrorMessage: directToolMessage,
               modelVisibleErrorMessage: directToolMessage
             });
-            emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.TOOL_NOT_FOUND, error42);
-            throw error42;
+            emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.TOOL_NOT_FOUND, error43);
+            throw error43;
           }
           const notFoundMessage = useDynamicToolNamespaces ? `Tool "${args.toolName}" not found in namespace "${args.server}".` : `MCP tool "${args.toolName}" not found on server "${args.server}".`;
-          const error41 = new CustomToolCallError(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
+          const error42 = new CustomToolCallError(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
             error: notFoundMessage,
             clientVisibleErrorMessage: notFoundMessage,
             modelVisibleErrorMessage: `${notFoundMessage} Available tools: ${resolvedServer.descriptor.tools.map((t) => t.toolName).join(", ")}`
           });
-          emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.TOOL_NOT_FOUND, error41);
-          throw error41;
+          emitErrorMetrics(ctx, GET_MCP_TOOLS_FAILURE_REASONS.TOOL_NOT_FOUND, error42);
+          throw error42;
         }
         const content = JSON.stringify(toModelFacingSingleToolPayload(serverPayload, tool, useDynamicToolNamespaces), null, 2);
         const result = createSuccessResult2(content);
@@ -701,8 +701,8 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
     parameters: modelParametersSchema,
     render: renderResult,
     execute: withSafeParsedArgs(parsingParametersSchema, execute, createToolCallProto2(createCallArgs("unknown-tool-call-id", {}), createErrorResult("Invalid arguments"))),
-    serializeError: (error41) => {
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+    serializeError: (error42) => {
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createToolCallProto2(createCallArgs("unknown-tool-call-id", {}), createErrorResult(errorMessage6));
     }
   });

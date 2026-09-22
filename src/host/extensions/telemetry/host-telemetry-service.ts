@@ -44,7 +44,7 @@ var HostTelemetryService = class {
       getMachineId: options2.auth.getMachineId,
       getOsLocale: options2.getOsLocale,
       hostInBox: true,
-      onAccessTokenFailure: (error41) => reportFallback("product_analytics", error41)
+      onAccessTokenFailure: (error42) => reportFallback("product_analytics", error42)
     });
     this.brain = withAutomationRunAnalytics(this.logs, this.analytics);
     this.metrics = new GrokBotMetricsBackend({
@@ -54,7 +54,7 @@ var HostTelemetryService = class {
       getMachineId: options2.auth.getMachineId,
       isEnabled: () => !options2.telemetryDisabled,
       flushPolling: options2.metricsFlushPolling,
-      onFlushError: (error41) => this.reportMetricsFlushError(error41)
+      onFlushError: (error42) => this.reportMetricsFlushError(error42)
     });
     this.modelExperimentExposure = createModelExperimentExposureLatch({
       experiments: options2.experiments,
@@ -166,8 +166,8 @@ var HostTelemetryService = class {
         envName: this.logs.getHttpProxyName()
       });
       if (resolved.source === "override") this.logs.setHttpProxyName(resolved.name);
-    } catch (error41) {
-      reportFallback("http_proxy_name_override", error41);
+    } catch (error42) {
+      reportFallback("http_proxy_name_override", error42);
     }
   }
   async setHttpProxyName(rawName) {
@@ -277,8 +277,8 @@ var HostTelemetryService = class {
     } catch {
     }
   }
-  reportMetricsFlushError(error41) {
-    const reason = errorLogTag(error41);
+  reportMetricsFlushError(error42) {
+    const reason = errorLogTag(error42);
     if (this.reportedMetricsFlushErrorReasons.has(reason)) return;
     this.reportedMetricsFlushErrorReasons.add(reason);
     this.logs.reportHostLog("warn", `[sand-telemetry] harness metrics flush failed (${reason})`);
@@ -295,8 +295,8 @@ var HostTelemetryService = class {
       this.lastEgressIpHash = ipHash;
       this.logs.setEgressIpHash(ipHash);
       this.analytics.setEgressIpHash(ipHash);
-    } catch (error41) {
-      const reason = errorLogTag(error41);
+    } catch (error42) {
+      const reason = errorLogTag(error42);
       if (this.reportedEgressIpProbeFailureReasons.has(reason)) return;
       this.reportedEgressIpProbeFailureReasons.add(reason);
       this.logs.reportHostLog("warn", `[sand-telemetry] egress ip probe failed (${reason})`);
@@ -308,10 +308,10 @@ var HostTelemetryService = class {
         heartbeatMs: DESKTOP_HEALTH_HEARTBEAT_MS,
         readRaw: async () => {
           try {
-            if (!(0, import_node_fs90.existsSync)(SAND_SUPERVISOR_DESKTOP_HEALTH_PATH)) return null;
+            if (!(0, import_node_fs89.existsSync)(SAND_SUPERVISOR_DESKTOP_HEALTH_PATH)) return null;
             return await (0, import_promises74.readFile)(SAND_SUPERVISOR_DESKTOP_HEALTH_PATH, "utf8");
-          } catch (error41) {
-            reportFallbackUnlessAbsent("host_telemetry_service", error41);
+          } catch (error42) {
+            reportFallbackUnlessAbsent("host_telemetry_service", error42);
             return null;
           }
         },
@@ -342,7 +342,7 @@ var HostTelemetryService = class {
       }
       forwarding = true;
       try {
-        this.logs.reportHostLog(level, (0, import_node_util13.format)(...args));
+        this.logs.reportHostLog(level, (0, import_node_util14.format)(...args));
       } catch {
       } finally {
         forwarding = false;

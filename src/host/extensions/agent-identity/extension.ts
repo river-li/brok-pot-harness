@@ -17,8 +17,8 @@ var TemplateRecipeReadError = class extends SandDomainError {
 var AvatarDownloadError = class extends SandDomainError {
   name = "AvatarDownloadError";
 };
-function isConnectCode(error41, code) {
-  return error41 instanceof ConnectError && error41.code === code;
+function isConnectCode(error42, code) {
+  return error42 instanceof ConnectError && error42.code === code;
 }
 function avatarChangeOf(avatar) {
   switch (avatar.kind) {
@@ -127,10 +127,10 @@ function startAgentIdentity({
         isWriteEnabled,
         sentinelPath: identityBackfillSentinelPath
       });
-    } catch (error41) {
+    } catch (error42) {
       if (lastMigrationCoverage !== "pending") {
         context2.host.log(
-          `[sand:agent-identity] migration coverage read failed: ${errorLogTag(error41)}`
+          `[sand:agent-identity] migration coverage read failed: ${errorLogTag(error42)}`
         );
       }
       coverage = "pending";
@@ -148,9 +148,9 @@ function startAgentIdentity({
     name: "sand-agent-identity-capability-recovery",
     ...RUNTIME_CAPABILITIES_RETRY_OPTIONS
   });
-  const reportCapabilityFailure = (error41) => {
+  const reportCapabilityFailure = (error42) => {
     if (lifetime.signal.aborted) return;
-    context2.host.log(`[sand:agent-identity] capabilities unavailable: ${errorLogTag(error41)}`);
+    context2.host.log(`[sand:agent-identity] capabilities unavailable: ${errorLogTag(error42)}`);
     context2.deps.telemetry.logs.reportAgentIdentitySync("warn", {
       op: "reconcile",
       outcome: "get_failed",
@@ -198,9 +198,9 @@ function startAgentIdentity({
     try {
       const recipe = await downloadTemplateRecipe(blobGetUrl);
       return importedTemplateSetupFromRecipe(recipe, { gettingStartedTrusted });
-    } catch (error41) {
+    } catch (error42) {
       context2.host.log(
-        `[sand:agent-identity] template recipe unavailable after create: ${errorLogTag(error41)}`
+        `[sand:agent-identity] template recipe unavailable after create: ${errorLogTag(error42)}`
       );
       return { kind: "unavailable" };
     }
@@ -245,11 +245,11 @@ function startAgentIdentity({
         });
         invariant(agent !== void 0, "CreateGrokBotAgent returned no agent");
         return { outcome: "created", agent };
-      } catch (error41) {
-        if (isServerAgentIdTakenRefusal(error41)) return { outcome: "already_taken" };
-        if (isConnectCode(error41, Code.AlreadyExists)) return { outcome: "tombstoned" };
-        if (isServerTemporalHarnessRefusal(error41)) return { outcome: "temporal_unavailable" };
-        throw error41;
+      } catch (error42) {
+        if (isServerAgentIdTakenRefusal(error42)) return { outcome: "already_taken" };
+        if (isConnectCode(error42, Code.AlreadyExists)) return { outcome: "tombstoned" };
+        if (isServerTemporalHarnessRefusal(error42)) return { outcome: "temporal_unavailable" };
+        throw error42;
       }
     },
     getCreationPolicy,
@@ -279,11 +279,11 @@ function startAgentIdentity({
           isSetupHandledByServer: response.setupHandledByServer === true,
           isConversationalSetupEnabled: response.conversationalSetupEnabled === true
         };
-      } catch (error41) {
-        if (isConnectCode(error41, Code.PermissionDenied)) {
+      } catch (error42) {
+        if (isConnectCode(error42, Code.PermissionDenied)) {
           throw new BotTemplateImportAccessDeniedError();
         }
-        throw error41;
+        throw error42;
       }
     },
     updateRemoteAgent: async (req) => {
@@ -296,18 +296,18 @@ function startAgentIdentity({
         });
         invariant(agent !== void 0, "UpdateGrokBotAgent returned no agent");
         return { outcome: "ok", agent };
-      } catch (error41) {
-        if (isConnectCode(error41, Code.NotFound)) return { outcome: "not_found" };
-        throw error41;
+      } catch (error42) {
+        if (isConnectCode(error42, Code.NotFound)) return { outcome: "not_found" };
+        throw error42;
       }
     },
     deleteRemoteAgent: async (serverId) => {
       try {
         await client.deleteGrokBotAgent({ id: serverId });
         return { outcome: "ok" };
-      } catch (error41) {
-        if (isConnectCode(error41, Code.NotFound)) return { outcome: "not_found" };
-        throw error41;
+      } catch (error42) {
+        if (isConnectCode(error42, Code.NotFound)) return { outcome: "not_found" };
+        throw error42;
       }
     },
     getLocalAvatar: (agentId) => context2.deps.transcript.getAgentAvatar(agentId),
@@ -337,8 +337,8 @@ function startAgentIdentity({
       ).then((result) => {
         reconciled = result;
         return result;
-      }).catch((error41) => {
-        reportCapabilityFailure(error41);
+      }).catch((error42) => {
+        reportCapabilityFailure(error42);
         return false;
       }).finally(() => {
         for (const remove of firstReadSignals.values()) remove();
@@ -369,10 +369,10 @@ function startAgentIdentity({
           return startup ? await startFirstReadReconcile(deadlineSignal) : await service.reconcileResumeOwnershipNow(deadlineSignal);
         }, signal)
       };
-    } catch (error41) {
+    } catch (error42) {
       signal.throwIfAborted();
-      reportCapabilityFailure(error41);
-      return { reconciled: false, errorClass: errorLogTag(error41) };
+      reportCapabilityFailure(error42);
+      return { reconciled: false, errorClass: errorLogTag(error42) };
     }
   };
   context2.onStop(
@@ -401,9 +401,9 @@ function startAgentIdentity({
     sweptThisBoot = false;
     try {
       await requestIdentityResweep(identityBackfillSentinelPath);
-    } catch (error41) {
+    } catch (error42) {
       context2.host.log(
-        `[sand:agent-identity] could not clear the sweep sentinel after mint ${agentId} missed: ${errorLogTag(error41)}`
+        `[sand:agent-identity] could not clear the sweep sentinel after mint ${agentId} missed: ${errorLogTag(error42)}`
       );
     }
   };
@@ -433,8 +433,8 @@ function startAgentIdentity({
           sentinelPath: identityBackfillSentinelPath,
           report: (level, metadata) => context2.deps.telemetry.logs.reportAgentIdentitySync(level, metadata)
         });
-      } catch (error41) {
-        context2.host.log(`[sand:agent-identity] backfill sweep failed: ${errorLogTag(error41)}`);
+      } catch (error42) {
+        context2.host.log(`[sand:agent-identity] backfill sweep failed: ${errorLogTag(error42)}`);
         return "threw";
       }
     };
@@ -444,9 +444,9 @@ function startAgentIdentity({
         let writesOn = false;
         try {
           writesOn = await isWriteEnabled();
-        } catch (error41) {
+        } catch (error42) {
           context2.host.log(
-            `[sand:agent-identity] backfill creation-policy read failed: ${errorLogTag(error41)}`
+            `[sand:agent-identity] backfill creation-policy read failed: ${errorLogTag(error42)}`
           );
           sweptThisBoot = false;
           return;
@@ -527,9 +527,9 @@ function startAgentIdentity({
             `[sand:agent-identity] mint ${agentId} left the agent local: ${outcome}`
           );
         },
-        async (error41) => {
+        async (error42) => {
           await requestResweepAfterMintMiss(agentId);
-          context2.host.log(`[sand:agent-identity] mint ${agentId} failed: ${errorLogTag(error41)}`);
+          context2.host.log(`[sand:agent-identity] mint ${agentId} failed: ${errorLogTag(error42)}`);
           context2.deps.telemetry.logs.reportAgentIdentitySync("warn", {
             op: "mint",
             outcome: "error",
@@ -549,7 +549,7 @@ function startAgentIdentity({
     },
     adoptServerAgent: (wire) => service.adoptServerAgent(wire),
     adoptServerAgentById: (agentId) => service.adoptServerAgentById(agentId),
-    expectLocalEdit: (agentId, write) => service.expectLocalEdit(agentId, write),
+    expectLocalEdit: (agentId, write2) => service.expectLocalEdit(agentId, write2),
     clearGeneratedRoomNameStamps: (rooms) => clearGeneratedRoomNameStamps({
       agentsRootDir: getSandAgentsRootDir(),
       sentinelPath: (0, import_node_path35.join)(getSandRootDir(), GENERATED_ROOM_NAME_STAMP_CLEANUP_SENTINEL_FILENAME),

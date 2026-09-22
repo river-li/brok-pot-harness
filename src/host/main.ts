@@ -5,8 +5,8 @@ async function runHostMain() {
     let code;
     try {
       code = await executeBoxCopyInFromEnv(process.env);
-    } catch (error41) {
-      console.error("[box-copy-in] unexpected error (failing closed):", error41);
+    } catch (error42) {
+      console.error("[box-copy-in] unexpected error (failing closed):", error42);
       code = BOX_COPY_IN_EXIT_FAILED;
     }
     process.exit(code);
@@ -25,7 +25,7 @@ async function runHostMain() {
   const hostLock = lockResult.lock;
   const environment = readSandHostEnvironment(process.env);
   const host = new SandHost({ environment });
-  crashGuards.setReporter((error41, kind) => host.reportProcessCrash(error41, kind));
+  crashGuards.setReporter((error42, kind) => host.reportProcessCrash(error42, kind));
   installInvariantReporter((report) => host.reportInvariantViolation(report));
   pinHostDiagnosticsReporter((diagnostic) => host.reportHostDiagnostic(diagnostic));
   let stage = "host_start";
@@ -41,7 +41,6 @@ async function runHostMain() {
           api: host.getApi(),
           subscribe: (listener) => host.subscribe(listener),
           getHealth: () => host.getHealth(),
-          onEventStreamClosed: () => host.noteEventStreamClosed(),
           onDesktopContact: () => host.noteDesktopContact(),
           prepareForUpgrade: () => host.prepareForUpgrade(),
           startedAt: host.startedAt,
@@ -76,16 +75,16 @@ async function runHostMain() {
       `[sand-host] gateway listening on ${scheme}://${gatewayConfig.host}:${gateway.port}${gatewayConfig.authToken != null ? " (auth required)" : ""}`
     );
     void host.reportBoxReady();
-  } catch (error41) {
+  } catch (error42) {
     const recorded = await createHostCrashMarkerStore().write(
       fatalStartupCrashMarker({
         stage,
-        error: error41,
+        error: error42,
         startedAtMs: host.startedAt,
         crashedAtMs: Date.now()
       })
     );
-    if (recorded !== "written") host.reportProcessCrash(error41, "fatal_startup");
+    if (recorded !== "written") host.reportProcessCrash(error42, "fatal_startup");
     await host.flushTelemetryForFatalExit();
     hostLock.release();
     process.exit(1);
@@ -109,8 +108,8 @@ function installShutdownHandlers(host, gateway, hostLock) {
         await gateway.close();
         await host.dispose();
         await clearGatewayDiscovery();
-      } catch (error41) {
-        host.reportProcessCrash(error41, "shutdown_error");
+      } catch (error42) {
+        host.reportProcessCrash(error42, "shutdown_error");
         await host.flushTelemetryForFatalExit();
       } finally {
         watchdog.dispose();
@@ -122,8 +121,8 @@ function installShutdownHandlers(host, gateway, hostLock) {
   process.on("SIGTERM", () => shutdown("SIGTERM"));
   process.on("SIGINT", () => shutdown("SIGINT"));
 }
-bootSandHost(runHostMain).catch((error41) => {
-  console.error("[sand-host] fatal:", error41);
+bootSandHost(runHostMain).catch((error42) => {
+  console.error("[sand-host] fatal:", error42);
   process.exit(1);
 });
 /*! Bundled license information:

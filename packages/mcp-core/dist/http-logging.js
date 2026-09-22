@@ -214,7 +214,7 @@ function isOAuthTokenEndpointRequest(input, init) {
   return path30.endsWith("/token") || path30.includes("/oauth/token") || path30.includes("/connect/token");
 }
 function readClonedResponseTextUpToMax(response, maxBytes) {
-  return __awaiter26(this, void 0, void 0, function* () {
+  return __awaiter27(this, void 0, void 0, function* () {
     try {
       const text2 = yield response.clone().text();
       return text2.length > maxBytes ? text2.slice(0, maxBytes) : text2;
@@ -238,7 +238,7 @@ function summarizeResponseBodyForLog(args) {
   }
 }
 function buildOAuthTokenEndpointErrorBodySummaryForLog(args) {
-  return __awaiter26(this, void 0, void 0, function* () {
+  return __awaiter27(this, void 0, void 0, function* () {
     if (!isOAuthTokenEndpointRequest(args.input, args.init)) {
       return void 0;
     }
@@ -256,7 +256,7 @@ function buildOAuthTokenEndpointErrorBodySummaryForLog(args) {
   });
 }
 function readHttpExchangeErrorSummariesForLog(args) {
-  return __awaiter26(this, void 0, void 0, function* () {
+  return __awaiter27(this, void 0, void 0, function* () {
     const responseErrorSummary = yield readErrorResponseSummaryForLog(args.input, args.response);
     const oauthTokenErrorBodySummary = responseErrorSummary === void 0 ? yield buildOAuthTokenEndpointErrorBodySummaryForLog({
       input: args.input,
@@ -296,18 +296,18 @@ function buildMcpHttpExchangeFailureMetadata(args) {
 }
 function logMcpHttpExchangeSuccess(args) {
   var _a20, _b2;
-  const { logger: logger107, response } = args;
+  const { logger: logger108, response } = args;
   const logMetadata = buildMcpHttpExchangeSuccessMetadata(args);
   if (response.ok) {
-    (_a20 = logger107.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger107, "MCP HTTP exchange completed", logMetadata);
+    (_a20 = logger108.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger108, "MCP HTTP exchange completed", logMetadata);
   } else {
-    (_b2 = logger107.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger107, "MCP HTTP exchange completed", logMetadata);
+    (_b2 = logger108.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger108, "MCP HTTP exchange completed", logMetadata);
   }
 }
 function logMcpHttpExchangeFailure(args) {
   var _a20;
-  const { logger: logger107 } = args;
-  (_a20 = logger107.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger107, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
+  const { logger: logger108 } = args;
+  (_a20 = logger108.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger108, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
 }
 function isMcpEndpointPath(path30) {
   return path30 === "/mcp" || (path30 === null || path30 === void 0 ? void 0 : path30.endsWith("/mcp")) === true;
@@ -331,7 +331,7 @@ function summarizeMcpErrorBody(parsed) {
   return JSON.stringify(Object.assign(Object.assign({}, code !== void 0 ? { code } : {}), message !== void 0 ? { message } : {}));
 }
 function readErrorResponseSummaryForLog(input, response) {
-  return __awaiter26(this, void 0, void 0, function* () {
+  return __awaiter27(this, void 0, void 0, function* () {
     var _a20;
     var _b2;
     try {
@@ -355,20 +355,20 @@ function readErrorResponseSummaryForLog(input, response) {
     }
   });
 }
-function safelyLogExchange(action, logger107, phase) {
+function safelyLogExchange(action, logger108, phase) {
   var _a20;
   try {
     action();
   } catch (_b2) {
-    (_a20 = logger107.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger107, "MCP HTTP exchange logging failed", {
+    (_a20 = logger108.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger108, "MCP HTTP exchange logging failed", {
       event: "mcp_http_exchange_logging_failure",
       phase
     });
   }
 }
 function createLoggedMcpHttpFetch(options2) {
-  const { fetch: fetch2, logger: logger107, metadata, logSuccessfulExchanges = true } = options2;
-  return (input, init) => __awaiter26(this, void 0, void 0, function* () {
+  const { fetch: fetch2, logger: logger108, metadata, logSuccessfulExchanges = true } = options2;
+  return (input, init) => __awaiter27(this, void 0, void 0, function* () {
     const startedAtMs = Date.now();
     try {
       const response = yield fetch2(input, init);
@@ -380,7 +380,7 @@ function createLoggedMcpHttpFetch(options2) {
       if (logSuccessfulExchanges || !response.ok) {
         safelyLogExchange(() => {
           logMcpHttpExchangeSuccess({
-            logger: logger107,
+            logger: logger108,
             input,
             init,
             response,
@@ -389,7 +389,7 @@ function createLoggedMcpHttpFetch(options2) {
             responseErrorSummary,
             oauthTokenErrorBodySummary
           });
-        }, logger107, "success");
+        }, logger108, "success");
       }
       return response;
     } catch (error3) {
@@ -401,7 +401,7 @@ function createLoggedMcpHttpFetch(options2) {
       }) : {};
       safelyLogExchange(() => {
         logMcpHttpExchangeFailure({
-          logger: logger107,
+          logger: logger108,
           input,
           init,
           error: error3,
@@ -411,18 +411,18 @@ function createLoggedMcpHttpFetch(options2) {
           responseErrorSummary,
           oauthTokenErrorBodySummary
         });
-      }, logger107, "failure");
+      }, logger108, "failure");
       throw error3;
     }
   });
 }
-var __awaiter26, MAX_RESPONSE_ERROR_SUMMARY_LOG_BYTES;
+var __awaiter27, MAX_RESPONSE_ERROR_SUMMARY_LOG_BYTES;
 var init_http_logging = __esm({
   "../packages/mcp-core/dist/http-logging.js"() {
     "use strict";
     init_log_metadata();
     init_oauth_logging();
-    __awaiter26 = function(thisArg, _arguments, P2, generator) {
+    __awaiter27 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve14) {
           resolve14(value);

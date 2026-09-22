@@ -5,6 +5,7 @@ function agentWakeOf(source) {
     case "web-search":
     case "web-fetch":
     case "generate-image":
+    case "idle-compaction":
       return void 0;
     default:
       return source;

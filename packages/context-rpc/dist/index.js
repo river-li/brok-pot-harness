@@ -1,7 +1,7 @@
-init_dist3();
+init_dist4();
 init_esm2();
 init_esm4();
-var __awaiter70 = function(thisArg, _arguments, P2, generator) {
+var __awaiter72 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -42,15 +42,15 @@ function wrapAsyncIterableWithSpan(iterable, span, cleanupSignalListener) {
     [Symbol.asyncIterator]() {
       const iterator = iterable[Symbol.asyncIterator]();
       let finished = false;
-      const finish = (error41) => {
+      const finish = (error42) => {
         if (finished)
           return;
         finished = true;
-        if (error41) {
-          span === null || span === void 0 ? void 0 : span.recordException(error41 instanceof Error ? error41 : new Error(String(error41)));
+        if (error42) {
+          span === null || span === void 0 ? void 0 : span.recordException(error42 instanceof Error ? error42 : new Error(String(error42)));
           span === null || span === void 0 ? void 0 : span.setStatus({
             code: SpanStatusCode.ERROR,
-            message: error41 instanceof Error ? error41.message : "Stream failed"
+            message: error42 instanceof Error ? error42.message : "Stream failed"
           });
         } else {
           span === null || span === void 0 ? void 0 : span.setStatus({ code: SpanStatusCode.OK });
@@ -60,21 +60,21 @@ function wrapAsyncIterableWithSpan(iterable, span, cleanupSignalListener) {
       };
       return {
         next() {
-          return __awaiter70(this, void 0, void 0, function* () {
+          return __awaiter72(this, void 0, void 0, function* () {
             try {
               const result = yield iterator.next();
               if (result.done) {
                 finish();
               }
               return result;
-            } catch (error41) {
-              finish(error41);
-              throw error41;
+            } catch (error42) {
+              finish(error42);
+              throw error42;
             }
           });
         },
         return(value) {
-          return __awaiter70(this, void 0, void 0, function* () {
+          return __awaiter72(this, void 0, void 0, function* () {
             finish();
             if (iterator.return) {
               return iterator.return(value);
@@ -82,13 +82,13 @@ function wrapAsyncIterableWithSpan(iterable, span, cleanupSignalListener) {
             return { done: true, value: void 0 };
           });
         },
-        throw(error41) {
-          return __awaiter70(this, void 0, void 0, function* () {
-            finish(error41);
+        throw(error42) {
+          return __awaiter72(this, void 0, void 0, function* () {
+            finish(error42);
             if (iterator.throw) {
-              return iterator.throw(error41);
+              return iterator.throw(error42);
             }
-            throw error41;
+            throw error42;
           });
         }
       };
@@ -183,15 +183,15 @@ function addContextPropagation(client, options2) {
               span === null || span === void 0 ? void 0 : span.end();
               cleanupSignalListener === null || cleanupSignalListener === void 0 ? void 0 : cleanupSignalListener();
               return res;
-            }).catch((error41) => {
-              span === null || span === void 0 ? void 0 : span.recordException(error41 instanceof Error ? error41 : new Error(String(error41)));
+            }).catch((error42) => {
+              span === null || span === void 0 ? void 0 : span.recordException(error42 instanceof Error ? error42 : new Error(String(error42)));
               span === null || span === void 0 ? void 0 : span.setStatus({
                 code: SpanStatusCode.ERROR,
-                message: error41 instanceof Error ? error41.message : "RPC call failed"
+                message: error42 instanceof Error ? error42.message : "RPC call failed"
               });
               span === null || span === void 0 ? void 0 : span.end();
               cleanupSignalListener === null || cleanupSignalListener === void 0 ? void 0 : cleanupSignalListener();
-              throw error41;
+              throw error42;
             });
           } else {
             span === null || span === void 0 ? void 0 : span.setStatus({ code: SpanStatusCode.OK });
@@ -199,15 +199,15 @@ function addContextPropagation(client, options2) {
             cleanupSignalListener === null || cleanupSignalListener === void 0 ? void 0 : cleanupSignalListener();
             return result;
           }
-        } catch (error41) {
-          span === null || span === void 0 ? void 0 : span.recordException(error41 instanceof Error ? error41 : new Error(String(error41)));
+        } catch (error42) {
+          span === null || span === void 0 ? void 0 : span.recordException(error42 instanceof Error ? error42 : new Error(String(error42)));
           span === null || span === void 0 ? void 0 : span.setStatus({
             code: SpanStatusCode.ERROR,
-            message: error41 instanceof Error ? error41.message : "RPC call failed"
+            message: error42 instanceof Error ? error42.message : "RPC call failed"
           });
           span === null || span === void 0 ? void 0 : span.end();
           cleanupSignalListener === null || cleanupSignalListener === void 0 ? void 0 : cleanupSignalListener();
-          throw error41;
+          throw error42;
         }
       };
     }

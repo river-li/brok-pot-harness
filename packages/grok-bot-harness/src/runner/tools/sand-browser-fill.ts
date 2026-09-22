@@ -8,9 +8,9 @@ function createSandBrowserOpRunner(deps) {
       deps.boxId,
       SAND_BROWSER_DRIVER_BOX_PATH,
       import_node_buffer7.Buffer.from(SAND_BROWSER_DRIVER_SOURCE, "utf8")
-    ).catch((error41) => {
+    ).catch((error42) => {
       uploaded = void 0;
-      throw new Error(`Could not install the browser driver on the box: ${errorMessage(error41)}`);
+      throw new Error(`Could not install the browser driver on the box: ${errorMessage(error42)}`);
     });
     return uploaded;
   };
@@ -94,14 +94,14 @@ function createSandBrowserOpRunner(deps) {
   };
   return {
     async run(ctx, op, args) {
-      const request3 = {
+      const request5 = {
         ...args,
         op,
         display: deps.windowIndex,
         cdpPort: BOX_CDP_PORT_BASE2 + deps.windowIndex,
         launchBrowser: false
       };
-      const encoded = import_node_buffer7.Buffer.from(JSON.stringify(request3), "utf8").toString("base64");
+      const encoded = import_node_buffer7.Buffer.from(JSON.stringify(request5), "utf8").toString("base64");
       const containsSubmittedValue = deps.protectSubmittedValues === true && (Object.hasOwn(args, "value") || Object.hasOwn(args, "values"));
       let result;
       try {
@@ -119,8 +119,8 @@ function createSandBrowserOpRunner(deps) {
             timeoutMs: SAND_BROWSER_DRIVER_SHELL_TIMEOUT_MS
           })
         );
-      } catch (error41) {
-        return { ok: false, infra: true, error: errorMessage(error41) };
+      } catch (error42) {
+        return { ok: false, infra: true, error: errorMessage(error42) };
       }
       if (result.result.case !== "success") {
         return {
@@ -346,11 +346,11 @@ async function resolveTargetRef(ctx, runner, target, preferredRole, fullSnapshot
     failure: (snapshot.meta?.unreachableFrames ?? 0) > 0 ? "in_unreachable_frame" : "target_missing"
   };
 }
-function isStaleRefDriverError(error41) {
-  return error41 !== void 0 && error41.includes(SAND_BROWSER_STALE_REF_ERROR);
+function isStaleRefDriverError(error42) {
+  return error42 !== void 0 && error42.includes(SAND_BROWSER_STALE_REF_ERROR);
 }
-function isHiddenTargetDriverError(error41) {
-  return error41 !== void 0 && error41.includes(SAND_BROWSER_HIDDEN_TARGET_ERROR);
+function isHiddenTargetDriverError(error42) {
+  return error42 !== void 0 && error42.includes(SAND_BROWSER_HIDDEN_TARGET_ERROR);
 }
 var RETRY_CANNOT_CURE = /* @__PURE__ */ new Set([
   "in_unreachable_frame",
@@ -615,7 +615,7 @@ var REMAP_CANNOT_CURE = /* @__PURE__ */ new Set([
   "in_unreachable_frame",
   "in_closed_shadow"
 ]);
-async function fillSandUserFormValues(ctx, runner, values, consentedHost, submitAfterFill, observeTiming) {
+async function fillSandUserFormValues(ctx, runner, values, consentedHost, submitAfterFill, observeTiming, clock = realClock) {
   let refTargetsSuspectAfterTabSwitch = false;
   if (consentedHost !== void 0) {
     const gate = await gateConsentedHostTab(ctx, runner, consentedHost);
@@ -675,11 +675,11 @@ async function fillSandUserFormValues(ctx, runner, values, consentedHost, submit
     if ("failure" in resolved) {
       failureKind = resolved.failure;
     } else if (await belt.okToWrite()) {
-      const writeStartedAt = performance.now();
+      const writeStartedAt = clock.monotonicNow();
       const result = await runner.run(ctx, op.op, op.args(resolved.ref, entry.value));
       observeTiming?.(
         "write",
-        result.opDurationMs ?? Math.max(0, performance.now() - writeStartedAt)
+        result.opDurationMs ?? Math.max(0, clock.monotonicNow() - writeStartedAt)
       );
       filled = result.ok && belt.trustResult(result);
       if (filled && result.control !== void 0) {
@@ -706,9 +706,9 @@ async function fillSandUserFormValues(ctx, runner, values, consentedHost, submit
     const target = entry.field.target;
     const op = fillOpFor(entry.field);
     if (target == null || op === null) continue;
-    const healStartedAt = performance.now();
+    const healStartedAt = clock.monotonicNow();
     const retried = await retryFillOnce(ctx, runner, entry, target, op, belt, firstPassKind);
-    observeTiming?.("heal", Math.max(0, performance.now() - healStartedAt));
+    observeTiming?.("heal", Math.max(0, clock.monotonicNow() - healStartedAt));
     if (healOutcome === "none") healOutcome = "missed";
     if (retried.kind === "filled") {
       healOutcome = "landed";
@@ -801,11 +801,11 @@ async function fillSandUserFormValues(ctx, runner, values, consentedHost, submit
   if (anchor === void 0) {
     submit = { attempted: false };
   } else {
-    const submitStartedAt = performance.now();
+    const submitStartedAt = clock.monotonicNow();
     const submitted = await submitByEnterInLastFilledField(ctx, runner, anchor, belt);
     observeTiming?.(
       "submit",
-      submitted.opDurationMs ?? Math.max(0, performance.now() - submitStartedAt)
+      submitted.opDurationMs ?? Math.max(0, clock.monotonicNow() - submitStartedAt)
     );
     submit = { attempted: true, succeeded: submitted.succeeded };
   }

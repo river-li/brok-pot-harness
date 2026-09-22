@@ -68,7 +68,7 @@ var RipwalkTtlCache = class {
       const cachedEntry = this.cache.get(cacheKey3);
       if (cachedEntry !== void 0) {
         const cachedResult = await Promise.race([
-          cachedEntry.linesPromise.then((lines2) => ({ type: "lines", lines: lines2 }), (error41) => ({ type: "error", error: error41 })),
+          cachedEntry.linesPromise.then((lines2) => ({ type: "lines", lines: lines2 }), (error42) => ({ type: "error", error: error42 })),
           abortPromise.then(() => ({ type: "aborted" }))
         ]);
         if (cachedResult.type === "aborted") {
@@ -112,9 +112,9 @@ var RipwalkTtlCache = class {
           return;
         }
         shouldCacheCollectedLines = true;
-      } catch (error41) {
-        cacheFailureReason = error41;
-        throw error41;
+      } catch (error42) {
+        cacheFailureReason = error42;
+        throw error42;
       } finally {
         if (shouldCacheCollectedLines) {
           resolveCachedLines?.(collectedLines);

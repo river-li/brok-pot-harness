@@ -14,19 +14,19 @@ var ChromeSessionWatcher = class {
       if (this.stopped) return;
       try {
         this.deps.onSessionChange();
-      } catch (error41) {
-        this.log(`onSessionChange threw (ignored): ${errorLogTag(error41)}`);
+      } catch (error42) {
+        this.log(`onSessionChange threw (ignored): ${errorLogTag(error42)}`);
       }
     });
     this.statMtimeMs = deps.statMtimeMs ?? ((path31) => {
       try {
         return (0, import_node_fs20.statSync)(path31).mtimeMs;
-      } catch (error41) {
-        if (!isMissingPathError(error41))
+      } catch (error42) {
+        if (!isMissingPathError(error42))
           reportBoxStoreDiagnostic({
             extension: "box_store",
             kind: "chrome_session_stat_failed",
-            errorClass: errorLogTag(error41)
+            errorClass: errorLogTag(error42)
           });
         return void 0;
       }
@@ -47,8 +47,8 @@ var ChromeSessionWatcher = class {
     try {
       this.watcher = this.startWatch(this.deps.watchDir, (name17) => this.handleFsEvent(name17));
       this.log(`watching ${this.deps.watchDir} for session-db changes`);
-    } catch (error41) {
-      this.log(`watch could not arm (periodic cycle is the backstop): ${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.log(`watch could not arm (periodic cycle is the backstop): ${errorLogTag(error42)}`);
     }
   }
   handleFsEvent(filename) {

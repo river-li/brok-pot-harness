@@ -1,6 +1,6 @@
-var import_node_fs89 = require("node:fs");
+var import_node_fs88 = require("node:fs");
 var import_promises73 = require("node:inspector/promises");
-var import_node_path148 = require("node:path");
+var import_node_path147 = require("node:path");
 init_errors();
 init_invariant();
 var SandProfilerCaptureError = class extends SandDomainError {
@@ -25,12 +25,12 @@ function createInspectorBackend() {
           interval: PROFILER_SAMPLING_INTERVAL_US
         });
         await starting.post("Profiler.start");
-      } catch (error41) {
+      } catch (error42) {
         try {
           starting.disconnect();
         } catch {
         }
-        throw error41;
+        throw error42;
       }
       session = starting;
     },
@@ -79,9 +79,9 @@ function createPressureCpuProfiler(options2) {
   let previousPressureAtMs;
   let disposed = false;
   const pruneOldProfiles = (maxRetainedProfiles) => {
-    const profiles = (0, import_node_fs89.readdirSync)(directory).filter((name17) => name17.startsWith(PRESSURE_CPU_PROFILE_PREFIX)).sort();
+    const profiles = (0, import_node_fs88.readdirSync)(directory).filter((name17) => name17.startsWith(PRESSURE_CPU_PROFILE_PREFIX)).sort();
     for (const name17 of profiles.slice(0, Math.max(0, profiles.length - maxRetainedProfiles))) {
-      (0, import_node_fs89.rmSync)((0, import_node_path148.join)(directory, name17), { force: true });
+      (0, import_node_fs88.rmSync)((0, import_node_path147.join)(directory, name17), { force: true });
     }
   };
   const finishCapture = async () => {
@@ -89,16 +89,16 @@ function createPressureCpuProfiler(options2) {
     try {
       const profileJson = await backend.stop();
       if (disposed) return;
-      (0, import_node_fs89.mkdirSync)(directory, { recursive: true });
-      const path31 = (0, import_node_path148.join)(directory, `${PRESSURE_CPU_PROFILE_PREFIX}${now()}.cpuprofile`);
-      (0, import_node_fs89.writeFileSync)(path31, profileJson);
+      (0, import_node_fs88.mkdirSync)(directory, { recursive: true });
+      const path31 = (0, import_node_path147.join)(directory, `${PRESSURE_CPU_PROFILE_PREFIX}${now()}.cpuprofile`);
+      (0, import_node_fs88.writeFileSync)(path31, profileJson);
       pruneOldProfiles(knobs().maxRetainedProfiles);
       options2.reportHostLog("warn", `[sand-host] pressure CPU profile written: ${path31}`);
       options2.onCaptured?.(path31);
-    } catch (error41) {
+    } catch (error42) {
       options2.reportHostLog(
         "warn",
-        `[sand-host] pressure CPU profile capture failed: ${errorLogTag(error41)}`
+        `[sand-host] pressure CPU profile capture failed: ${errorLogTag(error42)}`
       );
     } finally {
       state = "idle";
@@ -130,10 +130,10 @@ function createPressureCpuProfiler(options2) {
           captureDeadlineMs = now() + effective.profileDurationMs;
           state = "profiling";
         }
-      }).catch((error41) => {
+      }).catch((error42) => {
         options2.reportHostLog(
           "warn",
-          `[sand-host] pressure CPU profile start failed: ${errorLogTag(error41)}`
+          `[sand-host] pressure CPU profile start failed: ${errorLogTag(error42)}`
         );
         state = "idle";
         lastCaptureStartedAtMs = void 0;

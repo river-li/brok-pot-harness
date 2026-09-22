@@ -16,8 +16,8 @@ function createFingerprintSpoofReconciler(options2) {
         await import_promises46.default.rm(path31, { force: true, recursive: true });
       }
       lastApplied = profile;
-    } catch (error41) {
-      options2.log(`fingerprint-spoof marker update failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      options2.log(`fingerprint-spoof marker update failed: ${errorLogTag(error42)}`);
     }
   };
   return () => {

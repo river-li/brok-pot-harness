@@ -52,9 +52,9 @@ var __disposeResources14 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 function unresolvedTargetPathError(path31) {
   return `Path '${path31}' could not be verified while resolving symlinks. This can happen when access is denied or the path contains a symlink loop.`;
@@ -185,17 +185,17 @@ function safeExists(path31) {
     return "check_failed";
   }
 }
-function buildRipgrepEnoentMetadata(rgPath, cwd, error41, logContext) {
+function buildRipgrepEnoentMetadata(rgPath, cwd, error42, logContext) {
   return {
     ...probeRipgrepPath(rgPath),
     ...logContext,
     cwd,
     cwdExists: safeExists(cwd),
-    errorMessage: error41.message,
-    errorCode: error41.code,
-    errno: error41.errno,
-    syscall: error41.syscall,
-    errorPath: error41.path
+    errorMessage: error42.message,
+    errorCode: error42.code,
+    errno: error42.errno,
+    syscall: error42.syscall,
+    errorPath: error42.path
   };
 }
 function createPathDoesNotExistError(path31) {
@@ -487,8 +487,8 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
     const startedAt = performance.now();
     try {
       return await withTimeout(this.grepProvider.executeIndexedGrep(indexedCtx, workspacePaths, args, diagnostics), _LocalGrepExecutor.INDEXED_GREP_TIMEOUT_MS, `Indexed grep timed out after ${_LocalGrepExecutor.INDEXED_GREP_TIMEOUT_MS / 1e3}s`);
-    } catch (error41) {
-      if (error41 instanceof TimeoutError) {
+    } catch (error42) {
+      if (error42 instanceof TimeoutError) {
         logger39.warn(ctx, "indexed_grep.timeout_fallback", {
           ...logContext,
           totalMs: Math.round(performance.now() - startedAt),
@@ -496,7 +496,7 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
         });
         return void 0;
       }
-      throw error41;
+      throw error42;
     } finally {
       cancelIndexedCtx();
     }

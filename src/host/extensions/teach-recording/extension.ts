@@ -39,13 +39,13 @@ function parseTeachQueueKey(raw) {
 async function readTeachQueueKeyFile(keyPath) {
   try {
     return await (0, import_promises70.readFile)(keyPath, "utf8");
-  } catch (error41) {
-    reportFallbackUnlessAbsent("teach_recording_extension", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("teach_recording_extension", error42);
     return null;
   }
 }
 async function loadTeachQueueKey() {
-  const keyPath = (0, import_node_path146.join)(getSandRootDir(), TEACH_QUEUE_KEY_FILENAME);
+  const keyPath = (0, import_node_path145.join)(getSandRootDir(), TEACH_QUEUE_KEY_FILENAME);
   const raw = await readTeachQueueKeyFile(keyPath);
   const existing = raw == null ? null : parseTeachQueueKey(raw);
   if (existing != null) return existing;
@@ -133,10 +133,10 @@ function schedulePendingRecovery({
       try {
         await recover();
         recovered = true;
-      } catch (error41) {
+      } catch (error42) {
         if (!signal.aborted) {
           log4(
-            `teach-recording: pending delivery recovery failed (${errorLogTag(error41)}); retrying after credential renewal`
+            `teach-recording: pending delivery recovery failed (${errorLogTag(error42)}); retrying after credential renewal`
           );
         }
       }

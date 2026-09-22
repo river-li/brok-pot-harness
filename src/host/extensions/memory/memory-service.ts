@@ -11,18 +11,18 @@ var MEMORY_SYNTHESIS_GENERATED_DIRNAME = "synthesized";
 var MEMORY_SYNTHESIS_TOMBSTONE_DIRNAME = "tombstones";
 function agentMemoryHasContent(agentDir) {
   const memoryDir = getAgentMemoryDir(agentDir);
-  const logDir = (0, import_node_path123.join)(memoryDir, LOG_DIRNAME);
+  const logDir = (0, import_node_path122.join)(memoryDir, LOG_DIRNAME);
   let logFiles;
   try {
-    logFiles = (0, import_node_fs75.readdirSync)(logDir).filter((name17) => name17.endsWith(".md")).map((name17) => (0, import_node_path123.join)(logDir, name17));
-  } catch (error41) {
-    reportFallbackUnlessAbsent("memory_service", error41);
+    logFiles = (0, import_node_fs74.readdirSync)(logDir).filter((name17) => name17.endsWith(".md")).map((name17) => (0, import_node_path122.join)(logDir, name17));
+  } catch (error42) {
+    reportFallbackUnlessAbsent("memory_service", error42);
     logFiles = [];
   }
-  for (const file2 of [(0, import_node_path123.join)(memoryDir, PROFILE_FILENAME), ...logFiles]) {
+  for (const file2 of [(0, import_node_path122.join)(memoryDir, PROFILE_FILENAME), ...logFiles]) {
     let raw;
     try {
-      raw = (0, import_node_fs75.readFileSync)(file2, "utf8");
+      raw = (0, import_node_fs74.readFileSync)(file2, "utf8");
     } catch {
       continue;
     }
@@ -44,13 +44,13 @@ var FileMemoryStore = class {
   constructor(memoryDir, dreaming) {
     this.memoryDir = memoryDir;
     this.dreaming = dreaming;
-    this.profileFile = (0, import_node_path123.join)(memoryDir, PROFILE_FILENAME);
-    this.logDir = (0, import_node_path123.join)(memoryDir, LOG_DIRNAME);
-    const metadataDir = (0, import_node_path123.join)(memoryDir, MEMORY_SYNTHESIS_METADATA_DIRNAME);
-    this.explicitDir = (0, import_node_path123.join)(metadataDir, MEMORY_SYNTHESIS_EXPLICIT_DIRNAME);
-    this.generatedDir = (0, import_node_path123.join)(metadataDir, MEMORY_SYNTHESIS_GENERATED_DIRNAME);
-    this.refreshFile = (0, import_node_path123.join)(metadataDir, MEMORY_SYNTHESIS_REFRESH_FILENAME);
-    this.tombstoneDir = (0, import_node_path123.join)(metadataDir, MEMORY_SYNTHESIS_TOMBSTONE_DIRNAME);
+    this.profileFile = (0, import_node_path122.join)(memoryDir, PROFILE_FILENAME);
+    this.logDir = (0, import_node_path122.join)(memoryDir, LOG_DIRNAME);
+    const metadataDir = (0, import_node_path122.join)(memoryDir, MEMORY_SYNTHESIS_METADATA_DIRNAME);
+    this.explicitDir = (0, import_node_path122.join)(metadataDir, MEMORY_SYNTHESIS_EXPLICIT_DIRNAME);
+    this.generatedDir = (0, import_node_path122.join)(metadataDir, MEMORY_SYNTHESIS_GENERATED_DIRNAME);
+    this.refreshFile = (0, import_node_path122.join)(metadataDir, MEMORY_SYNTHESIS_REFRESH_FILENAME);
+    this.tombstoneDir = (0, import_node_path122.join)(metadataDir, MEMORY_SYNTHESIS_TOMBSTONE_DIRNAME);
     this.evidenceDir = getMemoryEvidenceDir(memoryDir);
   }
   memoryDir;
@@ -73,25 +73,25 @@ var FileMemoryStore = class {
   }
   read(path31) {
     try {
-      return (0, import_node_fs75.readFileSync)(path31, "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("memory_service", error41);
+      return (0, import_node_fs74.readFileSync)(path31, "utf8");
+    } catch (error42) {
+      reportFallbackUnlessAbsent("memory_service", error42);
       return "";
     }
   }
   logFiles() {
     let names3;
     try {
-      names3 = (0, import_node_fs75.readdirSync)(this.logDir);
-    } catch (error41) {
-      reportFallbackUnlessAbsent("memory_service", error41);
+      names3 = (0, import_node_fs74.readdirSync)(this.logDir);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("memory_service", error42);
       return [];
     }
-    return names3.filter((name17) => name17.endsWith(".md")).sort().map((name17) => (0, import_node_path123.join)(this.logDir, name17));
+    return names3.filter((name17) => name17.endsWith(".md")).sort().map((name17) => (0, import_node_path122.join)(this.logDir, name17));
   }
   logFileForDate(createdAt) {
     const bucket = formatMemoryDate(createdAt).slice(0, 7);
-    return (0, import_node_path123.join)(this.logDir, `${bucket}.md`);
+    return (0, import_node_path122.join)(this.logDir, `${bucket}.md`);
   }
   profileFacts() {
     return parseFacts(this.read(this.profileFile), "profile", 0, this.profileFile);
@@ -112,17 +112,17 @@ var FileMemoryStore = class {
     writeFileAtomicSync(path31, content);
   }
   tombstonePath(content) {
-    return (0, import_node_path123.join)(this.tombstoneDir, `${memoryIdFor(content)}.deleted`);
+    return (0, import_node_path122.join)(this.tombstoneDir, `${memoryIdFor(content)}.deleted`);
   }
   originPath(content, origin) {
     const dir = origin === "explicit" ? this.explicitDir : this.generatedDir;
-    return (0, import_node_path123.join)(dir, `${memoryIdFor(content)}.memory`);
+    return (0, import_node_path122.join)(dir, `${memoryIdFor(content)}.memory`);
   }
   hasOrigin(content, origin) {
     try {
-      return (0, import_node_fs75.statSync)(this.originPath(content, origin)).isFile();
-    } catch (error41) {
-      reportFallbackUnlessAbsent("memory_service", error41);
+      return (0, import_node_fs74.statSync)(this.originPath(content, origin)).isFile();
+    } catch (error42) {
+      reportFallbackUnlessAbsent("memory_service", error42);
       return false;
     }
   }
@@ -135,14 +135,14 @@ var FileMemoryStore = class {
     this.writeAtomic(this.originPath(content, origin), "");
   }
   clearOrigins(content) {
-    (0, import_node_fs75.rmSync)(this.originPath(content, "explicit"), { force: true });
-    (0, import_node_fs75.rmSync)(this.originPath(content, "synthesis"), { force: true });
+    (0, import_node_fs74.rmSync)(this.originPath(content, "explicit"), { force: true });
+    (0, import_node_fs74.rmSync)(this.originPath(content, "synthesis"), { force: true });
   }
   isTombstoned(content) {
     try {
-      return (0, import_node_fs75.statSync)(this.tombstonePath(content)).isFile();
-    } catch (error41) {
-      reportFallbackUnlessAbsent("memory_service", error41);
+      return (0, import_node_fs74.statSync)(this.tombstonePath(content)).isFile();
+    } catch (error42) {
+      reportFallbackUnlessAbsent("memory_service", error42);
       return false;
     }
   }
@@ -150,7 +150,7 @@ var FileMemoryStore = class {
     this.writeAtomic(this.tombstonePath(content), "");
   }
   clearTombstone(content) {
-    (0, import_node_fs75.rmSync)(this.tombstonePath(content), { force: true });
+    (0, import_node_fs74.rmSync)(this.tombstonePath(content), { force: true });
   }
   recall(recentLimit) {
     const safeLimit = Number.isFinite(recentLimit) && recentLimit > 0 ? Math.floor(recentLimit) : 0;
@@ -336,14 +336,14 @@ var FileMemoryStore = class {
     return this.countMemories() > 0;
   }
   readSpooledEvidence() {
-    if (!(0, import_node_fs75.existsSync)(this.evidenceDir)) return [];
+    if (!(0, import_node_fs74.existsSync)(this.evidenceDir)) return [];
     const evidence = [];
-    for (const name17 of (0, import_node_fs75.readdirSync)(this.evidenceDir).sort()) {
+    for (const name17 of (0, import_node_fs74.readdirSync)(this.evidenceDir).sort()) {
       const id = memoryEvidenceIdFromFileName(name17);
       if (id === null) continue;
-      const parsed2 = parseMemoryEvidenceFile(this.read((0, import_node_path123.join)(this.evidenceDir, name17)));
+      const parsed2 = parseMemoryEvidenceFile(this.read((0, import_node_path122.join)(this.evidenceDir, name17)));
       if (parsed2 === null || parsed2.id !== id) {
-        (0, import_node_fs75.rmSync)((0, import_node_path123.join)(this.evidenceDir, name17), { force: true });
+        (0, import_node_fs74.rmSync)((0, import_node_path122.join)(this.evidenceDir, name17), { force: true });
         continue;
       }
       evidence.push(parsed2);
@@ -353,7 +353,7 @@ var FileMemoryStore = class {
   clearSpooledEvidence(ids) {
     for (const id of ids) {
       if (memoryEvidenceIdFromFileName(memoryEvidenceFileName(id)) === null) continue;
-      (0, import_node_fs75.rmSync)((0, import_node_path123.join)(this.evidenceDir, memoryEvidenceFileName(id)), { force: true });
+      (0, import_node_fs74.rmSync)((0, import_node_path122.join)(this.evidenceDir, memoryEvidenceFileName(id)), { force: true });
     }
   }
   isTemporalReviewDue(now) {
@@ -396,9 +396,9 @@ var FileMemoryStore = class {
 function listShardAgentIds(shardsDir) {
   let entries;
   try {
-    entries = (0, import_node_fs75.readdirSync)(shardsDir, { withFileTypes: true });
-  } catch (error41) {
-    reportFallbackUnlessAbsent("memory_service", error41);
+    entries = (0, import_node_fs74.readdirSync)(shardsDir, { withFileTypes: true });
+  } catch (error42) {
+    reportFallbackUnlessAbsent("memory_service", error42);
     return [];
   }
   return entries.filter((entry) => entry.isDirectory() && isSafeFolderId(entry.name)).map((entry) => entry.name).sort();
@@ -410,7 +410,7 @@ function shardVia(agentId, resolveAgentName) {
 function readByAgentShardRecalls(shardsDir, recentLimit, resolveAgentName) {
   const shards = [];
   for (const agentId of listShardAgentIds(shardsDir)) {
-    const recall = new FileMemoryStore((0, import_node_path123.join)(shardsDir, agentId)).recall(recentLimit);
+    const recall = new FileMemoryStore((0, import_node_path122.join)(shardsDir, agentId)).recall(recentLimit);
     if (recall.profile.length === 0 && recall.recent.length === 0) continue;
     shards.push({ via: shardVia(agentId, resolveAgentName), recall });
   }
@@ -420,7 +420,7 @@ function readByAgentShardRecords(shardsDir, resolveAgentName) {
   return mergeUserMemoryShardRecords(
     listShardAgentIds(shardsDir).map((agentId) => ({
       via: shardVia(agentId, resolveAgentName),
-      records: new FileMemoryStore((0, import_node_path123.join)(shardsDir, agentId)).listMemories(MEMORY_SCAN_ALL)
+      records: new FileMemoryStore((0, import_node_path122.join)(shardsDir, agentId)).listMemories(MEMORY_SCAN_ALL)
     }))
   );
 }
@@ -451,66 +451,6 @@ var UserMemoryStore = class {
     return readByAgentShardRecords(this.shardsDir, this.resolveAgentName);
   }
 };
-function projectDirExists(sandRoot, slug) {
-  if (!isSafeFolderId(slug)) return false;
-  try {
-    return (0, import_node_fs75.statSync)(getProjectDir(sandRoot, slug)).isDirectory();
-  } catch (error41) {
-    reportFallbackUnlessAbsent("memory_service", error41);
-    return false;
-  }
-}
-function readProjectName(projectDir) {
-  let raw;
-  try {
-    raw = (0, import_node_fs75.readFileSync)((0, import_node_path123.join)(projectDir, PROJECT_FILENAME), "utf8");
-  } catch (error41) {
-    reportFallbackUnlessAbsent("memory_service", error41);
-    return null;
-  }
-  const parsed2 = parseSkillFile(raw);
-  if (parsed2 == null || parsed2.name.length === 0) return null;
-  return parsed2.name;
-}
-var ProjectMemoryStore = class {
-  constructor(sandRoot, ownAgentId, membership, resolveAgentName) {
-    this.sandRoot = sandRoot;
-    this.ownAgentId = ownAgentId;
-    this.membership = membership;
-    this.resolveAgentName = resolveAgentName;
-    this.projectsRootDir = getProjectsRootDir(sandRoot);
-  }
-  sandRoot;
-  ownAgentId;
-  membership;
-  resolveAgentName;
-  projectsRootDir;
-  getLocation() {
-    return this.projectsRootDir;
-  }
-  recall(limits, injectedCap) {
-    const blocks = [];
-    for (const slug of [...this.membership.read()].sort()) {
-      if (!projectDirExists(this.sandRoot, slug)) continue;
-      const name17 = readProjectName(getProjectDir(this.sandRoot, slug)) ?? slug;
-      const recall = mergeUserMemoryShards(
-        readByAgentShardRecalls(
-          getProjectMemoryShardsDir(this.sandRoot, slug),
-          limits.recentLimit,
-          this.resolveAgentName
-        ),
-        limits
-      );
-      blocks.push({
-        slug,
-        name: name17,
-        ownShardDir: getProjectMemoryShardDir(this.sandRoot, slug, this.ownAgentId),
-        recall
-      });
-    }
-    return selectProjectMemoryBlocks(blocks, injectedCap);
-  }
-};
 var MemoryService = class {
   constructor(options2) {
     this.options = options2;
@@ -518,7 +458,7 @@ var MemoryService = class {
   options;
   synthesisService = null;
   createAgentStore(agentDir) {
-    const agentId = (0, import_node_path123.basename)(agentDir);
+    const agentId = (0, import_node_path122.basename)(agentDir);
     return new FileMemoryStore(getAgentMemoryDir(agentDir), {
       isEnabled: () => this.synthesisService != null,
       record: (evidence) => {
@@ -542,30 +482,17 @@ var MemoryService = class {
   createUserMemory(options2) {
     return new UserMemoryStore(this.options.sandRoot, options2.agentId, options2.resolveAgentName);
   }
-  createProjectMemory(options2) {
-    const membership = new AgentProjectMembership(options2.agentDir);
-    try {
-      membership.pruneMissing((slug) => projectDirExists(this.options.sandRoot, slug));
-    } catch {
-    }
-    return new ProjectMemoryStore(
-      this.options.sandRoot,
-      options2.agentId,
-      membership,
-      options2.resolveAgentName
-    );
-  }
   dispose() {
     this.synthesisService?.dispose();
     this.synthesisService = null;
   }
   synthesisTargetForAgent(agentId) {
     if (!isSafeFolderId(agentId)) return null;
-    const agentDir = (0, import_node_path123.join)(this.options.agentsRootDir, agentId);
+    const agentDir = (0, import_node_path122.join)(this.options.agentsRootDir, agentId);
     try {
-      if (!(0, import_node_fs75.statSync)(agentDir).isDirectory()) return null;
-    } catch (error41) {
-      reportFallbackUnlessAbsent("memory_service", error41);
+      if (!(0, import_node_fs74.statSync)(agentDir).isDirectory()) return null;
+    } catch (error42) {
+      reportFallbackUnlessAbsent("memory_service", error42);
       return null;
     }
     return new FileMemoryStore(getAgentMemoryDir(agentDir));
@@ -573,11 +500,11 @@ var MemoryService = class {
   listSynthesisTargets() {
     let entries;
     try {
-      entries = (0, import_node_fs75.readdirSync)(this.options.agentsRootDir, {
+      entries = (0, import_node_fs74.readdirSync)(this.options.agentsRootDir, {
         withFileTypes: true
       });
-    } catch (error41) {
-      reportFallbackUnlessAbsent("memory_service", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("memory_service", error42);
       return [];
     }
     const targets = [];

@@ -62,7 +62,7 @@ var SandMcpManager = class {
     });
     this.instructionsAndToggles = new SandMcpInstructionsAndToggles({
       settingsStore: () => this.settingsStore,
-      resolveDisplayServer: (rawServerId) => this.resolveDisplayServer(rawServerId),
+      resolveListedDisplayServer: (rawServerId) => this.resolveListedDisplayServer(rawServerId),
       listServers: () => this.listServers(),
       lastAccountDisplayConfig: () => this.lastAccountDisplayConfigView(),
       getToolsRaw: async () => await this.boxRuntime?.getToolsRaw() ?? []
@@ -217,7 +217,8 @@ var SandMcpManager = class {
     if (this.boxRuntime != null && this.boxRuntime.isBoxExecWired()) {
       try {
         const boxServers = await this.boxRuntime.listBoxServers(
-          stdioServers.map((server) => server.serverIdentifier)
+          stdioServers.map((server) => server.serverIdentifier),
+          { accountConfigAdopted: this.accountServersProvider != null && displayConfig != null }
         );
         for (const server of boxServers) {
           boxByName.set(server.serverIdentifier, server);
@@ -228,8 +229,8 @@ var SandMcpManager = class {
         if (stdioServers.length > 0) {
           boxDiscoveryUnavailable = boxByName.size === 0;
         }
-      } catch (error41) {
-        reportMcpHostEdgeFailure("box-settings-list", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("box-settings-list", error42);
         boxDiscoveryUnavailable = true;
       }
     }
@@ -283,9 +284,9 @@ var SandMcpManager = class {
     }
     return display;
   }
-  async addServer(request3) {
-    const name17 = this.validateInstallableName(request3.name);
-    const serverConfig = parseServerConfig(request3.configJson);
+  async addServer(request5) {
+    const name17 = this.validateInstallableName(request5.name);
+    const serverConfig = parseServerConfig(request5.configJson);
     await this.addServersToAccount({ [name17]: serverConfig });
     return await this.reloadServers();
   }
@@ -298,11 +299,11 @@ var SandMcpManager = class {
   async resolvePluginLogo(url2) {
     return await this.catalogFlow.resolvePluginLogo(url2);
   }
-  async installEntry(request3, getAccessToken) {
-    return await this.catalogFlow.installEntry(request3, getAccessToken);
+  async installEntry(request5, getAccessToken) {
+    return await this.catalogFlow.installEntry(request5, getAccessToken);
   }
-  async updatePluginInstall(request3, getAccessToken) {
-    return await this.catalogFlow.updatePluginInstall(request3, getAccessToken);
+  async updatePluginInstall(request5, getAccessToken) {
+    return await this.catalogFlow.updatePluginInstall(request5, getAccessToken);
   }
   validateInstallableName(name17) {
     const validated = validateServerName(name17);
@@ -388,8 +389,8 @@ var SandMcpManager = class {
         installRecordGone = !effective.some(
           (plugin) => plugin.pluginId === pluginId && isEffectivePluginInstalled(plugin)
         );
-      } catch (error41) {
-        reportMcpHostEdgeFailure("plugin-list", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("plugin-list", error42);
         installRecordGone = false;
       }
     }
@@ -419,8 +420,8 @@ var SandMcpManager = class {
     if (this.effectivePluginsProvider != null) {
       try {
         effective = await this.effectivePluginsProvider();
-      } catch (error41) {
-        reportMcpHostEdgeFailure("plugin-list", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("plugin-list", error42);
         effective = null;
       }
     }
@@ -500,6 +501,16 @@ var SandMcpManager = class {
       options2?.oauthRedirectUri == null ? {} : { oauthRedirectUri: options2.oauthRedirectUri }
     );
   }
+  async resolveListedDisplayServer(rawServerId) {
+    const serverId = rawServerId.trim();
+    const view = this.lastAccountDisplayConfigView();
+    const viewIsCurrent = this.accountServersPromise == null && view?.cacheScope !== void 0 && view.cacheScope === this.settingsStore.getActiveAccountScope();
+    const listed = viewIsCurrent ? findDisplayServerByAddress(view.servers, serverId) : void 0;
+    if (listed != null && (!isGrokDisplayServerId(serverId) || listed.servedBy === "grok")) {
+      return listed;
+    }
+    return await this.resolveDisplayServer(rawServerId);
+  }
   async resolveDisplayServer(rawServerId, options2) {
     const serverId = rawServerId.trim();
     if (serverId.length === 0) return void 0;
@@ -532,8 +543,8 @@ var SandMcpManager = class {
     let display = null;
     try {
       display = await this.accountDisplayConfigProvider();
-    } catch (error41) {
-      if (requireFreshRead) throw error41;
+    } catch (error42) {
+      if (requireFreshRead) throw error42;
       display = null;
     }
     if (display != null) {

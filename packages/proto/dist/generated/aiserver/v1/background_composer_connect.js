@@ -525,7 +525,8 @@ var init_background_composer_connect = __esm({
          * read without wake or lease headers, so a hibernated pod stays asleep.
          * Same VM_ACCESS tier as GetMachine; PermissionDenied when the owner does
          * not pass cloud_agent_machine_resources; Unavailable while the machine
-         * cannot answer (worker offline, pod asleep or not ready); the daemon's
+         * cannot answer, with a MachineResourceUnavailableDetail naming why (asleep,
+         * not ready, worker not connected, or a failed hop); the daemon's
          * Unimplemented / FailedPrecondition / InvalidArgument pass through.
          *
          * @generated from rpc aiserver.v1.BackgroundComposerService.GetMachineResourceUsage
@@ -1278,6 +1279,20 @@ var init_background_composer_connect = __esm({
           name: "GetEnvironmentBuild",
           I: GetEnvironmentBuildRequest,
           O: GetEnvironmentBuildResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * The environment version a build baked (install/start scripts and the
+         * raw environment.json), for the builds dashboard detail page. Same
+         * access rules as GetEnvironmentBuild; the raw environment.json is only
+         * included when the caller may inspect that version's source.
+         *
+         * @generated from rpc aiserver.v1.BackgroundComposerService.GetEnvironmentBuildConfig
+         */
+        getEnvironmentBuildConfig: {
+          name: "GetEnvironmentBuildConfig",
+          I: GetEnvironmentBuildConfigRequest,
+          O: GetEnvironmentBuildConfigResponse,
           kind: MethodKind.Unary
         },
         /**

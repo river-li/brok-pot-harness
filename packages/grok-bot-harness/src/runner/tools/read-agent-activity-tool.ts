@@ -20,8 +20,8 @@ function formatAgentActivityAge(iso, nowMs2) {
 }
 function renderSummary(summary, nowMs2) {
   const lines2 = [`## ${summary.name} (agent ${summary.agentId})`];
-  const description10 = summary.description?.trim() ?? "";
-  if (description10.length > 0) lines2.push(description10);
+  const description9 = summary.description?.trim() ?? "";
+  if (description9.length > 0) lines2.push(description9);
   const lastUser = summary.lastUserMessageAt === null ? "none" : formatAgentActivityAge(summary.lastUserMessageAt, nowMs2);
   const lastAssistant = summary.lastAssistantMessageAt === null ? "none" : formatAgentActivityAge(summary.lastAssistantMessageAt, nowMs2);
   lines2.push(`Last user message: ${lastUser}. Last assistant message: ${lastAssistant}.`);

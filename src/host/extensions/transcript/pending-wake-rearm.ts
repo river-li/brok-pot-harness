@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 init_errors();
 var PENDING_WAKE_STALE_MAX_AGE_MS = 48 * 60 * 60 * 1e3;
 var PendingWakeRearm = class {

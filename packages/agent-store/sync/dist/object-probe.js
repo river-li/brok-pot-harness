@@ -1,4 +1,4 @@
-var __awaiter5 = function(thisArg, _arguments, P2, generator) {
+var __awaiter6 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -26,13 +26,13 @@ var __awaiter5 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function probeAgentStoreObject(args) {
-  return __awaiter5(this, void 0, void 0, function* () {
+  return __awaiter6(this, void 0, void 0, function* () {
     var _a19, _b2;
     var _c2, _d, _e2;
-    const runPresign = (_c2 = args.runPresign) !== null && _c2 !== void 0 ? _c2 : ((fn) => __awaiter5(this, void 0, void 0, function* () {
+    const runPresign = (_c2 = args.runPresign) !== null && _c2 !== void 0 ? _c2 : ((fn) => __awaiter6(this, void 0, void 0, function* () {
       return fn();
     }));
-    const runS3 = (_d = args.runS3) !== null && _d !== void 0 ? _d : ((fn) => __awaiter5(this, void 0, void 0, function* () {
+    const runS3 = (_d = args.runS3) !== null && _d !== void 0 ? _d : ((fn) => __awaiter6(this, void 0, void 0, function* () {
       return fn();
     }));
     const [presigned] = yield runPresign(() => args.client.presignReads({
@@ -48,8 +48,8 @@ function probeAgentStoreObject(args) {
     try {
       canonicalRequested = normalizeRelPath(args.relPath);
       canonicalPresignPath = normalizeRelPath(presigned.relPath);
-    } catch (error41) {
-      throw new Error(`agent-store baseline probe relPath mismatch for ${args.relPath}: ${error41 instanceof Error ? error41.message : String(error41)}`);
+    } catch (error42) {
+      throw new Error(`agent-store baseline probe relPath mismatch for ${args.relPath}: ${error42 instanceof Error ? error42.message : String(error42)}`);
     }
     if (canonicalPresignPath !== canonicalRequested) {
       throw new Error(`agent-store baseline probe relPath mismatch for ${args.relPath} (got ${presigned.relPath})`);
@@ -59,7 +59,7 @@ function probeAgentStoreObject(args) {
       relPath: args.relPath,
       validatePresignedUrl: args.validatePresignedUrl
     });
-    const probe = (range2) => __awaiter5(this, void 0, void 0, function* () {
+    const probe = (range2) => __awaiter6(this, void 0, void 0, function* () {
       return args.fetchImpl(presigned.url, Object.assign(Object.assign({
         // Same redirect hardening as sync-engine downloads/uploads.
         redirect: "error"

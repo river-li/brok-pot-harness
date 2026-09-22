@@ -32,8 +32,8 @@ async function runTurnMemory(memoryStore, episodeProgress, session, ctx, turnTs,
     } finally {
       episodeProgress.clearPendingEpisodeTurns();
     }
-  } catch (error41) {
-    process.stderr.write(`sand.memory.episode_summary_failed error_class=${errorLogTag(error41)}
+  } catch (error42) {
+    process.stderr.write(`sand.memory.episode_summary_failed error_class=${errorLogTag(error42)}
 `);
   }
 }
@@ -53,8 +53,8 @@ ${exchange.agent}`
       existingMemories
     });
     applyExtractedMemories(memoryStore, extraction, Date.now(), existingMemories);
-  } catch (error41) {
-    process.stderr.write(`sand.memory.extraction_failed error_class=${errorLogTag(error41)}
+  } catch (error42) {
+    process.stderr.write(`sand.memory.extraction_failed error_class=${errorLogTag(error42)}
 `);
   }
 }

@@ -184,10 +184,10 @@ function createSandLoopDetectionPolicy(inputs) {
     if (reportMitigation === void 0) return;
     try {
       reportMitigation(projectLoopMitigationObservation(observation, turn));
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "loop_mitigation_report_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   };

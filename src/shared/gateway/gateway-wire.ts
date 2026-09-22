@@ -1,5 +1,9 @@
 var GATEWAY_API_PREFIX = "/api";
 var GATEWAY_EVENTS_PATH = "/events";
+var GATEWAY_EVENTS_ECHO_PATH = "/events/echo";
+var GATEWAY_EVENTS_ECHO_NONCE_PARAM = "nonce";
+var GATEWAY_EVENTS_ECHO_COMMENT = ":echo ";
+var GATEWAY_EVENTS_ECHO_NONCE_PATTERN = /^[A-Za-z0-9-]{1,64}$/;
 var GATEWAY_HEALTH_PATH = "/health";
 var GATEWAY_AUTH_SCHEME = "Bearer";
 var GATEWAY_SLIM_AVATARS_HEADER = "x-sand-slim-avatars";

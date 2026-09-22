@@ -1,4 +1,4 @@
-var __awaiter47 = function(thisArg, _arguments, P2, generator) {
+var __awaiter49 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -79,7 +79,7 @@ var EagerReference = class {
     this.value = value;
   }
   writeToBlobStore(ctx) {
-    return __awaiter47(this, void 0, void 0, function* () {
+    return __awaiter49(this, void 0, void 0, function* () {
       var _a19, _b2, _c2;
       if (this.value instanceof Writeable) {
         return this.value.writeToBlobStore(ctx);
@@ -117,7 +117,7 @@ var LazyReference = class {
     this.lastWrittenBlobData = void 0;
   }
   get(ctx) {
-    return __awaiter47(this, void 0, void 0, function* () {
+    return __awaiter49(this, void 0, void 0, function* () {
       if (this.valuePromise === void 0) {
         const blobType = getBlobTypeLabel(this.serde);
         this.valuePromise = this.blobStore.getBlob(ctx, this.blobId).then((blob) => {
@@ -133,7 +133,9 @@ var LazyReference = class {
             lazyReferenceDeserializeBytes.histogram(ctx, blob.byteLength, {
               blob_type: blobType
             });
-            lazyReferenceDeserializeDuration.histogram(ctx, deserializeDurationMs, { blob_type: blobType });
+            lazyReferenceDeserializeDuration.histogram(ctx, deserializeDurationMs, {
+              blob_type: blobType
+            });
             logger25.warn(ctx, "Large lazy reference deserialize", {
               blobType,
               blobBytes: blob.byteLength,
@@ -160,7 +162,7 @@ var LazyReference = class {
     this.valuePromise = Promise.resolve(value);
   }
   writeToBlobStore(ctx) {
-    return __awaiter47(this, void 0, void 0, function* () {
+    return __awaiter49(this, void 0, void 0, function* () {
       var _a19, _b2;
       if (this.valuePromise === void 0) {
         return this.blobId;

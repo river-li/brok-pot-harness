@@ -30,13 +30,13 @@ function statsigClientPort(client) {
   let stagedValues;
   return {
     dataAdapter: {
-      setData: (config2) => {
+      setData: ({ config: config2, values, user }) => {
         client.dataAdapter.setData(config2);
         invariant(
-          config2 === "{}" || client.dataAdapter.getDataSync(extractStatsigUser(config2))?.data === config2,
+          config2 === "{}" || client.dataAdapter.getDataSync(user)?.data === config2,
           "Statsig bootstrap data was rejected"
         );
-        stagedValues = config2 === "{}" ? void 0 : JSON.parse(config2);
+        stagedValues = config2 === "{}" ? void 0 : values;
       }
     },
     initializeSync: () => {
@@ -132,10 +132,10 @@ var SandExperimentServiceCore = class {
       try {
         this.hydrate(cached2.config);
         this.flagsFetchedAtMs = cached2.fetchedAtMs;
-      } catch (error41) {
+      } catch (error42) {
         reportExperimentsDiagnostic({
           kind: "bootstrap_cache_hydrate_failed",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
     }
@@ -322,8 +322,8 @@ var SandExperimentServiceCore = class {
     });
     try {
       await deadline.run(drain);
-    } catch (error41) {
-      if (!(error41 instanceof DeadlineExceededError)) throw error41;
+    } catch (error42) {
+      if (!(error42 instanceof DeadlineExceededError)) throw error42;
     }
   }
   async checkGate(name17, options2) {
@@ -343,17 +343,17 @@ var SandExperimentServiceCore = class {
         groupName: experiment.groupName,
         value: experiment.value
       };
-    } catch (error41) {
-      this.reportConfigParseFailure(name17, error41);
+    } catch (error42) {
+      this.reportConfigParseFailure(name17, error42);
       return void 0;
     }
   }
-  reportConfigParseFailure(name17, error41) {
-    if (!(error41 instanceof SandConfigParseError)) return;
-    const key = `${name17} ${error41.path}`;
+  reportConfigParseFailure(name17, error42) {
+    if (!(error42 instanceof SandConfigParseError)) return;
+    const key = `${name17} ${error42.path}`;
     if (this.reportedParseFailures.has(key)) return;
     this.reportedParseFailures.add(key);
-    reportExperimentsDiagnostic({ kind: "config_parse_failed", stage: name17, reason: error41.path });
+    reportExperimentsDiagnostic({ kind: "config_parse_failed", stage: name17, reason: error42.path });
   }
   getExperimentGroupName(name17, options2) {
     return this.readExperiment(name17, options2)?.groupName ?? null;
@@ -370,17 +370,17 @@ var SandExperimentServiceCore = class {
         this.resolveHydratedUserIdReady = resolve29;
       });
     }
-    const ready2 = this.hydratedUserIdReady;
+    const ready3 = this.hydratedUserIdReady;
     const deadline = createDeadlinePolicy({
       name: "sand-experiments-hydrated-user",
       timeoutMs,
       clock: this.clock
     });
     try {
-      return await deadline.run(() => ready2);
-    } catch (error41) {
-      if (error41 instanceof DeadlineExceededError) return false;
-      throw error41;
+      return await deadline.run(() => ready3);
+    } catch (error42) {
+      if (error42 instanceof DeadlineExceededError) return false;
+      throw error42;
     }
   }
   getSandModelExperimentState() {
@@ -451,15 +451,34 @@ var SandExperimentServiceCore = class {
       this.options.browserUsePlaywrightExperimentOverride
     );
   }
-  offerEnabledArm(name17, devOverride) {
+  peekBrowserUsePlaywright() {
+    return this.peekEnabledArm(
+      GROK_BOT_BROWSER_USE_PLAYWRIGHT_EXPERIMENT_NAME,
+      this.options.browserUsePlaywrightExperimentOverride
+    );
+  }
+  allocateEnabledArm(name17, devOverride) {
     if (this.options.isDevBuild === true) {
       const override = devOverride?.trim().toLowerCase();
-      if (override === "control") return false;
-      if (override === "treatment") return true;
+      if (override === "control") return { kind: "forced", enabled: false };
+      if (override === "treatment") return { kind: "forced", enabled: true };
     }
-    if (!this.hasFreshAuthenticatedExperimentBootstrap) return false;
+    if (!this.hasFreshAuthenticatedExperimentBootstrap) return { kind: "unallocated" };
     const assignment = this.readExperiment(name17, PEEK_OPTIONS);
-    if (assignment?.groupName == null || assignment.groupName === "") return false;
+    if (assignment?.groupName == null || assignment.groupName === "") {
+      return { kind: "unallocated" };
+    }
+    const value = assignment.value;
+    return { kind: "allocated", enabled: isUnknownRecord(value) && value.enabled === true };
+  }
+  peekEnabledArm(name17, devOverride) {
+    const allocation = this.allocateEnabledArm(name17, devOverride);
+    return allocation.kind !== "unallocated" && allocation.enabled;
+  }
+  offerEnabledArm(name17, devOverride) {
+    const allocation = this.allocateEnabledArm(name17, devOverride);
+    if (allocation.kind === "unallocated") return false;
+    if (allocation.kind === "forced") return allocation.enabled;
     const exposed = this.readExperiment(name17, EXPOSE_OPTIONS);
     if (exposed?.groupName == null || exposed.groupName === "") return false;
     void this.flushExposureLog();
@@ -540,8 +559,8 @@ var SandExperimentServiceCore = class {
       client.getExperiment(name17, parse11, EXPOSE_OPTIONS);
       void this.flushExposureLog();
       return true;
-    } catch (error41) {
-      this.reportConfigParseFailure(name17, error41);
+    } catch (error42) {
+      this.reportConfigParseFailure(name17, error42);
       return false;
     }
   }
@@ -550,10 +569,10 @@ var SandExperimentServiceCore = class {
     if (client == null) return;
     try {
       await client.flush();
-    } catch (error41) {
+    } catch (error42) {
       reportExperimentsDiagnostic({
         kind: "exposure_flush_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }
@@ -563,8 +582,8 @@ var SandExperimentServiceCore = class {
     try {
       const parsed2 = override !== void 0 ? entry.parse(override) : this.client?.getDynamicConfig(name17, entry.parse, options2);
       return parsed2 === void 0 ? entry.fallbackValues : parsed2;
-    } catch (error41) {
-      this.reportConfigParseFailure(name17, error41);
+    } catch (error42) {
+      this.reportConfigParseFailure(name17, error42);
       return entry.fallbackValues;
     }
   }
@@ -625,10 +644,10 @@ var SandExperimentServiceCore = class {
     this.client = null;
     try {
       await client?.shutdown();
-    } catch (error41) {
+    } catch (error42) {
       reportExperimentsDiagnostic({
         kind: "shutdown_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }
@@ -717,12 +736,12 @@ var SandExperimentServiceCore = class {
         authenticated: this.hasAuthenticatedNetworkBootstrap,
         gatesOnCount
       });
-    } catch (error41) {
-      if (!this.isDisposed && !isStatsigBootstrapTeamStateUnavailableError(error41)) {
+    } catch (error42) {
+      if (!this.isDisposed && !isStatsigBootstrapTeamStateUnavailableError(error42)) {
         reportExperimentsDiagnostic({
           kind: "bootstrap_failed",
           stage: trigger2,
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
     } finally {
@@ -746,45 +765,43 @@ var SandExperimentServiceCore = class {
     resolve29?.(true);
   }
   hydrate(config2) {
-    config2 = stampStatsigBootstrapAppVersion(config2, this.options.backend.clientVersion);
+    let bootstrap = parseStatsigBootstrap(config2, this.options.backend.clientVersion);
     const previous = this.hydratedBootstrap;
-    if (previous != null && (previous.config === config2 || areJsonValuesEqual(JSON.parse(previous.config), JSON.parse(config2)))) {
-      config2 = previous.config;
-      if (previous.authRevision === this.authRevision) return config2;
+    if (previous != null && (previous.config === bootstrap.config || areJsonValuesEqual(JSON.parse(previous.config), bootstrap.values))) {
+      if (previous.authRevision === this.authRevision) return previous.config;
+      bootstrap = { ...bootstrap, config: previous.config };
     }
-    const user = {
-      ...extractStatsigUser(config2),
-      appVersion: this.options.backend.clientVersion
-    };
+    const user = { ...bootstrap.user, appVersion: this.options.backend.clientVersion };
     this.hydratedBootstrap = void 0;
     if (this.client == null) {
       const createClient2 = this.options.createStatsigClient ?? defaultCreateStatsigClient;
       this.client = createClient2(STATSIG_CLIENT_KEY, user, {
         loggingEnabled: "always",
         disableStorage: true,
+        disableEvaluationMemoization: true,
         logEventCompressionMode: import_js_client.LogEventCompressionMode.Forced,
         networkConfig: {
           api: STATSIG_LOG_EVENT_PROXY_URL,
           networkOverrideFunc: sandStatsigNetworkOverride
         }
       });
-      this.client.dataAdapter.setData(config2);
+      this.client.dataAdapter.setData(bootstrap);
       this.client.initializeSync();
     } else {
-      this.client.dataAdapter.setData(config2);
+      this.client.dataAdapter.setData(bootstrap);
       this.client.updateUserSync(user);
     }
-    this.isInitialized = true;
+    this.isInitialized = config2 !== "{}";
     this.lastHydratedUserId = typeof user.userID === "string" ? user.userID : null;
-    if (config2 !== "{}") {
-      this.hydratedBootstrap = { config: config2, authRevision: this.authRevision };
+    if (bootstrap.config !== "{}") {
+      this.hydratedBootstrap = { config: bootstrap.config, authRevision: this.authRevision };
     }
     if (this.hasHydratedStatsigUserId()) {
       this.client.logEvent(STATSIG_USER_HYDRATED_EVENT);
       void this.flushExposureLog();
     }
     this.settleHydratedUserIdReady();
-    return config2;
+    return bootstrap.config;
   }
   computeSnapshot() {
     const featureGates = {};
@@ -834,10 +851,10 @@ var SandExperimentServiceCore = class {
     for (const listener of this.listeners) {
       try {
         listener(this.snapshot);
-      } catch (error41) {
+      } catch (error42) {
         reportExperimentsDiagnostic({
           kind: "snapshot_listener_failed",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
     }

@@ -1,4 +1,4 @@
-var __awaiter67 = function(thisArg, _arguments, P2, generator) {
+var __awaiter69 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -33,7 +33,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * acquired resources before rejecting.
    */
   static open(_a19) {
-    return __awaiter67(this, arguments, void 0, function* ({ credentials, host, logger: logger107, signal }) {
+    return __awaiter69(this, arguments, void 0, function* ({ credentials, host, logger: logger108, signal }) {
       signal.throwIfAborted();
       const adapter = yield host.createAdapter({ credentials, signal });
       let session;
@@ -42,7 +42,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
           authId: credentials.authId,
           host,
           adapter,
-          logger: logger107
+          logger: logger108
         });
       } catch (err) {
         let closeResult;
@@ -52,7 +52,9 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
           closeResult = { kind: "cleanupFailed", errors: [cleanupErr] };
         }
         if (closeResult.kind === "cleanupFailed") {
-          throw new CodebaseTelemetryCleanupError(closeResult.errors, "Session-open cleanup failed", { cause: err });
+          throw new CodebaseTelemetryCleanupError(closeResult.errors, "Session-open cleanup failed", {
+            cause: err
+          });
         }
         throw err;
       }
@@ -62,7 +64,9 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
       } catch (err) {
         const closeResult = yield session.close();
         if (closeResult.kind === "cleanupFailed") {
-          throw new CodebaseTelemetryCleanupError(closeResult.errors, "Session-open cleanup failed", { cause: err });
+          throw new CodebaseTelemetryCleanupError(closeResult.errors, "Session-open cleanup failed", {
+            cause: err
+          });
         }
         throw err;
       }
@@ -74,18 +78,18 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * {@link CodebaseTelemetrySession.open} completes initialization and
    * handles cleanup if it fails.
    */
-  constructor({ authId, host, adapter, logger: logger107 }) {
+  constructor({ authId, host, adapter, logger: logger108 }) {
     this.disposables = new DisposableStore();
     this.coalescer = new Coalescer();
     this.featureGates = INITIAL_FEATURE_GATE_STATE;
     this.authId = authId;
     this.host = host;
     this.adapter = adapter;
-    this.logger = logger107;
+    this.logger = logger108;
     this.terminalFailure = adapter.terminalFailure;
     const [stateSender, stateReceiver] = createWatchChannel({
       initialValue: this.readState(),
-      onSubscriberError: (error41) => this.logger.error("Session state subscriber failed", error41)
+      onSubscriberError: (error42) => this.logger.error("Session state subscriber failed", error42)
     });
     this.stateSender = stateSender;
     this.state = stateReceiver;
@@ -102,8 +106,8 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
     }
     return Promise.race([
       initialization,
-      this.terminalFailure.then((error41) => {
-        throw error41;
+      this.terminalFailure.then((error42) => {
+        throw error42;
       })
     ]);
   }
@@ -111,11 +115,11 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * Initializes the session before it is exposed to callers.
    */
   initialize() {
-    return __awaiter67(this, void 0, void 0, function* () {
+    return __awaiter69(this, void 0, void 0, function* () {
       this.disposables.add(this.host.desiredCodebases.changes.subscribe(() => {
-        void this.applyDesiredCodebases().catch((error41) => {
+        void this.applyDesiredCodebases().catch((error42) => {
           if (this.isActive()) {
-            this.logger.error("Failed to apply desired codebases", error41);
+            this.logger.error("Failed to apply desired codebases", error42);
           }
         });
       }));
@@ -130,7 +134,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * Unavailable gate values preserve their current state.
    */
   reconcileFeatureGates(values) {
-    return __awaiter67(this, void 0, void 0, function* () {
+    return __awaiter69(this, void 0, void 0, function* () {
       if (!this.isActive()) {
         return;
       }
@@ -164,7 +168,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * Applies desired codebases serially, coalescing pending updates.
    */
   applyDesiredCodebases() {
-    return this.coalescer.run(() => __awaiter67(this, void 0, void 0, function* () {
+    return this.coalescer.run(() => __awaiter69(this, void 0, void 0, function* () {
       if (!this.isActive()) {
         return;
       }
@@ -183,7 +187,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * Captures a snapshot of all currently tracked codebases.
    */
   snapshot(reason) {
-    return __awaiter67(this, void 0, void 0, function* () {
+    return __awaiter69(this, void 0, void 0, function* () {
       if (!this.isActive()) {
         return;
       }
@@ -194,7 +198,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * Runs one Git history capture cycle.
    */
   runGitHistoryCapture() {
-    return __awaiter67(this, void 0, void 0, function* () {
+    return __awaiter69(this, void 0, void 0, function* () {
       if (!this.isActive()) {
         return;
       }
@@ -220,7 +224,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * the result.
    */
   releaseResources() {
-    return __awaiter67(this, void 0, void 0, function* () {
+    return __awaiter69(this, void 0, void 0, function* () {
       const errors = [];
       try {
         this.disposables.dispose();
@@ -249,8 +253,8 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * Starts closing the session without waiting for cleanup to finish.
    */
   dispose() {
-    void this.close().catch((error41) => {
-      this.logger.error("Failed to close session", error41);
+    void this.close().catch((error42) => {
+      this.logger.error("Failed to close session", error42);
     });
   }
 };

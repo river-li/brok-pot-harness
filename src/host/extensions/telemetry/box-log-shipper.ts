@@ -1,5 +1,5 @@
 var import_promises71 = require("node:fs/promises");
-var import_node_path147 = require("node:path");
+var import_node_path146 = require("node:path");
 init_zod();
 init_errors();
 init_system_errno();
@@ -140,6 +140,7 @@ var BoxLogShipper = class {
   offsetsPath;
   writeOffsets;
   openFile;
+  statFile;
   offsets = /* @__PURE__ */ new Map();
   pumpFailedPaths = /* @__PURE__ */ new Set();
   pendingDeliveryWindows = /* @__PURE__ */ new Map();
@@ -168,9 +169,10 @@ var BoxLogShipper = class {
     this.maxLinesPerPoll = deps.maxLinesPerPoll ?? DEFAULT_MAX_LINES_PER_POLL;
     this.maxLagBytes = deps.maxLagBytes ?? DEFAULT_MAX_LAG_BYTES;
     this.maxLineBytes = deps.maxLineBytes ?? DEFAULT_MAX_LINE_BYTES;
-    this.offsetsPath = deps.offsetsPath ?? (0, import_node_path147.join)(this.logDir, OFFSETS_FILE_NAME);
+    this.offsetsPath = deps.offsetsPath ?? (0, import_node_path146.join)(this.logDir, OFFSETS_FILE_NAME);
     this.writeOffsets = deps.writeOffsets ?? writeFileAtomic;
     this.openFile = deps.openFile ?? import_promises71.open;
+    this.statFile = deps.statFile ?? import_promises71.stat;
   }
   async start() {
     await this.loadOffsets();
@@ -184,8 +186,8 @@ var BoxLogShipper = class {
     this.pollingHandle = this.polling.start(async () => {
       try {
         await this.poll();
-      } catch (error41) {
-        this.reportHostLog("error", `[sand-log-shipper] poll failed: ${errorLogTag(error41)}`);
+      } catch (error42) {
+        this.reportHostLog("error", `[sand-log-shipper] poll failed: ${errorLogTag(error42)}`);
       } finally {
         if (first) {
           first = false;
@@ -230,9 +232,9 @@ var BoxLogShipper = class {
       try {
         budget -= await this.pumpFile(file2, budget);
         this.pumpFailedPaths.delete(file2.path);
-      } catch (error41) {
+      } catch (error42) {
         this.pumpFailedPaths.add(file2.path);
-        this.notePumpFailed(error41, 1);
+        this.notePumpFailed(error42, 1);
       }
     }
     if (snapshot.complete && this.pumpFailedPaths.size > 0) {
@@ -253,19 +255,19 @@ var BoxLogShipper = class {
     let entries;
     try {
       entries = await (0, import_promises71.readdir)(this.logDir, { withFileTypes: true });
-    } catch (error41) {
-      reportFallbackUnlessAbsent("box_log_shipper", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("box_log_shipper", error42);
       return { files, complete: false };
     }
     for (const entry of entries) {
       if (entry.isFile() && entry.name.endsWith(LOG_SUFFIX)) {
-        const path31 = (0, import_node_path147.join)(this.logDir, entry.name);
+        const path31 = (0, import_node_path146.join)(this.logDir, entry.name);
         const source = toSourceName(entry.name);
         if (!this.skip.has(path31) && !this.isExcludedSource(source)) {
           files.push({ path: path31, source });
         }
       } else if (entry.isDirectory() && this.subdirPattern.test(entry.name)) {
-        const subdir = (0, import_node_path147.join)(this.logDir, entry.name);
+        const subdir = (0, import_node_path146.join)(this.logDir, entry.name);
         let subEntries;
         try {
           subEntries = await (0, import_promises71.readdir)(subdir, { withFileTypes: true });
@@ -275,7 +277,7 @@ var BoxLogShipper = class {
         }
         for (const sub of subEntries) {
           if (!sub.isFile() || !sub.name.endsWith(LOG_SUFFIX)) continue;
-          const path31 = (0, import_node_path147.join)(subdir, sub.name);
+          const path31 = (0, import_node_path146.join)(subdir, sub.name);
           const leaf = toSourceName(sub.name);
           if (this.skip.has(path31) || this.isExcludedSource(leaf)) continue;
           files.push({ path: path31, source: `${entry.name}/${leaf}` });
@@ -290,14 +292,14 @@ var BoxLogShipper = class {
     for (const file2 of listing.files) {
       let fileStat;
       try {
-        fileStat = await (0, import_promises71.stat)(file2.path);
-      } catch (error41) {
+        fileStat = await this.statFile(file2.path);
+      } catch (error42) {
         complete = false;
-        if (findSystemErrno(error41) !== "ENOENT" && !this.statFailedPaths.has(file2.path)) {
+        if (findSystemErrno(error42) !== "ENOENT" && !this.statFailedPaths.has(file2.path)) {
           this.statFailedPaths.add(file2.path);
           this.reportHostLog(
             "error",
-            `[sand-log-shipper] stat failed for ${file2.source} (${errorLogTag(error41)})`
+            `[sand-log-shipper] stat failed for ${file2.source} (${errorLogTag(error42)})`
           );
         }
         continue;
@@ -445,11 +447,11 @@ var BoxLogShipper = class {
     this.offsetsRevision += 1;
   }
   async loadOffsets() {
-    const raw = await (0, import_promises71.readFile)(this.offsetsPath, "utf8").catch((error41) => {
-      if (findSystemErrno(error41) !== "ENOENT") {
+    const raw = await (0, import_promises71.readFile)(this.offsetsPath, "utf8").catch((error42) => {
+      if (findSystemErrno(error42) !== "ENOENT") {
         this.reportHostLog(
           "error",
-          `[sand-log-shipper] offsets read failed (${errorLogTag(error41)})`
+          `[sand-log-shipper] offsets read failed (${errorLogTag(error42)})`
         );
       }
       return null;
@@ -477,9 +479,9 @@ var BoxLogShipper = class {
         this.isOffsetsDirty = false;
         this.noteOffsetSaveSucceeded();
       }
-    } catch (error41) {
+    } catch (error42) {
       this.isOffsetsDirty = true;
-      this.noteOffsetSaveFailed(error41);
+      this.noteOffsetSaveFailed(error42);
     }
   }
   maybeReportProgress(files) {
@@ -512,8 +514,8 @@ var BoxLogShipper = class {
       oldestPendingWindowAgeMs
     });
   }
-  notePumpFailed(error41, failureCount) {
-    const errorClass = classifyOffsetSaveError(error41);
+  notePumpFailed(error42, failureCount) {
+    const errorClass = classifyOffsetSaveError(error42);
     const failure2 = this.pumpFailure;
     if (failure2 !== void 0) {
       failure2.errorClass = errorClass;
@@ -539,8 +541,8 @@ var BoxLogShipper = class {
       this.reportOffsetSaveFailure(failure2);
     }
   }
-  noteOffsetSaveFailed(error41) {
-    const errorClass = classifyOffsetSaveError(error41);
+  noteOffsetSaveFailed(error42) {
+    const errorClass = classifyOffsetSaveError(error42);
     const failure2 = this.offsetSaveFailure;
     if (failure2 !== void 0) {
       failure2.errorClass = errorClass;
@@ -588,8 +590,8 @@ var BoxLogShipper = class {
 function toSourceName(fileName) {
   return fileName.endsWith(LOG_SUFFIX) ? fileName.slice(0, -LOG_SUFFIX.length) : fileName;
 }
-function classifyOffsetSaveError(error41) {
-  switch (findSystemErrno(error41)) {
+function classifyOffsetSaveError(error42) {
+  switch (findSystemErrno(error42)) {
     case "ENOSPC":
     case "EDQUOT":
       return "no_space";

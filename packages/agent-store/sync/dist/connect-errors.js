@@ -1,38 +1,38 @@
 init_utils_pb();
 init_esm2();
-function getAgentStoreConnectCode(error41) {
-  if (error41 instanceof ConnectError) {
-    return error41.code;
+function getAgentStoreConnectCode(error42) {
+  if (error42 instanceof ConnectError) {
+    return error42.code;
   }
-  if (typeof error41 !== "object" || error41 === null || !("code" in error41)) {
+  if (typeof error42 !== "object" || error42 === null || !("code" in error42)) {
     return void 0;
   }
-  return normalizeConnectCode(error41.code);
+  return normalizeConnectCode(error42.code);
 }
-function isAgentStoreConnectCode(error41, code) {
-  return getAgentStoreConnectCode(error41) === code;
+function isAgentStoreConnectCode(error42, code) {
+  return getAgentStoreConnectCode(error42) === code;
 }
-function isAgentStoreMintNegativeCacheable(error41) {
-  const code = getAgentStoreConnectCode(error41);
+function isAgentStoreMintNegativeCacheable(error42) {
+  const code = getAgentStoreConnectCode(error42);
   return code === Code.InvalidArgument || code === Code.NotFound || code === Code.FailedPrecondition;
 }
-function isAgentStoreSyncDisabledError(error41) {
-  if (!messageLooksLikeSyncDisabled(errorMessageOf(error41))) {
+function isAgentStoreSyncDisabledError(error42) {
+  if (!messageLooksLikeSyncDisabled(errorMessageOf(error42))) {
     return false;
   }
-  const code = getAgentStoreConnectCode(error41);
+  const code = getAgentStoreConnectCode(error42);
   return code === void 0 || code === Code.InvalidArgument || code === Code.PermissionDenied;
 }
 function messageLooksLikeSyncDisabled(message) {
   const lower = message.toLowerCase();
   return lower.includes("agent store sync is not enabled") || lower.includes("agent store sync is not available in legacy privacy mode") || lower.includes("private worker agent-store sync is not enabled");
 }
-function errorMessageOf(error41) {
-  if (error41 instanceof Error) {
-    return error41.message;
+function errorMessageOf(error42) {
+  if (error42 instanceof Error) {
+    return error42.message;
   }
-  if (typeof error41 === "string") {
-    return error41;
+  if (typeof error42 === "string") {
+    return error42;
   }
   return "";
 }
@@ -49,15 +49,15 @@ function parseMarkerField(args) {
   const value = (end < 0 ? rest : rest.slice(0, end)).trim();
   return value.length > 0 ? value : void 0;
 }
-function markerHaystacks(error41) {
+function markerHaystacks(error42) {
   var _a19, _b2;
   const haystacks = [];
-  const message = errorMessageOf(error41);
+  const message = errorMessageOf(error42);
   if (message.length > 0) {
     haystacks.push(message);
   }
-  if (error41 instanceof ConnectError) {
-    for (const detail of error41.findDetails(ErrorDetails)) {
+  if (error42 instanceof ConnectError) {
+    for (const detail of error42.findDetails(ErrorDetails)) {
       const detailMessage = (_a19 = detail.details) === null || _a19 === void 0 ? void 0 : _a19.detail;
       if (typeof detailMessage === "string" && detailMessage.length > 0) {
         haystacks.push(detailMessage);
@@ -85,18 +85,18 @@ function stripAgentStoreMarkerTail(text2) {
   }
   return text2;
 }
-function agentStoreErrorSummaryMessage(error41, fallback2) {
+function agentStoreErrorSummaryMessage(error42, fallback2) {
   var _a19, _b2, _c2, _d;
-  const message = errorMessageOf(error41).trim();
+  const message = errorMessageOf(error42).trim();
   if (message.length > 0 && !isOpaqueConnectWireMessage(message)) {
     return stripAgentStoreMarkerTail(message);
   }
-  if (error41 instanceof ConnectError) {
-    const raw = error41.rawMessage.trim();
+  if (error42 instanceof ConnectError) {
+    const raw = error42.rawMessage.trim();
     if (raw.length > 0 && !isOpaqueConnectWireMessage(raw)) {
       return stripAgentStoreMarkerTail(raw);
     }
-    for (const detail of error41.findDetails(ErrorDetails)) {
+    for (const detail of error42.findDetails(ErrorDetails)) {
       const title = (_b2 = (_a19 = detail.details) === null || _a19 === void 0 ? void 0 : _a19.title) === null || _b2 === void 0 ? void 0 : _b2.trim();
       if (title !== void 0 && title.length > 0 && !isOpaqueConnectWireMessage(title)) {
         return stripAgentStoreMarkerTail(title);
@@ -109,12 +109,12 @@ function agentStoreErrorSummaryMessage(error41, fallback2) {
   }
   return fallback2;
 }
-function parseAgentStoreQuotaExceeded(error41) {
+function parseAgentStoreQuotaExceeded(error42) {
   var _a19, _b2, _c2;
-  if (!isAgentStoreConnectCode(error41, Code.FailedPrecondition) && !isAgentStoreConnectCode(error41, Code.InvalidArgument)) {
+  if (!isAgentStoreConnectCode(error42, Code.FailedPrecondition) && !isAgentStoreConnectCode(error42, Code.InvalidArgument)) {
     return void 0;
   }
-  const haystack = markerHaystacks(error41).find((h) => h.includes(QUOTA_EXCEEDED_MARKER));
+  const haystack = markerHaystacks(error42).find((h) => h.includes(QUOTA_EXCEEDED_MARKER));
   if (haystack === void 0) {
     return void 0;
   }
@@ -128,11 +128,11 @@ function parseAgentStoreQuotaExceeded(error41) {
     storeId: (_c2 = parseMarkerField({ haystack, key: "store_id" })) !== null && _c2 !== void 0 ? _c2 : ""
   };
 }
-function isAgentStoreDirNotEmptyConnectError(error41) {
-  if (!isAgentStoreConnectCode(error41, Code.FailedPrecondition)) {
+function isAgentStoreDirNotEmptyConnectError(error42) {
+  if (!isAgentStoreConnectCode(error42, Code.FailedPrecondition)) {
     return false;
   }
-  return markerHaystacks(error41).some((haystack) => haystack.includes(DIR_NOT_EMPTY_MARKER));
+  return markerHaystacks(error42).some((haystack) => haystack.includes(DIR_NOT_EMPTY_MARKER));
 }
 function normalizeConnectCode(code) {
   if (typeof code === "number" && typeof Code[code] === "string") {

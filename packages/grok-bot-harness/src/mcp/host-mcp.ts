@@ -3,8 +3,8 @@ function syncPluginSkillsInBackground(pluginSkills, trigger2) {
   void (async () => {
     try {
       await pluginSkills?.sync(trigger2);
-    } catch (error41) {
-      reportMcpHostEdgeFailure("plugin-skill-sync", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("plugin-skill-sync", error42);
     }
   })();
 }
@@ -147,8 +147,8 @@ function createHostMcp(deps) {
       return (view?.skills ?? []).flatMap(
         (skill) => skill.sourceUrl != null ? [skill.sourceUrl] : []
       );
-    } catch (error41) {
-      reportMcpHostEdgeFailure("plugin-skill-catalog-fetch", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("plugin-skill-catalog-fetch", error42);
       return null;
     }
   };
@@ -161,8 +161,8 @@ function createHostMcp(deps) {
     }
     try {
       pluginSkills.removeLiveReferences(sourceUrls);
-    } catch (error41) {
-      reportMcpHostEdgeFailure("plugin-skill-reference-drop", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("plugin-skill-reference-drop", error42);
     }
   };
   const catalogServerStatuses = () => deps.isCatalogServerStatusDisabled?.() === true ? Promise.resolve(/* @__PURE__ */ new Map()) : discovery.getServerStatuses();
@@ -170,15 +170,15 @@ function createHostMcp(deps) {
     deps.onServersMutated?.();
   };
   const mutations = {
-    async installEntry(request3) {
-      const state = await manager.installEntry(request3, getAccessToken);
+    async installEntry(request5) {
+      const state = await manager.installEntry(request5, getAccessToken);
       serversMutated();
-      dropLiveSkillReferences(await pluginSkillSourceUrls(request3.entryId));
+      dropLiveSkillReferences(await pluginSkillSourceUrls(request5.entryId));
       syncPluginSkillsInBackground(deps.pluginSkills, "install");
       return state;
     },
-    async updatePluginInstall(request3) {
-      const state = await manager.updatePluginInstall(request3, getAccessToken);
+    async updatePluginInstall(request5) {
+      const state = await manager.updatePluginInstall(request5, getAccessToken);
       serversMutated();
       return state;
     },
@@ -197,15 +197,15 @@ function createHostMcp(deps) {
       }
       return result;
     },
-    async authenticateServer(request3) {
+    async authenticateServer(request5) {
       const result = await manager.authenticateServer(
-        request3.serverId,
-        request3.accountKey ?? DEFAULT_MCP_ACCOUNT_KEY,
+        request5.serverId,
+        request5.accountKey ?? DEFAULT_MCP_ACCOUNT_KEY,
         {
-          forceReauth: request3.forceReauth === true,
-          ...request3.trigger == null ? {} : { trigger: request3.trigger },
-          ...request3.requestingAgentId == null ? {} : { requestingAgentId: request3.requestingAgentId },
-          ...request3.oauthRedirectUri == null ? {} : { oauthRedirectUri: request3.oauthRedirectUri }
+          forceReauth: request5.forceReauth === true,
+          ...request5.trigger == null ? {} : { trigger: request5.trigger },
+          ...request5.requestingAgentId == null ? {} : { requestingAgentId: request5.requestingAgentId },
+          ...request5.oauthRedirectUri == null ? {} : { oauthRedirectUri: request5.oauthRedirectUri }
         }
       );
       if (result.status === "started") {
@@ -213,22 +213,22 @@ function createHostMcp(deps) {
       }
       return result;
     },
-    async renameAccount(request3) {
+    async renameAccount(request5) {
       const state = await manager.renameAccount(
-        request3.serverId,
-        request3.accountKey,
-        request3.newAccountKey
+        request5.serverId,
+        request5.accountKey,
+        request5.newAccountKey
       );
       serversMutated();
       return state;
     },
-    async removeAccount(request3) {
-      const state = await manager.removeAccount(request3.serverId, request3.accountKey);
+    async removeAccount(request5) {
+      const state = await manager.removeAccount(request5.serverId, request5.accountKey);
       serversMutated();
       return state;
     },
-    async setCustomInstructions(request3) {
-      const state = await manager.setServerCustomInstructions(request3);
+    async setCustomInstructions(request5) {
+      const state = await manager.setServerCustomInstructions(request5);
       serversMutated();
       return state;
     }
@@ -264,8 +264,8 @@ function createHostMcp(deps) {
       const [views, state, effectivePlugins] = await Promise.all([
         manager.getCatalog(getAccessToken),
         manager.listServers(),
-        manager.listEffectivePlugins().catch((error41) => {
-          log4(`effective-plugins read degraded to attributed rows: ${errorLogTag(error41)}`);
+        manager.listEffectivePlugins().catch((error42) => {
+          log4(`effective-plugins read degraded to attributed rows: ${errorLogTag(error42)}`);
           return null;
         })
       ]);
@@ -283,8 +283,8 @@ function createHostMcp(deps) {
       if (view == null) return null;
       const [state, effectivePlugins] = await Promise.all([
         manager.listServers(),
-        manager.listEffectivePlugins().catch((error41) => {
-          log4(`effective-plugins read degraded to attributed rows: ${errorLogTag(error41)}`);
+        manager.listEffectivePlugins().catch((error42) => {
+          log4(`effective-plugins read degraded to attributed rows: ${errorLogTag(error42)}`);
           return null;
         })
       ]);
@@ -362,7 +362,7 @@ function createHostMcp(deps) {
     getCatalog: () => manager.getCatalog(getAccessToken),
     resolvePluginLogo: (url2) => manager.resolvePluginLogo(url2),
     listServerTools: (serverId) => manager.listServerTools(serverId),
-    toggleToolDisabled: (request3) => manager.toggleMcpToolDisabled(request3),
+    toggleToolDisabled: (request5) => manager.toggleMcpToolDisabled(request5),
     completeOAuth: async (args) => {
       const result = await deps.backendMcpExec.completeOAuth(args);
       const accountKey = accountKeyFromOAuthCompletion(result);
@@ -380,15 +380,16 @@ function createHostMcp(deps) {
     listBoxServers: (serverIdentifiers, options2) => discovery.listBoxServers(serverIdentifiers, options2),
     noteAuthCompletedElsewhere: (serverId, accountKey) => manager.noteAuthCompletedElsewhere(serverId, accountKey),
     setBoxMcpExec: (boxMcpExec) => discovery.setBoxMcpExec(boxMcpExec),
-    reconcileBoxServers: () => {
+    reconcileBoxServers: (options2) => {
       manager.definitionSourceView().reloadBoxServers();
+      if (options2?.force === true) discovery.resetPushState();
       return discovery.reconcileBoxServers();
     },
     readMemberPublishMarketplaces: async () => {
       try {
         await manager.getCatalog(getAccessToken);
-      } catch (error41) {
-        log4(`member-publish settings unavailable, publish gate stays open: ${errorLogTag(error41)}`);
+      } catch (error42) {
+        log4(`member-publish settings unavailable, publish gate stays open: ${errorLogTag(error42)}`);
       }
       return manager.peekMemberPublishMarketplaces();
     },

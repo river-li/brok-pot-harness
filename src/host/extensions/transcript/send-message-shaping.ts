@@ -306,7 +306,7 @@ function buildSelectedVideos(videoAttachmentPaths) {
     (videoPath) => new SelectedVideo({
       path: videoPath,
       mimeType: videoMimeFromPath(videoPath) ?? "video/mp4",
-      filename: (0, import_node_path156.basename)(videoPath),
+      filename: (0, import_node_path155.basename)(videoPath),
       fps: 4
     })
   );

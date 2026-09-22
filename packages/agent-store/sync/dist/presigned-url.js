@@ -125,8 +125,8 @@ function assertPresignedUrlSafe(args) {
   }
   try {
     args.validatePresignedUrl(parsed2);
-  } catch (error41) {
-    throw new Error(`Refusing presigned URL for ${args.relPath}: ${error41 instanceof Error ? error41.message : String(error41)}`, { cause: error41 instanceof Error ? error41 : void 0 });
+  } catch (error42) {
+    throw new Error(`Refusing presigned URL for ${args.relPath}: ${error42 instanceof Error ? error42.message : String(error42)}`, { cause: error42 instanceof Error ? error42 : void 0 });
   }
 }
 function isLoopbackHostName(hostname3) {

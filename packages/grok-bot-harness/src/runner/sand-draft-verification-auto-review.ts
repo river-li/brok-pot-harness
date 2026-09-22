@@ -50,10 +50,10 @@ async function reviewSandDraftRouteVerification(args) {
   const { ctx, route, options: options2, toolCallId } = args;
   if (options2.mode === "off") return { allowed: true };
   if (options2.mode === "shadow") {
-    void classify3(ctx, route, options2, toolCallId, "shadow").catch((error41) => {
+    void classify3(ctx, route, options2, toolCallId, "shadow").catch((error42) => {
       reportHostDiagnostic({
         kind: "auto_review_shadow_classify_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     });
     return { allowed: true };

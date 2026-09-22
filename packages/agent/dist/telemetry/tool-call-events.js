@@ -1,4 +1,10 @@
-init_dist3();
+init_dist4();
+function toolCallAuditOutcomeOf(error42) {
+  if (typeof error42 !== "object" || error42 === null)
+    return void 0;
+  const outcome = error42.toolCallAuditOutcome;
+  return outcome === "denied" || outcome === "cancelled" ? outcome : void 0;
+}
 var TOOL_CALL_EVENT_DEFERRED_ERROR_CLASS = "DeferredInteractionResponseError";
 var TOOL_CALL_EVENT_RESULT_ERROR_CLASS = "tool_result_error";
 var TOOL_CALL_EVENT_TOOL_NOT_FOUND_ERROR_CLASS = "tool_not_found";
@@ -8,12 +14,12 @@ function boundedErrorClassName(name17) {
   const trimmed = name17?.trim();
   return trimmed !== void 0 && trimmed !== "Error" && ERROR_CLASS_NAME_PATTERN.test(trimmed) ? trimmed : void 0;
 }
-function toolCallErrorClassOf(error41) {
-  if (error41 instanceof DeferredInteractionResponseError) {
+function toolCallErrorClassOf(error42) {
+  if (error42 instanceof DeferredInteractionResponseError) {
     return TOOL_CALL_EVENT_DEFERRED_ERROR_CLASS;
   }
-  if (error41 instanceof Error) {
-    return boundedErrorClassName(error41.constructor?.name) ?? TOOL_CALL_EVENT_UNKNOWN_ERROR_CLASS;
+  if (error42 instanceof Error) {
+    return boundedErrorClassName(error42.constructor?.name) ?? TOOL_CALL_EVENT_UNKNOWN_ERROR_CLASS;
   }
   return TOOL_CALL_EVENT_UNKNOWN_ERROR_CLASS;
 }
@@ -72,11 +78,13 @@ var ToolCallStepTracker = class {
     result.invocationId.then((id) => {
       this.invocationId = id;
     }, () => void 0);
-    const endStep = () => {
-      this.stepEnded = true;
-      this.flush();
-    };
-    result.response.then(endStep, endStep);
+    result.response.then(() => this.endStep(), () => this.endStep());
+  }
+  endStep(invocationId) {
+    if (invocationId !== void 0)
+      this.invocationId = invocationId;
+    this.stepEnded = true;
+    this.flush();
   }
   flush() {
     if (!this.stepEnded || this.pending.length === 0) {
@@ -119,6 +127,16 @@ function createToolCallEventMiddleware(options2) {
     },
     stream(ctx, invocationId, tools, options3) {
       return executor.stream(ctx, invocationId, tools, options3);
+    },
+    // The deferred calls a resume completes settle here, not in a model step:
+    // one batch for them, tagged with the resume's invocation.
+    async runWithToolCallEventRecorder(ctx, fn) {
+      const tracker = new ToolCallStepTracker(options2);
+      try {
+        return await fn(ctx.with(toolCallEventRecorderKey, tracker));
+      } finally {
+        tracker.endStep(getInvocationId(ctx));
+      }
     }
   });
 }

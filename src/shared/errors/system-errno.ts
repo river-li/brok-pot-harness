@@ -1,6 +1,6 @@
-function findSystemErrno(error41) {
+function findSystemErrno(error42) {
   const seen = /* @__PURE__ */ new Set();
-  let current = error41;
+  let current = error42;
   while (current != null && typeof current === "object" && !seen.has(current)) {
     seen.add(current);
     const code = current.code;
@@ -9,8 +9,8 @@ function findSystemErrno(error41) {
   }
   return void 0;
 }
-function isMissingPathError(error41) {
-  const errno = findSystemErrno(error41);
+function isMissingPathError(error42) {
+  const errno = findSystemErrno(error42);
   return errno === "ENOENT" || errno === "ENOTDIR";
 }
 var init_system_errno = __esm({

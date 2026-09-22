@@ -18,11 +18,11 @@ var SandSessionMaterialization = class {
     return this.workerPool;
   }
   blobStoreFor(dbPath) {
-    const agentDir = (0, import_node_path138.dirname)(dbPath);
+    const agentDir = (0, import_node_path137.dirname)(dbPath);
     return new WorkerBlobStore(
       this.requireWorkerPool(),
-      (0, import_node_path138.basename)(agentDir),
-      (0, import_node_path138.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
+      (0, import_node_path137.basename)(agentDir),
+      (0, import_node_path137.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
       dbPath
     );
   }
@@ -35,9 +35,9 @@ var SandSessionMaterialization = class {
     let entries;
     try {
       entries = await (0, import_promises65.readdir)(this.host.rootDir, { withFileTypes: true });
-    } catch (error41) {
-      if (error41.code === "ENOENT") return [];
-      throw error41;
+    } catch (error42) {
+      if (error42.code === "ENOENT") return [];
+      throw error42;
     }
     return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
   }
@@ -63,7 +63,7 @@ var SandSessionMaterialization = class {
   async runMint(agentId, mint2) {
     try {
       return await mint2(agentId);
-    } catch (error41) {
+    } catch (error42) {
       await (0, import_promises65.rm)(this.host.getAgentDir(agentId), {
         recursive: true,
         force: true
@@ -75,7 +75,7 @@ var SandSessionMaterialization = class {
           errorClass: errorLogTag(cleanupError)
         });
       });
-      throw error41;
+      throw error42;
     }
   }
   async createSession(profile, origin = "user", options2 = {}) {
@@ -116,7 +116,7 @@ var SandSessionMaterialization = class {
       avatarColor: profile?.avatarColor?.trim() ?? "",
       ...namedBy === null ? {} : { namedBy }
     };
-    const profilePath = getSandProfilePath((0, import_node_path138.dirname)(dbPath));
+    const profilePath = getSandProfilePath((0, import_node_path137.dirname)(dbPath));
     if (options2.serverId !== void 0) {
       writeServerBackedProfileFile(profilePath, identity, {
         serverId: options2.serverId,
@@ -125,7 +125,7 @@ var SandSessionMaterialization = class {
     } else {
       writeSandProfileFile(profilePath, identity);
     }
-    writeSandSettingsFile(getSandSettingsPath((0, import_node_path138.dirname)(dbPath)), {
+    writeSandSettingsFile(getSandSettingsPath((0, import_node_path137.dirname)(dbPath)), {
       notifyOnAgentUpdates: true
     });
     const automations = automationStoreForDbPath(
@@ -144,7 +144,7 @@ var SandSessionMaterialization = class {
       agentStore: new AgentStore2(this.blobStoreFor(dbPath), db, {
         fixedRootBlobId: SAND_CONVERSATION_ROOT_SLOT_ID
       }),
-      memory: this.host.memory().createAgentStore((0, import_node_path138.dirname)(dbPath)),
+      memory: this.host.memory().createAgentStore((0, import_node_path137.dirname)(dbPath)),
       automations,
       skills: skillStoreForDbPath(
         dbPath,
@@ -163,11 +163,11 @@ var SandSessionMaterialization = class {
       await agentStore.resetFromDb(this.host.ctx);
       try {
         await recoverConversationIfRootMissing(this.host.maintenanceHost(), dbPath, db, agentStore);
-      } catch (error41) {
-        if (error41 instanceof ConversationRecoveryScanError) {
-          return { outcome: "scan-failed", errorClass: error41.detail };
+      } catch (error42) {
+        if (error42 instanceof ConversationRecoveryScanError) {
+          return { outcome: "scan-failed", errorClass: error42.detail };
         }
-        throw error41;
+        throw error42;
       }
       return { outcome: "complete" };
     } finally {
@@ -199,7 +199,7 @@ var SandSessionMaterialization = class {
       dbPath,
       db,
       agentStore,
-      memory: this.host.memory().createAgentStore((0, import_node_path138.dirname)(dbPath)),
+      memory: this.host.memory().createAgentStore((0, import_node_path137.dirname)(dbPath)),
       automations: automationStoreForDbPath(
         dbPath,
         this.host.resolveUserTimeZone,

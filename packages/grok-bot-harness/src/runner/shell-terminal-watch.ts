@@ -55,8 +55,8 @@ async function pollShellTerminalFile(host, id, isCancelled, settle) {
           return;
         }
       }
-    } catch (error41) {
-      if (error41 instanceof SandLocalToolPermissionDeniedError) {
+    } catch (error42) {
+      if (error42 instanceof SandLocalToolPermissionDeniedError) {
         settle(
           "error",
           "Grok Bot is no longer allowed to read this command's output on the user's computer, so its completion cannot be observed. The command keeps running; ask the user to approve reading its output file for the result.",

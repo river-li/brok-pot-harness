@@ -1,4 +1,3 @@
-init_zod();
 var SAND_REQUEST_COOKIE_ORIGIN_APPROVAL_TOOL_NAME = "request_cookie_origin_approval";
 var COOKIE_ORIGIN_APPROVAL_MAX_ORIGINS = 32;
 var requestCookieOriginApprovalParameters = external_exports.object({
@@ -106,8 +105,8 @@ function createRequestCookieOriginApprovalTool(deps) {
     },
     execute: async (ctx, args, toolDeps) => {
       const origins = normalizeCookieOriginApprovalOrigins(args.origins);
-      const request3 = () => toolDeps.request({ origins, signal: ctx.signal });
-      if (origins.length === 0) return formatCookieOriginApprovalOutcome(await request3());
+      const request5 = () => toolDeps.request({ origins, signal: ctx.signal });
+      if (origins.length === 0) return formatCookieOriginApprovalOutcome(await request5());
       const requestedIds = pinnedProfileIds(origins);
       if (requestedIds.length > 0) {
         const probe = await toolDeps.request({ origins: [], signal: ctx.signal });
@@ -117,7 +116,7 @@ function createRequestCookieOriginApprovalTool(deps) {
         }
       }
       return formatCookieOriginApprovalOutcome(
-        await withToolExecutionTimeoutSuspended(ctx, request3)
+        await withToolExecutionTimeoutSuspended(ctx, request5)
       );
     }
   });

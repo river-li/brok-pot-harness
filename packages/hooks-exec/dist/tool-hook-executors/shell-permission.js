@@ -1,4 +1,4 @@
-var __awaiter36 = function(thisArg, _arguments, P2, generator) {
+var __awaiter38 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -26,7 +26,7 @@ var __awaiter36 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function runBeforeShellExecutionPermissionHook(_a19) {
-  return __awaiter36(this, arguments, void 0, function* ({ hookExecutor, baseHookRequest, command, cwd, sandbox }) {
+  return __awaiter38(this, arguments, void 0, function* ({ hookExecutor, baseHookRequest, command, cwd, sandbox }) {
     const beforeHookResponse = yield hookExecutor.executeHookForStep(HookStep.beforeShellExecution, Object.assign(Object.assign({}, baseHookRequest), {
       command,
       cwd,

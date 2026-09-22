@@ -1,4 +1,4 @@
-var __awaiter16 = function(thisArg, _arguments, P2, generator) {
+var __awaiter17 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -164,10 +164,10 @@ var AgentStoreSyncEngine = class {
       this.state = "paused";
     }
     this.conflictJournal = new ConflictJournal(conflictJournalPathForFilesDir(this.filesDir), {
-      warn: (message, error41) => this.warn(message, error41)
+      warn: (message, error42) => this.warn(message, error42)
     });
     this.pendingConflictJournal = new PendingConflictJournal(conflictPendingJournalPathForFilesDir(this.filesDir), {
-      warn: (message, error41) => this.warn(message, error41)
+      warn: (message, error42) => this.warn(message, error42)
     });
   }
   getState() {
@@ -190,12 +190,12 @@ var AgentStoreSyncEngine = class {
     return this.pendingConflictJournal.size();
   }
   /** Best-effort diagnostic; swallows listener errors so warns never throw. */
-  warn(message, error41) {
+  warn(message, error42) {
     if (this.onWarn === void 0) {
       return;
     }
     try {
-      this.onWarn(message, error41);
+      this.onWarn(message, error42);
     } catch (_a19) {
     }
   }
@@ -204,8 +204,8 @@ var AgentStoreSyncEngine = class {
   }
   /** Releases the lock and parks the loop. Idempotent under concurrent callers. */
   pause() {
-    return __awaiter16(this, void 0, void 0, function* () {
-      yield this.serialize(() => __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
+      yield this.serialize(() => __awaiter17(this, void 0, void 0, function* () {
         if (this.state === "paused") {
           return;
         }
@@ -230,8 +230,8 @@ var AgentStoreSyncEngine = class {
    * SQLite handle.
    */
   unpause() {
-    return __awaiter16(this, void 0, void 0, function* () {
-      yield this.serialize(() => __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
+      yield this.serialize(() => __awaiter17(this, void 0, void 0, function* () {
         if (this.disposed || this.closing) {
           return;
         }
@@ -271,8 +271,8 @@ var AgentStoreSyncEngine = class {
    * operating after the lock has moved on.
    */
   dispose(options2) {
-    return __awaiter16(this, void 0, void 0, function* () {
-      yield this.serialize(() => __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
+      yield this.serialize(() => __awaiter17(this, void 0, void 0, function* () {
         if (this.disposed) {
           return;
         }
@@ -457,7 +457,7 @@ var AgentStoreSyncEngine = class {
    * before.
    */
   releaseLockIfHeld() {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const handle = this.lockHandle;
       if (handle === void 0) {
         return;
@@ -476,11 +476,11 @@ var AgentStoreSyncEngine = class {
    * re-contend on the normal cadence once this host is healthy again.
    */
   relinquishLock() {
-    return __awaiter16(this, arguments, void 0, function* (reason = "lock_lost") {
+    return __awaiter17(this, arguments, void 0, function* (reason = "lock_lost") {
       if (this.lockProvider === void 0) {
         return;
       }
-      yield this.serialize(() => __awaiter16(this, void 0, void 0, function* () {
+      yield this.serialize(() => __awaiter17(this, void 0, void 0, function* () {
         if (this.disposed || this.state !== "running") {
           return;
         }
@@ -554,11 +554,11 @@ var AgentStoreSyncEngine = class {
    * `running` with a held contended lock. Best-effort.
    */
   revalidateLockOwnership() {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       if (this.lockProvider === void 0) {
         return;
       }
-      yield this.serialize(() => __awaiter16(this, void 0, void 0, function* () {
+      yield this.serialize(() => __awaiter17(this, void 0, void 0, function* () {
         if (this.disposed || this.closing || this.state !== "running" || this.lockHandle === void 0) {
           return;
         }
@@ -581,7 +581,7 @@ var AgentStoreSyncEngine = class {
    * path from awaiting it. A non-positive bound leaves the call unbounded.
    */
   raceResumeLockCall(call, timeoutValue) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const timeoutMs = this.resumeLockCallTimeoutMs;
       if (timeoutMs <= 0) {
         return yield call;
@@ -617,7 +617,7 @@ var AgentStoreSyncEngine = class {
    * and adopted normally).
    */
   acquireLockBounded(provider) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const timeoutMs = this.resumeLockCallTimeoutMs;
       const acquire = provider.acquire();
       if (timeoutMs <= 0) {
@@ -652,7 +652,7 @@ var AgentStoreSyncEngine = class {
    * has adopted this exact handle, so it can never release a live lock.
    */
   releaseOrphanedLockHandle(handle) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       if (handle === void 0 || handle === this.lockHandle) {
         return;
       }
@@ -669,7 +669,7 @@ var AgentStoreSyncEngine = class {
    * treated as owned; a transient read error never falsely relinquishes.
    */
   isLockStillOwnedOnDisk() {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const handle = this.lockHandle;
       if ((handle === null || handle === void 0 ? void 0 : handle.verifyStillOwned) === void 0) {
         return true;
@@ -695,7 +695,7 @@ var AgentStoreSyncEngine = class {
    * to `forceSync`'s `finally` (serialize from inside a round deadlocks).
    */
   assertRoundStillOwnsLock(relPath, options2) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       this.throwIfRoundAborted(relPath);
       if ((options2 === null || options2 === void 0 ? void 0 : options2.bypassCache) === true) {
         this.lockOwnershipCheckedAtMs = 0;
@@ -712,7 +712,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   drainInFlightRounds() {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       yield this.roundScheduler.drain();
       while (this.inFlightRounds.size > 0) {
         yield Promise.allSettled([...this.inFlightRounds]);
@@ -724,7 +724,7 @@ var AgentStoreSyncEngine = class {
    * `work()` rethrows to its caller without poisoning subsequent serializations.
    */
   serialize(work) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const next = this.stateMutation.then(work, work);
       this.stateMutation = next.then(noop2, noop2);
       yield next;
@@ -735,7 +735,7 @@ var AgentStoreSyncEngine = class {
   // to the index, and the pull diff then sees `lastSeenEtag === server.etag`
   // for any path we just pushed.
   forceSync(options2) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const callerSignal = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.signal) !== null && _a19 !== void 0 ? _a19 : this.defaultSignal;
       this.throwIfSignalAborted(callerSignal);
@@ -750,7 +750,7 @@ var AgentStoreSyncEngine = class {
    * coalesce concurrent callers.
    */
   syncPaths(relPaths, options2) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const signal = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.signal) !== null && _a19 !== void 0 ? _a19 : this.defaultSignal;
       this.throwIfSignalAborted(signal);
@@ -766,7 +766,7 @@ var AgentStoreSyncEngine = class {
    * full rounds and never runs concurrently with one.
    */
   pullPaths(relPaths, options2) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const signal = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.signal) !== null && _a19 !== void 0 ? _a19 : this.defaultSignal;
       this.throwIfSignalAborted(signal);
@@ -774,7 +774,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   runPullPathsBody(relPaths) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2;
       const summary = emptySummary("pull-path");
       if (!this.syncRoundStillAuthorized()) {
@@ -794,12 +794,12 @@ var AgentStoreSyncEngine = class {
         let relPath;
         try {
           relPath = normalizeRelPath(rawRelPath);
-        } catch (error41) {
+        } catch (error42) {
           summary.refusals++;
           summary.errors.push({
             relPath: rawRelPath,
             code: "not_regular_file",
-            message: error41 instanceof Error ? error41.message : `Unsafe path: ${rawRelPath}`
+            message: error42 instanceof Error ? error42.message : `Unsafe path: ${rawRelPath}`
           });
           continue;
         }
@@ -829,12 +829,12 @@ var AgentStoreSyncEngine = class {
             tombstoneMode: AgentStoreTombstoneMode.OMIT,
             signal: this.activeRoundSignal
           }));
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41);
-          this.rethrowIfLockLost(error41);
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42);
+          this.rethrowIfLockLost(error42);
           everyListingComplete = false;
           for (const relPath of paths) {
-            summary.errors.push(Object.assign({ relPath, code: error41 instanceof AgentStoreSyncError ? error41.code : "list_failed", message: error41 instanceof Error ? error41.message : String(error41) }, timeoutClassEntry(error41)));
+            summary.errors.push(Object.assign({ relPath, code: error42 instanceof AgentStoreSyncError ? error42.code : "list_failed", message: error42 instanceof Error ? error42.message : String(error42) }, timeoutClassEntry(error42)));
           }
           continue;
         } finally {
@@ -884,10 +884,10 @@ var AgentStoreSyncEngine = class {
     }
   }
   scheduleRound(kind, body) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       this.assertRoundAuthorized();
       let round;
-      yield this.serialize(() => __awaiter16(this, void 0, void 0, function* () {
+      yield this.serialize(() => __awaiter17(this, void 0, void 0, function* () {
         this.assertRoundAuthorized();
         if (this.roundChainAbandoned) {
           if (this.orphanedRounds.size > 0 || this.inFlightRounds.size > 0) {
@@ -898,7 +898,7 @@ var AgentStoreSyncEngine = class {
           }
           this.roundChainAbandoned = false;
         }
-        round = this.roundScheduler.enqueue(kind, (signal) => __awaiter16(this, void 0, void 0, function* () {
+        round = this.roundScheduler.enqueue(kind, (signal) => __awaiter17(this, void 0, void 0, function* () {
           this.activeRoundLane = kind;
           const running = body(signal);
           const tracked = running.then(noop2, noop2);
@@ -1004,18 +1004,18 @@ var AgentStoreSyncEngine = class {
    * True when `error` should be surfaced as a round abort: it already is one,
    * or it is an abort-shaped error raised while the round signal is firing.
    */
-  isRoundAbortError(error41) {
+  isRoundAbortError(error42) {
     var _a19;
-    if (error41 instanceof AgentStoreSyncError) {
-      return error41.code === "round_aborted";
+    if (error42 instanceof AgentStoreSyncError) {
+      return error42.code === "round_aborted";
     }
     if (((_a19 = this.activeRoundSignal) === null || _a19 === void 0 ? void 0 : _a19.aborted) !== true) {
       return false;
     }
-    if (error41 instanceof ConnectError && (error41.code === Code.DeadlineExceeded || error41.code === Code.Canceled)) {
+    if (error42 instanceof ConnectError && (error42.code === Code.DeadlineExceeded || error42.code === Code.Canceled)) {
       return true;
     }
-    return error41 instanceof Error && (error41.name === "AbortError" || error41.name === "TimeoutError");
+    return error42 instanceof Error && (error42.name === "AbortError" || error42.name === "TimeoutError");
   }
   /**
    * Re-throws `error` as a `round_aborted` error when it is (or was caused
@@ -1023,28 +1023,28 @@ var AgentStoreSyncEngine = class {
    * instead of recording it as an ordinary upload/download failure. No-op
    * for unrelated errors.
    */
-  rethrowIfRoundAbort(error41, relPath) {
+  rethrowIfRoundAbort(error42, relPath) {
     var _a19;
     var _b2;
-    if (isSyncRoundStoodAsideError(error41)) {
-      throw error41;
+    if (isSyncRoundStoodAsideError(error42)) {
+      throw error42;
     }
-    if (!this.isRoundAbortError(error41)) {
+    if (!this.isRoundAbortError(error42)) {
       return;
     }
-    if (error41 instanceof AgentStoreSyncError && error41.code === "round_aborted") {
-      throw error41;
+    if (error42 instanceof AgentStoreSyncError && error42.code === "round_aborted") {
+      throw error42;
     }
-    throwForAbortedRoundSignal(relPath, (_b2 = (_a19 = this.activeRoundSignal) === null || _a19 === void 0 ? void 0 : _a19.reason) !== null && _b2 !== void 0 ? _b2 : error41);
+    throwForAbortedRoundSignal(relPath, (_b2 = (_a19 = this.activeRoundSignal) === null || _a19 === void 0 ? void 0 : _a19.reason) !== null && _b2 !== void 0 ? _b2 : error42);
   }
   /** Lock steal must fail the round, not become a soft per-file summary error. */
-  rethrowIfLockLost(error41) {
-    if (error41 instanceof AgentStoreSyncError && error41.code === "lock_held_by_other") {
-      throw error41;
+  rethrowIfLockLost(error42) {
+    if (error42 instanceof AgentStoreSyncError && error42.code === "lock_held_by_other") {
+      throw error42;
     }
   }
   runSyncRound() {
-    return __awaiter16(this, arguments, void 0, function* (options2 = {}) {
+    return __awaiter17(this, arguments, void 0, function* (options2 = {}) {
       return yield this.withPublishedRoundSignal(options2.signal, () => this.runSyncRoundBody(options2));
     });
   }
@@ -1057,7 +1057,7 @@ var AgentStoreSyncEngine = class {
    * save/restore keeps a nested final-flush round from clobbering it.
    */
   withPublishedRoundSignal(callerSignal, body) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const owned = new AbortController();
       let cleanupForward;
       if (callerSignal !== void 0) {
@@ -1100,12 +1100,12 @@ var AgentStoreSyncEngine = class {
    * {@link releaseWedgedRoundChain}.
    */
   awaitInFlightRoundsSettled() {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       yield this.drainInFlightRounds();
     });
   }
   runSyncRoundBody() {
-    return __awaiter16(this, arguments, void 0, function* (options2 = {}) {
+    return __awaiter17(this, arguments, void 0, function* (options2 = {}) {
       if (options2.finalFlush) {
         if (this.lockProvider !== void 0 && this.lockHandle === void 0) {
           return emptySummary();
@@ -1201,12 +1201,12 @@ var AgentStoreSyncEngine = class {
     });
   }
   runSyncPaths(relPaths, signal) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       return yield this.withPublishedRoundSignal(signal, () => this.runSyncPathsBody(relPaths, signal));
     });
   }
   runSyncPathsBody(relPaths, signal) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       if (!this.syncRoundStillAuthorized()) {
         this.throwIfRoundAborted();
         return emptySummary("path");
@@ -1263,7 +1263,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   pushPathsBody(relPaths, summary, signal) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2;
       const scopedRelPaths = /* @__PURE__ */ new Set();
       const scopedRefusals = [];
@@ -1273,12 +1273,12 @@ var AgentStoreSyncEngine = class {
         let relPath;
         try {
           relPath = normalizeRelPath(rawRelPath);
-        } catch (error41) {
+        } catch (error42) {
           summary.refusals++;
           summary.errors.push({
             relPath: rawRelPath,
             code: "not_regular_file",
-            message: error41 instanceof Error ? error41.message : `Unsafe path: ${rawRelPath}`
+            message: error42 instanceof Error ? error42.message : `Unsafe path: ${rawRelPath}`
           });
           continue;
         }
@@ -1293,20 +1293,20 @@ var AgentStoreSyncEngine = class {
         let statResult;
         try {
           statResult = safeStatChild({ base: this.filesDir, relPath });
-        } catch (error41) {
-          if (error41 instanceof UnsafeAgentStorePathError) {
+        } catch (error42) {
+          if (error42 instanceof UnsafeAgentStorePathError) {
             summary.refusals++;
             summary.errors.push({
               relPath,
-              code: error41.code === "symlink_refused" ? "symlink_refused" : "not_regular_file",
-              message: error41.message
+              code: error42.code === "symlink_refused" ? "symlink_refused" : "not_regular_file",
+              message: error42.message
             });
             continue;
           }
           summary.errors.push({
             relPath,
             code: "fs_read_failed",
-            message: error41 instanceof Error ? error41.message : String(error41)
+            message: error42 instanceof Error ? error42.message : String(error42)
           });
           continue;
         }
@@ -1412,14 +1412,14 @@ var AgentStoreSyncEngine = class {
     try {
       fs8.rmSync(this.filesDir, { recursive: true, force: true });
       return true;
-    } catch (error41) {
-      if (isNodeError4(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError4(error42) && error42.code === "ENOENT") {
         return true;
       }
       summary.errors.push({
         relPath: void 0,
         code: "fs_write_failed",
-        message: `Failed to clear compromised agent store files root: ${error41 instanceof Error ? error41.message : String(error41)}`
+        message: `Failed to clear compromised agent store files root: ${error42 instanceof Error ? error42.message : String(error42)}`
       });
       return false;
     }
@@ -1443,7 +1443,7 @@ var AgentStoreSyncEngine = class {
    * (tmp-cleaner swap mid-restore). Returns false when a wipe fails.
    */
   pullAllWithFollowUpWipe(summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const identityBefore = this.probeFilesRootIdentity();
       yield this.pullAll(summary);
       const identityAfter = this.probeFilesRootIdentity();
@@ -1474,14 +1474,14 @@ var AgentStoreSyncEngine = class {
         fs8.rmSync(this.filesDir, { recursive: true, force: true });
       }
       return true;
-    } catch (error41) {
-      if (isNodeError4(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError4(error42) && error42.code === "ENOENT") {
         return true;
       }
       summary.errors.push({
         relPath: void 0,
         code: "fs_write_failed",
-        message: `Failed to clear obstructing agent store files root: ${error41 instanceof Error ? error41.message : String(error41)}`
+        message: `Failed to clear obstructing agent store files root: ${error42 instanceof Error ? error42.message : String(error42)}`
       });
       return false;
     }
@@ -1498,8 +1498,8 @@ var AgentStoreSyncEngine = class {
         return { kind: "absent" };
       }
       return { kind: "present", identity: { dev: stat28.dev, ino: stat28.ino } };
-    } catch (error41) {
-      if (isNodeError4(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError4(error42) && error42.code === "ENOENT") {
         return { kind: "absent" };
       }
       return { kind: "unreadable" };
@@ -1577,8 +1577,8 @@ var AgentStoreSyncEngine = class {
       try {
         fs8.lstatSync(absPath);
         continue;
-      } catch (error41) {
-        if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+      } catch (error42) {
+        if (!isNodeError4(error42) || error42.code !== "ENOENT") {
           continue;
         }
       }
@@ -1641,7 +1641,7 @@ var AgentStoreSyncEngine = class {
    * the next round.
    */
   flushPendingDeletes(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       var _b2, _c2, _d;
       const { summary, presentRelPaths, refusals = [], scopeRelPaths } = args;
@@ -1684,13 +1684,13 @@ var AgentStoreSyncEngine = class {
           fs8.lstatSync(absPath);
           this.index.removePendingDelete(entry.relPath);
           continue;
-        } catch (error41) {
-          if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+        } catch (error42) {
+          if (!isNodeError4(error42) || error42.code !== "ENOENT") {
             this.index.removePendingDelete(entry.relPath);
             summary.errors.push({
               relPath: entry.relPath,
               code: "delete_failed",
-              message: error41 instanceof Error ? error41.message : String(error41)
+              message: error42 instanceof Error ? error42.message : String(error42)
             });
             continue;
           }
@@ -1734,12 +1734,12 @@ var AgentStoreSyncEngine = class {
             files: batch.map((entry) => Object.assign({ relPath: entry.relPath, baseEtag: entry.baseEtag }, entry.mutationId !== void 0 ? { mutationId: entry.mutationId } : {})),
             signal: this.activeRoundSignal
           }));
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41);
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42);
           summary.errors.push({
             relPath: void 0,
             code: "delete_failed",
-            message: `Failed to delete ${toDelete.length - offset} agent store file(s): ${error41 instanceof Error ? error41.message : String(error41)}`
+            message: `Failed to delete ${toDelete.length - offset} agent store file(s): ${error42 instanceof Error ? error42.message : String(error42)}`
           });
           yield this.flushPendingRmdirs({
             summary,
@@ -1797,7 +1797,7 @@ var AgentStoreSyncEngine = class {
    * not-empty. Journaled before the RPC so a crash mid-chain resumes.
    */
   flushPendingRmdirs(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       var _b2;
       const { summary, ackedDeletePaths, refusals, presentRelPaths } = args;
@@ -1886,12 +1886,12 @@ var AgentStoreSyncEngine = class {
             base: this.filesDir,
             relPath: dir
           });
-        } catch (error41) {
-          if (error41 instanceof UnsafeAgentStorePathError) {
+        } catch (error42) {
+          if (error42 instanceof UnsafeAgentStorePathError) {
             this.index.removePendingRmdir(dir);
             continue;
           }
-          if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+          if (!isNodeError4(error42) || error42.code !== "ENOENT") {
             continue;
           }
           dirStat = { kind: "absent" };
@@ -1921,9 +1921,9 @@ var AgentStoreSyncEngine = class {
             relPath: dir,
             signal: this.activeRoundSignal
           }));
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41);
-          if (error41 instanceof AgentStoreDirectoryNotEmptyError) {
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42);
+          if (error42 instanceof AgentStoreDirectoryNotEmptyError) {
             this.index.removePendingRmdir(dir);
             let ancestor = parentRelPath(dir);
             while (ancestor !== void 0 && ancestor !== "") {
@@ -1936,7 +1936,7 @@ var AgentStoreSyncEngine = class {
           summary.errors.push({
             relPath: dir,
             code: "delete_failed",
-            message: `Failed to rmdir ${dir}: ${error41 instanceof Error ? error41.message : String(error41)}`
+            message: `Failed to rmdir ${dir}: ${error42 instanceof Error ? error42.message : String(error42)}`
           });
           return;
         }
@@ -1961,7 +1961,7 @@ var AgentStoreSyncEngine = class {
     return this.index.hasLiveFilesUnder(dir);
   }
   pushAll() {
-    return __awaiter16(this, arguments, void 0, function* (summary = emptySummary()) {
+    return __awaiter17(this, arguments, void 0, function* (summary = emptySummary()) {
       this.ensureDirsExist();
       this.stripJournaledPendingConflictMirrors();
       this.roundJournaledConflictEmits = [];
@@ -1974,7 +1974,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   pushAllBody(summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const walk = safeWalk(this.filesDir);
       summary.reservedPathsSkipped = ((_a19 = summary.reservedPathsSkipped) !== null && _a19 !== void 0 ? _a19 : 0) + partitionReservedWalkFiles(walk);
@@ -2088,7 +2088,7 @@ var AgentStoreSyncEngine = class {
    * resolve/presign/upload phases (throws the signal's abort reason).
    */
   uploadHashedCandidates(toUpload_1, summary_1) {
-    return __awaiter16(this, arguments, void 0, function* (toUpload, summary, options2 = {}) {
+    return __awaiter17(this, arguments, void 0, function* (toUpload, summary, options2 = {}) {
       if (toUpload.length === 0) {
         return;
       }
@@ -2111,7 +2111,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   pushUploadWindow(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2;
       const toUpload = args.candidates;
       const preconditionByPath = args.preconditionByPath;
@@ -2129,16 +2129,16 @@ var AgentStoreSyncEngine = class {
           }),
           signal: this.activeRoundSignal
         }));
-      } catch (error41) {
-        this.rethrowIfRoundAbort(error41);
-        if (isAgentStoreSyncDisabledError(error41)) {
-          throw error41;
+      } catch (error42) {
+        this.rethrowIfRoundAbort(error42);
+        if (isAgentStoreSyncDisabledError(error42)) {
+          throw error42;
         }
-        if (!isAgentStoreConnectCode(error41, Code.FailedPrecondition) && !isAgentStoreConnectCode(error41, Code.InvalidArgument)) {
-          throw error41;
+        if (!isAgentStoreConnectCode(error42, Code.FailedPrecondition) && !isAgentStoreConnectCode(error42, Code.InvalidArgument)) {
+          throw error42;
         }
         const unconditional = toUpload.filter((candidate) => !preconditionByPath.has(candidate.relPath));
-        const quota = parseAgentStoreQuotaExceeded(error41);
+        const quota = parseAgentStoreQuotaExceeded(error42);
         const toPark = quota !== void 0 ? toUpload : unconditional.length > 0 ? unconditional : toUpload;
         for (const candidate of toPark) {
           if (quota !== void 0) {
@@ -2147,13 +2147,13 @@ var AgentStoreSyncEngine = class {
               absPath: candidate.absPath,
               summary,
               quota,
-              message: agentStoreErrorSummaryMessage(error41, "Agent-store quota exceeded")
+              message: agentStoreErrorSummaryMessage(error42, "Agent-store quota exceeded")
             });
           } else {
             this.parkPushEntry({
               relPath: candidate.relPath,
               summary,
-              message: error41 instanceof Error ? error41.message : "Terminal push rejection from presignWrites"
+              message: error42 instanceof Error ? error42.message : "Terminal push rejection from presignWrites"
             });
           }
         }
@@ -2166,11 +2166,11 @@ var AgentStoreSyncEngine = class {
         let canonical;
         try {
           canonical = normalizeRelPath(presign.relPath);
-        } catch (error41) {
+        } catch (error42) {
           summary.errors.push({
             relPath: presign.relPath,
             code: "presign_response_mismatch",
-            message: `Server returned an unsafe relPath: ${presign.relPath} (${error41 instanceof Error ? error41.message : String(error41)})`
+            message: `Server returned an unsafe relPath: ${presign.relPath} (${error42 instanceof Error ? error42.message : String(error42)})`
           });
           continue;
         }
@@ -2183,7 +2183,7 @@ var AgentStoreSyncEngine = class {
         summary
       });
       const uploadStart = this.monotonicNow();
-      yield Promise.all(toUpload.map((candidate) => __awaiter16(this, void 0, void 0, function* () {
+      yield Promise.all(toUpload.map((candidate) => __awaiter17(this, void 0, void 0, function* () {
         yield this.assertRoundStillOwnsLock(candidate.relPath, {
           bypassCache: true
         });
@@ -2215,16 +2215,16 @@ var AgentStoreSyncEngine = class {
               precondition,
               summary
             });
-          } catch (error41) {
+          } catch (error42) {
             if (this.tryParkQuotaExceeded({
               relPath: candidate.relPath,
               absPath: candidate.absPath,
               summary,
-              error: error41
+              error: error42
             })) {
               return;
             }
-            summary.errors.push(syncRoundErrorFor(candidate.relPath, error41));
+            summary.errors.push(syncRoundErrorFor(candidate.relPath, error42));
           }
           return;
         }
@@ -2245,19 +2245,19 @@ var AgentStoreSyncEngine = class {
               summary,
               suppressIfRemoteIdentical: presign.primaryPreconditionFailed === true
             });
-          } catch (error41) {
-            this.rethrowIfRoundAbort(error41, candidate.relPath);
-            this.rethrowIfLockLost(error41);
+          } catch (error42) {
+            this.rethrowIfRoundAbort(error42, candidate.relPath);
+            this.rethrowIfLockLost(error42);
             if (this.tryParkQuotaExceeded({
               relPath: candidate.relPath,
               absPath: candidate.absPath,
               summary,
-              error: error41
+              error: error42
             })) {
               return;
             }
             this.emitConflictFallbackFailed({ candidate });
-            summary.errors.push(syncRoundErrorFor(candidate.relPath, error41));
+            summary.errors.push(syncRoundErrorFor(candidate.relPath, error42));
           }
           return;
         }
@@ -2268,16 +2268,16 @@ var AgentStoreSyncEngine = class {
               precondition,
               summary
             });
-          } catch (error41) {
+          } catch (error42) {
             if (this.tryParkQuotaExceeded({
               relPath: candidate.relPath,
               absPath: candidate.absPath,
               summary,
-              error: error41
+              error: error42
             })) {
               return;
             }
-            summary.errors.push(syncRoundErrorFor(candidate.relPath, error41));
+            summary.errors.push(syncRoundErrorFor(candidate.relPath, error42));
           }
           return;
         }
@@ -2302,32 +2302,32 @@ var AgentStoreSyncEngine = class {
           if (conflictProtectionDowngraded) {
             summary.conflictProtectionDowngrades++;
           }
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41, candidate.relPath);
-          this.rethrowIfLockLost(error41);
-          if (isAgentStoreSyncDisabledError(error41)) {
-            throw error41;
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42, candidate.relPath);
+          this.rethrowIfLockLost(error42);
+          if (isAgentStoreSyncDisabledError(error42)) {
+            throw error42;
           }
-          if (isAgentStoreConnectCode(error41, Code.FailedPrecondition) || isAgentStoreConnectCode(error41, Code.InvalidArgument)) {
-            const quota = parseAgentStoreQuotaExceeded(error41);
+          if (isAgentStoreConnectCode(error42, Code.FailedPrecondition) || isAgentStoreConnectCode(error42, Code.InvalidArgument)) {
+            const quota = parseAgentStoreQuotaExceeded(error42);
             if (quota !== void 0) {
               this.parkQuotaExceededEntry({
                 relPath: candidate.relPath,
                 absPath: candidate.absPath,
                 summary,
                 quota,
-                message: agentStoreErrorSummaryMessage(error41, "Agent-store quota exceeded")
+                message: agentStoreErrorSummaryMessage(error42, "Agent-store quota exceeded")
               });
             } else {
               this.parkPushEntry({
                 relPath: candidate.relPath,
                 summary,
-                message: error41 instanceof Error ? error41.message : "Terminal push rejection during upload"
+                message: error42 instanceof Error ? error42.message : "Terminal push rejection during upload"
               });
             }
             return;
           }
-          if (isPresignedUrlExpiredError(error41)) {
+          if (isPresignedUrlExpiredError(error42)) {
             try {
               yield this.refreshAndCompleteLegacyWrite({
                 candidate,
@@ -2347,7 +2347,7 @@ var AgentStoreSyncEngine = class {
             }
             return;
           }
-          if (isWriteConflictError(error41) && precondition !== void 0 && presign.conflict !== void 0) {
+          if (isWriteConflictError(error42) && precondition !== void 0 && presign.conflict !== void 0) {
             try {
               yield this.handleWriteConflict({
                 candidate,
@@ -2373,14 +2373,14 @@ var AgentStoreSyncEngine = class {
               return;
             }
           }
-          summary.errors.push(syncRoundErrorFor(candidate.relPath, error41));
+          summary.errors.push(syncRoundErrorFor(candidate.relPath, error42));
         }
       })));
       summary.uploadMs = ((_b2 = summary.uploadMs) !== null && _b2 !== void 0 ? _b2 : 0) + (this.monotonicNow() - uploadStart);
     });
   }
   processMultipartWrites(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const handledPaths = /* @__PURE__ */ new Set();
       const pendingContexts = /* @__PURE__ */ new Map();
@@ -2447,9 +2447,9 @@ var AgentStoreSyncEngine = class {
             }
             initialWorks.push(work);
             handledPaths.add(candidate.relPath);
-          } catch (error41) {
-            this.rethrowIfRoundAbort(error41, candidate.relPath);
-            args.summary.errors.push(syncRoundErrorFor(candidate.relPath, error41));
+          } catch (error42) {
+            this.rethrowIfRoundAbort(error42, candidate.relPath);
+            args.summary.errors.push(syncRoundErrorFor(candidate.relPath, error42));
           }
         }
         let works = initialWorks;
@@ -2467,8 +2467,8 @@ var AgentStoreSyncEngine = class {
     });
   }
   runMultipartWorkWave(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
-      const outcomes = yield Promise.all(args.works.map((originalWork) => __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
+      const outcomes = yield Promise.all(args.works.map((originalWork) => __awaiter17(this, void 0, void 0, function* () {
         let work = originalWork;
         try {
           while (work.upload.partUrlsExpiresAtMs <= this.now() || presignHasExpiredLockRedirect(work.presign, this.now())) {
@@ -2486,10 +2486,10 @@ var AgentStoreSyncEngine = class {
             kind: "uploaded",
             entry: yield this.uploadMultipartWork(work, args.summary)
           };
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41, work.candidate.relPath);
-          this.rethrowIfLockLost(error41);
-          if (isPresignedUrlExpiredError(error41)) {
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42, work.candidate.relPath);
+          this.rethrowIfLockLost(error42);
+          if (isPresignedUrlExpiredError(error42)) {
             try {
               const refreshed = yield this.refreshExpiredMultipartWork({
                 work,
@@ -2516,11 +2516,11 @@ var AgentStoreSyncEngine = class {
             relPath: work.candidate.relPath,
             absPath: work.candidate.absPath,
             summary: args.summary,
-            error: error41
+            error: error42
           })) {
             return { kind: "finished" };
           }
-          args.summary.errors.push(syncRoundErrorFor(work.candidate.relPath, error41));
+          args.summary.errors.push(syncRoundErrorFor(work.candidate.relPath, error42));
           return { kind: "finished" };
         }
       })));
@@ -2534,19 +2534,19 @@ var AgentStoreSyncEngine = class {
       try {
         yield this.assertRoundStillOwnsLock(void 0, { bypassCache: true });
         results = yield this.completeMultipartWithTransientRetries(uploaded);
-      } catch (error41) {
-        this.rethrowIfRoundAbort(error41);
-        this.rethrowIfLockLost(error41);
+      } catch (error42) {
+        this.rethrowIfRoundAbort(error42);
+        this.rethrowIfLockLost(error42);
         for (const entry of uploaded) {
           if (this.tryParkQuotaExceeded({
             relPath: entry.work.candidate.relPath,
             absPath: entry.work.candidate.absPath,
             summary: args.summary,
-            error: error41
+            error: error42
           })) {
             continue;
           }
-          args.summary.errors.push(syncRoundErrorFor(entry.work.candidate.relPath, error41));
+          args.summary.errors.push(syncRoundErrorFor(entry.work.candidate.relPath, error42));
         }
         return nextWorks;
       }
@@ -2579,25 +2579,25 @@ var AgentStoreSyncEngine = class {
           if (next !== void 0) {
             nextWorks.push(next);
           }
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41, entry.work.candidate.relPath);
-          this.rethrowIfLockLost(error41);
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42, entry.work.candidate.relPath);
+          this.rethrowIfLockLost(error42);
           if (this.tryParkQuotaExceeded({
             relPath: entry.work.candidate.relPath,
             absPath: entry.work.candidate.absPath,
             summary: args.summary,
-            error: error41
+            error: error42
           })) {
             continue;
           }
-          args.summary.errors.push(syncRoundErrorFor(entry.work.candidate.relPath, error41));
+          args.summary.errors.push(syncRoundErrorFor(entry.work.candidate.relPath, error42));
         }
       }
       return nextWorks;
     });
   }
   refreshExpiredMultipartWork(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       if (args.work.expiryRefreshCount >= this.multipartMaxExpiryRefreshes) {
         throw new AgentStoreSyncError({
           code: "presigned_url_expired",
@@ -2618,7 +2618,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   uploadMultipartWork(work, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const relPath = work.target === "primary" ? work.candidate.relPath : work.conflict.relPath;
       this.validateMultipartInstruction(work);
       const multipartParts = work.candidate.multipartParts;
@@ -2629,7 +2629,7 @@ var AgentStoreSyncEngine = class {
           message: `Multipart instructions were returned without client part checksums for ${work.candidate.relPath}`
         });
       }
-      const partOutcomes = yield Promise.all(work.upload.parts.map((part, index) => __awaiter16(this, void 0, void 0, function* () {
+      const partOutcomes = yield Promise.all(work.upload.parts.map((part, index) => __awaiter17(this, void 0, void 0, function* () {
         try {
           const requestedPart = multipartParts[index];
           if (requestedPart === void 0) {
@@ -2643,7 +2643,7 @@ var AgentStoreSyncEngine = class {
             rawUrl: part.url,
             relPath
           });
-          const uploaded = yield this.runQueued(this.queues.s3, () => __awaiter16(this, void 0, void 0, function* () {
+          const uploaded = yield this.runQueued(this.queues.s3, () => __awaiter17(this, void 0, void 0, function* () {
             var _a19;
             yield this.assertRoundStillOwnsLock(relPath, {
               bypassCache: true
@@ -2672,8 +2672,8 @@ var AgentStoreSyncEngine = class {
               checksumSha256: requestedPart.checksumSha256
             }
           };
-        } catch (error41) {
-          return { kind: "failure", error: error41 };
+        } catch (error42) {
+          return { kind: "failure", error: error42 };
         }
       })));
       const failedPart = partOutcomes.find((outcome) => outcome.kind === "failure");
@@ -2709,7 +2709,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   completeMultipartWithTransientRetries(uploaded) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const completeMultipartWrites = this.client.completeMultipartWrites;
       if (completeMultipartWrites === void 0) {
         throw new AgentStoreSyncError({
@@ -2727,11 +2727,11 @@ var AgentStoreSyncEngine = class {
             completions: pending.map((item) => item.entry.completion),
             signal: this.activeRoundSignal
           });
-        } catch (error41) {
+        } catch (error42) {
           for (const item of pending) {
             finalResults[item.index] = {
               kind: "rpc_error",
-              error: error41
+              error: error42
             };
           }
           pending = [];
@@ -2767,7 +2767,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   handleMultipartCompletionResult(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const { work } = args.entry;
       if (args.result.kind === "success") {
         args.pendingContexts.delete(work.upload.context.uploadId);
@@ -2889,7 +2889,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   presignFreshMultipartWork(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2, _c2;
       const fresh = yield this.presignFreshWrite(args.previous.candidate, args.previous.precondition, args.summary);
       this.registerMultipartContexts({
@@ -2944,9 +2944,9 @@ var AgentStoreSyncEngine = class {
             summary: args.summary
           });
           return void 0;
-        } catch (error41) {
-          if (!isPresignedUrlExpiredError(error41) || expiryRefreshCount >= this.multipartMaxExpiryRefreshes) {
-            throw error41;
+        } catch (error42) {
+          if (!isPresignedUrlExpiredError(error42) || expiryRefreshCount >= this.multipartMaxExpiryRefreshes) {
+            throw error42;
           }
           return yield this.presignFreshMultipartWork({
             previous: args.previous,
@@ -2978,7 +2978,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   completeFreshLegacyWrite(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       if (presignHasExpiredLockRedirect(args.presign, this.now())) {
         throw new AgentStoreSyncError({
           code: "presigned_url_expired",
@@ -3023,8 +3023,8 @@ var AgentStoreSyncEngine = class {
         if (conflictProtectionDowngraded) {
           args.summary.conflictProtectionDowngrades++;
         }
-      } catch (error41) {
-        if (isWriteConflictError(error41) && args.presign.conflict !== void 0 && args.precondition !== void 0) {
+      } catch (error42) {
+        if (isWriteConflictError(error42) && args.presign.conflict !== void 0 && args.precondition !== void 0) {
           yield this.handleWriteConflict({
             candidate: args.candidate,
             conflict: args.presign.conflict,
@@ -3034,17 +3034,17 @@ var AgentStoreSyncEngine = class {
           });
           return;
         }
-        throw error41;
+        throw error42;
       }
     });
   }
   refreshAndCompleteLegacyWrite(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       yield this.withFreshLegacyPresign({
         candidate: args.candidate,
         precondition: args.precondition,
         summary: args.summary,
-        operation: (fresh) => __awaiter16(this, void 0, void 0, function* () {
+        operation: (fresh) => __awaiter17(this, void 0, void 0, function* () {
           yield this.completeFreshLegacyWrite({
             candidate: args.candidate,
             presign: fresh,
@@ -3056,7 +3056,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   presignFreshWrite(candidate, precondition, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const fresh = yield this.runQueued(this.queues.presign, () => this.client.presignWrites({
         agentId: this.agentId,
         files: [
@@ -3076,7 +3076,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   withFreshLegacyPresign(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const pendingContexts = /* @__PURE__ */ new Map();
       try {
         const presign = yield this.presignFreshWrite(args.candidate, args.precondition, args.summary);
@@ -3089,10 +3089,7 @@ var AgentStoreSyncEngine = class {
   }
   registerMultipartContexts(args) {
     var _a19;
-    for (const upload of [
-      args.presign.multipart,
-      (_a19 = args.presign.conflict) === null || _a19 === void 0 ? void 0 : _a19.multipart
-    ]) {
+    for (const upload of [args.presign.multipart, (_a19 = args.presign.conflict) === null || _a19 === void 0 ? void 0 : _a19.multipart]) {
       if (upload === void 0) {
         continue;
       }
@@ -3142,7 +3139,7 @@ var AgentStoreSyncEngine = class {
     }
   }
   abortPendingMultipartContexts(pendingContexts) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       if (pendingContexts.size === 0) {
         return;
       }
@@ -3158,8 +3155,8 @@ var AgentStoreSyncEngine = class {
           // cleanup RPC instead of outliving the aborted round.
           signal: this.activeRoundSignal
         });
-      } catch (error41) {
-        this.rethrowIfRoundAbort(error41);
+      } catch (error42) {
+        this.rethrowIfRoundAbort(error42);
       }
     });
   }
@@ -3192,7 +3189,7 @@ var AgentStoreSyncEngine = class {
    * must never pay for or claim a full listing.
    */
   resolvePushPreconditions(toUpload_1, summary_1) {
-    return __awaiter16(this, arguments, void 0, function* (toUpload, summary, options2 = {}) {
+    return __awaiter17(this, arguments, void 0, function* (toUpload, summary, options2 = {}) {
       const preferProbeForLegacy = options2.preferProbeForLegacy === true;
       const preconditions = /* @__PURE__ */ new Map();
       const skippedDueToListingFailure = /* @__PURE__ */ new Set();
@@ -3220,13 +3217,13 @@ var AgentStoreSyncEngine = class {
             }
           }
           legacyListing = { listedPaths, etagByPath };
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41);
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42);
           legacyListingFailed = true;
           summary.errors.push({
             relPath: void 0,
             code: "list_failed",
-            message: `Failed to list agent store for legacy push baselines: ${error41 instanceof Error ? error41.message : String(error41)}`
+            message: `Failed to list agent store for legacy push baselines: ${error42 instanceof Error ? error42.message : String(error42)}`
           });
         }
       }
@@ -3290,7 +3287,7 @@ var AgentStoreSyncEngine = class {
    * propagates for session stand-down.
    */
   probeLegacyPushPrecondition(relPath, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       try {
         const probe = yield probeAgentStoreObject({
           client: this.client,
@@ -3308,15 +3305,15 @@ var AgentStoreSyncEngine = class {
           return { expectAbsent: true };
         }
         return { baseEtag: probe.etag };
-      } catch (error41) {
-        if (isAgentStoreSyncDisabledError(error41)) {
-          throw error41;
+      } catch (error42) {
+        if (isAgentStoreSyncDisabledError(error42)) {
+          throw error42;
         }
-        this.rethrowIfRoundAbort(error41, relPath);
+        this.rethrowIfRoundAbort(error42, relPath);
         summary.errors.push({
           relPath,
           code: "probe_failed",
-          message: `Failed to probe agent store object for legacy push baseline: ${error41 instanceof Error ? error41.message : String(error41)}`
+          message: `Failed to probe agent store object for legacy push baseline: ${error42 instanceof Error ? error42.message : String(error42)}`
         });
         return void 0;
       }
@@ -3420,14 +3417,14 @@ var AgentStoreSyncEngine = class {
    * caller's conflict fallback takes over).
    */
   uploadPrimaryWithConflictRetry(candidate, presign, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       try {
         return yield this.uploadOne(candidate, presign, summary);
-      } catch (error41) {
-        if (isWriteConflictError(error41) && error41.httpStatus === 409) {
+      } catch (error42) {
+        if (isWriteConflictError(error42) && error42.httpStatus === 409) {
           return yield this.uploadOne(candidate, presign, summary);
         }
-        throw error41;
+        throw error42;
       }
     });
   }
@@ -3439,7 +3436,7 @@ var AgentStoreSyncEngine = class {
    * on the conflict path.
    */
   tryRecreateOverListedTombstone(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2, _c2, _d;
       var _e2;
       (_b2 = (_a19 = this.client).invalidateListCache) === null || _b2 === void 0 ? void 0 : _b2.call(_a19, { agentId: this.agentId });
@@ -3452,9 +3449,9 @@ var AgentStoreSyncEngine = class {
           tombstoneMode: AgentStoreTombstoneMode.INCLUDE,
           signal: this.activeRoundSignal
         }));
-      } catch (error41) {
-        this.rethrowIfRoundAbort(error41, args.candidate.relPath);
-        this.rethrowIfLockLost(error41);
+      } catch (error42) {
+        this.rethrowIfRoundAbort(error42, args.candidate.relPath);
+        this.rethrowIfLockLost(error42);
         return false;
       }
       const floorMs = protoPositiveMs2(listing.tombstoneFloorMs);
@@ -3502,9 +3499,9 @@ var AgentStoreSyncEngine = class {
         } finally {
           (_d = (_c2 = this.client).invalidateListCache) === null || _d === void 0 ? void 0 : _d.call(_c2, { agentId: this.agentId });
         }
-      } catch (error41) {
-        this.rethrowIfRoundAbort(error41, args.candidate.relPath);
-        this.rethrowIfLockLost(error41);
+      } catch (error42) {
+        this.rethrowIfRoundAbort(error42, args.candidate.relPath);
+        this.rethrowIfLockLost(error42);
         return false;
       }
     });
@@ -3517,7 +3514,7 @@ var AgentStoreSyncEngine = class {
    * the conflict write could not be committed.
    */
   handleWriteConflict(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const { candidate, precondition, summary } = args;
       if (args.completedUpload === void 0 && args.suppressIfRemoteIdentical === true && (yield this.trySuppressIdenticalWriteConflict(candidate, summary))) {
         return;
@@ -3538,8 +3535,8 @@ var AgentStoreSyncEngine = class {
           } else {
             uploaded = yield this.uploadConflict(candidate, conflict, summary);
           }
-        } catch (error41) {
-          uploadError = error41;
+        } catch (error42) {
+          uploadError = error42;
         }
         if (uploaded === void 0) {
           this.rethrowIfRoundAbort(uploadError, candidate.relPath);
@@ -3579,7 +3576,7 @@ var AgentStoreSyncEngine = class {
    * preservation; round cancellation still propagates.
    */
   trySuppressIdenticalWriteConflict(candidate, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       var _b2, _c2;
       if (candidate.size > DEFAULT_IDENTICAL_CONFLICT_COMPARE_MAX_BYTES) {
@@ -3600,7 +3597,7 @@ var AgentStoreSyncEngine = class {
           rawUrl: presign.url,
           relPath: candidate.relPath
         });
-        response = yield this.runQueued(this.queues.s3, () => __awaiter16(this, void 0, void 0, function* () {
+        response = yield this.runQueued(this.queues.s3, () => __awaiter17(this, void 0, void 0, function* () {
           this.throwIfRoundAborted(candidate.relPath);
           return yield this.fetchImpl(presign.url, Object.assign({ redirect: "error" }, this.activeRoundSignal !== void 0 ? { signal: this.activeRoundSignal } : {}));
         }));
@@ -3656,8 +3653,8 @@ var AgentStoreSyncEngine = class {
           direction: "pushed"
         });
         return true;
-      } catch (error41) {
-        this.rethrowIfRoundAbort(error41, candidate.relPath);
+      } catch (error42) {
+        this.rethrowIfRoundAbort(error42, candidate.relPath);
         return false;
       } finally {
         yield (_a19 = response === null || response === void 0 ? void 0 : response.body) === null || _a19 === void 0 ? void 0 : _a19.cancel().catch(() => {
@@ -3842,10 +3839,7 @@ var AgentStoreSyncEngine = class {
       return;
     }
     this.roundJournaledConflictEmits.push(...newlyJournaled);
-    this.pendingConflictJournal.replaceAll([
-      ...stillPending,
-      ...durableMirrors
-    ]);
+    this.pendingConflictJournal.replaceAll([...stillPending, ...durableMirrors]);
     if (failures > 0) {
       this.warn(`conflict journal pending retry failed for ${failures} event(s); will retry on the next push round (pending=${this.pendingConflictJournal.size()}, failures=${this.conflictJournal.appendFailureCount()})`, void 0);
     }
@@ -3879,16 +3873,13 @@ var AgentStoreSyncEngine = class {
    * open for a shutdown flush (missing is fine; a planted symlink is not).
    */
   conflictJournalPathsSafeForShutdownFlush() {
-    for (const targetPath of [
-      this.conflictJournal.path,
-      this.pendingConflictJournal.path
-    ]) {
+    for (const targetPath of [this.conflictJournal.path, this.pendingConflictJournal.path]) {
       try {
         if (fs8.lstatSync(targetPath).isSymbolicLink()) {
           return false;
         }
-      } catch (error41) {
-        if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+      } catch (error42) {
+        if (!isNodeError4(error42) || error42.code !== "ENOENT") {
           return false;
         }
       }
@@ -3925,7 +3916,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   uploadFreshLegacyConflict(candidate, precondition, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       yield this.assertRoundStillOwnsLock(candidate.relPath, {
         bypassCache: true
       });
@@ -3933,7 +3924,7 @@ var AgentStoreSyncEngine = class {
         candidate,
         precondition,
         summary,
-        operation: (instruction) => __awaiter16(this, void 0, void 0, function* () {
+        operation: (instruction) => __awaiter17(this, void 0, void 0, function* () {
           if (instruction.conflict === void 0) {
             throw new AgentStoreSyncError({
               code: "write_conflict",
@@ -3951,12 +3942,12 @@ var AgentStoreSyncEngine = class {
     });
   }
   uploadConflict(candidate, conflict, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       this.assertPresignedUrlSafe({
         rawUrl: conflict.url,
         relPath: conflict.relPath
       });
-      return yield this.runQueued(this.queues.s3, () => __awaiter16(this, void 0, void 0, function* () {
+      return yield this.runQueued(this.queues.s3, () => __awaiter17(this, void 0, void 0, function* () {
         this.throwIfRoundAborted(conflict.relPath);
         this.assertPresignedUrlNotExpired({
           expiresAtMs: conflict.expiresAtMs,
@@ -4079,7 +4070,7 @@ var AgentStoreSyncEngine = class {
   // a hostile relPath or pre-planting a symlink under `files/` can't
   // escape the store.
   pullAll() {
-    return __awaiter16(this, arguments, void 0, function* (summary = emptySummary()) {
+    return __awaiter17(this, arguments, void 0, function* (summary = emptySummary()) {
       this.ensureDirsExist();
       const lastCompleteRoundMs = this.lastCompleteRoundMs();
       let listing = yield this.listServerFiles(summary);
@@ -4137,7 +4128,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   pullDownloadWindow(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const candidates = args.candidates;
       const summary = args.summary;
@@ -4155,17 +4146,17 @@ var AgentStoreSyncEngine = class {
         let canonical;
         try {
           canonical = normalizeRelPath(presign.relPath);
-        } catch (error41) {
+        } catch (error42) {
           summary.errors.push({
             relPath: presign.relPath,
             code: "presign_response_mismatch",
-            message: `Server returned an unsafe relPath: ${presign.relPath} (${error41.message})`
+            message: `Server returned an unsafe relPath: ${presign.relPath} (${error42.message})`
           });
           continue;
         }
         presignedByPath.set(canonical, presign);
       }
-      yield Promise.all(candidates.map((candidate) => this.queues.s3.enqueue(() => __awaiter16(this, void 0, void 0, function* () {
+      yield Promise.all(candidates.map((candidate) => this.queues.s3.enqueue(() => __awaiter17(this, void 0, void 0, function* () {
         yield this.assertRoundStillOwnsLock(candidate.relPath, {
           bypassCache: true
         });
@@ -4195,10 +4186,10 @@ var AgentStoreSyncEngine = class {
             lastSyncedMs: this.now(),
             direction: "pulled"
           });
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41, candidate.relPath);
-          this.rethrowIfLockLost(error41);
-          summary.errors.push(Object.assign({ relPath: candidate.relPath, code: error41 instanceof AgentStoreSyncError ? error41.code : "download_failed", message: error41 instanceof Error ? error41.message : String(error41) }, timeoutClassEntry(error41)));
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42, candidate.relPath);
+          this.rethrowIfLockLost(error42);
+          summary.errors.push(Object.assign({ relPath: candidate.relPath, code: error42 instanceof AgentStoreSyncError ? error42.code : "download_failed", message: error42 instanceof Error ? error42.message : String(error42) }, timeoutClassEntry(error42)));
         }
       }))));
     });
@@ -4212,7 +4203,7 @@ var AgentStoreSyncEngine = class {
   // available so `foo/bar.txt` and `foo//bar.txt` collapse to one entry;
   // unparseable paths fall back to their raw key (refusal-bound below).
   listServerFiles(summary, options2) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2;
       const listStartMs = this.now();
       let listingMode;
@@ -4245,9 +4236,9 @@ var AgentStoreSyncEngine = class {
         let listing;
         try {
           listing = yield this.queues.list.enqueue(() => this.client.listFiles(Object.assign({ agentId: this.agentId, relPath: dir, signal: this.activeRoundSignal }, listingMode.request)));
-        } catch (error41) {
-          this.rethrowIfRoundAbort(error41);
-          throw error41;
+        } catch (error42) {
+          this.rethrowIfRoundAbort(error42);
+          throw error42;
         }
         this.throwIfRoundAborted();
         if (listing.listingComplete !== true) {
@@ -4313,11 +4304,11 @@ var AgentStoreSyncEngine = class {
           let canonical;
           try {
             canonical = normalizeRelPath(sub);
-          } catch (error41) {
+          } catch (error42) {
             summary.errors.push({
               relPath: sub,
               code: "presign_response_mismatch",
-              message: `Server returned an unsafe subdir: ${sub} (${error41.message})`
+              message: `Server returned an unsafe subdir: ${sub} (${error42.message})`
             });
             continue;
           }
@@ -4379,7 +4370,7 @@ var AgentStoreSyncEngine = class {
    * walk empty parents toward the mirror root. Non-empty dirs stay.
    */
   applyRemovedLocalDirs(removedDirs, serverFiles, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const reusedExact = /* @__PURE__ */ new Set();
       for (const file2 of serverFiles) {
         try {
@@ -4406,7 +4397,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   clearLeftoverDescendantsForReusedFile(dir, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       for (const entry of this.index.listFiles()) {
         if (entry.state === "tombstoned" || entry.relPath === dir) {
           continue;
@@ -4434,12 +4425,12 @@ var AgentStoreSyncEngine = class {
         let stat28;
         try {
           stat28 = fs8.lstatSync(absPath);
-        } catch (error41) {
-          if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+        } catch (error42) {
+          if (!isNodeError4(error42) || error42.code !== "ENOENT") {
             summary.errors.push({
               relPath: entry.relPath,
               code: "fs_read_failed",
-              message: error41 instanceof Error ? error41.message : String(error41)
+              message: error42 instanceof Error ? error42.message : String(error42)
             });
             continue;
           }
@@ -4475,11 +4466,11 @@ var AgentStoreSyncEngine = class {
             expectedIno: stat28.ino
           });
           localSha = hashed.sha;
-        } catch (error41) {
+        } catch (error42) {
           summary.errors.push({
             relPath: entry.relPath,
-            code: error41 instanceof AgentStoreSyncError ? error41.code : "fs_read_failed",
-            message: error41 instanceof Error ? error41.message : String(error41)
+            code: error42 instanceof AgentStoreSyncError ? error42.code : "fs_read_failed",
+            message: error42 instanceof Error ? error42.message : String(error42)
           });
           continue;
         }
@@ -4511,12 +4502,12 @@ var AgentStoreSyncEngine = class {
         } else {
           try {
             fs8.unlinkSync(absPath);
-          } catch (error41) {
-            if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+          } catch (error42) {
+            if (!isNodeError4(error42) || error42.code !== "ENOENT") {
               summary.errors.push({
                 relPath: entry.relPath,
                 code: "fs_write_failed",
-                message: `Failed to unlink leftover ${entry.relPath} under reused ${dir}: ${error41 instanceof Error ? error41.message : String(error41)}`
+                message: `Failed to unlink leftover ${entry.relPath} under reused ${dir}: ${error42 instanceof Error ? error42.message : String(error42)}`
               });
               continue;
             }
@@ -4577,11 +4568,11 @@ var AgentStoreSyncEngine = class {
     let root;
     try {
       root = safeLstatDirectory({ base: this.filesDir, relPath: dir });
-    } catch (error41) {
+    } catch (error42) {
       summary.errors.push({
         relPath: dir,
         code: "fs_read_failed",
-        message: error41 instanceof Error ? error41.message : String(error41)
+        message: error42 instanceof Error ? error42.message : String(error42)
       });
       return found;
     }
@@ -4615,14 +4606,14 @@ var AgentStoreSyncEngine = class {
           });
           continue;
         }
-      } catch (error41) {
-        if (isNodeError4(error41) && error41.code === "ENOENT") {
+      } catch (error42) {
+        if (isNodeError4(error42) && error42.code === "ENOENT") {
           continue;
         }
         summary.errors.push({
           relPath: current.relPath,
           code: "fs_read_failed",
-          message: error41 instanceof Error ? error41.message : String(error41)
+          message: error42 instanceof Error ? error42.message : String(error42)
         });
         continue;
       }
@@ -4633,11 +4624,11 @@ var AgentStoreSyncEngine = class {
         const childRel = current.relPath === "" ? entry.name : `${current.relPath}/${entry.name}`;
         try {
           normalizeRelPath(childRel);
-        } catch (error41) {
+        } catch (error42) {
           summary.errors.push({
             relPath: childRel,
             code: "fs_read_failed",
-            message: error41 instanceof Error ? error41.message : String(error41)
+            message: error42 instanceof Error ? error42.message : String(error42)
           });
           continue;
         }
@@ -4645,14 +4636,14 @@ var AgentStoreSyncEngine = class {
         let stat28;
         try {
           stat28 = fs8.lstatSync(childAbs);
-        } catch (error41) {
-          if (isNodeError4(error41) && error41.code === "ENOENT") {
+        } catch (error42) {
+          if (isNodeError4(error42) && error42.code === "ENOENT") {
             continue;
           }
           summary.errors.push({
             relPath: childRel,
             code: "fs_read_failed",
-            message: error41 instanceof Error ? error41.message : String(error41)
+            message: error42 instanceof Error ? error42.message : String(error42)
           });
           continue;
         }
@@ -4692,7 +4683,7 @@ var AgentStoreSyncEngine = class {
    * deliberately ungated (mirrors the server's ungated tombstone listing).
    */
   applyRemoteTombstones(tombstones, summary, options2) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2, _c2;
       const acceptEmptyTombstoneEtag = (options2 === null || options2 === void 0 ? void 0 : options2.acceptEmptyTombstoneEtag) === true;
       let deferred = 0;
@@ -4715,12 +4706,12 @@ var AgentStoreSyncEngine = class {
         let absPath;
         try {
           absPath = resolveSafeChildPath({ base: this.filesDir, relPath });
-        } catch (error41) {
+        } catch (error42) {
           summary.refusals++;
           summary.errors.push({
             relPath,
             code: "not_regular_file",
-            message: error41 instanceof Error ? error41.message : String(error41)
+            message: error42 instanceof Error ? error42.message : String(error42)
           });
           deferred++;
           continue;
@@ -4728,12 +4719,12 @@ var AgentStoreSyncEngine = class {
         let stat28;
         try {
           stat28 = fs8.lstatSync(absPath);
-        } catch (error41) {
-          if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+        } catch (error42) {
+          if (!isNodeError4(error42) || error42.code !== "ENOENT") {
             summary.errors.push({
               relPath,
               code: "fs_read_failed",
-              message: error41 instanceof Error ? error41.message : String(error41)
+              message: error42 instanceof Error ? error42.message : String(error42)
             });
             deferred++;
             continue;
@@ -4785,11 +4776,11 @@ var AgentStoreSyncEngine = class {
               expectedIno: stat28.ino
             });
             localSha = hashed.sha;
-          } catch (error41) {
+          } catch (error42) {
             summary.errors.push({
               relPath,
-              code: error41 instanceof AgentStoreSyncError ? error41.code : "fs_read_failed",
-              message: error41 instanceof Error ? error41.message : String(error41)
+              code: error42 instanceof AgentStoreSyncError ? error42.code : "fs_read_failed",
+              message: error42 instanceof Error ? error42.message : String(error42)
             });
             deferred++;
             continue;
@@ -4830,12 +4821,12 @@ var AgentStoreSyncEngine = class {
           } else {
             try {
               fs8.unlinkSync(absPath);
-            } catch (error41) {
-              if (!isNodeError4(error41) || error41.code !== "ENOENT") {
+            } catch (error42) {
+              if (!isNodeError4(error42) || error42.code !== "ENOENT") {
                 summary.errors.push({
                   relPath,
                   code: "fs_write_failed",
-                  message: `Failed to unlink remotely deleted ${relPath}: ${error41 instanceof Error ? error41.message : String(error41)}`
+                  message: `Failed to unlink remotely deleted ${relPath}: ${error42 instanceof Error ? error42.message : String(error42)}`
                 });
                 deferred++;
                 continue;
@@ -5004,7 +4995,7 @@ var AgentStoreSyncEngine = class {
    * delete whose tombstone has already expired.
    */
   applyAbsenceDeletes(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const floorMs = args.tombstoneFloorMs;
       if (this.shouldApplyAbsenceDeletes({
@@ -5089,16 +5080,16 @@ var AgentStoreSyncEngine = class {
         base: this.filesDir,
         relPath: canonicalRel
       });
-    } catch (error41) {
+    } catch (error42) {
       summary.refusals++;
       let code = "presign_response_mismatch";
-      if (error41 instanceof UnsafeAgentStorePathError) {
-        code = error41.code === "windows_incompatible" ? "windows_incompatible" : "not_regular_file";
+      if (error42 instanceof UnsafeAgentStorePathError) {
+        code = error42.code === "windows_incompatible" ? "windows_incompatible" : "not_regular_file";
       }
       summary.errors.push({
         relPath: serverEntry.relPath,
         code,
-        message: error41 instanceof Error ? error41.message : String(error41)
+        message: error42 instanceof Error ? error42.message : String(error42)
       });
       return void 0;
     }
@@ -5140,13 +5131,13 @@ var AgentStoreSyncEngine = class {
       let canonical;
       try {
         canonical = normalizeRelPath(serverEntry.relPath);
-      } catch (error41) {
+      } catch (error42) {
         if (wanted === void 0) {
           summary.refusals++;
           summary.errors.push({
             relPath: serverEntry.relPath,
             code: "presign_response_mismatch",
-            message: error41 instanceof Error ? error41.message : String(error41)
+            message: error42 instanceof Error ? error42.message : String(error42)
           });
         }
         continue;
@@ -5187,7 +5178,7 @@ var AgentStoreSyncEngine = class {
    * indexed and the next round's candidate set shrinks.
    */
   pullCandidates(candidates, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       for (let windowStart = 0; windowStart < candidates.length; windowStart += this.pullPresignWindowSize) {
         yield this.pullDownloadWindow({
           candidates: candidates.slice(windowStart, windowStart + this.pullPresignWindowSize),
@@ -5197,7 +5188,7 @@ var AgentStoreSyncEngine = class {
     });
   }
   downloadOne(candidate, presign) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19, _b2, _c2;
       this.assertPresignedUrlSafe({
         rawUrl: presign.url,
@@ -5209,12 +5200,12 @@ var AgentStoreSyncEngine = class {
       let response;
       try {
         response = yield this.fetchImpl(presign.url, Object.assign({ method: "GET", redirect: "error" }, fetchSignal !== void 0 ? { signal: fetchSignal } : {}));
-      } catch (error41) {
+      } catch (error42) {
         idleWatch === null || idleWatch === void 0 ? void 0 : idleWatch.clear();
         if ((roundSignal === null || roundSignal === void 0 ? void 0 : roundSignal.aborted) === true) {
-          throwForAbortedRoundSignal(candidate.relPath, (_a19 = roundSignal.reason) !== null && _a19 !== void 0 ? _a19 : error41);
+          throwForAbortedRoundSignal(candidate.relPath, (_a19 = roundSignal.reason) !== null && _a19 !== void 0 ? _a19 : error42);
         }
-        if (isBlobIdleAbortError(error41, idleWatch === null || idleWatch === void 0 ? void 0 : idleWatch.signal)) {
+        if (isBlobIdleAbortError(error42, idleWatch === null || idleWatch === void 0 ? void 0 : idleWatch.signal)) {
           throw new AgentStoreSyncError({
             code: "download_failed",
             relPath: candidate.relPath,
@@ -5222,7 +5213,7 @@ var AgentStoreSyncEngine = class {
             message: `blob_get idle timeout after ${this.blobIdleTimeoutMs}ms (url=${redactPresignedUrlString(presign.url)})`
           });
         }
-        throw error41;
+        throw error42;
       }
       if (!response.ok) {
         idleWatch === null || idleWatch === void 0 ? void 0 : idleWatch.clear();
@@ -5307,14 +5298,14 @@ var AgentStoreSyncEngine = class {
             sizeTap,
             writeStream
           );
-        } catch (error41) {
-          if (error41 instanceof AgentStoreSyncError) {
-            throw error41;
+        } catch (error42) {
+          if (error42 instanceof AgentStoreSyncError) {
+            throw error42;
           }
           if ((roundSignal === null || roundSignal === void 0 ? void 0 : roundSignal.aborted) === true) {
-            throwForAbortedRoundSignal(candidate.relPath, (_b2 = roundSignal.reason) !== null && _b2 !== void 0 ? _b2 : error41);
+            throwForAbortedRoundSignal(candidate.relPath, (_b2 = roundSignal.reason) !== null && _b2 !== void 0 ? _b2 : error42);
           }
-          if (isBlobIdleAbortError(error41, idleWatch === null || idleWatch === void 0 ? void 0 : idleWatch.signal)) {
+          if (isBlobIdleAbortError(error42, idleWatch === null || idleWatch === void 0 ? void 0 : idleWatch.signal)) {
             throw new AgentStoreSyncError({
               code: "download_failed",
               relPath: candidate.relPath,
@@ -5325,7 +5316,7 @@ var AgentStoreSyncEngine = class {
           throw new AgentStoreSyncError({
             code: "download_failed",
             relPath: candidate.relPath,
-            message: `Streaming ${candidate.relPath} from ${redactPresignedUrlString(presign.url)} failed: ${error41 instanceof Error ? error41.message : String(error41)}`
+            message: `Streaming ${candidate.relPath} from ${redactPresignedUrlString(presign.url)} failed: ${error42 instanceof Error ? error42.message : String(error42)}`
           });
         } finally {
           writeStream.off("drain", rearmIdleOnDrain);
@@ -5366,11 +5357,11 @@ var AgentStoreSyncEngine = class {
         try {
           fs8.renameSync(tempPath, candidate.absPath);
           renameSucceeded = true;
-        } catch (error41) {
+        } catch (error42) {
           throw new AgentStoreSyncError({
             code: "fs_write_failed",
             relPath: candidate.relPath,
-            message: `Failed to rename staged blob into ${candidate.absPath}: ${error41 instanceof Error ? error41.message : String(error41)}`
+            message: `Failed to rename staged blob into ${candidate.absPath}: ${error42 instanceof Error ? error42.message : String(error42)}`
           });
         }
         try {
@@ -5419,12 +5410,12 @@ var AgentStoreSyncEngine = class {
    * and let the next round sort it out.
    */
   isLocalFileReplaceable(candidate, downloadedSha) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       let stat28;
       try {
         stat28 = fs8.lstatSync(candidate.absPath);
-      } catch (error41) {
-        if (isNodeError4(error41) && error41.code === "ENOENT") {
+      } catch (error42) {
+        if (isNodeError4(error42) && error42.code === "ENOENT") {
           return true;
         }
         return false;
@@ -5453,19 +5444,19 @@ var AgentStoreSyncEngine = class {
     });
   }
   hashCandidate(candidate) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       let resolvedAbs;
       try {
         resolvedAbs = resolveSafeChildPath({
           base: this.filesDir,
           relPath: candidate.relPath
         });
-      } catch (error41) {
+      } catch (error42) {
         return {
           kind: "error",
           relPath: candidate.relPath,
           code: "not_regular_file",
-          message: error41 instanceof Error ? error41.message : `Unsafe path: ${candidate.relPath}`
+          message: error42 instanceof Error ? error42.message : `Unsafe path: ${candidate.relPath}`
         };
       }
       if (resolvedAbs !== candidate.absPath) {
@@ -5486,20 +5477,20 @@ var AgentStoreSyncEngine = class {
         sha = result.sha;
         etag = result.etag;
         multipartParts = result.multipartParts;
-      } catch (error41) {
-        if (error41 instanceof AgentStoreSyncError) {
+      } catch (error42) {
+        if (error42 instanceof AgentStoreSyncError) {
           return {
             kind: "error",
             relPath: candidate.relPath,
-            code: error41.code,
-            message: error41.message
+            code: error42.code,
+            message: error42.message
           };
         }
         return {
           kind: "error",
           relPath: candidate.relPath,
           code: "fs_read_failed",
-          message: error41 instanceof Error ? error41.message : `Failed to hash file: ${error41}`
+          message: error42 instanceof Error ? error42.message : `Failed to hash file: ${error42}`
         };
       }
       return Object.assign(Object.assign({
@@ -5516,12 +5507,12 @@ var AgentStoreSyncEngine = class {
     });
   }
   uploadOne(candidate, presign, summary) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       this.assertPresignedUrlSafe({
         rawUrl: presign.url,
         relPath: candidate.relPath
       });
-      return yield this.runQueued(this.queues.s3, () => __awaiter16(this, void 0, void 0, function* () {
+      return yield this.runQueued(this.queues.s3, () => __awaiter17(this, void 0, void 0, function* () {
         this.throwIfRoundAborted(candidate.relPath);
         this.assertPresignedUrlNotExpired({
           expiresAtMs: presign.expiresAtMs,
@@ -5564,12 +5555,12 @@ var AgentStoreSyncEngine = class {
         relPath,
         validatePresignedUrl: this.validatePresignedUrl
       });
-    } catch (error41) {
+    } catch (error42) {
       throw new AgentStoreSyncError({
         code: "presigned_url_rejected",
         relPath,
-        message: error41 instanceof Error ? error41.message : String(error41),
-        cause: error41 instanceof Error ? error41 : void 0
+        message: error42 instanceof Error ? error42.message : String(error42),
+        cause: error42 instanceof Error ? error42 : void 0
       });
     }
   }
@@ -5578,11 +5569,11 @@ var AgentStoreSyncEngine = class {
     fs8.mkdirSync(this.tmpDir, { recursive: true, mode: PRIVATE_DIR_MODE });
   }
 };
-function isWriteConflictError(error41) {
-  return error41 instanceof AgentStoreSyncError && error41.code === "write_conflict";
+function isWriteConflictError(error42) {
+  return error42 instanceof AgentStoreSyncError && error42.code === "write_conflict";
 }
-function isPresignedUrlExpiredError(error41) {
-  return error41 instanceof AgentStoreSyncError && error41.code === "presigned_url_expired";
+function isPresignedUrlExpiredError(error42) {
+  return error42 instanceof AgentStoreSyncError && error42.code === "presigned_url_expired";
 }
 function presignUsesConflictTarget(presign) {
   return presign.primaryPreconditionFailed === true || presign.lockRedirect !== void 0;
@@ -5609,8 +5600,8 @@ function getHeaderCaseInsensitive(headers, name17) {
   }
   return void 0;
 }
-function syncRoundErrorFor(relPath, error41) {
-  return Object.assign({ relPath, code: error41 instanceof AgentStoreSyncError ? error41.code : "upload_failed", message: error41 instanceof Error ? error41.message : String(error41) }, timeoutClassEntry(error41));
+function syncRoundErrorFor(relPath, error42) {
+  return Object.assign({ relPath, code: error42 instanceof AgentStoreSyncError ? error42.code : "upload_failed", message: error42 instanceof Error ? error42.message : String(error42) }, timeoutClassEntry(error42));
 }
 function noop2() {
 }
@@ -5662,10 +5653,10 @@ function verifiedLeftoverLeaf(args) {
   let normalized;
   try {
     normalized = normalizeRelPath(args.relPath);
-  } catch (error41) {
+  } catch (error42) {
     return {
       kind: "refused",
-      message: error41 instanceof Error ? error41.message : String(error41)
+      message: error42 instanceof Error ? error42.message : String(error42)
     };
   }
   const slash = normalized.lastIndexOf("/");
@@ -5687,10 +5678,10 @@ function verifiedLeftoverLeaf(args) {
           message: "Refusing leftover under a non-directory store base"
         };
       }
-    } catch (error41) {
+    } catch (error42) {
       return {
         kind: "refused",
-        message: error41 instanceof Error ? error41.message : String(error41)
+        message: error42 instanceof Error ? error42.message : String(error42)
       };
     }
     parentAbs = args.base;
@@ -5698,10 +5689,10 @@ function verifiedLeftoverLeaf(args) {
     let parent;
     try {
       parent = safeLstatDirectory({ base: args.base, relPath: parentRel });
-    } catch (error41) {
+    } catch (error42) {
       return {
         kind: "refused",
-        message: error41 instanceof Error ? error41.message : String(error41)
+        message: error42 instanceof Error ? error42.message : String(error42)
       };
     }
     if (parent.kind === "absent") {
@@ -5723,13 +5714,13 @@ function verifiedLeftoverLeaf(args) {
         message: `Refusing leftover ${normalized}: parent changed before the leaf stat`
       };
     }
-  } catch (error41) {
-    if (isNodeError4(error41) && error41.code === "ENOENT") {
+  } catch (error42) {
+    if (isNodeError4(error42) && error42.code === "ENOENT") {
       return { kind: "absent" };
     }
     return {
       kind: "refused",
-      message: error41 instanceof Error ? error41.message : String(error41)
+      message: error42 instanceof Error ? error42.message : String(error42)
     };
   }
   return { kind: "ready", leafAbs: path9.join(parentAbs, leafName) };
@@ -5900,14 +5891,14 @@ function openExistingFileNoFollow({ absPath, maxBytes, expectedDev, expectedIno 
   let fd;
   try {
     fd = fs8.openSync(absPath, flags);
-  } catch (error41) {
-    if (isNodeError4(error41) && (error41.code === "ELOOP" || error41.code === "EMLINK" || error41.code === "ENOENT")) {
+  } catch (error42) {
+    if (isNodeError4(error42) && (error42.code === "ELOOP" || error42.code === "EMLINK" || error42.code === "ENOENT")) {
       throw new AgentStoreSyncError({
         code: "not_regular_file",
-        message: `Refused to open ${absPath}: ${error41.code}`
+        message: `Refused to open ${absPath}: ${error42.code}`
       });
     }
-    throw error41;
+    throw error42;
   }
   try {
     const fdStat = fs8.fstatSync(fd);
@@ -5936,13 +5927,13 @@ function openExistingFileNoFollow({ absPath, maxBytes, expectedDev, expectedIno 
       });
     }
     return { fd, size: fdStat.size };
-  } catch (error41) {
+  } catch (error42) {
     fs8.closeSync(fd);
-    throw error41;
+    throw error42;
   }
 }
 function streamHashFileNoFollow(_a19) {
-  return __awaiter16(this, arguments, void 0, function* ({ absPath, maxBytes, expectedDev, expectedIno, multipartPartSizeBytes }) {
+  return __awaiter17(this, arguments, void 0, function* ({ absPath, maxBytes, expectedDev, expectedIno, multipartPartSizeBytes }) {
     var _b2, e_1, _c2, _d;
     if (multipartPartSizeBytes !== void 0 && (!Number.isSafeInteger(multipartPartSizeBytes) || multipartPartSizeBytes <= 0)) {
       throw new RangeError("multipartPartSizeBytes must be a positive integer");
@@ -6036,9 +6027,9 @@ function assertTargetWritable({ absPath, relPath }) {
   let existing;
   try {
     existing = fs8.lstatSync(absPath);
-  } catch (error41) {
-    if (!isNodeError4(error41) || error41.code !== "ENOENT") {
-      throw error41;
+  } catch (error42) {
+    if (!isNodeError4(error42) || error42.code !== "ENOENT") {
+      throw error42;
     }
     return;
   }
@@ -6091,8 +6082,8 @@ function safeCreateDirChain({ base, target, relPath }) {
     let stat28;
     try {
       stat28 = fs8.lstatSync(current);
-    } catch (error41) {
-      if (isNodeError4(error41) && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (isNodeError4(error42) && error42.code === "ENOENT") {
         try {
           fs8.mkdirSync(current, { mode: PRIVATE_DIR_MODE });
         } catch (mkErr) {
@@ -6102,7 +6093,7 @@ function safeCreateDirChain({ base, target, relPath }) {
         }
         stat28 = fs8.lstatSync(current);
       } else {
-        throw error41;
+        throw error42;
       }
     }
     if (stat28.isSymbolicLink()) {
@@ -6140,21 +6131,21 @@ function assertRealDirectory({ targetPath, relPath }) {
 }
 function symlinkSafeReadFlags() {
   var _a19;
-  const constants11 = fs8.constants;
-  let flags = (_a19 = constants11.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
-  if (typeof constants11.O_NOFOLLOW === "number") {
-    flags |= constants11.O_NOFOLLOW;
+  const constants12 = fs8.constants;
+  let flags = (_a19 = constants12.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
+  if (typeof constants12.O_NOFOLLOW === "number") {
+    flags |= constants12.O_NOFOLLOW;
   }
-  if (typeof constants11.O_CLOEXEC === "number") {
-    flags |= constants11.O_CLOEXEC;
+  if (typeof constants12.O_CLOEXEC === "number") {
+    flags |= constants12.O_CLOEXEC;
   }
   return flags;
 }
-function isNodeError4(error41) {
-  return error41 instanceof Error && typeof error41.code === "string";
+function isNodeError4(error42) {
+  return error42 instanceof Error && typeof error42.code === "string";
 }
 function safeReadBody(response) {
-  return __awaiter16(this, void 0, void 0, function* () {
+  return __awaiter17(this, void 0, void 0, function* () {
     try {
       return yield response.text();
     } catch (_a19) {
@@ -6210,7 +6201,7 @@ var HttpAgentStoreBlobTransfer = class {
       throw new RangeError(`HttpAgentStoreBlobTransfer partUploadBaseDelayMs must be non-negative, got ${this.partUploadBaseDelayMs}`);
     }
     this.now = (_e2 = options2.now) !== null && _e2 !== void 0 ? _e2 : Date.now;
-    this.sleep = (_f = options2.sleep) !== null && _f !== void 0 ? _f : ((ms2) => __awaiter16(this, void 0, void 0, function* () {
+    this.sleep = (_f = options2.sleep) !== null && _f !== void 0 ? _f : ((ms2) => __awaiter17(this, void 0, void 0, function* () {
       yield new Promise((resolve29) => {
         setTimeout(resolve29, ms2);
       });
@@ -6225,63 +6216,63 @@ var HttpAgentStoreBlobTransfer = class {
   setBlobIdleTimeoutMs(blobIdleTimeoutMs) {
     this.blobIdleTimeoutMs = normalizeBlobIdleTimeoutMs(blobIdleTimeoutMs);
   }
-  uploadFile(request3) {
-    return __awaiter16(this, void 0, void 0, function* () {
+  uploadFile(request5) {
+    return __awaiter17(this, void 0, void 0, function* () {
       var _a19;
       const uploaded = yield this.uploadRange({
-        url: request3.url,
-        relPath: request3.relPath,
-        absPath: request3.absPath,
+        url: request5.url,
+        relPath: request5.relPath,
+        absPath: request5.absPath,
         offset: 0,
-        size: request3.size,
-        fileSize: request3.size,
-        expectedDev: request3.expectedDev,
-        expectedIno: request3.expectedIno,
-        presignHeaders: (_a19 = request3.presignHeaders) !== null && _a19 !== void 0 ? _a19 : {
-          "x-amz-meta-content-sha256": request3.sha
+        size: request5.size,
+        fileSize: request5.size,
+        expectedDev: request5.expectedDev,
+        expectedIno: request5.expectedIno,
+        presignHeaders: (_a19 = request5.presignHeaders) !== null && _a19 !== void 0 ? _a19 : {
+          "x-amz-meta-content-sha256": request5.sha
         },
-        signal: request3.signal
+        signal: request5.signal
       });
       return { etag: normalizeS3Etag(uploaded.etag) };
     });
   }
-  uploadPart(request3) {
-    return __awaiter16(this, void 0, void 0, function* () {
-      const expectedChecksum = Buffer.from(request3.checksumSha256).toString("base64");
-      if (request3.checksumSha256.byteLength !== 32 || getHeaderCaseInsensitive(request3.presignHeaders, "x-amz-checksum-sha256") !== expectedChecksum) {
+  uploadPart(request5) {
+    return __awaiter17(this, void 0, void 0, function* () {
+      const expectedChecksum = Buffer.from(request5.checksumSha256).toString("base64");
+      if (request5.checksumSha256.byteLength !== 32 || getHeaderCaseInsensitive(request5.presignHeaders, "x-amz-checksum-sha256") !== expectedChecksum) {
         throw new AgentStoreSyncError({
           code: "presign_response_mismatch",
-          relPath: request3.relPath,
-          message: `Multipart part ${request3.partNumber} of ${request3.relPath} is missing its signed SHA-256 checksum`,
+          relPath: request5.relPath,
+          message: `Multipart part ${request5.partNumber} of ${request5.relPath} is missing its signed SHA-256 checksum`,
           retryable: false
         });
       }
       for (let attempt = 1; ; attempt++) {
-        if (request3.expiresAtMs <= this.now()) {
+        if (request5.expiresAtMs <= this.now()) {
           throw new AgentStoreSyncError({
             code: "presigned_url_expired",
-            relPath: request3.relPath,
-            message: `Multipart upload URL expired before part ${request3.partNumber} of ${request3.relPath} could be sent`,
+            relPath: request5.relPath,
+            message: `Multipart upload URL expired before part ${request5.partNumber} of ${request5.relPath} could be sent`,
             retryable: false
           });
         }
         try {
           return yield this.uploadRange({
-            url: request3.url,
-            relPath: request3.relPath,
-            absPath: request3.absPath,
-            offset: request3.offset,
-            size: request3.size,
-            fileSize: request3.fileSize,
-            expectedDev: request3.expectedDev,
-            expectedIno: request3.expectedIno,
-            presignHeaders: request3.presignHeaders,
-            signal: request3.signal
+            url: request5.url,
+            relPath: request5.relPath,
+            absPath: request5.absPath,
+            offset: request5.offset,
+            size: request5.size,
+            fileSize: request5.fileSize,
+            expectedDev: request5.expectedDev,
+            expectedIno: request5.expectedIno,
+            presignHeaders: request5.presignHeaders,
+            signal: request5.signal
           });
-        } catch (error41) {
-          const retryable = error41 instanceof AgentStoreSyncError && error41.retryable === true;
+        } catch (error42) {
+          const retryable = error42 instanceof AgentStoreSyncError && error42.retryable === true;
           if (!retryable || attempt >= this.partUploadMaxAttempts) {
-            throw error41;
+            throw error42;
           }
           yield this.sleep(this.partUploadBaseDelayMs * Math.pow(2, Math.max(0, attempt - 1)));
         }
@@ -6289,7 +6280,7 @@ var HttpAgentStoreBlobTransfer = class {
     });
   }
   uploadRange(args) {
-    return __awaiter16(this, void 0, void 0, function* () {
+    return __awaiter17(this, void 0, void 0, function* () {
       const isEmptyWholeFile = args.offset === 0 && args.size === 0 && args.fileSize === 0;
       if (!Number.isSafeInteger(args.offset) || args.offset < 0 || !Number.isSafeInteger(args.size) || args.size < 0 || args.size === 0 && !isEmptyWholeFile || args.offset + args.size > args.fileSize) {
         throw new AgentStoreSyncError({
@@ -6345,16 +6336,16 @@ var HttpAgentStoreBlobTransfer = class {
               resolve29({ etag: outcome.etag });
               return;
             }
-            const { error: error41 } = outcome;
-            if (error41 instanceof AgentStoreSyncError) {
-              reject2(error41);
+            const { error: error42 } = outcome;
+            if (error42 instanceof AgentStoreSyncError) {
+              reject2(error42);
               return;
             }
             reject2(new AgentStoreSyncError({
               code: "upload_failed",
               relPath: args.relPath,
-              message: `Upload of ${args.relPath} failed (url=${redactedUrl}): ${error41 instanceof Error ? error41.message : String(error41)}`,
-              cause: error41,
+              message: `Upload of ${args.relPath} failed (url=${redactedUrl}): ${error42 instanceof Error ? error42.message : String(error42)}`,
+              cause: error42,
               retryable: true
             }));
           };
@@ -6363,7 +6354,7 @@ var HttpAgentStoreBlobTransfer = class {
             method: "PUT",
             headers: putHeaders
           }, (response) => {
-            response.on("error", (error41) => settle({ kind: "failure", error: error41 }));
+            response.on("error", (error42) => settle({ kind: "failure", error: error42 }));
             response.resume();
             response.on("end", () => {
               var _a19, _b2;
@@ -6397,7 +6388,7 @@ var HttpAgentStoreBlobTransfer = class {
               });
             });
           });
-          httpRequest.on("error", (error41) => settle({ kind: "failure", error: error41 }));
+          httpRequest.on("error", (error42) => settle({ kind: "failure", error: error42 }));
           let putIdleArmed = false;
           const armPutIdleTimeout = () => {
             if (putIdleArmed || this.blobIdleTimeoutMs <= 0) {
@@ -6438,7 +6429,7 @@ var HttpAgentStoreBlobTransfer = class {
           }
           if (this.blobIdleTimeoutMs > 0 && isEmptyWholeFile) {
             armPutIdleTimeout();
-            void (0, import_promises5.pipeline)(body, httpRequest).catch((error41) => settle({ kind: "failure", error: error41 }));
+            void (0, import_promises5.pipeline)(body, httpRequest).catch((error42) => settle({ kind: "failure", error: error42 }));
           } else if (this.blobIdleTimeoutMs > 0) {
             const armOnFirstByte = new import_node_stream.Transform({
               transform(chunk, _encoding, callback) {
@@ -6446,14 +6437,14 @@ var HttpAgentStoreBlobTransfer = class {
                 callback(null, chunk);
               }
             });
-            void (0, import_promises5.pipeline)(body, armOnFirstByte, httpRequest).catch((error41) => settle({ kind: "failure", error: error41 }));
+            void (0, import_promises5.pipeline)(body, armOnFirstByte, httpRequest).catch((error42) => settle({ kind: "failure", error: error42 }));
           } else {
-            void (0, import_promises5.pipeline)(body, httpRequest).catch((error41) => settle({ kind: "failure", error: error41 }));
+            void (0, import_promises5.pipeline)(body, httpRequest).catch((error42) => settle({ kind: "failure", error: error42 }));
           }
         });
-      } catch (error41) {
+      } catch (error42) {
         body.destroy();
-        throw error41;
+        throw error42;
       }
     });
   }
@@ -6545,8 +6536,8 @@ function roundAbortedError(relPath, cause) {
     cause
   }, cooperativeCause ? {} : { timeoutClass: "round" }));
 }
-function timeoutClassEntry(error41) {
-  return error41 instanceof AgentStoreSyncError && error41.timeoutClass !== void 0 ? { timeoutClass: error41.timeoutClass } : {};
+function timeoutClassEntry(error42) {
+  return error42 instanceof AgentStoreSyncError && error42.timeoutClass !== void 0 ? { timeoutClass: error42.timeoutClass } : {};
 }
 function composeAbortSignals(a, b2) {
   if (a === void 0) {
@@ -6557,17 +6548,17 @@ function composeAbortSignals(a, b2) {
   }
   return AbortSignal.any([a, b2]);
 }
-function isBlobIdleAbortError(error41, signal) {
+function isBlobIdleAbortError(error42, signal) {
   if ((signal === null || signal === void 0 ? void 0 : signal.aborted) !== true || !isBlobIdleTimeoutReason(signal.reason)) {
     return false;
   }
-  if (error41 === signal.reason) {
+  if (error42 === signal.reason) {
     return true;
   }
-  if (!(error41 instanceof Error)) {
+  if (!(error42 instanceof Error)) {
     return false;
   }
-  return error41.name === "TimeoutError" || error41.name === "AbortError";
+  return error42.name === "TimeoutError" || error42.name === "AbortError";
 }
 function isBlobIdleTimeoutReason(reason) {
   return reason instanceof Error && reason.name === "TimeoutError" && reason.message.includes("blob transfer idle timeout");

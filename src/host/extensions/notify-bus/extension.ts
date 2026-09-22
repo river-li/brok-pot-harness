@@ -15,9 +15,9 @@ var notifyBusExtension = defineHostExtension({
       for (const handler of handlersByTopic[topic]) {
         try {
           handler();
-        } catch (error41) {
+        } catch (error42) {
           context2.host.log(
-            `[sand:notify-bus] ${topic} drain handler failed: ${errorLogTag(error41)}`
+            `[sand:notify-bus] ${topic} drain handler failed: ${errorLogTag(error42)}`
           );
         }
       }
@@ -30,8 +30,8 @@ var notifyBusExtension = defineHostExtension({
         for (const topic of SAND_NOTIFY_TOPICS) fire(topic);
       },
       onNotify: fire,
-      onStreamError: (error41) => {
-        context2.host.log(`[sand:notify-bus] stream failed: ${errorLogTag(error41)}`);
+      onStreamError: (error42) => {
+        context2.host.log(`[sand:notify-bus] stream failed: ${errorLogTag(error42)}`);
       },
       reconnectBackoff: createRetryPolicy({
         name: "notify-bus.reconnect",

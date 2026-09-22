@@ -7,8 +7,8 @@ function applyStorePragmas(db, options2) {
   try {
     db.exec("PRAGMA journal_mode = WAL");
     db.exec("PRAGMA synchronous = NORMAL");
-  } catch (error41) {
-    if (options2.allowWalFailure !== true) throw error41;
+  } catch (error42) {
+    if (options2.allowWalFailure !== true) throw error42;
   }
   if (options2.incrementalAutoVacuum === true) {
     db.exec("PRAGMA auto_vacuum = INCREMENTAL");
@@ -54,8 +54,8 @@ function checkpointSandAgentDb(dbPath, busyTimeoutMs = DB_BUSY_TIMEOUT_MS) {
     db = new import_node_sqlite.DatabaseSync(dbPath);
     db.exec(`PRAGMA busy_timeout = ${busyTimeoutMs}`);
     result = db.prepare("PRAGMA wal_checkpoint(TRUNCATE)").get();
-  } catch (error41) {
-    reportFallback("store_db", error41);
+  } catch (error42) {
+    reportFallback("store_db", error42);
     return false;
   } finally {
     db?.close();
@@ -66,8 +66,8 @@ function checkpointSandAgentDb(dbPath, busyTimeoutMs = DB_BUSY_TIMEOUT_MS) {
   }
   try {
     return (0, import_node_fs13.statSync)(`${dbPath}-wal`).size === 0;
-  } catch (error41) {
-    return error41?.code === "ENOENT";
+  } catch (error42) {
+    return error42?.code === "ENOENT";
   }
 }
 var SQLITE_DB_SIDECAR_SUFFIXES = ["-wal", "-shm", "-journal"];

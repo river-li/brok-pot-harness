@@ -1,5 +1,5 @@
-init_dist3();
-var logger63 = createLogger("@anysphere/agent");
+init_dist4();
+var logger64 = createLogger("@anysphere/agent");
 var CONSECUTIVE_USER_MESSAGE_WARNING_THRESHOLD = 3;
 var TAIL_INSPECTION_WINDOW = 12;
 function extractCursorProviderOptions2(message) {
@@ -47,7 +47,7 @@ function warnIfLongTrailingUserMessageRun(ctx, messages2, invocationId) {
   }
   const tailDistinctCursorMessageIdCount = new Set(tailCursorMessageIds).size;
   const tailDistinctCursorRequestIdCount = new Set(tailCursorRequestIds).size;
-  logger63.warn(ctx, "Turn contains unusually long trailing run of consecutive user messages", {
+  logger64.warn(ctx, "Turn contains unusually long trailing run of consecutive user messages", {
     trailingConsecutiveUserMessages,
     threshold: CONSECUTIVE_USER_MESSAGE_WARNING_THRESHOLD,
     totalMessages: messages2.length,

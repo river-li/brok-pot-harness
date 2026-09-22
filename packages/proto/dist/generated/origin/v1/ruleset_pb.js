@@ -1,19 +1,19 @@
 init_esm();
 init_compact();
-var __protoPackage177 = "origin.v1.";
-var __protoMessage3168 = class extends CompactMessage {
+var __protoPackage178 = "origin.v1.";
+var __protoMessage3169 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage177;
+    return __protoPackage178;
   }
 };
-var RulesetEnforcement = /* @__PURE__ */ enumType(proto3, __protoPackage177, "RulesetEnforcement", [[0, "UNSPECIFIED"], [1, "ACTIVE"], [2, "EVALUATE"], [3, "DISABLED"]], 1);
-var RulesetKind = /* @__PURE__ */ enumType(proto3, __protoPackage177, "RulesetKind", [[0, "UNSPECIFIED"], [1, "MERGE_BRANCH"], [2, "PUSH_BRANCH"], [3, "PUSH_TAG"], [4, "PUSH_REPOSITORY"]], 1);
-var RulesetBypassMode = /* @__PURE__ */ enumType(proto3, __protoPackage177, "RulesetBypassMode", [[0, "UNSPECIFIED"], [1, "ALWAYS"], [2, "PULL_REQUEST_ONLY"]], 1);
-var RulesetBypassActorKind = /* @__PURE__ */ enumType(proto3, __protoPackage177, "RulesetBypassActorKind", [[0, "UNSPECIFIED"], [1, "USER"], [2, "TEAM"], [3, "APP"], [6, "ORIGIN_ROLE"]], 1);
-var RulesetRule = class _RulesetRule extends __protoMessage3168 {
+var RulesetEnforcement = /* @__PURE__ */ enumType(proto3, __protoPackage178, "RulesetEnforcement", [[0, "UNSPECIFIED"], [1, "ACTIVE"], [2, "EVALUATE"], [3, "DISABLED"]], 1);
+var RulesetKind = /* @__PURE__ */ enumType(proto3, __protoPackage178, "RulesetKind", [[0, "UNSPECIFIED"], [1, "MERGE_BRANCH"], [2, "PUSH_BRANCH"], [3, "PUSH_TAG"], [4, "PUSH_REPOSITORY"]], 1);
+var RulesetBypassMode = /* @__PURE__ */ enumType(proto3, __protoPackage178, "RulesetBypassMode", [[0, "UNSPECIFIED"], [1, "ALWAYS"], [2, "PULL_REQUEST_ONLY"]], 1);
+var RulesetBypassActorKind = /* @__PURE__ */ enumType(proto3, __protoPackage178, "RulesetBypassActorKind", [[0, "UNSPECIFIED"], [1, "USER"], [2, "TEAM"], [3, "APP"], [6, "ORIGIN_ROLE"]], 1);
+var RulesetRule = class _RulesetRule extends __protoMessage3169 {
   constructor(data) {
     super();
     this.id = "";
@@ -36,7 +36,7 @@ var RulesetRule = class _RulesetRule extends __protoMessage3168 {
     return ["RulesetRule|1 id 9|2 rule_type 9|3 parameters #0", Struct];
   }
 };
-var RulesetBypassActor = class _RulesetBypassActor extends __protoMessage3168 {
+var RulesetBypassActor = class _RulesetBypassActor extends __protoMessage3169 {
   constructor(data) {
     super();
     this.id = "";
@@ -60,7 +60,7 @@ var RulesetBypassActor = class _RulesetBypassActor extends __protoMessage3168 {
     return ["RulesetBypassActor|1 id 9|2 bypass_mode #0|3 actor_kind #1|4 actor_payload #2", RulesetBypassMode, RulesetBypassActorKind, Struct];
   }
 };
-var Ruleset = class _Ruleset extends __protoMessage3168 {
+var Ruleset = class _Ruleset extends __protoMessage3169 {
   constructor(data) {
     super();
     this.id = "";
@@ -90,7 +90,7 @@ var Ruleset = class _Ruleset extends __protoMessage3168 {
     return ["Ruleset|1 id 9|2 repo #0|3 name 9|4 description 9|5 enforcement #1|6 kind #2|7 included_ref_names 9*|8 excluded_ref_names 9*|9 rules #3*|10 bypass_actors #4*", ClientRepoIdentifier, RulesetEnforcement, RulesetKind, RulesetRule, RulesetBypassActor];
   }
 };
-var RulesetRuleInput = class _RulesetRuleInput extends __protoMessage3168 {
+var RulesetRuleInput = class _RulesetRuleInput extends __protoMessage3169 {
   constructor(data) {
     super();
     this.ruleType = "";
@@ -112,7 +112,7 @@ var RulesetRuleInput = class _RulesetRuleInput extends __protoMessage3168 {
     return ["RulesetRuleInput|1 rule_type 9|2 parameters #0", Struct];
   }
 };
-var RulesetBypassActorInput = class _RulesetBypassActorInput extends __protoMessage3168 {
+var RulesetBypassActorInput = class _RulesetBypassActorInput extends __protoMessage3169 {
   constructor(data) {
     super();
     this.bypassMode = RulesetBypassMode.UNSPECIFIED;
@@ -135,7 +135,7 @@ var RulesetBypassActorInput = class _RulesetBypassActorInput extends __protoMess
     return ["RulesetBypassActorInput|1 bypass_mode #0|2 actor_kind #1|3 actor_payload #2", RulesetBypassMode, RulesetBypassActorKind, Struct];
   }
 };
-var ListRulesetsRequest = class _ListRulesetsRequest extends __protoMessage3168 {
+var ListRulesetsRequest = class _ListRulesetsRequest extends __protoMessage3169 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -156,7 +156,7 @@ var ListRulesetsRequest = class _ListRulesetsRequest extends __protoMessage3168 
     return ["ListRulesetsRequest|1 repo #0", ClientRepoIdentifier];
   }
 };
-var ListRulesetsResponse = class _ListRulesetsResponse extends __protoMessage3168 {
+var ListRulesetsResponse = class _ListRulesetsResponse extends __protoMessage3169 {
   constructor(data) {
     super();
     this.rulesets = [];
@@ -178,7 +178,7 @@ var ListRulesetsResponse = class _ListRulesetsResponse extends __protoMessage316
     return ["ListRulesetsResponse|1 rulesets #0*", Ruleset];
   }
 };
-var GetRulesetRequest = class _GetRulesetRequest extends __protoMessage3168 {
+var GetRulesetRequest = class _GetRulesetRequest extends __protoMessage3169 {
   constructor(data) {
     super();
     this.rulesetId = "";
@@ -200,7 +200,7 @@ var GetRulesetRequest = class _GetRulesetRequest extends __protoMessage3168 {
     return ["GetRulesetRequest|1 repo #0|2 ruleset_id 9", ClientRepoIdentifier];
   }
 };
-var GetRulesetResponse = class _GetRulesetResponse extends __protoMessage3168 {
+var GetRulesetResponse = class _GetRulesetResponse extends __protoMessage3169 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -221,7 +221,7 @@ var GetRulesetResponse = class _GetRulesetResponse extends __protoMessage3168 {
     return ["GetRulesetResponse|1 ruleset #0", Ruleset];
   }
 };
-var UpsertRulesetRequest = class _UpsertRulesetRequest extends __protoMessage3168 {
+var UpsertRulesetRequest = class _UpsertRulesetRequest extends __protoMessage3169 {
   constructor(data) {
     super();
     this.name = "";
@@ -250,7 +250,7 @@ var UpsertRulesetRequest = class _UpsertRulesetRequest extends __protoMessage316
     return ["UpsertRulesetRequest|1 repo #0|2 ruleset_id 9?|3 name 9|4 description 9|5 enforcement #1|6 kind #2|7 included_ref_names 9*|8 excluded_ref_names 9*|9 rules #3*|10 bypass_actors #4*", ClientRepoIdentifier, RulesetEnforcement, RulesetKind, RulesetRuleInput, RulesetBypassActorInput];
   }
 };
-var UpsertRulesetResponse = class _UpsertRulesetResponse extends __protoMessage3168 {
+var UpsertRulesetResponse = class _UpsertRulesetResponse extends __protoMessage3169 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -271,7 +271,7 @@ var UpsertRulesetResponse = class _UpsertRulesetResponse extends __protoMessage3
     return ["UpsertRulesetResponse|1 ruleset #0", Ruleset];
   }
 };
-var DeleteRulesetRequest = class _DeleteRulesetRequest extends __protoMessage3168 {
+var DeleteRulesetRequest = class _DeleteRulesetRequest extends __protoMessage3169 {
   constructor(data) {
     super();
     this.rulesetId = "";
@@ -293,7 +293,7 @@ var DeleteRulesetRequest = class _DeleteRulesetRequest extends __protoMessage316
     return ["DeleteRulesetRequest|1 repo #0|2 ruleset_id 9", ClientRepoIdentifier];
   }
 };
-var DeleteRulesetResponse = class _DeleteRulesetResponse extends __protoMessage3168 {
+var DeleteRulesetResponse = class _DeleteRulesetResponse extends __protoMessage3169 {
   constructor(data) {
     super();
     this.rulesetId = "";

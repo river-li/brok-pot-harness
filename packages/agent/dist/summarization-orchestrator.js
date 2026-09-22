@@ -52,9 +52,9 @@ var __disposeResources21 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger60 = createLogger("@anysphere/agent");
 function countMessageKinds(messages2) {
@@ -120,13 +120,7 @@ var summarizationTime = createHistogram("agenticComposer.summarizationTime", {
 });
 var summarizationGenerationTime = createHistogram("agenticComposer.summarizationGenerationTime", {
   description: "Time spent generating a summary in milliseconds",
-  labelNames: [
-    "strategy",
-    "triggerReason",
-    "model",
-    "summarizerType",
-    "outcome"
-  ]
+  labelNames: ["strategy", "triggerReason", "model", "summarizerType", "outcome"]
 });
 var summarizationCounter = createCounter("agenticComposer.summarization", {
   description: "Number of summarizations performed",
@@ -412,6 +406,7 @@ ${formatProjectCompactionPrompt({
           startInvocationId: options2.currentInvocationId,
           startUsedTokens: getTokenDetails().usedTokens,
           startMaxTokens: getTokenDetails().maxTokens,
+          triggerReason: options2.triggerReason,
           lifecycle
         };
         stateHandler.setBackgroundSummarizationState(promiseInfo, settledMessages, cancellationToken);
@@ -431,6 +426,8 @@ ${formatProjectCompactionPrompt({
             startMaxTokens: getTokenDetails().maxTokens,
             usedTokensThresholdToStartBackgroundSummarization: config2.backgroundSummarizationProps.usedTokensThresholdToStartBackgroundSummarization,
             usedTokensThresholdToPersistBackgroundSummarization: config2.backgroundSummarizationProps.usedTokensThresholdToPersistBackgroundSummarization,
+            triggerReason: options2.triggerReason,
+            summaryLifecycleId: lifecycle.summaryLifecycleId,
             logFields: summarizationLogFields
           });
           config2.pendingSummaryStore.trackPendingGeneration?.({
@@ -520,9 +517,9 @@ ${formatProjectCompactionPrompt({
           } finally {
             __disposeResources21(env_2);
           }
-        } catch (error41) {
+        } catch (error42) {
           logger60.warn(ctx, "[summarization] preCompact hook execution failed", {
-            summarization: { error: error41 }
+            summarization: { error: error42 }
           });
         }
       }
@@ -629,7 +626,9 @@ ${formatProjectCompactionPrompt({
           errorKind: result.hadError === true ? result.errorKind ?? "unknown" : "none",
           model: backgroundSummarizationModelId
         });
-        backgroundSummarizationPersistedEstimatedTokens.histogram(ctx, persistedEstimatedTokens, { model: backgroundSummarizationModelId });
+        backgroundSummarizationPersistedEstimatedTokens.histogram(ctx, persistedEstimatedTokens, {
+          model: backgroundSummarizationModelId
+        });
         backgroundSummarizationPersistedAdditionalMessages.histogram(ctx, additionalMessagesStats.userMessages, { model: backgroundSummarizationModelId, kind: "user_message" });
         backgroundSummarizationPersistedAdditionalMessages.histogram(ctx, additionalMessagesStats.systemMessages, { model: backgroundSummarizationModelId, kind: "system_message" });
         backgroundSummarizationPersistedAdditionalMessages.histogram(ctx, additionalMessagesStats.assistantMessages, { model: backgroundSummarizationModelId, kind: "assistant_message" });
@@ -677,12 +676,9 @@ ${formatProjectCompactionPrompt({
           additionalAssistantMessageCount: additionalMessagesStats.assistantMessages,
           additionalToolMessageCount: additionalMessagesStats.toolMessages,
           additionalToolCallCount: additionalMessagesStats.toolCalls,
-          summaryLifecycleId: backgroundSummarizationPromiseInfo.kind === "live_generation" ? backgroundSummarizationPromiseInfo.lifecycle.summaryLifecycleId : void 0
+          summaryLifecycleId: backgroundSummarizationPromiseInfo.lifecycle?.summaryLifecycleId
         });
-        const gradingTailMessages = [
-          ...preservedOriginalTailMessages,
-          ...messagesNotSummarized
-        ];
+        const gradingTailMessages = [...preservedOriginalTailMessages, ...messagesNotSummarized];
         const preservedTailMessageSet = new Set(preservedOriginalTailMessages);
         const preservedTailIndices = new Set(fullReplacementMessages.flatMap((message, index) => preservedTailMessageSet.has(message) ? [index] : []));
         const effectiveContextMessages = [
@@ -714,9 +710,9 @@ ${formatProjectCompactionPrompt({
           });
         }
         return summary.summary;
-      } catch (error41) {
+      } catch (error42) {
         summarizationFailed = true;
-        throw error41;
+        throw error42;
       } finally {
         if (options2.backgroundSummarizationMode === BackgroundSummarizationMode.WaitForCompletion || options2.backgroundSummarizationMode === BackgroundSummarizationMode.WaitForCompletionIfStarted || options2.backgroundSummarizationMode === BackgroundSummarizationMode.BackgroundAndPersistIfCompleted) {
           await interactionListener.sendUpdate(ctx, toRedactedInteractionUpdate(Updates.summaryCompleted(hookMessage, summarizationFailed ? true : void 0), PrivacyMode.UNSPECIFIED));

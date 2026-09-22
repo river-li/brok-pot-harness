@@ -52,9 +52,9 @@ var __disposeResources3 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 function getRequiredToolName(allTools, toolId) {
   const tool = allTools[toolId];
@@ -275,21 +275,12 @@ var ToolSetHandle = class _ToolSetHandle {
       throw new Error("Cannot merge toolsets sharing a dynamic registry");
     }
     if (this.dynamicToolRegistry !== void 0) {
-      return this.transformToolsInPlace((tools) => [
-        ...tools,
-        ...other.getAllTools()
-      ]);
+      return this.transformToolsInPlace((tools) => [...tools, ...other.getAllTools()]);
     }
     if (otherRegistry !== void 0) {
-      return other.transformToolsInPlace((tools) => [
-        ...this.getAllTools(),
-        ...tools
-      ]);
+      return other.transformToolsInPlace((tools) => [...this.getAllTools(), ...tools]);
     }
-    return _ToolSetHandle.fromTools([
-      ...this.getAllTools(),
-      ...other.getAllTools()
-    ]);
+    return _ToolSetHandle.fromTools([...this.getAllTools(), ...other.getAllTools()]);
   }
 };
 var ToolErrorClassification;
@@ -325,20 +316,20 @@ async function executeToolResultOrError(tool, parentCtx, interactionHandler, arg
       return {
         result: await tool.execute(ctx, interactionHandler, argsStream, meta)
       };
-    } catch (error41) {
-      if (error41 instanceof DeferredInteractionResponseError) {
-        throw error41;
+    } catch (error42) {
+      if (error42 instanceof DeferredInteractionResponseError) {
+        throw error42;
       }
       const shouldBubbleRetryableTaskErrors = getShouldBubbleRetryableTaskErrorsFromContext(ctx);
-      if (error41 instanceof RetryableToolOrchestrationError && shouldBubbleRetryableTaskErrors) {
-        throw error41;
+      if (error42 instanceof RetryableToolOrchestrationError && shouldBubbleRetryableTaskErrors) {
+        throw error42;
       }
-      const streamStartTimeoutTurnError = maybeCreateAgentStreamStartTimeoutTurnError(error41);
+      const streamStartTimeoutTurnError = maybeCreateAgentStreamStartTimeoutTurnError(error42);
       if (streamStartTimeoutTurnError !== void 0) {
         throw streamStartTimeoutTurnError;
       }
       const interactionAbortSignal = interactionHandler.getAbortSignal?.(ctx);
-      const normalized = maybeRewriteFusedStepGuardAbort(maybeNormalizeExecBoundaryError(error41), interactionAbortSignal !== void 0 ? [interactionAbortSignal, ctx.signal] : [ctx.signal], tool.name);
+      const normalized = maybeRewriteFusedStepGuardAbort(maybeNormalizeExecBoundaryError(error42), interactionAbortSignal !== void 0 ? [interactionAbortSignal, ctx.signal] : [ctx.signal], tool.name);
       if (normalized instanceof DeferredInteractionResponseError) {
         throw normalized;
       }
@@ -363,113 +354,113 @@ async function executeToolResultOrError(tool, parentCtx, interactionHandler, arg
     __disposeResources3(env_1);
   }
 }
-function shouldHideToolCallErrorFromClient(error41) {
-  return error41 instanceof CustomToolCallError && "hideFromClientToolCall" in error41 && error41.hideFromClientToolCall === true;
+function shouldHideToolCallErrorFromClient(error42) {
+  return error42 instanceof CustomToolCallError && "hideFromClientToolCall" in error42 && error42.hideFromClientToolCall === true;
 }
-function isAbortLikeError(error41) {
-  return error41 instanceof ToolCallAbortedError || error41 instanceof Error && error41.name === "AbortError";
+function isAbortLikeError(error42) {
+  return error42 instanceof ToolCallAbortedError || error42 instanceof Error && error42.name === "AbortError";
 }
-function maybeRewriteFusedStepGuardAbort(error41, abortSignals, toolName) {
-  if (!isAbortLikeError(error41)) {
-    return error41;
+function maybeRewriteFusedStepGuardAbort(error42, abortSignals, toolName) {
+  if (!isAbortLikeError(error42)) {
+    return error42;
   }
-  const reason = findFusedStepGuardTimeoutReason(abortSignals, error41);
+  const reason = findFusedStepGuardTimeoutReason(abortSignals, error42);
   if (reason === void 0) {
-    return error41;
+    return error42;
   }
   const timeoutError = createToolCallExecutionTimeoutError({
     toolName,
     executionTimeoutMs: reason.fuseGuardMs
   });
-  timeoutError.cause = error41;
+  timeoutError.cause = error42;
   return timeoutError;
 }
-function findFusedStepGuardTimeoutReason(abortSignals, error41) {
+function findFusedStepGuardTimeoutReason(abortSignals, error42) {
   for (const signal of abortSignals) {
     if (signal.aborted && isFusedStepGuardTimeoutReason(signal.reason)) {
       return signal.reason;
     }
   }
-  if (isFusedStepGuardTimeoutReason(error41)) {
-    return error41;
+  if (isFusedStepGuardTimeoutReason(error42)) {
+    return error42;
   }
-  if (error41 instanceof Error && isFusedStepGuardTimeoutReason(error41.cause)) {
-    return error41.cause;
+  if (error42 instanceof Error && isFusedStepGuardTimeoutReason(error42.cause)) {
+    return error42.cause;
   }
   return void 0;
 }
-function classifyError(error41) {
-  if (error41 instanceof RetryableToolOrchestrationError) {
-    return error41.classification ?? ToolErrorClassification.OTHER_ERROR;
+function classifyError(error42) {
+  if (error42 instanceof RetryableToolOrchestrationError) {
+    return error42.classification ?? ToolErrorClassification.OTHER_ERROR;
   }
-  if (error41 instanceof CustomToolCallError) {
-    return error41.classification;
+  if (error42 instanceof CustomToolCallError) {
+    return error42.classification;
   }
-  if (error41 instanceof ToolCallArgParseError) {
-    return error41.classification ?? ToolErrorClassification.INVALID_ARGS;
+  if (error42 instanceof ToolCallArgParseError) {
+    return error42.classification ?? ToolErrorClassification.INVALID_ARGS;
   }
-  if (isAbortLikeError(error41)) {
+  if (isAbortLikeError(error42)) {
     return ToolErrorClassification.ABORTED;
   }
-  if (error41 instanceof ToolCallRejectedError) {
-    if (error41.message.includes(HOOK_DENIAL_AGENT_NOTE)) {
+  if (error42 instanceof ToolCallRejectedError) {
+    if (error42.message.includes(HOOK_DENIAL_AGENT_NOTE)) {
       return ToolErrorClassification.HOOK_DENIED;
     }
     return ToolErrorClassification.USER_REJECTED;
   }
-  if (error41 instanceof ToolCallUnexpectedEnvironmentError) {
+  if (error42 instanceof ToolCallUnexpectedEnvironmentError) {
     return ToolErrorClassification.UNEXPECTED_ENVIRONMENT;
   }
-  if (error41 instanceof ToolTimeoutError || error41 instanceof Error && error41.name === "TimeoutError" || isAxiosTimeoutError(error41)) {
+  if (error42 instanceof ToolTimeoutError || error42 instanceof Error && error42.name === "TimeoutError" || isAxiosTimeoutError(error42)) {
     return ToolErrorClassification.TIMEOUT;
   }
-  if (isBadUserDeviceStateError(error41)) {
+  if (isBadUserDeviceStateError(error42)) {
     return ToolErrorClassification.BAD_USER_DEVICE_STATE;
   }
-  if (isUnexpectedEnvironmentErrno(error41)) {
+  if (isUnexpectedEnvironmentErrno(error42)) {
     return ToolErrorClassification.UNEXPECTED_ENVIRONMENT;
   }
-  if (error41 instanceof RemoteHookBlockedError) {
+  if (error42 instanceof RemoteHookBlockedError) {
     return ToolErrorClassification.HOOK_DENIED;
   }
-  if (error41 instanceof Error && error41.message.includes(HOOK_DENIAL_AGENT_NOTE)) {
+  if (error42 instanceof Error && error42.message.includes(HOOK_DENIAL_AGENT_NOTE)) {
     return ToolErrorClassification.HOOK_DENIED;
   }
   return ToolErrorClassification.OTHER_ERROR;
 }
-function isAxiosTimeoutError(error41) {
-  if (!(error41 instanceof Error)) {
+function isAxiosTimeoutError(error42) {
+  if (!(error42 instanceof Error)) {
     return false;
   }
-  const code = error41.code;
+  const code = error42.code;
   if (code === "ETIMEDOUT") {
     return true;
   }
-  if (code === "ECONNABORTED" && error41.message.toLowerCase().includes("timeout")) {
+  if (code === "ECONNABORTED" && error42.message.toLowerCase().includes("timeout")) {
     return true;
   }
   return false;
 }
-function isBadUserDeviceStateError(error41) {
-  if (!(error41 instanceof Error)) {
+function isBadUserDeviceStateError(error42) {
+  if (!(error42 instanceof Error)) {
     return false;
   }
-  const errnoCode = error41.code;
+  const errnoCode = error42.code;
   if (errnoCode === "ENOSPC" || errnoCode === "ENOMEM" || errnoCode === "EMFILE" || errnoCode === "ENFILE" || errnoCode === "EAGAIN" || errnoCode === "EBADF") {
     return true;
   }
-  const message = error41.message.toLowerCase();
+  const message = error42.message.toLowerCase();
   return message.includes("no space left on device") || message.includes("out of memory") || message.includes("cannot allocate memory") || message.includes("too many open files") || message.includes("bad file descriptor");
 }
-function isUnexpectedEnvironmentErrno(error41) {
-  if (!(error41 instanceof Error)) {
+function isUnexpectedEnvironmentErrno(error42) {
+  if (!(error42 instanceof Error)) {
     return false;
   }
-  const errnoCode = error41.code;
+  const errnoCode = error42.code;
   if (errnoCode === "ENOENT" || errnoCode === "ENOTDIR") {
     return true;
   }
-  const message = error41.message.toLowerCase();
+  const message = error42.message.toLowerCase();
   return message.includes("no such file or directory") || message.includes("not a directory");
 }
 async function renderToolResultOrError(ctx, tool, output, props) {

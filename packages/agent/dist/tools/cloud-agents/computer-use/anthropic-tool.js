@@ -52,9 +52,9 @@ var __disposeResources10 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger28 = createLogger("agent/tools/computer-use/anthropic");
 function createAnthropicComputerTool(config2) {
@@ -92,13 +92,13 @@ function createAnthropicComputerTool(config2) {
             execId: generateSeededUuid(meta.toolCallId),
             hookContextCollector: meta.hookContextCollector
           }));
-        } catch (error41) {
+        } catch (error42) {
           trackComputerUseFailure(ctx, {
             provider: "anthropic",
             input: computerUseArgs,
             durationMs: Date.now() - executionStartedAt
           });
-          throw error41;
+          throw error42;
         }
         trackComputerUseExecution(ctx, {
           provider: "anthropic",

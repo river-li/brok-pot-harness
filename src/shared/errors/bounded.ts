@@ -86,6 +86,7 @@ var init_bounded = __esm({
     BOUNDED_TELEMETRY_TOKENS = [
       "client-paused",
       "dev-induced-offline",
+      "network-return",
       "unknown",
       "cold_create",
       "first_connect",

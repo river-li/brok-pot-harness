@@ -92,8 +92,8 @@ var foreverBoxExtension = defineHostExtension({
     });
     context2.onStop(() => diskPressure.dispose());
     if (environment.inBox) {
-      void provisionSandBoxPromptArtifacts().catch((error41) => {
-        context2.host.log(`box prompt artifacts were not provisioned: ${errorMessage(error41)}`);
+      void provisionSandBoxPromptArtifacts().catch((error42) => {
+        context2.host.log(`box prompt artifacts were not provisioned: ${errorMessage(error42)}`);
       });
     }
     return {

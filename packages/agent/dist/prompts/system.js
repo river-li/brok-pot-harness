@@ -10,7 +10,9 @@ function extractToolInfo(toolSetHandle) {
       automationsCommunicationToolNames.push(tool.name);
     }
     if (tool.toolIdentifier === "TASK" && "descriptionTokenPartsGenerator" in tool) {
-      const tokenParts = tool.descriptionTokenPartsGenerator?.(descriptionProps, { promptVisible: promptVisibleTools.includes(tool) });
+      const tokenParts = tool.descriptionTokenPartsGenerator?.(descriptionProps, {
+        promptVisible: promptVisibleTools.includes(tool)
+      });
       availableSubagentModelsDescription = tokenParts?.availableSubagentModelsDescriptionText;
       availableSubagentTypesDescription = tokenParts?.availableSubagentTypesDescriptionText;
     }

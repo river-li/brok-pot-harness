@@ -1,46 +1,46 @@
-function createNonThrowingLogger(logger107) {
+function createNonThrowingLogger(logger108) {
   return {
-    error: (message, error41) => {
+    error: (message, error42) => {
       try {
-        logger107.error(message, error41);
+        logger108.error(message, error42);
       } catch (_a19) {
       }
     },
-    warn: (message, error41) => {
+    warn: (message, error42) => {
       try {
-        logger107.warn(message, error41);
+        logger108.warn(message, error42);
       } catch (_a19) {
       }
     },
-    info: (message, error41) => {
+    info: (message, error42) => {
       try {
-        logger107.info(message, error41);
+        logger108.info(message, error42);
       } catch (_a19) {
       }
     },
-    debug: (message, error41) => {
+    debug: (message, error42) => {
       try {
-        logger107.debug(message, error41);
+        logger108.debug(message, error42);
       } catch (_a19) {
       }
     }
   };
 }
-function scopeLogger(logger107, component) {
+function scopeLogger(logger108, component) {
   const prefix = `[${component}]`;
   return {
-    error: (message, error41) => logger107.error(`${prefix} ${message}`, error41),
-    warn: (message, error41) => logger107.warn(`${prefix} ${message}`, error41),
-    info: (message, error41) => logger107.info(`${prefix} ${message}`, error41),
-    debug: (message, error41) => logger107.debug(`${prefix} ${message}`, error41)
+    error: (message, error42) => logger108.error(`${prefix} ${message}`, error42),
+    warn: (message, error42) => logger108.warn(`${prefix} ${message}`, error42),
+    info: (message, error42) => logger108.info(`${prefix} ${message}`, error42),
+    debug: (message, error42) => logger108.debug(`${prefix} ${message}`, error42)
   };
 }
-function formatLogMessage(message, error41) {
-  if (error41 === void 0) {
+function formatLogMessage(message, error42) {
+  if (error42 === void 0) {
     return message;
   }
   return `${message}
-${formatErrorValue(error41, /* @__PURE__ */ new Set(), 0, true)}`;
+${formatErrorValue(error42, /* @__PURE__ */ new Set(), 0, true)}`;
 }
 var MAX_ERROR_CAUSE_DEPTH = 8;
 var MAX_AGGREGATE_ERROR_COUNT = 8;
@@ -79,25 +79,25 @@ function formatErrorValue(value, seen, depth, includeAggregateErrors) {
   const nonEmptyStack = typeof stack === "string" && stack.trim().length > 0 ? stack : void 0;
   const nonEmptyName = typeof name17 === "string" && name17.trim().length > 0 ? name17 : void 0;
   const nonEmptyMessage = typeof message === "string" && message.trim().length > 0 ? message : void 0;
-  let description10;
+  let description9;
   if (nonEmptyStack !== void 0) {
-    description10 = nonEmptyStack;
+    description9 = nonEmptyStack;
   } else if (nonEmptyName !== void 0 && nonEmptyMessage !== void 0) {
-    description10 = `${nonEmptyName}: ${nonEmptyMessage}`;
+    description9 = `${nonEmptyName}: ${nonEmptyMessage}`;
   } else if (nonEmptyMessage !== void 0) {
-    description10 = nonEmptyMessage;
+    description9 = nonEmptyMessage;
   } else if (nonEmptyName !== void 0) {
-    description10 = nonEmptyName;
+    description9 = nonEmptyName;
   } else if (typeof stack === "string" || typeof name17 === "string" || typeof message === "string") {
-    description10 = "Error";
+    description9 = "Error";
   } else {
     seen.delete(value);
     return NON_ERROR_OBJECT;
   }
-  const parts = [description10];
+  const parts = [description9];
   const errors = readProperty(value, "errors");
   if (includeAggregateErrors && Array.isArray(errors)) {
-    const formattedErrors = errors.slice(0, MAX_AGGREGATE_ERROR_COUNT).map((error41, index) => `  ${index + 1}. ${formatErrorValue(error41, seen, depth + 1, false).replaceAll("\n", "\n     ")}`);
+    const formattedErrors = errors.slice(0, MAX_AGGREGATE_ERROR_COUNT).map((error42, index) => `  ${index + 1}. ${formatErrorValue(error42, seen, depth + 1, false).replaceAll("\n", "\n     ")}`);
     if (errors.length > MAX_AGGREGATE_ERROR_COUNT) {
       formattedErrors.push(`  ${TRUNCATED_AGGREGATE_ERRORS}`);
     }

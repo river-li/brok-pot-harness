@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 init_mcp_exec_pb();
 init_errors();
 init_mcp_diagnostics();
@@ -13,37 +13,40 @@ function errorResult2(message) {
     }
   });
 }
-function errorLabel3(error41) {
-  if (error41 instanceof Error) {
-    return error41.message.length > 0 ? error41.message : error41.name;
+function errorLabel3(error42) {
+  if (error42 instanceof Error) {
+    return error42.message.length > 0 ? error42.message : error42.name;
   }
-  return String(error41);
+  return String(error42);
 }
-function createBoxSandMcpExec(box) {
+function createBoxSandMcpExec(box, options2 = {}) {
   const boxCtx = createContext().withName("sandBoxMcp");
   let loadedConfigJson;
+  const loadOptions = (configJson) => ({
+    removeMissing: options2.removeMissing?.(configJson) ?? true
+  });
   const executingAccessor = async (agentId) => {
     const host = agentId === void 0 ? void 0 : await boxAgentMcpHost(box, boxCtx, agentId);
     if (host === void 0) {
       return await boxMcpResourceAccessor(box, boxCtx);
     }
     if (loadedConfigJson !== void 0) {
-      await host.loadMcpServers(boxCtx, loadedConfigJson);
+      await host.loadMcpServers(boxCtx, loadedConfigJson, loadOptions(loadedConfigJson));
     }
     return await host.mcpResourceAccessor(boxCtx);
   };
   return {
     async loadServers(configJson) {
       loadedConfigJson = configJson;
-      await boxLoadMcpServers(box, boxCtx, configJson);
+      await boxLoadMcpServers(box, boxCtx, configJson, loadOptions(configJson));
     },
-    async listTools(serverIdentifiers, options2) {
+    async listTools(serverIdentifiers, options3) {
       const accessor = await boxMcpResourceAccessor(box, boxCtx);
       const result = await accessor.get(mcpStateExecutorResource).execute(
         boxCtx,
         new McpStateExecArgs({
           serverIdentifiers: [...serverIdentifiers],
-          kickOnly: options2?.kickOnly === true
+          kickOnly: options3?.kickOnly === true
         })
       );
       if (result.result.case !== "success") {
@@ -70,13 +73,13 @@ function createBoxSandMcpExec(box) {
         };
       });
     },
-    async executeTool(ctx, args, options2) {
+    async executeTool(ctx, args, options3) {
       try {
-        const accessor = await executingAccessor(options2?.agentId);
-        return await accessor.get(mcpExecutorResource).execute(boxCtx, args);
-      } catch (error41) {
-        recordMcpExecErrorClass(ctx, error41);
-        return errorResult2(`Box MCP execution failed for "${args.name}": ${errorLabel3(error41)}`);
+        const accessor = await executingAccessor(options3?.agentId);
+        return await accessor.get(mcpExecutorResource).execute(ctx, args);
+      } catch (error42) {
+        recordMcpExecErrorClass(ctx, error42);
+        return errorResult2(`Box MCP execution failed for "${args.name}": ${errorLabel3(error42)}`);
       }
     }
   };

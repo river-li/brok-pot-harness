@@ -21,7 +21,7 @@ function createSystemPromptAssembly(deps) {
     if (profile == null) return null;
     const isDescriptionPrompted = deps.gates.agentDescription();
     const title = profile.name.trim();
-    const description10 = profile.description.trim();
+    const description9 = profile.description.trim();
     const lines2 = [];
     if (title.length > 0) {
       lines2.push(`Title: ${title}`);
@@ -29,8 +29,8 @@ function createSystemPromptAssembly(deps) {
         `Your agent name is "${title}". If the user asks for your name, answer with "${title}".`
       );
     }
-    if (isDescriptionPrompted && description10.length > 0) {
-      lines2.push(`Description: ${description10}`);
+    if (isDescriptionPrompted && description9.length > 0) {
+      lines2.push(`Description: ${description9}`);
     }
     if (profile.filePath.length > 0) {
       const fields2 = isDescriptionPrompted ? '"name", "description", and "title" fields' : '"name" and "title" fields';
@@ -126,21 +126,6 @@ function createSystemPromptAssembly(deps) {
         if (userRecall.profile.length > 0 || userRecall.recent.length > 0) {
           hasFacts = true;
         }
-      }
-      const projectMemory = deps.projectMemory();
-      if (projectMemory != null) {
-        const projectRecall = projectMemory.recall(
-          {
-            profileLimit: MEMORY_PROJECT_PROFILE_PROMPT_LIMIT,
-            recentLimit: MEMORY_PROJECT_RECENT_PROMPT_LIMIT
-          },
-          MEMORY_PROJECT_INJECTED_CAP
-        );
-        const projectRender = renderProjectMemorySystemPrompt(projectRecall, {
-          projectsRootDir: projectMemory.getLocation()
-        });
-        if (projectRender.length > 0) parts.push(projectRender);
-        if (projectMemoryHasFacts(projectRecall)) hasFacts = true;
       }
       if (agentRender.length > 0) parts.push(agentRender);
       return { render: parts.join("\n\n"), hasFacts };
@@ -340,32 +325,15 @@ function createSystemPromptAssembly(deps) {
     }
     return conservativeExecutorReuse ? sandDelegationAndMultitaskPromptSection({ conservativeExecutorReuse: true }) : SAND_DELEGATION_AND_MULTITASK_PROMPT_SECTION;
   }
-  function getMcpMultiAccountSection(skillify) {
+  function getMcpMultiAccountSection() {
     if (!hasParentPromptParity || deps.mcpManagement() == null) return null;
     if (!deps.gates.mcpMultiAccount()) return null;
-    if (deps.isParentMediatedAutomationSubagent) {
-      return SAND_PARENT_MEDIATED_AUTOMATION_SUBAGENT_MCP_MULTI_ACCOUNT_PROMPT_SECTION;
-    }
-    return skillify ? null : SAND_MCP_MULTI_ACCOUNT_PROMPT_SECTION;
+    return deps.isParentMediatedAutomationSubagent ? SAND_PARENT_MEDIATED_AUTOMATION_SUBAGENT_MCP_MULTI_ACCOUNT_PROMPT_SECTION : null;
   }
   function getInternalDetailsBoundaryLine() {
     if (deps.isSubagentRunner || deps.isSystemPromptOverridden) return null;
     if (!deps.gates.internalDetailsBoundary()) return null;
     return SAND_INTERNAL_DETAILS_BOUNDARY_PROMPT_LINE;
-  }
-  function getDraftExternalMessageSection(skillify) {
-    if (!hasParentPromptParity || deps.isParentMediatedAutomationSubagent || deps.isSystemPromptOverridden) {
-      return null;
-    }
-    if (!deps.gates.draftExternalMessage()) return null;
-    return skillify ? null : SAND_DRAFT_EXTERNAL_MESSAGE_PROMPT_SECTION;
-  }
-  function getUserFormSection(skillify) {
-    if (!hasParentPromptParity || deps.isParentMediatedAutomationSubagent || deps.isSystemPromptOverridden) {
-      return null;
-    }
-    if (deps.isUserFormEnabled?.() !== true) return null;
-    return skillify ? null : SAND_USER_FORM_PROMPT_SECTION;
   }
   function skillifyEnabled() {
     if (deps.isSystemPromptOverridden || !hasParentPromptParity) return false;
@@ -377,10 +345,17 @@ function createSystemPromptAssembly(deps) {
   function includesVoiceCallPrompt() {
     return deps.gates.voiceCall() && !deps.isSubagentRunner;
   }
-  function getBaseSystemPrompt(sendToUserEndTurnEnabled, useSkillify) {
+  function readBaseSystemPromptOverride() {
+    if (deps.isSubagentRunner || deps.isSystemPromptOverridden) return void 0;
+    const raw = deps.baseSystemPromptOverride?.();
+    if (typeof raw !== "string") return void 0;
+    const override = raw.trim();
+    return override.length === 0 ? void 0 : override;
+  }
+  function getBaseSystemPrompt(sendToUserEndTurnEnabled, useSkillify, baseOverride) {
     if (deps.isSystemPromptOverridden) return deps.basePrompt;
+    if (baseOverride !== void 0) return baseOverride;
     const cloudAgentsEnabled = !deps.gates.cloudAgentsDisabledByTeam();
-    const canvasesEnabled = deps.gates.canvases();
     const dynamicToolsEnabled = usesDynamicToolNamespaces();
     const voiceCallEnabled = deps.gates.voiceCall();
     const cloudAgentArtifactsEnabled = deps.gates.cloudAgentArtifacts();
@@ -392,10 +367,10 @@ function createSystemPromptAssembly(deps) {
       generateImage: deps.hasGenerateImage?.() !== false
     };
     const agentEmailEnabled = deps.gates.agentEmail();
+    const agentEmailMultipleInboxesEnabled = deps.gates.agentEmailMultipleInboxes();
     if (deps.isParentMediatedAutomationSubagent) {
       return sandAutomationSubagentSystemPromptVariant({
         cloudAgentsEnabled,
-        canvasesEnabled,
         dynamicToolsEnabled,
         credentialFillEnabled: deps.credentialFillEnabled === true,
         voiceCallEnabled,
@@ -404,13 +379,13 @@ function createSystemPromptAssembly(deps) {
         cloudAgentReplyModesEnabled,
         hostSurfaces,
         updateCommunication,
-        agentEmailEnabled
+        agentEmailEnabled,
+        agentEmailMultipleInboxesEnabled
       });
     }
     return sandBaseSystemPromptVariant({
       sendToUserEndTurnEnabled,
       cloudAgentsEnabled,
-      canvasesEnabled,
       dynamicToolsEnabled,
       credentialFillEnabled: deps.credentialFillEnabled === true,
       voiceCallEnabled,
@@ -421,13 +396,9 @@ function createSystemPromptAssembly(deps) {
       skillifyEnabled: useSkillify,
       updateCommunication,
       activeReactions: deps.gates.activeReactions(),
-      agentEmailEnabled
+      agentEmailEnabled,
+      agentEmailMultipleInboxesEnabled
     });
-  }
-  function getStripeLinkPurchasingSection(skillify) {
-    if (!hasParentPromptParity || deps.isParentMediatedAutomationSubagent) return null;
-    if (!deps.gates.stripeLink()) return null;
-    return skillify ? null : STRIPE_LINK_PURCHASING_SYSTEM_PROMPT_SECTION;
   }
   function getCurrentSessionSection() {
     if (!hasParentPromptParity || deps.isSystemPromptOverridden) return null;
@@ -444,15 +415,11 @@ function createSystemPromptAssembly(deps) {
     const rendered = renderActiveSessionsDigest(sessions);
     return rendered.length > 0 ? rendered : null;
   }
-  function getGroupChatTurnsSection(skillify) {
-    if (!hasParentPromptParity || deps.isParentMediatedAutomationSubagent) return null;
-    if ((deps.agentGroups?.() ?? []).length === 0) return null;
-    return skillify ? null : SAND_GROUP_CHAT_TURNS_PROMPT_SECTION;
-  }
-  function renderSystemPrompt(profileSnapshot, sendToUserEndTurnEnabled = false, conservativeExecutorReuse = !deps.isSystemPromptOverridden && deps.gates.lessSubagentFanout(), useSkillify = skillifyEnabled()) {
+  function renderSystemPrompt(profileSnapshot, sendToUserEndTurnEnabled = false, conservativeExecutorReuse = !deps.isSystemPromptOverridden && deps.gates.lessSubagentFanout(), useSkillify = skillifyEnabled(), baseOverride = readBaseSystemPromptOverride()) {
     const basePrompt = getBaseSystemPrompt(
       sendToUserEndTurnEnabled && !deps.isSubagentRunner,
-      useSkillify
+      useSkillify,
+      baseOverride
     );
     const sections = [];
     const shas = [];
@@ -483,19 +450,15 @@ function createSystemPromptAssembly(deps) {
     push("team_bot", getTeamBotSection());
     push("multitask", getMultitaskSection(conservativeExecutorReuse));
     push("internal_details_boundary", getInternalDetailsBoundaryLine());
-    push("mcp_multi_account", getMcpMultiAccountSection(useSkillify));
-    push("user_form", getUserFormSection(useSkillify));
-    push("draft_external_message", getDraftExternalMessageSection(useSkillify));
+    push("mcp_multi_account", getMcpMultiAccountSection());
     push("timezone", getTimeZoneSection());
     push("memory", getMemorySection());
     push("current_session", getCurrentSessionSection());
     push("active_sessions", getActiveSessionsSection());
     push("automations", getAutomationsSection(useSkillify));
     push("skills", getSkillsSection(useSkillify));
-    push("stripe_link_purchasing", getStripeLinkPurchasingSection(useSkillify));
     push("channels", getChannelsSection(useSkillify));
     push("agent_directory", getAgentDirectorySection());
-    push("group_chat_turns", getGroupChatTurnsSection(useSkillify));
     push("mcp_instructions", frozen("mcp_instructions", deps.mcpCustomInstructionsSection));
     push("tool_notes", getToolNotesSection());
     push("mcp_status", deps.mcpDiscoveryStatusSection());
@@ -512,11 +475,13 @@ function createSystemPromptAssembly(deps) {
   }) {
     const { conservativeExecutorReuse } = promptPolicy;
     const useSkillify = skillifyEnabled();
+    const baseOverride = readBaseSystemPromptOverride();
     return () => renderSystemPrompt(
       profileSnapshot,
       sendToUserEndTurnEnabled(),
       conservativeExecutorReuse,
-      useSkillify
+      useSkillify,
+      baseOverride
     );
   }
   return {

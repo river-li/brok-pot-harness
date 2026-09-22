@@ -208,7 +208,7 @@ var init_request_context_exec_pb = __esm({
         return proto3.util.equals(_MountedAgentStore, a, b2);
       }
       static $() {
-        return ["MountedAgentStore|1 path 9|2 kind #0|3 alias 9?|4 read_only 8", MountedAgentStoreKind];
+        return ["MountedAgentStore|1 path 9|2 kind #0|3 alias 9?|4 read_only 8|5 inherited_from_path 9?", MountedAgentStoreKind];
       }
     };
     UserAgentStoreWebContext = class _UserAgentStoreWebContext extends __protoMessage389 {

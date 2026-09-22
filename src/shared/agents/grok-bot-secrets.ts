@@ -57,8 +57,8 @@ async function carryOneSecret(deps, { serverId, name: name17 }) {
   try {
     await deps.put(serverId, { name: name17, description: "", value });
     return "copied";
-  } catch (error41) {
-    deps.reportFailure(error41);
+  } catch (error42) {
+    deps.reportFailure(error42);
     return "failed";
   }
 }

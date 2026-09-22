@@ -50,8 +50,8 @@ var CredentialPasswordStepFollowUp = class {
     let discovery;
     try {
       discovery = await this.options.filler.listPages();
-    } catch (error41) {
-      this.options.reportFailure("password-step-list-pages", error41);
+    } catch (error42) {
+      this.options.reportFailure("password-step-list-pages", error42);
       return;
     }
     for (const session of [...this.sessions.values()]) {
@@ -73,8 +73,8 @@ var CredentialPasswordStepFollowUp = class {
       let state;
       try {
         state = await this.options.filler.inspect(target);
-      } catch (error41) {
-        this.options.reportFailure("password-step-inspect", error41);
+      } catch (error42) {
+        this.options.reportFailure("password-step-inspect", error42);
         continue;
       }
       if (state === null) continue;
@@ -115,13 +115,13 @@ var CredentialPasswordStepFollowUp = class {
       const refusal = { outcome: "refused", reason: "fill-refused" };
       if (result.retryable === true && keepsSession) this.audit(session, target.url, refusal);
       else this.end(session, target.url, refusal);
-    } catch (error41) {
+    } catch (error42) {
       if (session.filledByBox) {
         this.audit(session, target.url, { outcome: "success", reason: "filled" });
         return;
       }
       this.audit(session, target.url, { outcome: "failed", reason: "resolve-login-failed" });
-      this.options.reportFailure("password-step-resolve", error41);
+      this.options.reportFailure("password-step-resolve", error42);
       if (!keepsSession) this.sessions.delete(session.targetWebSocketDebuggerUrl);
       session.retryNotBeforeMs = this.now() + PASSWORD_STEP_RESOLVE_RETRY_DELAY_MS;
     } finally {

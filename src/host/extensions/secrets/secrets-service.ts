@@ -19,7 +19,7 @@ function effectiveBoxSecrets(owned) {
   return { ...owned.desktop, ...owned.card };
 }
 function getBoxSecretsStorePath() {
-  return (0, import_node_path126.join)(getSandRootDir(), BOX_SECRETS_FILENAME);
+  return (0, import_node_path125.join)(getSandRootDir(), BOX_SECRETS_FILENAME);
 }
 var SECRETS_APPLY_WAIT_MS = 5e3;
 var SECRETS_RETRY_INITIAL_MS = 1e3;
@@ -58,8 +58,8 @@ var BoxSecretsApplier = class {
       cardRevision: null
     }));
   }
-  async syncUserSecrets(ctx, request3) {
-    if (request3.secrets === void 0) {
+  async syncUserSecrets(ctx, request5) {
+    if (request5.secrets === void 0) {
       const generation = this.desiredGeneration;
       const persisted = generation > 0 ? this.desired : await this.loadPersisted();
       const raced = this.desiredGeneration !== generation;
@@ -67,24 +67,24 @@ var BoxSecretsApplier = class {
       return {
         revision: current.cardRevision,
         generation: raced || generation > 0 ? this.desiredGeneration : this.persistedGeneration,
-        ...current.cardRevision === request3.revision ? {} : { card: current.card }
+        ...current.cardRevision === request5.revision ? {} : { card: current.card }
       };
     }
-    const secrets = request3.secrets;
+    const secrets = request5.secrets;
     const outcome = await this.tryReplaceDesired(
       ctx,
       (current) => ({
         desktop: current.desktop,
         card: { ...secrets },
-        cardRevision: request3.revision
+        cardRevision: request5.revision
       }),
-      request3.generation
+      request5.generation
     );
     if (outcome === "stale") {
-      const report = await this.syncUserSecrets(ctx, { revision: request3.revision });
+      const report = await this.syncUserSecrets(ctx, { revision: request5.revision });
       return { ...report, replaced: false };
     }
-    return { revision: request3.revision, generation: this.desiredGeneration, replaced: true };
+    return { revision: request5.revision, generation: this.desiredGeneration, replaced: true };
   }
   async replaceDesired(ctx, next) {
     const outcome = await this.tryReplaceDesired(ctx, next, void 0);
@@ -104,14 +104,14 @@ var BoxSecretsApplier = class {
     this.desired = desired;
     this.desiredGeneration = currentGeneration + 1;
     const generation = this.desiredGeneration;
-    const persist = this.persistQueue.catch((error41) => {
-      this.log(`box secrets: prior persist failed (${errorLogTag(error41)}); retrying`);
+    const persist = this.persistQueue.catch((error42) => {
+      this.log(`box secrets: prior persist failed (${errorLogTag(error42)}); retrying`);
     }).then(async () => await this.persist(desired, generation));
     this.persistQueue = persist;
     await persist;
     void this.runApplyLoop(ctx);
-    await this.applyDeadline.run((signal) => this.waitForGeneration(generation, signal)).catch((error41) => {
-      this.log(`box secrets: apply wait ended unconfirmed (${errorLogTag(error41)})`);
+    await this.applyDeadline.run((signal) => this.waitForGeneration(generation, signal)).catch((error42) => {
+      this.log(`box secrets: apply wait ended unconfirmed (${errorLogTag(error42)})`);
     });
     return this.getStatus();
   }
@@ -175,8 +175,8 @@ var BoxSecretsApplier = class {
           this.lastAppliedAtMs = Date.now();
           attempt = 0;
           this.notifyApplied();
-        } catch (error41) {
-          if (error41 instanceof BoxEnvironmentSyncUnsupportedError) {
+        } catch (error42) {
+          if (error42 instanceof BoxEnvironmentSyncUnsupportedError) {
             this.isStopped = true;
             this.log("box secrets: this box has no environment sync; giving up");
             return;
@@ -186,9 +186,9 @@ var BoxSecretsApplier = class {
           const retry2 = this.retryPolicy.schedule(attempt, this.stopSignal.signal);
           try {
             await retry2.elapsed;
-          } catch (error42) {
+          } catch (error43) {
             if (this.isStopped) return;
-            throw error42;
+            throw error43;
           } finally {
             retry2.dispose();
           }
@@ -244,9 +244,9 @@ var BoxSecretsApplier = class {
   async loadPersisted() {
     let raw;
     try {
-      raw = await import_node_fs77.promises.readFile(this.storePath, "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("secrets_service", error41);
+      raw = await import_node_fs76.promises.readFile(this.storePath, "utf8");
+    } catch (error42) {
+      reportFallbackUnlessAbsent("secrets_service", error42);
       return null;
     }
     try {

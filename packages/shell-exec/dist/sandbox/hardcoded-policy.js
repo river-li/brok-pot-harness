@@ -129,7 +129,9 @@ function getGitIgnore() {
 }
 async function resolveWorktreeGitDirParent(workspaceDir) {
   try {
-    const commonDir = await spawnPromise("git", ["rev-parse", "--git-common-dir"], { cwd: workspaceDir });
+    const commonDir = await spawnPromise("git", ["rev-parse", "--git-common-dir"], {
+      cwd: workspaceDir
+    });
     return (0, import_node_path5.dirname)((0, import_node_path5.resolve)(workspaceDir, commonDir.trim()));
   } catch {
     return null;
@@ -329,8 +331,7 @@ var init_hardcoded_policy = __esm({
       { platform: "darwin", scope: "global", path: "/dev/null" },
       { platform: "darwin", scope: "global", path: "/dev/zero" },
       { platform: "darwin", scope: "global", path: "/dev/random" },
-      { platform: "darwin", scope: "global", path: "/dev/urandom" },
-      { platform: "darwin", scope: "global", path: "/dev/tty" }
+      { platform: "darwin", scope: "global", path: "/dev/urandom" }
     ];
     HARDCODED_WRITE_PROTECTION_PATTERNS = [
       // --- Workspace-relative patterns (all use **/ to match at any depth) ---

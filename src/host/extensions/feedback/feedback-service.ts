@@ -57,8 +57,8 @@ var SandFeedbackService = class {
         categories,
         ...comment != null ? { comment } : {}
       });
-    } catch (error41) {
-      this.deps.logReportFailure(`feedback report failed: ${String(error41)}`);
+    } catch (error42) {
+      this.deps.logReportFailure(`feedback report failed: ${String(error42)}`);
     }
   }
 };

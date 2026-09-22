@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 init_scheduling();
 init_computer_use_tool_pb();
 init_bounded();
@@ -98,9 +98,9 @@ var ForeverBoxService = class {
         const result = await this.requestRecreate();
         if (result.started) this.updateFailureNotified = false;
         return result;
-      } catch (error41) {
+      } catch (error42) {
         this.options.log(
-          `pre-hibernation update failed; computer unchanged: ${errorLogTag(error41)}`
+          `pre-hibernation update failed; computer unchanged: ${errorLogTag(error42)}`
         );
         return { started: false, reason: "recreate-unavailable" };
       }
@@ -128,8 +128,8 @@ var ForeverBoxService = class {
           this.ctx
         );
       }, this.abort.signal);
-    } catch (error41) {
-      reportFallback("forever_box_service", error41);
+    } catch (error42) {
+      reportFallback("forever_box_service", error42);
       return null;
     }
   }
@@ -164,8 +164,8 @@ var ForeverBoxService = class {
     let result;
     try {
       result = await this.requestRecreate();
-    } catch (error41) {
-      throw new SandForeverBoxError(RECREATE_UNAVAILABLE_MESSAGE, { cause: error41 });
+    } catch (error42) {
+      throw new SandForeverBoxError(RECREATE_UNAVAILABLE_MESSAGE, { cause: error42 });
     }
     if (!result.started) {
       const reason = result.reason.length > 0 ? result.reason : "the service declined the recreate";
@@ -185,11 +185,11 @@ var ForeverBoxService = class {
         () => this.options.flushPendingUploads(),
         this.abort.signal
       );
-    } catch (error41) {
+    } catch (error42) {
       if (this.abort.signal.aborted) {
-        throw error41;
+        throw error42;
       }
-      this.options.log(`snapshot upload flush failed before box recreate: ${errorLogTag(error41)}`);
+      this.options.log(`snapshot upload flush failed before box recreate: ${errorLogTag(error42)}`);
     }
     this.abort.signal.throwIfAborted();
     return await this.options.lifecycleClient.recreateInBox({ preserveData: true });
@@ -208,9 +208,9 @@ var ForeverBoxService = class {
     try {
       await this.recreate(agentId ?? "");
       this.updateFailureNotified = false;
-    } catch (error41) {
+    } catch (error42) {
       this.options.log(
-        `image update failed; computer stays on its current image: ${errorLogTag(error41)}`
+        `image update failed; computer stays on its current image: ${errorLogTag(error42)}`
       );
       if (!this.updateFailureNotified && agentId !== void 0) {
         this.updateFailureNotified = true;
@@ -258,7 +258,7 @@ var ForeverBoxService = class {
         durationMs: this.elapsedSince(startedAt)
       });
       return { outcome, available };
-    } catch (error41) {
+    } catch (error42) {
       if (this.abort.signal.aborted) {
         this.reportImageCheck({
           trigger: trigger2,
@@ -268,7 +268,7 @@ var ForeverBoxService = class {
         });
         return { outcome: "skipped" };
       }
-      if (error41 instanceof DeadlineExceededError) {
+      if (error42 instanceof DeadlineExceededError) {
         this.reportImageCheck({
           trigger: trigger2,
           outcome: "timeout",
@@ -282,7 +282,7 @@ var ForeverBoxService = class {
         outcome: "failed",
         durationMs: this.elapsedSince(startedAt),
         error: SandError.boxImageCheckFailed({
-          errorClass: brandedErrorClass(errorClassOf(error41))
+          errorClass: brandedErrorClass(errorClassOf(error42))
         })
       });
       return { outcome: "failed" };
@@ -330,8 +330,8 @@ var ForeverBoxService = class {
       if (!await this.box.isBoxRunning(this.ctx)) return;
       const agentId = (await this.box.listBoxes()).find((box) => box.running)?.agentId;
       await this.maybeAutoUpdate(agentId, this.box.getImageUpdateAvailable());
-    } catch (error41) {
-      this.options.log(`image update watch failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.log(`image update watch failed: ${errorLogTag(error42)}`);
     }
   }
   reportImageCheck(report) {

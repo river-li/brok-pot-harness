@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 init_errors();
 var READ_BATCH_BLOBS = 32;
 var EXPORT_PUT_CONCURRENCY = 8;
@@ -12,11 +12,11 @@ function boundedConcurrency(value, fallback2, maximum) {
   if (value === void 0 || !Number.isInteger(value) || value < 1) return fallback2;
   return value > maximum ? maximum : value;
 }
-function workingStateExportErrorClass(error41) {
-  if (typeof error41 === "object" && error41 !== null && "code" in error41 && error41.code === BLOB_HASH_MISMATCH_CODE) {
+function workingStateExportErrorClass(error42) {
+  if (typeof error42 === "object" && error42 !== null && "code" in error42 && error42.code === BLOB_HASH_MISMATCH_CODE) {
     return "blob-hash-mismatch";
   }
-  return errorClassOf(error41);
+  return errorClassOf(error42);
 }
 function workingStateExportClientStateSeedFromSummary(summary) {
   if (summary === null) return void 0;
@@ -58,9 +58,9 @@ async function waitForWorkingStateOperation(startOperation, control) {
         control.signal.removeEventListener("abort", aborted2);
         resolve29(value);
       },
-      (error41) => {
+      (error42) => {
         control.signal.removeEventListener("abort", aborted2);
-        reject2(error41);
+        reject2(error42);
       }
     );
   });
@@ -68,10 +68,11 @@ async function waitForWorkingStateOperation(startOperation, control) {
   control.onProgress();
   return result;
 }
-var skipped = (reason, hasTranscript) => ({
+var skipped = (reason, hasTranscript, pendingCompletions) => ({
   outcome: "skipped",
   reason,
-  ...hasTranscript === void 0 ? {} : { hasTranscript }
+  ...hasTranscript === void 0 ? {} : { hasTranscript },
+  ...pendingCompletions === void 0 ? {} : { pendingCompletions }
 });
 function reportFields(progress) {
   return {
@@ -107,8 +108,8 @@ var WorkingStateExporter = class {
     let outcome;
     try {
       outcome = await this.uploadClosure(agentId, limits, progress);
-    } catch (error41) {
-      outcome = { outcome: "failed", errorClass: workingStateExportErrorClass(error41) };
+    } catch (error42) {
+      outcome = { outcome: "failed", errorClass: workingStateExportErrorClass(error42) };
     }
     const alreadyDurableBlobs = outcome.outcome === "exported" ? Math.max(0, outcome.closureBlobCount - outcome.uploadedBlobs) : void 0;
     const alreadyDurableBytes = outcome.outcome === "exported" && progress.uploadedBytes !== void 0 ? Math.max(0, outcome.closureByteSize - progress.uploadedBytes) : void 0;
@@ -126,8 +127,8 @@ var WorkingStateExporter = class {
     };
     try {
       this.deps.report(report);
-    } catch (error41) {
-      this.deps.log(`[sand:working-state-export] telemetry report failed (${errorLogTag(error41)})`);
+    } catch (error42) {
+      this.deps.log(`[sand:working-state-export] telemetry report failed (${errorLogTag(error42)})`);
     }
     return outcome;
   }
@@ -147,8 +148,8 @@ var WorkingStateExporter = class {
         closureByteSize: result.closureByteSize,
         uploadedBlobs: result.uploadedBlobs
       } : result;
-    } catch (error41) {
-      outcome = { outcome: "failed", errorClass: workingStateExportErrorClass(error41) };
+    } catch (error42) {
+      outcome = { outcome: "failed", errorClass: workingStateExportErrorClass(error42) };
     }
     const dependencyBlobs = progress.closureBlobs !== void 0 ? Math.max(0, progress.closureBlobs - 1) : void 0;
     const dependencyBytes = progress.closureBytes !== void 0 && progress.rootBytes !== void 0 ? Math.max(0, progress.closureBytes - progress.rootBytes) : void 0;
@@ -170,8 +171,8 @@ var WorkingStateExporter = class {
     };
     try {
       this.deps.reportWarm(report);
-    } catch (error41) {
-      this.deps.log(`[sand:working-state-warm] telemetry report failed (${errorLogTag(error41)})`);
+    } catch (error42) {
+      this.deps.log(`[sand:working-state-warm] telemetry report failed (${errorLogTag(error42)})`);
     }
     return outcome;
   }
@@ -203,14 +204,14 @@ var WorkingStateExporter = class {
       progress.listingKnownBlobs = listed.size;
       progress.listingDurationMs = Math.max(0, this.deps.now() - startedAt);
       return listed;
-    } catch (error41) {
+    } catch (error42) {
       progress.listingOutcome = control?.signal.aborted === true ? "interrupted" : "failed";
       progress.listingDurationMs = Math.max(0, this.deps.now() - startedAt);
       if (control?.signal.aborted === true) {
-        throw error41;
+        throw error42;
       }
       this.deps.log(
-        `[sand:working-state-export] durable blob listing failed (${errorLogTag(error41)}); uploading every blob this attempt`
+        `[sand:working-state-export] durable blob listing failed (${errorLogTag(error42)}); uploading every blob this attempt`
       );
       return /* @__PURE__ */ new Set();
     } finally {
@@ -237,9 +238,9 @@ var WorkingStateExporter = class {
         async (hexPrefix) => await listPrefix(hexPrefix, controller.signal),
         { max: DURABLE_BLOB_LIST_CONCURRENCY }
       );
-    }).catch((error41) => {
-      controller.abort(error41);
-      throw error41;
+    }).catch((error42) => {
+      controller.abort(error42);
+      throw error42;
     }).then((listedByPrefix) => {
       const listed = /* @__PURE__ */ new Set();
       for (const prefixSet of listedByPrefix) {
@@ -279,7 +280,11 @@ var WorkingStateExporter = class {
     );
     progress.snapshotDurationMs = Math.max(0, this.deps.now() - snapshotStartedAt);
     if (snapshot == null) return skipped("agent-missing");
-    const skippedAfterSnapshot = (reason) => skipped(reason, snapshot.hasTranscript);
+    const skippedAfterSnapshot = (reason) => skipped(
+      reason,
+      snapshot.hasTranscript,
+      includeRoot ? snapshot.pendingCompletions : void 0
+    );
     if (this.deps.isTurnInFlight(agentId)) return skippedAfterSnapshot("turn-inflight");
     const { walk } = snapshot;
     if (walk.outcome !== "walked") return skippedAfterSnapshot(walk.reason);

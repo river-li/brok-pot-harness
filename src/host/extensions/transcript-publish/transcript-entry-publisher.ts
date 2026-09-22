@@ -1,9 +1,9 @@
-var import_node_fs91 = require("node:fs");
+var import_node_fs90 = require("node:fs");
 var import_promises75 = require("node:fs/promises");
-var import_node_path149 = require("node:path");
+var import_node_path148 = require("node:path");
 var import_node_sqlite6 = require("node:sqlite");
 init_scheduling();
-init_dist2();
+init_dist3();
 init_errors();
 init_system_errno();
 init_unknown_record();
@@ -137,19 +137,19 @@ var TranscriptEntryPublisher = class {
     }
   }
   flush(scope = "all") {
-    const settled = this.lane.then(() => this.drain(scope)).catch((error41) => {
-      this.report("warn", { outcome: "failed", error_class: errorLogTag(error41) });
+    const settled = this.lane.then(() => this.drain(scope)).catch((error42) => {
+      this.report("warn", { outcome: "failed", error_class: errorLogTag(error42) });
     });
     this.lane = settled;
     return settled;
   }
   async flushAgent(agentId) {
     this.dirtyFor(agentId).backfill = true;
-    const settled = this.lane.then(() => this.drainAgent(agentId)).catch((error41) => {
+    const settled = this.lane.then(() => this.drainAgent(agentId)).catch((error42) => {
       this.report("warn", {
         outcome: "failed",
         agent_id: agentId,
-        error_class: errorLogTag(error41)
+        error_class: errorLogTag(error42)
       });
     });
     this.lane = settled;
@@ -163,16 +163,16 @@ var TranscriptEntryPublisher = class {
       const dirents = await (0, import_promises75.readdir)(this.deps.agentsRootDir, { withFileTypes: true });
       for (const dirent of dirents) {
         if (!dirent.isDirectory()) continue;
-        if (!(0, import_node_fs91.existsSync)((0, import_node_path149.join)(this.deps.agentsRootDir, dirent.name, STORE_FILENAME3))) continue;
+        if (!(0, import_node_fs90.existsSync)((0, import_node_path148.join)(this.deps.agentsRootDir, dirent.name, STORE_FILENAME3))) continue;
         this.dirtyFor(dirent.name).backfill = true;
         swept += 1;
       }
-    } catch (error41) {
-      if (findSystemErrno(error41) !== "ENOENT") {
+    } catch (error42) {
+      if (findSystemErrno(error42) !== "ENOENT") {
         this.report("warn", {
           outcome: "failed",
           trigger: "backfill",
-          error_class: errorLogTag(error41),
+          error_class: errorLogTag(error42),
           duration_ms: String(Math.round(performance.now() - startedAt))
         });
         return swept;
@@ -202,7 +202,7 @@ var TranscriptEntryPublisher = class {
     return state;
   }
   ledgerPath(agentId) {
-    return (0, import_node_path149.join)(this.deps.ledgerDir, `${agentId}.json`);
+    return (0, import_node_path148.join)(this.deps.ledgerDir, `${agentId}.json`);
   }
   async drain(scope) {
     const batch = this.dirty;
@@ -232,12 +232,12 @@ var TranscriptEntryPublisher = class {
     for (const [agentId, state] of ordered) {
       try {
         await this.publishAgent(agentId, state);
-      } catch (error41) {
+      } catch (error42) {
         this.report("warn", {
           outcome: "failed",
           agent_id: agentId,
           trigger: triggerOf(state),
-          error_class: errorLogTag(error41)
+          error_class: errorLogTag(error42)
         });
       }
     }
@@ -260,13 +260,13 @@ var TranscriptEntryPublisher = class {
     let outcome;
     try {
       outcome = await this.publishAgentInner(agentId, state);
-    } catch (error41) {
+    } catch (error42) {
       this.redirtyUnlessClearSuperseded(agentId, state);
       this.report("warn", {
         outcome: "failed",
         agent_id: agentId,
         trigger: trigger2,
-        error_class: errorLogTag(error41),
+        error_class: errorLogTag(error42),
         duration_ms: String(Math.round(performance.now() - startedAt))
       });
       return;
@@ -297,8 +297,8 @@ var TranscriptEntryPublisher = class {
     let raw;
     try {
       raw = (await (0, import_promises75.readFile)(this.ledgerPath(agentId))).toString();
-    } catch (error41) {
-      if (findSystemErrno(error41) !== "ENOENT") throw error41;
+    } catch (error42) {
+      if (findSystemErrno(error42) !== "ENOENT") throw error42;
       return FRESH_LEDGER;
     }
     const ledger = parseLedger(raw);
@@ -310,8 +310,8 @@ var TranscriptEntryPublisher = class {
     this.ledgers.set(agentId, ledger);
   }
   async publishAgentInner(agentId, state) {
-    const dbPath = (0, import_node_path149.join)(this.deps.agentsRootDir, agentId, STORE_FILENAME3);
-    if (!(0, import_node_fs91.existsSync)(dbPath)) return null;
+    const dbPath = (0, import_node_path148.join)(this.deps.agentsRootDir, agentId, STORE_FILENAME3);
+    if (!(0, import_node_fs90.existsSync)(dbPath)) return null;
     let ledger = await this.loadLedger(agentId);
     let maxSeq = 0;
     let minRow = null;

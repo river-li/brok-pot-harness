@@ -20,7 +20,7 @@ var searchEmailThreadsParameters = external_exports.object({
     '"hybrid" (default) blends keyword and meaning and suits most questions. "keyword" is exact-term matching: use it for a quoted phrase, an email address, an order or ticket number. "semantic" matches by meaning only.'
   )
 });
-var description7 = [
+var description6 = [
   "Search the email in your inboxes and get back matching conversation threads, newest activity and best match first.",
   `Each thread lists its id, subject, participants, message count, and up to two matching messages with a snippet. To read a whole conversation, call ${SAND_READ_EMAIL_THREAD_TOOL_NAME} with the thread id. Search first; do not guess thread ids.`,
   'Use mode "keyword" for an exact phrase, address or identifier; leave it on "hybrid" otherwise.',
@@ -97,7 +97,7 @@ function createSearchEmailThreadsTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_SEARCH_EMAIL_THREADS_TOOL_NAME,
-    description: description7,
+    description: description6,
     parameters: searchEmailThreadsParameters,
     describeActivity: (args) => ({ detail: args.query }),
     execute: async (_ctx, args, d) => searchEmailThreads(d, args)

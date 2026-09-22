@@ -925,24 +925,24 @@ var BOUNDED_TAG_VALUE = /^[0-9A-Za-z._|:-]{1,64}$/;
 function isRegisteredCode(code) {
   return typeof code === "string" && Object.hasOwn(SAND_ERROR_DEFINITIONS, code);
 }
-function sandErrorWireCode(error41) {
-  const code = error41.code;
+function sandErrorWireCode(error42) {
+  const code = error42.code;
   return isRegisteredCode(code) ? code : UNREGISTERED_CODE;
 }
 function tagName(field) {
   return field.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 }
-function sandErrorTags(error41) {
-  const code = sandErrorWireCode(error41);
+function sandErrorTags(error42) {
+  const code = sandErrorWireCode(error42);
   const definition2 = SAND_ERROR_DEFINITIONS[code];
   const tags = {
     error_code: code,
     error_domain: definition2.domain,
     error_retryable: String(definition2.retryable)
   };
-  if (code !== error41.code) return tags;
+  if (code !== error42.code) return tags;
   const declared = new Set(definition2.payload);
-  for (const [field, value] of Object.entries(error41)) {
+  for (const [field, value] of Object.entries(error42)) {
     if (field === "code" || value === void 0 || !declared.has(field)) continue;
     if (typeof value === "number" && Number.isFinite(value)) {
       tags[tagName(field)] = String(value);

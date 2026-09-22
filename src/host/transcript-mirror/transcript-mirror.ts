@@ -1,5 +1,5 @@
-function journalErrno(error41) {
-  const code = error41?.code;
+function journalErrno(error42) {
+  const code = error42?.code;
   return typeof code === "string" ? brandedErrno(code) : void 0;
 }
 async function requiredBlob(ctx, blobStore, blobId, label) {
@@ -27,10 +27,10 @@ var FileTranscriptMirror = class {
   preparedDeferredSteps = /* @__PURE__ */ new Map();
   routes = /* @__PURE__ */ new Map();
   reportedFailures = /* @__PURE__ */ new WeakSet();
-  reportFailureOnce(error41, report) {
-    if (typeof error41 === "object" && error41 != null) {
-      if (this.reportedFailures.has(error41)) return;
-      this.reportedFailures.add(error41);
+  reportFailureOnce(error42, report) {
+    if (typeof error42 === "object" && error42 != null) {
+      if (this.reportedFailures.has(error42)) return;
+      this.reportedFailures.add(error42);
     }
     this.reportOutcome(report);
   }
@@ -45,15 +45,15 @@ var FileTranscriptMirror = class {
         ...counts,
         durationMs: performance.now() - startedAt
       });
-    } catch (error41) {
-      this.reportFailureOnce(error41, {
+    } catch (error42) {
+      this.reportFailureOnce(error42, {
         op,
         outcome: "failed",
         conversationId,
-        cause: mintCause(journalErrno(error41)),
+        cause: mintCause(journalErrno(error42)),
         durationMs: performance.now() - startedAt
       });
-      throw error41;
+      throw error42;
     }
   }
   routed(legacy, isJournalEnabled) {
@@ -61,62 +61,62 @@ var FileTranscriptMirror = class {
   }
   jsonlPathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.jsonl`);
+    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.jsonl`);
   }
   pendingPathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.journal-pending.json`);
+    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.journal-pending.json`);
   }
   cursorPathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.journal-cursor.json`);
+    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.journal-cursor.json`);
   }
   modePathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.journal-mode`);
+    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.journal-mode`);
   }
   async syncParentDirectory(path31) {
-    const handle = await (0, import_promises82.open)((0, import_node_path181.dirname)(path31), "r");
+    const handle = await (0, import_promises82.open)((0, import_node_path179.dirname)(path31), "r");
     try {
       await handle.sync();
     } finally {
       await handle.close();
     }
   }
-  async installAtomicFile(path31, write) {
-    const temporary = (0, import_node_path181.join)((0, import_node_path181.dirname)(path31), `.transcript.${(0, import_node_crypto87.randomUUID)()}.part`);
+  async installAtomicFile(path31, write2) {
+    const temporary = (0, import_node_path179.join)((0, import_node_path179.dirname)(path31), `.transcript.${(0, import_node_crypto87.randomUUID)()}.part`);
     let handle;
     try {
       handle = await (0, import_promises82.open)(temporary, "wx");
-      await write(handle);
+      await write2(handle);
       await handle.sync();
       await handle.close();
       handle = void 0;
       await (0, import_promises82.rename)(temporary, path31);
       await this.syncParentDirectory(path31);
-    } catch (error41) {
+    } catch (error42) {
       if (handle != null) await Promise.allSettled([handle.close()]);
       await Promise.allSettled([(0, import_promises82.unlink)(temporary)]);
-      throw error41;
+      throw error42;
     }
   }
   async ownsConversation(conversationId) {
     try {
       await (0, import_promises82.stat)(this.modePathFor(conversationId));
       return true;
-    } catch (error41) {
-      if (isMissingFile(error41)) return false;
-      throw error41;
+    } catch (error42) {
+      if (isMissingFile(error42)) return false;
+      throw error42;
     }
   }
   async claimConversation(conversationId) {
     const path31 = this.modePathFor(conversationId);
-    await (0, import_promises82.mkdir)((0, import_node_path181.dirname)(path31), { recursive: true });
+    await (0, import_promises82.mkdir)((0, import_node_path179.dirname)(path31), { recursive: true });
     try {
       await (0, import_promises82.stat)(path31);
       return;
-    } catch (error41) {
-      if (!isMissingFile(error41)) throw error41;
+    } catch (error42) {
+      if (!isMissingFile(error42)) throw error42;
     }
     await this.installAtomicFile(path31, async (handle) => {
       await writeAll(handle, Buffer.from("1\n", "utf8"), 0);
@@ -154,7 +154,7 @@ var FileTranscriptMirror = class {
   }
   async initialize(ctx, conversationId, checkpoint, blobStore) {
     const id = getSafeConversationId2(conversationId);
-    await (0, import_promises82.mkdir)((0, import_node_path181.join)(this.transcriptsDir, id), { recursive: true });
+    await (0, import_promises82.mkdir)((0, import_node_path179.join)(this.transcriptsDir, id), { recursive: true });
     const path31 = this.jsonlPathFor(conversationId);
     let rebuild = false;
     let tail;
@@ -174,8 +174,8 @@ var FileTranscriptMirror = class {
         }
         if (rebuild) tail = "torn";
       }
-    } catch (error41) {
-      if (!isMissingFile(error41)) throw error41;
+    } catch (error42) {
+      if (!isMissingFile(error42)) throw error42;
       rebuild = true;
       if (checkpoint.turns.length > 0) tail = "missing";
     }
@@ -183,21 +183,21 @@ var FileTranscriptMirror = class {
     if (rebuild) {
       try {
         await this.createInitialJsonl(ctx, path31, checkpoint, blobStore);
-      } catch (error41) {
+      } catch (error42) {
         if (tail != null) {
-          this.reportFailureOnce(error41, {
+          this.reportFailureOnce(error42, {
             op: "rebuild",
             outcome: "failed",
             conversationId,
             cause: SandError.journalRebuildFailed({
               tail: brandLiteralEnum(tail),
-              errno: journalErrno(error41)
+              errno: journalErrno(error42)
             }),
             entryCount: checkpoint.turns.length,
             durationMs: performance.now() - rebuildStartedAt
           });
         }
-        throw error41;
+        throw error42;
       }
     }
     const state = await this.scan(path31);
@@ -224,9 +224,9 @@ var FileTranscriptMirror = class {
       () => {
         if (this.writeLanes.get(key) === current) this.writeLanes.delete(key);
       },
-      (error41) => {
+      (error42) => {
         if (this.writeLanes.get(key) === current) this.writeLanes.delete(key);
-        throw error41;
+        throw error42;
       }
     );
     this.writeLanes.set(key, current);
@@ -235,18 +235,18 @@ var FileTranscriptMirror = class {
   async readPending(conversationId) {
     try {
       return parsePendingCheckpoint(await (0, import_promises82.readFile)(this.pendingPathFor(conversationId), "utf8"));
-    } catch (error41) {
-      if (isMissingFile(error41)) return null;
-      throw error41;
+    } catch (error42) {
+      if (isMissingFile(error42)) return null;
+      throw error42;
     }
   }
   async removePending(conversationId) {
     const path31 = this.pendingPathFor(conversationId);
     try {
       await (0, import_promises82.unlink)(path31);
-    } catch (error41) {
-      if (isMissingFile(error41)) return;
-      throw error41;
+    } catch (error42) {
+      if (isMissingFile(error42)) return;
+      throw error42;
     }
     await this.syncParentDirectory(path31);
   }
@@ -255,9 +255,9 @@ var FileTranscriptMirror = class {
       return parseDeferredStep(
         JSON.parse(await (0, import_promises82.readFile)(this.cursorPathFor(conversationId), "utf8"))
       );
-    } catch (error41) {
-      if (isMissingFile(error41)) return void 0;
-      throw error41;
+    } catch (error42) {
+      if (isMissingFile(error42)) return void 0;
+      throw error42;
     }
   }
   async writeDeferredStep(conversationId, deferredStep) {
@@ -266,8 +266,8 @@ var FileTranscriptMirror = class {
       try {
         await (0, import_promises82.unlink)(path31);
         await this.syncParentDirectory(path31);
-      } catch (error41) {
-        if (!isMissingFile(error41)) throw error41;
+      } catch (error42) {
+        if (!isMissingFile(error42)) throw error42;
       }
       return;
     }
@@ -517,7 +517,7 @@ var FileTranscriptMirror = class {
   }
   async replay(ctx, conversationId, checkpoint, blobStore) {
     let applied;
-    await (0, import_promises82.mkdir)((0, import_node_path181.dirname)(this.jsonlPathFor(conversationId)), { recursive: true });
+    await (0, import_promises82.mkdir)((0, import_node_path179.dirname)(this.jsonlPathFor(conversationId)), { recursive: true });
     const pending = await this.readPending(conversationId);
     let state = this.states.get(conversationId);
     const previous = this.durableCheckpoints.get(conversationId);

@@ -1,11 +1,11 @@
 init_agent_pb();
 init_cloud_canvas_tool_pb();
-init_dist2();
+init_dist3();
 init_zod();
 var WRITE_CANVAS_TOOL_NAME = "WriteCanvas";
 var READ_CANVAS_TOOL_NAME = "ReadCanvas";
-function errorMessage4(error41) {
-  return error41 instanceof Error ? error41.message : String(error41);
+function errorMessage4(error42) {
+  return error42 instanceof Error ? error42.message : String(error42);
 }
 var writeCanvasParametersSchema = external_exports.object({
   contents: external_exports.string().describe("The full source of the canvas \u2014 one self-contained React `.canvas.tsx` module. Overwrites the whole canvas; send the complete file, not a patch."),
@@ -206,9 +206,7 @@ function renderWriteResult(result) {
         "No url was produced; do not present a canvas link to the user."
       ].join("\n");
     }
-    const lines2 = [
-      `Canvas was not saved: ${describeWriteFailReason(failure2.reason)}.`
-    ];
+    const lines2 = [`Canvas was not saved: ${describeWriteFailReason(failure2.reason)}.`];
     if (failure2.detail !== void 0 && failure2.detail.length > 0) {
       lines2.push(failure2.detail);
     }
@@ -280,13 +278,13 @@ function resolveReadArgs(parsedArgs) {
 function isWriteArgValidationDetail(detail) {
   return detail !== void 0 && detail.startsWith("Invalid arguments:");
 }
-function serializeWriteToolError(error41) {
-  if (error41 instanceof ToolCallArgParseError) {
-    const detail = isWriteArgValidationDetail(error41.message) ? error41.message : `Invalid arguments:
-${error41.message}`;
+function serializeWriteToolError(error42) {
+  if (error42 instanceof ToolCallArgParseError) {
+    const detail = isWriteArgValidationDetail(error42.message) ? error42.message : `Invalid arguments:
+${error42.message}`;
     return writeFailureResult(WriteCanvasFailReason.REFUSED, detail);
   }
-  return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage4(error41));
+  return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage4(error42));
 }
 function buildWriteCanvasTool(port) {
   const render2 = async (_ctx, result, _props) => createStringResult(renderWriteResult(result));
@@ -308,17 +306,17 @@ function buildWriteCanvasTool(port) {
             ...parsedArgs.title !== void 0 ? { title: parsedArgs.title } : {}
           });
           return toWriteResult(result);
-        } catch (error41) {
-          if (error41 instanceof DeferredInteractionResponseError) {
-            throw error41;
+        } catch (error42) {
+          if (error42 instanceof DeferredInteractionResponseError) {
+            throw error42;
           }
-          return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage4(error41));
+          return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage4(error42));
         }
       }, (result) => wrapWriteToolCall(new WriteCanvasToolCall({ args: argsProto, result })));
     }, wrapWriteToolCall(new WriteCanvasToolCall()), { emitInitialPartialToolCall: false }),
     render: render2,
-    serializeError: (error41) => wrapWriteToolCall(new WriteCanvasToolCall({
-      result: serializeWriteToolError(error41)
+    serializeError: (error42) => wrapWriteToolCall(new WriteCanvasToolCall({
+      result: serializeWriteToolError(error42)
     }))
   });
 }
@@ -344,17 +342,17 @@ function buildReadCanvasTool(port) {
             ...readArgs.storeId !== void 0 ? { storeId: readArgs.storeId } : {}
           });
           return toReadResult(readResult);
-        } catch (error41) {
-          if (error41 instanceof DeferredInteractionResponseError) {
-            throw error41;
+        } catch (error42) {
+          if (error42 instanceof DeferredInteractionResponseError) {
+            throw error42;
           }
-          return readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage4(error41));
+          return readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage4(error42));
         }
       }, (result) => wrapReadToolCall(new ReadCanvasToolCall({ args: argsProto, result })));
     }, wrapReadToolCall(new ReadCanvasToolCall()), { emitInitialPartialToolCall: false }),
     render: render2,
-    serializeError: (error41) => wrapReadToolCall(new ReadCanvasToolCall({
-      result: readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage4(error41))
+    serializeError: (error42) => wrapReadToolCall(new ReadCanvasToolCall({
+      result: readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage4(error42))
     }))
   });
 }

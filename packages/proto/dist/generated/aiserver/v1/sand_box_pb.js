@@ -1,4 +1,4 @@
-var __protoPackage149, __protoMessage3142, CredentialLifecycleState, CredentialExpirationMode, CredentialTargetRuleKind, OnePasswordSyncTrigger, SandCredentialDecisionHarness, SandSetupManifestScopeKind, BulkTeamMemberSandBoxAction, BulkTeamMemberSandBoxItemState, BulkTeamMemberSandBoxOperationState, SandBoxMigrationPhase, SandBoxRunState, SandBoxUpgradeScheduleState, SandBoxStoreMultipartOperationFailureCode, SandBoxStoreManifestCommitStatus, CredentialTargetRule, OnePasswordCredentialItem, OnePasswordConnection, OnePasswordState, BeginOnePasswordConnectionRequest, BeginOnePasswordConnectionResponse, CompleteOnePasswordConnectionRequest, GetOnePasswordStateRequest, SyncOnePasswordConnectionsRequest, DeleteOnePasswordConnectionRequest, SetOnePasswordAlwaysAllowRequest, ApproveOnePasswordCredentialRequestRequest, DenyOnePasswordCredentialRequestRequest, OnePasswordCredentialDecisionResponse, NotifySandAgentTurnFinishedRequest, NotifySandAgentTurnFinishedResponse, ListSandSetupManifestsRequest, SandSetupManifestEntry, SandAssignedSetupManifest, ListSandSetupManifestsResponse, SandTeamSetupManifest, ListTeamSandSetupManifestsRequest, ListTeamSandSetupManifestsResponse, SaveTeamSandSetupManifestRequest, SaveTeamSandSetupManifestResponse, DeleteTeamSandSetupManifestRequest, DeleteTeamSandSetupManifestResponse, ListTeamGroupSandSetupManifestsRequest, ListTeamGroupSandSetupManifestsResponse, SaveTeamGroupSandSetupManifestRequest, SaveTeamGroupSandSetupManifestResponse, DeleteTeamGroupSandSetupManifestRequest, DeleteTeamGroupSandSetupManifestResponse, ListTeamMemberSandBoxesRequest, TeamMemberSandBoxPod, ListTeamMemberSandBoxesResponse, KillTeamMemberSandBoxRequest, KillTeamMemberSandBoxResponse, RecreateTeamMemberSandBoxRequest, GetTeamMemberSandBoxMigrationStatusRequest, GetTeamMemberSandBoxMigrationStatusResponse, StartBulkTeamMemberSandBoxOperationRequest, StartBulkTeamMemberSandBoxOperationResponse, GetBulkTeamMemberSandBoxOperationStatusRequest, BulkTeamMemberSandBoxOperationItem, GetBulkTeamMemberSandBoxOperationStatusResponse, EnsureSandBoxRequest, EnsureSandBoxWindowRequest, EnsureSandBoxResponse, RecreateSandBoxRequest, ForceRecreateSandBoxRequest, RecreateSandBoxResponse, AdminRecreateSandBoxRequest, AdminForceRecreateSandBoxRequest, AdminSandBoxStoreStatusRequest, AdminSandBoxStoreStatusResponse, AdminUpdateSandBoxHostRequest, AdminUpdateSandBoxHostResponse, AdminSandBoxHostStatusRequest, AdminSandBoxHostStatusResponse, AdminSnapshotSandBoxStoreRequest, AdminSnapshotSandBoxStoreResponse, AdminListSandBoxStoreManifestVersionsRequest, SandBoxStoreManifestVersion, AdminListSandBoxStoreManifestVersionsResponse, AdminRestoreSandBoxStoreSnapshotRequest, AdminRestoreSandBoxStoreSnapshotResponse, AdminHibernateSandBoxRequest, AdminHibernateSandBoxResponse, AdminListSandAgentsRequest, AdminListSandAgentsResponse, AdminGetSandAgentTranscriptPageRequest, AdminGetSandAgentTranscriptPageResponse, WatchSandBoxMigrationRequest, AdminWatchSandBoxMigrationRequest, SandBoxMigrationEvent, GetSandBoxRunStateRequest, GetSandBoxRunStateResponse, SandBoxUpgradeSchedule, GetSandBoxUpgradeScheduleRequest, GetSandBoxUpgradeScheduleResponse, ScheduleSandBoxUpgradeRequest, ScheduleSandBoxUpgradeResponse, CancelSandBoxUpgradeRequest, CancelSandBoxUpgradeResponse, RescheduleSandBoxUpgradeRequest, RescheduleSandBoxUpgradeResponse, SandBoxDescriptor, ListSandBoxesRequest, ListSandBoxesResponse, SandBoxStoreMultipartPart, SandBoxStoreWriteFile, PresignSandBoxStoreWritesRequest, SandBoxStoreMultipartUploadPartInstruction, SandBoxStoreMultipartUploadContext, SandBoxStoreMultipartWriteInstruction, SandBoxStoreWriteInstruction, PresignSandBoxStoreWritesResponse, SandBoxStoreMultipartUploadedPart, SandBoxStoreMultipartWriteCompletion, CompleteSandBoxStoreMultipartWritesRequest, SandBoxStoreMultipartWriteSuccess, SandBoxStoreMultipartOperationFailure, SandBoxStoreMultipartWriteResult, CompleteSandBoxStoreMultipartWritesResponse, CommitSandBoxStoreManifestRequest, CommitSandBoxStoreManifestResponse, SandBoxStoreMultipartWriteAbort, AbortSandBoxStoreMultipartWritesRequest, SandBoxStoreMultipartAbortSuccess, SandBoxStoreMultipartAbortResult, AbortSandBoxStoreMultipartWritesResponse, PresignSandBoxStoreReadsRequest, SandBoxStoreReadInstruction, PresignSandBoxStoreReadsResponse, StatSandBoxStoreObjectRequest, StatSandBoxStoreObjectResponse, ListSandBoxStoreObjectsRequest, SandBoxStoreObjectEntry, ListSandBoxStoreObjectsResponse, MintSandVoiceCallSecretRequest, MintSandVoiceCallSecretResponse;
+var __protoPackage149, __protoMessage3142, CredentialLifecycleState, CredentialExpirationMode, CredentialTargetRuleKind, OnePasswordSyncTrigger, SandCredentialDecisionHarness, SandSetupManifestScopeKind, BulkTeamMemberSandBoxAction, BulkTeamMemberSandBoxItemState, BulkTeamMemberSandBoxOperationState, AdminRefreshSandBoxEgressTrigger, AdminRefreshSandBoxEgressStatus, AdminRefreshSandBoxEgressLabelOutcome, SandBoxMigrationPhase, SandBoxRunState, SandBoxUpgradeScheduleState, SandBoxStoreMultipartOperationFailureCode, SandBoxStoreManifestCommitStatus, CredentialTargetRule, OnePasswordCredentialItem, OnePasswordConnection, OnePasswordState, BeginOnePasswordConnectionRequest, BeginOnePasswordConnectionResponse, CompleteOnePasswordConnectionRequest, GetOnePasswordStateRequest, SyncOnePasswordConnectionsRequest, DeleteOnePasswordConnectionRequest, SetOnePasswordAlwaysAllowRequest, ApproveOnePasswordCredentialRequestRequest, DenyOnePasswordCredentialRequestRequest, OnePasswordCredentialDecisionResponse, NotifySandAgentTurnFinishedRequest, NotifySandAgentTurnFinishedResponse, ListSandSetupManifestsRequest, SandSetupManifestEntry, SandAssignedSetupManifest, ListSandSetupManifestsResponse, SandTeamSetupManifest, ListTeamSandSetupManifestsRequest, ListTeamSandSetupManifestsResponse, SaveTeamSandSetupManifestRequest, SaveTeamSandSetupManifestResponse, DeleteTeamSandSetupManifestRequest, DeleteTeamSandSetupManifestResponse, ListTeamGroupSandSetupManifestsRequest, ListTeamGroupSandSetupManifestsResponse, SaveTeamGroupSandSetupManifestRequest, SaveTeamGroupSandSetupManifestResponse, DeleteTeamGroupSandSetupManifestRequest, DeleteTeamGroupSandSetupManifestResponse, ListTeamMemberSandBoxesRequest, TeamMemberSandBoxPod, ListTeamMemberSandBoxesResponse, KillTeamMemberSandBoxRequest, KillTeamMemberSandBoxResponse, RecreateTeamMemberSandBoxRequest, GetTeamMemberSandBoxMigrationStatusRequest, GetTeamMemberSandBoxMigrationStatusResponse, StartBulkTeamMemberSandBoxOperationRequest, StartBulkTeamMemberSandBoxOperationResponse, GetBulkTeamMemberSandBoxOperationStatusRequest, BulkTeamMemberSandBoxOperationItem, GetBulkTeamMemberSandBoxOperationStatusResponse, EnsureSandBoxRequest, EnsureSandBoxWindowRequest, EnsureSandBoxResponse, RecreateSandBoxRequest, ForceRecreateSandBoxRequest, RecreateSandBoxResponse, AdminRecreateSandBoxRequest, AdminForceRecreateSandBoxRequest, AdminSandBoxStoreStatusRequest, AdminSandBoxStoreStatusResponse, AdminUpdateSandBoxHostRequest, AdminUpdateSandBoxHostResponse, AdminSandBoxHostStatusRequest, AdminSandBoxHostStatusResponse, AdminSnapshotSandBoxStoreRequest, AdminSnapshotSandBoxStoreResponse, AdminListSandBoxStoreManifestVersionsRequest, SandBoxStoreManifestVersion, AdminListSandBoxStoreManifestVersionsResponse, AdminRestoreSandBoxStoreSnapshotRequest, AdminRestoreSandBoxStoreSnapshotResponse, AdminHibernateSandBoxRequest, AdminHibernateSandBoxResponse, AdminRefreshSandBoxEgressRequest, AdminRefreshSandBoxEgressResponse, AdminListSandAgentsRequest, AdminListSandAgentsResponse, AdminGetSandAgentTranscriptPageRequest, AdminGetSandAgentTranscriptPageResponse, WatchSandBoxMigrationRequest, AdminWatchSandBoxMigrationRequest, SandBoxMigrationEvent, GetSandBoxRunStateRequest, GetSandBoxRunStateResponse, SandBoxUpgradeSchedule, GetSandBoxUpgradeScheduleRequest, GetSandBoxUpgradeScheduleResponse, ScheduleSandBoxUpgradeRequest, ScheduleSandBoxUpgradeResponse, CancelSandBoxUpgradeRequest, CancelSandBoxUpgradeResponse, RescheduleSandBoxUpgradeRequest, RescheduleSandBoxUpgradeResponse, SandBoxDescriptor, ListSandBoxesRequest, ListSandBoxesResponse, SandBoxStoreMultipartPart, SandBoxStoreWriteFile, PresignSandBoxStoreWritesRequest, SandBoxStoreMultipartUploadPartInstruction, SandBoxStoreMultipartUploadContext, SandBoxStoreMultipartWriteInstruction, SandBoxStoreWriteInstruction, PresignSandBoxStoreWritesResponse, SandBoxStoreMultipartUploadedPart, SandBoxStoreMultipartWriteCompletion, CompleteSandBoxStoreMultipartWritesRequest, SandBoxStoreMultipartWriteSuccess, SandBoxStoreMultipartOperationFailure, SandBoxStoreMultipartWriteResult, CompleteSandBoxStoreMultipartWritesResponse, CommitSandBoxStoreManifestRequest, CommitSandBoxStoreManifestResponse, SandBoxStoreMultipartWriteAbort, AbortSandBoxStoreMultipartWritesRequest, SandBoxStoreMultipartAbortSuccess, SandBoxStoreMultipartAbortResult, AbortSandBoxStoreMultipartWritesResponse, PresignSandBoxStoreReadsRequest, SandBoxStoreReadInstruction, PresignSandBoxStoreReadsResponse, StatSandBoxStoreObjectRequest, StatSandBoxStoreObjectResponse, ListSandBoxStoreObjectsRequest, SandBoxStoreObjectEntry, ListSandBoxStoreObjectsResponse, MintSandVoiceCallSecretRequest, MintSandVoiceCallSecretResponse;
 var init_sand_box_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/sand_box_pb.js"() {
     "use strict";
@@ -22,6 +22,9 @@ var init_sand_box_pb = __esm({
     BulkTeamMemberSandBoxAction = /* @__PURE__ */ enumType(proto3, __protoPackage149, "BulkTeamMemberSandBoxAction", [[0, "UNSPECIFIED"], [1, "KILL"], [2, "RECREATE"], [3, "PERMANENT_DELETE"]], 1);
     BulkTeamMemberSandBoxItemState = /* @__PURE__ */ enumType(proto3, __protoPackage149, "BulkTeamMemberSandBoxItemState", [[0, "UNSPECIFIED"], [1, "QUEUED"], [2, "RUNNING"], [3, "SUCCEEDED"], [4, "SKIPPED"], [5, "FAILED"]], 1);
     BulkTeamMemberSandBoxOperationState = /* @__PURE__ */ enumType(proto3, __protoPackage149, "BulkTeamMemberSandBoxOperationState", [[0, "UNSPECIFIED"], [1, "RUNNING"], [2, "SUCCEEDED"], [3, "PARTIALLY_SUCCEEDED"], [4, "FAILED"]], 1);
+    AdminRefreshSandBoxEgressTrigger = /* @__PURE__ */ enumType(proto3, __protoPackage149, "AdminRefreshSandBoxEgressTrigger", [[0, "UNSPECIFIED"], [1, "SINGLE"], [2, "BULK"]], 1);
+    AdminRefreshSandBoxEgressStatus = /* @__PURE__ */ enumType(proto3, __protoPackage149, "AdminRefreshSandBoxEgressStatus", [[0, "UNSPECIFIED"], [1, "PUSHED"], [2, "NO_BOX"], [3, "ERROR"]], 1);
+    AdminRefreshSandBoxEgressLabelOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage149, "AdminRefreshSandBoxEgressLabelOutcome", [[0, "UNSPECIFIED"], [1, "REFRESHED"], [2, "SKIPPED"], [3, "UNSUPPORTED_HOST"], [4, "FAILED"]], 1);
     SandBoxMigrationPhase = /* @__PURE__ */ enumType(proto3, __protoPackage149, "SandBoxMigrationPhase", [[0, "UNSPECIFIED"], [1, "BACKING_UP"], [2, "CREATING"], [3, "MOVING"], [4, "CLEANING_UP"], [5, "WIPING"], [6, "DONE"], [7, "FAILED"]], 1);
     SandBoxRunState = /* @__PURE__ */ enumType(proto3, __protoPackage149, "SandBoxRunState", [[0, "UNSPECIFIED"], [1, "ABSENT"], [2, "HIBERNATED"], [3, "RUNNING"], [4, "STARTING"]], 1);
     SandBoxUpgradeScheduleState = /* @__PURE__ */ enumType(proto3, __protoPackage149, "SandBoxUpgradeScheduleState", [[0, "UNSPECIFIED"], [1, "SCHEDULED"], [2, "CLAIMED"], [3, "RUNNING"], [4, "WAITING_FOR_IMAGE"], [5, "COMPLETED"], [6, "MISSED"], [7, "FAILED"], [8, "CANCELLED"]], 1);
@@ -1702,6 +1705,62 @@ var init_sand_box_pb = __esm({
       }
       static $() {
         return ["AdminHibernateSandBoxResponse|1 started 8|2 reason 9"];
+      }
+    };
+    AdminRefreshSandBoxEgressRequest = class _AdminRefreshSandBoxEgressRequest extends __protoMessage3142 {
+      constructor(data) {
+        super();
+        this.authId = "";
+        this.flavor = "";
+        this.trigger = AdminRefreshSandBoxEgressTrigger.UNSPECIFIED;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _AdminRefreshSandBoxEgressRequest().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _AdminRefreshSandBoxEgressRequest().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _AdminRefreshSandBoxEgressRequest().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_AdminRefreshSandBoxEgressRequest, a, b2);
+      }
+      static $() {
+        return ["AdminRefreshSandBoxEgressRequest|1 auth_id 9|2 flavor 9|3 trigger #0|4 team_id 5?", AdminRefreshSandBoxEgressTrigger];
+      }
+    };
+    AdminRefreshSandBoxEgressResponse = class _AdminRefreshSandBoxEgressResponse extends __protoMessage3142 {
+      constructor(data) {
+        super();
+        this.status = AdminRefreshSandBoxEgressStatus.UNSPECIFIED;
+        this.authId = "";
+        this.cluster = "";
+        this.tenantId = "";
+        this.podId = "";
+        this.runtimeApplied = false;
+        this.httpProxyRuleCount = 0;
+        this.labelOutcome = AdminRefreshSandBoxEgressLabelOutcome.UNSPECIFIED;
+        this.labelPersisted = false;
+        this.labelReason = "";
+        this.error = "";
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _AdminRefreshSandBoxEgressResponse().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _AdminRefreshSandBoxEgressResponse().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _AdminRefreshSandBoxEgressResponse().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_AdminRefreshSandBoxEgressResponse, a, b2);
+      }
+      static $() {
+        return ["AdminRefreshSandBoxEgressResponse|1 status #0|2 auth_id 9|3 cluster 9|4 tenant_id 9|5 pod_id 9|6 runtime_applied 8|7 http_proxy_rule_count 5|8 http_proxy_name 9?|9 label_outcome #1|10 label_applied 9?|11 label_persisted 8|12 label_reason 9|13 error 9", AdminRefreshSandBoxEgressStatus, AdminRefreshSandBoxEgressLabelOutcome];
       }
     };
     AdminListSandAgentsRequest = class _AdminListSandAgentsRequest extends __protoMessage3142 {

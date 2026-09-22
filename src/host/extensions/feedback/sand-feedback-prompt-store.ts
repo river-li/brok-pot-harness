@@ -42,16 +42,16 @@ var SandFeedbackPromptStore = class {
   read() {
     try {
       return parseFeedbackPromptFile((0, import_node_fs61.readFileSync)(this.filePath, "utf8"));
-    } catch (error41) {
-      reportFallbackUnlessAbsent("sand_feedback_prompt_store", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("sand_feedback_prompt_store", error42);
       return { version: 1 };
     }
   }
   write(file2) {
     try {
       writeFileAtomicSync(this.filePath, JSON.stringify(file2));
-    } catch (error41) {
-      this.logWriteFailure(`feedback prompt store write failed: ${String(error41)}`);
+    } catch (error42) {
+      this.logWriteFailure(`feedback prompt store write failed: ${String(error42)}`);
     }
   }
 };

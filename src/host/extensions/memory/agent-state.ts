@@ -1,6 +1,3 @@
-function isBlank(value) {
-  return value == null || value.trim().length === 0;
-}
 function describeAutomationWrite(automation, verb) {
   if (automation == null) {
     return stateWriteFailed(
@@ -13,47 +10,22 @@ function describeAutomationWrite(automation, verb) {
     )}${automation.isEnabled ? "" : ", paused"}.`
   );
 }
-function rejectUnsafeSlug(slug) {
-  return isSafeFolderId(slug) ? null : stateWriteFailed(`"${slug}" is not a valid project slug \u2014 use a short kebab-case id.`);
-}
-function memoryShardFor(deps, scope, project2) {
-  if (scope === "agent") {
-    return { store: deps.memory, label: "your memory" };
-  }
+function memoryShardFor(deps, scope) {
   if (scope === "user") {
     return {
       store: new FileMemoryStore(getUserMemoryShardDir(deps.sandRoot, deps.agentId)),
       label: "shared user memory"
     };
   }
-  if (isBlank(project2)) {
-    return stateWriteFailed("'project' (the slug) is required when scope is project.");
-  }
-  const slug = (project2 ?? "").trim();
-  const unsafe = rejectUnsafeSlug(slug);
-  if (unsafe != null) return unsafe;
-  if (!projectDirExists(deps.sandRoot, slug)) {
-    return stateWriteFailed(
-      `no project "${slug}" exists yet. Create or join it first (target "project").`
-    );
-  }
-  if (!deps.membership.read().has(slug)) {
-    return stateWriteFailed(
-      `you haven't joined project "${slug}" yet. Join it first (target "project", action "join").`
-    );
-  }
-  return {
-    store: new FileMemoryStore(getProjectMemoryShardDir(deps.sandRoot, slug, deps.agentId)),
-    label: `project "${slug}" memory`
-  };
+  return { store: deps.memory, label: "your memory" };
 }
 async function replaceAvatarFiles(agentDir, file2) {
   await (0, import_promises61.mkdir)(agentDir, { recursive: true });
   for (const name17 of listConventionalAvatarFilenames(agentDir)) {
-    await (0, import_promises61.rm)((0, import_node_path124.join)(agentDir, name17), { force: true });
+    await (0, import_promises61.rm)((0, import_node_path123.join)(agentDir, name17), { force: true });
   }
   if (file2 != null) {
-    await (0, import_promises61.writeFile)((0, import_node_path124.join)(agentDir, file2.filename), file2.bytes);
+    await (0, import_promises61.writeFile)((0, import_node_path123.join)(agentDir, file2.filename), file2.bytes);
   }
   invalidateAvatarDataUrlCache(agentDir);
 }
@@ -77,16 +49,14 @@ function createSandAgentState(deps) {
   const profilePath = getSandProfilePath(deps.agentDir);
   const settingsPath = getSandSettingsPath(deps.agentDir);
   return {
-    async writeMemory({ content, tier, scope = "agent", project: project2 }) {
-      const shard = memoryShardFor(deps, scope, project2);
-      if ("ok" in shard) return shard;
+    async writeMemory({ content, tier, scope = "agent" }) {
+      const shard = memoryShardFor(deps, scope);
       const outcome = rememberFact(shard.store, content, tier, now(), shard.label);
       if (outcome.ok && scope === "user") deps.onUserMemoryWritten?.();
       return outcome;
     },
-    async removeMemory({ content, scope = "agent", project: project2 }) {
-      const shard = memoryShardFor(deps, scope, project2);
-      if ("ok" in shard) return shard;
+    async removeMemory({ content, scope = "agent" }) {
+      const shard = memoryShardFor(deps, scope);
       const outcome = forgetFact(shard.store, content, shard.label);
       if (outcome.ok && scope === "user") deps.onUserMemoryWritten?.();
       return outcome;
@@ -175,61 +145,12 @@ function createSandAgentState(deps) {
         `Disconnected ${platform2}. The connector closes the live connection within a few seconds.`
       ) : stateWriteFailed(`${platform2} is not connected.`);
     },
-    async createProject({ slug, name: name17, description: description10 }) {
-      const trimmed = slug.trim();
-      const unsafe = rejectUnsafeSlug(trimmed);
-      if (unsafe != null) return unsafe;
-      if (isBlank(name17)) {
-        return stateWriteFailed("a project needs a non-empty name.");
-      }
-      const projectDir = getProjectDir(deps.sandRoot, trimmed);
-      const existed = projectDirExists(deps.sandRoot, trimmed);
-      if (!existed) {
-        await (0, import_promises61.mkdir)(projectDir, { recursive: true });
-        const body = serializeSkillFile({
-          name: name17.trim(),
-          description: (description10 ?? "").trim(),
-          body: "",
-          trigger: null
-        });
-        await (0, import_promises61.writeFile)((0, import_node_path124.join)(projectDir, PROJECT_FILENAME), body, "utf8");
-      }
-      if (!deps.membership.join(trimmed)) {
-        return stateWriteFailed(`could not join project "${trimmed}" \u2014 the slug is not path-safe.`);
-      }
-      return stateWriteOk(
-        existed ? `Joined existing project "${trimmed}" (create-is-join; project.md left as-is).` : `Created and joined project "${name17.trim()}" (folder ${trimmed}).`
-      );
-    },
-    async joinProject({ slug }) {
-      const trimmed = slug.trim();
-      const unsafe = rejectUnsafeSlug(trimmed);
-      if (unsafe != null) return unsafe;
-      if (!projectDirExists(deps.sandRoot, trimmed)) {
-        return stateWriteFailed(
-          `no project "${trimmed}" exists. Create it first (action "create").`
-        );
-      }
-      if (!deps.membership.join(trimmed)) {
-        return stateWriteFailed(`could not join project "${trimmed}".`);
-      }
-      return stateWriteOk(`Joined project "${trimmed}".`);
-    },
-    async leaveProject({ slug }) {
-      const trimmed = slug.trim();
-      const unsafe = rejectUnsafeSlug(trimmed);
-      if (unsafe != null) return unsafe;
-      if (!deps.membership.leave(trimmed)) {
-        return stateWriteFailed(`could not leave project "${trimmed}".`);
-      }
-      return stateWriteOk(`Left project "${trimmed}".`);
-    },
     async setAvatar({ path: sourcePath }) {
       const trimmed = sourcePath.trim();
       if (trimmed.length === 0) {
         return stateWriteFailed("pass the path of an image file to install.");
       }
-      const absolute = (0, import_node_path124.isAbsolute)(trimmed) ? trimmed : (0, import_node_path124.resolve)(trimmed);
+      const absolute = (0, import_node_path123.isAbsolute)(trimmed) ? trimmed : (0, import_node_path123.resolve)(trimmed);
       let bytes = null;
       try {
         bytes = await (0, import_promises61.readFile)(absolute);
@@ -238,15 +159,15 @@ function createSandAgentState(deps) {
           try {
             const pulled = await deps.readBoxFile(absolute);
             bytes = Buffer.from(pulled);
-          } catch (error41) {
-            reportFallback("agent_state", error41);
+          } catch (error42) {
+            reportFallback("agent_state", error42);
             bytes = null;
           }
         }
       }
       if (bytes == null) {
         return stateWriteFailed(
-          isBoxRootPath(absolute) ? `could not read "${(0, import_node_path124.basename)(absolute)}" from your box \u2014 write the image with Shell (or CopyFromBox onto a host path) first, then pass that path.` : `could not read "${(0, import_node_path124.basename)(absolute)}" \u2014 download or write the image somewhere first, then pass that path.`
+          isBoxRootPath(absolute) ? `could not read "${(0, import_node_path123.basename)(absolute)}" from your box \u2014 write the image with Shell (or CopyFromBox onto a host path) first, then pass that path.` : `could not read "${(0, import_node_path123.basename)(absolute)}" \u2014 download or write the image somewhere first, then pass that path.`
         );
       }
       if (bytes.length === 0 || bytes.length > AVATAR_MAX_BYTES) {
@@ -264,7 +185,7 @@ function createSandAgentState(deps) {
       const filename = ext2 === "png" ? CANONICAL_AVATAR_FILENAME : `avatar.${ext2}`;
       await replaceAvatarFiles(deps.agentDir, { filename, bytes });
       return stateWriteOk(
-        `Updated your picture (${filename}). Source ${(0, import_node_path124.basename)(absolute)} can be deleted if you no longer need it.`
+        `Updated your picture (${filename}). Source ${(0, import_node_path123.basename)(absolute)} can be deleted if you no longer need it.`
       );
     },
     async clearAvatar() {

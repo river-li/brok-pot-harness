@@ -92,15 +92,15 @@ function setTurnTraceAttributes(trace2, attributes) {
     for (const [key, value] of Object.entries(attributes)) {
       trace2.span.setAttribute(key, value);
     }
-  } catch (error41) {
-    process.stderr.write(`sand.turn.trace_attribute_failed error_class=${errorLogTag(error41)}
+  } catch (error42) {
+    process.stderr.write(`sand.turn.trace_attribute_failed error_class=${errorLogTag(error42)}
 `);
   }
 }
-function markTurnTraceError(trace2, error41) {
+function markTurnTraceError(trace2, error42) {
   if (trace2 === void 0) return;
   try {
-    trace2.span.recordException(error41 instanceof Error ? error41 : new Error(String(error41)));
+    trace2.span.recordException(error42 instanceof Error ? error42 : new Error(String(error42)));
     trace2.span.setStatus({ code: 2 });
     trace2.span.setAttribute("sand.outcome", "error");
   } catch (markError) {
@@ -126,9 +126,9 @@ async function traceSendPhase(ctx, name17, fn) {
   }
   try {
     return await fn(childCtx);
-  } catch (error41) {
+  } catch (error42) {
     try {
-      span.recordException(error41 instanceof Error ? error41 : new Error(String(error41)));
+      span.recordException(error42 instanceof Error ? error42 : new Error(String(error42)));
       span.setStatus({ code: 2 });
     } catch (recordError) {
       process.stderr.write(
@@ -136,7 +136,7 @@ async function traceSendPhase(ctx, name17, fn) {
 `
       );
     }
-    throw error41;
+    throw error42;
   } finally {
     try {
       span.end();

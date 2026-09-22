@@ -16,30 +16,30 @@ function createSandImageGenerator(environment, auth2, options2) {
     ...options2?.onRequestId == null ? {} : { onRequestId: options2.onRequestId }
   });
 }
-function toGenerateImageToolError(error41) {
-  if (error41 instanceof SandGenerateImageError) {
+function toGenerateImageToolError(error42) {
+  if (error42 instanceof SandGenerateImageError) {
     return createGenerateImageProviderError({
-      message: error41.message,
-      providerStatusCode: error41.provider.statusCode,
-      contentSafetyBlocked: error41.provider.contentSafetyBlocked
+      message: error42.message,
+      providerStatusCode: error42.provider.statusCode,
+      contentSafetyBlocked: error42.provider.contentSafetyBlocked
     });
   }
-  if (error41 instanceof ConnectError && error41.code === Code.ResourceExhausted) {
+  if (error42 instanceof ConnectError && error42.code === Code.ResourceExhausted) {
     return new CustomToolCallError(ToolErrorClassification.PROVIDER_ERROR, {
       clientVisibleErrorMessage: USAGE_LIMITED_MESSAGE,
       modelVisibleErrorMessage: USAGE_LIMITED_MESSAGE,
-      error: `${USAGE_LIMITED_MESSAGE} ${error41.message}`
+      error: `${USAGE_LIMITED_MESSAGE} ${error42.message}`
     });
   }
-  return error41;
+  return error42;
 }
 function createSandGenerateImageService(environment, auth2, options2) {
   const generateImage = createSandImageGenerator(environment, auth2, {
     onRequestId: options2.onRequestId
   });
-  return async (_ctx, description10, _filePath, referenceImages) => {
-    const generated = await generateImage(description10, referenceImages).catch((error41) => {
-      throw toGenerateImageToolError(error41);
+  return async (_ctx, description9, _filePath, referenceImages) => {
+    const generated = await generateImage(description9, referenceImages).catch((error42) => {
+      throw toGenerateImageToolError(error42);
     });
     const persisted = await options2.persistImage(
       Buffer.from(generated.imageData, "base64"),

@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 init_errors();
 var FORCED_UPGRADE_PAUSE_MAX_MS = 10 * 6e4;
 var FORCED_UPGRADE_RETRY_COOLDOWN_MS = 30 * 6e4;
@@ -68,8 +68,8 @@ var UpgradeRecreateResume = class {
   invalidateResumeOwnership() {
     this.resumeOwnershipConfirmed = false;
   }
-  setResumeOwnershipRecoveryRequester(request3) {
-    this.requestResumeOwnershipRecovery = request3;
+  setResumeOwnershipRecoveryRequester(request5) {
+    this.requestResumeOwnershipRecovery = request5;
   }
   requestOwnershipRecovery() {
     if (this.resumeOwnershipRecoveryRequested) return;
@@ -236,19 +236,19 @@ var UpgradeRecreateResume = class {
           }
           await this.tm.roster.emitAgentUpdate(session.id);
           this.tm.automationRuntime.emitAutomations(session);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "resume",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "resume_after_host_update_failed", description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: "resume_after_host_update_failed", description: description9 })
           });
         } finally {
           this.tm.ackObligations.retireAckRunToken(session.id, ackToken);
@@ -387,12 +387,12 @@ var UpgradeRecreateResume = class {
     const resume = this.resumeUpgradeAgent(marker17);
     void resume.then(
       () => this.finishUpgradeResume(marker17),
-      (error41) => {
+      (error42) => {
         this.tm.telemetry.reportAgentError({
           source: "resume",
           conversationId: marker17.agentId,
-          error: classifyAgentError(error41),
-          detail: sandErrorDetail(error41)
+          error: classifyAgentError(error42),
+          detail: sandErrorDetail(error42)
         });
         this.finishUpgradeResume(marker17);
       }

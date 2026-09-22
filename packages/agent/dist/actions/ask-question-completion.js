@@ -17,7 +17,9 @@ async function applyAskQuestionCompletion(ctx, args) {
     return { outcome: "invalid" };
   }
   if (originalToolCallId.length > 0 && stateHandler.hasCompletedAskQuestion(originalToolCallId)) {
-    logger62.info(ctx, "Dropping duplicate ask_question completion (already applied)", { originalToolCallId });
+    logger62.info(ctx, "Dropping duplicate ask_question completion (already applied)", {
+      originalToolCallId
+    });
     return { outcome: "already-applied" };
   }
   const syntheticArgs = action.originalArgs ? createRedactedAskQuestionArgs(action._privacyMode, {

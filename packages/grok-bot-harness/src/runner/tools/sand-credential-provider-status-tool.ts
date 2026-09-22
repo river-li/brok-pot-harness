@@ -22,8 +22,8 @@ function createCredentialProviderStatusTool(reader) {
       }
       try {
         return renderCredentialProviderStatus(await deps.getStatus());
-      } catch (error41) {
-        return `Credential provider status: unavailable. The backend status check failed; this does not mean the provider is disconnected. Tell the user the status could not be checked and that the 1Password page in the Marketplace on their Mac shows the live state. Diagnostic class: ${errorLogTag(error41)}.`;
+      } catch (error42) {
+        return `Credential provider status: unavailable. The backend status check failed; this does not mean the provider is disconnected. Tell the user the status could not be checked and that the 1Password page in the Marketplace on their Mac shows the live state. Diagnostic class: ${errorLogTag(error42)}.`;
       }
     }
   });

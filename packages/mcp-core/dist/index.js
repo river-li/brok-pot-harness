@@ -1,4 +1,4 @@
-var init_dist6 = __esm({
+var init_dist7 = __esm({
   "../packages/mcp-core/dist/index.js"() {
     "use strict";
     init_admin_mcp_policy();

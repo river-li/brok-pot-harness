@@ -51,7 +51,7 @@ function createTemporalMemberTurns(deps) {
     return true;
   };
   const cancelUpstream = (args) => {
-    void deps.client.cancelGrokBotRoomMemberTurn(args, { timeoutMs: TEMPORAL_MEMBER_TURN_RPC_TIMEOUT_MS }).catch((error41) => deps.reportFailure(errorLogTag(error41)));
+    void deps.client.cancelGrokBotRoomMemberTurn(args, { timeoutMs: TEMPORAL_MEMBER_TURN_RPC_TIMEOUT_MS }).catch((error42) => deps.reportFailure(errorLogTag(error42)));
   };
   return {
     isEnabled: deps.isEnabled,
@@ -100,9 +100,9 @@ function createTemporalMemberTurns(deps) {
           { timeoutMs: TEMPORAL_MEMBER_TURN_RPC_TIMEOUT_MS }
         );
         dispatch = response.dispatch;
-      } catch (error41) {
+      } catch (error42) {
         pending.delete(nonce);
-        deps.reportFailure(errorLogTag(error41));
+        deps.reportFailure(errorLogTag(error42));
         return { outcome: "error", messages: [] };
       }
       switch (dispatch) {
@@ -164,8 +164,8 @@ function createTemporalMemberTurns(deps) {
           if (delivery !== "unknown_nonce" || !failedAttemptMayStillHoldNonce) {
             return delivery;
           }
-        } catch (error41) {
-          deps.reportFailure(errorLogTag(error41));
+        } catch (error42) {
+          deps.reportFailure(errorLogTag(error42));
           failedAttemptMayStillHoldNonce = true;
           delivery = "unreachable";
         }

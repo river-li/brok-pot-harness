@@ -1,4 +1,4 @@
-var __awaiter66 = function(thisArg, _arguments, P2, generator) {
+var __awaiter68 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -53,7 +53,7 @@ var Coalescer = class {
     return this.runTask(task);
   }
   runTask(task) {
-    return __awaiter66(this, void 0, void 0, function* () {
+    return __awaiter68(this, void 0, void 0, function* () {
       try {
         yield task();
       } finally {
@@ -74,7 +74,7 @@ var Coalescer = class {
     void this.runPending(pending);
   }
   runPending(pending) {
-    return __awaiter66(this, void 0, void 0, function* () {
+    return __awaiter68(this, void 0, void 0, function* () {
       try {
         yield this.runTask(pending.task);
         pending.resolve();

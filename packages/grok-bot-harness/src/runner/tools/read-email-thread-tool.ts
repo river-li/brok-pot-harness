@@ -13,7 +13,7 @@ var readEmailThreadParameters = external_exports.object({
     `Per-message body cap in characters (default ${READ_EMAIL_THREAD_DEFAULT_BODY_MAX_CHARS}). Raise it only when a long message was cut off.`
   )
 });
-var description6 = [
+var description5 = [
   `Read one email conversation in full, oldest message first, by the thread_id that ${SAND_SEARCH_EMAIL_THREADS_TOOL_NAME} returned. Do not invent thread ids.`,
   "Each message shows who sent it, to whom, when, its delivery state, its body, and its stored attachments with the attachment_id to open each one. An image pasted into the body is listed as inline; the body marks where it sat as [inline image: <content id>].",
   "A body can be marked not indexed: the message arrived within the last minute and its text is not readable yet, so wait briefly and read again. A purged body was removed by retention and will not return."
@@ -102,7 +102,7 @@ function createReadEmailThreadTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_READ_EMAIL_THREAD_TOOL_NAME,
-    description: description6,
+    description: description5,
     parameters: readEmailThreadParameters,
     describeActivity: (args) => ({ detail: args.thread_id }),
     execute: async (_ctx, args, d) => readEmailThread(d, args)

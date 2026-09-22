@@ -55,8 +55,8 @@ async function readDiskVolumeSnapshots(roots) {
         totalBytes: Number(fileSystem.blocks * fileSystem.bsize),
         availableBytes: Number(fileSystem.bavail * fileSystem.bsize)
       });
-    } catch (error41) {
-      reportFallback("disk_pressure_guard", error41);
+    } catch (error42) {
+      reportFallback("disk_pressure_guard", error42);
       complete = false;
     }
   }
@@ -73,8 +73,8 @@ function createDiskPressureGuard(options2) {
     let sample;
     try {
       sample = await options2.readVolumes();
-    } catch (error41) {
-      options2.log(`disk-pressure sample failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      options2.log(`disk-pressure sample failed: ${errorLogTag(error42)}`);
       return;
     }
     const sampledDeviceIds = /* @__PURE__ */ new Set();
@@ -98,8 +98,8 @@ function createDiskPressureGuard(options2) {
           trigger: transitioned ? "transition" : "heartbeat",
           usedPercent: snapshot.totalBytes > 0 ? (snapshot.totalBytes - snapshot.availableBytes) / snapshot.totalBytes * 100 : 0
         });
-      } catch (error41) {
-        options2.log(`disk-pressure report delivery failed: ${errorLogTag(error41)}`);
+      } catch (error42) {
+        options2.log(`disk-pressure report delivery failed: ${errorLogTag(error42)}`);
       }
     }
     if (sample.complete) {

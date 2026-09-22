@@ -1,2 +1,2 @@
-init_dist6();
-init_dist6();
+init_dist7();
+init_dist7();

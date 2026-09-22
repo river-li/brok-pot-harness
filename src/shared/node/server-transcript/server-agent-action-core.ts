@@ -1,5 +1,5 @@
 init_esm2();
-init_dist4();
+init_dist5();
 init_unknown_record();
 init_proto();
 var SERVER_AGENT_ACTION_TIMEOUT_MS = 2e4;
@@ -129,9 +129,9 @@ function unreadableDelivery(delivery) {
     message: `unknown-delivery:${delivery}`
   };
 }
-function isNonceDedupedSendReplayable(error41) {
-  if (!(error41 instanceof ConnectError)) return true;
-  return error41.code === Code.Unavailable && !error41.metadata.has("retry-after");
+function isNonceDedupedSendReplayable(error42) {
+  if (!(error42 instanceof ConnectError)) return true;
+  return error42.code === Code.Unavailable && !error42.metadata.has("retry-after");
 }
 function localToolPermissionResolutionProto(resolution) {
   switch (resolution) {
@@ -271,6 +271,7 @@ function paymentMethodsResultOf(response) {
       };
   }
 }
+var SEND_LENGTH_REFUSAL = /^(text|rich_text) exceeds the maximum length of \d+/;
 var GROK_BOT_REFUSAL_HEADER = "x-grok-bot-refusal";
 var GROK_BOT_BOX_HARNESS_REFUSAL = "box_harness";
 var GROK_BOT_LOCAL_TOOL_PERMISSION_FALLBACK_HEADER = "x-grok-bot-local-tool-permission-fallback";
@@ -284,51 +285,58 @@ function debugDetailText(detail) {
   if (typeof described !== "string" || described.length === 0) return void 0;
   return described;
 }
-function describeConnectFailure(error41) {
-  for (const detail of error41.details) {
+function describeConnectFailure(error42) {
+  for (const detail of error42.details) {
     const described = debugDetailText(detail);
     if (described !== void 0) return described;
   }
-  return error41.rawMessage;
+  return error42.rawMessage;
 }
-function classifyServerAgentActionError(error41, method) {
-  if (method === "resolveLocalToolPermission" && error41 instanceof ConnectError && error41.code === Code.Unavailable && error41.metadata.get(GROK_BOT_LOCAL_TOOL_PERMISSION_FALLBACK_HEADER) === "gateway") {
+function classifyServerAgentActionError(error42, method) {
+  if (method === "resolveLocalToolPermission" && error42 instanceof ConnectError && error42.code === Code.Unavailable && error42.metadata.get(GROK_BOT_LOCAL_TOOL_PERMISSION_FALLBACK_HEADER) === "gateway") {
     return {
       status: "unimplemented"
     };
   }
-  if (error41 instanceof ConnectError && error41.code === Code.NotFound && error41.metadata.get(GROK_BOT_REFUSAL_HEADER) === GROK_BOT_BOX_HARNESS_REFUSAL) {
+  if (error42 instanceof ConnectError && error42.code === Code.NotFound && error42.metadata.get(GROK_BOT_REFUSAL_HEADER) === GROK_BOT_BOX_HARNESS_REFUSAL) {
     return {
       status: "unimplemented",
       scope: "agent"
     };
   }
-  if (method === "resolveAutoReviewApproval" && error41 instanceof ConnectError && error41.code === Code.NotFound) {
+  if (method === "resolveAutoReviewApproval" && error42 instanceof ConnectError && error42.code === Code.NotFound) {
     return {
       status: "refused",
       failureCode: SAND_AUTO_REVIEW_STALE,
-      message: describeConnectFailure(error41)
+      message: describeConnectFailure(error42)
     };
   }
-  if (method === "resolveVirtualCardApproval" && error41 instanceof ConnectError && error41.code === Code.NotFound) {
+  if (method === "resolveVirtualCardApproval" && error42 instanceof ConnectError && error42.code === Code.NotFound) {
     return {
       status: "refused",
       failureCode: SAND_VIRTUAL_CARD_STALE,
-      message: describeConnectFailure(error41)
+      message: describeConnectFailure(error42)
     };
   }
-  if (method === "submitSecret" && error41 instanceof ConnectError && (error41.code === Code.InvalidArgument || error41.code === Code.FailedPrecondition)) {
+  if (method === "submitSecret" && error42 instanceof ConnectError && (error42.code === Code.InvalidArgument || error42.code === Code.FailedPrecondition)) {
     return secretSaveRefused({
-      message: describeConnectFailure(error41)
+      message: describeConnectFailure(error42)
     });
   }
-  if (!(error41 instanceof ConnectError)) {
+  if (method === "sendPrompt" && error42 instanceof ConnectError && error42.code === Code.InvalidArgument && SEND_LENGTH_REFUSAL.test(describeConnectFailure(error42))) {
+    return {
+      status: "refused",
+      failureCode: SEND_MESSAGE_TOO_LONG,
+      message: describeConnectFailure(error42)
+    };
+  }
+  if (!(error42 instanceof ConnectError)) {
     return unreachable2({
       kind: "network",
-      message: error41 instanceof Error ? error41.message : String(error41)
+      message: error42 instanceof Error ? error42.message : String(error42)
     });
   }
-  switch (error41.code) {
+  switch (error42.code) {
     case Code.Unimplemented:
       return {
         status: "unimplemented"
@@ -337,43 +345,43 @@ function classifyServerAgentActionError(error41, method) {
     case Code.ResourceExhausted:
       return unreachable2({
         kind: "network",
-        message: describeConnectFailure(error41)
+        message: describeConnectFailure(error42)
       });
     case Code.DeadlineExceeded:
       return unreachable2({
         kind: "timeout",
-        message: describeConnectFailure(error41)
+        message: describeConnectFailure(error42)
       });
     case Code.Unauthenticated:
     case Code.PermissionDenied:
       return unreachable2({
         kind: "access_denied",
-        message: describeConnectFailure(error41)
+        message: describeConnectFailure(error42)
       });
     case Code.Internal:
     case Code.Unknown:
     case Code.DataLoss:
       return unreachable2({
         kind: "http_5xx",
-        message: describeConnectFailure(error41)
+        message: describeConnectFailure(error42)
       });
     default:
       return {
         status: "refused",
         failureCode: null,
-        message: describeConnectFailure(error41)
+        message: describeConnectFailure(error42)
       };
   }
 }
-async function perform(client, request3) {
+async function perform(client, request5) {
   const callOptions = {
     timeoutMs: SERVER_AGENT_ACTION_TIMEOUT_MS
   };
-  switch (request3.method) {
+  switch (request5.method) {
     case "sendPrompt": {
       const {
         args
-      } = request3;
+      } = request5;
       const response = await client.sendGrokBotUserMessage({
         agentId: args.agentId,
         messageId: args.clientNonce,
@@ -406,7 +414,7 @@ async function perform(client, request3) {
             }
           };
         case GrokBotUserMessageDelivery.REFUSED:
-          return refused(response.refusal, request3.method);
+          return refused(response.refusal, request5.method);
         case GrokBotUserMessageDelivery.UNSPECIFIED:
           return unreadableDelivery(response.delivery);
         default: {
@@ -418,7 +426,7 @@ async function perform(client, request3) {
     case "promptAcceptanceStatus": {
       const {
         args
-      } = request3;
+      } = request5;
       const response = await client.getGrokBotSendStatus({
         agentId: args.agentId,
         messageId: args.clientNonce,
@@ -436,10 +444,10 @@ async function perform(client, request3) {
     }
     case "interruptAgentRun": {
       const response = await client.interruptGrokBotAgentRun({
-        agentId: request3.args.id,
+        agentId: request5.args.id,
         reason: "user_interrupt",
-        ...request3.args.sessionId != null ? {
-          sessionId: request3.args.sessionId
+        ...request5.args.sessionId != null ? {
+          sessionId: request5.args.sessionId
         } : {}
       }, callOptions);
       return {
@@ -451,12 +459,12 @@ async function perform(client, request3) {
     }
     case "respondToWidget": {
       const response = await client.respondGrokBotWidget({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
-        value: request3.args.value
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
+        value: request5.args.value
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -467,11 +475,11 @@ async function perform(client, request3) {
     }
     case "submitSecret": {
       const response = await client.submitGrokBotSecret({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
-        value: request3.args.value,
-        ...request3.args.sessionId != null && request3.args.sessionId.length > 0 ? {
-          sessionId: request3.args.sessionId
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
+        value: request5.args.value,
+        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
+          sessionId: request5.args.sessionId
         } : {}
       }, callOptions);
       if (response.refusal != null) {
@@ -487,18 +495,18 @@ async function perform(client, request3) {
     }
     case "resolveCredentialRequest": {
       const response = await client.resolveGrokBotCredentialRequest({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
-        resolution: credentialRequestResolutionProto(request3.args.resolution),
-        ...request3.args.sessionId != null && request3.args.sessionId.length > 0 ? {
-          sessionId: request3.args.sessionId
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
+        resolution: credentialRequestResolutionProto(request5.args.resolution),
+        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
+          sessionId: request5.args.sessionId
         } : {}
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       if (!response.accepted) {
-        return refused(void 0, request3.method);
+        return refused(void 0, request5.method);
       }
       return {
         status: "ok",
@@ -507,11 +515,11 @@ async function perform(client, request3) {
     }
     case "dismissWidget": {
       const response = await client.dismissGrokBotWidget({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -522,18 +530,18 @@ async function perform(client, request3) {
     }
     case "submitUserForm": {
       const response = await client.submitGrokBotUserForm({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
         values: {
-          ...request3.args.values
+          ...request5.args.values
         },
-        platform: userFormClientPlatformProto(request3.args.platform)
+        platform: userFormClientPlatformProto(request5.args.platform)
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       if (!response.accepted) {
-        return staleUserForm(request3.method);
+        return staleUserForm(request5.method);
       }
       return {
         status: "ok",
@@ -542,16 +550,16 @@ async function perform(client, request3) {
     }
     case "dismissUserForm": {
       const response = await client.dismissGrokBotUserForm({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
-        mode: userFormDismissModeProto(request3.args.mode),
-        platform: userFormClientPlatformProto(request3.args.platform)
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
+        mode: userFormDismissModeProto(request5.args.mode),
+        platform: userFormClientPlatformProto(request5.args.platform)
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       if (!response.accepted) {
-        return staleUserForm(request3.method);
+        return staleUserForm(request5.method);
       }
       return {
         status: "ok",
@@ -560,12 +568,12 @@ async function perform(client, request3) {
     }
     case "reactToMessage": {
       const response = await client.reactToGrokBotMessage({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
-        emoji: request3.args.emoji
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
+        emoji: request5.args.emoji
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -575,7 +583,7 @@ async function perform(client, request3) {
     case "resolveLocalToolPermission": {
       const {
         args
-      } = request3;
+      } = request5;
       const response = await client.resolveGrokBotLocalToolPermission({
         agentId: args.agentId,
         entryId: args.entryId,
@@ -586,7 +594,7 @@ async function perform(client, request3) {
         } : {}
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -596,7 +604,7 @@ async function perform(client, request3) {
     case "resolveVirtualCardApproval": {
       const {
         args
-      } = request3;
+      } = request5;
       const response = await client.resolveGrokBotVirtualCardApproval({
         agentId: args.agentId,
         entryId: args.entryId,
@@ -607,7 +615,7 @@ async function perform(client, request3) {
         }
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -624,7 +632,7 @@ async function perform(client, request3) {
     case "resolveAutoReviewApproval": {
       const {
         args
-      } = request3;
+      } = request5;
       await client.resolveGrokBotAutoReviewApproval({
         agentId: args.agentId,
         requestId: args.requestId,
@@ -642,9 +650,9 @@ async function perform(client, request3) {
     }
     case "handBackForeverBox": {
       await client.endGrokBotBoxHandoff({
-        agentId: request3.args.id,
-        requestId: request3.args.requestId,
-        trigger: handBackTriggerProto(request3.args.trigger)
+        agentId: request5.args.id,
+        requestId: request5.args.requestId,
+        trigger: handBackTriggerProto(request5.args.trigger)
       }, callOptions);
       return {
         status: "ok",
@@ -653,8 +661,8 @@ async function perform(client, request3) {
     }
     case "setAgentUnread": {
       await client.setGrokBotAgentClientState({
-        agentId: request3.args.id,
-        ...request3.args.isUnread ? {
+        agentId: request5.args.id,
+        ...request5.args.isUnread ? {
           markUnread: true
         } : {
           markRead: true
@@ -667,8 +675,8 @@ async function perform(client, request3) {
     }
     case "setAgentHiddenFromSidebar": {
       await client.setGrokBotAgentClientState({
-        agentId: request3.args.id,
-        hiddenFromSidebar: request3.args.isHidden
+        agentId: request5.args.id,
+        hiddenFromSidebar: request5.args.isHidden
       }, callOptions);
       return {
         status: "ok",
@@ -677,8 +685,8 @@ async function perform(client, request3) {
     }
     case "setAgentNotifyOnUpdates": {
       await client.setGrokBotAgentClientState({
-        agentId: request3.args.id,
-        notifyOnUpdatesEnabled: request3.args.isEnabled
+        agentId: request5.args.id,
+        notifyOnUpdatesEnabled: request5.args.isEnabled
       }, callOptions);
       return {
         status: "ok",
@@ -688,7 +696,7 @@ async function perform(client, request3) {
     case "voteFeedback": {
       const {
         args
-      } = request3;
+      } = request5;
       const response = await client.voteGrokBotFeedback({
         agentId: args.agentId,
         entryId: args.entryId,
@@ -697,7 +705,7 @@ async function perform(client, request3) {
         comment: args.comment
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -706,15 +714,15 @@ async function perform(client, request3) {
     }
     case "sendDraft": {
       const response = await client.sendGrokBotDraft({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
-        ...draftProto(request3.args.draft),
-        ...request3.args.sessionId != null && request3.args.sessionId.length > 0 ? {
-          sessionId: request3.args.sessionId
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
+        ...draftProto(request5.args.draft),
+        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
+          sessionId: request5.args.sessionId
         } : {}
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -725,14 +733,14 @@ async function perform(client, request3) {
     }
     case "discardDraft": {
       const response = await client.discardGrokBotDraft({
-        agentId: request3.args.agentId,
-        entryId: request3.args.entryId,
-        ...request3.args.sessionId != null && request3.args.sessionId.length > 0 ? {
-          sessionId: request3.args.sessionId
+        agentId: request5.args.agentId,
+        entryId: request5.args.entryId,
+        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
+          sessionId: request5.args.sessionId
         } : {}
       }, callOptions);
       if (response.refusal != null) {
-        return refused(response.refusal, request3.method);
+        return refused(response.refusal, request5.method);
       }
       return {
         status: "ok",
@@ -775,24 +783,24 @@ function draftProto(draft) {
   };
 }
 function createServerAgentActionCore(client) {
-  return async (request3) => {
+  return async (request5) => {
     try {
-      return await perform(client, request3);
-    } catch (error41) {
-      if (request3.method !== "sendPrompt" || !isNonceDedupedSendReplayable(error41)) {
-        return classifyServerAgentActionError(error41, request3.method);
+      return await perform(client, request5);
+    } catch (error42) {
+      if (request5.method !== "sendPrompt" || !isNonceDedupedSendReplayable(error42)) {
+        return classifyServerAgentActionError(error42, request5.method);
       }
-      const firstAttempt = classifyServerAgentActionError(error41);
+      const firstAttempt = classifyServerAgentActionError(error42);
       try {
         const {
           agentId,
           clientNonce
-        } = request3.args;
+        } = request5.args;
         const probe = await client.getGrokBotSendStatus({
           agentId,
           messageId: clientNonce,
-          ...request3.args.sessionId != null && request3.args.sessionId.length > 0 ? {
-            sessionId: request3.args.sessionId
+          ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
+            sessionId: request5.args.sessionId
           } : {}
         }, {
           timeoutMs: SERVER_AGENT_ACTION_TIMEOUT_MS
@@ -803,7 +811,7 @@ function createServerAgentActionCore(client) {
           response: probe
         });
         if (lookup3.outcome !== "not-found") return firstAttempt;
-        return await perform(client, request3);
+        return await perform(client, request5);
       } catch (retryError) {
         return classifyServerAgentActionError(retryError);
       }

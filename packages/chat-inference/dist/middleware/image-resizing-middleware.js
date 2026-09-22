@@ -1,4 +1,4 @@
-var __awaiter20 = function(thisArg, _arguments, P2, generator) {
+var __awaiter25 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -101,7 +101,7 @@ var __asyncGenerator6 = function(thisArg, _arguments, generator) {
     if (f2(v2), q2.shift(), q2.length) resume(q2[0][0], q2[0][1]);
   }
 };
-var logger3 = createLogger("@anysphere/chat-inference/image-resizing-middleware");
+var logger4 = createLogger("@anysphere/chat-inference/image-resizing-middleware");
 var IMAGE_RESIZE_CONCURRENCY = 4;
 function decodeImageDataUrl(value) {
   const parsed2 = new URL(value);
@@ -128,7 +128,7 @@ function decodeImageDataUrl(value) {
 var modelImageResizeOptions = (options2) => Object.assign(Object.assign({}, options2), { convertUnsupportedModelFormatsToPng: true });
 var wasImagePartChecked = ({ checkedImageParts, part, payload }) => checkedImageParts.has(part) && checkedImageParts.get(part) === payload;
 function resizeImagesInMessage(_a19) {
-  return __awaiter20(this, arguments, void 0, function* ({ ctx, message, resizeOptions, checkedImageParts }) {
+  return __awaiter25(this, arguments, void 0, function* ({ ctx, message, resizeOptions, checkedImageParts }) {
     var _b2;
     var _c2, _d;
     if (message.role === "user") {
@@ -166,7 +166,7 @@ function resizeImagesInMessage(_a19) {
             const wasResized = resizedImage.data.length !== imageBuffer.length || resizedImage.mimeType !== originalMimeType;
             if (wasResized) {
               hasUpdates = true;
-              logger3.info(ctx, "Resized image in user message", {
+              logger4.info(ctx, "Resized image in user message", {
                 originalSize,
                 newSize: resizedImage.data.length,
                 newMimeType: resizedImage.mimeType
@@ -178,9 +178,9 @@ function resizeImagesInMessage(_a19) {
               checkedImageParts.set(part, part.image);
               updatedContent.push(part);
             }
-          } catch (error41) {
+          } catch (error42) {
             hasUpdates = true;
-            logger3.error(ctx, "Failed to resize image, dropping it", error41, {
+            logger4.error(ctx, "Failed to resize image, dropping it", error42, {
               originalSize
             });
             updatedContent.push({
@@ -227,7 +227,7 @@ function resizeImagesInMessage(_a19) {
                 try {
                   imageBuffer = Buffer.from(expPart.data, "base64");
                 } catch (e) {
-                  logger3.error(ctx, "Failed to decode base64 image in tool result", e, {
+                  logger4.error(ctx, "Failed to decode base64 image in tool result", e, {
                     partIndex,
                     expContentIndex
                   });
@@ -243,7 +243,7 @@ function resizeImagesInMessage(_a19) {
                 if (wasResized) {
                   expContentHasUpdates = true;
                   messageHasUpdates = true;
-                  logger3.info(ctx, "Resized image in tool result", {
+                  logger4.info(ctx, "Resized image in tool result", {
                     partIndex,
                     expContentIndex,
                     originalSize: imageBuffer.length,
@@ -257,10 +257,10 @@ function resizeImagesInMessage(_a19) {
                 } else {
                   checkedImageParts.set(expPart, expPart.data);
                 }
-              } catch (error41) {
+              } catch (error42) {
                 expContentHasUpdates = true;
                 messageHasUpdates = true;
-                logger3.error(ctx, "Failed to resize image in tool result, dropping it", error41, {
+                logger4.error(ctx, "Failed to resize image in tool result, dropping it", error42, {
                   partIndex,
                   expContentIndex,
                   originalSize: imageBuffer.length
@@ -285,7 +285,7 @@ function resizeImagesInMessage(_a19) {
   });
 }
 function resizeImagesInMessages(_a19) {
-  return __awaiter20(this, arguments, void 0, function* ({ ctx, messages: messages2, resizeOptions, checkedImageParts }) {
+  return __awaiter25(this, arguments, void 0, function* ({ ctx, messages: messages2, resizeOptions, checkedImageParts }) {
     return asyncMapValues(messages2, (message) => resizeImagesInMessage({ ctx, message, resizeOptions, checkedImageParts }), { max: IMAGE_RESIZE_CONCURRENCY });
   });
 }
@@ -298,7 +298,7 @@ var ImageResizingPromptExecutor = class extends BaseMiddleware {
   // Wrap the stream method to resize images before streaming
   stream(ctx, invocationId, tools, options2) {
     const messages2 = this.innerExecutor.getMessages();
-    const processAndStream = () => __awaiter20(this, void 0, void 0, function* () {
+    const processAndStream = () => __awaiter25(this, void 0, void 0, function* () {
       const processedMessages = yield resizeImagesInMessages({
         ctx,
         messages: messages2,
@@ -317,23 +317,23 @@ var ImageResizingPromptExecutor = class extends BaseMiddleware {
           yield __await6(yield* __asyncDelegator3(__asyncValues6(result.fullStream)));
         });
       })(),
-      response: (() => __awaiter20(this, void 0, void 0, function* () {
+      response: (() => __awaiter25(this, void 0, void 0, function* () {
         const result = yield processingPromise;
         return yield result.response;
       }))(),
-      usage: (() => __awaiter20(this, void 0, void 0, function* () {
+      usage: (() => __awaiter25(this, void 0, void 0, function* () {
         const result = yield processingPromise;
         return yield result.usage;
       }))(),
-      providerMetadata: (() => __awaiter20(this, void 0, void 0, function* () {
+      providerMetadata: (() => __awaiter25(this, void 0, void 0, function* () {
         const result = yield processingPromise;
         return yield result.providerMetadata;
       }))(),
-      extendedUsage: (() => __awaiter20(this, void 0, void 0, function* () {
+      extendedUsage: (() => __awaiter25(this, void 0, void 0, function* () {
         const result = yield processingPromise;
         return yield result.extendedUsage;
       }))(),
-      invocationId: (() => __awaiter20(this, void 0, void 0, function* () {
+      invocationId: (() => __awaiter25(this, void 0, void 0, function* () {
         const result = yield processingPromise;
         return yield result.invocationId;
       }))()

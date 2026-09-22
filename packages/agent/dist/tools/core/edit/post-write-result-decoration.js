@@ -1,13 +1,13 @@
-var logger79 = createLogger("@anysphere/agent");
+var logger80 = createLogger("@anysphere/agent");
 var eagerStoreConflictBarrier = createCounter("agent.store.eager_barrier", {
   description: "Eager same-result agent-store conflict barrier outcomes."
 });
 function recordEagerBarrierOutcome(ctx, outcome) {
   try {
     eagerStoreConflictBarrier.increment(ctx, 1, { outcome });
-  } catch (error41) {
-    logger79.warn(ctx, "Eager store conflict barrier telemetry failed", {
-      error: error41
+  } catch (error42) {
+    logger80.warn(ctx, "Eager store conflict barrier telemetry failed", {
+      error: error42
     });
   }
 }
@@ -92,9 +92,9 @@ async function decorateWithEagerStoreConflict(args) {
   const noteDeferredForAbortRescue = async () => {
     try {
       await conflictNoticeNoteDeferredEagerWrittenPaths(executor, ctx, [path31], conflictNoticeArgs);
-    } catch (error41) {
-      logger79.warn(ctx, "Eager store conflict deferred-path note failed", {
-        error: error41
+    } catch (error42) {
+      logger80.warn(ctx, "Eager store conflict deferred-path note failed", {
+        error: error42
       });
     }
   };
@@ -108,8 +108,8 @@ async function decorateWithEagerStoreConflict(args) {
     }
     try {
       await conflictNoticeRelease(executor, ctx, eventIds, conflictNoticeArgs);
-    } catch (error41) {
-      logger79.warn(ctx, "Eager store conflict release failed", { error: error41 });
+    } catch (error42) {
+      logger80.warn(ctx, "Eager store conflict release failed", { error: error42 });
     }
   };
   const ackIfStillLive = async (eventIds) => {
@@ -121,8 +121,8 @@ async function decorateWithEagerStoreConflict(args) {
     try {
       await conflictNoticeAck(executor, ctx, eventIds, conflictNoticeArgs);
       return "acked";
-    } catch (error41) {
-      logger79.warn(ctx, "Eager store conflict ack failed", { error: error41 });
+    } catch (error42) {
+      logger80.warn(ctx, "Eager store conflict ack failed", { error: error42 });
       await releaseEagerEvents(eventIds);
       return "ack-failed";
     }
@@ -141,9 +141,9 @@ async function decorateWithEagerStoreConflict(args) {
       peeked = await conflictNoticePeek(executor, ctx, {
         ...conversationId !== void 0 ? { conversationId } : {}
       });
-    } catch (error41) {
-      logger79.warn(ctx, "Eager store conflict journal-drain fallback failed", {
-        error: error41
+    } catch (error42) {
+      logger80.warn(ctx, "Eager store conflict journal-drain fallback failed", {
+        error: error42
       });
       recordPrior();
       return resultForModel;
@@ -254,15 +254,15 @@ ${reminder}`;
       }
       recordEagerBarrierOutcome(ctx, "attributed");
       try {
-        logger79.info(ctx, "Local-sync eager conflict barrier attributed", {
+        logger80.info(ctx, "Local-sync eager conflict barrier attributed", {
           eventCount: eventIds.length
         });
       } catch {
       }
       reportWriteBarrier("synced");
       return decorated;
-    } catch (error41) {
-      logger79.warn(ctx, "Eager store conflict barrier failed", { error: error41 });
+    } catch (error42) {
+      logger80.warn(ctx, "Eager store conflict barrier failed", { error: error42 });
       reportWriteBarrier("error");
       return await fallbackJournalDrain("error");
     }

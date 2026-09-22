@@ -83,8 +83,8 @@ async function sweepStaleUploadParts(partsDir) {
     try {
       const stat28 = await import_node_fs51.promises.stat(partPath);
       if (stat28.mtimeMs < cutoff) await import_node_fs51.promises.rm(partPath, { force: true });
-    } catch (error41) {
-      if (findSystemErrno(error41) !== "ENOENT") throw error41;
+    } catch (error42) {
+      if (findSystemErrno(error42) !== "ENOENT") throw error42;
     }
   }
 }
@@ -155,8 +155,8 @@ async function readHostAttachmentVideoBytes(filePath) {
     const stat28 = await import_node_fs51.promises.stat(resolved);
     if (!stat28.isFile() || stat28.size > VIDEO_BYTE_LIMIT) return null;
     return new Uint8Array(await import_node_fs51.promises.readFile(resolved));
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
 }
@@ -201,17 +201,17 @@ async function readHostAttachmentChunk(agentDir, filePath, offset, length, video
       return await withVideoPlaybackSource(source, readResolved, reportRenditionFailure);
     }
     return await readResolved(source);
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
 }
 async function readImageSize(buffer) {
   try {
     return readImageFileDimensions(buffer);
-  } catch (error41) {
-    if (error41 instanceof RangeError) return null;
-    throw error41;
+  } catch (error42) {
+    if (error42 instanceof RangeError) return null;
+    throw error42;
   }
 }
 async function readImageAttachment(filePath, reportRenditionFailure = () => {
@@ -234,8 +234,8 @@ async function readImageAttachment(filePath, reportRenditionFailure = () => {
       },
       reportRenditionFailure
     );
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
 }
@@ -245,8 +245,8 @@ async function readImageDimensions(filePath) {
   try {
     const data = await import_node_fs51.promises.readFile(resolved);
     return await readImageSize(data);
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
 }
@@ -272,8 +272,8 @@ async function readVideoDimensions(filePath) {
     } finally {
       await handle.close();
     }
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
 }
@@ -310,16 +310,16 @@ async function resolvePreviewBoxFile(filePath) {
   let real;
   try {
     real = await import_node_fs51.promises.realpath(lexical);
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
   if (resolvedBoxFilePath(real) == null) return null;
   try {
     const stat28 = await import_node_fs51.promises.stat(real);
     if (!stat28.isFile()) return null;
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
   return real;
@@ -340,8 +340,8 @@ async function readAttachmentText(agentDir, filePath) {
       truncated: bytes > ATTACHMENT_TEXT_PREVIEW_BYTE_CAP,
       bytes
     };
-  } catch (error41) {
-    reportFallbackUnlessAbsent("attachments_service", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
 }

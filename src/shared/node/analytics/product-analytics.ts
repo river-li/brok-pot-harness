@@ -45,8 +45,8 @@ var SandProductAnalytics = class {
                 backendUrl: this.options.environment.backend.backendUrl
               });
               return token.length > 0 ? token : null;
-            } catch (error41) {
-              this.options.onAccessTokenFailure?.(error41);
+            } catch (error42) {
+              this.options.onAccessTokenFailure?.(error42);
               return null;
             }
           }
@@ -65,9 +65,9 @@ var SandProductAnalytics = class {
       if (this.debug) {
         console.info("[sand-analytics] enabled");
       }
-    } catch (error41) {
+    } catch (error42) {
       if (this.debug) {
-        console.info("[sand-analytics] failed to enable; disabling", error41);
+        console.info("[sand-analytics] failed to enable; disabling", error42);
       }
       this.disable();
     }

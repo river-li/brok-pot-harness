@@ -9,7 +9,7 @@ function createUserFormVaultService(deps) {
   const { newEntryId } = deps;
   const nowMs2 = deps.nowMs ?? Date.now;
   let mutationChain = Promise.resolve();
-  const errorText = (error41) => error41 instanceof Error ? error41.message : String(error41);
+  const errorText = (error42) => error42 instanceof Error ? error42.message : String(error42);
   const listRemote = async () => dropEntriesOfUnknownKind(await deps.remote.list());
   const syncDiffById = async (before, next) => {
     const nextIds = new Set(next.map((entry) => entry.id));
@@ -22,7 +22,7 @@ function createUserFormVaultService(deps) {
       for (const entry of next) {
         if (beforeById.get(entry.id) !== entry) await deps.remote.upsert(entry);
       }
-    } catch (error41) {
+    } catch (error42) {
       for (const entry of evicted) {
         await deps.remote.upsert(entry).catch((restoreError) => {
           deps.log(
@@ -30,15 +30,15 @@ function createUserFormVaultService(deps) {
           );
         });
       }
-      throw error41;
+      throw error42;
     }
   };
   const enqueueMutation = (mutation) => {
     const run = mutationChain.then(mutation);
     mutationChain = run.then(
       () => void 0,
-      (error41) => {
-        deps.log(`[sand:user-form-vault] queued vault mutation failed: ${errorText(error41)}`);
+      (error42) => {
+        deps.log(`[sand:user-form-vault] queued vault mutation failed: ${errorText(error42)}`);
       }
     );
     return run;
@@ -68,8 +68,8 @@ function createUserFormVaultService(deps) {
         await syncDiffById(entries, next);
         entries = next;
       }
-    }).then(void 0, (error41) => {
-      deps.log(`[sand:user-form-vault] post-fill save failed: ${errorText(error41)}`);
+    }).then(void 0, (error42) => {
+      deps.log(`[sand:user-form-vault] post-fill save failed: ${errorText(error42)}`);
     })
   };
   return { api, dispose: () => {

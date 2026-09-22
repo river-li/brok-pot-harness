@@ -132,12 +132,12 @@ var CompletionRevivals = class {
         subagentAgentId: completion.subagentAgentId,
         isQuietOrigin: completion.quietOrigin != null
       });
-    } catch (error41) {
+    } catch (error42) {
       this.tm.telemetry.reportAgentError({
         source: "background_followup",
         conversationId: parentAgentId,
-        error: classifyAgentError(error41),
-        detail: sandErrorDetail(error41)
+        error: classifyAgentError(error42),
+        detail: sandErrorDetail(error42)
       });
       this.tm.telemetry.reportSubagentRevival({
         parentAgentId,
@@ -147,7 +147,7 @@ var CompletionRevivals = class {
         subagentAgentId: completion.subagentAgentId,
         reason: "error"
       });
-      throw error41;
+      throw error42;
     }
   }
   async reviveForSubagentCompletions(agentId) {
@@ -191,13 +191,13 @@ var CompletionRevivals = class {
     let session;
     try {
       session = await this.tm.sessions.resolveBackgroundSession(agentId);
-    } catch (error41) {
-      if (!isAgentAbsent(error41)) {
+    } catch (error42) {
+      if (!isAgentAbsent(error42)) {
         this.tm.telemetry.reportAgentError({
           source: "background_followup",
           conversationId: agentId,
-          error: classifyAgentError(error41),
-          detail: sandErrorDetail(error41)
+          error: classifyAgentError(error42),
+          detail: sandErrorDetail(error42)
         });
       }
       return { outcome: "dropped", reason: "session_unavailable" };
@@ -216,7 +216,6 @@ var CompletionRevivals = class {
           const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(session);
           const runResult = await runner.run(
             buildSubagentRevivalPrompt(completions, {
-              gates: runner.gates,
               canvasCursorAgentIds: runner.canvasCursorAgentIds
             }),
             {
@@ -240,19 +239,19 @@ var CompletionRevivals = class {
               sentMessageCount: runResult.sentMessageCount
             };
           }
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "background_followup",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "background_task_follow_up_failed", description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: "background_task_follow_up_failed", description: description9 })
           });
           result = { outcome: "dropped", reason: "error" };
         } finally {
@@ -352,19 +351,19 @@ var CompletionRevivals = class {
             });
           }
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "background_followup",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "background_command_follow_up_failed", description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: "background_command_follow_up_failed", description: description9 })
           });
           reportOutcome("dropped", { reason: "error" });
         } finally {

@@ -58,7 +58,7 @@ function turnEndedOnSilentToolCalls(rawMessages) {
   let tailIndex = messages2.length - 1;
   while (tailIndex >= 0) {
     const message = messages2[tailIndex];
-    if (message === void 0 || message.role === "tool" || isBlankAssistantMessage(message) || isInjectedReminderMessage(message)) {
+    if (message === void 0 || message.role === "tool" || isBlankAssistantMessage(message) || isInjectedReminderMessage2(message)) {
       tailIndex--;
       continue;
     }
@@ -71,7 +71,7 @@ function turnEndedOnSilentToolCalls(rawMessages) {
   let boundary = -1;
   for (let index = tailIndex - 1; index >= 0; index--) {
     const message = messages2[index];
-    if (message === void 0 || isInjectedReminderMessage(message)) continue;
+    if (message === void 0 || isInjectedReminderMessage2(message)) continue;
     if (message.role === "user" || message.role === "system") {
       boundary = index;
       break;

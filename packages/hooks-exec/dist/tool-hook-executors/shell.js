@@ -1,5 +1,5 @@
 init_shell_exec_pb();
-var __awaiter39 = function(thisArg, _arguments, P2, generator) {
+var __awaiter41 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -111,7 +111,7 @@ var shellHooksConfig = {
    * Run beforeShellExecution hook before execution.
    * Throws HookDeniedError if hook denies execution (generic-hooks handles the rest).
    */
-  runPreExecutionHooks: (params) => __awaiter39(void 0, void 0, void 0, function* () {
+  runPreExecutionHooks: (params) => __awaiter41(void 0, void 0, void 0, function* () {
     const { args, baseHookRequest, hookExecutor } = params;
     const cwd = args.workingDirectory || "";
     setShellHookApprovalRequirement(args, yield runBeforeShellExecutionPermissionHook({
@@ -126,7 +126,7 @@ var shellHooksConfig = {
   /**
    * Run afterShellExecution hook after execution.
    */
-  runPostExecutionHooks: (params) => __awaiter39(void 0, void 0, void 0, function* () {
+  runPostExecutionHooks: (params) => __awaiter41(void 0, void 0, void 0, function* () {
     const { args, result, baseHookRequest, hookExecutor, executionDurationMs } = params;
     const output = getOutputFromResult(result);
     yield hookExecutor.executeHookForStep(HookStep.afterShellExecution, Object.assign(Object.assign({}, baseHookRequest), { command: args.command, output, duration: executionDurationMs, sandbox: isSandboxed(args.requestedSandboxPolicy) }));

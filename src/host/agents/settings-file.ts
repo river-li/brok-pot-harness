@@ -7,8 +7,8 @@ function readRawSettings(path31) {
   let raw;
   try {
     raw = (0, import_node_fs73.readFileSync)(path31, "utf8");
-  } catch (error41) {
-    reportFallbackUnlessAbsent("settings_file", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("settings_file", error42);
     return {};
   }
   return parseRawSandSettings(raw);

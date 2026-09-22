@@ -52,8 +52,8 @@ function createSandUserFullNameResolver(options2) {
       if (currentPrincipal() !== principal) return;
       resolvedPrincipal = principal;
       resolvedFullName = fullName;
-    } catch (error41) {
-      options2.log(`user full-name resolve failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      options2.log(`user full-name resolve failed: ${errorLogTag(error42)}`);
     }
   };
   return {

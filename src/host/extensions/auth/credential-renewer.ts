@@ -135,13 +135,13 @@ var SandInferenceCredentialRenewer = class {
           this.options.pollIntervalMs ?? MAX_REFRESH_INTERVAL_MS
         )
       };
-    } catch (error41) {
+    } catch (error42) {
       if (this.abort.signal.aborted) return null;
       this.consecutiveFailures += 1;
       this.reportResult(
         "failed",
         Date.now() - cycleStartedAtMs,
-        redactRenewalErrorForReport(error41 instanceof Error ? error41.message : String(error41))
+        redactRenewalErrorForReport(error42 instanceof Error ? error42.message : String(error42))
       );
       return { kind: "backoff", attempt: this.consecutiveFailures };
     }
@@ -159,9 +159,9 @@ var SandInferenceCredentialRenewer = class {
       if (this.options.allowImmediateRenewalDuringBackoff) this.interruptWait = interrupt;
       try {
         await scheduled.elapsed;
-      } catch (error41) {
+      } catch (error42) {
         if (signal.aborted || interrupted) return;
-        console.warn(`[sand-credential-renewer] backoff wait failed (${errorLogTag(error41)})`);
+        console.warn(`[sand-credential-renewer] backoff wait failed (${errorLogTag(error42)})`);
       } finally {
         if (this.interruptWait === interrupt) this.interruptWait = void 0;
       }

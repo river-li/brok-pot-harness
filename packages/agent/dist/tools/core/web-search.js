@@ -1,7 +1,7 @@
-init_dist3();
+init_dist4();
 init_agent_pb();
 init_web_search_tool_pb();
-init_dist2();
+init_dist3();
 init_zod();
 var __addDisposableResource36 = function(env, value, async) {
   if (value !== null && value !== void 0) {
@@ -57,9 +57,9 @@ var __disposeResources36 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 function createWebSearchToolCall(webSearchTool) {
   return new ToolCall({
@@ -76,12 +76,12 @@ function normalizeArgs(args) {
   };
 }
 var API_REQUEST_FAILED_STATUS_REGEX = /\bAPI request failed:\s*(\d{3})\b/i;
-function getErrorMessage3(error41) {
-  if (error41 instanceof Error) {
-    return error41.message;
+function getErrorMessage3(error42) {
+  if (error42 instanceof Error) {
+    return error42.message;
   }
-  if (typeof error41 === "object" && error41 !== null && "message" in error41 && typeof error41.message === "string") {
-    return error41.message;
+  if (typeof error42 === "object" && error42 !== null && "message" in error42 && typeof error42.message === "string") {
+    return error42.message;
   }
   return void 0;
 }
@@ -93,13 +93,13 @@ function parseProviderStatusFromMessage(message) {
   const parsed2 = Number(match2[1]);
   return Number.isFinite(parsed2) ? parsed2 : void 0;
 }
-function classifyWebSearchProviderError(error41) {
+function classifyWebSearchProviderError(error42) {
   const candidateMessages = [];
-  const directMessage = getErrorMessage3(error41);
+  const directMessage = getErrorMessage3(error42);
   if (directMessage !== void 0) {
     candidateMessages.push(directMessage);
   }
-  const cause = typeof error41 === "object" && error41 !== null && "cause" in error41 ? error41.cause : void 0;
+  const cause = typeof error42 === "object" && error42 !== null && "cause" in error42 ? error42.cause : void 0;
   const causeMessage = getErrorMessage3(cause);
   if (causeMessage !== void 0) {
     candidateMessages.push(causeMessage);
@@ -320,8 +320,8 @@ var createWebSearchTool = (webSearchService, promptVersion, options2) => {
           let serviceResult;
           try {
             serviceResult = await webSearchService(innerCtx, normalized);
-          } catch (error41) {
-            throw classifyWebSearchProviderError(error41) ?? error41;
+          } catch (error42) {
+            throw classifyWebSearchProviderError(error42) ?? error42;
           }
           const references = await buildReferencesFromServiceResult(innerCtx, serviceResult, meta.toolCallId, diskWriteCtx);
           return new WebSearchResult({
@@ -417,18 +417,18 @@ ${options2.descriptionSuffix}` : base;
     parameters: parametersSchema29,
     execute: withSafeParsedArgs(parametersSchema29, execute, createWebSearchToolCall(new WebSearchToolCall())),
     render: render2,
-    serializeError: (error41) => {
-      if (error41 instanceof ToolCallRejectedError) {
+    serializeError: (error42) => {
+      if (error42 instanceof ToolCallRejectedError) {
         return createWebSearchToolCall(new WebSearchToolCall({
           result: new WebSearchResult({
             result: {
               case: "rejected",
-              value: new WebSearchRejected({ reason: error41.message })
+              value: new WebSearchRejected({ reason: error42.message })
             }
           })
         }));
       }
-      const errorMessage6 = error41 instanceof ToolCallError ? error41.clientVisibleErrorMessage : "An error occurred while searching the web";
+      const errorMessage6 = error42 instanceof ToolCallError ? error42.clientVisibleErrorMessage : "An error occurred while searching the web";
       return createWebSearchToolCall(new WebSearchToolCall({
         result: new WebSearchResult({
           result: {

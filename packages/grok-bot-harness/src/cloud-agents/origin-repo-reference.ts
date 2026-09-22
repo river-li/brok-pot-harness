@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 function repoReferenceAsUrl(raw) {
   const trimmed = raw?.trim() ?? "";
   if (trimmed.length === 0) return null;

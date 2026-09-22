@@ -3,8 +3,6 @@ var MEMORY_PROFILE_FILENAME = "profile.md";
 var MEMORY_LOG_DIRNAME = "log";
 var USER_MEMORY_DIRNAME = "user-memory";
 var USER_MEMORY_SHARD_PARENT_DIRNAME = "by-agent";
-var PROJECTS_DIRNAME = "projects";
-var PROJECT_FILENAME = "project.md";
 function getAgentMemoryDir(agentDir) {
   return (0, import_node_path119.join)(agentDir, MEMORY_DIRNAME);
 }
@@ -16,18 +14,6 @@ function getUserMemoryShardsDir(sandRoot) {
 }
 function getUserMemoryShardDir(sandRoot, agentId) {
   return (0, import_node_path119.join)(getUserMemoryShardsDir(sandRoot), agentId);
-}
-function getProjectsRootDir(sandRoot) {
-  return (0, import_node_path119.join)(sandRoot, PROJECTS_DIRNAME);
-}
-function getProjectDir(sandRoot, slug) {
-  return (0, import_node_path119.join)(getProjectsRootDir(sandRoot), slug);
-}
-function getProjectMemoryShardsDir(sandRoot, slug) {
-  return (0, import_node_path119.join)(getProjectDir(sandRoot, slug), MEMORY_DIRNAME, USER_MEMORY_SHARD_PARENT_DIRNAME);
-}
-function getProjectMemoryShardDir(sandRoot, slug, agentId) {
-  return (0, import_node_path119.join)(getProjectMemoryShardsDir(sandRoot, slug), agentId);
 }
 var MEMORY_PROFILE_HEADER = [
   "# About the user",

@@ -1,3 +1,5 @@
+var PREVIEW_SOURCE_MAX_CHARS = 4096;
+var PREVIEW_LINE_MAX_CHARS = 200;
 var INLINE_TAG_PATTERN = /<(\/?)([a-zA-Z]+)\s*(\/)?>/g;
 var BACKTICK_RUN_PATTERN = /`+/g;
 var FENCE_LINE_PATTERN = /^[ \t]*(`{3,}|~{3,})/;
@@ -175,4 +177,24 @@ function markdownToPreviewText(input) {
     flattenMathSpans(stripInlineFormattingTags(input))
   );
   return flattened.replace(/\s+/g, " ").trim();
+}
+function isHighSurrogate2(codeUnit) {
+  return codeUnit >= 55296 && codeUnit <= 56319;
+}
+function flatCopy(slice) {
+  return slice.split("").join("");
+}
+function boundedPrefix(text2, maxChars) {
+  const end = isHighSurrogate2(text2.charCodeAt(maxChars - 1)) ? maxChars - 1 : maxChars;
+  return flatCopy(text2.slice(0, end));
+}
+function boundedPreviewSource(text2) {
+  return text2.length <= PREVIEW_SOURCE_MAX_CHARS ? text2 : boundedPrefix(text2, PREVIEW_SOURCE_MAX_CHARS);
+}
+function capPreviewLine(line) {
+  if (line.length <= PREVIEW_LINE_MAX_CHARS) return line;
+  return `${boundedPrefix(line, PREVIEW_LINE_MAX_CHARS - 1).trimEnd()}\u2026`;
+}
+function markdownToPreviewLine(markdown) {
+  return capPreviewLine(markdownToPreviewText(boundedPreviewSource(markdown)));
 }

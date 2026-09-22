@@ -2,21 +2,21 @@ var CONFLICT_JOURNAL_ROTATE_BYTES = 4 * 1024 * 1024;
 var MAX_DEDUP_ENTRIES = 65536;
 var EVENT_SCHEMA_VERSION = 1;
 var PRIVATE_FILE_MODE = 384;
-function sanitizeConflictJournalWarnError(error41) {
-  if (!(error41 instanceof Error)) {
-    return typeof error41 === "string" ? "<redacted>" : error41;
+function sanitizeConflictJournalWarnError(error42) {
+  if (!(error42 instanceof Error)) {
+    return typeof error42 === "string" ? "<redacted>" : error42;
   }
-  const code = error41.code;
-  const redacted = new Error(code !== void 0 ? `${error41.name}: ${code}` : error41.name);
-  redacted.name = error41.name;
+  const code = error42.code;
+  const redacted = new Error(code !== void 0 ? `${error42.name}: ${code}` : error42.name);
+  redacted.name = error42.name;
   if (code !== void 0) {
     redacted.code = code;
   }
   return redacted;
 }
 function wrapConflictJournalWarn(warn2) {
-  return (message, error41) => {
-    warn2(message, sanitizeConflictJournalWarnError(error41));
+  return (message, error42) => {
+    warn2(message, sanitizeConflictJournalWarnError(error42));
   };
 }
 var O_NOFOLLOW_FLAG = fs3.constants.O_NOFOLLOW;
@@ -169,12 +169,7 @@ function dedupKeyForEvent(event) {
 }
 function pendingConflictEmitKey(emit) {
   var _a19;
-  return [
-    emit.storeId,
-    emit.kind,
-    emit.originalRelPath,
-    (_a19 = emit.conflictRelPath) !== null && _a19 !== void 0 ? _a19 : ""
-  ].join("\0");
+  return [emit.storeId, emit.kind, emit.originalRelPath, (_a19 = emit.conflictRelPath) !== null && _a19 !== void 0 ? _a19 : ""].join("\0");
 }
 var PENDING_EMIT_KINDS = /* @__PURE__ */ new Set([
   "write_conflict",
@@ -251,9 +246,9 @@ function openNoFollowSync(targetPath, options2) {
   let existing;
   try {
     existing = fs3.lstatSync(targetPath);
-  } catch (error41) {
-    if (!isEnoent(error41)) {
-      throw error41;
+  } catch (error42) {
+    if (!isEnoent(error42)) {
+      throw error42;
     }
   }
   if ((existing === null || existing === void 0 ? void 0 : existing.isSymbolicLink()) === true) {
@@ -284,9 +279,9 @@ var ConflictJournal = class {
     this.emittedConflicts = /* @__PURE__ */ new Set();
     this.path = journalPath;
     this.epoch = (0, import_node_crypto.randomUUID)();
-    this.warn = wrapConflictJournalWarn((_a19 = options2 === null || options2 === void 0 ? void 0 : options2.warn) !== null && _a19 !== void 0 ? _a19 : ((message, error41) => {
+    this.warn = wrapConflictJournalWarn((_a19 = options2 === null || options2 === void 0 ? void 0 : options2.warn) !== null && _a19 !== void 0 ? _a19 : ((message, error42) => {
       void message;
-      void error41;
+      void error42;
     }));
     this.hydrateDedupFromDisk();
   }
@@ -315,9 +310,9 @@ var ConflictJournal = class {
     let body;
     try {
       body = readFileNoFollowSync(this.path);
-    } catch (error41) {
-      if (!isEnoent(error41)) {
-        this.warn("conflict journal dedup hydrate failed", error41);
+    } catch (error42) {
+      if (!isEnoent(error42)) {
+        this.warn("conflict journal dedup hydrate failed", error42);
         return void 0;
       }
       return [];
@@ -395,9 +390,9 @@ var ConflictJournal = class {
     try {
       this.appendEmit(emit, key);
       return true;
-    } catch (error41) {
+    } catch (error42) {
       this.appendFailures += 1;
-      this.warn(`conflict journal append failed; sync round still succeeded (failures=${this.appendFailures})`, error41);
+      this.warn(`conflict journal append failed; sync round still succeeded (failures=${this.appendFailures})`, error42);
       return false;
     }
   }
@@ -446,11 +441,11 @@ var ConflictJournal = class {
     let size;
     try {
       size = fs3.statSync(this.path).size;
-    } catch (error41) {
-      if (typeof error41 === "object" && error41 !== null && "code" in error41 && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (typeof error42 === "object" && error42 !== null && "code" in error42 && error42.code === "ENOENT") {
         return;
       }
-      this.warn("conflict journal metadata failed; skipping rotate", error41);
+      this.warn("conflict journal metadata failed; skipping rotate", error42);
       return;
     }
     if (size < CONFLICT_JOURNAL_ROTATE_BYTES) {
@@ -458,8 +453,8 @@ var ConflictJournal = class {
     }
     try {
       this.forceGapRewriteLocked();
-    } catch (error41) {
-      this.warn("conflict journal rotate rewrite failed; appending onto oversized journal", error41);
+    } catch (error42) {
+      this.warn("conflict journal rotate rewrite failed; appending onto oversized journal", error42);
     }
   }
   forceGapRewriteLocked() {
@@ -476,9 +471,9 @@ var ConflictJournal = class {
     const tmp = `${this.path}.rotate-tmp`;
     try {
       fs3.unlinkSync(tmp);
-    } catch (error41) {
-      if (!isEnoent(error41)) {
-        throw error41;
+    } catch (error42) {
+      if (!isEnoent(error42)) {
+        throw error42;
       }
     }
     const fd = openNoFollowSync(tmp, {
@@ -520,9 +515,9 @@ var PendingConflictJournal = class {
     this.dirty = false;
     this.loadFailed = false;
     this.path = pendingPath;
-    this.warn = wrapConflictJournalWarn((_a19 = options2 === null || options2 === void 0 ? void 0 : options2.warn) !== null && _a19 !== void 0 ? _a19 : ((message, error41) => {
+    this.warn = wrapConflictJournalWarn((_a19 = options2 === null || options2 === void 0 ? void 0 : options2.warn) !== null && _a19 !== void 0 ? _a19 : ((message, error42) => {
       void message;
-      void error41;
+      void error42;
     }));
     const loaded = this.tryReadDisk();
     if (loaded !== void 0) {
@@ -632,11 +627,11 @@ var PendingConflictJournal = class {
     let body;
     try {
       body = readFileNoFollowSync(this.path);
-    } catch (error41) {
-      if (isEnoent(error41)) {
+    } catch (error42) {
+      if (isEnoent(error42)) {
         return { pending: [], keys: /* @__PURE__ */ new Set() };
       }
-      this.warn("conflict pending journal load failed", error41);
+      this.warn("conflict pending journal load failed", error42);
       return void 0;
     }
     const pending = [];
@@ -704,9 +699,9 @@ var PendingConflictJournal = class {
       const body = pending.map(pendingEmitToJsonLine).join("");
       this.atomicRewrite(body);
       return true;
-    } catch (error41) {
+    } catch (error42) {
       this.persistFailures += 1;
-      this.warn(`conflict pending journal persist failed (failures=${this.persistFailures})`, error41);
+      this.warn(`conflict pending journal persist failed (failures=${this.persistFailures})`, error42);
       return false;
     }
   }
@@ -714,9 +709,9 @@ var PendingConflictJournal = class {
     const tmp = `${this.path}.pending-tmp`;
     try {
       fs3.unlinkSync(tmp);
-    } catch (error41) {
-      if (!isEnoent(error41)) {
-        throw error41;
+    } catch (error42) {
+      if (!isEnoent(error42)) {
+        throw error42;
       }
     }
     const fd = openNoFollowSync(tmp, {
@@ -742,14 +737,14 @@ var PendingConflictJournal = class {
   removeFile() {
     try {
       fs3.unlinkSync(this.path);
-    } catch (error41) {
-      if (!isEnoent(error41)) {
-        throw error41;
+    } catch (error42) {
+      if (!isEnoent(error42)) {
+        throw error42;
       }
     }
   }
 };
 var PENDING_FILE_MODE = 384;
-function isEnoent(error41) {
-  return typeof error41 === "object" && error41 !== null && "code" in error41 && error41.code === "ENOENT";
+function isEnoent(error42) {
+  return typeof error42 === "object" && error42 !== null && "code" in error42 && error42.code === "ENOENT";
 }

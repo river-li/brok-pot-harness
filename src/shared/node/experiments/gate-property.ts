@@ -20,10 +20,10 @@ var MutableGateProperty = class {
     for (const listener of this.listeners) {
       try {
         listener(value);
-      } catch (error41) {
+      } catch (error42) {
         reportExperimentsDiagnostic({
           kind: "gate_listener_failed",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
     }

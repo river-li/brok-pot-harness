@@ -2,7 +2,7 @@ var import_promises45 = require("node:fs/promises");
 var import_node_http4 = __toESM(require("node:http"), 1);
 var import_node_net4 = __toESM(require("node:net"), 1);
 var import_node_path93 = require("node:path");
-init_dist();
+init_dist2();
 init_scheduling();
 init_errors();
 init_system_errno();
@@ -81,8 +81,8 @@ function sendInvalid(args) {
 async function unlinkIfPresent(socketPath) {
   try {
     await (0, import_promises45.unlink)(socketPath);
-  } catch (error41) {
-    if (findSystemErrno(error41) !== "ENOENT") throw error41;
+  } catch (error42) {
+    if (findSystemErrno(error42) !== "ENOENT") throw error42;
   }
 }
 function waitForSocketClose(socket) {
@@ -94,8 +94,8 @@ function waitForSocketClose(socket) {
     socket.once("close", () => resolve29());
   });
 }
-function destroyOnDeadline(error41, socket) {
-  if (error41 instanceof DeadlineExceededError) {
+function destroyOnDeadline(error42, socket) {
+  if (error42 instanceof DeadlineExceededError) {
     socket.destroy();
   }
 }
@@ -299,8 +299,8 @@ async function startGrokBotBoxIdentitySocketServer(options2) {
       } finally {
         releaseMintPermit();
       }
-    })().catch((error41) => {
-      options2.log(`identity socket request failed: ${errorLogTag(error41)}`);
+    })().catch((error42) => {
+      options2.log(`identity socket request failed: ${errorLogTag(error42)}`);
       if (!res.headersSent) {
         sendError({ res, status: 500, code: "host_error" });
       } else {
@@ -316,7 +316,7 @@ async function startGrokBotBoxIdentitySocketServer(options2) {
       socket.once("close", () => {
         rejectedSockets.delete(socket);
       });
-      void saturatedWriteDeadline.run(() => waitForSocketClose(socket)).catch((error41) => destroyOnDeadline(error41, socket));
+      void saturatedWriteDeadline.run(() => waitForSocketClose(socket)).catch((error42) => destroyOnDeadline(error42, socket));
       socket.end(SATURATED_RESPONSE);
       return;
     }
@@ -324,10 +324,10 @@ async function startGrokBotBoxIdentitySocketServer(options2) {
     socket.once("close", () => {
       liveSockets.delete(socket);
     });
-    void connectionServeDeadline.run(() => waitForSocketClose(socket)).catch((error41) => destroyOnDeadline(error41, socket));
+    void connectionServeDeadline.run(() => waitForSocketClose(socket)).catch((error42) => destroyOnDeadline(error42, socket));
     const headerReadCancel = new AbortController();
     headerReadCancels.set(socket, headerReadCancel);
-    void headerReadDeadline.run(() => waitForSocketClose(socket), headerReadCancel.signal).catch((error41) => destroyOnDeadline(error41, socket));
+    void headerReadDeadline.run(() => waitForSocketClose(socket), headerReadCancel.signal).catch((error42) => destroyOnDeadline(error42, socket));
     httpServer.emit("connection", socket);
   });
   const closeListener = async () => {
@@ -346,14 +346,14 @@ async function startGrokBotBoxIdentitySocketServer(options2) {
   });
   try {
     await (0, import_promises45.chmod)(socketPath, 384);
-  } catch (error41) {
+  } catch (error42) {
     await closeListener();
     await unlinkIfPresent(socketPath);
-    throw error41;
+    throw error42;
   }
   for (const server of [acceptor, httpServer]) {
-    server.on("error", (error41) => {
-      options2.log(`identity socket listener error: ${errorLogTag(error41)}`);
+    server.on("error", (error42) => {
+      options2.log(`identity socket listener error: ${errorLogTag(error42)}`);
     });
   }
   return {

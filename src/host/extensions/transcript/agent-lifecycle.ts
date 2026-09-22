@@ -96,13 +96,13 @@ var AgentLifecycle = class {
     let session;
     try {
       session = this.tm.sessions.activeSession?.id === agentId ? this.tm.sessions.activeSession : await this.tm.sessions.resolveBackgroundSession(agentId);
-    } catch (error41) {
-      if (!isAgentAbsent(error41)) {
+    } catch (error42) {
+      if (!isAgentAbsent(error42)) {
         this.tm.telemetry.reportAgentError({
           source: "onboarding_kickstart",
           conversationId: agentId,
-          error: classifyAgentError(error41),
-          detail: sandErrorDetail(error41)
+          error: classifyAgentError(error42),
+          detail: sandErrorDetail(error42)
         });
       }
       return false;
@@ -167,19 +167,19 @@ var AgentLifecycle = class {
             });
           }
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "onboarding_kickstart",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "introduction_failed", description: description10 }),
+            ...description9,
+            ...hostTrayTitle({ kind: "introduction_failed", description: description9 }),
             dedupeKey: introductionFailedTrayKey(session.id)
           });
         } finally {
@@ -199,13 +199,13 @@ var AgentLifecycle = class {
     let session;
     try {
       session = this.tm.sessions.activeSession?.id === agentId ? this.tm.sessions.activeSession : await this.tm.sessions.resolveBackgroundSession(agentId);
-    } catch (error41) {
-      if (!isAgentAbsent(error41)) {
+    } catch (error42) {
+      if (!isAgentAbsent(error42)) {
         this.tm.telemetry.reportAgentError({
           source: "disk_saver_reaudit",
           conversationId: agentId,
-          error: classifyAgentError(error41),
-          detail: sandErrorDetail(error41)
+          error: classifyAgentError(error42),
+          detail: sandErrorDetail(error42)
         });
       }
       return false;
@@ -235,13 +235,13 @@ var AgentLifecycle = class {
             await this.tm.automationRuntime.ensureHiddenTurnReply(runner);
           }
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "disk_saver_reaudit",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
         } finally {
           this.tm.runLifecycle.endSessionRun(session);
@@ -308,9 +308,9 @@ var AgentLifecycle = class {
         throw new SandAgentLifecycleError("minted agent could not be summarized");
       }
       return { session, entries, agent };
-    } catch (error41) {
+    } catch (error42) {
       await this.discardMintedSession(session, newId2);
-      throw error41;
+      throw error42;
     }
   }
   async discardMintedSession(session, newId2) {
@@ -321,9 +321,9 @@ var AgentLifecycle = class {
       } catch {
       }
     }
-    await this.tm.sessionStore.deleteSession(newId2).catch((error41) => {
+    await this.tm.sessionStore.deleteSession(newId2).catch((error42) => {
       this.tm.hostLog(
-        `[sand] minted-session discard left ${newId2} on disk: ${errorLogTag(error41)}`,
+        `[sand] minted-session discard left ${newId2} on disk: ${errorLogTag(error42)}`,
         "error"
       );
     });
@@ -336,11 +336,11 @@ var AgentLifecycle = class {
     if (ids.size === 0) return { transcript: getTranscript(), stats: emptyDeleteStats() };
     try {
       return await this.runDeleteAgents(ids);
-    } catch (error41) {
+    } catch (error42) {
       for (const id of ids) {
         if (this.tm.sessionStore.agentDirExists(id)) this.tm.sessions.deletedAgentIds.delete(id);
       }
-      throw error41;
+      throw error42;
     }
   }
   async runDeleteAgents(ids) {
@@ -414,9 +414,9 @@ var AgentLifecycle = class {
       let nextSession;
       try {
         nextSession = this.tm.sessions.liveSessions.get(successorId) ?? await this.tm.sessions.openSessionOnce(successorId);
-      } catch (error41) {
+      } catch (error42) {
         this.tm.hostLog(
-          `[sand] skipping unopenable agent ${successorId} after delete: ${errorLogTag(error41)}`,
+          `[sand] skipping unopenable agent ${successorId} after delete: ${errorLogTag(error42)}`,
           "error"
         );
         continue;

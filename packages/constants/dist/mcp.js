@@ -259,6 +259,8 @@ var init_mcp = __esm({
     MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL = "grokbot://mcp/oauth/callback";
     MCP_OAUTH_LOOPBACK_CALLBACK_URL = "http://localhost:8787/callback";
     MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME = "127.0.0.1";
-    MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL = mcpOAuthLoopbackRedirectUrl({ loopbackIpv4: true });
+    MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL = mcpOAuthLoopbackRedirectUrl({
+      loopbackIpv4: true
+    });
   }
 });

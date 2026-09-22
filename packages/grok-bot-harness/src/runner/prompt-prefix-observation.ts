@@ -95,7 +95,7 @@ function shaOfMessage(message) {
 function toolDefinitionForHash(tool) {
   const cached2 = toolShaByIdentity.get(tool);
   if (cached2 !== void 0) return cached2;
-  const description10 = "description" in tool ? tool.description : void 0;
+  const description9 = "description" in tool ? tool.description : void 0;
   const parameters2 = "parameters" in tool ? jsonSchemaOf(tool.parameters) : void 0;
   const customToolFormat = "customToolFormat" in tool ? tool.customToolFormat : void 0;
   const providerTool = "parameters" in tool ? void 0 : tool;
@@ -103,13 +103,13 @@ function toolDefinitionForHash(tool) {
   try {
     serialized = JSON.stringify({
       name: tool.name,
-      description: description10,
+      description: description9,
       parameters: parameters2,
       customToolFormat,
       providerTool
     });
   } catch {
-    serialized = JSON.stringify({ name: tool.name, description: description10 });
+    serialized = JSON.stringify({ name: tool.name, description: description9 });
   }
   const sha = sha256HexOfText(serialized);
   toolShaByIdentity.set(tool, sha);
@@ -127,15 +127,15 @@ function dynamicToolNamesOf(message) {
   dynamicToolsByIdentity.set(message, names3);
   return names3;
 }
-function hashPromptPrefix(request3) {
-  const first = request3.messages[0];
+function hashPromptPrefix(request5) {
+  const first = request5.messages[0];
   const system = first?.role === "system" ? first : void 0;
   const systemSha = system === void 0 ? sha256HexOfText("") : shaOfMessage(system);
-  const firstUser = request3.messages.find((message) => message.role === "user");
+  const firstUser = request5.messages.find((message) => message.role === "user");
   const userInfo = firstUser !== void 0 && messageText(firstUser).includes(USER_INFO_MARKER) ? firstUser : void 0;
   const userInfoSha = userInfo === void 0 ? void 0 : shaOfMessage(userInfo);
   const dynamicTools = userInfo === void 0 ? void 0 : dynamicToolNamesOf(userInfo);
-  const tools = (request3.tools ?? []).map((tool) => ({
+  const tools = (request5.tools ?? []).map((tool) => ({
     name: tool.name,
     sha: toolDefinitionForHash(tool)
   }));
@@ -170,13 +170,13 @@ var prefixDynamicToolChanged = createCounter("grok_bot.turn.prefix_dynamic_tool_
 });
 var SUMMARIZATION_INFERENCE_REASON = "agent-summarization";
 var AUXILIARY_INFERENCE_REASON = "auxiliary";
-function isSummarizationRequest(request3) {
-  const providerOptions = request3.messages.at(-1)?.providerOptions;
+function isSummarizationRequest(request5) {
+  const providerOptions = request5.messages.at(-1)?.providerOptions;
   if (!isUnknownRecord(providerOptions) || !isUnknownRecord(providerOptions.cursor)) return false;
   return providerOptions.cursor.inferenceReason === SUMMARIZATION_INFERENCE_REASON;
 }
-function isAuxiliaryRequest(request3) {
-  return (request3.tools?.length ?? 0) === 0;
+function isAuxiliaryRequest(request5) {
+  return (request5.tools?.length ?? 0) === 0;
 }
 function toCallIndexLabel(callIndex) {
   return callIndex === 1 ? "first" : "later";
@@ -193,6 +193,9 @@ function createPromptPrefixObservation(deps) {
   let callIndex = 0;
   let previousMain;
   let latestMain;
+  let firstMainUsage;
+  let lastMainUsage;
+  let lastMainCompactionEpoch = 0;
   let loadedPersisted = false;
   function loadPersisted() {
     if (loadedPersisted) return;
@@ -204,7 +207,7 @@ function createPromptPrefixObservation(deps) {
     return latestMain === void 0 ? void 0 : { prefix: latestMain, fromPreviousTurn: false };
   }
   let settlePending;
-  function observe(request3) {
+  function observe(request5) {
     settlePending?.();
     loadPersisted();
     const sections = deps.sectionShas();
@@ -212,8 +215,8 @@ function createPromptPrefixObservation(deps) {
     const requestSource = deps.requestSource();
     const recordedAtMs = now();
     const harness = deps.harness;
-    const summarization = isSummarizationRequest(request3);
-    const auxiliary = !summarization && isAuxiliaryRequest(request3);
+    const summarization = isSummarizationRequest(request5);
+    const auxiliary = !summarization && isAuxiliaryRequest(request5);
     let settled;
     const settle = () => {
       if (settled !== void 0) return settled;
@@ -222,7 +225,7 @@ function createPromptPrefixObservation(deps) {
         settled = { kind: "auxiliary", inferenceReason: AUXILIARY_INFERENCE_REASON };
         return settled;
       }
-      const { dynamicTools, ...hashed } = hashPromptPrefix(request3);
+      const { dynamicTools, ...hashed } = hashPromptPrefix(request5);
       const inferenceReason = summarization ? SUMMARIZATION_INFERENCE_REASON : "agent";
       const isMain = inferenceReason === "agent";
       if (isMain) callIndex += 1;
@@ -295,6 +298,16 @@ function createPromptPrefixObservation(deps) {
         const call = settle();
         const inputTokens = usage.inputTokens;
         const cacheReadTokens = usage.cacheReadTokens;
+        if (call.kind === "prefix" && call.inferenceReason === "agent") {
+          const mainUsage = {
+            inputTokens,
+            cacheReadTokens,
+            cacheWriteTokens: usage.cacheWriteTokens
+          };
+          firstMainUsage ??= mainUsage;
+          lastMainUsage = mainUsage;
+          lastMainCompactionEpoch = call.current.compactionEpoch;
+        }
         if (harness !== void 0 && inputTokens > 0) {
           prefixHitRate.histogram(deps.ctx, Math.min(1, cacheReadTokens / inputTokens), {
             harness,
@@ -331,11 +344,17 @@ function createPromptPrefixObservation(deps) {
   }
   return {
     streamObserver: {
-      onRequestStart: (_ctx, request3) => observe(request3)
+      onRequestStart: (_ctx, request5) => observe(request5)
     },
     finalize: () => {
       settlePending?.();
       if (latestMain !== void 0) deps.snapshots?.setPromptPrefixSnapshot(latestMain);
+    },
+    parentTurnPrompt: (modelId) => firstMainUsage === void 0 || lastMainUsage === void 0 ? void 0 : {
+      modelId,
+      firstCall: firstMainUsage,
+      lastCall: lastMainUsage,
+      lastCallCompactionEpoch: lastMainCompactionEpoch
     }
   };
 }

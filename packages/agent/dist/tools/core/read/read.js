@@ -52,11 +52,11 @@ var __disposeResources32 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger84 = createLogger("tools/read");
+var logger85 = createLogger("tools/read");
 var pdfTextCache = /* @__PURE__ */ new Map();
 var MAX_CONVERSATION_ID_LENGTH2 = 200;
 var READ_LINE_NUMBER_INTERVAL = 10;
@@ -137,12 +137,7 @@ var readSuccessCounter = createCounter("agent.tools.read.success", {
   description: "Successful file read operations by requested scope",
   // explicit_desc mirrors the read_file_explicit_offset_limit_description
   // experiment arm so Datadog can split Control vs Test without a warehouse join.
-  labelNames: [
-    "read_scope",
-    "repeat_status",
-    "exceeded_limit",
-    "explicit_desc"
-  ]
+  labelNames: ["read_scope", "repeat_status", "exceeded_limit", "explicit_desc"]
 });
 var readReturnedLinesHistogram = createHistogram("agent.tools.read.returned_lines", {
   description: "Number of lines returned by successful file reads",
@@ -317,7 +312,7 @@ function computeReadSlice(totalLines, offset, limit) {
 function createOffsetSchema(options2 = {}) {
   const baseNumberSchema = options2.requireInt ? external_exports.number().int() : external_exports.number();
   const allowNegative = options2.includeNegativeOffset ?? false;
-  const description10 = allowNegative ? "The line number to start reading from. Positive values are 1-indexed from the start of the file. Negative values count backwards from the end (e.g. -1 is the last line). Only provide if the file is too large to read at once." : "The line number to start reading from. Only provide if the file is too large to read at once.";
+  const description9 = allowNegative ? "The line number to start reading from. Positive values are 1-indexed from the start of the file. Negative values count backwards from the end (e.g. -1 is the last line). Only provide if the file is too large to read at once." : "The line number to start reading from. Only provide if the file is too large to read at once.";
   const errorMessage6 = allowNegative ? "Offset must be >= 1 or <= -1." : "Offset must be >= 1.";
   return lenientNumber(baseNumberSchema).optional().refine((val) => {
     if (val === void 0 || val === 0 || val >= 1)
@@ -331,7 +326,7 @@ function createOffsetSchema(options2 = {}) {
     if (val === 0)
       return 1;
     return val;
-  }).describe(description10);
+  }).describe(description9);
 }
 function createLimitSchema(options2 = {}) {
   const baseNumberSchema = options2.requireInt ? external_exports.number().int() : external_exports.number();
@@ -441,7 +436,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
         const safeConversationId = conversationId !== void 0 ? getSafeConversationId3(conversationId) : void 0;
         const targetLeaf = stripKnownTranscriptExtension(getLastPathComponent(path31));
         const wasOwnTranscript = conversationId !== void 0 ? targetLeaf === conversationId || targetLeaf === safeConversationId : void 0;
-        logger84.info(spanCtxt.ctx, "Model accessed agent transcript path", {
+        logger85.info(spanCtxt.ctx, "Model accessed agent transcript path", {
           tool: "read",
           toolCallId: meta.toolCallId,
           wasOwnTranscript
@@ -471,7 +466,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
       }
       const includeLineNumbers = rawArgs.include_line_numbers;
       if (enableLineNumbersArg) {
-        logger84.info(spanCtxt.ctx, "nal.read.include_line_numbers_arg", {
+        logger85.info(spanCtxt.ctx, "nal.read.include_line_numbers_arg", {
           modelPassedArg: includeLineNumbers !== void 0,
           includeLineNumbersValue: includeLineNumbers ?? false,
           path: path31,
@@ -479,7 +474,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
         });
       }
       if (offset !== void 0 || limit !== void 0) {
-        logger84.info(spanCtxt.ctx, "Read called with offset or limit", {
+        logger85.info(spanCtxt.ctx, "Read called with offset or limit", {
           offset,
           limit,
           path: path31,
@@ -526,7 +521,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
               const cachedPdfText = pdfTextCache.get(resolvedPath);
               if (cachedPdfText !== void 0) {
                 pdfContentOverride = cachedPdfText;
-                logger84.info(ctx, "Using cached PDF text content", {
+                logger85.info(ctx, "Using cached PDF text content", {
                   path: resolvedPath,
                   toolCallId: meta.toolCallId
                 });
@@ -534,7 +529,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
                 const extractedPdfText = await extractPdfText(binaryData);
                 pdfContentOverride = normalizeLineEndings2(extractedPdfText);
                 pdfTextCache.set(resolvedPath, pdfContentOverride);
-                logger84.info(ctx, "Converted PDF binary to text content", {
+                logger85.info(ctx, "Converted PDF binary to text content", {
                   path: resolvedPath,
                   toolCallId: meta.toolCallId
                 });
@@ -543,7 +538,10 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
             if (pdfContentOverride === void 0) {
               const imageMimeType = detectImageMimeType(binaryData, resolvedPath);
               if (imageMimeType !== void 0) {
-                const bounded = await boundInlineImageForModel(ctx, binaryData, { mimeType: imageMimeType, source: "read" });
+                const bounded = await boundInlineImageForModel(ctx, binaryData, {
+                  mimeType: imageMimeType,
+                  source: "read"
+                });
                 if (bounded.data !== binaryData) {
                   binaryData = bounded.data;
                   execSuccess.outputBlobId = void 0;
@@ -799,9 +797,9 @@ ${body}`;
       return void 0;
     }
     const skillBlocks = skills.map((skill) => {
-      const description11 = skill.description || "(No description)";
+      const description10 = skill.description || "(No description)";
       return `- ${skill.fullPath}
-${description11}`;
+${description10}`;
     });
     const lines2 = [
       "The following skills may be relevant to the files you just read:",
@@ -1059,7 +1057,7 @@ PDF Support:
     }
   }
   const name17 = useMinimalHarness ? "ViewImage" : getToolName5(promptVersion);
-  const description10 = options2?.toolDescription ?? getDescription4({
+  const description9 = options2?.toolDescription ?? getDescription4({
     version: promptVersion,
     includeLineNumbersInDescription: !enableLineNumbersArg,
     useMinimalHarnessDescription: useMinimalHarness,
@@ -1077,12 +1075,12 @@ PDF Support:
   const parametersSchema29 = extendMachineIdParameter(baseParametersSchema3, options2?.machineIds, options2?.machineIdParameterSchema);
   return createZodAgentTool("READ", {
     name: name17,
-    descriptionGenerator: (_props) => description10,
+    descriptionGenerator: (_props) => description9,
     parameters: parametersSchema29,
     execute: withSafeParsedArgs(parametersSchema29, execute, createReadToolCall(new ReadToolCall())),
     render: render2,
-    serializeError: (error41) => {
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+    serializeError: (error42) => {
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createReadToolCall(new ReadToolCall({
         result: new ReadToolResult({
           result: {

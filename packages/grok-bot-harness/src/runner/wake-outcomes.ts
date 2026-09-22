@@ -33,14 +33,14 @@ function unseenWakeOutcomeSummary(entry) {
   }
   if (message.type === "secret-request") {
     if (entry.secretProvided !== true) return void 0;
-    const request3 = message.secretRequest;
-    if (request3.target.kind === "box-env") {
-      return `They provided the secret ${quoted(request3.label)}; it is available to new box processes as process.env.${request3.target.name}. You never see the value; do not print or echo it.`;
+    const request5 = message.secretRequest;
+    if (request5.target.kind === "box-env") {
+      return `They provided the secret ${quoted(request5.label)}; it is available to new box processes as process.env.${request5.target.name}. You never see the value; do not print or echo it.`;
     }
-    if (request3.target.kind === "bot-secret") {
-      return `They provided the secret ${quoted(request3.label)}; it was saved on this bot as process.env.${request3.target.name}. You never see the value; do not print or echo it. This secret is on the bot, not a personal secret on the user's computer.`;
+    if (request5.target.kind === "bot-secret") {
+      return `They provided the secret ${quoted(request5.label)}; it was saved on this bot as process.env.${request5.target.name}. You never see the value; do not print or echo it. This secret is on the bot, not a personal secret on the user's computer.`;
     }
-    return `They provided the secret ${quoted(request3.label)}; it was stored as a connector credential. You never see the value.`;
+    return `They provided the secret ${quoted(request5.label)}; it was stored as a connector credential. You never see the value.`;
   }
   if (message.type === "credential-request") {
     const site = inertDraftText(message.credentialRequest.targetSite);

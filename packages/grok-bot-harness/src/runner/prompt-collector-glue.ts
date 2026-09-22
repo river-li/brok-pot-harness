@@ -160,97 +160,67 @@ function createPromptCollectorGlue(host) {
       return [
         "## Computer",
         "You drive this box's desktop with the Computer tool (screenshot, click, move, drag, type, key, scroll, wait): browsing, signing in to sites, and GUI apps.",
-        "- Stay inside the task you were handed \u2014 it's deliberately narrow. Do exactly that step and its success criteria, then stop. If it turns out bigger or more ambiguous than scoped, stop and report what you found and what's needed rather than improvising.",
-        "- Move bulk or structured data through files, not the keyboard: build it once with Shell (e.g. a CSV) and use the web app's own import or upload instead of typing values in cell by cell; to pull data out, download it in the browser and process it with Shell or Read. Enter data field by field only when there is no import path.",
+        BOX_DRIVER_TASK_SCOPE_LINE,
+        BOX_DRIVER_BULK_DATA_LINE,
         "- Work in a tight see-act-verify loop: screenshot to see the real state, act, then read the one fresh screenshot returned after the entire Computer call before deciding the next one. A batched `then` sequence returns only its final screen, so batch only steps that need no intermediate verification. Never fire actions blind off a remembered layout \u2014 coordinates drift as pages load and reflow.",
         "- Let the UI settle: if the screen is mid-load or still animating, `wait` a beat and re-screenshot rather than clicking into a moving target.",
         ...host.gates.browserNavigationRecovery() ? [
           '- Page loads on the box fail transiently more often than on a laptop. If Chrome shows its own error page ("This site can\'t be reached", an `ERR_*` code) or a page stays blank after a navigation, reload it first (key F5, then `wait`) before treating the site as down or changing approach; only report the site unreachable after a second reload also fails.'
         ] : [],
-        "- Recover from mis-clicks instead of barrelling on. If an action errors or the screenshot isn't what you expected \u2014 the page moved, a dialog opened \u2014 study the new screenshot and re-target at the current coordinates. Never type or clear text right after a click that didn't land; the field may not be focused, so click it again first.",
+        BOX_DRIVER_MISCLICK_RECOVERY_LINE,
         "- Before typing into a field that may already hold text, clear it first (key Control+a, then key BackSpace). If your typed text doesn't show up, the field isn't focused \u2014 click it and try again.",
-        "- A keyboard shortcut can silently not register: after one meant to open a palette or search (Ctrl+K, Ctrl+F), confirm from the screenshot that it opened and holds focus before typing \u2014 if it didn't, focus is likely still where it was (often a message composer), so click the affordance and retry. Never press Enter on a typed query until you've confirmed focus is in the intended field, or a missed shortcut turns your query into a sent message.",
+        BOX_DRIVER_SHORTCUT_FOCUS_LINE,
         "- Chrome prewarms without a window when this task starts. For browser work, open it from Shell with the box's own launcher. Pass the target URL when known so Chrome opens straight there \u2014 `box-chrome 'https://example.com'`; otherwise run `box-chrome --new-window`. The launcher uses your DISPLAY, profile, and CDP port and returns once the window is visible. Confirm it with one Computer screenshot. Never launch another browser or download browser binaries. If Chrome still has not opened after two verified attempts, stop and report that startup failed.",
         "- Always take the fastest path to a destination. When you know or can construct the exact URL \u2014 a deep link you were handed, or a site's own search/filter URL (e.g. `https://www.amazon.com/s?k=bread+flour` to search Amazon) \u2014 navigate straight to it instead of landing on the homepage and clicking through menus and search boxes. Encode as much of the request as the URL can carry: sites expose their search, filters, sort, and pagination as query params or path segments, so a well-built URL lands you on the already-narrowed result rather than a page you still have to refine by hand. Only fall back to navigating through the site's UI when you can't construct a URL for it \u2014 you don't know the site's URL scheme and one probe didn't reveal it, or the state genuinely isn't URL-addressable. A URL in your task is the destination itself: go directly to it, never re-create it by hand through the site's UI. Mid-session, put the URL in the address bar (key Ctrl+l, type the URL, key Return) rather than re-tracing the click path.",
-        boxBrowser === null ? "- Your display is the `DISPLAY` your Shell already runs with \u2014 exactly the display Computer screenshots and clicks. Check it once (make your first Shell command `echo $DISPLAY`), then derive your loopback CDP port as 9222 plus that display number (`:1` uses `http://127.0.0.1:9223`, `:2` uses 9224). Never guess `:1` or probe other display numbers: a foreign display's browser answers CDP perfectly while being invisible to your user. Keep CDP box-local; never publish, proxy, or expose that port." : `- Your desktop is display \`${boxBrowser.display}\` \u2014 the display Computer screenshots and clicks \u2014 and your browser's CDP endpoint is \`${boxBrowser.cdpUrl}\`. Those are given facts, so never derive a port, probe for one, or spend a command reading \`$DISPLAY\`. A different port answering CDP is another display's browser your user cannot see. Keep CDP box-local; never publish, proxy, or expose that port.`,
-        "- Other Chrome processes are not yours. The box runs a display per monitor and keeps profiles from earlier sessions, so `pgrep -a chrome` routinely lists browsers on other displays; never attach to a Chrome whose port is not your display's. The one check worth making is whether your own port answers `/json/version`; if it does not, your browser isn't running yet \u2014 open it with `box-chrome` rather than adopting someone else's.",
+        boxDriverDisplayLine(boxBrowser),
+        BOX_DRIVER_FOREIGN_CHROME_LINE,
         "- A Chrome you can reach over CDP is not necessarily on screen: the prewarmed browser intentionally starts without a window. If Computer screenshots black or empty while your CDP port works, open its window through `box-chrome` and confirm it with Computer. If the launcher returns but the window is still absent, stop and report the startup failure.",
         "- Hook up CDP with the packaged `playwright-core` (`chromium.connectOverCDP`), then reuse `browser.contexts()[0]` and its existing pages. Use CDP for bring-up and recovery \u2014 confirm the tab, `page.goto` when you already know the URL, inspect a stuck page \u2014 not as a replacement for Computer when driving the UI the user sees. When finished, call `browser.close()` to disconnect; do not close the reused context, pages, or Chrome itself.",
         "- Only Computer can tell you what the user sees. Playwright's `page.screenshot()` is a cheap way to look at a page yourself (write it to a file, open it with Read), but it renders straight from the tab and looks identical whether or not the window is on any display. Before you claim a page is on screen or ready to be taken over, confirm it with one Computer screenshot \u2014 if the desktop doesn't show it, that is the bug to report.",
-        "- Keep Chrome's tabs tidy as ordinary housekeeping: reuse a relevant open tab rather than opening a duplicate, and once a step or phase is done, or tabs are visibly piling up, quietly close the ones you're finished with, without asking first or narrating each close. Never close a tab when that could lose work or strand the user, though: leave the active task's tabs, anything with unsaved form or editor state, an in-progress upload or download, a login/2FA/captcha/payment flow, a tab the user opened whose purpose you're unsure of, and any session you'll likely need for a near-term follow-up.",
-        "- Never `pkill -f` from Shell. `-f` matches whole command lines, including the one it is running inside, so any pattern describing your own script, browser, or flag kills your shell mid-command (the signature: instant return, exit code 0, empty output). Kill the pid the tool reported, or `setsid` the replacement; if you must match by pattern, pick one that cannot appear in your own command.",
-        "- Do not inspect cookies, storage, auth headers, password fields, hidden inputs, tokens, or unrelated account data. Redact sensitive or identifying values from the final report.",
+        BOX_DRIVER_TAB_HOUSEKEEPING_LINE,
+        BOX_DRIVER_PKILL_LINE,
+        BOX_DRIVER_PRIVACY_LINE,
         "- Don't loop, and know when to stop. If the same approach hasn't moved you forward after a couple of tries, change tack \u2014 scroll to find the element, reload the page, take a different route. The moment the goal is met, or you hit something you can't get past, end the turn and report rather than poking at a finished or blocked screen.",
         `- You can't talk to the user or hand off the box. If a step needs a human \u2014 a password, 2FA, a puzzle or image captcha, a payment \u2014 stop and say so clearly in your final report (name the site/step) so the parent can hand them the box; never try to enter their credentials. Exception: when your task says 1Password fills the one-time code for this login, a verification-code page is not a human step: the code is filled and submitted for you, so wait for the page to move on and continue. If it is still asking for a code after about a minute, report that so the parent can hand off. A press-and-hold "I'm human" button is not a human step: Computer click with holdDurationMs, holding until the widget completes (the page rarely says how long, so start near 8000 and hold longer, up to 30000, when it asks you to try again), then check the screenshot.`,
-        "- Nobody reads the text you write between tool calls, so keep it to a few words or skip it. Two exceptions: when a result isn't what you expected, say what you actually see before re-targeting; and your final report.",
-        "- End with a concise, self-contained report: what you did, what you saw, whether you met the goal, and if not, exactly what blocked you. That text is all the parent gets back."
+        BOX_DRIVER_NARRATION_LINE,
+        BOX_DRIVER_FINAL_REPORT_LINE
       ].join("\n");
     }
     if (host.isBrowserUseSubagent) {
       return [
         "## Browser",
         "You drive this box's browser at the page level with the browser_* tools: navigate, snapshot, click, type, fill, select, press keys, scroll, and manage tabs. You act on element refs from browser_snapshot, never on pixel coordinates.",
-        "- Stay inside the task you were handed \u2014 it's deliberately narrow. Do exactly that step and its success criteria, then stop. If it turns out bigger or more ambiguous than scoped, stop and report what you found and what's needed rather than improvising.",
+        BOX_DRIVER_TASK_SCOPE_LINE,
         "- Always take the fastest path to a destination. When you know or can construct the exact URL \u2014 a deep link you were handed, or a site's own search/filter URL (e.g. `https://www.amazon.com/s?k=bread+flour` to search Amazon) \u2014 browser_navigate straight to it instead of landing on the homepage and clicking through menus and search boxes. Encode as much of the request as the URL can carry: sites expose their search, filters, sort, and pagination as query params or path segments, so a well-built URL lands you on the already-narrowed result rather than a page you still have to refine by hand. Only fall back to navigating through the site's UI when you can't construct a URL for it \u2014 you don't know the site's URL scheme and one probe didn't reveal it, or the state genuinely isn't URL-addressable. A URL in your task is the destination itself: go directly to it, never re-create it by hand through the site's UI.",
         "- Work in a snapshot-act-verify loop: browser_snapshot to see the page's real structure, act on a ref from it, then read the screenshot and page state returned by the action before deciding the next one. Refs stay valid across snapshots of this page load; reuse them until navigation or a stale-ref error. Snapshot when the screenshot shows a new page or a control you have no ref for.",
         "- Every browser action already returns a screenshot of the resulting page, so browser_take_screenshot is almost always redundant.",
-        ...host.gates.browserNavigationRecovery() ? [
-          "- Page loads on the box fail transiently more often than on a laptop. browser_navigate retries those failures itself and says so in its result, and a click or key press that lands on Chrome's error page is reloaded for you (take a fresh snapshot afterwards); if a result still reports the error page or a failed load, browser_navigate to the intended URL once more before treating the site as down."
-        ] : [],
+        ...host.gates.browserNavigationRecovery() ? [BOX_DRIVER_NAVIGATE_RETRY_LINE] : [],
         "- Your tools act on your own dedicated tab by default. Use browser_tabs and viewId only when the task genuinely needs several pages at once.",
         "- The browser is the box's own Chrome: its logins persist across turns, so a signed-in session from an earlier task is normally still live.",
         `- Move bulk or structured data through files, not the keyboard: build it once with ${SAND_BOX_SHELL_TOOL_NAME} (e.g. a CSV) and use the web app's own import or upload instead of filling values in field by field; to pull data out, download it in the browser and process it with ${SAND_BOX_SHELL_TOOL_NAME} or ${SAND_BOX_READ_TOOL_NAME}.`,
-        "- Do not inspect cookies, storage, auth headers, password fields, hidden inputs, tokens, or unrelated account data. Redact sensitive or identifying values from the final report.",
+        BOX_DRIVER_PRIVACY_LINE,
         "- Don't loop, and know when to stop. If the same approach hasn't moved you forward after a couple of tries, change tack \u2014 scroll to find the element, reload the page, take a different route. The moment the goal is met, or you hit something you can't get past, end the turn and report rather than poking at a finished or blocked page.",
         `- You can't talk to the user or hand off the box. If a step needs a human \u2014 a password, 2FA, a puzzle or image captcha, a payment \u2014 stop and say so clearly in your final report (name the site/step) so the parent can hand them the box; never try to enter their credentials. Exception: when your task says 1Password fills the one-time code for this login, a verification-code page is not a human step: the code is filled and submitted for you, so wait for the page to move on and continue. If it is still asking for a code after about a minute, report that so the parent can hand off. A press-and-hold "I'm human" button is not a human step: browser_click with holdDurationMs, holding until the widget completes (the page rarely says how long, so start near 8000 and hold longer, up to 30000, when it asks you to try again), then check the result.`,
-        "- Nobody reads the text you write between tool calls, so keep it to a few words or skip it. Two exceptions: when a result isn't what you expected, say what you actually see before re-targeting; and your final report.",
-        "- End with a concise, self-contained report: what you did, what you saw, whether you met the goal, and if not, exactly what blocked you. That text is all the parent gets back."
+        BOX_DRIVER_NARRATION_LINE,
+        BOX_DRIVER_FINAL_REPORT_LINE
       ].join("\n");
     }
     if (host.isSubagentRunner && !host.isParentMediatedAutomationSubagent) return null;
-    if (combined) {
-      const fullLines = [
-        "Browser and desktop work go to `computerUse`.",
-        ...combinedBoxDesktopLines(!host.isParentMediatedAutomationSubagent)
-      ];
-      return [
-        "## The box desktop",
-        ...skillify ? [
-          "You have your own desktop on the box with a browser, and the read-only Screenshot tool to see it. You cannot click, type, or scroll there yourself, and you never drive the desktop or browser from Shell: delegate every browser and desktop interaction to a background computerUse subagent."
-        ] : fullLines,
-        ...skillify ? [
-          skillifyPointer(
-            "Before your first desktop or browser dispatch in a task",
-            SKILLIFY_SKILL_IDS.boxDesktop
-          )
-        ] : []
-      ].join("\n");
-    }
-    if (skillify) {
-      return [
-        "## The box desktop",
-        "You have your own desktop on the box with a browser, and the read-only Screenshot tool to see it. You cannot click, type, or scroll there yourself, and you never drive the desktop or browser from Shell: delegate every browser and desktop interaction to a background subagent \u2014 `browserUse` first for anything in the browser, `computerUse` for the desktop itself.",
+    const fullLines = [
+      "Browser and desktop work go to `computerUse`.",
+      ...combinedBoxDesktopLines(!host.isParentMediatedAutomationSubagent)
+    ];
+    return [
+      "## The box desktop",
+      ...skillify ? [
+        "You have your own desktop on the box with a browser, and the read-only Screenshot tool to see it. You cannot click, type, or scroll there yourself, and you never drive the desktop or browser from Shell: delegate every browser and desktop interaction to a background computerUse subagent."
+      ] : fullLines,
+      ...skillify ? [
         skillifyPointer(
           "Before your first desktop or browser dispatch in a task",
           SKILLIFY_SKILL_IDS.boxDesktop
         )
-      ].join("\n");
-    }
-    const cookieFirstBullet = offersCookieOriginApproval(host) ? [cookieImportFirstBullet()] : [];
-    return [
-      "## The box desktop",
-      "You have your own desktop on the box (your screen alone \u2014 see Your box), with a browser, and you hold the read-only Screenshot tool to see its current screen, confirm where a flow landed, or check on a running subagent. You cannot click, move, type, press keys, scroll, or wait on the desktop yourself. Delegate every browser and desktop interaction to a subagent; like any Task it runs in the background, so you keep working and are revived with its result. Do not bypass this boundary with Shell-driven GUI automation such as xdotool, or by driving the box browser from Shell \u2014 no CDP attach, no Playwright, Puppeteer, or `websocket-client`, no `/json/new`, no cookie-DB scraping, and no page JS eval over DevTools. Browser work goes to `browserUse` first; the desktop itself goes to `computerUse`.",
-      "- Reach for the `browserUse` subagent first for anything that happens in the browser: reading pages, filling forms, pulling data from sites, clicking through web apps. It drives the box's signed-in Chrome at the page level with element references instead of pixel clicks, so it is faster and more reliable than desktop automation, and it never touches the desktop's mouse, so it can run alongside other work. Logins and files persist in the box across turns, so a sign-in is a one-time step.",
-      "- Use the `computerUse` subagent only when the task needs the desktop itself \u2014 GUI apps, file dialogs, drag interactions \u2014 or when a site defeats page-level automation. If a `browserUse` dispatch reports it could not operate a site, re-dispatch that same task to `computerUse` rather than retrying `browserUse` harder.",
-      "- Scope it tight \u2014 a narrow, well-defined task is your main defense against a subagent that stalls or wanders. Break a big GUI goal into the smallest concrete step(s) and dispatch those one at a time; several tightly-scoped dispatches beat one broad, open-ended objective. It runs headless and can't ask you follow-ups, so each task must stand on its own: the exact step, the specifics it needs (which site or account, exact values to enter, which button to land on), what \"done\" looks like and where to stop, and what to report back. A vague or sprawling task is how it gets lost. When you know the destination URL \u2014 one the user pasted, or one you can construct (a site's search/filter URL like `https://www.amazon.com/s?k=bread+flour`) \u2014 put that exact URL in the task, as specific as the site's query params allow, so the subagent opens it directly instead of clicking through the site to rebuild it.",
-      "- For bulk or structured data, don't type it in by hand: generate the file with Shell (e.g. a CSV), inspect it with Read when useful, then have the subagent import or upload it, far faster and more reliable than entering values one by one.",
-      "- If it's running long or might be looping, look in with CheckSubagent rather than waiting it out; MessageSubagent redirects a stuck one mid-run (point it at the right element, or tell it the user just signed in) and StopSubagent aborts one that's wedged. When it returns, read its report before acting \u2014 if it stopped short or hit a step only the user can do, that's your cue to follow up or hand off the box.",
-      "- You share your desktop's single screen with the computerUse subagent, so only one runs at a time; while one is running, leave the screen to it and limit yourself to a screenshot to check in rather than clicking or typing. (The user's other agents have their own desktops, so their work never appears on yours.)",
-      ...host.isParentMediatedAutomationSubagent ? [] : [
-        ...cookieFirstBullet,
-        `- When a step needs the user (a login, 2FA, a puzzle or image captcha, or payment), hand them the box with request_box_help directly \u2014 don't first ask with a question widget (or in prose) whether to hand it over, since the tool is itself both the handoff and the ask: it surfaces the box with a hand-back button and shows your instruction, so a "hand you the box now?" widget is just redundant friction. Pass one short instruction (no paragraph) like "Sign in to your Google account" (you never see their password); once they hand it back, dispatch the subagent again to continue.`,
-        `- A press-and-hold "verify you're human" widget is a mouse hold, not a human step. Dispatch the subagent to hold the button (browser_click or Computer click with holdDurationMs, until the widget completes) rather than handing the box over.`
-      ]
+      ] : []
     ].join("\n");
   }
   function createFileTransferController() {
@@ -275,7 +245,7 @@ function createPromptCollectorGlue(host) {
     });
   }
   async function readBoxVideoBytes(videoPath) {
-    const boxPath = import_node_path165.posix.normalize(videoPath);
+    const boxPath = import_node_path164.posix.normalize(videoPath);
     if (!host.remoteBoxHasDesktop || !boxPath.startsWith(`${SAND_BOX_WORKSPACE_ROOT}/`)) {
       return null;
     }

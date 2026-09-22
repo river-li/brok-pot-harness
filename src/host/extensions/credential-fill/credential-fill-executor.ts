@@ -174,37 +174,37 @@ var CredentialFillExecutor = class {
   }
   options;
   queue = new PromiseQueue({ max: 1 });
-  async fill(request3) {
-    return await this.queue.enqueue(() => this.execute(request3));
+  async fill(request5) {
+    return await this.queue.enqueue(() => this.execute(request5));
   }
   async verifyCleared(target) {
     return await this.queue.enqueue(() => this.verify(target));
   }
-  async execute(request3) {
+  async execute(request5) {
     const formContext = {};
-    const result = await this.executeSteps(request3, formContext);
+    const result = await this.executeSteps(request5, formContext);
     return formContext.inForm === void 0 ? result : { ...result, inForm: formContext.inForm };
   }
-  async executeSteps(request3, formContext) {
-    const expectedOrigin = normalizedOrigin(request3.expectedOrigin);
-    const expectedPathname = normalizedPathname(request3.expectedPathname);
-    const allowedFormActionOrigins = request3.allowedFormActionOrigins?.map(normalizedOrigin) ?? [];
-    const step = request3.step ?? "login";
-    const username = request3.username === void 0 || request3.username.trim().length === 0 ? void 0 : request3.username;
-    const password = request3.password === void 0 || request3.password.length === 0 ? void 0 : request3.password;
-    const oneTimeCode = request3.oneTimeCode === void 0 || request3.oneTimeCode.length === 0 ? void 0 : request3.oneTimeCode;
-    if (expectedOrigin === void 0 || expectedPathname === void 0 || allowedFormActionOrigins.some((origin) => origin === void 0) || !Number.isSafeInteger(request3.browserCdpPort) || request3.browserCdpPort < 1 || request3.browserCdpPort > 65535 || request3.targetId.length === 0 || request3.frameId !== void 0 && request3.frameId.length === 0 || step !== "login" && step !== "username-first" && step !== "one-time-code" || step === "username-first" && username === void 0 || (step === "one-time-code" ? oneTimeCode === void 0 || password !== void 0 || username !== void 0 : password === void 0) || oneTimeCode !== void 0 && (oneTimeCode.length > ONE_TIME_CODE_MAX_LENGTH || /\s/.test(oneTimeCode))) {
+  async executeSteps(request5, formContext) {
+    const expectedOrigin = normalizedOrigin(request5.expectedOrigin);
+    const expectedPathname = normalizedPathname(request5.expectedPathname);
+    const allowedFormActionOrigins = request5.allowedFormActionOrigins?.map(normalizedOrigin) ?? [];
+    const step = request5.step ?? "login";
+    const username = request5.username === void 0 || request5.username.trim().length === 0 ? void 0 : request5.username;
+    const password = request5.password === void 0 || request5.password.length === 0 ? void 0 : request5.password;
+    const oneTimeCode = request5.oneTimeCode === void 0 || request5.oneTimeCode.length === 0 ? void 0 : request5.oneTimeCode;
+    if (expectedOrigin === void 0 || expectedPathname === void 0 || allowedFormActionOrigins.some((origin) => origin === void 0) || !Number.isSafeInteger(request5.browserCdpPort) || request5.browserCdpPort < 1 || request5.browserCdpPort > 65535 || request5.targetId.length === 0 || request5.frameId !== void 0 && request5.frameId.length === 0 || step !== "login" && step !== "username-first" && step !== "one-time-code" || step === "username-first" && username === void 0 || (step === "one-time-code" ? oneTimeCode === void 0 || password !== void 0 || username !== void 0 : password === void 0) || oneTimeCode !== void 0 && (oneTimeCode.length > ONE_TIME_CODE_MAX_LENGTH || /\s/.test(oneTimeCode))) {
       return { kind: "refused", reason: "invalid-request", cleared: true };
     }
-    const listing = await this.listTarget(request3.browserCdpPort, request3.targetId);
+    const listing = await this.listTarget(request5.browserCdpPort, request5.targetId);
     if (listing.kind !== "ready") return { kind: "unavailable", cleared: true };
     if (normalizedOrigin(listing.url) !== expectedOrigin || normalizedPathname(new URL(listing.url).pathname) !== expectedPathname) {
       return { kind: "refused", reason: "origin-mismatch", cleared: true };
     }
     const clearTargetBase = {
-      browserCdpPort: request3.browserCdpPort,
-      targetId: request3.targetId,
-      ...request3.frameId === void 0 ? {} : { frameId: request3.frameId }
+      browserCdpPort: request5.browserCdpPort,
+      targetId: request5.targetId,
+      ...request5.frameId === void 0 ? {} : { frameId: request5.frameId }
     };
     let connection;
     let preparedObjectId;
@@ -217,7 +217,7 @@ var CredentialFillExecutor = class {
     try {
       connection = await this.connect(listing.webSocketDebuggerUrl);
       const frameTree = frameTreeResultSchema.parse(await connection.send("Page.getFrameTree"));
-      const frame = request3.frameId === void 0 ? frameTree.frameTree.frame : frameById(frameTree.frameTree, request3.frameId);
+      const frame = request5.frameId === void 0 ? frameTree.frameTree.frame : frameById(frameTree.frameTree, request5.frameId);
       if (frame === void 0 || normalizedOrigin(frame.url) !== expectedOrigin) {
         return { kind: "refused", reason: "frame-mismatch", cleared: true };
       }
@@ -277,7 +277,7 @@ var CredentialFillExecutor = class {
         writtenPage = codePage;
         const codeResult = await this.callPreparedState(connection, preparedObjectId, {
           functionDeclaration: "function(value, submit) { return this.fillOneTimeCode(value, submit); }",
-          arguments: [{ value: oneTimeCode }, { value: request3.submit === true }]
+          arguments: [{ value: oneTimeCode }, { value: request5.submit === true }]
         });
         const codeStep = pageStepSchema.safeParse(codeResult);
         if (!codeStep.success) {
@@ -331,7 +331,7 @@ var CredentialFillExecutor = class {
         }
       }
       if (step === "username-first") {
-        if (request3.submit !== true) {
+        if (request5.submit !== true) {
           await this.clearPreparedState(connection, preparedObjectId);
           return { kind: "filled", submitted: false, cleared: true };
         }
@@ -394,7 +394,7 @@ var CredentialFillExecutor = class {
       writtenPage = preparedPage;
       const passwordResult = await this.callPreparedState(connection, preparedObjectId, {
         functionDeclaration: "function(value, submit) { return this.fillPassword(value, submit); }",
-        arguments: [{ value: password }, { value: request3.submit === true }]
+        arguments: [{ value: password }, { value: request5.submit === true }]
       });
       const passwordStep = pageStepSchema.safeParse(passwordResult);
       if (!passwordStep.success) {
@@ -430,8 +430,8 @@ var CredentialFillExecutor = class {
         ...submitConfirmed ? {} : { submitConfirmed: false },
         ...clearance
       };
-    } catch (error41) {
-      this.options.reportFailure(`execute-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.reportFailure(`execute-${errorLogTag(error42)}`);
       if (writtenPage === void 0) return { kind: "unavailable", cleared: true };
       return { kind: "unavailable", ...await this.clearAfterSecretWrite(writtenPage) };
     } finally {
@@ -440,8 +440,8 @@ var CredentialFillExecutor = class {
           await connection.send("Runtime.releaseObjectGroup", {
             objectGroup: CREDENTIAL_FILL_OBJECT_GROUP
           });
-        } catch (error41) {
-          this.options.reportFailure(`release-object-group-${errorLogTag(error41)}`);
+        } catch (error42) {
+          this.options.reportFailure(`release-object-group-${errorLogTag(error42)}`);
         }
         connection.close();
       }
@@ -455,8 +455,8 @@ var CredentialFillExecutor = class {
       if (await this.clearPreparedState(page.connection, page.preparedObjectId)) {
         return { cleared: true };
       }
-    } catch (error41) {
-      this.options.reportFailure(`clear-written-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.reportFailure(`clear-written-${errorLogTag(error42)}`);
     }
     return await this.verifyFrameCleared(page.connection, page.frameId, page.clearTarget);
   }
@@ -468,8 +468,8 @@ var CredentialFillExecutor = class {
         })
       );
       if (settled.success && settled.data.cleared) return { cleared: true };
-    } catch (error41) {
-      this.options.reportFailure(`clear-submitted-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.reportFailure(`clear-submitted-${errorLogTag(error42)}`);
     }
     return await this.verifyFrameCleared(page.connection, page.frameId, page.clearTarget);
   }
@@ -487,8 +487,8 @@ var CredentialFillExecutor = class {
       const frame = target.frameId === void 0 ? frameTree.frameTree.frame : frameById(frameTree.frameTree, target.frameId);
       if (frame === void 0) return { cleared: true };
       return await this.verifyFrameCleared(connection, frame.id, target);
-    } catch (error41) {
-      this.options.reportFailure(`verify-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.reportFailure(`verify-${errorLogTag(error42)}`);
       return { cleared: false, clearTarget: target };
     } finally {
       connection?.close();
@@ -527,8 +527,8 @@ var CredentialFillExecutor = class {
       );
       const clearance = pageClearanceSchema.safeParse(result?.value);
       return this.clearance(clearance.success && clearance.data.cleared, target);
-    } catch (error41) {
-      this.options.reportFailure(`verify-frame-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.reportFailure(`verify-frame-${errorLogTag(error42)}`);
       return { cleared: false, clearTarget: target };
     }
   }
@@ -555,9 +555,9 @@ var CredentialFillExecutor = class {
       });
       if (webSocketDebuggerUrl === void 0) return { kind: "unknown" };
       return { kind: "ready", webSocketDebuggerUrl, url: target.url };
-    } catch (error41) {
-      this.options.reportFailure(`target-lookup-${errorLogTag(error41)}`);
-      if (!(error41 instanceof DeadlineExceededError) && connectionRefusedSchema.safeParse(error41).success) {
+    } catch (error42) {
+      this.options.reportFailure(`target-lookup-${errorLogTag(error42)}`);
+      if (!(error42 instanceof DeadlineExceededError) && connectionRefusedSchema.safeParse(error42).success) {
         return { kind: "closed" };
       }
       return { kind: "unknown" };
@@ -595,8 +595,8 @@ var CredentialFillExecutor = class {
       });
       await connection.send("Input.dispatchKeyEvent", { type: "keyUp", ...key });
       return true;
-    } catch (error41) {
-      this.options.reportFailure(`press-enter-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.reportFailure(`press-enter-${errorLogTag(error42)}`);
       return false;
     }
   }
@@ -610,13 +610,13 @@ var CredentialFillExecutor = class {
           functionDeclaration: "function() { return this.handOffTaken(); }"
         });
         if (taken === true) return true;
-      } catch (error41) {
+      } catch (error42) {
         const tree = frameTreeResultSchema.parse(await connection.send("Page.getFrameTree"));
         const live = tree.frameTree.frame.id === frame.id ? tree.frameTree.frame : frameById(tree.frameTree, frame.id);
         if (live === void 0 || live.url !== frame.url || frame.loaderId !== void 0 && live.loaderId !== frame.loaderId) {
           return true;
         }
-        throw error41;
+        throw error42;
       }
       if (Date.now() >= deadline) return false;
     }

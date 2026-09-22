@@ -1,8 +1,8 @@
 function createWritableIterable() {
   const readQueue = [];
   const writeQueue = [];
-  let closed2 = false;
-  let error41;
+  let closed3 = false;
+  let error42;
   let nextResolve = () => {
   };
   let nextReject = () => {
@@ -36,9 +36,9 @@ function createWritableIterable() {
   }
   return {
     write(value) {
-      return __awaiter11(this, void 0, void 0, function* () {
-        if (closed2) {
-          throw error41 !== null && error41 !== void 0 ? error41 : new WriteIterableClosedError("WritableIterable is closed");
+      return __awaiter12(this, void 0, void 0, function* () {
+        if (closed3) {
+          throw error42 !== null && error42 !== void 0 ? error42 : new WriteIterableClosedError("WritableIterable is closed");
         }
         const reader = readQueue.shift();
         if (reader) {
@@ -56,17 +56,17 @@ function createWritableIterable() {
       });
     },
     throw(err) {
-      if (closed2)
+      if (closed3)
         return;
-      closed2 = true;
-      error41 = err;
+      closed3 = true;
+      error42 = err;
       rejectPendingWrites(err);
       drainReads({ done: true, value: void 0 }, err);
     },
     close() {
-      if (closed2)
+      if (closed3)
         return;
-      closed2 = true;
+      closed3 = true;
       writeQueue.length = 0;
       nextResolve();
       nextPromise = Promise.reject(new WriteIterableClosedError("WritableIterable is closed"));
@@ -83,9 +83,9 @@ function createWritableIterable() {
           if (value !== void 0) {
             return Promise.resolve({ done: false, value });
           }
-          if (closed2) {
-            if (error41) {
-              return Promise.reject(error41);
+          if (closed3) {
+            if (error42) {
+              return Promise.reject(error42);
             }
             return Promise.resolve({ done: true, value: void 0 });
           }
@@ -94,15 +94,15 @@ function createWritableIterable() {
           });
         },
         throw(err) {
-          closed2 = true;
-          error41 = err;
+          closed3 = true;
+          error42 = err;
           writeQueue.length = 0;
           rejectPendingWrites(err);
           drainReads({ done: true, value: void 0 }, err);
           return Promise.resolve({ done: true, value: void 0 });
         },
         return() {
-          closed2 = true;
+          closed3 = true;
           writeQueue.length = 0;
           nextResolve();
           nextPromise = Promise.reject(new Error("Iterator was closed"));
@@ -115,11 +115,11 @@ function createWritableIterable() {
     }
   };
 }
-var __awaiter11, WriteIterableClosedError;
+var __awaiter12, WriteIterableClosedError;
 var init_writable_iterable = __esm({
   "../packages/utils/dist/writable-iterable.js"() {
     "use strict";
-    __awaiter11 = function(thisArg, _arguments, P2, generator) {
+    __awaiter12 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve29) {
           resolve29(value);

@@ -158,7 +158,7 @@ var SandWebAuthnBridge = class {
     this.pending.set(funnel.requestId, { settle, funnel, providerId: provider.id });
     try {
       provider.send({ kind: "ceremony", requestId: funnel.requestId, ceremony });
-    } catch (error41) {
+    } catch (error42) {
       this.pending.delete(funnel.requestId);
       this.emit(funnel, {
         stage: "request",
@@ -167,14 +167,14 @@ var SandWebAuthnBridge = class {
         ...this.providerCounts()
       });
       this.emit(funnel, { stage: "complete", outcome: "failed", cause: "dispatch_failed" });
-      throw error41;
+      throw error42;
     }
     this.emit(funnel, { stage: "request", outcome: "ok", ...this.providerCounts() });
     try {
       const settlement = await this.deps.ceremonyDeadline.run(() => settled);
       return settlement.ok ? { ok: true, credentialJson: settlement.credentialJson } : failure(settlement.name, settlement.message);
-    } catch (error41) {
-      if (error41 instanceof DeadlineExceededError) {
+    } catch (error42) {
+      if (error42 instanceof DeadlineExceededError) {
         if (this.pending.has(funnel.requestId)) {
           this.emit(funnel, { stage: "complete", outcome: "timeout", cause: "timeout" });
         }
@@ -184,7 +184,7 @@ var SandWebAuthnBridge = class {
           "The security key ceremony timed out before it was completed."
         );
       }
-      throw error41;
+      throw error42;
     } finally {
       this.pending.delete(funnel.requestId);
     }

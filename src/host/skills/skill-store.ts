@@ -1,5 +1,5 @@
-var import_node_fs84 = require("node:fs");
-var import_node_path135 = require("node:path");
+var import_node_fs83 = require("node:fs");
+var import_node_path134 = require("node:path");
 init_scheduling();
 var LEGACY_WORKFLOWS_DIRNAME = "workflows";
 var MANAGED_SKILLS_CHANGE_DEBOUNCE_MS = 50;
@@ -9,20 +9,20 @@ var pluginSkillsIndexCache = new StatKeyedParseCache();
 function readPluginSkillFileFacts(filePath) {
   let raw;
   try {
-    raw = (0, import_node_fs84.readFileSync)(filePath, "utf8");
-  } catch (error41) {
-    reportFallbackUnlessAbsent("skill_store", error41);
+    raw = (0, import_node_fs83.readFileSync)(filePath, "utf8");
+  } catch (error42) {
+    reportFallbackUnlessAbsent("skill_store", error42);
     return null;
   }
   const parsed2 = parseSkillFile(raw);
   if (parsed2 == null || parsed2.body.length === 0) return null;
   let helperScripts = [];
   try {
-    helperScripts = (0, import_node_fs84.readdirSync)((0, import_node_path135.dirname)(filePath), {
+    helperScripts = (0, import_node_fs83.readdirSync)((0, import_node_path134.dirname)(filePath), {
       withFileTypes: true
     }).filter((entry) => entry.isFile() && entry.name !== "SKILL.md").map((entry) => entry.name).sort();
-  } catch (error41) {
-    reportFallbackUnlessAbsent("skill_store", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("skill_store", error42);
     helperScripts = [];
   }
   return {
@@ -34,18 +34,18 @@ function readPluginSkillFileFacts(filePath) {
   };
 }
 function agentHasSkills(agentDir) {
-  const legacyDir = (0, import_node_path135.join)(agentDir, LEGACY_WORKFLOWS_DIRNAME);
+  const legacyDir = (0, import_node_path134.join)(agentDir, LEGACY_WORKFLOWS_DIRNAME);
   let entries;
   try {
-    entries = (0, import_node_fs84.readdirSync)(legacyDir, { withFileTypes: true });
-  } catch (error41) {
-    reportFallbackUnlessAbsent("skill_store", error41);
+    entries = (0, import_node_fs83.readdirSync)(legacyDir, { withFileTypes: true });
+  } catch (error42) {
+    reportFallbackUnlessAbsent("skill_store", error42);
     return false;
   }
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     try {
-      (0, import_node_fs84.statSync)((0, import_node_path135.join)(legacyDir, entry.name, LEGACY_WORKFLOW_FILENAME));
+      (0, import_node_fs83.statSync)((0, import_node_path134.join)(legacyDir, entry.name, LEGACY_WORKFLOW_FILENAME));
       return true;
     } catch {
       continue;
@@ -57,7 +57,7 @@ var FileSkillStore = class {
   constructor(agentDir, globalDir, resolveUserTimeZone = () => void 0, isFiveMinuteAutomationFloorEnabled = () => false) {
     this.agentDir = agentDir;
     this.library = new GlobalSkillLibrary(globalDir);
-    this.managedDir = getManagedSkillsDir((0, import_node_path135.dirname)(globalDir));
+    this.managedDir = getManagedSkillsDir((0, import_node_path134.dirname)(globalDir));
     this.managedDirWatcher = new WatchedDirectory(
       this.managedDir,
       createDebouncePolicy({
@@ -65,7 +65,7 @@ var FileSkillStore = class {
         delayMs: MANAGED_SKILLS_CHANGE_DEBOUNCE_MS
       })
     );
-    this.pluginSkillsDir = getPluginSkillsDir((0, import_node_path135.dirname)(globalDir));
+    this.pluginSkillsDir = getPluginSkillsDir((0, import_node_path134.dirname)(globalDir));
     this.pluginSkillsDirWatcher = new WatchedDirectory(
       this.pluginSkillsDir,
       createDebouncePolicy({
@@ -120,9 +120,9 @@ var FileSkillStore = class {
     const skillFilePath = getManagedSkillFilePath(this.managedDir, skill.id);
     let hasSkillFile = false;
     try {
-      hasSkillFile = (0, import_node_fs84.statSync)(skillFilePath).isFile();
-    } catch (error41) {
-      reportFallbackUnlessAbsent("skill_store", error41);
+      hasSkillFile = (0, import_node_fs83.statSync)(skillFilePath).isFile();
+    } catch (error42) {
+      reportFallbackUnlessAbsent("skill_store", error42);
       hasSkillFile = false;
     }
     return {
@@ -163,7 +163,7 @@ var FileSkillStore = class {
   }
   pluginSkillToSkill(record2, index) {
     const facts = pluginSkillParseCache.read(
-      [record2.filePath, (0, import_node_path135.dirname)(record2.filePath)],
+      [record2.filePath, (0, import_node_path134.dirname)(record2.filePath)],
       () => readPluginSkillFileFacts(record2.filePath)
     );
     if (facts == null) return null;
@@ -306,9 +306,9 @@ var FileSkillStore = class {
     if (record2 == null) return null;
     let existing = {};
     try {
-      existing = parseSkillFile((0, import_node_fs84.readFileSync)(record2.filePath, "utf8"))?.data ?? {};
-    } catch (error41) {
-      reportFallbackUnlessAbsent("skill_store", error41);
+      existing = parseSkillFile((0, import_node_fs83.readFileSync)(record2.filePath, "utf8"))?.data ?? {};
+    } catch (error42) {
+      reportFallbackUnlessAbsent("skill_store", error42);
       return null;
     }
     this.pluginSkillsDirWatcher.writeFileAtomic(
@@ -351,38 +351,25 @@ var FileSkillStore = class {
     if (record2 == null) return null;
     return { id: record2.id, name: record2.name };
   }
-  portLocalSkills(homeDir, cwd) {
-    const imported = [];
-    const skipped2 = [];
-    for (const source of discoverLocalSkillFiles(homeDir, cwd)) {
-      const result = this.importLiveSource(source.path, source.fallbackName);
-      if (result == null) {
-        skipped2.push({ source: source.label, reason: "could not link" });
-      } else {
-        imported.push(result);
-      }
-    }
-    return { imported, skipped: skipped2 };
-  }
   migrateLegacyPerAgentSkills() {
-    const legacyDir = (0, import_node_path135.join)(this.agentDir, LEGACY_WORKFLOWS_DIRNAME);
+    const legacyDir = (0, import_node_path134.join)(this.agentDir, LEGACY_WORKFLOWS_DIRNAME);
     let entries;
     try {
-      entries = (0, import_node_fs84.readdirSync)(legacyDir, { withFileTypes: true });
+      entries = (0, import_node_fs83.readdirSync)(legacyDir, { withFileTypes: true });
     } catch {
       return;
     }
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
       const id = entry.name;
-      const legacyFolder = (0, import_node_path135.join)(legacyDir, id);
+      const legacyFolder = (0, import_node_path134.join)(legacyDir, id);
       if (this.library.has(id)) continue;
       try {
-        (0, import_node_fs84.renameSync)(legacyFolder, (0, import_node_path135.join)(this.library.getLocation(), id));
+        (0, import_node_fs83.renameSync)(legacyFolder, (0, import_node_path134.join)(this.library.getLocation(), id));
       } catch {
         let raw;
         try {
-          raw = (0, import_node_fs84.readFileSync)((0, import_node_path135.join)(legacyFolder, LEGACY_WORKFLOW_FILENAME), "utf8");
+          raw = (0, import_node_fs83.readFileSync)((0, import_node_path134.join)(legacyFolder, LEGACY_WORKFLOW_FILENAME), "utf8");
         } catch {
           continue;
         }
@@ -397,43 +384,6 @@ var FileSkillStore = class {
       }
     }
     this.library.renameLegacyRecipeFiles();
-    (0, import_node_fs84.rmSync)(legacyDir, { recursive: true, force: true });
+    (0, import_node_fs83.rmSync)(legacyDir, { recursive: true, force: true });
   }
 };
-function discoverLocalSkillFiles(homeDir, cwd) {
-  const sources = [];
-  const seen = /* @__PURE__ */ new Set();
-  const add2 = (path31, label, fallbackName) => {
-    if (seen.has(path31)) return;
-    seen.add(path31);
-    try {
-      if ((0, import_node_fs84.statSync)(path31).isFile()) {
-        sources.push({ path: path31, label, fallbackName });
-      }
-    } catch {
-    }
-  };
-  for (const dir of [cwd, homeDir]) {
-    add2((0, import_node_path135.join)(dir, "CLAUDE.md"), `${dir}/CLAUDE.md`, "Claude memory");
-    add2((0, import_node_path135.join)(dir, "AGENTS.md"), `${dir}/AGENTS.md`, "Agents memory");
-    add2((0, import_node_path135.join)(dir, ".claude", "CLAUDE.md"), `${dir}/.claude/CLAUDE.md`, "Claude memory");
-  }
-  const rulesDir = (0, import_node_path135.join)(cwd, ".cursor", "rules");
-  let ruleEntries = [];
-  try {
-    ruleEntries = (0, import_node_fs84.readdirSync)(rulesDir, { withFileTypes: true });
-  } catch (error41) {
-    reportFallbackUnlessAbsent("skill_store", error41);
-    ruleEntries = [];
-  }
-  for (const entry of ruleEntries) {
-    if (!entry.isFile()) continue;
-    if (!/\.(mdc|md)$/i.test(entry.name)) continue;
-    add2(
-      (0, import_node_path135.join)(rulesDir, entry.name),
-      `.cursor/rules/${entry.name}`,
-      entry.name.replace(/\.(mdc|md)$/i, "")
-    );
-  }
-  return sources;
-}

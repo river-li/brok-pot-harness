@@ -24,8 +24,8 @@ var StoreDbSnapshotUpload = class {
     let size;
     try {
       size = (await (0, import_promises20.stat)(snapshotPath)).size;
-    } catch (error41) {
-      this.log(`store.db ${relPath} snapshot stat failed: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`store.db ${relPath} snapshot stat failed: ${errorMessage(error42)}`);
       return {
         outcome: "error",
         bytesUploaded: 0,
@@ -51,8 +51,8 @@ var StoreDbSnapshotUpload = class {
         bytes = await (0, import_promises20.readFile)(snapshotPath);
         sha = sha256Hex(bytes);
       }
-    } catch (error41) {
-      this.log(`read failed ${relPath}: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`read failed ${relPath}: ${errorMessage(error42)}`);
       return {
         outcome: "error",
         bytesUploaded: 0,
@@ -89,8 +89,8 @@ var StoreDbSnapshotUpload = class {
           contentAddressed: true
         });
       }
-    } catch (error41) {
-      this.log(`upload failed ${relPath}: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`upload failed ${relPath}: ${errorMessage(error42)}`);
       return {
         outcome: "error",
         bytesUploaded: 0,
@@ -127,10 +127,10 @@ var StoreDbSnapshotUpload = class {
           busyTimeoutMs: DB_BUSY_TIMEOUT_MS
         });
         return;
-      } catch (error41) {
-        if (!(error41 instanceof VacuumWorkerUnavailableError)) throw error41;
+      } catch (error42) {
+        if (!(error42 instanceof VacuumWorkerUnavailableError)) throw error42;
         this.vacuumWorkerAvailable = false;
-        this.log(`vacuum worker unavailable; using in-process VACUUM: ${errorMessage(error41)}`);
+        this.log(`vacuum worker unavailable; using in-process VACUUM: ${errorMessage(error42)}`);
       }
     }
     await this.discardSnapshotTemp({ tmpPath: args.destPath, label: "vacuum fallback pre-clean" });
@@ -139,9 +139,9 @@ var StoreDbSnapshotUpload = class {
   async discardSnapshotTemp(args) {
     try {
       await (0, import_promises20.unlink)(args.tmpPath);
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") return;
-      this.log(`temp cleanup failed ${args.label}: ${errorMessage(error41)}`);
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") return;
+      this.log(`temp cleanup failed ${args.label}: ${errorMessage(error42)}`);
     }
   }
 };
@@ -160,8 +160,8 @@ function runVacuumInWorker(args) {
     let worker;
     try {
       worker = new import_node_worker_threads.Worker(entryPath);
-    } catch (error41) {
-      reject2(new VacuumWorkerUnavailableError(errorMessage(error41)));
+    } catch (error42) {
+      reject2(new VacuumWorkerUnavailableError(errorMessage(error42)));
       return;
     }
     let settled = false;
@@ -180,7 +180,7 @@ function runVacuumInWorker(args) {
     );
     worker.on(
       "error",
-      (error41) => finish(() => reject2(new VacuumWorkerUnavailableError(errorMessage(error41))))
+      (error42) => finish(() => reject2(new VacuumWorkerUnavailableError(errorMessage(error42))))
     );
     worker.on(
       "exit",

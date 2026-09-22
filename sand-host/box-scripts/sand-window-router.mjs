@@ -95,7 +95,7 @@ export function createWindowRouterServer({
         res.writeHead(upstreamRes.statusCode ?? 502, upstreamRes.headers);
         upstreamRes.pipe(res);
         endCallerStreamWhenDaemonDropsMidResponse(upstreamRes, res);
-      }
+      },
     );
     upstream.on("error", (err) => {
       if (res.destroyed) return;
@@ -131,14 +131,11 @@ function main() {
   });
   server.listen(LISTEN_PORT, "0.0.0.0", () => {
     process.stdout.write(
-      `sand-window-router listening pid=${process.pid} port=${LISTEN_PORT} primary=${PRIMARY_PORT} fork_base=${EXEC_BASE} (owner-token enforced)\n`
+      `sand-window-router listening pid=${process.pid} port=${LISTEN_PORT} primary=${PRIMARY_PORT} fork_base=${EXEC_BASE} (owner-token enforced)\n`,
     );
   });
 }
 
-if (
-  process.argv[1] != null &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+if (process.argv[1] != null && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }

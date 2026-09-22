@@ -1,4 +1,4 @@
-var __awaiter69 = function(thisArg, _arguments, P2, generator) {
+var __awaiter71 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -42,7 +42,7 @@ var CodebaseTelemetryController = class {
     this.metrics = createNonThrowingMetrics(params.metrics, this.logger);
     const [sessionStateSender, sessionStateReceiver] = createWatchChannel({
       initialValue: void 0,
-      onSubscriberError: (error41) => this.logger.error("Session state subscriber failed", error41)
+      onSubscriberError: (error42) => this.logger.error("Session state subscriber failed", error42)
     });
     this.sessionStateSender = sessionStateSender;
     this.sessionState = sessionStateReceiver;
@@ -243,7 +243,7 @@ var CodebaseTelemetryController = class {
   beginSessionOpen({ auth: auth2, openAttempt }) {
     const credentials = new SessionCredentials({
       auth: auth2,
-      onSubscriberError: (error41) => this.logger.error("Auth token subscriber failed", error41)
+      onSubscriberError: (error42) => this.logger.error("Auth token subscriber failed", error42)
     });
     const abortController = new AbortController();
     const completion = this.openSession(credentials, abortController.signal).then((session) => {
@@ -252,14 +252,14 @@ var CodebaseTelemetryController = class {
         openAttempt,
         session
       });
-    }, (error41) => {
-      if (error41 instanceof CodebaseTelemetryCleanupError) {
-        this.recordCleanupFailure(error41);
+    }, (error42) => {
+      if (error42 instanceof CodebaseTelemetryCleanupError) {
+        this.recordCleanupFailure(error42);
       }
       this.sendMessage({
         kind: "sessionOpenFailed",
         openAttempt,
-        error: error41
+        error: error42
       });
     });
     this.openAttemptResources.set(openAttempt, {
@@ -308,8 +308,8 @@ var CodebaseTelemetryController = class {
       sessionStateSubscription
     });
     if (session.terminalFailure !== void 0) {
-      void session.terminalFailure.then((error41) => {
-        this.sendMessage({ kind: "sessionFailed", session, error: error41 });
+      void session.terminalFailure.then((error42) => {
+        this.sendMessage({ kind: "sessionFailed", session, error: error42 });
       });
     }
     this.publishSession(session);
@@ -339,21 +339,21 @@ var CodebaseTelemetryController = class {
   /**
    * Releases resources from a failed session-open attempt and logs the error.
    */
-  finalizeFailedSessionOpenAttempt({ openAttempt, error: error41 }) {
+  finalizeFailedSessionOpenAttempt({ openAttempt, error: error42 }) {
     const { credentials } = this.takeSessionOpenAttemptResources(openAttempt);
     credentials.dispose();
-    this.logger.error("Failed to open session", error41);
-    return error41 instanceof CodebaseTelemetryCleanupError ? { kind: "cleanupFailed" } : void 0;
+    this.logger.error("Failed to open session", error42);
+    return error42 instanceof CodebaseTelemetryCleanupError ? { kind: "cleanupFailed" } : void 0;
   }
   /**
    * Logs a stale session-open failure and propagates any cleanup failure.
    */
-  reportStaleSessionOpenFailure({ error: error41 }) {
-    if (error41 instanceof CodebaseTelemetryCleanupError) {
-      this.logger.error("Failed to clean up cancelled or superseded session-open attempt", error41);
+  reportStaleSessionOpenFailure({ error: error42 }) {
+    if (error42 instanceof CodebaseTelemetryCleanupError) {
+      this.logger.error("Failed to clean up cancelled or superseded session-open attempt", error42);
       return { kind: "cleanupFailed" };
     }
-    this.logger.debug("Ignoring failure from a cancelled or superseded session-open attempt", error41);
+    this.logger.debug("Ignoring failure from a cancelled or superseded session-open attempt", error42);
   }
   /**
    * Updates the auth token used by the active session.
@@ -418,8 +418,8 @@ var CodebaseTelemetryController = class {
       }
     }
   }
-  reportSessionFailure({ error: error41 }) {
-    this.logger.error("Session adapter encountered a terminal failure", error41);
+  reportSessionFailure({ error: error42 }) {
+    this.logger.error("Session adapter encountered a terminal failure", error42);
   }
   /**
    * Logs an auth ID change that triggered reconciliation.
@@ -477,7 +477,7 @@ var CodebaseTelemetryController = class {
    * successfully.
    */
   openSession(credentials, signal) {
-    return __awaiter69(this, void 0, void 0, function* () {
+    return __awaiter71(this, void 0, void 0, function* () {
       yield this.cleanupTracker.drain(signal);
       if (this.cleanupFailure !== void 0) {
         throw this.cleanupFailure;
@@ -531,8 +531,8 @@ var CodebaseTelemetryController = class {
    * when a drain completes.
    */
   trackCleanup(cleanupTask) {
-    this.cleanupTracker.add(cleanupTask.catch((error41) => {
-      const cleanupError = error41 instanceof CodebaseTelemetryCleanupError ? error41 : new CodebaseTelemetryCleanupError([error41], "Codebase telemetry cleanup failed");
+    this.cleanupTracker.add(cleanupTask.catch((error42) => {
+      const cleanupError = error42 instanceof CodebaseTelemetryCleanupError ? error42 : new CodebaseTelemetryCleanupError([error42], "Codebase telemetry cleanup failed");
       this.logger.error("Unexpected cleanup failure", cleanupError);
       this.recordCleanupFailure(cleanupError);
       this.sendMessage({ kind: "cleanupFailed" });
@@ -544,9 +544,9 @@ var CodebaseTelemetryController = class {
    * The controller then fails closed. No later session may open because
    * the failed cleanup may have left resources active.
    */
-  recordCleanupFailure(error41) {
+  recordCleanupFailure(error42) {
     var _a19;
-    (_a19 = this.cleanupFailure) !== null && _a19 !== void 0 ? _a19 : this.cleanupFailure = error41;
+    (_a19 = this.cleanupFailure) !== null && _a19 !== void 0 ? _a19 : this.cleanupFailure = error42;
   }
   /**
    * Stops the controller and begins cleaning up its resources.
@@ -565,13 +565,13 @@ var CodebaseTelemetryController = class {
    * Cleanup failures are logged rather than thrown.
    */
   shutdown() {
-    return __awaiter69(this, void 0, void 0, function* () {
+    return __awaiter71(this, void 0, void 0, function* () {
       this.dispose();
       yield this.cleanupTracker.drain();
     });
   }
 };
-function createNonThrowingMetrics(metrics2, logger107) {
+function createNonThrowingMetrics(metrics2, logger108) {
   if (metrics2 === void 0) {
     return void 0;
   }
@@ -579,16 +579,16 @@ function createNonThrowingMetrics(metrics2, logger107) {
     increment(stat28, value, tags) {
       try {
         metrics2.increment(stat28, value, tags);
-      } catch (error41) {
-        logger107.debug("Failed to emit codebase telemetry counter", error41);
+      } catch (error42) {
+        logger108.debug("Failed to emit codebase telemetry counter", error42);
       }
     }
   };
 }
 var SessionSubgateController = class {
-  constructor(host, logger107, session) {
+  constructor(host, logger108, session) {
     this.host = host;
-    this.logger = logger107;
+    this.logger = logger108;
     this.session = session;
     this.coalescer = new Coalescer();
     this.isDisposed = false;
@@ -625,7 +625,7 @@ var SessionSubgateController = class {
    * Schedules checked feature-gate values for serialized reconciliation.
    */
   scheduleReconciliation(checkToken, gates) {
-    void this.coalescer.run(() => __awaiter69(this, void 0, void 0, function* () {
+    void this.coalescer.run(() => __awaiter71(this, void 0, void 0, function* () {
       if (this.isDisposed || this.latestCheckToken !== checkToken) {
         return;
       }
@@ -654,12 +654,12 @@ var SessionSubgateController = class {
 function areAuthStatesEqual(left, right) {
   return (left === null || left === void 0 ? void 0 : left.authId) === (right === null || right === void 0 ? void 0 : right.authId) && (left === null || left === void 0 ? void 0 : left.authToken) === (right === null || right === void 0 ? void 0 : right.authToken);
 }
-function tryCheckFeatureGate(host, logger107, gate) {
-  return __awaiter69(this, void 0, void 0, function* () {
+function tryCheckFeatureGate(host, logger108, gate) {
+  return __awaiter71(this, void 0, void 0, function* () {
     try {
       return yield host.featureGates.check(gate);
     } catch (err) {
-      logger107.warn(`Failed to evaluate feature gate ${gate}`, err);
+      logger108.warn(`Failed to evaluate feature gate ${gate}`, err);
       return void 0;
     }
   });

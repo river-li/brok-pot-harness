@@ -20,10 +20,7 @@ function resolveWorkloadPlacement(platform2, workloadCgroupDir, isUsable = isUsa
     kind: "armed",
     workloadCgroupDir,
     executable: "/bin/sh",
-    argumentPrefix: Object.freeze([
-      "-c",
-      buildPlacementShimScript(workloadCgroupDir)
-    ])
+    argumentPrefix: Object.freeze(["-c", buildPlacementShimScript(workloadCgroupDir)])
   });
 }
 function resetReturnedChildPid(value, resetChildPid) {

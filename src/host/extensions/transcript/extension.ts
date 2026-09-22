@@ -62,7 +62,7 @@ var transcriptExtension = defineHostExtension({
       fill: (agentId, values, consentedHost, submitAfterFill) => context2.deps.session.fillUserForm(agentId, values, consentedHost, submitAfterFill),
       holdForRemap: (agentId, hold) => context2.deps.session.holdUserFormForRemap(agentId, hold),
       settleRemap: (args) => context2.deps.session.settleUserFormRemap(args),
-      startHandoff: (request3) => context2.deps.session.startHandoff(request3)
+      startHandoff: (request5) => context2.deps.session.startHandoff(request5)
     });
     manager.setUserFormVault(context2.deps["user-form-vault"]);
     manager.setAutomationAgentGoneTerminalGate(
@@ -148,8 +148,8 @@ var transcriptExtension = defineHostExtension({
         await manager.widgetResponses.expireAllPendingVirtualCardApprovalCards({
           ifPendingBeforeMs: bootStartedAtMs - PENDING_VIRTUAL_CARD_TTL_SECONDS * 1e3
         });
-      } catch (error41) {
-        context2.host.log(`virtual card boot sweep failed (${errorLogTag(error41)})`);
+      } catch (error42) {
+        context2.host.log(`virtual card boot sweep failed (${errorLogTag(error42)})`);
       }
     };
     void sweepExpiredVirtualCardsOnBoot();
@@ -157,8 +157,8 @@ var transcriptExtension = defineHostExtension({
       await context2.host.whenBackgroundWorkReady;
       try {
         await manager.widgetResponses.restoreCredentialRequestExpiryTimers();
-      } catch (error41) {
-        context2.host.log(`credential request expiry restore failed (${errorLogTag(error41)})`);
+      } catch (error42) {
+        context2.host.log(`credential request expiry restore failed (${errorLogTag(error42)})`);
       }
     };
     void restoreCredentialRequestExpiryTimersOnBoot();

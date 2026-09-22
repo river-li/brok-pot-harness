@@ -55,20 +55,20 @@ function createUserSkillsCacheService(deps) {
   };
   const publishes = createSingleFlight({
     read: () => deps.publishRetry.runWithRetry(
-      (attempt, signal) => publishAttempt(attempt, signal).catch((error41) => {
+      (attempt, signal) => publishAttempt(attempt, signal).catch((error42) => {
         if (attempt === 1 && !signal.aborted) {
-          deps.log(`[sand:user-skills-cache] publish failed, retrying: ${errorLogTag(error41)}`);
+          deps.log(`[sand:user-skills-cache] publish failed, retrying: ${errorLogTag(error42)}`);
         }
-        throw error41;
+        throw error42;
       }),
       stopped2.signal
     ),
     install: (fingerprint) => {
       if (fingerprint !== void 0) lastFingerprint = fingerprint;
     },
-    installFailure: (error41) => {
+    installFailure: (error42) => {
       if (stopped2.signal.aborted) return;
-      deps.log(`[sand:user-skills-cache] publish gave up: ${errorLogTag(error41)}`);
+      deps.log(`[sand:user-skills-cache] publish gave up: ${errorLogTag(error42)}`);
     }
   });
   const publishSnapshot = async () => {

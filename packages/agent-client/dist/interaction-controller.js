@@ -1,2 +1,2 @@
-init_dist3();
-var logger96 = createLogger("ClientInteractionController");
+init_dist4();
+var logger97 = createLogger("ClientInteractionController");

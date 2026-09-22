@@ -1,4 +1,4 @@
-var __awaiter27 = function(thisArg, _arguments, P2, generator) {
+var __awaiter29 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -25,7 +25,7 @@ var __awaiter27 = function(thisArg, _arguments, P2, generator) {
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 };
-var __asyncValues9 = function(o) {
+var __asyncValues8 = function(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var m2 = o[Symbol.asyncIterator], i;
   return m2 ? m2.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
@@ -63,7 +63,7 @@ var SUMMARIZATION_CURSOR_PROVIDER_OPTIONS = {
   }
 };
 function executeSummarizationStream(ctx, promptSession, summaryPrompt, maxOutputTokens) {
-  return __awaiter27(this, void 0, void 0, function* () {
+  return __awaiter29(this, void 0, void 0, function* () {
     var _a19, e_1, _b2, _c2;
     const executor = promptSession.getExecutor([
       {
@@ -83,7 +83,9 @@ function executeSummarizationStream(ctx, promptSession, summaryPrompt, maxOutput
       maxOutputTokens
     };
     result.extendedUsage.catch((e) => {
-      logger7.error(ctx, "[summarization-handler] Error getting extended usage", e, { summarization: streamLogFields });
+      logger7.error(ctx, "[summarization-handler] Error getting extended usage", e, {
+        summarization: streamLogFields
+      });
     });
     result.usage.catch((e) => {
       logger7.error(ctx, "[summarization-handler] Error getting usage", e, {
@@ -91,10 +93,14 @@ function executeSummarizationStream(ctx, promptSession, summaryPrompt, maxOutput
       });
     });
     result.providerMetadata.catch((e) => {
-      logger7.error(ctx, "[summarization-handler] Error getting provider metadata", e, { summarization: streamLogFields });
+      logger7.error(ctx, "[summarization-handler] Error getting provider metadata", e, {
+        summarization: streamLogFields
+      });
     });
     result.invocationId.catch((e) => {
-      logger7.error(ctx, "[summarization-handler] Error getting invocation id", e, { summarization: streamLogFields });
+      logger7.error(ctx, "[summarization-handler] Error getting invocation id", e, {
+        summarization: streamLogFields
+      });
     });
     result.response.catch((e) => {
       logger7.error(ctx, "[summarization-handler] Error getting response", e, {
@@ -102,7 +108,7 @@ function executeSummarizationStream(ctx, promptSession, summaryPrompt, maxOutput
       });
     });
     try {
-      for (var _d = true, _e2 = __asyncValues9(result.fullStream), _f; _f = yield _e2.next(), _a19 = _f.done, !_a19; _d = true) {
+      for (var _d = true, _e2 = __asyncValues8(result.fullStream), _f; _f = yield _e2.next(), _a19 = _f.done, !_a19; _d = true) {
         _c2 = _f.value;
         _d = false;
         const _chunk = _c2;
@@ -323,7 +329,7 @@ function parseSummarizerModelLabel(modelId) {
   return { model: modelId, provider: "default" };
 }
 function executeSummarizationWithRetry(ctx, promptSession, messages2, options2) {
-  return __awaiter27(this, void 0, void 0, function* () {
+  return __awaiter29(this, void 0, void 0, function* () {
     var _a19, _b2, _c2;
     var _d, _e2, _f, _g;
     const { model: metricsModel, provider: metricsProvider } = parseSummarizerModelLabel(promptSession.getModelId());
@@ -419,11 +425,11 @@ function executeSummarizationWithRetry(ctx, promptSession, messages2, options2) 
           summarizationFallbackAttempts.increment(ctx);
         }
         return Object.assign(Object.assign({}, result), { hadError: false });
-      } catch (error41) {
+      } catch (error42) {
         const enableReduceInputsRetry = (_e2 = options2.enableReduceInputsRetry) !== null && _e2 !== void 0 ? _e2 : false;
         const enableRetryUncategorizedErrors = (_f = options2.enableRetryUncategorizedErrors) !== null && _f !== void 0 ? _f : true;
         const enableRetryOutputTokenLimit = (_g = options2.enableRetryOutputTokenLimit) !== null && _g !== void 0 ? _g : true;
-        const retryDirective = getRetryDirective(error41, {
+        const retryDirective = getRetryDirective(error42, {
           transientRetryDelayMs: TRANSIENT_SUMMARIZATION_RETRY_DELAY_MS,
           enableReduceInputsRetry,
           enableRetryUncategorizedErrors,
@@ -450,7 +456,7 @@ function executeSummarizationWithRetry(ctx, promptSession, messages2, options2) 
           model: metricsModel,
           provider: metricsProvider
         });
-        logger7.error(ctx, "[summarization-handler] Error summarizing messages", error41, {
+        logger7.error(ctx, "[summarization-handler] Error summarizing messages", error42, {
           summarization: Object.assign(Object.assign({}, orchestrationLogFields), { attempt, maxRetries: MAX_SUMMARIZATION_RETRIES, errorType: retryDirective.errorType, willRetry, retryDelayMs: retryDirective.retryDelayMs, requestShorterOutput: retryDirective.requestShorterOutput, reduceInputs: retryDirective.reduceInputs, options: {
             enableReduceInputsRetry,
             enableRetryUncategorizedErrors,
@@ -561,13 +567,7 @@ var summarizationAttempts = createCounter("agent.summarization.attempts", {
 });
 var summarizationFailures = createCounter("agent.summarization.failures", {
   description: "Failed summarizations",
-  labelNames: [
-    "errorKind",
-    "invocation",
-    "triggerReason",
-    "model",
-    "provider"
-  ]
+  labelNames: ["errorKind", "invocation", "triggerReason", "model", "provider"]
 });
 var summarizationTryAttempts = createCounter("agent.summarization.try.attempts", {
   description: "Per-try summarization attempts within the retry loop",
@@ -579,13 +579,7 @@ var summarizationTrySuccess = createCounter("agent.summarization.try.success", {
 });
 var summarizationTryFailures = createCounter("agent.summarization.try.failures", {
   description: "Per-try failed summarization attempts",
-  labelNames: [
-    "errorKind",
-    "invocation",
-    "triggerReason",
-    "model",
-    "provider"
-  ]
+  labelNames: ["errorKind", "invocation", "triggerReason", "model", "provider"]
 });
 var summarizationRetries = createCounter("agent.summarization.retries", {
   description: "Total retries (attempts beyond the first) that actually executed",
@@ -819,7 +813,8 @@ var SummarizationHandler = class {
     const { systemMessage, userInfoMessage, messagesForSummarization } = prepareMessagesForCompaction(messages2);
     let splitIndex = -1;
     for (let i = messagesForSummarization.length - 1; i >= 0; i--) {
-      if (messagesForSummarization[i].role === "user") {
+      const message = messagesForSummarization[i];
+      if (message.role === "user" && !isInjectedReminderMessage(message)) {
         splitIndex = i;
         break;
       }
@@ -836,7 +831,7 @@ var SummarizationHandler = class {
       let lastUserIndex = -1;
       for (let i = messagesToSummarize.length - 1; i >= 0; i--) {
         const m2 = messagesToSummarize[i];
-        if (m2.role === "user" && ((_b2 = (_a19 = m2.providerOptions) === null || _a19 === void 0 ? void 0 : _a19.cursor) === null || _b2 === void 0 ? void 0 : _b2.isSummary) !== true) {
+        if (m2.role === "user" && ((_b2 = (_a19 = m2.providerOptions) === null || _a19 === void 0 ? void 0 : _a19.cursor) === null || _b2 === void 0 ? void 0 : _b2.isSummary) !== true && !isInjectedReminderMessage(m2)) {
           lastUserIndex = i;
           break;
         }
@@ -858,7 +853,7 @@ var SummarizationHandler = class {
   // Phase 2: Generate summary
   // ---------------------------------------------------------------------------
   generateSummary(ctx, partitioned, options2) {
-    return __awaiter27(this, void 0, void 0, function* () {
+    return __awaiter29(this, void 0, void 0, function* () {
       var _a19;
       const result = yield executeSummarizationWithRetry(ctx, this.promptSession, partitioned.messagesToSummarize, {
         isFallbackToMainModel: this.isFallbackToMainModel,
@@ -984,7 +979,7 @@ var SummarizationHandler = class {
   // Top-level summarize  (delegates to pipeline + adds metrics)
   // ---------------------------------------------------------------------------
   summarize(ctx, messages2, options2) {
-    return __awaiter27(this, void 0, void 0, function* () {
+    return __awaiter29(this, void 0, void 0, function* () {
       var _a19;
       var _b2, _c2;
       if (!messages2.find((message) => message.role === "system")) {
@@ -1051,14 +1046,16 @@ var SummarizationHandler = class {
           })
         });
         return Object.assign(Object.assign({}, pipelineResult), { summary: { summary }, hadError, errorKind: pipelineResult.rawSummary.errorKind });
-      } catch (error41) {
+      } catch (error42) {
         const durationMs = performance.now() - startTime;
         summaryBlockingDurationMs.histogram(ctx, durationMs);
         if (timeBetweenMessages !== void 0) {
           timeBetweenLastTwoMessagesMs.histogram(ctx, timeBetweenMessages);
         }
-        logger7.error(ctx, "[summarization-handler] Summarize pipeline failed", error41, { summarization: summarizationLogFields });
-        throw error41;
+        logger7.error(ctx, "[summarization-handler] Summarize pipeline failed", error42, {
+          summarization: summarizationLogFields
+        });
+        throw error42;
       }
     });
   }
@@ -1142,8 +1139,8 @@ var SummarizationHandler = class {
    * The error detection logic is in openaiProxyAdapter.ts which converts
    * matching errors to InputTokenLimitError.
    */
-  static isTokenLimitError(error41) {
-    return error41 instanceof InputTokenLimitError;
+  static isTokenLimitError(error42) {
+    return error42 instanceof InputTokenLimitError;
   }
   /**
    * Checks if an error is a token-limit failure on either side of the model
@@ -1152,7 +1149,7 @@ var SummarizationHandler = class {
    * cause chain in addition to instanceof, since these typed errors can lose
    * class identity across transport boundaries.
    */
-  static isInputOrOutputTokenLimitError(error41) {
-    return error41 instanceof InputTokenLimitError || hasErrorName(error41, "InputTokenLimitError") || error41 instanceof OutputTokensLimitExceededError || hasErrorName(error41, "OutputTokensLimitExceededError");
+  static isInputOrOutputTokenLimitError(error42) {
+    return error42 instanceof InputTokenLimitError || hasErrorName(error42, "InputTokenLimitError") || error42 instanceof OutputTokensLimitExceededError || hasErrorName(error42, "OutputTokensLimitExceededError");
   }
 };

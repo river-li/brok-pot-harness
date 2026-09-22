@@ -1,4 +1,4 @@
-init_dist4();
+init_dist5();
 init_unknown_record();
 init_proto();
 var SKILL_FILENAME = "SKILL.md";
@@ -28,8 +28,8 @@ function toAgentSkills(skills) {
 function clampSkillName(name17) {
   return clampLine(name17, SKILL_MAX_NAME_LENGTH);
 }
-function clampSkillDescription(description10) {
-  return clampLine(description10, SKILL_MAX_DESCRIPTION_LENGTH);
+function clampSkillDescription(description9) {
+  return clampLine(description9, SKILL_MAX_DESCRIPTION_LENGTH);
 }
 function clampSkillBody(body) {
   return clampBlock(body, SKILL_MAX_BODY_LENGTH);
@@ -191,10 +191,10 @@ function buildLiveSourceDescription(name17, source) {
 function liveSkillSpecFromSource(args) {
   const source = args.source.trim();
   const name17 = clampSkillName(args.name);
-  const description10 = clampSkillDescription(args.description ?? "");
+  const description9 = clampSkillDescription(args.description ?? "");
   return {
     name: name17,
-    description: description10.length > 0 ? description10 : clampSkillDescription(buildLiveSourceDescription(name17, source)),
+    description: description9.length > 0 ? description9 : clampSkillDescription(buildLiveSourceDescription(name17, source)),
     body: clampSkillBody(buildLiveSourcePointerBody(source)),
     trigger: null,
     sourceRef: source

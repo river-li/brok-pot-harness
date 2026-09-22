@@ -27,18 +27,18 @@ function genericSandShellAutoReviewSummary(surface) {
 }
 function describeSandShellAutoReviewAction(args) {
   const location2 = shellLocationPhrase(args.surface);
-  const description10 = args.description?.replace(/\s+/g, " ").trim();
+  const description9 = args.description?.replace(/\s+/g, " ").trim();
   const cwd = args.workingDirectory === void 0 ? "" : ` from ${compact(args.workingDirectory, 100)}`;
-  if (description10 !== void 0 && description10.length > 0) {
-    const head = description10.replace(/[.!?]+$/u, "");
+  if (description9 !== void 0 && description9.length > 0) {
+    const head = description9.replace(/[.!?]+$/u, "");
     return compact(`${head} ${location2}${cwd}`, 340);
   }
   return compact(`${genericSandShellAutoReviewSummary(args.surface)}${cwd}`, 340);
 }
 function describeSandShellAutoReviewActionSource(args) {
   const summary = describeSandShellAutoReviewAction(args);
-  const description10 = args.description?.replace(/\s+/g, " ").trim();
-  const head = description10 === void 0 || description10.length === 0 ? void 0 : compact(description10.replace(/[.!?]+$/u, ""), 220);
+  const description9 = args.description?.replace(/\s+/g, " ").trim();
+  const head = description9 === void 0 || description9.length === 0 ? void 0 : compact(description9.replace(/[.!?]+$/u, ""), 220);
   const workingDirectory = args.workingDirectory === void 0 ? void 0 : compact(args.workingDirectory, 100);
   return {
     summary,
@@ -156,10 +156,10 @@ function fallbackSandMcpAutoReviewSummary(args) {
   return `${base} to ${hint}`;
 }
 function describeSandMcpAutoReviewAction(args) {
-  const description10 = args.description?.replace(/\s+/g, " ").trim();
+  const description9 = args.description?.replace(/\s+/g, " ").trim();
   const server = compact(args.serverDisplayName, 80);
-  if (description10 !== void 0 && description10.length > 0) {
-    const head = description10.replace(/[.!?]+$/u, "");
+  if (description9 !== void 0 && description9.length > 0) {
+    const head = description9.replace(/[.!?]+$/u, "");
     if (server.length > 0 && !mentionsServer(head, server)) {
       return compact(`${head} with ${server}`, 340);
     }
@@ -173,8 +173,8 @@ function describeSandMcpAutoReviewAction(args) {
 }
 function describeSandMcpAutoReviewActionSource(args) {
   const summary = describeSandMcpAutoReviewAction(args);
-  const description10 = args.description?.replace(/\s+/g, " ").trim();
-  const head = description10 === void 0 || description10.length === 0 ? void 0 : compact(description10.replace(/[.!?]+$/u, ""), 240);
+  const description9 = args.description?.replace(/\s+/g, " ").trim();
+  const head = description9 === void 0 || description9.length === 0 ? void 0 : compact(description9.replace(/[.!?]+$/u, ""), 240);
   const server = compact(args.serverDisplayName, 80);
   const toolName = head === void 0 ? compact(args.toolName, 80) || void 0 : void 0;
   const destinationHint = head === void 0 ? safeMcpDestinationHint(args.mcpArguments) : void 0;

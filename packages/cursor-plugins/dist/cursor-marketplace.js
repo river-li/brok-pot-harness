@@ -1,4 +1,4 @@
-var __awaiter49 = function(thisArg, _arguments, P2, generator) {
+var __awaiter51 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -60,7 +60,7 @@ var DefaultPluginCacheManager = class {
     return getPluginInstallCachePath(this.cacheRoot, args);
   }
   isCached(args) {
-    return __awaiter49(this, void 0, void 0, function* () {
+    return __awaiter51(this, void 0, void 0, function* () {
       const cacheDir = this.getCacheDir(args);
       try {
         const sentinelPath = (0, import_node_path57.join)(cacheDir, PLUGIN_CACHE_SENTINEL);
@@ -72,7 +72,7 @@ var DefaultPluginCacheManager = class {
     });
   }
   extractToCache(args) {
-    return __awaiter49(this, void 0, void 0, function* () {
+    return __awaiter51(this, void 0, void 0, function* () {
       const cacheDir = this.getCacheDir(args);
       yield (0, import_promises28.mkdir)(cacheDir, { recursive: true });
       const bufferStream = import_node_stream5.Readable.from(args.tarball);
@@ -82,7 +82,7 @@ var DefaultPluginCacheManager = class {
     });
   }
   listCachedVersions(args) {
-    return __awaiter49(this, void 0, void 0, function* () {
+    return __awaiter51(this, void 0, void 0, function* () {
       const safeSlug = sanitizePluginCacheMarketplaceSlug(args.marketplaceSlug);
       const safePluginId = sanitizePluginCachePluginId(args.pluginId);
       const pluginDir = (0, import_node_path57.join)(this.cacheRoot, safeSlug, safePluginId);
@@ -95,7 +95,7 @@ var DefaultPluginCacheManager = class {
     });
   }
   removeVersion(args) {
-    return __awaiter49(this, void 0, void 0, function* () {
+    return __awaiter51(this, void 0, void 0, function* () {
       const cacheDir = this.getCacheDir(args);
       try {
         yield (0, import_promises28.rm)(cacheDir, { recursive: true, force: true });
@@ -104,13 +104,13 @@ var DefaultPluginCacheManager = class {
     });
   }
   removeAllVersions(args) {
-    return __awaiter49(this, void 0, void 0, function* () {
+    return __awaiter51(this, void 0, void 0, function* () {
       const pluginDir = getPluginInstallCachePath(this.cacheRoot, args);
       yield (0, import_promises28.rm)(pluginDir, { recursive: true, force: true });
     });
   }
   pruneOldVersions(args) {
-    return __awaiter49(this, void 0, void 0, function* () {
+    return __awaiter51(this, void 0, void 0, function* () {
       const cachedVersions2 = yield this.listCachedVersions({
         marketplaceSlug: args.marketplaceSlug,
         pluginId: args.pluginId
@@ -128,7 +128,7 @@ var DefaultPluginCacheManager = class {
     });
   }
   markCacheComplete(args) {
-    return __awaiter49(this, void 0, void 0, function* () {
+    return __awaiter51(this, void 0, void 0, function* () {
       const cacheDir = this.getCacheDir(args);
       yield (0, import_promises28.writeFile)((0, import_node_path57.join)(cacheDir, PLUGIN_CACHE_SENTINEL), "");
     });

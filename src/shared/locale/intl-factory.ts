@@ -1,4 +1,4 @@
-init_dist4();
+init_dist5();
 function lazyMemoizedIntlFactory(create) {
   let slot;
   return () => {

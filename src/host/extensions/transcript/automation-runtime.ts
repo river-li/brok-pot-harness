@@ -401,6 +401,6 @@ var AutomationRuntime = class {
   }
   async ensureHiddenTurnReply(runner, voiceLine) {
     const prompt = voiceLine === void 0 ? REPLY_NUDGE_PROMPT : MainLoopVoicePrompt.replyNudge({ sendTool: "SendToUser", address: voiceLine });
-    return await runner.run(prompt, { hidden: true });
+    return await runner.run(prompt, { hidden: true, continuesTurn: true });
   }
 };

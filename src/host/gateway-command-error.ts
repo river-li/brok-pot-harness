@@ -8,9 +8,9 @@ var NETWORK_ERRNOS = /* @__PURE__ */ new Set([
   "ENETDOWN",
   "ENETRESET"
 ]);
-function hasTimeoutName(error41) {
+function hasTimeoutName(error42) {
   const seen = /* @__PURE__ */ new Set();
-  let current = error41;
+  let current = error42;
   while (current != null && typeof current === "object" && !seen.has(current)) {
     seen.add(current);
     const name17 = current.name;
@@ -21,25 +21,25 @@ function hasTimeoutName(error41) {
   }
   return false;
 }
-function classifyGatewayCommandError(error41) {
-  const errorClass = error41 instanceof Error ? error41.name || "Error" : "unknown";
-  const errno = findSystemErrno(error41);
-  if (error41 instanceof SandBoxDaemonUnreachableError) {
+function classifyGatewayCommandError(error42) {
+  const errorClass = error42 instanceof Error ? error42.name || "Error" : "unknown";
+  const errno = findSystemErrno(error42);
+  if (error42 instanceof SandBoxDaemonUnreachableError) {
     const reason = (() => {
-      if (error41.outcome === "refused") return "daemon_refused";
-      if (error41.outcome === "timeout") return "daemon_timeout";
+      if (error42.outcome === "refused") return "daemon_refused";
+      if (error42.outcome === "timeout") return "daemon_timeout";
       return "daemon_crash";
     })();
     return { reason, errorClass, errno };
   }
-  if (error41 instanceof SandBoxNoMonitorAvailableError) {
+  if (error42 instanceof SandBoxNoMonitorAvailableError) {
     return { reason: "no_monitor", errorClass, errno };
   }
   if (errno === "ECONNREFUSED") return { reason: "refused", errorClass, errno };
   if (errno === "ENOTFOUND" || errno === "EAI_AGAIN") {
     return { reason: "dns", errorClass, errno };
   }
-  if (errno === "ETIMEDOUT" || hasTimeoutName(error41)) {
+  if (errno === "ETIMEDOUT" || hasTimeoutName(error42)) {
     return { reason: "timeout", errorClass, errno };
   }
   if (errno != null && NETWORK_ERRNOS.has(errno)) {

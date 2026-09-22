@@ -1,4 +1,4 @@
-var __awaiter46 = function(thisArg, _arguments, P2, generator) {
+var __awaiter48 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -42,7 +42,7 @@ function isWritethroughBlobStore(blobStore) {
   return blobStore instanceof WritethroughBlobStore || typeof blobStore.setBlobAwaitingSecondary === "function";
 }
 function setBlobReadableFromCloudMirror(options2) {
-  return __awaiter46(this, void 0, void 0, function* () {
+  return __awaiter48(this, void 0, void 0, function* () {
     const target = unwrapBlobStore(options2.blobStore);
     if (isWritethroughBlobStore(target)) {
       yield target.setBlobAwaitingSecondary(options2.ctx, options2.blobId, options2.blobData);
@@ -62,22 +62,22 @@ var TypedBlobStore = class {
   }
   // Forward all standard BlobStore methods to the inner store
   getBlob(ctx, blobId) {
-    return __awaiter46(this, void 0, void 0, function* () {
+    return __awaiter48(this, void 0, void 0, function* () {
       return this.inner.getBlob(ctx, blobId);
     });
   }
   setBlob(ctx, blobId, blobData) {
-    return __awaiter46(this, void 0, void 0, function* () {
+    return __awaiter48(this, void 0, void 0, function* () {
       return this.inner.setBlob(ctx, blobId, blobData);
     });
   }
   setBlobLocallyOnly(ctx, blobId, blobData) {
-    return __awaiter46(this, void 0, void 0, function* () {
+    return __awaiter48(this, void 0, void 0, function* () {
       return this.inner.setBlobLocallyOnly(ctx, blobId, blobData);
     });
   }
   flush(ctx) {
-    return __awaiter46(this, void 0, void 0, function* () {
+    return __awaiter48(this, void 0, void 0, function* () {
       return this.inner.flush(ctx);
     });
   }

@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage178 = "origin.v1.";
-var __protoMessage3169 = class extends CompactMessage {
+var __protoPackage179 = "origin.v1.";
+var __protoMessage3170 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage178;
+    return __protoPackage179;
   }
 };
-var Label = class _Label extends __protoMessage3169 {
+var Label = class _Label extends __protoMessage3170 {
   constructor(data) {
     super();
     this.id = "";
@@ -34,7 +34,7 @@ var Label = class _Label extends __protoMessage3169 {
     return ["Label|1 id 9|2 repo_uuid 9|3 name 9|4 color 9|5 description 9?|6 created_at #0|7 updated_at #0", Timestamp];
   }
 };
-var CreateLabelRequest = class _CreateLabelRequest extends __protoMessage3169 {
+var CreateLabelRequest = class _CreateLabelRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.name = "";
@@ -57,7 +57,7 @@ var CreateLabelRequest = class _CreateLabelRequest extends __protoMessage3169 {
     return ["CreateLabelRequest|1 repo #0|2 name 9|3 color 9|4 description 9?", ClientRepoIdentifier];
   }
 };
-var CreateLabelResponse = class _CreateLabelResponse extends __protoMessage3169 {
+var CreateLabelResponse = class _CreateLabelResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -78,7 +78,7 @@ var CreateLabelResponse = class _CreateLabelResponse extends __protoMessage3169 
     return ["CreateLabelResponse|1 label #0", Label];
   }
 };
-var UpdateLabelRequest = class _UpdateLabelRequest extends __protoMessage3169 {
+var UpdateLabelRequest = class _UpdateLabelRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.labelId = "";
@@ -100,7 +100,7 @@ var UpdateLabelRequest = class _UpdateLabelRequest extends __protoMessage3169 {
     return ["UpdateLabelRequest|1 repo #0|2 label_id 9|3 name 9?|4 color 9?|5 description 9?", ClientRepoIdentifier];
   }
 };
-var UpdateLabelResponse = class _UpdateLabelResponse extends __protoMessage3169 {
+var UpdateLabelResponse = class _UpdateLabelResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -121,7 +121,7 @@ var UpdateLabelResponse = class _UpdateLabelResponse extends __protoMessage3169 
     return ["UpdateLabelResponse|1 label #0", Label];
   }
 };
-var DeleteLabelRequest = class _DeleteLabelRequest extends __protoMessage3169 {
+var DeleteLabelRequest = class _DeleteLabelRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.labelId = "";
@@ -143,7 +143,7 @@ var DeleteLabelRequest = class _DeleteLabelRequest extends __protoMessage3169 {
     return ["DeleteLabelRequest|1 repo #0|2 label_id 9", ClientRepoIdentifier];
   }
 };
-var DeleteLabelResponse = class _DeleteLabelResponse extends __protoMessage3169 {
+var DeleteLabelResponse = class _DeleteLabelResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -164,7 +164,7 @@ var DeleteLabelResponse = class _DeleteLabelResponse extends __protoMessage3169 
     return ["DeleteLabelResponse"];
   }
 };
-var ListLabelsRequest = class _ListLabelsRequest extends __protoMessage3169 {
+var ListLabelsRequest = class _ListLabelsRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -185,7 +185,7 @@ var ListLabelsRequest = class _ListLabelsRequest extends __protoMessage3169 {
     return ["ListLabelsRequest|1 repo #0|2 cursor 9?|3 limit 5?|4 search_query 9?", ClientRepoIdentifier];
   }
 };
-var ListLabelsResponse = class _ListLabelsResponse extends __protoMessage3169 {
+var ListLabelsResponse = class _ListLabelsResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     this.labels = [];
@@ -207,7 +207,7 @@ var ListLabelsResponse = class _ListLabelsResponse extends __protoMessage3169 {
     return ["ListLabelsResponse|1 labels #0*|2 next_cursor 9?", Label];
   }
 };
-var GetLabelByNameRequest = class _GetLabelByNameRequest extends __protoMessage3169 {
+var GetLabelByNameRequest = class _GetLabelByNameRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.name = "";
@@ -229,7 +229,7 @@ var GetLabelByNameRequest = class _GetLabelByNameRequest extends __protoMessage3
     return ["GetLabelByNameRequest|1 repo #0|2 name 9", ClientRepoIdentifier];
   }
 };
-var GetLabelByNameResponse = class _GetLabelByNameResponse extends __protoMessage3169 {
+var GetLabelByNameResponse = class _GetLabelByNameResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -250,7 +250,7 @@ var GetLabelByNameResponse = class _GetLabelByNameResponse extends __protoMessag
     return ["GetLabelByNameResponse|1 label #0?", Label];
   }
 };
-var AddLabelToChangeRequest = class _AddLabelToChangeRequest extends __protoMessage3169 {
+var AddLabelToChangeRequest = class _AddLabelToChangeRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.labelId = "";
@@ -272,7 +272,7 @@ var AddLabelToChangeRequest = class _AddLabelToChangeRequest extends __protoMess
     return ["AddLabelToChangeRequest|1 change #0|2 label_id 9", ChangeIdentifier];
   }
 };
-var AddLabelToChangeResponse = class _AddLabelToChangeResponse extends __protoMessage3169 {
+var AddLabelToChangeResponse = class _AddLabelToChangeResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -293,7 +293,7 @@ var AddLabelToChangeResponse = class _AddLabelToChangeResponse extends __protoMe
     return ["AddLabelToChangeResponse"];
   }
 };
-var RemoveLabelFromChangeRequest = class _RemoveLabelFromChangeRequest extends __protoMessage3169 {
+var RemoveLabelFromChangeRequest = class _RemoveLabelFromChangeRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.labelId = "";
@@ -315,7 +315,7 @@ var RemoveLabelFromChangeRequest = class _RemoveLabelFromChangeRequest extends _
     return ["RemoveLabelFromChangeRequest|1 change #0|2 label_id 9", ChangeIdentifier];
   }
 };
-var RemoveLabelFromChangeResponse = class _RemoveLabelFromChangeResponse extends __protoMessage3169 {
+var RemoveLabelFromChangeResponse = class _RemoveLabelFromChangeResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);

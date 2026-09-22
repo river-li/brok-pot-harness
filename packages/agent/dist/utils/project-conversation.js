@@ -1,4 +1,4 @@
-init_dist();
+init_dist2();
 init_agent_pb();
 function isRootProjectUserMessage(userMessage2) {
   return isRootProjectDetails(userMessage2.projectDetails) && userMessage2.bestOfNGroupId === void 0;

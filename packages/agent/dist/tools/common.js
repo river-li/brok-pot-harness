@@ -52,9 +52,9 @@ var __disposeResources4 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger16 = createLogger("tools/common");
 function generateSeededUuid(seed) {
@@ -207,12 +207,12 @@ function createZodAgentTool(toolIdentifier, tool) {
         __disposeResources4(env_1);
       }
     },
-    serializeError: (error41) => tool.serializeError(error41)
+    serializeError: (error42) => tool.serializeError(error42)
   };
 }
 var ToolCallError = class extends Error {
-  constructor({ clientVisibleErrorMessage, modelVisibleErrorMessage, error: error41 }) {
-    super(error41);
+  constructor({ clientVisibleErrorMessage, modelVisibleErrorMessage, error: error42 }) {
+    super(error42);
     this.clientVisibleErrorMessage = clientVisibleErrorMessage;
     this.modelVisibleErrorMessage = modelVisibleErrorMessage;
   }
@@ -220,11 +220,11 @@ var ToolCallError = class extends Error {
 var ToolTimeoutError = class extends ToolCallError {
 };
 var CustomToolCallError = class extends ToolCallError {
-  constructor(classification, { clientVisibleErrorMessage, modelVisibleErrorMessage, error: error41 }) {
+  constructor(classification, { clientVisibleErrorMessage, modelVisibleErrorMessage, error: error42 }) {
     super({
       clientVisibleErrorMessage,
       modelVisibleErrorMessage,
-      error: error41
+      error: error42
     });
     this.classification = classification;
   }
@@ -292,8 +292,8 @@ function parseJsonArgsWithZodSchema(args, schema2, options2) {
   let parsedJson;
   try {
     parsedJson = JSON.parse(args);
-  } catch (error41) {
-    const parseErrorMessage = error41 instanceof Error ? error41.message : "Invalid arguments";
+  } catch (error42) {
+    const parseErrorMessage = error42 instanceof Error ? error42.message : "Invalid arguments";
     const markupHint = options2?.modelVendor === GLM_TOOL_CALL_TEMPLATE_VENDOR && containsGlmToolCallMarkup(args) ? GLM_TOOL_CALL_MARKUP_HINT : "";
     throw new ToolCallArgParseError(`Tool call arguments were not valid JSON (${parseErrorMessage}). Re-issue the call with arguments as a single well-formed JSON object.${markupHint}`);
   }
@@ -331,13 +331,13 @@ var withSafeParsedArgs = (parametersSchema29, execute, initialToolCall, options2
           classifyParseFailure: options2?.classifyParseFailure,
           modelVendor: meta.modelVendor
         });
-      } catch (error41) {
+      } catch (error42) {
         const toolName2 = initialToolCall.tool?.case ?? "unknown";
         toolArgsParseSuccessRate.histogram(ctx, 0, { tool_name: toolName2 });
-        if (error41 instanceof ToolCallArgParseError) {
-          throw error41;
+        if (error42 instanceof ToolCallArgParseError) {
+          throw error42;
         }
-        const errorMessage6 = error41 instanceof Error ? error41.message : "Invalid arguments";
+        const errorMessage6 = error42 instanceof Error ? error42.message : "Invalid arguments";
         throw new ToolCallArgParseError(errorMessage6);
       }
       const rawArgs = parsedArgs;

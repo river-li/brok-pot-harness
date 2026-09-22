@@ -7,8 +7,8 @@ var TERMINAL_MIGRATION_RPC_CODES = /* @__PURE__ */ new Set([
   Code.Unauthenticated,
   Code.FailedPrecondition
 ]);
-function isTerminalHarnessMigrationRpcError(error41) {
-  return TERMINAL_MIGRATION_RPC_CODES.has(ConnectError.from(error41).code);
+function isTerminalHarnessMigrationRpcError(error42) {
+  return TERMINAL_MIGRATION_RPC_CODES.has(ConnectError.from(error42).code);
 }
 var resumeOwnershipExtension = defineHostExtension({
   id: "resume-ownership",
@@ -83,14 +83,14 @@ var resumeOwnershipExtension = defineHostExtension({
             }
             if (response.state === GrokBotBoxHarnessMigrationPassState.DONE) return "done";
             cutoverMayHaveStarted = true;
-          } catch (error41) {
+          } catch (error42) {
             deadlineSignal.throwIfAborted();
-            if (isTerminalHarnessMigrationRpcError(error41)) {
+            if (isTerminalHarnessMigrationRpcError(error42)) {
               return cutoverMayHaveStarted ? "abandoned_after_drain" : "abandoned";
             }
             cutoverMayHaveStarted = true;
             context2.host.log(
-              `[sand:resume-ownership] harness migration notify failed (${errorLogTag(error41)})`
+              `[sand:resume-ownership] harness migration notify failed (${errorLogTag(error42)})`
             );
           }
           await migrationRetry.schedule(attempt, deadlineSignal).elapsed;
@@ -123,8 +123,8 @@ var resumeOwnershipExtension = defineHostExtension({
         const activeAgentId = transcript.getActiveAgentId();
         if (activeAgentId != null) {
           const kickstart = async () => {
-            const ready2 = await turnExecution.isRunReady();
-            await transcript.kickstartAgent(activeAgentId, ready2);
+            const ready3 = await turnExecution.isRunReady();
+            await transcript.kickstartAgent(activeAgentId, ready3);
           };
           void kickstart();
         }

@@ -1,6 +1,6 @@
-init_dist3();
+init_dist4();
 init_errors();
-var logger101 = createLogger("sand:automation-completion-middleware");
+var logger102 = createLogger("sand:automation-completion-middleware");
 var SAND_AUTOMATION_COMPLETION_PROMPT_TAG = "sandAutomationCompletionId";
 function completionIdOf(message) {
   const value = message.providerOptions?.cursor?.[SAND_AUTOMATION_COMPLETION_PROMPT_TAG];
@@ -32,9 +32,9 @@ var AutomationCompletionMiddleware = class extends BaseMiddleware {
     let completions;
     try {
       completions = this.source.drain();
-    } catch (error41) {
-      logger101.warn(ctx, "Failed to drain automation completion inbox", {
-        error: errorLogTag(error41)
+    } catch (error42) {
+      logger102.warn(ctx, "Failed to drain automation completion inbox", {
+        error: errorLogTag(error42)
       });
       return;
     }

@@ -5,7 +5,7 @@ function createCodebaseTelemetryService({
   createAdapter,
   privacyMode,
   policies: policies2,
-  logger: logger107
+  logger: logger108
 }) {
   let currentAdapter;
   let controller;
@@ -22,12 +22,12 @@ function createCodebaseTelemetryService({
       void adapter.terminalFailure?.then(() => scheduleRestart(adapter));
       return adapter;
     },
-    logger: logger107
+    logger: logger108
   });
   controller = new CodebaseTelemetryController({ host });
   const snapshotTrigger = new CodebaseSnapshotTrigger({
     getSession: () => controller.session,
-    logger: logger107
+    logger: logger108
   });
   const unsubscribeFromRunStarted = events.on(
     "transcript.run-started",
@@ -51,11 +51,11 @@ function createCodebaseTelemetryService({
       restartDelay = delay5;
       try {
         await delay5.elapsed;
-      } catch (error41) {
+      } catch (error42) {
         if (stopping || controller !== failedController) {
           return;
         }
-        throw error41;
+        throw error42;
       } finally {
         if (restartDelay === delay5) {
           restartDelay = void 0;
@@ -68,8 +68,8 @@ function createCodebaseTelemetryService({
     })().finally(() => {
       restartPromise = void 0;
     });
-    void restartPromise.catch((error41) => {
-      logger107.error("Failed to restart Codebase Telemetry after adapter failure", error41);
+    void restartPromise.catch((error42) => {
+      logger108.error("Failed to restart Codebase Telemetry after adapter failure", error42);
     });
   }
   let disposePromise;
@@ -90,11 +90,11 @@ function createCodebaseTelemetryService({
         unsubscribeFromRunEnded();
         try {
           await policies2.shutdownDeadline.run(() => controller.shutdown());
-        } catch (error41) {
-          if (!(error41 instanceof DeadlineExceededError)) {
-            throw error41;
+        } catch (error42) {
+          if (!(error42 instanceof DeadlineExceededError)) {
+            throw error42;
           }
-          logger107.warn("Controller shutdown exceeded its deadline", error41);
+          logger108.warn("Controller shutdown exceeded its deadline", error42);
         } finally {
           host.dispose();
         }
@@ -104,13 +104,13 @@ function createCodebaseTelemetryService({
   };
 }
 function createSandCodebaseTelemetryLogger(log4) {
-  const write = (level, message, error41) => {
-    log4(`[codebase-telemetry] ${level}: ${formatLogMessage(message, error41)}`);
+  const write2 = (level, message, error42) => {
+    log4(`[codebase-telemetry] ${level}: ${formatLogMessage(message, error42)}`);
   };
   return {
-    error: (message, error41) => write("error", message, error41),
-    warn: (message, error41) => write("warn", message, error41),
-    info: (message, error41) => write("info", message, error41),
-    debug: (message, error41) => write("debug", message, error41)
+    error: (message, error42) => write2("error", message, error42),
+    warn: (message, error42) => write2("warn", message, error42),
+    info: (message, error42) => write2("info", message, error42),
+    debug: (message, error42) => write2("debug", message, error42)
   };
 }

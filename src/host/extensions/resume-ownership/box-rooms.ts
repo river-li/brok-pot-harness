@@ -5,7 +5,7 @@ async function summarizeBoxRooms(deps) {
       ({ room, membersServerBound }) => ({ roomId: room.id, membersServerBound })
     );
     return { rooms, unavailable: null };
-  } catch (error41) {
-    return { rooms: [], unavailable: errorLogTag(error41) };
+  } catch (error42) {
+    return { rooms: [], unavailable: errorLogTag(error42) };
   }
 }

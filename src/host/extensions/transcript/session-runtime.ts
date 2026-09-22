@@ -1,5 +1,5 @@
-var import_node_path157 = require("node:path");
-init_dist2();
+var import_node_path156 = require("node:path");
+init_dist3();
 init_errors();
 function readActivationGap(db, shippedThroughId) {
   return shippedThroughId == null ? db.getTranscriptEntries() : db.getTranscriptEntriesAfter(shippedThroughId);
@@ -10,8 +10,8 @@ var AgentGoneError = class extends SandDomainError {
     super(`Bot ${agentId} no longer exists`);
   }
 };
-function isAgentAbsent(error41) {
-  return error41 instanceof AgentGoneError || chainCarriesMarker(error41, "isAgentMissing");
+function isAgentAbsent(error42) {
+  return error42 instanceof AgentGoneError || chainCarriesMarker(error42, "isAgentMissing");
 }
 var SessionRuntime = class {
   constructor(tm, windowedActivationDefer) {
@@ -69,7 +69,7 @@ var SessionRuntime = class {
   }
   getActiveAgentDir() {
     const session = this.activeSession;
-    return session == null ? void 0 : (0, import_node_path157.dirname)(session.dbPath);
+    return session == null ? void 0 : (0, import_node_path156.dirname)(session.dbPath);
   }
   async ensureLoaded() {
     const session = await this.restoreSession();
@@ -328,10 +328,10 @@ var SessionRuntime = class {
       if (activated === void 0) return;
       this.emitActivationGap(activated.gap);
       await this.announceActivation({ agentId, previousAgentId: current?.id });
-    }).catch((error41) => {
+    }).catch((error42) => {
       this.clearPendingActivationClaim(abort);
       this.tm.hostLog(
-        `[sand] windowed background activation failed for ${agentId}: ${errorLogTag(error41)}`,
+        `[sand] windowed background activation failed for ${agentId}: ${errorLogTag(error42)}`,
         "error"
       );
     });
@@ -389,11 +389,11 @@ var SessionRuntime = class {
   openSessionOnce(agentId) {
     const pending = this.pendingSessionOpens.get(agentId);
     if (pending != null) return pending;
-    const open9 = this.tm.sessionStore.openSession(agentId).catch((error41) => {
+    const open9 = this.tm.sessionStore.openSession(agentId).catch((error42) => {
       if (this.pendingSessionOpens.get(agentId) === open9) {
         this.pendingSessionOpens.delete(agentId);
       }
-      throw error41;
+      throw error42;
     });
     this.pendingSessionOpens.set(agentId, open9);
     return open9;
@@ -417,9 +417,9 @@ var SessionRuntime = class {
         this.setActiveSession(session);
         this.tm.runLifecycle.watchActiveSession(session);
         return session;
-      } catch (error41) {
+      } catch (error42) {
         this.tm.hostLog(
-          `[sand] skipping unopenable agent ${id} on boot: ${errorLogTag(error41)}`,
+          `[sand] skipping unopenable agent ${id} on boot: ${errorLogTag(error42)}`,
           "error"
         );
       }

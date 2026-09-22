@@ -9,16 +9,16 @@ function createRemoteAgentMessagingCapabilities(args) {
           try {
             const response = await args.client.getGrokBotRuntimeCapabilities({}, { signal });
             return response.capabilities?.agentMessagingEnabled ?? "legacy";
-          } catch (error41) {
-            if (error41 instanceof ConnectError && error41.code === Code.Unimplemented) {
+          } catch (error42) {
+            if (error42 instanceof ConnectError && error42.code === Code.Unimplemented) {
               return "legacy";
             }
-            throw error41;
+            throw error42;
           }
         }, args.signal);
-      } catch (error41) {
+      } catch (error42) {
         enabled = false;
-        throw error41;
+        throw error42;
       }
     }
   };

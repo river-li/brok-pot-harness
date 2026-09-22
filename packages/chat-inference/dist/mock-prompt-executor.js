@@ -1,4 +1,4 @@
-var __awaiter21 = function(thisArg, _arguments, P2, generator) {
+var __awaiter26 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -172,7 +172,7 @@ var MockPromptExecutor = class extends BasePromptExecutor {
         });
       });
     })();
-    const response = (() => __awaiter21(this, void 0, void 0, function* () {
+    const response = (() => __awaiter26(this, void 0, void 0, function* () {
       const content = [];
       if (responseText) {
         content.push({

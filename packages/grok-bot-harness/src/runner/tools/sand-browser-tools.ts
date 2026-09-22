@@ -49,9 +49,9 @@ function decodeEnvelope(raw) {
         return { text: text2, imageKey: stringField(fields2, "imageKey") };
       }
     }
-  } catch (error41) {
+  } catch (error42) {
     process.stderr.write(
-      `sand.computer_use.browser_result_envelope_unparseable error_class=${errorLogTag(error41)}
+      `sand.computer_use.browser_result_envelope_unparseable error_class=${errorLogTag(error42)}
 `
     );
   }
@@ -170,10 +170,10 @@ var SandBrowserDriver = class {
         );
       }
       return index;
-    }).catch((error41) => {
+    }).catch((error42) => {
       this.windowIndex = void 0;
-      throw error41 instanceof SandBrowserDriverError ? error41 : new SandBrowserDriverError(
-        `Could not resolve this agent's browser window: ${errorMessage(error41)}`,
+      throw error42 instanceof SandBrowserDriverError ? error42 : new SandBrowserDriverError(
+        `Could not resolve this agent's browser window: ${errorMessage(error42)}`,
         "window_resolution_failed"
       );
     });
@@ -185,10 +185,10 @@ var SandBrowserDriver = class {
       this.deps.getBoxId(),
       SAND_BROWSER_DRIVER_BOX_PATH,
       import_node_buffer6.Buffer.from(SAND_BROWSER_DRIVER_SOURCE, "utf8")
-    ).catch((error41) => {
+    ).catch((error42) => {
       this.uploaded = void 0;
       throw new SandBrowserDriverError(
-        `Could not install the browser driver on the box: ${errorMessage(error41)}`,
+        `Could not install the browser driver on the box: ${errorMessage(error42)}`,
         "upload_failed"
       );
     });
@@ -206,8 +206,15 @@ var SandBrowserDriver = class {
       this.resolveWindowIndex(ctx),
       this.ensureUploaded(ctx)
     ]);
-    const screenshotPath = skipScreenshot === true ? void 0 : `${SAND_BROWSER_DRIVER_BOX_DIR}/shot-${sanitizeForBoxPath(toolCallId)}.png`;
-    const request3 = {
+    let screenshotPath;
+    if (skipScreenshot === true) {
+      screenshotPath = void 0;
+    } else if (op === "screenshot") {
+      screenshotPath = `/workspace/screenshots/shot-${sanitizeForBoxPath(toolCallId)}.png`;
+    } else {
+      screenshotPath = `${SAND_BROWSER_DRIVER_BOX_DIR}/shot-${sanitizeForBoxPath(toolCallId)}.png`;
+    }
+    const request5 = {
       ...args,
       op,
       display: windowIndex,
@@ -216,7 +223,7 @@ var SandBrowserDriver = class {
       navigationRecovery: this.deps.isNavigationRecoveryEnabled?.() === true,
       ...screenshotPath !== void 0 ? { screenshotPath } : {}
     };
-    const encoded = import_node_buffer6.Buffer.from(JSON.stringify(request3), "utf8").toString("base64");
+    const encoded = import_node_buffer6.Buffer.from(JSON.stringify(request5), "utf8").toString("base64");
     const shell = this.deps.resourceAccessor.get(shellExecutorResource);
     observation.stage = "shell";
     const shellResult = shell.execute(
@@ -225,7 +232,7 @@ var SandBrowserDriver = class {
         command: `node ${SAND_BROWSER_DRIVER_BOX_PATH} ${encoded}`,
         name: "node",
         workingDirectory: "/workspace",
-        toolCallId: `sand-browser-${op}-${sanitizeForBoxPath(toolCallId)}`,
+        toolCallId,
         timeoutMs: SAND_BROWSER_DRIVER_SHELL_TIMEOUT_MS
       })
     );
@@ -288,9 +295,9 @@ var SandBrowserDriver = class {
       if (bytes.length === 0) return void 0;
       const persistImage = this.deps.getPersistImage();
       if (persistImage !== void 0) {
-        await persistImage(bytes, "image/png").catch((error41) => {
+        await persistImage(bytes, "image/png").catch((error42) => {
           process.stderr.write(
-            `sand.computer_use.browser_screenshot_persist_failed error_class=${errorLogTag(error41)}
+            `sand.computer_use.browser_screenshot_persist_failed error_class=${errorLogTag(error42)}
 `
           );
         });
@@ -364,8 +371,8 @@ function stringArg(args, key) {
   return typeof value === "string" ? value : void 0;
 }
 var SAND_BROWSER_MAX_HOLD_DURATION_MS = 3e4;
-function browserHoldDurationField(description10) {
-  return external_exports.number().int().min(1).max(SAND_BROWSER_MAX_HOLD_DURATION_MS).optional().describe(`${description10} Max ${SAND_BROWSER_MAX_HOLD_DURATION_MS}.`);
+function browserHoldDurationField(description9) {
+  return external_exports.number().int().min(1).max(SAND_BROWSER_MAX_HOLD_DURATION_MS).optional().describe(`${description9} Max ${SAND_BROWSER_MAX_HOLD_DURATION_MS}.`);
 }
 function numberArg(args, key) {
   const value = args[key];
@@ -448,11 +455,15 @@ async function captureBrowserReviewState(args) {
     displayNumber = await args.resolveDisplayNumber(args.ctx);
   } catch {
     throw new SandBrowserAutoReviewBlockedError(
-      "Browser Auto-review could not identify this agent's own display; retry once the box desktop is ready."
+      "Browser Auto-review could not identify this agent's own display; retry once the box desktop is ready.",
+      "display_unavailable"
     );
   }
   if (displayNumber === void 0) {
-    throw new SandBrowserAutoReviewBlockedError(SAND_BOX_NO_MONITOR_AVAILABLE_MESSAGE);
+    throw new SandBrowserAutoReviewBlockedError(
+      SAND_BOX_NO_MONITOR_AVAILABLE_MESSAGE,
+      "display_unavailable"
+    );
   }
   let result;
   try {
@@ -467,7 +478,8 @@ async function captureBrowserReviewState(args) {
     );
   } catch {
     throw new SandBrowserAutoReviewBlockedError(
-      "Browser Auto-review could not capture the current page state."
+      "Browser Auto-review could not capture the current page state.",
+      "state_capture_failed"
     );
   }
   const probe = classifyNavigationProbeResult(result, args.ctx.signal.aborted);
@@ -476,7 +488,8 @@ async function captureBrowserReviewState(args) {
   }
   if (probe.kind === "capture-failed") {
     throw new SandBrowserAutoReviewBlockedError(
-      "Browser Auto-review could not capture the current page state."
+      "Browser Auto-review could not capture the current page state.",
+      "state_capture_failed"
     );
   }
   const { stdout } = probe;
@@ -562,18 +575,18 @@ function defineBrowserTool(driver, deps, spec) {
                   deps.onPossibleNavigation?.(ctx);
                 }
                 return toResultProto(output);
-              } catch (error41) {
-                if (error41 instanceof DeferredInteractionResponseError) {
+              } catch (error42) {
+                if (error42 instanceof DeferredInteractionResponseError) {
                   observation.fail("auto_review_blocked");
-                  throw error41;
+                  throw error42;
                 }
-                if (error41 instanceof SandBrowserAutoReviewBlockedError) {
+                if (error42 instanceof SandBrowserAutoReviewBlockedError) {
                   observation.fail("auto_review_blocked");
                 } else {
-                  observation.caught(error41);
+                  observation.caught(error42);
                 }
                 return toResultProto({
-                  text: errorMessage(error41),
+                  text: errorMessage(error42),
                   isError: true
                 });
               }
@@ -585,7 +598,7 @@ function defineBrowserTool(driver, deps, spec) {
         { emitInitialPartialToolCall: false }
       ),
       render: (_ctx, output) => renderBrowserToolOutput(output, (imageKey) => driver.takeScreenshot(imageKey)),
-      serializeError: (error41) => buildResultToolCall(spec.name, toResultProto({ text: errorMessage(error41), isError: true }))
+      serializeError: (error42) => buildResultToolCall(spec.name, toResultProto({ text: errorMessage(error42), isError: true }))
     }
   );
   return {
@@ -619,10 +632,10 @@ function isJavascriptUrl(url2) {
     return false;
   }
 }
-function browserUrlField(description10) {
+function browserUrlField(description9) {
   return external_exports.string().min(1).refine((url2) => !isJavascriptUrl(url2), {
     message: "javascript: URLs are not allowed; open an http(s) page instead."
-  }).describe(description10);
+  }).describe(description9);
 }
 var elementField = external_exports.string().optional().describe("Human-readable description of the element.");
 function createSandBrowserTools(deps) {
@@ -812,7 +825,7 @@ function createSandBrowserTools(deps) {
     defineBrowserTool(driver, deps, {
       id: "BROWSER_CDP",
       name: "browser_cdp",
-      description: "Send a Chrome DevTools Protocol command to the target browser tab. Do not use CDP Input.* methods; use dedicated browser tools for clicks, text input, key presses, scrolling, and drag-and-drop. Browser-wide, storage, cookie, cache, permission, and target-management commands are denied.",
+      description: "Send a Chrome DevTools Protocol command to the target browser tab. Do not use CDP Input.* methods; use dedicated browser tools for clicks, text input, key presses, scrolling, and drag-and-drop. Browser-wide, storage, cookie, cache, permission, and target-management commands are denied. Results over 20k characters are written to /workspace/browser-cdp (not packed into the box store); the tool returns {truncated, outputFile, bytes, preview}. Read that file, or Shell/jq if a single line exceeds Read's 100k-character limit.",
       op: "cdp",
       canNavigate: true,
       parameters: external_exports.object({
@@ -843,7 +856,7 @@ function createSandBrowserTools(deps) {
     defineBrowserTool(driver, deps, {
       id: "BROWSER_TAKE_SCREENSHOT",
       name: "browser_take_screenshot",
-      description: "Save a screenshot of the current page. Use fullPage for the full scrollable page.",
+      description: "Save a screenshot of the current page to /workspace/screenshots (not packed into the box store). Use fullPage for the full scrollable page.",
       op: "screenshot",
       parameters: external_exports.object({
         viewId: viewIdField,

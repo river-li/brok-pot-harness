@@ -5,10 +5,10 @@ function defaultIsProcessAlive(pid) {
   try {
     process.kill(pid, 0);
     return true;
-  } catch (error41) {
-    const code = findSystemErrno(error41);
+  } catch (error42) {
+    const code = findSystemErrno(error42);
     if (code === "ESRCH" || code === "EPERM" || code === "ERR_INVALID_ARG_TYPE") return false;
-    throw error41;
+    throw error42;
   }
 }
 function defaultTerminateProcess(pid, signal) {
@@ -24,8 +24,8 @@ function readLockPid(path31) {
   let raw;
   try {
     raw = (0, import_node_fs29.readFileSync)(path31, "utf8");
-  } catch (error41) {
-    reportFallbackUnlessAbsent("host_lock", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("host_lock", error42);
     return null;
   }
   const pid = Number.parseInt(raw.trim(), 10);
@@ -46,9 +46,9 @@ function tryCreateLock(path31, pid) {
       (0, import_node_fs29.closeSync)(fd);
     }
     return true;
-  } catch (error41) {
-    if (findSystemErrno(error41) === "EEXIST") return false;
-    throw error41;
+  } catch (error42) {
+    if (findSystemErrno(error42) === "EEXIST") return false;
+    throw error42;
   }
 }
 function makeHandle(path31, pid) {

@@ -1,10 +1,4 @@
-import {
-  appendFileSync,
-  existsSync,
-  renameSync,
-  watch,
-  writeFileSync,
-} from "node:fs";
+import { appendFileSync, existsSync, renameSync, watch, writeFileSync } from "node:fs";
 import { basename, dirname } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -23,8 +17,7 @@ import {
 } from "./cdp-cookies.mjs";
 
 export const WEB_BOT_AUTH_MARKER = "/tmp/sand-web-bot-auth";
-export const WEB_BOT_AUTH_XHR_FETCH_MARKER =
-  "/tmp/sand-web-bot-auth-xhr-fetch";
+export const WEB_BOT_AUTH_XHR_FETCH_MARKER = "/tmp/sand-web-bot-auth-xhr-fetch";
 export const WEB_BOT_AUTH_IFRAMES_MARKER = "/tmp/sand-web-bot-auth-iframes";
 export const WEB_BOT_AUTH_DEFAULT_SCOPE = Object.freeze({
   xhrFetch: false,
@@ -34,8 +27,7 @@ export const TUNNEL_CLIENT_MARKER = "/tmp/sand-egress-tunnel-client";
 export const WEB_BOT_AUTH_SIGNED_MAX_ENTRIES = 64;
 export const WEB_BOT_AUTH_FAILURE_REPORT_INTERVAL_MS = 60_000;
 export const WEB_BOT_AUTH_FAILURE_COUNT_MAX = 10_000;
-const BOX_TELEMETRY_LOG_PATH =
-  process.env.SAND_BOX_TELEMETRY_LOG ?? "/tmp/sand-box-telemetry.log";
+const BOX_TELEMETRY_LOG_PATH = process.env.SAND_BOX_TELEMETRY_LOG ?? "/tmp/sand-box-telemetry.log";
 const FALLBACK_FAILURE_REASON = {
   fetch_enable: "protocol_error",
   tick: "unexpected_error",
@@ -68,9 +60,7 @@ function emitWebBotAuthFailure(event, error) {
   try {
     appendFileSync(BOX_TELEMETRY_LOG_PATH, `${JSON.stringify(event)}\n`, "utf8");
   } catch (appendError) {
-    process.stderr.write(
-      `sand-web-bot-auth telemetry append failed: ${String(appendError)}\n`,
-    );
+    process.stderr.write(`sand-web-bot-auth telemetry append failed: ${String(appendError)}\n`);
   }
 }
 
@@ -117,10 +107,7 @@ export function isTunnelClientAttached(markerPath = TUNNEL_CLIENT_MARKER) {
 }
 
 export function watchWebBotAuthMarkers(onChange, { dir } = {}) {
-  const markerNames = new Set([
-    basename(WEB_BOT_AUTH_MARKER),
-    basename(TUNNEL_CLIENT_MARKER),
-  ]);
+  const markerNames = new Set([basename(WEB_BOT_AUTH_MARKER), basename(TUNNEL_CLIENT_MARKER)]);
   try {
     return watch(dir ?? dirname(WEB_BOT_AUTH_MARKER), (_event, filename) => {
       if (filename == null || markerNames.has(filename)) onChange(filename);
@@ -134,25 +121,6 @@ function writeSignedCacheFile(path, text) {
   const tmp = `${path}.${process.pid}.tmp`;
   writeFileSync(tmp, text);
   renameSync(tmp, path);
-}
-
-export function lookupWebBotAuthSignedEntry(
-  entries,
-  origin,
-  nowMs,
-  ttlMs = WEB_BOT_AUTH_SIGNED_TTL_MS,
-) {
-  const entry = entries?.[origin];
-  if (
-    entry == null ||
-    typeof entry.signed !== "boolean" ||
-    typeof entry.atMs !== "number" ||
-    !Number.isFinite(entry.atMs) ||
-    nowMs - entry.atMs > ttlMs
-  ) {
-    return undefined;
-  }
-  return entry.signed;
 }
 
 export class WebBotAuthSignedOriginCache {
@@ -266,9 +234,7 @@ export function isWebBotAuthSigningCandidate(
   if (requestUrl?.protocol !== "https:") return false;
   const resourceType = params?.resourceType;
   if (
-    !webBotAuthFetchEnablePatterns(scope).some(
-      (pattern) => pattern.resourceType === resourceType,
-    )
+    !webBotAuthFetchEnablePatterns(scope).some((pattern) => pattern.resourceType === resourceType)
   ) {
     return false;
   }
@@ -311,9 +277,7 @@ function parseJwtExpiryMs(token) {
     const payload = token.split(".")[1];
     if (payload == null) return null;
     const parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
-    return typeof parsed.exp === "number" && Number.isFinite(parsed.exp)
-      ? parsed.exp * 1000
-      : null;
+    return typeof parsed.exp === "number" && Number.isFinite(parsed.exp) ? parsed.exp * 1000 : null;
   } catch {
     return null;
   }
@@ -337,9 +301,7 @@ async function fetchWithTimeout(fetchImpl, url, init, timeoutMs, readBody) {
 }
 
 function unexpiredAccessToken(cached, nowMs) {
-  return cached != null && nowMs < cached.expiresAtMs
-    ? cached.accessToken
-    : null;
+  return cached != null && nowMs < cached.expiresAtMs ? cached.accessToken : null;
 }
 
 async function readSigningResponseBody(response) {
@@ -393,10 +355,7 @@ export class SessionTokenSource {
         this.renewalInFlight = null;
       });
     }
-    return (
-      (await this.renewalInFlight) ??
-      unexpiredAccessToken(this.cached, this.now())
-    );
+    return (await this.renewalInFlight) ?? unexpiredAccessToken(this.cached, this.now());
   }
 
   async renew() {
@@ -413,8 +372,7 @@ export class SessionTokenSource {
         this.timeoutMs,
         async (res) => (res.status === 200 ? await res.json() : null),
       );
-      const accessToken =
-        typeof body?.accessToken === "string" ? body.accessToken : "";
+      const accessToken = typeof body?.accessToken === "string" ? body.accessToken : "";
       if (response.status !== 200 || accessToken === "") throw new Error();
       const expiresAtMs =
         typeof body.expiresAtMs === "number" && Number.isFinite(body.expiresAtMs)
@@ -432,8 +390,7 @@ export class SessionTokenSource {
 export function resolveWebBotAuthConfig(env = process.env) {
   const credential = env.SAND_INFERENCE_RENEWAL_CREDENTIAL?.trim() ?? "";
   if (credential === "") return null;
-  const base =
-    env.SAND_BACKEND_URL ?? env.CURSOR_API_BASE_URL ?? DEFAULT_BACKEND_URL;
+  const base = env.SAND_BACKEND_URL ?? env.CURSOR_API_BASE_URL ?? DEFAULT_BACKEND_URL;
   if (!URL.canParse(SIGN_PATH, base)) return null;
   return {
     credential,
@@ -548,13 +505,9 @@ export class WebBotAuthSigner {
         return null;
       }
       if (response.status === 403) {
-        const signingEnabledButOriginNotAllowlisted =
-          body?.reason === "origin_not_allowed";
+        const signingEnabledButOriginNotAllowlisted = body?.reason === "origin_not_allowed";
         if (signingEnabledButOriginNotAllowlisted) {
-          this.disabledOriginNextProbeAtMs.set(
-            origin,
-            this.now() + this.forbiddenCooldownMs,
-          );
+          this.disabledOriginNextProbeAtMs.set(origin, this.now() + this.forbiddenCooldownMs);
           this.consecutiveForbidden = 0;
           this.nextProbeAtMs = 0;
           return null;
@@ -622,11 +575,9 @@ export async function continueWebBotAuthRequest({
   let consideredOrigin = null;
   try {
     const request = params?.request;
-    const requestUrl =
-      typeof request?.url === "string" ? new URL(request.url) : null;
+    const requestUrl = typeof request?.url === "string" ? new URL(request.url) : null;
     const isSigningCandidate = () =>
-      isEnabled() &&
-      isWebBotAuthSigningCandidate(params, topFrameId, requestUrl, getScope());
+      isEnabled() && isWebBotAuthSigningCandidate(params, topFrameId, requestUrl, getScope());
     if (isSigningCandidate()) {
       consideredOrigin = requestUrl.origin;
       const signed = await signer.getHeaders({ origin: requestUrl.origin });
@@ -665,11 +616,7 @@ export async function configureWebBotAuthBrowser(
   const topFrameBySession = new Map();
   const enableFetch = async (sessionId) => {
     await browser
-      .send(
-        "Fetch.enable",
-        { patterns: webBotAuthFetchEnablePatterns(getScope()) },
-        sessionId,
-      )
+      .send("Fetch.enable", { patterns: webBotAuthFetchEnablePatterns(getScope()) }, sessionId)
       .catch((error) => failures?.report("fetch_enable", error));
   };
   const autoAttachIframes = async (sessionId, iframes) => {
@@ -710,10 +657,7 @@ export async function configureWebBotAuthBrowser(
     ) {
       const attachedSessionId = message.params.sessionId;
       const targetId = message.params.targetInfo.targetId;
-      topFrameBySession.set(
-        attachedSessionId,
-        typeof targetId === "string" ? targetId : undefined,
-      );
+      topFrameBySession.set(attachedSessionId, typeof targetId === "string" ? targetId : undefined);
       void browser
         .send("Page.getFrameTree", {}, attachedSessionId)
         .then((result) => {
@@ -723,10 +667,7 @@ export async function configureWebBotAuthBrowser(
           }
         })
         .catch(logUnlessTargetGone("Page.getFrameTree"));
-      void enableFetchThenResume(
-        attachedSessionId,
-        message.params.waitingForDebugger === true,
-      );
+      void enableFetchThenResume(attachedSessionId, message.params.waitingForDebugger === true);
       return;
     }
     if (
@@ -736,10 +677,7 @@ export async function configureWebBotAuthBrowser(
       topFrameBySession.delete(message.params.sessionId);
       return;
     }
-    if (
-      message.method === "Fetch.requestPaused" &&
-      typeof sessionId === "string"
-    ) {
+    if (message.method === "Fetch.requestPaused" && typeof sessionId === "string") {
       void continueWebBotAuthRequest({
         browser,
         sessionId,
@@ -796,9 +734,7 @@ export class WebBotAuthDaemon {
       this.browsers.delete(port);
       closing.push(
         (async () => {
-          await browser
-            .send("Fetch.disable", {})
-            .catch(logUnlessTargetGone("Fetch.disable"));
+          await browser.send("Fetch.disable", {}).catch(logUnlessTargetGone("Fetch.disable"));
           browser.close();
         })(),
       );
@@ -817,10 +753,7 @@ export class WebBotAuthDaemon {
         log(`token prefetch failed: ${String(error)}`);
       });
       const scope = this.getScope();
-      if (
-        this.lastAppliedScope !== null &&
-        !isSameWebBotAuthScope(scope, this.lastAppliedScope)
-      ) {
+      if (this.lastAppliedScope !== null && !isSameWebBotAuthScope(scope, this.lastAppliedScope)) {
         for (const { applyScope } of this.browsers.values()) {
           await applyScope();
         }
@@ -832,16 +765,12 @@ export class WebBotAuthDaemon {
         let browser = null;
         try {
           browser = await this.connect(port);
-          const { applyScope } = await configureWebBotAuthBrowser(
-            browser,
-            this.signer,
-            {
-              isEnabled: () => this.isEnabled(),
-              getScope: () => this.getScope(),
-              signedOriginCache: this.signedOriginCache,
-              failures: this.failures,
-            },
-          );
+          const { applyScope } = await configureWebBotAuthBrowser(browser, this.signer, {
+            isEnabled: () => this.isEnabled(),
+            getScope: () => this.getScope(),
+            signedOriginCache: this.signedOriginCache,
+            failures: this.failures,
+          });
           this.browsers.set(port, { browser, applyScope });
         } catch {
           browser?.close();
@@ -909,9 +838,6 @@ async function main() {
   }
 }
 
-if (
-  process.argv[1] != null &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+if (process.argv[1] != null && import.meta.url === pathToFileURL(process.argv[1]).href) {
   void main();
 }

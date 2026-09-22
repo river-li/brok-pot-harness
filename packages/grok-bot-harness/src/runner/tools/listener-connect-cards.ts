@@ -16,9 +16,9 @@ async function surfaceListenerConnectCards({
       if (!await isListenerPlatformConnected(platform2)) {
         disconnected.push(platform2);
       }
-    } catch (error41) {
+    } catch (error42) {
       process.stderr.write(
-        `sand.automation.listener_connection_read_failed platform=${platform2} error_class=${errorLogTag(error41)}
+        `sand.automation.listener_connection_read_failed platform=${platform2} error_class=${errorLogTag(error42)}
 `
       );
     }

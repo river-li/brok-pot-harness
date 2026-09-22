@@ -1,8 +1,8 @@
-init_dist3();
+init_dist4();
 init_subagent_exec_pb();
 init_subagent_exec_pb();
 init_subagents_pb();
-var __awaiter32 = function(thisArg, _arguments, P2, generator) {
+var __awaiter34 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -40,14 +40,14 @@ var SubagentHostError = class extends Error {
     this.cause = options2 === null || options2 === void 0 ? void 0 : options2.cause;
   }
 };
-function extractAgentIdFromError(error41) {
-  if (error41 instanceof SubagentHostError && error41.agentId) {
-    return error41.agentId;
+function extractAgentIdFromError(error42) {
+  if (error42 instanceof SubagentHostError && error42.agentId) {
+    return error42.agentId;
   }
-  if (!error41 || typeof error41 !== "object") {
+  if (!error42 || typeof error42 !== "object") {
     return void 0;
   }
-  const record2 = error41;
+  const record2 = error42;
   if (typeof record2.agentId === "string") {
     return record2.agentId;
   }
@@ -70,7 +70,7 @@ function createSubagentExecutor(adapter) {
   const inFlightByToolCall = /* @__PURE__ */ new Map();
   const completedByToolCall = /* @__PURE__ */ new Map();
   function runExecute(ctx, args, options2) {
-    return __awaiter32(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a19, _b2, _c2, _d;
       let agentId;
       try {
@@ -124,15 +124,15 @@ function createSubagentExecutor(adapter) {
             })
           }
         });
-      } catch (error41) {
+      } catch (error42) {
         if (agentId && adapter.releaseSession) {
           adapter.releaseSession(agentId);
         }
-        if (error41 instanceof DeferredInteractionResponseError) {
-          throw error41;
+        if (error42 instanceof DeferredInteractionResponseError) {
+          throw error42;
         }
-        const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
-        const errorAgentId = (_d = agentId !== null && agentId !== void 0 ? agentId : extractAgentIdFromError(error41)) !== null && _d !== void 0 ? _d : args.resumeAgentId;
+        const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+        const errorAgentId = (_d = agentId !== null && agentId !== void 0 ? agentId : extractAgentIdFromError(error42)) !== null && _d !== void 0 ? _d : args.resumeAgentId;
         return new SubagentResult({
           result: {
             case: "error",

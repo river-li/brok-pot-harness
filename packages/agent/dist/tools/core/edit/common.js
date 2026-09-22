@@ -1,4 +1,4 @@
-var logger80 = createLogger("@anysphere/agent");
+var logger81 = createLogger("@anysphere/agent");
 var PLAN_MODE_NON_MARKDOWN_EDIT_ERROR = "Cannot edit non markdown files in plan mode";
 function assertPlanModeAllowsFileEdit(path30, stateHandler) {
   if (stateHandler.mode !== AgentMode.PLAN || isPlanModeAllowedEditPath(path30)) {

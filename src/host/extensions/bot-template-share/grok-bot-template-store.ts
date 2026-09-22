@@ -89,11 +89,11 @@ var GrokBotTemplateStore = class {
         { shareId: args.shareId, version: args.version },
         { signal }
       );
-    } catch (error41) {
-      if (error41 instanceof ConnectError && error41.code === Code.NotFound) {
+    } catch (error42) {
+      if (error42 instanceof ConnectError && error42.code === Code.NotFound) {
         throw new BotTemplateStoreNotFound();
       }
-      throw error41;
+      throw error42;
     }
     const getUrl = details.blobGetUrl?.trim() ?? "";
     if (getUrl.length === 0) {
@@ -106,10 +106,10 @@ var GrokBotTemplateStore = class {
         throw new BotTemplateShareBlobDownloadFailed(`status ${response.status}`);
       }
       bytes = new Uint8Array(await response.arrayBuffer());
-    } catch (error41) {
-      if (error41 instanceof BotTemplateShareBlobDownloadFailed) throw error41;
+    } catch (error42) {
+      if (error42 instanceof BotTemplateShareBlobDownloadFailed) throw error42;
       throw new BotTemplateShareBlobDownloadFailed(
-        error41 instanceof Error ? error41.message : "fetch failed"
+        error42 instanceof Error ? error42.message : "fetch failed"
       );
     }
     try {
@@ -134,10 +134,10 @@ var GrokBotTemplateStore = class {
           ...visibility == null ? {} : { visibility }
         }
       };
-    } catch (error41) {
+    } catch (error42) {
       throw new BotTemplateShareRecipeInvalid(
-        error41 instanceof Error ? error41.message : "unparseable recipe",
-        { cause: error41 }
+        error42 instanceof Error ? error42.message : "unparseable recipe",
+        { cause: error42 }
       );
     }
   }

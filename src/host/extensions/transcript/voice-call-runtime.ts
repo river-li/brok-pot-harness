@@ -1,16 +1,16 @@
 var VOICE_CALLS_DIR = "voice-calls";
 function voiceCallsDir(agentId) {
-  return (0, import_node_path162.join)(resolveSandAgentDir(agentId), VOICE_CALLS_DIR);
+  return (0, import_node_path161.join)(resolveSandAgentDir(agentId), VOICE_CALLS_DIR);
 }
 function voiceCallPath({ agentId, callId }) {
-  return (0, import_node_path162.join)(voiceCallsDir(agentId), `${callId}.json`);
+  return (0, import_node_path161.join)(voiceCallsDir(agentId), `${callId}.json`);
 }
 function readRecordFile(ref) {
   try {
-    const value = JSON.parse((0, import_node_fs98.readFileSync)(voiceCallPath(ref), "utf8"));
+    const value = JSON.parse((0, import_node_fs97.readFileSync)(voiceCallPath(ref), "utf8"));
     return SandVoiceCallRecords.isRecord(value) ? { kind: "record", record: value } : { kind: "unreadable" };
-  } catch (error41) {
-    reportFallbackUnlessAbsent("voice_call_runtime", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("voice_call_runtime", error42);
     return { kind: "unreadable" };
   }
 }
@@ -275,20 +275,20 @@ var VoiceCallRuntime = class _VoiceCallRuntime {
     if (args.request.trim().length === 0) return { kind: "refused", refusal: "empty-request" };
     const parsed2 = VoiceCallRequests.parse(args.request);
     if (parsed2.kind === "rejected") throw new SandWireParseError(parsed2.error);
-    const request3 = parsed2.request;
+    const request5 = parsed2.request;
     if (args.sink.kind === "server-loop") {
       let output;
       try {
-        output = await args.sink.relay({ callId: args.callId, request: request3 });
-      } catch (error41) {
-        reportFallback("voice_call_runtime", error41);
+        output = await args.sink.relay({ callId: args.callId, request: request5 });
+      } catch (error42) {
+        reportFallback("voice_call_runtime", error42);
         return { kind: "refused", refusal: "agent-unavailable" };
       }
       if (output.relay !== "accepted") return { kind: "refused", refusal: "agent-unavailable" };
-      this.rememberAccepted(args.callId, request3);
+      this.rememberAccepted(args.callId, request5);
       return { kind: "accepted" };
     }
-    const text2 = MainLoopVoicePrompt.relayed({ request: request3 });
+    const text2 = MainLoopVoicePrompt.relayed({ request: request5 });
     const session = await this.resolveSession(args.agentId);
     if (session === null || !this.tm.execution.canExecute) {
       return { kind: "refused", refusal: "agent-unavailable" };
@@ -307,13 +307,13 @@ var VoiceCallRuntime = class _VoiceCallRuntime {
         () => this.tm.backgroundWakes.wakeForInbound(args.agentId, alreadyShownByTheSteer)
       );
     }
-    this.rememberAccepted(args.callId, request3);
+    this.rememberAccepted(args.callId, request5);
     return { kind: "accepted" };
   }
-  rememberAccepted(callId, request3) {
+  rememberAccepted(callId, request5) {
     this.acceptedRequestsByCall.set(callId, [
       ...this.acceptedRequestsByCall.get(callId) ?? [],
-      request3
+      request5
     ]);
   }
   steerTheLiveTurn(session, envelope) {
@@ -401,8 +401,8 @@ var VoiceCallRuntime = class _VoiceCallRuntime {
     let authored;
     try {
       authored = await this.authorCardCopy(record2);
-    } catch (error41) {
-      reportFallback("voice_call_runtime", error41);
+    } catch (error42) {
+      reportFallback("voice_call_runtime", error42);
       return;
     }
     if (authored === void 0) return;
@@ -415,8 +415,8 @@ var VoiceCallRuntime = class _VoiceCallRuntime {
           await this.patchReceiptInBoxChat(record2, authored);
           return;
       }
-    } catch (error41) {
-      reportFallback("voice_call_runtime", error41);
+    } catch (error42) {
+      reportFallback("voice_call_runtime", error42);
     }
   }
   async appendReceiptToBoxChat(record2, authored) {
@@ -472,12 +472,12 @@ var VoiceCallRuntime = class _VoiceCallRuntime {
     if (stored.kind !== "record" || stored.record.agentRequestId === requestId2) return;
     try {
       await writeRecordFile({ ...stored.record, agentRequestId: requestId2 });
-    } catch (error41) {
+    } catch (error42) {
       this.tm.telemetry.reportAgentError({
         source: "resume",
         conversationId: agentId,
-        error: classifyAgentError(error41),
-        detail: sandErrorDetail(error41)
+        error: classifyAgentError(error42),
+        detail: sandErrorDetail(error42)
       });
     }
   }
@@ -509,8 +509,8 @@ var VoiceCallRuntime = class _VoiceCallRuntime {
 async function resolveSessionOrRefusal(tm, agentId) {
   try {
     return { kind: "session", session: await tm.sessions.resolveBackgroundSession(agentId) };
-  } catch (error41) {
-    if (!isAgentAbsent(error41)) reportFallback("voice_call_runtime", error41);
+  } catch (error42) {
+    if (!isAgentAbsent(error42)) reportFallback("voice_call_runtime", error42);
     return { kind: "unavailable" };
   }
 }

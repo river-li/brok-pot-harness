@@ -5,9 +5,9 @@ var CodebaseSnapshotTrigger = class {
   handledReasonKeys = /* @__PURE__ */ new Set();
   failureCount = 0;
   nextFailureLogAt = 1;
-  constructor({ getSession, logger: logger107 }) {
+  constructor({ getSession, logger: logger108 }) {
     this.getSession = getSession;
-    this.logger = logger107;
+    this.logger = logger108;
   }
   handle(reason) {
     const session = this.getSession();

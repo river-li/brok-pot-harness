@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 var BARE_URL = /https?:\/\/[^\s<>"]+/g;
 var TRAILING_PROSE_PUNCTUATION = /[.,;:!?]$/;
 function emailDraftHtmlBody(body) {

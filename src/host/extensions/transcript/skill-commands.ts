@@ -124,17 +124,6 @@ var SkillCommands = class {
   async importAgentWorkflowUrl(agentId, url2, name17) {
     return this.tm.importAgentSkillSource(agentId, url2, name17 ?? deriveSkillNameFromUrl(url2));
   }
-  async portAgentLocalSkills(agentId) {
-    const active = this.tm.sessions.activeSession;
-    if (active != null && active.id === agentId) {
-      const result = active.skills.portLocalSkills((0, import_node_os29.homedir)(), process.cwd());
-      return {
-        workflows: limitSurfacedSkills(active.skills.listAll()),
-        result
-      };
-    }
-    return this.tm.sessionStore.portAgentLocalSkills(agentId);
-  }
   async runAgentWorkflowNow(agentId, workflowId) {
     const skill = await this.getSkillForAgent(agentId, workflowId);
     if (skill == null) return;

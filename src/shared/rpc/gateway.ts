@@ -478,7 +478,6 @@ var transcribeAudioArgs = rpcObject({
 });
 var gatewayRpcEdge = declareRpcEdge("gateway", {
   methods: {
-    getTranscript: rpcMethod().noArgs,
     getAgentTranscript: rpcMethod().args(idArgs),
     getAgentTranscriptPage: rpcMethod().args(transcriptPageArgs),
     openAgentWindowed: rpcMethod().args({
@@ -755,7 +754,6 @@ var gatewayRpcEdge = declareRpcEdge("gateway", {
       url: rpcString(),
       name: rpcOptional(rpcString())
     }),
-    portAgentLocalSkills: rpcMethod().args(idArgs),
     getConversationOutline: rpcMethod().args(idArgs),
     readMainAgentContext: rpcMethod().args(idArgs),
     readVoiceCallSentMessages: rpcMethod().args(idArgs),

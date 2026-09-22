@@ -49,7 +49,7 @@ var GetRepoContentClientRequest = class _GetRepoContentClientRequest extends __p
     return proto3.util.equals(_GetRepoContentClientRequest, a, b2);
   }
   static $() {
-    return ["GetRepoContentClientRequest|1 identifier #0|2 ref_path 9", ClientRepoIdentifier];
+    return ["GetRepoContentClientRequest|1 identifier #0|2 ref_path 9|3 max_file_size 4?", ClientRepoIdentifier];
   }
 };
 var MintRawRepoFileLinkClientRequest = class _MintRawRepoFileLinkClientRequest extends __protoMessage3149 {

@@ -13,7 +13,7 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
     spawnCsnaps: spawnCsnaps2,
     uploadPolling,
     createUploadCredentials,
-    logger: logger107,
+    logger: logger108,
     signal
   }) {
     const { handle: csnaps, initialState } = await spawnCsnaps2({
@@ -72,19 +72,19 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
         initialState,
         uploadPolling,
         createUploadCredentials,
-        logger: logger107
+        logger: logger108
       });
-    } catch (error41) {
+    } catch (error42) {
       try {
         await csnaps.close();
       } catch (cleanupError) {
         throw new CodebaseTelemetryCleanupError(
           [cleanupError],
           "Failed to clean up csnaps after adapter creation failure",
-          { cause: error41 }
+          { cause: error42 }
         );
       }
-      throw error41;
+      throw error42;
     }
   }
   constructor({
@@ -93,20 +93,20 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
     initialState,
     uploadPolling,
     createUploadCredentials,
-    logger: logger107
+    logger: logger108
   }) {
     this.csnaps = csnaps;
     this.authId = authId;
-    this.logger = logger107;
+    this.logger = logger108;
     this.uploadPollingPolicy = uploadPolling;
     this.createUploadCredentials = createUploadCredentials;
     [this.stateSender, this.state] = createWatchChannel({
       initialValue: toAdapterState(authId, initialState),
-      onSubscriberError: (error41) => logger107.error("Adapter state subscriber failed", error41)
+      onSubscriberError: (error42) => logger108.error("Adapter state subscriber failed", error42)
     });
     const terminalFailure = Promise.withResolvers();
     this.terminalFailure = terminalFailure.promise;
-    void csnaps.terminalFailure.then((error41) => {
+    void csnaps.terminalFailure.then((error42) => {
       if (this.isDisposed) {
         return;
       }
@@ -114,7 +114,7 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
         trackedCodebases: [],
         isWithinStorageBudget: false
       });
-      terminalFailure.resolve(error41);
+      terminalFailure.resolve(error42);
     });
   }
   csnaps;
@@ -177,25 +177,25 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
           );
         }
       },
-      (error41) => this.logger.error("Failed to close adapter", error41)
+      (error42) => this.logger.error("Failed to close adapter", error42)
     );
   }
   async releaseResources() {
     const errors = [];
     try {
       this.uploadPolling?.dispose();
-    } catch (error41) {
-      errors.push(error41);
+    } catch (error42) {
+      errors.push(error42);
     }
     try {
       await this.csnaps.close();
-    } catch (error41) {
-      errors.push(error41);
+    } catch (error42) {
+      errors.push(error42);
     }
     try {
       this.stateSender.dispose();
-    } catch (error41) {
-      errors.push(error41);
+    } catch (error42) {
+      errors.push(error42);
     }
     const cleanupErrors = toNonEmptyErrors(errors);
     return cleanupErrors === void 0 ? { kind: "closed" } : { kind: "cleanupFailed", errors: cleanupErrors };
@@ -217,9 +217,9 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
         return;
       }
       this.publishState(stateRequestSequence, state);
-    } catch (error41) {
+    } catch (error42) {
       if (!this.isDisposed) {
-        this.logger.warn("Failed to refresh snapshot service state", error41);
+        this.logger.warn("Failed to refresh snapshot service state", error42);
       }
     }
   }
@@ -240,9 +240,9 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
         return;
       }
       await this.csnaps.triggerUpload(credentials);
-    } catch (error41) {
+    } catch (error42) {
       if (!this.isDisposed) {
-        this.logger.warn("Failed to trigger snapshot upload", error41);
+        this.logger.warn("Failed to trigger snapshot upload", error42);
       }
     }
   }

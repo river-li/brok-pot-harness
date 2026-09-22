@@ -1,5 +1,5 @@
 function asyncMapValues(array2, selector, options2) {
-  return __awaiter13(this, void 0, void 0, function* () {
+  return __awaiter14(this, void 0, void 0, function* () {
     const { max = 4 } = options2 !== null && options2 !== void 0 ? options2 : {};
     const promiseSelToObs = (idx) => (0, import_rxjs.defer)(() => (0, import_rxjs.from)(selector(array2[idx])).pipe((0, import_rxjs.map)((v2) => ({ idx, v: v2 }))));
     const ret = (0, import_rxjs.from)(array2.map((_2, idx) => idx)).pipe((0, import_rxjs.map)(promiseSelToObs), (0, import_rxjs.mergeAll)(max), (0, import_rxjs.reduce)((acc, kvp) => {
@@ -20,12 +20,12 @@ function withTimeout(promise2, timeoutMs, message) {
     with: () => (0, import_rxjs.throwError)(() => new TimeoutError(message !== null && message !== void 0 ? message : `Promise timed out after ${timeoutMs}ms`))
   })));
 }
-var import_rxjs, __awaiter13, TimeoutError, PromiseQueue;
+var import_rxjs, __awaiter14, TimeoutError, PromiseQueue;
 var init_promise_extras = __esm({
   "../packages/utils/dist/promise-extras.js"() {
     "use strict";
     import_rxjs = __toESM(require_cjs(), 1);
-    __awaiter13 = function(thisArg, _arguments, P2, generator) {
+    __awaiter14 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve29) {
           resolve29(value);

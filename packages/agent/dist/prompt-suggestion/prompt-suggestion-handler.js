@@ -52,9 +52,9 @@ var __disposeResources20 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger57 = createLogger("prompt-suggestion");
 var SILENCE_TAG_REGEX = /<{1,2}\/?\s*silence\s*\/?>/i;
@@ -150,7 +150,7 @@ async function requestPromptSuggestion(parentCtx, invocationId, model, executor,
       const streamResult = executor.stream(ctx, invocationId, tools, {
         maxTokens
       });
-      const settledResponse = streamResult.response.then(() => ({ didReject: false }), (error41) => ({ didReject: true, error: error41 }));
+      const settledResponse = streamResult.response.then(() => ({ didReject: false }), (error42) => ({ didReject: true, error: error42 }));
       let responseText = "";
       for await (const chunk of streamResult.fullStream) {
         if (chunk.type === "text-delta") {
@@ -205,12 +205,12 @@ async function requestPromptSuggestion(parentCtx, invocationId, model, executor,
           });
           break;
       }
-    } catch (error41) {
+    } catch (error42) {
       promptSuggestionOutcome.increment(ctx, 1, {
         model,
         outcome: "error"
       });
-      logger57.error(ctx, "Error during prompt suggestion request", error41);
+      logger57.error(ctx, "Error during prompt suggestion request", error42);
     } finally {
       executor.clearMessages();
       executor.appendMessages(currentMessages);

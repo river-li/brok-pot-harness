@@ -3,7 +3,7 @@ function peerMessageLastEntry(entry) {
     const sessionPreview = {
       kind: "sent_agent_message",
       recipient: entry.toAgent.name,
-      text: entry.content
+      text: boundedPreviewSource(entry.content)
     };
     return {
       kind: "text",
@@ -15,7 +15,7 @@ function peerMessageLastEntry(entry) {
     const sessionPreview = {
       kind: "received_agent_message",
       sender: entry.fromAgent.name,
-      text: entry.content
+      text: boundedPreviewSource(entry.content)
     };
     return {
       kind: "text",
@@ -99,13 +99,13 @@ function getLastMessageFromTranscript(entries) {
       if (previewSource.kind === "message_text") {
         previewSource = {
           kind: "message_text",
-          text: markdownToPreviewText(previewSource.text)
+          text: markdownToPreviewLine(previewSource.text)
         };
       }
       const pushMessageContent = getPushMessageContentFromTranscript(entries);
       return {
         id: entry.id,
-        preview: hostSessionPreview(previewSource),
+        preview: capPreviewLine(hostSessionPreview(previewSource)),
         previewSource: isLocalizableSessionPreview(previewSource) ? previewSource : null,
         authorId: entry.author?.id ?? null,
         pushMessageContent: pushMessageContent?.message.id === entry.id ? pushMessageContent : null
@@ -140,13 +140,13 @@ function getLastEntryFromTranscript(entries) {
       }) : sessionPreviewForSendMessage(entry.message);
       return {
         kind: "text",
-        text: hostSessionPreview(sessionPreview),
+        text: boundedPreviewSource(hostSessionPreview(sessionPreview)),
         ...entry.author?.id == null ? {} : { authorId: entry.author.id },
         ...isLocalizableSessionPreview(sessionPreview) ? { sessionPreview } : {}
       };
     }
     if (entry.kind === "message" && entry.content.length > 0) {
-      return { kind: "text", text: entry.content };
+      return { kind: "text", text: boundedPreviewSource(entry.content) };
     }
     if (entry.kind === "user-attachment") {
       return buildAttachmentLastEntry(visible, i);

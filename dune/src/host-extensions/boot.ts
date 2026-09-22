@@ -1,6 +1,4 @@
-init_clock();
-init_policies();
-init_process_keep_alive();
+init_dist();
 var HOST_EXTENSION_START_DEADLINE = "host-extension-start";
 var HostExtensionGraphError = class extends Error {
   constructor(message) {
@@ -72,8 +70,8 @@ async function startHostExtensions(options2) {
     for (const teardown of teardowns.splice(0).reverse()) {
       try {
         await teardown.run();
-      } catch (error41) {
-        options2.onStopFailure(teardown.extensionId, error41);
+      } catch (error42) {
+        options2.onStopFailure(teardown.extensionId, error42);
       }
     }
   };
@@ -96,9 +94,9 @@ async function startHostExtensions(options2) {
       });
       try {
         apis[id] = await (startDeadline === null ? start() : startDeadline.run(start));
-      } catch (error41) {
+      } catch (error42) {
         await stopStarted();
-        throw new HostExtensionStartError(id, error41);
+        throw new HostExtensionStartError(id, error42);
       }
     }
   } finally {

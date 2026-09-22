@@ -6,8 +6,8 @@ function displayRowOwnsIdentifier(identifier, rowIdentifier, slots) {
   return identifier === rowIdentifier || (slots?.some((slot) => slot.serverIdentifier === identifier) ?? false);
 }
 var UnresolvedBoxServers = class {
-  constructor(error41) {
-    this.error = error41;
+  constructor(error42) {
+    this.error = error42;
   }
   error;
 };
@@ -29,7 +29,7 @@ var SandMcpDefinitionSource = class {
   loadBoxServers() {
     return this.boxServers().then(
       (servers) => servers,
-      (error41) => new UnresolvedBoxServers(error41)
+      (error42) => new UnresolvedBoxServers(error42)
     );
   }
   loadAccountConfig() {

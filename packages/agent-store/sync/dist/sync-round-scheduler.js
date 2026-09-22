@@ -1,4 +1,4 @@
-var __awaiter15 = function(thisArg, _arguments, P2, generator) {
+var __awaiter16 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -32,8 +32,8 @@ var SyncRoundStoodAsideError = class extends Error {
     this.name = "SyncRoundStoodAsideError";
   }
 };
-function isSyncRoundStoodAsideError(error41) {
-  return error41 instanceof SyncRoundStoodAsideError;
+function isSyncRoundStoodAsideError(error42) {
+  return error42 instanceof SyncRoundStoodAsideError;
 }
 var SyncRoundScheduler = class {
   constructor() {
@@ -74,7 +74,7 @@ var SyncRoundScheduler = class {
     this.fullRoundStandAside = void 0;
   }
   drain() {
-    return __awaiter15(this, void 0, void 0, function* () {
+    return __awaiter16(this, void 0, void 0, function* () {
       var _a19;
       while (this.pending.length > 0 || this.pumping !== void 0) {
         yield (_a19 = this.pumping) !== null && _a19 !== void 0 ? _a19 : Promise.resolve();
@@ -93,7 +93,7 @@ var SyncRoundScheduler = class {
     });
   }
   pump() {
-    return __awaiter15(this, void 0, void 0, function* () {
+    return __awaiter16(this, void 0, void 0, function* () {
       while (this.pending.length > 0) {
         const next = this.pending.shift();
         const standAside = next.kind === "full" ? new AbortController() : void 0;
@@ -107,12 +107,12 @@ var SyncRoundScheduler = class {
         try {
           const summary = yield Promise.race([runPromise, abandonPromise]);
           next.resolve(summary);
-        } catch (error41) {
-          if (error41 === ROUND_ABANDONED) {
+        } catch (error42) {
+          if (error42 === ROUND_ABANDONED) {
             void runPromise.then(next.resolve, next.reject);
             break;
           }
-          next.reject(error41);
+          next.reject(error42);
         } finally {
           if (this.abandonInFlightReject !== void 0) {
             this.abandonInFlightReject = void 0;

@@ -38,13 +38,13 @@ function createRunnerPendingSummaryStore() {
         pendingGeneration = generation;
       }
     },
-    trackPendingWrite: (write) => {
-      pendingWrite = write;
+    trackPendingWrite: (write2) => {
+      pendingWrite = write2;
     },
     take: async (_ctx, conversationId) => {
-      const write = pendingWrite;
-      await write;
-      if (pendingWrite === write) pendingWrite = void 0;
+      const write2 = pendingWrite;
+      await write2;
+      if (pendingWrite === write2) pendingWrite = void 0;
       if (pendingSummary?.conversationId !== conversationId) return void 0;
       const record2 = pendingSummary;
       pendingSummary = void 0;

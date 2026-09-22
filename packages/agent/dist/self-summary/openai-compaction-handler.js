@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var __addDisposableResource8 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -53,18 +53,26 @@ var __disposeResources8 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var logger20 = createLogger("@anysphere/agent");
 var compactionInputTokens2 = createHistogram("openai_compaction.input_token", {
   description: "Input tokens consumed during OpenAI compaction"
 });
-var compactionOutputTokens2 = createHistogram("openai_compaction.output_token", { description: "Output tokens generated during OpenAI compaction" });
-var compactionCacheReadTokens2 = createHistogram("openai_compaction.cache_read_token", { description: "Cache read tokens during OpenAI compaction" });
-var compactionCacheWriteTokens2 = createHistogram("openai_compaction.cache_write_token", { description: "Cache write tokens during OpenAI compaction" });
-var compactionTimeTakenMs2 = createHistogram("openai_compaction.time_taken_ms", { description: "Time taken for OpenAI compaction in milliseconds" });
+var compactionOutputTokens2 = createHistogram("openai_compaction.output_token", {
+  description: "Output tokens generated during OpenAI compaction"
+});
+var compactionCacheReadTokens2 = createHistogram("openai_compaction.cache_read_token", {
+  description: "Cache read tokens during OpenAI compaction"
+});
+var compactionCacheWriteTokens2 = createHistogram("openai_compaction.cache_write_token", {
+  description: "Cache write tokens during OpenAI compaction"
+});
+var compactionTimeTakenMs2 = createHistogram("openai_compaction.time_taken_ms", {
+  description: "Time taken for OpenAI compaction in milliseconds"
+});
 var compactionStatus2 = createCounter("openai_compaction.status", {
   description: "Count of OpenAI compaction attempts and their outcomes",
   labelNames: ["outcome", "errorKind"]
@@ -222,15 +230,15 @@ ${rawSummary.text}`;
             this.stateHandler.incrementSelfSummaryCount();
           }
         };
-      } catch (error41) {
-        const errorKind = getRetryDirective(error41, {
+      } catch (error42) {
+        const errorKind = getRetryDirective(error42, {
           transientRetryDelayMs: 0
         }).errorType;
         compactionStatus2.increment(innerCtx, 1, {
           outcome: "failed",
           errorKind
         });
-        throw error41;
+        throw error42;
       } finally {
         compactionTimeTakenMs2.histogram(innerCtx, performance.now() - startTime);
       }

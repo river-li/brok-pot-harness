@@ -1,1 +1,1 @@
-init_clock();
+init_dist();

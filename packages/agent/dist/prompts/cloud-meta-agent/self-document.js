@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var logger58 = createLogger("@anysphere/agent");
 var NAMED_AGENT_SELF_DOCUMENT_TAG = "agent_self_document";
 var SELF_DOCUMENT_OPEN = `<${NAMED_AGENT_SELF_DOCUMENT_TAG}>`;
@@ -41,9 +41,9 @@ async function refreshNamedAgentSelfDocumentInMessages(ctx, messages2, getNamedA
   let contents;
   try {
     contents = await getNamedAgentSelfDocument();
-  } catch (error41) {
+  } catch (error42) {
     logger58.warn(ctx, "[self-document] refresh load failed; keeping stale copy", {
-      error: error41
+      error: error42
     });
     return messages2;
   }

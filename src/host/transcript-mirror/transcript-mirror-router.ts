@@ -64,11 +64,11 @@ var RoutedTranscriptMirror = class {
         pending.blobStore,
         stateBlobId
       );
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "transcript_manager",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }

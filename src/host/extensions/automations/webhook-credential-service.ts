@@ -1,7 +1,7 @@
 var import_node_fs54 = require("node:fs");
 var import_node_path97 = require("node:path");
 init_dashboard_pb();
-init_dist2();
+init_dist3();
 init_zod();
 init_errors();
 init_system_errno();
@@ -69,8 +69,8 @@ var SandWebhookCredentialService = class {
         if (!changed) return;
         await this.writeStore(keys);
       });
-    } catch (error41) {
-      this.log(`webhook key drop failed for ${automationIds.join(", ")} (${errorLogTag(error41)})`);
+    } catch (error42) {
+      this.log(`webhook key drop failed for ${automationIds.join(", ")} (${errorLogTag(error42)})`);
     }
   }
   async getCredential({
@@ -94,9 +94,9 @@ var SandWebhookCredentialService = class {
     let raw;
     try {
       raw = (await import_node_fs54.promises.readFile(this.storePath)).toString();
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") return {};
-      this.log(`webhook key store read failed (${errorLogTag(error41)}); keeping existing keys`);
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") return {};
+      this.log(`webhook key store read failed (${errorLogTag(error42)}); keeping existing keys`);
       return null;
     }
     try {
@@ -106,8 +106,8 @@ var SandWebhookCredentialService = class {
         return null;
       }
       return parsed2.data.version === 1 ? {} : parsed2.data.keys;
-    } catch (error41) {
-      this.log(`webhook key store unreadable (${errorLogTag(error41)}); keeping existing keys`);
+    } catch (error42) {
+      this.log(`webhook key store unreadable (${errorLogTag(error42)}); keeping existing keys`);
       return null;
     }
   }
@@ -118,8 +118,8 @@ var SandWebhookCredentialService = class {
         new CreateAutomationWebhookApiKeyRequest({ automationId })
       );
       key = response.apiKey;
-    } catch (error41) {
-      this.log(`webhook key mint failed for ${automationId} (${errorLogTag(error41)})`);
+    } catch (error42) {
+      this.log(`webhook key mint failed for ${automationId} (${errorLogTag(error42)})`);
       return null;
     }
     try {
@@ -127,8 +127,8 @@ var SandWebhookCredentialService = class {
         await this.writeStore({ ...keys, [automationId]: key });
         keys[automationId] = key;
       });
-    } catch (error41) {
-      this.log(`webhook key store failed for ${automationId} (${errorLogTag(error41)})`);
+    } catch (error42) {
+      this.log(`webhook key store failed for ${automationId} (${errorLogTag(error42)})`);
       return null;
     }
     return key;

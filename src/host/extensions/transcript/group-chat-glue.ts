@@ -64,11 +64,11 @@ var GroupChatGlue = class {
     let groupSession;
     try {
       groupSession = await this.tm.sessions.resolveBackgroundSession(groupId);
-    } catch (error41) {
-      if (!isAgentAbsent(error41)) reportFallback("group_chat_glue", error41);
+    } catch (error42) {
+      if (!isAgentAbsent(error42)) reportFallback("group_chat_glue", error42);
       return { status: "not_found", reply: `No group found with id ${groupId}.` };
     }
-    const config2 = this.localGroupConfig((0, import_node_path159.dirname)(groupSession.dbPath));
+    const config2 = this.localGroupConfig((0, import_node_path158.dirname)(groupSession.dbPath));
     if (config2 == null) {
       return { status: "not_found", reply: `${groupId} is not a group chat.` };
     }
@@ -207,7 +207,7 @@ var GroupChatGlue = class {
     return summary == null ? null : this.tm.roster.finalizeSummaryForRpc(summary, stamp);
   }
   isGroupSession(session) {
-    return isSandGroupDir((0, import_node_path159.dirname)(session.dbPath));
+    return isSandGroupDir((0, import_node_path158.dirname)(session.dbPath));
   }
   localGroupConfig(dir) {
     const config2 = readSandGroupConfig(dir);
@@ -215,7 +215,7 @@ var GroupChatGlue = class {
     return readSandProfileHarness(getSandProfilePath(dir)) === "temporal" ? null : config2;
   }
   isServerRoomSession(session) {
-    const dir = (0, import_node_path159.dirname)(session.dbPath);
+    const dir = (0, import_node_path158.dirname)(session.dbPath);
     return isSandGroupDir(dir) && this.localGroupConfig(dir) == null;
   }
   isGroupAgentId(agentId) {
@@ -228,7 +228,7 @@ var GroupChatGlue = class {
   async runGroupTurn(session, epoch, options2 = {}) {
     try {
       const { traceCtx, lane = "background", attachments, isAttachmentOnlyTurn } = options2;
-      const config2 = this.localGroupConfig((0, import_node_path159.dirname)(session.dbPath));
+      const config2 = this.localGroupConfig((0, import_node_path158.dirname)(session.dbPath));
       if (config2 == null) return;
       const orchestrator = new GroupChatOrchestrator(
         this.groupOrchestratorDeps(session, epoch, traceCtx, lane, void 0, attachments)
@@ -239,12 +239,12 @@ var GroupChatGlue = class {
         ...isAttachmentOnlyTurn === true ? { isAttachmentOnlyTurn: true } : {}
       });
       await this.tm.roster.emitAgentUpdate(session.id);
-    } catch (error41) {
-      const description10 = describeAgentRunError(error41);
+    } catch (error42) {
+      const description9 = describeAgentRunError(error42);
       this.tm.trayErrors.pushError({
         agentId: session.id,
-        ...description10,
-        ...hostTrayTitle({ kind: "group_chat_failed", description: description10 })
+        ...description9,
+        ...hostTrayTitle({ kind: "group_chat_failed", description: description9 })
       });
       await this.tm.roster.emitAgentUpdate(session.id);
     } finally {
@@ -255,9 +255,9 @@ var GroupChatGlue = class {
     return {
       resolveMembers: (ids) => this.resolveGroupMembers(ids),
       readHistory: () => this.readGroupHistory(session),
-      runMemberTurn: (request3) => this.runGroupMemberTurn(
+      runMemberTurn: (request5) => this.runGroupMemberTurn(
         session,
-        request3,
+        request5,
         () => this.tm.sendPipeline.currentTurnEpoch(session) === epoch,
         traceCtx,
         lane,
@@ -272,7 +272,7 @@ var GroupChatGlue = class {
     const members = [];
     for (const id of memberIds) {
       const dir = this.tm.sessionStore.getAgentDir(id);
-      if (!(0, import_node_fs97.existsSync)(dir)) continue;
+      if (!(0, import_node_fs96.existsSync)(dir)) continue;
       if (isSandGroupDir(dir)) {
         this.tm.hostLog(
           `Sand group: ignoring nested group member ${id}; a group chat cannot be a member of another group.`,
@@ -292,54 +292,54 @@ var GroupChatGlue = class {
   }
   memberKindOf(memberId) {
     const profilePath = getSandProfilePath(this.tm.sessionStore.getAgentDir(memberId));
-    if (!(0, import_node_fs97.existsSync)(profilePath)) return "local";
-    const profile = parseProfileJson((0, import_node_fs97.readFileSync)(profilePath, "utf8"));
+    if (!(0, import_node_fs96.existsSync)(profilePath)) return "local";
+    const profile = parseProfileJson((0, import_node_fs96.readFileSync)(profilePath, "utf8"));
     if (profile === null) throw new SandGroupMemberHarnessError("Invalid member profile.");
     if (profile.harness === "temporal") return "temporal";
     if (profile.harness == null || profile.harness === "box") return "local";
     throw new SandGroupMemberHarnessError("Cannot run a member with an unsupported harness.");
   }
-  reportMemberTurnOutcome(roomSession, memberId, outcome, error41) {
+  reportMemberTurnOutcome(roomSession, memberId, outcome, error42) {
     const kind = this.memberKindOf(memberId);
     this.tm.telemetry.reportGroupMemberTurnOutcome({
       conversationId: roomSession.id,
       memberConversationId: memberId,
       memberKind: kind,
       outcome,
-      ...error41 !== void 0 ? { error: classifyAgentError(error41) } : {}
+      ...error42 !== void 0 ? { error: classifyAgentError(error42) } : {}
     });
   }
-  surfaceGroupMemberTurnError(roomSession, error41) {
-    const description10 = describeAgentRunError(error41);
+  surfaceGroupMemberTurnError(roomSession, error42) {
+    const description9 = describeAgentRunError(error42);
     this.tm.trayErrors.pushError({
       agentId: roomSession.id,
-      ...description10,
-      ...hostTrayTitle({ kind: turnTrayTitleKind(description10.errorKind), description: description10 })
+      ...description9,
+      ...hostTrayTitle({ kind: turnTrayTitleKind(description9.errorKind), description: description9 })
     });
   }
-  async runGroupMemberTurn(roomSession, request3, isRoomTurnCurrent, traceCtx, lane = "background", requestSource, attachments) {
-    const memberKind = this.memberKindOf(request3.member.id);
+  async runGroupMemberTurn(roomSession, request5, isRoomTurnCurrent, traceCtx, lane = "background", requestSource, attachments) {
+    const memberKind = this.memberKindOf(request5.member.id);
     if (memberKind === "temporal") {
       return await this.runTemporalGroupMemberTurn(
         roomSession,
-        request3.member,
-        request3.isWindingDown === true,
+        request5.member,
+        request5.isWindingDown === true,
         isRoomTurnCurrent
       );
     }
     const result = await this.runLocalRoomMemberTurn({
       room: { id: roomSession.id, name: this.groupIdentityFor(roomSession).name },
-      member: request3.member,
-      prompt: request3.prompt,
+      member: request5.member,
+      prompt: request5.prompt,
       isRoomTurnCurrent,
       lineage: this.tm.runLifecycle.syntheticTurnLineage(roomSession.id),
-      applyReaction: (update) => this.applyGroupMemberReaction(roomSession, request3.member, update),
+      applyReaction: (update) => this.applyGroupMemberReaction(roomSession, request5.member, update),
       traceCtx,
       lane,
       requestSource,
       attachments
     });
-    this.reportMemberTurnOutcome(roomSession, request3.member.id, result.outcome, result.error);
+    this.reportMemberTurnOutcome(roomSession, request5.member.id, result.outcome, result.error);
     if (result.outcome === "error" && isRoomTurnCurrent()) {
       this.surfaceGroupMemberTurnError(roomSession, result.error);
     }
@@ -362,8 +362,8 @@ var GroupChatGlue = class {
     let memberSession;
     try {
       memberSession = await this.pinMemberSessionForGroupTurn(member.id);
-    } catch (error41) {
-      if (!isAgentAbsent(error41)) reportFallback("group_chat_glue", error41);
+    } catch (error42) {
+      if (!isAgentAbsent(error42)) reportFallback("group_chat_glue", error42);
       return { outcome: "session_unavailable", messages: [] };
     }
     const sent = [];
@@ -449,17 +449,17 @@ var GroupChatGlue = class {
                 setTurnTraceAttributes(memberTurnTrace, {
                   "sand.outcome": resolveTurnTraceOutcome(memberResult)
                 });
-              } catch (error41) {
-                markTurnTraceError(memberTurnTrace, error41);
-                throw error41;
+              } catch (error42) {
+                markTurnTraceError(memberTurnTrace, error42);
+                throw error42;
               }
             } catch (_2) {
               var _error = _2, _hasError = true;
             } finally {
               __callDispose(_stack, _error, _hasError);
             }
-          } catch (error41) {
-            finalAttemptError = error41;
+          } catch (error42) {
+            finalAttemptError = error42;
           } finally {
             if (registeredRunner != null && this.tm.runnerRegistry.activeGroupMemberRunners.get(memberSession.id) === registeredRunner) {
               this.tm.runnerRegistry.activeGroupMemberRunners.delete(memberSession.id);
@@ -498,7 +498,7 @@ var GroupChatGlue = class {
       this.reportMemberTurnOutcome(roomSession, member.id, "skipped");
       return [];
     }
-    const config2 = readSandGroupConfig((0, import_node_path159.dirname)(roomSession.dbPath));
+    const config2 = readSandGroupConfig((0, import_node_path158.dirname)(roomSession.dbPath));
     if (config2 == null) {
       this.reportMemberTurnOutcome(roomSession, member.id, "skipped");
       return [];
@@ -536,10 +536,10 @@ var GroupChatGlue = class {
         temporalOutcomeToMemberTurnOutcome(result.outcome, result.messages)
       );
       return result.messages;
-    } catch (error41) {
-      this.reportMemberTurnOutcome(roomSession, member.id, "error", error41);
+    } catch (error42) {
+      this.reportMemberTurnOutcome(roomSession, member.id, "error", error42);
       if (isRoomTurnCurrent()) {
-        this.surfaceGroupMemberTurnError(roomSession, error41);
+        this.surfaceGroupMemberTurnError(roomSession, error42);
       }
       return [];
     } finally {
@@ -565,13 +565,13 @@ var GroupChatGlue = class {
     let memberKind;
     try {
       memberKind = this.memberKindOf(args.memberAgentId);
-    } catch (error41) {
+    } catch (error42) {
       this.tm.telemetry.reportGroupMemberTurnOutcome({
         conversationId: args.room.id,
         memberConversationId: args.memberAgentId,
         memberKind: "local",
         outcome: "skipped",
-        error: classifyAgentError(error41)
+        error: classifyAgentError(error42)
       });
       return { status: "refused", reason: "invalid" };
     }
@@ -636,8 +636,8 @@ var GroupChatGlue = class {
         },
         requestSource: "turn"
       }) : { outcome: "pass", messages: [] };
-    } catch (error41) {
-      result = { outcome: "error", messages: [], error: error41 };
+    } catch (error42) {
+      result = { outcome: "error", messages: [], error: error42 };
     } finally {
       this.remoteRoomTurns.delete(args.nonce);
     }

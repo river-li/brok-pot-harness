@@ -1,15 +1,25 @@
-var import_node_crypto61 = require("node:crypto");
-init_scheduling();
-init_grok_bot_connect();
-init_esm2();
-init_esm3();
-init_errors();
 var ServerTranscriptTailDisabledError = class extends SandDomainError {
   name = "ServerTranscriptTailDisabledError";
 };
 var ServerTranscriptBlobReadError = class extends SandDomainError {
   name = "ServerTranscriptBlobReadError";
 };
+var BACKEND_PROBE_TIMEOUT_MS = 2e3;
+var BACKEND_PROBE_ROUTE = `${GrokBotService.typeName}/${GrokBotService.methods.watchGrokBotTranscripts.name}`;
+var BACKEND_UNAVAILABLE_STATUSES = /* @__PURE__ */ new Set([
+  502,
+  503,
+  504,
+  520,
+  521,
+  522,
+  523,
+  524,
+  525,
+  526,
+  527,
+  530
+]);
 var LIST_TIMEOUT_MS = 15e3;
 var PRESIGN_TIMEOUT_MS = 15e3;
 var BLOB_READ_TIMEOUT_MS = 3e4;
@@ -20,6 +30,17 @@ var blobReadDeadline = createDeadlinePolicy({
   name: "server-transcript-blob-read",
   timeoutMs: BLOB_READ_TIMEOUT_MS
 });
+var backendProbeDeadline = createDeadlinePolicy({
+  name: "server-transcript-backend-probe",
+  timeoutMs: BACKEND_PROBE_TIMEOUT_MS
+});
+async function fetchBackendRouteStatusFromUrl(url2, signal) {
+  return await backendProbeDeadline.run(async (deadline) => {
+    const response = await fetch(url2, { signal: deadline });
+    await response.body?.cancel();
+    return response.status;
+  }, signal);
+}
 async function fetchBlobFromUrl(url2, signal) {
   return await blobReadDeadline.run(async (deadline) => {
     const response = await fetch(url2, { signal: deadline });
@@ -32,15 +53,18 @@ async function fetchBlobFromUrl(url2, signal) {
 }
 function createServerTranscriptClient(deps) {
   const fetchBlob = deps.fetchBlob ?? fetchBlobFromUrl;
+  const fetchBackendRouteStatus = deps.fetchBackendRouteStatus ?? fetchBackendRouteStatusFromUrl;
   const now = deps.now ?? (() => Date.now());
   const accessCacheMs = deps.accessCacheMs ?? ACCESS_CACHE_MS;
   let cachedAccess = null;
   let promiseClient = null;
+  let lastBaseUrl = null;
   const resolveAccess = async () => {
     const at2 = now();
     if (cachedAccess != null && at2 - cachedAccess.at < accessCacheMs) return cachedAccess.access;
     const access5 = await deps.resolveAccess();
     cachedAccess = { access: access5, at: at2 };
+    if (access5.enabled) lastBaseUrl = access5.baseUrl;
     return access5;
   };
   const requireAccess = async () => {
@@ -68,9 +92,8 @@ function createServerTranscriptClient(deps) {
     if (promiseClient != null && promiseClient.baseUrl === access5.baseUrl) {
       return promiseClient.client;
     }
-    const transport = (deps.createTransport ?? createConnectTransport)({
+    const transport = (deps.createTransport ?? createSandConnectTransport)({
       baseUrl: access5.baseUrl,
-      httpVersion: "1.1",
       interceptors: [headerInterceptor]
     });
     const client = createPromiseClient(GrokBotService, transport);
@@ -82,13 +105,27 @@ function createServerTranscriptClient(deps) {
       const access5 = await resolveAccess();
       return access5.enabled && access5.legacyEnabled !== false;
     },
-    async *watch(request3, signal) {
-      const client = clientFor(await requireRouteAccess({}));
-      yield* client.watchGrokBotTranscripts(request3, { signal });
+    async probeBackend(signal) {
+      if (lastBaseUrl === null) return "unknown";
+      try {
+        const status = await fetchBackendRouteStatus(
+          `${lastBaseUrl.replace(/\/+$/, "")}/${BACKEND_PROBE_ROUTE}`,
+          signal
+        );
+        return BACKEND_UNAVAILABLE_STATUSES.has(status) ? "down" : "up";
+      } catch (error42) {
+        if (signal.aborted) return "unknown";
+        if (error42 instanceof TypeError || error42 instanceof DeadlineExceededError) return "down";
+        throw error42;
+      }
     },
-    async list(request3, signal) {
-      const client = clientFor(await requireRouteAccess({ agentId: request3.agentId ?? "" }));
-      return await client.listGrokBotTranscriptEntries(request3, {
+    async *watch(request5, signal) {
+      const client = clientFor(await requireRouteAccess({}));
+      yield* client.watchGrokBotTranscripts(request5, { signal });
+    },
+    async list(request5, signal) {
+      const client = clientFor(await requireRouteAccess({ agentId: request5.agentId ?? "" }));
+      return await client.listGrokBotTranscriptEntries(request5, {
         timeoutMs: LIST_TIMEOUT_MS,
         ...signal === void 0 ? {} : { signal }
       });

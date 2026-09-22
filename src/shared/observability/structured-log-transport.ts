@@ -1,8 +1,8 @@
 var MAX_BUFFER_SIZE = 1e3;
 var STRUCTURED_LOG_SUBMIT_DEADLINE_MS = 15e3;
 var DEADLINE_EXPIRY_CODE = "deadline_exceeded";
-function isDeadlineExpiry(error41) {
-  return typeof error41 === "object" && error41 !== null && error41.code === DEADLINE_EXPIRY_CODE;
+function isDeadlineExpiry(error42) {
+  return typeof error42 === "object" && error42 !== null && error42.code === DEADLINE_EXPIRY_CODE;
 }
 function createDropCounterId() {
   const bytes = new Uint8Array(16);
@@ -239,8 +239,8 @@ var StructuredLogTransport = class {
       }
       try {
         await this.flushIfDue(false);
-      } catch (error41) {
-        console.error(`[structured-log-transport] flush tick failed: ${errorLogTag(error41)}`);
+      } catch (error42) {
+        console.error(`[structured-log-transport] flush tick failed: ${errorLogTag(error42)}`);
       }
     });
   }
@@ -438,8 +438,8 @@ var StructuredLogTransport = class {
       key: this.options.key
     });
   }
-  reportSubmitTimeout(error41, batchEntries) {
-    if (!isDeadlineExpiry(error41)) {
+  reportSubmitTimeout(error42, batchEntries) {
+    if (!isDeadlineExpiry(error42)) {
       this.submitTimeoutStreakActive = false;
       return;
     }
@@ -477,10 +477,10 @@ var StructuredLogTransport = class {
           logsDropped: response.logsDropped
         } : void 0
       };
-    } catch (error41) {
+    } catch (error42) {
       if (this.client === attemptedClient) this.client = void 0;
-      this.reportSubmitTimeout(error41, logs.length);
-      return { delivered: false, error: error41 };
+      this.reportSubmitTimeout(error42, logs.length);
+      return { delivered: false, error: error42 };
     } finally {
       this.requestAbortControllers.delete(controller);
     }

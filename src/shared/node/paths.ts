@@ -43,8 +43,8 @@ async function realpathNearestExisting(p2) {
     try {
       const real = await (0, import_promises.realpath)(current);
       return missing.length === 0 ? real : (0, import_node_path.join)(real, ...missing.reverse());
-    } catch (error41) {
-      if (findSystemErrno(error41) !== "ENOENT") throw error41;
+    } catch (error42) {
+      if (findSystemErrno(error42) !== "ENOENT") throw error42;
       const parent = (0, import_node_path.dirname)(current);
       if (parent === current) return p2;
       missing.push((0, import_node_path.basename)(current));

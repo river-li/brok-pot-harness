@@ -15,13 +15,13 @@ async function loadBoxMcpServersViaTransport(ctx, transport, configJson) {
       })
     );
     return response.loadedServerNames;
-  } catch (error41) {
-    if (error41 instanceof ConnectError && error41.code === Code.Unimplemented) {
+  } catch (error42) {
+    if (error42 instanceof ConnectError && error42.code === Code.Unimplemented) {
       throw new SandBoxMcpUnsupportedError(
         "Grok Bot's computer is running an older image without MCP support \u2014 update it from Settings \u2192 Updates \u2192 Update Grok Bot's Computer.",
-        { cause: error41 }
+        { cause: error42 }
       );
     }
-    throw error41;
+    throw error42;
   }
 }

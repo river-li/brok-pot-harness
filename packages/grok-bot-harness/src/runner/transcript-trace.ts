@@ -1,5 +1,5 @@
 init_agent_pb();
-init_dist2();
+init_dist3();
 init_zod();
 var SAND_TRANSCRIPT_DEFAULT_MESSAGES = 30;
 var SAND_TRANSCRIPT_MAX_MESSAGES = 200;

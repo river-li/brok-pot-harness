@@ -39,8 +39,8 @@ function createHostAuthService(options2) {
     for (const listener of [...listeners2]) {
       try {
         listener(event);
-      } catch (error41) {
-        options2.log(`credential renewal listener failed: ${errorLogTag(error41)}`);
+      } catch (error42) {
+        options2.log(`credential renewal listener failed: ${errorLogTag(error42)}`);
       }
     }
   };
@@ -114,8 +114,8 @@ function bestEffortAccessToken(backend, auth2) {
     try {
       const token = await auth2.getAccessToken({ backendUrl: backend.backendUrl });
       return token.length > 0 ? token : null;
-    } catch (error41) {
-      reportFallback("auth_service", error41);
+    } catch (error42) {
+      reportFallback("auth_service", error42);
       return null;
     }
   };

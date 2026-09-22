@@ -52,9 +52,7 @@ var InMemoryLocalWakeupQueue = class {
     return pulled.map((wakeup) => Object.assign({}, wakeup));
   }
   pullAll() {
-    const conversationIds = [
-      ...new Set(this.pending.map((wakeup) => wakeup.conversationId))
-    ];
+    const conversationIds = [...new Set(this.pending.map((wakeup) => wakeup.conversationId))];
     return conversationIds.flatMap((conversationId) => this.pull(conversationId));
   }
   ack(ids) {

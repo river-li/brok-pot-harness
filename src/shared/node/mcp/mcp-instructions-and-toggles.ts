@@ -14,7 +14,7 @@ var SandMcpInstructionsAndToggles = class {
   }
   async setServerCustomInstructions(args) {
     const serverId = validateMcpDisplayServerId(args.serverId);
-    const server = await this.deps.resolveDisplayServer(serverId);
+    const server = await this.deps.resolveListedDisplayServer(serverId);
     if (server == null) {
       throw new SandMcpConfigError("MCP server not found.");
     }
@@ -36,7 +36,7 @@ var SandMcpInstructionsAndToggles = class {
   }
   async listServerTools(rawServerId) {
     const serverId = validateMcpDisplayServerId(rawServerId);
-    const server = await this.deps.resolveDisplayServer(serverId);
+    const server = await this.deps.resolveListedDisplayServer(serverId);
     if (server == null) {
       throw new SandMcpConfigError("MCP server not found.");
     }
@@ -63,7 +63,7 @@ var SandMcpInstructionsAndToggles = class {
     if (toolName.length === 0) {
       throw new SandMcpConfigError("MCP tool name is required.");
     }
-    if (await this.deps.resolveDisplayServer(serverId) == null) {
+    if (await this.deps.resolveListedDisplayServer(serverId) == null) {
       throw new SandMcpConfigError("MCP server not found.");
     }
     const disabledByServerId = {

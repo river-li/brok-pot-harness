@@ -64,13 +64,13 @@ function itemReference(item) {
   };
 }
 function createCredentialAutoFillRequestResolver(options2) {
-  const request3 = createAutofillRequester(
+  const request5 = createAutofillRequester(
     options2,
     "/sand/credential-provider-autofill-request",
     autofillRequestResultSchema,
     AUTO_FILL_REQUEST_TIMEOUT_MS
   );
-  return ({ agentId, entryId, request: credentialRequest }) => request3({
+  return ({ agentId, entryId, request: credentialRequest }) => request5({
     agentId,
     entryId,
     credentialId: credentialRequest.credentialId,
@@ -81,13 +81,13 @@ function createCredentialAutoFillRequestResolver(options2) {
   });
 }
 function createCredentialOneTimeCodeResolver(options2) {
-  const request3 = createAutofillRequester(
+  const request5 = createAutofillRequester(
     options2,
     "/sand/credential-provider-autofill-one-time-code",
     autofillResultSchema,
     DEFAULT_TIMEOUT_MS3
   );
-  return (session, target) => request3({
+  return (session, target) => request5({
     ...itemReference(session.item),
     targetSite: target.url,
     targetWebSocketDebuggerUrl: target.webSocketDebuggerUrl,
@@ -95,13 +95,13 @@ function createCredentialOneTimeCodeResolver(options2) {
   });
 }
 function createCredentialPasswordStepResolver(options2) {
-  const request3 = createAutofillRequester(
+  const request5 = createAutofillRequester(
     options2,
     "/sand/credential-provider-autofill-password-step",
     autofillResultSchema,
     PASSWORD_STEP_TIMEOUT_MS
   );
-  return (session, target) => request3({
+  return (session, target) => request5({
     ...itemReference(session.item),
     targetSite: target.url,
     targetWebSocketDebuggerUrl: target.webSocketDebuggerUrl,

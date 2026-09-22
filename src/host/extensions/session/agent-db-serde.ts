@@ -76,9 +76,9 @@ function parseProfile(raw) {
   } catch {
     return EMPTY_SAND_PROFILE;
   }
-  const description10 = typeof parsed2.description === "string" ? parsed2.description : "";
+  const description9 = typeof parsed2.description === "string" ? parsed2.description : "";
   const avatarPath = typeof parsed2.avatarPath === "string" && parsed2.avatarPath.length > 0 ? parsed2.avatarPath : null;
-  return { description: description10, avatarPath };
+  return { description: description9, avatarPath };
 }
 function parseUnreadState(raw) {
   if (raw == null) return EMPTY_UNREAD_STATE;

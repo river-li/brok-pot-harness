@@ -23,8 +23,8 @@ var McpHostService = class {
             backendUrl: deps.backend.backendUrl
           });
           return token.length > 0 ? token : null;
-        } catch (error41) {
-          reportFallback("mcp_service", error41);
+        } catch (error42) {
+          reportFallback("mcp_service", error42);
           return null;
         }
       },
@@ -48,9 +48,9 @@ var McpHostService = class {
     const kickInstallBackfillOnce = () => {
       this.installBackfill ??= backfillUserPluginInstalls(accountMcpDeps).then(
         () => void 0,
-        (error41) => {
+        (error42) => {
           if (this.disposed) return;
-          deps.log(`[sand:mcp] plugin install backfill failed: ${errorLogTag(error41)}`);
+          deps.log(`[sand:mcp] plugin install backfill failed: ${errorLogTag(error42)}`);
         }
       );
     };
@@ -60,8 +60,8 @@ var McpHostService = class {
         ...this.hostMcp.mcp,
         getTools: (ctx, mcpConfigJson) => {
           this.boxServersTurn = { ctx, agentId, gates };
-          this.hostMcp.reconcileBoxServers().catch((error41) => {
-            reportFallback("mcp_service", error41);
+          this.hostMcp.reconcileBoxServers().catch((error42) => {
+            reportFallback("mcp_service", error42);
           });
           return this.hostMcp.mcp.getTools(ctx, mcpConfigJson);
         }
@@ -146,10 +146,10 @@ var McpHostService = class {
               }
             ]
           });
-        } catch (error41) {
+        } catch (error42) {
           if (this.disposed) return;
           this.deps.log(
-            `[sand:mcp] box MCP status follow-up failed for ${id}: ${errorLogTag(error41)}`
+            `[sand:mcp] box MCP status follow-up failed for ${id}: ${errorLogTag(error42)}`
           );
         } finally {
           this.statusFollowUps.delete(id);

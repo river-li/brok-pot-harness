@@ -5,10 +5,7 @@ var PLUGIN_MANIFEST_PATHS = [
   ".claude-plugin/plugin.json",
   "plugin.json"
 ];
-var PLUGIN_ROOT_DIR_NAMES = [
-  ".cursor-plugin",
-  ".claude-plugin"
-];
+var PLUGIN_ROOT_DIR_NAMES = [".cursor-plugin", ".claude-plugin"];
 var MARKETPLACE_MANIFEST_PATHS = [
   ".cursor-plugin/marketplace.json",
   ".claude-plugin/marketplace.json"
@@ -32,12 +29,7 @@ var GitSubdirSourceSchema = external_exports.object({
   ref: external_exports.string().optional(),
   sha: external_exports.string().length(40, "SHA must be 40 characters").regex(/^[a-f0-9]+$/, "SHA must be hexadecimal").optional()
 });
-var PluginSourceSchema = external_exports.union([
-  external_exports.string(),
-  GitHubSourceSchema,
-  GitUrlSourceSchema,
-  GitSubdirSourceSchema
-]);
+var PluginSourceSchema = external_exports.union([external_exports.string(), GitHubSourceSchema, GitUrlSourceSchema, GitSubdirSourceSchema]);
 var MIN_CLIENT_VERSION_PATTERN = /^(\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?|never)$/;
 var MIN_CLIENT_VERSION_MESSAGE = 'Must be a semver version (X.Y.Z) or "never"';
 var MinClientVersionsSchema = external_exports.object({
@@ -148,10 +140,7 @@ var PluginVariableSchemaSchema = external_exports.lazy(() => external_exports.ob
   properties: external_exports.record(external_exports.string(), PluginVariableSchemaSchema).optional(),
   required: external_exports.array(external_exports.string()).optional(),
   additionalProperties: external_exports.union([external_exports.boolean(), PluginVariableSchemaSchema]).optional(),
-  items: external_exports.union([
-    PluginVariableSchemaSchema,
-    external_exports.array(PluginVariableSchemaSchema)
-  ]).optional(),
+  items: external_exports.union([PluginVariableSchemaSchema, external_exports.array(PluginVariableSchemaSchema)]).optional(),
   minLength: external_exports.number().int().nonnegative().optional(),
   maxLength: external_exports.number().int().nonnegative().optional(),
   minimum: external_exports.number().optional(),

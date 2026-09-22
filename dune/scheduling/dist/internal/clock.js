@@ -14,7 +14,7 @@ function assertDelay(delayMs) {
 }
 var realClock;
 var init_clock = __esm({
-  "../dune/src/internal/scheduling/clock.ts"() {
+  "../dune/scheduling/dist/internal/clock.js"() {
     "use strict";
     realClock = {
       now: () => Date.now(),
@@ -23,16 +23,18 @@ var init_clock = __esm({
         assertDelay(delayMs);
         let active = true;
         const timer = globalThis.setTimeout(() => {
-          if (!active) return;
+          if (!active)
+            return;
           active = false;
           fn();
         }, delayMs);
-        if (options2?.keepEventLoopAlive !== true && isNodeTimer(timer)) {
+        if ((options2 === null || options2 === void 0 ? void 0 : options2.keepEventLoopAlive) !== true && isNodeTimer(timer)) {
           timer.unref();
         }
         return {
           dispose() {
-            if (!active) return;
+            if (!active)
+              return;
             active = false;
             globalThis.clearTimeout(timer);
           }

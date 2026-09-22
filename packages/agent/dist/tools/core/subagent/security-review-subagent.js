@@ -51,10 +51,7 @@ function createSecurityReviewSubagentConfig() {
     // Fast first, standard Composer as the fallback — same chain as the Bugbot
     // subagent, so a team policy that blocks the fast variant degrades to
     // standard Composer instead of the parent model.
-    defaultModelIds: [
-      SubagentComposerModelId.fast,
-      SubagentComposerModelId.standard
-    ],
+    defaultModelIds: [SubagentComposerModelId.fast, SubagentComposerModelId.standard],
     userRequestedModelId: SubagentComposerModelId.fast,
     forceDefaultModel: true,
     systemPromptOverride: () => SECURITY_REVIEW_SUBAGENT_PROMPT,

@@ -1,5 +1,5 @@
-init_dist3();
-var __awaiter44 = function(thisArg, _arguments, P2, generator) {
+init_dist4();
+var __awaiter46 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -75,7 +75,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     this.fallbackDecryptKeyStr = fallbackDecryptKeyStr;
   }
   static deriveKey(keyStr) {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       const encoder2 = new TextEncoder();
       const keyMaterial = encoder2.encode(keyStr);
       const keyHash = yield crypto.subtle.digest("SHA-256", keyMaterial);
@@ -83,7 +83,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     });
   }
   getEncryptionKey() {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       if (this.encryptionKey === void 0) {
         this.encryptionKey = yield _EncryptedBlobStore.deriveKey(this.encryptionKeyStr);
       }
@@ -91,7 +91,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     });
   }
   getFallbackDecryptKey() {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       if (this.fallbackDecryptKeyStr === null) {
         return null;
       }
@@ -102,7 +102,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     });
   }
   getBlob(ctx, blobId) {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       const startTime = performance.now();
       try {
         const encryptedValue = yield this.blobStore.getBlob(ctx, blobId);
@@ -134,7 +134,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     });
   }
   encryptBlob(blobData) {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       const iv = crypto.getRandomValues(new Uint8Array(_EncryptedBlobStore.IV_LENGTH));
       const encryptedValue = yield crypto.subtle.encrypt({ name: _EncryptedBlobStore.ALGORITHM, iv }, yield this.getEncryptionKey(), toUint8Array2(blobData));
       const combined = new Uint8Array(iv.length + encryptedValue.byteLength);
@@ -144,7 +144,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     });
   }
   setBlob(ctx, blobId, blobData) {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       const startTime = performance.now();
       try {
         const encryptedBlob = yield this.encryptBlob(blobData);
@@ -156,7 +156,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     });
   }
   setBlobLocallyOnly(ctx, blobId, blobData) {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       const startTime = performance.now();
       try {
         const encryptedBlob = yield this.encryptBlob(blobData);
@@ -168,7 +168,7 @@ var EncryptedBlobStore = class _EncryptedBlobStore {
     });
   }
   flush(ctx) {
-    return __awaiter44(this, void 0, void 0, function* () {
+    return __awaiter46(this, void 0, void 0, function* () {
       return yield this.blobStore.flush(ctx);
     });
   }

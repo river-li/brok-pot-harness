@@ -113,8 +113,8 @@ function createSharedInstalledPluginsLoader(deps) {
         { timeoutMs: CURRENT_USER_RPC_TIMEOUT_MS }
       );
       currentUserId = response.userId > 0 ? response.userId : null;
-    } catch (error41) {
-      deps.log(`[sand:plugin-skills] could not resolve the signed-in user: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      deps.log(`[sand:plugin-skills] could not resolve the signed-in user: ${errorLogTag(error42)}`);
     }
     return currentUserId;
   };
@@ -321,15 +321,15 @@ var SandPluginSkillsService = class {
         durationMs: Date.now() - startedAtMs
       });
       return records2;
-    } catch (error41) {
-      this.options.log?.(`[sand:plugin-skills] sync (${trigger2}) failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.options.log?.(`[sand:plugin-skills] sync (${trigger2}) failed: ${errorLogTag(error42)}`);
       this.options.reportSync?.({
         trigger: trigger2,
         outcome: "failed",
-        errorClass: errorLogTag(error41),
+        errorClass: errorLogTag(error42),
         durationMs: Date.now() - startedAtMs
       });
-      throw error41;
+      throw error42;
     }
   }
 };

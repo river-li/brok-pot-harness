@@ -76,9 +76,9 @@ var RosterEmit = class {
             const outcome = await this.runEmitAgentUpdate(agentId, pendingSiblingAgentIds);
             if (outcome === "full") return;
           }
-        } catch (error41) {
+        } catch (error42) {
           this.tm.hostLog(
-            `[transcript-manager] coalesced roster emit failed: ${errorLogTag(error41)}`,
+            `[transcript-manager] coalesced roster emit failed: ${errorLogTag(error42)}`,
             "error"
           );
         }
@@ -133,8 +133,8 @@ var RosterEmit = class {
     if (live != null) {
       try {
         summary = await this.tm.sessionStore.summarizeSession(live, announcedId);
-      } catch (error41) {
-        reportFallback("roster_emit", error41);
+      } catch (error42) {
+        reportFallback("roster_emit", error42);
         summary = null;
       }
     }
@@ -191,16 +191,16 @@ var RosterEmit = class {
         ordered: this.replicaWriter.nextStamp(ROSTER_REPLICA_KEY)
       });
       return "delta";
-    } catch (error41) {
+    } catch (error42) {
       this.tm.hostLog(
-        `[transcript-manager] incremental emit failed for ${agentId}; falling back to full emit: ${errorLogTag(error41)}`,
+        `[transcript-manager] incremental emit failed for ${agentId}; falling back to full emit: ${errorLogTag(error42)}`,
         "error"
       );
       try {
         await this.runEmitAgents();
         return "full";
-      } catch (error42) {
-        reportFallback("roster_emit", error42);
+      } catch (error43) {
+        reportFallback("roster_emit", error43);
         return "failed";
       }
     }

@@ -58,6 +58,7 @@ var experimentsExtension = defineHostExtension({
       offerLessSubagentFanout: () => service.offerLessSubagentFanout(),
       offerUpdateCommunication: () => service.offerUpdateCommunication(),
       offerBrowserUsePlaywright: () => service.offerBrowserUsePlaywright(),
+      peekBrowserUsePlaywright: () => service.peekBrowserUsePlaywright(),
       getConfiguredDefaultModel: () => service.getConfiguredDefaultModel(),
       getConfiguredAutomationsModel: () => service.getConfiguredAutomationsModel(),
       getComputerUseModelOverride: () => service.getComputerUseModelOverride(),

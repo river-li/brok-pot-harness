@@ -1,6 +1,6 @@
 var import_promises25 = require("node:fs/promises");
 var import_node_path34 = require("node:path");
-init_dist2();
+init_dist3();
 init_system_errno();
 init_unknown_record();
 var SENTINEL_VERSION = 3;
@@ -11,9 +11,9 @@ async function readIdentityBackfillState(path31) {
   let raw;
   try {
     raw = (await (0, import_promises25.readFile)(path31)).toString();
-  } catch (error41) {
-    if (findSystemErrno(error41) === "ENOENT") return void 0;
-    throw error41;
+  } catch (error42) {
+    if (findSystemErrno(error42) === "ENOENT") return void 0;
+    throw error42;
   }
   const parsed2 = attemptSync(() => JSON.parse(raw));
   if (!parsed2.ok || !isUnknownRecord(parsed2.value)) return void 0;
@@ -92,9 +92,9 @@ async function runIdentityBackfill(deps) {
   let summaries;
   try {
     summaries = await deps.listAgents();
-  } catch (error41) {
+  } catch (error42) {
     deps.report("warn", { op: "backfill_sweep", outcome: "roster_failed" });
-    throw error41;
+    throw error42;
   }
   let minted = 0;
   let skipped2 = 0;
@@ -173,9 +173,9 @@ async function runIdentityBackfill(deps) {
         refused: refusedAgents
       });
     }
-  } catch (error41) {
+  } catch (error42) {
     stopped2 = "aborted";
-    throw error41;
+    throw error42;
   } finally {
     deps.report(stopped2 === void 0 && failed2 === 0 ? "info" : "warn", {
       op: "backfill_sweep",

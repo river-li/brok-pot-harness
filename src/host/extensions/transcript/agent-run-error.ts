@@ -32,15 +32,15 @@ var BackendConnectErrors = class _BackendConnectErrors {
   static backendDetails(connectError) {
     return _BackendConnectErrors.backendEntry(connectError)?.details;
   }
-  static scan(error41) {
+  static scan(error42) {
     const matches = { usageLimit: null, detailed: null, first: null };
-    _BackendConnectErrors.walk(error41, /* @__PURE__ */ new Set(), matches);
+    _BackendConnectErrors.walk(error42, /* @__PURE__ */ new Set(), matches);
     return matches;
   }
-  static walk(error41, seen, matches) {
-    if (error41 == null || typeof error41 !== "object" || seen.has(error41)) return;
-    seen.add(error41);
-    const connectError = _BackendConnectErrors.asConnectError(error41);
+  static walk(error42, seen, matches) {
+    if (error42 == null || typeof error42 !== "object" || seen.has(error42)) return;
+    seen.add(error42);
+    const connectError = _BackendConnectErrors.asConnectError(error42);
     if (connectError != null) {
       matches.first ??= connectError;
       if (connectError.findDetails(ErrorDetails).length > 0) {
@@ -50,8 +50,8 @@ var BackendConnectErrors = class _BackendConnectErrors {
         }
       }
     }
-    _BackendConnectErrors.walk(error41.cause, seen, matches);
-    const aggregated = error41.errors;
+    _BackendConnectErrors.walk(error42.cause, seen, matches);
+    const aggregated = error42.errors;
     if (Array.isArray(aggregated)) {
       for (const inner of aggregated) {
         _BackendConnectErrors.walk(inner, seen, matches);
@@ -59,14 +59,14 @@ var BackendConnectErrors = class _BackendConnectErrors {
     }
   }
 };
-function findBackendConnectError(error41, requireDetails = true) {
-  const matches = BackendConnectErrors.scan(error41);
+function findBackendConnectError(error42, requireDetails = true) {
+  const matches = BackendConnectErrors.scan(error42);
   const detailed = matches.usageLimit ?? matches.detailed;
   if (detailed != null) return detailed;
   return requireDetails ? null : matches.first;
 }
-function getBackendErrorDetailMessage(error41) {
-  const connectError = findBackendConnectError(error41);
+function getBackendErrorDetailMessage(error42) {
+  const connectError = findBackendConnectError(error42);
   if (connectError == null) return null;
   const detail = BackendConnectErrors.backendDetails(connectError);
   const title = detail?.title.trim();
@@ -79,113 +79,113 @@ function getBackendErrorDetailMessage(error41) {
 
 ${message}`;
 }
-function formatAgentRunError(error41) {
-  const backendDetail = getBackendErrorDetailMessage(error41);
-  return backendDetail ?? error41.message;
+function formatAgentRunError(error42) {
+  const backendDetail = getBackendErrorDetailMessage(error42);
+  return backendDetail ?? error42.message;
 }
-function errorChainIncludes(error41, matches, seen = /* @__PURE__ */ new Set()) {
-  if (matches(error41)) return true;
-  if (error41 == null || typeof error41 !== "object" || seen.has(error41)) return false;
-  seen.add(error41);
-  const cause = "cause" in error41 ? error41.cause : void 0;
+function errorChainIncludes(error42, matches, seen = /* @__PURE__ */ new Set()) {
+  if (matches(error42)) return true;
+  if (error42 == null || typeof error42 !== "object" || seen.has(error42)) return false;
+  seen.add(error42);
+  const cause = "cause" in error42 ? error42.cause : void 0;
   if (cause != null && errorChainIncludes(cause, matches, seen)) return true;
-  const aggregated = "errors" in error41 ? error41.errors : void 0;
+  const aggregated = "errors" in error42 ? error42.errors : void 0;
   return Array.isArray(aggregated) && aggregated.some((inner) => errorChainIncludes(inner, matches, seen));
 }
-function chainCarriesMarker(error41, marker17) {
+function chainCarriesMarker(error42, marker17) {
   return errorChainIncludes(
-    error41,
+    error42,
     (candidate) => isUnknownRecord(candidate) && candidate[marker17] === true
   );
 }
-function isCheckpointPublicationFailure(error41) {
+function isCheckpointPublicationFailure(error42) {
   return chainCarriesMarker(
-    error41,
+    error42,
     "isSandCheckpointPublicationError"
   );
 }
 var KNOWN_INTERNAL_ERROR_KINDS = [
   {
-    matches: (error41) => chainCarriesMarker(error41, "isTranscriptJournalFailure"),
+    matches: (error42) => chainCarriesMarker(error42, "isTranscriptJournalFailure"),
     kind: "transcript_journal_corruption"
   },
   {
-    matches: (error41) => chainCarriesMarker(
-      error41,
+    matches: (error42) => chainCarriesMarker(
+      error42,
       "isTranscriptAppendAfterCheckpointError"
     ),
     kind: "transcript_append_failed"
   },
   {
-    matches: (error41) => errorChainIncludes(error41, isFirstTokenStallError),
+    matches: (error42) => errorChainIncludes(error42, isFirstTokenStallError),
     kind: "first_token_stall"
   },
   {
-    matches: (error41) => errorChainIncludes(error41, isStreamIdleError),
+    matches: (error42) => errorChainIncludes(error42, isStreamIdleError),
     kind: "opaque_wire_failure"
   },
   {
-    matches: (error41) => chainCarriesMarker(error41, "isConversationTooLarge"),
+    matches: (error42) => chainCarriesMarker(error42, "isConversationTooLarge"),
     kind: "conversation_too_large"
   },
   {
-    matches: (error41) => errorChainIncludes(
-      error41,
+    matches: (error42) => errorChainIncludes(
+      error42,
       (candidate) => candidate instanceof SandBoxNotReadyError && candidate.errorKind === "box_starting"
     ),
     kind: "box_starting"
   },
   {
-    matches: (error41) => errorChainIncludes(
-      error41,
+    matches: (error42) => errorChainIncludes(
+      error42,
       (candidate) => candidate instanceof SandBoxNotReadyError && candidate.errorKind === "box_not_responding"
     ),
     kind: "box_not_responding"
   },
   {
-    matches: (error41) => errorChainIncludes(
-      error41,
+    matches: (error42) => errorChainIncludes(
+      error42,
       (candidate) => candidate instanceof SandBoxNotReadyError && candidate.errorKind === "box_no_monitor_available"
     ),
     kind: "box_no_monitor_available"
   },
   {
-    matches: (error41) => errorChainIncludes(
-      error41,
+    matches: (error42) => errorChainIncludes(
+      error42,
       (candidate) => candidate instanceof SandBoxNotReadyError && candidate.errorKind === "box_hibernated"
     ),
     kind: "box_hibernated"
   },
   {
-    matches: (error41) => findBackendConnectError(error41, false) != null || isTransientStreamError(error41),
+    matches: (error42) => findBackendConnectError(error42, false) != null || isTransientStreamError(error42),
     kind: "opaque_wire_failure"
   }
 ];
-function describeAgentRunError(error41) {
-  const formatted = error41 instanceof Error ? formatAgentRunError(error41) : String(error41);
-  if (isCheckpointPublicationFailure(error41)) {
+function describeAgentRunError(error42) {
+  const formatted = error42 instanceof Error ? formatAgentRunError(error42) : String(error42);
+  if (isCheckpointPublicationFailure(error42)) {
     return {
       errorKind: "checkpoint_publication_failed",
       rawDetail: formatted
     };
   }
-  if (isBackendUnreachableError(error41)) {
+  if (isBackendUnreachableError(error42)) {
     return {
       errorKind: "backend_unreachable",
       rawDetail: formatted
     };
   }
-  if (isProviderCapacityError(error41)) {
+  if (isProviderCapacityError(error42)) {
     return {
       errorKind: "provider_overloaded",
       rawDetail: formatted
     };
   }
-  const connectError = findBackendConnectError(error41);
+  const connectError = findBackendConnectError(error42);
   const custom3 = connectError == null ? void 0 : BackendConnectErrors.backendDetails(connectError);
   const title = custom3?.title?.trim() ?? "";
   if (custom3 == null) {
-    const known = KNOWN_INTERNAL_ERROR_KINDS.find(({ matches }) => matches(error41));
+    const known = KNOWN_INTERNAL_ERROR_KINDS.find(({ matches }) => matches(error42));
     if (known != null) {
       return { errorKind: known.kind, rawDetail: formatted };
     }
@@ -205,7 +205,7 @@ function describeAgentRunError(error41) {
       ...actions.length > 0 ? { actions } : {}
     };
   }
-  const rawMessage = error41 instanceof Error ? error41.message : String(error41);
+  const rawMessage = error42 instanceof Error ? error42.message : String(error42);
   const rateLimitReason = custom3?.additionalInfo?.rateLimitReason;
   const isUsageLimit = rateLimitReason === SAND_INCLUDED_LIMIT_REASON || rateLimitReason === ENTERPRISE_GROK_BOT_TRIAL_CAP_REASON;
   let detail = title.length > 0 ? custom3?.detail?.trim() ?? "" : formatted;

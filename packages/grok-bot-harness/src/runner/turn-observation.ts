@@ -4,12 +4,13 @@ function createTurnObservation(host, timing) {
     name: "sand-mcp-exec-stall",
     ttlMs: MCP_EXEC_STALL_THRESHOLD_MS
   });
+  const clock = timing?.clock ?? realClock;
   let onToolCallDiagnostic = void 0;
   function setToolCallDiagnosticHandler(handler) {
     onToolCallDiagnostic = handler;
   }
   function beginMcpExecObservation(call) {
-    const startedPerfMs = performance.now();
+    const startedPerfMs = clock.monotonicNow();
     const requestIdPart = call.requestId != null ? { requestId: call.requestId } : {};
     const windowIndexPart = call.windowIndex === void 0 ? {} : { windowIndex: call.windowIndex };
     const transport = call.resolveTransport === void 0 ? Promise.resolve("unknown") : call.resolveTransport().catch(() => "unknown");
@@ -19,7 +20,7 @@ function createTurnObservation(host, timing) {
         toolCallId: call.toolCallId,
         toolName: MCP_TOOL_CALL_OUTLINE_NAME,
         connector: call.connector,
-        elapsedMs: Math.round(performance.now() - startedPerfMs),
+        elapsedMs: Math.round(clock.monotonicNow() - startedPerfMs),
         ...requestIdPart
       });
     });
@@ -28,7 +29,7 @@ function createTurnObservation(host, timing) {
       if (settled) return;
       settled = true;
       stallArm.dispose();
-      const durationMs = Math.round(performance.now() - startedPerfMs);
+      const durationMs = Math.round(clock.monotonicNow() - startedPerfMs);
       const errorClassPart = settlement.kind === "error" ? { errorClass: settlement.errorClass } : {};
       void transport.then((resolvedTransport) => {
         onToolCallDiagnostic?.({
@@ -220,7 +221,7 @@ function createTurnObservation(host, timing) {
   function armDispatchObservation(deps) {
     let pendingFirstToken = void 0;
     let runResolvedModelId = void 0;
-    const dispatchPerfMs = performance.now();
+    const dispatchPerfMs = clock.monotonicNow();
     const dispatchEpochMs = Date.now();
     if (deps.enterEpochMs !== void 0 && Number.isFinite(deps.enterEpochMs)) {
       try {
@@ -256,9 +257,9 @@ function createTurnObservation(host, timing) {
           traceId: deps.traceId,
           spanId: deps.spanId
         });
-      } catch (error41) {
+      } catch (error42) {
         process.stderr.write(
-          `sand.turn.send_dispatch_observation_failed error_class=${errorLogTag(error41)}
+          `sand.turn.send_dispatch_observation_failed error_class=${errorLogTag(error42)}
 `
         );
       }
@@ -268,7 +269,7 @@ function createTurnObservation(host, timing) {
       if (firstTokenObserved) return;
       firstTokenObserved = true;
       try {
-        const rawTtftMs = performance.now() - dispatchPerfMs;
+        const rawTtftMs = clock.monotonicNow() - dispatchPerfMs;
         const sanitized = sanitizeCrossClockDurationMs(rawTtftMs, TTFT_MAX_PLAUSIBLE_MS);
         const skew = sanitized.skewReason !== void 0;
         if (sanitized.ms !== void 0) {
@@ -306,9 +307,9 @@ function createTurnObservation(host, timing) {
         } else {
           pendingFirstToken = emitObservation;
         }
-      } catch (error41) {
+      } catch (error42) {
         process.stderr.write(
-          `sand.turn.first_token_observation_failed error_class=${errorLogTag(error41)}
+          `sand.turn.first_token_observation_failed error_class=${errorLogTag(error42)}
 `
         );
       }

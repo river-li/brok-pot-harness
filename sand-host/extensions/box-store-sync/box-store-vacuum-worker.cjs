@@ -120,6 +120,7 @@ var BOUNDED_TELEMETRY_ERROR_NAMES = [
 var BOUNDED_TELEMETRY_TOKENS = [
   "client-paused",
   "dev-induced-offline",
+  "network-return",
   "unknown",
   "cold_create",
   "first_connect",
@@ -135,7 +136,7 @@ var BOUNDED_TELEMETRY_TOKENS = [
 ];
 var brandedTelemetryToken = brandedEnumOf(BOUNDED_TELEMETRY_TOKENS, "unknown");
 
-// ../dune/src/internal/scheduling/policies.ts
+// ../dune/scheduling/dist/internal/policies.js
 var JITTER_SPREAD = { none: 0, equal: 1 / 2, full: 1 };
 
 // src/host/storage/store-db.ts

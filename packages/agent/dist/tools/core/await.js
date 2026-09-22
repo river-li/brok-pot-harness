@@ -52,11 +52,11 @@ var __disposeResources30 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger77 = createLogger("await-tool");
+var logger78 = createLogger("await-tool");
 var DEFAULT_BLOCK_UNTIL_MS = 3e4;
 var SHELL_CHECK_SLICE_MS = 250;
 var AWAIT_TOOL_MODEL_NAME_DEFAULT = "Await";
@@ -412,9 +412,7 @@ async function resolveSubagentTranscriptPath(ctx, resourceAccessor, taskId, tran
   const directCandidates = [
     normalizePathJoin(transcriptsFolder, `${taskId}.jsonl`),
     normalizePathJoin(transcriptsFolder, `${taskId}/${taskId}.jsonl`),
-    ...parentConversationId ? [
-      normalizePathJoin(transcriptsFolder, `${parentConversationId}/subagents/${taskId}.jsonl`)
-    ] : []
+    ...parentConversationId ? [normalizePathJoin(transcriptsFolder, `${parentConversationId}/subagents/${taskId}.jsonl`)] : []
   ];
   for (const candidate of directCandidates) {
     const snapshot = await readSnapshot(ctx, resourceAccessor, candidate, toolCallId).catch(() => void 0);
@@ -573,13 +571,13 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
             throw new Error("Must pass a task id or wait for a nonzero duration.");
           }
           const sleepStartMs = Date.now();
-          logger77.debug(ctx, "nal.await_stall.sleep_start", {
+          logger78.debug(ctx, "nal.await_stall.sleep_start", {
             blockUntilMs,
             callId: meta.toolCallId
           });
           const sleepOutcome = await sleepOrAbortOrSteerRelease(toolCtx, blockUntilMs, steerSignal);
           const actualSleepMs = Date.now() - sleepStartMs;
-          logger77.debug(ctx, "nal.await_stall.sleep_completed", {
+          logger78.debug(ctx, "nal.await_stall.sleep_completed", {
             blockUntilMs,
             actualSleepMs,
             sleepOutcome,
@@ -627,7 +625,11 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
             fallbackTranscriptPath = options2.agentTranscriptsFolder ? await resolveSubagentTranscriptPath(toolCtx, resourceAccessor, taskId, options2.agentTranscriptsFolder, meta.toolCallId, parentConversationId) : void 0;
             return fallbackTranscriptPath;
           };
-          const readSubagentTranscriptSnapshot = async (path31) => path31 ? readSnapshot(toolCtx, resourceAccessor, path31, meta.toolCallId).catch(() => ({ exists: false, content: "", outputLength: 0 })) : { exists: false, content: "", outputLength: 0 };
+          const readSubagentTranscriptSnapshot = async (path31) => path31 ? readSnapshot(toolCtx, resourceAccessor, path31, meta.toolCallId).catch(() => ({
+            exists: false,
+            content: "",
+            outputLength: 0
+          })) : { exists: false, content: "", outputLength: 0 };
           const buildSubagentAwaitSuccess = (awaitResult) => new AwaitResult({
             result: {
               case: "success",
@@ -652,7 +654,7 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
                 throw new Error("Awaiting subagent ids is not available in this environment (subagent executor resource is not registered).");
               }
             })();
-            logger77.debug(toolCtx, "nal.await_stall.legacy_subagent_fallback", {
+            logger78.debug(toolCtx, "nal.await_stall.legacy_subagent_fallback", {
               taskId,
               blockUntilMs,
               callId: meta.toolCallId,
@@ -753,7 +755,7 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
             });
             try {
               const raced = await Promise.race([
-                rawSubagentAwaitPromise.then((result) => ({ kind: "result", result }), (error41) => ({ kind: "error", error: error41 })),
+                rawSubagentAwaitPromise.then((result) => ({ kind: "result", result }), (error42) => ({ kind: "error", error: error42 })),
                 steerReleasePromise.then(() => ({
                   kind: "steer_release"
                 }))
@@ -863,8 +865,8 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
         let steerReleasedMidSleep = false;
         while (true) {
           throwIfAborted(toolCtx);
-          const snapshot = await readSnapshot(toolCtx, resourceAccessor, outputPath, meta.toolCallId, machineId).catch((error41) => {
-            throw new Error(error41 instanceof Error ? error41.message : "Failed to read shell output");
+          const snapshot = await readSnapshot(toolCtx, resourceAccessor, outputPath, meta.toolCallId, machineId).catch((error42) => {
+            throw new Error(error42 instanceof Error ? error42.message : "Failed to read shell output");
           });
           if (!snapshot.exists) {
             throw new Error(`No shell found for id ${taskId}`);
@@ -1066,7 +1068,7 @@ output_length: ${value.outputLength.toString()}`);
       const taskToolName = props.allTools.TASK?.name;
       const mentionSubagents = enableSubagentAwaiting && taskToolName !== void 0;
       const hasShellTool = shellToolName !== void 0;
-      const description10 = getDescription4({
+      const description9 = getDescription4({
         version: promptVersion,
         enableSubagentAwaiting: mentionSubagents,
         hasShell: hasShellTool,
@@ -1074,13 +1076,13 @@ output_length: ${value.outputLength.toString()}`);
         enableJobCompletionNotifications,
         promptCacheTTLMs
       });
-      return description10;
+      return description9;
     },
     parameters: baseParametersSchema3,
     execute: withSafeParsedArgs(parsingParametersSchema, execute, createAwaitToolCall(new AwaitToolCall())),
     render: render2,
-    serializeError: (error41) => {
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+    serializeError: (error42) => {
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createAwaitToolCall(new AwaitToolCall({
         result: new AwaitResult({
           result: {

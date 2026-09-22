@@ -36,8 +36,8 @@ var MAX_TAG_LENGTH = 128;
 function isBoundedTag(value) {
   return typeof value === "string" && value.length > 0 && value.length <= MAX_TAG_LENGTH;
 }
-function hasErrnoCode(error41, code) {
-  return error41 instanceof Error && "code" in error41 && error41.code === code;
+function hasErrnoCode(error42, code) {
+  return error42 instanceof Error && "code" in error42 && error42.code === code;
 }
 function readCommonTimes(value) {
   if (!("startedAtMs" in value) || !("crashedAtMs" in value) || !("uptimeMs" in value) || !isNonNegativeFinite(value.startedAtMs) || !isNonNegativeFinite(value.crashedAtMs) || !isNonNegativeFinite(value.uptimeMs)) {
@@ -136,24 +136,24 @@ function createHostCrashMarkerStore(path31 = getHostCrashMarkerPath()) {
     read: async () => {
       try {
         return { kind: "present", raw: await (0, import_promises7.readFile)(path31, "utf8") };
-      } catch (error41) {
-        return { kind: hasErrnoCode(error41, "ENOENT") ? "absent" : "unavailable" };
+      } catch (error42) {
+        return { kind: hasErrnoCode(error42, "ENOENT") ? "absent" : "unavailable" };
       }
     },
     write: async (marker17) => {
       try {
         await (0, import_promises7.writeFile)(path31, JSON.stringify(marker17), { flag: "wx" });
         return "written";
-      } catch (error41) {
-        return hasErrnoCode(error41, "EEXIST") ? "present" : "unavailable";
+      } catch (error42) {
+        return hasErrnoCode(error42, "EEXIST") ? "present" : "unavailable";
       }
     },
     delete: async () => {
       try {
         await (0, import_promises7.rm)(path31, { force: true });
         return "deleted";
-      } catch (error41) {
-        reportFallback("host_crash_marker", error41);
+      } catch (error42) {
+        reportFallback("host_crash_marker", error42);
         return "unavailable";
       }
     }

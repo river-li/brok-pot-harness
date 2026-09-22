@@ -1,9 +1,9 @@
 var import_node_child_process15 = require("node:child_process");
-var import_node_fs99 = require("node:fs");
+var import_node_fs98 = require("node:fs");
 var import_promises80 = require("node:fs/promises");
-var import_node_path177 = require("node:path");
-var import_node_util14 = require("node:util");
-var runCommand2 = (0, import_node_util14.promisify)(import_node_child_process15.execFile);
+var import_node_path175 = require("node:path");
+var import_node_util15 = require("node:util");
+var runCommand2 = (0, import_node_util15.promisify)(import_node_child_process15.execFile);
 var SAND_WALLPAPER_COMMAND = "/usr/local/bin/sand-wallpaper";
 var SAND_WALLPAPER_TONE_SCRIPT = "/usr/local/bin/sand-wallpaper-tone.mjs";
 var X_SOCKET_DIR = "/tmp/.X11-unix";
@@ -23,7 +23,7 @@ async function readLiveDisplays(socketDir) {
   }).sort((left, right) => Number(left) - Number(right));
   const displays = [];
   for (const num of numbers) {
-    const stats = (0, import_node_fs99.lstatSync)((0, import_node_path177.join)(socketDir, `X${num}`), { throwIfNoEntry: false });
+    const stats = (0, import_node_fs98.lstatSync)((0, import_node_path175.join)(socketDir, `X${num}`), { throwIfNoEntry: false });
     if (stats === void 0 || !stats.isSocket()) continue;
     displays.push({ display: `:${num}`, uid: stats.uid, gid: stats.gid });
   }
@@ -35,12 +35,12 @@ function createBoxWallpaperCommands(options2) {
   const wallpaperCommandPath = options2.wallpaperCommandPath ?? SAND_WALLPAPER_COMMAND;
   const xSocketDir = options2.xSocketDir ?? X_SOCKET_DIR;
   return {
-    isAvailable: (0, import_node_fs99.existsSync)(toneScriptPath) && (0, import_node_fs99.existsSync)(wallpaperCommandPath),
+    isAvailable: (0, import_node_fs98.existsSync)(toneScriptPath) && (0, import_node_fs98.existsSync)(wallpaperCommandPath),
     async resolvePlan() {
       const result = await runCommand2(nodePath, [toneScriptPath, options2.settingsPath], {
         timeout: COMMAND_TIMEOUT_MS2
-      }).catch((error41) => {
-        options2.log(`wallpaper: tone helper failed (${describe2(error41)})`);
+      }).catch((error42) => {
+        options2.log(`wallpaper: tone helper failed (${describe2(error42)})`);
         return void 0;
       });
       if (result === void 0) return void 0;
@@ -56,12 +56,12 @@ function createBoxWallpaperCommands(options2) {
           await runCommand2(wallpaperCommandPath, ["paint", display], {
             timeout: COMMAND_TIMEOUT_MS2,
             ...asDisplayOwner({ uid, gid })
-          }).catch((error41) => {
-            options2.log(`wallpaper: paint of ${display} failed (${describe2(error41)})`);
+          }).catch((error42) => {
+            options2.log(`wallpaper: paint of ${display} failed (${describe2(error42)})`);
           });
         }
-      } catch (error41) {
-        options2.log(`wallpaper: reading live displays failed (${describe2(error41)})`);
+      } catch (error42) {
+        options2.log(`wallpaper: reading live displays failed (${describe2(error42)})`);
       }
     }
   };
@@ -71,6 +71,6 @@ function asDisplayOwner(owner) {
   if (self2 !== 0 || owner.uid === self2 && owner.gid === process.getgid?.()) return {};
   return owner;
 }
-function describe2(error41) {
-  return error41 instanceof Error ? error41.message : String(error41);
+function describe2(error42) {
+  return error42 instanceof Error ? error42.message : String(error42);
 }

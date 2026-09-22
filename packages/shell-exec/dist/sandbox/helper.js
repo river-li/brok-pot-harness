@@ -416,13 +416,7 @@ function spawnWithSandboxHelperPolicy(command, args, options2, sandboxPolicy) {
     unifiedPolicy.networkPolicyStrict = false;
   }
   const policyFilePath = writeSandboxPolicyFile(JSON.stringify(unifiedPolicy));
-  const sandboxArgs = [
-    "--policy",
-    policyFilePath,
-    "--",
-    actualCommand,
-    ...actualArgs
-  ];
+  const sandboxArgs = ["--policy", policyFilePath, "--", actualCommand, ...actualArgs];
   const baseEnv = process.platform === "linux" ? scrubSocketEnvVars(process.env) : process.env;
   const optionsEnv = process.platform === "linux" && options2.env ? scrubSocketEnvVars(options2.env) : options2.env;
   const mergedEnv = {

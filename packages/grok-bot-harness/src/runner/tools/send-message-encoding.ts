@@ -241,8 +241,8 @@ ${markdown}`;
 function encodeMarkdownImageDestination(url2) {
   return `<${url2.replace(/[<>\r\n]/g, encodeURIComponent)}>`;
 }
-async function resolveBoxMediaAttachment(request3) {
-  const { ctx, boxPath, box, boxId, remoteBoxHasDesktop, persistImage } = request3;
+async function resolveBoxMediaAttachment(request5) {
+  const { ctx, boxPath, box, boxId, remoteBoxHasDesktop, persistImage } = request5;
   if (!remoteBoxHasDesktop) return null;
   if (!isBoxRootPath(boxPath)) return null;
   let data;
@@ -264,9 +264,9 @@ async function resolveBoxMediaAttachment(request3) {
       return null;
     }
   }
-  if (request3.persistMediaBytes == null) return null;
+  if (request5.persistMediaBytes == null) return null;
   try {
-    return await request3.persistMediaBytes((0, import_node_path172.basename)(boxPath), data);
+    return await request5.persistMediaBytes((0, import_node_path170.basename)(boxPath), data);
   } catch {
     return null;
   }

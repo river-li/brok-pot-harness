@@ -14,10 +14,8 @@ var SAND_FORCED_STATIC_TOOL_NAMES = /* @__PURE__ */ new Set([
 ]);
 var SAND_WEB_SEARCH_DESCRIPTION_SUFFIX = `Results come from an external search index that some sites block, so a missing or stale result is not evidence a page or fact does not exist. When search comes up empty for something that should exist, try WebFetch on a likely URL, then fall back to a browser subagent when one is available, or \`curl\` via Shell.`;
 var SAND_WEB_FETCH_DESCRIPTION_SUFFIX = `Some sites' firewalls block this tool's fetch provider with a 403 or a block page (e.g. "Request Rejected"). That is not evidence the page does not exist: fall back to a browser subagent when one is available, or \`curl\` via Shell (your box egresses from a different network).`;
-var CLOUD_AGENT_HINT = "Launch and manage Cursor cloud coding agents for repository work.";
-var CLOUD_AGENT_PROJECTS_HINT_SENTENCE = "A Project is a coordinator cloud agent the user can ask for explicitly, and the CloudAgent tool description has the details.";
 var SAND_DYNAMIC_TOOL_HINTS = {
-  CLOUD_AGENT: CLOUD_AGENT_HINT,
+  CLOUD_AGENT: "Launch and manage Cursor cloud coding agents for repository work. A Project is a coordinator cloud agent the user can ask for explicitly, and the CloudAgent tool description has the details.",
   SEARCH_PLUGINS: "Search installable plugins/connectors when a task needs a service.",
   AUTHENTICATE_MCP_SERVER: "Start authentication for a connector that needs auth.",
   COPY_TO_BOX: "Copy a file from the user's computer onto your box.",
@@ -29,6 +27,7 @@ var SAND_DYNAMIC_TOOL_HINTS = {
   REQUEST_VIRTUAL_CARD: "Ask the user to authorize a one-time virtual card for a specific purchase.",
   SEND_FEEDBACK: "Send the user's product feedback to the SpaceXAI team when they ask. Ask whether they want a reply unless they already said.",
   CHECK_SUBSCRIPTION_USAGE: "Report the user's Grok Bot subscription plan, usage so far this cycle, and when it resets.",
+  TASK: "Spawn agents.",
   CHECK_SUBAGENT: "Inspect a running background subagent's status and recent actions.",
   MESSAGE_SUBAGENT: "Send a new instruction into a running background subagent.",
   STOP_SUBAGENT: "Abort a running background subagent.",
@@ -48,12 +47,12 @@ var AUTOMATION_PARENT_MEDIATED_MCP_TOOL_NAMES = /* @__PURE__ */ new Set([
   "AddMcpServer",
   "AuthenticateMcpServer"
 ]);
-function withDynamicToolPlacement(tool, options2) {
+function withDynamicToolPlacement(tool) {
   if (SAND_FORCED_STATIC_TOOL_NAMES.has(tool.name)) {
     return { ...tool, contextType: { type: "static" } };
   }
   if (tool.contextType !== void 0) return tool;
-  const hint = tool.toolIdentifier === "CLOUD_AGENT" && options2.projectsEnabled ? `${CLOUD_AGENT_HINT} ${CLOUD_AGENT_PROJECTS_HINT_SENTENCE}` : SAND_DYNAMIC_TOOL_HINTS[tool.toolIdentifier];
+  const hint = SAND_DYNAMIC_TOOL_HINTS[tool.toolIdentifier];
   if (hint === void 0) return tool;
   return { ...tool, contextType: { type: "dynamic", conciseStaticContext: hint } };
 }
@@ -255,7 +254,6 @@ function buildTurnTools(host, turn, props) {
   }
   const hasUserFacingChat = !host.isSubagentRunner || host.isAutomationSubagent && !host.isParentMediatedAutomationSubagent;
   if (hasUserFacingChat) {
-    const hiddenCursorAgentCardIds = host.gates.canvases() ? host.hiddenCursorAgentCardIds : void 0;
     tools.push(
       createSendMessageTool2({
         completeTurnAfterSend: turn.offerSendToUserEndTurn() ? turn.completeThisRun : void 0,
@@ -277,7 +275,6 @@ function buildTurnTools(host, turn, props) {
         isAwaitingUserSelection: isThisRunAwaitingUser,
         getSendBlockReason: (message, deliverTo) => host.transport?.sendMessageBlockReason?.(message, deliverTo),
         resolveCloudAgentTitle: host.resolveCloudAgentTitle,
-        isSuppressedCursorAgentCard: hiddenCursorAgentCardIds === void 0 ? void 0 : (bcId) => hiddenCursorAgentCardIds.has(bcId),
         resolveBoxAttachment: (ctx, boxPath) => resolveBoxMediaAttachment({
           ctx,
           boxPath,
@@ -452,6 +449,8 @@ function buildTurnTools(host, turn, props) {
       createSandStateTool({
         state: host.agentState,
         conversationMemory: host.memoryStore?.memoryScopes,
+        metricsHarness: host.metricsHarness,
+        memoryTelemetry: host.memoryTelemetry,
         skillStore: host.skillStore,
         automationStore: host.automationStore,
         assertNoPendingAutoReviewApproval: () => host.assertNoPendingAutoReviewApproval(),
@@ -664,8 +663,7 @@ function buildTurnTools(host, turn, props) {
               blockedAction
             })
           } : {},
-          isCanvasesEnabled: host.gates.canvases(),
-          projectsEnabled: host.gates.cloudAgentProjects(),
+          isCanvasesEnabled: false,
           artifactsEnabled: host.gates.cloudAgentArtifacts(),
           durableWatchEnabled: host.gates.cloudAgentDurableWatch(),
           replyModesEnabled: host.gates.cloudAgentReplyModes(),
@@ -830,6 +828,11 @@ function buildTurnTools(host, turn, props) {
       await host.remoteBox.ensureReady(ctx, host.resolveBoxId());
       return boxAgentWindowIndex(host.remoteBox, host.resolveBoxId());
     };
+    const onPossibleNavigation = (ctx) => {
+      const windowIndex = boxAgentWindowIndex(host.remoteBox, host.resolveBoxId());
+      if (windowIndex === void 0) return;
+      host.getOrCreateNavigationProbe()?.probe(ctx.withDetached(), remoteBoxResourceAccessor, windowIndex);
+    };
     if (browserSurface === "driver") {
       tools.push(
         ...createSandBrowserTools({
@@ -843,11 +846,7 @@ function buildTurnTools(host, turn, props) {
           getPersistImage: () => host.persistImage,
           getDefaultViewId: () => host.getTranscriptId(),
           isNavigationRecoveryEnabled: host.gates.browserNavigationRecovery,
-          onPossibleNavigation: (ctx) => {
-            const windowIndex = boxAgentWindowIndex(host.remoteBox, host.resolveBoxId());
-            if (windowIndex === void 0) return;
-            host.getOrCreateNavigationProbe()?.probe(ctx.withDetached(), remoteBoxResourceAccessor, windowIndex);
-          }
+          onPossibleNavigation
         }).map(gateOnCredentialFillLease)
       );
     } else {
@@ -856,6 +855,7 @@ function buildTurnTools(host, turn, props) {
           harness: host.browserOperationHarness,
           resourceAccessor: props.resourceAccessor,
           getWindowIndex,
+          onPossibleNavigation,
           ...browserAutoReview !== void 0 ? {
             autoReview: {
               ...browserAutoReview,
@@ -882,7 +882,7 @@ function buildTurnTools(host, turn, props) {
     const boxHandoff = host.boxHandoff;
     tools.push(
       createRequestBoxHelpTool({
-        requestHelp: (request3) => boxHandoff.requestHelp(request3),
+        requestHelp: (request5) => boxHandoff.requestHelp(request5),
         getAgentId: () => host.getConversationId(),
         getTurnId: () => turn.childRequestLineage.parentRequestId,
         getRevivingSubagentAgentId: () => turn.revivingDesktopSubagentAgentId,
@@ -908,7 +908,7 @@ function buildTurnTools(host, turn, props) {
     const userForm = host.userForm;
     tools.push(
       createRequestUserFormTool({
-        requestForm: (request3) => userForm.requestForm(request3),
+        requestForm: (request5) => userForm.requestForm(request5),
         ...turn.userFormVaultKeys !== void 0 ? { vaultKeysCatalog: turn.userFormVaultKeys } : {},
         getAgentId: () => host.getConversationId(),
         onSendMessage: (message, timestampMs2, userFormStamp) => host.emitUpdate(
@@ -984,7 +984,7 @@ function buildTurnTools(host, turn, props) {
     const virtualCard = host.virtualCard;
     tools.push(
       createRequestVirtualCardTool({
-        requestCard: (request3) => virtualCard.requestCard(request3),
+        requestCard: (request5) => virtualCard.requestCard(request5),
         retireCard: (args) => virtualCard.retireCard(args),
         getAgentId: () => host.getConversationId(),
         onSendMessage: (message, timestampMs2) => host.emitUpdate(
@@ -1040,14 +1040,14 @@ function buildTurnTools(host, turn, props) {
     tools.push(
       createUploadFileTool({
         listConnections: () => connectorFiles.listConnections(),
-        stage: (request3) => connectorFiles.stage(request3),
+        stage: (request5) => connectorFiles.stage(request5),
         getAgentId: () => host.getConversationId(),
         ...reviewUpload !== void 0 ? { reviewUpload } : {},
         onArgsRejected: host.observeToolCallArgsRejected
       }),
       createDownloadFileTool({
         listConnections: () => connectorFiles.listConnections(),
-        prepareDownload: (request3) => connectorFiles.prepareDownload(request3),
+        prepareDownload: (request5) => connectorFiles.prepareDownload(request5),
         getAgentId: () => host.getConversationId(),
         ...reviewDownload !== void 0 ? { reviewDownload } : {},
         onArgsRejected: host.observeToolCallArgsRejected
@@ -1152,11 +1152,7 @@ function buildTurnTools(host, turn, props) {
       })
     );
   }
-  const contextHintedTools = dynamicToolRegistry === void 0 ? tools : tools.map(
-    (tool) => withDynamicToolPlacement(tool, {
-      projectsEnabled: host.gates.cloudAgentProjects()
-    })
-  );
+  const contextHintedTools = dynamicToolRegistry === void 0 ? tools : tools.map(withDynamicToolPlacement);
   return fencedToolSet(
     contextHintedTools.map(toolHandoff.wrapTool).map((tool) => {
       if (tool.dynamicToolMetaRole === "invocation") {

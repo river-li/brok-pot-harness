@@ -107,9 +107,7 @@ function getConfiguredBranchPrefixInstruction(branchContext) {
   return `- Use the configured branch name prefix "${prefix}" (for example, "${prefix}short-description").`;
 }
 function getCreateBranchInstructionLines(branchContext) {
-  const lines2 = [
-    "- First create and check out a new informatively named branch for this work."
-  ];
+  const lines2 = ["- First create and check out a new informatively named branch for this work."];
   const prefixInstruction = getConfiguredBranchPrefixInstruction(branchContext);
   if (prefixInstruction) {
     lines2.push(prefixInstruction);

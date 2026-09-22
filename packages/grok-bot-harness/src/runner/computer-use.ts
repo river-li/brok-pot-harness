@@ -4,8 +4,8 @@ init_mcp_diagnostics();
 var BOX_CDP_PORT_BASE3 = 9222;
 var TAB_SWEEP_SHELL_TIMEOUT_MS = 3e4;
 function tabSweepCommand(display) {
-  const request3 = { op: "sweep", display, cdpPort: BOX_CDP_PORT_BASE3 + display };
-  const encoded = import_node_buffer8.Buffer.from(JSON.stringify(request3), "utf8").toString("base64");
+  const request5 = { op: "sweep", display, cdpPort: BOX_CDP_PORT_BASE3 + display };
+  const encoded = import_node_buffer8.Buffer.from(JSON.stringify(request5), "utf8").toString("base64");
   return `node ${SAND_BROWSER_DRIVER_BOX_PATH} ${encoded}`;
 }
 function sweepShellFailure(result) {
@@ -15,7 +15,7 @@ function sweepShellFailure(result) {
 }
 function remoteBoxPrewarmFor(subagentType, gates) {
   if (!isComputerUseSubagentType(subagentType)) return void 0;
-  return { playwrightServer: gates.browserUsePlaywright() };
+  return { playwrightServer: gates.browserUsePlaywright({ logExposure: true }) };
 }
 function mergedModelId(ids) {
   if (ids.length === 0) return void 0;
@@ -41,9 +41,9 @@ function createComputerUseCoordination(deps) {
         boxId,
         SAND_BROWSER_DRIVER_BOX_PATH,
         import_node_buffer8.Buffer.from(SAND_BROWSER_DRIVER_SOURCE, "utf8")
-      ).catch((error41) => {
+      ).catch((error42) => {
         driverUploadByBox.delete(boxId);
-        throw error41;
+        throw error42;
       });
       driverUploadByBox.set(boxId, upload);
     }
@@ -81,12 +81,12 @@ function createComputerUseCoordination(deps) {
     },
     prepareRemoteBox({ agentId, boxId, playwrightServer }) {
       const connection = deps.remoteBox.ensureReady(deps.ctx, boxId).then(
-        (ready2) => isNoMonitorComputerUseExecutor(ready2.remoteAccessor.get(computerUseExecutorResource)) ? void 0 : ready2
-      ).catch((error41) => {
+        (ready3) => isNoMonitorComputerUseExecutor(ready3.remoteAccessor.get(computerUseExecutorResource)) ? void 0 : ready3
+      ).catch((error42) => {
         reportHostDiagnostic({
           kind: "computer_use_prewarm_skipped",
           stage: "box",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
         return void 0;
       });
@@ -98,9 +98,9 @@ function createComputerUseCoordination(deps) {
       });
       preparationBySubagent.set(
         agentId,
-        connection.then(async (ready2) => {
-          if (ready2 === void 0) return;
-          await ready2.remoteAccessor.get(shellExecutorResource).execute(
+        connection.then(async (ready3) => {
+          if (ready3 === void 0) return;
+          await ready3.remoteAccessor.get(shellExecutorResource).execute(
             deps.ctx,
             buildHostShellArgs({
               command: "box-chrome --sand-prepare",
@@ -138,11 +138,11 @@ function createComputerUseCoordination(deps) {
             reason: "error",
             errorClass: boxStdioStatusClassOf(server.statusDetail)
           });
-        }).catch((error41) => {
+        }).catch((error42) => {
           reportHostDiagnostic({
             kind: "computer_use_prewarm_skipped",
             stage: "browser",
-            errorClass: errorLogTag(error41)
+            errorClass: errorLogTag(error42)
           });
           if (playwrightServer) serverReady("prewarm_failed");
           return void 0;
@@ -196,8 +196,8 @@ function createComputerUseCoordination(deps) {
       const done = (async () => {
         do {
           displaysOwedAnotherSweep.delete(display);
-          await sweepDisplay(outlivesTheTurn, connection, display).catch((error41) => {
-            reportHostDiagnostic({ kind: "tab_sweep_failed", errorClass: errorLogTag(error41) });
+          await sweepDisplay(outlivesTheTurn, connection, display).catch((error42) => {
+            reportHostDiagnostic({ kind: "tab_sweep_failed", errorClass: errorLogTag(error42) });
           });
         } while (displaysOwedAnotherSweep.has(display));
         runningSweepByDisplay.delete(display);

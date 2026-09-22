@@ -40,9 +40,9 @@ ${formatCloudAgentDumpCompletionLine(
         )}`
       };
     }
-  } catch (error41) {
+  } catch (error42) {
     process.stderr.write(
-      `sand.cloud_agent.transcript_dump_failed error_class=${errorLogTag(error41)}
+      `sand.cloud_agent.transcript_dump_failed error_class=${errorLogTag(error42)}
 `
     );
   }

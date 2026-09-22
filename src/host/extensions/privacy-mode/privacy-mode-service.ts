@@ -7,7 +7,7 @@ function createPrivacyModeService({
   load: load2,
   policies: policies2,
   clock,
-  logger: logger107
+  logger: logger108
 }) {
   let activeAuth;
   let activeRefresh;
@@ -18,7 +18,7 @@ function createPrivacyModeService({
       kind: "unresolved",
       authId: null
     },
-    onSubscriberError: (error41) => logger107.error("Privacy mode subscriber failed", error41)
+    onSubscriberError: (error42) => logger108.error("Privacy mode subscriber failed", error42)
   });
   const publish = (next) => {
     const current = observationReceiver.get();
@@ -49,9 +49,9 @@ function createPrivacyModeService({
           observedAtMs: clock.now()
         });
       }
-    } catch (error41) {
+    } catch (error42) {
       if (!disposed && refreshGeneration === generation) {
-        logger107.warn("Privacy mode lookup failed", error41);
+        logger108.warn("Privacy mode lookup failed", error42);
       }
     } finally {
       if (activeRefresh === refreshController) {
@@ -60,7 +60,7 @@ function createPrivacyModeService({
     }
   };
   const reconcileAuth = () => {
-    const nextAuth = readAuth(auth2.peekAccessToken(), logger107);
+    const nextAuth = readAuth(auth2.peekAccessToken(), logger108);
     if (nextAuth?.authId === activeAuth?.authId && nextAuth?.authToken === activeAuth?.authToken) {
       return;
     }
@@ -108,24 +108,24 @@ function createPrivacyModeService({
   };
 }
 function createPrivacyModeLogger(log4) {
-  const write = (level, message, error41) => {
-    log4(`[privacy-mode] ${level}: ${formatLogMessage(message, error41)}`);
+  const write2 = (level, message, error42) => {
+    log4(`[privacy-mode] ${level}: ${formatLogMessage(message, error42)}`);
   };
   return {
-    error: (message, error41) => write("error", message, error41),
-    warn: (message, error41) => write("warn", message, error41)
+    error: (message, error42) => write2("error", message, error42),
+    warn: (message, error42) => write2("warn", message, error42)
   };
 }
-function isRetryablePrivacyModeLookupError(error41) {
-  return error41 instanceof DeadlineExceededError || error41 instanceof ConnectError && (error41.code === Code.DeadlineExceeded || error41.code === Code.Unavailable && !error41.metadata.has("retry-after"));
+function isRetryablePrivacyModeLookupError(error42) {
+  return error42 instanceof DeadlineExceededError || error42 instanceof ConnectError && (error42.code === Code.DeadlineExceeded || error42.code === Code.Unavailable && !error42.metadata.has("retry-after"));
 }
-function readAuth(accessToken, logger107) {
+function readAuth(accessToken, logger108) {
   if (accessToken === null || accessToken.length === 0) {
     return void 0;
   }
   const authId = parseJwtPayload(accessToken)?.sub;
   if (authId === void 0 || authId.length === 0) {
-    logger107.warn("Credential has no usable subject claim");
+    logger108.warn("Credential has no usable subject claim");
     return void 0;
   }
   return { authId, authToken: accessToken };

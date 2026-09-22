@@ -231,25 +231,25 @@ async function streamPutFromFile(url2, headers, srcPath) {
   try {
     return await new Promise((resolve29, reject2) => {
       let settled = false;
-      const settle = (error41, status) => {
+      const settle = (error42, status) => {
         if (settled) return;
         settled = true;
-        if (error41 == null) resolve29(status ?? 0);
-        else reject2(error41);
+        if (error42 == null) resolve29(status ?? 0);
+        else reject2(error42);
       };
-      const request3 = transport.request(parsedUrl, { method: "PUT", headers }, (response) => {
-        response.on("error", (error41) => settle(error41));
+      const request5 = transport.request(parsedUrl, { method: "PUT", headers }, (response) => {
+        response.on("error", (error42) => settle(error42));
         response.resume();
         response.on("end", () => {
           settle(void 0, response.statusCode ?? 0);
         });
       });
-      request3.on("error", (error41) => settle(error41));
-      void (0, import_promises9.pipeline)(body, request3).catch((error41) => settle(error41));
+      request5.on("error", (error42) => settle(error42));
+      void (0, import_promises9.pipeline)(body, request5).catch((error42) => settle(error42));
     });
-  } catch (error41) {
+  } catch (error42) {
     body.destroy();
-    throw error41;
+    throw error42;
   }
 }
 async function putAgentStoreObjectFromFile(args) {

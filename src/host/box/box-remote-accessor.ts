@@ -7,17 +7,17 @@ function createBoxTransport(endpoint) {
   const httpClient = createNodeHttpClient({ httpVersion: "1.1" });
   return createTransport({
     baseUrl: `http://${endpoint.host}:${endpoint.port}`,
-    httpClient: (request3) => httpClient(
-      request3.signal !== void 0 ? request3 : { ...request3, signal: new AbortController().signal }
+    httpClient: (request5) => httpClient(
+      request5.signal !== void 0 ? request5 : { ...request5, signal: new AbortController().signal }
     ),
     useBinaryFormat: true,
     interceptors: [
-      (next) => async (request3) => {
-        request3.header.set("Authorization", `Bearer ${endpoint.authToken}`);
+      (next) => async (request5) => {
+        request5.header.set("Authorization", `Bearer ${endpoint.authToken}`);
         for (const [name17, value] of Object.entries(endpoint.headers ?? {})) {
-          request3.header.set(name17, value);
+          request5.header.set(name17, value);
         }
-        return await next(request3);
+        return await next(request5);
       }
     ],
     sendCompression: null,
@@ -38,26 +38,30 @@ var BoxRemoteExecManager = class {
         yield message.element.value;
       } else if (message.element.case === "execClientControlMessage" && message.element.value.message.case === "throw") {
         const thrown = message.element.value.message.value;
-        const error41 = new Error(thrown.error);
+        const error42 = new Error(thrown.error);
         if (thrown.stackTrace !== void 0 && thrown.stackTrace.length > 0) {
-          error41.stack = thrown.stackTrace;
+          error42.stack = thrown.stackTrace;
         }
-        throw error41;
+        throw error42;
       }
     }
   }
 };
 function createBoxRemoteResourceAccessorFromTransport(transport) {
   return new RemoteResourceAccessor(
-    new BoxRemoteExecManager(createContextPropagatingClient(ExecService, transport))
+    new BoxRemoteExecManager(
+      createContextPropagatingClient(ExecService, transport, {
+        extractHeaders: extractSandExecMetadataHeaders
+      })
+    )
   );
 }
 function createBoxRemoteResourceAccessor(endpoint) {
   return createBoxRemoteResourceAccessorFromTransport(createBoxTransport(endpoint));
 }
-function classifyPingFailure(error41) {
-  const connectError = error41 instanceof ConnectError ? error41 : ConnectError.from(error41);
-  const errno = findSystemErrno(error41);
+function classifyPingFailure(error42) {
+  const connectError = error42 instanceof ConnectError ? error42 : ConnectError.from(error42);
+  const errno = findSystemErrno(error42);
   const codeName = Code[connectError.code] ?? "unknown";
   const causeSummary = errno != null ? `${codeName}/${errno}` : codeName;
   if (connectError.code === Code.DeadlineExceeded) {
@@ -74,8 +78,8 @@ async function pingBoxTransportClassified(ctx, transport, timeoutMs = 1500) {
   try {
     await control.ping(ctx, new PingRequest(), { timeoutMs });
     return { outcome: "ok", latencyMs: Date.now() - start };
-  } catch (error41) {
-    const { outcome, causeSummary } = classifyPingFailure(error41);
+  } catch (error42) {
+    const { outcome, causeSummary } = classifyPingFailure(error42);
     return { outcome, latencyMs: Date.now() - start, causeSummary };
   }
 }

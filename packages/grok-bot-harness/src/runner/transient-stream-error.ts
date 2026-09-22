@@ -1,5 +1,5 @@
 init_utils_pb();
-init_dist2();
+init_dist3();
 init_esm2();
 var TRANSIENT_ERRNO_CODES = /* @__PURE__ */ new Set([
   "ECONNRESET",
@@ -40,15 +40,15 @@ function messageLooksTransient(message) {
   const lower = message.toLowerCase();
   return TRANSIENT_MESSAGE_TOKENS.some((token) => lower.includes(token));
 }
-function isTransientStreamError(error41) {
-  return classify(error41, /* @__PURE__ */ new Set());
+function isTransientStreamError(error42) {
+  return classify(error42, /* @__PURE__ */ new Set());
 }
-function classify(error41, seen) {
-  if (typeof error41 === "string") return messageLooksTransient(error41);
-  if (error41 == null || typeof error41 !== "object") return false;
-  if (seen.has(error41)) return false;
-  seen.add(error41);
-  const fields2 = error41;
+function classify(error42, seen) {
+  if (typeof error42 === "string") return messageLooksTransient(error42);
+  if (error42 == null || typeof error42 !== "object") return false;
+  if (seen.has(error42)) return false;
+  seen.add(error42);
+  const fields2 = error42;
   if (typeof fields2.code === "string" && TRANSIENT_ERRNO_CODES.has(fields2.code.toUpperCase())) {
     return true;
   }
@@ -59,21 +59,21 @@ function classify(error41, seen) {
   }
   return false;
 }
-function isRetryableProviderError(error41) {
-  if (error41 == null) return false;
-  if (!(classifyError2(error41) instanceof RetriableError)) return false;
-  if (isContextOverflowDeadEnd(error41)) return false;
-  if (isConversationTooLargeRefusal(error41)) return false;
-  return !hasWrappedHardTerminal(error41, /* @__PURE__ */ new Set());
+function isRetryableProviderError(error42) {
+  if (error42 == null) return false;
+  if (!(classifyError2(error42) instanceof RetriableError)) return false;
+  if (isContextOverflowDeadEnd(error42)) return false;
+  if (isConversationTooLargeRefusal(error42)) return false;
+  return !hasWrappedHardTerminal(error42, /* @__PURE__ */ new Set());
 }
-function isConversationTooLargeRefusal(error41) {
-  return hasConversationTooLargeSignal(error41, /* @__PURE__ */ new Set());
+function isConversationTooLargeRefusal(error42) {
+  return hasConversationTooLargeSignal(error42, /* @__PURE__ */ new Set());
 }
-function hasConversationTooLargeSignal(error41, seen) {
-  if (error41 == null || typeof error41 !== "object") return false;
-  if (seen.has(error41)) return false;
-  seen.add(error41);
-  const fields2 = error41;
+function hasConversationTooLargeSignal(error42, seen) {
+  if (error42 == null || typeof error42 !== "object") return false;
+  if (seen.has(error42)) return false;
+  seen.add(error42);
+  const fields2 = error42;
   if (fields2.isConversationTooLarge === true) {
     return true;
   }
@@ -85,30 +85,30 @@ function hasConversationTooLargeSignal(error41, seen) {
   }
   return false;
 }
-function isContextOverflowDeadEnd(error41) {
-  return hasContextOverflowDeadEndSignal(error41, /* @__PURE__ */ new Set());
+function isContextOverflowDeadEnd(error42) {
+  return hasContextOverflowDeadEndSignal(error42, /* @__PURE__ */ new Set());
 }
-function isInputTokenLimitOverflowError(error41) {
-  if (error41 instanceof InputTokenLimitError) return true;
-  return error41 instanceof Error && error41.name === "InputTokenLimitError";
+function isInputTokenLimitOverflowError(error42) {
+  if (error42 instanceof InputTokenLimitError) return true;
+  return error42 instanceof Error && error42.name === "InputTokenLimitError";
 }
-function isSummarizationRetriesExhaustedError(error41) {
-  if (error41 instanceof Error && error41.name === "StepRetriesExhaustedError") {
-    const fields3 = error41;
+function isSummarizationRetriesExhaustedError(error42) {
+  if (error42 instanceof Error && error42.name === "StepRetriesExhaustedError") {
+    const fields3 = error42;
     return fields3.reason === "summarization-retries";
   }
-  if (error41 == null || typeof error41 !== "object") return false;
-  const fields2 = error41;
+  if (error42 == null || typeof error42 !== "object") return false;
+  const fields2 = error42;
   return fields2.isStepRetriesExhausted === true && fields2.reason === "summarization-retries";
 }
-function hasContextOverflowDeadEndSignal(error41, seen) {
-  if (error41 == null || typeof error41 !== "object") return false;
-  if (seen.has(error41)) return false;
-  seen.add(error41);
-  if (isInputTokenLimitOverflowError(error41) || isSummarizationRetriesExhaustedError(error41)) {
+function hasContextOverflowDeadEndSignal(error42, seen) {
+  if (error42 == null || typeof error42 !== "object") return false;
+  if (seen.has(error42)) return false;
+  seen.add(error42);
+  if (isInputTokenLimitOverflowError(error42) || isSummarizationRetriesExhaustedError(error42)) {
     return true;
   }
-  const fields2 = error41;
+  const fields2 = error42;
   if (fields2.cause != null && hasContextOverflowDeadEndSignal(fields2.cause, seen)) {
     return true;
   }
@@ -117,32 +117,32 @@ function hasContextOverflowDeadEndSignal(error41, seen) {
   }
   return false;
 }
-function hasWrappedHardTerminal(error41, seen) {
-  if (error41 == null || typeof error41 !== "object") return false;
-  if (seen.has(error41)) return false;
-  seen.add(error41);
-  const classified = classifyError2(error41);
+function hasWrappedHardTerminal(error42, seen) {
+  if (error42 == null || typeof error42 !== "object") return false;
+  if (seen.has(error42)) return false;
+  seen.add(error42);
+  const classified = classifyError2(error42);
   if (classified instanceof NonRetriableError || classified instanceof ActionRequiredError) {
     return true;
   }
-  const fields2 = error41;
+  const fields2 = error42;
   if (fields2.cause != null && hasWrappedHardTerminal(fields2.cause, seen)) return true;
   if (Array.isArray(fields2.errors)) {
     return fields2.errors.some((inner) => hasWrappedHardTerminal(inner, seen));
   }
   return false;
 }
-function isProviderCapacityError(error41) {
-  if (!isRetryableProviderError(error41)) return false;
-  return hasProviderCapacitySignal(error41, /* @__PURE__ */ new Set());
+function isProviderCapacityError(error42) {
+  if (!isRetryableProviderError(error42)) return false;
+  return hasProviderCapacitySignal(error42, /* @__PURE__ */ new Set());
 }
-function isBackendUnreachableError(error41) {
-  if (!isRetryableProviderError(error41)) return false;
-  return hasTransportUnavailableSignal(error41, /* @__PURE__ */ new Set());
+function isBackendUnreachableError(error42) {
+  if (!isRetryableProviderError(error42)) return false;
+  return hasTransportUnavailableSignal(error42, /* @__PURE__ */ new Set());
 }
-function hasTransportErrno(error41) {
+function hasTransportErrno(error42) {
   const seen = /* @__PURE__ */ new Set();
-  let current = error41;
+  let current = error42;
   while (current != null && typeof current === "object" && !seen.has(current)) {
     seen.add(current);
     const fields2 = current;
@@ -153,33 +153,33 @@ function hasTransportErrno(error41) {
   }
   return false;
 }
-function hasTransportUnavailableSignal(error41, seen) {
-  if (error41 == null || typeof error41 !== "object") return false;
-  if (seen.has(error41)) return false;
-  seen.add(error41);
-  const classified = classifyError2(error41);
-  if (classified instanceof RetriableError && classified.displayInfo?.connectCode === Code.Unavailable && hasTransportErrno(error41)) {
+function hasTransportUnavailableSignal(error42, seen) {
+  if (error42 == null || typeof error42 !== "object") return false;
+  if (seen.has(error42)) return false;
+  seen.add(error42);
+  const classified = classifyError2(error42);
+  if (classified instanceof RetriableError && classified.displayInfo?.connectCode === Code.Unavailable && hasTransportErrno(error42)) {
     return true;
   }
-  const fields2 = error41;
+  const fields2 = error42;
   if (fields2.cause != null && hasTransportUnavailableSignal(fields2.cause, seen)) return true;
   if (Array.isArray(fields2.errors)) {
     return fields2.errors.some((inner) => hasTransportUnavailableSignal(inner, seen));
   }
   return false;
 }
-function hasProviderCapacitySignal(error41, seen) {
-  if (error41 == null || typeof error41 !== "object") return false;
-  if (seen.has(error41)) return false;
-  seen.add(error41);
-  const classified = classifyError2(error41);
+function hasProviderCapacitySignal(error42, seen) {
+  if (error42 == null || typeof error42 !== "object") return false;
+  if (seen.has(error42)) return false;
+  seen.add(error42);
+  const classified = classifyError2(error42);
   if (classified instanceof RetriableError) {
     const { connectCode, errorCode } = classified.displayInfo ?? {};
-    if (connectCode === Code.Unavailable && !hasTransportErrno(error41) || connectCode === Code.ResourceExhausted && errorCode === ErrorDetails_Error.RESOURCE_EXHAUSTED) {
+    if (connectCode === Code.Unavailable && !hasTransportErrno(error42) || connectCode === Code.ResourceExhausted && errorCode === ErrorDetails_Error.RESOURCE_EXHAUSTED) {
       return true;
     }
   }
-  const fields2 = error41;
+  const fields2 = error42;
   if (fields2.cause != null && hasProviderCapacitySignal(fields2.cause, seen)) return true;
   if (Array.isArray(fields2.errors)) {
     return fields2.errors.some((inner) => hasProviderCapacitySignal(inner, seen));
@@ -193,10 +193,10 @@ var FirstTokenStallError = class extends Error {
     this.name = "FirstTokenStallError";
   }
 };
-function isFirstTokenStallError(error41) {
-  if (error41 instanceof FirstTokenStallError) return true;
-  if (error41 == null || typeof error41 !== "object") return false;
-  const fields2 = error41;
+function isFirstTokenStallError(error42) {
+  if (error42 instanceof FirstTokenStallError) return true;
+  if (error42 == null || typeof error42 !== "object") return false;
+  const fields2 = error42;
   return fields2.isFirstTokenStall === true;
 }
 var StreamIdleError = class extends Error {
@@ -208,10 +208,10 @@ var StreamIdleError = class extends Error {
     this.idleDeadlineMs = deadlineMs;
   }
 };
-function isStreamIdleError(error41) {
-  if (error41 instanceof StreamIdleError) return true;
-  if (error41 == null || typeof error41 !== "object") return false;
-  const fields2 = error41;
+function isStreamIdleError(error42) {
+  if (error42 instanceof StreamIdleError) return true;
+  if (error42 == null || typeof error42 !== "object") return false;
+  const fields2 = error42;
   return fields2.isStreamIdleStall === true;
 }
 function shouldRetryTurnAttempt(input) {
@@ -241,21 +241,21 @@ function computeBackoffDelayMs(params) {
 }
 var RETRY_AFTER_METADATA_KEY = "retry-after";
 var MAX_SERVER_RETRY_AFTER_MS = 3e4;
-function serverRetryAfterMsFromError(error41) {
-  return findServerRetryAfterMs(error41, /* @__PURE__ */ new Set());
+function serverRetryAfterMsFromError(error42) {
+  return findServerRetryAfterMs(error42, /* @__PURE__ */ new Set());
 }
 function computeServerPacedDelayMs(params) {
   const random = params.random ?? Math.random;
   const jittered = params.retryAfterMs + random() * (params.retryAfterMs / 2);
   return Math.min(Math.round(jittered), MAX_SERVER_RETRY_AFTER_MS);
 }
-function findServerRetryAfterMs(error41, seen) {
-  if (error41 == null || typeof error41 !== "object" || seen.has(error41)) {
+function findServerRetryAfterMs(error42, seen) {
+  if (error42 == null || typeof error42 !== "object" || seen.has(error42)) {
     return void 0;
   }
-  seen.add(error41);
-  if (error41 instanceof ConnectError) {
-    const raw = error41.metadata.get(RETRY_AFTER_METADATA_KEY);
+  seen.add(error42);
+  if (error42 instanceof ConnectError) {
+    const raw = error42.metadata.get(RETRY_AFTER_METADATA_KEY);
     if (raw !== null && raw !== "") {
       const seconds = Number(raw);
       if (Number.isFinite(seconds) && seconds >= 0) {
@@ -263,7 +263,7 @@ function findServerRetryAfterMs(error41, seen) {
       }
     }
   }
-  const fields2 = error41;
+  const fields2 = error42;
   const fromCause = findServerRetryAfterMs(fields2.cause, seen);
   if (fromCause !== void 0) return fromCause;
   if (Array.isArray(fields2.errors)) {
@@ -282,9 +282,9 @@ async function runWithTransientRetry(run, policy) {
   for (let attempt = 1; ; attempt++) {
     try {
       return await run();
-    } catch (error41) {
-      if (attempt >= maxAttempts || !isRetryable(error41)) throw error41;
-      const serverRetryAfterMs = serverRetryAfterMsFromError(error41);
+    } catch (error42) {
+      if (attempt >= maxAttempts || !isRetryable(error42)) throw error42;
+      const serverRetryAfterMs = serverRetryAfterMsFromError(error42);
       const delayMs = serverRetryAfterMs !== void 0 ? computeServerPacedDelayMs({
         retryAfterMs: serverRetryAfterMs,
         random
@@ -298,7 +298,7 @@ async function runWithTransientRetry(run, policy) {
         attempt,
         delayMs,
         serverPaced: serverRetryAfterMs !== void 0,
-        error: error41
+        error: error42
       });
       await sleep2(delayMs);
     }

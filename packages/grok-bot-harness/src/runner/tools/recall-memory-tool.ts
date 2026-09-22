@@ -14,7 +14,7 @@ var recallMemoryParameters = external_exports.object({
     `Maximum facts to return (default ${RECALL_MEMORY_DEFAULT_LIMIT}, max ${RECALL_MEMORY_MAX_LIMIT}).`
   )
 });
-var description8 = [
+var description7 = [
   "Search your durable memory for facts that are not in the memory section of your prompt: older log entries, notes that have aged out of the recent slice, and shared user facts recorded by any of this user's assistants.",
   "Read-only. Results list each fact with its date, tier (profile | log) and, for shared facts, which assistant learned it.",
   `To add or drop a fact use update_state (target "memory"). Prefer this tool over grepping memory folders.`
@@ -100,7 +100,7 @@ function createRecallMemoryTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_RECALL_MEMORY_TOOL_NAME,
-    description: description8,
+    description: description7,
     parameters: recallMemoryParameters,
     describeActivity: (args) => ({ detail: args.query }),
     execute: async (_ctx, args, d) => recallMemory(d, args)

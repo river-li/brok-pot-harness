@@ -19,6 +19,7 @@ var SandHost = class {
   hostExtensions;
   backgroundWorkReady = Promise.withResolvers();
   listeners = /* @__PURE__ */ new Set();
+  focusReportStream;
   ctx = createContext().with(loggerKey, { log: () => {
   } });
   rosterBookkeeping;
@@ -100,9 +101,9 @@ var SandHost = class {
     const lifecycle = hostExtensions.api("telemetry").createHostLifecycleProgress(lifecycleStartedAt);
     try {
       await this.startWithLifecycle(lifecycle, hooks);
-    } catch (error41) {
+    } catch (error42) {
       lifecycle.fail();
-      throw error41;
+      throw error42;
     }
   }
   async startWithLifecycle(lifecycle, hooks) {
@@ -178,13 +179,13 @@ var SandHost = class {
     });
     const hostUpgrade = this.hostUpgrade;
     const hostBundleVersion = await hostUpgrade.resolveHostBundleIdentityVersion(
-      (true ? "2bea36a" : null) ?? "unknown"
+      (true ? "bfe1879" : null) ?? "unknown"
     );
     let resolvedBoxStoreId;
     try {
       resolvedBoxStoreId = await this.boxStore.getStoreId();
-    } catch (error41) {
-      reportFallback("sand_host", error41);
+    } catch (error42) {
+      reportFallback("sand_host", error42);
       resolvedBoxStoreId = void 0;
     }
     lifecycle.complete({ phase: "identity" });
@@ -232,7 +233,7 @@ var SandHost = class {
       diskPressure: extensions.api("forever-box").diskPressureLevel ?? "none",
       hostVersion,
       hostUpdateAvailable
-    }).catch((error41) => reportFallback("sand_host", error41));
+    }).catch((error42) => reportFallback("sand_host", error42));
   }
   async ensureLoadedResilient() {
     const entryCount = await loadInitialTranscriptResiliently(
@@ -269,7 +270,15 @@ var SandHost = class {
     return () => {
       this.listeners.delete(listener);
       this.noteEventStreamListeners();
+      if (listener === this.focusReportStream || this.listeners.size === 0) {
+        this.focusReportStream = void 0;
+        void this.transcript.setWindowFocused(false);
+      }
     };
+  }
+  setWindowFocused(isFocused) {
+    this.focusReportStream = [...this.listeners].at(-1);
+    return this.transcript.setWindowFocused(isFocused);
   }
   noteEventStreamListeners() {
     this.hostExtensions?.api("server-agent-proxy").noteEventStreamListeners(this.listeners.size);
@@ -291,9 +300,6 @@ var SandHost = class {
       }
     });
   }
-  noteEventStreamClosed() {
-    void this.transcript.setWindowFocused(false);
-  }
   noteDesktopContact() {
     this.transcript.noteDesktopContact();
   }
@@ -305,6 +311,7 @@ var SandHost = class {
       rosterBookkeeping: this.requireRosterBookkeeping(),
       decorateForeverBoxStatus: (status) => this.decorateForeverBoxStatus(status),
       getHealth: () => this.getHealth(),
+      setWindowFocused: (isFocused) => this.setWindowFocused(isFocused),
       kickstartIfPending: (agentId) => this.kickstartIfPending(agentId),
       requestDiskSaverAudit: (agentId) => this.requestDiskSaverAudit(agentId),
       releaseAgentBox: (agentId) => this.releaseAgentBox(agentId),

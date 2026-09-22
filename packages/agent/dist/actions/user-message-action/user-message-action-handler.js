@@ -52,16 +52,16 @@ var __disposeResources29 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger73 = createLogger("@anysphere/agent:user-message-action");
+var logger74 = createLogger("@anysphere/agent:user-message-action");
 function recordInitialCheckpointOutcomeSafely(ctx, record2, outcome) {
   try {
     record2?.(outcome);
-  } catch (error41) {
-    logger73.warn(ctx, "Failed to record initial checkpoint outcome", { error: error41 });
+  } catch (error42) {
+    logger74.warn(ctx, "Failed to record initial checkpoint outcome", { error: error42 });
   }
 }
 var conversationInitDuration = createHistogram("agent.ttft.conversationInitMs", {
@@ -466,6 +466,7 @@ function buildInterruptedPendingToolCallMessages(stateHandler, tools, interrupte
   }
   return toRedactedCoreMessages(messagesToAppend, stateHandler.getPrivacyMode());
 }
+var DEFAULT_MAX_PREPENDED_USER_MESSAGES = 5;
 var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
   async initializeConversation(ctx, params) {
     const { action, rootPromptExecutor, stateHandler, mcpTools, maxPrependedUserMessages, forcePrependedUserMessages, onStateUpdate, initialCheckpointMode, recordInitialCheckpointOutcome } = params;
@@ -529,14 +530,14 @@ var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
       const prependedMessages = allPrepended.slice(-maxPrependedUserMessages);
       prependedCount = prependedMessages.length;
       if (droppedCount > 0) {
-        logger73.warn(ctx, "dropped excess prepended user messages", {
+        logger74.warn(ctx, "dropped excess prepended user messages", {
           droppedCount,
           totalCount: allPrepended.length,
           keptCount: prependedMessages.length
         });
       }
       if (prependedMessages.length > 0) {
-        logger73.info(ctx, "prepending user messages", {
+        logger74.info(ctx, "prepending user messages", {
           prependUserMessagesCount: prependedMessages.length
         });
       }
@@ -551,7 +552,7 @@ var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
         const prependedMessageId = prependedUserMessage.messageId;
         const duplicateByMessageId = prependedMessageId.length > 0 && existingUserTurnMessageIds?.has(prependedMessageId) === true;
         if (duplicateByMessageId) {
-          logger73.info(ctx, "skipping duplicate prepended user message", {
+          logger74.info(ctx, "skipping duplicate prepended user message", {
             prependedMessageId,
             duplicateByMessageId
           });
@@ -572,7 +573,9 @@ var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
         }
       }
     }
-    prependedMessagesDuration.histogram(ctx, performance.now() - prependedMessagesStart, { count: String(prependedCount) });
+    prependedMessagesDuration.histogram(ctx, performance.now() - prependedMessagesStart, {
+      count: String(prependedCount)
+    });
     const systemPromptStart = performance.now();
     const rules = getAllRules(requestContext, this.config.nonFileRules, this.config.featureFlags);
     const priorMessages = rootPromptExecutor.getMessages().filter((m2) => m2.role !== "system");
@@ -706,7 +709,7 @@ var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
       });
       if (staleCatalogs.length > 0) {
         userInfoCatalogUpdateReminder = renderUserInfoCatalogUpdateReminder(staleCatalogs, userInfoCatalogInputs);
-        logger73.info(ctx, "agent.user_info.catalog_update_appended", {
+        logger74.info(ctx, "agent.user_info.catalog_update_appended", {
           catalogs: staleCatalogs
         });
         recordUserInfoCatalogUpdate(ctx, staleCatalogs, this.config.modelInfo);
@@ -743,7 +746,7 @@ var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
         if (needsCloudTestingPlacementRerender) {
           reasons.push("cloud_testing_placement_recovery");
         }
-        logger73.info(ctx, "agent.user_info.rerendered", { reasons });
+        logger74.info(ctx, "agent.user_info.rerendered", { reasons });
         recordUserInfoRerendered(ctx, reasons, this.config.modelInfo);
       }
       const subagentToolName = this.config.modelInfo !== void 0 ? getTaskToolName(this.config.modelInfo) : "Task";
@@ -756,9 +759,9 @@ var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
       if (this.config.getNamedAgentSelfDocument !== void 0) {
         try {
           namedAgentSelfDocumentBlock = renderNamedAgentSelfDocumentBlock(await this.config.getNamedAgentSelfDocument());
-        } catch (error41) {
-          logger73.warn(ctx, "agent.named_agent_self_document.load_failed", {
-            error: error41
+        } catch (error42) {
+          logger74.warn(ctx, "agent.named_agent_self_document.load_failed", {
+            error: error42
           });
           namedAgentSelfDocumentBlock = extractNamedAgentSelfDocumentBlock(firstUserInfoContent);
         }
@@ -890,9 +893,9 @@ ${renderMultitaskModeEnterUserReminder(subagentToolName, multitaskModeEnterRemin
         }
       };
       if (this.config.fireAndForgetCheckpoints) {
-        void persistInitialCheckpoint().catch((error41) => {
-          logger73.error(ctx, "Failed to persist checkpoint for new turn", {
-            error: error41
+        void persistInitialCheckpoint().catch((error42) => {
+          logger74.error(ctx, "Failed to persist checkpoint for new turn", {
+            error: error42
           });
         });
       } else if (initialCheckpointMode === "overlap_model_step") {
@@ -902,7 +905,7 @@ ${renderMultitaskModeEnterUserReminder(subagentToolName, multitaskModeEnterRemin
           timing.checkpointMs = performance.now() - startedAtMs;
         });
         let joinPromise;
-        const join127 = () => {
+        const join126 = () => {
           if (joinPromise === void 0) {
             const joinStartedAtMs = performance.now();
             joinPromise = completion.finally(() => {
@@ -914,7 +917,7 @@ ${renderMultitaskModeEnterUserReminder(subagentToolName, multitaskModeEnterRemin
         void completion.catch(() => {
         });
         deferredInitialCheckpoint = {
-          join: join127,
+          join: join126,
           startedAtMs,
           timing,
           recordOutcome: recordInitialCheckpointOutcome
@@ -960,7 +963,7 @@ ${renderMultitaskModeEnterUserReminder(subagentToolName, multitaskModeEnterRemin
         rootPromptExecutor,
         stateHandler,
         mcpTools,
-        maxPrependedUserMessages: options2.maxPrependedUserMessages ?? 5,
+        maxPrependedUserMessages: options2.maxPrependedUserMessages ?? DEFAULT_MAX_PREPENDED_USER_MESSAGES,
         forcePrependedUserMessages: options2.forcePrependedUserMessages ?? false,
         onStateUpdate
       });
@@ -981,7 +984,7 @@ ${renderMultitaskModeEnterUserReminder(subagentToolName, multitaskModeEnterRemin
       rootPromptExecutor,
       stateHandler,
       mcpTools,
-      maxPrependedUserMessages: options2.maxPrependedUserMessages ?? 5,
+      maxPrependedUserMessages: options2.maxPrependedUserMessages ?? DEFAULT_MAX_PREPENDED_USER_MESSAGES,
       forcePrependedUserMessages: options2.forcePrependedUserMessages ?? false,
       onStateUpdate,
       initialCheckpointMode,

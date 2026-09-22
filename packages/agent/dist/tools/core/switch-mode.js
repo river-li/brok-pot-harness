@@ -1,2 +1,2 @@
-init_dist3();
-var logger88 = createLogger("@anysphere/agent:switch-mode");
+init_dist4();
+var logger89 = createLogger("@anysphere/agent:switch-mode");

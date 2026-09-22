@@ -35,8 +35,8 @@ async function runSandAutoReviewClassifier(args) {
       };
     }
     return decision === SmartModeClassifierDecision.ALLOW ? { kind: "allow" } : { kind: "reject", reason: args.errorReason };
-  } catch (error41) {
-    if (error41 instanceof Error && error41.name === "AbortError") throw error41;
+  } catch (error42) {
+    if (error42 instanceof Error && error42.name === "AbortError") throw error42;
     return { kind: "reject", reason: args.errorReason };
   }
 }

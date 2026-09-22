@@ -19,8 +19,8 @@ async function augmentMcpResultWithSavedImages(result, persistImage) {
     let saved = null;
     try {
       saved = await persistImage(image2.data, image2.mimeType);
-    } catch (error41) {
-      reportMcpHostEdgeFailure("image-persist", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("image-persist", error42);
       saved = null;
     }
     if (saved == null) continue;

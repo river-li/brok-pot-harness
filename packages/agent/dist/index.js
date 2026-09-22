@@ -52,11 +52,11 @@ var __disposeResources38 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger95 = createLogger("@anysphere/agent");
+var logger96 = createLogger("@anysphere/agent");
 var stateDeserializationDuration = createHistogram("agent.ttft.stateDeserializationMs", {
   description: "Time to deserialize conversation state from blob store in runStream"
 });
@@ -131,6 +131,7 @@ var AnysphereAgent = class {
       enableExecuteHookExec: false,
       enableTranscriptInSummary: true,
       summarizeActionClearTurns: false,
+      summarizeActionMode: "full",
       fireAndForgetCheckpoints: false,
       skipErrorStateCheckpoint: false,
       enablePrependedUserActions: true,
@@ -170,7 +171,7 @@ var AnysphereAgent = class {
           return new SelfSummarizer(session, stateHandler, interactionListener2, tools, extraT, modelId, {
             ...baseRetryOptions,
             enableRetryNoSummaryResponse: selfSummaryConfig.enableRetryNoSummaryResponse ?? true
-          }, selfSummaryConfig.enableTranscriptEnrichment ?? false);
+          }, selfSummaryConfig.enableTranscriptEnrichment ?? false, selfSummaryConfig.promptVariant, selfSummaryConfig.preserveUserDeliveryTail);
         default: {
           const _exhaustive = flavor;
           return _exhaustive;
@@ -281,8 +282,8 @@ var AnysphereAgent = class {
         accumulatedUsage.cacheWriteTokens += mainUsage.cacheWriteTokens;
         accumulatedUsage.reasoningTokens += mainUsage.reasoningTokens ?? 0;
         if (this.config.fireAndForgetCheckpoints) {
-          promise2 = promise2.then(() => onStateUpdateWithFlush(ctx, currentState)).catch((error41) => {
-            logger95.error(ctx, "Failed to flush and update state", { error: error41 });
+          promise2 = promise2.then(() => onStateUpdateWithFlush(ctx, currentState)).catch((error42) => {
+            logger96.error(ctx, "Failed to flush and update state", { error: error42 });
           });
         } else {
           await onStateUpdateWithFlush(ctx, currentState);
@@ -311,8 +312,8 @@ var AnysphereAgent = class {
           accumulatedUsage.cacheWriteTokens += queuedUsage.cacheWriteTokens;
           accumulatedUsage.reasoningTokens += queuedUsage.reasoningTokens ?? 0;
           if (this.config.fireAndForgetCheckpoints) {
-            promise2 = promise2.then(() => onStateUpdateWithFlush(ctx, currentState)).catch((error41) => {
-              logger95.error(ctx, "Failed to flush and update state", { error: error41 });
+            promise2 = promise2.then(() => onStateUpdateWithFlush(ctx, currentState)).catch((error42) => {
+              logger96.error(ctx, "Failed to flush and update state", { error: error42 });
             });
           } else {
             await onStateUpdateWithFlush(ctx, currentState);
@@ -330,12 +331,12 @@ var AnysphereAgent = class {
           actionHandlerMs
         });
         return fromRedactedConversationStateStructure(currentState, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
-      } catch (error41) {
+      } catch (error42) {
         await drainPendingWritesOnRunStreamError(ctx, {
           pendingCheckpoints: promise2,
           flush: () => this.blobStore.flush(ctx)
         });
-        throw error41;
+        throw error42;
       }
     } catch (e_1) {
       env_1.error = e_1;
@@ -567,20 +568,22 @@ var AnysphereAgent = class {
       const handler = this.getSplitStepHandler(splitStepData.actionCase);
       try {
         return await handler.executeToolCall(ctx, descriptor2, stateHandler, mcpTools, splitStepData, splitStepData.requestContext ?? new RequestContext(), fileOperationLockManager);
-      } catch (error41) {
-        if (error41 instanceof DeferredInteractionResponseError) {
+      } catch (error42) {
+        if (error42 instanceof DeferredInteractionResponseError) {
           if (typeof onStateUpdate !== "function") {
-            logger95.error(ctx, "executeToolCall missing onStateUpdate; cannot persist pending AskQuestion before pause");
+            logger96.error(ctx, "executeToolCall missing onStateUpdate; cannot persist pending AskQuestion before pause");
           } else {
             try {
               const pendingState = await stateHandler.computeNewStructure(ctx);
               await onStateUpdate(ctx, fromRedactedConversationStateStructure(pendingState, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
             } catch (persistError) {
-              logger95.error(ctx, "Failed to persist pending AskQuestion before pause", { error: persistError });
+              logger96.error(ctx, "Failed to persist pending AskQuestion before pause", {
+                error: persistError
+              });
             }
           }
         }
-        throw error41;
+        throw error42;
       }
     } catch (e_5) {
       env_5.error = e_5;

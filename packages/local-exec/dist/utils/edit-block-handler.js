@@ -8,7 +8,9 @@ async function handleBlockReason(blockReason, callbacks) {
     case "cursorIgnore":
       return callbacks.onPermissionDenied("Blocked by cursor ignore");
     case "permissionsConfig":
-      return callbacks.onPermissionDenied("Blocked by permissions configuration", { isReadonly: blockReason.isReadonly });
+      return callbacks.onPermissionDenied("Blocked by permissions configuration", {
+        isReadonly: blockReason.isReadonly
+      });
     case "cursorFiles":
       return callbacks.onPermissionDenied("Blocked by cursor files protection");
     case "adminBlock":

@@ -115,7 +115,7 @@ ${expandedPrompt}` : expandedPrompt;
     await turnDone;
     return;
   }
-  turnDone.catch((error41) => {
-    tm.hostLog(`[sand] detached turn failed after send acceptance: ${errorLogTag(error41)}`, "error");
+  turnDone.catch((error42) => {
+    tm.hostLog(`[sand] detached turn failed after send acceptance: ${errorLogTag(error42)}`, "error");
   });
 }

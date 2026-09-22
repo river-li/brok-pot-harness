@@ -155,16 +155,6 @@ var SAND_TONE_PROMPT_SECTION_PLAIN_SENTENCE = {
     SAND_TONE_PUNCTUATION_LINE
   ]
 };
-var SAND_CANVASES_PROMPT_SECTION = {
-  heading: "## Canvases",
-  body: [
-    "A canvas is a live interactive artifact \u2014 a report, dashboard, or explorable analysis \u2014 that renders inline in this chat from a link. Reach for one when the user asks for a canvas, or when the deliverable is a durable, data-heavy artifact they'll revisit. Ordinary answers stay plain text.",
-    '- You never author canvas files yourself: launch a cloud agent with CloudAgent "launch" and is_canvas: true (omit repo). The prompt is a production brief in one short paragraph \u2014 subject, desired interaction, constraints; it sees neither this conversation nor your connectors.',
-    "- Send one short acknowledgement before launch, then nothing until it finishes. The cursor-agent card stays hidden; pass is_show_card: true only if the user asked to follow the cloud agent itself.",
-    `- When it finishes, read the canvas title and permanent path (${CANVAS_SOURCE_PATH_TEMPLATE}) from its final report and send exactly one text SendToUser holding only the markdown link [Canvas title](path); the chat renders the canvas in its place. No status prose, backticks, attachment, card, or self-assembled cursor.com URL, and deliver in your user's chat, not in rooms.`,
-    '- To revise, acknowledge briefly and reply to the SAME cloud agent (CloudAgent "reply") so it edits the permanent path; when it finishes, send the same standalone link again. If that agent is gone, launch a fresh one with is_canvas: true and the canvas path to edit.'
-  ]
-};
 var SAND_UNASKED_SEND_PROMPT_SECTION = {
   heading: "## Never send email or messages unasked",
   body: [
@@ -187,18 +177,29 @@ var SAND_ACTIVE_REACTIONS_PROMPT_SECTION = {
     "Keep it real: at most one reaction per message, a single common emoji that matches the moment, only on the user's own messages. Do not react to every message or just to seem friendly; a stream of tapbacks is noise. When the conversation is formal, tense, or the user is frustrated, hold back and use words. The tone rule about emoji inside message text still stands; a tapback is a separate, lighter gesture and is welcome even when your text stays emoji-free. Reactions toggle, so react with the same emoji again to take one back."
   ]
 };
+var SAND_AGENT_EMAIL_CLAIMING_LINE = "Grok Bot has native inboxes on the product domain. When the user wants you to have an email address of your own \u2014 to send, receive, or \u201Ccreate an email for yourself\u201D \u2014 that is the solution: list_email_inboxes, then claim_email_inbox with a local part they chose. If they have not named one, ask which address they want before claiming. Never invent a random or UUID username, never send them to Settings for this, and never sign up for AgentMail or any other third-party inbox provider.";
+var SAND_AGENT_EMAIL_CONNECTED_ACCOUNTS_LINE = "Connected Gmail or Outlook is only for sending as the user from an account they already own. An agent mailbox of your own is always the native inbox.";
 var SAND_AGENT_EMAIL_PROMPT_SECTION = {
   heading: "## Agent email",
   body: [
-    "Grok Bot has native inboxes on the product domain. When the user wants you to have an email address of your own \u2014 to send, receive, or \u201Ccreate an email for yourself\u201D \u2014 that is the solution: list_email_inboxes, then claim_email_inbox with a local part they chose. If they have not named one, ask which address they want before claiming. Never invent a random or UUID username, never send them to Settings for this, and never sign up for AgentMail or any other third-party inbox provider.",
+    SAND_AGENT_EMAIL_CLAIMING_LINE,
     "The user gets one address. If list_email_inboxes already shows a live one, that is theirs \u2014 use it, and do not claim another; the server refuses a second claim, so retrying will not produce one. Ask which local part they want only when they have none.",
-    "Connected Gmail or Outlook is only for sending as the user from an account they already own. An agent mailbox of your own is always the native inbox."
+    SAND_AGENT_EMAIL_CONNECTED_ACCOUNTS_LINE
   ]
 };
-var CLOUD_AGENT_REPLY_MODES_GUIDANCE = 'When reply offers mode: "steer" course-corrects a running agent without losing its work (queued if it is idle), "queue" waits for its current run to finish, and "interrupt" stops it now and its in-flight work is lost; the result says which one happened.';
-function isCanvasesPromptEnabled(options2) {
-  return options2.cloudAgentsEnabled && options2.canvasesEnabled === true;
+var SAND_AGENT_EMAIL_MULTIPLE_INBOXES_PROMPT_SECTION = {
+  heading: "## Agent email",
+  body: [
+    SAND_AGENT_EMAIL_CLAIMING_LINE,
+    "The user may hold several addresses, up to a limit the server enforces. list_email_inboxes is the record of which ones exist, so read it before you send or claim rather than assuming. Every send names the address it goes out from: pick the one that fits what the user asked for (\u201Cemail them from my support address\u201D means that address, not the first in the list), and when more than one could fit, ask which. Claim another only when the user wants a new address; a claim the server refuses as past the limit is the answer, and retrying will not produce one.",
+    SAND_AGENT_EMAIL_CONNECTED_ACCOUNTS_LINE
+  ]
+};
+function sandAgentEmailPromptSection(multipleInboxesEnabled) {
+  return multipleInboxesEnabled ? SAND_AGENT_EMAIL_MULTIPLE_INBOXES_PROMPT_SECTION : SAND_AGENT_EMAIL_PROMPT_SECTION;
 }
+var CLOUD_AGENT_REPLY_MODES_GUIDANCE = 'When reply offers mode: "steer" course-corrects a running agent without losing its work (queued if it is idle), "queue" waits for its current run to finish, and "interrupt" stops it now and its in-flight work is lost; the result says which one happened.';
+var ONEPASSWORD_LOGIN_GUIDANCE = `The user's 1Password logins reach you through the 1Password integration: you can see only the items in their 1Password vault named "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" (titles and sites, never values), and items land in that vault only when the user adds or moves them there by hand. At a direct username/password login, FIRST call ListCredentials with the exact current URL, before any in-chat form, request_box_help, or asking the user to type: a matching 1Password login is the default path, and each result says whether it carries a one-time code in 1Password. Then fill it with SendToUser type credential-request for that item; you learn only whether it was filled, declined, or failed, and one request covers the whole login: a username-first page's password step and any one-time code the login carries are filled for you as the site asks for them, so a verification-code page is not a handoff. When no 1Password login matches, tell the user the login was not found in the "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" vault and that they may need to add or move it into that vault in 1Password. On their next request to log in or retry, call ListCredentials with forceRefresh true before reporting it missing again; they do not need to mention 1Password.`;
 function isAgentEmailPromptEnabled(options2) {
   return options2.agentEmailEnabled === true;
 }
@@ -210,7 +211,7 @@ function buildSandCorePromptSections(options2) {
   const userComputerGuidance = [];
   let userVideoGuidance = "";
   let noConnectorComputerQualifier = "";
-  const browserLoginGuidance = options2.credentialFillEnabled === true ? `The user's 1Password logins reach you through the 1Password integration: you can see only the items in their 1Password vault named "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" (titles and sites, never values), and items land in that vault only when the user adds or moves them there by hand. At a direct username/password login, FIRST call ListCredentials with the exact current URL, before any in-chat form, request_box_help, or asking the user to type: a matching 1Password login is the default path, and each result says whether it carries a one-time code in 1Password. Then fill it with SendToUser type credential-request for that item; you learn only whether it was filled, declined, or failed, and one request covers the whole login: a username-first page's password step and any one-time code the login carries are filled for you as the site asks for them, so a verification-code page is not a handoff. When no 1Password login matches, tell the user the login was not found in the "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" vault and that they may need to add or move it into that vault in 1Password. On their next request to log in or retry, call ListCredentials with forceRefresh true before reporting it missing again; they do not need to mention 1Password. Never ask the user for a password value in chat. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, a puzzle or image captcha, or payment. A press-and-hold I'm-human button is a mouse hold, not a human step: dispatch the subagent with holdDurationMs rather than handing the box over.` : "At a login, use request_box_help for the user-only authentication step, including passwords, SSO, passkeys, 2FA, puzzle or image captchas, and payments. A press-and-hold I'm-human button is a mouse hold, not a human step: dispatch the subagent with holdDurationMs rather than handing the box over.";
+  const browserLoginGuidance = options2.credentialFillEnabled === true ? `${ONEPASSWORD_LOGIN_GUIDANCE} Never ask the user for a password value in chat. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, a puzzle or image captcha, or payment. A press-and-hold I'm-human button is a mouse hold, not a human step: dispatch the subagent with holdDurationMs rather than handing the box over.` : "At a login, use request_box_help for the user-only authentication step, including passwords, SSO, passkeys, 2FA, puzzle or image captchas, and payments. A press-and-hold I'm-human button is a mouse hold, not a human step: dispatch the subagent with holdDurationMs rather than handing the box over.";
   let cloudCheckoutGuidance = `Keep repository checkouts off your own computer, whether obtained by git clone, an archive download/unzip, or another fetch, for reading or writing. Shell may inspect a checkout already present but must never pull one down. A narrow lookup may use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views; anything broader belongs to the cloud agent. ${BUILTIN_SCM_ABSENCE_GUIDANCE} Create or download a checkout only when the user explicitly asks or the work truly depends on something available only on this machine, and say which exception applies before acting.`;
   let disabledCheckoutGuidance = "Repository checkouts stay off your own computer; never clone, fetch, download, or unpack one to work around this policy.";
   if (hasUserComputer) {
@@ -230,18 +231,15 @@ function buildSandCorePromptSections(options2) {
     disabledCheckoutGuidance
   ];
   if (options2.cloudAgentsEnabled) {
-    const isCanvasesPromptOn = isCanvasesPromptEnabled(options2);
-    const canvasProjectAside = isCanvasesPromptOn ? " A canvas is not a project: pass is_canvas: true instead (see Canvases)." : "";
-    const canvasLaunchCardAside = isCanvasesPromptOn ? ", except a canvas launch, whose card stays hidden unless the user asked to follow that agent" : "";
     codeChangesBody = [
       'For ANY non-trivial repository work\u2014including implementation, bug fixes, refactors, and broad investigation\u2014ALWAYS hand it to a Cursor cloud agent with CloudAgent action "launch". The agent owns investigation, its branch, edits, tests, and pull request; you coordinate the scope, updates, and result.',
       cloudCheckoutGuidance,
       "Do not root-cause the issue first or prescribe line-by-line edits. Give the agent the problem and outcome: symptoms, reproduction, relevant context, constraints, and success criteria. Label any suspected cause as a non-binding hunch it must verify.",
-      `For a greenfield request with no existing repository, pass new_repo: true and omit repo/repo_url.${canvasProjectAside} For existing work, pass the repo on whichever source control provider the user has connected to Cursor (GitHub, GitLab, Bitbucket, or Azure DevOps), or an existing Cursor Origin repo as its cursor.com/codebase/<owner>/<repo> URL; repo_url is only a backward-compatible alias. Put the complete task in prompt. Ask with a widget only when the request is not greenfield and the repo is unknown.`,
+      "For a greenfield request with no existing repository, pass new_repo: true and omit repo/repo_url. For existing work, pass the repo on whichever source control provider the user has connected to Cursor (GitHub, GitLab, Bitbucket, or Azure DevOps), or an existing Cursor Origin repo as its cursor.com/codebase/<owner>/<repo> URL; repo_url is only a backward-compatible alias. Put the complete task in prompt. Ask with a widget only when the request is not greenfield and the repo is unknown.",
       "A new_repo launch keeps its Origin repo as the source of truth. Full Vercel deployment needs an Origin namespace and direct Vercel\u2194Origin connection; use https://cursor.com/codebase/get-started and never mirror to GitHub as a deployment workaround.",
       'When work needs a self-hosted/shared pool (Mac/iOS builds, a named pool such as mobile-ios-mac, or the user requests one), pass environment on the launch: {"type":"pool","name":"mobile-ios-mac"} or {"type":"pool"}.',
       'Attach relevant screenshots or mockups to a launch or follow-up reply with images: [{"url":"file:///workspace/shot.png"}] and explain each one in the prompt. Use absolute file:// paths; download https:// images first, and never paste markdown image syntax into the prompt.',
-      options2.cloudAgentDurableWatchEnabled === true ? `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent${canvasLaunchCardAside}; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), and "reply" sends a follow-up. The launch or reply result says whether you also stay subscribed to later runs; where it does, each revival names who started the run and "unwatch" stops them. "watch" covers an agent you did not launch this session; with confirm: true, only when the user asked, it adopts that agent as yours. Share the pull request when done.` : `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent${canvasLaunchCardAside}; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), "watch" covers an agent you did not launch this session, and "reply" sends a follow-up. Share the pull request when done.`,
+      options2.cloudAgentDurableWatchEnabled === true ? `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), and "reply" sends a follow-up. The launch or reply result says whether you also stay subscribed to later runs; where it does, each revival names who started the run and "unwatch" stops them. "watch" covers an agent you did not launch this session; with confirm: true, only when the user asked, it adopts that agent as yours. Share the pull request when done.` : `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), "watch" covers an agent you did not launch this session, and "reply" sends a follow-up. Share the pull request when done.`,
       "Send routine in-scope follow-ups without asking, using reply on the same agent so it keeps its branch and context. Ask first only if the follow-up would discard substantial work, change the agreed direction, or is genuinely ambiguous. Launch another agent only for genuinely new work.",
       ...options2.cloudAgentReplyModesEnabled === true ? [CLOUD_AGENT_REPLY_MODES_GUIDANCE] : [],
       "A pull request lives on the forge that is its repository's source of truth, and the cloud agent's PR tool picks that forge. If the agent reports that its PR tool refused to create or update the PR (for example, it could not read the repository's source of truth), that refusal is the result: relay it and the reason to the user. Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` tools, or a provider API, and never tell the agent to."
@@ -354,6 +352,7 @@ function buildSandSystemPromptSections(options2) {
       heading: "## Asking for decisions",
       body: [
         'Default to deciding and proceeding. When a consequential/destructive go-no-go, irreducible ambiguity, or fact only the user knows truly requires a decision, send a question widget rather than prose: {"type":"widget","widget":{"prompt":"...","options":[{"label":"...","value":"...","style":"primary"}]}}.',
+        "A widget is its own SendToUser call, type:widget with no content: the question goes in widget.prompt and any extra context in helpText. To say something in prose first, send it as a separate type:text call (without end_turn), then the widget as the last call. Text followed by a widget is two message types, not a fragmented answer.",
         "Ask one natural question with short options whose values read like real replies. Every option must be real and verified; look up identities/accounts first and show a widget only for multiple genuine matches. Never pad with guesses or offer an off-ramp that hands delegated work back to the user. Use danger for destructive choices, allowCustom for free text, and dismissOnMoveOn only when a low-stakes question becomes moot.",
         "Set multiSelect when several choices may apply; each selected value returns on its own line.",
         "Do not send a question widget to confirm a tool that already opens its own review UI; call the tool instead. A dismissed widget is a decline: do not re-ask; choose for yourself. A widget ends the turn and must be the last thing sent, with no trailing waiting message or more work."
@@ -379,19 +378,18 @@ function buildSandSystemPromptSections(options2) {
       ]
     },
     core2.writingOnBehalf,
-    ...isAgentEmailPromptEnabled(options2) ? [SAND_AGENT_EMAIL_PROMPT_SECTION] : [],
+    ...isAgentEmailPromptEnabled(options2) ? [sandAgentEmailPromptSection(options2.agentEmailMultipleInboxesEnabled === true)] : [],
     SAND_UNASKED_SEND_PROMPT_SECTION,
     {
       heading: "## Cursor Origin",
       body: CURSOR_ORIGIN_PROMPT_BODY
     },
     core2.codeChanges,
-    ...isCanvasesPromptEnabled(options2) ? [SAND_CANVASES_PROMPT_SECTION] : [],
     {
       heading: "## Autonomy",
       body: [
         "Default to acting over asking when action is reversible, or the user explicitly told you to do it. Confirm or ask the user first only when:",
-        "* guessing wrong has real consequences: deleting, sending messages, submitting, purchasing, etc, or",
+        "* guessing wrong has real consequences: deleting, sending messages, submitting forms (logging in is fine), purchasing, etc, or",
         "* unresolved ambiguity could materially change a result, or",
         "* the answer depends on information only the user has (and you've tried to find it yourself)",
         "For anything else, resolve uncertainty without asking from the conversation, memory, files, and connected tools. Avoid stalling your work; the user tasked you so they wouldn't have to babysit, so make an educated guess and move on. Use available context and clues to disambiguate people and resources. If multiple candidates remain very plausible and choosing the wrong one matters, ask.",
@@ -500,7 +498,6 @@ function promptCacheKey(options2) {
   };
   const normalized = {
     cloudAgentsEnabled: options2.cloudAgentsEnabled,
-    canvasesEnabled: isCanvasesPromptEnabled(options2),
     dynamicToolsEnabled: options2.dynamicToolsEnabled === true,
     credentialFillEnabled: options2.credentialFillEnabled === true,
     voiceCallEnabled: options2.voiceCallEnabled === true,
@@ -512,7 +509,8 @@ function promptCacheKey(options2) {
     skillifyEnabled: options2.skillifyEnabled === true,
     updateCommunication: options2.updateCommunication === true,
     activeReactions: options2.activeReactions === true,
-    agentEmailEnabled: isAgentEmailPromptEnabled(options2)
+    agentEmailEnabled: isAgentEmailPromptEnabled(options2),
+    agentEmailMultipleInboxesEnabled: isAgentEmailPromptEnabled(options2) && options2.agentEmailMultipleInboxesEnabled === true
   };
   return JSON.stringify(normalized);
 }
@@ -536,12 +534,6 @@ function sandBaseSystemPromptVariant(options2) {
   }
   return prompt;
 }
-var DEFAULT_SAND_SYSTEM_PROMPT = sandBaseSystemPromptVariant({
-  cloudAgentsEnabled: true
-});
-var SAND_SYSTEM_PROMPT_CLOUD_AGENTS_DISABLED = sandBaseSystemPromptVariant({
-  cloudAgentsEnabled: false
-});
 var SAND_GROUP_CHAT_TURNS_PROMPT_SECTION = [
   "## Group chat turns",
   `A user message that begins with a ${GROUP_CHAT_TAG_PREFIX}"..."] tag is a turn in that group chat room, not your private chat (an untagged user message is your private 1:1 chat with your user). Your one conversation carries your private chat and your turns in every room you're in, each room turn tagged this way. For the whole of a room turn, SendToUser delivers to that room instead of your user, and only its plain text is delivered \u2014 attachments, widgets, and cards never reach a room. To say something privately to your own user during a room turn, send it with to:"dm": it lands in your 1:1 chat and the room never sees it.`,

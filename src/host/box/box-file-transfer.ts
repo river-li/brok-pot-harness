@@ -85,10 +85,10 @@ async function uploadFileViaExecDaemon(ctx, accessor, boxPath, data) {
   const partPath = `${boxPath}.sand-${(0, import_node_crypto48.randomBytes)(8).toString("hex")}.part`;
   try {
     await writeFileBytesViaExecDaemon(ctx, accessor, partPath, data);
-  } catch (error41) {
+  } catch (error42) {
     await runBoxShell(ctx, accessor, `rm -f -- ${shellSingleQuote(partPath)}`).catch(() => {
     });
-    throw error41;
+    throw error42;
   }
   await runBoxShell(
     ctx,

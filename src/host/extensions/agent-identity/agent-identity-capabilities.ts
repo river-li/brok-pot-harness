@@ -3,9 +3,9 @@ async function readAgentIdentityCapabilities(args) {
   const capabilities = await args.deadline.run(async (signal) => {
     try {
       return (await args.client.getGrokBotRuntimeCapabilities({}, { signal })).capabilities;
-    } catch (error41) {
-      if (error41 instanceof ConnectError && error41.code === Code.Unimplemented) return void 0;
-      throw error41;
+    } catch (error42) {
+      if (error42 instanceof ConnectError && error42.code === Code.Unimplemented) return void 0;
+      throw error42;
     }
   }, args.signal);
   const resolved = capabilities ?? args.legacy();

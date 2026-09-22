@@ -215,13 +215,13 @@ var AckObligations = class {
               ackOutstanding: store.get(agentId) != null
             });
           }
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "ack_redrive",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
         } finally {
           this.retireAckRunToken(session.id, ackToken);

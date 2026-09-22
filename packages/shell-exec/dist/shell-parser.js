@@ -1,8 +1,8 @@
 var import_tree_sitter = __toESM(require("tree-sitter"), 1);
 var import_tree_sitter_bash = __toESM(require("tree-sitter-bash"), 1);
 var TREE_SITTER_STUBBED_ERROR_CODE = "CURSOR_TREE_SITTER_STUBBED";
-function isStubbedTreeSitterError(error41) {
-  return typeof error41 === "object" && error41 !== null && error41.code === TREE_SITTER_STUBBED_ERROR_CODE;
+function isStubbedTreeSitterError(error42) {
+  return typeof error42 === "object" && error42 !== null && error42.code === TREE_SITTER_STUBBED_ERROR_CODE;
 }
 var cachedParser;
 function getParser() {
@@ -13,9 +13,9 @@ function getParser() {
     const parser = new import_tree_sitter.default();
     parser.setLanguage(import_tree_sitter_bash.default);
     cachedParser = parser;
-  } catch (error41) {
-    if (!isStubbedTreeSitterError(error41)) {
-      throw error41;
+  } catch (error42) {
+    if (!isStubbedTreeSitterError(error42)) {
+      throw error42;
     }
     cachedParser = null;
     console.warn("shell-parser: tree-sitter natives are unavailable in this artifact; shell command analysis degrades to parsingFailed");
@@ -31,17 +31,7 @@ var redirectNodeTypes = /* @__PURE__ */ new Set([
   "redirect",
   "redirection"
 ]);
-var fileRedirectOperatorTypes = /* @__PURE__ */ new Set([
-  "<",
-  ">",
-  ">>",
-  ">|",
-  "<>",
-  "<&",
-  ">&",
-  "&>",
-  "&>>"
-]);
+var fileRedirectOperatorTypes = /* @__PURE__ */ new Set(["<", ">", ">>", ">|", "<>", "<&", ">&", "&>", "&>>"]);
 function analyzeShellCommand(cmd) {
   const parser = getParser();
   if (parser === null) {

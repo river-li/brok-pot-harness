@@ -47,11 +47,11 @@ async function fetchSkillCatalog(backend, getAccessToken, getMachineId, report) 
         });
       }
     }
-  } catch (error41) {
+  } catch (error42) {
     report?.({
       extension: "managed_setup",
       kind: "skills_catalog",
-      errorClass: errorLogTag(error41)
+      errorClass: errorLogTag(error42)
     });
   }
   entries.sort((a, b2) => a.name.localeCompare(b2.name));

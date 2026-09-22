@@ -23,13 +23,9 @@ import {
 } from "./sand-fingerprint-profiles.mjs";
 
 const POLL_INTERVAL_MS = 100;
-const DESKTOP_UA_TEMPLATE =
-  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{MAJOR}.0.0.0 Safari/537.36";
 
 function errorClass(error) {
-  return (
-    error?.code ?? error?.cause?.code ?? (error instanceof Error ? error.name : typeof error)
-  );
+  return error?.code ?? error?.cause?.code ?? (error instanceof Error ? error.name : typeof error);
 }
 
 const reportedOnce = new Set();
@@ -59,41 +55,24 @@ export function grokAgentUaToken(
   return owner === "" ? "GrokAgent/1.0" : `GrokAgent/1.0 (u:${owner})`;
 }
 
-function chromeMajorOf(chromeVersion) {
-  return chromeVersion.split(".", 1)[0];
-}
-
-function userAgentFromTemplate(template, chromeVersion, uaToken) {
-  const base = template.replace("{MAJOR}", chromeMajorOf(chromeVersion));
-  return uaToken === "" ? base : `${base} ${uaToken}`;
-}
-
 export function liveChromeProduct(browser) {
   const version = typeof browser?.chromeVersion === "string" ? browser.chromeVersion : "";
   if (/^\d+\.\d+\.\d+\.\d+$/.test(version)) return `Chrome/${version}`;
   return "Chrome/0.0.0.0";
 }
 
-export function desktopUserAgent(chromeVersion, uaToken = grokAgentUaToken()) {
-  return userAgentFromTemplate(DESKTOP_UA_TEMPLATE, chromeVersion, uaToken);
-}
-
-export function desktopUserAgentOverride(browser, uaToken = grokAgentUaToken()) {
-  const override = buildUserAgentOverride(liveChromeProduct(browser), PROFILES.linux);
+function userAgentOverrideFor(browser, profile, uaToken) {
+  const override = buildUserAgentOverride(liveChromeProduct(browser), profile);
   return {
     ...override,
     userAgent: uaToken === "" ? override.userAgent : `${override.userAgent} ${uaToken}`,
   };
 }
 
-export async function applyDesktopUaToTarget(
-  browser,
-  sessionId,
-  uaToken = grokAgentUaToken(),
-) {
+export async function applyDesktopUaToTarget(browser, sessionId, uaToken = grokAgentUaToken()) {
   await browser.send(
     "Emulation.setUserAgentOverride",
-    desktopUserAgentOverride(browser, uaToken),
+    userAgentOverrideFor(browser, PROFILES.linux, uaToken),
     sessionId,
   );
 }
@@ -119,14 +98,6 @@ export function resolveOsSpoofProfileName({
     }
     return null;
   }
-}
-
-export function osSpoofUserAgentOverride(browser, profile, uaToken = grokAgentUaToken()) {
-  const override = buildUserAgentOverride(liveChromeProduct(browser), profile);
-  return {
-    ...override,
-    userAgent: uaToken === "" ? override.userAgent : `${override.userAgent} ${uaToken}`,
-  };
 }
 
 export function spoofDocumentScriptMap(browser) {
@@ -156,8 +127,11 @@ export async function applyOsSpoofToTarget(
   uaToken = grokAgentUaToken(),
 ) {
   const script = buildNewDocumentScript(profile);
-  const override = osSpoofUserAgentOverride(browser, profile, uaToken);
-  await browser.send("Emulation.setUserAgentOverride", override, sessionId);
+  await browser.send(
+    "Emulation.setUserAgentOverride",
+    userAgentOverrideFor(browser, profile, uaToken),
+    sessionId,
+  );
   try {
     await removeSpoofDocumentScript(browser, sessionId);
     await browser.send("Runtime.evaluate", { expression: script }, sessionId);
@@ -194,7 +168,7 @@ export async function applyUaTreatmentToTarget(browser, sessionId, uaToken = gro
 
 export async function configureUaGovernorBrowser(browser) {
   browser.attachedSessions = new Set();
-  browser.onEvent(message => {
+  browser.onEvent((message) => {
     const sessionId = message.params?.sessionId;
     if (typeof sessionId !== "string") return;
     if (message.method === "Target.detachedFromTarget") {
@@ -271,13 +245,10 @@ async function main() {
       }
       await reapplyUaTreatment(browsers, uaToken);
     }
-    await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
   }
 }
 
-if (
-  process.argv[1] != null &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+if (process.argv[1] != null && import.meta.url === pathToFileURL(process.argv[1]).href) {
   void main();
 }

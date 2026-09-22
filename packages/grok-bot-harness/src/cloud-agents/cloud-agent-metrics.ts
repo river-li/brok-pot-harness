@@ -11,8 +11,8 @@ function recordCloudAgentMetric(metrics2, record2) {
   if (metrics2 === void 0) return;
   try {
     record2(metrics2);
-  } catch (error41) {
-    process.stderr.write(`sand.cloud_agent.metrics_failed error_class=${errorLogTag(error41)}
+  } catch (error42) {
+    process.stderr.write(`sand.cloud_agent.metrics_failed error_class=${errorLogTag(error42)}
 `);
   }
 }

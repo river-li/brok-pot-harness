@@ -308,17 +308,17 @@ function createBackendRelaySources(deps) {
     return Math.min(registerIntervalMs, degradedRegisterIntervalMs * backoffFactor);
   }
   async function ensureRegistered() {
-    const request3 = relaySubscriptionRequestOf({
+    const request5 = relaySubscriptionRequestOf({
       slackListeners,
       githubListeners,
       originListeners
     });
-    const key = JSON.stringify(request3);
+    const key = JSON.stringify(request5);
     const isStale = Date.now() - lastRegisteredAtMs > registrationRefreshIntervalMs();
     if (key === lastRegisteredKey && !isStale) return;
     const result = await callRelay(
       "/sand/listener-subscriptions",
-      request3
+      request5
     );
     lastRegisteredKey = key;
     lastRegisteredAtMs = Date.now();
@@ -390,10 +390,10 @@ function createBackendRelaySources(deps) {
       }
       pendingAckIds = nextAckIds;
       notifyGate.recordPoll();
-    } catch (error41) {
+    } catch (error42) {
       lastRegisteredKey = "";
       backoffUntilMs = Date.now() + ERROR_BACKOFF_MS;
-      const detail = error41 instanceof Error ? error41.message : "relay poll failed";
+      const detail = error42 instanceof Error ? error42.message : "relay poll failed";
       if (slackListeners.length > 0 && slackSink != null) {
         slackStatus = { state: "error", detail };
       }

@@ -150,8 +150,8 @@ var BoxStoreDownload = class {
         let info2;
         try {
           info2 = await (0, import_promises14.lstat)(current);
-        } catch (error41) {
-          if (findSystemErrno(error41) !== "ENOENT") throw error41;
+        } catch (error42) {
+          if (findSystemErrno(error42) !== "ENOENT") throw error42;
           try {
             await (0, import_promises14.mkdir)(current);
             created = true;
@@ -163,13 +163,13 @@ var BoxStoreDownload = class {
         if (!info2.isDirectory()) {
           try {
             await (0, import_promises14.unlink)(current);
-          } catch (error41) {
-            if (findSystemErrno(error41) !== "ENOENT") {
+          } catch (error42) {
+            if (findSystemErrno(error42) !== "ENOENT") {
               const raced = await (0, import_promises14.lstat)(current).then(
                 (value) => value,
                 () => void 0
               );
-              if (!raced?.isDirectory()) throw error41;
+              if (!raced?.isDirectory()) throw error42;
               info2 = raced;
             }
           }
@@ -221,9 +221,9 @@ var BoxStoreDownload = class {
     const existingRegularFileMode = async (path31) => {
       const destination = await (0, import_promises14.lstat)(path31).then(
         (value) => value,
-        (error41) => {
-          if (findSystemErrno(error41) === "ENOENT") return void 0;
-          throw error41;
+        (error42) => {
+          if (findSystemErrno(error42) === "ENOENT") return void 0;
+          throw error42;
         }
       );
       return destination?.isFile() ? destination.mode & 511 : void 0;
@@ -231,9 +231,9 @@ var BoxStoreDownload = class {
     const replaceDestinationWithTemp = async (tmpPath, destPath, symlinkOrdinal) => {
       const inspectDestination = async () => await (0, import_promises14.lstat)(destPath).then(
         (value) => value,
-        (error41) => {
-          if (findSystemErrno(error41) === "ENOENT") return void 0;
-          throw error41;
+        (error42) => {
+          if (findSystemErrno(error42) === "ENOENT") return void 0;
+          throw error42;
         }
       );
       const destination = symlinkOrdinal == null ? await inspectDestination() : await runSymlinkStep("inspect-destination", symlinkOrdinal, inspectDestination);
@@ -349,8 +349,8 @@ var BoxStoreDownload = class {
             });
           }
         }
-      } catch (error41) {
-        recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+      } catch (error42) {
+        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       verified += 1;
@@ -368,9 +368,9 @@ var BoxStoreDownload = class {
         let blob;
         try {
           blob = await store.get(`${BOX_STORE_BLOBS_PREFIX}/${group.sha}`);
-        } catch (error41) {
+        } catch (error42) {
           for (const relPath of pending) {
-            recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+            recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
           }
           return;
         }
@@ -396,8 +396,8 @@ var BoxStoreDownload = class {
           try {
             await mkdirOwned((0, import_node_path12.dirname)(destPath));
             await writeVerifiedBytes(destPath, relPath, blob);
-          } catch (error41) {
-            recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+          } catch (error42) {
+            recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
             continue;
           }
           files += 1;
@@ -416,8 +416,8 @@ var BoxStoreDownload = class {
       }
       try {
         await mkdirOwned((0, import_node_path12.dirname)(destPath));
-      } catch (error41) {
-        recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+      } catch (error42) {
+        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       if (!await this.hasDiskSpaceForLargeObject(destPath, group.size)) {
@@ -433,9 +433,9 @@ var BoxStoreDownload = class {
         written = await store.getToFile(`${BOX_STORE_BLOBS_PREFIX}/${group.sha}`, tmpPath, {
           maxBytes: group.size
         });
-      } catch (error41) {
+      } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       if (written == null) {
@@ -446,9 +446,9 @@ var BoxStoreDownload = class {
       let actualSha;
       try {
         actualSha = await sha256File(tmpPath);
-      } catch (error41) {
+      } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       if (written !== group.size || actualSha !== group.sha) {
@@ -459,9 +459,9 @@ var BoxStoreDownload = class {
       verified += 1;
       try {
         await installVerifiedTemp(tmpPath, destPath, relPath);
-      } catch (error41) {
+      } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       files += 1;
@@ -477,8 +477,8 @@ var BoxStoreDownload = class {
       }
       try {
         await mkdirOwned((0, import_node_path12.dirname)(destPath));
-      } catch (error41) {
-        recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+      } catch (error42) {
+        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return;
       }
       if (!await this.hasDiskSpaceForLargeObject(destPath, group.size)) {
@@ -498,9 +498,9 @@ var BoxStoreDownload = class {
         }
         verified += 1;
         await installVerifiedTemp(tmpPath, destPath, relPath);
-      } catch (error41) {
+      } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return;
       }
       files += 1;
@@ -524,12 +524,12 @@ var BoxStoreDownload = class {
         const local = await (0, import_promises14.lstat)(destPath);
         if (!local.isFile() || local.size !== group.size) return false;
         return await sha256File(destPath) === group.sha;
-      } catch (error41) {
-        if (!isMissingPathError(error41))
+      } catch (error42) {
+        if (!isMissingPathError(error42))
           reportBoxStoreDiagnostic({
             extension: "box_store",
             kind: "local_file_compare_failed",
-            errorClass: errorLogTag(error41)
+            errorClass: errorLogTag(error42)
           });
         return false;
       }
@@ -547,16 +547,16 @@ var BoxStoreDownload = class {
               if (destPath == null) continue;
               try {
                 await mkdirOwned((0, import_node_path12.dirname)(destPath));
-              } catch (error41) {
-                recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+              } catch (error42) {
+                recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
                 continue;
               }
               if (await localFileMatches(destPath, group)) {
                 verified += 1;
                 try {
                   await applyExistingFileMetadata(destPath, relPath);
-                } catch (error41) {
-                  recordFailure(`${relPath}: ${errorMessage(error41)}`, copyInFailureOf(error41));
+                } catch (error42) {
+                  recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
                   continue;
                 }
                 files += 1;
@@ -573,9 +573,9 @@ var BoxStoreDownload = class {
               await store.prefetchReads(
                 remote.map((r) => `${BOX_STORE_BLOBS_PREFIX}/${r.group.sha}`)
               );
-            } catch (error41) {
+            } catch (error42) {
               this.log(
-                `read prefetch failed (falling back to per-blob presign): ${errorMessage(error41)}`
+                `read prefetch failed (falling back to per-blob presign): ${errorMessage(error42)}`
               );
             }
           }

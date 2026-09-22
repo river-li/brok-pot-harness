@@ -13,9 +13,9 @@ function clampAgentMessage(text2) {
   return clampBlock(text2, AGENT_MESSAGE_MAX_TEXT_LENGTH);
 }
 function describeAddress(address) {
-  const description10 = address.description != null && address.description.trim().length > 0 ? ` \u2014 ${clampLine(address.description, 120)}` : "";
+  const description9 = address.description != null && address.description.trim().length > 0 ? ` \u2014 ${clampLine(address.description, 120)}` : "";
   const groupTag = address.isGroup === true ? " (group)" : "";
-  return `- ${address.name} (id: ${address.id})${groupTag}${description10}`;
+  return `- ${address.name} (id: ${address.id})${groupTag}${description9}`;
 }
 function byStableId(items) {
   return [...items].sort((a, b2) => {

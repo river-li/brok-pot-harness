@@ -6,16 +6,36 @@ var MODEL_FACING_CODES = /* @__PURE__ */ new Set([
   Code.FailedPrecondition,
   Code.ResourceExhausted
 ]);
-function toSandEmailError(error41, reportUnexpectedError) {
-  if (error41 instanceof SandEmailError) return error41;
-  if (error41 instanceof ConnectError && MODEL_FACING_CODES.has(error41.code)) {
-    return new SandEmailError(error41.rawMessage);
+function toSandEmailError(error42, reportUnexpectedError) {
+  if (error42 instanceof SandEmailError) return error42;
+  if (error42 instanceof ConnectError && MODEL_FACING_CODES.has(error42.code)) {
+    return new SandEmailError(error42.rawMessage);
   }
-  reportUnexpectedError(error41);
+  reportUnexpectedError(error42);
   return new SandEmailError(SAND_EMAIL_UNAVAILABLE);
 }
 function toAddress(address) {
   return { name: address.name, email: address.email };
+}
+function toSuppressionReason(reason) {
+  switch (reason) {
+    case GrokBotEmailSuppressionReason.PERMANENT_BOUNCE:
+      return "permanent_bounce";
+    case GrokBotEmailSuppressionReason.COMPLAINT:
+      return "complaint";
+    case GrokBotEmailSuppressionReason.UNSUBSCRIBE_REQUEST:
+      return "unsubscribe_request";
+    case GrokBotEmailSuppressionReason.MANUAL:
+      return "manual";
+    default:
+      return "unknown";
+  }
+}
+function suppressedRecipientsFromProto(recipients) {
+  return recipients.map((recipient2) => ({
+    address: recipient2.address,
+    reason: toSuppressionReason(recipient2.reason)
+  }));
 }
 function toDirection(direction) {
   switch (direction) {
@@ -164,8 +184,8 @@ function createGrokBotEmailReadPort(rpcs, options2) {
   async function guarded(run) {
     try {
       return await run();
-    } catch (error41) {
-      throw toSandEmailError(error41, options2.reportUnexpectedError);
+    } catch (error42) {
+      throw toSandEmailError(error42, options2.reportUnexpectedError);
     }
   }
   return {
@@ -206,8 +226,8 @@ function createGrokBotEmailClientPort(rpcs, options2) {
           throw new SandEmailError(SAND_EMAIL_UNAVAILABLE);
         }
         return inboxFromProto(response.inbox);
-      } catch (error41) {
-        throw toSandEmailError(error41, options2.reportUnexpectedError);
+      } catch (error42) {
+        throw toSandEmailError(error42, options2.reportUnexpectedError);
       }
     },
     send: async (input) => {
@@ -218,9 +238,13 @@ function createGrokBotEmailClientPort(rpcs, options2) {
       }
       try {
         const response = await rpcs.sendGrokBotEmail(sendRequestToProto(input));
-        return { messageId: response.messageId, threadId: response.threadId };
-      } catch (error41) {
-        throw toSandEmailError(error41, options2.reportUnexpectedError);
+        return {
+          messageId: response.messageId,
+          threadId: response.threadId,
+          suppressedRecipients: suppressedRecipientsFromProto(response.suppressedRecipients)
+        };
+      } catch (error42) {
+        throw toSandEmailError(error42, options2.reportUnexpectedError);
       }
     }
   };

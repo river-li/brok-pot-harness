@@ -27,16 +27,16 @@ async function createSmartModeMcpApprovalRequest(ctx, store, target) {
     throw new Error(SMART_MODE_MCP_APPROVAL_MISSING_CONVERSATION_REASON);
   }
   const fingerprint = computeSmartModeMcpApprovalTargetFingerprint(target);
-  const request3 = {
+  const request5 = {
     id: (0, import_node_crypto27.randomUUID)(),
     conversationId,
     createdAtMs: Date.now(),
     fingerprint,
     blockReason: target.blockReason
   };
-  await store.createPendingRequest(ctx, request3);
+  await store.createPendingRequest(ctx, request5);
   return {
-    requestId: request3.id,
+    requestId: request5.id,
     fingerprint,
     conversationId,
     blockReason: target.blockReason

@@ -1,11 +1,11 @@
-function sandErrorDetail(error41) {
-  if (error41 instanceof Error) {
+function sandErrorDetail(error42) {
+  if (error42 instanceof Error) {
     return {
-      message: error41.message,
-      ...error41.stack !== void 0 ? { stack: error41.stack } : {}
+      message: error42.message,
+      ...error42.stack !== void 0 ? { stack: error42.stack } : {}
     };
   }
-  return { message: String(error41) };
+  return { message: String(error42) };
 }
 var SAND_BOX_BOOT_STAGES = [
   "entrypoint_started",

@@ -110,13 +110,13 @@ function createTurnSettle(host, scope) {
       } else {
         host.setLocalState(checkpoint);
       }
-    } catch (error41) {
+    } catch (error42) {
       if (preparedTranscriptMirror != null) {
         await Promise.allSettled([
           preparedTranscriptMirror.abortCheckpoint(ctx, host.getTranscriptId())
         ]);
       }
-      throw error41;
+      throw error42;
     }
     if (preparedTranscriptMirror != null) {
       try {
@@ -125,8 +125,8 @@ function createTurnSettle(host, scope) {
           host.getTranscriptId(),
           store?.getMetadata("latestRootBlobId")
         );
-      } catch (error41) {
-        throw new TranscriptAppendAfterCheckpointError(error41);
+      } catch (error42) {
+        throw new TranscriptAppendAfterCheckpointError(error42);
       }
     } else if (transcriptPersistence === "disabled") {
       await host.transcriptMirror?.skipCheckpoint(
@@ -169,11 +169,11 @@ function createTurnSettle(host, scope) {
     }
     try {
       host.recordFollowupLabeling?.(labeling);
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "labeling_failed",
         stage: "followup_record",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   };
@@ -187,11 +187,11 @@ function createTurnSettle(host, scope) {
     }
     try {
       host.recordPostTurnLabeling?.({ ...identity, messages: args.messages });
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "labeling_failed",
         stage: "post_turn_record",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   };

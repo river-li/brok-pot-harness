@@ -61,16 +61,16 @@ function parseManifest(bytes, onWriteBlockedError) {
   if (value === invalidJson) return null;
   const header = manifestVersionSchema.safeParse(value);
   if (header.success && header.data.version !== BOX_STORE_LEGACY_MANIFEST_VERSION && header.data.version !== BOX_STORE_MANIFEST_VERSION) {
-    const error41 = new BoxStoreUnsupportedManifestVersionError(header.data.version);
-    onWriteBlockedError?.(error41);
-    throw error41;
+    const error42 = new BoxStoreUnsupportedManifestVersionError(header.data.version);
+    onWriteBlockedError?.(error42);
+    throw error42;
   }
   const parsed2 = manifestSchema.safeParse(value);
   if (!parsed2.success) return null;
   if (hasManifestPathConflict(parsed2.data.entries)) {
-    const error41 = new BoxStoreManifestPathConflictError();
-    onWriteBlockedError?.(error41);
-    throw error41;
+    const error42 = new BoxStoreManifestPathConflictError();
+    onWriteBlockedError?.(error42);
+    throw error42;
   }
   return parsed2.data;
 }
@@ -156,7 +156,7 @@ var BoxStoreManifestStore = class {
       invariant(load2 != null, "manifest read requires a load request");
       return this.readManifest(load2.storeId).then(
         (manifest) => () => load2.resolve(manifest),
-        (error41) => () => load2.reject(error41)
+        (error42) => () => load2.reject(error42)
       );
     },
     install: (settle) => {
@@ -200,9 +200,9 @@ var BoxStoreManifestStore = class {
     return configured2;
   }
   parseManifest(bytes) {
-    const parsed2 = parseManifest(bytes, (error41) => {
-      if (error41 instanceof BoxStoreUnsupportedManifestVersionError || this.manifestWriteBlock == null) {
-        this.manifestWriteBlock = error41;
+    const parsed2 = parseManifest(bytes, (error42) => {
+      if (error42 instanceof BoxStoreUnsupportedManifestVersionError || this.manifestWriteBlock == null) {
+        this.manifestWriteBlock = error42;
       }
     });
     if (parsed2?.version === BOX_STORE_MANIFEST_VERSION) {
@@ -357,18 +357,18 @@ var BoxStoreManifestStore = class {
           };
         }
       }
-    } catch (error41) {
-      if (error41 instanceof BoxStoreUnsupportedManifestVersionError || error41 instanceof BoxStoreManifestPathConflictError) {
-        throw error41;
+    } catch (error42) {
+      if (error42 instanceof BoxStoreUnsupportedManifestVersionError || error42 instanceof BoxStoreManifestPathConflictError) {
+        throw error42;
       }
       if (hydrationHandoffPending) {
         this.hydrationManifestReadBlocked = true;
-        throw error41;
+        throw error42;
       }
       this.log(
-        `manifest load failed; failing closed instead of starting empty (an empty start would publish over the canonical manifest, SAND-3226/SAND-3191); the next load retries the read: ${errorMessage(error41)}`
+        `manifest load failed; failing closed instead of starting empty (an empty start would publish over the canonical manifest, SAND-3226/SAND-3191); the next load retries the read: ${errorMessage(error42)}`
       );
-      throw error41;
+      throw error42;
     }
     this.initializeManifestRevision(map4, persisted);
     this.manifest ??= map4;
@@ -420,9 +420,9 @@ var BoxStoreManifestStore = class {
         revisionState.markPersisted(capture, fullyHydrated);
         this.fullyHydrated = fullyHydrated;
         this.markStoreDbEntriesCommitted(entries);
-      } catch (error41) {
+      } catch (error42) {
         revisionState.markFailed();
-        throw error41;
+        throw error42;
       } finally {
         if (captureTrace != null) {
           captureTrace.manifestCommitDurationMs += this.elapsedDurationMs(commitStartedAt);
@@ -457,21 +457,21 @@ var BoxStoreManifestStore = class {
         };
         try {
           await this.writeManifestAttempt(storeId, manifest);
-        } catch (error41) {
-          if (error41 instanceof ManifestRetryStoppedError) {
-            lastConflict = error41.conflict;
-          } else if (error41 instanceof BoxStoreCanonicalWriteConflictError) {
-            lastConflict = error41;
+        } catch (error42) {
+          if (error42 instanceof ManifestRetryStoppedError) {
+            lastConflict = error42.conflict;
+          } else if (error42 instanceof BoxStoreCanonicalWriteConflictError) {
+            lastConflict = error42;
           }
-          throw error41;
+          throw error42;
         }
       });
       return;
-    } catch (error41) {
-      const failure2 = error41 instanceof RetryExhaustedError ? error41.cause : error41;
+    } catch (error42) {
+      const failure2 = error42 instanceof RetryExhaustedError ? error42.cause : error42;
       const conflict = failure2 instanceof ManifestRetryStoppedError ? failure2.conflict : failure2;
       if (!(conflict instanceof BoxStoreCanonicalWriteConflictError)) {
-        throw error41;
+        throw error42;
       }
       if (await this.handleExhaustedManifestConflict(
         storeId,
@@ -492,18 +492,18 @@ var BoxStoreManifestStore = class {
         BOX_STORE_MANIFEST_REL_PATH,
         new Uint8Array(Buffer.from(JSON.stringify(manifest), "utf8"))
       );
-    } catch (error41) {
-      if (error41 instanceof BoxStoreCanonicalWriteConflictError && this.isDisposed()) {
-        throw new ManifestRetryStoppedError(error41);
+    } catch (error42) {
+      if (error42 instanceof BoxStoreCanonicalWriteConflictError && this.isDisposed()) {
+        throw new ManifestRetryStoppedError(error42);
       }
-      if (error41 instanceof BoxStoreCanonicalWriteConflictError) {
+      if (error42 instanceof BoxStoreCanonicalWriteConflictError) {
         const canonical = await this.objectStore(storeId).get(BOX_STORE_MANIFEST_REL_PATH);
         if (canonical != null) this.parseManifest(canonical);
         this.log(
-          `manifest save lost a concurrent-write race; retry policy will use the winner's baseline${error41.conflictRelPath == null ? "" : ` (lost attempt preserved at ${error41.conflictRelPath})`}`
+          `manifest save lost a concurrent-write race; retry policy will use the winner's baseline${error42.conflictRelPath == null ? "" : ` (lost attempt preserved at ${error42.conflictRelPath})`}`
         );
       }
-      throw error41;
+      throw error42;
     }
   }
   async handleExhaustedManifestConflict(storeId, entries, fullyHydrated, conflict, attempts2, options2) {
@@ -556,8 +556,8 @@ var BoxStoreManifestStore = class {
         writerWindowId: parsed2.writerWindowId ?? null,
         fullyHydrated: parsed2.fullyHydrated
       };
-    } catch (error41) {
-      this.log(`canonical manifest readback failed after a lost write: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`canonical manifest readback failed after a lost write: ${errorMessage(error42)}`);
       return null;
     }
   }
@@ -579,8 +579,8 @@ var BoxStoreManifestStore = class {
     if (bytes == null) return;
     try {
       this.parseManifest(bytes);
-    } catch (error41) {
-      if (!(error41 instanceof BoxStoreManifestPathConflictError)) throw error41;
+    } catch (error42) {
+      if (!(error42 instanceof BoxStoreManifestPathConflictError)) throw error42;
       if (this.manifestWriteBlock instanceof BoxStoreUnsupportedManifestVersionError) {
         throw this.manifestWriteBlock;
       }

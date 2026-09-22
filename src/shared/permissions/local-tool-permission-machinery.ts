@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var sandLocalToolScopeKey = createKey(/* @__PURE__ */ Symbol("sand.local-tool.scope"), void 0);
 var sandTurnDirectionEpochKey = createKey(/* @__PURE__ */ Symbol("sand.local-tool.direction-epoch"), void 0);
 var SAND_LOCAL_TOOLS_DISABLED_MESSAGE = 'Local tools are turned off. The user has set local tool access to "Never", so Shell, Read, and AwaitShell with machineId, plus CopyToBox and CopyFromBox, cannot run on their computer. Do not retry them while this setting remains "Never". Use your own computer instead by omitting machineId, or ask the user to change the setting in Settings \u2192 Bot \u2192 Execution on Local Computer. If they change it away from "Never", you may try again.';
@@ -39,9 +39,10 @@ var SandLocalToolPermissionDeniedError = class extends Error {
     this.name = "SandLocalToolPermissionDeniedError";
   }
   code;
+  toolCallAuditOutcome = "denied";
 };
-async function authorizeLocalToolAction(gate, scope, request3) {
-  const decision = await gate.authorize(scope, request3);
+async function authorizeLocalToolAction(gate, scope, request5) {
+  const decision = await gate.authorize(scope, request5);
   if (!decision.allowed) {
     throw new SandLocalToolPermissionDeniedError(decision.reason);
   }
@@ -83,12 +84,12 @@ function describeLocalExec(serverMessage, terminalsFolder) {
       return void 0;
   }
 }
-function localToolApprovalCovers(approval, request3) {
-  if (approval.machineId !== request3.machineId) return false;
-  if (approval.action === request3.action && approval.target === request3.target) {
+function localToolApprovalCovers(approval, request5) {
+  if (approval.machineId !== request5.machineId) return false;
+  if (approval.action === request5.action && approval.target === request5.target) {
     return true;
   }
   const owned = normalizeResourcePath(approval.resourcePath);
-  const wanted = normalizeResourcePath(request3.attachToResourcePath);
+  const wanted = normalizeResourcePath(request5.attachToResourcePath);
   return owned !== void 0 && owned === wanted;
 }

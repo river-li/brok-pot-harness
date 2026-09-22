@@ -12,5 +12,6 @@ function canonicalSendInput(input) {
   ]);
 }
 var NONCE_DIGEST_MISMATCH = "send/nonce-digest-mismatch";
+var SEND_MESSAGE_TOO_LONG = "send/message-too-long";
 var HOST_ACCOUNT_SLOT = "host";
 var DISABLE_SEND_ACCEPT_RETURN_ENV = "SAND_DISABLE_SEND_ACCEPT_RETURN";

@@ -24,10 +24,10 @@ async function runSandAutomationNowInSession(deps, args) {
         grokBotSessionId: args.sessionId
       })
     );
-  } catch (error41) {
-    if (error41 instanceof ConnectError && REFUSAL_CODES.has(error41.code)) {
-      throw new SandAutomationRunNowRefusedError(error41.rawMessage);
+  } catch (error42) {
+    if (error42 instanceof ConnectError && REFUSAL_CODES.has(error42.code)) {
+      throw new SandAutomationRunNowRefusedError(error42.rawMessage);
     }
-    throw error41;
+    throw error42;
   }
 }

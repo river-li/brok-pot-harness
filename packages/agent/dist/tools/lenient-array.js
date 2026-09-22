@@ -17,8 +17,8 @@ var diagnose = (text2) => {
   try {
     const parsed2 = JSON.parse(text2);
     return Array.isArray(parsed2) ? "unreachable" : `parsed-as-${typeof parsed2}`;
-  } catch (error41) {
-    const message = error41 instanceof Error ? error41.message : "";
+  } catch (error42) {
+    const message = error42 instanceof Error ? error42.message : "";
     if (/Unexpected end of (JSON input|data)/.test(message)) {
       return "truncated";
     }

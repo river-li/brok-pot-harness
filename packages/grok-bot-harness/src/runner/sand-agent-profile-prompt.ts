@@ -108,9 +108,9 @@ function parseLatestAgentProfileUpdate(text2) {
           description: parsed2.description
         });
       }
-    } catch (error41) {
+    } catch (error42) {
       process.stderr.write(
-        `sand.agent.profile_update_marker_unparseable error_class=${errorLogTag(error41)}
+        `sand.agent.profile_update_marker_unparseable error_class=${errorLogTag(error42)}
 `
       );
     }

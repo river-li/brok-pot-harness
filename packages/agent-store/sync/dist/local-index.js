@@ -47,10 +47,10 @@ var LocalAgentStoreIndex = class _LocalAgentStoreIndex {
       index.restrictFileModes();
       _LocalAgentStoreIndex.openHandles.set(resolvedPath, index);
       return index;
-    } catch (error41) {
+    } catch (error42) {
       db === null || db === void 0 ? void 0 : db.close();
       opened.close();
-      throw error41;
+      throw error42;
     }
   }
   constructor(indexPath, db) {

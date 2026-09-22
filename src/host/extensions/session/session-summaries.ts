@@ -56,13 +56,13 @@ var reportedPreviewDegradations = /* @__PURE__ */ new Set();
 function previewFieldOrNull(agentId, derive) {
   try {
     return derive();
-  } catch (error41) {
+  } catch (error42) {
     if (!reportedPreviewDegradations.has(agentId)) {
       reportedPreviewDegradations.add(agentId);
       reportHostDiagnostic({
         kind: "summary_preview_degraded",
         agentId,
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
     return null;
@@ -73,7 +73,7 @@ function orNull(value) {
 }
 function minimalAgentSummary(args) {
   const { dirName, dbPath, dbStats, activeAgentId } = args;
-  const profilePath = getSandProfilePath((0, import_node_path140.dirname)(dbPath));
+  const profilePath = getSandProfilePath((0, import_node_path139.dirname)(dbPath));
   const fileProfile = readSandProfileFile(profilePath);
   const creationMetadata = readSandProfileCreationMetadata(profilePath);
   const name17 = fileProfile != null && fileProfile.name.trim().length > 0 ? fileProfile.name : SAND_DEFAULT_AGENT_NAME;
@@ -116,7 +116,7 @@ function minimalAgentSummary(args) {
 }
 async function buildSummary(args) {
   const { extras, dbPath, dirName, dbStats, activeAgentId, includeBlank, agentHasMemory } = args;
-  const agentDir = (0, import_node_path140.dirname)(dbPath);
+  const agentDir = (0, import_node_path139.dirname)(dbPath);
   ensureSettingsFile(dbPath);
   const profilePath = getSandProfilePath(agentDir);
   const fileProfile = readSandProfileFile(profilePath);
@@ -125,16 +125,16 @@ async function buildSummary(args) {
   const fileSettings = readSandSettingsFile(getSandSettingsPath(agentDir));
   const groupConfig = readSandGroupConfig(agentDir);
   const isGroup = groupConfig != null;
-  const memberIds = groupConfig == null ? [] : groupConfig.memberIds.filter((id2) => !isSandGroupDir((0, import_node_path139.join)((0, import_node_path140.dirname)(agentDir), id2)));
+  const memberIds = groupConfig == null ? [] : groupConfig.memberIds.filter((id2) => !isSandGroupDir((0, import_node_path138.join)((0, import_node_path139.dirname)(agentDir), id2)));
   const isActive = dirName === activeAgentId;
   const derivedAvatar = resolveDerivedAvatarFilename(
     agentDir,
     readLegacyProfileAvatarField(profilePath)
   );
   const name17 = fileProfile != null && fileProfile.name.trim().length > 0 ? fileProfile.name : SAND_DEFAULT_AGENT_NAME;
-  const description10 = fileProfile?.description ?? "";
+  const description9 = fileProfile?.description ?? "";
   const title = fileProfile?.title ?? "";
-  const hasUserIdentity = isGroup || !hasPlaceholderProfileName(fileProfile) || description10.trim().length > 0 || title.length > 0 || derivedAvatar != null || extras?.legacyAvatarPath != null;
+  const hasUserIdentity = isGroup || !hasPlaceholderProfileName(fileProfile) || description9.trim().length > 0 || title.length > 0 || derivedAvatar != null || extras?.legacyAvatarPath != null;
   if (!isActive && !includeBlank) {
     const provablyBlank = extras != null && !extras.hasTranscript && !hasUserIdentity && !await agentHasDurableFootprint(agentDir, agentHasMemory);
     if (provablyBlank) return null;
@@ -146,7 +146,7 @@ async function buildSummary(args) {
   return {
     id,
     name: name17,
-    description: description10,
+    description: description9,
     title,
     avatarDataUrl: avatar?.dataUrl ?? null,
     avatarVersion: avatar?.version ?? null,
@@ -193,8 +193,8 @@ async function agentHasQuarantinedStoreDb(agentDir) {
   try {
     const entries = await (0, import_promises66.readdir)(agentDir);
     return entries.some((name17) => name17.startsWith("store.db.corrupt-"));
-  } catch (error41) {
-    reportFallbackUnlessAbsent("session_summaries", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("session_summaries", error42);
     return false;
   }
 }

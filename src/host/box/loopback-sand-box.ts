@@ -197,14 +197,14 @@ var LoopbackSandBox = class {
         }
       }
       return await (0, import_promises52.readFile)(resolvedPath);
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") {
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") {
         throw new BoxFileUnreadableError(
           `download from box ${resolvedPath} failed (file missing)`,
-          { cause: error41 }
+          { cause: error42 }
         );
       }
-      throw error41;
+      throw error42;
     }
   }
   async waitUntilReady(ctx, endpoint, timeoutMs = this.readyTimeoutMs) {
@@ -303,8 +303,8 @@ var LoopbackSandBox = class {
           }
         }
       }
-    } catch (error41) {
-      if (!this.daemonWatchdogAbort.signal.aborted) throw error41;
+    } catch (error42) {
+      if (!this.daemonWatchdogAbort.signal.aborted) throw error42;
     }
   }
   async pollDaemonWatchdog(endpoint) {

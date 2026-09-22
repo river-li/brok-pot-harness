@@ -1,8 +1,8 @@
 var SAND_UPDATE_STATE_TOOL_NAME = "update_state";
 var OPERATIONS = {
   memory: {
-    write: 'save a durable fact (fact, tier, optional scope). scope "agent" (default) is your own memory; "user" is shared user-memory every assistant should know; "project" needs project=<slug> and writes your shard in that project. tier "profile" is foundational and kept in mind every turn; "log" (default) is dated history; "note" fades fast. Facts are deduped.',
-    forget: "drop a fact by its EXACT recorded text (fact, same scope/project). Pair with a write for the corrected version."
+    write: 'save a durable fact (fact, tier, optional scope). scope "agent" (default) is your own memory; "user" is shared user-memory every assistant should know. tier "profile" is foundational and kept in mind every turn; "log" (default) is dated history; "note" fades fast. Facts are deduped.',
+    forget: "drop a fact by its EXACT recorded text (fact, same scope). Pair with a write for the corrected version."
   },
   routine: {
     create: "save a routine (name, prompt, and either schedule or trigger). prompt is what you do each time it fires, written to your future self.",
@@ -24,11 +24,6 @@ var OPERATIONS = {
   channel: {
     disconnect: "(platform). The connector closes the live connection within a few seconds."
   },
-  project: {
-    create: "(project slug, name, optional description). Creates the folder + project.md and joins it; if the slug already exists this is create-is-join.",
-    join: "(project slug).",
-    leave: "(project slug)."
-  },
   avatar: {
     set: "(path to an image on your box or the host \u2014 write/download it first, then install it here; a box path under /workspace is fine).",
     clear: "back to the default picture."
@@ -46,7 +41,7 @@ function nonEmptyTuple(items) {
   return [first, ...rest];
 }
 function conversationMemoryWrite(story) {
-  return `save a durable fact (fact, tier, optional scope). ${renderMemoryConversationScopeStory(story)} scope "project" needs project=<slug> and writes your shard in that project. tier "profile" is foundational and kept in mind every turn; "log" (default) is dated history; "note" fades fast. Facts are deduped.`;
+  return `save a durable fact (fact, tier, optional scope). ${renderMemoryConversationScopeStory(story)} tier "profile" is foundational and kept in mind every turn; "log" (default) is dated history; "note" fades fast. Facts are deduped.`;
 }
 function actionsOf(target) {
   const actions = OPERATIONS[target];
@@ -102,7 +97,7 @@ var githubListener2 = external_exports.object({
   type: external_exports.literal("github"),
   repo: external_exports.string().trim().min(1).describe('One concrete "owner/name" repo. No wildcards; omit pr for repo-wide events.'),
   events: external_exports.array(external_exports.enum(GITHUB_EVENT_KINDS)).min(1).describe(
-    'Which GitHub events fire this routine. For a PR babysitter, use ["review-requested", "review-approved", "review-changes-requested", "review-commented", "pr-comment", "inline-review-comment", "review-thread-resolved", "review-thread-unresolved", "pr-pushed", "pr-merged", "pr-closed", "ci-passed", "ci-failed"].'
+    'Which GitHub events fire this routine. For a PR babysitter, use ["review-requested", "review-approved", "review-changes-requested", "review-commented", "pr-comment", "inline-review-comment", "review-thread-resolved", "review-thread-unresolved", "pr-pushed", "pr-merged", "pr-closed", "ci-passed", "ci-failed"]. pr-pushed and the comment kinds need pr or userAllowlist.'
   ),
   pr: external_exports.number().int().positive().optional().describe(
     "Optional pull request number. When set, only events for that PR fire; a listener containing pr-merged or pr-closed deletes itself after that terminal wake finishes."
@@ -282,15 +277,12 @@ var sandUpdateStateParameters = external_exports.object({
     "memory only. The fact, one self-contained sentence. For forget, the EXACT text of the recorded fact (find it with RecallMemory first, or read the memory folder when it is on your computer)."
   ),
   tier: external_exports.enum(["profile", "log", "note"]).optional().describe("memory write only. Defaults to log. Keep profile small."),
-  scope: external_exports.enum(["agent", "user", "project"]).optional().describe("memory only. Defaults to agent (your own memory)."),
-  project: external_exports.string().trim().min(1).optional().describe(
-    'Project slug. Required for memory when scope is "project", and for every project action.'
-  ),
+  scope: external_exports.enum(["agent", "user"]).optional().describe("memory only. Defaults to agent (your own memory)."),
   id: external_exports.string().trim().min(1).optional().describe(
     "The routine's folder or the skill's id. Required for every routine action except create, and for skill delete. Omit on a skill write to create a new one."
   ),
   name: external_exports.string().trim().min(1).optional().describe(
-    "routine/skill/project create: its name. Required on create and on a skill write; on routine update, omit to keep the current name. profile: your new name, which is the chat title the user sees."
+    "routine/skill create: its name. Required on create and on a skill write; on routine update, omit to keep the current name. profile: your new name, which is the chat title the user sees."
   ),
   prompt: external_exports.string().trim().min(1).optional().describe(
     "routine only. What you should do each time it fires, written to your future self. Write it as an INTENT, not a frozen tool recipe: a connector's schema can change between fires, so describe the goal and let each run look the tool up. Required on create; on update, omit to keep the current prompt."
@@ -303,7 +295,7 @@ var sandUpdateStateParameters = external_exports.object({
     "routine create/update only. On create, defaults to true. On update, omit to leave the current arming alone (use pause/resume to toggle)."
   ),
   description: external_exports.string().trim().optional().describe(
-    "skill write: REQUIRED. One line on when to use the skill. profile: your new description. project create: optional summary."
+    "skill write: REQUIRED. One line on when to use the skill. profile: your new description."
   ),
   body: external_exports.string().trim().min(1).optional().describe("skill write only. The recipe, in markdown."),
   title: external_exports.string().trim().optional().describe(
@@ -331,6 +323,15 @@ function sandConversationUpdateStateParameters(defaultScope) {
     )
   });
 }
+function sandMemoryWriteReport(args, deps, outcome) {
+  if (!outcome.ok || args.target !== "memory") return null;
+  if (args.action !== "write" && args.action !== "forget") return null;
+  return {
+    scope: memoryScope(args, deps),
+    action: args.action,
+    bytes: memoryFactBytes(args.fact ?? "")
+  };
+}
 var TEAM_SETUP_CARD_ROUTES = /* @__PURE__ */ new Set(["routine.create", "skill.write"]);
 var SAND_TEAM_SETUP_UNDERWAY_STATE_REASON = "this bot's setup is already running from the owner's message, and the owner is choosing its plugins and skills from the cards in this chat. Routines and skills come after they have been through the cards and ask.";
 function resolveTrigger(args, need, fallback2) {
@@ -344,6 +345,10 @@ function resolveTrigger(args, need, fallback2) {
     const parsed2 = parseStoredTrigger(args.trigger);
     if (isTriggerParseFailure(parsed2)) {
       throw new SandToolInputError(renderTriggerParseFailure(parsed2));
+    }
+    const unbounded = findUnboundedRepoListener(parsed2);
+    if (unbounded !== void 0) {
+      throw new SandToolInputError(renderUnboundedRepoListenerRefusal(unbounded));
     }
     return parsed2;
   }
@@ -382,10 +387,10 @@ function resolveReferencedSkills(prompt, deps) {
 function probeFiveMinuteAutomationFloor(deps) {
   try {
     return deps.fiveMinuteAutomationFloorEnabled() ? "enabled" : "disabled";
-  } catch (error41) {
+  } catch (error42) {
     reportHostDiagnostic({
       kind: "automation_floor_probe_failed",
-      errorClass: errorLogTag(error41)
+      errorClass: errorLogTag(error42)
     });
     return "probe_failed";
   }
@@ -453,9 +458,14 @@ async function writeAutomation(args, deps, need) {
     };
   }
   const operation = isUpdate ? "update" : "create";
+  const requestedFolder = isUpdate || args.id === void 0 ? {} : { folderId: args.id };
   const turnProvenance = deps.automationWriteProvenance?.() ?? "untrusted";
   if (turnProvenance === "template_import" && isTemplateSetupConsentedWrite({ operation, spec })) {
-    const outcome2 = await deps.state.createAutomation({ spec, provenance: turnProvenance });
+    const outcome2 = await deps.state.createAutomation({
+      spec,
+      provenance: turnProvenance,
+      ...requestedFolder
+    });
     if (!outcome2.ok) return outcome2;
     const note2 = await deps.onListenerAutomationSaved?.(spec.trigger);
     return note2 == null ? outcome2 : stateWriteOk(`${outcome2.detail}
@@ -484,7 +494,11 @@ ${note2}`);
     targetId: id,
     firingAutomation
   });
-  const outcome = id === void 0 ? await deps.state.createAutomation({ spec, provenance: storedProvenance }) : await deps.state.updateAutomation({ id, spec, provenance: storedProvenance });
+  const outcome = id === void 0 ? await deps.state.createAutomation({
+    spec,
+    provenance: storedProvenance,
+    ...requestedFolder
+  }) : await deps.state.updateAutomation({ id, spec, provenance: storedProvenance });
   if (!outcome.ok) return outcome;
   const note = await deps.onListenerAutomationSaved?.(spec.trigger);
   return note == null ? outcome : stateWriteOk(`${outcome.detail}
@@ -508,7 +522,7 @@ function resolveNamedSkill(deps, id) {
 async function writeSkill(args, deps, need) {
   const name17 = need(args.name, "name");
   const body = need(args.body, "body");
-  const description10 = need(args.description, "description");
+  const description9 = need(args.description, "description");
   const id = args.id;
   const existing = resolveNamedSkill(deps, id);
   const skillId = existing?.id ?? id ?? slugifySkillName(name17);
@@ -576,7 +590,7 @@ async function writeSkill(args, deps, need) {
   return await deps.state.writeSkill({
     id,
     name: name17,
-    description: description10,
+    description: description9,
     body,
     provenance: resolveStoredWriteProvenance({
       review,
@@ -589,17 +603,25 @@ async function writeSkill(args, deps, need) {
 function memoryScope(args, deps) {
   return args.scope ?? deps.conversationMemory?.defaultScope ?? "agent";
 }
+function recordMemoryOutcome(ctx, args, deps, outcome) {
+  if (deps.memoryTelemetry === void 0) return;
+  const report = sandMemoryWriteReport(args, deps, outcome);
+  if (report === null) return;
+  recordMemoryWrite(
+    deps.metricsHarness === void 0 ? void 0 : { ctx, harness: deps.metricsHarness },
+    deps.memoryTelemetry,
+    report
+  );
+}
 var ROUTES = {
   "memory.write": async (args, deps, need) => await deps.state.writeMemory({
     content: need(args.fact, "fact"),
     tier: args.tier ?? "log",
-    scope: memoryScope(args, deps),
-    project: args.project
+    scope: memoryScope(args, deps)
   }),
   "memory.forget": async (args, deps, need) => await deps.state.removeMemory({
     content: need(args.fact, "fact"),
-    scope: memoryScope(args, deps),
-    project: args.project
+    scope: memoryScope(args, deps)
   }),
   "routine.create": writeAutomation,
   "routine.update": writeAutomation,
@@ -664,13 +686,6 @@ var ROUTES = {
   "channel.disconnect": async (args, deps, need) => await deps.state.disconnectChannel({
     platform: need(args.platform, "platform")
   }),
-  "project.create": async (args, deps, need) => await deps.state.createProject({
-    slug: need(args.project, "project"),
-    name: need(args.name, "name"),
-    description: args.description
-  }),
-  "project.join": async (args, deps, need) => await deps.state.joinProject({ slug: need(args.project, "project") }),
-  "project.leave": async (args, deps, need) => await deps.state.leaveProject({ slug: need(args.project, "project") }),
   "avatar.set": async (args, deps, need) => await deps.state.setAvatar({ path: need(args.path, "path") }),
   "avatar.clear": async (_args, deps) => await deps.state.clearAvatar()
 };
@@ -698,7 +713,7 @@ async function applySandStateUpdate(args, deps) {
 }
 function stateToolDescription(memoryWrite, teamBot = false) {
   return [
-    "Change your OWN durable state: what you remember (own, shared user, or project), the routines you run, the skills you save, your profile and settings, which channels you're connected to, which projects you've joined, and your picture. Prefer this over editing those files with the shell \u2014 read them with RecallMemory, or with Read and grep when they are on your computer.",
+    "Change your OWN durable state: what you remember (own or shared user), the routines you run, the skills you save, your profile and settings, which channels you're connected to, and your picture. Prefer this over editing those files with the shell \u2014 read them with RecallMemory, or with Read and grep when they are on your computer.",
     "",
     "target + action:",
     ...operationLines(memoryWrite, teamBot),
@@ -706,7 +721,7 @@ function stateToolDescription(memoryWrite, teamBot = false) {
     "Just do it and mention it in passing \u2014 don't narrate a save or ask permission for an ordinary one. Creating or changing a ROUTINE may ask the user to confirm, since it's the one change that acts while they're away; if it does, they'll see a card and you'll get their answer back as the tool result."
   ].join("\n");
 }
-var description9 = stateToolDescription(OPERATIONS.memory.write);
+var description8 = stateToolDescription(OPERATIONS.memory.write);
 var toolVariants = /* @__PURE__ */ new Map();
 function toolVariant(story, teamBot) {
   const key = JSON.stringify([
@@ -732,24 +747,24 @@ function toolVariant(story, teamBot) {
 function describeStateUpdate(args) {
   if (args.target === "memory") {
     if (args.scope === "user") return "user memory";
-    if (args.scope === "project") return `project ${args.project ?? "memory"}`;
     return "memory";
   }
   if (args.target === "avatar") return "avatar";
-  return args.name ?? args.project ?? args.id ?? args.platform ?? args.target;
+  return args.name ?? args.id ?? args.platform ?? args.target;
 }
 function createSandStateTool(deps) {
   const teamBot = deps.teamBot?.() === true;
-  const variant = deps.conversationMemory === void 0 && !teamBot ? { description: description9, parameters: sandUpdateStateParameters } : toolVariant(deps.conversationMemory, teamBot);
+  const variant = deps.conversationMemory === void 0 && !teamBot ? { description: description8, parameters: sandUpdateStateParameters } : toolVariant(deps.conversationMemory, teamBot);
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_UPDATE_STATE_TOOL_NAME,
     description: variant.description,
     parameters: variant.parameters,
     describeActivity: (args) => ({ detail: describeStateUpdate(args) }),
-    execute: async (_ctx, args, d) => {
+    execute: async (ctx, args, d) => {
       d.assertNoPendingAutoReviewApproval?.();
       const outcome = await applySandStateUpdate(args, d);
+      recordMemoryOutcome(ctx, args, d, outcome);
       return outcome.ok ? outcome.detail : `Not saved \u2014 ${outcome.reason}`;
     }
   });

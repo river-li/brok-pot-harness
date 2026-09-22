@@ -1,5 +1,5 @@
 var import_node_crypto75 = require("node:crypto");
-var import_node_path163 = require("node:path");
+var import_node_path162 = require("node:path");
 init_utils_pb2();
 function isLargeOutputSpillEnabled(env = process.env) {
   return env.SAND_DISABLE_LARGE_OUTPUT_SPILL !== "1";
@@ -16,7 +16,7 @@ function createSandMcpTextSpiller(opts) {
       thresholdBytes,
       write: async (aggregateText) => {
         try {
-          const relativePath = import_node_path163.posix.join(AGENT_TOOLS_DIR, `${(0, import_node_crypto75.randomUUID)()}.txt`);
+          const relativePath = import_node_path162.posix.join(AGENT_TOOLS_DIR, `${(0, import_node_crypto75.randomUUID)()}.txt`);
           const capped = aggregateText.length > MAX_OUTPUT_FILE_SIZE ? aggregateText.slice(0, MAX_OUTPUT_FILE_SIZE) : aggregateText;
           const data = new TextEncoder().encode(capped);
           await opts.uploadTextFile(ctx, relativePath, data);

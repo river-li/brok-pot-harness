@@ -43,9 +43,9 @@ var FrozenToolDescriptionsMiddleware = class extends BaseMiddleware {
     }
     const sent = tools.map((tool) => {
       if (!isDescribedTool(tool)) return tool;
-      const description10 = resolved.descriptions.get(tool.name);
-      if (description10 === void 0 || description10 === tool.description) return tool;
-      return { ...tool, description: description10 };
+      const description9 = resolved.descriptions.get(tool.name);
+      if (description9 === void 0 || description9 === tool.description) return tool;
+      return { ...tool, description: description9 };
     });
     return this.innerExecutor.stream(ctx, invocationId, sent, options2);
   }

@@ -22,10 +22,10 @@ var BoxFileUnreadableError = class extends Error {
 var BoxFileTooLargeError = class extends Error {
 };
 var DEFAULT_BOX_TRANSFER_MAX_BYTES = 256 * 1024 * 1024;
-function isSourceMissingError(error41) {
-  if (error41 instanceof BoxFileUnreadableError) return true;
-  if (findSystemErrno(error41) === "ENOENT") return true;
-  const message = error41 instanceof Error ? error41.message.toLowerCase() : "";
+function isSourceMissingError(error42) {
+  if (error42 instanceof BoxFileUnreadableError) return true;
+  if (findSystemErrno(error42) === "ENOENT") return true;
+  const message = error42 instanceof Error ? error42.message.toLowerCase() : "";
   return message.includes("no such file or directory") || message.includes("enoent");
 }
 async function transferFileBetweenBoxes(ctx, args) {
@@ -34,15 +34,15 @@ async function transferFileBetweenBoxes(ctx, args) {
   let data;
   try {
     data = await source.box.downloadFile(ctx, source.agentId, source.path);
-  } catch (error41) {
-    if (isSourceMissingError(error41)) {
+  } catch (error42) {
+    if (isSourceMissingError(error42)) {
       throw new BoxTransferError(`source file not found on ${source.label}: ${source.path}`, {
-        cause: error41
+        cause: error42
       });
     }
     throw new BoxTransferError(
-      `failed to read ${source.path} from ${source.label}: ${errorMessage(error41)}`,
-      { cause: error41 }
+      `failed to read ${source.path} from ${source.label}: ${errorMessage(error42)}`,
+      { cause: error42 }
     );
   }
   if (data.byteLength > maxBytes) {
@@ -52,10 +52,10 @@ async function transferFileBetweenBoxes(ctx, args) {
   }
   try {
     await dest.box.uploadFile(ctx, dest.agentId, dest.path, data);
-  } catch (error41) {
+  } catch (error42) {
     throw new BoxTransferError(
-      `failed to write ${dest.path} on ${dest.label}: ${errorMessage(error41)}`,
-      { cause: error41 }
+      `failed to write ${dest.path} on ${dest.label}: ${errorMessage(error42)}`,
+      { cause: error42 }
     );
   }
   return data.byteLength;
@@ -70,9 +70,9 @@ async function forEachBounded(items, limit, fn) {
       const item = items[cursor++];
       try {
         await fn(item);
-      } catch (error41) {
+      } catch (error42) {
         isAborted2 = true;
-        throw error41;
+        throw error42;
       }
     }
   }
@@ -100,9 +100,9 @@ async function forEachWavePipelined(items, opts) {
     nextWaveStart += waveSize;
     prepareInFlight = opts.prepareWave(wave).then((work) => {
       queue.push(...work);
-    }).catch((error41) => {
+    }).catch((error42) => {
       failed2 = true;
-      failure2 ??= error41;
+      failure2 ??= error42;
     }).finally(() => {
       prepareInFlight = void 0;
       beginPrepareIfNeeded();
@@ -117,9 +117,9 @@ async function forEachWavePipelined(items, opts) {
         beginPrepareIfNeeded();
         try {
           await opts.process(work);
-        } catch (error41) {
+        } catch (error42) {
           failed2 = true;
-          failure2 ??= error41;
+          failure2 ??= error42;
           wakeAll();
           return;
         }

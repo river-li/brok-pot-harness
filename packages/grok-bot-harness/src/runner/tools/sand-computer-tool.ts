@@ -39,7 +39,7 @@ var COMPUTER_ACTIONS = [
 ];
 function buildComputerActionCoreSchema(actions = COMPUTER_ACTIONS, options2) {
   const describeFields = options2?.describeFields ?? true;
-  const withFieldDescription = (schema2, description10) => describeFields ? schema2.describe(description10) : schema2;
+  const withFieldDescription = (schema2, description9) => describeFields ? schema2.describe(description9) : schema2;
   return external_exports.object({
     action: withFieldDescription(
       external_exports.enum(actions),
@@ -181,8 +181,8 @@ function buildComputerParameters(autoReview) {
     refineHoldClick(args, ctx);
     if (autoReview?.mode !== "enforce") return;
     if (args.action !== "click" && args.action !== "drag") return;
-    const description10 = args.description?.trim();
-    if (description10 !== void 0 && description10.length > 0) return;
+    const description9 = args.description?.trim();
+    if (description9 !== void 0 && description9.length > 0) return;
     ctx.addIssue({
       code: external_exports.ZodIssueCode.custom,
       message: "Click and drag require description: a concise statement of the intended UI target and purpose.",
@@ -373,8 +373,8 @@ function renderComputerResult(output, operation) {
   }
   return createStringResult(summary, output.result.case === "error");
 }
-function serializeComputerError(error41, args) {
-  const message = error41 instanceof Error ? error41.message : "Unknown error";
+function serializeComputerError(error42, args) {
+  const message = error42 instanceof Error ? error42.message : "Unknown error";
   return wrapToolCall(
     new ComputerUseToolCall({
       args,
@@ -484,7 +484,7 @@ function createScreenshotTool(resourceAccessor, deps) {
       { emitInitialPartialToolCall: false }
     ),
     render: async (_ctx, output) => renderComputerResult(output, "screenshot"),
-    serializeError: (error41) => serializeComputerError(error41, createScreenshotArgs())
+    serializeError: (error42) => serializeComputerError(error42, createScreenshotArgs())
   });
   return observeComputerTool(tool, "Screenshot", deps);
 }
@@ -508,12 +508,12 @@ function createComputerTool(resourceAccessor, deps) {
         if (sequence.at(-1)?.action !== "screenshot") {
           actions.push(toAction({ action: "screenshot" }));
         }
-        const description10 = rawArgs.description?.trim();
+        const description9 = rawArgs.description?.trim();
         const args = new ComputerUseArgs({
           toolCallId: meta.toolCallId,
           actions,
           ...deps.isUnicodeTypingEnabled?.() === true ? { bindUnmappedCharacters: true } : {},
-          ...description10 !== void 0 && description10.length > 0 ? { description: description10 } : {}
+          ...description9 !== void 0 && description9.length > 0 ? { description: description9 } : {}
         });
         return await interactionHandler.executeToolCall(
           ctx,

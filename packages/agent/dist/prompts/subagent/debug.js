@@ -42,8 +42,7 @@ function DebugModeLoggingSection() {
     jsx(
       "p",
       null,
-      "Each log must map to at least one hypothesis (include hypothesisId in payload). Use this payload structure:",
-      " ",
+      "Each log must map to at least one hypothesis (include hypothesisId in payload). Use this payload structure: ",
       "`{hypothesisId, location, message, data, timestamp}`"
     ),
     jsx("p", null, "**REQUIRED:** Wrap EACH debug log in a collapsible code region:"),

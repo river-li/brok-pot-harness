@@ -1,7 +1,7 @@
 var import_node_crypto2 = require("node:crypto");
 var fs7 = __toESM(require("node:fs"), 1);
 var path8 = __toESM(require("node:path"), 1);
-var __awaiter6 = function(thisArg, _arguments, P2, generator) {
+var __awaiter7 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -59,7 +59,7 @@ function tryNormalizeRelPaths(relPaths) {
   return out;
 }
 function enqueuePathSyncRequest(args) {
-  return __awaiter6(this, void 0, void 0, function* () {
+  return __awaiter7(this, void 0, void 0, function* () {
     var _a19;
     const relPaths = tryNormalizeRelPaths(args.relPaths);
     if (relPaths === void 0 || relPaths.length === 0) {
@@ -158,22 +158,22 @@ function listPathSyncRequests(args) {
     } catch (_f) {
       continue;
     }
-    const request3 = parseRequest(raw);
-    if (request3 === void 0) {
+    const request5 = parseRequest(raw);
+    if (request5 === void 0) {
       try {
         fs7.unlinkSync(full);
       } catch (_g) {
       }
       continue;
     }
-    if (now - request3.createdAtMs > staleMs) {
+    if (now - request5.createdAtMs > staleMs) {
       try {
         fs7.unlinkSync(full);
       } catch (_h) {
       }
       continue;
     }
-    out.push(request3);
+    out.push(request5);
   }
   return out;
 }
@@ -184,8 +184,8 @@ function inspectPathSyncRequest(args) {
   let stat28;
   try {
     stat28 = fs7.lstatSync(full);
-  } catch (error41) {
-    if (typeof error41 === "object" && error41 !== null && "code" in error41 && error41.code === "ENOENT") {
+  } catch (error42) {
+    if (typeof error42 === "object" && error42 !== null && "code" in error42 && error42.code === "ENOENT") {
       return "acked";
     }
     return "pending";
@@ -203,8 +203,8 @@ function inspectPathSyncRequest(args) {
   } catch (_d) {
     return "pending";
   }
-  const request3 = parseRequest(raw);
-  if (request3 === void 0) {
+  const request5 = parseRequest(raw);
+  if (request5 === void 0) {
     try {
       fs7.unlinkSync(full);
     } catch (_e2) {
@@ -213,7 +213,7 @@ function inspectPathSyncRequest(args) {
   }
   const now = ((_a19 = args.now) !== null && _a19 !== void 0 ? _a19 : Date.now)();
   const staleMs = (_b2 = args.staleMs) !== null && _b2 !== void 0 ? _b2 : PATH_SYNC_REQUEST_STALE_MS;
-  if (now - request3.createdAtMs > staleMs) {
+  if (now - request5.createdAtMs > staleMs) {
     try {
       fs7.unlinkSync(full);
     } catch (_f) {
@@ -235,7 +235,7 @@ function ackPathSyncRequests(args) {
   }
 }
 function waitForPathSyncRequestAck(args) {
-  return __awaiter6(this, void 0, void 0, function* () {
+  return __awaiter7(this, void 0, void 0, function* () {
     var _a19;
     var _b2, _c2;
     const pollMs = (_b2 = args.pollMs) !== null && _b2 !== void 0 ? _b2 : PATH_SYNC_REQUEST_WAIT_POLL_MS;

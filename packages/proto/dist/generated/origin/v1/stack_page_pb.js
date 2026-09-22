@@ -1,14 +1,14 @@
 init_compact();
-var __protoPackage174 = "origin.v1.";
-var __protoMessage3165 = class extends CompactMessage {
+var __protoPackage175 = "origin.v1.";
+var __protoMessage3166 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage174;
+    return __protoPackage175;
   }
 };
-var GetChangeStackPageDataRequest = class _GetChangeStackPageDataRequest extends __protoMessage3165 {
+var GetChangeStackPageDataRequest = class _GetChangeStackPageDataRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -29,7 +29,7 @@ var GetChangeStackPageDataRequest = class _GetChangeStackPageDataRequest extends
     return ["GetChangeStackPageDataRequest|1 change #0", ChangeIdentifier];
   }
 };
-var GetChangeStackPageDataResponse = class _GetChangeStackPageDataResponse extends __protoMessage3165 {
+var GetChangeStackPageDataResponse = class _GetChangeStackPageDataResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.mirrorStatus = MirrorStatus.UNSPECIFIED;
@@ -52,7 +52,7 @@ var GetChangeStackPageDataResponse = class _GetChangeStackPageDataResponse exten
     return ["GetChangeStackPageDataResponse|1 mirror_status #0|2 items #1*|3 reviewer_candidates #2", MirrorStatus, ChangeStackPageItem, ListOriginRepoReviewerCandidatesResponse];
   }
 };
-var ChangeStackPageItem = class _ChangeStackPageItem extends __protoMessage3165 {
+var ChangeStackPageItem = class _ChangeStackPageItem extends __protoMessage3166 {
   constructor(data) {
     super();
     this.versions = [];

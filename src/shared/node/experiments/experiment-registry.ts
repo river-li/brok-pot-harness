@@ -41,8 +41,8 @@ function fieldParsersConfigEntry(fallbackValues, parsers) {
         Object.entries(parsers).map(([field, parseField]) => {
           try {
             return [field, parseField(merged[field])];
-          } catch (error41) {
-            throw new SandConfigParseError(field, { cause: error41 });
+          } catch (error42) {
+            throw new SandConfigParseError(field, { cause: error42 });
           }
         })
       );

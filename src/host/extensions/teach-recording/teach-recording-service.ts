@@ -5,9 +5,9 @@ var TEACH_PRIVATE_MONITOR_MESSAGE = "Teach recording requires a private desktop 
 function isForkWindowIndex(windowIndex) {
   return windowIndex != null && Number.isInteger(windowIndex) && windowIndex >= SAND_BOX_FIRST_FORK_WINDOW_INDEX;
 }
-function startFailureKind(error41) {
-  if (error41 instanceof SandTeachRecordingError) return error41.kind;
-  if (error41 instanceof SandBoxNoMonitorAvailableError) return "no_monitor";
+function startFailureKind(error42) {
+  if (error42 instanceof SandTeachRecordingError) return error42.kind;
+  if (error42 instanceof SandBoxNoMonitorAvailableError) return "no_monitor";
   return "box";
 }
 var SandTeachRecordingError = class extends SandDomainError {
@@ -196,9 +196,9 @@ ${queuedFile}`).digest("hex");
         agentId: recording.agentId,
         save: true,
         trackCompletion: true
-      }).catch((error41) => {
+      }).catch((error42) => {
         deps.reportCapStopFailed({
-          errorClass: error41 instanceof Error ? error41.name || "Error" : "unknown"
+          errorClass: error42 instanceof Error ? error42.name || "Error" : "unknown"
         });
       });
     });
@@ -422,7 +422,7 @@ ${queuedFile}`).digest("hex");
           `teach-recording: ffmpeg failed to start: ${result.stdout} ${result.stderr}`
         );
       }
-    } catch (error41) {
+    } catch (error42) {
       try {
         await cleanupFailedStart({ connection, recording });
         if (failedStart === recording) failedStart = null;
@@ -432,7 +432,7 @@ ${queuedFile}`).digest("hex");
           `teach-recording: ffmpeg startup cleanup failed: ${cleanupError instanceof Error ? cleanupError.message : String(cleanupError)}`
         );
       }
-      throw error41;
+      throw error42;
     }
     if (failedStart === recording) failedStart = null;
     active = recording;
@@ -442,22 +442,22 @@ ${queuedFile}`).digest("hex");
     emit();
     return statusOf2();
   };
-  const reportStartFailure = ({ agentId, entryPoint }, error41) => {
+  const reportStartFailure = ({ agentId, entryPoint }, error42) => {
     deps.reportStartFailed({
-      kind: startFailureKind(error41),
-      errorClass: error41 instanceof Error ? error41.name || "Error" : "unknown",
+      kind: startFailureKind(error42),
+      errorClass: error42 instanceof Error ? error42.name || "Error" : "unknown",
       windowIndex: deps.box.getAgentWindowIndex?.(agentId),
       entryPoint
     });
   };
   const start = async (args) => {
     if (isDisposing) {
-      const error41 = new SandTeachRecordingError(
+      const error42 = new SandTeachRecordingError(
         "shutting_down",
         "teach-recording: recording service is shutting down"
       );
-      reportStartFailure(args, error41);
-      throw error41;
+      reportStartFailure(args, error42);
+      throw error42;
     }
     if (active != null) return statusOf2();
     if (startInFlight != null) return await startInFlight;
@@ -465,9 +465,9 @@ ${queuedFile}`).digest("hex");
     startInFlight = startup;
     try {
       return await startup;
-    } catch (error41) {
-      reportStartFailure(args, error41);
-      throw error41;
+    } catch (error42) {
+      reportStartFailure(args, error42);
+      throw error42;
     } finally {
       if (startInFlight === startup) startInFlight = null;
     }

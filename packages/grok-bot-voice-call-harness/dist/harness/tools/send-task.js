@@ -32,8 +32,8 @@ var SendTaskTool = class _SendTaskTool extends VoiceCallTool {
     super(_SendTaskTool.definition);
     this.relay = relay;
   }
-  async execute({ request: request3 }, { agentId, callId }) {
-    return _SendTaskTool.outputOf(await this.relay({ agentId, callId, request: request3 }));
+  async execute({ request: request5 }, { agentId, callId }) {
+    return _SendTaskTool.outputOf(await this.relay({ agentId, callId, request: request5 }));
   }
   /** What the model is told for each relay answer; the desktop reuses it when the harness itself cannot be reached. */
   static outputOf(outcome) {

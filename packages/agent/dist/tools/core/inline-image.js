@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var logger27 = createLogger("tools/inline-image");
 var inlineImageBoundCounter = createCounter("agent.tools.inline_image.bound", {
   description: "Image bytes bounded before being persisted in a tool step, by source and outcome",
@@ -28,13 +28,13 @@ async function boundInlineImageForModel(ctx, bytes, { mimeType, source }) {
     resized = await resizeImageBufferIfNeeded(original, {
       webpWithoutCodec: "passthrough"
     });
-  } catch (error41) {
+  } catch (error42) {
     recordBound(ctx, source, "failed", original.byteLength, original.byteLength);
     logger27.warn(ctx, "Failed to bound inline image; keeping original bytes", {
       source,
       mimeType,
       bytes: original.byteLength,
-      error: error41 instanceof Error ? error41.message : String(error41)
+      error: error42 instanceof Error ? error42.message : String(error42)
     });
     return { data: bytes, mimeType };
   }

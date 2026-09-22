@@ -20,8 +20,8 @@ function createSingleFlight(spec) {
     flight = null;
     try {
       effect();
-    } catch (error41) {
-      current.reject(error41);
+    } catch (error42) {
+      current.reject(error42);
       return;
     }
     current.fulfil();
@@ -39,10 +39,10 @@ function createSingleFlight(spec) {
         (result) => {
           land(current, () => spec.install(result));
         },
-        (error41) => {
+        (error42) => {
           land(current, () => {
-            if (spec.installFailure == null) throw error41;
-            spec.installFailure(error41);
+            if (spec.installFailure == null) throw error42;
+            spec.installFailure(error42);
           });
         }
       );

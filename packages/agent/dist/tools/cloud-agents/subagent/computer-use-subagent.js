@@ -3,15 +3,17 @@ var DEFAULT_COMPUTER_USE_MODEL_IDS = [
   "claude-4.5-sonnet"
 ];
 var COMPUTER_USE_SUBAGENT_PROMPT = `Enter COMPUTER USE mode. Follow the provided instruction above.`;
-var COMPUTER_USE_SUBAGENT_TOOL_IDENTIFIERS = /* @__PURE__ */ new Set(["SHELL", "READ", "GREP", "GLOB"]);
+var COMPUTER_USE_SUBAGENT_TOOL_IDENTIFIERS = /* @__PURE__ */ new Set([
+  "SHELL",
+  "READ",
+  "GREP",
+  "GLOB"
+]);
 function resolveDefaultModelIds(cuaModel) {
   if (typeof cuaModel !== "string" || cuaModel.length === 0) {
     return [...DEFAULT_COMPUTER_USE_MODEL_IDS];
   }
-  return [
-    cuaModel,
-    ...DEFAULT_COMPUTER_USE_MODEL_IDS.filter((modelId) => modelId !== cuaModel)
-  ];
+  return [cuaModel, ...DEFAULT_COMPUTER_USE_MODEL_IDS.filter((modelId) => modelId !== cuaModel)];
 }
 function createComputerUseTools({ callerTools, props, modelId, apiCanvas }) {
   const tools = callerTools.filter((tool) => COMPUTER_USE_SUBAGENT_TOOL_IDENTIFIERS.has(tool.toolIdentifier));

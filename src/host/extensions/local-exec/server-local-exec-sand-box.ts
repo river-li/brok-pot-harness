@@ -53,8 +53,8 @@ var ServerUserComputerPresenceCache = class {
         this.fetchedAt = this.computers.length === 0 ? Number.NEGATIVE_INFINITY : this.clock.now();
         return this.computers;
       },
-      (error41) => {
-        this.onRefreshFailure(error41);
+      (error42) => {
+        this.onRefreshFailure(error42);
         if (generation !== this.generation) return this.computers;
         this.consecutiveFailures += 1;
         if (this.consecutiveFailures > 1) this.computers = [];
@@ -157,26 +157,26 @@ async function* openWithWatchdog(deps, ctx, machine, frame, watchdogPolicy = dep
     }
     if (timedOut) throw unavailable(machine);
     if (terminalResponse !== void 0) yield terminalResponse;
-  } catch (error41) {
+  } catch (error42) {
     if (timedOut) throw unavailable(machine);
-    const refusal = serverRefusalDetail(error41);
+    const refusal = serverRefusalDetail(error42);
     if (refusal !== void 0) {
-      throw new SandLocalExecError(refusal, { cause: error41 });
+      throw new SandLocalExecError(refusal, { cause: error42 });
     }
-    if (error41 instanceof ConnectError && error41.code === Code.Unavailable) {
+    if (error42 instanceof ConnectError && error42.code === Code.Unavailable) {
       throw unavailable(machine);
     }
-    throw error41;
+    throw error42;
   } finally {
     watchdog?.dispose();
     ctx.signal.removeEventListener("abort", onAbort);
     controller.abort();
   }
 }
-function serverRefusalDetail(error41) {
-  if (!(error41 instanceof ConnectError)) return void 0;
-  if (error41.code !== Code.Unavailable && error41.code !== Code.InvalidArgument) return void 0;
-  const detail = error41.findDetails(ErrorDetails).at(0)?.details?.detail;
+function serverRefusalDetail(error42) {
+  if (!(error42 instanceof ConnectError)) return void 0;
+  if (error42.code !== Code.Unavailable && error42.code !== Code.InvalidArgument) return void 0;
+  const detail = error42.findDetails(ErrorDetails).at(0)?.details?.detail;
   if (detail === void 0 || detail.length === 0) return void 0;
   return detail;
 }
@@ -242,11 +242,11 @@ var ServerUserComputerExecManager = class {
               ...cwdState !== void 0 ? { cwdState } : {},
               ...scope?.agentId !== void 0 ? { conversationId: scope.agentId } : {}
             });
-            const error41 = new Error(thrown.error);
+            const error42 = new Error(thrown.error);
             if (thrown.stackTrace !== void 0 && thrown.stackTrace.length > 0) {
-              error41.stack = thrown.stackTrace;
+              error42.stack = thrown.stackTrace;
             }
-            throw error41;
+            throw error42;
           }
           if (control.message.case === "streamClose") return;
           break;

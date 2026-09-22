@@ -1,4 +1,4 @@
-var __awaiter65 = function(thisArg, _arguments, P2, generator) {
+var __awaiter67 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -26,7 +26,7 @@ var __awaiter65 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function rejectWhenAborted2(signal, operation) {
-  return __awaiter65(this, void 0, void 0, function* () {
+  return __awaiter67(this, void 0, void 0, function* () {
     let onAbort;
     const result = new Promise((resolve29, reject2) => {
       onAbort = () => reject2(signal.reason);

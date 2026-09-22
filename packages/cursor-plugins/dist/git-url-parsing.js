@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 function detectNonGitHubProvider(host) {
   const lowerHost = host.toLowerCase();
   if (isGitLabHost(host)) {

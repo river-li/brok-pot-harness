@@ -44,8 +44,8 @@ var CredentialFillLease = class {
       (state) => state.autofill === "idle" && state.agentHolds.size === 0
     );
   }
-  async acquireAutofill(request3) {
-    const key = windowKey(request3.windowIndex);
+  async acquireAutofill(request5) {
+    const key = windowKey(request5.windowIndex);
     const own = this.window(key);
     const startedAt = this.clock.monotonicNow();
     own.autofillWaiting += 1;
@@ -61,7 +61,7 @@ var CredentialFillLease = class {
           own.autofill = "filling";
           return true;
         },
-        request3.signal
+        request5.signal
       );
     } finally {
       own.autofillWaiting -= 1;
@@ -105,13 +105,13 @@ var CredentialFillLease = class {
       }
     };
   }
-  async acquireAgentTool(request3) {
-    const key = windowKey(request3.windowIndex);
+  async acquireAgentTool(request5) {
+    const key = windowKey(request5.windowIndex);
     const own = this.window(key);
     const startedAt = this.clock.monotonicNow();
-    const deadline = request3.waitMs === void 0 ? this.agentToolDeadline : createDeadlinePolicy({
+    const deadline = request5.waitMs === void 0 ? this.agentToolDeadline : createDeadlinePolicy({
       name: "sand-credential-fill-lease-agent-tool",
-      timeoutMs: request3.waitMs,
+      timeoutMs: request5.waitMs,
       clock: this.clock
     });
     own.agentWaiting += 1;
@@ -124,10 +124,10 @@ var CredentialFillLease = class {
             (state) => state.autofill !== "idle" || state.autofillWaiting > 0
           );
           if (blocked) return false;
-          own.agentHolds.set(request3.toolName, (own.agentHolds.get(request3.toolName) ?? 0) + 1);
+          own.agentHolds.set(request5.toolName, (own.agentHolds.get(request5.toolName) ?? 0) + 1);
           return true;
         },
-        request3.signal
+        request5.signal
       );
     } finally {
       own.agentWaiting -= 1;
@@ -139,14 +139,14 @@ var CredentialFillLease = class {
         reason = this.scope(key).some((state) => state.autofill === "uncleared") ? "credentials-uncleared" : "autofill-in-progress";
       }
       this.log(
-        `credentials: lease refused ${request3.toolName} on window ${key} after ${waitedMs}ms (${reason}${outcome.kind === "aborted" ? `: ${errorLogTag(outcome.cause)}` : ""}, ${this.describeWindow(key)})`
+        `credentials: lease refused ${request5.toolName} on window ${key} after ${waitedMs}ms (${reason}${outcome.kind === "aborted" ? `: ${errorLogTag(outcome.cause)}` : ""}, ${this.describeWindow(key)})`
       );
       this.forgetIfIdle(key);
       return { ok: false, reason, detail: AGENT_TOOL_REFUSAL_DETAIL[reason] };
     }
     if (waitedMs > 0) {
       this.log(
-        `credentials: lease ${request3.toolName} on window ${key} waited ${waitedMs}ms for a credential fill`
+        `credentials: lease ${request5.toolName} on window ${key} waited ${waitedMs}ms for a credential fill`
       );
     }
     let released = false;
@@ -155,9 +155,9 @@ var CredentialFillLease = class {
       release: () => {
         if (released) return;
         released = true;
-        const remaining = (own.agentHolds.get(request3.toolName) ?? 1) - 1;
-        if (remaining <= 0) own.agentHolds.delete(request3.toolName);
-        else own.agentHolds.set(request3.toolName, remaining);
+        const remaining = (own.agentHolds.get(request5.toolName) ?? 1) - 1;
+        if (remaining <= 0) own.agentHolds.delete(request5.toolName);
+        else own.agentHolds.set(request5.toolName, remaining);
         this.forgetIfIdle(key);
         this.notify();
       }
@@ -204,10 +204,10 @@ var CredentialFillLease = class {
         }
       }, signal);
       return { kind: "ready" };
-    } catch (error41) {
+    } catch (error42) {
       if (taken) return { kind: "ready" };
-      if (error41 instanceof DeadlineExceededError) return { kind: "timed-out" };
-      return { kind: "aborted", cause: error41 };
+      if (error42 instanceof DeadlineExceededError) return { kind: "timed-out" };
+      return { kind: "aborted", cause: error42 };
     }
   }
   nextChange(signal) {
@@ -256,8 +256,8 @@ function createLeasedCredentialFill(options2) {
       let clearance;
       try {
         clearance = await options2.verifyCleared(target);
-      } catch (error41) {
-        options2.log(`credentials: clear retry ${attempts2} failed (${errorLogTag(error41)})`);
+      } catch (error42) {
+        options2.log(`credentials: clear retry ${attempts2} failed (${errorLogTag(error42)})`);
         return;
       }
       if (!clearance.cleared) {
@@ -281,10 +281,10 @@ function createLeasedCredentialFill(options2) {
     let result;
     try {
       result = await fill();
-    } catch (error41) {
+    } catch (error42) {
       activeFill.active = false;
       releaseIfCleared(windowIndex, activeFill);
-      throw error41;
+      throw error42;
     }
     activeFill.active = false;
     holdUntilCleared(windowIndex, activeFill, result);

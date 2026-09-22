@@ -63,9 +63,9 @@ function createStreamAttempt(host) {
       checkpointOperations.add(operation);
       try {
         await operation;
-      } catch (error41) {
-        checkpointFailure ??= { status: "rejected", reason: error41 };
-        throw error41;
+      } catch (error42) {
+        checkpointFailure ??= { status: "rejected", reason: error42 };
+        throw error42;
       } finally {
         checkpointOperations.delete(operation);
       }
@@ -79,9 +79,9 @@ function createStreamAttempt(host) {
     let streamPromise;
     try {
       streamPromise = host.startStream(attemptCtx, resumeStreamFrom, persistCheckpoint);
-    } catch (error41) {
+    } catch (error42) {
       settleAttempt();
-      throw error41;
+      throw error42;
     }
     const policy = resolveStreamDeadlinePolicy(
       host.streamTuning.deadlineOverrides,
@@ -92,10 +92,10 @@ function createStreamAttempt(host) {
         const state = await streamPromise;
         if (checkpointFailure != null) throw checkpointFailure.reason;
         return state;
-      } catch (error41) {
+      } catch (error42) {
         const failed2 = await drainCheckpoints();
         if (failed2 != null) throw failed2.reason;
-        throw error41;
+        throw error42;
       } finally {
         settleAttempt();
       }
@@ -180,11 +180,11 @@ function createStreamAttempt(host) {
             reject2(checkpointFailure.reason);
           }
         },
-        (error41) => {
+        (error42) => {
           if (deadlineFired) return;
           hooks.disarm();
           void drainCheckpoints().then((failed2) => {
-            reject2(failed2 == null ? error41 : failed2.reason);
+            reject2(failed2 == null ? error42 : failed2.reason);
           });
         }
       );
@@ -196,8 +196,8 @@ function createStreamAttempt(host) {
   let retriesPerformed = 0;
   const runBoundedTurn = async () => retryPolicy.maxAttempts > 1 ? await runWithTransientRetry(runStreamOnce, {
     ...retryPolicy,
-    isRetryable: (error41) => shouldRetryTurnAttempt({
-      error: error41,
+    isRetryable: (error42) => shouldRetryTurnAttempt({
+      error: error42,
       canceled: ctx.canceled,
       streamOutputProduced: host.getStreamOutputProduced(),
       resumeCheckpointAvailable: attemptResumeCheckpoint != null,
@@ -228,7 +228,7 @@ function createStreamAttempt(host) {
   const run = async () => {
     try {
       return await runBoundedTurn();
-    } catch (error41) {
+    } catch (error42) {
       if (!ctx.canceled) {
         const failingAttempt = retriesPerformed + 1;
         if (retriesPerformed > 0 && retriesPerformed >= retryPolicy.maxAttempts - 1) {
@@ -236,18 +236,18 @@ function createStreamAttempt(host) {
             outcome: "exhausted",
             attempt: failingAttempt,
             maxAttempts: retryPolicy.maxAttempts,
-            error: error41
+            error: error42
           });
-        } else if (retriesPerformed > 0 || isRetryableProviderError(error41)) {
+        } else if (retriesPerformed > 0 || isRetryableProviderError(error42)) {
           host.reportTurnRetry({
             outcome: "gave_up_ineligible",
             attempt: failingAttempt,
             maxAttempts: retryPolicy.maxAttempts,
-            error: error41
+            error: error42
           });
         }
       }
-      throw error41;
+      throw error42;
     }
   };
   return { run };

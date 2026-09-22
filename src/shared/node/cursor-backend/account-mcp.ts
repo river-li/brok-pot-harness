@@ -19,8 +19,8 @@ function accountMcpBackendClient(deps) {
 async function accountMcpAccessToken(deps) {
   return deps.backend === void 0 ? await deps.getAccessToken() : await deps.getAccessToken({ backendUrl: deps.backend.backendUrl });
 }
-function logAccountMcpFetchError(leg, error41) {
-  reportMcpHostEdgeFailure(leg, error41);
+function logAccountMcpFetchError(leg, error42) {
+  reportMcpHostEdgeFailure(leg, error42);
 }
 function parseAccountMcpConfigJson(json3) {
   if (json3.trim().length === 0) return null;
@@ -144,8 +144,8 @@ async function fetchAccountMcpServers(deps) {
         )
       )
     ];
-    const fetchStdioRuntimeConfig = (request3) => client.getMcpConfig(request3, { timeoutMs: ACCOUNT_MCP_RPC_TIMEOUT_MS }).catch((error41) => {
-      logAccountMcpFetchError("account-config-fetch", error41);
+    const fetchStdioRuntimeConfig = (request5) => client.getMcpConfig(request5, { timeoutMs: ACCOUNT_MCP_RPC_TIMEOUT_MS }).catch((error42) => {
+      logAccountMcpFetchError("account-config-fetch", error42);
       return null;
     });
     const configResponses = await Promise.all([
@@ -292,8 +292,8 @@ async function backfillUserPluginInstalls(deps) {
     try {
       await client.installUserPlugin(new InstallUserPluginRequest({ pluginId: BigInt(pluginId) }));
       backfilled.push(pluginId);
-    } catch (error41) {
-      logAccountMcpFetchError("account-install-backfill", error41);
+    } catch (error42) {
+      logAccountMcpFetchError("account-install-backfill", error42);
     }
   }
   return backfilled;

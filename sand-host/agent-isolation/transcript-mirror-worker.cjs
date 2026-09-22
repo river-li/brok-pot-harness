@@ -18178,20 +18178,20 @@ function createPrettyTerminalLoggerBackend(options = {}) {
       }
       const seen = /* @__PURE__ */ new WeakSet();
       if (!isContext(entry.context) && entry.context && Object.keys(entry.context).length > 0) {
-        const contextValue = formatInlineValue(entry.context, renderOptions, colors, 0, seen, ["context"]);
+        const contextValue = formatInlineValue(entry.context, renderOptions, colors, 0, seen, [
+          "context"
+        ]);
         parts.push(`${colors.dim("context=")}${contextValue}`);
       }
       if (entry.metadata && Object.keys(entry.metadata).length > 0) {
-        const metaValue = formatInlineValue(entry.metadata, renderOptions, colors, 0, seen, ["metadata"]);
+        const metaValue = formatInlineValue(entry.metadata, renderOptions, colors, 0, seen, [
+          "metadata"
+        ]);
         parts.push(`${colors.dim("meta=")}${metaValue}`);
       }
       const outputLines = [parts.join(" ")];
       if (entry.error !== void 0) {
-        const errorValue = isErrorLike(entry.error) ? formatErrorSummary(entry.error, renderOptions, colors, 0, seen, [
-          "error"
-        ]) : formatInlineValue(entry.error, renderOptions, colors, 0, seen, [
-          "error"
-        ]);
+        const errorValue = isErrorLike(entry.error) ? formatErrorSummary(entry.error, renderOptions, colors, 0, seen, ["error"]) : formatInlineValue(entry.error, renderOptions, colors, 0, seen, ["error"]);
         outputLines[0] = `${outputLines[0]} ${colors.dim("error=")}${errorValue}`;
         if (isErrorLike(entry.error) && typeof entry.error.stack === "string") {
           const stackLines = entry.error.stack.split("\n").slice(1);
@@ -18425,11 +18425,7 @@ var logger = createLogger("@anysphere/agent-kv:subagent-states");
 
 // ../packages/agent-kv/dist/agent-store.js
 var AgentModes = ["default", "plan", "debug", "search"];
-var ApprovalModeSettings = [
-  "allowlist",
-  "unrestricted",
-  "auto-review"
-];
+var ApprovalModeSettings = ["allowlist", "unrestricted", "auto-review"];
 var agentModeSet = new Set(AgentModes);
 var approvalModeSettingSet = new Set(ApprovalModeSettings);
 var todoItemSerde = new ProtoSerde(TodoItem);

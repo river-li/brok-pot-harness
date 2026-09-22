@@ -1,4 +1,4 @@
-var __awaiter24 = function(thisArg, _arguments, P2, generator) {
+var __awaiter22 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -36,7 +36,7 @@ function createPrManagementNotAvailableResult() {
   });
 }
 function flushPostTurnEndedWork(ctx, listener) {
-  return __awaiter24(this, void 0, void 0, function* () {
+  return __awaiter22(this, void 0, void 0, function* () {
     var _a19;
     yield (_a19 = listener.flushPostTurnEndedWork) === null || _a19 === void 0 ? void 0 : _a19.call(listener, ctx);
   });
@@ -54,17 +54,17 @@ var NoopInteractionListener = class {
     this.postTurnEndedWorkQueue = [];
   }
   sendUpdate(_ctx, _update) {
-    return __awaiter24(this, void 0, void 0, function* () {
+    return __awaiter22(this, void 0, void 0, function* () {
     });
   }
   enqueuePostTurnEndedWork(work) {
     this.postTurnEndedWorkQueue.push(work);
   }
   flushPostTurnEndedWork(_ctx) {
-    return __awaiter24(this, void 0, void 0, function* () {
+    return __awaiter22(this, void 0, void 0, function* () {
       const work = this.postTurnEndedWorkQueue;
       this.postTurnEndedWorkQueue = [];
-      yield Promise.all(work.map((fn) => __awaiter24(this, void 0, void 0, function* () {
+      yield Promise.all(work.map((fn) => __awaiter22(this, void 0, void 0, function* () {
         try {
           yield fn();
         } catch (_a19) {
@@ -73,7 +73,7 @@ var NoopInteractionListener = class {
     });
   }
   query(_ctx, query) {
-    return __awaiter24(this, void 0, void 0, function* () {
+    return __awaiter22(this, void 0, void 0, function* () {
       var _a19;
       switch (query.query.case) {
         case "webSearchRequestQuery":

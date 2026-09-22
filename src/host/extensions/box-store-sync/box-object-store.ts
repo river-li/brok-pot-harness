@@ -133,9 +133,9 @@ var LocalFsObjectStore = class {
   async get(key) {
     try {
       return new Uint8Array(await (0, import_promises11.readFile)(this.pathFor(key)));
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") return null;
-      throw error41;
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") return null;
+      throw error42;
     }
   }
   async put(key, bytes, _opts) {
@@ -148,9 +148,9 @@ var LocalFsObjectStore = class {
     let size;
     try {
       size = (await (0, import_promises11.stat)(src)).size;
-    } catch (error41) {
-      if (findSystemErrno(error41) === "ENOENT") return null;
-      throw error41;
+    } catch (error42) {
+      if (findSystemErrno(error42) === "ENOENT") return null;
+      throw error42;
     }
     if (opts?.maxBytes != null && size > opts.maxBytes) {
       throw new SandBoxStoreSyncError(`object ${key} is ${size}B over the ${opts.maxBytes}B cap`);
@@ -172,8 +172,8 @@ var LocalFsObjectStore = class {
   async delete(key) {
     try {
       await (0, import_promises11.unlink)(this.pathFor(key));
-    } catch (error41) {
-      if (findSystemErrno(error41) !== "ENOENT") throw error41;
+    } catch (error42) {
+      if (findSystemErrno(error42) !== "ENOENT") throw error42;
     }
   }
   pathFor(key) {
@@ -208,9 +208,9 @@ async function walkFiles(dir, out) {
   let entries;
   try {
     entries = await (0, import_promises11.readdir)(dir, { withFileTypes: true });
-  } catch (error41) {
-    if (findSystemErrno(error41) === "ENOENT") return;
-    throw error41;
+  } catch (error42) {
+    if (findSystemErrno(error42) === "ENOENT") return;
+    throw error42;
   }
   for (const entry of entries) {
     if (entry.isSymbolicLink()) continue;

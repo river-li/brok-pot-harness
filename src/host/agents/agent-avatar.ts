@@ -6,8 +6,8 @@ function listConventionalAvatarFilenames(agentDir) {
   let entries;
   try {
     entries = (0, import_node_fs72.readdirSync)(agentDir);
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_avatar", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_avatar", error42);
     return [];
   }
   return sortConventionalAvatarFilenames(entries);
@@ -26,8 +26,8 @@ function resolveDerivedAvatarFilename(agentDir, legacyFieldValue) {
     const migratedName = `avatar.${ext2}`;
     (0, import_node_fs72.copyFileSync)(resolved, (0, import_node_path120.join)(agentDir, migratedName), import_node_fs72.constants.COPYFILE_EXCL);
     return migratedName;
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_avatar", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_avatar", error42);
     return legacyFieldValue;
   }
 }
@@ -43,8 +43,8 @@ function resolveAvatarPathWithinDir(agentDir, candidate) {
   try {
     realFile = (0, import_node_fs72.realpathSync)(absolute);
     realDir = (0, import_node_fs72.realpathSync)(agentDir);
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_avatar", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_avatar", error42);
     return null;
   }
   if (!isPathWithin4(realDir, realFile)) return null;
@@ -63,8 +63,8 @@ async function resolveAndStatAvatar(agentDir, candidate) {
       return null;
     }
     return { path: path31, mtimeMs: stats.mtimeMs, size: stats.size };
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_avatar", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_avatar", error42);
     return null;
   }
 }
@@ -76,8 +76,8 @@ async function readValidatedAvatar(agentDir, candidate) {
     const mime2 = sniffAvatarMimeType(bytes);
     if (mime2 == null) return null;
     return { bytes, mime: mime2 };
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_avatar", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_avatar", error42);
     return null;
   }
 }
@@ -104,8 +104,8 @@ async function readAvatarWithinDir(agentDir, candidate) {
   let bytes;
   try {
     bytes = await (0, import_promises60.readFile)(meta.path);
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_avatar", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_avatar", error42);
     return null;
   }
   const mime2 = sniffAvatarMimeType(bytes);

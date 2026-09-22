@@ -1,2 +1,2 @@
-init_dist3();
-var logger92 = createLogger("@anysphere/agent:dsv31018");
+init_dist4();
+var logger93 = createLogger("@anysphere/agent:dsv31018");

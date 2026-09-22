@@ -9,14 +9,14 @@ function openConfiguredDb(dbPath, agentDirName, options2, hasOtherLiveHandles, i
   for (let attempt = 0; attempt < 2 && db === void 0; attempt += 1) {
     try {
       db = initDb(dbPath, agentDirName, options2);
-    } catch (error41) {
-      openError = error41;
-      if (!isSqliteIoError(error41) || attempt > 0) break;
+    } catch (error42) {
+      openError = error42;
+      if (!isSqliteIoError(error42) || attempt > 0) break;
       reportSessionDiagnostic({
         family: "store_db",
         kind: "open_io_retry",
         agentId: agentDirName,
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }
@@ -64,22 +64,22 @@ function initConfiguredDb(dbPath, agentDirName, options2) {
     try {
       db.exec("PRAGMA journal_mode = WAL");
       db.exec("PRAGMA synchronous = NORMAL");
-    } catch (error41) {
+    } catch (error42) {
       reportSessionDiagnostic({
         family: "store_db",
         kind: "wal_unavailable",
         agentId: agentDirName,
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
     db.exec(SCHEMA);
     return db;
-  } catch (error41) {
+  } catch (error42) {
     try {
       db.close();
     } catch {
     }
-    throw error41;
+    throw error42;
   }
 }
 function recoverCorruptStoreDb(dbPath, agentDirName, options2, cause) {

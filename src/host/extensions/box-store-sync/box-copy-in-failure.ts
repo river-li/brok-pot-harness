@@ -14,10 +14,10 @@ function isCopyInNativeCode(code) {
       return false;
   }
 }
-function copyInFailureOf(error41) {
+function copyInFailureOf(error42) {
   const seen = /* @__PURE__ */ new Set();
-  const read = (error42) => {
-    let current = error42;
+  const read = (error43) => {
+    let current = error43;
     while (current != null && typeof current === "object" && seen.size < 16 && !seen.has(current)) {
       seen.add(current);
       if (current instanceof SandBoxStoreSyncError && current.copyInFailureCode != null) {
@@ -48,7 +48,7 @@ function copyInFailureOf(error41) {
     }
     return { code: "unknown" };
   };
-  return read(error41);
+  return read(error42);
 }
 function copyInFailureClassOf(failure2) {
   switch (failure2.code) {

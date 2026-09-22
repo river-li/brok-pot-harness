@@ -46,9 +46,9 @@ async function readCloudAgentWatch(clients, bcId) {
         subscriptions: response.subscriptions.map(toSandCloudAgentSubscription),
         watchers: { kind: "read", watchers: [] }
       }),
-      (error41) => ({
+      (error42) => ({
         kind: "failed",
-        reason: classifyReadFailure(error41)
+        reason: classifyReadFailure(error42)
       })
     ),
     clients.grokBot.getGrokBotCloudAgentWatchers(new GetGrokBotCloudAgentWatchersRequest({ bcId: trimmed })).then(
@@ -56,9 +56,9 @@ async function readCloudAgentWatch(clients, bcId) {
         kind: "read",
         watchers: response.watchers.map(toSandCloudAgentWatcher)
       }),
-      (error41) => ({
+      (error42) => ({
         kind: "failed",
-        reason: classifyReadFailure(error41)
+        reason: classifyReadFailure(error42)
       })
     )
   ]);

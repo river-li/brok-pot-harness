@@ -24,10 +24,10 @@ function resolveTls(env) {
   }
   try {
     return { cert: (0, import_node_fs24.readFileSync)(certPath), key: (0, import_node_fs24.readFileSync)(keyPath) };
-  } catch (error41) {
+  } catch (error42) {
     throw new SandGatewayConfigError(
-      `Failed to read gateway TLS cert/key (${certPath}, ${keyPath}): ${String(error41)}`,
-      { cause: error41 }
+      `Failed to read gateway TLS cert/key (${certPath}, ${keyPath}): ${String(error42)}`,
+      { cause: error42 }
     );
   }
 }

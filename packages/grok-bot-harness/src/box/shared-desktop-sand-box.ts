@@ -19,7 +19,7 @@ var ASSIGNMENTS_LOAD_RETRY_POLICY = {
   maxAttempts: ASSIGNMENTS_LOAD_MAX_ATTEMPTS,
   initialDelayMs: ASSIGNMENTS_LOAD_RETRY_INTERVAL_MS,
   maxDelayMs: ASSIGNMENTS_LOAD_RETRY_INTERVAL_MS,
-  shouldRetry: (error41) => error41 instanceof AssignmentsNotReadyError
+  shouldRetry: (error42) => error42 instanceof AssignmentsNotReadyError
 };
 var DEFAULT_SHARED_BOX_ID = "shared";
 var SHARED_DESKTOP_ASSIGNMENTS_BOX_PATH = "/home/box/.sand-window-assignments.json";
@@ -94,9 +94,9 @@ var SharedDesktopSandBox = class {
             this.sharedBoxId,
             SHARED_DESKTOP_ASSIGNMENTS_BOX_PATH
           );
-        } catch (error41) {
-          if (error41 instanceof BoxFileUnreadableError) return null;
-          throw new AssignmentsNotReadyError({ kind: "download-failed", error: error41 });
+        } catch (error42) {
+          if (error42 instanceof BoxFileUnreadableError) return null;
+          throw new AssignmentsNotReadyError({ kind: "download-failed", error: error42 });
         }
         const parsed2 = parseAssignments(bytes, this.maxWindowCount);
         if (parsed2.assignments.size === 0 && (bytes.length === 0 || parsed2.isCorrupt)) {
@@ -106,9 +106,9 @@ var SharedDesktopSandBox = class {
       });
       if (result == null) return;
       loaded = result;
-    } catch (error41) {
-      const failure2 = error41 instanceof RetryExhaustedError ? error41.cause : error41;
-      if (!(failure2 instanceof AssignmentsNotReadyError)) throw error41;
+    } catch (error42) {
+      const failure2 = error42 instanceof RetryExhaustedError ? error42.cause : error42;
+      if (!(failure2 instanceof AssignmentsNotReadyError)) throw error42;
       if (failure2.retryOutcome.kind === "download-failed") throw failure2.retryOutcome.error;
       loaded = failure2.retryOutcome.parsed;
     }
@@ -138,12 +138,12 @@ var SharedDesktopSandBox = class {
         SHARED_DESKTOP_ASSIGNMENTS_BOX_PATH
       );
       return parseAssignments(bytes, this.maxWindowCount);
-    } catch (error41) {
-      if (!(error41 instanceof BoxFileUnreadableError)) {
-        process.stderr.write(
-          `sand.box.window_assignment_refresh_failed error_class=${errorLogTag(error41)}
-`
-        );
+    } catch (error42) {
+      if (!(error42 instanceof BoxFileUnreadableError)) {
+        reportHostDiagnosticOrStderr({
+          kind: "box_window_assignment_refresh_failed",
+          errorClass: errorLogTag(error42)
+        });
       }
       return void 0;
     }
@@ -153,9 +153,9 @@ var SharedDesktopSandBox = class {
     this.assignmentsLoad ??= this.loadPersistedAssignments(ctx);
     try {
       await this.assignmentsLoad;
-    } catch (error41) {
+    } catch (error42) {
       this.assignmentsLoad = void 0;
-      throw error41;
+      throw error42;
     }
   }
   async adoptPersistedAssignment(ctx, agentId) {
@@ -207,10 +207,10 @@ var SharedDesktopSandBox = class {
             JSON.stringify({ assignments: snapshot, tokens: tokenSnapshot })
           )
         );
-      } catch (error41) {
+      } catch (error42) {
         reportHostDiagnostic({
           kind: "window_assignment_persist_failed",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
     });
@@ -255,11 +255,11 @@ var SharedDesktopSandBox = class {
     if (shouldTearDownFork && windowIndex !== void 0) {
       try {
         await this.inner.releaseWindow?.(ctx, this.sharedBoxId, windowIndex);
-      } catch (error41) {
-        process.stderr.write(
-          `sand.box.fork_window_release_failed error_class=${errorLogTag(error41)}
-`
-        );
+      } catch (error42) {
+        reportHostDiagnosticOrStderr({
+          kind: "box_fork_window_release_failed",
+          errorClass: errorLogTag(error42)
+        });
       }
     }
     if (opts.isNewAssignment) {
@@ -304,8 +304,8 @@ var SharedDesktopSandBox = class {
       window2 = await this.inner.ensureWindow(ctx, this.sharedBoxId, adopted.windowIndex, {
         ownerToken: this.agentWindowTokens.get(agentId)
       });
-    } catch (error41) {
-      if (error41 instanceof SandBoxNoMonitorAvailableError) {
+    } catch (error42) {
+      if (error42 instanceof SandBoxNoMonitorAvailableError) {
         this.forgetForeignFork(ctx, agentId, adopted.windowIndex);
       } else if (this.agentWindows.get(agentId) === adopted.windowIndex) {
         this.downForks.add(agentId);
@@ -353,8 +353,8 @@ var SharedDesktopSandBox = class {
       window2 = await this.inner.ensureWindow(ctx, this.sharedBoxId, windowIndex, {
         ownerToken: this.agentWindowTokens.get(agentId)
       });
-    } catch (error41) {
-      if (error41 instanceof SandBoxNoMonitorAvailableError) {
+    } catch (error42) {
+      if (error42 instanceof SandBoxNoMonitorAvailableError) {
         const reattached = await this.reattachAdoptedFork(ctx, agentId, primary);
         if (reattached !== void 0) return reattached;
         this.forgetForeignFork(ctx, agentId, windowIndex);
@@ -386,8 +386,8 @@ var SharedDesktopSandBox = class {
   async applyEnvironment(ctx, update) {
     await boxApplyEnvironment(this.inner, ctx, update);
   }
-  async loadMcpServers(ctx, configJson) {
-    return await boxLoadMcpServers(this.inner, ctx, configJson);
+  async loadMcpServers(ctx, configJson, options2) {
+    return await boxLoadMcpServers(this.inner, ctx, configJson, options2);
   }
   async mcpResourceAccessor(ctx) {
     return await boxMcpResourceAccessor(this.inner, ctx);
@@ -401,11 +401,11 @@ var SharedDesktopSandBox = class {
       const windowIndex = this.agentWindows.get(agentId);
       if (windowIndex === void 0 || isPrimaryWindowIndex(windowIndex)) return;
       await this.ensureReady(ctx, agentId);
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "window_mcp_host",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }
@@ -423,11 +423,11 @@ var SharedDesktopSandBox = class {
       window2 = await this.inner.ensureWindow(ctx, this.sharedBoxId, windowIndex, {
         ownerToken: this.agentWindowTokens.get(agentId)
       });
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "window_mcp_host",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
       return void 0;
     }

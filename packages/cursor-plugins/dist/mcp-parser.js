@@ -1,4 +1,4 @@
-var __awaiter48 = function(thisArg, _arguments, P2, generator) {
+var __awaiter50 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -26,12 +26,7 @@ var __awaiter48 = function(thisArg, _arguments, P2, generator) {
   });
 };
 var PLUGIN_MCP_CONFIG_FILE_NAMES = [".mcp.json", "mcp.json"];
-var MCP_NON_SERVER_METADATA_KEYS = [
-  "author",
-  "owner",
-  "source",
-  "metadata"
-];
+var MCP_NON_SERVER_METADATA_KEYS = ["author", "owner", "source", "metadata"];
 var NON_SERVER_METADATA_KEY_SET = new Set(MCP_NON_SERVER_METADATA_KEYS.map((key) => key.toLowerCase()));
 function isMcpMetadataKey(key) {
   return NON_SERVER_METADATA_KEY_SET.has(key.toLowerCase());
@@ -115,11 +110,11 @@ function parsePluginMcpConfig(content, installPath, options2) {
     const data = parse9(content);
     const mcpSchemaId = readSchemaId(data);
     if (mcpSchemaId !== void 0) {
-      const logger107 = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.log) !== null && _a19 !== void 0 ? _a19 : noopPluginMetricsLogger;
+      const logger108 = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.log) !== null && _a19 !== void 0 ? _a19 : noopPluginMetricsLogger;
       if (resolveSchemaVersion(mcpSchemaId).kind === "unsupported") {
-        logger107.log("warn", `mcp.json declares an unrecognized $schema, loading anyway: ${mcpSchemaId}`);
+        logger108.log("warn", `mcp.json declares an unrecognized $schema, loading anyway: ${mcpSchemaId}`);
       } else if (schemaVersionsDisagree(options2 === null || options2 === void 0 ? void 0 : options2.pluginSchemaId, mcpSchemaId)) {
-        logger107.log("warn", `mcp.json $schema ${mcpSchemaId} disagrees with plugin.json $schema ${options2 === null || options2 === void 0 ? void 0 : options2.pluginSchemaId}, loading anyway`);
+        logger108.log("warn", `mcp.json $schema ${mcpSchemaId} disagrees with plugin.json $schema ${options2 === null || options2 === void 0 ? void 0 : options2.pluginSchemaId}, loading anyway`);
       }
     }
     const parsed2 = mcpConfigSchema.safeParse(data);
@@ -153,7 +148,7 @@ function mergeResolvedServers(target, servers, sourcePath) {
   }
 }
 function resolveManifestMcpServersWithReader(mcpServers_1, readFileContent_1) {
-  return __awaiter48(this, arguments, void 0, function* (mcpServers, readFileContent, options2 = {}) {
+  return __awaiter50(this, arguments, void 0, function* (mcpServers, readFileContent, options2 = {}) {
     var _a19, _b2;
     const toSourcePath = (_a19 = options2.toSourcePath) !== null && _a19 !== void 0 ? _a19 : ((p2) => p2);
     const installPathForExpansion = (_b2 = options2.installPathForExpansion) !== null && _b2 !== void 0 ? _b2 : "";
@@ -161,7 +156,7 @@ function resolveManifestMcpServersWithReader(mcpServers_1, readFileContent_1) {
       mcpServers: {},
       mcpServerSourcePaths: {}
     };
-    const loadFromPath = (rawPath) => __awaiter48(this, void 0, void 0, function* () {
+    const loadFromPath = (rawPath) => __awaiter50(this, void 0, void 0, function* () {
       const normalized = rawPath.replace(/^\.\//, "");
       if (!isPathSafe(normalized)) {
         return;
@@ -199,7 +194,7 @@ function resolveManifestMcpServersWithReader(mcpServers_1, readFileContent_1) {
   });
 }
 function resolvePluginMcpConfigFromReader(readFileContent_1, manifestMcpServers_1, manifestSourcePath_1) {
-  return __awaiter48(this, arguments, void 0, function* (readFileContent, manifestMcpServers, manifestSourcePath, options2 = {}) {
+  return __awaiter50(this, arguments, void 0, function* (readFileContent, manifestMcpServers, manifestSourcePath, options2 = {}) {
     var _a19, _b2, _c2, _d;
     const toSourcePath = (_a19 = options2.toSourcePath) !== null && _a19 !== void 0 ? _a19 : ((p2) => p2);
     const installPathForExpansion = (_b2 = options2.installPathForExpansion) !== null && _b2 !== void 0 ? _b2 : "";
@@ -247,7 +242,7 @@ function resolvePluginMcpConfigFromReader(readFileContent_1, manifestMcpServers_
   });
 }
 function resolvePluginMcpConfigWithManifestLookup(readFileContent_1) {
-  return __awaiter48(this, arguments, void 0, function* (readFileContent, options2 = {}) {
+  return __awaiter50(this, arguments, void 0, function* (readFileContent, options2 = {}) {
     var _a19;
     const toSourcePath = (_a19 = options2.toSourcePath) !== null && _a19 !== void 0 ? _a19 : ((p2) => p2);
     let manifestMcpServers;

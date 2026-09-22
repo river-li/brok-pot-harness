@@ -382,9 +382,7 @@ function checkForAgentSingleMessageLooping(params) {
     period: loopInfo.period,
     repetitions: loopInfo.repetitions
   });
-  const evidenceFingerprint = fingerprintAgentLoopEvidence(loopInfo.loopKind, [
-    loopInfo.pattern
-  ]);
+  const evidenceFingerprint = fingerprintAgentLoopEvidence(loopInfo.loopKind, [loopInfo.pattern]);
   reportLoopObservation(params.reporting, {
     loopKind: loopInfo.loopKind,
     repetitions: loopInfo.repetitions,

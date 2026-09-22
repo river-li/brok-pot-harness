@@ -34,10 +34,7 @@ var RegistryResourceAccessor = class {
     return (_a19 = this.resources.get(resource.symbol)) === null || _a19 === void 0 ? void 0 : _a19.value;
   }
   entries() {
-    return Array.from(this.resources.values()).map((value) => [
-      value.resource,
-      value.value
-    ]);
+    return Array.from(this.resources.values()).map((value) => [value.resource, value.value]);
   }
 };
 var CombinedResourceAccessor = class {

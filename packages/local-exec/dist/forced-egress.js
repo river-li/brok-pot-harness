@@ -74,10 +74,7 @@ function policyOverrides() {
   return cachedPolicyOverrides;
 }
 function compileConfigurablePattern(overrideEnv, extraEnv, options2 = {}) {
-  const parts = [
-    requiredRegexSource(overrideEnv),
-    requiredRegexSource(extraEnv)
-  ].filter((part) => part !== void 0).map((part) => `(?:${part})`);
+  const parts = [requiredRegexSource(overrideEnv), requiredRegexSource(extraEnv)].filter((part) => part !== void 0).map((part) => `(?:${part})`);
   if (parts.length === 0) {
     return null;
   }

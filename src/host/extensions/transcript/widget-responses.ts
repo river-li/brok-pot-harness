@@ -15,11 +15,11 @@ var WidgetResponses = class {
         void this.expireCredentialRequest({
           agentId: args.agentId,
           entryId: args.entryId
-        }).catch((error41) => {
+        }).catch((error42) => {
           reportHostDiagnostic({
             kind: "fallback_taken",
             stage: "transcript_manager",
-            errorClass: errorLogTag(error41)
+            errorClass: errorLogTag(error42)
           });
         });
       }
@@ -30,11 +30,11 @@ var WidgetResponses = class {
     let agentIds;
     try {
       agentIds = await this.tm.sessionStore.listAgentIds();
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "transcript_manager",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
       return;
     }
@@ -44,11 +44,11 @@ var WidgetResponses = class {
       let session;
       try {
         session = liveSession ?? await this.tm.sessionStore.openSession(agentId);
-      } catch (error41) {
+      } catch (error42) {
         reportHostDiagnostic({
           kind: "fallback_taken",
           stage: "transcript_manager",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
         continue;
       }
@@ -63,11 +63,11 @@ var WidgetResponses = class {
             expiresAtMs: entry.message.credentialRequest.expiresAtMs
           });
         }
-      } catch (error41) {
+      } catch (error42) {
         reportHostDiagnostic({
           kind: "fallback_taken",
           stage: "transcript_manager",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       } finally {
         if (liveSession == null) {
@@ -203,10 +203,10 @@ ${modelPrompt}` : modelPrompt, {
         offRecordMessageId: `${SAND_WIDGET_ANSWER_MESSAGE_ID_PREFIX}${entryId}`,
         awaitTurn: false
       });
-    } catch (error41) {
+    } catch (error42) {
       if (guardApplied) return { accepted: true };
       this.rollbackWidgetResponse(entryId);
-      throw error41;
+      throw error42;
     }
     return { accepted: true };
   }
@@ -228,10 +228,10 @@ ${modelPrompt}` : modelPrompt, {
     return true;
   }
   async expireAllPendingAutoReviewApprovalCards() {
-    const recordSweepFailure = (stage, error41) => {
+    const recordSweepFailure = (stage, error42) => {
       this.tm.telemetry.reportAutoReviewExpireSweepFailed({
         stage,
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     };
     try {
@@ -245,8 +245,8 @@ ${modelPrompt}` : modelPrompt, {
       let agentIds;
       try {
         agentIds = await this.tm.sessionStore.listAgentIds();
-      } catch (error41) {
-        recordSweepFailure("list_agents", error41);
+      } catch (error42) {
+        recordSweepFailure("list_agents", error42);
         return;
       }
       for (const agentId of agentIds) {
@@ -254,14 +254,14 @@ ${modelPrompt}` : modelPrompt, {
         let expired;
         try {
           expired = await this.tm.sessionStore.expirePendingAutoReviewApprovals(agentId);
-        } catch (error41) {
-          recordSweepFailure("expire_agent", error41);
+        } catch (error42) {
+          recordSweepFailure("expire_agent", error42);
           continue;
         }
         if (expired.length > 0) void this.tm.roster.emitAgentUpdate(agentId);
       }
-    } catch (error41) {
-      recordSweepFailure("sweep", error41);
+    } catch (error42) {
+      recordSweepFailure("sweep", error42);
     }
   }
   settlePendingAutoReviewApprovalsOnSession(args) {
@@ -302,11 +302,11 @@ ${modelPrompt}` : modelPrompt, {
     return expired.length > 0 ? "retired" : "already-settled";
   }
   async expireAllPendingLocalToolPermissionCards(options2) {
-    const reportSweepFailure = (error41) => {
+    const reportSweepFailure = (error42) => {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "transcript_manager",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     };
     const ifPendingBeforeMs = options2?.ifPendingBeforeMs;
@@ -324,8 +324,8 @@ ${modelPrompt}` : modelPrompt, {
       let agentIds;
       try {
         agentIds = await this.tm.sessionStore.listAgentIds();
-      } catch (error41) {
-        reportSweepFailure(error41);
+      } catch (error42) {
+        reportSweepFailure(error42);
         return;
       }
       for (const agentId of agentIds) {
@@ -337,22 +337,22 @@ ${modelPrompt}` : modelPrompt, {
             ifPendingBeforeMs,
             unlessRequestId
           });
-        } catch (error41) {
-          reportSweepFailure(error41);
+        } catch (error42) {
+          reportSweepFailure(error42);
           continue;
         }
         if (expired.length > 0) void this.tm.roster.emitAgentUpdate(agentId);
       }
-    } catch (error41) {
-      reportSweepFailure(error41);
+    } catch (error42) {
+      reportSweepFailure(error42);
     }
   }
   async expireAllPendingCookieOriginApprovalCards(options2) {
-    const reportSweepFailure = (error41) => {
+    const reportSweepFailure = (error42) => {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "transcript_manager",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     };
     const ifPendingBeforeMs = options2?.ifPendingBeforeMs;
@@ -369,8 +369,8 @@ ${modelPrompt}` : modelPrompt, {
       let agentIds;
       try {
         agentIds = await this.tm.sessionStore.listAgentIds();
-      } catch (error41) {
-        reportSweepFailure(error41);
+      } catch (error42) {
+        reportSweepFailure(error42);
         return;
       }
       for (const agentId of agentIds) {
@@ -382,14 +382,14 @@ ${modelPrompt}` : modelPrompt, {
             ifPendingBeforeMs,
             unlessRequestId
           });
-        } catch (error41) {
-          reportSweepFailure(error41);
+        } catch (error42) {
+          reportSweepFailure(error42);
           continue;
         }
         if (expired.length > 0) void this.tm.roster.emitAgentUpdate(agentId);
       }
-    } catch (error41) {
-      reportSweepFailure(error41);
+    } catch (error42) {
+      reportSweepFailure(error42);
     }
   }
   settlePendingCookieOriginApprovalsOnSession(args) {
@@ -504,11 +504,11 @@ ${modelPrompt}` : modelPrompt, {
     return retired;
   }
   async expireAllPendingVirtualCardApprovalCards(options2) {
-    const reportSweepFailure = (error41) => {
+    const reportSweepFailure = (error42) => {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "transcript_manager",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     };
     const ifPendingBeforeMs = options2?.ifPendingBeforeMs;
@@ -526,8 +526,8 @@ ${modelPrompt}` : modelPrompt, {
       let agentIds;
       try {
         agentIds = await this.tm.sessionStore.listAgentIds();
-      } catch (error41) {
-        reportSweepFailure(error41);
+      } catch (error42) {
+        reportSweepFailure(error42);
         return;
       }
       for (const agentId of agentIds) {
@@ -539,12 +539,12 @@ ${modelPrompt}` : modelPrompt, {
             unlessRequestId
           });
           if (expired.length > 0) void this.tm.roster.emitAgentUpdate(agentId);
-        } catch (error41) {
-          reportSweepFailure(error41);
+        } catch (error42) {
+          reportSweepFailure(error42);
         }
       }
-    } catch (error41) {
-      reportSweepFailure(error41);
+    } catch (error42) {
+      reportSweepFailure(error42);
     }
   }
   async dismissWidget({
@@ -590,7 +590,7 @@ ${modelPrompt}` : modelPrompt, {
       if (entry?.kind !== "send-message" || entry.message.type !== "credential-request" || entry.credentialResolution != null || this.tm.clock.now() < entry.message.credentialRequest.expiresAtMs) {
         return;
       }
-      const request3 = entry.message.credentialRequest;
+      const request5 = entry.message.credentialRequest;
       const markExpired = (candidate) => candidate.kind === "send-message" && candidate.message.type === "credential-request" && candidate.credentialResolution == null ? { ...candidate, credentialResolution: "failed", wakeOutcomeUnseen: true } : candidate;
       const persisted = session.db.updateTranscriptEntry(args.entryId, markExpired);
       if (persisted == null) return;
@@ -603,7 +603,7 @@ ${modelPrompt}` : modelPrompt, {
       await this.tm.boxHandoff.resumeWithHiddenPrompt(
         args.agentId,
         buildCredentialResolvedAck({
-          request: request3,
+          request: request5,
           resolution: "failed",
           detail: "The credential request expired before approval."
         }),
@@ -621,11 +621,11 @@ ${modelPrompt}` : modelPrompt, {
     let outcome;
     try {
       outcome = await this.tm.requestCredentialAutoFill(args);
-    } catch (error41) {
+    } catch (error42) {
       reportHostDiagnostic({
         kind: "fallback_taken",
         stage: "transcript_manager",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
       outcome = { accepted: false };
     }
@@ -652,14 +652,14 @@ ${modelPrompt}` : modelPrompt, {
     if (entry?.kind !== "send-message" || entry.message.type !== "credential-request" || entry.credentialResolution != null) {
       return null;
     }
-    const request3 = entry.message.credentialRequest;
-    if (this.tm.clock.now() < request3.expiresAtMs) {
-      return request3;
+    const request5 = entry.message.credentialRequest;
+    if (this.tm.clock.now() < request5.expiresAtMs) {
+      return request5;
     }
     await this.settleCredentialRequest({
       session,
       entryId: args.entryId,
-      request: request3,
+      request: request5,
       resolution: "failed",
       detail: "The credential request expired before approval."
     });
@@ -673,13 +673,13 @@ ${modelPrompt}` : modelPrompt, {
     if (entry?.kind !== "send-message" || entry.message.type !== "credential-request" || entry.credentialResolution != null) {
       return false;
     }
-    const request3 = entry.message.credentialRequest;
-    const requestIsCurrent = this.tm.clock.now() < request3.expiresAtMs;
+    const request5 = entry.message.credentialRequest;
+    const requestIsCurrent = this.tm.clock.now() < request5.expiresAtMs;
     if (requestIsCurrent) {
       return await this.settleCredentialRequest({
         session,
         entryId: args.entryId,
-        request: request3,
+        request: request5,
         resolution: args.resolution,
         ...args.detail == null ? {} : { detail: args.detail }
       });
@@ -687,7 +687,7 @@ ${modelPrompt}` : modelPrompt, {
     return await this.settleCredentialRequest({
       session,
       entryId: args.entryId,
-      request: request3,
+      request: request5,
       resolution: "failed",
       detail: "The credential request expired before approval."
     });
@@ -733,8 +733,8 @@ ${modelPrompt}` : modelPrompt, {
     if (entry == null || entry.kind !== "send-message" || entry.message.type !== "secret-request" || entry.secretProvided === true) {
       return;
     }
-    const request3 = entry.message.secretRequest;
-    if (!await this.routeSecret(session.id, request3.target, trimmed)) {
+    const request5 = entry.message.secretRequest;
+    if (!await this.routeSecret(session.id, request5.target, trimmed)) {
       this.tm.trayErrors.pushError({
         agentId: session.id,
         ...hostTrayTitle({ kind: "secret_store_failed" }),
@@ -744,14 +744,14 @@ ${modelPrompt}` : modelPrompt, {
       try {
         await this.tm.boxHandoff.resumeWithHiddenPrompt(
           session.id,
-          buildSecretSaveFailedAck(request3, failed2.message),
+          buildSecretSaveFailedAck(request5, failed2.message),
           "resume_after_secret_submission_failed"
         );
-      } catch (error41) {
+      } catch (error42) {
         reportHostDiagnostic({
           kind: "fallback_taken",
           stage: "transcript_manager",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
       throw failed2;
@@ -762,7 +762,7 @@ ${modelPrompt}` : modelPrompt, {
     session.db.updateTranscriptEntry(entryId, markProvided);
     await this.tm.boxHandoff.resumeWithHiddenPrompt(
       session.id,
-      buildSecretProvidedAck(request3),
+      buildSecretProvidedAck(request5),
       "resume_after_secret_submission_failed",
       { wakeOutcomeEntryIds: [entryId] }
     );

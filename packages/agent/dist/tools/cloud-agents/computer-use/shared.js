@@ -49,8 +49,8 @@ function createToolCallProto(computerUseTool) {
     }
   });
 }
-function serializeComputerUseError(error41) {
-  const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+function serializeComputerUseError(error42) {
+  const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
   return createToolCallProto(new ComputerUseToolCall({
     result: new ComputerUseResult({
       result: {
@@ -93,11 +93,11 @@ async function renderComputerUseResult(_ctx, output, includeCursorPosition = fal
     }
     return { content, isError: false };
   } else if (result.case === "error") {
-    const { error: error41, log: log4 } = result.value;
+    const { error: error42, log: log4 } = result.value;
     if (log4) {
       content.push({ type: "text", text: log4 });
     }
-    content.push({ type: "text", text: `Error: ${error41}` });
+    content.push({ type: "text", text: `Error: ${error42}` });
     return { content, isError: true };
   }
   return createStringResult("Unknown error", true);

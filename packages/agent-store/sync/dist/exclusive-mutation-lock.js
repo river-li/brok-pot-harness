@@ -1,4 +1,4 @@
-var __awaiter4 = function(thisArg, _arguments, P2, generator) {
+var __awaiter5 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -30,7 +30,7 @@ function exclusiveMutationLockPathForFilesDir(filesDir) {
   return path6.join(path6.dirname(path6.resolve(filesDir)), AGENT_STORE_SYNC_DIR_NAME, AGENT_STORE_EXCLUSIVE_MUTATION_LOCK_FILE_NAME);
 }
 function readAgentStoreExclusiveMutationClaimOwner(args) {
-  return __awaiter4(this, void 0, void 0, function* () {
+  return __awaiter5(this, void 0, void 0, function* () {
     return yield readActiveStoreLockOwner({
       lockPath: exclusiveMutationLockPathForFilesDir(args.filesDir)
     });

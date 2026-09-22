@@ -36,6 +36,4 @@ var PERMISSION_HOOK_STEPS = [
   HookStep.subagentStart,
   HookStep.preToolUse
 ];
-var WORKSPACE_LIFECYCLE_STEPS = [
-  HookStep.workspaceOpen
-];
+var WORKSPACE_LIFECYCLE_STEPS = [HookStep.workspaceOpen];

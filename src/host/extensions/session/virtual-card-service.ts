@@ -4,15 +4,15 @@ init_utils_pb();
 init_esm2();
 init_cursor_inference();
 var RAISE_TIMEOUT_MS = 15e3;
-function describeRaiseFailure(error41) {
-  if (!(error41 instanceof ConnectError)) {
-    return error41 instanceof Error ? error41.message : String(error41);
+function describeRaiseFailure(error42) {
+  if (!(error42 instanceof ConnectError)) {
+    return error42 instanceof Error ? error42.message : String(error42);
   }
-  for (const entry of error41.findDetails(ErrorDetails)) {
+  for (const entry of error42.findDetails(ErrorDetails)) {
     const detail = entry.details?.detail ?? "";
     if (detail.length > 0) return detail;
   }
-  return error41.rawMessage.length > 0 ? error41.rawMessage : error41.message;
+  return error42.rawMessage.length > 0 ? error42.rawMessage : error42.message;
 }
 var VirtualCardService = class {
   constructor(deps) {
@@ -26,20 +26,20 @@ var VirtualCardService = class {
   forget(agentId) {
     this.serverReservationCache.delete(agentId);
   }
-  async start(request3) {
+  async start(request5) {
     let outcome;
     try {
       outcome = await (this.deps.raise ?? ((args) => this.raiseOverBackend(args)))({
-        agentId: request3.agentId,
-        card: request3.card
+        agentId: request5.agentId,
+        card: request5.card
       });
-    } catch (error41) {
-      return { kind: "failed", reason: describeRaiseFailure(error41) };
+    } catch (error42) {
+      return { kind: "failed", reason: describeRaiseFailure(error42) };
     }
     if (outcome.kind === "started") {
-      this.serverReservationCache.set(request3.agentId, {
+      this.serverReservationCache.set(request5.agentId, {
         requestId: outcome.requestId,
-        card: request3.card,
+        card: request5.card,
         requestedAtMs: Date.now()
       });
     }

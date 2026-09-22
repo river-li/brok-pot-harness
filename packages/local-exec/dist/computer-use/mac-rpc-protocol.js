@@ -74,11 +74,11 @@ var responseSchema = external_exports.union([
     sessionId: external_exports.never().optional()
   }).strip()
 ]);
-function parseJSON(raw, description10) {
+function parseJSON(raw, description9) {
   try {
     return JSON.parse(raw);
   } catch {
-    throw new MacRPCProtocolError(`local-cua ${description10} is not valid JSON`);
+    throw new MacRPCProtocolError(`local-cua ${description9} is not valid JSON`);
   }
 }
 var MacRPCProtocol = {

@@ -158,11 +158,11 @@ var RunnerRegistry = class {
         ...observation
       })
     );
-    runner.setTurnRetryHandler(({ error: error41, ...rest }) => {
+    runner.setTurnRetryHandler(({ error: error42, ...rest }) => {
       this.tm.telemetry.reportTurnRetry({
         conversationId: session.id,
         ...rest,
-        error: classifyAgentError(error41)
+        error: classifyAgentError(error42)
       });
     });
     runner.setToolCallDiagnosticHandler(

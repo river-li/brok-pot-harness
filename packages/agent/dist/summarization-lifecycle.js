@@ -7,10 +7,7 @@ function eventBase(lifecycle) {
   };
 }
 function liveLifecycle(source) {
-  if ("status" in source) {
-    return source;
-  }
-  return source.kind === "live_generation" ? source.lifecycle : void 0;
+  return "status" in source ? source : source.lifecycle;
 }
 function createLiveSummaryLifecycle(options2) {
   return {
@@ -21,6 +18,9 @@ function createLiveSummaryLifecycle(options2) {
     emittedDeferrals: /* @__PURE__ */ new Set(),
     status: "created"
   };
+}
+function resumeSummaryLifecycle(options2) {
+  return { ...options2, emittedDeferrals: /* @__PURE__ */ new Set(), status: "completed" };
 }
 function emitSummaryLifecycleStarted(ctx, source) {
   const lifecycle = liveLifecycle(source);

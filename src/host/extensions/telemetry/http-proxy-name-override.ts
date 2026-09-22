@@ -31,8 +31,8 @@ function createHttpProxyNameOverrideStore(path31 = getHttpProxyNameOverridePath(
       let raw;
       try {
         raw = await (0, import_promises72.readFile)(path31, "utf8");
-      } catch (error41) {
-        const reason = errorLogTag(error41);
+      } catch (error42) {
+        const reason = errorLogTag(error42);
         return reason.includes("ENOENT") ? { kind: "absent" } : { kind: "unavailable", reason };
       }
       const override = parseOverride(raw);
@@ -45,8 +45,8 @@ function createHttpProxyNameOverrideStore(path31 = getHttpProxyNameOverridePath(
       try {
         await writeFileAtomic(path31, JSON.stringify(record2));
         return { kind: "written" };
-      } catch (error41) {
-        return { kind: "unavailable", reason: errorLogTag(error41) };
+      } catch (error42) {
+        return { kind: "unavailable", reason: errorLogTag(error42) };
       }
     }
   };

@@ -91,7 +91,10 @@ function ffmpegScreenshotScaleArgs(displayWidth, displayHeight, apiWidth, apiHei
   return ["-vf", `scale=${apiWidth}:${apiHeight}`];
 }
 async function detectDisplay(display) {
-  const { stdout } = await spawnWorkload(execFileUtf8Async, "xrandr", ["--display", display], { timeout: 5e3, encoding: "utf8" });
+  const { stdout } = await spawnWorkload(execFileUtf8Async, "xrandr", ["--display", display], {
+    timeout: 5e3,
+    encoding: "utf8"
+  });
   const info2 = parseXrandrOutput(stdout);
   const resolution = resolutionConfigForDisplay(info2.width, info2.height);
   return {

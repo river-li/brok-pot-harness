@@ -1,6 +1,6 @@
-init_dist3();
+init_dist4();
 init_zod();
-var logger85 = createLogger("@anysphere/agent/tools/read-lints");
+var logger86 = createLogger("@anysphere/agent/tools/read-lints");
 var readLintsParametersSchema = external_exports.object({
   paths: lenientArray(external_exports.array(external_exports.string()), {
     field: "paths",

@@ -43,6 +43,7 @@ function createSubagentRuntime(host, timing) {
       ...titleFields,
       startedAtMs,
       ...params.lineage != null ? { lineage: params.lineage } : {},
+      ...params.eventSequence === void 0 ? {} : { eventSequence: params.eventSequence },
       ...params.quietOrigin != null ? { quietOrigin: params.quietOrigin } : {},
       ...params.automationRunUuid != null ? { automationRunUuid: params.automationRunUuid } : {}
     });
@@ -80,8 +81,8 @@ function createSubagentRuntime(host, timing) {
     let turn;
     try {
       turn = runTurn();
-    } catch (error41) {
-      turn = Promise.reject(error41);
+    } catch (error42) {
+      turn = Promise.reject(error42);
     }
     const promise2 = turn.then(
       (result) => {
@@ -111,10 +112,10 @@ function createSubagentRuntime(host, timing) {
         }
         return settleBackgroundSubagentTurn(subagentAgentId, outcome);
       },
-      (error41) => settleBackgroundSubagentTurn(subagentAgentId, {
+      (error42) => settleBackgroundSubagentTurn(subagentAgentId, {
         status: "error",
-        error: errorMessage(error41),
-        cause: error41
+        error: errorMessage(error42),
+        cause: error42
       })
     );
     backgroundSubagentRuns.set(subagentAgentId, promise2);
@@ -162,7 +163,6 @@ function createSubagentRuntime(host, timing) {
         const prompt = formatSteerPrompt(pendingSteer);
         return meta == null ? runner.run(prompt) : runner.run(prompt, subagentSteerRunOptions(meta));
       });
-      return;
     }
     pendingSubagentSteers.delete(subagentAgentId);
     const cleanup = abortCleanups.get(subagentAgentId);
@@ -187,9 +187,9 @@ function createSubagentRuntime(host, timing) {
     if (runner != null) {
       try {
         subagentOutlines.set(subagentAgentId, await runner.getResolvedOutline());
-      } catch (error41) {
+      } catch (error42) {
         process.stderr.write(
-          `sand.subagent.outline_resolve_failed error_class=${errorLogTag(error41)}
+          `sand.subagent.outline_resolve_failed error_class=${errorLogTag(error42)}
 `
         );
       }
@@ -223,8 +223,8 @@ function createSubagentRuntime(host, timing) {
         host.onComputerUseUsage?.({ ...reportBase, outcome: "completed" });
       }
       if (isComputerUseSubagentType(meta.subagentType) && host.actionAuditor != null && runner != null) {
-        host.actionAuditor.record(
-          computerUseSessionAuditRecord({
+        host.actionAuditor.record({
+          ...computerUseSessionAuditRecord({
             agentId: host.getConversationId(),
             boxId: host.resolveBoxId(),
             lineage: meta.lineage,
@@ -232,8 +232,9 @@ function createSubagentRuntime(host, timing) {
             toolCallId: meta.toolCallId,
             actionCounts: runner.getComputerUseAuditActionCounts(),
             startedAtMs: meta.startedAtMs
-          })
-        );
+          }),
+          sequence: meta.eventSequence
+        });
       }
     }
     if (aborted2) {
@@ -349,9 +350,9 @@ function createSubagentRuntime(host, timing) {
         } else {
           runner.interrupt(reason);
         }
-      } catch (error41) {
+      } catch (error42) {
         process.stderr.write(
-          `sand.subagent.abort_cleanup_failed subagent_agent_id=${subagentAgentId} error_class=${errorLogTag(error41)}
+          `sand.subagent.abort_cleanup_failed subagent_agent_id=${subagentAgentId} error_class=${errorLogTag(error42)}
 `
         );
       }

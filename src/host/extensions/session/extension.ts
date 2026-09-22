@@ -75,12 +75,12 @@ var sessionExtension = defineHostExtension({
     return {
       store,
       transcriptsDir: () => getSandTranscriptsDir(),
-      conversationBlobsPath: (dbPath) => (0, import_node_path143.join)((0, import_node_path143.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
+      conversationBlobsPath: (dbPath) => (0, import_node_path142.join)((0, import_node_path142.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
       pendingHandoff: (agentId) => handoff.get(agentId),
-      startHandoff: (request3) => handoff.start(request3),
+      startHandoff: (request5) => handoff.start(request5),
       endHandoff: (agentId, trigger2) => handoff.end(agentId, trigger2),
       forgetHandoff: (agentId) => handoff.forget(agentId),
-      startUserForm: (request3) => userForms.start(request3),
+      startUserForm: (request5) => userForms.start(request5),
       endUserForm: (agentId, requestId2) => userForms.end(agentId, requestId2),
       recordUserFormResolution: (report) => userForms.recordResolution(report),
       forgetUserForm: (agentId) => userForms.forget(agentId),
@@ -89,7 +89,7 @@ var sessionExtension = defineHostExtension({
       hasUserFormRemapHold: (agentId) => userForms.hasRemapHold(agentId),
       remapUserFormTargets: (args) => userForms.remap(args),
       settleUserFormRemap: (args) => userForms.settleRemap(args),
-      startVirtualCard: (request3) => virtualCards.start(request3),
+      startVirtualCard: (request5) => virtualCards.start(request5),
       pendingVirtualCard: (agentId) => virtualCards.get(agentId),
       forgetVirtualCard: (agentId) => virtualCards.forget(agentId)
     };

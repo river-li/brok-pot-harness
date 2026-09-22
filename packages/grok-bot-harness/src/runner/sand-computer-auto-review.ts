@@ -28,8 +28,10 @@ var SandComputerAutoReviewBlockedError = class extends Error {
     super(message);
     this.telemetryCode = telemetryCode;
     this.name = "SandComputerAutoReviewBlockedError";
+    this.toolCallAuditOutcome = reviewFailureAuditOutcome(telemetryCode);
   }
   telemetryCode;
+  toolCallAuditOutcome;
 };
 var SAND_COMPUTER_PAGE_STATE_CHROME_UNREACHABLE = "chrome-unreachable";
 function computeSandComputerPageStateIdentity(stdout) {
@@ -78,9 +80,9 @@ function normalizeSandComputerExactActionArgs(raw) {
   }
   return raw;
 }
-function normalizeSandComputerDescription(description10) {
-  if (description10 === void 0) return void 0;
-  const trimmed = description10.trim();
+function normalizeSandComputerDescription(description9) {
+  if (description9 === void 0) return void 0;
+  const trimmed = description9.trim();
   if (trimmed.length === 0) return void 0;
   if (trimmed.length > SAND_COMPUTER_AUTO_REVIEW_MAX_DESCRIPTION_CHARS) {
     rejectOversizedField("description", SAND_COMPUTER_AUTO_REVIEW_MAX_DESCRIPTION_CHARS);
@@ -142,7 +144,7 @@ function buildProjectPermissionsContext(args) {
   };
 }
 function buildSandComputerClassifierRiskTarget(args) {
-  const { exactAction, description: description10, boxIdentity } = args.canonicalTarget;
+  const { exactAction, description: description9, boxIdentity } = args.canonicalTarget;
   const projectPermissions = buildProjectPermissionsContext({
     personalInstructions: args.personalInstructions,
     userAutoRunInstructions: args.userAutoRunInstructions,
@@ -168,7 +170,7 @@ function buildSandComputerClassifierRiskTarget(args) {
       amount: exactAction.amount,
       duration_ms: exactAction.durationMs,
       hold_duration_ms: exactAction.holdDurationMs,
-      declared_purpose: description10,
+      declared_purpose: description9,
       box: {
         box_id: boxIdentity.boxId,
         window_generation: boxIdentity.windowGeneration,
@@ -186,13 +188,13 @@ function describeHeldGesture(base, modifiers) {
   return `${gesture.charAt(0).toUpperCase()}${gesture.slice(1)}`;
 }
 function summarizeBlockedAction(target, fingerprint, reason) {
-  const { exactAction, description: description10 } = target;
+  const { exactAction, description: description9 } = target;
   const summary = (() => {
     if (exactAction.action === "click") {
-      return `${describeHeldGesture("click", exactAction.modifiers)} at (${exactAction.x}, ${exactAction.y}) on Grok Bot's computer${description10 === void 0 ? "" : ` to ${description10.slice(0, 160)}`}`;
+      return `${describeHeldGesture("click", exactAction.modifiers)} at (${exactAction.x}, ${exactAction.y}) on Grok Bot's computer${description9 === void 0 ? "" : ` to ${description9.slice(0, 160)}`}`;
     }
     if (exactAction.action === "drag") {
-      return `${describeHeldGesture("drag", exactAction.modifiers)} from (${exactAction.x}, ${exactAction.y}) to (${exactAction.x2}, ${exactAction.y2}) on Grok Bot's computer${description10 === void 0 ? "" : ` to ${description10.slice(0, 160)}`}`;
+      return `${describeHeldGesture("drag", exactAction.modifiers)} from (${exactAction.x}, ${exactAction.y}) to (${exactAction.x2}, ${exactAction.y2}) on Grok Bot's computer${description9 === void 0 ? "" : ` to ${description9.slice(0, 160)}`}`;
     }
     if (exactAction.action === "type") {
       return summarizeSandComputerTypedText(exactAction.text ?? "");
@@ -262,8 +264,8 @@ async function runSandComputerAutoReviewPreflight(args) {
     return;
   }
   if (mode === "enforce" && requiresSandComputerDeclaredDescription(action)) {
-    const description10 = normalizeSandComputerDescription(args.description);
-    if (description10 === void 0) {
+    const description9 = normalizeSandComputerDescription(args.description);
+    if (description9 === void 0) {
       throw new SandComputerAutoReviewBlockedError(
         "Computer click and drag actions require a concise description field stating the intended UI target and purpose.",
         "invalid_arguments"

@@ -8,10 +8,10 @@ function sqliteVacuumInto(srcPath, destPath, busyTimeoutMs = DB_BUSY_TIMEOUT_MS)
   }
 }
 var LOCKED_DB_COPY_ATTEMPTS = 3;
-function classifySqliteSnapshotFailure(error41, operation, pathStage) {
-  const candidate = error41?.errcode;
+function classifySqliteSnapshotFailure(error42, operation, pathStage) {
+  const candidate = error42?.errcode;
   const sqliteCode = typeof candidate === "number" && Number.isSafeInteger(candidate) && candidate >= 0 ? candidate : void 0;
-  const systemErrno = sqliteCode === void 0 ? findSystemErrno(error41) : void 0;
+  const systemErrno = sqliteCode === void 0 ? findSystemErrno(error42) : void 0;
   const errno = brandedErrno(systemErrno);
   const primarySqliteCode = sqliteCode === void 0 ? void 0 : sqliteCode & 255;
   const isCapacityFailure = systemErrno === "ENOSPC" || systemErrno === "EDQUOT" || primarySqliteCode === 13;
@@ -20,21 +20,21 @@ function classifySqliteSnapshotFailure(error41, operation, pathStage) {
     resolvedPathStage = "staged_main";
   } else if (operation === "copy_source_sidecars" && isCapacityFailure) {
     resolvedPathStage = "staged_sidecars";
-  } else if (operation === "vacuum_into" && (isSqliteBusyError(error41) || isSqliteCorruptError(error41))) {
+  } else if (operation === "vacuum_into" && (isSqliteBusyError(error42) || isSqliteCorruptError(error42))) {
     resolvedPathStage = "source_main";
   }
   let errorClass = "unknown";
-  if (error41 instanceof TypeError) errorClass = "TypeError";
-  else if (error41 instanceof RangeError) errorClass = "RangeError";
-  else if (error41 instanceof Error) errorClass = "Error";
+  if (error42 instanceof TypeError) errorClass = "TypeError";
+  else if (error42 instanceof RangeError) errorClass = "RangeError";
+  else if (error42 instanceof Error) errorClass = "Error";
   let cause = "unknown";
-  if (isSqliteBusyError(error41)) cause = "busy";
-  else if (isSqliteIoError(error41)) cause = "io";
-  else if (isSqliteCorruptError(error41)) cause = "corrupt";
-  else if (isSqliteCantOpenError(error41)) cause = "cant_open";
+  if (isSqliteBusyError(error42)) cause = "busy";
+  else if (isSqliteIoError(error42)) cause = "io";
+  else if (isSqliteCorruptError(error42)) cause = "corrupt";
+  else if (isSqliteCantOpenError(error42)) cause = "cant_open";
   else if (sqliteCode !== void 0) cause = "sqlite";
   else if (errno !== void 0) cause = "system";
-  else if (error41 instanceof Error) cause = "error";
+  else if (error42 instanceof Error) cause = "error";
   return {
     operation,
     pathStage: resolvedPathStage,
@@ -106,23 +106,23 @@ function copyLockedSqliteDb(args) {
           };
         }
       }
-    } catch (error41) {
-      attemptFailure = classifySqliteSnapshotFailure(error41, operation, pathStage);
+    } catch (error42) {
+      attemptFailure = classifySqliteSnapshotFailure(error42, operation, pathStage);
       verified = false;
     } finally {
       try {
         db?.close();
-      } catch (error41) {
+      } catch (error42) {
         verified = false;
-        attemptFailure ??= classifySqliteSnapshotFailure(error41, "close_staged", "staged_main");
+        attemptFailure ??= classifySqliteSnapshotFailure(error42, "close_staged", "staged_main");
       }
       for (const suffix of SQLITE_DB_SIDECAR_SUFFIXES) {
         try {
           (0, import_node_fs15.rmSync)(`${destPath}${suffix}`, { force: true });
-        } catch (error41) {
+        } catch (error42) {
           verified = false;
           attemptFailure ??= classifySqliteSnapshotFailure(
-            error41,
+            error42,
             "cleanup_staged",
             "staged_sidecars"
           );
@@ -131,8 +131,8 @@ function copyLockedSqliteDb(args) {
       if (!verified) {
         try {
           (0, import_node_fs15.rmSync)(destPath, { force: true });
-        } catch (error41) {
-          attemptFailure ??= classifySqliteSnapshotFailure(error41, "cleanup_staged", "staged_main");
+        } catch (error42) {
+          attemptFailure ??= classifySqliteSnapshotFailure(error42, "cleanup_staged", "staged_main");
         }
       }
     }

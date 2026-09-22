@@ -161,10 +161,10 @@ var HostUpgradeService = class {
     if (!requested.quiescing) return requested;
     try {
       await this.deps.automations.suspendWakes();
-    } catch (error41) {
+    } catch (error42) {
       this.deps.transcript.cancelForcedUpgradePause();
       await this.resumeBackgroundWorkIfUnpaused();
-      throw error41;
+      throw error42;
     }
     if (!this.deps.transcript.isForcedUpgradePauseActive()) {
       await this.resumeBackgroundWorkIfUnpaused();
@@ -260,8 +260,8 @@ var HostUpgradeService = class {
     try {
       await this.runRootUpdateTick?.();
       await this.maybeAutoUpdateHostBundle();
-    } catch (error41) {
-      this.deps.log("warn", `shared update watch failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.deps.log("warn", `shared update watch failed: ${errorLogTag(error42)}`);
     } finally {
       if (this.sharedUpdateWatchActive) {
         this.scheduleSharedUpdateWatch(

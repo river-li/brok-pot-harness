@@ -209,13 +209,13 @@ var TracingMiddleware = class extends BaseMiddleware {
               if (e_1) throw e_1.error;
             }
           }
-        } catch (error41) {
+        } catch (error42) {
           if (!seenFirstToken) {
             ttftHistogram.histogram(ctx, performance.now() - startTime, {
               outcome: "failure"
             });
           }
-          throw error41;
+          throw error42;
         }
       });
     };
@@ -229,12 +229,12 @@ var TracingMiddleware = class extends BaseMiddleware {
         requestOutcomeCounter.increment(ctx, 1, { outcome: "success" });
       }
       return response;
-    }).catch((error41) => {
+    }).catch((error42) => {
       const endTime = performance.now();
       const e2eLatency = endTime - startTime;
       e2eLatencyHistogram.histogram(ctx, e2eLatency, { outcome: "failure" });
       requestOutcomeCounter.increment(ctx, 1, { outcome: "failure" });
-      throw error41;
+      throw error42;
     });
     return {
       fullStream: tracedFullStream(),

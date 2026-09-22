@@ -27,8 +27,8 @@ var X11ComputerUseExecutor = class {
    * Set the InputEventLogger on the underlying X11Executor.
    * Used for recording polished video preprocessing data.
    */
-  setInputEventLogger(logger107) {
-    this.executor.setInputEventLogger(logger107);
+  setInputEventLogger(logger108) {
+    this.executor.setInputEventLogger(logger108);
   }
   generateScreenshotFilename() {
     const randomBytes4 = crypto3.randomBytes(3);

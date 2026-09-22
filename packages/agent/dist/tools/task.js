@@ -52,15 +52,15 @@ var __disposeResources28 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger72 = createLogger("task-tool");
+var logger73 = createLogger("task-tool");
 var TASK_RESUME_SELF_SENTINEL = "self";
 var SUBAGENT_STREAM_CLOSED_ERROR = "The subagent's connection closed before it finished (the run was torn down mid-flight). This is usually transient \u2014 please try again.";
-function isWritableIterableClosedError(error41) {
-  return error41 instanceof WriteIterableClosedError || error41 instanceof Error && error41.message.includes("WritableIterable is closed");
+function isWritableIterableClosedError(error42) {
+  return error42 instanceof WriteIterableClosedError || error42 instanceof Error && error42.message.includes("WritableIterable is closed");
 }
 function formatSubagentBackgroundMessage(reason, transcriptPath, options2) {
   let intro;
@@ -122,6 +122,7 @@ function buildClientContinuationConfig(config2) {
 var SubagentBlockedByHookError = class extends Error {
   constructor(message) {
     super(message);
+    this.toolCallAuditOutcome = "denied";
     this.name = "SubagentBlockedByHookError";
   }
 };
@@ -150,7 +151,7 @@ async function executeSubagentStartHook(params) {
     });
     if (result.permission === "deny") {
       const denyMessage = result.userMessage ? `Subagent creation blocked by hook: ${result.userMessage}` : "Subagent creation blocked by hook";
-      logger72.warn(hookCtx, "Subagent blocked by subagentStart hook", {
+      logger73.warn(hookCtx, "Subagent blocked by subagentStart hook", {
         toolCallId,
         subagentType,
         denyMessage
@@ -159,7 +160,7 @@ async function executeSubagentStartHook(params) {
     }
     if (result.permission === "ask") {
       const askMessage = "The 'ask' permission for subagentStart hooks is not yet implemented. Use 'allow' or 'deny' instead.";
-      logger72.warn(hookCtx, "Subagent blocked - 'ask' permission not implemented", {
+      logger73.warn(hookCtx, "Subagent blocked - 'ask' permission not implemented", {
         toolCallId,
         subagentType
       });
@@ -175,7 +176,7 @@ async function executeSubagentStartHook(params) {
 async function executeSubagentStopHook(params) {
   const env_2 = { stack: [], error: void 0, hasError: false };
   try {
-    const { resourceAccessor, toolCallId, subagentId, subagentType, overriddenModelId, status, durationMs, messageCount, toolCallCount: toolCallCount2, summary, errorMessage: errorMessage6, loopCount, task, description: description10, parentCtx, enableExecuteHookExec, configuredSteps } = params;
+    const { resourceAccessor, toolCallId, subagentId, subagentType, overriddenModelId, status, durationMs, messageCount, toolCallCount: toolCallCount2, summary, errorMessage: errorMessage6, loopCount, task, description: description9, parentCtx, enableExecuteHookExec, configuredSteps } = params;
     const span = __addDisposableResource28(env_2, createSpan(parentCtx.withName("agent.lifecycleHook.subagentStop")), false);
     const hookCtx = span.ctx;
     const result = await executeRemoteSubagentStopHook({
@@ -190,7 +191,7 @@ async function executeSubagentStopHook(params) {
       errorMessage: errorMessage6,
       loopCount,
       task,
-      description: description10,
+      description: description9,
       requestContext: {
         toolCallId,
         model: overriddenModelId
@@ -219,7 +220,7 @@ async function extractLastAssistantMessage(ctx, newTurns, blobStore, logContext)
       const turnBlobId = newTurns[i];
       const turnBlob = await blobStore.getBlob(spanCtx, turnBlobId);
       if (turnBlob === void 0) {
-        logger72.warn(spanCtx, "Turn blob not found when extracting result", {
+        logger73.warn(spanCtx, "Turn blob not found when extracting result", {
           toolCallId: logContext.toolCallId,
           subagentType: logContext.subagentType,
           turnIndex: logContext.turnsOffset + i
@@ -268,7 +269,7 @@ async function collectConversationStepsFromStepBlobIds({ ctx, stepBlobIds, blobS
       if (stepBlob === void 0) {
         missingStepCount++;
         if (logContext !== void 0) {
-          logger72.warn(spanCtx, "Step blob not found when extracting result", {
+          logger73.warn(spanCtx, "Step blob not found when extracting result", {
             toolCallId: logContext.toolCallId,
             subagentType: logContext.subagentType,
             turnIndex: logContext.turnIndex,
@@ -607,7 +608,7 @@ var NOT_FOUND_ERROR_PREFIX = "Not found error:";
 var API_ERROR_PREFIX = "API Error:";
 var TASK_ERROR_SHAPE_MAX_JSON_CHARS = 4e3;
 var TASK_ERROR_SHAPE_MAX_KEYS = 50;
-function buildTaskErrorShapeSnapshot(error41) {
+function buildTaskErrorShapeSnapshot(error42) {
   const seen = /* @__PURE__ */ new WeakSet();
   const stringifyReplacer = (_key, value) => {
     if (value instanceof Error) {
@@ -631,24 +632,24 @@ function buildTaskErrorShapeSnapshot(error41) {
     return value;
   };
   const base = {
-    typeof: typeof error41,
-    isErrorInstance: error41 instanceof Error
+    typeof: typeof error42,
+    isErrorInstance: error42 instanceof Error
   };
-  if (error41 instanceof Error) {
-    const maybeCode = "code" in error41 && (typeof error41.code === "string" || typeof error41.code === "number") ? error41.code : void 0;
-    const maybeCause = "cause" in error41 && error41.cause !== void 0 ? error41.cause : void 0;
+  if (error42 instanceof Error) {
+    const maybeCode = "code" in error42 && (typeof error42.code === "string" || typeof error42.code === "number") ? error42.code : void 0;
+    const maybeCause = "cause" in error42 && error42.cause !== void 0 ? error42.cause : void 0;
     return {
       ...base,
-      constructorName: error41.constructor?.name,
-      name: error41.name,
-      message: error41.message,
+      constructorName: error42.constructor?.name,
+      name: error42.name,
+      message: error42.message,
       ...maybeCode !== void 0 ? { code: maybeCode } : {},
       ...maybeCause !== void 0 ? { causeTypeof: typeof maybeCause } : {},
-      ...error41.stack !== void 0 ? { hasStack: true } : {}
+      ...error42.stack !== void 0 ? { hasStack: true } : {}
     };
   }
-  if (typeof error41 === "object" && error41 !== null) {
-    const objectError = error41;
+  if (typeof error42 === "object" && error42 !== null) {
+    const objectError = error42;
     const ownKeys = Object.keys(objectError);
     let jsonPreview;
     try {
@@ -670,7 +671,7 @@ function buildTaskErrorShapeSnapshot(error41) {
   }
   return {
     ...base,
-    stringValue: String(error41)
+    stringValue: String(error42)
   };
 }
 function readNumericStatus(value) {
@@ -733,22 +734,22 @@ function getNestedErrorObject(value) {
   }
   return void 0;
 }
-function collectTaskProviderErrorCandidateMessages(error41) {
+function collectTaskProviderErrorCandidateMessages(error42) {
   const candidateMessages = [];
   const pushMessage = (message) => {
     if (message !== void 0 && !candidateMessages.includes(message)) {
       candidateMessages.push(message);
     }
   };
-  pushMessage(getObjectMessage(error41));
-  const cause = typeof error41 === "object" && error41 !== null && "cause" in error41 ? error41.cause : void 0;
+  pushMessage(getObjectMessage(error42));
+  const cause = typeof error42 === "object" && error42 !== null && "cause" in error42 ? error42.cause : void 0;
   pushMessage(getObjectMessage(cause));
   pushMessage(getObjectMessage(getNestedErrorObject(cause)));
-  pushMessage(getObjectMessage(getNestedErrorObject(error41)));
+  pushMessage(getObjectMessage(getNestedErrorObject(error42)));
   return candidateMessages;
 }
-function classifyTaskProviderError(error41) {
-  const candidateMessages = collectTaskProviderErrorCandidateMessages(error41);
+function classifyTaskProviderError(error42) {
+  const candidateMessages = collectTaskProviderErrorCandidateMessages(error42);
   if (candidateMessages.length === 0) {
     return void 0;
   }
@@ -768,15 +769,15 @@ function classifyTaskProviderError(error41) {
   }
   return void 0;
 }
-function shouldBubbleTaskErrorToOuterRetryLayer(ctx, error41, runStreamCompleted) {
+function shouldBubbleTaskErrorToOuterRetryLayer(ctx, error42, runStreamCompleted) {
   if (!getShouldBubbleRetryableTaskErrorsFromContext(ctx) || runStreamCompleted) {
     return false;
   }
-  const providerError = classifyTaskProviderError(error41);
+  const providerError = classifyTaskProviderError(error42);
   if (providerError !== void 0 && providerError.classification === ToolErrorClassification.PROVIDER_ERROR) {
     return true;
   }
-  const connectErrorCode = getConnectErrorCode(error41);
+  const connectErrorCode = getConnectErrorCode(error42);
   return connectErrorCode === Code.Unavailable || connectErrorCode === Code.DeadlineExceeded || connectErrorCode === Code.ResourceExhausted;
 }
 var StreamingTaskInteractionListener = class {
@@ -808,11 +809,11 @@ var StreamingTaskInteractionListener = class {
     }
   }
 };
-function maybeAppendInterruptRetryHint(error41, enableSubagentInterrupt, interruptAlreadyRequested) {
-  if (!enableSubagentInterrupt || interruptAlreadyRequested || error41 !== RUNNING_SUBAGENT_FOLLOWUP_ERROR) {
-    return error41;
+function maybeAppendInterruptRetryHint(error42, enableSubagentInterrupt, interruptAlreadyRequested) {
+  if (!enableSubagentInterrupt || interruptAlreadyRequested || error42 !== RUNNING_SUBAGENT_FOLLOWUP_ERROR) {
+    return error42;
   }
-  return `${error41}
+  return `${error42}
 ${RUNNING_SUBAGENT_INTERRUPT_RETRY_HINT}`;
 }
 function taskEnvironmentToProto(environment) {
@@ -922,10 +923,7 @@ function targetMachineFromProto(proto) {
         type: "self_hosted_pool",
         ...proto.machine.value.pool !== void 0 ? { pool: proto.machine.value.pool } : {},
         ...proto.machine.value.labels.length > 0 ? {
-          labels: Object.fromEntries(proto.machine.value.labels.map((label) => [
-            label.key,
-            label.value
-          ]))
+          labels: Object.fromEntries(proto.machine.value.labels.map((label) => [label.key, label.value]))
         } : {}
       };
     default:
@@ -957,11 +955,7 @@ function assertMachineAndLegacyArgsNotBothSet(args) {
   if (args.machine === void 0) {
     return;
   }
-  const conflicting = [
-    "environment",
-    "cloud_base_branch",
-    "cloud_requested_environment_build_id"
-  ].filter((key) => args[key] !== void 0);
+  const conflicting = ["environment", "cloud_base_branch", "cloud_requested_environment_build_id"].filter((key) => args[key] !== void 0);
   if (conflicting.length > 0) {
     throw new ToolCallArgParseError(`Invalid arguments:
 machine replaces ${conflicting.join(", ")}; specify machine alone.`);
@@ -1005,7 +999,7 @@ Choose a supported model with the \`model\` parameter or omit this subagent call
     if (!parentRequestId) {
       return resolvedModelId;
     }
-    logger72.info(logContext.ctx, "Subagent model resolved", {
+    logger73.info(logContext.ctx, "Subagent model resolved", {
       parentRequestId,
       rootParentRequestId: getRootParentRequestId(logContext.ctx) ?? parentRequestId,
       subagentRequestId: logContext.subagentRequestId,
@@ -1096,7 +1090,7 @@ Choose a supported model with the \`model\` parameter or omit this subagent call
       if (trimmedRequestedModel.toLowerCase() === "fast") {
         if (logContext) {
           const parentRequestId = getRequestId(logContext.ctx);
-          logger72.info(logContext.ctx, "Ignoring unresolvable 'fast' model alias from task tool args", {
+          logger73.info(logContext.ctx, "Ignoring unresolvable 'fast' model alias from task tool args", {
             parentRequestId,
             parentAgentToolCallId: logContext.parentAgentToolCallId,
             subagentRequestId: logContext.subagentRequestId,
@@ -1269,11 +1263,7 @@ function buildTaskParametersSchema(configs, options2) {
   };
   const normalizeParsingSubagentType = (value) => normalizeSubagentTypeWithNames(value, parsingNormalizedToCanonical);
   const subagentTypeDescription = `Subagent type to use for this task. Must be one of: ${configNames.join(", ")}.`;
-  const parsingTypeEnum = external_exports.enum([
-    enumValues[0],
-    ...enumValues.slice(1),
-    ...resumeOnlyNames
-  ]);
+  const parsingTypeEnum = external_exports.enum([enumValues[0], ...enumValues.slice(1), ...resumeOnlyNames]);
   const defaultingSubagentTypeField = external_exports.preprocess(preprocessSubagentType, external_exports.enum(enumValues)).describe(subagentTypeDescription);
   const explicitSubagentTypeField = external_exports.preprocess(normalizeSubagentType, external_exports.enum(enumValues)).describe(subagentTypeDescription);
   const parsingSubagentTypeField = external_exports.preprocess(normalizeParsingSubagentType, parsingTypeEnum.optional()).describe(subagentTypeDescription);
@@ -1434,13 +1424,13 @@ ${enableAgentChatLinks ? hideAsyncSubagentTaskNotifications ? "- If you mention 
 function formatSubagentConfigForDescription(config2, defaultResumeMode) {
   const name17 = getSubagentTypeName(config2.subagent_type);
   const effectiveResumeMode = config2.resumeModeOverride ?? defaultResumeMode;
-  let description10 = config2.description ?? "";
+  let description9 = config2.description ?? "";
   if (effectiveResumeMode !== SubagentResumeMode.DEFAULT) {
     const resumeNote = effectiveResumeMode === SubagentResumeMode.LAST_AGENT_SAME_TYPE ? " (Auto-resumes most recent agent of this type; `resume` arg is ignored)" : " (Auto-resumes most recent agent; `resume` arg is ignored)";
-    description10 = description10 ? `${description10}${resumeNote}` : resumeNote;
+    description9 = description9 ? `${description9}${resumeNote}` : resumeNote;
   }
-  if (description10) {
-    return `- ${name17}: ${description10}`;
+  if (description9) {
+    return `- ${name17}: ${description9}`;
   }
   return `- ${name17}`;
 }
@@ -1585,8 +1575,8 @@ When an agent runs in the background, you will be automatically notified when it
     let parsedJson;
     try {
       parsedJson = typeof rawArgs === "string" ? JSON.parse(rawArgs) : rawArgs;
-    } catch (error41) {
-      const message = error41 instanceof Error ? error41.message : "Failed to parse arguments";
+    } catch (error42) {
+      const message = error42 instanceof Error ? error42.message : "Failed to parse arguments";
       throw new ToolCallArgParseError(`Invalid arguments:
 argument: ${message}`);
     }
@@ -1672,7 +1662,7 @@ ${errorMessages.join("\n")}`);
   };
   const getUpdatedTaskRawArgs = async (ctx, rawArgs, toolCallId) => await applyTaskPreToolUseUpdatedInput(ctx, applyDefaultRunInBackground(rawArgs), toolCallId);
   const getTaskToolRuntimeConfig = async (ctx, prepared) => {
-    logger72.info(ctx, "Getting Task tool config", {
+    logger73.info(ctx, "Getting Task tool config", {
       toolCallId: prepared.toolCallId,
       subagentType: prepared.subagentTypeName,
       overriddenModelId: prepared.resolvedModelId
@@ -1680,7 +1670,7 @@ ${errorMessages.join("\n")}`);
     try {
       return await getTaskToolConfig(prepared.resolvedModelId, prepared.subagentType);
     } catch (configError) {
-      logger72.error(ctx, "Failed to get Task tool config", configError, {
+      logger73.error(ctx, "Failed to get Task tool config", configError, {
         toolCallId: prepared.toolCallId,
         subagentType: prepared.subagentTypeName,
         overriddenModelId: prepared.resolvedModelId
@@ -1706,7 +1696,7 @@ ${errorMessages.join("\n")}`);
         if (hookError instanceof SubagentBlockedByHookError) {
           throw hookError;
         }
-        logger72.error(ctx, "Error executing subagentStart hook", hookError, {
+        logger73.error(ctx, "Error executing subagentStart hook", hookError, {
           toolCallId: prepared.toolCallId,
           subagentType: prepared.subagentTypeName
         });
@@ -1843,7 +1833,7 @@ ${errorMessages.join("\n")}`);
         const executionStartTime = Date.now();
         const eventTracker = getAgentEventTracker(ctx);
         if (canUseClientSideSubagent) {
-          logger72.info(ctx, "Using client-side subagent execution", {
+          logger73.info(ctx, "Using client-side subagent execution", {
             toolCallId: meta.toolCallId,
             subagentType: typeName,
             modelId: resolvedModelId
@@ -1923,8 +1913,11 @@ ${errorMessages.join("\n")}`);
                     if (forceBackgroundResult.status === ForceBackgroundSubagentStatus.ACCEPTED) {
                       handoffAccepted = true;
                     }
-                  } catch (error41) {
-                    logger72.debug(ctx, "Steer-driven subagent background handoff failed", { toolCallId: meta.toolCallId, error: error41 });
+                  } catch (error42) {
+                    logger73.debug(ctx, "Steer-driven subagent background handoff failed", {
+                      toolCallId: meta.toolCallId,
+                      error: error42
+                    });
                   } finally {
                     handoffInFlight = false;
                     if (!stopped2 && !handoffAccepted && retryTimer === void 0 && steerSignal.hasPendingUserInjections()) {
@@ -1983,16 +1976,16 @@ ${errorMessages.join("\n")}`);
               stopSteerHandoff?.();
             }
             if (result.result.case === "error") {
-              const error41 = result.result.value;
+              const error42 = result.result.value;
               const durationMs2 = Date.now() - executionStartTime;
-              logger72.warn(ctx, "Client-side subagent failed or was aborted", {
+              logger73.warn(ctx, "Client-side subagent failed or was aborted", {
                 toolCallId: meta.toolCallId,
                 subagentType: typeName,
-                agentId: error41.agentId,
-                error: error41.error,
+                agentId: error42.agentId,
+                error: error42.error,
                 durationMs: durationMs2
               });
-              throw new Error(maybeAppendInterruptRetryHint(error41.error ?? "Unknown subagent error", enableSubagentInterrupt, updatedRawArgs.interrupt === true));
+              throw new Error(maybeAppendInterruptRetryHint(error42.error ?? "Unknown subagent error", enableSubagentInterrupt, updatedRawArgs.interrupt === true));
             }
             if (result.result.case !== "success") {
               throw new Error("Unknown subagent result");
@@ -2022,7 +2015,7 @@ ${errorMessages.join("\n")}`);
             const isBackground = success2.backgroundReason !== SubagentBackgroundReason.UNSPECIFIED;
             const totalLoops = 1;
             const durationMs = Date.now() - executionStartTime;
-            logger72.info(ctx, "Client-side subagent completed successfully", {
+            logger73.info(ctx, "Client-side subagent completed successfully", {
               toolCallId: meta.toolCallId,
               subagentType: typeName,
               agentId: lastAgentId,
@@ -2069,21 +2062,21 @@ ${errorMessages.join("\n")}`);
                 })
               }
             });
-          } catch (error41) {
-            if (error41 instanceof DeferredInteractionResponseError) {
-              throw error41;
+          } catch (error42) {
+            if (error42 instanceof DeferredInteractionResponseError) {
+              throw error42;
             }
             const durationMs = Date.now() - executionStartTime;
-            const isStreamClosed = isWritableIterableClosedError(error41);
-            const errorMessage6 = isStreamClosed ? SUBAGENT_STREAM_CLOSED_ERROR : error41 instanceof Error ? error41.message : String(error41);
+            const isStreamClosed = isWritableIterableClosedError(error42);
+            const errorMessage6 = isStreamClosed ? SUBAGENT_STREAM_CLOSED_ERROR : error42 instanceof Error ? error42.message : String(error42);
             if (isStreamClosed) {
-              logger72.info(ctx, "Client-side subagent execution interrupted by stream teardown", {
+              logger73.info(ctx, "Client-side subagent execution interrupted by stream teardown", {
                 toolCallId: meta.toolCallId,
                 subagentType: typeName,
                 durationMs
               });
             } else {
-              logger72.error(ctx, "Client-side subagent execution threw error", error41, {
+              logger73.error(ctx, "Client-side subagent execution threw error", error42, {
                 toolCallId: meta.toolCallId,
                 subagentType: typeName,
                 durationMs
@@ -2138,7 +2131,7 @@ ${errorMessages.join("\n")}`);
           subagentInstanceId: subagentRequestId
         });
         const initialTurnsCount = prepared.initialTurnsCount;
-        logger72.info(ctx, "Creating subagent and starting execution", {
+        logger73.info(ctx, "Creating subagent and starting execution", {
           toolCallId: meta.toolCallId,
           subagentType: typeName,
           modelId: subagentAgentConfig.modelId,
@@ -2243,8 +2236,8 @@ ${errorMessages.join("\n")}`);
               return iterResult.finalResult;
             }
           }
-        } catch (error41) {
-          return await handleSubagentExecutionError(error41, state, iterState, completionCtx, completionDeps, subagentCtx.canceled, registry2.lastAbortOptions);
+        } catch (error42) {
+          return await handleSubagentExecutionError(error42, state, iterState, completionCtx, completionDeps, subagentCtx.canceled, registry2.lastAbortOptions);
         } finally {
           if (executionTimeoutId !== void 0) {
             clearTimeout(executionTimeoutId);
@@ -2293,8 +2286,8 @@ ${errorMessages.join("\n")}`);
     },
     execute: (ctx, handler, argsStream, meta) => withSafeParsedArgs(isPendingReplay(ctx, meta) ? replaySchema : schemaForParsing, execute, createTaskToolCall(new TaskToolCall()))(ctx, handler, argsStream, meta),
     render: render2,
-    serializeError: (error41) => {
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+    serializeError: (error42) => {
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       return createTaskToolCall(new TaskToolCall({
         result: new TaskResult({
           result: {

@@ -1,2 +1,2 @@
-init_dist3();
-var logger74 = createLogger("@anysphere/agent:progress-update-reminder-middleware");
+init_dist4();
+var logger75 = createLogger("@anysphere/agent:progress-update-reminder-middleware");

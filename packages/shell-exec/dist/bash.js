@@ -258,13 +258,7 @@ var init_bash = __esm({
               env,
               // Use 'ignore' for stdin (unless interactive) to prevent background processes
               // from inheriting an open stdin pipe, which would prevent the 'close' event from firing
-              stdio: [
-                pipeStdin ? "pipe" : "ignore",
-                "pipe",
-                "pipe",
-                "pipe",
-                "pipe"
-              ],
+              stdio: [pipeStdin ? "pipe" : "ignore", "pipe", "pipe", "pipe", "pipe"],
               cwd,
               // Use detached to create a new process group. This allows killing all
               // child processes (e.g., python servers) when aborting, not just the shell.

@@ -53,14 +53,14 @@ function createRemoteAgentMessagingService(deps) {
           },
           { timeoutMs: REMOTE_AGENT_MESSAGE_TIMEOUT_MS }
         );
-      } catch (error41) {
+      } catch (error42) {
         unsettledSends.delete(key);
         unsettledSends.set(key, messageId);
         if (unsettledSends.size > UNSETTLED_SEND_LEDGER_CAP) {
           const oldest = unsettledSends.keys().next().value;
           if (oldest !== void 0) unsettledSends.delete(oldest);
         }
-        deps.reportFailure(errorLogTag(error41));
+        deps.reportFailure(errorLogTag(error42));
         return undelivered(`Could not reach agent ${args.toAgentId} right now; try again later.`);
       }
       unsettledSends.delete(key);

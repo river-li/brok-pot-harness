@@ -1396,6 +1396,15 @@ var init_aiserver_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * @generated from rpc aiserver.v1.AiService.KeepTaskList
+         */
+        keepTaskList: {
+          name: "KeepTaskList",
+          I: KeepTaskListRequest,
+          O: KeepTaskListResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.AiService.IsTerminalFinishedV2
          */
         isTerminalFinishedV2: {

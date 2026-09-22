@@ -8,3 +8,14 @@ var SAND_COMPUTER_ACTION_BITS = {
   scroll: 64,
   wait: 128
 };
+function reviewFailureAuditOutcome(failure2) {
+  switch (failure2) {
+    case "policy_denied":
+    case "approval_denied":
+      return "denied";
+    case "cancelled":
+      return "cancelled";
+    default:
+      return void 0;
+  }
+}

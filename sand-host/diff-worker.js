@@ -430,22 +430,13 @@ function calculateDiff(params) {
     `--- ${withGitDiffPrefix(oldPath, "a")}`,
     `+++ ${withGitDiffPrefix(newPath, "b")}`,
     ...hunks.flatMap((h) => [
-      `@@ -${formatRange(h.oldStart, h.oldLines)} +${formatRange(
-        h.newStart,
-        h.newLines
-      )} @@`,
+      `@@ -${formatRange(h.oldStart, h.oldLines)} +${formatRange(h.newStart, h.newLines)} @@`,
       ...h.lines
     ])
   ].join("\n");
   return {
     diffString,
-    linesAdded: hunks.reduce(
-      (sum, h) => sum + h.lines.filter((l) => l.startsWith("+")).length,
-      0
-    ),
-    linesRemoved: hunks.reduce(
-      (sum, h) => sum + h.lines.filter((l) => l.startsWith("-")).length,
-      0
-    )
+    linesAdded: hunks.reduce((sum, h) => sum + h.lines.filter((l) => l.startsWith("+")).length, 0),
+    linesRemoved: hunks.reduce((sum, h) => sum + h.lines.filter((l) => l.startsWith("-")).length, 0)
   };
 }

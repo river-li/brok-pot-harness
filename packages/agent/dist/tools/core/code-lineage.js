@@ -1,6 +1,6 @@
-init_dist3();
+init_dist4();
 init_zod();
-var logger78 = createLogger("agent/tools/ai-attribution");
+var logger79 = createLogger("agent/tools/ai-attribution");
 var parametersSchema9 = external_exports.object({
   file_paths: external_exports.array(external_exports.string()).min(1).optional().describe("File paths to get AI attribution for. Use repository-relative git paths (for example: backend/server/src/app.ts), not absolute workspace paths."),
   start_line: external_exports.number().int().positive().optional().describe("Optional start line (1-indexed). If not provided, gets AI attribution for entire file. Applies to all files."),

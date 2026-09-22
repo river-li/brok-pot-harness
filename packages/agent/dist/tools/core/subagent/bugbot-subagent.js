@@ -51,14 +51,8 @@ function createBugbotSubagentConfig(options2) {
   const enableProactiveReview = options2?.enableProactiveReview === true;
   const trimmedModelOverride = options2?.modelOverride?.trim();
   const modelOverride = trimmedModelOverride === "" ? void 0 : trimmedModelOverride;
-  const composerModelIds = [
-    SubagentComposerModelId.fast,
-    SubagentComposerModelId.standard
-  ];
-  const defaultModelIds = modelOverride !== void 0 ? [
-    modelOverride,
-    ...composerModelIds.filter((modelId) => modelId !== modelOverride)
-  ] : composerModelIds;
+  const composerModelIds = [SubagentComposerModelId.fast, SubagentComposerModelId.standard];
+  const defaultModelIds = modelOverride !== void 0 ? [modelOverride, ...composerModelIds.filter((modelId) => modelId !== modelOverride)] : composerModelIds;
   return {
     subagent_type: new SubagentType({
       type: {

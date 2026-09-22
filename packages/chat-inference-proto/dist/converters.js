@@ -207,9 +207,9 @@ function providerOptionsToProto(options2) {
   }
   return hasOptions ? protoOptions : void 0;
 }
-var DEFAULT_IMAGE_MIME_TYPE = "image/png";
+var DEFAULT_IMAGE_MIME_TYPE2 = "image/png";
 function imageBytesToDataUrl(bytes, mimeType) {
-  const mime2 = typeof mimeType === "string" && mimeType.trim() !== "" ? mimeType : DEFAULT_IMAGE_MIME_TYPE;
+  const mime2 = typeof mimeType === "string" && mimeType.trim() !== "" ? mimeType : DEFAULT_IMAGE_MIME_TYPE2;
   return `data:${mime2};base64,${Buffer.from(bytes).toString("base64")}`;
 }
 function userContentPartToProto(part) {
@@ -303,14 +303,12 @@ function protoStreamErrorToError(protoError) {
 function buildStreamRequest(options2) {
   var _a19;
   const { messages: messages2, requestedModel, tools, providerDefinedTools, modelConfig, invocationId, conversationId, conversationGroupId, automationId, parentRequestId, rootParentRequestId, parentAgentToolCallId, subagentType, compactionEpoch, inferenceReason, acceptedUnadvertisedToolNames } = options2;
-  const request3 = new InferenceStreamRequest();
-  request3.messages = messages2.map(coreMessageToProto);
-  request3.tools = (tools !== null && tools !== void 0 ? tools : []).map(agentToolToProto);
-  request3.providerDefinedTools = (providerDefinedTools !== null && providerDefinedTools !== void 0 ? providerDefinedTools : []).map(namedProviderDefinedToolToProto);
-  request3.acceptedUnadvertisedToolNames = [
-    ...acceptedUnadvertisedToolNames !== null && acceptedUnadvertisedToolNames !== void 0 ? acceptedUnadvertisedToolNames : []
-  ];
-  request3.requestedModel = new InferenceRequestedModel({
+  const request5 = new InferenceStreamRequest();
+  request5.messages = messages2.map(coreMessageToProto);
+  request5.tools = (tools !== null && tools !== void 0 ? tools : []).map(agentToolToProto);
+  request5.providerDefinedTools = (providerDefinedTools !== null && providerDefinedTools !== void 0 ? providerDefinedTools : []).map(namedProviderDefinedToolToProto);
+  request5.acceptedUnadvertisedToolNames = [...acceptedUnadvertisedToolNames !== null && acceptedUnadvertisedToolNames !== void 0 ? acceptedUnadvertisedToolNames : []];
+  request5.requestedModel = new InferenceRequestedModel({
     modelId: requestedModel.modelId,
     maxMode: requestedModel.maxMode,
     parameters: requestedModel.parameters.map((parameter) => new InferenceModelParameterValue({
@@ -321,34 +319,34 @@ function buildStreamRequest(options2) {
     isVariantStringRepresentation: requestedModel.isVariantStringRepresentation
   });
   if (invocationId) {
-    request3.invocationId = invocationId;
+    request5.invocationId = invocationId;
   }
   if (conversationId) {
-    request3.conversationId = conversationId;
+    request5.conversationId = conversationId;
   }
   if (conversationGroupId) {
-    request3.conversationGroupId = conversationGroupId;
+    request5.conversationGroupId = conversationGroupId;
   }
   if (automationId) {
-    request3.automationId = automationId;
+    request5.automationId = automationId;
   }
   if (parentRequestId) {
-    request3.parentRequestId = parentRequestId;
+    request5.parentRequestId = parentRequestId;
   }
   if (rootParentRequestId) {
-    request3.rootParentRequestId = rootParentRequestId;
+    request5.rootParentRequestId = rootParentRequestId;
   }
   if (parentAgentToolCallId) {
-    request3.parentAgentToolCallId = parentAgentToolCallId;
+    request5.parentAgentToolCallId = parentAgentToolCallId;
   }
   if (subagentType) {
-    request3.subagentType = subagentType;
+    request5.subagentType = subagentType;
   }
   if (compactionEpoch !== void 0) {
-    request3.compactionEpoch = compactionEpoch;
+    request5.compactionEpoch = compactionEpoch;
   }
   if (inferenceReason) {
-    request3.inferenceReason = inferenceReason;
+    request5.inferenceReason = inferenceReason;
   }
   if (modelConfig) {
     const config2 = new InferenceModelConfig();
@@ -356,7 +354,7 @@ function buildStreamRequest(options2) {
     config2.temperature = modelConfig.temperature;
     config2.topP = modelConfig.topP;
     config2.stopSequences = (_a19 = modelConfig.stopSequences) !== null && _a19 !== void 0 ? _a19 : [];
-    request3.modelConfig = config2;
+    request5.modelConfig = config2;
   }
-  return request3;
+  return request5;
 }

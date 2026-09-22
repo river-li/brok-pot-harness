@@ -1,16 +1,16 @@
 init_esm();
 init_exec_pb();
 init_compact();
-var __protoPackage152 = "agent.v1.";
-var __protoMessage3145 = class extends CompactMessage {
+var __protoPackage151 = "agent.v1.";
+var __protoMessage3144 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage152;
+    return __protoPackage151;
   }
 };
-var ExecStreamElement = class _ExecStreamElement extends __protoMessage3145 {
+var ExecStreamElement = class _ExecStreamElement extends __protoMessage3144 {
   constructor(data) {
     super();
     this.element = { case: void 0 };
@@ -32,7 +32,7 @@ var ExecStreamElement = class _ExecStreamElement extends __protoMessage3145 {
     return ["ExecStreamElement|1 exec_client_message #0 element|2 exec_client_control_message #1 element", ExecClientMessage, ExecClientControlMessage];
   }
 };
-var ReadFileRequest = class _ReadFileRequest extends __protoMessage3145 {
+var ReadFileRequest = class _ReadFileRequest extends __protoMessage3144 {
   constructor(data) {
     super();
     this.path = "";
@@ -55,7 +55,7 @@ var ReadFileRequest = class _ReadFileRequest extends __protoMessage3145 {
     return ["ReadFileRequest|1 path 9|2 max_bytes 4"];
   }
 };
-var ReadFileHeader = class _ReadFileHeader extends __protoMessage3145 {
+var ReadFileHeader = class _ReadFileHeader extends __protoMessage3144 {
   constructor(data) {
     super();
     this.size = protoInt64.zero;
@@ -77,7 +77,7 @@ var ReadFileHeader = class _ReadFileHeader extends __protoMessage3145 {
     return ["ReadFileHeader|1 size 4"];
   }
 };
-var ReadFileComplete = class _ReadFileComplete extends __protoMessage3145 {
+var ReadFileComplete = class _ReadFileComplete extends __protoMessage3144 {
   constructor(data) {
     super();
     this.size = protoInt64.zero;
@@ -100,7 +100,7 @@ var ReadFileComplete = class _ReadFileComplete extends __protoMessage3145 {
     return ["ReadFileComplete|1 size 4|2 sha256 12"];
   }
 };
-var ReadFileResponse = class _ReadFileResponse extends __protoMessage3145 {
+var ReadFileResponse = class _ReadFileResponse extends __protoMessage3144 {
   constructor(data) {
     super();
     this.payload = { case: void 0 };

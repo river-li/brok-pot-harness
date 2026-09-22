@@ -127,12 +127,12 @@ function createHostRunnerComposition(deps) {
               for (const pending of session.db.getPendingAutomationCompletions()) {
                 automationCompletions.enqueue(pending);
               }
-            } catch (error41) {
+            } catch (error42) {
               telemetryApi.logs.reportSessionDiagnostic({
                 family: "maintenance",
                 kind: "automation_completion_refill_failed",
                 agentId: session.id,
-                errorClass: errorLogTag(error41)
+                errorClass: errorLogTag(error42)
               });
             }
             return;
@@ -146,7 +146,8 @@ function createHostRunnerComposition(deps) {
     const gates = composeBoxRunnerGates({
       spotlightOverride: environment.spotlightOverride,
       experiments,
-      isCloudAgentsDisabledByTeamAdmin: () => cloudAgents.isDisabledByTeamAdmin()
+      isCloudAgentsDisabledByTeamAdmin: () => cloudAgents.isDisabledByTeamAdmin(),
+      isAgentEmailAllowedByTeamAdmin: () => extensions.api("email").isEnabled()
     });
     const cloudAgentPeer = (message) => ({
       id: message.bcId,
@@ -190,19 +191,19 @@ function createHostRunnerComposition(deps) {
       userComputers: localExec.userComputers,
       remoteBoxHasDesktop: true,
       boxHandoff: {
-        requestHelp: (request3) => extensions.api("session").startHandoff(request3)
+        requestHelp: (request5) => extensions.api("session").startHandoff(request5)
       },
       userForm: {
-        requestForm: (request3) => extensions.api("session").startUserForm(request3),
+        requestForm: (request5) => extensions.api("session").startUserForm(request5),
         listVaultKeys: () => extensions.api("user-form-vault").listKeys(),
         hasRemapHold: (agentId) => extensions.api("session").hasUserFormRemapHold(agentId),
         remapTargets: (args) => extensions.api("session").remapUserFormTargets(args)
       },
       cookieOriginApproval: {
-        request: (request3) => extensions.api("cookie-origin-approval").request(request3)
+        request: (request5) => extensions.api("cookie-origin-approval").request(request5)
       },
       virtualCard: {
-        requestCard: (request3) => extensions.api("session").startVirtualCard(request3),
+        requestCard: (request5) => extensions.api("session").startVirtualCard(request5),
         retireCard: (args) => extensions.api("transcript").widgetResponses.retireSupersededVirtualCard(args)
       },
       messages: {
@@ -247,7 +248,7 @@ function createHostRunnerComposition(deps) {
         automations: session.automations,
         skills: session.skills,
         channels: session.channels,
-        agentDir: (0, import_node_path182.dirname)(session.dbPath),
+        agentDir: (0, import_node_path180.dirname)(session.dbPath),
         agentId: session.id,
         readBoxFile: (boxPath) => remoteBox.downloadFile(ctx, session.id, boxPath)
       }),
@@ -270,9 +271,9 @@ function createHostRunnerComposition(deps) {
         onRequestId: onRequestIdFor("generate-image")
       }),
       generateImageResourceAccessor: attachments.createGenerateImageResourceAccessor(
-        (0, import_node_path182.dirname)(session.dbPath)
+        (0, import_node_path180.dirname)(session.dbPath)
       ),
-      getAgentDir: () => (0, import_node_path182.dirname)(session.dbPath),
+      getAgentDir: () => (0, import_node_path180.dirname)(session.dbPath),
       onComputerAction: ({ agentId, action }) => deps.emitGatewayEvent({
         channel: "computer-action",
         payload: { agentId, ...action }
@@ -284,17 +285,15 @@ function createHostRunnerComposition(deps) {
         agentId: session.id,
         resolveAgentName: (agentId) => resolveAgentDisplayName(agentId)
       }),
-      projectMemory: memory.createProjectMemory({
-        agentDir: (0, import_node_path182.dirname)(session.dbPath),
-        agentId: session.id,
-        resolveAgentName: (agentId) => resolveAgentDisplayName(agentId)
-      }),
       memorySnapshots: session.db,
       profilePromptSnapshots: session.db,
       promptPrefixSnapshots: session.db,
       promptSectionSnapshots: session.db,
       episodeProgress: session.db,
       systemPrompt: overrides?.systemPrompt,
+      baseSystemPromptOverride: () => experiments.getDynamicConfig("grok_bot_system_prompt_override", {
+        disableExposureLog: true
+      }).basePrompt,
       automationStore: session.automations,
       automationCompletions,
       gates,
@@ -345,12 +344,11 @@ function createHostRunnerComposition(deps) {
         canvasCursorAgentIds: cloudAgents.canvasCursorAgentIds,
         hiddenCursorAgentCardIds: cloudAgents.hiddenCursorAgentCardIds,
         isCanvasesEnabled: options2.isCanvasesEnabled,
-        projectsEnabled: options2.projectsEnabled,
         artifactsEnabled: options2.artifactsEnabled,
         ...options2.exchangeEnabled ? { exchange } : {},
         watch: (bcId, watchOptions) => runnerRef?.watchCloudAgent(bcId, watchOptions),
         writeBoxFile: (toolCtx, boxPath, data) => remoteBox.uploadFile(toolCtx, session.id, boxPath, data),
-        agentDir: (0, import_node_path182.dirname)(session.dbPath),
+        agentDir: (0, import_node_path180.dirname)(session.dbPath),
         readBoxFile: (toolCtx, boxPath, options3) => remoteBox.downloadFile(toolCtx, session.id, boxPath, options3),
         harness: "box",
         onLaunched: (info2) => analytics.trackEvent("sand.cloud_agent.launched", {
@@ -404,9 +402,9 @@ function createHostRunnerComposition(deps) {
                 text: cloudAgentExchangeReportText(result),
                 timestampMs: Date.now()
               });
-            } catch (error41) {
+            } catch (error42) {
               deps.log(
-                `sand.cloud_agent.exchange_record_failed agent_id=${session.id} bc_id=${bcId} error_class=${errorLogTag(error41)}`
+                `sand.cloud_agent.exchange_record_failed agent_id=${session.id} bc_id=${bcId} error_class=${errorLogTag(error42)}`
               );
             }
           }
@@ -420,7 +418,7 @@ function createHostRunnerComposition(deps) {
         const target = transcript.listAgentsSync().find((agent) => agent.id === toAgentId);
         const store = extensions.api("session").store;
         const profilePath = store.agentDirExists(toAgentId) ? getSandProfilePath(store.getAgentDir(toAgentId)) : void 0;
-        const profile = profilePath !== void 0 && (0, import_node_fs102.existsSync)(profilePath) ? parseProfileJson((0, import_node_fs102.readFileSync)(profilePath, "utf8")) : void 0;
+        const profile = profilePath !== void 0 && (0, import_node_fs101.existsSync)(profilePath) ? parseProfileJson((0, import_node_fs101.readFileSync)(profilePath, "utf8")) : void 0;
         if (profile === null) return "Cannot message this agent: invalid profile.";
         const harness = profile?.harness ?? target?.harness;
         if (harness != null && harness !== "box" && harness !== "temporal") {
@@ -488,8 +486,8 @@ function createHostRunnerComposition(deps) {
                   parentVisibility = peeked.visibility;
                 }
               }
-            } catch (error41) {
-              void errorLogTag(error41);
+            } catch (error42) {
+              void errorLogTag(error42);
               const policyOnFailure = botTemplateShare.peekExportPolicy?.() ?? getPolicy();
               if (policyOnFailure === "none") {
                 return { kind: "disabled" };
@@ -652,7 +650,7 @@ function createHostRunnerComposition(deps) {
           };
         }
       },
-      agentsRootDir: () => (0, import_node_path182.dirname)((0, import_node_path182.dirname)(session.dbPath))
+      agentsRootDir: () => (0, import_node_path180.dirname)((0, import_node_path180.dirname)(session.dbPath))
     });
     runnerRef = runner;
     return runner;

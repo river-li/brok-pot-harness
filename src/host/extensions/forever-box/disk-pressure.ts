@@ -1,8 +1,8 @@
 var SandDiskPressureLedgerError = class extends SandDomainError {
   name = "SandDiskPressureLedgerError";
 };
-function hasErrorCode(error41, code) {
-  return isUnknownRecord(error41) && error41.code === code;
+function hasErrorCode(error42, code) {
+  return isUnknownRecord(error42) && error42.code === code;
 }
 function createDiskPressureReminderEpisodes(options2) {
   const filePath = options2.rootDir === void 0 ? void 0 : (0, import_node_path110.join)(options2.rootDir, SAND_DISK_PRESSURE_REMINDERS_FILE_NAME);
@@ -37,8 +37,8 @@ function createDiskPressureReminderEpisodes(options2) {
           }
         }
       }
-    } catch (error41) {
-      if (!hasErrorCode(error41, "ENOENT")) options2.onLedgerError?.(error41);
+    } catch (error42) {
+      if (!hasErrorCode(error42, "ENOENT")) options2.onLedgerError?.(error42);
     }
   }
   const claims = /* @__PURE__ */ new Map();
@@ -60,8 +60,8 @@ function createDiskPressureReminderEpisodes(options2) {
       };
       writeFileAtomicSync(filePath, JSON.stringify(ledger));
       return true;
-    } catch (error41) {
-      options2.onLedgerError?.(error41);
+    } catch (error42) {
+      options2.onLedgerError?.(error42);
       return false;
     }
   };
@@ -162,7 +162,7 @@ function startDiskPressureWatch(deps) {
   const reminderEpisodes = createDiskPressureReminderEpisodes({
     rootDir: deps.isInBox ? getSandRootDir() : void 0,
     createEpisodeId: () => (0, import_node_crypto49.randomUUID)(),
-    onLedgerError: (error41) => deps.log(`disk-pressure reminder ledger failed: ${errorLogTag(error41)}`)
+    onLedgerError: (error42) => deps.log(`disk-pressure reminder ledger failed: ${errorLogTag(error42)}`)
   });
   if (deps.isInBox) {
     guard = createDiskPressureGuard({

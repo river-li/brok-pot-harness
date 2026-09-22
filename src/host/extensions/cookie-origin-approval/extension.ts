@@ -26,8 +26,8 @@ var cookieOriginApprovalExtension = defineHostExtension({
           ifPendingBeforeMs: bootStartedAtMs,
           unlessRequestId: (requestId2) => bridge.hasPendingRequest(requestId2)
         });
-      } catch (error41) {
-        context2.host.log(`cookie approval boot sweep failed (${errorLogTag(error41)})`);
+      } catch (error42) {
+        context2.host.log(`cookie approval boot sweep failed (${errorLogTag(error42)})`);
       }
     };
     void sweepPendingCardsOnBoot();

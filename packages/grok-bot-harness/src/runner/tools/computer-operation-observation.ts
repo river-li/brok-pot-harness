@@ -1,3 +1,7 @@
+var import_node_crypto79 = require("node:crypto");
+init_dist4();
+init_scheduling();
+init_esm2();
 var attempts = createCounter("sand.computer.operation.attempt", {
   description: "Terminal Computer and Screenshot tool execution attempts, including admission failures",
   labelNames: ["tool", "action", "outcome", "stage", "code", "harness", "combined_mode"]
@@ -9,6 +13,9 @@ var computerOperationObservationKey = createKey(
 var ComputerOperationObservation = class {
   constructor(options2) {
     this.options = options2;
+    this.clock = options2.clock ?? realClock;
+    this.startedAt = this.clock.monotonicNow();
+    this.attemptId = (0, import_node_crypto79.randomUUID)();
   }
   options;
   stage = "admission";
@@ -18,8 +25,9 @@ var ComputerOperationObservation = class {
   actionMask = 0;
   batchLength;
   finished = false;
-  startedAt = performance.now();
-  attemptId = (0, import_node_crypto79.randomUUID)();
+  clock;
+  startedAt;
+  attemptId;
   admitted(actions) {
     this.batchLength = actions.length;
     this.actionMask = actions.reduce((mask, action) => mask | SAND_COMPUTER_ACTION_BITS[action], 0);
@@ -47,20 +55,20 @@ var ComputerOperationObservation = class {
       this.fail("screenshot_missing");
     }
   }
-  caught(error41) {
+  caught(error42) {
     if (this.options.signal.aborted) {
       this.fail(isTimeout(this.options.signal.reason) ? "timeout" : "cancelled");
-    } else if (isTimeout(error41)) {
+    } else if (isTimeout(error42)) {
       this.fail("timeout");
-    } else if (error41 instanceof ToolCallAbortedError || error41 instanceof Error && error41.name === "AbortError") {
+    } else if (error42 instanceof ToolCallAbortedError || error42 instanceof Error && error42.name === "AbortError") {
       this.fail("cancelled");
-    } else if (error41 instanceof SandComputerAutoReviewBlockedError) {
-      this.fail(error41.telemetryCode);
-    } else if (error41 instanceof ToolCallArgParseError || error41 instanceof SandToolInputError) {
+    } else if (error42 instanceof SandComputerAutoReviewBlockedError) {
+      this.fail(error42.telemetryCode);
+    } else if (error42 instanceof ToolCallArgParseError || error42 instanceof SandToolInputError) {
       this.fail("invalid_arguments");
-    } else if (error41 instanceof ConnectError && error41.code === Code.Canceled) {
+    } else if (error42 instanceof ConnectError && error42.code === Code.Canceled) {
       this.fail("cancelled");
-    } else if (error41 instanceof ConnectError && this.stage === "executor") {
+    } else if (error42 instanceof ConnectError && this.stage === "executor") {
       this.fail("transport_error");
     } else if (this.outcome === "success") {
       let code = "unexpected_error";
@@ -93,7 +101,7 @@ var ComputerOperationObservation = class {
         ...dimensions,
         action_mask: this.actionMask,
         batch_length: this.batchLength,
-        duration_ms: Math.max(0, performance.now() - this.startedAt),
+        duration_ms: Math.max(0, this.clock.monotonicNow() - this.startedAt),
         request_id: getRequestId(this.options.ctx) ?? "unavailable",
         subagent_id: getConversationId(this.options.ctx) ?? "unavailable",
         tool_call_id: this.options.toolCallId,
@@ -122,9 +130,9 @@ var ComputerOperationObservation = class {
         this.fail(result.result.case === "error" ? "executor_error" : "result_missing");
       }
       return result;
-    } catch (error41) {
-      this.caught(error41);
-      throw error41;
+    } catch (error42) {
+      this.caught(error42);
+      throw error42;
     } finally {
       this.options.signal.removeEventListener("abort", onAbort);
       this.finish();
@@ -140,6 +148,6 @@ function combinedMode(getSelection) {
     return "unavailable";
   }
 }
-function isTimeout(error41) {
-  return error41 instanceof ToolTimeoutError || isFusedStepGuardTimeoutReason(error41) || error41 instanceof Error && error41.name === "TimeoutError" || error41 instanceof ConnectError && error41.code === Code.DeadlineExceeded;
+function isTimeout(error42) {
+  return error42 instanceof ToolTimeoutError || isFusedStepGuardTimeoutReason(error42) || error42 instanceof Error && error42.name === "TimeoutError" || error42 instanceof ConnectError && error42.code === Code.DeadlineExceeded;
 }

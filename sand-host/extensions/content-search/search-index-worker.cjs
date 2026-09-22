@@ -4,6 +4,27 @@ const __mod=require('node:module');const __p=require('node:path');const __depsDi
 // src/host/extensions/content-search/search-index-worker.ts
 var import_node_worker_threads = require("node:worker_threads");
 
+// src/shared/errors/system-errno.ts
+function findSystemErrno(error) {
+  const seen = /* @__PURE__ */ new Set();
+  let current = error;
+  while (current != null && typeof current === "object" && !seen.has(current)) {
+    seen.add(current);
+    const code = current.code;
+    if (typeof code === "string" && /^E[A-Z_]+$/.test(code)) return code;
+    current = current.cause;
+  }
+  return void 0;
+}
+
+// src/shared/errors/errors.ts
+function errorLogTag(error) {
+  if (!(error instanceof Error)) return typeof error;
+  const ownCode = error.code;
+  const code = ownCode != null && ownCode.length > 0 ? ownCode : findSystemErrno(error);
+  return code !== void 0 ? `${error.name} (${code})` : error.name;
+}
+
 // src/shared/invariant.ts
 var SandInvariantViolation = class extends Error {
   constructor(message) {
@@ -53,7 +74,7 @@ function failInvariant(message, boundary) {
   throw violation;
 }
 
-// ../dune/src/internal/scheduling/policies.ts
+// ../dune/scheduling/dist/internal/policies.js
 var JITTER_SPREAD = { none: 0, equal: 1 / 2, full: 1 };
 
 // src/host/storage/sqlite-busy.ts
@@ -507,27 +528,6 @@ var KNOWN = {
   }
 };
 
-// src/shared/errors/system-errno.ts
-function findSystemErrno(error) {
-  const seen = /* @__PURE__ */ new Set();
-  let current = error;
-  while (current != null && typeof current === "object" && !seen.has(current)) {
-    seen.add(current);
-    const code = current.code;
-    if (typeof code === "string" && /^E[A-Z_]+$/.test(code)) return code;
-    current = current.cause;
-  }
-  return void 0;
-}
-
-// src/shared/errors/errors.ts
-function errorLogTag(error) {
-  if (!(error instanceof Error)) return typeof error;
-  const ownCode = error.code;
-  const code = ownCode != null && ownCode.length > 0 ? ownCode : findSystemErrno(error);
-  return code !== void 0 ? `${error.name} (${code})` : error.name;
-}
-
 // src/shared/transcript/transcript.ts
 function isOutboundAgentPeerMessageEntry(entry) {
   return entry != null && entry.kind === "message" && entry.toAgent != null;
@@ -555,20 +555,24 @@ function reportFallback(stage, error) {
 // src/host/storage/store-db.ts
 var import_node_sqlite = require("node:sqlite");
 var DB_BUSY_TIMEOUT_MS = 5e3;
-function applyStorePragmas(db2, options) {
-  db2.exec(`PRAGMA busy_timeout = ${options.busyTimeoutMs ?? DB_BUSY_TIMEOUT_MS}`);
+function applyStorePragmas(db, options) {
+  db.exec(`PRAGMA busy_timeout = ${options.busyTimeoutMs ?? DB_BUSY_TIMEOUT_MS}`);
   try {
-    db2.exec("PRAGMA journal_mode = WAL");
-    db2.exec("PRAGMA synchronous = NORMAL");
+    db.exec("PRAGMA journal_mode = WAL");
+    db.exec("PRAGMA synchronous = NORMAL");
   } catch (error) {
     if (options.allowWalFailure !== true) throw error;
   }
   if (options.incrementalAutoVacuum === true) {
-    db2.exec("PRAGMA auto_vacuum = INCREMENTAL");
+    db.exec("PRAGMA auto_vacuum = INCREMENTAL");
   }
 }
 
 // src/host/extensions/content-search/agent-content-search.ts
+var AGENT_CONTENT_SEARCH_MAX_MATCHES_PER_AGENT = 5;
+var SNIPPET_LEAD = 30;
+var SNIPPET_TRAIL = 60;
+var ELLIPSIS = "\u2026";
 function entrySearchText(entry) {
   switch (entry.kind) {
     case "message":
@@ -581,11 +585,31 @@ function entrySearchText(entry) {
       return "";
   }
 }
+function flatten(text) {
+  return text.replace(/\s+/g, " ").trim();
+}
+function buildContentSnippet(text, normalizedQuery) {
+  if (normalizedQuery.length === 0) return null;
+  const flat = flatten(text);
+  const index = flat.toLowerCase().indexOf(normalizedQuery);
+  if (index < 0) return null;
+  const start = Math.max(0, index - SNIPPET_LEAD);
+  const end = Math.min(flat.length, index + normalizedQuery.length + SNIPPET_TRAIL);
+  const core = flat.slice(start, end);
+  const prefix = start > 0 ? ELLIPSIS : "";
+  const suffix = end < flat.length ? ELLIPSIS : "";
+  return `${prefix}${core}${suffix}`;
+}
 
 // src/host/extensions/content-search/search-index-db.ts
 var INDEXED_BODY_MAX_CHARS = 2e4;
+var FTS_QUERY_MAX_TERMS = 8;
+var SNIPPET_CONTEXT_TOKENS = 16;
 var META_RECONCILE_DONE = "reconcile_done";
 var ATTACHMENT_KINDS = new Set(SAND_ATTACHMENT_KINDS);
+function parseAttachmentKind(kind) {
+  return ATTACHMENT_KINDS.has(kind) ? kind : "file";
+}
 var CORE_SCHEMA = `
 CREATE TABLE IF NOT EXISTS meta (
   key TEXT PRIMARY KEY,
@@ -662,37 +686,42 @@ CREATE TRIGGER IF NOT EXISTS media_fts_update AFTER UPDATE ON media BEGIN
 END;
 `;
 function isFts5Available() {
-  let db2;
+  let db;
   try {
-    db2 = new import_node_sqlite2.DatabaseSync(":memory:");
-    db2.exec("CREATE VIRTUAL TABLE fts5_probe USING fts5(x)");
+    db = new import_node_sqlite2.DatabaseSync(":memory:");
+    db.exec("CREATE VIRTUAL TABLE fts5_probe USING fts5(x)");
     return true;
   } catch (error) {
     reportFallback("search_index_db", error);
     return false;
   } finally {
-    db2?.close();
+    db?.close();
   }
 }
 function openSearchIndexDb(dbPath) {
-  const db2 = new import_node_sqlite2.DatabaseSync(dbPath);
+  const db = new import_node_sqlite2.DatabaseSync(dbPath);
   try {
-    applyStorePragmas(db2, { incrementalAutoVacuum: true });
-    return db2;
+    applyStorePragmas(db, { incrementalAutoVacuum: true });
+    return db;
   } catch (error) {
     try {
-      db2.close();
+      db.close();
     } catch {
     }
     throw error;
   }
 }
-function ensureSearchIndexSchema(db2, isFtsEnabled) {
-  db2.exec(CORE_SCHEMA);
-  if (isFtsEnabled) db2.exec(FTS_SCHEMA);
+function openSearchIndexReadDb(dbPath) {
+  const db = openSearchIndexDb(dbPath);
+  db.exec("PRAGMA query_only = ON");
+  return db;
 }
-function writeReconcileDone(db2) {
-  db2.prepare(
+function ensureSearchIndexSchema(db, isFtsEnabled) {
+  db.exec(CORE_SCHEMA);
+  if (isFtsEnabled) db.exec(FTS_SCHEMA);
+}
+function writeReconcileDone(db) {
+  db.prepare(
     "INSERT INTO meta (key, value) VALUES (?, '1') ON CONFLICT(key) DO UPDATE SET value = '1'"
   ).run(META_RECONCILE_DONE);
 }
@@ -757,6 +786,186 @@ function deriveMediaRow(entry) {
     height
   };
 }
+function searchTerms(query) {
+  return query.normalize("NFKC").trim().split(/\s+/).filter((term) => term.length > 0).slice(0, FTS_QUERY_MAX_TERMS);
+}
+function buildFtsMatchQuery(query) {
+  const terms = searchTerms(query);
+  if (terms.length === 0) return null;
+  return terms.map((term) => `"${term.replaceAll('"', '""')}"*`).join(" ");
+}
+function termConjunction(column, terms) {
+  return terms.map(() => `instr(lower(${column}), lower(?)) > 0`).join(" AND ");
+}
+function flattenSnippet(text) {
+  return text.replace(/\s+/g, " ").trim();
+}
+var EFFECTIVE_TIMESTAMP = `CASE
+	WHEN m.timestamp_ms > 0 THEN m.timestamp_ms
+	ELSE COALESCE(
+		(SELECT MAX(m2.timestamp_ms) FROM messages m2 WHERE m2.agent_id = m.agent_id),
+		0
+	)
+END`;
+function messageMatchSql(rowSource, snippetColumn) {
+  return `SELECT
+			m.agent_id AS agentId,
+			m.entry_id AS entryId,
+			m.role AS role,
+			matched.ts AS timestampMs,
+			${snippetColumn} AS snippet
+		 FROM (
+			SELECT match_rowid, ts FROM (
+				SELECT
+					match_rowid,
+					ts,
+					ROW_NUMBER() OVER (
+						PARTITION BY agent_id
+						ORDER BY ts DESC
+					) AS agent_rank
+				FROM (${rowSource})
+			)
+			WHERE agent_rank <= ${AGENT_CONTENT_SEARCH_MAX_MATCHES_PER_AGENT}
+			ORDER BY ts DESC
+			LIMIT ?
+		 ) AS matched
+		 JOIN messages m ON m.id = matched.match_rowid`;
+}
+function collectMessageMatches(rows, snippetOf) {
+  const results = [];
+  for (const row of rows) {
+    if (typeof row.agentId !== "string" || typeof row.entryId !== "string" || row.role !== "user" && row.role !== "assistant" || typeof row.timestampMs !== "number") {
+      continue;
+    }
+    const snippet = snippetOf(row);
+    if (snippet == null) continue;
+    results.push({
+      agentId: row.agentId,
+      entryId: row.entryId,
+      role: row.role,
+      timestampMs: row.timestampMs,
+      snippet
+    });
+  }
+  return results;
+}
+function searchMessages(db, query, limit, isFtsEnabled) {
+  if (limit <= 0) return [];
+  if (!isFtsEnabled) return searchMessagesPlain(db, query, limit);
+  const match = buildFtsMatchQuery(query);
+  if (match == null) return [];
+  const rows = db.prepare(
+    `${messageMatchSql(
+      `SELECT
+					messages_fts.rowid AS match_rowid,
+					m.agent_id AS agent_id,
+					${EFFECTIVE_TIMESTAMP} AS ts
+				FROM messages_fts
+				JOIN messages m ON m.id = messages_fts.rowid
+				WHERE messages_fts MATCH ?`,
+      `snippet(messages_fts, 0, '', '', '\u2026', ${SNIPPET_CONTEXT_TOKENS})`
+    )}
+			 JOIN messages_fts ON messages_fts.rowid = matched.match_rowid
+			 WHERE messages_fts MATCH ?
+			 ORDER BY matched.ts DESC`
+  ).all(match, limit, match);
+  return collectMessageMatches(
+    rows,
+    (row) => typeof row.snippet === "string" ? flattenSnippet(row.snippet) : null
+  );
+}
+function searchMessagesPlain(db, query, limit) {
+  const terms = searchTerms(query);
+  if (terms.length === 0) return [];
+  const rows = db.prepare(
+    `${messageMatchSql(
+      `SELECT
+					m.id AS match_rowid,
+					m.agent_id AS agent_id,
+					${EFFECTIVE_TIMESTAMP} AS ts
+				FROM messages m
+				WHERE ${termConjunction("m.body", terms)}`,
+      "m.body"
+    )}
+			 ORDER BY matched.ts DESC`
+  ).all(...terms, limit);
+  return collectMessageMatches(
+    rows,
+    (row) => typeof row.snippet === "string" ? plainSnippet(row.snippet, terms) : null
+  );
+}
+function plainSnippet(body, terms) {
+  for (const term of terms) {
+    const snippet = buildContentSnippet(body, term.toLowerCase());
+    if (snippet != null) return snippet;
+  }
+  const flat = flattenSnippet(body);
+  const head = flat.slice(0, SNIPPET_CONTEXT_TOKENS * 8);
+  return head.length < flat.length ? `${head}\u2026` : head;
+}
+var MEDIA_SELECT_COLUMNS = `
+	md.agent_id AS agentId,
+	md.entry_id AS entryId,
+	md.file_name AS fileName,
+	md.ext AS ext,
+	md.mime AS mime,
+	md.kind AS kind,
+	md.timestamp_ms AS timestampMs,
+	md.width AS width,
+	md.height AS height`;
+function mediaMatchRows(db, query, limit, isFtsEnabled) {
+  if (isFtsEnabled) {
+    const match = buildFtsMatchQuery(query);
+    if (match == null) return browseMediaRows(db, limit);
+    return db.prepare(
+      `SELECT ${MEDIA_SELECT_COLUMNS}
+				 FROM media_fts
+				 JOIN media md ON md.id = media_fts.rowid
+				 WHERE media_fts MATCH ?
+				 ORDER BY md.timestamp_ms DESC
+				 LIMIT ?`
+    ).all(match, limit);
+  }
+  const terms = searchTerms(query);
+  if (terms.length === 0) return browseMediaRows(db, limit);
+  return db.prepare(
+    `SELECT ${MEDIA_SELECT_COLUMNS}
+			 FROM media md
+			 WHERE ${termConjunction("md.file_name", terms)}
+			 ORDER BY md.timestamp_ms DESC
+			 LIMIT ?`
+  ).all(...terms, limit);
+}
+function browseMediaRows(db, limit) {
+  return db.prepare(
+    `SELECT ${MEDIA_SELECT_COLUMNS}
+			 FROM media md
+			 ORDER BY md.timestamp_ms DESC
+			 LIMIT ?`
+  ).all(limit);
+}
+function searchMedia(db, query, limit, isFtsEnabled) {
+  if (limit <= 0) return [];
+  const rows = mediaMatchRows(db, query, limit, isFtsEnabled);
+  const results = [];
+  for (const row of rows) {
+    if (typeof row.agentId !== "string" || typeof row.entryId !== "string" || typeof row.fileName !== "string" || typeof row.ext !== "string" || typeof row.kind !== "string" || typeof row.timestampMs !== "number") {
+      continue;
+    }
+    results.push({
+      agentId: row.agentId,
+      entryId: row.entryId,
+      fileName: row.fileName,
+      ext: row.ext,
+      mime: typeof row.mime === "string" ? row.mime : null,
+      kind: parseAttachmentKind(row.kind),
+      timestampMs: row.timestampMs,
+      width: typeof row.width === "number" ? row.width : null,
+      height: typeof row.height === "number" ? row.height : null
+    });
+  }
+  return results;
+}
 
 // src/host/extensions/content-search/search-index-writer.ts
 var import_node_fs = require("node:fs");
@@ -764,9 +973,9 @@ var import_node_path2 = require("node:path");
 var import_node_sqlite3 = require("node:sqlite");
 var STORE_FILENAME = "store.db";
 var INCREMENTAL_VACUUM_PAGES = 512;
-function prepareStatements(db2) {
+function prepareStatements(db) {
   return {
-    upsertMessage: db2.prepare(
+    upsertMessage: db.prepare(
       `INSERT INTO messages (agent_id, entry_id, role, timestamp_ms, body)
 			 VALUES (?, ?, ?, ?, ?)
 			 ON CONFLICT(agent_id, entry_id) DO UPDATE SET
@@ -774,9 +983,9 @@ function prepareStatements(db2) {
 				timestamp_ms = excluded.timestamp_ms,
 				body = excluded.body`
     ),
-    deleteMessage: db2.prepare("DELETE FROM messages WHERE agent_id = ? AND entry_id = ?"),
-    deleteAgentMessages: db2.prepare("DELETE FROM messages WHERE agent_id = ?"),
-    upsertMedia: db2.prepare(
+    deleteMessage: db.prepare("DELETE FROM messages WHERE agent_id = ? AND entry_id = ?"),
+    deleteAgentMessages: db.prepare("DELETE FROM messages WHERE agent_id = ?"),
+    upsertMedia: db.prepare(
       `INSERT INTO media (
 				agent_id, entry_id, file_name, ext, mime, kind,
 				timestamp_ms, width, height
@@ -791,15 +1000,15 @@ function prepareStatements(db2) {
 				width = excluded.width,
 				height = excluded.height`
     ),
-    deleteMedia: db2.prepare("DELETE FROM media WHERE agent_id = ? AND entry_id = ?"),
-    deleteAgentMedia: db2.prepare("DELETE FROM media WHERE agent_id = ?"),
-    upsertFingerprint: db2.prepare(
+    deleteMedia: db.prepare("DELETE FROM media WHERE agent_id = ? AND entry_id = ?"),
+    deleteAgentMedia: db.prepare("DELETE FROM media WHERE agent_id = ?"),
+    upsertFingerprint: db.prepare(
       `INSERT INTO agents (agent_id, fingerprint) VALUES (?, ?)
 			 ON CONFLICT(agent_id) DO UPDATE SET fingerprint = excluded.fingerprint`
     ),
-    deleteFingerprint: db2.prepare("DELETE FROM agents WHERE agent_id = ?"),
-    readFingerprint: db2.prepare("SELECT fingerprint FROM agents WHERE agent_id = ?"),
-    listIndexedAgentIds: db2.prepare(
+    deleteFingerprint: db.prepare("DELETE FROM agents WHERE agent_id = ?"),
+    readFingerprint: db.prepare("SELECT fingerprint FROM agents WHERE agent_id = ?"),
+    listIndexedAgentIds: db.prepare(
       `SELECT agent_id AS agentId FROM agents
 			 UNION SELECT DISTINCT agent_id FROM messages
 			 UNION SELECT DISTINCT agent_id FROM media`
@@ -807,10 +1016,10 @@ function prepareStatements(db2) {
   };
 }
 var SandSearchIndexWriter = class {
-  constructor(db2, agentsRootDir) {
-    this.db = db2;
+  constructor(db, agentsRootDir) {
+    this.db = db;
     this.agentsRootDir = agentsRootDir;
-    this.statements = prepareStatements(db2);
+    this.statements = prepareStatements(db);
   }
   db;
   agentsRootDir;
@@ -862,9 +1071,9 @@ var SandSearchIndexWriter = class {
     const path = this.storeDbPath(agentId);
     if (!(0, import_node_fs.existsSync)(path)) return null;
     try {
-      const db2 = new import_node_sqlite3.DatabaseSync(path, { readOnly: true });
-      db2.exec(`PRAGMA busy_timeout = ${DB_BUSY_TIMEOUT_MS}`);
-      const connection = { db: db2 };
+      const db = new import_node_sqlite3.DatabaseSync(path, { readOnly: true });
+      db.exec(`PRAGMA busy_timeout = ${DB_BUSY_TIMEOUT_MS}`);
+      const connection = { db };
       this.storeConnections.set(agentId, connection);
       return connection;
     } catch {
@@ -1030,28 +1239,82 @@ var SandSearchIndexWriter = class {
 };
 
 // src/host/extensions/content-search/search-index-worker.ts
+function errorMessage(error) {
+  return error instanceof Error ? error.message : String(error);
+}
+function serveJobs(port2, config) {
+  invariant(
+    typeof config.indexDbPath === "string" && typeof config.agentsRootDir === "string",
+    "search-index-worker needs indexDbPath + agentsRootDir"
+  );
+  const db = openSearchIndexDb(config.indexDbPath);
+  ensureSearchIndexSchema(db, isFts5Available());
+  const writer = new SandSearchIndexWriter(db, config.agentsRootDir);
+  port2.on("message", (request) => {
+    let response;
+    try {
+      writer.runJob(request.job);
+      response = { requestId: request.requestId, ok: true };
+    } catch (error) {
+      response = {
+        requestId: request.requestId,
+        ok: false,
+        message: errorMessage(error),
+        isIndexCorrupt: isSqliteCorruptError(error)
+      };
+    }
+    port2.postMessage(response);
+  });
+}
+function runQuery(db, { kind, query, limit }, isFtsEnabled) {
+  switch (kind) {
+    case "messages":
+      return { kind, matches: searchMessages(db, query, limit, isFtsEnabled) };
+    case "media":
+      return { kind, matches: searchMedia(db, query, limit, isFtsEnabled) };
+    default: {
+      const exhaustive = kind;
+      return exhaustive;
+    }
+  }
+}
+function serveQueries(port2, config) {
+  invariant(
+    typeof config.indexDbPath === "string" && typeof config.isFtsEnabled === "boolean",
+    "search-index-worker reader needs indexDbPath + isFtsEnabled"
+  );
+  let db;
+  port2.on("message", (request) => {
+    let response;
+    try {
+      db ??= openSearchIndexReadDb(config.indexDbPath);
+      response = {
+        requestId: request.requestId,
+        ok: true,
+        ...runQuery(db, request.query, config.isFtsEnabled)
+      };
+    } catch (error) {
+      response = {
+        requestId: request.requestId,
+        ok: false,
+        message: errorMessage(error),
+        errorClass: errorLogTag(error),
+        isIndexCorrupt: isSqliteCorruptError(error)
+      };
+    }
+    port2.postMessage(response);
+  });
+}
 var port = import_node_worker_threads.parentPort;
 invariant(port != null, "search-index-worker must run as a worker_thread");
-var config = import_node_worker_threads.workerData;
-invariant(
-  typeof config?.indexDbPath === "string" && typeof config?.agentsRootDir === "string",
-  "search-index-worker needs indexDbPath + agentsRootDir"
-);
-var db = openSearchIndexDb(config.indexDbPath);
-ensureSearchIndexSchema(db, isFts5Available());
-var writer = new SandSearchIndexWriter(db, config.agentsRootDir);
-port.on("message", (request) => {
-  let response;
-  try {
-    writer.runJob(request.job);
-    response = { requestId: request.requestId, ok: true };
-  } catch (error) {
-    response = {
-      requestId: request.requestId,
-      ok: false,
-      message: error instanceof Error ? error.message : String(error),
-      isIndexCorrupt: isSqliteCorruptError(error)
-    };
-  }
-  port.postMessage(response);
-});
+var data = import_node_worker_threads.workerData;
+switch (data?.role) {
+  case "writer":
+    serveJobs(port, data);
+    break;
+  case "reader":
+    serveQueries(port, data);
+    break;
+  default:
+    invariant(false, "search-index-worker needs a writer or reader role");
+}

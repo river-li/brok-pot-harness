@@ -13,8 +13,8 @@ function createCookieOriginApprovalPort(deps) {
     try {
       const { injected } = await deps.inject(outcome.cookies);
       return { kind: "resolved", decision, grants, injected, ...presented };
-    } catch (error41) {
-      const errorClass = errorLogTag(error41);
+    } catch (error42) {
+      const errorClass = errorLogTag(error42);
       deps.log(`cookie approval inject failed (${errorClass})`);
       return { kind: "failed", stage: "inject", errorClass, decision, grants, ...presented };
     }

@@ -181,8 +181,8 @@ var RosterProjection = class {
         if (runner.hasSubagent(agentId)) {
           try {
             items2 = await runner.getSubagentOutline(agentId);
-          } catch (error41) {
-            reportFallback("roster_projection", error41);
+          } catch (error42) {
+            reportFallback("roster_projection", error42);
             items2 = [];
           }
           break;
@@ -203,8 +203,8 @@ var RosterProjection = class {
     let items = [];
     try {
       items = await this.tm.sessionStore.getAgentOutline(agentId);
-    } catch (error41) {
-      reportFallback("roster_projection", error41);
+    } catch (error42) {
+      reportFallback("roster_projection", error42);
       items = [];
     }
     this.emitOutline({ type: "snapshot", agentId, items });
@@ -435,10 +435,10 @@ var RosterProjection = class {
     }
     try {
       this.emitter.emit("subagents", event);
-    } catch (error41) {
+    } catch (error42) {
       this.tm.productAnalytics.trackEvent("sand.subagent.fanout_failed", {
         agent_id: parentAgentId,
-        error_type: error41 instanceof Error ? error41.name : "unknown"
+        error_type: error42 instanceof Error ? error42.name : "unknown"
       });
     }
     if (hasRunningSubagent === hadRunningSubagent) return;

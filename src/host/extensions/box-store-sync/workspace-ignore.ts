@@ -1,6 +1,6 @@
 var import_node_fs21 = require("node:fs");
 var import_node_path22 = require("node:path");
-init_dist();
+init_dist2();
 var IGNORE_NOTHING = {
   ignores: () => false,
   canPruneDir: () => false

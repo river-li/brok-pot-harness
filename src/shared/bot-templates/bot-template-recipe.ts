@@ -144,10 +144,10 @@ function parseBotTemplateRecipeBlob(blob) {
   let parsed2;
   try {
     parsed2 = JSON.parse(new TextDecoder().decode(blob.bytes));
-  } catch (error41) {
+  } catch (error42) {
     return {
       kind: "refused",
-      error: new BotTemplateRecipeRefused({ reason: "invalid-json", error: error41 })
+      error: new BotTemplateRecipeRefused({ reason: "invalid-json", error: error42 })
     };
   }
   const recipe = botTemplateDraftSchema.safeParse(parsed2);

@@ -1,4 +1,4 @@
-var __awaiter37 = function(thisArg, _arguments, P2, generator) {
+var __awaiter39 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -86,7 +86,7 @@ var backgroundShellHooksConfig = {
    * Sandbox is derived from args.sandboxPolicy (same logic as Shell/ShellStream).
    * Throws HookDeniedError if hook denies execution (generic-hooks handles the rest).
    */
-  runPreExecutionHooks: (params) => __awaiter37(void 0, void 0, void 0, function* () {
+  runPreExecutionHooks: (params) => __awaiter39(void 0, void 0, void 0, function* () {
     const { args, baseHookRequest, hookExecutor } = params;
     const cwd = args.workingDirectory || "";
     const sandbox = isSandboxed(args.sandboxPolicy);

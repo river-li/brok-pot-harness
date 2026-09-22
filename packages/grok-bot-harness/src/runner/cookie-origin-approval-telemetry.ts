@@ -79,8 +79,8 @@ function cookieOriginApprovalSandErrorOf(report) {
 function reportCookieOriginApproval(deps, makeReport) {
   try {
     deps.report(makeReport());
-  } catch (error41) {
-    deps.log(`Cookie origin approval report failed (${errorLogTag(error41)})`);
+  } catch (error42) {
+    deps.log(`Cookie origin approval report failed (${errorLogTag(error42)})`);
   }
 }
 function instrumentCookieOriginApproval(port, deps) {
@@ -96,14 +96,14 @@ function instrumentCookieOriginApproval(port, deps) {
       let outcome;
       try {
         outcome = await port.request(args);
-      } catch (error41) {
+      } catch (error42) {
         reportCookieOriginApproval(deps, () => ({
           ...ctx,
           outcome: "failed",
           durationMs: deps.now() - startedAt,
-          errorClass: errorClassOf(error41)
+          errorClass: errorClassOf(error42)
         }));
-        throw error41;
+        throw error42;
       }
       reportCookieOriginApproval(
         deps,

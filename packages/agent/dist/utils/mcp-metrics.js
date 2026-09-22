@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var logger51 = createLogger("mcp.meta.failure");
 var getMcpToolsDuration = createHistogram("mcp.meta.get_tools_duration_ms", {
   description: "Duration of GetMcpTools calls in milliseconds",
@@ -189,8 +189,8 @@ var CALL_MCP_TOOL_FAILURE_REASONS = {
   WITHOUT_READ_DEF: "without_read_def",
   OTHER: "other"
 };
-function reportMcpMetaToolFailure(ctx, error41, data) {
-  const errorMessage6 = error41 instanceof Error ? error41.message : typeof error41 === "string" ? error41 : String(error41);
+function reportMcpMetaToolFailure(ctx, error42, data) {
+  const errorMessage6 = error42 instanceof Error ? error42.message : typeof error42 === "string" ? error42 : String(error42);
   const logData = {
     tool: data.tool,
     failure_reason: data.failureReason,

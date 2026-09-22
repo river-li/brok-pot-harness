@@ -74,19 +74,19 @@ var SandLocalToolPermissionController = class {
       }
     );
   }
-  async authorize(scope, request3) {
-    const permission = this.permission(request3.machineId);
+  async authorize(scope, request5) {
+    const permission = this.permission(request5.machineId);
     if (permission === "never") {
       return { allowed: false, reason: SAND_LOCAL_TOOLS_DISABLED_MESSAGE };
     }
     if (scope !== void 0) {
-      const refusal = this.refusalFor(scope, request3);
+      const refusal = this.refusalFor(scope, request5);
       if (refusal !== void 0) return { allowed: false, reason: refusal };
     }
-    if (localToolActionStanding(request3.action) === "setting") {
+    if (localToolActionStanding(request5.action) === "setting") {
       return this.options.getMessagesEnabled() ? { allowed: true } : { allowed: false, reason: SAND_MESSAGES_DISABLED_MESSAGE };
     }
-    if (permission === "always" && localToolActionStanding(request3.action) === "global" && !this.predatesStandingGrant(scope, request3.machineId)) {
+    if (permission === "always" && localToolActionStanding(request5.action) === "global" && !this.predatesStandingGrant(scope, request5.machineId)) {
       return { allowed: true };
     }
     if (scope === void 0) {
@@ -95,12 +95,12 @@ var SandLocalToolPermissionController = class {
     if (scope.toolCallId === void 0) {
       const attached = this.findApprovalForResource(
         scope.agentId,
-        request3.machineId,
-        request3.attachToResourcePath
+        request5.machineId,
+        request5.attachToResourcePath
       );
       return attached !== void 0 ? { allowed: true, approvalId: attached.id } : { allowed: false, reason: SAND_LOCAL_TOOLS_UNAPPROVED_MESSAGE };
     }
-    return await this.ask({ ...scope, toolCallId: scope.toolCallId }, request3);
+    return await this.ask({ ...scope, toolCallId: scope.toolCallId }, request5);
   }
   completeScope(scope) {
     const toolCallId = scope?.toolCallId;
@@ -288,7 +288,7 @@ var SandLocalToolPermissionController = class {
   scopeEpoch(scope) {
     return scope.directionEpoch ?? this.directionEpoch(scope.agentId);
   }
-  refusalFor(scope, request3) {
+  refusalFor(scope, request5) {
     if (this.forgottenAgents.has(scope.agentId)) {
       return SAND_LOCAL_TOOLS_STALE_TASK_MESSAGE;
     }
@@ -298,7 +298,7 @@ var SandLocalToolPermissionController = class {
       return SAND_LOCAL_TOOLS_STALE_TASK_MESSAGE;
     }
     const refused2 = this.refusedActions.get(
-      refusalKey(scope.agentId, request3.machineId, request3.action, request3.target)
+      refusalKey(scope.agentId, request5.machineId, request5.action, request5.target)
     );
     return refused2 !== void 0 && refused2.directionEpoch >= epoch ? SAND_LOCAL_TOOLS_ABANDONED_MESSAGE : void 0;
   }
@@ -364,12 +364,12 @@ var SandLocalToolPermissionController = class {
       forget(key, refused2);
     }
   }
-  async ask(scope, request3) {
+  async ask(scope, request5) {
     const covered = [...this.approvalsById.values()].find(
-      (approval) => approval.agentId === scope.agentId && (approval.toolCallId === scope.toolCallId || approval.resourcePath !== void 0) && localToolApprovalCovers(approval, request3)
+      (approval) => approval.agentId === scope.agentId && (approval.toolCallId === scope.toolCallId || approval.resourcePath !== void 0) && localToolApprovalCovers(approval, request5)
     );
     if (covered !== void 0) {
-      if (request3.outlivesScope === true && !covered.outlivesScope) {
+      if (request5.outlivesScope === true && !covered.outlivesScope) {
         this.approvalsById.set(covered.id, { ...covered, outlivesScope: true });
       }
       return { allowed: true, approvalId: covered.id };
@@ -381,43 +381,43 @@ var SandLocalToolPermissionController = class {
       return { allowed: false, reason: SAND_NO_LOCAL_MACHINE_MESSAGE };
     }
     const scopeApproved = scope.action !== void 0 && [...this.approvalsById.values()].some(
-      (approval) => approval.agentId === scope.agentId && approval.toolCallId === scope.toolCallId && approval.machineId === request3.machineId && approval.action === scope.action
+      (approval) => approval.agentId === scope.agentId && approval.toolCallId === scope.toolCallId && approval.machineId === request5.machineId && approval.action === scope.action
     );
-    if (scope.action !== void 0 && scope.action !== request3.action && !scopeApproved) {
+    if (scope.action !== void 0 && scope.action !== request5.action && !scopeApproved) {
       return { allowed: false, reason: SAND_LOCAL_TOOLS_PREPARATORY_MESSAGE };
     }
-    if (request3.signal?.aborted === true) {
+    if (request5.signal?.aborted === true) {
       return { allowed: false, reason: SAND_LOCAL_TOOLS_ASK_CANCELLED_MESSAGE };
     }
-    const target = request3.target;
+    const target = request5.target;
     if (target.length > SAND_LOCAL_TOOL_TARGET_MAX_CHARS) {
       return { allowed: false, reason: SAND_LOCAL_TOOLS_TARGET_TOO_LARGE_MESSAGE };
     }
-    const key = askKey(scope.agentId, scope.toolCallId, request3.machineId, request3.action, target);
+    const key = askKey(scope.agentId, scope.toolCallId, request5.machineId, request5.action, target);
     const existing = this.pendingByKey.get(key);
-    if (existing !== void 0) return await this.join(existing, request3.signal);
+    if (existing !== void 0) return await this.join(existing, request5.signal);
     const createdAtMs2 = this.now();
-    const description10 = request3.description?.trim();
-    const recipientName = request3.recipientName?.trim();
+    const description9 = request5.description?.trim();
+    const recipientName = request5.recipientName?.trim();
     const pending = {
       request: {
         id: (0, import_node_crypto51.randomBytes)(32).toString("hex"),
         agentId: scope.agentId,
-        action: request3.action,
+        action: request5.action,
         target,
-        ...request3.machineId !== void 0 ? { machineId: request3.machineId } : {},
-        ...request3.targetKind !== void 0 ? { targetKind: request3.targetKind } : {},
+        ...request5.machineId !== void 0 ? { machineId: request5.machineId } : {},
+        ...request5.targetKind !== void 0 ? { targetKind: request5.targetKind } : {},
         status: "pending",
         createdAtMs: createdAtMs2,
         expiresAtMs: createdAtMs2 + this.askTtlMs,
-        ...description10 !== void 0 && description10.length > 0 ? { description: description10 } : {},
+        ...description9 !== void 0 && description9.length > 0 ? { description: description9 } : {},
         ...recipientName !== void 0 && recipientName.length > 0 ? { recipientName } : {}
       },
       waiters: /* @__PURE__ */ new Set(),
       expiryAbort: new AbortController(),
       toolCallId: scope.toolCallId,
-      resourcePath: normalizeResourcePath(request3.resourcePath),
-      outlivesScope: request3.outlivesScope === true,
+      resourcePath: normalizeResourcePath(request5.resourcePath),
+      outlivesScope: request5.outlivesScope === true,
       directionEpoch: this.scopeEpoch(scope)
     };
     this.pendingByKey.set(key, pending);
@@ -430,7 +430,7 @@ var SandLocalToolPermissionController = class {
       });
     });
     this.emit({ type: "created", request: pending.request });
-    return await this.join(pending, request3.signal);
+    return await this.join(pending, request5.signal);
   }
   async join(pending, signal) {
     return await new Promise((resolve29) => {

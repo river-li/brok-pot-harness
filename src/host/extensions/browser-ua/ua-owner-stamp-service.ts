@@ -17,8 +17,8 @@ function createUaOwnerStampWriter(options2) {
       await writeFileAtomic(path31, `${stamp}
 `, { mode: 420 });
       lastWritten = stamp;
-    } catch (error41) {
-      options2.log(`ua-owner stamp write failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      options2.log(`ua-owner stamp write failed: ${errorLogTag(error42)}`);
     }
   };
 }

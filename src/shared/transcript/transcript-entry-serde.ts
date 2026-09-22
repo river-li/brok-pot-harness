@@ -38,9 +38,9 @@ function isValidTranscriptEntry(entry) {
 }
 function withBoxEnvSecretTargetKeys(entry) {
   if (entry.kind !== "send-message" || entry.message.type !== "secret-request") return entry;
-  const request3 = entry.message.secretRequest;
-  if (!isUnknownRecord(request3) || !isUnknownRecord(request3.target)) return entry;
-  const { kind, name: name17, platform: platform2, field } = request3.target;
+  const request5 = entry.message.secretRequest;
+  if (!isUnknownRecord(request5) || !isUnknownRecord(request5.target)) return entry;
+  const { kind, name: name17, platform: platform2, field } = request5.target;
   if (kind !== "box-env" || typeof name17 !== "string") return entry;
   if (typeof platform2 === "string" && typeof field === "string") return entry;
   return {

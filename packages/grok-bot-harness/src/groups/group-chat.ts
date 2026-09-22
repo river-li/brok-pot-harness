@@ -140,8 +140,8 @@ function messagesSinceMemberLastSpoke(history, memberId) {
 function buildGroupTurnPrompt(args) {
   const { member, group, peers, newMessages, isWindingDown, isAttachmentOnlyTurn } = args;
   const lines2 = [formatGroupChatTag(group, peers)];
-  const description10 = group.description.trim();
-  if (description10.length > 0) lines2.push(`Room: ${description10}`);
+  const description9 = group.description.trim();
+  if (description9.length > 0) lines2.push(`Room: ${description9}`);
   const describedPeers = peers.filter((peer) => peer.description.trim().length > 0);
   if (describedPeers.length > 0) {
     lines2.push(

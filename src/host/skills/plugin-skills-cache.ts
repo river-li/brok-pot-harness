@@ -50,8 +50,8 @@ function readPluginSkillsCache(cacheDir) {
       skills: parsed2.skills.map(withProvenanceDefaults),
       authBlocked: Array.isArray(parsed2.authBlocked) && parsed2.authBlocked.every(isPluginAuthBlock) ? parsed2.authBlocked : []
     };
-  } catch (error41) {
-    reportFallbackUnlessAbsent("plugin_skills_cache", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("plugin_skills_cache", error42);
     return null;
   }
 }

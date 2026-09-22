@@ -40,10 +40,10 @@ var TokenRefreshingSpanExporter = class {
       });
       this.delegateToken = token;
       if (previous !== void 0) {
-        void previous.shutdown().catch((error41) => {
+        void previous.shutdown().catch((error42) => {
           this.reportHostLog(
             "warn",
-            `[sand-tracing] replaced exporter shutdown failed (${errorLogTag(error41)})`
+            `[sand-tracing] replaced exporter shutdown failed (${errorLogTag(error42)})`
           );
         });
       }
@@ -98,8 +98,8 @@ function initSandHostTracing(options2) {
       resource: (0, import_resources.resourceFromAttributes)({
         "service.name": "sand-host",
         "service.version": options2.serviceVersion ?? "unknown",
-        "host.name": import_node_os28.default.hostname(),
-        "os.type": import_node_os28.default.platform(),
+        "host.name": import_node_os27.default.hostname(),
+        "os.type": import_node_os27.default.platform(),
         "process.runtime.name": "node",
         "process.runtime.version": process.version,
         "deployment.environment": "box"
@@ -115,10 +115,10 @@ function initSandHostTracing(options2) {
     const tracing = {
       flush: () => {
         try {
-          void provider.forceFlush().catch((error41) => {
+          void provider.forceFlush().catch((error42) => {
             options2.reportHostLog(
               "warn",
-              `[sand-tracing] span flush failed (${errorLogTag(error41)})`
+              `[sand-tracing] span flush failed (${errorLogTag(error42)})`
             );
           });
         } catch {

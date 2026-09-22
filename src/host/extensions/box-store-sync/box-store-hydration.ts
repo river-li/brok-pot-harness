@@ -39,11 +39,11 @@ async function writeHydrationHandoffMarker(markerPath) {
       await directory.close();
     }
   } finally {
-    await (0, import_promises13.rm)(tempPath, { force: true }).catch((error41) => {
+    await (0, import_promises13.rm)(tempPath, { force: true }).catch((error42) => {
       reportBoxStoreDiagnostic({
         extension: "box_store",
         kind: "hydration_temp_cleanup_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     });
   }

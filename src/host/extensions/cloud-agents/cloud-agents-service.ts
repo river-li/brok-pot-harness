@@ -128,7 +128,8 @@ var SandCloudAgentManager = class {
     }
     if (this.originClient == null) {
       const authBackendUrl = this.options.backend.backendUrl;
-      this.originClient = createSandCursorBackendClient(OriginService, {
+      const createClient2 = this.options.createOriginClient ?? createSandCursorBackendClient;
+      this.originClient = createClient2(OriginService, {
         backend: sandBackendIdentityAt(this.options.backend, this.originUrls.api),
         getAccessToken: () => this.options.getCursorAccessToken({ backendUrl: authBackendUrl }),
         getTeamId: this.options.getTeamId,
@@ -174,14 +175,14 @@ var SandCloudAgentManager = class {
           defaultBranch: "main"
         }),
         originCallOptions2
-      ).catch((error41) => {
-        if (error41 instanceof ConnectError && error41.code === Code.FailedPrecondition) {
+      ).catch((error42) => {
+        if (error42 instanceof ConnectError && error42.code === Code.FailedPrecondition) {
           throw new SandCloudAgentLaunchError(
             "Origin can't create a new project for this account. Check your plan, Privacy Mode, and team Origin settings, then try again: https://cursor.com/codebase/get-started",
-            { cause: error41 }
+            { cause: error42 }
           );
         }
-        throw error41;
+        throw error42;
       });
       const defaultBranch = response.repository?.defaultBranch.trim() || "main";
       const org = response.repository?.identifier?.org.trim() ?? "";

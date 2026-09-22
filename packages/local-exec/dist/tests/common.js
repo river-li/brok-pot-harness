@@ -35,7 +35,9 @@ var MockPermissionsService = class {
       kind: "allow",
       policy: requestedPolicy ?? { type: "insecure_none" }
     });
-    this._shouldEnforceShellInvariantBlocksImpl = async () => ({ kind: "allow" });
+    this._shouldEnforceShellInvariantBlocksImpl = async () => ({
+      kind: "allow"
+    });
     this._isShellCommandFullyAllowlistedImpl = async () => false;
     this._isMcpFullyAllowlistedImpl = async () => false;
   }

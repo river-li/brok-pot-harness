@@ -1,4 +1,4 @@
-var __awaiter41 = function(thisArg, _arguments, P2, generator) {
+var __awaiter43 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -37,7 +37,7 @@ function toUint8Array2(b2) {
   return new Uint8Array(buffer, b2.byteOffset, b2.byteLength);
 }
 function getBlobId(blobData) {
-  return __awaiter41(this, void 0, void 0, function* () {
+  return __awaiter43(this, void 0, void 0, function* () {
     const hash = yield crypto.subtle.digest("SHA-256", toUint8Array2(blobData));
     return new Uint8Array(hash);
   });

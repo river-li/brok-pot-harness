@@ -1,11 +1,11 @@
 var SAND_DOWNLOAD_FILE_TOOL_NAME = "download_file";
 var downloadFileObjectSchema = external_exports.object({
   connection: external_exports.string().trim().min(1).describe(
-    "Which connected account holds the file: the connection's identifier as GetMcpServerStatus lists it and as its own tools are prefixed with (e.g. user-onedrive, dashboard-team-1-Google-drive). The service short name (google-drive, onedrive, gmail) also works when exactly one account of that service is connected. A name that matches nothing is answered with the identifiers that can serve files."
+    "Which connected account holds the file: the connection's identifier as GetMcpServerStatus lists it and as its own tools are prefixed with (e.g. user-onedrive, dashboard-team-1-Google-drive). The service short name (google-drive, onedrive, gmail, slack) also works when exactly one account of that service is connected. A name that matches nothing is answered with the identifiers that can serve files."
   ),
   source: external_exports.object({
     fileId: external_exports.string().trim().optional().describe(
-      "Provider file id from that connection's listing or search tools. Google Drive takes ids only."
+      "Provider file id from that connection's listing or search tools. Google Drive and Slack take ids only."
     ),
     path: external_exports.string().trim().optional().describe(
       'OneDrive only: file path from the OneDrive root, e.g. "Documents/notes.txt". Provide exactly one of fileId or path.'
@@ -57,12 +57,12 @@ function normalizeSource(source) {
 function normalizeDestinationPath(raw) {
   const path31 = nonEmpty4(raw);
   if (path31 === void 0) return void 0;
-  if (!import_node_path167.posix.isAbsolute(path31)) {
+  if (!import_node_path165.posix.isAbsolute(path31)) {
     throw new SandToolInputError(
       `destination.path ${JSON.stringify(path31)} is not absolute. Pass the full path on your computer, e.g. "/home/box/agent-data/agents/<id>/downloads/report.pdf", or omit it.`
     );
   }
-  const normalized = import_node_path167.posix.normalize(path31);
+  const normalized = import_node_path165.posix.normalize(path31);
   if (normalized.endsWith("/")) {
     throw new SandToolInputError(
       "destination.path must name a file (folder plus file name), not a directory."
@@ -75,12 +75,12 @@ function formatBytes(bytes) {
   if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${bytes} bytes`;
 }
-function describeDownloadFileOutcome(outcome, request3) {
-  const source = request3.source.fileId !== void 0 ? `file ${request3.source.fileId}` : JSON.stringify(request3.source.path ?? "");
+function describeDownloadFileOutcome(outcome, request5) {
+  const source = request5.source.fileId !== void 0 ? `file ${request5.source.fileId}` : JSON.stringify(request5.source.path ?? "");
   switch (outcome.kind) {
     case "downloaded": {
       const lines2 = [
-        `Downloaded ${source} from ${request3.connection} to ${outcome.boxPath} (${formatBytes(outcome.sizeBytes)}, ${outcome.mimeType}).`,
+        `Downloaded ${source} from ${request5.connection} to ${outcome.boxPath} (${formatBytes(outcome.sizeBytes)}, ${outcome.mimeType}).`,
         `name: ${outcome.name}`,
         `id: ${outcome.id}`
       ];
@@ -91,27 +91,28 @@ function describeDownloadFileOutcome(outcome, request3) {
       return lines2.join("\n");
     }
     case "needs_auth":
-      return `The ${request3.connection} connection is installed but not signed in, so nothing was downloaded. Ask the user to connect ${request3.connection} again (AuthenticateMcpServer can start that), then retry.`;
+      return `The ${request5.connection} connection is installed but not signed in, so nothing was downloaded. Ask the user to connect ${request5.connection} again (AuthenticateMcpServer can start that), then retry.`;
     case "unknown_connection":
-      return outcome.available.length === 0 ? "No connected service can serve files this turn, so nothing was downloaded. Tell the user which service you need connected." : `${JSON.stringify(request3.connection)} is not a connection that can serve files. Use one of: ${outcome.available.join(", ")}.`;
+      return outcome.available.length === 0 ? "No connected service can serve files this turn, so nothing was downloaded. Tell the user which service you need connected." : `${JSON.stringify(request5.connection)} is not a connection that can serve files. Use one of: ${outcome.available.join(", ")}.`;
     case "destination_refused":
       return `Nothing was downloaded: download_file only writes under ${outcome.allowedRoots.join(" or ")}. Pass a destination.path under one of those directories, or omit it to use your downloads folder.`;
     case "not_found":
       return `Nothing was downloaded: ${outcome.message}`;
     case "too_large":
-      return `Nothing was downloaded: ${source} on ${request3.connection} is over the ${formatBytes(outcome.maxBytes)} limit for download_file. Tell the user it is too large to fetch this way.`;
+      return `Nothing was downloaded: ${source} on ${request5.connection} is over the ${formatBytes(outcome.maxBytes)} limit for download_file. Tell the user it is too large to fetch this way.`;
     case "rejected":
-      return `${request3.connection} refused the download: ${outcome.message} Nothing was downloaded.`;
+      return `${request5.connection} refused the download: ${outcome.message} Nothing was downloaded.`;
     case "unavailable":
       return `${outcome.message} Nothing was downloaded; try again in a moment or tell the user.`;
   }
 }
 var DOWNLOAD_FILE_DESCRIPTION = [
   "Fetch a file from one of the user's connected services onto your computer using the account they already connected. The file's bytes go straight from the service to your computer: you never read or paste them, so this works for any size or type up to the limit, and it is the right tool whenever you need to work on a file that lives in one of these services (read it, convert it, attach it, upload it somewhere else). Do not ask a service's own tools to print a file's contents into the conversation; download it and open it locally. The result tells you where the file landed.",
-  "connection is the connection's identifier: the same one GetMcpServerStatus lists and that connection's own tools are prefixed with (for example user-onedrive, dashboard-team-1-Google-drive or user-Gmail--personal). The service short name (google-drive, onedrive or gmail) is accepted when exactly one account of that service is connected; with several accounts, name the identifier so the right account is used. Supported today:",
+  CONNECTOR_CONNECTION_ARGUMENT_DESCRIPTION,
   "- Google Drive: source.fileId is a Drive file id from the Drive listing or search tools. Google Docs, Sheets, Slides and Drawings have no file of their own and are exported as .docx, .xlsx, .pptx and .png; the returned name carries that extension.",
   '- OneDrive: source.fileId is an item id from list_drive_items or search_drive_items, or source.path is a path from the OneDrive root (e.g. "Documents/notes.txt").',
   `- Gmail: source.fileId is "<message id>/<attachment id>", both from get_thread (each attachment listed on a message carries an id). This is the only way to get an email attachment's bytes; the Gmail tools themselves never return them.`,
+  "- Slack: source.fileId is the file id (F\u2026) a Slack message or search result shows for an attachment. Canvases, posts and files that live in another service have no bytes to fetch this way.",
   "destination.path is the full path on your computer, name included; omit it to land the file in your downloads folder under the service's file name. A connection that cannot serve files answers with the ones that can."
 ].join("\n");
 async function runDownloadFile(args, deps) {
@@ -128,7 +129,7 @@ async function runDownloadFile(args, deps) {
     return `${describeAmbiguousConnectorConnection(args.connection, resolution)} Nothing was downloaded.`;
   }
   const connection = resolution.connection;
-  const request3 = { connection, source };
+  const request5 = { connection, source };
   const prepared = await deps.prepareDownload({
     agentId,
     connection,
@@ -136,7 +137,7 @@ async function runDownloadFile(args, deps) {
     destination
   });
   if (prepared.kind !== "ready") {
-    return describeDownloadFileOutcome(prepared, request3);
+    return describeDownloadFileOutcome(prepared, request5);
   }
   if (deps.reviewDownload !== void 0) {
     const decision = await deps.reviewDownload({
@@ -148,7 +149,7 @@ async function runDownloadFile(args, deps) {
       return `The download from ${connection} was not approved: ${decision.reason} Nothing was downloaded. Do not retry the same download unless the user asks for it.`;
     }
   }
-  return describeDownloadFileOutcome(await prepared.download(), request3);
+  return describeDownloadFileOutcome(await prepared.download(), request5);
 }
 function createDownloadFileTool(deps) {
   return defineCommunicateTool(deps, {
@@ -158,7 +159,7 @@ function createDownloadFileTool(deps) {
     parameters: downloadFileParameters,
     onArgsRejected: deps.onArgsRejected,
     describeActivity: (args) => ({
-      detail: args.source.path === void 0 ? args.source.fileId ?? "" : import_node_path167.posix.basename(args.source.path),
+      detail: args.source.path === void 0 ? args.source.fileId ?? "" : import_node_path165.posix.basename(args.source.path),
       target: args.connection
     }),
     execute: async (ctx, args, d) => runDownloadFile(args, { ...d, signal: ctx.signal })

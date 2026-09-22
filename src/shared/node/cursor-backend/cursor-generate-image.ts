@@ -14,10 +14,10 @@ var SandGenerateImageModelRestrictedError = class extends SandDomainError {
 };
 function createCursorGenerateImageService(options2) {
   const client = createSandCursorBackendClient(AiService2, options2);
-  return async (description10, referenceImages) => {
+  return async (description9, referenceImages) => {
     const response = await client.runGenerateImage(
       new RunGenerateImageRequest({
-        description: description10,
+        description: description9,
         referenceImages: (referenceImages ?? []).map(
           (image2) => new GenerateImageReferenceImage({
             data: image2.data,

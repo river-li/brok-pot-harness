@@ -1,5 +1,5 @@
-init_dist();
 init_dist2();
+init_dist3();
 var DEV_SMART_MODE_CLASSIFIER_BLOCK_REASON = "This is a dev block whatever just retry it";
 function createDevSmartModeClassifierOneShotState(token) {
   const trimmedToken = token?.trim();

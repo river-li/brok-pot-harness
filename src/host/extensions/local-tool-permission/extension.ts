@@ -21,15 +21,15 @@ var localToolPermissionExtension = defineHostExtension({
       ...options2?.activeOnly === true ? { activeOnly: true } : {}
     });
     void context2.host.whenBackgroundWorkReady.then(
-      () => sweepStrandedCards().catch((error41) => {
-        context2.host.log(`local-tool ask boot sweep failed (${errorLogTag(error41)})`);
+      () => sweepStrandedCards().catch((error42) => {
+        context2.host.log(`local-tool ask boot sweep failed (${errorLogTag(error42)})`);
       })
     );
     const offComputerAttached = context2.host.events.on("local-exec.computer-attached", async () => {
       try {
         await sweepStrandedCards({ activeOnly: true });
-      } catch (error41) {
-        context2.host.log(`local-tool ask reconnect sweep failed (${errorLogTag(error41)})`);
+      } catch (error42) {
+        context2.host.log(`local-tool ask reconnect sweep failed (${errorLogTag(error42)})`);
       }
     });
     context2.onStop(offComputerAttached);

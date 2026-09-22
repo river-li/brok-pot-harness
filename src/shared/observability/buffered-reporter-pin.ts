@@ -8,8 +8,8 @@ function createBufferedReporterPin(options2) {
     }
     try {
       next(...args);
-    } catch (error41) {
-      options2.onReplayFailure(error41);
+    } catch (error42) {
+      options2.onReplayFailure(error42);
     }
   };
   return {

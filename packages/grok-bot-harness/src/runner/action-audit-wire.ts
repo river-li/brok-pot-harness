@@ -10,7 +10,10 @@ function toSandAuditEventProto(record2, eventId) {
     turnId: record2.turnId ?? "",
     rootTurnId: record2.rootTurnId ?? "",
     subagentId: record2.subagentId ?? "",
-    boxId: record2.boxId ?? ""
+    boxId: record2.boxId ?? "",
+    eventSequence: nonNegativeBigInt(record2.sequence ?? 0),
+    toolCallId: record2.toolCallId ?? "",
+    initiatedBy: record2.initiatedBy ?? ""
   };
   const action = record2.action;
   switch (action.kind) {
@@ -73,6 +76,19 @@ function toSandAuditEventProto(record2, eventId) {
             ),
             durationMs: nonNegativeBigInt(action.durationMs),
             screenshotCount: nonNegativeBigInt(action.screenshotCount)
+          })
+        }
+      });
+    case "toolResult":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "toolResult",
+          value: new SandAuditEvent_ToolResult({
+            toolName: action.toolName,
+            outcome: action.outcome,
+            durationMs: nonNegativeBigInt(action.durationMs),
+            errorCategory: action.errorCategory ?? ""
           })
         }
       });

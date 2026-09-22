@@ -2,8 +2,8 @@ var import_node_child_process14 = require("node:child_process");
 var import_node_fs65 = require("node:fs");
 var import_promises57 = require("node:fs/promises");
 var import_node_path113 = require("node:path");
-init_dist();
 init_dist2();
+init_dist3();
 init_errors();
 init_system_errno();
 var SandManagedSetupError = class extends SandDomainError {
@@ -70,8 +70,8 @@ var ManagedSetupService = class {
         if ((await this.refresh()).refreshed) return;
         throw new SandManagedSetupError("managed setup is not ready");
       }, this.abort.signal);
-    } catch (error41) {
-      this.log(`managed setup seed failed; keeping the prior assignment: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.log(`managed setup seed failed; keeping the prior assignment: ${errorLogTag(error42)}`);
     }
   }
   refresh(force = false) {
@@ -100,11 +100,11 @@ var ManagedSetupService = class {
           await this.launchConverge({ force: forceSetup });
           refreshed = true;
           failure2 = null;
-        } catch (error41) {
+        } catch (error42) {
           refreshed = false;
-          failure2 = { error: error41 };
+          failure2 = { error: error42 };
           this.log(
-            `managed setup refresh failed; keeping the prior assignment: ${errorLogTag(error41)}`
+            `managed setup refresh failed; keeping the prior assignment: ${errorLogTag(error42)}`
           );
         }
       }
@@ -139,9 +139,9 @@ async function publishSandSetupManifests(manifests, paths = defaultPaths) {
 async function readdirOrEmpty(dir) {
   try {
     return await (0, import_promises57.readdir)(dir);
-  } catch (error41) {
-    if (findSystemErrno(error41) === "ENOENT") return [];
-    throw error41;
+  } catch (error42) {
+    if (findSystemErrno(error42) === "ENOENT") return [];
+    throw error42;
   }
 }
 async function pruneUnreferencedManifests(manifestsRoot, manifests) {

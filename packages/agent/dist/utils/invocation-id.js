@@ -1,5 +1,5 @@
+init_dist4();
 init_dist3();
-init_dist2();
 var invocationCounter = new LRUCache({
   max: 1e5
 });

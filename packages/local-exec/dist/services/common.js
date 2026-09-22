@@ -1,6 +1,8 @@
 async function findGitRoot(ctx, gitExecutor, startPath) {
   try {
-    const result = await gitExecutor.exec(ctx, startPath, ["rev-parse", "--show-toplevel"], { caller: "findGitRoot" });
+    const result = await gitExecutor.exec(ctx, startPath, ["rev-parse", "--show-toplevel"], {
+      caller: "findGitRoot"
+    });
     return result.stdout.trim();
   } catch {
     return null;
@@ -8,7 +10,9 @@ async function findGitRoot(ctx, gitExecutor, startPath) {
 }
 async function getGitRemoteUrl(ctx, gitExecutor, gitRoot) {
   try {
-    const result = await gitExecutor.exec(ctx, gitRoot, ["config", "--get", "remote.origin.url"], { caller: "getGitRemoteUrl" });
+    const result = await gitExecutor.exec(ctx, gitRoot, ["config", "--get", "remote.origin.url"], {
+      caller: "getGitRemoteUrl"
+    });
     return result.stdout.trim();
   } catch {
     return void 0;

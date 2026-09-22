@@ -1,6 +1,6 @@
 var import_promises39 = require("node:fs/promises");
 var path20 = __toESM(require("node:path"), 1);
-var __awaiter63 = function(thisArg, _arguments, P2, generator) {
+var __awaiter65 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -48,7 +48,7 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
     }
   }
   loadMcpAuth() {
-    return __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
       try {
         const mcpAuth = yield (0, import_promises39.readFile)(this.mcpAuthPath, "utf8");
         const data = JSON.parse(mcpAuth);
@@ -82,15 +82,15 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
     });
   }
   loadTokens(identifier) {
-    return __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
       var _a19;
       const mcpAuth = yield this.mcpAuthPromise;
       return (_a19 = mcpAuth[identifier]) === null || _a19 === void 0 ? void 0 : _a19.tokens;
     });
   }
   saveTokens(identifier, tokens) {
-    return __awaiter63(this, void 0, void 0, function* () {
-      yield this.withSaveLock(() => __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
+      yield this.withSaveLock(() => __awaiter65(this, void 0, void 0, function* () {
         const mcpAuth = yield this.mcpAuthPromise;
         if (!mcpAuth[identifier]) {
           mcpAuth[identifier] = {};
@@ -101,14 +101,14 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
     });
   }
   loadClientInformation(identifier) {
-    return __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
       var _a19;
       const mcpAuth = yield this.mcpAuthPromise;
       return (_a19 = mcpAuth[identifier]) === null || _a19 === void 0 ? void 0 : _a19.clientInfo;
     });
   }
   withSaveLock(fn) {
-    return __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
       var _a19;
       const previousLock = (_a19 = _FileBasedTokenStore.saveLocks.get(this.mcpAuthPath)) !== null && _a19 !== void 0 ? _a19 : Promise.resolve();
       let releaseLock;
@@ -124,8 +124,8 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
     });
   }
   saveClientInformation(identifier, clientInfo) {
-    return __awaiter63(this, void 0, void 0, function* () {
-      yield this.withSaveLock(() => __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
+      yield this.withSaveLock(() => __awaiter65(this, void 0, void 0, function* () {
         const mcpAuth = yield this.mcpAuthPromise;
         if (!mcpAuth[identifier]) {
           mcpAuth[identifier] = {};
@@ -136,8 +136,8 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
     });
   }
   deleteCredentials(identifier) {
-    return __awaiter63(this, void 0, void 0, function* () {
-      yield this.withSaveLock(() => __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
+      yield this.withSaveLock(() => __awaiter65(this, void 0, void 0, function* () {
         const mcpAuth = yield this.mcpAuthPromise;
         if (identifier in mcpAuth) {
           delete mcpAuth[identifier];
@@ -147,7 +147,7 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
     });
   }
   saveMcpAuth(data) {
-    return __awaiter63(this, void 0, void 0, function* () {
+    return __awaiter65(this, void 0, void 0, function* () {
       yield (0, import_promises39.mkdir)(path20.dirname(this.mcpAuthPath), { recursive: true });
       yield (0, import_promises39.writeFile)(this.mcpAuthPath, JSON.stringify(data, null, 2));
     });

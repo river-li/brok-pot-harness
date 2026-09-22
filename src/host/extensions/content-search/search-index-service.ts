@@ -3,6 +3,7 @@ var import_node_path101 = require("node:path");
 var import_node_url13 = require("node:url");
 var import_node_worker_threads2 = require("node:worker_threads");
 init_errors();
+init_invariant();
 var MAX_INDEX_REBUILDS = 3;
 var MAX_WORKER_RESPAWNS = 3;
 var MAX_FAILED_JOB_RECONCILES = 3;
@@ -15,71 +16,109 @@ function defaultWorkerEntryPath() {
     "search-index-worker.cjs"
   );
 }
-var WorkerSearchIndexJobPort = class {
+var SearchIndexWorkerChannel = class {
   worker;
   pending = /* @__PURE__ */ new Map();
   nextRequestId = 1;
-  isDead = false;
-  constructor(entryPath, config2) {
-    this.worker = new import_node_worker_threads2.Worker(entryPath, { workerData: config2 });
+  isLost = false;
+  constructor(entryPath, workerData) {
+    this.worker = new import_node_worker_threads2.Worker(entryPath, { workerData });
     this.worker.on("message", (response) => {
       const settle = this.pending.get(response.requestId);
       if (settle == null) return;
       this.pending.delete(response.requestId);
-      settle(
-        response.ok ? { ok: true } : {
-          ok: false,
-          message: response.message ?? "search index job failed",
-          isIndexCorrupt: response.isIndexCorrupt === true,
-          isWorkerUnavailable: false
-        }
-      );
+      settle({ kind: "response", response });
     });
-    this.worker.on("error", (error41) => this.die(error41));
-    this.worker.on("exit", (code) => this.die(new Error(`search-index worker exited (${code})`)));
+    this.worker.on("error", (error42) => this.lose(error42.message));
+    this.worker.on("exit", (code) => this.lose(`search-index worker exited (${code})`));
   }
-  die(error41) {
-    if (this.isDead) return;
-    this.isDead = true;
-    const failure2 = {
-      ok: false,
-      message: error41.message,
-      isIndexCorrupt: false,
-      isWorkerUnavailable: true
-    };
-    for (const settle of this.pending.values()) settle(failure2);
+  lose(message) {
+    if (this.isLost) return;
+    this.isLost = true;
+    for (const settle of this.pending.values()) settle({ kind: "lost", message });
     this.pending.clear();
   }
-  post(job) {
-    if (this.isDead) {
-      return Promise.resolve({
-        ok: false,
-        message: "search-index worker is no longer running",
-        isIndexCorrupt: false,
-        isWorkerUnavailable: true
-      });
+  request(build2) {
+    if (this.isLost) {
+      return Promise.resolve({ kind: "lost", message: "search-index worker is no longer running" });
     }
     const requestId2 = this.nextRequestId++;
     return new Promise((resolve29) => {
       this.pending.set(requestId2, resolve29);
-      const request3 = { requestId: requestId2, job };
-      this.worker.postMessage(request3);
+      this.worker.postMessage(build2(requestId2));
     });
   }
   async terminate() {
-    this.die(new Error("search-index worker terminated"));
+    this.lose("search-index worker terminated");
     await this.worker.terminate();
+  }
+};
+var WorkerSearchIndexJobPort = class {
+  channel;
+  constructor(entryPath, config2) {
+    this.channel = new SearchIndexWorkerChannel(entryPath, { role: "writer", ...config2 });
+  }
+  async post(job) {
+    const reply2 = await this.channel.request((requestId2) => ({ requestId: requestId2, job }));
+    if (reply2.kind === "lost") {
+      return {
+        ok: false,
+        message: reply2.message,
+        isIndexCorrupt: false,
+        isWorkerUnavailable: true
+      };
+    }
+    const { response } = reply2;
+    return response.ok ? { ok: true } : {
+      ok: false,
+      message: response.message ?? "search index job failed",
+      isIndexCorrupt: response.isIndexCorrupt === true,
+      isWorkerUnavailable: false
+    };
+  }
+  terminate() {
+    return this.channel.terminate();
+  }
+};
+var WorkerSearchIndexQueryPort = class {
+  channel;
+  constructor(entryPath, config2) {
+    this.channel = new SearchIndexWorkerChannel(entryPath, { role: "reader", ...config2 });
+  }
+  async run(query) {
+    const reply2 = await this.channel.request((requestId2) => ({ requestId: requestId2, query }));
+    if (reply2.kind === "lost") return { ok: false, reason: "reader-lost", message: reply2.message };
+    const { response } = reply2;
+    if (response.ok) return response;
+    return response.isIndexCorrupt ? { ok: false, reason: "index-corrupt", message: response.message } : { ok: false, reason: "query-failed", errorClass: response.errorClass };
+  }
+  async searchMessages(query, limit) {
+    const result = await this.run({ kind: "messages", query, limit });
+    if (!result.ok) return result;
+    invariant(result.kind === "messages", "search-index reader answered messages with media");
+    return { ok: true, matches: result.matches };
+  }
+  async searchMedia(query, limit) {
+    const result = await this.run({ kind: "media", query, limit });
+    if (!result.ok) return result;
+    invariant(result.kind === "media", "search-index reader answered media with messages");
+    return { ok: true, matches: result.matches };
+  }
+  terminate() {
+    return this.channel.terminate();
   }
 };
 var SandSearchIndexService = class {
   indexDbPath;
   agentsRootDir;
   createJobPort;
+  createQueryPort;
   disposeDeadline;
   report;
   isFtsEnabled;
   db;
   port;
+  queryPort;
   isUnavailable = false;
   isDisposed = false;
   isReconcileDone = false;
@@ -87,6 +126,7 @@ var SandSearchIndexService = class {
   pendingReindexCount = 0;
   rebuildCount = 0;
   workerRespawnCount = 0;
+  readerRespawnCount = 0;
   failedJobReconcileCount = 0;
   jobTail = Promise.resolve();
   constructor(options2) {
@@ -98,14 +138,15 @@ var SandSearchIndexService = class {
     this.isFtsEnabled = options2.isFtsAvailable ?? isFts5Available();
     const entryPath = options2.workerEntryPath ?? defaultWorkerEntryPath();
     this.createJobPort = options2.createJobPort ?? ((config2) => new WorkerSearchIndexJobPort(entryPath, config2));
+    this.createQueryPort = options2.createQueryPort ?? ((config2) => new WorkerSearchIndexQueryPort(entryPath, config2));
   }
   start() {
     if (this.isDisposed || this.isUnavailable) return;
     if (this.db == null) {
       try {
         this.db = this.openAndMigrate();
-      } catch (error41) {
-        this.markUnavailable("open", error41);
+      } catch (error42) {
+        this.markUnavailable("open", error42);
         return;
       }
       this.isReconcileDone = this.safeReadReconcileDone();
@@ -116,24 +157,25 @@ var SandSearchIndexService = class {
     return this.db != null && !this.isUnavailable && this.isReconcileDone && this.pendingReindexCount === 0;
   }
   searchMessages(query, limit) {
-    const db = this.db;
-    if (db == null || this.isUnavailable) return null;
-    try {
-      return searchMessages(db, query, limit, this.isFtsEnabled);
-    } catch (error41) {
-      this.handleIndexFailure("search-messages", error41);
-      return null;
-    }
+    return this.runQuery("search-messages", (port) => port.searchMessages(query, limit));
   }
   searchMedia(query, limit) {
-    const db = this.db;
-    if (db == null || this.isUnavailable) return null;
-    try {
-      return searchMedia(db, query, limit, this.isFtsEnabled);
-    } catch (error41) {
-      this.handleIndexFailure("search-media", error41);
+    return this.runQuery("search-media", (port) => port.searchMedia(query, limit));
+  }
+  async runQuery(stage, run) {
+    if (this.db == null || this.isDisposed || this.isUnavailable || this.isRebuildPending) {
       return null;
     }
+    try {
+      const port = this.getQueryPort();
+      const result = await run(port);
+      if (port !== this.queryPort) return null;
+      if (result.ok) return result.matches;
+      this.handleQueryFailure(stage, result);
+    } catch (error42) {
+      this.handleQueryFailure(stage, { reason: "query-failed", errorClass: errorLogTag(error42) });
+    }
+    return null;
   }
   applyMutation(mutation) {
     switch (mutation.kind) {
@@ -184,11 +226,13 @@ var SandSearchIndexService = class {
   }
   async dispose() {
     this.isDisposed = true;
-    await this.disposeDeadline.run(async () => await this.jobTail).catch((error41) => {
-      this.report({ kind: "dispose_drain_cut", errorClass: errorLogTag(error41) });
+    await this.disposeDeadline.run(async () => await this.jobTail).catch((error42) => {
+      this.report({ kind: "dispose_drain_cut", errorClass: errorLogTag(error42) });
     });
     await this.terminateWorker(this.port, "dispose");
     this.port = void 0;
+    await this.terminateWorker(this.queryPort, "dispose");
+    this.queryPort = void 0;
     try {
       this.db?.close();
     } catch {
@@ -196,21 +240,24 @@ var SandSearchIndexService = class {
     this.db = void 0;
   }
   async terminateWorker(port, stage) {
-    await port?.terminate().catch((error41) => {
-      this.report({ kind: "worker_terminate_failed", stage, errorClass: errorLogTag(error41) });
+    await port?.terminate().catch((error42) => {
+      this.report({ kind: "worker_terminate_failed", stage, errorClass: errorLogTag(error42) });
     });
   }
-  markUnavailable(stage, error41) {
+  markUnavailable(stage, error42) {
     this.isUnavailable = true;
     const port = this.port;
     this.port = void 0;
     void this.terminateWorker(port, "unavailable teardown");
+    const queryPort = this.queryPort;
+    this.queryPort = void 0;
+    void this.terminateWorker(queryPort, "unavailable teardown");
     try {
       this.db?.close();
     } catch {
     }
     this.db = void 0;
-    this.report({ kind: "unavailable", stage, errorClass: errorLogTag(error41) });
+    this.report({ kind: "unavailable", stage, errorClass: errorLogTag(error42) });
   }
   safeReadReconcileDone() {
     const db = this.db;
@@ -232,8 +279,8 @@ var SandSearchIndexService = class {
         return this.recreateIndexFile();
       }
       ensureSearchIndexSchema(db, this.isFtsEnabled);
-    } catch (error41) {
-      this.report({ kind: "stage_failed", stage: "open", errorClass: errorLogTag(error41) });
+    } catch (error42) {
+      this.report({ kind: "stage_failed", stage: "open", errorClass: errorLogTag(error42) });
       return this.recreateIndexFile();
     }
     if (readSearchIndexSchemaVersion(db) !== SEARCH_INDEX_SCHEMA_VERSION) {
@@ -262,21 +309,37 @@ var SandSearchIndexService = class {
       (0, import_node_fs58.rmSync)(`${this.indexDbPath}${suffix}`, { force: true });
     }
   }
-  handleIndexFailure(stage, error41) {
+  handleQueryFailure(stage, failure2) {
     if (this.isDisposed || this.isUnavailable) return;
-    if (isSqliteCorruptError(error41)) {
-      this.scheduleRebuild(stage, error41);
-      return;
+    switch (failure2.reason) {
+      case "index-corrupt":
+        this.scheduleRebuild(stage, new Error(failure2.message));
+        return;
+      case "reader-lost":
+        this.queryPort = void 0;
+        this.readerRespawnCount += 1;
+        if (this.readerRespawnCount > MAX_WORKER_RESPAWNS) {
+          this.markUnavailable("worker-respawn", new Error(failure2.message));
+          return;
+        }
+        this.report({ kind: "worker_respawn", count: this.readerRespawnCount });
+        return;
+      case "query-failed":
+        this.report({ kind: "stage_failed", stage, errorClass: failure2.errorClass });
+        return;
+      default: {
+        const exhaustive = failure2;
+        return exhaustive;
+      }
     }
-    this.report({ kind: "stage_failed", stage, errorClass: errorLogTag(error41) });
   }
-  scheduleRebuild(stage, error41) {
+  scheduleRebuild(stage, error42) {
     if (this.isDisposed || this.isUnavailable || this.isRebuildPending) {
       return;
     }
     this.rebuildCount += 1;
     if (this.rebuildCount > MAX_INDEX_REBUILDS) {
-      this.markUnavailable(stage, error41);
+      this.markUnavailable(stage, error42);
       return;
     }
     this.report({ kind: "corrupt_rebuild", stage, count: this.rebuildCount });
@@ -284,8 +347,11 @@ var SandSearchIndexService = class {
     this.isRebuildPending = true;
     const port = this.port;
     this.port = void 0;
+    const queryPort = this.queryPort;
+    this.queryPort = void 0;
     this.jobTail = this.jobTail.then(async () => {
       await this.terminateWorker(port, "rebuild");
+      await this.terminateWorker(queryPort, "rebuild");
       try {
         this.db?.close();
       } catch {
@@ -307,10 +373,19 @@ var SandSearchIndexService = class {
     }
     return this.port;
   }
+  getQueryPort() {
+    if (this.queryPort == null) {
+      this.queryPort = this.createQueryPort({
+        indexDbPath: this.indexDbPath,
+        isFtsEnabled: this.isFtsEnabled
+      });
+    }
+    return this.queryPort;
+  }
   enqueue(job) {
     if (this.isDisposed || this.isUnavailable || this.db == null) return;
-    this.jobTail = this.jobTail.then(() => this.runJob(job)).catch((error41) => {
-      this.report({ kind: "dispatch_failed", errorClass: errorLogTag(error41) });
+    this.jobTail = this.jobTail.then(() => this.runJob(job)).catch((error42) => {
+      this.report({ kind: "dispatch_failed", errorClass: errorLogTag(error42) });
     });
   }
   async runJob(job) {

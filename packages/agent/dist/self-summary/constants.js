@@ -1,16 +1,27 @@
 var MAX_SELF_SUMMARY_RETRIES = 3;
 var SELF_SUMMARY_CONTEXT_WINDOW_FRACTION = 0.9;
-var SELF_SUMMARIZATION_PROMPT = `<user_query>
+var SELF_SUMMARY_USEFUL_THINGS_BY_VARIANT = {
+  coding: "the user's requests, what you've done so far, relevant file paths and code details, any errors encountered and how they were resolved, and what remains to be done.",
+  generalized: "the user's requests, constraints and preferences, what you've done so far, key decisions and their reasons, relevant files/artifacts and specifics, any issues encountered and how they were resolved, and what remains to be done."
+};
+function renderSelfSummarizationPrompt(variant) {
+  return `<user_query>
 <summary_request>
 Please summarize the conversation so far.
 
 This summary (everything after your thinking) will be provided to another AI assistant to continue working on the task. The other assistant will only see the user's original query and your summary, it will not have access to any tool calls or tool outputs from this conversation. The purpose of the summary is to compress the conversation context while preserving the essential information needed to seamlessly continue.
 
-Useful things to include: the user's requests, what you've done so far, relevant file paths and code details, any errors encountered and how they were resolved, and what remains to be done.
+Useful things to include: ${SELF_SUMMARY_USEFUL_THINGS_BY_VARIANT[variant]}
 
 DO NOT call any tools in your response.
 </summary_request>
 </user_query>`;
+}
+var SELF_SUMMARIZATION_PROMPT = renderSelfSummarizationPrompt("coding");
+var GENERALIZED_SELF_SUMMARIZATION_PROMPT = renderSelfSummarizationPrompt("generalized");
+function selfSummarizationPromptForVariant(variant) {
+  return variant === "generalized" ? GENERALIZED_SELF_SUMMARIZATION_PROMPT : SELF_SUMMARIZATION_PROMPT;
+}
 var CLAUDE_CODE_COMPACTION_PROMPT = `Your task is to create a detailed summary of the conversation so far, paying close attention to the user's explicit requests and your previous actions.
 This summary should be thorough in capturing technical details, code patterns, and architectural decisions that would be essential for continuing development work without losing context.
 

@@ -1,4 +1,4 @@
-init_dist2();
+init_dist3();
 function getTranscriptRelativePath(args) {
   const safeId = getSafeConversationId(args.conversationId);
   if (args.kind === "subagent" && args.parentConversationId) {

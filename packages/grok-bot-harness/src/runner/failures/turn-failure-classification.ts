@@ -37,13 +37,13 @@ function classifyErrorDetails(details) {
   if (RATE_LIMIT_ERROR_CODES.has(details.error)) return "rate_limit";
   return void 0;
 }
-function classifyNode(error41, seen) {
-  if (error41 == null || typeof error41 !== "object") return void 0;
-  if (seen.has(error41)) return void 0;
-  seen.add(error41);
-  const own = classifyErrorDetails(classifyError2(error41).displayInfo?.errorDetails);
+function classifyNode(error42, seen) {
+  if (error42 == null || typeof error42 !== "object") return void 0;
+  if (seen.has(error42)) return void 0;
+  seen.add(error42);
+  const own = classifyErrorDetails(classifyError2(error42).displayInfo?.errorDetails);
   if (own !== void 0) return own;
-  const fields2 = error41;
+  const fields2 = error42;
   const fromCause = classifyNode(fields2.cause, seen);
   if (fromCause !== void 0) return fromCause;
   if (Array.isArray(fields2.errors)) {
@@ -54,8 +54,8 @@ function classifyNode(error41, seen) {
   }
   return void 0;
 }
-function classifyExpectedTurnFailure(error41) {
-  return classifyNode(error41, /* @__PURE__ */ new Set());
+function classifyExpectedTurnFailure(error42) {
+  return classifyNode(error42, /* @__PURE__ */ new Set());
 }
 function resolveTurnOutcomeTags(args) {
   const adjusted = adjustTurnOutcomeForBotBlock({

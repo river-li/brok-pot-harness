@@ -1,12 +1,6 @@
 #!/exec-daemon/node
 
-import {
-  existsSync,
-  lstatSync,
-  renameSync,
-  unlinkSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, lstatSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 
 const DEFAULT_MAX_BYTES = 1024 * 1024;
@@ -16,9 +10,7 @@ const parsedMaxBytes =
     ? Number(rawMaxBytes)
     : DEFAULT_MAX_BYTES;
 const maxBytes =
-  Number.isSafeInteger(parsedMaxBytes) && parsedMaxBytes > 0
-    ? parsedMaxBytes
-    : DEFAULT_MAX_BYTES;
+  Number.isSafeInteger(parsedMaxBytes) && parsedMaxBytes > 0 ? parsedMaxBytes : DEFAULT_MAX_BYTES;
 
 const logPath = process.argv[2];
 const ownerPid = process.argv[3];
@@ -103,12 +95,7 @@ async function writeSnapshot(value) {
 }
 
 function startFlush() {
-  if (
-    loggingDisabled ||
-    !dirty ||
-    flushPromise !== undefined ||
-    retainedLength === 0
-  ) {
+  if (loggingDisabled || !dirty || flushPromise !== undefined || retainedLength === 0) {
     return;
   }
   dirty = false;
@@ -135,8 +122,7 @@ try {
   }
 } catch (error) {
   if (!loggingDisabled) {
-    const midLine =
-      retainedLength > 0 && ring[(writeOffset - 1 + capacity) % capacity] !== 0x0a;
+    const midLine = retainedLength > 0 && ring[(writeOffset - 1 + capacity) % capacity] !== 0x0a;
     append(
       Buffer.from(
         `${midLine ? "\n" : ""}box-bounded-log: the managed process's output stream failed, the sink is exiting: ${String(error)}\n`,

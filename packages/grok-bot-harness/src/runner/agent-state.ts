@@ -1,4 +1,4 @@
-var SAND_MEMORY_SCOPES = ["conversation", "agent", "user", "project"];
+var SAND_MEMORY_SCOPES = ["conversation", "agent", "user"];
 function stateWriteOk(detail) {
   return { ok: true, detail };
 }

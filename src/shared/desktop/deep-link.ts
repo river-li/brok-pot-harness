@@ -64,23 +64,24 @@ var sandDeepLinks = declareDeepLinkSurface({
 });
 var GROK_BOT_DEEP_LINK_SCHEMES = sandDeepLinks.schemes;
 var SAND_OPEN_DEEP_LINK_URL = sandDeepLinks.buildUrl("open");
+var SAND_AGENT_SHARE_LINK_BASE = `${SAND_BOT_TEMPLATE_LINK.httpsOrigin}${SAND_BOT_TEMPLATE_LINK.httpsPathPrefixes[0]}`;
 function buildSandSettingsDeepLinkUrl(anchor) {
   return sandDeepLinks.buildUrl("settings", { id: anchor });
 }
 function buildSandPluginDeepLinkUrl(pluginId) {
   try {
     return sandDeepLinks.buildUrl("plugin-add", { id: pluginId });
-  } catch (error41) {
-    if (error41 instanceof DeepLinkBuildError) return null;
-    throw error41;
+  } catch (error42) {
+    if (error42 instanceof DeepLinkBuildError) return null;
+    throw error42;
   }
 }
 function buildSandSidebarDeepLinkUrl(target, automationId) {
   try {
     return sandDeepLinks.buildUrl("sidebar", { target, automation: automationId });
-  } catch (error41) {
-    if (error41 instanceof DeepLinkBuildError) return null;
-    throw error41;
+  } catch (error42) {
+    if (error42 instanceof DeepLinkBuildError) return null;
+    throw error42;
   }
 }
 var TRANSCRIPT_DEEP_LINK_ROUTES = ["settings", "plugin-add", "sidebar"];

@@ -148,19 +148,19 @@ var BoxHandoffResume = class {
             ...this.tm.widgetResponses.wakeOutcomeSeenHook(session, wakeOutcomeEntryIds)
           });
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "resume",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: errorTitleKind, description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: errorTitleKind, description: description9 })
           });
         } finally {
           this.tm.ackObligations.retireAckRunToken(session.id, ackToken);

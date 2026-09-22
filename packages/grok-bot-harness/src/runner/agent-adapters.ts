@@ -44,7 +44,7 @@ var SandRequestContextExecutor = class {
   }
 };
 var SandSubagentHostAdapter = class {
-  constructor(sessions, createRunner, dispatcher, launchReviewRequired, detached, quietOrigin, fallbackLineage, executorProfileNames) {
+  constructor(sessions, createRunner, dispatcher, launchReviewRequired, detached, quietOrigin, fallbackLineage, executorProfileNames, actionAuditSequencer) {
     this.sessions = sessions;
     this.createRunner = createRunner;
     this.dispatcher = dispatcher;
@@ -53,6 +53,7 @@ var SandSubagentHostAdapter = class {
     this.quietOrigin = quietOrigin;
     this.fallbackLineage = fallbackLineage;
     this.executorProfileNames = executorProfileNames;
+    this.actionAuditSequencer = actionAuditSequencer;
   }
   sessions;
   createRunner;
@@ -62,7 +63,11 @@ var SandSubagentHostAdapter = class {
   quietOrigin;
   fallbackLineage;
   executorProfileNames;
+  actionAuditSequencer;
   reviewLaunch;
+  sessionEventSequence(subagentType, lineage) {
+    return isComputerUseSubagentType(subagentType) && lineage !== void 0 ? this.actionAuditSequencer?.next(lineage.parentRequestId) : void 0;
+  }
   setLaunchReviewer(reviewLaunch) {
     this.reviewLaunch = reviewLaunch;
   }
@@ -100,11 +105,11 @@ var SandSubagentHostAdapter = class {
     }
     try {
       this.sessions.set(agentId, this.createRunner(agentId, args));
-    } catch (error41) {
+    } catch (error42) {
       if (isComputerUse) {
         this.dispatcher.freeComputerUseWindow(agentId);
       }
-      throw error41;
+      throw error42;
     }
     return agentId;
   }
@@ -129,18 +134,20 @@ var SandSubagentHostAdapter = class {
     let selectedImages;
     try {
       selectedImages = args.selectedContext?.selectedImages.map(toSandSelectedImageInput);
-    } catch (error41) {
+    } catch (error42) {
       this.releaseSession(agentId);
-      return { status: "error", error: error41 instanceof Error ? error41.message : String(error41) };
+      return { status: "error", error: error42 instanceof Error ? error42.message : String(error42) };
     }
     const parentTraceCtx = getSpan2(ctx) !== void 0 ? ctx : void 0;
     const lineage = deriveSandRequestLineage(ctx, args.toolCallId, this.fallbackLineage);
+    const eventSequence = this.sessionEventSequence(args.subagentType, lineage);
     this.dispatcher.dispatch({
       ...args.resumeAgentId ? { resume: true } : {},
       subagentAgentId: agentId,
       subagentType: args.subagentType || "generalPurpose",
       toolCallId: args.toolCallId,
       prompt: args.prompt,
+      ...eventSequence === void 0 ? {} : { eventSequence },
       ...lineage != null ? {
         lineage: {
           parentRequestId: lineage.parentRequestId,
@@ -199,12 +206,14 @@ var SandSubagentHostAdapter = class {
         acceptsExplicitModel: isMediaReviewSubagentType(args.subagentType),
         executorProfileNames: this.executorProfileNames?.() ?? /* @__PURE__ */ new Set()
       });
+      const eventSequence = this.sessionEventSequence(args.subagentType, lineage);
       await detached.dispatch({
         ...decision === void 0 ? {} : { combinedComputerUseDecision: decision },
         subagentAgentId: agentId,
         subagentType: args.subagentType || "generalPurpose",
         toolCallId: args.toolCallId,
         prompt: args.prompt,
+        ...eventSequence === void 0 ? {} : { eventSequence },
         readonly: args.readonly ?? false,
         ...ctx.get(pendingSubagentReplayKey)?.reattachOnly === true && ctx.get(pendingSubagentReplayKey)?.toolCallId === args.toolCallId ? { reattachOnly: true } : {},
         ...modelId === void 0 ? {} : { modelId },
@@ -218,8 +227,8 @@ var SandSubagentHostAdapter = class {
         } : {},
         ...this.quietOrigin != null ? { quietOrigin: this.quietOrigin } : {}
       });
-    } catch (error41) {
-      return { status: "error", error: error41 instanceof Error ? error41.message : String(error41) };
+    } catch (error42) {
+      return { status: "error", error: error42 instanceof Error ? error42.message : String(error42) };
     }
     return {
       status: "background",

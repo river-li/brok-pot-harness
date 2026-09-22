@@ -1,4 +1,4 @@
-init_dist();
+init_dist2();
 init_scheduling();
 init_errors();
 init_sand_client_metadata();
@@ -19,11 +19,11 @@ var GrokBotBoxIdentityMintClient = class {
     this.log = args.log;
   }
   cancelUnreadResponseBody(response) {
-    void response.body?.cancel().catch((error41) => {
-      this.log(`identity mint body cancel failed: ${errorLogTag(error41)}`);
+    void response.body?.cancel().catch((error42) => {
+      this.log(`identity mint body cancel failed: ${errorLogTag(error42)}`);
     });
   }
-  async mint(request3) {
+  async mint(request5) {
     const credential = this.getBoxCredential();
     if (credential === null) {
       return { kind: "host_error" };
@@ -40,9 +40,9 @@ var GrokBotBoxIdentityMintClient = class {
               ...getSandBackendClientHeaders(this.backend)
             },
             body: JSON.stringify({
-              audience: request3.audience,
-              ...request3.nonce !== void 0 ? { nonce: request3.nonce } : {},
-              ...request3.subClaim !== void 0 ? { subClaim: request3.subClaim } : {}
+              audience: request5.audience,
+              ...request5.nonce !== void 0 ? { nonce: request5.nonce } : {},
+              ...request5.subClaim !== void 0 ? { subClaim: request5.subClaim } : {}
             }),
             signal
           }
@@ -94,8 +94,8 @@ var GrokBotBoxIdentityMintClient = class {
         token: parsed2.token,
         expiresAtUnixSeconds: parsed2.expiresAtUnixSeconds
       };
-    } catch (error41) {
-      const timedOut = error41 instanceof DeadlineExceededError || error41 instanceof Error && error41.name === "AbortError";
+    } catch (error42) {
+      const timedOut = error42 instanceof DeadlineExceededError || error42 instanceof Error && error42.name === "AbortError";
       return { kind: "transport", timedOut };
     }
   }

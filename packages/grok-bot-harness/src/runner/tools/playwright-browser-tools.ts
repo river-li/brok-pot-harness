@@ -24,6 +24,14 @@ var PLAYWRIGHT_BROWSER_TOOL_NAMES = [
   "browser_tabs",
   "browser_wait_for"
 ];
+var PLAYWRIGHT_NAVIGABLE_TOOLS = /* @__PURE__ */ new Set([
+  "browser_navigate",
+  "browser_navigate_back",
+  "browser_click",
+  "browser_type",
+  "browser_press_key",
+  "browser_tabs"
+]);
 var REVIEW_OPS = {
   browser_navigate: "navigate",
   browser_click: "click",
@@ -155,10 +163,13 @@ function rowTool(deps, row, lastPageUrl) {
           const pageUrl = pageUrlOf(result);
           if (pageUrl !== void 0) lastPageUrl.set(windowIndex, pageUrl);
           record2(toolCallResultOf(result));
+          if (PLAYWRIGHT_NAVIGABLE_TOOLS.has(row.name)) {
+            deps.onPossibleNavigation?.(ctx);
+          }
           return result;
-        } catch (error41) {
-          record2({ kind: "error", stage, errorClass: playwrightToolCallErrorClass(error41) });
-          throw error41;
+        } catch (error42) {
+          record2({ kind: "error", stage, errorClass: playwrightToolCallErrorClass(error42) });
+          throw error42;
         }
       },
       new ToolCall({ tool: { case: "mcpToolCall", value: new McpToolCall() } }),

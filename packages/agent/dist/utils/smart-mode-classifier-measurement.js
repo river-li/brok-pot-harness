@@ -47,8 +47,8 @@ async function executeSmartModeClassifierWithMeasurement(ctx, executor, args, mo
         retryCount: attempt - 1
       }, options2?.suppressToolCallIdLogging === true ? void 0 : args.toolCallId);
       return result;
-    } catch (error41) {
-      if (error41 instanceof Error && error41.name === "AbortError") {
+    } catch (error42) {
+      if (error42 instanceof Error && error42.name === "AbortError") {
         recordSmartModeClassifierException(ctx, {
           mode,
           actionKind,
@@ -56,9 +56,9 @@ async function executeSmartModeClassifierWithMeasurement(ctx, executor, args, mo
           latencyMs: elapsedMs2(overallStartTime),
           retryCount: attempt - 1
         }, options2?.suppressToolCallIdLogging === true ? void 0 : args.toolCallId);
-        throw error41;
+        throw error42;
       }
-      const failureReason = classifySmartModeClassifierException(error41);
+      const failureReason = classifySmartModeClassifierException(error42);
       if (failureReason === "timeout_exception") {
         cancelAttempt(new Error(timeoutMessage));
       }
@@ -73,7 +73,7 @@ async function executeSmartModeClassifierWithMeasurement(ctx, executor, args, mo
         retryCount: attempt - 1,
         failureReason
       }, options2?.suppressToolCallIdLogging === true ? void 0 : args.toolCallId);
-      throw error41;
+      throw error42;
     }
   }
   throw new Error("Smart Mode classifier retry loop exited unexpectedly");
@@ -175,8 +175,8 @@ function isRetryableClassifierFailure(result) {
   }
   return result.retryable ?? true;
 }
-function classifySmartModeClassifierException(error41) {
-  if (error41 instanceof Error && (error41.name === "TimeoutError" || error41.message.includes("Smart Mode classifier timed out"))) {
+function classifySmartModeClassifierException(error42) {
+  if (error42 instanceof Error && (error42.name === "TimeoutError" || error42.message.includes("Smart Mode classifier timed out"))) {
     return "timeout_exception";
   }
   return "unknown_exception";

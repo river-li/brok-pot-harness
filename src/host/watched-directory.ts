@@ -38,8 +38,8 @@ var WatchedDirectory = class {
     if (this.watchers.size > 0) return;
     try {
       (0, import_node_fs52.mkdirSync)(this.root, { recursive: true });
-    } catch (error41) {
-      this.reportWatchUnavailable(error41);
+    } catch (error42) {
+      this.reportWatchUnavailable(error42);
       return;
     }
     this.watchDirectoryTree(this.root);
@@ -72,8 +72,8 @@ var WatchedDirectory = class {
       watcher = this.watchDirectory(directory, (filename) => {
         this.onDirectoryEvent(directory, filename);
       });
-    } catch (error41) {
-      if (!isMissingPathError(error41)) this.reportWatchUnavailable(error41);
+    } catch (error42) {
+      if (!isMissingPathError(error42)) this.reportWatchUnavailable(error42);
       return;
     }
     watcher.on("error", () => {
@@ -96,8 +96,8 @@ var WatchedDirectory = class {
         kind: "directory",
         identity: { dev: stats.dev, ino: stats.ino, birthtimeMs: stats.birthtimeMs }
       };
-    } catch (error41) {
-      reportFallbackUnlessAbsent("watched_directory", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("watched_directory", error42);
       return { kind: "missing" };
     }
   }
@@ -105,8 +105,8 @@ var WatchedDirectory = class {
     let entries;
     try {
       entries = (0, import_node_fs52.readdirSync)(directory, { withFileTypes: true });
-    } catch (error41) {
-      reportFallbackUnlessAbsent("watched_directory", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("watched_directory", error42);
       return [];
     }
     return entries.filter((entry) => entry.isDirectory() && !entry.isSymbolicLink()).map((entry) => entry.name).sort();
@@ -132,10 +132,10 @@ var WatchedDirectory = class {
       }
     }
   }
-  reportWatchUnavailable(error41) {
+  reportWatchUnavailable(error42) {
     reportHostDiagnostic({
       kind: "watch_unavailable",
-      errorClass: errorLogTag(error41)
+      errorClass: errorLogTag(error42)
     });
   }
   scheduleNotify() {

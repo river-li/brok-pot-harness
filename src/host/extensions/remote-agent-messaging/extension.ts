@@ -35,8 +35,8 @@ function startRemoteAgentMessaging({
     name: "remote-agent-messaging-capability-recovery",
     ...RUNTIME_CAPABILITIES_RETRY_OPTIONS
   });
-  const reportCapabilityFailure = (error41) => {
-    if (!lifetime.signal.aborted) reportFailure(errorLogTag(error41));
+  const reportCapabilityFailure = (error42) => {
+    if (!lifetime.signal.aborted) reportFailure(errorLogTag(error42));
   };
   const backgroundRefresh = createSingleFlight({
     read: () => (async () => {

@@ -1,5 +1,5 @@
-init_dist3();
-var __awaiter26 = function(thisArg, _arguments, P2, generator) {
+init_dist4();
+var __awaiter28 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -52,7 +52,7 @@ function warnIfPreservedTailShapeInvalid(ctx, partitioned, options2) {
   });
 }
 function runSummarizationPipeline(summarizer, ctx, messages2, options2) {
-  return __awaiter26(this, void 0, void 0, function* () {
+  return __awaiter28(this, void 0, void 0, function* () {
     const partitioned = summarizer.partitionMessages(messages2, options2);
     warnIfPreservedTailShapeInvalid(ctx, partitioned, options2);
     const enrichments = {

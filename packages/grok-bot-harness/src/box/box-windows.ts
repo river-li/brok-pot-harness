@@ -61,11 +61,11 @@ async function touchSandMonitorBusyLease(ctx, accessor, windowIndex) {
         toolCallId: "sand-monitor-busy-lease"
       })
     );
-  } catch (error41) {
-    process.stderr.write(
-      `sand.box.monitor_busy_lease_touch_failed error_class=${errorLogTag(error41)}
-`
-    );
+  } catch (error42) {
+    reportHostDiagnosticOrStderr({
+      kind: "box_monitor_busy_lease_touch_failed",
+      errorClass: errorLogTag(error42)
+    });
   }
 }
 function sandBoxWindowKey(agentId, windowIndex) {
@@ -89,18 +89,18 @@ function primarySandBoxWindow(connection) {
 function createWindowMcpHost(daemon) {
   let pushed;
   return {
-    loadMcpServers: async (ctx, configJson) => {
+    loadMcpServers: async (ctx, configJson, options2) => {
       if (pushed?.configJson === configJson) {
         return await pushed.load;
       }
-      const load2 = daemon.loadMcpServers(ctx, configJson);
+      const load2 = daemon.loadMcpServers(ctx, configJson, options2);
       const attempt = { configJson, load: load2 };
       pushed = attempt;
       try {
         return await load2;
-      } catch (error41) {
+      } catch (error42) {
         if (pushed === attempt) pushed = void 0;
-        throw error41;
+        throw error42;
       }
     },
     mcpResourceAccessor: (ctx) => daemon.mcpResourceAccessor(ctx)

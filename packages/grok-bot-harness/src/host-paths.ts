@@ -12,8 +12,8 @@ function toModelVisibleText(text2) {
 async function lstatIfExists(path31) {
   try {
     return await (0, import_promises2.lstat)(path31);
-  } catch (error41) {
-    if (findSystemErrno(error41) !== "ENOENT") throw error41;
+  } catch (error42) {
+    if (findSystemErrno(error42) !== "ENOENT") throw error42;
     return null;
   }
 }

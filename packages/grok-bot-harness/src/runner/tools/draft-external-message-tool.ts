@@ -1,4 +1,5 @@
 var DraftRefusedError = class extends Error {
+  toolCallAuditOutcome = "denied";
 };
 var SAND_DRAFT_EXTERNAL_MESSAGE_TOOL_NAME = "DraftExternalMessage";
 function nonEmpty6(value) {

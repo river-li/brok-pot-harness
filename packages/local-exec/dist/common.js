@@ -1,2 +1,2 @@
-init_dist2();
-init_dist2();
+init_dist3();
+init_dist3();

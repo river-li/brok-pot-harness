@@ -52,12 +52,12 @@ var __disposeResources27 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
-  async executePendingToolCalls(ctx, stateHandler, mergedMcpTools, requestContext, invocationId) {
+  async executePendingToolCalls(ctx, rootPromptExecutor, stateHandler, mergedMcpTools, requestContext, invocationId) {
     const pendingMessages = stateHandler.getRawPendingMessages();
     if (pendingMessages.length === 0) {
       return false;
@@ -102,7 +102,9 @@ var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
     }
     const { messages: messages2, lastMessage, completedToolResults } = pending;
     const contracts = readPendingToolExecutionContracts(lastMessage);
-    const { allowedToolNames, admittedEffectiveToolNames } = collectPendingToolAdmission({ contracts: contracts.values() });
+    const { allowedToolNames, admittedEffectiveToolNames } = collectPendingToolAdmission({
+      contracts: contracts.values()
+    });
     const modelVisibleTools = toolSetHandle.getStaticTools();
     const scopedModelVisibleTools = allowedToolNames === void 0 ? modelVisibleTools : modelVisibleTools.filter((tool) => allowedToolNames.has(tool.name) || admittedEffectiveToolNames.has(tool.name));
     const toolExecutionSet = toolSetHandle.getToolExecutionSet(scopedModelVisibleTools);
@@ -116,57 +118,60 @@ var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
       allTools: extractToolMetadataMap(executableTools),
       blobStore: stateHandler.getBlobStore()
     };
-    const toolPromises = [];
-    if (Array.isArray(lastMessage.content)) {
-      for (const content of lastMessage.content) {
-        if (content.type !== "tool-call")
-          continue;
-        const completedResult = completedToolResults.get(content.toolCallId);
-        if (completedResult !== void 0) {
-          toolPromises.push(Promise.resolve(completedResult));
-          continue;
-        }
-        const contract = contracts.get(content.toolCallId);
-        const descriptor2 = resolveDescriptorForPendingToolCall({
-          toolCallId: content.toolCallId,
-          toolName: content.toolName,
-          args: content.args,
-          contract,
-          toolExecutionSet
-        });
-        const effectiveToolName = descriptor2.effectiveNativeToolCall?.toolName ?? descriptor2.toolName;
-        const tool = toolMap[effectiveToolName];
-        if (contract !== void 0 && tool !== void 0) {
-          const validation = validatePendingToolContractIdentity({
-            contract,
-            tool,
-            descriptor: descriptor2,
-            directDynamicToolNames
-          });
-          if (!validation.ok) {
-            toolPromises.push(Promise.resolve(createPendingToolContractMismatchResult(descriptor2, validation.reason)));
+    const executePending = async (recordingCtx) => {
+      const toolPromises = [];
+      if (Array.isArray(lastMessage.content)) {
+        for (const content of lastMessage.content) {
+          if (content.type !== "tool-call")
+            continue;
+          const completedResult = completedToolResults.get(content.toolCallId);
+          if (completedResult !== void 0) {
+            toolPromises.push(Promise.resolve(completedResult));
             continue;
           }
+          const contract = contracts.get(content.toolCallId);
+          const descriptor2 = resolveDescriptorForPendingToolCall({
+            toolCallId: content.toolCallId,
+            toolName: content.toolName,
+            args: content.args,
+            contract,
+            toolExecutionSet
+          });
+          const effectiveToolName = descriptor2.effectiveNativeToolCall?.toolName ?? descriptor2.toolName;
+          const tool = toolMap[effectiveToolName];
+          if (contract !== void 0 && tool !== void 0) {
+            const validation = validatePendingToolContractIdentity({
+              contract,
+              tool,
+              descriptor: descriptor2,
+              directDynamicToolNames
+            });
+            if (!validation.ok) {
+              toolPromises.push(Promise.resolve(createPendingToolContractMismatchResult(descriptor2, validation.reason)));
+              continue;
+            }
+          }
+          const conflictNoticesEnabled = this.config.featureFlags?.enableAgentStoreConflictNotices === true;
+          toolPromises.push(executeDeferredToolCall(tool?.toolIdentifier === "TASK" ? recordingCtx.with(pendingSubagentReplayKey, {
+            toolCallId: content.toolCallId
+          }) : recordingCtx, descriptor2, toolMap, interactionHandler, {
+            repositoryInfos: requestContext.repositoryInfo,
+            stateHandler,
+            workspacePaths: requestContext.env?.workspacePaths,
+            // Mirror split-step deferred contexts so resume still runs eager
+            // same-write decoration and post-tool journal drain on structured writes.
+            enableHookAdditionalContext: this.config.featureFlags?.enableHookAdditionalContext === true,
+            enableAgentStoreConflictNoticeCollector: conflictNoticesEnabled,
+            enableAgentStoreConflictNotices: conflictNoticesEnabled,
+            writeBarrierTimeoutMs: this.resolveWriteBarrierTimeoutMs(),
+            onWriteBarrier: this.config.recordAgentStoreWriteBarrier
+          }, async () => {
+          }, renderProps, void 0, void 0, directDynamicToolNames));
         }
-        const conflictNoticesEnabled = this.config.featureFlags?.enableAgentStoreConflictNotices === true;
-        toolPromises.push(executeDeferredToolCall(tool?.toolIdentifier === "TASK" ? ctx.with(pendingSubagentReplayKey, {
-          toolCallId: content.toolCallId
-        }) : ctx, descriptor2, toolMap, interactionHandler, {
-          repositoryInfos: requestContext.repositoryInfo,
-          stateHandler,
-          workspacePaths: requestContext.env?.workspacePaths,
-          // Mirror split-step deferred contexts so resume still runs eager
-          // same-write decoration and post-tool journal drain on structured writes.
-          enableHookAdditionalContext: this.config.featureFlags?.enableHookAdditionalContext === true,
-          enableAgentStoreConflictNoticeCollector: conflictNoticesEnabled,
-          enableAgentStoreConflictNotices: conflictNoticesEnabled,
-          writeBarrierTimeoutMs: this.resolveWriteBarrierTimeoutMs(),
-          onWriteBarrier: this.config.recordAgentStoreWriteBarrier
-        }, async () => {
-        }, renderProps, void 0, void 0, directDynamicToolNames));
       }
-    }
-    const toolResults = await Promise.all(toolPromises);
+      return Promise.all(toolPromises);
+    };
+    const toolResults = await (rootPromptExecutor.runWithToolCallEventRecorder?.(ctx, executePending) ?? executePending(ctx));
     messages2.push(...toolResults);
     if (shouldTagToolCallIdsForCurrentContext(ctx)) {
       appendToolCallIdTagsToToolResults(messages2);
@@ -183,7 +188,7 @@ var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
       span.span.setAttribute("invocationId", invocationId);
       const requestContext = await getRequestContext(ctx, action.requestContext ? fromRedactedRequestContext(action.requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED) : void 0, this.resourceAccessor, buildRequestContextOptions(this.config));
       const mergedMcpTools = this.mergeRequestContextTools(mcpTools, requestContext.tools);
-      const completedPendingTools = await this.executePendingToolCalls(ctx, stateHandler, mergedMcpTools, requestContext, invocationId);
+      const completedPendingTools = await this.executePendingToolCalls(ctx, rootPromptExecutor, stateHandler, mergedMcpTools, requestContext, invocationId);
       if (completedPendingTools) {
         await onStateUpdate(ctx, await stateHandler.computeNewStructure(ctx));
         ctx.signal.throwIfAborted();
@@ -206,7 +211,7 @@ var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
       __disposeResources27(env_1);
     }
   }
-  async setupResumeStep(ctx, action, stateHandler, mcpTools, onStateUpdate) {
+  async setupResumeStep(ctx, action, rootPromptExecutor, stateHandler, mcpTools, onStateUpdate) {
     const invocationId = getInvocationId(ctx);
     const { requestContext, provenance: requestContextProvenance } = await resolveRequestContext({
       parentCtx: ctx,
@@ -215,7 +220,7 @@ var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
       options: buildRequestContextOptions(this.config)
     });
     const mergedMcpTools = this.mergeRequestContextTools(mcpTools, requestContext.tools);
-    const completedPendingTools = await this.executePendingToolCalls(ctx, stateHandler, mergedMcpTools, requestContext, invocationId);
+    const completedPendingTools = await this.executePendingToolCalls(ctx, rootPromptExecutor, stateHandler, mergedMcpTools, requestContext, invocationId);
     if (completedPendingTools) {
       await onStateUpdate(ctx, await stateHandler.computeNewStructure(ctx));
       ctx.signal.throwIfAborted();
@@ -241,7 +246,7 @@ var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
       const span = __addDisposableResource27(env_2, createSpan(parentCtx.withName("ResumeActionHandler.handleSingleStep")), false);
       const ctx = span.ctx;
       span.span.setAttribute("invocationId", getInvocationId(ctx));
-      const setup = await this.setupResumeStep(ctx, action, stateHandler, mcpTools, onStateUpdate);
+      const setup = await this.setupResumeStep(ctx, action, rootPromptExecutor, stateHandler, mcpTools, onStateUpdate);
       if ("noTurns" in setup) {
         return {
           state: await stateHandler.computeNewStructure(ctx),
@@ -267,7 +272,7 @@ var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
       const span = __addDisposableResource27(env_3, createSpan(parentCtx.withName("ResumeActionHandler.handleModelStep")), false);
       const ctx = span.ctx;
       span.span.setAttribute("invocationId", getInvocationId(ctx));
-      const setup = await this.setupResumeStep(ctx, action, stateHandler, mcpTools, onStateUpdate);
+      const setup = await this.setupResumeStep(ctx, action, rootPromptExecutor, stateHandler, mcpTools, onStateUpdate);
       if ("noTurns" in setup) {
         return {
           state: await stateHandler.computeNewStructure(ctx),

@@ -52,11 +52,11 @@ var __disposeResources24 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger65 = createLogger("@anysphere/agent");
+var logger66 = createLogger("@anysphere/agent");
 var SUBAGENT_NOTIFICATION_VISIBLE_SUMMARY_LEAD = "The beginning of the above subagent result is already visible to the user.";
 var SUBAGENT_NOTIFICATION_ACKNOWLEDGEMENT_USER_QUERY_WITH_VISIBLE_SUMMARY_BASE = SUBAGENT_NOTIFICATION_VISIBLE_SUMMARY_LEAD + " Perform any follow-up actions (if needed). DO NOT regurgitate or reiterate its result unless asked. If multiple subagents have now completed and none are still running, briefly summarize the findings and conclusions across all of them. Otherwise, if no follow-ups remain, end your response with a brief third-person confirmation that the subagent has completed.";
 var SUBAGENT_NOTIFICATION_HIDDEN_SUMMARY_LEAD = "Perform any necessary follow-up actions in response to the subagent completion above.";
@@ -189,9 +189,7 @@ function BackgroundCompletionsPrompt({ completions }) {
       `title: ${escapePromptXmlText(completion.title)}`,
       ...completion.toolCallId ? [`tool_call_id: ${escapePromptXmlText(completion.toolCallId)}`] : [],
       ...completion.subagentId ? [`agent_id: ${escapePromptXmlText(completion.subagentId)}`] : [],
-      ...completion.detail ? [
-        `detail: ${neutralizeBackgroundTaskDetailCloseTags(completion.detail)}`
-      ] : [],
+      ...completion.detail ? [`detail: ${neutralizeBackgroundTaskDetailCloseTags(completion.detail)}`] : [],
       ...completion.outputPath ? [`output_path: ${escapePromptXmlText(completion.outputPath)}`] : []
     ];
     return jsx("section", { title: "task", children: lines2.join("\n") }, i);
@@ -290,7 +288,7 @@ function isWorkerNeedsAttentionCompletion(completion) {
   return completion.reason === BackgroundTaskCompletionReason.WORKER_NEEDS_ATTENTION;
 }
 function logBackgroundTaskCompletionOutcome(ctx, outcome, summary, extra) {
-  logger65.info(ctx, "agent.background_task_completion", {
+  logger66.info(ctx, "agent.background_task_completion", {
     event: "agent.background_task_completion",
     outcome,
     ...summary,
@@ -500,11 +498,9 @@ ${body}`,
           content: composeCompletionPromptMessage({
             promptBody,
             systemReminderBlocks: [
-              ...systemReminder !== void 0 ? [
-                `<system_reminder>
+              ...systemReminder !== void 0 ? [`<system_reminder>
 ${systemReminder}
-</system_reminder>`
-              ] : [],
+</system_reminder>`] : [],
               ...offloadReminder !== void 0 ? [offloadReminder] : []
             ],
             acknowledgementQuery: promptAcknowledgementQuery

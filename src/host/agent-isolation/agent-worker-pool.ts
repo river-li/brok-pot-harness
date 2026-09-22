@@ -1,14 +1,14 @@
 function defaultWorkerEntryPath2() {
-  const here = (0, import_node_path127.dirname)((0, import_node_url14.fileURLToPath)(__import_meta_url));
-  return (0, import_node_path127.join)(here, "agent-isolation", "agent-store-worker.cjs");
+  const here = (0, import_node_path126.dirname)((0, import_node_url14.fileURLToPath)(__import_meta_url));
+  return (0, import_node_path126.join)(here, "agent-isolation", "agent-store-worker.cjs");
 }
 function rebuildWorkerError(response) {
-  const error41 = new Error(response.message);
-  if (response.name != null) error41.name = response.name;
+  const error42 = new Error(response.message);
+  if (response.name != null) error42.name = response.name;
   if (response.code != null) {
-    error41.code = response.code;
+    error42.code = response.code;
   }
-  return error41;
+  return error42;
 }
 var AgentWorkerConnection = class {
   constructor(workerEntryPath, boot, onExit, reportHostLog) {
@@ -34,7 +34,7 @@ var AgentWorkerConnection = class {
         entry.resolve(response);
       }
     });
-    this.worker.on("error", (error41) => this.die(error41));
+    this.worker.on("error", (error42) => this.die(error42));
     this.worker.on("exit", (code) => {
       if (code !== 0) this.die(new Error(`worker exited with code ${code}`));
       else this.die(new Error("worker exited"));
@@ -48,10 +48,10 @@ var AgentWorkerConnection = class {
   lastActivityAt = Date.now();
   workerThreadId = null;
   workerPid = null;
-  die(error41) {
+  die(error42) {
     if (this.isDead) return;
     this.isDead = true;
-    for (const [, entry] of this.pending) entry.reject(error41);
+    for (const [, entry] of this.pending) entry.reject(error42);
     this.pending.clear();
     this.onExit(this);
   }
@@ -61,20 +61,20 @@ var AgentWorkerConnection = class {
     }
     this.lastActivityAt = Date.now();
     const requestId2 = this.nextRequestId++;
-    const request3 = build2(requestId2);
+    const request5 = build2(requestId2);
     return new Promise((resolve29, reject2) => {
       this.pending.set(requestId2, {
         resolve: (response) => {
           this.lastActivityAt = Date.now();
           resolve29(response);
         },
-        reject: (error41) => {
+        reject: (error42) => {
           this.lastActivityAt = Date.now();
-          reject2(error41);
+          reject2(error42);
         },
         ...onProgress === void 0 ? {} : { onProgress }
       });
-      this.worker.postMessage(request3, transfer);
+      this.worker.postMessage(request5, transfer);
     });
   }
   activityAt() {

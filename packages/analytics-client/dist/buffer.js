@@ -1,4 +1,4 @@
-var __awaiter71 = function(thisArg, _arguments, P2, generator) {
+var __awaiter73 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -57,7 +57,7 @@ var AnalyticsBuffer = class {
       this.scheduleFlush();
   }
   flush(timeoutMs) {
-    return __awaiter71(this, void 0, void 0, function* () {
+    return __awaiter73(this, void 0, void 0, function* () {
       while (true) {
         if (this.activeFlush) {
           yield this.activeFlush;
@@ -82,7 +82,7 @@ var AnalyticsBuffer = class {
     });
   }
   flushOnce(timeoutMs) {
-    return __awaiter71(this, void 0, void 0, function* () {
+    return __awaiter73(this, void 0, void 0, function* () {
       var _a19;
       if (this.buffer.length === 0)
         return 0;
@@ -94,7 +94,9 @@ var AnalyticsBuffer = class {
           const token = yield Promise.race([
             this.tokenProvider.getAccessToken(),
             new Promise((resolve29) => {
-              controller.signal.addEventListener("abort", () => resolve29(TOKEN_CHECK_TIMEOUT), { once: true });
+              controller.signal.addEventListener("abort", () => resolve29(TOKEN_CHECK_TIMEOUT), {
+                once: true
+              });
             })
           ]);
           if (token === TOKEN_CHECK_TIMEOUT) {
@@ -123,7 +125,9 @@ var AnalyticsBuffer = class {
         if (toSend.length === 0)
           return 0;
         try {
-          yield this.client.trackEvents(new TrackEventsRequest({ events: toSend }), { signal: controller.signal });
+          yield this.client.trackEvents(new TrackEventsRequest({ events: toSend }), {
+            signal: controller.signal
+          });
           this.buffer.splice(0, toSend.length);
           return toSend.length;
         } catch (err) {

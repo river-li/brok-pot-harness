@@ -1,4 +1,4 @@
-var logger86 = createLogger("tools/shell/background-executor");
+var logger87 = createLogger("tools/shell/background-executor");
 function createShellToolCall2(shellTool) {
   return new ToolCall({
     tool: {
@@ -92,16 +92,16 @@ async function executeBackgroundCommand(ctx, backgroundShellExecutor, interactio
           });
         }
         case "error": {
-          const { error: error41 } = execResult.result.value;
-          throw new Error(error41);
+          const { error: error42 } = execResult.result.value;
+          throw new Error(error42);
         }
         case "rejected": {
           const { reason } = execResult.result.value;
           throw new ShellRejectedError(options2.command, options2.workingDirectory, reason);
         }
         case "permissionDenied": {
-          const { error: error41, isReadonly } = execResult.result.value;
-          throw new ShellPermissionDeniedError(options2.command, options2.workingDirectory, error41, isReadonly);
+          const { error: error42, isReadonly } = execResult.result.value;
+          throw new ShellPermissionDeniedError(options2.command, options2.workingDirectory, error42, isReadonly);
         }
         case "sandboxUnsupported": {
           const { sandboxPolicyType, reason, isReadonly } = execResult.result.value;
@@ -118,9 +118,9 @@ async function executeBackgroundCommand(ctx, backgroundShellExecutor, interactio
       if (!completed) {
         try {
           await options2.onRejected?.(ctx2);
-        } catch (error41) {
-          logger86.warn(ctx2, "Failed to clean up rejected background shell approval", {
-            error: error41
+        } catch (error42) {
+          logger87.warn(ctx2, "Failed to clean up rejected background shell approval", {
+            error: error42
           });
         }
       }

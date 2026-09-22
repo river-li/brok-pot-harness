@@ -88,7 +88,8 @@ function toRedactedMountedAgentStore(msg, privacyMode) {
     path: createRedactedString(msg.path, DataClassification.PATH, "path", privacyMode),
     kind: msg.kind,
     alias: msg.alias !== void 0 ? createRedactedString(msg.alias, DataClassification.PATH, "alias", privacyMode) : void 0,
-    readOnly: msg.readOnly
+    readOnly: msg.readOnly,
+    inheritedFromPath: msg.inheritedFromPath !== void 0 ? createRedactedString(msg.inheritedFromPath, DataClassification.PATH, "inherited_from_path", privacyMode) : void 0
   };
 }
 function fromRedactedMountedAgentStore(msg, purpose, opts) {
@@ -98,7 +99,8 @@ function fromRedactedMountedAgentStore(msg, purpose, opts) {
     path: msg.path.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing }),
     kind: msg.kind,
     alias: msg.alias?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing }),
-    readOnly: msg.readOnly
+    readOnly: msg.readOnly,
+    inheritedFromPath: msg.inheritedFromPath?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
 function toRedactedUserAgentStoreWebContext(msg, privacyMode) {

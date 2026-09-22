@@ -1,15 +1,15 @@
 var import_node_crypto71 = require("node:crypto");
-init_dist2();
+init_dist3();
 init_errors();
 function spendInitiationForRequest(session, requestId2) {
   if (requestId2 == null) return void 0;
   try {
     return session.db.getSpendInitiation(requestId2)?.initiation;
-  } catch (error41) {
+  } catch (error42) {
     reportHostDiagnostic({
       kind: "fallback_taken",
       stage: "transcript_manager",
-      errorClass: errorLogTag(error41)
+      errorClass: errorLogTag(error42)
     });
     return void 0;
   }

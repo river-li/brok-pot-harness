@@ -2,8 +2,8 @@ var DESCRIPTION_MAX_LENGTH = 500;
 function renderBotSecretsSection(secrets) {
   if (secrets === void 0 || secrets.length === 0) return null;
   const entries = [...secrets].sort((a, b2) => a.name.localeCompare(b2.name)).map((secret) => {
-    const description10 = clampLine(secret.description, DESCRIPTION_MAX_LENGTH);
-    return description10.length === 0 ? `- ${secret.name}` : `- ${secret.name}: ${description10}`;
+    const description9 = clampLine(secret.description, DESCRIPTION_MAX_LENGTH);
+    return description9.length === 0 ? `- ${secret.name}` : `- ${secret.name}: ${description9}`;
   });
   return [
     "## Bot secrets",

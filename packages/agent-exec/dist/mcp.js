@@ -97,10 +97,7 @@ function mergeMcpLeaseEvents(...events) {
   }
   return {
     serverIdentifiers: [
-      .../* @__PURE__ */ new Set([
-        ...(_c2 = a.serverIdentifiers) !== null && _c2 !== void 0 ? _c2 : [],
-        ...(_d = b2 === null || b2 === void 0 ? void 0 : b2.serverIdentifiers) !== null && _d !== void 0 ? _d : []
-      ])
+      .../* @__PURE__ */ new Set([...(_c2 = a.serverIdentifiers) !== null && _c2 !== void 0 ? _c2 : [], ...(_d = b2 === null || b2 === void 0 ? void 0 : b2.serverIdentifiers) !== null && _d !== void 0 ? _d : []])
     ],
     reason: (_e2 = a.reason) !== null && _e2 !== void 0 ? _e2 : b2 === null || b2 === void 0 ? void 0 : b2.reason
   };

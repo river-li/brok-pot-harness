@@ -3,10 +3,10 @@ init_system_errno();
 var EVENT_FIRE_DEBOUNCE_MS = 750;
 var MAX_QUEUED_EVENT_FIRES_PER_AUTOMATION = 500;
 var MAX_REPORTED_DROPPED_FIRES = 256;
-function deliveryErrorTypeAndCode(error41) {
-  let errorType = typeof error41;
-  if (error41 instanceof Error) errorType = error41.constructor.name;
-  const errorCode = findSystemErrno(error41);
+function deliveryErrorTypeAndCode(error42) {
+  let errorType = typeof error42;
+  if (error42 instanceof Error) errorType = error42.constructor.name;
+  const errorCode = findSystemErrno(error42);
   return {
     errorType,
     ...errorCode !== void 0 ? { errorCode } : {}
@@ -125,9 +125,9 @@ var AutomationEventFires = class {
         await this.tm.automationRuntime.deleteAgentAutomation(batch.agentId, batch.automation.id);
         terminalWatchDeleted = true;
       }
-    } catch (error41) {
+    } catch (error42) {
       this.tm.hostLog(
-        `[sand:automation] event wake dispatch failed for "${batch.automation.name}" (${batch.automation.id}): ` + errorMessage(error41),
+        `[sand:automation] event wake dispatch failed for "${batch.automation.name}" (${batch.automation.id}): ` + errorMessage(error42),
         "error"
       );
     } finally {
@@ -158,7 +158,7 @@ var AutomationEventFires = class {
     reason,
     scheduledForMs,
     runUuid,
-    error: error41
+    error: error42
   }) {
     if (runUuid !== void 0) {
       if (this.reportedDroppedFireUuids.has(runUuid)) return;
@@ -174,7 +174,7 @@ var AutomationEventFires = class {
       trigger: trigger2,
       reason,
       ...runUuid !== void 0 ? { runUuid } : {},
-      ...error41 !== void 0 ? deliveryErrorTypeAndCode(error41) : {},
+      ...error42 !== void 0 ? deliveryErrorTypeAndCode(error42) : {},
       ...scheduledForMs != null ? {
         scheduledForMs,
         latenessMs: Math.max(0, Date.now() - scheduledForMs)

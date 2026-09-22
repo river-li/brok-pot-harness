@@ -23,8 +23,8 @@ var SandBoxDaemonUnreachableError = class extends Error {
     this.outcome = outcome;
   }
 };
-function isSandBoxHibernatedError(error41) {
-  return error41 instanceof SandBoxDaemonUnreachableError && error41.outcome === "hibernated";
+function isSandBoxHibernatedError(error42) {
+  return error42 instanceof SandBoxDaemonUnreachableError && error42.outcome === "hibernated";
 }
 var SandBoxNoMonitorAvailableError = class extends Error {
   constructor(message = "No private desktop monitor is available on the shared box.") {
@@ -32,17 +32,17 @@ var SandBoxNoMonitorAvailableError = class extends Error {
     this.name = "SandBoxNoMonitorAvailableError";
   }
 };
-function boxNotReadyReasonForError(error41) {
-  if (error41 instanceof SandBoxNoMonitorAvailableError) {
+function boxNotReadyReasonForError(error42) {
+  if (error42 instanceof SandBoxNoMonitorAvailableError) {
     return {
       errorKind: "box_no_monitor_available",
       message: SAND_BOX_NO_MONITOR_AVAILABLE_MESSAGE
     };
   }
-  if (isSandBoxHibernatedError(error41)) {
+  if (isSandBoxHibernatedError(error42)) {
     return { errorKind: "box_hibernated", message: SAND_BOX_HIBERNATED_MESSAGE };
   }
-  if (error41 instanceof SandBoxDaemonUnreachableError && (error41.outcome === "timeout" || error41.outcome === "crash")) {
+  if (error42 instanceof SandBoxDaemonUnreachableError && (error42.outcome === "timeout" || error42.outcome === "crash")) {
     return {
       errorKind: "box_not_responding",
       message: SAND_BOX_NOT_RESPONDING_MESSAGE

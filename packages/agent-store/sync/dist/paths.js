@@ -2,8 +2,8 @@ var import_node_child_process = require("node:child_process");
 var fs2 = __toESM(require("node:fs"), 1);
 var os = __toESM(require("node:os"), 1);
 var path2 = __toESM(require("node:path"), 1);
-init_dist();
-init_dist();
+init_dist2();
+init_dist2();
 var AGENT_STORE_SYNC_DIR_NAME = ".sync";
 function isReservedRelPath(relPath) {
   return relPath.split("/").some(isReservedAgentStorePathSegment);
@@ -167,9 +167,9 @@ function ensureRealDirectorySegment(targetPath, deps) {
   if (!stat28) {
     try {
       deps.fs.mkdirSync(targetPath, { mode: PRIVATE_DIR_MODE });
-    } catch (error41) {
-      if (!isNodeError2(error41) || error41.code !== "EEXIST") {
-        throw error41;
+    } catch (error42) {
+      if (!isNodeError2(error42) || error42.code !== "EEXIST") {
+        throw error42;
       }
     }
     stat28 = tryLstat(targetPath, deps.fs);

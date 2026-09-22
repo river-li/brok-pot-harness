@@ -1,5 +1,5 @@
 var SAND_READ_TRANSCRIPT_TOOL_NAME = "ReadTranscript";
-var optionalId = (description10) => external_exports.string().trim().optional().describe(description10);
+var optionalId = (description9) => external_exports.string().trim().optional().describe(description9);
 function presentId(value) {
   return value === void 0 || value.length === 0 ? void 0 : value;
 }

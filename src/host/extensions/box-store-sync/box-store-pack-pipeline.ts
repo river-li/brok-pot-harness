@@ -205,8 +205,8 @@ var BoxStorePackPipeline = class {
             );
           }
         }
-      } catch (error41) {
-        this.log(`pack retired-list write failed: ${errorMessage(error41)}`);
+      } catch (error42) {
+        this.log(`pack retired-list write failed: ${errorMessage(error42)}`);
         summary.failures += 1;
         return summary;
       }
@@ -218,16 +218,16 @@ var BoxStorePackPipeline = class {
         for (const packId of retiring) {
           try {
             await store.delete(`${BOX_STORE_PACKS_PREFIX}/${packId}`);
-          } catch (error41) {
-            this.log(`pack ${packId} delete failed: ${errorMessage(error41)}`);
+          } catch (error42) {
+            this.log(`pack ${packId} delete failed: ${errorMessage(error42)}`);
           }
         }
       }
       if (plan.deferredMembers > 0) {
         this.log(`pack round deferred ${plan.deferredMembers} member(s) under the build floor`);
       }
-    } catch (error41) {
-      this.log(`pack maintenance round failed: ${errorMessage(error41)}`);
+    } catch (error42) {
+      this.log(`pack maintenance round failed: ${errorMessage(error42)}`);
       summary.failures += 1;
     }
     return summary;
@@ -335,16 +335,16 @@ var BoxStorePackPipeline = class {
       try {
         const rawIndex = await store.get(BOX_STORE_PACK_INDEX_KEY);
         packIndex = rawIndex == null || rawIndex.byteLength > PACK_INDEX_MAX_BYTES ? null : parsePackIndex(Buffer.from(rawIndex).toString("utf8"));
-      } catch (error41) {
-        this.log(`pack index read failed (falling back to loose blobs): ${errorMessage(error41)}`);
+      } catch (error42) {
+        this.log(`pack index read failed (falling back to loose blobs): ${errorMessage(error42)}`);
       }
       if (packIndex != null && packIndex.packs.length > 0) {
         await forEachBounded([...packIndex.packs], PACK_DOWNLOAD_CONCURRENCY, async (pack) => {
           try {
             await restoreFromPack(pack);
-          } catch (error41) {
+          } catch (error42) {
             this.log(
-              `pack ${pack.id} restore failed (falling back to loose blobs): ${errorMessage(error41)}`
+              `pack ${pack.id} restore failed (falling back to loose blobs): ${errorMessage(error42)}`
             );
           }
         });

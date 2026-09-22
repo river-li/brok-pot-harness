@@ -3,9 +3,9 @@ var import_node_path2 = require("node:path");
 var import_node_sqlite3 = require("node:sqlite");
 var STORE_FILENAME = "store.db";
 var INCREMENTAL_VACUUM_PAGES = 512;
-function prepareStatements(db2) {
+function prepareStatements(db) {
   return {
-    upsertMessage: db2.prepare(
+    upsertMessage: db.prepare(
       `INSERT INTO messages (agent_id, entry_id, role, timestamp_ms, body)
 			 VALUES (?, ?, ?, ?, ?)
 			 ON CONFLICT(agent_id, entry_id) DO UPDATE SET
@@ -13,9 +13,9 @@ function prepareStatements(db2) {
 				timestamp_ms = excluded.timestamp_ms,
 				body = excluded.body`
     ),
-    deleteMessage: db2.prepare("DELETE FROM messages WHERE agent_id = ? AND entry_id = ?"),
-    deleteAgentMessages: db2.prepare("DELETE FROM messages WHERE agent_id = ?"),
-    upsertMedia: db2.prepare(
+    deleteMessage: db.prepare("DELETE FROM messages WHERE agent_id = ? AND entry_id = ?"),
+    deleteAgentMessages: db.prepare("DELETE FROM messages WHERE agent_id = ?"),
+    upsertMedia: db.prepare(
       `INSERT INTO media (
 				agent_id, entry_id, file_name, ext, mime, kind,
 				timestamp_ms, width, height
@@ -30,15 +30,15 @@ function prepareStatements(db2) {
 				width = excluded.width,
 				height = excluded.height`
     ),
-    deleteMedia: db2.prepare("DELETE FROM media WHERE agent_id = ? AND entry_id = ?"),
-    deleteAgentMedia: db2.prepare("DELETE FROM media WHERE agent_id = ?"),
-    upsertFingerprint: db2.prepare(
+    deleteMedia: db.prepare("DELETE FROM media WHERE agent_id = ? AND entry_id = ?"),
+    deleteAgentMedia: db.prepare("DELETE FROM media WHERE agent_id = ?"),
+    upsertFingerprint: db.prepare(
       `INSERT INTO agents (agent_id, fingerprint) VALUES (?, ?)
 			 ON CONFLICT(agent_id) DO UPDATE SET fingerprint = excluded.fingerprint`
     ),
-    deleteFingerprint: db2.prepare("DELETE FROM agents WHERE agent_id = ?"),
-    readFingerprint: db2.prepare("SELECT fingerprint FROM agents WHERE agent_id = ?"),
-    listIndexedAgentIds: db2.prepare(
+    deleteFingerprint: db.prepare("DELETE FROM agents WHERE agent_id = ?"),
+    readFingerprint: db.prepare("SELECT fingerprint FROM agents WHERE agent_id = ?"),
+    listIndexedAgentIds: db.prepare(
       `SELECT agent_id AS agentId FROM agents
 			 UNION SELECT DISTINCT agent_id FROM messages
 			 UNION SELECT DISTINCT agent_id FROM media`
@@ -46,10 +46,10 @@ function prepareStatements(db2) {
   };
 }
 var SandSearchIndexWriter = class {
-  constructor(db2, agentsRootDir) {
-    this.db = db2;
+  constructor(db, agentsRootDir) {
+    this.db = db;
     this.agentsRootDir = agentsRootDir;
-    this.statements = prepareStatements(db2);
+    this.statements = prepareStatements(db);
   }
   db;
   agentsRootDir;
@@ -101,9 +101,9 @@ var SandSearchIndexWriter = class {
     const path = this.storeDbPath(agentId);
     if (!(0, import_node_fs.existsSync)(path)) return null;
     try {
-      const db2 = new import_node_sqlite3.DatabaseSync(path, { readOnly: true });
-      db2.exec(`PRAGMA busy_timeout = ${DB_BUSY_TIMEOUT_MS}`);
-      const connection = { db: db2 };
+      const db = new import_node_sqlite3.DatabaseSync(path, { readOnly: true });
+      db.exec(`PRAGMA busy_timeout = ${DB_BUSY_TIMEOUT_MS}`);
+      const connection = { db };
       this.storeConnections.set(agentId, connection);
       return connection;
     } catch {

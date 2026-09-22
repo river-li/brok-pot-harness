@@ -138,11 +138,11 @@ var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
           })
         }
       });
-    } catch (error41) {
+    } catch (error42) {
       if (this.ctx.signal.aborted) {
         return this.abortedResult();
       }
-      return this.errorResult(error41);
+      return this.errorResult(error42);
     } finally {
       if (needsControl) {
         await this.sidecar.releaseControl(this.ctx);
@@ -190,10 +190,12 @@ var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
     }
     this.cursor = _MacComputerUseActionRunner.cursorFromResult(result) ?? _MacComputerUseActionRunner.coordinateFromPoint(coordinate2) ?? this.cursor;
   }
-  async errorResult(error41) {
-    _MacComputerUseActionRunner.logger.error(this.ctx, "local-cua execute failed", void 0, { error: redactMacComputerUseError(error41) });
+  async errorResult(error42) {
+    _MacComputerUseActionRunner.logger.error(this.ctx, "local-cua execute failed", void 0, {
+      error: redactMacComputerUseError(error42)
+    });
     let errorShot;
-    if (!isMacComputerUseCaptureBlocked(error41)) {
+    if (!isMacComputerUseCaptureBlocked(error42)) {
       try {
         const result = await this.sidecar.screenshot(this.ctx);
         errorShot = (await this.normalizeScreenshot(result.screenshot, "error")).data;
@@ -203,7 +205,7 @@ var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
         });
       }
     }
-    const guidance = userFacingMacComputerUseError(error41);
+    const guidance = userFacingMacComputerUseError(error42);
     return new ComputerUseResult({
       result: {
         case: "error",
@@ -261,8 +263,8 @@ var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
     }
     try {
       return { data: await MacScreenshotCodec.normalize(image2), failed: false };
-    } catch (error41) {
-      const reason = redactMacComputerUseError(error41);
+    } catch (error42) {
+      const reason = redactMacComputerUseError(error42);
       _MacComputerUseActionRunner.logger.error(this.ctx, "local-cua screenshot conversion failed", void 0, { frame, error: reason });
       if (image2.mimeType === "image/png" && image2.data.length > 0) {
         return { data: image2.data, failed: false };

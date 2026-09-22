@@ -1,5 +1,5 @@
-init_dist3();
-var logger102 = createLogger("sand:start-of-turn-ack-reminder-middleware");
+init_dist4();
+var logger103 = createLogger("sand:start-of-turn-ack-reminder-middleware");
 function chatSilenceRemindersCoverThisTurn({
   isSubagentRunner,
   isSilenceAllowed,
@@ -44,7 +44,7 @@ function hasTextSendMessageCall(message) {
 function hasTextSendMessageSinceTurnStart(messages2) {
   for (let index = messages2.length - 1; index >= 0; index--) {
     const message = messages2[index];
-    if (isInjectedReminderMessage(message)) {
+    if (isInjectedReminderMessage2(message)) {
       continue;
     }
     if (message.role === "user" || message.role === "system") {
@@ -75,7 +75,7 @@ var StartOfTurnAckReminderMiddleware = class extends BaseMiddleware {
     }
     const toolCallsSinceLastSend = countToolCallsSinceLastSendMessage(messages2);
     if (toolCallsSinceLastSend > this.threshold) {
-      logger102.info(ctx, "[sand-start-of-turn-ack] injecting reminder", {
+      logger103.info(ctx, "[sand-start-of-turn-ack] injecting reminder", {
         toolCallsSinceLastSend,
         threshold: this.threshold,
         messageCount: messages2.length

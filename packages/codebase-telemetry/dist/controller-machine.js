@@ -43,10 +43,7 @@ function reconcileEligibility(state, { auth: auth2, privacyMode }, options2 = {}
   }
   if (!isCodebaseTelemetryAllowed(privacyMode)) {
     const { commands } = stopTelemetry(state, "privacyModeDisallowed");
-    return createTransition(state, { kind: "inactive", auth: auth2 }, [
-      ...precedingCommands,
-      ...commands
-    ]);
+    return createTransition(state, { kind: "inactive", auth: auth2 }, [...precedingCommands, ...commands]);
   }
   return beginMainGateCheck(state, auth2, { precedingCommands });
 }
@@ -64,10 +61,7 @@ function beginMainGateCheck(state, auth2, { precedingCommands }) {
   switch (state.kind) {
     case "inactive":
     case "checkingMainGate":
-      return createTransition(state, checkingState, [
-        ...precedingCommands,
-        checkCommand
-      ]);
+      return createTransition(state, checkingState, [...precedingCommands, checkCommand]);
     case "openingSession":
     case "recheckingMainGateWhileOpening": {
       if (state.openAttempt.expectedAuthId !== auth2.authId) {
@@ -193,9 +187,7 @@ function handleFeatureGatesChanged(state, { mainGateChanged, subgateChanged, aut
   }
   switch (state.kind) {
     case "active":
-      return createSelfTransition(state, [
-        { kind: "reconcileSubgates", session: state.session }
-      ]);
+      return createSelfTransition(state, [{ kind: "reconcileSubgates", session: state.session }]);
     case "recheckingMainGate":
       return createTransition(state, Object.assign(Object.assign({}, state), { subgatesDirty: true }));
     case "mainGateUnavailable":
@@ -296,9 +288,7 @@ function handleMainGateCheckCompleted(state, { checkToken, enabled }) {
 }
 function handleSessionOpenSucceeded(state, { openAttempt, session }) {
   if (state.kind !== "openingSession" && state.kind !== "recheckingMainGateWhileOpening" || state.openAttempt !== openAttempt) {
-    return createSelfTransition(state, [
-      { kind: "closeStaleSession", session }
-    ]);
+    return createSelfTransition(state, [{ kind: "closeStaleSession", session }]);
   }
   if (session.authId !== openAttempt.expectedAuthId) {
     return createTransition(state, { kind: "inactive", auth: state.auth }, [
@@ -338,11 +328,9 @@ function handleSessionOpenSucceeded(state, { openAttempt, session }) {
     }
   ]);
 }
-function handleSessionOpenFailed(state, { openAttempt, error: error41 }) {
+function handleSessionOpenFailed(state, { openAttempt, error: error42 }) {
   if (state.kind !== "openingSession" && state.kind !== "recheckingMainGateWhileOpening" || state.openAttempt !== openAttempt) {
-    return createSelfTransition(state, [
-      { kind: "reportStaleSessionOpenFailure", error: error41 }
-    ]);
+    return createSelfTransition(state, [{ kind: "reportStaleSessionOpenFailure", error: error42 }]);
   }
   if (state.kind === "recheckingMainGateWhileOpening") {
     return createTransition(state, {
@@ -353,7 +341,7 @@ function handleSessionOpenFailed(state, { openAttempt, error: error41 }) {
       {
         kind: "finalizeFailedSessionOpenAttempt",
         openAttempt,
-        error: error41
+        error: error42
       }
     ]);
   }
@@ -361,11 +349,11 @@ function handleSessionOpenFailed(state, { openAttempt, error: error41 }) {
     {
       kind: "finalizeFailedSessionOpenAttempt",
       openAttempt,
-      error: error41
+      error: error42
     }
   ]);
 }
-function handleSessionFailed(state, { session, error: error41 }) {
+function handleSessionFailed(state, { session, error: error42 }) {
   switch (state.kind) {
     case "active":
     case "recheckingMainGate":
@@ -376,7 +364,7 @@ function handleSessionFailed(state, { session, error: error41 }) {
       const { nextState, commands } = transitionToInactive(state);
       return {
         nextState,
-        commands: [{ kind: "reportSessionFailure", error: error41 }, ...commands]
+        commands: [{ kind: "reportSessionFailure", error: error42 }, ...commands]
       };
     }
     case "inactive":
@@ -478,10 +466,7 @@ function stopTelemetry(state, reason) {
     case "mainGateUnavailable":
       return {
         nextState: transition.nextState,
-        commands: [
-          ...transition.commands,
-          { kind: "reportTelemetryStopped", reason }
-        ]
+        commands: [...transition.commands, { kind: "reportTelemetryStopped", reason }]
       };
     case "inactive":
     case "checkingMainGate":

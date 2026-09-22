@@ -11,7 +11,7 @@ async function resolveCloudAgentTitleBestEffort(ctx, bcId, deps) {
 }
 async function resolveAttachmentSource(ctx, sourceUrl, deps) {
   const sourcePath = filePathFromFileUrl(sourceUrl);
-  const fileName = sourcePath != null ? (0, import_node_path173.basename)(sourcePath) : void 0;
+  const fileName = sourcePath != null ? (0, import_node_path171.basename)(sourcePath) : void 0;
   const resolved = (url2) => ({
     url: url2,
     ...fileName != null && fileName.length > 0 ? { fileName } : {}
@@ -23,11 +23,11 @@ async function resolveAttachmentSource(ctx, sourceUrl, deps) {
   if (ingest != null) {
     try {
       return resolved((0, import_node_url17.pathToFileURL)(await ingest(sourcePath)).href);
-    } catch (error41) {
-      if (error41 instanceof SandToolInputError || error41 instanceof AttachmentTooLargeError) {
-        throw error41;
+    } catch (error42) {
+      if (error42 instanceof SandToolInputError || error42 instanceof AttachmentTooLargeError) {
+        throw error42;
       }
-      ingestError = error41;
+      ingestError = error42;
     }
   }
   const boxUrl = await deps.resolveBoxAttachment?.(ctx, sourcePath);
@@ -116,10 +116,10 @@ async function buildSandSendMessage(ctx, rawArgs, deps) {
       if (secret == null) {
         throw new SandToolInputError("secret is required when type is secret-request");
       }
-      const description10 = secret.description != null && secret.description.length > 0 ? clampSecretDescription(secret.description) : void 0;
+      const description9 = secret.description != null && secret.description.length > 0 ? clampSecretDescription(secret.description) : void 0;
       const secretRequest = {
         label: clampSecretLabel(secret.label),
-        ...description10 != null ? { description: description10 } : {},
+        ...description9 != null ? { description: description9 } : {},
         target: resolveSendMessageSecretTarget(
           { name: secret.name, pluginId: secret.plugin_id },
           deps.resolveSecretRequestTarget
@@ -309,9 +309,9 @@ function createSendMessageTool2(deps) {
                   })
                 }
               });
-            } catch (error41) {
+            } catch (error42) {
               if (awaitsUserSelection) userSelectionSendStarted = false;
-              throw error41;
+              throw error42;
             }
           },
           (result) => createSendMessageToolCall(new SendMessageToolCall({ ...baseToolCall, result }))
@@ -331,8 +331,8 @@ function createSendMessageTool2(deps) {
         messageId.length > 0 ? `Message sent to user. (id: ${messageId})` : "Message sent to user."
       );
     },
-    serializeError: (error41) => {
-      const message = error41 instanceof Error ? error41.message : "Unknown error";
+    serializeError: (error42) => {
+      const message = error42 instanceof Error ? error42.message : "Unknown error";
       return createSendMessageToolCall(
         new SendMessageToolCall({
           result: new SendMessageResult({

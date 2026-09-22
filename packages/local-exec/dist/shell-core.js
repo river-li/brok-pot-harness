@@ -101,12 +101,7 @@ function appendRequestScopedEnvRestore(env, requestScopedEnv) {
   }
   const existingRestore = env.__CURSOR_SANDBOX_ENV_RESTORE?.trim();
   const processRestore = process.env.__CURSOR_SANDBOX_ENV_RESTORE?.trim();
-  env.__CURSOR_SANDBOX_ENV_RESTORE = [
-    unsetAll,
-    processRestore,
-    existingRestore,
-    ...exportParts
-  ].filter((part) => part !== void 0 && part !== "").join("; ");
+  env.__CURSOR_SANDBOX_ENV_RESTORE = [unsetAll, processRestore, existingRestore, ...exportParts].filter((part) => part !== void 0 && part !== "").join("; ");
 }
 function appendUnique(paths, pathToAdd) {
   const next = paths === void 0 ? [] : [...paths];

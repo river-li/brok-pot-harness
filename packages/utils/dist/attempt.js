@@ -1,8 +1,8 @@
 function attemptSync(operation) {
   try {
     return { ok: true, value: operation() };
-  } catch (error41) {
-    return { ok: false, error: error41 };
+  } catch (error42) {
+    return { ok: false, error: error42 };
   }
 }
 var init_attempt = __esm({

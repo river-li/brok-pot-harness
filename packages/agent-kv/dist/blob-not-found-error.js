@@ -19,14 +19,14 @@ var BlobNotFoundError = class extends Error {
   }
 };
 var MAX_CAUSE_CHAIN_DEPTH = 10;
-function isBlobNotFoundErrorNode(error41) {
-  if (!(error41 instanceof Error)) {
+function isBlobNotFoundErrorNode(error42) {
+  if (!(error42 instanceof Error)) {
     return false;
   }
-  return error41 instanceof BlobNotFoundError || error41.isBlobNotFound === true || error41.name === "BlobNotFoundError";
+  return error42 instanceof BlobNotFoundError || error42.isBlobNotFound === true || error42.name === "BlobNotFoundError";
 }
-function findBlobNotFoundError(error41) {
-  let current = error41;
+function findBlobNotFoundError(error42) {
+  let current = error42;
   for (let depth = 0; depth < MAX_CAUSE_CHAIN_DEPTH; depth++) {
     if (current === null || current === void 0) {
       return void 0;

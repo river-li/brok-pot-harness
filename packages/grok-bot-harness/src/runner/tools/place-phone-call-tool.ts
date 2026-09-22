@@ -17,7 +17,8 @@ async function placePhoneCall(deps, args) {
   }
   const result = await deps.outboundCall.placeCall(args);
   const part = (label, value) => value === void 0 || value.length === 0 ? "" : ` ${label} ${value}.`;
-  return `Placed outbound phone call to ${args.to} from ${result.from}.${part("Status", result.status)}${part("Call id", result.callId)}`;
+  const outcome = result.watched === true ? " You will be told how it went when it ends." : " Nothing is watching this call, so its outcome will not be reported to you.";
+  return `Placed outbound phone call to ${args.to} from ${result.from}.${part("Status", result.status)}${part("Call id", result.callId)}${outcome}`;
 }
 function createPlacePhoneCallTool(deps) {
   return defineCommunicateTool(deps, {

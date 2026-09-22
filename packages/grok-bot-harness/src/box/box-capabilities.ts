@@ -31,11 +31,11 @@ async function boxApplyEnvironment(box, ctx, update) {
   }
   await box.applyEnvironment(ctx, update);
 }
-async function boxLoadMcpServers(box, ctx, configJson) {
+async function boxLoadMcpServers(box, ctx, configJson, options2) {
   if (box.loadMcpServers == null) {
     throw new BoxMcpUnsupportedError();
   }
-  return await box.loadMcpServers(ctx, configJson);
+  return await box.loadMcpServers(ctx, configJson, options2);
 }
 async function boxMcpResourceAccessor(box, ctx) {
   if (box.mcpResourceAccessor == null) {

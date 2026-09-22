@@ -2,9 +2,9 @@ var ACTION_AUDIT_FLUSH_INTERVAL_MS = 5e3;
 var MAX_BATCH_SIZE = 50;
 var MAX_PENDING_EVENTS = 2e3;
 var FLUSH_FAILURE_BACKOFF_MS = 3e4;
-function flushFailureBackoffMs(error41, nowMs2) {
-  if (!isRateLimitConnectError(error41)) return FLUSH_FAILURE_BACKOFF_MS;
-  return Math.max(getConnectRetryAfterMs(error41, nowMs2) ?? 0, FLUSH_FAILURE_BACKOFF_MS);
+function flushFailureBackoffMs(error42, nowMs2) {
+  if (!isRateLimitConnectError(error42)) return FLUSH_FAILURE_BACKOFF_MS;
+  return Math.max(getConnectRetryAfterMs(error42, nowMs2) ?? 0, FLUSH_FAILURE_BACKOFF_MS);
 }
 function outboxPath() {
   return (0, import_node_path30.join)(getSandAgentsRootDir(), "audit-outbox.json");
@@ -67,6 +67,17 @@ function localJsonlLine(record2, eventId) {
         command: action.command,
         shellKind: action.shellKind,
         target: action.target
+      })}
+`;
+    case "toolResult":
+      return `${JSON.stringify({
+        ...base,
+        type: "tool_result",
+        toolCallId: record2.toolCallId ?? "",
+        toolName: action.toolName,
+        outcome: action.outcome,
+        durationMs: action.durationMs,
+        ...action.errorCategory === void 0 ? {} : { errorCategory: action.errorCategory }
       })}
 `;
     default: {
@@ -136,8 +147,8 @@ function createSandActionAuditor(deps) {
         removeDelivered(batch);
       }
       await persistOutbox();
-    } catch (error41) {
-      backoffUntilMs = now() + flushFailureBackoffMs(error41, now());
+    } catch (error42) {
+      backoffUntilMs = now() + flushFailureBackoffMs(error42, now());
       await persistOutbox();
     }
   };
@@ -165,10 +176,10 @@ function createSandActionAuditor(deps) {
           const line = localJsonlLine(record2, eventId);
           if (line.length > 0 && acceptingLocalWrites) {
             const path31 = auditJsonlPath(record2.agentId);
-            localWriteTail = localWriteTail.then(() => appendLocalLine(path31, line)).catch((error41) => {
+            localWriteTail = localWriteTail.then(() => appendLocalLine(path31, line)).catch((error42) => {
               deps.report?.({
                 extension: "action_audit",
-                errorClass: errorLogTag(error41)
+                errorClass: errorLogTag(error42)
               });
             });
           }
@@ -183,6 +194,9 @@ function createSandActionAuditor(deps) {
             rootTurnId: record2.rootTurnId,
             subagentId: record2.subagentId,
             boxId: record2.boxId ?? "",
+            ...record2.toolCallId === void 0 ? {} : { toolCallId: record2.toolCallId },
+            ...record2.sequence === void 0 ? {} : { sequence: record2.sequence },
+            ...record2.initiatedBy === void 0 ? {} : { initiatedBy: record2.initiatedBy },
             action: record2.action
           });
           if (pending.length > MAX_PENDING_EVENTS) {

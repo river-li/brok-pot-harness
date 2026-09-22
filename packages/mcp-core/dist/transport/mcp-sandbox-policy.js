@@ -30,7 +30,7 @@ function buildMcpNetworkPolicy(config2) {
   return Object.assign({ version: 1, default: "deny", allow: [...PROXY_MEDIATED_ALLOW_ALL] }, denylist.entries.length > 0 ? { deny: denylist.entries } : {});
 }
 function buildMcpSandboxPolicy(config2, workspaceDir) {
-  return __awaiter27(this, void 0, void 0, function* () {
+  return __awaiter28(this, void 0, void 0, function* () {
     const { resolveSandboxPolicyForWorkspace: resolveSandboxPolicyForWorkspace2 } = yield Promise.resolve().then(() => (init_dist4(), dist_exports));
     const mcpNetworkPolicy = {
       type: "workspace_readwrite",
@@ -46,12 +46,12 @@ function buildMcpSandboxPolicy(config2, workspaceDir) {
     return policy;
   });
 }
-var __awaiter27, PROXY_MEDIATED_ALLOW_ALL;
+var __awaiter28, PROXY_MEDIATED_ALLOW_ALL;
 var init_mcp_sandbox_policy = __esm({
   "../packages/mcp-core/dist/transport/mcp-sandbox-policy.js"() {
     "use strict";
     init_mcp_url_utils();
-    __awaiter27 = function(thisArg, _arguments, P2, generator) {
+    __awaiter28 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve14) {
           resolve14(value);

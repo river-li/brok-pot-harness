@@ -1,4 +1,4 @@
-var __asyncValues8 = function(o) {
+var __asyncValues12 = function(o) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var m2 = o[Symbol.asyncIterator], i;
   return m2 ? m2.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
@@ -17,10 +17,10 @@ var __asyncValues8 = function(o) {
     }, reject2);
   }
 };
-var __await9 = function(v2) {
-  return this instanceof __await9 ? (this.v = v2, this) : new __await9(v2);
+var __await13 = function(v2) {
+  return this instanceof __await13 ? (this.v = v2, this) : new __await13(v2);
 };
-var __asyncGenerator9 = function(thisArg, _arguments, generator) {
+var __asyncGenerator13 = function(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g2 = generator.apply(thisArg, _arguments || []), i, q2 = [];
   return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function() {
@@ -49,7 +49,7 @@ var __asyncGenerator9 = function(thisArg, _arguments, generator) {
     }
   }
   function step(r) {
-    r.value instanceof __await9 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
+    r.value instanceof __await13 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
   }
   function fulfill(value) {
     resume("next", value);
@@ -61,15 +61,6 @@ var __asyncGenerator9 = function(thisArg, _arguments, generator) {
     if (f2(v2), q2.shift(), q2.length) resume(q2[0][0], q2[0][1]);
   }
 };
-var requestIdKey = createKey(/* @__PURE__ */ Symbol("requestId"), void 0);
-var conversationIdKey = createKey(/* @__PURE__ */ Symbol("conversationId"), void 0);
-var conversationGroupIdKey = createKey(/* @__PURE__ */ Symbol("conversationGroupId"), void 0);
-var automationIdKey = createKey(/* @__PURE__ */ Symbol("automationId"), void 0);
-var parentRequestIdKey = createKey(/* @__PURE__ */ Symbol("parentRequestId"), void 0);
-var rootParentRequestIdKey = createKey(/* @__PURE__ */ Symbol("rootParentRequestId"), void 0);
-var parentAgentToolCallIdKey = createKey(/* @__PURE__ */ Symbol("parentAgentToolCallId"), void 0);
-var subagentTypeKey = createKey(/* @__PURE__ */ Symbol("subagentType"), void 0);
-var requestedModelKey = createKey(/* @__PURE__ */ Symbol("requestedModel"), void 0);
 function preventUnhandledRejection(promise2) {
   void promise2.catch(() => {
   });
@@ -190,7 +181,7 @@ var ProtoPromptExecutor = class extends BasePromptExecutor {
     const effectiveModelConfig = (options2 === null || options2 === void 0 ? void 0 : options2.maxTokens) !== void 0 ? Object.assign(Object.assign({}, this.modelConfig), { maxTokens: options2.maxTokens }) : this.modelConfig;
     const requestedModel = (_b2 = ctx.get(requestedModelKey)) !== null && _b2 !== void 0 ? _b2 : this.requestedModel;
     const requestMessages = this.builder.getMessages();
-    const request3 = buildStreamRequest({
+    const request5 = buildStreamRequest({
       messages: requestMessages,
       requestedModel,
       tools: agentTools,
@@ -222,7 +213,7 @@ var ProtoPromptExecutor = class extends BasePromptExecutor {
       }
     } catch (_c2) {
     }
-    const streamPromise = this.client.stream(request3, {
+    const streamPromise = this.client.stream(request5, {
       signal: ctx.signal,
       headers
     });
@@ -283,7 +274,7 @@ var ProtoPromptExecutor = class extends BasePromptExecutor {
     };
   }
   createFullStream(streamPromise, resolvers, _ctx, requestMessages) {
-    return __asyncGenerator9(this, arguments, function* createFullStream_1() {
+    return __asyncGenerator13(this, arguments, function* createFullStream_1() {
       var _a19, e_1, _b2, _c2;
       var _d;
       var _e2, _f;
@@ -295,7 +286,7 @@ var ProtoPromptExecutor = class extends BasePromptExecutor {
       let streamError;
       try {
         try {
-          for (var _g = true, streamPromise_1 = __asyncValues8(streamPromise), streamPromise_1_1; streamPromise_1_1 = yield __await9(streamPromise_1.next()), _a19 = streamPromise_1_1.done, !_a19; _g = true) {
+          for (var _g = true, streamPromise_1 = __asyncValues12(streamPromise), streamPromise_1_1; streamPromise_1_1 = yield __await13(streamPromise_1.next()), _a19 = streamPromise_1_1.done, !_a19; _g = true) {
             _c2 = streamPromise_1_1.value;
             _g = false;
             const response = _c2;
@@ -350,20 +341,20 @@ var ProtoPromptExecutor = class extends BasePromptExecutor {
               this.applyImageDescriptions(requestMessages, response.response.value);
             }
             for (const part of parts) {
-              yield yield __await9(part);
+              yield yield __await13(part);
             }
           }
         } catch (e_1_1) {
           e_1 = { error: e_1_1 };
         } finally {
           try {
-            if (!_g && !_a19 && (_b2 = streamPromise_1.return)) yield __await9(_b2.call(streamPromise_1));
+            if (!_g && !_a19 && (_b2 = streamPromise_1.return)) yield __await13(_b2.call(streamPromise_1));
           } finally {
             if (e_1) throw e_1.error;
           }
         }
-      } catch (error41) {
-        streamError = error41 instanceof Error ? error41 : new Error(String(error41));
+      } catch (error42) {
+        streamError = error42 instanceof Error ? error42 : new Error(String(error42));
       }
       if (!usageResolved) {
         if (streamError) {

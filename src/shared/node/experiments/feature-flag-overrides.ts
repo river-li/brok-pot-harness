@@ -41,10 +41,10 @@ var SandFeatureFlagOverrideStore = class {
           expiresAtMs: entry.expiresAtMs
         });
       }
-    } catch (error41) {
+    } catch (error42) {
       reportExperimentsDiagnostic({
         kind: "overrides_load_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }
@@ -56,10 +56,10 @@ var SandFeatureFlagOverrideStore = class {
         overrides[name17] = entry;
       }
       await writeFileAtomic(path31, JSON.stringify({ overrides }));
-    } catch (error41) {
+    } catch (error42) {
       reportExperimentsDiagnostic({
         kind: "overrides_persist_failed",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }

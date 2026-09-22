@@ -14,10 +14,10 @@ var MainLoopVoicePrompt = class _MainLoopVoicePrompt {
     return `Your last turn sent nothing, so the call is still waiting on its result. Deliver it now by actually invoking ${sendTool} with the channel set to ${address}: a real tool call, not text you write. Text you write as your reply, and a ${sendTool} without that channel, never reach the call \u2014 that one goes to the chat instead, and the caller waits on regardless. Lead with the result in a sentence or two of plain text.`;
   }
   static callEndedClosing({ sendTool }) {
-    return `The call is over. If work is still going or a follow-up is owed, call ${sendTool} with no channel: one short message covering those, then keep working them. Text you write as your reply never reaches the user. If nothing is open, send nothing. Do not call ${sendTool} with that closed address.`;
+    return `The call is over. Anything you already sent on that closed address is not in this chat. If work is still going, a follow-up is owed, or you already delivered a result on the call, call ${sendTool} with no channel: one short message covering those, then keep working them. Text you write as your reply never reaches the user. If nothing was owed, send nothing. Do not call ${sendTool} with that closed address.`;
   }
   static callEndedNudge({ sendTool }) {
-    return `Your last turn sent nothing to this chat. If work is still going or a follow-up is owed, deliver it now by actually invoking ${sendTool} with no channel: a real tool call, not text you write. If nothing is open, send nothing. Do not call ${sendTool} with that closed address.`;
+    return `Your last turn sent nothing to this chat. If work is still going, a follow-up is owed, or you already delivered a result on the call, deliver it now by actually invoking ${sendTool} with no channel: a real tool call, not text you write. If nothing was owed, send nothing. Do not call ${sendTool} with that closed address.`;
   }
   static section() {
     return {
@@ -34,12 +34,12 @@ var MainLoopVoicePrompt = class _MainLoopVoicePrompt {
       "## The voice channel",
       `While a call is open, ${sendTool} with the channel set to the call's ${ADDRESS_SHAPE} address is how you answer it, over the same rail as any connected messaging platform. The channel carries plain text only: no markdown, no lists, and a file or image goes in writing instead.`,
       ..._MainLoopVoicePrompt.sendRules(),
-      `When the call ends you get a message on the same channel, and its address closes with it. Anything still in progress and any follow-ups go to this chat through ${sendTool} with no channel, as one short message.`
+      `When the call ends you get a message on the same channel, and its address closes with it. Anything still in progress, any follow-ups, and any result you already sent on the call go to this chat through ${sendTool} with no channel, as one short message.`
     ].join("\n");
   }
   /** The nudge is the request and nothing else: no transcript rides along. */
-  static relayed({ request: request3 }) {
-    const parsed2 = VoiceCallRequests.parse(request3);
+  static relayed({ request: request5 }) {
+    const parsed2 = VoiceCallRequests.parse(request5);
     if (parsed2.kind === "rejected")
       throw new Error(parsed2.error);
     return parsed2.request;

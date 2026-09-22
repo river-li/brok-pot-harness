@@ -1,11 +1,4 @@
-var MARKDOWN_SUFFIXES = [
-  ".md",
-  ".markdown",
-  ".mdown",
-  ".mkd",
-  ".mkdn",
-  ".mdx"
-];
+var MARKDOWN_SUFFIXES = [".md", ".markdown", ".mdown", ".mkd", ".mkdn", ".mdx"];
 var MANAGED_CANVAS_REGEX2 = /(?:^|\/)\.cursor\/projects\/[^/]+\/canvases\/[^/]+\.canvas\.tsx$/i;
 function isMarkdownEditPath(path31) {
   const normalizedPath = path31.trim().toLowerCase();

@@ -1,14 +1,18 @@
 var completedToolResultsByDeferredError = /* @__PURE__ */ new WeakMap();
-function getToolResultsCompletedBeforeDeferral(error41) {
-  return completedToolResultsByDeferredError.get(error41) ?? [];
+function getToolResultsCompletedBeforeDeferral(error42) {
+  return completedToolResultsByDeferredError.get(error42) ?? [];
+}
+function auditOutcomeField(error42) {
+  const auditOutcome = toolCallAuditOutcomeOf(error42);
+  return auditOutcome === void 0 ? {} : { auditOutcome };
 }
 function conversationStateOpsInReplayOrder(toolCallResults) {
   return toolCallResults.flatMap((result) => result.stateOps ?? []);
 }
 var RAW_ERROR_MESSAGE_CHARACTER_BUDGET = 2e4;
-function collectRawErrorMessages(error41) {
+function collectRawErrorMessages(error42) {
   const messages2 = [];
-  const queue = [error41];
+  const queue = [error42];
   const seen = /* @__PURE__ */ new Set();
   while (queue.length > 0) {
     const current = queue.shift();
@@ -363,7 +367,7 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
       toolCallId: descriptor2.toolCallId,
       hookContextCollector
     });
-    const toolOutputPromise = executeTool().then((result) => ({ ok: true, result }), (error41) => ({ ok: false, error: error41 }));
+    const toolOutputPromise = executeTool().then((result) => ({ ok: true, result }), (error42) => ({ ok: false, error: error42 }));
     if (tool.resolveToolCallTelemetry !== void 0 && completedArgs !== void 0) {
       try {
         const telemetryRaceResult = await Promise.race([
@@ -416,13 +420,13 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
     if (toolOutput.isError === true && "error" in toolOutputRaw) {
       errorClassification = toolOutputRaw.errorClassification;
     }
+    const toolAbortReason = ctx.reason;
+    const isToolIntentionalAbort = toolOutput.isError === true && ctx.canceled && toolAbortReason?.intentional === true;
     if (toolOutput.isError === true && "error" in toolOutputRaw) {
       const rawErrorMessages = collectRawErrorMessages(toolOutputRaw.error);
       if (rawErrorMessages.length > 0) {
         highLevelToolCallResult.rawErrorMessages = rawErrorMessages;
       }
-      const toolAbortReason = ctx.reason;
-      const isToolIntentionalAbort = ctx.canceled && toolAbortReason?.intentional === true;
       const logData = {
         toolCallId: descriptor2.toolCallId,
         toolName: telemetry.loggedToolName,
@@ -488,9 +492,7 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
       isdynamic: telemetry.isDynamic ? "true" : "false",
       "user.is_dev": getIsDevFromContext(ctx) ? "true" : "false"
     });
-    const toolResultContent = [
-      ...toolOutput.content
-    ];
+    const toolResultContent = [...toolOutput.content];
     const carriersToRender = generalHookCarriersEnabled || hookContextCollector === void 0 ? hookContextCollector ?? [] : hookContextCollector.filter((carrier) => carrier.hookEventName === AGENT_STORE_CONFLICT_HOOK_EVENT_NAME4);
     appendHookContextRemindersToCoreToolResult(textParts, toolResultContent, carriersToRender);
     primaryContent = textParts.length > 0 ? textParts.join("\n") : primaryContent;
@@ -503,7 +505,11 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
         success: toolOutput.isError !== true,
         ...toolOutput.isError === true ? {
           errorClass: "error" in toolOutputRaw ? toolCallErrorClassOf(toolOutputRaw.error) : TOOL_CALL_EVENT_RESULT_ERROR_CLASS,
-          ...errorClassification !== void 0 ? { errorClassification: errorClassification.toString() } : {}
+          ..."error" in toolOutputRaw ? auditOutcomeField(toolOutputRaw.error) : {},
+          // An error result produced while the turn was being aborted is
+          // the abort, whatever the tool classified it as (the log line
+          // above says "aborted" for the same reason).
+          ...isToolIntentionalAbort ? { errorClassification: ToolErrorClassification.ABORTED } : errorClassification !== void 0 ? { errorClassification: errorClassification.toString() } : {}
         } : {},
         ...measureRenderedToolResult(toolOutput)
       });
@@ -532,16 +538,6 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
     }
     const settledAtMs = Date.now();
     const durationMs = settledAtMs - startTimeMs;
-    if (toolCallEventRecorder !== void 0) {
-      recordToolCallSettled(toolCallEventRecorder, ctx, {
-        toolCallId: descriptor2.toolCallId,
-        toolIdentifier: telemetry.toolIdentifier,
-        startedAtMs: startTimeMs,
-        endedAtMs: settledAtMs,
-        success: false,
-        errorClass: toolCallErrorClassOf(err)
-      });
-    }
     const errorName = err instanceof Error ? err.name : typeof err;
     const errorMessage6 = err instanceof Error ? err.message : void 0;
     const errorClassification = isMcpToolNotFoundError(err) ? "tool_not_found" : err instanceof RetryableToolOrchestrationError ? err.classification : void 0;
@@ -576,6 +572,18 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
         team: getToolOwnerTeam(telemetry.toolIdentifier),
         mcp_version: getMcpVersionLabel(telemetry.loggedToolName),
         ...telemetryLogFields
+      });
+    }
+    if (toolCallEventRecorder !== void 0) {
+      recordToolCallSettled(toolCallEventRecorder, ctx, {
+        toolCallId: descriptor2.toolCallId,
+        toolIdentifier: telemetry.toolIdentifier,
+        startedAtMs: startTimeMs,
+        endedAtMs: settledAtMs,
+        success: false,
+        errorClass: toolCallErrorClassOf(err),
+        ...outcome === "error" ? {} : { errorClassification: outcome },
+        ...auditOutcomeField(err)
       });
     }
     const catchTeam = getToolOwnerTeam(telemetry.toolIdentifier);
@@ -680,8 +688,10 @@ function streamModelAndCollectToolCalls(ctx, executor, interactionHandler, model
   }
   const toolDefinitions = toAgentTools(modelVisibleTools, descriptionProps ?? buildDescriptionGeneratorProps(modelVisibleTools));
   const acceptedUnadvertisedToolNames = options2?.acceptedUnadvertisedToolNames ?? [];
-  const result = executor.stream(ctx, interactionHandler.invocationId, toolDefinitions, { acceptedUnadvertisedToolNames });
-  const settledResultResponse = result.response.then((response) => ({ didReject: false, response }), (error41) => ({ didReject: true, error: error41 }));
+  const result = executor.stream(ctx, interactionHandler.invocationId, toolDefinitions, {
+    acceptedUnadvertisedToolNames
+  });
+  const settledResultResponse = result.response.then((response) => ({ didReject: false, response }), (error42) => ({ didReject: true, error: error42 }));
   const chunkObserver = ctx.get(modelStreamChunkObserverKey);
   const sourceStream = chunkObserver === void 0 ? result.fullStream : observeStreamChunks(result.fullStream, chunkObserver);
   const [innerStream, fullStream] = duplicateStream(sourceStream);
@@ -731,8 +741,8 @@ function streamModelAndCollectToolCalls(ctx, executor, interactionHandler, model
             return stream3.written;
           try {
             return JSON.parse(stream3.written);
-          } catch (error41) {
-            argsParseError = error41;
+          } catch (error42) {
+            argsParseError = error42;
             return stream3.written;
           }
         })();
@@ -1060,10 +1070,7 @@ function executeToolStream(ctx, executor, interactionHandler, tools, extraT, rec
   };
   const streamResult = streamModelAndCollectToolCalls(ctx, executor, interactionHandler, modelVisibleTools, descriptionProps, firstToolCallHook, {
     executionToolMap: toolMap,
-    acceptedUnadvertisedToolNames: [
-      ...directDynamicToolNames,
-      ...executionAliases
-    ]
+    acceptedUnadvertisedToolNames: [...directDynamicToolNames, ...executionAliases]
   });
   const responsePromise = (async () => {
     const toolPromises = [];
@@ -1145,34 +1152,28 @@ function executeToolStream(ctx, executor, interactionHandler, tools, extraT, rec
         trackToolPromise(executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHandler, extraT, circuitBreakerRecordToolCallResult, renderProps, event.argsStream, event.completedArgs, directDynamicToolNames));
       }
     })();
-    const [response] = await Promise.all([
-      streamResult.response,
-      consumeToolCalls
-    ]);
+    const [response] = await Promise.all([streamResult.response, consumeToolCalls]);
     const isValidToolResult = (toolId) => {
       return response.messages.some((p2) => p2.role === "assistant" && Array.isArray(p2.content) && p2.content.some((c) => c.type === "tool-call" && c.toolCallId === toolId));
     };
     let toolResults;
     try {
       toolResults = await Promise.all(toolPromises);
-    } catch (error41) {
-      if (error41 instanceof DeferredInteractionResponseError) {
+    } catch (error42) {
+      if (error42 instanceof DeferredInteractionResponseError) {
         const settled = await Promise.allSettled(toolPromises);
-        completedToolResultsByDeferredError.set(error41, settled.flatMap((outcome) => outcome.status === "fulfilled" && isValidToolResult(outcome.value.id) ? [outcome.value] : []));
-        throw error41;
+        completedToolResultsByDeferredError.set(error42, settled.flatMap((outcome) => outcome.status === "fulfilled" && isValidToolResult(outcome.value.id) ? [outcome.value] : []));
+        throw error42;
       }
-      if (!isAgentStreamStartTimeoutRecoveryTurnError(error41)) {
-        throw error41;
+      if (!isAgentStreamStartTimeoutRecoveryTurnError(error42)) {
+        throw error42;
       }
       return {
         ...response,
-        error: error41 instanceof Error ? error41 : new Error("Unknown tool error")
+        error: error42 instanceof Error ? error42 : new Error("Unknown tool error")
       };
     }
-    const newMessages = [
-      ...response.messages,
-      ...toolResults.filter((r) => isValidToolResult(r.id))
-    ];
+    const newMessages = [...response.messages, ...toolResults.filter((r) => isValidToolResult(r.id))];
     return {
       ...response,
       messages: newMessages
@@ -1195,10 +1196,7 @@ function executeModelStreamOnly(ctx, executor, interactionHandler, tools, descri
   const executionAliases = executableTools.flatMap((tool) => tool.executionAliases ?? []);
   const streamResult = streamModelAndCollectToolCalls(ctx, executor, interactionHandler, modelVisibleTools, descriptionProps, firstToolCallHook, {
     emitToolCallEvents: false,
-    acceptedUnadvertisedToolNames: [
-      ...directDynamicToolNames,
-      ...executionAliases
-    ]
+    acceptedUnadvertisedToolNames: [...directDynamicToolNames, ...executionAliases]
   });
   const toolCallDescriptors = (async () => {
     const descriptors = [];
@@ -1305,6 +1303,9 @@ var RedactedPromptToolExecutor = class {
   clearMessages() {
     this.innerToolExecutor.clearMessages();
     this.redactedWrapperMemo = /* @__PURE__ */ new WeakMap();
+  }
+  runWithToolCallEventRecorder(ctx, fn) {
+    return this.innerToolExecutor.runWithToolCallEventRecorder === void 0 ? fn(ctx) : this.innerToolExecutor.runWithToolCallEventRecorder(ctx, fn);
   }
   executeToolStream(ctx, state, interactionHandler, tools, extraT, recordToolCallResult, descriptionProps, firstToolCallHook) {
     return this.innerToolExecutor.executeToolStream(ctx, state, interactionHandler, tools, extraT, recordToolCallResult, descriptionProps, firstToolCallHook);

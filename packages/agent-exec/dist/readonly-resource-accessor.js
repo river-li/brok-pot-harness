@@ -1,4 +1,4 @@
-var __awaiter31 = function(thisArg, _arguments, P2, generator) {
+var __awaiter33 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -25,10 +25,10 @@ var __awaiter31 = function(thisArg, _arguments, P2, generator) {
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 };
-var __await12 = function(v2) {
-  return this instanceof __await12 ? (this.v = v2, this) : new __await12(v2);
+var __await11 = function(v2) {
+  return this instanceof __await11 ? (this.v = v2, this) : new __await11(v2);
 };
-var __asyncGenerator12 = function(thisArg, _arguments, generator) {
+var __asyncGenerator11 = function(thisArg, _arguments, generator) {
   if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
   var g2 = generator.apply(thisArg, _arguments || []), i, q2 = [];
   return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function() {
@@ -57,7 +57,7 @@ var __asyncGenerator12 = function(thisArg, _arguments, generator) {
     }
   }
   function step(r) {
-    r.value instanceof __await12 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
+    r.value instanceof __await11 ? Promise.resolve(r.value.v).then(fulfill, reject2) : settle(q2[0][2], r);
   }
   function fulfill(value) {
     resume("next", value);
@@ -82,7 +82,7 @@ function createReadonlyShellPermissionDenied(errorMessage6, args) {
 function createReadonlyShellExecutor(errorMessage6) {
   return {
     execute(_ctx, args) {
-      return __awaiter31(this, void 0, void 0, function* () {
+      return __awaiter33(this, void 0, void 0, function* () {
         return new ShellResult({
           result: {
             case: "permissionDenied",
@@ -96,8 +96,8 @@ function createReadonlyShellExecutor(errorMessage6) {
 function createReadonlyShellStreamExecutor(errorMessage6) {
   return {
     execute(_ctx, args) {
-      return __asyncGenerator12(this, arguments, function* execute_1() {
-        yield yield __await12(new ShellStream({
+      return __asyncGenerator11(this, arguments, function* execute_1() {
+        yield yield __await11(new ShellStream({
           event: {
             case: "permissionDenied",
             value: createReadonlyShellPermissionDenied(errorMessage6, args)
@@ -110,7 +110,7 @@ function createReadonlyShellStreamExecutor(errorMessage6) {
 function createReadonlyBackgroundShellExecutor(errorMessage6) {
   return {
     execute(_ctx, args) {
-      return __awaiter31(this, void 0, void 0, function* () {
+      return __awaiter33(this, void 0, void 0, function* () {
         return new BackgroundShellSpawnResult({
           result: {
             case: "permissionDenied",
@@ -124,7 +124,7 @@ function createReadonlyBackgroundShellExecutor(errorMessage6) {
 function createReadonlyWriteExecutor(errorMessage6) {
   return {
     execute(_ctx, args) {
-      return __awaiter31(this, void 0, void 0, function* () {
+      return __awaiter33(this, void 0, void 0, function* () {
         return new WriteResult({
           result: {
             case: "permissionDenied",
@@ -142,7 +142,7 @@ function createReadonlyWriteExecutor(errorMessage6) {
 function createReadonlyDeleteExecutor(errorMessage6) {
   return {
     execute(_ctx, args) {
-      return __awaiter31(this, void 0, void 0, function* () {
+      return __awaiter33(this, void 0, void 0, function* () {
         return new DeleteResult({
           result: {
             case: "permissionDenied",
@@ -160,7 +160,7 @@ function createReadonlyDeleteExecutor(errorMessage6) {
 function createReadonlyMcpExecutor(errorMessage6) {
   return {
     execute(_ctx, args) {
-      return __awaiter31(this, void 0, void 0, function* () {
+      return __awaiter33(this, void 0, void 0, function* () {
         return new McpResult({
           result: {
             case: "permissionDenied",
@@ -177,7 +177,7 @@ function createReadonlyMcpExecutor(errorMessage6) {
 function createReadonlyWriteBackgroundShellStdinExecutor(errorMessage6) {
   return {
     execute(_ctx, _args) {
-      return __awaiter31(this, void 0, void 0, function* () {
+      return __awaiter33(this, void 0, void 0, function* () {
         return new WriteShellStdinResult({
           result: {
             case: "error",
@@ -200,10 +200,7 @@ function buildReadonlyResourceEntries(args) {
       deleteExecutorResource,
       createReadonlyDeleteExecutor(args.errorMessage)
     ],
-    [
-      mcpExecutorResource,
-      createReadonlyMcpExecutor(args.errorMessage)
-    ]
+    [mcpExecutorResource, createReadonlyMcpExecutor(args.errorMessage)]
   ];
   if (args.wrapShell) {
     localEntries.push([

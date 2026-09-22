@@ -296,11 +296,11 @@ function createDraftVerificationExecute(ctx, mcp, agentId) {
       const failure2 = describeDraftCallFailure(result);
       if (failure2 != null) return { ok: false, error: failure2 };
       return { ok: true, text: draftCallResultText(result) };
-    } catch (error41) {
-      if (error41 instanceof DeadlineExceededError) {
+    } catch (error42) {
+      if (error42 instanceof DeadlineExceededError) {
         return { ok: false, error: "The connector did not answer in time." };
       }
-      return { ok: false, error: errorMessage(error41) };
+      return { ok: false, error: errorMessage(error42) };
     }
   };
 }

@@ -70,14 +70,14 @@ var BrowserOperationObservation = class {
       code
     };
   }
-  caught(error41) {
-    if (this.options.signal.aborted || error41 instanceof Error && error41.name === "AbortError") {
+  caught(error42) {
+    if (this.options.signal.aborted || error42 instanceof Error && error42.name === "AbortError") {
       this.fail("cancelled");
     } else if (this.result.outcome !== "success") {
       return;
-    } else if (error41 instanceof SandBrowserOperationError) {
-      this.fail(this.stage === "protocol" ? "protocol_invalid" : error41.code);
-    } else if (error41 instanceof Error && error41.name === "TimeoutError") {
+    } else if (error42 instanceof SandBrowserOperationError) {
+      this.fail(this.stage === "protocol" ? "protocol_invalid" : error42.code);
+    } else if (error42 instanceof Error && error42.name === "TimeoutError") {
       this.fail("timeout");
     } else {
       this.fail(this.stage === "admission" ? "invalid_arguments" : "unexpected_error");
@@ -132,9 +132,9 @@ var BrowserOperationObservation = class {
         this.fail(this.stage === "admission" ? "invalid_arguments" : "unexpected_error");
       }
       return result;
-    } catch (error41) {
-      this.caught(error41);
-      throw error41;
+    } catch (error42) {
+      this.caught(error42);
+      throw error42;
     } finally {
       this.options.signal.removeEventListener("abort", onAbort);
       this.finish();

@@ -13,7 +13,7 @@ function createRemoteBoxResourceAccessor(host) {
     connectionPromise = void 0;
     connectionAnswered = false;
   };
-  const connect3 = async (ctx) => {
+  const connect5 = async (ctx) => {
     if (boxIsPreparing(box, boxId)) {
       throw new SandBoxNotReadyError("box_starting", SAND_BOX_NOT_READY_MESSAGE);
     }
@@ -21,31 +21,31 @@ function createRemoteBoxResourceAccessor(host) {
       const connection = await (connectionPromise ??= (async () => await preparedConnection ?? box.ensureReady(ctx, boxId))());
       host.setRemoteBoxTerminalsFolder(connection.terminalsFolder);
       return connection;
-    } catch (error41) {
+    } catch (error42) {
       dropConnection();
-      const reason = boxNotReadyReasonForError(error41);
-      throw new SandBoxNotReadyError(reason.errorKind, reason.message, { cause: error41 });
+      const reason = boxNotReadyReasonForError(error42);
+      throw new SandBoxNotReadyError(reason.errorKind, reason.message, { cause: error42 });
     }
   };
   const markConnectionAnswered = () => {
     connectionAnswered = true;
   };
-  const rethrowOnFreshConnection = (error41) => {
-    if (!connectionAnswered && ConnectError.from(error41).code === Code.Unavailable) {
+  const rethrowOnFreshConnection = (error42) => {
+    if (!connectionAnswered && ConnectError.from(error42).code === Code.Unavailable) {
       dropConnection();
       throw new SandBoxNotReadyError("box_starting", SAND_BOX_NOT_READY_MESSAGE, {
-        cause: error41
+        cause: error42
       });
     }
-    throw error41;
+    throw error42;
   };
   const onFreshConnection = async (run) => {
     try {
       const result = await run();
       markConnectionAnswered();
       return result;
-    } catch (error41) {
-      return rethrowOnFreshConnection(error41);
+    } catch (error42) {
+      return rethrowOnFreshConnection(error42);
     }
   };
   const audit = (ctx, kind, command) => {
@@ -78,7 +78,7 @@ function createRemoteBoxResourceAccessor(host) {
     execute: (ctx, args, options2) => (async function* () {
       guardAutoReviewBarrier();
       audit(ctx, "foreground", args.command);
-      const connection = await connect3(ctx);
+      const connection = await connect5(ctx);
       guardAutoReviewBarrier();
       try {
         await awaitShellNavigationBaseline(ctx, connection);
@@ -88,8 +88,8 @@ function createRemoteBoxResourceAccessor(host) {
           yield chunk;
         }
         markConnectionAnswered();
-      } catch (error41) {
-        rethrowOnFreshConnection(error41);
+      } catch (error42) {
+        rethrowOnFreshConnection(error42);
       } finally {
         probeNavigationAfterShell(ctx, connection);
       }
@@ -99,7 +99,7 @@ function createRemoteBoxResourceAccessor(host) {
     execute: async (ctx, args, options2) => {
       guardAutoReviewBarrier();
       audit(ctx, "background", args.command);
-      const connection = await connect3(ctx);
+      const connection = await connect5(ctx);
       guardAutoReviewBarrier();
       try {
         return await onFreshConnection(async () => {
@@ -116,7 +116,7 @@ function createRemoteBoxResourceAccessor(host) {
     execute: async (ctx, args, options2) => {
       const managedSkill = host.readManagedSkill?.(args);
       if (managedSkill !== void 0) return await managedSkill;
-      const connection = await connect3(ctx);
+      const connection = await connect5(ctx);
       return await onFreshConnection(
         () => connection.remoteAccessor.get(readExecutorResource).execute(ctx, args, options2)
       );
@@ -125,7 +125,7 @@ function createRemoteBoxResourceAccessor(host) {
   accessor.register(shellExecutorResource, {
     execute: async (ctx, args, options2) => {
       guardAutoReviewBarrier();
-      const connection = await connect3(ctx);
+      const connection = await connect5(ctx);
       guardAutoReviewBarrier();
       return await onFreshConnection(
         () => connection.remoteAccessor.get(shellExecutorResource).execute(ctx, args, options2)
@@ -134,7 +134,7 @@ function createRemoteBoxResourceAccessor(host) {
   });
   accessor.register(computerUseExecutorResource, {
     execute: async (ctx, args, options2) => {
-      const connection = await connect3(ctx);
+      const connection = await connect5(ctx);
       let ownsMonitor = false;
       try {
         const inner = connection.remoteAccessor.get(computerUseExecutorResource);
@@ -151,13 +151,13 @@ function createRemoteBoxResourceAccessor(host) {
           host.computerUse.recordAuditIntent(args.actions[0]?.action.case);
           return result;
         });
-      } catch (error41) {
-        if (error41 instanceof SandBoxNoMonitorAvailableError) {
+      } catch (error42) {
+        if (error42 instanceof SandBoxNoMonitorAvailableError) {
           dropConnection();
-          const reason = boxNotReadyReasonForError(error41);
-          throw new SandBoxNotReadyError(reason.errorKind, reason.message, { cause: error41 });
+          const reason = boxNotReadyReasonForError(error42);
+          throw new SandBoxNotReadyError(reason.errorKind, reason.message, { cause: error42 });
         }
-        throw error41;
+        throw error42;
       } finally {
         if (ownsMonitor) {
           host.probeNavigationAfterComputerUse(ctx, connection);

@@ -12,29 +12,16 @@ function isInputTokenCountExceededMessage(lowerMessage) {
   return lowerMessage.includes("input token count") && lowerMessage.includes("exceeds the maximum number of tokens allowed");
 }
 function isInputTokenCountExceedsMaximumContextLengthMessage(lowerMessage) {
-  return includesAll(lowerMessage, [
-    "input token count",
-    "exceeds",
-    "maximum context length"
-  ]);
+  return includesAll(lowerMessage, ["input token count", "exceeds", "maximum context length"]);
 }
 function isMaximumPromptLengthMessage(lowerMessage) {
-  return includesAll(lowerMessage, [
-    "maximum prompt length",
-    "request contains",
-    "tokens"
-  ]);
+  return includesAll(lowerMessage, ["maximum prompt length", "request contains", "tokens"]);
 }
 function isPromptTooLongMessage(lowerMessage) {
   return lowerMessage.includes("prompt is too long");
 }
 function isInputLongerThanContextMessage(lowerMessage) {
-  return includesAll(lowerMessage, [
-    "input",
-    "token",
-    "longer than",
-    "context length"
-  ]);
+  return includesAll(lowerMessage, ["input", "token", "longer than", "context length"]);
 }
 function isInputPlusOutputExceedsContextLengthMessage(lowerMessage) {
   return includesAll(lowerMessage, [
@@ -52,10 +39,7 @@ function isInputTooLongForRequestedModelMessage(lowerMessage) {
   return lowerMessage.includes("input is too long for requested model");
 }
 function isInputLengthExceededMessage(lowerMessage) {
-  return includesAll(lowerMessage, [
-    "input length",
-    "exceeds the maximum allowed input length"
-  ]);
+  return includesAll(lowerMessage, ["input length", "exceeds the maximum allowed input length"]);
 }
 function isRequestSizeLimitMessage(lowerMessage) {
   return includesAll(lowerMessage, [
@@ -65,11 +49,7 @@ function isRequestSizeLimitMessage(lowerMessage) {
   ]);
 }
 function isInputAndMaxTokensExceedContextLimitMessage(lowerMessage) {
-  return includesAll(lowerMessage, [
-    "input length",
-    "max_tokens",
-    "exceed context limit"
-  ]);
+  return includesAll(lowerMessage, ["input length", "max_tokens", "exceed context limit"]);
 }
 function isGenericInputTooLongMessage(lowerMessage) {
   return lowerMessage.includes("input is too long");
@@ -78,12 +58,7 @@ function isRequestSizeExceedsContextWindowMessage(lowerMessage) {
   return lowerMessage.includes("request size exceeds model context window");
 }
 function isMessageSizeExceedsMbLimitMessage(lowerMessage) {
-  return includesAll(lowerMessage, [
-    "message size",
-    "bytes",
-    "exceeds",
-    "mb limit"
-  ]);
+  return includesAll(lowerMessage, ["message size", "bytes", "exceeds", "mb limit"]);
 }
 function isContextLengthExceededCodeMessage(lowerMessage) {
   return lowerMessage.includes("context_length_exceeded");

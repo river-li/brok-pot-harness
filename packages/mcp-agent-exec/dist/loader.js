@@ -1,5 +1,5 @@
 init_dist5();
-var __awaiter35 = function(thisArg, _arguments, P2, generator) {
+var __awaiter36 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve14) {
       resolve14(value);
@@ -136,7 +136,7 @@ function getMcpSandboxLogMetadata(args) {
   };
 }
 function loadCommandBasedServerWithElicitation(ctx, serverName, commandBasedServer, networkControlsService) {
-  return __awaiter35(this, void 0, void 0, function* () {
+  return __awaiter36(this, void 0, void 0, function* () {
     var _a20;
     var _b2, _c2;
     const expandedCwd = commandBasedServer.cwd ? expandPath({ filePath: commandBasedServer.cwd }) : void 0;
@@ -155,10 +155,7 @@ function loadCommandBasedServerWithElicitation(ctx, serverName, commandBasedServ
     }
     const env = (_b2 = commandBasedServer.env) !== null && _b2 !== void 0 ? _b2 : {};
     const networkControlsConfig = yield (_a20 = networkControlsService === null || networkControlsService === void 0 ? void 0 : networkControlsService.getMcpNetworkControlsConfig) === null || _a20 === void 0 ? void 0 : _a20.call(networkControlsService, {
-      command: [
-        commandBasedServer.command,
-        ...(_c2 = commandBasedServer.args) !== null && _c2 !== void 0 ? _c2 : []
-      ].join(" ")
+      command: [commandBasedServer.command, ...(_c2 = commandBasedServer.args) !== null && _c2 !== void 0 ? _c2 : []].join(" ")
     });
     const sandboxNetworkControlsConfig = getStdioMcpSandboxConfig(networkControlsConfig);
     if (sandboxNetworkControlsConfig !== void 0) {
@@ -214,14 +211,14 @@ function createHttpExchangeLogging(ctx, serverName) {
   };
 }
 function loadLegacyHttpServer(ctx, serverName, remoteServer, tokenStorage, authRedirectUrl) {
-  return __awaiter35(this, void 0, void 0, function* () {
+  return __awaiter36(this, void 0, void 0, function* () {
     const lifecycleLogger = createContextStructuredLifecycleLogger(ctx, logger12);
     const httpExchangeLogging = createHttpExchangeLogging(ctx, serverName);
     return McpSdkClient.fromStreamableHttp(serverName, remoteServer, tokenStorage, remoteServer.headers, authRedirectUrl, void 0, httpExchangeLogging, lifecycleLogger);
   });
 }
 function loadServer(ctx_1, serverName_1, server_1, tokenStorage_1) {
-  return __awaiter35(this, arguments, void 0, function* (ctx, serverName, server, tokenStorage, middlewareSettings = {
+  return __awaiter36(this, arguments, void 0, function* (ctx, serverName, server, tokenStorage, middlewareSettings = {
     middlewares: [],
     configPath: ""
   }, authRedirectUrlGenerator) {
@@ -230,7 +227,7 @@ function loadServer(ctx_1, serverName_1, server_1, tokenStorage_1) {
       const { middlewares, configPath } = middlewareSettings;
       const span = __addDisposableResource12(env_1, createSpan(ctx.withName("mcp-agent-exec.loadServer")), false);
       span.span.setAttribute("serverName", serverName);
-      let next = (previousCtx, currentServer) => __awaiter35(this, void 0, void 0, function* () {
+      let next = (previousCtx, currentServer) => __awaiter36(this, void 0, void 0, function* () {
         const env_2 = { stack: [], error: void 0, hasError: false };
         try {
           const nextSpan = __addDisposableResource12(env_2, createSpan(previousCtx.withName("loadServer.next")), false);
@@ -256,7 +253,7 @@ function loadServer(ctx_1, serverName_1, server_1, tokenStorage_1) {
       });
       for (const middleware of middlewares) {
         const previousNext = next;
-        next = (middlewareCtx, middlewareServer) => __awaiter35(this, void 0, void 0, function* () {
+        next = (middlewareCtx, middlewareServer) => __awaiter36(this, void 0, void 0, function* () {
           return yield middleware.load(middlewareCtx, serverName, middlewareServer, configPath, previousNext);
         });
       }
@@ -291,7 +288,7 @@ var FileConfigMcpDefinitionSource = class {
     this.configPromise = getMcpConfig(this.configPath);
   }
   getDefinitions(_ctx_1) {
-    return __awaiter35(this, arguments, void 0, function* (_ctx, _cache = true) {
+    return __awaiter36(this, arguments, void 0, function* (_ctx, _cache = true) {
       const config2 = yield this.configPromise;
       return Object.entries(config2.mcpServers).map(([identifier, serverConfig]) => ({
         identifier,
@@ -310,7 +307,7 @@ var DefinitionMcpLoader = class {
     this.clientCache = /* @__PURE__ */ new Map();
   }
   load(ctx_1) {
-    return __awaiter35(this, arguments, void 0, function* (ctx, cache3 = true) {
+    return __awaiter36(this, arguments, void 0, function* (ctx, cache3 = true) {
       var _a20, _b2;
       var _c2;
       const env_3 = { stack: [], error: void 0, hasError: false };
@@ -323,7 +320,7 @@ var DefinitionMcpLoader = class {
         const definitions = yield this.source.getDefinitions(ctx, cache3);
         yield this.evictClientsOnSandboxPolicyChange(ctx, definitions);
         const clients = {};
-        yield asyncMapValues([...definitions], (definition2) => __awaiter35(this, void 0, void 0, function* () {
+        yield asyncMapValues([...definitions], (definition2) => __awaiter36(this, void 0, void 0, function* () {
           try {
             const cachedClient = cache3 ? this.clientCache.get(definition2.identifier) : void 0;
             const client = cachedClient !== null && cachedClient !== void 0 ? cachedClient : yield this.loadDefinitionClient(ctx, definition2);
@@ -367,21 +364,18 @@ var DefinitionMcpLoader = class {
    * byte-for-byte identical for setups that do not use MCP network controls.
    */
   evictClientsOnSandboxPolicyChange(ctx, definitions) {
-    return __awaiter35(this, void 0, void 0, function* () {
+    return __awaiter36(this, void 0, void 0, function* () {
       const service = this.middlewares.find(isMcpNetworkControlsConfigService);
       if (!service) {
         return;
       }
       let fingerprint;
       try {
-        fingerprint = JSON.stringify(yield Promise.all([...definitions].sort((a, b2) => a.identifier.localeCompare(b2.identifier)).map((definition2) => __awaiter35(this, void 0, void 0, function* () {
+        fingerprint = JSON.stringify(yield Promise.all([...definitions].sort((a, b2) => a.identifier.localeCompare(b2.identifier)).map((definition2) => __awaiter36(this, void 0, void 0, function* () {
           var _a20;
           var _b2;
           const config2 = (_b2 = yield (_a20 = service.getMcpNetworkControlsConfig) === null || _a20 === void 0 ? void 0 : _a20.call(service, getMcpNetworkControlsServerIdentity(definition2.serverConfig))) !== null && _b2 !== void 0 ? _b2 : {};
-          return [
-            definition2.identifier,
-            computeMcpSandboxPolicyFingerprint(config2)
-          ];
+          return [definition2.identifier, computeMcpSandboxPolicyFingerprint(config2)];
         }))));
       } catch (_a20) {
         return;
@@ -395,10 +389,10 @@ var DefinitionMcpLoader = class {
     });
   }
   closeAllCachedClients() {
-    return __awaiter35(this, void 0, void 0, function* () {
+    return __awaiter36(this, void 0, void 0, function* () {
       const cachedClients = [...this.clientCache.values()];
       this.clientCache.clear();
-      yield asyncMapValues(cachedClients, (client) => __awaiter35(this, void 0, void 0, function* () {
+      yield asyncMapValues(cachedClients, (client) => __awaiter36(this, void 0, void 0, function* () {
         var _a20;
         try {
           yield (_a20 = client.close) === null || _a20 === void 0 ? void 0 : _a20.call(client);
@@ -408,7 +402,7 @@ var DefinitionMcpLoader = class {
     });
   }
   loadClient(ctx, identifier, ignoreTokens) {
-    return __awaiter35(this, void 0, void 0, function* () {
+    return __awaiter36(this, void 0, void 0, function* () {
       const env_4 = { stack: [], error: void 0, hasError: false };
       try {
         const _span = __addDisposableResource12(env_4, createSpan(ctx.withName("DefinitionMcpLoader.loadClient")), false);
@@ -444,7 +438,7 @@ var DefinitionMcpLoader = class {
     });
   }
   loadDefinitionClient(ctx, definition2, ignoreTokens) {
-    return __awaiter35(this, void 0, void 0, function* () {
+    return __awaiter36(this, void 0, void 0, function* () {
       var _a20, _b2;
       const identifier = (_a20 = definition2.authStorageKey) !== null && _a20 !== void 0 ? _a20 : definition2.identifier;
       const inner = new IdentifierScopedTokenStorage(this.tokenStorage, identifier);

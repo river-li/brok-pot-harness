@@ -3,9 +3,9 @@ async function listAgents(host, activeAgentId) {
   let entries;
   try {
     entries = await (0, import_promises68.readdir)(host.rootDir, { withFileTypes: true });
-  } catch (error41) {
-    if (error41.code === "ENOENT") return [];
-    throw error41;
+  } catch (error42) {
+    if (error42.code === "ENOENT") return [];
+    throw error42;
   }
   const summaries = await Promise.all(
     entries.filter((entry) => entry.isDirectory()).map(async (entry) => {
@@ -19,12 +19,12 @@ async function listAgents(host, activeAgentId) {
             dirName: entry.name,
             activeAgentId
           });
-        } catch (error41) {
+        } catch (error42) {
           reportSessionDiagnostic({
             family: "summary_build",
             kind: "recovery_build_failed",
             agentId: entry.name,
-            errorClass: errorLogTag(error41)
+            errorClass: errorLogTag(error42)
           });
           return minimalAgentSummary({
             dirName: entry.name,
@@ -50,13 +50,13 @@ async function listAgents(host, activeAgentId) {
           includeBlank: false,
           agentHasMemory: (candidate) => host.memory.agentHasContent(candidate)
         });
-      } catch (error41) {
+      } catch (error42) {
         if (host.isAgentBeingDeleted(entry.name)) return null;
         reportSessionDiagnostic({
           family: "summary_build",
           kind: "degraded",
           agentId: entry.name,
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
         try {
           return await buildSummary({

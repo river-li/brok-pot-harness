@@ -29,6 +29,33 @@ function reviewArguments2(target) {
     }
   };
 }
+function addressesMatch(left, right) {
+  return left.trim().toLowerCase() === right.trim().toLowerCase();
+}
+function wakeEmailContext(target, wakeEmail) {
+  return {
+    from_address: wakeEmail.fromAddress,
+    inbox_email: wakeEmail.inboxEmail,
+    sender_authenticated: wakeEmail.authPassed,
+    // Mail back to whoever wrote in is the ordinary shape; a send that
+    // reaches someone the waking message never involved is the one worth
+    // looking at twice.
+    recipients_include_sender: [...target.to, ...target.cc, ...target.bcc].some(
+      (recipient2) => addressesMatch(recipient2, wakeEmail.fromAddress)
+    )
+  };
+}
+function provenanceContext(target, provenance) {
+  const source = provenance?.requestSource;
+  return {
+    request_source: source ?? "unknown",
+    // An unrecorded source counts as unattended, as the approval expiry and
+    // automation-write provenance rules already treat it.
+    unattended: source !== "turn",
+    ...provenance?.wakeEmbedsExternalEvent === void 0 ? {} : { wake_embeds_external_event: provenance.wakeEmbedsExternalEvent },
+    ...provenance?.wakeEmail === void 0 ? {} : { wake_email: wakeEmailContext(target, provenance.wakeEmail) }
+  };
+}
 function buildSandEmailSendRiskTarget(args) {
   return new SmartModeRiskTarget({
     action: "mcp",
@@ -44,6 +71,7 @@ function buildSandEmailSendRiskTarget(args) {
         description: "Send an email to external recipients from one of the agent's own email addresses. The recipients are third parties; the message leaves the user's control once sent.",
         annotations: { destructiveHint: false, openWorldHint: true }
       },
+      turn_provenance: provenanceContext(args.target, args.provenance),
       project_permissions: buildProjectPermissionsContext({
         personalInstructions: args.personalInstructions,
         userAutoRunInstructions: args.userAutoRunInstructions,
@@ -52,7 +80,7 @@ function buildSandEmailSendRiskTarget(args) {
     })
   });
 }
-function sandEmailSendFingerprintPayload(target) {
+function sandEmailSendFingerprintPayload(target, provenance) {
   return {
     from: target.fromInboxEmail,
     fromDisplayName: target.fromDisplayName ?? "",
@@ -68,28 +96,39 @@ function sandEmailSendFingerprintPayload(target) {
       attachment.filename,
       attachment.sizeBytes,
       attachment.sha256
-    ])
+    ]),
+    // Provenance-bound: an approval given while the user was in the
+    // conversation does not carry over to the same send from an unattended
+    // wake, which is the boundary the classifier is being asked to weigh.
+    provenance: {
+      requestSource: provenance?.requestSource ?? null,
+      wakeEmbedsExternalEvent: provenance?.wakeEmbedsExternalEvent ?? null,
+      wakeFromAddress: provenance?.wakeEmail?.fromAddress ?? null,
+      wakeSenderAuthenticated: provenance?.wakeEmail?.authPassed ?? null
+    }
   };
 }
-var SAND_EMAIL_SEND_REVIEW_SPEC = {
-  surface: "mcp",
-  classifierErrorReason: SAND_EMAIL_SEND_CLASSIFIER_ERROR_REASON,
-  buildRiskTarget: buildSandEmailSendRiskTarget,
-  fingerprintPayload: sandEmailSendFingerprintPayload,
-  summarize: (target) => summarizeSandEmailSendAction({
-    from: target.fromInboxEmail,
-    fromDisplayName: target.fromDisplayName,
-    to: target.to,
-    cc: target.cc,
-    bcc: target.bcc,
-    subject: target.subject,
-    textBody: target.textBody,
-    replyTo: target.replyTo,
-    attachments: target.attachments
-  }),
-  abortPolicy: { kind: "deny", reason: "The email was cancelled before it was sent." },
-  requireApproval: sendNeedsManualReview
-};
+function sandEmailSendReviewSpec(provenance) {
+  return {
+    surface: "mcp",
+    classifierErrorReason: SAND_EMAIL_SEND_CLASSIFIER_ERROR_REASON,
+    buildRiskTarget: (args) => buildSandEmailSendRiskTarget({ ...args, provenance }),
+    fingerprintPayload: (target) => sandEmailSendFingerprintPayload(target, provenance),
+    summarize: (target) => summarizeSandEmailSendAction({
+      from: target.fromInboxEmail,
+      fromDisplayName: target.fromDisplayName,
+      to: target.to,
+      cc: target.cc,
+      bcc: target.bcc,
+      subject: target.subject,
+      textBody: target.textBody,
+      replyTo: target.replyTo,
+      attachments: target.attachments
+    }),
+    abortPolicy: { kind: "deny", reason: "The email was cancelled before it was sent." },
+    requireApproval: sendNeedsManualReview
+  };
+}
 function attachmentsNotFullyReviewable(target) {
   const unseen = target.attachments.filter(
     (attachment) => attachment.textPreview === void 0 || attachment.textPreview.endsWith(SAND_EMAIL_ATTACHMENT_PREVIEW_TRUNCATED_MARKER)
@@ -109,7 +148,7 @@ function sendNeedsManualReview(target) {
 async function reviewSandEmailSend(args) {
   const decision = await runSandAutoReviewFlow({
     ...args,
-    spec: SAND_EMAIL_SEND_REVIEW_SPEC
+    spec: sandEmailSendReviewSpec(args.options.provenance)
   });
   return decision.allowed === false ? decision : { allowed: true };
 }

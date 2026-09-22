@@ -1,4 +1,4 @@
-var __protoPackage146, __protoMessage3139, LocalPromptQualityInvocationStatus, LocalAgentMailboxEndedReason, ClientHeartbeat, PrewarmRequest, AgentClientMessage, TtftBreakdown, AgentServerMessage, NameAgentRequest, NameAgentResponse, UpdateConversationMetadataRequest, UpdateConversationMetadataResponse, GetPromptContextUsageRequest, GetPromptContextUsageResponse, CreateTranscriptOverviewRequest, CreateTranscriptOverviewResponse, GetUsableModelsRequest, GetUsableModelsResponse, GetDefaultModelForCliRequest, GetDefaultModelForCliResponse, GetAllowedModelIntentsRequest, GetAllowedModelIntentsResponse, BlobEntry, UploadConversationBlobsRequest, UploadConversationBlobsResponse, LocalPromptQualityInvocation, UploadLocalAgentRunToPromptQualityRequest, UploadLocalAgentRunToPromptQualityResponse, GetSignedUrlForAttachedMediaRequest, GetSignedUrlForAttachedMediaResponse, NotifyConversationCloneRequest, NotifyConversationCloneResponse, GetNewChatNudgeLegacyModelPickerRequest, GetNewChatNudgeLegacyModelPickerResponse, NudgeBumpVariant, NudgeAskVariant, NudgeSilentSwitchVariant, NewChatNudge, ListLocalSubscriptionToolsRequest, LocalSubscriptionToolDefinition, ListLocalSubscriptionToolsResponse, CallLocalSubscriptionToolRequest, CallLocalSubscriptionToolResponse, SubscriptionDeliveryEntry, SubscriptionRemovedEntry, LocalAgentMailboxEntry, StreamLocalAgentMailboxRequest, StreamLocalAgentMailboxRequest_ConversationCursor, LocalAgentMailboxDelivery, LocalAgentMailboxGap, LocalAgentMailboxEnded, StreamLocalAgentMailboxHeartbeat, StreamLocalAgentMailboxResponse, GetNewChatNudgeParameterizedModelPickerRequest, GetNewChatNudgeParameterizedModelPickerResponse, NewChatNudgeV2;
+var __protoPackage146, __protoMessage3139, LocalPromptQualityInvocationStatus, LocalAgentMailboxGapReason, LocalAgentMailboxEndedReason, ClientHeartbeat, PrewarmRequest, AgentClientMessage, TtftBreakdown, AgentServerMessage, NameAgentRequest, NameAgentResponse, UpdateConversationMetadataRequest, UpdateConversationMetadataResponse, GetPromptContextUsageRequest, GetPromptContextUsageResponse, CreateTranscriptOverviewRequest, CreateTranscriptOverviewResponse, GetUsableModelsRequest, GetUsableModelsResponse, GetDefaultModelForCliRequest, GetDefaultModelForCliResponse, GetAllowedModelIntentsRequest, GetAllowedModelIntentsResponse, BlobEntry, UploadConversationBlobsRequest, UploadConversationBlobsResponse, LocalPromptQualityInvocation, UploadLocalAgentRunToPromptQualityRequest, UploadLocalAgentRunToPromptQualityResponse, GetSignedUrlForAttachedMediaRequest, GetSignedUrlForAttachedMediaResponse, NotifyConversationCloneRequest, NotifyConversationCloneResponse, GetNewChatNudgeLegacyModelPickerRequest, GetNewChatNudgeLegacyModelPickerResponse, NudgeBumpVariant, NudgeAskVariant, NudgeSilentSwitchVariant, NewChatNudge, ListLocalSubscriptionToolsRequest, LocalSubscriptionToolDefinition, ListLocalSubscriptionToolsResponse, CallLocalSubscriptionToolRequest, CallLocalSubscriptionToolResponse, SubscriptionDeliveryEntry, SubscriptionRemovedEntry, LocalAgentMailboxEntry, StreamLocalAgentMailboxRequest, StreamLocalAgentMailboxRequest_ConversationCursor, LocalAgentMailboxDelivery, LocalAgentMailboxGap, LocalAgentMailboxEnded, StreamLocalAgentMailboxHeartbeat, StreamLocalAgentMailboxResponse, GetNewChatNudgeParameterizedModelPickerRequest, GetNewChatNudgeParameterizedModelPickerResponse, NewChatNudgeV2;
 var init_agent_service_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/agent_service_pb.js"() {
     "use strict";
@@ -19,6 +19,7 @@ var init_agent_service_pb = __esm({
       }
     };
     LocalPromptQualityInvocationStatus = /* @__PURE__ */ enumType(proto3, __protoPackage146, "LocalPromptQualityInvocationStatus", [[0, "UNSPECIFIED"], [1, "SUCCESS"], [2, "ERRORED"], [3, "ABORTED"]], 1);
+    LocalAgentMailboxGapReason = /* @__PURE__ */ enumType(proto3, __protoPackage146, "LocalAgentMailboxGapReason", [[0, "UNSPECIFIED"], [1, "TRIMMED"], [2, "LOST"]], 1);
     LocalAgentMailboxEndedReason = /* @__PURE__ */ enumType(proto3, __protoPackage146, "LocalAgentMailboxEndedReason", [[0, "UNSPECIFIED"], [1, "NO_ACTIVE_SUBSCRIPTIONS"], [2, "STORE_DELETED"], [3, "MIGRATED_TO_CLOUD"]], 1);
     ClientHeartbeat = class _ClientHeartbeat extends __protoMessage3139 {
       constructor(data) {
@@ -1083,6 +1084,7 @@ var init_agent_service_pb = __esm({
         this.conversationId = "";
         this.afterOffset = "";
         this.resumeOffset = "";
+        this.reason = LocalAgentMailboxGapReason.UNSPECIFIED;
         proto3.util.initPartial(data, this);
       }
       static fromBinary(bytes, options2) {
@@ -1098,7 +1100,7 @@ var init_agent_service_pb = __esm({
         return proto3.util.equals(_LocalAgentMailboxGap, a, b2);
       }
       static $() {
-        return ["LocalAgentMailboxGap|1 conversation_id 9|2 after_offset 9|3 resume_offset 9"];
+        return ["LocalAgentMailboxGap|1 conversation_id 9|2 after_offset 9|3 resume_offset 9|4 reason #0", LocalAgentMailboxGapReason];
       }
     };
     LocalAgentMailboxEnded = class _LocalAgentMailboxEnded extends __protoMessage3139 {

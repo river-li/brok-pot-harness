@@ -143,12 +143,12 @@ async function ensurePlaywrightMcpInstalled(args) {
         await source.readTarball(pkg.file)
       );
     }
-  } catch (error41) {
+  } catch (error42) {
     throw fail({
       reason: "upload_failed",
       boxImageSha: probe.boxImageSha,
-      detail: errorLogTag(error41),
-      cause: error41
+      detail: errorLogTag(error42),
+      cause: error42
     });
   }
   const installed = shellOutcome(

@@ -1,8 +1,8 @@
 var import_promises31 = require("node:fs/promises");
 var import_node_os13 = require("node:os");
 var import_node_path59 = require("node:path");
-init_dist2();
-var __awaiter54 = function(thisArg, _arguments, P2, generator) {
+init_dist3();
+var __awaiter56 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -46,7 +46,7 @@ function appliesToCurrentOperatingSystem(hook) {
   return hook.operatingSystems.includes(currentOperatingSystemName());
 }
 function synthesizeInlinePluginDir(options2) {
-  return __awaiter54(this, void 0, void 0, function* () {
+  return __awaiter56(this, void 0, void 0, function* () {
     var _a19, _b2;
     const { targetDir, inlineContentJson, pluginName } = options2;
     const content = JSON.parse(inlineContentJson);

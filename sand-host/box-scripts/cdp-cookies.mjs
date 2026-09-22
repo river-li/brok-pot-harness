@@ -61,10 +61,7 @@ export function discoverChromeDebugPorts(procRoot = "/proc") {
     if (args.some((arg) => arg.startsWith("--type="))) continue;
     for (const arg of args) {
       if (!arg.startsWith("--remote-debugging-port=")) continue;
-      const port = Number.parseInt(
-        arg.slice("--remote-debugging-port=".length),
-        10,
-      );
+      const port = Number.parseInt(arg.slice("--remote-debugging-port=".length), 10);
       if (Number.isInteger(port) && port > 0 && port <= 65535) ports.add(port);
     }
   }
@@ -96,19 +93,13 @@ export function chromeVersionFromProduct(product) {
   return match != null ? match[1] : "";
 }
 
-export function chromeProductFromVersion(browserString) {
-  const match = /Chrome\/(\d+\.\d+\.\d+\.\d+)/.exec(
-    typeof browserString === "string" ? browserString : "",
-  );
-  return match != null ? match[0] : "";
-}
-
 export async function getBrowserVersion(port) {
   const res = await fetch(`http://127.0.0.1:${port}/json/version`);
   if (!res.ok) throw new Error(`/json/version HTTP ${res.status}`);
   const body = await res.json();
   const version = chromeVersionFromProduct(body.Browser);
-  if (version === "") throw new Error(`/json/version Browser not a Chrome version: ${body.Browser}`);
+  if (version === "")
+    throw new Error(`/json/version Browser not a Chrome version: ${body.Browser}`);
   return version;
 }
 
@@ -160,8 +151,11 @@ export class CdpProtocolError extends CdpError {
 }
 
 export function isCdpTargetGone(error) {
-  return error instanceof CdpError &&
-    (error.code === CDP_ERROR_CODES.connectionClosed || error.code === CDP_ERROR_CODES.sessionNotFound);
+  return (
+    error instanceof CdpError &&
+    (error.code === CDP_ERROR_CODES.connectionClosed ||
+      error.code === CDP_ERROR_CODES.sessionNotFound)
+  );
 }
 
 export function isConnectionRefused(error) {
@@ -183,7 +177,7 @@ export class CdpBrowser {
     this.pending = new Map();
     this.eventListeners = new Set();
     this.isClosed = false;
-    ws.onmessage = event => this.onMessage(event);
+    ws.onmessage = (event) => this.onMessage(event);
     ws.onclose = () => this.fail(new CdpError(CDP_ERROR_CODES.connectionClosed, "socket closed"));
     ws.onerror = () => this.fail(new CdpError(CDP_ERROR_CODES.connectionClosed, "socket error"));
   }
@@ -204,12 +198,13 @@ export class CdpBrowser {
     const { resolve, reject } = this.pending.get(msg.id);
     this.pending.delete(msg.id);
     if (msg.error) {
-      reject(new CdpProtocolError(
-        msg.error.code,
-        typeof msg.error.message === "string" ? msg.error.message : "CDP error",
-      ));
-    }
-    else resolve(msg.result);
+      reject(
+        new CdpProtocolError(
+          msg.error.code,
+          typeof msg.error.message === "string" ? msg.error.message : "CDP error",
+        ),
+      );
+    } else resolve(msg.result);
   }
 
   fail(error) {
@@ -239,17 +234,19 @@ export class CdpBrowser {
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
-        reject(new CdpError(
-          CDP_ERROR_CODES.sendTimeout,
-          `CDP ${method} timed out after ${CDP_SEND_TIMEOUT_MS}ms`,
-        ));
+        reject(
+          new CdpError(
+            CDP_ERROR_CODES.sendTimeout,
+            `CDP ${method} timed out after ${CDP_SEND_TIMEOUT_MS}ms`,
+          ),
+        );
       }, CDP_SEND_TIMEOUT_MS);
       this.pending.set(id, {
-        resolve: value => {
+        resolve: (value) => {
           clearTimeout(timer);
           resolve(value);
         },
-        reject: error => {
+        reject: (error) => {
           clearTimeout(timer);
           reject(error);
         },
@@ -294,21 +291,13 @@ export function partitionKeyString(cookie) {
 }
 
 export function cookieKey(cookie) {
-  return [
-    cookie.domain,
-    cookie.path,
-    cookie.name,
-    partitionKeyString(cookie),
-  ].join("\u0000");
+  return [cookie.domain, cookie.path, cookie.name, partitionKeyString(cookie)].join("\u0000");
 }
 
 export function cookieFingerprint(cookie) {
-  return [
-    cookie.value,
-    cookie.secure ? 1 : 0,
-    cookie.httpOnly ? 1 : 0,
-    cookie.sameSite ?? "",
-  ].join("\u0000");
+  return [cookie.value, cookie.secure ? 1 : 0, cookie.httpOnly ? 1 : 0, cookie.sameSite ?? ""].join(
+    "\u0000",
+  );
 }
 
 export const ROTATING_AUTH_COOKIE_NAMES = new Set([
@@ -324,9 +313,7 @@ export function isRotatingAuthCookie(name) {
 }
 
 export function cookieRecency(cookie) {
-  return typeof cookie.expires === "number" && cookie.expires > 0
-    ? cookie.expires
-    : 0;
+  return typeof cookie.expires === "number" && cookie.expires > 0 ? cookie.expires : 0;
 }
 
 const COOKIE_SAMESITE = new Set(["Strict", "Lax", "None"]);
@@ -397,7 +384,7 @@ export async function readCookies(browser) {
 }
 
 export async function pushCookies(browser, cookieParams) {
-  const params = cookieParams.filter(param => param != null);
+  const params = cookieParams.filter((param) => param != null);
   if (params.length === 0) return;
   try {
     await browser.send("Storage.setCookies", { cookies: params });
@@ -446,7 +433,7 @@ async function evaluate(browser, sessionId, expression) {
   const result = await browser.send(
     "Runtime.evaluate",
     { expression, returnByValue: true },
-    sessionId
+    sessionId,
   );
   if (result?.exceptionDetails != null) return undefined;
   return result?.result?.value;
@@ -463,7 +450,7 @@ export async function readPageStorage(browser, sessionId) {
          if (k != null) items[k] = localStorage.getItem(k);
        }
        return JSON.stringify({ origin: location.origin, items });
-     } catch (_e) { return null; } })()`
+     } catch (_e) { return null; } })()`,
   ).catch((error) => {
     if (!isCdpTargetGone(error) && !isSendTimeout(error)) {
       log(`Runtime.evaluate for localStorage failed: ${String(error)}`);
@@ -486,7 +473,7 @@ export async function readPageStorage(browser, sessionId) {
 export async function setPageStorage(browser, sessionId, entries) {
   for (const [key, value] of entries) {
     const expr = `try { localStorage.setItem(${JSON.stringify(key)}, ${JSON.stringify(
-      value
+      value,
     )}); } catch (_e) {}`;
     await browser
       .send("Runtime.evaluate", { expression: expr }, sessionId)

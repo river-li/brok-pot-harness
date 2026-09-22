@@ -13,12 +13,12 @@ var DOMAIN_REFUSALS = [
   SandSkillPublishError,
   ServerAgentProxyRefusedError
 ];
-function statusForCommandError(error41) {
-  if (error41 instanceof SandGatewayRequestError) {
+function statusForCommandError(error42) {
+  if (error42 instanceof SandGatewayRequestError) {
     return 400;
   }
-  if (error41 instanceof ServerAgentProxyUnavailableError) return 502;
-  return DOMAIN_REFUSALS.some((refusal) => error41 instanceof refusal) ? 409 : 500;
+  if (error42 instanceof ServerAgentProxyUnavailableError) return 502;
+  return DOMAIN_REFUSALS.some((refusal) => error42 instanceof refusal) ? 409 : 500;
 }
 var GATEWAY_FAILURE_CODES = /* @__PURE__ */ new Set([
   BOT_TEMPLATE_IMPORT_ACCESS_DENIED_CODE,
@@ -34,16 +34,16 @@ var GATEWAY_FAILURE_CODES = /* @__PURE__ */ new Set([
   SAND_SECRET_SAVE_REFUSED,
   SAND_SKILL_PUBLISH_REFUSED
 ]);
-function gatewayFailureCodeFor(error41) {
-  if (error41 instanceof BotTemplateImportAccessDeniedError) {
+function gatewayFailureCodeFor(error42) {
+  if (error42 instanceof BotTemplateImportAccessDeniedError) {
     return BOT_TEMPLATE_IMPORT_ACCESS_DENIED_CODE;
   }
-  if (error41 instanceof SandSkillPublishError) return SAND_SKILL_PUBLISH_REFUSED;
-  if (error41 instanceof SandGenerateImageError) return SAND_GENERATE_IMAGE_REFUSED;
-  if (error41 instanceof SandMcpConfigError) return SAND_MCP_CONFIG_FAILURE_CODE;
-  if (error41 instanceof ServerAgentProxyRefusedError) return error41.failureCode ?? void 0;
-  if (error41 == null || typeof error41 !== "object") return void 0;
-  const { code, failureCode } = error41;
+  if (error42 instanceof SandSkillPublishError) return SAND_SKILL_PUBLISH_REFUSED;
+  if (error42 instanceof SandGenerateImageError) return SAND_GENERATE_IMAGE_REFUSED;
+  if (error42 instanceof SandMcpConfigError) return SAND_MCP_CONFIG_FAILURE_CODE;
+  if (error42 instanceof ServerAgentProxyRefusedError) return error42.failureCode ?? void 0;
+  if (error42 == null || typeof error42 !== "object") return void 0;
+  const { code, failureCode } = error42;
   const declared = typeof failureCode === "string" ? failureCode : code;
   return typeof declared === "string" && GATEWAY_FAILURE_CODES.has(declared) ? declared : void 0;
 }
@@ -58,16 +58,16 @@ function parseArgs(body, parse11) {
   let parsed2;
   try {
     parsed2 = body.length > 0 ? JSON.parse(body) : {};
-  } catch (error41) {
-    throw new SandGatewayRequestError(`request body is not valid JSON: ${String(error41)}`, {
-      cause: error41
+  } catch (error42) {
+    throw new SandGatewayRequestError(`request body is not valid JSON: ${String(error42)}`, {
+      cause: error42
     });
   }
   try {
     return parse11(parsed2);
-  } catch (error41) {
-    throw new SandGatewayRequestError(`request body has the wrong shape: ${errorMessage(error41)}`, {
-      cause: error41
+  } catch (error42) {
+    throw new SandGatewayRequestError(`request body has the wrong shape: ${errorMessage(error42)}`, {
+      cause: error42
     });
   }
 }
@@ -108,9 +108,9 @@ function respondJson(res, value, req) {
     res.end(raw);
   };
   if (req != null && raw.byteLength >= GZIP_MIN_BYTES && clientAcceptsGzip(req)) {
-    (0, import_node_zlib2.gzip)(raw, (error41, gzipped) => {
+    (0, import_node_zlib2.gzip)(raw, (error42, gzipped) => {
       if (res.destroyed || res.writableEnded || res.headersSent) return;
-      if (error41 != null) {
+      if (error42 != null) {
         respondRaw();
         return;
       }
@@ -209,10 +209,10 @@ async function routeCommand(api, method, body, res, req, onCommandError, onComma
     } finally {
       commandSpan?.span.end();
     }
-  } catch (error41) {
-    if (onCommandError != null && statusForCommandError(error41) >= 500) {
+  } catch (error42) {
+    if (onCommandError != null && statusForCommandError(error42) >= 500) {
       try {
-        const { reason, errorClass, errno } = classifyGatewayCommandError(error41);
+        const { reason, errorClass, errno } = classifyGatewayCommandError(error42);
         onCommandError({
           method,
           reason,
@@ -225,7 +225,7 @@ async function routeCommand(api, method, body, res, req, onCommandError, onComma
       } catch {
       }
     }
-    throw error41;
+    throw error42;
   }
   if (onCommandComplete != null) {
     try {
@@ -240,7 +240,7 @@ async function routeCommand(api, method, body, res, req, onCommandError, onComma
   }
   return respondJson(res, result, req);
 }
-function openSseStream(deps, req, res, register) {
+function openSseStream(deps, req, res, register, echoes) {
   const isGzipEnabled = !deps.sseGzipDisabled && clientAcceptsGzip(req);
   res.writeHead(200, {
     "content-type": "text/event-stream",
@@ -248,9 +248,9 @@ function openSseStream(deps, req, res, register) {
     connection: "keep-alive",
     ...isGzipEnabled ? { "content-encoding": "gzip", vary: "Accept-Encoding" } : {}
   });
-  const gzip4 = isGzipEnabled ? (0, import_node_zlib2.createGzip)({ flush: import_node_zlib2.constants.Z_SYNC_FLUSH }) : null;
-  if (gzip4 != null) gzip4.pipe(res);
-  const sink = gzip4 ?? res;
+  const gzip6 = isGzipEnabled ? (0, import_node_zlib2.createGzip)({ flush: import_node_zlib2.constants.Z_SYNC_FLUSH }) : null;
+  if (gzip6 != null) gzip6.pipe(res);
+  const sink = gzip6 ?? res;
   sink.write("retry: 1000\n\n");
   const heartbeat = sseHeartbeatPolicy.arm(() => {
     sink.write(":ping\n\n");
@@ -262,10 +262,17 @@ function openSseStream(deps, req, res, register) {
 `);
     heartbeat.kick();
   });
+  const echo = (nonce) => {
+    sink.write(`${GATEWAY_EVENTS_ECHO_COMMENT}${nonce}
+
+`);
+  };
+  echoes?.add(echo);
   res.on("close", () => {
+    echoes?.delete(echo);
     heartbeat.dispose();
     unsubscribe();
-    gzip4?.destroy();
+    gzip6?.destroy();
   });
 }
 function parseSubscribedChannels(url2) {
@@ -277,19 +284,19 @@ function parseSubscribedChannels(url2) {
   });
   return channels.length > 0 ? new Set(channels) : void 0;
 }
-function handleEvents(deps, req, res, subscribedChannels) {
+function handleEvents(deps, req, res, subscribedChannels, echoes) {
   const isSlim = clientWantsSlimAvatars(req);
-  res.on("close", () => deps.onEventStreamClosed?.());
   openSseStream(
     deps,
     req,
     res,
-    (write) => deps.subscribe((event) => {
+    (write2) => deps.subscribe((event) => {
       if (subscribedChannels !== void 0 && !subscribedChannels.has(event.channel)) {
         return;
       }
-      write(JSON.stringify(isSlim ? stripInlineAvatarsFromEvent(event) : event));
-    })
+      write2(JSON.stringify(isSlim ? stripInlineAvatarsFromEvent(event) : event));
+    }),
+    echoes
   );
 }
 var DATA_URL_PATTERN = /^data:([a-z0-9.+/-]+);base64,(.*)$/i;
@@ -340,7 +347,7 @@ function handleLocalExecRequests(deps, req, res) {
     deps,
     req,
     res,
-    (write) => bridge.registerProvider((frame) => write(JSON.stringify(frame)))
+    (write2) => bridge.registerProvider((frame) => write2(JSON.stringify(frame)))
   );
 }
 function handleLocalExecResponses(deps, body, res) {
@@ -361,7 +368,7 @@ function handleWebAuthnRequests(deps, req, res) {
     deps,
     req,
     res,
-    (write) => bridge.registerProvider((frame) => write(JSON.stringify(frame)))
+    (write2) => bridge.registerProvider((frame) => write2(JSON.stringify(frame)))
   );
 }
 function handleWebAuthnResponses(deps, body, res) {
@@ -382,7 +389,7 @@ function handleCookieOriginApprovalRequests(deps, req, res) {
     deps,
     req,
     res,
-    (write) => bridge.registerProvider((frame) => write(JSON.stringify(frame)))
+    (write2) => bridge.registerProvider((frame) => write2(JSON.stringify(frame)))
   );
 }
 function handleCookieOriginApprovalResponses(deps, body, res) {
@@ -396,16 +403,17 @@ function handleCookieOriginApprovalResponses(deps, body, res) {
 }
 async function startGatewayServer(deps) {
   const host = deps.host ?? "127.0.0.1";
+  const eventStreamEchoes = /* @__PURE__ */ new Set();
   const requestListener = (req, res) => {
-    void handleRequest(deps, req, res).catch((error41) => {
-      const message = errorMessage(error41);
+    void handleRequest(deps, req, res, eventStreamEchoes).catch((error42) => {
+      const message = errorMessage(error42);
       if (!res.headersSent) {
-        const failureCode = gatewayFailureCodeFor(error41);
-        respondErrorPayload(res, statusForCommandError(error41), {
+        const failureCode = gatewayFailureCodeFor(error42);
+        respondErrorPayload(res, statusForCommandError(error42), {
           message,
           ...failureCode === void 0 ? {} : { failureCode },
-          ...error41 instanceof SandSkillPublishError && error41.refusalKind !== void 0 ? { skillPublishRefusalKind: error41.refusalKind } : {},
-          ...error41 instanceof SandMcpConfigError && error41.failure !== void 0 ? { mcpConfigFailure: error41.failure } : {}
+          ...error42 instanceof SandSkillPublishError && error42.refusalKind !== void 0 ? { skillPublishRefusalKind: error42.refusalKind } : {},
+          ...error42 instanceof SandMcpConfigError && error42.failure !== void 0 ? { mcpConfigFailure: error42.failure } : {}
         });
       } else res.end();
     });
@@ -423,11 +431,11 @@ async function startGatewayServer(deps) {
     port: address.port,
     close: () => new Promise((resolve29, reject2) => {
       server.closeAllConnections();
-      server.close((error41) => error41 != null ? reject2(error41) : resolve29());
+      server.close((error42) => error42 != null ? reject2(error42) : resolve29());
     })
   };
 }
-async function handleRequest(deps, req, res) {
+async function handleRequest(deps, req, res, eventStreamEchoes) {
   const url2 = new URL(req.url ?? "/", "http://127.0.0.1");
   if (rejectUntrustedBrowserRequest(deps, req, res)) return;
   if (req.method === "GET" && url2.pathname === GATEWAY_HEALTH_PATH) {
@@ -444,6 +452,7 @@ async function handleRequest(deps, req, res) {
     return respondJson(res, payload);
   }
   const isEvents = req.method === "GET" && url2.pathname === GATEWAY_EVENTS_PATH;
+  const isEventsEcho = req.method === "POST" && url2.pathname === GATEWAY_EVENTS_ECHO_PATH;
   const isPrepareUpgrade = req.method === "POST" && url2.pathname === GATEWAY_PREPARE_UPGRADE_PATH;
   const isAvatar = req.method === "GET" && url2.pathname.startsWith(`${GATEWAY_AVATARS_PATH}/`);
   const isLocalExecRequests = req.method === "GET" && url2.pathname === GATEWAY_LOCAL_EXEC_REQUESTS_PATH;
@@ -453,7 +462,7 @@ async function handleRequest(deps, req, res) {
   const isCookieOriginApprovalRequests = req.method === "GET" && url2.pathname === GATEWAY_COOKIE_ORIGIN_APPROVAL_REQUESTS_PATH;
   const isCookieOriginApprovalResponses = req.method === "POST" && url2.pathname === GATEWAY_COOKIE_ORIGIN_APPROVAL_RESPONSES_PATH;
   const isCommand = req.method === "POST" && url2.pathname.startsWith(`${GATEWAY_API_PREFIX}/`);
-  if (isEvents || isAvatar || isCommand || isPrepareUpgrade || isLocalExecRequests || isLocalExecResponses || isWebAuthnRequests || isWebAuthnResponses || isCookieOriginApprovalRequests || isCookieOriginApprovalResponses) {
+  if (isEvents || isEventsEcho || isAvatar || isCommand || isPrepareUpgrade || isLocalExecRequests || isLocalExecResponses || isWebAuthnRequests || isWebAuthnResponses || isCookieOriginApprovalRequests || isCookieOriginApprovalResponses) {
     if ((isLocalExecRequests || isLocalExecResponses) && deps.authToken == null) {
       return respondError(res, 401, "local-exec requires gateway authentication");
     }
@@ -492,7 +501,15 @@ async function handleRequest(deps, req, res) {
       return handleCookieOriginApprovalResponses(deps, await readBody(req), res);
     }
     if (isEvents) {
-      return handleEvents(deps, req, res, parseSubscribedChannels(url2));
+      return handleEvents(deps, req, res, parseSubscribedChannels(url2), eventStreamEchoes);
+    }
+    if (isEventsEcho) {
+      const nonce = url2.searchParams.get(GATEWAY_EVENTS_ECHO_NONCE_PARAM);
+      if (nonce === null || !GATEWAY_EVENTS_ECHO_NONCE_PATTERN.test(nonce)) {
+        return respondError(res, 400, "echo needs a nonce of 1 to 64 letters, digits, or dashes");
+      }
+      for (const echo of eventStreamEchoes) echo(nonce);
+      return respondJson(res, { ok: true, streams: eventStreamEchoes.size });
     }
     if (isAvatar) {
       return handleAvatarImage(deps, req, res, url2);

@@ -31,12 +31,12 @@ function createRequestCoalescer(options2) {
       batch.forEach((pending, index) => {
         pending.resolve(results[index]);
       });
-    } catch (error41) {
-      if (batch.length > 1 && (options2.shouldSplitOnError?.(error41) ?? false)) {
+    } catch (error42) {
+      if (batch.length > 1 && (options2.shouldSplitOnError?.(error42) ?? false)) {
         await runIndividually(batch);
         return;
       }
-      for (const pending of batch) pending.reject(error41);
+      for (const pending of batch) pending.reject(error42);
     }
   }
   async function runIndividually(batch) {
@@ -48,8 +48,8 @@ function createRequestCoalescer(options2) {
           throw new SandBoxStoreSyncError("Batched request returned no result for its request");
         }
         pending.resolve(result);
-      } catch (error41) {
-        pending.reject(error41);
+      } catch (error42) {
+        pending.reject(error42);
       }
     }
   }
@@ -66,8 +66,8 @@ function createRequestCoalescer(options2) {
       draining = false;
     }
   }
-  return (request3) => new Promise((resolve29, reject2) => {
-    queue.push({ request: request3, resolve: resolve29, reject: reject2 });
+  return (request5) => new Promise((resolve29, reject2) => {
+    queue.push({ request: request5, resolve: resolve29, reject: reject2 });
     void drain();
   });
 }

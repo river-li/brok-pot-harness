@@ -1,5 +1,3 @@
-init_scheduling();
-init_dashboard_pb();
 init_errors();
 var TEAM_ADMIN_POLICY_TTL_MS = 5 * 6e4;
 var TEAM_ADMIN_POLICY_REQUEST_TIMEOUT_MS = 1e4;
@@ -16,7 +14,8 @@ function snapshotFromResponse(response, teamId) {
   return {
     teamId,
     cloudAgentsDisabled: response.backgroundAgentSettings?.disableCloudAgentsInSand === true,
-    autoReviewEnforced: response.sandAutoReviewControls?.enforceEnabled === true
+    autoReviewEnforced: response.sandAutoReviewControls?.enforceEnabled === true,
+    agentEmailAllowed: response.grokBotAgentEmailControls?.allowed ?? AGENT_EMAIL_DENIED_WITHOUT_A_BACKEND_ANSWER
   };
 }
 function currentTeamId(getTeamId) {
@@ -42,7 +41,7 @@ function createTeamAdminPolicyService(deps) {
     if (cache3.inFlight !== void 0) return cache3.inFlight;
     const attempt = cache3.generation;
     cache3.loading = true;
-    const request3 = (async () => {
+    const request5 = (async () => {
       const teamId = currentTeamId(deps.getTeamId);
       try {
         const response = await deps.getDashboardClient().getTeamAdminSettingsOrEmptyIfNotInTeam(new GetTeamAdminSettingsRequest({}), {
@@ -53,17 +52,17 @@ function createTeamAdminPolicyService(deps) {
         cache3.snapshotAtMs = deps.clock.monotonicNow();
         cache3.lastFailureAtMs = Number.NEGATIVE_INFINITY;
         cache3.loading = false;
-      } catch (error41) {
+      } catch (error42) {
         if (cache3.disposed || attempt !== cache3.generation) return;
         cache3.lastFailureAtMs = deps.clock.monotonicNow();
         cache3.loading = false;
-        deps.log(`[sand:team-admin-policy] fetch failed: ${errorLogTag(error41)}`);
+        deps.log(`[sand:team-admin-policy] fetch failed: ${errorLogTag(error42)}`);
       }
     })().finally(() => {
-      if (cache3.inFlight === request3) cache3.inFlight = void 0;
+      if (cache3.inFlight === request5) cache3.inFlight = void 0;
     });
-    cache3.inFlight = request3;
-    return request3;
+    cache3.inFlight = request5;
+    return request5;
   };
   const loadUnlessBackingOff = () => {
     if (cache3.disposed) return void 0;
@@ -76,7 +75,7 @@ function createTeamAdminPolicyService(deps) {
     mode: "until-signal",
     initialDelayMs: TEAM_ADMIN_POLICY_FIRST_READ_RETRY_INITIAL_DELAY_MS,
     maxDelayMs: TEAM_ADMIN_POLICY_FIRST_READ_RETRY_MAX_DELAY_MS,
-    shouldRetry: (error41) => error41 instanceof TeamAdminPolicyUnreadError,
+    shouldRetry: (error42) => error42 instanceof TeamAdminPolicyUnreadError,
     clock: deps.clock
   });
   const loadThroughSupersededReads = async (signal) => {
@@ -99,6 +98,10 @@ function createTeamAdminPolicyService(deps) {
       void loadUnlessBackingOff();
       return cache3.snapshot?.autoReviewEnforced ?? false;
     },
+    isAgentEmailAllowed: () => {
+      void loadUnlessBackingOff();
+      return cache3.snapshot?.agentEmailAllowed ?? AGENT_EMAIL_DENIED_WITHOUT_A_BACKEND_ANSWER;
+    },
     prefetch: () => {
       void loadUnlessBackingOff();
     },
@@ -115,8 +118,8 @@ function createTeamAdminPolicyService(deps) {
       });
       try {
         await deadline.run(retryFirstReadUntilKnown);
-      } catch (error41) {
-        if (!(error41 instanceof DeadlineExceededError)) throw error41;
+      } catch (error42) {
+        if (!(error42 instanceof DeadlineExceededError)) throw error42;
         deps.log(`[sand:team-admin-policy] first read still pending after ${timeoutMs}ms`);
       }
       const known = cache3.snapshot !== void 0;

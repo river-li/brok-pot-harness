@@ -3,8 +3,8 @@ var CLOUD_AGENT_POLL_INTERVAL_MS = 1e4;
 var CLOUD_AGENT_POLL_RPC_TIMEOUT_MS = 3e4;
 var CLOUD_AGENT_RATE_LIMIT_FALLBACK_MS = 6e4;
 var CLOUD_AGENT_RATE_LIMIT_JITTER_RATIO = 0.25;
-function cloudAgentRateLimitPauseMs(error41, random = Math.random) {
-  const baseMs = getConnectRetryAfterMs(error41) ?? CLOUD_AGENT_RATE_LIMIT_FALLBACK_MS;
+function cloudAgentRateLimitPauseMs(error42, random = Math.random) {
+  const baseMs = getConnectRetryAfterMs(error42) ?? CLOUD_AGENT_RATE_LIMIT_FALLBACK_MS;
   return Math.round(baseMs + random() * baseMs * CLOUD_AGENT_RATE_LIMIT_JITTER_RATIO);
 }
 var CLOUD_AGENT_RUN_RESTART_GRACE_MS = 3 * 6e4;
@@ -103,9 +103,9 @@ var CloudAgentCompletionPoller = class {
               { timeoutMs: CLOUD_AGENT_POLL_RPC_TIMEOUT_MS }
             );
             detailed = response.composer;
-          } catch (error41) {
-            if (isRateLimitConnectError(error41)) {
-              rateLimitPauseUntilMs = this.options.clock.monotonicNow() + cloudAgentRateLimitPauseMs(error41, this.options.randomFn);
+          } catch (error42) {
+            if (isRateLimitConnectError(error42)) {
+              rateLimitPauseUntilMs = this.options.clock.monotonicNow() + cloudAgentRateLimitPauseMs(error42, this.options.randomFn);
             }
             if (this.options.clock.monotonicNow() >= deadline) {
               finish(timedOut());

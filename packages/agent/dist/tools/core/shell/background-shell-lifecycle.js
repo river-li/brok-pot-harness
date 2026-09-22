@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var logger55 = createLogger("tools/shell/background-shell-lifecycle");
 var MAX_TRACKED_SHELLS = 4096;
 var records = /* @__PURE__ */ new Map();

@@ -1,5 +1,4 @@
-var SEARCH_INDEX_SCHEMA_VERSION = 1;
-var SEARCH_INDEX_FILENAME = "search-index.db";
+var INDEXED_BODY_MAX_CHARS = 2e4;
 var FTS_QUERY_MAX_TERMS = 8;
 var SNIPPET_CONTEXT_TOKENS = 16;
 var META_RECONCILE_DONE = "reconcile_done";
@@ -7,7 +6,7 @@ var ATTACHMENT_KINDS = new Set(SAND_ATTACHMENT_KINDS);
 function parseAttachmentKind(kind) {
   return ATTACHMENT_KINDS.has(kind) ? kind : "file";
 }
-var CORE_SCHEMA2 = `
+var CORE_SCHEMA = `
 CREATE TABLE IF NOT EXISTS meta (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL
@@ -85,50 +84,103 @@ END;
 function isFts5Available() {
   let db;
   try {
-    db = new import_node_sqlite3.DatabaseSync(":memory:");
+    db = new import_node_sqlite2.DatabaseSync(":memory:");
     db.exec("CREATE VIRTUAL TABLE fts5_probe USING fts5(x)");
     return true;
-  } catch (error41) {
-    reportFallback("search_index_db", error41);
+  } catch (error) {
+    reportFallback("search_index_db", error);
     return false;
   } finally {
     db?.close();
   }
 }
 function openSearchIndexDb(dbPath) {
-  const db = new import_node_sqlite3.DatabaseSync(dbPath);
+  const db = new import_node_sqlite2.DatabaseSync(dbPath);
   try {
     applyStorePragmas(db, { incrementalAutoVacuum: true });
     return db;
-  } catch (error41) {
+  } catch (error) {
     try {
       db.close();
     } catch {
     }
-    throw error41;
+    throw error;
   }
 }
+function openSearchIndexReadDb(dbPath) {
+  const db = openSearchIndexDb(dbPath);
+  db.exec("PRAGMA query_only = ON");
+  return db;
+}
 function ensureSearchIndexSchema(db, isFtsEnabled) {
-  db.exec(CORE_SCHEMA2);
+  db.exec(CORE_SCHEMA);
   if (isFtsEnabled) db.exec(FTS_SCHEMA);
 }
-function readSearchIndexFileMode(db) {
-  const names3 = new Set(
-    db.prepare("SELECT name FROM sqlite_master WHERE name IN ('meta', 'messages_fts')").all().map((row) => row.name)
-  );
-  if (!names3.has("meta")) return "fresh";
-  return names3.has("messages_fts") ? "fts" : "plain";
+function writeReconcileDone(db) {
+  db.prepare(
+    "INSERT INTO meta (key, value) VALUES (?, '1') ON CONFLICT(key) DO UPDATE SET value = '1'"
+  ).run(META_RECONCILE_DONE);
 }
-function readSearchIndexSchemaVersion(db) {
-  const row = db.prepare("PRAGMA user_version").get();
-  return typeof row?.user_version === "number" ? row.user_version : 0;
+function deriveMessageRow(entry) {
+  if (isHiddenOutboundAgentPeerMessageEntry(entry)) return null;
+  const body = entrySearchText(entry).trim();
+  if (body.length === 0) return null;
+  return {
+    entryId: entry.id,
+    role: entry.kind === "message" ? entry.role : "assistant",
+    timestampMs: wholeMs(entry.timestampMs),
+    body: body.slice(0, INDEXED_BODY_MAX_CHARS)
+  };
 }
-function stampSearchIndexSchemaVersion(db) {
-  db.exec(`PRAGMA user_version = ${SEARCH_INDEX_SCHEMA_VERSION}`);
+function wholeMs(value) {
+  return typeof value === "number" && Number.isFinite(value) ? Math.round(value) : 0;
 }
-function readReconcileDone(db) {
-  const row = db.prepare("SELECT value FROM meta WHERE key = ?").get(META_RECONCILE_DONE);
-  return row?.value === "1";
+function wholeDimension(value) {
+  return typeof value === "number" && Number.isFinite(value) ? Math.round(value) : null;
+}
+function mediaFileName(fileName, urlOrPath) {
+  const trimmed = fileName?.trim();
+  if (trimmed != null && trimmed.length > 0) return trimmed;
+  let subject = urlOrPath;
+  try {
+    subject = new URL(urlOrPath).pathname;
+  } catch {
+  }
+  try {
+    subject = decodeURIComponent(subject);
+  } catch {
+  }
+  return (0, import_node_path.basename)(subject);
+}
+function deriveMediaRow(entry) {
+  let fileName;
+  let urlOrPath;
+  let width = null;
+  let height = null;
+  if (entry.kind === "user-attachment") {
+    urlOrPath = entry.file_path;
+    fileName = mediaFileName(entry.file_name, urlOrPath);
+    width = wholeDimension(entry.width);
+    height = wholeDimension(entry.height);
+  } else if (entry.kind === "send-message" && entry.message.type === "attachment") {
+    urlOrPath = entry.message.url;
+    fileName = mediaFileName(entry.message.file_name, urlOrPath);
+  } else {
+    return null;
+  }
+  if (fileName.length === 0) return null;
+  const ext = (0, import_node_path.extname)(fileName).toLowerCase();
+  const mime = imageMimeFromPath(fileName) ?? videoMimeFromPath(fileName) ?? audioMimeFromPath(fileName) ?? null;
+  return {
+    entryId: entry.id,
+    fileName,
+    ext,
+    mime,
+    kind: classifyAttachment({ fileName, urlOrPath }),
+    timestampMs: wholeMs(entry.timestampMs),
+    width,
+    height
+  };
 }
 function searchTerms(query) {
   return query.normalize("NFKC").trim().split(/\s+/).filter((term) => term.length > 0).slice(0, FTS_QUERY_MAX_TERMS);
@@ -141,8 +193,8 @@ function buildFtsMatchQuery(query) {
 function termConjunction(column, terms) {
   return terms.map(() => `instr(lower(${column}), lower(?)) > 0`).join(" AND ");
 }
-function flattenSnippet(text2) {
-  return text2.replace(/\s+/g, " ").trim();
+function flattenSnippet(text) {
+  return text.replace(/\s+/g, " ").trim();
 }
 var EFFECTIVE_TIMESTAMP = `CASE
 	WHEN m.timestamp_ms > 0 THEN m.timestamp_ms
@@ -181,14 +233,14 @@ function collectMessageMatches(rows, snippetOf) {
     if (typeof row.agentId !== "string" || typeof row.entryId !== "string" || row.role !== "user" && row.role !== "assistant" || typeof row.timestampMs !== "number") {
       continue;
     }
-    const snippet2 = snippetOf(row);
-    if (snippet2 == null) continue;
+    const snippet = snippetOf(row);
+    if (snippet == null) continue;
     results.push({
       agentId: row.agentId,
       entryId: row.entryId,
       role: row.role,
       timestampMs: row.timestampMs,
-      snippet: snippet2
+      snippet
     });
   }
   return results;
@@ -196,8 +248,8 @@ function collectMessageMatches(rows, snippetOf) {
 function searchMessages(db, query, limit, isFtsEnabled) {
   if (limit <= 0) return [];
   if (!isFtsEnabled) return searchMessagesPlain(db, query, limit);
-  const match2 = buildFtsMatchQuery(query);
-  if (match2 == null) return [];
+  const match = buildFtsMatchQuery(query);
+  if (match == null) return [];
   const rows = db.prepare(
     `${messageMatchSql(
       `SELECT
@@ -212,7 +264,7 @@ function searchMessages(db, query, limit, isFtsEnabled) {
 			 JOIN messages_fts ON messages_fts.rowid = matched.match_rowid
 			 WHERE messages_fts MATCH ?
 			 ORDER BY matched.ts DESC`
-  ).all(match2, limit, match2);
+  ).all(match, limit, match);
   return collectMessageMatches(
     rows,
     (row) => typeof row.snippet === "string" ? flattenSnippet(row.snippet) : null
@@ -240,8 +292,8 @@ function searchMessagesPlain(db, query, limit) {
 }
 function plainSnippet(body, terms) {
   for (const term of terms) {
-    const snippet2 = buildContentSnippet(body, term.toLowerCase());
-    if (snippet2 != null) return snippet2;
+    const snippet = buildContentSnippet(body, term.toLowerCase());
+    if (snippet != null) return snippet;
   }
   const flat = flattenSnippet(body);
   const head = flat.slice(0, SNIPPET_CONTEXT_TOKENS * 8);
@@ -259,8 +311,8 @@ var MEDIA_SELECT_COLUMNS = `
 	md.height AS height`;
 function mediaMatchRows(db, query, limit, isFtsEnabled) {
   if (isFtsEnabled) {
-    const match2 = buildFtsMatchQuery(query);
-    if (match2 == null) return browseMediaRows(db, limit);
+    const match = buildFtsMatchQuery(query);
+    if (match == null) return browseMediaRows(db, limit);
     return db.prepare(
       `SELECT ${MEDIA_SELECT_COLUMNS}
 				 FROM media_fts
@@ -268,7 +320,7 @@ function mediaMatchRows(db, query, limit, isFtsEnabled) {
 				 WHERE media_fts MATCH ?
 				 ORDER BY md.timestamp_ms DESC
 				 LIMIT ?`
-    ).all(match2, limit);
+    ).all(match, limit);
   }
   const terms = searchTerms(query);
   if (terms.length === 0) return browseMediaRows(db, limit);

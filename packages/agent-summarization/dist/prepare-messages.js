@@ -19,6 +19,24 @@ function isEmptyAssistantMessage3(message) {
   }
   return false;
 }
+var INJECTED_REMINDER_CURSOR_FLAGS = [
+  "loopReminder",
+  "sandSendMessageReminder",
+  "sandEarlyResultReminder",
+  "sandStartOfTurnAckReminder",
+  "sandDiskPressureReminder"
+];
+function isInjectedReminderMessage(message) {
+  var _a19;
+  if (message.role !== "user") {
+    return false;
+  }
+  const cursor = (_a19 = message.providerOptions) === null || _a19 === void 0 ? void 0 : _a19.cursor;
+  if (cursor === void 0) {
+    return false;
+  }
+  return INJECTED_REMINDER_CURSOR_FLAGS.some((flag) => cursor[flag] === true);
+}
 function prepareMessagesForCompaction(messages2) {
   const systemMessage = messages2.find((message) => message.role === "system");
   let messagesForSummarization = messages2.filter((message) => message.role !== "system" && !isEmptyAssistantMessage3(message));

@@ -1,6 +1,6 @@
 init_unknown_record();
-function isStoreUnreadable(error41) {
-  return isUnknownRecord(error41) && error41.isSandAgentStoreUnreadable === true;
+function isStoreUnreadable(error42) {
+  return isUnknownRecord(error42) && error42.isSandAgentStoreUnreadable === true;
 }
 var RosterSearch = class {
   constructor(tm) {
@@ -46,8 +46,8 @@ var RosterSearch = class {
       let entries;
       try {
         entries = activeId != null && agent.id === activeId ? getTranscript() : this.tm.sessionStore.readAgentTranscriptEntries(agent.id);
-      } catch (error41) {
-        if (!isStoreUnreadable(error41)) throw error41;
+      } catch (error42) {
+        if (!isStoreUnreadable(error42)) throw error42;
         continue;
       }
       for (const match2 of this.tm.contentSearch.findTranscriptMatches(entries, normalized)) {

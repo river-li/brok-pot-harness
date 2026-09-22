@@ -70,7 +70,7 @@ var LocalExecSandBox = class {
     return {
       remoteAccessor: accessor,
       vncUrl: "",
-      terminalsFolder: (0, import_node_path69.join)(projectDir, "terminals")
+      terminalsFolder: (0, import_node_path68.join)(projectDir, "terminals")
     };
   }
   async hibernate(_ctx, _agentId) {
@@ -110,7 +110,7 @@ var LocalExecSandBox = class {
     return new Uint8Array(await (0, import_promises27.readFile)(target));
   }
   resolveBoxPath(boxPath) {
-    return (0, import_node_path69.isAbsolute)(boxPath) ? boxPath : (0, import_node_path69.resolve)(resolveProjectDir(this.projectDir), boxPath);
+    return (0, import_node_path68.isAbsolute)(boxPath) ? boxPath : (0, import_node_path68.resolve)(resolveProjectDir(this.projectDir), boxPath);
   }
   displayWindowIndex() {
     const display = this.options.computerUseDisplay?.trim();

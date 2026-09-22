@@ -96,11 +96,11 @@ async function armScmConnectWaits(card, registerScmConnectWait) {
       });
     }
     return true;
-  } catch (error41) {
+  } catch (error42) {
     reportHostDiagnostic({
       kind: "scm_connect_surface_failed",
       stage: "register_wait",
-      errorClass: errorClassOf(error41)
+      errorClass: errorClassOf(error42)
     });
     return false;
   }

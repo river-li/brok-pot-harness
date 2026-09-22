@@ -1,4 +1,4 @@
-var __awaiter28 = function(thisArg, _arguments, P2, generator) {
+var __awaiter30 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -28,12 +28,12 @@ var __awaiter28 = function(thisArg, _arguments, P2, generator) {
 function toUnredactedInteractionListener(delegate, privacyMode) {
   return {
     sendUpdate(ctx, update) {
-      return __awaiter28(this, void 0, void 0, function* () {
+      return __awaiter30(this, void 0, void 0, function* () {
         yield delegate.sendUpdate(ctx, toRedactedInteractionUpdate(update, privacyMode));
       });
     },
     query(ctx, query) {
-      return __awaiter28(this, void 0, void 0, function* () {
+      return __awaiter30(this, void 0, void 0, function* () {
         const redactedResponse = yield delegate.query(ctx, toRedactedInteractionQuery(query, privacyMode));
         return fromRedactedInteractionResponse(redactedResponse, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
       });
@@ -45,12 +45,12 @@ function toUnredactedInteractionListener(delegate, privacyMode) {
 function toRedactedInteractionListener(delegate, privacyMode) {
   return {
     sendUpdate(ctx, update) {
-      return __awaiter28(this, void 0, void 0, function* () {
+      return __awaiter30(this, void 0, void 0, function* () {
         yield delegate.sendUpdate(ctx, fromRedactedInteractionUpdate(update, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
       });
     },
     query(ctx, query) {
-      return __awaiter28(this, void 0, void 0, function* () {
+      return __awaiter30(this, void 0, void 0, function* () {
         const response = yield delegate.query(ctx, fromRedactedInteractionQuery(query, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
         return toRedactedInteractionResponse(response, privacyMode);
       });

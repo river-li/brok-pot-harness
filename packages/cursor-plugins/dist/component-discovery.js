@@ -1,4 +1,4 @@
-var __awaiter57 = function(thisArg, _arguments, P2, generator) {
+var __awaiter59 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -27,10 +27,7 @@ var __awaiter57 = function(thisArg, _arguments, P2, generator) {
 };
 var MARKDOWN_EXTENSIONS2 = [".md", ".mdc", ".markdown"];
 var COMMAND_EXTRA_EXTENSIONS = [".txt"];
-var COMMAND_EXTENSIONS = [
-  ...MARKDOWN_EXTENSIONS2,
-  ...COMMAND_EXTRA_EXTENSIONS
-];
+var COMMAND_EXTENSIONS = [...MARKDOWN_EXTENSIONS2, ...COMMAND_EXTRA_EXTENSIONS];
 var FRONTMATTER_REGEX = /^---\s*\n([\s\S]*?)\n---/;
 function toKebabCase(str3) {
   return str3.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9.-]/g, "");
@@ -102,7 +99,7 @@ var PluginComponentDiscovery = class {
     this.fetcher = fetcher;
   }
   discoverComponents() {
-    return __awaiter57(this, arguments, void 0, function* (options2 = {}) {
+    return __awaiter59(this, arguments, void 0, function* (options2 = {}) {
       var _a19;
       const basePath = (_a19 = options2.basePath) !== null && _a19 !== void 0 ? _a19 : "";
       const basePrefix = basePath ? `${basePath}/` : "";
@@ -147,7 +144,7 @@ var PluginComponentDiscovery = class {
     });
   }
   discoverHooksFromJson(hooksJsonPath) {
-    return __awaiter57(this, void 0, void 0, function* () {
+    return __awaiter59(this, void 0, void 0, function* () {
       try {
         const exists = yield this.fetcher.fileExists(hooksJsonPath);
         if (!exists) {
@@ -173,7 +170,7 @@ var PluginComponentDiscovery = class {
    * Discover hooks from manifest definition (can be string path or inline object)
    */
   discoverHooksFromManifest(basePrefix, hooksConfig) {
-    return __awaiter57(this, void 0, void 0, function* () {
+    return __awaiter59(this, void 0, void 0, function* () {
       var _a19;
       if (typeof hooksConfig === "string") {
         if (!isPathSafe(hooksConfig)) {
@@ -205,7 +202,7 @@ var PluginComponentDiscovery = class {
    * - `extensions` controls which file extensions are accepted (defaults to MARKDOWN_EXTENSIONS)
    */
   discoverFromManifestPaths(basePrefix_1, paths_1) {
-    return __awaiter57(this, arguments, void 0, function* (basePrefix, paths, isSkillDir = false, extensions = MARKDOWN_EXTENSIONS2) {
+    return __awaiter59(this, arguments, void 0, function* (basePrefix, paths, isSkillDir = false, extensions = MARKDOWN_EXTENSIONS2) {
       var _a19, _b2;
       if (typeof paths === "string") {
         if (!isPathSafe(paths)) {
@@ -259,14 +256,14 @@ var PluginComponentDiscovery = class {
             const { content } = yield this.fetcher.fetchFile(fullPath);
             const parsed2 = parseNameAndDescription(content);
             finalName = (_b2 = parsed2.name) !== null && _b2 !== void 0 ? _b2 : finalName;
-            const description10 = parsed2.description;
+            const description9 = parsed2.description;
             if (finalName) {
               const component = {
                 name: toKebabCase(finalName),
                 path: fullPath
               };
-              if (description10 !== void 0) {
-                component.description = description10;
+              if (description9 !== void 0) {
+                component.description = description9;
               }
               results.push(component);
             }
@@ -278,7 +275,7 @@ var PluginComponentDiscovery = class {
     });
   }
   discoverMarkdownComponents(folderPath_1) {
-    return __awaiter57(this, arguments, void 0, function* (folderPath, extensions = MARKDOWN_EXTENSIONS2, visitedRealDirPaths = /* @__PURE__ */ new Set()) {
+    return __awaiter59(this, arguments, void 0, function* (folderPath, extensions = MARKDOWN_EXTENSIONS2, visitedRealDirPaths = /* @__PURE__ */ new Set()) {
       let contents;
       try {
         contents = yield this.fetcher.listDirectory(folderPath, visitedRealDirPaths);
@@ -288,13 +285,13 @@ var PluginComponentDiscovery = class {
       const matchingFiles = contents.filter((item) => item.type === "file" && extensions.some((ext2) => item.name.endsWith(ext2)));
       const subdirs = contents.filter((item) => item.type === "dir");
       const [fileResults, subdirResults] = yield Promise.all([
-        Promise.all(matchingFiles.map((file2) => __awaiter57(this, void 0, void 0, function* () {
+        Promise.all(matchingFiles.map((file2) => __awaiter59(this, void 0, void 0, function* () {
           try {
             let finalName = deriveNameFromPath(file2.name);
             const { content } = yield this.fetcher.fetchFile(file2.path);
             const parsed2 = parseNameAndDescription(content);
             finalName = parsed2.name ? toKebabCase(parsed2.name) : finalName;
-            const description10 = parsed2.description;
+            const description9 = parsed2.description;
             if (!finalName) {
               return null;
             }
@@ -302,8 +299,8 @@ var PluginComponentDiscovery = class {
               name: finalName,
               path: file2.path
             };
-            if (description10 !== void 0) {
-              component.description = description10;
+            if (description9 !== void 0) {
+              component.description = description9;
             }
             return component;
           } catch (_a19) {
@@ -323,7 +320,7 @@ var PluginComponentDiscovery = class {
    * Discover a root-level SKILL.md file (when the plugin itself is a skill)
    */
   discoverRootSkill(basePrefix) {
-    return __awaiter57(this, void 0, void 0, function* () {
+    return __awaiter59(this, void 0, void 0, function* () {
       try {
         const skillMdPath = `${basePrefix}SKILL.md`;
         const dirName = (0, import_node_path63.basename)(basePrefix.replace(/[\\/]+$/, ""));
@@ -350,7 +347,7 @@ var PluginComponentDiscovery = class {
     });
   }
   discoverSkills(skillsPath) {
-    return __awaiter57(this, void 0, void 0, function* () {
+    return __awaiter59(this, void 0, void 0, function* () {
       let contents;
       try {
         contents = yield this.fetcher.listDirectory(skillsPath);
@@ -358,7 +355,7 @@ var PluginComponentDiscovery = class {
         return [];
       }
       const skillDirs = contents.filter((item) => item.type === "dir");
-      const results = yield Promise.all(skillDirs.map((dir) => __awaiter57(this, void 0, void 0, function* () {
+      const results = yield Promise.all(skillDirs.map((dir) => __awaiter59(this, void 0, void 0, function* () {
         try {
           const skillMdPath = `${dir.path}/SKILL.md`;
           const exists = yield this.fetcher.fileExists(skillMdPath);
@@ -397,10 +394,10 @@ var PluginComponentDiscovery = class {
    * indexing behavior.
    */
   discoverMcpServers(basePrefix, manifestMcpServers, presentMcpConfigFiles) {
-    return __awaiter57(this, void 0, void 0, function* () {
+    return __awaiter59(this, void 0, void 0, function* () {
       var _a19;
       const fetched = /* @__PURE__ */ new Map();
-      const readFileContent = (relativePath) => __awaiter57(this, void 0, void 0, function* () {
+      const readFileContent = (relativePath) => __awaiter59(this, void 0, void 0, function* () {
         const cached2 = fetched.get(relativePath);
         if (cached2 !== void 0) {
           return cached2;
@@ -409,7 +406,7 @@ var PluginComponentDiscovery = class {
         fetched.set(relativePath, pending);
         return pending;
       });
-      const resolveWith = (manifestPrecedence) => __awaiter57(this, void 0, void 0, function* () {
+      const resolveWith = (manifestPrecedence) => __awaiter59(this, void 0, void 0, function* () {
         return resolvePluginMcpConfigFromReader(readFileContent, manifestMcpServers, manifestMcpServers !== void 0 ? "manifest" : void 0, {
           // Only probe default config files known to exist (from the directory
           // listing) to avoid speculative reads of absent files.

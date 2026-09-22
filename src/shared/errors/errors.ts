@@ -1,15 +1,15 @@
-function errorMessage(error41) {
-  return error41 instanceof Error ? error41.message : String(error41);
+function errorMessage(error42) {
+  return error42 instanceof Error ? error42.message : String(error42);
 }
-function errorClassOf(error41) {
-  if (!(error41 instanceof Error)) return typeof error41;
-  return error41.name.length > 0 ? error41.name : "Error";
+function errorClassOf(error42) {
+  if (!(error42 instanceof Error)) return typeof error42;
+  return error42.name.length > 0 ? error42.name : "Error";
 }
-function errorLogTag(error41) {
-  if (!(error41 instanceof Error)) return typeof error41;
-  const ownCode = error41.code;
-  const code = ownCode != null && ownCode.length > 0 ? ownCode : findSystemErrno(error41);
-  return code !== void 0 ? `${error41.name} (${code})` : error41.name;
+function errorLogTag(error42) {
+  if (!(error42 instanceof Error)) return typeof error42;
+  const ownCode = error42.code;
+  const code = ownCode != null && ownCode.length > 0 ? ownCode : findSystemErrno(error42);
+  return code !== void 0 ? `${error42.name} (${code})` : error42.name;
 }
 var SandDomainError;
 var init_errors = __esm({

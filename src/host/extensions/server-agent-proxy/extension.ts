@@ -25,8 +25,8 @@ var serverAgentProxyExtension = defineHostExtension({
     });
     proxy.bindRunStateChanged((agentId) => {
       transcript.overhearServerActivity(agentId, proxy.activityOverlayFor(agentId)?.live ?? null);
-      transcript.emitAgentUpdate(agentId).catch((error41) => {
-        context2.host.log(`server-agent-proxy roster emit failed: ${errorLogTag(error41)}`);
+      transcript.emitAgentUpdate(agentId).catch((error42) => {
+        context2.host.log(`server-agent-proxy roster emit failed: ${errorLogTag(error42)}`);
       });
     });
     transcript.setServerActivityOverlayProvider((agentId) => proxy.activityOverlayFor(agentId));

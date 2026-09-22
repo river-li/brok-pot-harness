@@ -12,8 +12,8 @@ function parseProfileJson2(path31) {
   let raw;
   try {
     raw = (0, import_node_fs26.readFileSync)(path31, "utf8");
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_profile", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_profile", error42);
     return null;
   }
   return parseProfileJson(raw);
@@ -48,8 +48,8 @@ function readSandProfileCreationMetadata(path31) {
 function writeProfileJson(path31, serialized) {
   try {
     if ((0, import_node_fs26.readFileSync)(path31, "utf8") === serialized) return;
-  } catch (error41) {
-    reportFallbackUnlessAbsent("agent_profile", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("agent_profile", error42);
   }
   writeFileAtomicSync(path31, serialized);
 }

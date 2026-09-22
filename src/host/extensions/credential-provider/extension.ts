@@ -112,8 +112,8 @@ async function startCredentialProvider(context2) {
   });
   const credentialFill = context2.deps[HostExtensions.CredentialFill];
   const filler = new BrowserCredentialFiller({
-    executeFill: (request3) => credentialFill.fill(request3),
-    reportFailure: (stage, error41) => context2.host.log(`credentials: ${stage} failed (${errorLogTag(error41)})`),
+    executeFill: (request5) => credentialFill.fill(request5),
+    reportFailure: (stage, error42) => context2.host.log(`credentials: ${stage} failed (${errorLogTag(error42)})`),
     audit
   });
   const lease = new CredentialFillLease({ log: (message) => context2.host.log(message) });
@@ -153,7 +153,7 @@ async function startCredentialProvider(context2) {
       getAccessToken: auth2.getAccessToken,
       getBackendUrl
     }),
-    reportFailure: (stage, error41) => context2.host.log(`credentials: ${stage} failed (${errorLogTag(error41)})`),
+    reportFailure: (stage, error42) => context2.host.log(`credentials: ${stage} failed (${errorLogTag(error42)})`),
     audit
   });
   context2.onStop(() => oneTimeCodeFollowUp.dispose());
@@ -169,7 +169,7 @@ async function startCredentialProvider(context2) {
       getAccessToken: auth2.getAccessToken,
       getBackendUrl
     }),
-    reportFailure: (stage, error41) => context2.host.log(`credentials: ${stage} failed (${errorLogTag(error41)})`),
+    reportFailure: (stage, error42) => context2.host.log(`credentials: ${stage} failed (${errorLogTag(error42)})`),
     audit
   });
   context2.onStop(() => passwordStepFollowUp.dispose());
@@ -208,9 +208,9 @@ async function startCredentialProvider(context2) {
       let decision;
       try {
         decision = await requestAutoFillOnBackend(args);
-      } catch (error41) {
+      } catch (error42) {
         auditRequest("failed", "auto-fill-request-failed");
-        context2.host.log(`credentials: auto-fill request failed (${errorLogTag(error41)})`);
+        context2.host.log(`credentials: auto-fill request failed (${errorLogTag(error42)})`);
         return {
           accepted: false,
           detail: "The 1Password login could not be filled automatically."

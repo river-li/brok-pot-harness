@@ -1,4 +1,5 @@
 var SandRunAbortError = class extends Error {
+  toolCallAuditOutcome = "cancelled";
   intentional;
   reason;
   constructor({ intentional, reason }) {

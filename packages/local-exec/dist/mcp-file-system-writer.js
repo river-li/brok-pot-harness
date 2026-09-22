@@ -2,7 +2,7 @@ var import_node_crypto26 = require("node:crypto");
 var import_promises40 = require("node:fs/promises");
 var import_node_os17 = require("node:os");
 var import_node_path72 = require("node:path");
-init_dist3();
+init_dist4();
 init_mcp_tool_annotations();
 init_mcp_pb();
 var __addDisposableResource13 = function(env, value, async) {
@@ -59,9 +59,9 @@ var __disposeResources13 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 function configuredServersBucket(count) {
   if (count === 0)
@@ -76,21 +76,11 @@ function configuredServersBucket(count) {
 }
 var mcpFilesystemDivergence = createCounter("mcp.filesystem.divergence", {
   description: "Divergence detected between MCP lease state and filesystem state",
-  labelNames: [
-    "divergence_type",
-    "mcp_source",
-    "configured_servers",
-    "mcp_version"
-  ]
+  labelNames: ["divergence_type", "mcp_source", "configured_servers", "mcp_version"]
 });
 var mcpFilesystemSyncCheck = createCounter("mcp.filesystem.sync_check", {
   description: "MCP filesystem sync check executed",
-  labelNames: [
-    "synced",
-    "mcp_source",
-    "configured_servers",
-    "mcp_version"
-  ]
+  labelNames: ["synced", "mcp_source", "configured_servers", "mcp_version"]
 });
 var mcpFilesystemSyncExpectedServers = createGauge("mcp.filesystem.sync_check.expected_servers", {
   description: "Number of expected MCP servers at last sync check",
@@ -129,8 +119,8 @@ var logger36 = {
   warn(ctx, message, metadata, options2) {
     baseLogger.warn(ctx, message, withStructuredLogOptIn(metadata, options2));
   },
-  error(ctx, message, error41, metadata, options2) {
-    baseLogger.error(ctx, message, error41, withStructuredLogOptIn(metadata, options2));
+  error(ctx, message, error42, metadata, options2) {
+    baseLogger.error(ctx, message, error42, withStructuredLogOptIn(metadata, options2));
   }
 };
 var MCPS_SUBDIR = "mcps";
@@ -204,9 +194,9 @@ ${CURSOR_DIR_GITIGNORE_MANAGED_END}
   let existingContent;
   try {
     existingContent = await (0, import_promises40.readFile)(gitignorePath, "utf-8");
-  } catch (error41) {
-    if (error41?.code !== "ENOENT") {
-      throw error41;
+  } catch (error42) {
+    if (error42?.code !== "ENOENT") {
+      throw error42;
     }
   }
   if (existingContent === void 0) {
@@ -431,8 +421,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       if (previousPromise) {
         try {
           await previousPromise;
-        } catch (error41) {
-          logger36.error(logCtx, "Error waiting for previous write", error41);
+        } catch (error42) {
+          logger36.error(logCtx, "Error waiting for previous write", error42);
         }
       }
       if (this.disposed) {
@@ -703,9 +693,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
   }
   async refreshServersFromLease(ctx, leaseChangeEvent) {
     const logCtx = this.getLogContext(ctx);
-    const uniqueServerIdentifiers = [
-      ...new Set(leaseChangeEvent.serverIdentifiers ?? [])
-    ];
+    const uniqueServerIdentifiers = [...new Set(leaseChangeEvent.serverIdentifiers ?? [])];
     logger36.info(logCtx, `fetchAndWrite: refreshing ${uniqueServerIdentifiers.length} targeted servers`, {
       serverIdentifiers: uniqueServerIdentifiers
     });
@@ -728,12 +716,12 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
           kind: "client",
           client
         };
-      } catch (error41) {
-        logger36.warn(logCtx, `getClient("${serverIdentifier}") threw during scoped refresh, preserving cached data: ${error41}`);
+      } catch (error42) {
+        logger36.warn(logCtx, `getClient("${serverIdentifier}") threw during scoped refresh, preserving cached data: ${error42}`);
         return {
           serverIdentifier,
           kind: "error",
-          error: error41
+          error: error42
         };
       }
     }));
@@ -804,9 +792,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       const logCtx = this.getLogContext(ctx);
       try {
         if (this.cachedServerData !== void 0 && leaseChangeEvent !== void 0 && !isFullMcpLeaseInvalidation(leaseChangeEvent)) {
-          const targetedServerIdentifiers = [
-            ...new Set(leaseChangeEvent.serverIdentifiers ?? [])
-          ];
+          const targetedServerIdentifiers = [...new Set(leaseChangeEvent.serverIdentifiers ?? [])];
           if (targetedServerIdentifiers.length > 0) {
             await this.refreshServersFromLease(ctx, leaseChangeEvent);
             return;
@@ -835,8 +821,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
         await this.writeServerData(ctx, serversToWrite, leaseSanitizedIdMap);
         this.cachedServerData = serversToWrite;
         this.fireOnDidWrite(serversToWrite);
-      } catch (error41) {
-        logger36.error(logCtx, "Error fetching/writing MCP state", error41);
+      } catch (error42) {
+        logger36.error(logCtx, "Error fetching/writing MCP state", error42);
       }
     } catch (e_1) {
       env_1.error = e_1;
@@ -873,8 +859,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       for (const server of servers) {
         try {
           newFingerprints.set(server.serverIdentifier, serverFingerprint(server));
-        } catch (error41) {
-          logger36.error(logCtx, "Error computing server fingerprint, will force write", error41, {
+        } catch (error42) {
+          logger36.error(logCtx, "Error computing server fingerprint, will force write", error42, {
             serverIdentifier: server.serverIdentifier
           });
           newFingerprints.set(server.serverIdentifier, `__error_${Date.now()}_${Math.random()}`);
@@ -952,8 +938,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
               }
             }
           }
-        } catch (error41) {
-          logger36.error(logCtx, "Error clearing mcps directory", error41);
+        } catch (error42) {
+          logger36.error(logCtx, "Error clearing mcps directory", error42);
         }
       }
       const toRemoveIds = Array.from(toRemove);
@@ -1055,8 +1041,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
         } catch {
         }
         await (0, import_promises40.rename)(stagingDir, liveDir);
-      } catch (error41) {
-        logger36.error(ctx, "Per-server swap failed", error41, {
+      } catch (error42) {
+        logger36.error(ctx, "Per-server swap failed", error42, {
           serverIdentifier: server.serverIdentifier,
           sanitizedId: server.sanitizedId
         }, {
@@ -1067,7 +1053,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
         } catch {
         }
         await (0, import_promises40.rm)(stagingDir, { recursive: true, force: true });
-        throw error41;
+        throw error42;
       }
       await (0, import_promises40.rm)(prevDir, { recursive: true, force: true }).catch(() => {
       });
@@ -1235,8 +1221,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
             }, timeoutMs);
           })
         ]);
-      } catch (error41) {
-        logger36.error(logCtx, "Error waiting for pending write to complete", error41);
+      } catch (error42) {
+        logger36.error(logCtx, "Error waiting for pending write to complete", error42);
       } finally {
         clearTimeout(timer);
       }
@@ -1247,8 +1233,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
     }
     try {
       await this.writePromise;
-    } catch (error41) {
-      logger36.error(logCtx, "Error waiting for pending write to complete", error41);
+    } catch (error42) {
+      logger36.error(logCtx, "Error waiting for pending write to complete", error42);
     }
     return false;
   }

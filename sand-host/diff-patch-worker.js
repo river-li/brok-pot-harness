@@ -461,14 +461,7 @@ function splitLines(text) {
 // ../packages/agent/src/tools/core/edit/diff-patch-worker.ts
 function calculateDiffPatch(params) {
   const fileName = params.filePath || "";
-  const patch = createPatch(
-    fileName,
-    params.original,
-    params.new,
-    "",
-    "",
-    { context: 2 }
-  );
+  const patch = createPatch(fileName, params.original, params.new, "", "", { context: 2 });
   return {
     patch
   };

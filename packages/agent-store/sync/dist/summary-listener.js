@@ -4,9 +4,9 @@ function notifySummaryResult({ agentId, summary, listener, pathHashSalt }) {
     return;
   }
   let firstError;
-  for (const error41 of summary.errors) {
+  for (const error42 of summary.errors) {
     try {
-      dispatchError({ agentId, error: error41, listener, pathHashSalt });
+      dispatchError({ agentId, error: error42, listener, pathHashSalt });
     } catch (err) {
       if (firstError === void 0) {
         firstError = err;
@@ -17,22 +17,22 @@ function notifySummaryResult({ agentId, summary, listener, pathHashSalt }) {
     throw firstError;
   }
 }
-function dispatchError({ agentId, error: error41, listener, pathHashSalt }) {
-  if (error41.code === "symlink_refused" || error41.code === "toctou_swap_refused") {
+function dispatchError({ agentId, error: error42, listener, pathHashSalt }) {
+  if (error42.code === "symlink_refused" || error42.code === "toctou_swap_refused") {
     safeNotifyListener(listener, "onSymlinkRefused", {
       agentId,
       op: "fs_read",
       relPathHash: hashRelPath({
-        relPath: error41.relPath,
+        relPath: error42.relPath,
         salt: requirePathHashSalt(pathHashSalt)
       })
     });
     return;
   }
-  if (looksLikeDiskFull(error41)) {
+  if (looksLikeDiskFull(error42)) {
     safeNotifyListener(listener, "onDiskFull", {
       agentId,
-      op: error41.code === "fs_read_failed" ? "fs_read" : "fs_write"
+      op: error42.code === "fs_read_failed" ? "fs_read" : "fs_write"
     });
     return;
   }
@@ -46,8 +46,8 @@ function requirePathHashSalt(pathHashSalt) {
   }
   return pathHashSalt;
 }
-function looksLikeDiskFull(error41) {
-  return error41.code === "fs_write_failed" || error41.code === "fs_read_failed";
+function looksLikeDiskFull(error42) {
+  return error42.code === "fs_write_failed" || error42.code === "fs_read_failed";
 }
 function notifySummaryMetrics({ agentId, summary, listener, metricsEmitter, pathHashSalt }) {
   let firstError;
@@ -84,8 +84,8 @@ function emitMetrics({ agentId, summary, metricsEmitter, pathHashSalt }) {
   }
   const metricsSalt = pathHashSalt !== void 0 && pathHashSalt.length > 0 ? pathHashSalt : void 0;
   if (metricsEmitter.onError !== void 0) {
-    for (const error41 of summary.errors) {
-      const event = Object.assign({ agentId, op: opForCode(error41.code), errorClass: error41.code, relPathHash: error41.relPath === void 0 || metricsSalt === void 0 ? void 0 : hashRelPath({ relPath: error41.relPath, salt: metricsSalt }) }, error41.timeoutClass === void 0 ? {} : { timeoutClass: error41.timeoutClass });
+    for (const error42 of summary.errors) {
+      const event = Object.assign({ agentId, op: opForCode(error42.code), errorClass: error42.code, relPathHash: error42.relPath === void 0 || metricsSalt === void 0 ? void 0 : hashRelPath({ relPath: error42.relPath, salt: metricsSalt }) }, error42.timeoutClass === void 0 ? {} : { timeoutClass: error42.timeoutClass });
       try {
         metricsEmitter.onError(event);
       } catch (err) {

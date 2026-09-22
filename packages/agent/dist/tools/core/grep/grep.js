@@ -1,6 +1,6 @@
-init_dist3();
+init_dist4();
 init_zod();
-var logger83 = createLogger("tools/grep");
+var logger84 = createLogger("tools/grep");
 function coerceBooleanLike(val) {
   if (typeof val === "string") {
     const lower = val.toLowerCase();

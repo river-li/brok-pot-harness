@@ -42,8 +42,8 @@ async function listPromotableRooms(deps) {
         next++;
       }
     });
-  } catch (error41) {
-    if (!(error41 instanceof DeadlineExceededError)) throw error41;
+  } catch (error42) {
+    if (!(error42 instanceof DeadlineExceededError)) throw error42;
     for (const { agent } of quiet.slice(next)) {
       skipped2.push({ roomId: agent.id, reason: "flush_timeout" });
     }

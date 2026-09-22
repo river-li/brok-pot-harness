@@ -13,28 +13,28 @@ var SQLITE_PRIMARY_CODES = /* @__PURE__ */ new Map([
   ["SQLITE_CANTOPEN", SQLITE_CANTOPEN],
   ["SQLITE_NOTADB", SQLITE_NOTADB]
 ]);
-function sqlitePrimaryCode(error41) {
-  if (!(error41 instanceof Error)) return void 0;
-  if ("errcode" in error41 && typeof error41.errcode === "number" && Number.isInteger(error41.errcode)) {
-    return error41.errcode & 255;
+function sqlitePrimaryCode(error42) {
+  if (!(error42 instanceof Error)) return void 0;
+  if ("errcode" in error42 && typeof error42.errcode === "number" && Number.isInteger(error42.errcode)) {
+    return error42.errcode & 255;
   }
-  if ("code" in error41 && typeof error41.code === "string") {
-    return SQLITE_PRIMARY_CODES.get(error41.code.split("_", 2).join("_"));
+  if ("code" in error42 && typeof error42.code === "string") {
+    return SQLITE_PRIMARY_CODES.get(error42.code.split("_", 2).join("_"));
   }
   return void 0;
 }
-function isSqliteBusyError(error41) {
-  const code = sqlitePrimaryCode(error41);
+function isSqliteBusyError(error42) {
+  const code = sqlitePrimaryCode(error42);
   return code === SQLITE_BUSY || code === SQLITE_LOCKED;
 }
-function isSqliteIoError(error41) {
-  return sqlitePrimaryCode(error41) === SQLITE_IOERR;
+function isSqliteIoError(error42) {
+  return sqlitePrimaryCode(error42) === SQLITE_IOERR;
 }
-function isSqliteCantOpenError(error41) {
-  return sqlitePrimaryCode(error41) === SQLITE_CANTOPEN;
+function isSqliteCantOpenError(error42) {
+  return sqlitePrimaryCode(error42) === SQLITE_CANTOPEN;
 }
-function isSqliteCorruptError(error41) {
-  const code = sqlitePrimaryCode(error41);
+function isSqliteCorruptError(error42) {
+  const code = sqlitePrimaryCode(error42);
   return code === SQLITE_CORRUPT || code === SQLITE_NOTADB;
 }
 async function retrySqliteBusy(operation, options2 = {}) {
@@ -49,9 +49,9 @@ async function retrySqliteBusy(operation, options2 = {}) {
   for (let attempt = 1; attempt <= attempts2; attempt++) {
     try {
       return await operation();
-    } catch (error41) {
-      if (!isSqliteBusyError(error41)) throw error41;
-      lastError = error41;
+    } catch (error42) {
+      if (!isSqliteBusyError(error42)) throw error42;
+      lastError = error42;
       if (attempt < attempts2) {
         await backoff2.schedule(attempt).elapsed;
       }

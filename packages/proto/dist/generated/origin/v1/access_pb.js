@@ -248,6 +248,7 @@ var GrantPrincipal = class _GrantPrincipal extends __protoMessage3151 {
     this.groupAdminCount = 0;
     this.groupMemberCount = 0;
     this.groupScope = GroupScope.UNSPECIFIED;
+    this.isIdpSynced = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -263,7 +264,7 @@ var GrantPrincipal = class _GrantPrincipal extends __protoMessage3151 {
     return proto3.util.equals(_GrantPrincipal, a, b2);
   }
   static $() {
-    return ["GrantPrincipal|1 kind 9|2 external_id 9|3 display_name 9|4 email 9|5 group_admin_count 5|6 group_member_count 5|7 group_scope #0", GroupScope];
+    return ["GrantPrincipal|1 kind 9|2 external_id 9|3 display_name 9|4 email 9|5 group_admin_count 5|6 group_member_count 5|7 group_scope #0|8 is_idp_synced 8", GroupScope];
   }
 };
 var RepoGrantRow = class _RepoGrantRow extends __protoMessage3151 {
@@ -741,6 +742,73 @@ var SetNamespaceGroupAccessResponse = class _SetNamespaceGroupAccessResponse ext
   }
   static $() {
     return ["SetNamespaceGroupAccessResponse|1 namespace #0|2 self_admin_granted 8", OriginNamespace];
+  }
+};
+var ListGroupGrantsInNamespaceRequest = class _ListGroupGrantsInNamespaceRequest extends __protoMessage3151 {
+  constructor(data) {
+    super();
+    this.namespaceSlug = "";
+    this.groupId = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ListGroupGrantsInNamespaceRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ListGroupGrantsInNamespaceRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ListGroupGrantsInNamespaceRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ListGroupGrantsInNamespaceRequest, a, b2);
+  }
+  static $() {
+    return ["ListGroupGrantsInNamespaceRequest|1 namespace_slug 9|2 group_id 9"];
+  }
+};
+var GroupRepoGrant = class _GroupRepoGrant extends __protoMessage3151 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _GroupRepoGrant().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _GroupRepoGrant().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _GroupRepoGrant().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_GroupRepoGrant, a, b2);
+  }
+  static $() {
+    return ["GroupRepoGrant|1 repository #0|2 namespace_policy #1|3 repo_policy #1|4 effective_policy #1", ClientRepoIdentifier, GrantPolicyRef];
+  }
+};
+var ListGroupGrantsInNamespaceResponse = class _ListGroupGrantsInNamespaceResponse extends __protoMessage3151 {
+  constructor(data) {
+    super();
+    this.repoGrants = [];
+    this.listTruncated = false;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ListGroupGrantsInNamespaceResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ListGroupGrantsInNamespaceResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ListGroupGrantsInNamespaceResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ListGroupGrantsInNamespaceResponse, a, b2);
+  }
+  static $() {
+    return ["ListGroupGrantsInNamespaceResponse|1 principal #0|2 namespace_policy #1|3 repo_grants #2*|4 list_truncated 8", GrantPrincipal, GrantPolicyRef, GroupRepoGrant];
   }
 };
 var ListNamespaceAssignablePoliciesRequest = class _ListNamespaceAssignablePoliciesRequest extends __protoMessage3151 {

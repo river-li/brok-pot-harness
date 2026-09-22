@@ -91,8 +91,8 @@ var SandMcpAuthWatchLifecycle = class {
           ...rowScope
         });
         confirmedBlocked = fresh == null || fresh.disabledByTeamAdminPolicy === true;
-      } catch (error41) {
-        reportMcpHostEdgeFailure("auth-policy-recheck", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("auth-policy-recheck", error42);
         confirmedBlocked = false;
       }
       if (confirmedBlocked) {
@@ -148,7 +148,7 @@ var SandMcpAuthWatchLifecycle = class {
           forceReauth
         }
       );
-    } catch (error41) {
+    } catch (error42) {
       this.deps.onConnectorAuth?.({
         phase: "flow_started",
         outcome: "failed",
@@ -157,11 +157,11 @@ var SandMcpAuthWatchLifecycle = class {
         serverUrl,
         error: SandError.connectorAuthStartFailed({
           reason: startFailureReason(
-            isDeadlineExceededConnectError(error41) ? "rpc_timeout" : "probe_failed"
+            isDeadlineExceededConnectError(error42) ? "rpc_timeout" : "probe_failed"
           )
         })
       });
-      throw error41;
+      throw error42;
     }
     const probeReachedServerWithoutAuth = status.isAvailable && !status.requiresAuth;
     if (!forceReauth && probeReachedServerWithoutAuth) {
@@ -284,8 +284,8 @@ var SandMcpAuthWatchLifecycle = class {
       registered.poll = this.authWatchPolling.start(async () => {
         try {
           await this.pollPendingAuthWatch(watchKey2);
-        } catch (error41) {
-          reportMcpHostEdgeFailure("auth-watch-poll", error41);
+        } catch (error42) {
+          reportMcpHostEdgeFailure("auth-watch-poll", error42);
         }
       });
     }
@@ -406,8 +406,8 @@ var SandMcpAuthWatchLifecycle = class {
             ...watch4.grokBotAgentId == null ? {} : { grokBotAgentId: watch4.grokBotAgentId }
           })
         );
-      } catch (error41) {
-        reportMcpHostEdgeFailure("auth-watch-poll", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("auth-watch-poll", error42);
         resolveFailed = true;
       }
       if (this.pendingAuthWatches.get(watchKey2) !== watch4) return;

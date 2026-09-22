@@ -52,9 +52,9 @@ var __disposeResources19 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var __classPrivateFieldGet3 = function(receiver, state, kind, f2) {
   if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
@@ -64,6 +64,9 @@ var __classPrivateFieldGet3 = function(receiver, state, kind, f2) {
 var _ConversationStateHandle_instances;
 var _ConversationStateHandle_suppressesMultitask;
 var _ConversationStateHandle_createAgentTurn;
+function persistsWithoutThreshold(info2) {
+  return info2.triggerReason === "idle_timer";
+}
 var _logger3 = createLogger("@anysphere/agent:state");
 var textDecoder2 = new TextDecoder();
 var MODEL_SWITCH_REMINDER = `<system_reminder>
@@ -973,8 +976,8 @@ var ConversationStateHandle = class _ConversationStateHandle {
                 imagePartCount: imageStats.imagePartCount
               }
             };
-          } catch (error41) {
-            return { kind: "failed", error: error41 };
+          } catch (error42) {
+            return { kind: "failed", error: error42 };
           }
         }, { max: restoreBlobFetchConcurrency });
         const missingRootPromptBlobIdHexes = rootPromptMessageLoads.flatMap((load2) => load2.kind === "missing" ? [load2.blobIdHex] : []);
@@ -1074,7 +1077,10 @@ var ConversationStateHandle = class _ConversationStateHandle {
         phase: "file_states",
         ...largeLabel
       });
-      conversationStateRestorePhaseMs.histogram(span.ctx, subagentStateRefsPhaseMs, { phase: "subagent_state_refs", ...largeLabel });
+      conversationStateRestorePhaseMs.histogram(span.ctx, subagentStateRefsPhaseMs, {
+        phase: "subagent_state_refs",
+        ...largeLabel
+      });
       conversationStateRestorePhaseMs.histogram(span.ctx, otherPhaseMs, {
         phase: "other",
         ...largeLabel
@@ -1209,9 +1215,7 @@ var ConversationStateHandle = class _ConversationStateHandle {
     }
     this.selfSummaryCount = this.conversationStateStructure.selfSummaryCount ?? 0;
     this.messageCountAtLastCompaction = this.conversationStateStructure.messageCountAtLastCompaction;
-    this.recentUserMessageIds = [
-      ...this.conversationStateStructure.recentUserMessageIds ?? []
-    ];
+    this.recentUserMessageIds = [...this.conversationStateStructure.recentUserMessageIds ?? []];
     this.olderAgentTurnCount = this.conversationStateStructure.recentUserMessageIdsOlderTurnCount ?? this.turns.length;
     if (this.conversationStateStructure.subagentStates) {
       for (const [subagentId, redactedState] of this.conversationStateStructure.subagentStates) {
@@ -1291,15 +1295,17 @@ var ConversationStateHandle = class _ConversationStateHandle {
         if (!this.subagentStates.has(subagentId)) {
           return { kind: "missing", blobIdHex: toHex3(blobId) };
         }
-        _logger3.warn(ctx, "Subagent state ref blob not found; falling back to inline entry", { subagentId });
+        _logger3.warn(ctx, "Subagent state ref blob not found; falling back to inline entry", {
+          subagentId
+        });
         return { kind: "fallback" };
       }
       try {
         const redactedState = this.serdes.subagentPersistedState.deserialize(blob);
         const state = fromRedactedSubagentPersistedState(redactedState, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
         return { kind: "loaded", subagentId, state, blobId, blobData: blob };
-      } catch (error41) {
-        return { kind: "failed", error: error41 };
+      } catch (error42) {
+        return { kind: "failed", error: error42 };
       }
     }, { max: this.restoreBlobFetchConcurrency });
     const missingBlobIdHexes = loadedEntries.flatMap((entry) => entry.kind === "missing" ? [entry.blobIdHex] : []);
@@ -1827,10 +1833,7 @@ var ConversationStateHandle = class _ConversationStateHandle {
           mode: "passthrough"
         });
         const appendedRootPromptMessagesJson = await serializeRootPromptMessages(rootPromptMessages);
-        return [
-          ...this.originalRootPromptMessagesJson,
-          ...appendedRootPromptMessagesJson
-        ];
+        return [...this.originalRootPromptMessagesJson, ...appendedRootPromptMessagesJson];
       })();
       const newTurnsPromise = Promise.all(this.turns.map((ref) => {
         setBlobCount++;
@@ -2266,7 +2269,9 @@ _ConversationStateHandle_instances = /* @__PURE__ */ new WeakSet(), _Conversatio
       const stateBeforeMessageBytes = conversationStateStructureSerde.serialize(fromRedactedConversationStateStructure(stateBeforeMessage, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
       const stateBeforeMessageBlobId2 = await getBlobId(stateBeforeMessageBytes);
       stateSnapshotCompletedAt = performance.now();
-      stateSnapshotDuration.histogram(ctx, stateSnapshotCompletedAt - stateSnapshotStart, { overlap: overlapPreTurnStateSnapshot ? "true" : "false" });
+      stateSnapshotDuration.histogram(ctx, stateSnapshotCompletedAt - stateSnapshotStart, {
+        overlap: overlapPreTurnStateSnapshot ? "true" : "false"
+      });
       getBlobMetadataCallback(this.blobStore)?.({
         blobId: stateBeforeMessageBlobId2,
         blobType: {
@@ -2394,7 +2399,8 @@ ${branchReminder}` : branchReminder
       projectName: projectChildName,
       storeDir: projectSubagentStoreDir,
       subagentId: projectSubagentId,
-      promptText: config2.projectPromptTextGenerator?.()
+      promptText: config2.projectPromptTextGenerator?.(),
+      mountedAgentStores: requestContext.env?.mountedAgentStores
     }) : projectSubagentStoreDir !== void 0 && projectSubagentId !== void 0 ? formatProjectSubagentPrompt({
       storeDir: projectSubagentStoreDir,
       subagentId: projectSubagentId

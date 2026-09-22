@@ -59,8 +59,8 @@ var SandNotifyBusClient = class {
     while (!stopSignal.aborted) {
       try {
         await this.streamOnce(stopSignal);
-      } catch (error41) {
-        if (!stopSignal.aborted) this.deps.onStreamError(error41);
+      } catch (error42) {
+        if (!stopSignal.aborted) this.deps.onStreamError(error42);
       }
       if (stopSignal.aborted) return;
       const wasHealthy = this.connectedAtMs != null && Date.now() - this.connectedAtMs >= HEALTHY_CONNECTION_MIN_LIFETIME_MS;
@@ -70,8 +70,8 @@ var SandNotifyBusClient = class {
         const delay5 = this.deps.reconnectBackoff.schedule(attempt, stopSignal);
         try {
           await delay5.elapsed;
-        } catch (error41) {
-          if (!stopSignal.aborted) this.deps.onStreamError(error41);
+        } catch (error42) {
+          if (!stopSignal.aborted) this.deps.onStreamError(error42);
           return;
         } finally {
           delay5.dispose();

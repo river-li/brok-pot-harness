@@ -25,21 +25,21 @@ function buildGitCommitsUserContent(gitCommits) {
 function formatSingleCommit(commit) {
   const sha = commit.sha ?? "unknown";
   const message = commit.message ?? "";
-  const description10 = commit.description;
+  const description9 = commit.description;
   const diff = commit.diff ?? "";
   const headerLength = `Commit: ${sha}
 Message: ${message}
-`.length + (description10 ? `Description:
-${description10}
+`.length + (description9 ? `Description:
+${description9}
 `.length : 0) + `
 Diff:
 `.length;
   const availableCharsForDiff = Math.max(0, MAX_GIT_COMMIT_CHAR_LENGTH - headerLength);
   const truncatedDiff = diff.length > availableCharsForDiff ? diff.slice(0, availableCharsForDiff - GIT_COMMIT_DIFF_TRUNCATION_NOTICE.length) + GIT_COMMIT_DIFF_TRUNCATION_NOTICE : diff;
   const parts = [`Commit: ${sha}`, `Message: ${message}`];
-  if (description10?.trim()) {
+  if (description9?.trim()) {
     parts.push(`Description:
-${description10}`);
+${description9}`);
   }
   if (truncatedDiff) {
     parts.push(`

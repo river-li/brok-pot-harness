@@ -2,9 +2,9 @@ var import_node_child_process9 = require("node:child_process");
 var fs20 = __toESM(require("node:fs/promises"), 1);
 var path21 = __toESM(require("node:path"), 1);
 var import_node_util7 = require("node:util");
-init_dist3();
+init_dist4();
 init_record_screen_exec_pb();
-init_dist2();
+init_dist3();
 init_esm();
 var __addDisposableResource15 = function(env, value, async) {
   if (value !== null && value !== void 0) {
@@ -60,19 +60,19 @@ var __disposeResources15 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var execFileAsync3 = (0, import_node_util7.promisify)(import_node_child_process9.execFile);
 function hasFfmpegExited(child) {
   return child.exitCode !== null || child.signalCode !== null || child.killed;
 }
-function isErrnoCode(error41, code) {
-  return typeof error41 === "object" && error41 !== null && "code" in error41 && error41.code === code;
+function isErrnoCode(error42, code) {
+  return typeof error42 === "object" && error42 !== null && "code" in error42 && error42.code === code;
 }
-function errorMessage3(error41) {
-  return error41 instanceof Error ? error41.message : String(error41);
+function errorMessage3(error42) {
+  return error42 instanceof Error ? error42.message : String(error42);
 }
 function describeRecordedFfmpegExit(state, saveStartedAtMs) {
   const exitCode = state.ffmpegExitCode ?? state.childProcess.exitCode;
@@ -272,22 +272,22 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
     try {
       await fs20.rename(sourcePath, destinationPath);
       return;
-    } catch (error41) {
-      if (!isErrnoCode(error41, "EXDEV")) {
-        throw error41;
+    } catch (error42) {
+      if (!isErrnoCode(error42, "EXDEV")) {
+        throw error42;
       }
     }
     try {
       await fs20.copyFile(sourcePath, destinationPath);
-    } catch (error41) {
+    } catch (error42) {
       await fs20.rm(destinationPath, { force: true }).catch(() => void 0);
-      throw error41;
+      throw error42;
     }
     try {
       await fs20.unlink(sourcePath);
-    } catch (error41) {
+    } catch (error42) {
       await fs20.rm(destinationPath, { force: true }).catch(() => void 0);
-      throw error41;
+      throw error42;
     }
   }
   /**
@@ -306,9 +306,9 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         const handle = await fs20.open(candidatePath, "wx");
         await handle.close();
         return candidatePath;
-      } catch (error41) {
-        if (!isErrnoCode(error41, "EEXIST")) {
-          throw error41;
+      } catch (error42) {
+        if (!isErrnoCode(error42, "EEXIST")) {
+          throw error42;
         }
         candidateFilename = `${baseName}-${suffix}${extension3}`;
         suffix++;
@@ -428,8 +428,8 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         }
       }
       console.warn(`[record-screen] Unexpected ffprobe r_frame_rate output "${rate}", defaulting to ${_LocalRecordScreenExecutor.PROXY_TARGET_FPS}fps`);
-    } catch (error41) {
-      console.warn(`[record-screen] Failed to read video framerate: ${error41 instanceof Error ? error41.message : String(error41)}, defaulting to ${_LocalRecordScreenExecutor.PROXY_TARGET_FPS}fps`);
+    } catch (error42) {
+      console.warn(`[record-screen] Failed to read video framerate: ${error42 instanceof Error ? error42.message : String(error42)}, defaulting to ${_LocalRecordScreenExecutor.PROXY_TARGET_FPS}fps`);
     }
     return _LocalRecordScreenExecutor.PROXY_TARGET_FPS;
   }
@@ -448,8 +448,8 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
     try {
       const displayResult = await detectDisplay(this.display);
       refreshRate = displayResult.display.refreshRate;
-    } catch (error41) {
-      console.warn(`[record-screen] Failed to detect refresh rate: ${error41 instanceof Error ? error41.message : String(error41)}, using default ${_LocalRecordScreenExecutor.DEFAULT_REFRESH_RATE}Hz`);
+    } catch (error42) {
+      console.warn(`[record-screen] Failed to detect refresh rate: ${error42 instanceof Error ? error42.message : String(error42)}, using default ${_LocalRecordScreenExecutor.DEFAULT_REFRESH_RATE}Hz`);
       refreshRate = _LocalRecordScreenExecutor.DEFAULT_REFRESH_RATE;
     }
     const args = [
@@ -550,8 +550,8 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
           stderr += data.toString();
         }
       });
-      child.once("error", (error41) => {
-        reject2(new Error(`ffmpeg ${label} failed to start: ${error41 instanceof Error ? error41.message : String(error41)}`));
+      child.once("error", (error42) => {
+        reject2(new Error(`ffmpeg ${label} failed to start: ${error42 instanceof Error ? error42.message : String(error42)}`));
       });
       child.once("close", (code) => {
         if (code === 0) {
@@ -692,9 +692,9 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         clearTimeout(timeout2);
         resolve29();
       });
-      childProcess.once("error", (error41) => {
+      childProcess.once("error", (error42) => {
         clearTimeout(timeout2);
-        reject2(new Error(`Error stopping ffmpeg: ${error41.message}`));
+        reject2(new Error(`Error stopping ffmpeg: ${error42.message}`));
       });
       try {
         try {
@@ -702,13 +702,13 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         } catch {
           process.kill(pid, "SIGTERM");
         }
-      } catch (error41) {
+      } catch (error42) {
         clearTimeout(timeout2);
-        if (isErrnoCode(error41, "ESRCH")) {
+        if (isErrnoCode(error42, "ESRCH")) {
           resolve29();
           return;
         }
-        reject2(new Error(`Failed to send SIGTERM: ${error41 instanceof Error ? error41.message : String(error41)}`));
+        reject2(new Error(`Failed to send SIGTERM: ${error42 instanceof Error ? error42.message : String(error42)}`));
       }
     });
   }
@@ -723,9 +723,9 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         if (!hasFfmpegExited(state.childProcess) && state.childProcess.pid) {
           await this.stopFfmpegRecording(state);
         }
-      } catch (error41) {
-        stopError = error41;
-        console.warn(`[record-screen] Failed to stop ffmpeg: ${errorMessage3(error41)}`);
+      } catch (error42) {
+        stopError = error42;
+        console.warn(`[record-screen] Failed to stop ffmpeg: ${errorMessage3(error42)}`);
       }
       const ffmpegStartedEpochMs = state.ffmpegStartedEpochMs ?? recordingStartEpochMs;
       const stagingSessionDir = state.sessionDir;
@@ -736,10 +736,10 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       let sourceFps;
       try {
         await fs20.access(proxyPath, fs20.constants.R_OK);
-      } catch (error41) {
+      } catch (error42) {
         await this.cleanupRecording(state);
         this.clearActiveRecordingIfCurrent(state);
-        const message = isErrnoCode(error41, "ENOENT") ? `Recording proxy not found at ${proxyPath}` : `Recording proxy at ${proxyPath} could not be validated: ${errorMessage3(error41)}`;
+        const message = isErrnoCode(error42, "ENOENT") ? `Recording proxy not found at ${proxyPath}` : `Recording proxy at ${proxyPath} could not be validated: ${errorMessage3(error42)}`;
         return new RecordScreenResult({
           result: {
             case: "failure",
@@ -758,9 +758,9 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         if (actualVideoDurationMs <= 0) {
           throw new Error(`Recording proxy has zero duration at ${proxyPath}`);
         }
-      } catch (error41) {
+      } catch (error42) {
         await this.cleanupRecording(state);
-        const detail = errorMessage3(error41);
+        const detail = errorMessage3(error42);
         const message = detail.includes(proxyPath) ? detail : `Recording proxy at ${proxyPath} could not be validated: ${detail}`;
         return new RecordScreenResult({
           result: {
@@ -815,14 +815,14 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
           const polishedVideoPath = await this.renderPolished(stagingSessionDir);
           await this.movePolishedVideo(polishedVideoPath, finalVideoPath);
         }
-      } catch (error41) {
+      } catch (error42) {
         await fs20.rm(finalVideoPath, { force: true }).catch(() => void 0);
-        throw error41;
+        throw error42;
       }
       try {
         await fs20.rm(stagingSessionDir, { force: true, recursive: true });
-      } catch (error41) {
-        console.warn(`[record-screen] Failed to remove staging session ${stagingSessionDir}: ${errorMessage3(error41)}`);
+      } catch (error42) {
+        console.warn(`[record-screen] Failed to remove staging session ${stagingSessionDir}: ${errorMessage3(error42)}`);
       }
       this.clearActiveRecordingIfCurrent(state);
       return new RecordScreenResult({
@@ -835,14 +835,14 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
           })
         }
       });
-    } catch (error41) {
+    } catch (error42) {
       await this.cleanupRecording(state);
       this.invokeStoppedCallbackIfCurrent(state);
       return new RecordScreenResult({
         result: {
           case: "failure",
           value: new RecordScreenFailure({
-            error: errorMessage3(error41)
+            error: errorMessage3(error42)
           })
         }
       });
@@ -854,12 +854,12 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       const _span = __addDisposableResource15(env_1, createSpan(parentCtx.withName("LocalRecordScreenExecutor.execute")), false);
       try {
         await this.ensureRecordingDirectoryExists();
-      } catch (error41) {
+      } catch (error42) {
         return new RecordScreenResult({
           result: {
             case: "failure",
             value: new RecordScreenFailure({
-              error: `Failed to create recording directory: ${error41 instanceof Error ? error41.message : String(error41)}. Ensure the parent directory exists and has write permissions, or run: sudo mkdir -p ${this.stagingDir} ${this.artifactsDir} && sudo chmod 777 ${this.stagingDir} ${this.artifactsDir}`
+              error: `Failed to create recording directory: ${error42 instanceof Error ? error42.message : String(error42)}. Ensure the parent directory exists and has write permissions, or run: sudo mkdir -p ${this.stagingDir} ${this.artifactsDir} && sudo chmod 777 ${this.stagingDir} ${this.artifactsDir}`
             })
           }
         });
@@ -913,8 +913,8 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
             let ffmpegStartedEpochMs;
             try {
               ffmpegStartedEpochMs = await videoStartedPromise;
-            } catch (error41) {
-              throw new Error(`ffmpeg failed to start encoding: ${error41 instanceof Error ? error41.message : String(error41)}`);
+            } catch (error42) {
+              throw new Error(`ffmpeg failed to start encoding: ${error42 instanceof Error ? error42.message : String(error42)}`);
             }
             const state = {
               childProcess,
@@ -948,7 +948,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
                 })
               }
             });
-          } catch (error41) {
+          } catch (error42) {
             if (inputEventLogger) {
               try {
                 await inputEventLogger.stop();
@@ -970,7 +970,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
               result: {
                 case: "failure",
                 value: new RecordScreenFailure({
-                  error: error41 instanceof Error ? error41.message : String(error41)
+                  error: error42 instanceof Error ? error42.message : String(error42)
                 })
               }
             });
@@ -1040,7 +1040,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
                 value: new RecordScreenDiscardSuccess()
               }
             });
-          } catch (error41) {
+          } catch (error42) {
             await this.cleanupRecording(state);
             this.invokeStoppedCallbackOnce();
             const sessionDir = state.sessionDir;
@@ -1051,7 +1051,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
             } catch {
             }
             this.activeRecording = null;
-            const detail = error41 instanceof Error ? error41.message : String(error41);
+            const detail = error42 instanceof Error ? error42.message : String(error42);
             const suffix = removed ? "" : `. Session may remain at: ${sessionDir}`;
             return new RecordScreenResult({
               result: {

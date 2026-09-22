@@ -50,8 +50,8 @@ var SandSourceMap = class {
       const raw = await import_node_fs6.promises.readFile(this.path, "utf8");
       const parsed2 = sourceMapSchema.safeParse(JSON.parse(raw));
       this.cache = parsed2.success ? { ...parsed2.data } : {};
-    } catch (error41) {
-      reportFallbackUnlessAbsent("source_map_service", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("source_map_service", error42);
       this.cache = {};
     }
     return this.cache;

@@ -1,40 +1,24 @@
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 process.umask(0o077);
 
 const MANAGED_ROOT = process.env.SAND_MANAGED_ROOT || "/opt/sand-managed";
 const ASSIGNMENT_PATH =
-  process.env.SAND_MANIFEST_ASSIGNMENT_PATH ||
-  join(MANAGED_ROOT, "assignment.json");
-const MANIFESTS_ROOT =
-  process.env.SAND_MANIFESTS_ROOT || join(MANAGED_ROOT, "manifests");
-const RECEIPTS_ROOT =
-  process.env.SAND_SETUP_RECEIPTS_ROOT || join(MANAGED_ROOT, "receipts");
-const STATUS_PATH =
-  process.env.SAND_SETUP_STATUS_PATH ||
-  "/run/sand/managed-setup-status.json";
+  process.env.SAND_MANIFEST_ASSIGNMENT_PATH || join(MANAGED_ROOT, "assignment.json");
+const MANIFESTS_ROOT = process.env.SAND_MANIFESTS_ROOT || join(MANAGED_ROOT, "manifests");
+const RECEIPTS_ROOT = process.env.SAND_SETUP_RECEIPTS_ROOT || join(MANAGED_ROOT, "receipts");
+const STATUS_PATH = process.env.SAND_SETUP_STATUS_PATH || "/run/sand/managed-setup-status.json";
 const LOCK_PATH =
-  process.env.SAND_SETUP_LOCK_PATH ||
-  join(dirname(STATUS_PATH), "managed-setup-converge.lock");
-const IMAGE_SHA_PATH =
-  process.env.SAND_BOX_IMAGE_SHA_PATH || "/etc/sand-box-image-sha";
+  process.env.SAND_SETUP_LOCK_PATH || join(dirname(STATUS_PATH), "managed-setup-converge.lock");
+const IMAGE_SHA_PATH = process.env.SAND_BOX_IMAGE_SHA_PATH || "/etc/sand-box-image-sha";
 const SCHEMA_VERSION = 1;
 const EXECUTOR_VERSION = "2.0.0";
 const SAFE_PATH_SEGMENT = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
 const DEFAULT_SCRIPT_TIMEOUT_MS = 30 * 60 * 1000;
-const configuredScriptTimeoutMs = Number(
-  process.env.SAND_SETUP_SCRIPT_TIMEOUT_MS
-);
+const configuredScriptTimeoutMs = Number(process.env.SAND_SETUP_SCRIPT_TIMEOUT_MS);
 const SCRIPT_TIMEOUT_MS =
   Number.isFinite(configuredScriptTimeoutMs) && configuredScriptTimeoutMs > 0
     ? configuredScriptTimeoutMs
@@ -135,7 +119,7 @@ function parseAssignment(raw) {
     !assignment.manifests.every(isValidManifestRef)
   ) {
     throw new Error(
-      "expected { schemaVersion: 1, manifests: [{ scope: { kind, id }, manifestId, revision }] }"
+      "expected { schemaVersion: 1, manifests: [{ scope: { kind, id }, manifestId, revision }] }",
     );
   }
   const keys = assignment.manifests.map(manifestRefKey);
@@ -168,14 +152,11 @@ function parseManifest(raw, assigned) {
     manifest.revision === assigned.revision &&
     Array.isArray(manifest.entries) &&
     manifest.entries.every(isValidEntry) &&
-    new Set(manifest.entries.map(entry => entry.id)).size ===
-      manifest.entries.length
+    new Set(manifest.entries.map((entry) => entry.id)).size === manifest.entries.length
       ? manifest.entries
       : null;
   if (entries === null) {
-    throw new Error(
-      "manifest identity or shape does not match its assignment"
-    );
+    throw new Error("manifest identity or shape does not match its assignment");
   }
   return { manifest, entries };
 }
@@ -187,18 +168,12 @@ function manifestPath(ref) {
     ref.scope.id,
     ref.manifestId,
     ref.revision,
-    "manifest.json"
+    "manifest.json",
   );
 }
 
 function receiptPath(ref, entryId) {
-  return join(
-    RECEIPTS_ROOT,
-    ref.scope.kind,
-    ref.scope.id,
-    ref.manifestId,
-    `${entryId}.json`
-  );
+  return join(RECEIPTS_ROOT, ref.scope.kind, ref.scope.id, ref.manifestId, `${entryId}.json`);
 }
 
 function hash(value) {
@@ -211,7 +186,7 @@ function entryHash(entry) {
       id: entry.id,
       setup: entry.setup,
       check: entry.check ?? null,
-    })
+    }),
   );
 }
 
@@ -260,10 +235,7 @@ function readEntryReceipt(ref, entry) {
 }
 
 function receiptMatchesCurrentManifest(receipt, ref, manifestHash) {
-  return (
-    receipt.revision === ref.revision &&
-    receipt.manifestHash === manifestHash
-  );
+  return receipt.revision === ref.revision && receipt.manifestHash === manifestHash;
 }
 
 function writeReceipt(ref, manifestHash, entry, imageSha) {
@@ -284,24 +256,17 @@ function reconcileEntry(ref, manifestHash, entry, imageSha) {
   const hadReceipt = existsSync(path);
   const entryReceipt = readEntryReceipt(ref, entry);
   const receipt =
-    entryReceipt !== null &&
-    imageSha.length !== 0 &&
-    entryReceipt.imageSha === imageSha
+    entryReceipt !== null && imageSha.length !== 0 && entryReceipt.imageSha === imageSha
       ? entryReceipt
       : null;
   const receiptInvalidated =
-    hadReceipt &&
-    receipt === null &&
-    (entryReceipt === null || imageSha.length !== 0);
+    hadReceipt && receipt === null && (entryReceipt === null || imageSha.length !== 0);
 
   if (!FORCE_SETUP && entry.check !== undefined && !receiptInvalidated) {
     const checkError = runScript(entry.id, "check", entry.check);
     if (checkError === null) {
       log(`entry ${entry.id}: already compliant`);
-      if (
-        receipt === null ||
-        !receiptMatchesCurrentManifest(receipt, ref, manifestHash)
-      ) {
+      if (receipt === null || !receiptMatchesCurrentManifest(receipt, ref, manifestHash)) {
         writeReceipt(ref, manifestHash, entry, imageSha);
       }
       return null;
@@ -378,7 +343,7 @@ function main() {
   }
 
   const imageSha = (readFileOrNull(IMAGE_SHA_PATH) ?? "").trim();
-  const manifestStatuses = assignment.manifests.map(ref => ({
+  const manifestStatuses = assignment.manifests.map((ref) => ({
     ...ref,
     phase: "pending",
   }));
@@ -421,7 +386,7 @@ function main() {
       continue;
     }
 
-    const entryStatuses = entries.map(entry => ({
+    const entryStatuses = entries.map((entry) => ({
       entryId: entry.id,
       phase: "pending",
     }));
@@ -442,12 +407,7 @@ function main() {
       publishApplying(assignmentHash, manifestStatuses);
       let error;
       try {
-        error = reconcileEntry(
-          ref,
-          currentManifestHash,
-          entry,
-          imageSha
-        );
+        error = reconcileEntry(ref, currentManifestHash, entry, imageSha);
       } catch (reconcileError) {
         error = `reconciliation failed: ${reconcileError}`;
         try {
@@ -475,9 +435,7 @@ function main() {
     if (entries.length === 0) succeededEmptyManifests += 1;
     let manifestPhase = "ok";
     if (manifestFailed) {
-      manifestPhase = entryStatuses.some(entry => entry.phase === "ok")
-        ? "degraded"
-        : "failed";
+      manifestPhase = entryStatuses.some((entry) => entry.phase === "ok") ? "degraded" : "failed";
     }
     manifestStatuses[manifestIndex] = {
       ...ref,
@@ -506,7 +464,7 @@ function main() {
     manifests: manifestStatuses,
   });
   log(
-    `converged ${assignment.manifests.length} manifest(s): ${succeededEntries} entries ok, ${failedEntries} failed`
+    `converged ${assignment.manifests.length} manifest(s): ${succeededEntries} entries ok, ${failedEntries} failed`,
   );
 }
 

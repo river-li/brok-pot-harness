@@ -31,9 +31,9 @@ async function dispatchGroupSend(tm, args) {
     if (awaitTurn) {
       await groupTurnDone;
     } else {
-      groupTurnDone.catch((error41) => {
+      groupTurnDone.catch((error42) => {
         tm.hostLog(
-          `[sand] detached group turn failed after send acceptance: ${errorLogTag(error41)}`,
+          `[sand] detached group turn failed after send acceptance: ${errorLogTag(error42)}`,
           "error"
         );
       });

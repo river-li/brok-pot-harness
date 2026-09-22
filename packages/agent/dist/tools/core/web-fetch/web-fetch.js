@@ -52,9 +52,9 @@ var __disposeResources35 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var MAX_CONTENT_SIZE = 1e5;
 function shouldSkipApproval(parsed2) {
@@ -172,9 +172,9 @@ async function getSmartModeWebFetchPreflightDecision(ctx, args) {
         reason: formatSmartModeWebFetchClassifierErrorReason()
       };
     }
-  } catch (error41) {
-    if (error41 instanceof Error && error41.name === "AbortError") {
-      throw error41;
+  } catch (error42) {
+    if (error42 instanceof Error && error42.name === "AbortError") {
+      throw error42;
     }
     return {
       kind: "reject",
@@ -343,12 +343,12 @@ var createWebFetchTool = (webFetchService, promptVersion, options2) => {
                 if (precheck.allowlisted) {
                   return void 0;
                 }
-              } catch (error41) {
-                if (error41 instanceof Error && error41.name === "AbortError") {
-                  throw error41;
+              } catch (error42) {
+                if (error42 instanceof Error && error42.name === "AbortError") {
+                  throw error42;
                 }
-                if (isAgentStreamStartTimeoutError(error41)) {
-                  throw error41;
+                if (isAgentStreamStartTimeoutError(error42)) {
+                  throw error42;
                 }
               }
             }
@@ -563,23 +563,23 @@ ${options2.descriptionSuffix}` : base;
     parameters: parametersSchema29,
     execute: withSafeParsedArgs(parametersSchema29, execute, createWebFetchToolCall(new WebFetchToolCall())),
     render: render2,
-    serializeError: (error41) => {
-      if (error41 instanceof ToolCallRejectedError) {
+    serializeError: (error42) => {
+      if (error42 instanceof ToolCallRejectedError) {
         return createWebFetchToolCall(new WebFetchToolCall({
           result: new WebFetchResult({
             result: {
               case: "rejected",
-              value: new WebFetchRejected({ reason: error41.message })
+              value: new WebFetchRejected({ reason: error42.message })
             }
           })
         }));
       }
       const errorMessage6 = (() => {
-        if (error41 instanceof ToolCallError) {
-          return error41.clientVisibleErrorMessage;
+        if (error42 instanceof ToolCallError) {
+          return error42.clientVisibleErrorMessage;
         }
-        if (error41 instanceof Error) {
-          const msg = error41.message ?? "";
+        if (error42 instanceof Error) {
+          const msg = error42.message ?? "";
           const m2 = /http_(\d{3})/i.exec(msg) ?? /\bstatus(?:\s*code)?\s*[:=]?\s*(\d{3})\b/i.exec(msg) ?? /\bHTTP\/\d(?:\.\d)?\s+(\d{3})\b/i.exec(msg);
           if (m2?.[1]) {
             return `Error fetching URL, status code: ${Number(m2[1])}`;

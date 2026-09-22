@@ -1,3 +1,4 @@
+init_mcp_tool_annotations();
 init_mcp_pb();
 init_esm();
 init_errors();
@@ -12,10 +13,10 @@ function createMcpPauseCancelledError(toolName) {
     error: message
   });
 }
-function dynamicToolCallErrorClass(error41) {
-  if (error41 instanceof CustomToolCallError) return error41.classification;
-  if (error41 instanceof ToolTimeoutError) return "timeout";
-  return errorLogTag(error41);
+function dynamicToolCallErrorClass(error42) {
+  if (error42 instanceof CustomToolCallError) return error42.classification;
+  if (error42 instanceof ToolTimeoutError) return "timeout";
+  return errorLogTag(error42);
 }
 var MCP_INVOCATION_TOOL_NAMES = /* @__PURE__ */ new Set(["callmcptool", "mcp", "calldynamictool"]);
 function invokedToolNameOf(value) {
@@ -77,14 +78,14 @@ function wrapDynamicInvocationToolWithTimeout({
         })
       });
       const startedPerfMs = performance.now();
-      const reportDynamicOutcome = (outcome, error41) => {
+      const reportDynamicOutcome = (outcome, error42) => {
         if (dispatch?.kind !== "dynamic") return;
         observeDynamicToolCall?.({
           kind: "dynamic",
           toolCallId: meta.toolCallId,
           toolName: inProcessFirstPartyToolName ?? "unknown",
           outcome,
-          ...outcome === "error" ? { errorClass: dynamicToolCallErrorClass(error41) } : {},
+          ...outcome === "error" ? { errorClass: dynamicToolCallErrorClass(error42) } : {},
           durationMs: Math.round(performance.now() - startedPerfMs)
         });
       };
@@ -92,11 +93,11 @@ function wrapDynamicInvocationToolWithTimeout({
         const result = await guarded.execute(callCtx, interactionHandler, args, meta);
         reportDynamicOutcome("ok");
         return result;
-      } catch (error41) {
+      } catch (error42) {
         if (!(callCtx.canceled && isIntentionalAbortReason(callCtx.reason))) {
-          reportDynamicOutcome("error", error41);
+          reportDynamicOutcome("error", error42);
         }
-        throw error41;
+        throw error42;
       } finally {
         unregisterPauseCancel?.();
       }
@@ -123,7 +124,8 @@ function createSandMcpMetaToolOptions(mcpTools) {
       new McpToolDescriptor({
         toolName: tool.toolName,
         description: tool.description,
-        inputSchema: tool.inputSchema !== void 0 ? Value.fromJson(tool.inputSchema) : void 0
+        inputSchema: tool.inputSchema !== void 0 ? Value.fromJson(tool.inputSchema) : void 0,
+        ...toolAnnotationsJsonField(tool.annotations)
       })
     );
   }

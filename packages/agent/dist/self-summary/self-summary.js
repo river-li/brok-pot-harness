@@ -2,7 +2,7 @@ var logger10 = createLogger("@anysphere/agent");
 function findLastUserMessageIndex2(messages2, options2) {
   for (let i = messages2.length - 1; i >= 0; i--) {
     const msg = messages2[i];
-    if (msg.role === "user" && (options2?.includeSummaryMessages || !msg.providerOptions?.cursor?.isSummary)) {
+    if (msg.role === "user" && (options2?.includeSummaryMessages || !msg.providerOptions?.cursor?.isSummary) && !isInjectedReminderMessage(msg)) {
       return i;
     }
   }

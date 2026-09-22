@@ -78,8 +78,8 @@ var BackgroundWakes = class {
       return refusal;
     }
     if (outbound == null) return null;
-    void this.tm.channelDelivery(agentId, addressToken, outbound).catch((error41) => {
-      const rawDetail = error41 instanceof Error ? error41.message : "Channel delivery failed";
+    void this.tm.channelDelivery(agentId, addressToken, outbound).catch((error42) => {
+      const rawDetail = error42 instanceof Error ? error42.message : "Channel delivery failed";
       const reason = humanizeChannelDeliveryFailure({ addressToken, rawMessage: rawDetail });
       const copy = classifyChannelDeliveryFailure({ addressToken, rawMessage: rawDetail });
       this.tm.trayErrors.pushError({
@@ -125,13 +125,13 @@ var BackgroundWakes = class {
     let session;
     try {
       session = await this.tm.sessions.resolveBackgroundSession(agentId);
-    } catch (error41) {
-      if (error41 instanceof AgentGoneError) return true;
+    } catch (error42) {
+      if (error42 instanceof AgentGoneError) return true;
       this.tm.telemetry.reportAgentError({
         source: "channel_failure",
         conversationId: agentId,
-        error: classifyAgentError(error41),
-        detail: sandErrorDetail(error41)
+        error: classifyAgentError(error42),
+        detail: sandErrorDetail(error42)
       });
       return false;
     }
@@ -151,19 +151,19 @@ var BackgroundWakes = class {
             ...this.tm.widgetResponses.collectUnansweredQuestionPrompts(session)
           });
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "channel_failure",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "delivery_failure_follow_up_failed", description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: "delivery_failure_follow_up_failed", description: description9 })
           });
         } finally {
           this.tm.runLifecycle.endSessionRun(session);
@@ -216,7 +216,7 @@ var BackgroundWakes = class {
     };
   }
   lineStillOpenForTheAnswer(agentId, envelopes) {
-    const address = voiceLineAwaitingAnAnswer(envelopes);
+    const address = firstVoiceLineAwaitingAnAnswer(envelopes);
     if (address === null) return void 0;
     return this.tm.voiceCalls.lineIsOpen({ agentId, address }) ? address : void 0;
   }
@@ -274,12 +274,12 @@ var BackgroundWakes = class {
             return;
           }
           if (!result.aborted && result.sentMessageCount === 0) {
-            if (isVoiceCallCloseOnlyWake(envelopes)) {
+            if (anyVoiceCallCloseOnlyWake(envelopes)) {
               await runner.run(
                 MainLoopVoicePrompt.callEndedNudge({
                   sendTool: SAND_SEND_TO_USER_TOOL_NAME
                 }),
-                { hidden: true }
+                { hidden: true, continuesTurn: true }
               );
             } else {
               await this.tm.automationRuntime.ensureHiddenTurnReply(
@@ -289,19 +289,19 @@ var BackgroundWakes = class {
             }
           }
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "connector",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "channel_message_follow_up_failed", description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: "channel_message_follow_up_failed", description: description9 })
           });
         } finally {
           this.tm.turnRuntime.activeChannelAddresses.delete(session.id);
@@ -335,13 +335,13 @@ var BackgroundWakes = class {
     let session;
     try {
       session = await this.tm.sessions.resolveBackgroundSession(agentId);
-    } catch (error41) {
-      if (!isAgentAbsent(error41)) {
+    } catch (error42) {
+      if (!isAgentAbsent(error42)) {
         this.tm.telemetry.reportAgentError({
           source: "broadcast",
           conversationId: agentId,
-          error: classifyAgentError(error41),
-          detail: sandErrorDetail(error41)
+          error: classifyAgentError(error42),
+          detail: sandErrorDetail(error42)
         });
       }
       return false;
@@ -362,19 +362,19 @@ var BackgroundWakes = class {
             await this.tm.automationRuntime.ensureHiddenTurnReply(runner);
           }
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "broadcast",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "broadcast_message_failed", description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: "broadcast_message_failed", description: description9 })
           });
         } finally {
           this.tm.runLifecycle.endSessionRun(session);
@@ -429,9 +429,9 @@ var BackgroundWakes = class {
         this.pendingEventWakes.delete(agentId);
         try {
           await this.runEventWake(agentId, events);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.hostLog(
-            `[transcript-manager] event wake revival failed for ${agentId}: ${errorLogTag(error41)}`,
+            `[transcript-manager] event wake revival failed for ${agentId}: ${errorLogTag(error42)}`,
             "error"
           );
         }
@@ -463,19 +463,19 @@ var BackgroundWakes = class {
             isSilenceAllowed: true
           });
           await this.tm.roster.emitAgentUpdate(session.id);
-        } catch (error41) {
+        } catch (error42) {
           this.tm.telemetry.reportAgentError({
             source: "event",
             conversationId: session.id,
             requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-            error: classifyAgentError(error41),
-            detail: sandErrorDetail(error41)
+            error: classifyAgentError(error42),
+            detail: sandErrorDetail(error42)
           });
-          const description10 = describeAgentRunError(error41);
+          const description9 = describeAgentRunError(error42);
           this.tm.trayErrors.pushError({
             agentId: session.id,
-            ...description10,
-            ...hostTrayTitle({ kind: "timeline_event_follow_up_failed", description: description10 })
+            ...description9,
+            ...hostTrayTitle({ kind: "timeline_event_follow_up_failed", description: description9 })
           });
         } finally {
           this.tm.runLifecycle.endSessionRun(session);

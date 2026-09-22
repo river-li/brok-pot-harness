@@ -1,4 +1,4 @@
-var __awaiter58 = function(thisArg, _arguments, P2, generator) {
+var __awaiter60 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -27,7 +27,7 @@ var __awaiter58 = function(thisArg, _arguments, P2, generator) {
 };
 var MAX_FILE_SIZE = 10 * 1024 * 1024;
 function isSymlink2(filePath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     try {
       const stats = yield (0, import_promises34.lstat)(filePath);
       return stats.isSymbolicLink();
@@ -37,7 +37,7 @@ function isSymlink2(filePath) {
   });
 }
 function readFileNoSymlink(filePath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     if (yield isSymlink2(filePath)) {
       throw new Error(`Refusing to read symlink: ${filePath}`);
     }
@@ -45,15 +45,15 @@ function readFileNoSymlink(filePath) {
   });
 }
 function checkFileSize(filePath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const stats = yield (0, import_promises34.stat)(filePath);
     if (stats.size > MAX_FILE_SIZE) {
       throw new Error(`File ${filePath} exceeds maximum size of ${MAX_FILE_SIZE} bytes`);
     }
   });
 }
-function classifyLoadError(error41) {
-  const msg = error41 instanceof Error ? error41.message : String(error41);
+function classifyLoadError(error42) {
+  const msg = error42 instanceof Error ? error42.message : String(error42);
   if (/timed?\s*out/i.test(msg))
     return "timeout";
   if (/clone|fetch|git/i.test(msg))
@@ -81,7 +81,7 @@ function createLocalPluginFileFetcher(basePath, options2) {
     }
   }
   function assertContainedRealPath(fullPath) {
-    return __awaiter58(this, void 0, void 0, function* () {
+    return __awaiter60(this, void 0, void 0, function* () {
       const containedPath = assertContained(fullPath);
       const resolvedAllowedRealPath = yield resolvedSymlinkTargetRootPromise;
       const resolvedRealPath = yield (0, import_promises34.realpath)(containedPath);
@@ -94,7 +94,7 @@ function createLocalPluginFileFetcher(basePath, options2) {
   }
   return {
     listDirectory(dirPath, visitedRealDirPaths) {
-      return __awaiter58(this, void 0, void 0, function* () {
+      return __awaiter60(this, void 0, void 0, function* () {
         const candidatePath = assertContained(dirPath ? (0, import_node_path64.join)(basePath, dirPath) : basePath);
         try {
           const fullPath = yield assertContainedRealPath(candidatePath);
@@ -129,7 +129,7 @@ function createLocalPluginFileFetcher(basePath, options2) {
       });
     },
     fetchFile(filePath) {
-      return __awaiter58(this, void 0, void 0, function* () {
+      return __awaiter60(this, void 0, void 0, function* () {
         const cached2 = fileContentCache.get(filePath);
         if (cached2 !== void 0) {
           return { content: cached2 };
@@ -143,7 +143,7 @@ function createLocalPluginFileFetcher(basePath, options2) {
       });
     },
     fileExists(filePath) {
-      return __awaiter58(this, void 0, void 0, function* () {
+      return __awaiter60(this, void 0, void 0, function* () {
         try {
           const candidatePath = assertContained((0, import_node_path64.join)(basePath, filePath));
           const fullPath = yield assertContainedRealPath(candidatePath);
@@ -157,7 +157,7 @@ function createLocalPluginFileFetcher(basePath, options2) {
   };
 }
 function resolveLocalPluginLogoUrl(_a19) {
-  return __awaiter58(this, arguments, void 0, function* ({ installPath, logo }) {
+  return __awaiter60(this, arguments, void 0, function* ({ installPath, logo }) {
     const relativeLogoPath = logo === null || logo === void 0 ? void 0 : logo.trim();
     if (!relativeLogoPath || (0, import_node_path64.isAbsolute)(relativeLogoPath) || relativeLogoPath.includes("://")) {
       return void 0;
@@ -203,7 +203,7 @@ function preferIdentity(preferred, fallback2) {
   });
 }
 function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogger) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     var _a19;
     let identityOnly;
     for (const manifestPath2 of PLUGIN_MANIFEST_PATHS) {
@@ -233,7 +233,7 @@ function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogge
       const mcpServers = manifest.mcpServers;
       const hasManifestOptions = commands !== void 0 || agents !== void 0 || skills !== void 0 || rules !== void 0 || hooks !== void 0 || mcpServers !== void 0;
       const displayName2 = typeof manifest.displayName === "string" ? manifest.displayName : void 0;
-      const description10 = typeof manifest.description === "string" ? manifest.description : void 0;
+      const description9 = typeof manifest.description === "string" ? manifest.description : void 0;
       const authorName = (_a19 = manifest.author) === null || _a19 === void 0 ? void 0 : _a19.name;
       const logoUrl = yield resolveLocalPluginLogoUrl({
         installPath,
@@ -242,7 +242,7 @@ function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogge
       const identity = pickIdentity(manifest);
       const variables = manifest.variables;
       const capabilities = manifest.capabilities;
-      const hasUiMetadata = displayName2 !== void 0 || description10 !== void 0 || authorName !== void 0 || logoUrl !== void 0 || variables !== void 0 || capabilities !== void 0;
+      const hasUiMetadata = displayName2 !== void 0 || description9 !== void 0 || authorName !== void 0 || logoUrl !== void 0 || variables !== void 0 || capabilities !== void 0;
       if (!hasManifestOptions && !hasUiMetadata && !hasIdentity(identity)) {
         continue;
       }
@@ -272,7 +272,7 @@ function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogge
       }), hasMetadata && {
         metadata: Object.assign(Object.assign({
           displayName: displayName2,
-          description: description10,
+          description: description9,
           authorName,
           logoUrl
         }, mergedIdentity), {
@@ -294,7 +294,7 @@ function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogge
   });
 }
 function discoverAndLoadComponents(installPath, manifestOptions) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const fetcher = createLocalPluginFileFetcher(installPath);
     const discovery = new PluginComponentDiscovery(fetcher);
     const discovered = yield discovery.discoverComponents({
@@ -310,7 +310,7 @@ function discoverAndLoadComponents(installPath, manifestOptions) {
   });
 }
 function loadSkillsFromDiscovered(fetcher, descriptors, installPath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const skills = [];
     for (const desc of descriptors) {
       try {
@@ -326,7 +326,7 @@ function loadSkillsFromDiscovered(fetcher, descriptors, installPath) {
   });
 }
 function loadRulesFromDiscovered(fetcher, descriptors, installPath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const rules = [];
     for (const desc of descriptors) {
       try {
@@ -342,7 +342,7 @@ function loadRulesFromDiscovered(fetcher, descriptors, installPath) {
   });
 }
 function loadAgentsFromDiscovered(fetcher, descriptors, installPath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const agents = [];
     for (const desc of descriptors) {
       try {
@@ -358,7 +358,7 @@ function loadAgentsFromDiscovered(fetcher, descriptors, installPath) {
   });
 }
 function loadCommandsFromDiscovered(fetcher, descriptors, installPath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const commands = [];
     for (const desc of descriptors) {
       try {
@@ -494,7 +494,7 @@ function mcpParseOptionsFromPluginSource(sourceInfo) {
   return { configuredVariables: sourceInfo.configuredVariables };
 }
 function createSafeFsPluginMcpFileReader(installPath) {
-  return (relativePath) => __awaiter58(this, void 0, void 0, function* () {
+  return (relativePath) => __awaiter60(this, void 0, void 0, function* () {
     if (!isPathSafe(relativePath)) {
       return null;
     }
@@ -513,7 +513,7 @@ function createSafeFsPluginMcpFileReader(installPath) {
   });
 }
 function readPluginMcpConfigSimple(installPath, sourceInfo, explicitMcpOptions) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const mcpOptions = explicitMcpOptions !== null && explicitMcpOptions !== void 0 ? explicitMcpOptions : mcpParseOptionsFromPluginSource(sourceInfo);
     return resolvePluginMcpConfigWithManifestLookup(createSafeFsPluginMcpFileReader(installPath), {
       fallbackFileNames: resolvePluginMcpConfigPaths(),
@@ -542,7 +542,7 @@ function expandHooksConfigVariables(config2, installPath) {
   return Object.assign(Object.assign({}, config2), { hooks: expandedHooks });
 }
 function loadPluginHooksInternal(installPath, pluginDisplayName, manifestHooks, manifestSourcePath) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     if (typeof manifestHooks === "object") {
       const result2 = validateAndTransformHooks(manifestHooks, pluginDisplayName);
       if (result2 && "config" in result2) {
@@ -634,7 +634,7 @@ function validateAndTransformHooks(parsed2, pluginDisplayName) {
   return void 0;
 }
 function loadPluginContentFromDir(installPath, pluginDisplayName, sourceInfo, options2) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     var _a19, _b2, _c2, _d, _e2, _f, _g, _h, _j, _k;
     var _l, _m, _o2;
     const pluginLogger = (_l = options2 === null || options2 === void 0 ? void 0 : options2.log) !== null && _l !== void 0 ? _l : noopPluginMetricsLogger;
@@ -663,9 +663,11 @@ function loadPluginContentFromDir(installPath, pluginDisplayName, sourceInfo, op
   });
 }
 function loadCursorPluginFromPath(installPath, sourceType, sourceInfo, options2) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     const pluginDisplayName = `${sourceInfo.name}@${sourceInfo.version}`;
-    const { displayName: displayName2, description: description10, authorName, logoUrl, version: version3, homepage, repository, variablesSchema, skills, rules, agents, commands, mcpConfig, capabilities, hooks } = yield loadPluginContentFromDir(installPath, pluginDisplayName, sourceInfo, { log: options2 === null || options2 === void 0 ? void 0 : options2.log });
+    const { displayName: displayName2, description: description9, authorName, logoUrl, version: version3, homepage, repository, variablesSchema, skills, rules, agents, commands, mcpConfig, capabilities, hooks } = yield loadPluginContentFromDir(installPath, pluginDisplayName, sourceInfo, {
+      log: options2 === null || options2 === void 0 ? void 0 : options2.log
+    });
     const identifier = {
       source: sourceType,
       sourceInfo
@@ -673,7 +675,7 @@ function loadCursorPluginFromPath(installPath, sourceType, sourceInfo, options2)
     return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({
       identifier,
       installPath
-    }, displayName2 !== void 0 && { displayName: displayName2 }), description10 !== void 0 && { description: description10 }), authorName !== void 0 && { authorName }), logoUrl !== void 0 && { logoUrl }), version3 !== void 0 && { version: version3 }), homepage !== void 0 && { homepage }), repository !== void 0 && { repository }), {
+    }, displayName2 !== void 0 && { displayName: displayName2 }), description9 !== void 0 && { description: description9 }), authorName !== void 0 && { authorName }), logoUrl !== void 0 && { logoUrl }), version3 !== void 0 && { version: version3 }), homepage !== void 0 && { homepage }), repository !== void 0 && { repository }), {
       variablesSchema,
       skills,
       rules,
@@ -686,7 +688,7 @@ function loadCursorPluginFromPath(installPath, sourceType, sourceInfo, options2)
   });
 }
 function loadFromMarketplaceSource(options2) {
-  return __awaiter58(this, void 0, void 0, function* () {
+  return __awaiter60(this, void 0, void 0, function* () {
     var _a19, _b2, _c2, _d, _e2, _f;
     var _g, _h;
     const pluginLogger = (_g = options2.log) !== null && _g !== void 0 ? _g : noopPluginMetricsLogger;
@@ -818,7 +820,9 @@ function loadFromMarketplaceSource(options2) {
           marketplaceDbId: entry.marketplaceDbId,
           isTeamRequired: entry.isTeamRequired
         };
-        const plugin = yield loadCursorPluginFromPath(installPath, sourceType, sourceInfo, { log: pluginLogger });
+        const plugin = yield loadCursorPluginFromPath(installPath, sourceType, sourceInfo, {
+          log: pluginLogger
+        });
         plugins.push(plugin);
         try {
           yield cacheManager.pruneOldVersions({
@@ -832,13 +836,13 @@ function loadFromMarketplaceSource(options2) {
         pluginLogger.captureException(err, {
           error_type: "load_plugin_from_marketplace"
         });
-        const error41 = err instanceof Error ? err : new Error(String(err));
+        const error42 = err instanceof Error ? err : new Error(String(err));
         failures.push({
           pluginName: entry.name,
           pluginId: entry.pluginId,
           marketplaceName: (_e2 = entry.marketplace) === null || _e2 === void 0 ? void 0 : _e2.name,
-          errorMessage: error41.message,
-          errorType: classifyLoadError(error41)
+          errorMessage: error42.message,
+          errorType: classifyLoadError(error42)
         });
         const marketplaceName = (_f = entry.marketplace) === null || _f === void 0 ? void 0 : _f.name;
         const isThirdParty = marketplaceName !== void 0 && marketplaceName !== "cursor-public" && marketplaceName.length > 0;
@@ -855,7 +859,7 @@ function loadFromMarketplaceSource(options2) {
             }
           },
           installPath: "",
-          loadError: error41.message || "Plugin load failed",
+          loadError: error42.message || "Plugin load failed",
           skills: [],
           rules: [],
           agents: [],
@@ -863,7 +867,7 @@ function loadFromMarketplaceSource(options2) {
           capabilities: []
         });
         if (onCursorError) {
-          onCursorError(entry, error41);
+          onCursorError(entry, error42);
         }
       }
     }

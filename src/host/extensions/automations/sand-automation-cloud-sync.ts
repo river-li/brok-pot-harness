@@ -11,9 +11,9 @@ function sameIds(left, right) {
 function sameSchedulingAuthority(left, right) {
   return left !== void 0 && sameIds(left.desiredCloudAutomationIds, right.desiredCloudAutomationIds) && sameIds(left.enabledRemoteAutomationIds, right.enabledRemoteAutomationIds);
 }
-function errorIdentity(error41) {
-  const errorType = error41 instanceof Error ? error41.constructor.name : typeof error41;
-  const errorCode = error41 instanceof ConnectError ? Code[error41.code] : findSystemErrno(error41);
+function errorIdentity(error42) {
+  const errorType = error42 instanceof Error ? error42.constructor.name : typeof error42;
+  const errorCode = error42 instanceof ConnectError ? Code[error42.code] : findSystemErrno(error42);
   return errorCode === void 0 ? { errorType } : { errorType, errorCode };
 }
 function retainsUndesiredShadows(state) {
@@ -67,8 +67,8 @@ var SandAutomationCloudSync = class {
       this.rerun = true;
       return this.inFlight;
     }
-    this.inFlight = this.reconcile().catch((error41) => {
-      this.recordFailure({ operation: "reconcile", error: error41 });
+    this.inFlight = this.reconcile().catch((error42) => {
+      this.recordFailure({ operation: "reconcile", error: error42 });
     }).finally(() => {
       this.inFlight = void 0;
       if (this.rerun) {
@@ -132,15 +132,15 @@ var SandAutomationCloudSync = class {
     let scheduled;
     try {
       scheduled = await this.deps.listAutomations();
-    } catch (error41) {
-      this.recordFailure({ operation: "list-local", error: error41 });
+    } catch (error42) {
+      this.recordFailure({ operation: "list-local", error: error42 });
       return;
     }
     let listedAgentIds;
     try {
       listedAgentIds = await this.deps.listAgentIds();
-    } catch (error41) {
-      this.recordFailure({ operation: "list-agents", error: error41 });
+    } catch (error42) {
+      this.recordFailure({ operation: "list-agents", error: error42 });
       return;
     }
     const agentIds = new Set(listedAgentIds);
@@ -179,11 +179,11 @@ var SandAutomationCloudSync = class {
         if (await this.reconcileAgent(agentId, desired, localInspection)) {
           this.lastSuccessfulFingerprintByAgent.set(agentId, fingerprint);
         }
-      } catch (error41) {
+      } catch (error42) {
         this.recordFailure({
           agentId,
           operation: "reconcile",
-          error: error41
+          error: error42
         });
       }
     }
@@ -198,8 +198,8 @@ var SandAutomationCloudSync = class {
     if (webhookAutomationIds.size === 0 || this.deps.ensureWebhookKeys === void 0) return;
     try {
       await this.deps.ensureWebhookKeys([...webhookAutomationIds]);
-    } catch (error41) {
-      this.recordFailure({ operation: "reconcile", error: error41 });
+    } catch (error42) {
+      this.recordFailure({ operation: "reconcile", error: error42 });
     }
   }
   async reconcileAgent(agentId, desiredByAutomationId, localInspection) {
@@ -342,8 +342,8 @@ var SandAutomationCloudSync = class {
       return await this.deps.client.listSandAutomations(
         new ListSandAutomationsRequest({ sandAgentId: agentId })
       );
-    } catch (error41) {
-      this.recordFailure({ agentId, operation: "list-remote", error: error41 });
+    } catch (error42) {
+      this.recordFailure({ agentId, operation: "list-remote", error: error42 });
       return void 0;
     }
   }
@@ -352,8 +352,8 @@ var SandAutomationCloudSync = class {
     try {
       await mutation();
       return true;
-    } catch (error41) {
-      this.recordFailure({ agentId, operation, error: error41 });
+    } catch (error42) {
+      this.recordFailure({ agentId, operation, error: error42 });
       return false;
     }
   }
@@ -372,8 +372,8 @@ var SandAutomationCloudSync = class {
     this.lastNotifiedSchedulingAuthorityByAgent.set(agentId, schedulingAuthority);
     try {
       this.deps.onSchedulingAuthorityChanged(agentId);
-    } catch (error41) {
-      this.logCallbackFailure("onSchedulingAuthorityChanged", agentId, error41);
+    } catch (error42) {
+      this.logCallbackFailure("onSchedulingAuthorityChanged", agentId, error42);
     }
   }
   recordFailure(failure2) {
@@ -389,16 +389,16 @@ var SandAutomationCloudSync = class {
     if (!this.deps.hasCredential()) return;
     try {
       this.deps.onFailure(failure2);
-    } catch (error41) {
-      this.logCallbackFailure("onFailure", failure2.agentId, error41);
+    } catch (error42) {
+      this.logCallbackFailure("onFailure", failure2.agentId, error42);
     }
   }
   recordRecovery(agentId) {
     if (!this.failedAgentIds.delete(agentId)) return;
     try {
       this.deps.onRecovery(agentId);
-    } catch (error41) {
-      this.logCallbackFailure("onRecovery", agentId, error41);
+    } catch (error42) {
+      this.logCallbackFailure("onRecovery", agentId, error42);
     }
   }
   finishAgentDeletion(agentId) {
@@ -408,12 +408,12 @@ var SandAutomationCloudSync = class {
     this.schedulingEvidenceByAgent.delete(agentId);
     this.lastNotifiedSchedulingAuthorityByAgent.delete(agentId);
   }
-  logCallbackFailure(callback, agentId, error41) {
+  logCallbackFailure(callback, agentId, error42) {
     this.deps.reportDiagnostic?.({
       extension: "automation_cloud_sync",
       operation: callback,
       agentId,
-      ...errorIdentity(error41)
+      ...errorIdentity(error42)
     });
   }
 };

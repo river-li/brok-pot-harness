@@ -1,5 +1,5 @@
 function getHostBuiltAtMs() {
-  return true ? "1789694876000" : void 0;
+  return true ? "1790001078000" : void 0;
 }
 var TELEMETRY_FLUSH_TICK_MS = 3e3;
 var HOST_IDENTITY_HOLD_BACKSTOP_MS = 9e4;
@@ -17,9 +17,9 @@ function cappedToolCallMs(ms2) {
 function booleanTag(value) {
   return brandLiteralEnum(value ? "true" : "false");
 }
-function errorDetailTags(error41, detail) {
+function errorDetailTags(error42, detail) {
   return {
-    error_code: sandErrorWireCode(error41),
+    error_code: sandErrorWireCode(error42),
     error_message: truncateStructuredLogValue(detail.message, MAX_ERROR_DETAIL_MESSAGE_LENGTH),
     error_stack: detail.stack !== void 0 ? truncateStructuredLogValue(detail.stack, MAX_ERROR_DETAIL_STACK_LENGTH) : void 0
   };
@@ -53,18 +53,18 @@ var SandStructuredLogTelemetry = class {
         client: SAND_CLIENT_TYPE,
         "client.type": SAND_CLIENT_TYPE,
         client_version: options2.backend.clientVersion,
-        app_version: options2.appVersion ?? (true ? "0.57.0-pre.7" : "unknown"),
+        app_version: options2.appVersion ?? (true ? "0.58.0-pre.19" : "unknown"),
         arch: process.arch,
         platform: process.platform,
         ...options2.identityTags ?? resolveSandBoxIdentityTags()
       },
       createClient: options2.createClient ?? (() => createSandCursorBackendClient(AnalyticsService, {
         backend: options2.backend,
-        getAccessToken: async (request3) => {
+        getAccessToken: async (request5) => {
           try {
-            return await options2.getAccessToken(request3);
-          } catch (error41) {
-            reportFallback("structured_log_telemetry", error41);
+            return await options2.getAccessToken(request5);
+          } catch (error42) {
+            reportFallback("structured_log_telemetry", error42);
             return "";
           }
         },
@@ -920,12 +920,12 @@ var SandTurnTelemetryImpl = class {
       this.requestId = requestId2;
     }
   }
-  finalize(outcome, error41, detail) {
+  finalize(outcome, error42, detail) {
     if (this.finalized) return;
     this.finalized = true;
     this.onFinalized();
     this.emitStart();
-    const finalOutcome = error41 !== void 0 ? "error" : outcome;
+    const finalOutcome = error42 !== void 0 ? "error" : outcome;
     const adjusted = adjustTurnOutcomeForBotBlock({
       conversationId: this.start.conversationId,
       outcome: finalOutcome
@@ -943,14 +943,14 @@ var SandTurnTelemetryImpl = class {
     if (adjusted.errorType === BOT_BLOCK_ERROR_TYPE) {
       metadata.error_type = brandLiteralEnum(BOT_BLOCK_ERROR_TYPE);
     }
-    if (error41 !== void 0) {
-      Object.assign(metadata, sandErrorTags(error41));
+    if (error42 !== void 0) {
+      Object.assign(metadata, sandErrorTags(error42));
     }
     this.telemetry.emitTurnEvent(TURN_OUTCOME_EVENT, metadata);
-    if (error41 !== void 0 && detail !== void 0) {
+    if (error42 !== void 0 && detail !== void 0) {
       this.telemetry.emitTurnEvent(TURN_OUTCOME_DETAIL_EVENT, {
         ...this.baseTags(),
-        ...errorDetailTags(error41, detail)
+        ...errorDetailTags(error42, detail)
       });
     }
     consumeTurnBotBlock(this.start.conversationId);

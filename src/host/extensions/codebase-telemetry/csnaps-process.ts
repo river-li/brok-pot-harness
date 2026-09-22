@@ -23,44 +23,44 @@ var CsnapsProcess = class _CsnapsProcess {
     this.resolveTerminalFailure = terminal.resolve;
     this.childClosed = new Promise((resolve29) => {
       child.once("close", (exitCode, signal) => {
-        let error41 = this.terminalError;
-        if (error41 === void 0) {
+        let error42 = this.terminalError;
+        if (error42 === void 0) {
           try {
             this.responseDecoder.assertComplete();
-            error41 = new CsnapsProcessError(describeCsnapsExit(exitCode, signal));
+            error42 = new CsnapsProcessError(describeCsnapsExit(exitCode, signal));
           } catch (cause) {
-            error41 = cause instanceof Error ? cause : new CsnapsProcessError("invalid csnaps response", { cause });
+            error42 = cause instanceof Error ? cause : new CsnapsProcessError("invalid csnaps response", { cause });
           }
         }
-        this.terminalError = error41;
-        this.rejectPendingRequests(error41);
+        this.terminalError = error42;
+        this.rejectPendingRequests(error42);
         if (!this.isClosing) {
-          this.resolveTerminalFailure(error41);
+          this.resolveTerminalFailure(error42);
         }
         resolve29();
       });
     });
     child.once(
       "error",
-      (error41) => this.fail(
-        new CsnapsProcessError(`csnaps child process failed: ${error41.message}`, {
-          cause: error41
+      (error42) => this.fail(
+        new CsnapsProcessError(`csnaps child process failed: ${error42.message}`, {
+          cause: error42
         })
       )
     );
     child.stdin.on(
       "error",
-      (error41) => this.fail(
-        new CsnapsProcessError(`csnaps stdin failed: ${error41.message}`, {
-          cause: error41
+      (error42) => this.fail(
+        new CsnapsProcessError(`csnaps stdin failed: ${error42.message}`, {
+          cause: error42
         })
       )
     );
     child.stdout.on(
       "error",
-      (error41) => this.fail(
-        new CsnapsProcessError(`csnaps stdout failed: ${error41.message}`, {
-          cause: error41
+      (error42) => this.fail(
+        new CsnapsProcessError(`csnaps stdout failed: ${error42.message}`, {
+          cause: error42
         })
       )
     );
@@ -87,17 +87,17 @@ var CsnapsProcess = class _CsnapsProcess {
     const csnaps = new _CsnapsProcess(child, options2.deadlines);
     try {
       await csnaps.ping(options2.signal);
-    } catch (error41) {
+    } catch (error42) {
       try {
         await csnaps.terminate();
       } catch (cleanupError) {
         throw new CodebaseTelemetryCleanupError(
           [cleanupError],
           "Failed to clean up csnaps after startup failure",
-          { cause: error41 }
+          { cause: error42 }
         );
       }
-      throw error41;
+      throw error42;
     }
     try {
       const initialized2 = await csnaps.initialize(options2.initializeParams, options2.signal);
@@ -105,17 +105,17 @@ var CsnapsProcess = class _CsnapsProcess {
         handle: csnaps,
         initialState: initialized2.state
       };
-    } catch (error41) {
+    } catch (error42) {
       try {
         await csnaps.close();
       } catch (cleanupError) {
         throw new CodebaseTelemetryCleanupError(
           [cleanupError],
           "Failed to clean up csnaps after initialization failure",
-          { cause: error41 }
+          { cause: error42 }
         );
       }
-      throw error41;
+      throw error42;
     }
   }
   async initialize(params, signal) {
@@ -168,14 +168,14 @@ var CsnapsProcess = class _CsnapsProcess {
       const operation = { method: "shutdown" };
       parseCsnapsOperationResult(operation, await this.request(operation));
       await this.waitForChildClose("shutdown");
-    } catch (error41) {
+    } catch (error42) {
       try {
         await this.terminate();
       } catch (cleanupError) {
         throw new CodebaseTelemetryCleanupError(
           [cleanupError],
           "Failed to terminate csnaps after shutdown failure",
-          { cause: error41 }
+          { cause: error42 }
         );
       }
     }
@@ -203,7 +203,7 @@ var CsnapsProcess = class _CsnapsProcess {
     }
   }
   request(operation, signal) {
-    const request3 = this.deadlineFor(operation.method).run(async (deadlineSignal) => {
+    const request5 = this.deadlineFor(operation.method).run(async (deadlineSignal) => {
       if (this.terminalError !== void 0) {
         throw this.terminalError;
       }
@@ -215,9 +215,9 @@ var CsnapsProcess = class _CsnapsProcess {
           return;
         }
         const cause = deadlineSignal.reason;
-        const error41 = cause instanceof DeadlineExceededError ? new CsnapsProcessError(`csnaps ${operation.method} request timed out`, { cause }) : new CsnapsProcessError(`csnaps ${operation.method} request cancelled`, { cause });
-        response.reject(error41);
-        this.fail(error41);
+        const error42 = cause instanceof DeadlineExceededError ? new CsnapsProcessError(`csnaps ${operation.method} request timed out`, { cause }) : new CsnapsProcessError(`csnaps ${operation.method} request cancelled`, { cause });
+        response.reject(error42);
+        this.fail(error42);
       };
       this.pendingRequests.set(id, {
         method: operation.method,
@@ -237,16 +237,16 @@ var CsnapsProcess = class _CsnapsProcess {
       );
       try {
         await writeFrame(this.child.stdin, frame);
-      } catch (error41) {
-        const processError = this.terminalError ?? (error41 instanceof Error ? error41 : new CsnapsProcessError("csnaps stdin write failed", { cause: error41 }));
+      } catch (error42) {
+        const processError = this.terminalError ?? (error42 instanceof Error ? error42 : new CsnapsProcessError("csnaps stdin write failed", { cause: error42 }));
         this.fail(processError);
         await responseSettled;
         throw processError;
       }
       return await response.promise;
     }, signal);
-    return request3.catch((error41) => {
-      throw this.terminalError ?? error41;
+    return request5.catch((error42) => {
+      throw this.terminalError ?? error42;
     });
   }
   deadlineFor(method) {
@@ -288,9 +288,9 @@ var CsnapsProcess = class _CsnapsProcess {
       for (const response of responses) {
         this.settlePendingRequest(response);
       }
-    } catch (error41) {
+    } catch (error42) {
       this.fail(
-        error41 instanceof Error ? error41 : new CsnapsProcessError("invalid csnaps response", { cause: error41 })
+        error42 instanceof Error ? error42 : new CsnapsProcessError("invalid csnaps response", { cause: error42 })
       );
     }
   }
@@ -307,22 +307,22 @@ var CsnapsProcess = class _CsnapsProcess {
       pending.reject(new CsnapsRequestError(pending.method, response.error));
     }
   }
-  fail(error41) {
+  fail(error42) {
     if (this.terminalError !== void 0) {
       return;
     }
-    this.terminalError = error41;
+    this.terminalError = error42;
     this.child.stdin.destroy();
     this.child.kill("SIGTERM");
-    this.rejectPendingRequests(error41);
+    this.rejectPendingRequests(error42);
     if (!this.isClosing) {
-      this.resolveTerminalFailure(error41);
+      this.resolveTerminalFailure(error42);
     }
   }
-  rejectPendingRequests(error41) {
+  rejectPendingRequests(error42) {
     for (const pending of this.pendingRequests.values()) {
       pending.signal.removeEventListener("abort", pending.onAbort);
-      pending.reject(error41);
+      pending.reject(error42);
     }
     this.pendingRequests.clear();
   }
@@ -350,9 +350,9 @@ function describeChildCloseTimeout(trigger2) {
 function writeFrame(stream3, frame) {
   return new Promise((resolve29, reject2) => {
     try {
-      stream3.write(frame, (error41) => {
-        if (error41 != null) {
-          reject2(csnapsStdinWriteError(error41));
+      stream3.write(frame, (error42) => {
+        if (error42 != null) {
+          reject2(csnapsStdinWriteError(error42));
         } else {
           resolve29();
         }

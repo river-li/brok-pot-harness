@@ -15,7 +15,7 @@ function composeBoxRunnerGates(deps) {
     dynamicTools: gate("grok_bot_dynamic_tools"),
     stableDynamicToolCatalog: gate("grok_bot_stable_dynamic_tool_catalog"),
     browserNavigationRecovery: gate("sand_browser_navigation_recovery"),
-    browserUsePlaywright: () => browserUsePlaywrightGate() || experiments.offerBrowserUsePlaywright(),
+    browserUsePlaywright: (options2) => browserUsePlaywrightGate() || (options2?.logExposure === true ? experiments.offerBrowserUsePlaywright() : experiments.peekBrowserUsePlaywright()),
     userForm,
     formVault: gate("grok_bot_form_vault"),
     draftExternalMessage: gate("sand_draft_external_message"),
@@ -35,8 +35,10 @@ function composeBoxRunnerGates(deps) {
       false,
       "the box host has no tool-description snapshot store; frozen tool descriptions are Temporal-only"
     ),
-    canvases: gate("sand_canvases"),
-    cloudAgentProjects: gate("sand_enable_projects"),
+    summaryTurnEndHold: fixedGate(
+      false,
+      "the box host keeps one runner across turns and never tears down an in-flight summary; the turn-end hold is Temporal-only"
+    ),
     cloudAgentExchange: gate("sand_enable_bot2bot_cloud_agent_ui"),
     cloudCanvasTools: () => false,
     botShare: gate("sand_share_bot"),
@@ -48,7 +50,12 @@ function composeBoxRunnerGates(deps) {
     chromeCookieImport: gate("sand_import_chrome_cookies"),
     boxEgressTunnel: gate("sand_box_egress_tunnel"),
     onePasswordIntegration: gate("sand_1pass_integration"),
-    agentEmail: gate("grok_bot_agent_mail"),
+    agentEmail: () => gate("grok_bot_agent_mail")() && deps.isAgentEmailAllowedByTeamAdmin(),
+    agentEmailMultipleInboxes: gate("grok_bot_agent_mail_multiple_inboxes"),
+    generalizedSelfSummaryPrompt: fixedGate(
+      false,
+      "the box host keeps the trained coding compaction prompt; the generalized self-summary prompt is Temporal-only"
+    ),
     checkSubscriptionUsage: gate("grok_bot_check_subscription_usage"),
     connectedActivity: gate("sand_connected_activity_tool"),
     updateCommunication: () => experiments.offerUpdateCommunication(),

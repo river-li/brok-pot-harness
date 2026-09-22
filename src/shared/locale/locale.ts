@@ -33,7 +33,12 @@ var init_locale = __esm({
       { tag: "id", endonym: "Bahasa Indonesia", englishName: "Indonesian", direction: "ltr" },
       { tag: "ur", endonym: "\u0627\u0631\u062F\u0648", englishName: "Urdu", direction: "rtl" },
       { tag: "th", endonym: "\u0E44\u0E17\u0E22", englishName: "Thai", direction: "ltr" },
-      { tag: "bn", endonym: "\u09AC\u09BE\u0982\u09B2\u09BE", englishName: "Bengali", direction: "ltr" }
+      { tag: "bn", endonym: "\u09AC\u09BE\u0982\u09B2\u09BE", englishName: "Bengali", direction: "ltr" },
+      { tag: "cs", endonym: "\u010Ce\u0161tina", englishName: "Czech", direction: "ltr" },
+      { tag: "hu", endonym: "Magyar", englishName: "Hungarian", direction: "ltr" },
+      { tag: "nb", endonym: "Norsk bokm\xE5l", englishName: "Norwegian Bokm\xE5l", direction: "ltr" },
+      { tag: "da", endonym: "Dansk", englishName: "Danish", direction: "ltr" },
+      { tag: "fi", endonym: "Suomi", englishName: "Finnish", direction: "ltr" }
     ];
     SUPPORTED_LOCALES = SUPPORTED_LOCALE_ROWS.map(
       (row) => row.tag

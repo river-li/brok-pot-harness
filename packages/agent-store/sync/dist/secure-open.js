@@ -1,6 +1,6 @@
 var fs4 = __toESM(require("node:fs"), 1);
 var path4 = __toESM(require("node:path"), 1);
-var __awaiter2 = function(thisArg, _arguments, P2, generator) {
+var __awaiter3 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -62,12 +62,12 @@ function openSecureSqlitePath(resolvedPath, mode) {
       fs4.closeSync(leafFd);
     }
     let verified = false;
-    let closed2 = false;
+    let closed3 = false;
     const closeParent = () => {
-      if (closed2) {
+      if (closed3) {
         return;
       }
-      closed2 = true;
+      closed3 = true;
       fs4.closeSync(parentDirFd);
     };
     const verifyOpenedInode = () => {
@@ -91,22 +91,22 @@ function openSecureSqlitePath(resolvedPath, mode) {
   }
 }
 function writeLockFileExclusive(lockPath, contents, mode) {
-  return __awaiter2(this, void 0, void 0, function* () {
+  return __awaiter3(this, void 0, void 0, function* () {
     const flags = symlinkSafeExclusiveWriteFlags();
     let fd;
     try {
       fd = yield fs4.promises.open(lockPath, flags, mode);
       assertResolvedPathStillCanonical(lockPath);
       yield fd.writeFile(contents, { encoding: "utf8" });
-    } catch (error41) {
-      if (isNofollowSymlinkRefusal(error41)) {
+    } catch (error42) {
+      if (isNofollowSymlinkRefusal(error42)) {
         throw new AgentStorePathError({
           code: "symlink_refused",
           message: `Refusing to create lockfile at symlinked path: ${lockPath}`,
           failedPath: lockPath
         });
       }
-      throw error41;
+      throw error42;
     } finally {
       yield fd === null || fd === void 0 ? void 0 : fd.close();
     }
@@ -116,30 +116,30 @@ function openRegularFileNoFollowCreate(filePath, mode) {
   const flags = symlinkSafeOpenCreateFlags();
   try {
     return fs4.openSync(filePath, flags, mode);
-  } catch (error41) {
-    if (isNofollowSymlinkRefusal(error41)) {
+  } catch (error42) {
+    if (isNofollowSymlinkRefusal(error42)) {
       throw new AgentStorePathError({
         code: "symlink_refused",
         message: `Refusing to open symlinked path: ${filePath}`,
         failedPath: filePath
       });
     }
-    throw error41;
+    throw error42;
   }
 }
 function openParentDirectoryNoFollow(parentDir) {
   const flags = symlinkSafeDirectoryOpenFlags();
   try {
     return fs4.openSync(parentDir, flags);
-  } catch (error41) {
-    if (isNofollowSymlinkRefusal(error41) || isNodeError3(error41) && error41.code === "ENOTDIR" && isSymlink(parentDir)) {
+  } catch (error42) {
+    if (isNofollowSymlinkRefusal(error42) || isNodeError3(error42) && error42.code === "ENOTDIR" && isSymlink(parentDir)) {
       throw new AgentStorePathError({
         code: "symlink_refused",
         message: `Refusing to open sqlite under symlinked parent: ${parentDir}`,
         failedPath: parentDir
       });
     }
-    throw error41;
+    throw error42;
   }
 }
 function isSymlink(targetPath) {
@@ -157,15 +157,15 @@ function assertLeafInodeUnchanged(resolvedPath, expected) {
   let fd;
   try {
     fd = fs4.openSync(resolvedPath, flags);
-  } catch (error41) {
-    if (isNofollowSymlinkRefusal(error41)) {
+  } catch (error42) {
+    if (isNofollowSymlinkRefusal(error42)) {
       throw new AgentStorePathError({
         code: "symlink_refused",
         message: `Sqlite path became symlinked between open and verification: ${resolvedPath}`,
         failedPath: resolvedPath
       });
     }
-    throw error41;
+    throw error42;
   }
   try {
     const stat28 = fs4.fstatSync(fd);
@@ -185,10 +185,10 @@ function assertParentDirInodeMatchesPath(expected, parentDir) {
   let pathStat;
   try {
     pathStat = fs4.lstatSync(parentDir);
-  } catch (error41) {
+  } catch (error42) {
     throw new AgentStorePathError({
       code: "symlink_refused",
-      message: `Unable to lstat parent directory ${parentDir}: ${error41 instanceof Error ? error41.message : String(error41)}`,
+      message: `Unable to lstat parent directory ${parentDir}: ${error42 instanceof Error ? error42.message : String(error42)}`,
       failedPath: parentDir
     });
   }
@@ -209,72 +209,72 @@ function assertParentDirInodeMatchesPath(expected, parentDir) {
 }
 function symlinkSafeOpenCreateFlags() {
   var _a19;
-  const constants11 = fs4.constants;
-  let flags = (_a19 = constants11.O_RDWR) !== null && _a19 !== void 0 ? _a19 : 0;
-  if (typeof constants11.O_CREAT === "number") {
-    flags |= constants11.O_CREAT;
+  const constants12 = fs4.constants;
+  let flags = (_a19 = constants12.O_RDWR) !== null && _a19 !== void 0 ? _a19 : 0;
+  if (typeof constants12.O_CREAT === "number") {
+    flags |= constants12.O_CREAT;
   }
-  if (typeof constants11.O_NOFOLLOW === "number") {
-    flags |= constants11.O_NOFOLLOW;
+  if (typeof constants12.O_NOFOLLOW === "number") {
+    flags |= constants12.O_NOFOLLOW;
   }
-  if (typeof constants11.O_CLOEXEC === "number") {
-    flags |= constants11.O_CLOEXEC;
+  if (typeof constants12.O_CLOEXEC === "number") {
+    flags |= constants12.O_CLOEXEC;
   }
   return flags;
 }
 function symlinkSafeReopenFlags() {
   var _a19;
-  const constants11 = fs4.constants;
-  let flags = (_a19 = constants11.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
-  if (typeof constants11.O_NOFOLLOW === "number") {
-    flags |= constants11.O_NOFOLLOW;
+  const constants12 = fs4.constants;
+  let flags = (_a19 = constants12.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
+  if (typeof constants12.O_NOFOLLOW === "number") {
+    flags |= constants12.O_NOFOLLOW;
   }
-  if (typeof constants11.O_CLOEXEC === "number") {
-    flags |= constants11.O_CLOEXEC;
+  if (typeof constants12.O_CLOEXEC === "number") {
+    flags |= constants12.O_CLOEXEC;
   }
   return flags;
 }
 function symlinkSafeDirectoryOpenFlags() {
   var _a19;
-  const constants11 = fs4.constants;
-  let flags = (_a19 = constants11.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
-  if (typeof constants11.O_DIRECTORY === "number") {
-    flags |= constants11.O_DIRECTORY;
+  const constants12 = fs4.constants;
+  let flags = (_a19 = constants12.O_RDONLY) !== null && _a19 !== void 0 ? _a19 : 0;
+  if (typeof constants12.O_DIRECTORY === "number") {
+    flags |= constants12.O_DIRECTORY;
   }
-  if (typeof constants11.O_NOFOLLOW === "number") {
-    flags |= constants11.O_NOFOLLOW;
+  if (typeof constants12.O_NOFOLLOW === "number") {
+    flags |= constants12.O_NOFOLLOW;
   }
-  if (typeof constants11.O_CLOEXEC === "number") {
-    flags |= constants11.O_CLOEXEC;
+  if (typeof constants12.O_CLOEXEC === "number") {
+    flags |= constants12.O_CLOEXEC;
   }
   return flags;
 }
 function symlinkSafeExclusiveWriteFlags() {
   var _a19;
-  const constants11 = fs4.constants;
-  let flags = (_a19 = constants11.O_WRONLY) !== null && _a19 !== void 0 ? _a19 : 0;
-  if (typeof constants11.O_CREAT === "number") {
-    flags |= constants11.O_CREAT;
+  const constants12 = fs4.constants;
+  let flags = (_a19 = constants12.O_WRONLY) !== null && _a19 !== void 0 ? _a19 : 0;
+  if (typeof constants12.O_CREAT === "number") {
+    flags |= constants12.O_CREAT;
   }
-  if (typeof constants11.O_EXCL === "number") {
-    flags |= constants11.O_EXCL;
+  if (typeof constants12.O_EXCL === "number") {
+    flags |= constants12.O_EXCL;
   }
-  if (typeof constants11.O_NOFOLLOW === "number") {
-    flags |= constants11.O_NOFOLLOW;
+  if (typeof constants12.O_NOFOLLOW === "number") {
+    flags |= constants12.O_NOFOLLOW;
   }
-  if (typeof constants11.O_CLOEXEC === "number") {
-    flags |= constants11.O_CLOEXEC;
+  if (typeof constants12.O_CLOEXEC === "number") {
+    flags |= constants12.O_CLOEXEC;
   }
   return flags;
 }
-function isNofollowSymlinkRefusal(error41) {
-  if (!isNodeError3(error41)) {
+function isNofollowSymlinkRefusal(error42) {
+  if (!isNodeError3(error42)) {
     return false;
   }
-  if (error41.code === "ELOOP" || error41.code === "EMLINK") {
+  if (error42.code === "ELOOP" || error42.code === "EMLINK") {
     return true;
   }
-  if (error41.code === "EPERM" && hasNofollowConstant()) {
+  if (error42.code === "EPERM" && hasNofollowConstant()) {
     return true;
   }
   return false;
@@ -282,6 +282,6 @@ function isNofollowSymlinkRefusal(error41) {
 function hasNofollowConstant() {
   return typeof fs4.constants.O_NOFOLLOW === "number";
 }
-function isNodeError3(error41) {
-  return error41 instanceof Error && typeof error41.code === "string";
+function isNodeError3(error42) {
+  return error42 instanceof Error && typeof error42.code === "string";
 }

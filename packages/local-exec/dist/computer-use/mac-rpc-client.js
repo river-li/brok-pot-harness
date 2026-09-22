@@ -7,27 +7,27 @@ var MacComputerUseRPCError = class extends Error {
     this.tool = options2?.tool;
   }
 };
-function userFacingMacComputerUseError(error41) {
-  if (error41 instanceof MacComputerUseRPCError && error41.userFacing && error41.message.trim().length > 0 && !macComputerUseErrorContainsPath(error41.message)) {
-    return error41.message.trim();
+function userFacingMacComputerUseError(error42) {
+  if (error42 instanceof MacComputerUseRPCError && error42.userFacing && error42.message.trim().length > 0 && !macComputerUseErrorContainsPath(error42.message)) {
+    return error42.message.trim();
   }
   return void 0;
 }
-function isMacComputerUseCaptureBlocked(error41) {
-  if (!(error41 instanceof MacComputerUseRPCError)) {
+function isMacComputerUseCaptureBlocked(error42) {
+  if (!(error42 instanceof MacComputerUseRPCError)) {
     return false;
   }
-  return error41.tool === "computer_use_screenshot" || error41.code === "permission_required";
+  return error42.tool === "computer_use_screenshot" || error42.code === "permission_required";
 }
-function redactMacComputerUseError(error41) {
-  if (typeof error41 === "object" && error41 !== null && "code" in error41 && typeof error41.code === "string") {
-    return error41.code;
+function redactMacComputerUseError(error42) {
+  if (typeof error42 === "object" && error42 !== null && "code" in error42 && typeof error42.code === "string") {
+    return error42.code;
   }
-  if (error41 instanceof Error) {
-    if (macComputerUseErrorContainsPath(error41.message)) {
-      return error41.name;
+  if (error42 instanceof Error) {
+    if (macComputerUseErrorContainsPath(error42.message)) {
+      return error42.name;
     }
-    return error41.message.length > 0 ? `${error41.name}: ${error41.message}` : error41.name;
+    return error42.message.length > 0 ? `${error42.name}: ${error42.message}` : error42.name;
   }
   return "unknown";
 }
@@ -161,8 +161,10 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
       if (response.error !== void 0) {
         throw _MacComputerUseRPCClient.rpcError(response);
       }
-    } catch (error41) {
-      _MacComputerUseRPCClient.logger.warn(ctx, "local-cua control release failed", { error: redactMacComputerUseError(error41) });
+    } catch (error42) {
+      _MacComputerUseRPCClient.logger.warn(ctx, "local-cua control release failed", {
+        error: redactMacComputerUseError(error42)
+      });
     }
   }
   async callTool(ctx, name17, args) {
@@ -208,13 +210,13 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
     _MacComputerUseRPCClient.throwIfAborted(ctx.signal);
     try {
       return await _MacComputerUseRPCClient.sendOnce(socketPath, buildRequest(), timeoutMs, ctx.signal);
-    } catch (error41) {
-      if (!_MacComputerUseRPCClient.isPreDeliveryConnectionError(error41)) {
-        throw error41;
+    } catch (error42) {
+      if (!_MacComputerUseRPCClient.isPreDeliveryConnectionError(error42)) {
+        throw error42;
       }
       _MacComputerUseRPCClient.logger.warn(ctx, "local-cua callTool failed; relaunching and retrying", {
         tool: label,
-        error: _MacComputerUseRPCClient.spawnErrorCode(error41)
+        error: _MacComputerUseRPCClient.spawnErrorCode(error42)
       });
       const retryPath = await this.ensureSocketPath(ctx, true);
       _MacComputerUseRPCClient.throwIfAborted(ctx.signal);
@@ -253,10 +255,7 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
     if (process.env[_MacComputerUseRPCClient.directLaunchEnv] === "1") {
       await _MacComputerUseRPCClient.spawnSidecarProcess(ctx, _MacComputerUseRPCClient.serviceExecutablePath(), [], { detached: true });
     } else {
-      await _MacComputerUseRPCClient.spawnSidecarProcess(ctx, "/usr/bin/open", [
-        "-g",
-        appPath
-      ]);
+      await _MacComputerUseRPCClient.spawnSidecarProcess(ctx, "/usr/bin/open", ["-g", appPath]);
     }
     const deadline = Date.now() + _MacComputerUseRPCClient.launchReadyTimeoutMs;
     while (Date.now() < deadline) {
@@ -275,8 +274,8 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
     }
     throw new MacComputerUseRPCError("local-cua sidecar did not become ready in time");
   }
-  static isPreDeliveryConnectionError(error41) {
-    const code = redactMacComputerUseError(error41);
+  static isPreDeliveryConnectionError(error42) {
+    const code = redactMacComputerUseError(error42);
     return code === "ENOENT" || code === "ECONNREFUSED";
   }
   static appSupportDirectory() {
@@ -313,11 +312,11 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
       usingOverride: Boolean(process.env[_MacComputerUseRPCClient.serviceAppOverrideEnv])
     };
   }
-  static spawnErrorCode(error41) {
-    return redactMacComputerUseError(error41);
+  static spawnErrorCode(error42) {
+    return redactMacComputerUseError(error42);
   }
-  static socketError(error41) {
-    const code = redactMacComputerUseError(error41);
+  static socketError(error42) {
+    const code = redactMacComputerUseError(error42);
     return new MacComputerUseRPCError(`local-cua RPC connection failed: ${code}`, { code });
   }
   static serviceExecutablePath() {
@@ -334,15 +333,15 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
         detached: options2?.detached === true,
         stdio: "ignore"
       });
-      const fail = (error41) => {
-        reject2(new MacComputerUseRPCError(`local-cua sidecar launch failed: ${_MacComputerUseRPCClient.spawnErrorCode(error41)}`));
+      const fail = (error42) => {
+        reject2(new MacComputerUseRPCError(`local-cua sidecar launch failed: ${_MacComputerUseRPCClient.spawnErrorCode(error42)}`));
       };
       child.once("error", fail);
       child.once("spawn", () => {
         child.removeListener("error", fail);
-        child.on("error", (error41) => {
+        child.on("error", (error42) => {
           _MacComputerUseRPCClient.logger.warn(ctx, "local-cua sidecar process error after launch", {
-            error: _MacComputerUseRPCClient.spawnErrorCode(error41)
+            error: _MacComputerUseRPCClient.spawnErrorCode(error42)
           });
         });
         child.unref();
@@ -354,11 +353,11 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
     try {
       const raw = await (0, import_promises38.readFile)(_MacComputerUseRPCClient.serviceStatePath(), "utf8");
       return MacRPCProtocol.parseServiceState(raw);
-    } catch (error41) {
-      if (error41 instanceof Error && "code" in error41 && error41.code === "ENOENT") {
+    } catch (error42) {
+      if (error42 instanceof Error && "code" in error42 && error42.code === "ENOENT") {
         return void 0;
       }
-      if (error41 instanceof MacRPCProtocolError) {
+      if (error42 instanceof MacRPCProtocolError) {
         return void 0;
       }
       throw new MacComputerUseRPCError("local-cua service state could not be read");
@@ -376,7 +375,7 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
     }
   }
   /** Send one newline-delimited JSON-RPC request over one connection. */
-  static sendOnce(socketPath, request3, timeoutMs, signal) {
+  static sendOnce(socketPath, request5, timeoutMs, signal) {
     if (signal?.aborted) {
       return Promise.reject(_MacComputerUseRPCClient.abortError(signal));
     }
@@ -408,10 +407,10 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
         return;
       }
       socket.on("connect", () => {
-        socket.write(`${JSON.stringify(request3)}
-`, (error41) => {
-          if (error41 != null) {
-            finish(() => reject2(_MacComputerUseRPCClient.socketError(error41)));
+        socket.write(`${JSON.stringify(request5)}
+`, (error42) => {
+          if (error42 != null) {
+            finish(() => reject2(_MacComputerUseRPCClient.socketError(error42)));
             return;
           }
           requestDelivered = true;
@@ -439,16 +438,16 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
             expectedID: _MacComputerUseRPCClient.requestID
           });
           finish(() => resolve29(parsed2));
-        } catch (error41) {
-          finish(() => reject2(error41));
+        } catch (error42) {
+          finish(() => reject2(error42));
         }
       });
-      socket.on("error", (error41) => {
+      socket.on("error", (error42) => {
         if (requestDelivered) {
           finish(() => reject2(new MacComputerUseRPCError("local-cua RPC connection failed after request delivery")));
           return;
         }
-        finish(() => reject2(_MacComputerUseRPCClient.socketError(error41)));
+        finish(() => reject2(_MacComputerUseRPCClient.socketError(error42)));
       });
       socket.on("close", () => {
         const message = bufferedBytes > 0 ? "local-cua RPC response ended without a newline" : requestDelivered ? "local-cua RPC connection closed after request delivery" : "local-cua RPC connection closed";

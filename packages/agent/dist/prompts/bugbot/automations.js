@@ -1,5 +1,5 @@
 var import_node_path42 = __toESM(require("node:path"), 1);
-init_dist();
+init_dist2();
 init_request_context_exec_pb();
 function automationToolNameToSnakeCase(name17) {
   return name17.replace(/([a-z0-9])([A-Z])/g, "$1_$2").replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2").toLowerCase();

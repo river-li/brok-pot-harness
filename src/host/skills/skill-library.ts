@@ -57,8 +57,8 @@ var GlobalSkillLibrary = class {
     let entries;
     try {
       entries = (0, import_node_fs68.readdirSync)(this.folder(id), { withFileTypes: true });
-    } catch (error41) {
-      reportFallbackUnlessAbsent("skill_library", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("skill_library", error42);
       return [];
     }
     return entries.filter((entry) => entry.isFile() && !RESERVED_SKILL_FILES.has(entry.name)).map((entry) => entry.name).sort();
@@ -71,8 +71,8 @@ var GlobalSkillLibrary = class {
     let raw;
     try {
       raw = (0, import_node_fs68.readFileSync)(this.path(id), "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("skill_library", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("skill_library", error42);
       return null;
     }
     const parsed2 = parseSkillFile(raw);
@@ -154,8 +154,8 @@ var GlobalSkillLibrary = class {
     let raw;
     try {
       raw = (0, import_node_fs68.readFileSync)(this.path(id), "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("skill_library", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("skill_library", error42);
       return {};
     }
     return parseSkillFile(raw)?.data ?? {};
@@ -169,8 +169,8 @@ var GlobalSkillLibrary = class {
     const folder = this.folder(id);
     try {
       if (!(0, import_node_fs68.statSync)(folder).isDirectory()) return false;
-    } catch (error41) {
-      reportFallbackUnlessAbsent("skill_library", error41);
+    } catch (error42) {
+      reportFallbackUnlessAbsent("skill_library", error42);
       return false;
     }
     (0, import_node_fs68.rmSync)(folder, { recursive: true, force: true });

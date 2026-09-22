@@ -69,8 +69,8 @@ async function sweepLegacyPluginSkillReferences(deps) {
       deps.log(`[sand:plugin-skills] retired ${removed} legacy live-reference record(s)`);
     }
     return removed;
-  } catch (error41) {
-    deps.log(`[sand:plugin-skills] legacy live-reference sweep failed: ${errorLogTag(error41)}`);
+  } catch (error42) {
+    deps.log(`[sand:plugin-skills] legacy live-reference sweep failed: ${errorLogTag(error42)}`);
     return 0;
   }
 }

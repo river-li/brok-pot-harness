@@ -1,5 +1,5 @@
 init_webp_codec();
-var __awaiter19 = function(thisArg, _arguments, P2, generator) {
+var __awaiter24 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -87,7 +87,7 @@ var targetDimensions = (width, height, maxDimension = MAX_IMAGE_DIMENSION) => ta
 var resizeJimp = (image2, width, height) => {
   image2.resize({ w: width, h: height });
 };
-var resizeWebp = (imageData, options2) => __awaiter19(void 0, void 0, void 0, function* () {
+var resizeWebp = (imageData, options2) => __awaiter24(void 0, void 0, void 0, function* () {
   const dimensions = readWebpDimensions(imageData);
   if ((options2 === null || options2 === void 0 ? void 0 : options2.preserveWebpDimensions) === true && dimensions !== void 0) {
     return { data: toUint8Array(imageData), mimeType: "image/webp" };
@@ -133,7 +133,7 @@ var resizeWebp = (imageData, options2) => __awaiter19(void 0, void 0, void 0, fu
   return { data: toUint8Array(resultBuffer), mimeType: "image/webp" };
 });
 var registeredRasterResizeCodec;
-var resizeWithCodec = (_a19) => __awaiter19(void 0, [_a19], void 0, function* ({ codec, imageData, mimeType }) {
+var resizeWithCodec = (_a19) => __awaiter24(void 0, [_a19], void 0, function* ({ codec, imageData, mimeType }) {
   const dimensions = yield codec.readOrientedDimensions(imageData);
   if (dimensions === void 0) {
     throw new Error(`Could not read ${mimeType} dimensions`);
@@ -157,7 +157,7 @@ var resizeWithCodec = (_a19) => __awaiter19(void 0, [_a19], void 0, function* ({
   }
   return { data: toUint8Array(resultBuffer), mimeType };
 });
-var resizeImageBufferIfNeeded = (imageData, options2) => __awaiter19(void 0, void 0, void 0, function* () {
+var resizeImageBufferIfNeeded = (imageData, options2) => __awaiter24(void 0, void 0, void 0, function* () {
   if (isWebp(imageData)) {
     return resizeWebp(imageData, options2);
   }

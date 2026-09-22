@@ -15,9 +15,9 @@ function recordArtifactMetrics(metrics2, record2) {
   if (metrics2 === void 0) return;
   try {
     record2(metrics2);
-  } catch (error41) {
+  } catch (error42) {
     process.stderr.write(
-      `sand.cloud_agent.artifact_metrics_failed error_class=${errorLogTag(error41)}
+      `sand.cloud_agent.artifact_metrics_failed error_class=${errorLogTag(error42)}
 `
     );
   }
@@ -135,8 +135,8 @@ async function syncCloudAgentArtifactsToBox(args) {
           bcId: args.bcId,
           absolutePath: candidate.artifact.path
         });
-      } catch (error41) {
-        return { failure: error41 };
+      } catch (error42) {
+        return { failure: error42 };
       }
     })
   );
@@ -168,8 +168,8 @@ async function syncCloudAgentArtifactsToBox(args) {
       try {
         await args.writeBoxFile(entry.boxPath, entry.bytes);
         return { synced: { boxPath: entry.boxPath, sizeBytes: entry.bytes.byteLength } };
-      } catch (error41) {
-        return { failed: entry.artifact, sizeBytes: entry.bytes.byteLength, cause: error41 };
+      } catch (error42) {
+        return { failed: entry.artifact, sizeBytes: entry.bytes.byteLength, cause: error42 };
       }
     })
   );
@@ -238,9 +238,9 @@ async function augmentWatchResultWithArtifacts(args) {
 
 ${note}` };
     }
-  } catch (error41) {
+  } catch (error42) {
     process.stderr.write(
-      `sand.cloud_agent.artifact_sync_failed error_class=${errorLogTag(error41)}
+      `sand.cloud_agent.artifact_sync_failed error_class=${errorLogTag(error42)}
 `
     );
   }

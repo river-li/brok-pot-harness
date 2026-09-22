@@ -5,8 +5,8 @@ var BASE_HOST_CAPABILITIES = [
 ];
 var CREATE_AGENT_NONCE_LEDGER_CAP = 64;
 function botTemplateGatewayView(view) {
-  const { description: description10, ...rest } = view;
-  return { ...rest, body: description10 };
+  const { description: description9, ...rest } = view;
+  return { ...rest, body: description9 };
 }
 async function hostCapabilities(deps) {
   const experiments = deps.extensions.api("experiments");
@@ -74,7 +74,7 @@ function createTemplateImportGatewayMethod(deps) {
           }
           try {
             local = await manager.createAgent(profile, "user", options2);
-          } catch (error41) {
+          } catch (error42) {
             const cleanupFailed = (stage) => (cleanupError) => {
               deps.extensions.api("telemetry").logs.reportHostDiagnostic({
                 kind: "template_import_cleanup_failed",
@@ -87,7 +87,7 @@ function createTemplateImportGatewayMethod(deps) {
             if (imported.kind === "server_backed") {
               await identity.rollbackRemoteAgent({ agentId, serverId: imported.agent.serverId }).catch(cleanupFailed("rollback_remote"));
             }
-            throw error41;
+            throw error42;
           }
           if (imported.kind === "local_only") identity.noteAgentMinted(agentId);
         } else {
@@ -119,9 +119,9 @@ function createTemplateImportGatewayMethod(deps) {
           if (result.setup.kind === "unavailable") mintsByAgentId.delete(agentId);
           return result;
         },
-        (error41) => {
+        (error42) => {
           mintsByAgentId.delete(agentId);
-          throw error41;
+          throw error42;
         }
       );
       mintsByAgentId.set(agentId, minted);
@@ -237,10 +237,10 @@ function wrapGatewayApiWithServerAgentProxy(args) {
         return await fallback2();
     }
   };
-  const act = async (request3, onOk, fallback2) => settle(await proxy.performAction(request3), onOk, fallback2);
+  const act = async (request5, onOk, fallback2) => settle(await proxy.performAction(request5), onOk, fallback2);
   const activate = (agentId) => {
-    void args.activateAgent(agentId).catch((error41) => {
-      proxy.log(`agent activation failed for ${agentId}: ${errorLogTag(error41)}`);
+    void args.activateAgent(agentId).catch((error42) => {
+      proxy.log(`agent activation failed for ${agentId}: ${errorLogTag(error42)}`);
     });
   };
   const openRead = (query) => query.beforeSeq === void 0 ? proxy.openAgentTail({ id: query.id, limit: query.limit }) : proxy.getAgentTranscriptTail(query);
@@ -255,11 +255,11 @@ function wrapGatewayApiWithServerAgentProxy(args) {
       { method: "setAgentUnread", args: { id: agentId, isUnread: false } },
       discardValue,
       async () => null
-    ).catch((error41) => {
-      proxy.log(`mark-read action failed for ${agentId}: ${errorLogTag(error41)}`);
+    ).catch((error42) => {
+      proxy.log(`mark-read action failed for ${agentId}: ${errorLogTag(error42)}`);
     });
-    void api.setAgentUnread({ id: agentId, isUnread: false }).catch((error41) => {
-      proxy.log(`mark-read mirror failed for ${agentId}: ${errorLogTag(error41)}`);
+    void api.setAgentUnread({ id: agentId, isUnread: false }).catch((error42) => {
+      proxy.log(`mark-read mirror failed for ${agentId}: ${errorLogTag(error42)}`);
     });
   };
   const isAgentSummary = (value) => isUnknownRecord(value) && typeof value.id === "string";
@@ -453,8 +453,8 @@ function wrapGatewayApiWithServerAgentProxy(args) {
     },
     setAgentUnread: async (unreadArgs) => {
       if (!proxy.isProxiedAgent(unreadArgs.id)) return api.setAgentUnread(unreadArgs);
-      await api.setAgentUnread(unreadArgs).catch((error41) => {
-        proxy.log(`unread mirror failed for ${unreadArgs.id}: ${errorLogTag(error41)}`);
+      await api.setAgentUnread(unreadArgs).catch((error42) => {
+        proxy.log(`unread mirror failed for ${unreadArgs.id}: ${errorLogTag(error42)}`);
       });
       await act(
         {
@@ -467,8 +467,8 @@ function wrapGatewayApiWithServerAgentProxy(args) {
     },
     setAgentHiddenFromSidebar: async (hiddenArgs) => {
       if (!proxy.isProxiedAgent(hiddenArgs.id)) return api.setAgentHiddenFromSidebar(hiddenArgs);
-      await api.setAgentHiddenFromSidebar(hiddenArgs).catch((error41) => {
-        proxy.log(`hidden mirror failed for ${hiddenArgs.id}: ${errorLogTag(error41)}`);
+      await api.setAgentHiddenFromSidebar(hiddenArgs).catch((error42) => {
+        proxy.log(`hidden mirror failed for ${hiddenArgs.id}: ${errorLogTag(error42)}`);
       });
       await settle(
         await proxy.setAgentHidden(hiddenArgs.id, hiddenArgs.isHidden),
@@ -623,10 +623,10 @@ ${args.request.trim()}`;
     let result;
     try {
       result = await manager.createAgent(config2, args.origin, createOptions);
-    } catch (error41) {
+    } catch (error42) {
       if (remote !== null)
         identity.rollbackRemoteAgent({ agentId: remote.agentId, serverId: remote.serverId });
-      throw error41;
+      throw error42;
     }
     if (remote === null) {
       identity.noteAgentMinted(result.agent.id);
@@ -673,7 +673,7 @@ ${args.request.trim()}`;
     });
     return { transcript };
   };
-  const writeLocalProfile = async (id, write) => {
+  const writeLocalProfile = async (id, write2) => {
     const identity = deps.extensions.api("agent-identity");
     const adopted = await identity.adoptServerAgentById(id);
     if (adopted === "missing") {
@@ -688,7 +688,7 @@ ${args.request.trim()}`;
         "network"
       );
     }
-    return identity.expectLocalEdit(id, write);
+    return identity.expectLocalEdit(id, write2);
   };
   const userFormCommands = {
     submitUserForm: (args) => manager.submitUserForm(args),
@@ -696,7 +696,6 @@ ${args.request.trim()}`;
   };
   const api = {
     ...createTemplateImportGatewayMethod(deps),
-    getTranscript: () => manager.ensureLoaded(),
     getAgentTranscript: (args) => manager.getAgentTranscript(args.id),
     getAgentTranscriptPage: async (args) => manager.getAgentTranscriptPage(args.id, args),
     getAgentTranscriptWindow: async (args) => manager.getAgentTranscriptWindow(args.id, args),
@@ -833,9 +832,9 @@ ${args.request.trim()}`;
       if (nonce == null || nonce.length === 0) return mintAgent(args);
       const pending = createAgentMintsByNonce.get(nonce);
       if (pending != null) return pending;
-      const minted = mintAgent(args).catch((error41) => {
+      const minted = mintAgent(args).catch((error42) => {
         createAgentMintsByNonce.delete(nonce);
-        throw error41;
+        throw error42;
       });
       createAgentMintsByNonce.set(nonce, minted);
       for (const oldest of createAgentMintsByNonce.keys()) {
@@ -929,7 +928,7 @@ ${args.request.trim()}`;
       void deps.kickstartIfPending(args.id);
       return tail;
     },
-    setWindowFocused: (args) => manager.setWindowFocused(args.isFocused),
+    setWindowFocused: (args) => deps.setWindowFocused(args.isFocused),
     getAgentAutomations: (args) => manager.getAgentAutomations(args.id),
     getAgentTodos: (args) => manager.getAgentTodos(args.id),
     getAutomationWebhookCredential: (args) => automations.getWebhookCredential({ agentId: args.id, localId: args.automationId }),
@@ -1000,7 +999,6 @@ ${args.request.trim()}`;
     runAgentWorkflowNow: (args) => manager.runAgentWorkflowNow(args.id, args.workflowId),
     importAgentWorkflowText: (args) => manager.importAgentSkillMarkdown(args.id, args.markdown, args.name),
     importAgentWorkflowUrl: (args) => manager.importAgentWorkflowUrl(args.id, args.url, args.name),
-    portAgentLocalSkills: (args) => manager.portAgentLocalSkills(args.id),
     getConversationOutline: (args) => manager.getConversationOutline(args.id),
     readMainAgentContext: (args) => manager.readMainAgentContext({ agentId: args.id }),
     readVoiceCallSentMessages: (args) => manager.readVoiceCallSentMessages(args.id),
@@ -1074,7 +1072,7 @@ ${args.request.trim()}`;
       mimeType,
       ...language === void 0 ? {} : { language }
     }),
-    generateAgentAvatarImage: ({ description: description10 }) => attachments.generateAvatarImage(description10),
+    generateAgentAvatarImage: ({ description: description9 }) => attachments.generateAvatarImage(description9),
     getSkillPublishTargets: () => deps.extensions.api("mcp").skillPublish.listTargets(),
     publishSkill: (args) => deps.extensions.api("mcp").skillPublish.publish(args),
     resyncPublishedSkill: (args) => deps.extensions.api("mcp").skillPublish.resync(args),
@@ -1284,11 +1282,11 @@ ${args.request.trim()}`;
         detail: "a decision is already in progress for this request"
       },
       async () => {
-        const request3 = await manager.widgetResponses.getOpenCredentialRequest({
+        const request5 = await manager.widgetResponses.getOpenCredentialRequest({
           entryId: args.entryId,
           agentId: args.agentId
         });
-        if (request3 == null) {
+        if (request5 == null) {
           return {
             filled: false,
             resolved: false,
@@ -1297,7 +1295,7 @@ ${args.request.trim()}`;
         }
         const provider = deps.extensions.api("credential-provider");
         const item = (await provider.getFreshDirectory())?.items.find(
-          (candidate) => candidate.credentialId === request3.credentialId && candidate.connectionId === request3.connectionId && candidate.catalogRevision === request3.catalogRevision
+          (candidate) => candidate.credentialId === request5.credentialId && candidate.connectionId === request5.connectionId && candidate.catalogRevision === request5.catalogRevision
         );
         if (item == null) {
           const detail = "the credential is no longer in the current synced catalog";
@@ -1311,8 +1309,8 @@ ${args.request.trim()}`;
         }
         const result = await provider.fillBrowserCredential({
           item,
-          targetSite: request3.targetSite,
-          ...request3.targetWebSocketDebuggerUrl == null ? {} : { targetWebSocketDebuggerUrl: request3.targetWebSocketDebuggerUrl },
+          targetSite: request5.targetSite,
+          ...request5.targetWebSocketDebuggerUrl == null ? {} : { targetWebSocketDebuggerUrl: request5.targetWebSocketDebuggerUrl },
           approvalMode: args.approvalMode ?? "allow-once",
           ...args.username == null ? {} : { username: args.username },
           password: args.password,

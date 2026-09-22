@@ -1,13 +1,13 @@
 var import_promises55 = require("node:fs/promises");
 var import_node_path111 = require("node:path");
-init_dist();
+init_dist2();
 init_errors();
 async function readLocalHostVersion(versionPath = SAND_BOX_HOST_VERSION_PATH) {
   try {
     const raw = (await (0, import_promises55.readFile)(versionPath, "utf8")).trim();
     return raw.length > 0 ? raw : null;
-  } catch (error41) {
-    reportFallbackUnlessAbsent("host_bundle_upgrade", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("host_bundle_upgrade", error42);
     return null;
   }
 }
@@ -45,10 +45,10 @@ async function fetchStageAndReportHostBundle(deps) {
       `host bundle update (${trigger2}): staged ${source.version}; supervisor swaps when idle`
     );
     return { ok: true };
-  } catch (error41) {
+  } catch (error42) {
     deps.log?.(
       "warn",
-      `host bundle update (${trigger2}): ${phase} failed (box unchanged): ${errorLogTag(error41)}`
+      `host bundle update (${trigger2}): ${phase} failed (box unchanged): ${errorLogTag(error42)}`
     );
     if (state.lastFailedVersion !== source.version) {
       state.lastFailedVersion = source.version;
@@ -59,10 +59,10 @@ async function fetchStageAndReportHostBundle(deps) {
         trigger: trigger2,
         from_version: fromVersion ?? void 0,
         to_version: source.version,
-        error_class: error41 instanceof Error ? error41.constructor.name : "unknown"
+        error_class: error42 instanceof Error ? error42.constructor.name : "unknown"
       });
     }
-    return { ok: false, error: error41, phase };
+    return { ok: false, error: error42, phase };
   }
 }
 var MAX_FAILED_SWAP_RESTAGE_RETRIES = 2;
@@ -78,8 +78,8 @@ async function isHostVersionSwapVetoed(args) {
   try {
     await (0, import_promises55.access)((0, import_node_path111.join)(acksDir, ackName));
     return true;
-  } catch (error41) {
-    reportFallbackUnlessAbsent("host_bundle_upgrade", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("host_bundle_upgrade", error42);
     return false;
   }
 }
@@ -112,10 +112,10 @@ function describeHostBundleErrorNode(err, seen) {
   }
   return node;
 }
-function describeHostBundleErrorDetail(error41, phase) {
+function describeHostBundleErrorDetail(error42, phase) {
   const parts = [];
   const seen = /* @__PURE__ */ new Set();
-  let current = error41;
+  let current = error42;
   while (current != null && !seen.has(current)) {
     seen.add(current);
     if (current instanceof Error) {
@@ -126,7 +126,7 @@ function describeHostBundleErrorDetail(error41, phase) {
       break;
     }
   }
-  const chain = parts.length > 0 ? parts.join(" \u2192 ") : String(error41);
+  const chain = parts.length > 0 ? parts.join(" \u2192 ") : String(error42);
   return phase != null ? `@phase:${phase} ${chain}` : chain;
 }
 var HOST_BUNDLE_WATCH_INTERVAL_MS = 24 * 60 * 6e4;

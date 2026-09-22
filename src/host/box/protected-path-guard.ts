@@ -10,7 +10,6 @@ var MODEL_READABLE_STORE_TREES = /* @__PURE__ */ new Set([
   "agents",
   "agent-transcripts",
   "user-memory",
-  "projects",
   "workflows",
   "plugins",
   "managed-skills"

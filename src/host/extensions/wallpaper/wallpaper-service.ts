@@ -35,8 +35,8 @@ var WallpaperToneScheduler = class {
         synced = this.generation;
         await this.sync(synced);
       }
-    } catch (error41) {
-      this.deps.log(`wallpaper tone sync failed (${errorLogTag(error41)}); retrying`);
+    } catch (error42) {
+      this.deps.log(`wallpaper tone sync failed (${errorLogTag(error42)}); retrying`);
       if (!this.disposed) this.armWake(UNRESOLVED_PLAN_RETRY_MS, this.generation);
     } finally {
       this.syncing = false;

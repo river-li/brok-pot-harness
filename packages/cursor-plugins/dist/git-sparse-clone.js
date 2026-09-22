@@ -1,6 +1,6 @@
 var import_promises30 = require("node:fs/promises");
 var import_node_path58 = require("node:path");
-var __awaiter53 = function(thisArg, _arguments, P2, generator) {
+var __awaiter55 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -42,7 +42,7 @@ function isSparseCloneSupported() {
   if (process.env[DISABLE_SPARSE_PLUGIN_CLONES_ENV]) {
     return Promise.resolve(false);
   }
-  sparseSupportPromise !== null && sparseSupportPromise !== void 0 ? sparseSupportPromise : sparseSupportPromise = (() => __awaiter53(this, void 0, void 0, function* () {
+  sparseSupportPromise !== null && sparseSupportPromise !== void 0 ? sparseSupportPromise : sparseSupportPromise = (() => __awaiter55(this, void 0, void 0, function* () {
     try {
       const { stdout } = yield execGitNonInteractive(["--version"]);
       const version3 = parseGitVersion(stdout);
@@ -89,7 +89,7 @@ function sparseDirsForInitialCheckout(dirs) {
   return [.../* @__PURE__ */ new Set([...ALWAYS_SPARSE_DIRS, ...dirs])];
 }
 function resolveSparseClonePlan(requested, sparsePluginClones) {
-  return __awaiter53(this, void 0, void 0, function* () {
+  return __awaiter55(this, void 0, void 0, function* () {
     const materialize3 = requested === "all" ? "all" : materializeSpecForGitPaths(requested);
     const sparse = sparsePluginClones && materialize3 !== "all" && (yield isSparseCloneSupported());
     return {
@@ -103,12 +103,12 @@ function serverIgnoredFilter(stderr) {
   return stderr.toLowerCase().includes("filtering not recognized by server");
 }
 function setSparseCheckoutDirs(repoDir, dirs, execOpts) {
-  return __awaiter53(this, void 0, void 0, function* () {
+  return __awaiter55(this, void 0, void 0, function* () {
     yield execGitNonInteractive(["sparse-checkout", "set", "--cone", "--", ...dirs], Object.assign(Object.assign({}, execOpts), { cwd: repoDir }));
   });
 }
 function isSparseCheckoutRepo(repoDir) {
-  return __awaiter53(this, void 0, void 0, function* () {
+  return __awaiter55(this, void 0, void 0, function* () {
     try {
       yield (0, import_promises30.access)((0, import_node_path58.join)(repoDir, ".git", "info", "sparse-checkout"));
     } catch (_a19) {
@@ -123,7 +123,7 @@ function isSparseCheckoutRepo(repoDir) {
   });
 }
 function materializeSparseDirs(repoDir, spec, execOpts) {
-  return __awaiter53(this, void 0, void 0, function* () {
+  return __awaiter55(this, void 0, void 0, function* () {
     if (spec !== "all" && spec.length === 0) {
       return;
     }

@@ -26,14 +26,15 @@ async function recordExchangeOutbound(exchange, api, message) {
       ...message.images === void 0 ? {} : { images: message.images },
       ...message.attachments === void 0 ? {} : { attachments: message.attachments }
     });
-  } catch (error41) {
+  } catch (error42) {
     process.stderr.write(
-      `sand.cloud_agent.exchange_record_failed error_class=${errorLogTag(error41)}
+      `sand.cloud_agent.exchange_record_failed error_class=${errorLogTag(error42)}
 `
     );
   }
 }
 var CloudAgentLaunchBlockedError = class extends Error {
+  toolCallAuditOutcome = "denied";
   reason;
   constructor(reason) {
     super(reason);
@@ -231,7 +232,6 @@ function cloudAgentParametersFor(enabled) {
   const replyModes = enabled.replyModes === true;
   const base = cloudAgentParameters.innerType().omit({
     ...enabled.isCanvasesEnabled ? {} : { is_canvas: true, is_show_card: true },
-    ...enabled.projectsEnabled ? {} : { project: true },
     // Reply modes off: no `mode`, and `interrupt` keeps today's full text.
     ...replyModes ? {} : { mode: true }
   });
@@ -363,9 +363,9 @@ async function validateModelSelection(api, modelId, modelParams) {
   }
   return null;
 }
-function backendRejectionMessage(error41, repoUrl) {
-  if (!(error41 instanceof ConnectError)) return null;
-  const structured = error41.findDetails(ErrorDetails)[0];
+function backendRejectionMessage(error42, repoUrl) {
+  if (!(error42 instanceof ConnectError)) return null;
+  const structured = error42.findDetails(ErrorDetails)[0];
   const details = structured?.details;
   const provider = detectScmProviderForRepoUrl(repoUrl);
   const providerName = provider == null || provider === "origin" ? null : scmProviderDisplayName(provider);
@@ -383,7 +383,7 @@ function backendRejectionMessage(error41, repoUrl) {
   }
   const fromDetails = [details?.detail, details?.title].map((v2) => v2?.trim()).find((v2) => v2);
   if (fromDetails != null && fromDetails.length > 0) return fromDetails;
-  const raw = error41.rawMessage.trim();
+  const raw = error42.rawMessage.trim();
   if (raw.length === 0 || raw === "Error") return null;
   if (/repositor/i.test(raw) || /please reconnect (github|gitlab|bitbucket|azure)/i.test(raw)) {
     return raw;
@@ -480,7 +480,7 @@ async function runCloudAgentAction(ctx, args, deps) {
         return "A saved-environment launch needs environment.name (the environment's display name) or environment.id (its public id).";
       }
       const isCanvas = deps.isCanvasesEnabled && args.is_canvas === true;
-      const isProject = deps.projectsEnabled && args.project === true;
+      const isProject = args.project === true;
       if (isProject && isCanvas) {
         throw new SandCloudAgentToolInputError("project cannot be combined with is_canvas.");
       }
@@ -528,11 +528,11 @@ async function runCloudAgentAction(ctx, args, deps) {
           environment: toCloudAgentEnvironment(args.environment),
           lineage: deriveCloudAgentHandoffLineage(ctx, deps.toolCallId, deps.fallbackLineage)
         });
-      } catch (error41) {
-        if (error41 instanceof CloudAgentLaunchBlockedError) {
-          return formatCloudAgentLaunchBlockedMessage(error41.reason);
+      } catch (error42) {
+        if (error42 instanceof CloudAgentLaunchBlockedError) {
+          return formatCloudAgentLaunchBlockedMessage(error42.reason);
         }
-        const rejection = backendRejectionMessage(error41, repoUrl);
+        const rejection = backendRejectionMessage(error42, repoUrl);
         if (rejection != null) {
           if (!newRepo && deps.describeScmConnect != null) {
             const truncatedPrompt = prompt.length > 300 ? `${prompt.slice(0, 300)}\u2026` : prompt;
@@ -549,7 +549,7 @@ ${note}`;
           }
           return `Could not launch the cloud agent: ${rejection}`;
         }
-        throw error41;
+        throw error42;
       }
       launchedIds.add(result.bcId);
       if (isCanvas) {
@@ -626,11 +626,11 @@ It runs on ${cloudAgentRuntimeDescription(args.environment)}.${prClause} ${follo
       let result;
       try {
         result = await api.listRepositories({ search, cursor });
-      } catch (error41) {
-        if (error41 instanceof SandCloudAgentRepositoriesCursorError) {
-          return `Invalid cursor: ${error41.message}`;
+      } catch (error42) {
+        if (error42 instanceof SandCloudAgentRepositoriesCursorError) {
+          return `Invalid cursor: ${error42.message}`;
         }
-        throw error41;
+        throw error42;
       }
       if (result.connectedProviders.length === 0) {
         if (result.unreachableProviders.length > 0) {
@@ -779,13 +779,13 @@ ${note}`;
             files: attachments.files,
             ...quietOrigin === void 0 ? {} : { quietOrigin }
           });
-        } catch (error41) {
-          const rejection = backendRejectionMessage(error41);
+        } catch (error42) {
+          const rejection = backendRejectionMessage(error42);
           if (rejection != null) {
             recordCloudAgentReply(metrics2, { mode, outcome: "rejected" });
             return `Could not steer ${agentId}: ${rejection}`;
           }
-          throw error41;
+          throw error42;
         }
         if (outcome.kind === "failed") {
           recordCloudAgentReply(metrics2, { mode, outcome: "rejected" });
@@ -830,9 +830,9 @@ ${note}`;
           const detail = await api.get(agentId);
           wasRunning = detail?.status === "running" || detail?.status === "creating";
           knownName = detail?.name;
-        } catch (error41) {
+        } catch (error42) {
           process.stderr.write(
-            `sand.cloud_agent.interrupt_status_probe_failed error_class=${errorLogTag(error41)}
+            `sand.cloud_agent.interrupt_status_probe_failed error_class=${errorLogTag(error42)}
 `
           );
         }
@@ -851,13 +851,13 @@ ${note}`;
           files: attachments.files,
           interrupt
         });
-      } catch (error41) {
-        const rejection = backendRejectionMessage(error41);
+      } catch (error42) {
+        const rejection = backendRejectionMessage(error42);
         if (rejection != null) {
           recordCloudAgentReply(metrics2, { mode, outcome: "rejected" });
           return `Could not send the follow-up: ${rejection}`;
         }
-        throw error41;
+        throw error42;
       }
       recordCloudAgentReply(metrics2, {
         mode,
@@ -903,12 +903,12 @@ ${note}`;
       const title = requireField2(args.title, "title", "rename");
       try {
         await api.rename(agentId, title);
-      } catch (error41) {
-        const rejection = backendRejectionMessage(error41);
+      } catch (error42) {
+        const rejection = backendRejectionMessage(error42);
         if (rejection != null) {
           return `Could not rename the cloud agent: ${rejection}`;
         }
-        throw error41;
+        throw error42;
       }
       return `Renamed ${agentId} to "${title}". The new title shows everywhere the agent appears (cursor.com, the IDE sidebar, mobile).`;
     }
@@ -949,8 +949,6 @@ ${note}`;
 }
 var SCM_CONNECT_CARD_CLAUSE = " If the launch is rejected because no (or the wrong) source control integration is connected, or it can't see the repo, nothing is shown to the user; the result names the request_scm_connect call that asks them.";
 var CANVAS_LAUNCH_CLAUSE = ", is_canvas (the deliverable is a Cursor canvas; implies new_repo), is_show_card (surface the cursor-agent card a canvas launch hides)";
-var PROJECT_LAUNCH_CLAUSE = ", project (a Project coordinator instead of a plain agent, only when the user explicitly asks for a project, see Projects below)";
-var PROJECTS_PARAGRAPH = `Projects. A Project is a coordinator cloud agent. Its threads are regular cloud agents attached to it. The coordinator plans the work, spawns and directs its own threads on the repo, and keeps notes in its Agent Store. Start one with launch and project: true. The title names it. Do this only when the user explicitly asks for a project, for example "start a project", "spin up a project agent", or "make this a project". A plain cloud agent is the default for every coding task, including large ones. Never pick a project on your own, and never because the task looks big. Steer it with reply. Cancel, archive, rename, dump, and get work on the coordinator as on any agent. You are revived when the coordinator's own run finishes. Its threads may still be running then.`;
 var REPOSITORIES_ACTION_LINE = "- repositories: list the repositories the user's connected source control integrations (GitHub, GitLab, Bitbucket, Azure DevOps) can access, 100 per call, with an optional 'search' name filter. A 'More repositories' footer carries a cursor; pass it back (with the same search) for the next page. Use this to resolve a bare repo name the user gave you, or to see what's launchable before picking a repo.";
 var CLOUD_AGENT_ARTIFACT_CLAUSES = {
   launch: {
@@ -972,7 +970,6 @@ function cloudAgentDescription({
   scmConnectCard,
   describeScmConnect,
   isCanvasesEnabled,
-  projectsEnabled,
   artifactsEnabled,
   durableWatch,
   replyModes
@@ -982,7 +979,7 @@ function cloudAgentDescription({
     "Manage Cursor cloud agents \u2014 background coding agents that run on a Cursor-managed VM or self-hosted worker, edit a repo on a branch (GitHub, GitLab, Bitbucket, Azure DevOps, or an existing Cursor Origin repo), or build a new app in a private Origin repo. Use this to spawn coding agents that make code changes, and to enumerate, inspect, follow up on, or clean up cloud agents.",
     "",
     "Actions:",
-    `- launch: start a new cloud agent. Requires prompt + repo (the full URL of a repository on a connected SCM provider \u2014 GitHub, GitLab, Bitbucket, or Azure DevOps \u2014 or of an existing Cursor Origin repo as https://cursor.com/codebase/owner/repo or its origin.cursor.com clone URL; never a bare owner/name; repo_url is a backward-compatible alias), unless new_repo is true or a saved environment supplies its own repos. Prefer new_repo: true for greenfield requests such as "build an app", "create a new project", or "start from scratch" when the user has not named an existing repo; do not ask for or invent a repo in that case. Optional starting_ref, model, model_params, title (used verbatim as the agent's title instead of the auto-generated prompt summary)` + (isCanvasesEnabled ? CANVAS_LAUNCH_CLAUSE : "") + (projectsEnabled ? PROJECT_LAUNCH_CLAUSE : "") + ", and environment (where it runs \u2014 see Environment below). Returns the agent id and its cursor.com URL." + (offersScmAsk ? SCM_CONNECT_CARD_CLAUSE : "") + " You're revived automatically when the run finishes \u2014 don't poll it \u2014 and the completion message includes the path to its full transcript (auto-dumped to a file on your box)" + (artifactsEnabled ? CLOUD_AGENT_ARTIFACT_CLAUSES.launch.on : CLOUD_AGENT_ARTIFACT_CLAUSES.launch.off) + (durableWatch === true ? DURABLE_WATCH_DESCRIPTION_CLAUSE : ""),
+    `- launch: start a new cloud agent. Requires prompt + repo (the full URL of a repository on a connected SCM provider \u2014 GitHub, GitLab, Bitbucket, or Azure DevOps \u2014 or of an existing Cursor Origin repo as https://cursor.com/codebase/owner/repo or its origin.cursor.com clone URL; never a bare owner/name; repo_url is a backward-compatible alias), unless new_repo is true or a saved environment supplies its own repos. Prefer new_repo: true for greenfield requests such as "build an app", "create a new project", or "start from scratch" when the user has not named an existing repo; do not ask for or invent a repo in that case. Optional starting_ref, model, model_params, title (used verbatim as the agent's title instead of the auto-generated prompt summary)` + (isCanvasesEnabled ? CANVAS_LAUNCH_CLAUSE : "") + ", project (a Project coordinator instead of a plain agent, only when the user explicitly asks for a project, see Projects below), and environment (where it runs \u2014 see Environment below). Returns the agent id and its cursor.com URL." + (offersScmAsk ? SCM_CONNECT_CARD_CLAUSE : "") + " You're revived automatically when the run finishes \u2014 don't poll it \u2014 and the completion message includes the path to its full transcript (auto-dumped to a file on your box)" + (artifactsEnabled ? CLOUD_AGENT_ARTIFACT_CLAUSES.launch.on : CLOUD_AGENT_ARTIFACT_CLAUSES.launch.off) + (durableWatch === true ? DURABLE_WATCH_DESCRIPTION_CLAUSE : ""),
     '- list: enumerate cloud agents. scope defaults to "launched" (the agents you launched, or the user handed to you, this session); pass scope: "all" to see every cloud agent on the account.',
     "- models: list the model ids you can launch with and, per model, the params each accepts with allowed values. Use only to resolve a model or settings the user explicitly requested; do not browse the catalog to choose a model yourself.",
     ...scmConnectCard === true ? [REPOSITORIES_ACTION_LINE + (offersScmAsk ? REPOSITORIES_SCM_ASK_CLAUSE : "")] : [],
@@ -996,13 +993,14 @@ function cloudAgentDescription({
     "- delete: permanently delete an agent. Confirm with the user (e.g. a SendToUser widget) first, then call with confirm: true.",
     "- list_artifacts: list files the agent saved under its workspace artifacts (paths on its VM, not yours)." + (artifactsEnabled ? CLOUD_AGENT_ARTIFACT_CLAUSES.listArtifacts.on : CLOUD_AGENT_ARTIFACT_CLAUSES.listArtifacts.off),
     "",
-    ...projectsEnabled ? [PROJECTS_PARAGRAPH, ""] : [],
+    `Projects. A Project is a coordinator cloud agent. Its threads are regular cloud agents attached to it. The coordinator plans the work, spawns and directs its own threads on the repo, and keeps notes in its Agent Store. Start one with launch and project: true. The title names it. Do this only when the user explicitly asks for a project, for example "start a project", "spin up a project agent", or "make this a project". A plain cloud agent is the default for every coding task, including large ones. Never pick a project on your own, and never because the task looks big. Steer it with reply. Cancel, archive, rename, dump, and get work on the coordinator as on any agent. You are revived when the coordinator's own run finishes. Its threads may still be running then.`,
+    "",
     "New Origin projects: keep the minted Origin repo as the source of truth. A full Vercel deployment requires an Origin namespace and a direct Vercel\u2194Origin connection; guide the user through Origin setup at https://cursor.com/codebase/get-started and connecting Vercel to Origin. Never mirror the repo to GitHub solely to make Vercel work or deploy Vercel from that mirror.",
     "",
     "Environment (worker pools / private workers): set where the agent runs with the environment param on launch.",
     '- Omit environment, or pass {"type":"cloud"}, for a Cursor-managed Linux VM (the default).',
     '- Pass {"type":"pool"} to run on any eligible self-hosted pool for the repo ("shared pool" / self-hosted pool).',
-    `- Pass {"type":"pool","name":"<pool-name>"} for a specific named pool the user or task names (examples: "mobile-ios-mac", "mobile-ios-mac-legacy"). Use this when the work needs Mac/iOS simulators, a team's shared workers, or any runtime the default cloud VM cannot provide.`,
+    `- Pass {"type":"pool","name":"<pool-name>"} for a specific named pool the user or task names (for example, "mobile-ios-mac"). Use this when the work needs Mac/iOS simulators, a team's shared workers, or any runtime the default cloud VM cannot provide.`,
     '- Pass {"type":"machine","name":"<worker-name>"} for one specific private worker ("My Machine").',
     `- Pass {"type":"environment","name":"<environment-name>"} (or "id" with its public id) to launch into a saved Cloud Agents environment from the user's cursor.com dashboard \u2014 the run gets that environment's custom env vars, egress rules, install commands, and (for multi-repo environments) all configured repos, on a Cursor VM. repo (or repo_url) is then optional and defaults to the environment's primary repo; new_repo is not compatible with a saved environment. Use this when the user names a saved environment or the task needs specific environment variables or egress settings.`,
     "- For pool and machine, a single active team is selected automatically; set team_id only when the user belongs to multiple active teams.",

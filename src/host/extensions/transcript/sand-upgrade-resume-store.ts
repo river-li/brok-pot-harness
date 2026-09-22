@@ -1,5 +1,5 @@
-var import_node_fs96 = require("node:fs");
-var import_node_path155 = require("node:path");
+var import_node_fs95 = require("node:fs");
+var import_node_path154 = require("node:path");
 init_unknown_record();
 function parseUpgradeResumeFile(raw) {
   if (raw == null) return [];
@@ -37,7 +37,7 @@ function upsertResumeMarker(existing, marker17) {
 var SandUpgradeResumeStore = class {
   filePath;
   constructor(rootDir) {
-    this.filePath = (0, import_node_path155.join)(rootDir, SAND_UPGRADE_RESUME_FILE_NAME);
+    this.filePath = (0, import_node_path154.join)(rootDir, SAND_UPGRADE_RESUME_FILE_NAME);
   }
   markPending(marker17) {
     try {
@@ -66,9 +66,9 @@ var SandUpgradeResumeStore = class {
   readPending() {
     let raw;
     try {
-      raw = (0, import_node_fs96.readFileSync)(this.filePath, "utf8");
-    } catch (error41) {
-      reportFallbackUnlessAbsent("sand_upgrade_resume_store", error41);
+      raw = (0, import_node_fs95.readFileSync)(this.filePath, "utf8");
+    } catch (error42) {
+      reportFallbackUnlessAbsent("sand_upgrade_resume_store", error42);
       raw = null;
     }
     return parseUpgradeResumeFile(raw);
@@ -79,7 +79,7 @@ var SandUpgradeResumeStore = class {
   }
   deleteFile() {
     try {
-      (0, import_node_fs96.rmSync)(this.filePath, { force: true });
+      (0, import_node_fs95.rmSync)(this.filePath, { force: true });
     } catch {
     }
   }

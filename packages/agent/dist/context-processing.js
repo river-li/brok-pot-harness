@@ -1,6 +1,6 @@
 var logger54 = createLogger("@anysphere/agent/context-processing");
-function getSafeErrorType(error41) {
-  return error41 instanceof Error ? error41.name || "Error" : typeof error41;
+function getSafeErrorType(error42) {
+  return error42 instanceof Error ? error42.name || "Error" : typeof error42;
 }
 var enrichContextDuration = createHistogram("agent.ttft.enrichContextMs", {
   description: "Time for the parallelizable context enrichment tasks in processSelectedContext (external links, documentation, PR hydration, etc.)"
@@ -581,7 +581,9 @@ ${requestContext.sharedNotesListing}
     }
   }
   const invocationContextKind = resolvedInvocationContext?.data.case ?? "none";
-  invocationContextDuration.histogram(ctx, performance.now() - invocationContextStart, { kind: invocationContextKind });
+  invocationContextDuration.histogram(ctx, performance.now() - invocationContextStart, {
+    kind: invocationContextKind
+  });
   const blobHydrationStart = performance.now();
   const hasImages = selectedContext.selectedImages.length > 0;
   const hasVideos = selectedContext.selectedVideos.length > 0;
@@ -831,9 +833,9 @@ ${requestContext.sharedNotesListing}
             ...processedSelectedVideo ?? selectedVideo,
             path: filePath
           });
-        } catch (error41) {
+        } catch (error42) {
           logger54.warn(ctx, "Failed to write video to filesystem", {
-            errorType: getSafeErrorType(error41)
+            errorType: getSafeErrorType(error42)
           });
           processedSelectedVideo = void 0;
         }
@@ -938,9 +940,9 @@ ${requestContext.sharedNotesListing}
             ...processedSelectedDocument ?? selectedDoc,
             path: filePath
           });
-        } catch (error41) {
+        } catch (error42) {
           logger54.warn(ctx, "Failed to write document to filesystem", {
-            errorType: getSafeErrorType(error41)
+            errorType: getSafeErrorType(error42)
           });
           processedSelectedDocument = void 0;
         }
@@ -959,11 +961,7 @@ ${requestContext.sharedNotesListing}
       documentFilePath
     };
   }));
-  const [imageProcessingResults, videoProcessingResults, documentProcessingResults] = await Promise.all([
-    imageProcessingPromise,
-    videoProcessingPromise,
-    documentProcessingPromise
-  ]);
+  const [imageProcessingResults, videoProcessingResults, documentProcessingResults] = await Promise.all([imageProcessingPromise, videoProcessingPromise, documentProcessingPromise]);
   blobHydrationDuration.histogram(ctx, performance.now() - blobHydrationStart, {
     hasImages: hasImages ? "true" : "false",
     hasVideos: hasVideos ? "true" : "false",
@@ -1056,12 +1054,12 @@ ${requestContext.sharedNotesListing}
       const safeFilename = `${safeStem}-L${startLine}-L${endLine}-${index}.${safeExt}`;
       const fileBytes = new TextEncoder().encode(content);
       return await writeToUploadsDir(fileBytes, safeFilename);
-    } catch (error41) {
+    } catch (error42) {
       logger54.warn(ctx, "Failed to write long code selection to file", {
         originalPath,
         startLine,
         endLine,
-        error: error41 instanceof Error ? error41.message : String(error41)
+        error: error42 instanceof Error ? error42.message : String(error42)
       });
       return void 0;
     }
@@ -1250,10 +1248,10 @@ Title: ${title}
       const fileContent = header + contentToWrite;
       const fileBytes = new TextEncoder().encode(fileContent);
       return await writeToUploadsDir(fileBytes, safeFilename);
-    } catch (error41) {
+    } catch (error42) {
       logger54.warn(ctx, "Failed to write external link content to file", {
         url: url2,
-        error: error41 instanceof Error ? error41.message : String(error41)
+        error: error42 instanceof Error ? error42.message : String(error42)
       });
       return void 0;
     }
@@ -1439,13 +1437,17 @@ Title: ${title}
   const timedExternalLinksTask = async () => {
     const start = performance.now();
     const result = await externalLinksTask();
-    enrichContextExternalLinksDuration.histogram(ctx, performance.now() - start, { hasWork: hasExternalLinks ? "true" : "false" });
+    enrichContextExternalLinksDuration.histogram(ctx, performance.now() - start, {
+      hasWork: hasExternalLinks ? "true" : "false"
+    });
     return result;
   };
   const timedDocumentationTask = async () => {
     const start = performance.now();
     const result = await documentationTask();
-    enrichContextDocumentationDuration.histogram(ctx, performance.now() - start, { hasWork: hasDocumentation ? "true" : "false" });
+    enrichContextDocumentationDuration.histogram(ctx, performance.now() - start, {
+      hasWork: hasDocumentation ? "true" : "false"
+    });
     return result;
   };
   const timedBlobStoreTask = async () => {

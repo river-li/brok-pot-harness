@@ -4,7 +4,7 @@ var noopLogger = {
   info: () => {
   }
 };
-function transformToolMatcher(matcher, logger107 = noopLogger) {
+function transformToolMatcher(matcher, logger108 = noopLogger) {
   if (!matcher || matcher === "*") {
     return "*";
   }
@@ -37,7 +37,7 @@ function transformToolMatcher(matcher, logger107 = noopLogger) {
     }
   }
   for (const warning of warnings) {
-    logger107.warn(warning);
+    logger108.warn(warning);
   }
   if (transformedTools.length === 0) {
     return null;
@@ -66,21 +66,21 @@ function transformHookScript(claudeScript, matcher) {
   }
   return Object.assign({ type: "command", command: claudeScript.command }, base);
 }
-function transformHookEntry(entry, event, logger107 = noopLogger) {
+function transformHookEntry(entry, event, logger108 = noopLogger) {
   const result = [];
   const usesToolMatcher = event === "PreToolUse" || event === "PostToolUse";
   let effectiveMatcher;
   if (usesToolMatcher) {
-    const transformed = transformToolMatcher(entry.matcher, logger107);
+    const transformed = transformToolMatcher(entry.matcher, logger108);
     if (transformed === null) {
-      logger107.warn(`All tools in matcher "${entry.matcher}" are unsupported, skipping hooks`);
+      logger108.warn(`All tools in matcher "${entry.matcher}" are unsupported, skipping hooks`);
       return [];
     }
     effectiveMatcher = transformed === "*" ? void 0 : transformed;
   } else if (event === "SessionStart" || event === "PreCompact") {
     if (entry.matcher && entry.matcher !== "*" && entry.matcher !== "" && // Check if it's a trigger-specific matcher
     (event === "SessionStart" ? ["startup", "resume", "clear", "compact"].includes(entry.matcher) : ["manual", "auto"].includes(entry.matcher))) {
-      logger107.warn(`${event} trigger matcher "${entry.matcher}" is not supported in Cursor, hooks will fire for all triggers`);
+      logger108.warn(`${event} trigger matcher "${entry.matcher}" is not supported in Cursor, hooks will fire for all triggers`);
     }
     effectiveMatcher = void 0;
   } else {
@@ -94,27 +94,27 @@ function transformHookEntry(entry, event, logger107 = noopLogger) {
   }
   return result;
 }
-function transformClaudeHooksToConfig(claudeHooks, logger107 = noopLogger) {
+function transformClaudeHooksToConfig(claudeHooks, logger108 = noopLogger) {
   const cursorHooks = {};
   for (const [eventName, entries] of Object.entries(claudeHooks)) {
     const event = eventName;
     if (UNSUPPORTED_CLAUDE_EVENTS.includes(event)) {
-      logger107.warn(`Claude Code event "${event}" is not supported in Cursor and will be ignored`);
+      logger108.warn(`Claude Code event "${event}" is not supported in Cursor and will be ignored`);
       continue;
     }
     const cursorStep = CLAUDE_EVENT_TO_CURSOR_STEP[event];
     if (!cursorStep) {
-      logger107.warn(`Unknown Claude Code event "${event}", skipping`);
+      logger108.warn(`Unknown Claude Code event "${event}", skipping`);
       continue;
     }
     const scripts = [];
     if (Array.isArray(entries)) {
       for (const entry of entries) {
-        const transformedScripts = transformHookEntry(entry, event, logger107);
+        const transformedScripts = transformHookEntry(entry, event, logger108);
         scripts.push(...transformedScripts);
       }
     } else if (entries !== void 0) {
-      logger107.warn(`Claude Code event "${event}" has invalid value (expected array), skipping`);
+      logger108.warn(`Claude Code event "${event}" has invalid value (expected array), skipping`);
     }
     if (scripts.length > 0) {
       const existingScripts = cursorHooks[cursorStep] || [];

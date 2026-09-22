@@ -18,9 +18,5 @@ function normalizeMetaParentResponseBody(rawText) {
     return neutralizeMetaParentWrapperTags(trimmedText);
   }
   const escapedText = escapePromptXmlText(trimmedText);
-  return [
-    "<response>",
-    escapedText.length > 0 ? escapedText : "No output",
-    "</response>"
-  ].join("\n");
+  return ["<response>", escapedText.length > 0 ? escapedText : "No output", "</response>"].join("\n");
 }

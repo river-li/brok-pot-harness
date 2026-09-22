@@ -24,8 +24,8 @@ var SandMcpCatalogFlow = class {
     let listing;
     try {
       listing = await fetchPlugins(getAccessToken, this.core.getMachineId);
-    } catch (error41) {
-      if (!isCacheUsable) throw error41;
+    } catch (error42) {
+      if (!isCacheUsable) throw error42;
       return cached2.views;
     }
     this.catalogCache.clear();
@@ -56,16 +56,16 @@ var SandMcpCatalogFlow = class {
     const createClient2 = marketplaceDashboardClientFor(backend);
     return (getAccessToken, getMachineId) => fetchPlugins(getAccessToken, getMachineId, createClient2);
   }
-  async installEntry(request3, getAccessToken) {
-    const plugin = await this.requireCachedPlugin(request3.entryId, getAccessToken);
+  async installEntry(request5, getAccessToken) {
+    const plugin = await this.requireCachedPlugin(request5.entryId, getAccessToken);
     const writer = this.core.requireAccountWriter();
-    const teamVariablesKnown = request3.hasTeamConfiguredVariables === true || await this.pluginHasTeamConfiguredVariables(plugin.pluginId);
+    const teamVariablesKnown = request5.hasTeamConfiguredVariables === true || await this.pluginHasTeamConfiguredVariables(plugin.pluginId);
     if (!teamVariablesKnown) {
-      this.assertPluginRequiredFieldsProvided(plugin, request3.values ?? {});
+      this.assertPluginRequiredFieldsProvided(plugin, request5.values ?? {});
     }
     await writer.installPlugin({
       pluginId: BigInt(plugin.pluginId),
-      ...request3.values != null ? { variables: request3.values } : {}
+      ...request5.values != null ? { variables: request5.values } : {}
     });
     return await this.core.reloadServers();
   }
@@ -83,13 +83,13 @@ var SandMcpCatalogFlow = class {
     }
     return cached2;
   }
-  async updatePluginInstall(request3, getAccessToken) {
-    const plugin = await this.requireCachedPlugin(request3.pluginId, getAccessToken);
-    this.assertPluginRequiredFieldsProvided(plugin, request3.values);
+  async updatePluginInstall(request5, getAccessToken) {
+    const plugin = await this.requireCachedPlugin(request5.pluginId, getAccessToken);
+    this.assertPluginRequiredFieldsProvided(plugin, request5.values);
     const writer = this.core.requireAccountWriter();
     await writer.updatePluginInstall({
       pluginId: BigInt(plugin.pluginId),
-      variables: request3.values
+      variables: request5.values
     });
     return await this.core.reloadServers();
   }
@@ -115,8 +115,8 @@ var SandMcpCatalogFlow = class {
       return plugins.some(
         (plugin) => plugin.pluginId === pluginId && plugin.hasTeamConfiguredVariables === true
       );
-    } catch (error41) {
-      reportMcpHostEdgeFailure("plugin-list", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("plugin-list", error42);
       return false;
     }
   }

@@ -17,8 +17,8 @@ function createWebBotAuthMarkerReconciler(options2) {
         await import_promises48.default.rm(path31, { force: true, recursive: true });
       }
       lastApplied = enabled;
-    } catch (error41) {
-      options2.log(`web-bot-auth marker update failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      options2.log(`web-bot-auth marker update failed: ${errorLogTag(error42)}`);
     }
   };
   return () => {

@@ -19,13 +19,13 @@ function createSandTranscribeAudio(backend, auth2, options2, createClient2 = cre
     });
     return client;
   };
-  return async (request3) => {
-    const language = request3.language != null && request3.language.length > 0 ? toWhisperLanguageHint(request3.language) : void 0;
+  return async (request5) => {
+    const language = request5.language != null && request5.language.length > 0 ? toWhisperLanguageHint(request5.language) : void 0;
     const response = await transcribeDeadline.run(
       (signal) => getClient().transcribeAudio(
         new TranscribeAudioRequest({
-          audio: new Uint8Array(request3.audio),
-          mimeType: stripMimeParameters(request3.mimeType),
+          audio: new Uint8Array(request5.audio),
+          mimeType: stripMimeParameters(request5.mimeType),
           ...language == null ? {} : { language }
         }),
         { signal }

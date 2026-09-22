@@ -64,11 +64,11 @@ var WorkingStateWarmer = class {
       try {
         const outcome = await this.runWarm(agentId);
         if (outcome.outcome === "warmed") this.warmed.add(agentId);
-      } catch (error41) {
+      } catch (error42) {
         if (!this.disposed) {
-          this.deps.log(`[sand:working-state-warm] scheduler failed (${errorLogTag(error41)})`);
+          this.deps.log(`[sand:working-state-warm] scheduler failed (${errorLogTag(error42)})`);
         }
-        if (error41 instanceof WorkingStateWarmOperationTimeoutError) {
+        if (error42 instanceof WorkingStateWarmOperationTimeoutError) {
           return;
         }
       } finally {
@@ -93,10 +93,10 @@ var WorkingStateWarmer = class {
         }
         this.enqueue(agentId, false);
       }
-    }).catch((error41) => {
+    }).catch((error42) => {
       if (!this.disposed) {
         this.deps.log(
-          `[sand:working-state-warm] backfill listing failed (${errorLogTag(error41)})`
+          `[sand:working-state-warm] backfill listing failed (${errorLogTag(error42)})`
         );
       }
     }).finally(() => {

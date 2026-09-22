@@ -65,10 +65,7 @@ ${sections.join("\n\n")}`;
 - Still do whatever validation is necessary to ensure the judgment is correct; efficiency means avoiding waste, not skipping verification.
 - This may still be a long-running investigation if correctness requires it, but do not spend tokens on status updates, progress narration, or UX niceties while judging.
 - Always quote paths that contain spaces.`;
-    const minimalSections = [
-      outputNotificationSection,
-      tmuxGuidanceSection
-    ].filter((section) => section !== void 0);
+    const minimalSections = [outputNotificationSection, tmuxGuidanceSection].filter((section) => section !== void 0);
     if (minimalSections.length === 0) {
       return minimalHarnessDescription;
     }

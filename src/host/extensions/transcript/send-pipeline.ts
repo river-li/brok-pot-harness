@@ -47,12 +47,12 @@ var SendPipeline = class {
     this.inFlightSends.set(nonce, pending);
     try {
       await pending;
-    } catch (error41) {
+    } catch (error42) {
       this.tm.acceptanceLedger.clearUnlessAccepted({
         accountSlot: HOST_ACCOUNT_SLOT,
         clientNonce: nonce
       });
-      throw error41;
+      throw error42;
     } finally {
       this.inFlightSends.delete(nonce);
     }
@@ -186,9 +186,9 @@ var SendPipeline = class {
         } else {
           userMessageId = resolveUserMessageId({ id: crypto.randomUUID() });
         }
-      } catch (error41) {
+      } catch (error42) {
         rollbackAppendedEntries();
-        throw error41;
+        throw error42;
       }
       if (!acceptedDurably) {
         this.tm.hostLog(
@@ -300,14 +300,14 @@ var SendPipeline = class {
           acceptance,
           ackGuard
         });
-      } catch (error41) {
+      } catch (error42) {
         if (templateSetupProvenance !== void 0) {
           this.tm.turnRuntime.disarmTemplateSetupWriteProvenance({
             sessionId: session.id,
             messageId: userMessageId
           });
         }
-        throw error41;
+        throw error42;
       }
     } catch (_2) {
       var _error = _2, _hasError = true;
@@ -355,7 +355,7 @@ var SendPipeline = class {
     if (session == null) return message;
     try {
       const ingested = await this.tm.createAttachmentIngestor(session)(filePath);
-      const fileName = (0, import_node_path161.basename)(filePath);
+      const fileName = (0, import_node_path160.basename)(filePath);
       const resolvedFileName = fileName.length > 0 ? fileName : message.file_name;
       return {
         type: "attachment",
@@ -367,8 +367,8 @@ var SendPipeline = class {
         ...message.width != null ? { width: message.width } : {},
         ...message.height != null ? { height: message.height } : {}
       };
-    } catch (error41) {
-      reportFallback("send_pipeline", error41);
+    } catch (error42) {
+      reportFallback("send_pipeline", error42);
       return message;
     }
   }

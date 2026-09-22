@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var modelStreamChunkObserverKey = createKey(/* @__PURE__ */ Symbol("modelStreamChunkObserver"), void 0);
 function withModelStreamChunkObserver(ctx, observer) {
   return ctx.with(modelStreamChunkObserverKey, observer);

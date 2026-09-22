@@ -1,11 +1,11 @@
-init_dist3();
+init_dist4();
 init_agent_pb();
-var logger70 = createLogger("task-subagent-completion");
+var logger71 = createLogger("task-subagent-completion");
 async function processSubagentIterationSuccess(currentState, turnsAtStartOfIteration, iterState, completionCtx, deps, persistState, subagentType) {
   const { ctx, blobStore, registry: registry2 } = deps;
   const { subagentId, subagentRequestId, toolCallId, typeName, overriddenModelId, executionStartTime } = completionCtx;
   const runStreamDurationMs = Date.now() - executionStartTime;
-  logger70.info(ctx, "Subagent runStream completed", {
+  logger71.info(ctx, "Subagent runStream completed", {
     toolCallId,
     subagentType: typeName,
     durationMs: runStreamDurationMs,
@@ -18,7 +18,7 @@ async function processSubagentIterationSuccess(currentState, turnsAtStartOfItera
     conversationState: currentState,
     modelId: overriddenModelId
   }));
-  logger70.info(ctx, "Persisted subagent state", {
+  logger71.info(ctx, "Persisted subagent state", {
     toolCallId,
     subagentType: typeName,
     subagentId,
@@ -33,7 +33,7 @@ async function processSubagentIterationSuccess(currentState, turnsAtStartOfItera
   const toolCallCount2 = await countToolCallsFromTurns(ctx, newTurns, blobStore);
   const totalDurationMs = Date.now() - executionStartTime;
   if (lastAssistant === void 0) {
-    logger70.warn(ctx, "Subagent completed without an assistant message", {
+    logger71.warn(ctx, "Subagent completed without an assistant message", {
       toolCallId,
       subagentType: typeName,
       durationMs: totalDurationMs,
@@ -44,7 +44,7 @@ async function processSubagentIterationSuccess(currentState, turnsAtStartOfItera
       subagentRequestId
     });
   }
-  logger70.info(ctx, "Subagent runStream iteration completed", {
+  logger71.info(ctx, "Subagent runStream iteration completed", {
     toolCallId,
     subagentType: typeName,
     durationMs: totalDurationMs,
@@ -71,7 +71,7 @@ async function processSubagentIterationSuccess(currentState, turnsAtStartOfItera
     iterState.subagentStopCalled = true;
   } catch (hookError) {
     iterState.subagentStopCalled = true;
-    logger70.error(ctx, "Error executing subagentStop hook (success case)", hookError, {
+    logger71.error(ctx, "Error executing subagentStop hook (success case)", hookError, {
       toolCallId,
       subagentType: typeName,
       subagentId,
@@ -79,7 +79,7 @@ async function processSubagentIterationSuccess(currentState, turnsAtStartOfItera
     });
   }
   if (followupMessage !== void 0 && followupMessage.length > 0) {
-    logger70.info(ctx, "SubagentStop hook returned followup message, continuing subagent", {
+    logger71.info(ctx, "SubagentStop hook returned followup message, continuing subagent", {
       toolCallId,
       subagentType: typeName,
       loopCount: iterState.loopCount + 1,
@@ -174,7 +174,7 @@ async function buildFinalResult(currentState, _iterState, completionCtx, deps) {
         }
       });
     } catch (hookError) {
-      logger70.error(ctx, "Error executing postToolUse hook", hookError, {
+      logger71.error(ctx, "Error executing postToolUse hook", hookError, {
         toolCallId,
         subagentType: completionCtx.typeName,
         subagentId
@@ -202,9 +202,9 @@ async function handleSubagentRunStreamError(runStreamError, currentState, iterSt
     errorStack: runStreamError instanceof Error ? runStreamError.stack : void 0
   };
   if (isIntentionalAbort) {
-    logger70.info(ctx, "Subagent runStream aborted (intentional cancellation)", logData);
+    logger71.info(ctx, "Subagent runStream aborted (intentional cancellation)", logData);
   } else {
-    logger70.error(ctx, "Subagent runStream failed with exception", runStreamError, logData);
+    logger71.error(ctx, "Subagent runStream failed with exception", runStreamError, logData);
   }
   try {
     await executeSubagentStopHook({
@@ -221,7 +221,7 @@ async function handleSubagentRunStreamError(runStreamError, currentState, iterSt
     iterState.subagentStopCalled = true;
   } catch (hookError) {
     iterState.subagentStopCalled = true;
-    logger70.error(ctx, "Error executing subagentStop hook (error case)", hookError, {
+    logger71.error(ctx, "Error executing subagentStop hook (error case)", hookError, {
       toolCallId,
       subagentType: typeName,
       subagentId,
@@ -230,7 +230,7 @@ async function handleSubagentRunStreamError(runStreamError, currentState, iterSt
   }
   throw runStreamError;
 }
-async function handleSubagentExecutionError(error41, state, iterState, completionCtx, deps, subagentCtxCanceled, abortOptions) {
+async function handleSubagentExecutionError(error42, state, iterState, completionCtx, deps, subagentCtxCanceled, abortOptions) {
   const { ctx, registry: registry2 } = deps;
   const { subagentId, subagentRequestId, toolCallId, typeName, analyticsSubagentType, overriddenModelId, effectiveReadonly, isParallel, executionStartTime, parentModelName, plugin, marketplace, pluginId, marketplaceId } = completionCtx;
   const durationMs = Date.now() - executionStartTime;
@@ -243,15 +243,15 @@ async function handleSubagentExecutionError(error41, state, iterState, completio
     subagentRequestId,
     intentionalAbort: isIntentionalTaskAbort,
     abortReason: abortOptions?.reason,
-    errorName: error41 instanceof Error ? error41.name : "unknown",
-    errorMessage: error41 instanceof Error ? error41.message : String(error41),
-    errorStack: error41 instanceof Error ? error41.stack : void 0,
-    taskErrorShape: buildTaskErrorShapeSnapshot(error41)
+    errorName: error42 instanceof Error ? error42.name : "unknown",
+    errorMessage: error42 instanceof Error ? error42.message : String(error42),
+    errorStack: error42 instanceof Error ? error42.stack : void 0,
+    taskErrorShape: buildTaskErrorShapeSnapshot(error42)
   };
   if (isIntentionalTaskAbort) {
-    logger70.info(ctx, "Task tool execution aborted (intentional cancellation)", taskErrorLogData);
+    logger71.info(ctx, "Task tool execution aborted (intentional cancellation)", taskErrorLogData);
   } else {
-    logger70.error(ctx, "Task tool execution failed with exception", error41, taskErrorLogData);
+    logger71.error(ctx, "Task tool execution failed with exception", error42, taskErrorLogData);
   }
   if (iterState.runStreamCompleted && !iterState.subagentStopCalled && subagentId !== void 0 && overriddenModelId !== void 0) {
     try {
@@ -261,13 +261,13 @@ async function handleSubagentExecutionError(error41, state, iterState, completio
         durationMs,
         messageCount: state?.turns.length ?? 0,
         toolCallCount: 0,
-        errorMessage: error41 instanceof Error ? error41.message : String(error41),
+        errorMessage: error42 instanceof Error ? error42.message : String(error42),
         loopCount: iterState.loopCount,
         task: completionCtx.rawArgsPrompt,
         description: completionCtx.rawArgsDescription
       });
     } catch (hookError) {
-      logger70.error(ctx, "Error executing subagentStop hook (post-execution error case)", hookError, {
+      logger71.error(ctx, "Error executing subagentStop hook (post-execution error case)", hookError, {
         toolCallId,
         subagentType: typeName,
         subagentId,
@@ -299,7 +299,7 @@ async function handleSubagentExecutionError(error41, state, iterState, completio
         ctx,
         toolName: deps.toolName,
         toolInput: deps.postToolUseHookInput,
-        errorMessage: error41 instanceof Error ? error41.message : String(error41),
+        errorMessage: error42 instanceof Error ? error42.message : String(error42),
         failureType: "error",
         durationMs,
         isInterrupt: false,
@@ -314,20 +314,20 @@ async function handleSubagentExecutionError(error41, state, iterState, completio
         }
       });
     } catch (hookError) {
-      logger70.error(ctx, "Error executing postToolUseFailure hook", hookError, {
+      logger71.error(ctx, "Error executing postToolUseFailure hook", hookError, {
         toolCallId,
         subagentType: typeName,
         subagentId
       });
     }
   }
-  if (shouldBubbleTaskErrorToOuterRetryLayer(ctx, error41, iterState.runStreamCompleted)) {
-    const err = error41 instanceof Error ? error41 : new Error(String(error41));
+  if (shouldBubbleTaskErrorToOuterRetryLayer(ctx, error42, iterState.runStreamCompleted)) {
+    const err = error42 instanceof Error ? error42 : new Error(String(error42));
     throw new RetryableToolOrchestrationError(err.message, { cause: err });
   }
-  const classifiedTaskError = classifyTaskProviderError(error41);
+  const classifiedTaskError = classifyTaskProviderError(error42);
   if (classifiedTaskError !== void 0) {
     throw classifiedTaskError;
   }
-  throw error41;
+  throw error42;
 }

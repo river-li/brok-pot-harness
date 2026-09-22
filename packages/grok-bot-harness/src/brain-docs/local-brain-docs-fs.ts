@@ -8,18 +8,18 @@ function createLocalBrainDocsFs(io2 = nodeLocalBrainDocsIo) {
   async function statIfPresent(path31) {
     try {
       return await io2.stat(path31);
-    } catch (error41) {
-      if (isMissingPath2(findSystemErrno(error41))) return null;
-      throw error41;
+    } catch (error42) {
+      if (isMissingPath2(findSystemErrno(error42))) return null;
+      throw error42;
     }
   }
   async function collectFile(path31, out) {
     let bytes;
     try {
       bytes = await io2.readFile(path31);
-    } catch (error41) {
-      if (isMissingPath2(findSystemErrno(error41))) return;
-      throw error41;
+    } catch (error42) {
+      if (isMissingPath2(findSystemErrno(error42))) return;
+      throw error42;
     }
     out.set(path31, bytes.includes(0) ? null : Buffer.from(bytes).toString("utf8"));
   }
@@ -27,12 +27,12 @@ function createLocalBrainDocsFs(io2 = nodeLocalBrainDocsIo) {
     let entries;
     try {
       entries = await io2.readdir(dir);
-    } catch (error41) {
-      if (isMissingPath2(findSystemErrno(error41))) return;
-      throw error41;
+    } catch (error42) {
+      if (isMissingPath2(findSystemErrno(error42))) return;
+      throw error42;
     }
     for (const entry of entries) {
-      const path31 = (0, import_node_path175.join)(dir, entry.name);
+      const path31 = (0, import_node_path173.join)(dir, entry.name);
       if (entry.isFile()) await collectFile(path31, out);
       else if (entry.isDirectory()) await collectDirectory(path31, out);
     }
@@ -52,9 +52,9 @@ function createLocalBrainDocsFs(io2 = nodeLocalBrainDocsIo) {
     async readFile(path31) {
       try {
         return new Uint8Array(await io2.readFile(path31));
-      } catch (error41) {
-        if (isMissingPath2(findSystemErrno(error41))) return null;
-        throw error41;
+      } catch (error42) {
+        if (isMissingPath2(findSystemErrno(error42))) return null;
+        throw error42;
       }
     },
     async writeFile(path31, content) {
@@ -68,9 +68,9 @@ function createLocalBrainDocsFs(io2 = nodeLocalBrainDocsIo) {
     async listDirectories(path31) {
       try {
         return (await io2.readdir(path31)).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
-      } catch (error41) {
-        if (isMissingPath2(findSystemErrno(error41))) return [];
-        throw error41;
+      } catch (error42) {
+        if (isMissingPath2(findSystemErrno(error42))) return [];
+        throw error42;
       }
     }
   };

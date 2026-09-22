@@ -56,8 +56,8 @@ var CredentialOneTimeCodeFollowUp = class {
     let discovery;
     try {
       discovery = await this.options.filler.listPages();
-    } catch (error41) {
-      this.options.reportFailure("one-time-code-list-pages", error41);
+    } catch (error42) {
+      this.options.reportFailure("one-time-code-list-pages", error42);
       return;
     }
     for (const session of [...this.sessions.values()]) {
@@ -76,8 +76,8 @@ var CredentialOneTimeCodeFollowUp = class {
       let state;
       try {
         state = await this.options.filler.inspect(target);
-      } catch (error41) {
-        this.options.reportFailure("one-time-code-inspect", error41);
+      } catch (error42) {
+        this.options.reportFailure("one-time-code-inspect", error42);
         continue;
       }
       if (state === null || state.formKind !== "one-time-code" || !state.hasFocus) continue;
@@ -108,9 +108,9 @@ var CredentialOneTimeCodeFollowUp = class {
           new Error("One-time code autofill was refused.")
         );
       }
-    } catch (error41) {
+    } catch (error42) {
       this.auditRequest(session, target, { outcome: "failed", reason: "resolve-login-failed" });
-      this.options.reportFailure("one-time-code-resolve", error41);
+      this.options.reportFailure("one-time-code-resolve", error42);
     } finally {
       session.inFlight = false;
     }

@@ -1,4 +1,5 @@
 var PLAYWRIGHT_BOX_MCP_SERVER_NAME = /^playwright-w(0|[1-9]\d*)$/;
+var PLAYWRIGHT_ACTION_TIMEOUT_MS = 1e4;
 function playwrightBoxMcpServerName(windowIndex) {
   return `playwright-w${windowIndex}`;
 }
@@ -13,7 +14,12 @@ function playwrightBoxMcpServers(windowIndexes) {
       {
         type: "stdio",
         command: "playwright-mcp",
-        args: ["--cdp-endpoint", `http://127.0.0.1:${SAND_BOX_CDP_PORT_BASE + windowIndex}`]
+        args: [
+          "--cdp-endpoint",
+          `http://127.0.0.1:${SAND_BOX_CDP_PORT_BASE + windowIndex}`,
+          "--timeout-action",
+          String(PLAYWRIGHT_ACTION_TIMEOUT_MS)
+        ]
       }
     ])
   );

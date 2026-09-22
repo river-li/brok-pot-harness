@@ -96,9 +96,9 @@ function normalizeDisplayName(raw, field) {
   if (name17.length === 0) {
     return void 0;
   }
-  const error41 = mailboxDisplayNameError(name17);
-  if (error41 !== void 0) {
-    throw new SandToolInputError(`${field} ${error41}`);
+  const error42 = mailboxDisplayNameError(name17);
+  if (error42 !== void 0) {
+    throw new SandToolInputError(`${field} ${error42}`);
   }
   return name17;
 }
@@ -128,6 +128,24 @@ function describeRecipients(to3, cc, bcc) {
 function describeAttachments(described) {
   if (described.length === 0) return "";
   return ` Attached ${described.map((a) => `${a.filename} (${formatSandEmailAttachmentSize(a.sizeBytes)})`).join(", ")}.`;
+}
+function describeSuppressionReason(reason) {
+  switch (reason) {
+    case "permanent_bounce":
+      return "bounced permanently";
+    case "complaint":
+      return "marked a previous message as spam";
+    case "unsubscribe_request":
+      return "asked not to be emailed again";
+    case "manual":
+    case "unknown":
+      return "is on the do-not-email list";
+  }
+}
+function describeSuppressed(suppressed) {
+  if (suppressed === void 0 || suppressed.length === 0) return "";
+  const listed = suppressed.map((recipient2) => `${recipient2.address} (${describeSuppressionReason(recipient2.reason)})`).join(", ");
+  return ` Not sent to ${listed}; tell the user. Do not try these addresses again.`;
 }
 async function sendEmail(deps, args) {
   const input = normalizeSendEmailArgs(args);
@@ -190,7 +208,7 @@ async function sendEmail(deps, args) {
   const replyToNote = input.replyTo.length === 0 ? "" : ` Reply-To ${input.replyTo.map(
     (address) => address.name.length === 0 ? address.email : `${address.name} <${address.email}>`
   ).join(", ")}.`;
-  return `Sent from ${fromMailbox} ${describeRecipients(input.to, input.cc, input.bcc)}.${replyToNote}${describeAttachments(described)} Message id ${result.messageId} (thread ${result.threadId}); pass it as replyToMessageId to continue this conversation.`;
+  return `Sent from ${fromMailbox} ${describeRecipients(input.to, input.cc, input.bcc)}.${replyToNote}${describeAttachments(described)}${describeSuppressed(result.suppressedRecipients)} Message id ${result.messageId} (thread ${result.threadId}); pass it as replyToMessageId to continue this conversation.`;
 }
 function createSendEmailTool(deps) {
   return defineCommunicateTool(deps, {

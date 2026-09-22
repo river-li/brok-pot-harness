@@ -1,5 +1,5 @@
-init_dist3();
-var logger97 = createLogger("@anysphere/agent-client:stall-detector");
+init_dist4();
+var logger98 = createLogger("@anysphere/agent-client:stall-detector");
 var streamStallCount = createCounter("agent_client.stream.stall.count", {
   description: "Number of bidirectional stream stalls detected",
   labelNames: ["activity_type", "message_type"]

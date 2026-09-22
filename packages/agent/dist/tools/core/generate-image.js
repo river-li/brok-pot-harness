@@ -1,11 +1,11 @@
 var import_node_path88 = __toESM(require("node:path"), 1);
-init_dist3();
+init_dist4();
 init_agent_pb();
 init_generate_image_tool_pb();
 init_read_exec_pb();
 init_write_exec_pb();
 init_privacy_mode_pb();
-init_dist2();
+init_dist3();
 init_zod();
 var __addDisposableResource31 = function(env, value, async) {
   if (value !== null && value !== void 0) {
@@ -61,11 +61,11 @@ var __disposeResources31 = /* @__PURE__ */ (function(SuppressedError2) {
     }
     return next();
   };
-})(typeof SuppressedError === "function" ? SuppressedError : function(error41, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error42, suppressed, message) {
   var e = new Error(message);
-  return e.name = "SuppressedError", e.error = error41, e.suppressed = suppressed, e;
+  return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var logger82 = createLogger("agent/tools/generate-image");
+var logger83 = createLogger("agent/tools/generate-image");
 var generateImageWriteResultCounter = createCounter("agent.tools.generate_image.write_result", {
   description: "Generate image write results by case and location",
   labelNames: ["result", "location", "operation", "is_readonly"]
@@ -105,11 +105,11 @@ function recordGenerateImageExecuteFinish(ctx, outcome) {
 function recordGenerateImageRenderFinish(ctx, outcome) {
   generateImageRenderFinishCounter.increment(ctx, 1, { outcome });
 }
-function isResizeImageError(error41) {
-  if (!(error41 instanceof Error)) {
+function isResizeImageError(error42) {
+  if (!(error42 instanceof Error)) {
     return false;
   }
-  const message = error41.message.toLowerCase();
+  const message = error42.message.toLowerCase();
   return message.includes("resize") || message.includes("sharp");
 }
 function classifyErrorFinishReason(stage) {
@@ -281,16 +281,16 @@ function extractProviderErrorSummary(responseData) {
   const messagePart = providerMessage !== void 0 ? providerMessage : "Image generation request rejected by provider";
   return `${messagePart}${metadataString}`;
 }
-function isContentSafetyBlockedError(error41) {
-  if (error41 instanceof Error) {
-    if (error41.name === "ImageGenerationContentSafetyError") {
+function isContentSafetyBlockedError(error42) {
+  if (error42 instanceof Error) {
+    if (error42.name === "ImageGenerationContentSafetyError") {
       return true;
     }
   }
-  if (typeof error41 !== "object" || error41 === null) {
+  if (typeof error42 !== "object" || error42 === null) {
     return false;
   }
-  const maybeError = error41;
+  const maybeError = error42;
   const fields2 = parseProviderErrorFields(maybeError.response?.data);
   if (fields2.code === "moderation_blocked") {
     return true;
@@ -301,11 +301,11 @@ function isContentSafetyBlockedError(error41) {
   return false;
 }
 var CONTENT_SAFETY_BLOCKED_ERROR = "The image generation was blocked due to content safety policies.";
-function getProviderResponseStatusCode(error41) {
-  if (typeof error41 !== "object" || error41 === null) {
+function getProviderResponseStatusCode(error42) {
+  if (typeof error42 !== "object" || error42 === null) {
     return void 0;
   }
-  const maybeError = error41;
+  const maybeError = error42;
   if (typeof maybeError.response?.status === "number") {
     return maybeError.response.status;
   }
@@ -314,11 +314,11 @@ function getProviderResponseStatusCode(error41) {
   }
   return void 0;
 }
-function getProviderResponseDetails(error41) {
-  if (typeof error41 !== "object" || error41 === null) {
+function getProviderResponseDetails(error42) {
+  if (typeof error42 !== "object" || error42 === null) {
     return void 0;
   }
-  const maybeError = error41;
+  const maybeError = error42;
   const status = typeof maybeError.response?.status === "number" ? maybeError.response.status : void 0;
   const statusText = typeof maybeError.response?.statusText === "string" ? maybeError.response.statusText : void 0;
   const responseData = maybeError.response?.data;
@@ -338,12 +338,12 @@ function getProviderResponseDetails(error41) {
   }
   return void 0;
 }
-function getGenerateImageBaseErrorMessage(error41) {
-  return error41 instanceof Error ? error41.message : String(error41);
+function getGenerateImageBaseErrorMessage(error42) {
+  return error42 instanceof Error ? error42.message : String(error42);
 }
-function getGenerateImageDetailedErrorMessage(error41) {
-  const baseMessage = getGenerateImageBaseErrorMessage(error41);
-  const providerDetails = getProviderResponseDetails(error41);
+function getGenerateImageDetailedErrorMessage(error42) {
+  const baseMessage = getGenerateImageBaseErrorMessage(error42);
+  const providerDetails = getProviderResponseDetails(error42);
   if (!providerDetails) {
     return baseMessage;
   }
@@ -382,19 +382,19 @@ async function readReferenceImages(ctx, readExecutor, referenceImagePaths, toolC
   const processReadResult = (imagePath, readResult) => {
     const logImagePath = redactPathForLog(imagePath, privacyMode, "image_path");
     if (readResult.result.case !== "success") {
-      logger82.warn(ctx, "[generate-image] ref image read failed", {
+      logger83.warn(ctx, "[generate-image] ref image read failed", {
         imagePath: logImagePath
       });
       return null;
     }
     const output = readResult.result.value.output;
     if (output.case !== "data" || !output.value || output.value.length === 0) {
-      logger82.warn(ctx, "[generate-image] ref image read empty", {
+      logger83.warn(ctx, "[generate-image] ref image read empty", {
         imagePath: logImagePath
       });
       return null;
     }
-    logger82.info(ctx, "[generate-image] ref image read success", {
+    logger83.info(ctx, "[generate-image] ref image read success", {
       imagePath: logImagePath,
       dataLength: output.value.length
     });
@@ -407,11 +407,11 @@ async function readReferenceImages(ctx, readExecutor, referenceImagePaths, toolC
     try {
       const readResult = await readExecutor.execute(ctx, new ReadArgs({ path: imagePath, toolCallId }));
       return processReadResult(imagePath, readResult);
-    } catch (error41) {
+    } catch (error42) {
       const logImagePath = redactPathForLog(imagePath, privacyMode, "image_path");
-      logger82.error(ctx, "[generate-image] ref image read failed", {
+      logger83.error(ctx, "[generate-image] ref image read failed", {
         imagePath: logImagePath,
-        error: error41 instanceof Error ? error41.message : String(error41)
+        error: error42 instanceof Error ? error42.message : String(error42)
       });
       return null;
     }
@@ -505,14 +505,14 @@ async function writeGeneratedImage(ctx, writeExecutor, options2) {
         break;
       }
     }
-    logger82.error(ctx, "[generate-image] write failed", {
+    logger83.error(ctx, "[generate-image] write failed", {
       outputPath: logOutputPath,
       resultCase,
       error: errorDetail
     });
     throw toThrow;
   }
-  logger82.info(ctx, "[generate-image] write success", {
+  logger83.info(ctx, "[generate-image] write success", {
     outputPath: logOutputPath,
     size: imageBytes.length
   });
@@ -605,7 +605,9 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
         executeOutcome = "model_restricted";
         recordGenerateImageExecuteFinish(parentCtx, executeOutcome);
         finishRecorded = true;
-        generateImageExecuteDurationMs.histogram(parentCtx, Date.now() - executeStartTimeMs, { outcome: executeOutcome });
+        generateImageExecuteDurationMs.histogram(parentCtx, Date.now() - executeStartTimeMs, {
+          outcome: executeOutcome
+        });
         return new GenerateImageResult({
           result: {
             case: "error",
@@ -619,11 +621,15 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
         generateImageShortPromptCounter.increment(parentCtx, 1, {
           word_count: String(promptWordCount)
         });
-        logger82.warn(parentCtx, "[generate-image] short/suspicious prompt rejected", { wordCount: promptWordCount });
+        logger83.warn(parentCtx, "[generate-image] short/suspicious prompt rejected", {
+          wordCount: promptWordCount
+        });
         executeOutcome = "short_prompt_rejected";
         recordGenerateImageExecuteFinish(parentCtx, executeOutcome);
         finishRecorded = true;
-        generateImageExecuteDurationMs.histogram(parentCtx, Date.now() - executeStartTimeMs, { outcome: executeOutcome });
+        generateImageExecuteDurationMs.histogram(parentCtx, Date.now() - executeStartTimeMs, {
+          outcome: executeOutcome
+        });
         return new GenerateImageResult({
           result: {
             case: "error",
@@ -637,7 +643,9 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
         executeOutcome = "readonly_rejected";
         recordGenerateImageExecuteFinish(parentCtx, executeOutcome);
         finishRecorded = true;
-        generateImageExecuteDurationMs.histogram(parentCtx, Date.now() - executeStartTimeMs, { outcome: executeOutcome });
+        generateImageExecuteDurationMs.histogram(parentCtx, Date.now() - executeStartTimeMs, {
+          outcome: executeOutcome
+        });
         return new GenerateImageResult({
           result: {
             case: "error",
@@ -663,7 +671,7 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
           if (!projectFolder || projectFolder.trim().length === 0) {
             errorStage = "project_folder";
             recordGenerateImageExecuteError(ctx, "project_folder");
-            logger82.error(ctx, "[generate-image] no project folder available to save the generated image", {
+            logger83.error(ctx, "[generate-image] no project folder available to save the generated image", {
               generate_image: {
                 projectFolder: requestContext?.env?.projectFolder,
                 artifactsFolder: requestContext?.env?.artifactsFolder,
@@ -678,10 +686,10 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
           let referenceImages;
           try {
             referenceImages = await readReferenceImages(ctx, readExecutor, rawArgs.reference_image_paths ?? [], meta.toolCallId, privacyMode);
-          } catch (error41) {
+          } catch (error42) {
             errorStage = "read_reference_images";
             recordGenerateImageExecuteError(ctx, "read_reference_images");
-            throw error41;
+            throw error42;
           }
           if (imageGenerationConcurrencyLimiter) {
             await imageGenerationConcurrencyLimiter.acquire();
@@ -696,10 +704,10 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
               if (serviceResult.usage && meta.stateHandler) {
                 meta.stateHandler.addTurnUsage(serviceResult.usage);
               }
-            } catch (error41) {
+            } catch (error42) {
               errorStage = "provider_inference";
               recordGenerateImageExecuteError(ctx, "provider_inference");
-              throw error41;
+              throw error42;
             }
             try {
               return await writeGeneratedImage(ctx, writeExecutor, {
@@ -709,10 +717,10 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
                 artifactsFolder: requestContext?.env?.artifactsFolder,
                 privacyMode
               });
-            } catch (error41) {
+            } catch (error42) {
               errorStage = "write_output";
               recordGenerateImageExecuteError(ctx, "write_output");
-              throw error41;
+              throw error42;
             }
           } finally {
             if (imageGenerationConcurrencyLimiter) {
@@ -724,8 +732,8 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
         recordGenerateImageExecuteFinish(parentCtx, executeOutcome);
         finishRecorded = true;
         return result;
-      } catch (error41) {
-        const isAborted2 = parentCtx.signal.aborted || error41 instanceof ToolCallAbortedError || error41 instanceof Error && error41.name === "AbortError";
+      } catch (error42) {
+        const isAborted2 = parentCtx.signal.aborted || error42 instanceof ToolCallAbortedError || error42 instanceof Error && error42.name === "AbortError";
         if (isAborted2) {
           const { reasonInfo, finishOutcome } = classifyAbortFinish(parentCtx.reason);
           if (!finishRecorded) {
@@ -737,7 +745,7 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
             phase: "execute",
             abort_reason_type: finishOutcome
           });
-          logger82.warn(parentCtx, "[generate-image] aborted", {
+          logger83.warn(parentCtx, "[generate-image] aborted", {
             ...reasonInfo,
             abortReason: finishOutcome
           });
@@ -747,21 +755,21 @@ var createGenerateImageTool = (resourceAccessor, generateImageService, promptVer
           recordGenerateImageExecuteFinish(parentCtx, executeOutcome);
           finishRecorded = true;
         }
-        const contentSafetyBlocked = isContentSafetyBlockedError(error41);
+        const contentSafetyBlocked = isContentSafetyBlockedError(error42);
         if (!isAborted2 && contentSafetyBlocked) {
           throw createContentSafetyBlockedError();
         }
-        const providerDetails = getProviderResponseDetails(error41);
+        const providerDetails = getProviderResponseDetails(error42);
         if (!isAborted2 && providerDetails !== void 0) {
-          const baseMessage = getGenerateImageBaseErrorMessage(error41);
-          const classification = classifyProviderStatus(getProviderResponseStatusCode(error41));
+          const baseMessage = getGenerateImageBaseErrorMessage(error42);
+          const classification = classifyProviderStatus(getProviderResponseStatusCode(error42));
           throw new CustomToolCallError(classification, {
             clientVisibleErrorMessage: baseMessage,
             modelVisibleErrorMessage: baseMessage,
-            error: getGenerateImageDetailedErrorMessage(error41)
+            error: getGenerateImageDetailedErrorMessage(error42)
           });
         }
-        throw error41;
+        throw error42;
       } finally {
         const durationMs = Date.now() - executeStartTimeMs;
         generateImageExecuteDurationMs.histogram(parentCtx, durationMs, {
@@ -804,9 +812,9 @@ Always use this absolute path when referring to the image. Do not repeat this im
           renderOutcome = "success";
           return createImageResult(resizedBase64, resizedImage.mimeType, `Successfully generated image at: ${filePath}
 Always use this absolute path when referring to the image. Do not repeat this image as a Markdown reference; it is already displayed to the user.`);
-        } catch (error41) {
-          renderOutcome = isResizeImageError(error41) ? "resize_error" : "internal_error";
-          throw error41;
+        } catch (error42) {
+          renderOutcome = isResizeImageError(error42) ? "resize_error" : "internal_error";
+          throw error42;
         }
       }
       if (result.result.case === "error" && result.result.value.error === ASK_MODE_MODEL_ERROR) {
@@ -820,16 +828,16 @@ Always use this absolute path when referring to the image. Do not repeat this im
     }
   };
   const name17 = getToolName(promptVersion);
-  const description10 = getDescription(promptVersion);
+  const description9 = getDescription(promptVersion);
   return createZodAgentTool("GENERATE_IMAGE", {
     name: name17,
     contextType: { type: "dynamic" },
-    descriptionGenerator: (_props) => description10,
+    descriptionGenerator: (_props) => description9,
     parameters: parametersSchema16,
     execute: withSafeParsedArgs(parametersSchema16, execute, createGenerateImageToolCall(new GenerateImageToolCall())),
     render: render2,
-    serializeError: (error41) => {
-      const errorMessage6 = error41 instanceof ToolCallError ? error41.clientVisibleErrorMessage : getGenerateImageBaseErrorMessage(error41);
+    serializeError: (error42) => {
+      const errorMessage6 = error42 instanceof ToolCallError ? error42.clientVisibleErrorMessage : getGenerateImageBaseErrorMessage(error42);
       return createGenerateImageToolCall(new GenerateImageToolCall({
         result: new GenerateImageResult({
           result: {

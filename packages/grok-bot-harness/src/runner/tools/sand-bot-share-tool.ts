@@ -36,14 +36,14 @@ var PUBLIC_SHARING_DISABLED_MARKERS = [
 ];
 var SHARING_DISABLED_MARKER = "Grok Bot template sharing is disabled";
 var TEAM_SHARED_SOURCE_MARKER = "A team-shared bot cannot be saved as a template";
-function botTemplateShareRefusalReason(error41) {
-  if (error41 instanceof ConnectError) {
-    const header = error41.metadata.get(BOT_TEMPLATE_SHARE_REASON_HEADER);
+function botTemplateShareRefusalReason(error42) {
+  if (error42 instanceof ConnectError) {
+    const header = error42.metadata.get(BOT_TEMPLATE_SHARE_REASON_HEADER);
     if (header === "none" || header === "public_disabled" || header === "team_shared_source") {
       return header;
     }
   }
-  const message = error41 instanceof Error ? error41.message : String(error41);
+  const message = error42 instanceof Error ? error42.message : String(error42);
   if (PUBLIC_SHARING_DISABLED_MARKERS.some((marker17) => message.includes(marker17))) {
     return "public_disabled";
   }
@@ -55,8 +55,8 @@ function botTemplateShareRefusalReason(error41) {
   }
   return void 0;
 }
-function botTemplateShareRefusalToolResult(error41) {
-  const reason = botTemplateShareRefusalReason(error41);
+function botTemplateShareRefusalToolResult(error42) {
+  const reason = botTemplateShareRefusalReason(error42);
   if (reason === "none") {
     return BOT_TEMPLATE_SHARING_DISABLED_MESSAGE;
   }
@@ -180,12 +180,12 @@ function createCreateBotShareJsonTool(deps) {
         const created = await shareDeps.share.create(input, ctx.signal);
         shareDeps.emitShare(botTemplateShareToMessage(created));
         return `Staged unpublished version ${created.version} of "${created.name}". It is not public until you confirm it.`;
-      } catch (error41) {
-        const refusal = botTemplateShareRefusalToolResult(error41);
+      } catch (error42) {
+        const refusal = botTemplateShareRefusalToolResult(error42);
         if (refusal != null) {
           return refusal;
         }
-        throw error41;
+        throw error42;
       }
     }
   });

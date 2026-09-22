@@ -218,9 +218,9 @@ async function parseGatewayCommandBody(method, body) {
   let parsed2;
   try {
     parsed2 = body.length > 0 ? JSON.parse(body) : {};
-  } catch (error41) {
-    throw new SandGatewayRequestError(`command body is not valid JSON: ${String(error41)}`, {
-      cause: error41
+  } catch (error42) {
+    throw new SandGatewayRequestError(`command body is not valid JSON: ${String(error42)}`, {
+      cause: error42
     });
   }
   const schema2 = GATEWAY_METHOD_DECLARATIONS[method].schema ?? NO_ARGS_SCHEMA2;

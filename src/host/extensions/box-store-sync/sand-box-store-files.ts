@@ -101,14 +101,14 @@ async function streamPutRangeFromFile(url2, headers, srcPath, offsetBytes, sizeB
   try {
     return await new Promise((resolve29, reject2) => {
       let settled = false;
-      const settle = (error41, result) => {
+      const settle = (error42, result) => {
         if (settled) return;
         settled = true;
-        if (error41 == null) resolve29(result ?? { status: 0, etag: "" });
-        else reject2(error41);
+        if (error42 == null) resolve29(result ?? { status: 0, etag: "" });
+        else reject2(error42);
       };
-      const request3 = transport.request(parsedUrl, { method: "PUT", headers }, (response) => {
-        response.on("error", (error41) => settle(error41));
+      const request5 = transport.request(parsedUrl, { method: "PUT", headers }, (response) => {
+        response.on("error", (error42) => settle(error42));
         const rawEtag = response.headers.etag;
         const etag = typeof rawEtag === "string" ? rawEtag.replaceAll('"', "").trim() : "";
         response.resume();
@@ -116,12 +116,12 @@ async function streamPutRangeFromFile(url2, headers, srcPath, offsetBytes, sizeB
           settle(void 0, { status: response.statusCode ?? 0, etag });
         });
       });
-      request3.on("error", (error41) => settle(error41));
-      void (0, import_promises10.pipeline)(body, request3).catch((error41) => settle(error41));
+      request5.on("error", (error42) => settle(error42));
+      void (0, import_promises10.pipeline)(body, request5).catch((error42) => settle(error42));
     });
-  } catch (error41) {
+  } catch (error42) {
     body.destroy();
-    throw error41;
+    throw error42;
   }
 }
 var READ_PRESIGN_BATCH_MAX = AGENT_STORE_SYNC_CLIENT_CONFIG_DEFAULTS.pullPresignWindowSize;
@@ -458,8 +458,8 @@ var SandBoxStoreServiceObjectStore = class {
             completions: [{ context: context2, parts: uploaded }]
           });
           result = response.results[0];
-        } catch (error41) {
-          lastFailure = error41 instanceof Error ? error41.message : String(error41);
+        } catch (error42) {
+          lastFailure = error42 instanceof Error ? error42.message : String(error42);
           continue;
         }
         if (result?.outcome.case === "success") {
@@ -477,9 +477,9 @@ var SandBoxStoreServiceObjectStore = class {
       throw new SandBoxStoreSyncError(
         `sand-box-store multipart complete failed for ${key}: ${lastFailure}`
       );
-    } catch (error41) {
+    } catch (error42) {
       await this.bestEffortAbortMultipart(context2);
-      throw error41;
+      throw error42;
     }
   }
   async bestEffortAbortMultipart(context2) {

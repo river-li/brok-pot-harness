@@ -1,9 +1,9 @@
-init_dist();
+init_dist2();
 init_agent_pb();
 init_requested_model_pb();
 init_selected_context_pb();
 init_background_composer_pb();
-init_dist2();
+init_dist3();
 function buildCloudAgentRequestedModel(modelId, params) {
   const paramsMap = new Map(Object.entries(params ?? {}));
   const trimmedModelId = modelId?.trim();

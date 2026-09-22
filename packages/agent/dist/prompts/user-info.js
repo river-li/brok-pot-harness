@@ -117,7 +117,7 @@ function MountedAgentStoresSection({ stores }) {
     const quotedAlias = store.alias !== void 0 && store.alias.length > 0 ? ` "${store.alias}"` : "";
     switch (store.kind) {
       case MountedAgentStoreKind.SELF:
-        return `Current agent's store: ${store.path}${readOnlySuffix}`;
+        return store.inheritedFromPath === void 0 ? `Current agent's store: ${store.path}${readOnlySuffix}` : `Current agent's store: ${store.path}${readOnlySuffix} (inherited from the parent agent; a symlink to ${store.inheritedFromPath})`;
       case MountedAgentStoreKind.PRINCIPAL:
         switch (store.alias) {
           case AGENT_STORE_USER_MOUNT_NAME:
@@ -210,7 +210,7 @@ function getAgentRequestableRuleDescription(rule, ruleDir) {
   }
   return void 0;
 }
-function UserInfoSection({ env, dsv3, mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder, agentSharedNotesFolder, agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled, agentStorePrincipalAutoMount }) {
+function UserInfoSection({ env, dsv3, mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder, agentSharedNotesFolder, agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled }) {
   const knownRepoText = hasGitRepos ? gitRepos.length > 1 ? `at:
 ${gitRepos.map((r) => `- ${r.path}`).join("\n")}` : `at ${gitRepos[0].path}` : "";
   const gitRepoStatusText = gitRepoInfoComplete === false ? hasGitRepos ? `Yes (potentially incomplete while git repository detection is still warming), currently found ${knownRepoText}` : "Unknown (git repository detection still warming)" : hasGitRepos ? `Yes, ${knownRepoText}` : "No";
@@ -225,7 +225,9 @@ ${gitRepos.map((r) => `- ${r.path}`).join("\n")}` : `at ${gitRepos[0].path}` : "
   });
   const hasUserAgentStore = mountedAgentStores.some((store) => store.kind === MountedAgentStoreKind.PRINCIPAL && store.alias === AGENT_STORE_USER_MOUNT_NAME);
   const hasAutomationAgentStore = allMountedAgentStores.some((store) => store.kind === MountedAgentStoreKind.PRINCIPAL && store.alias === AGENT_STORE_AUTOMATION_MOUNT_NAME);
-  const showMountedAgentStores = hasUserAgentStore || agentStorePrincipalAutoMount !== true && !hasAutomationAgentStore && mountedAgentStores.some((store) => store.kind === MountedAgentStoreKind.SELF);
+  const hasPeerAgentStore = mountedAgentStores.some((store) => store.kind === MountedAgentStoreKind.PEER);
+  const hasSelfAgentStore = mountedAgentStores.some((store) => store.kind === MountedAgentStoreKind.SELF);
+  const showMountedAgentStores = hasUserAgentStore || hasPeerAgentStore || !hasAutomationAgentStore && hasSelfAgentStore;
   if (dsv3) {
     const shouldShowAgentNotesPaths = mode === AgentMode.PROJECT || metaAgentNotesEnabled === true;
     return jsxs("section", { title: "user_info", children: [jsxs("p", { children: ["OS Version: ", env.osVersion] }), jsxs("p", { children: ["Shell: ", env.shell ?? "bash"] }), env.workspacePaths.length > 1 ? jsxs("p", { children: ["Workspace Paths:", jsx("br", {}), env.workspacePaths.map((p2) => `- ${p2}`).join("\n")] }) : env.workspacePaths.length === 1 ? jsxs("p", { children: ["Workspace Path: ", env.workspacePaths[0], isWorktreesPath(env.workspacePaths[0]) && jsxs(Fragment, { children: [jsx("br", {}), CURSOR_WORKTREE_NOTE] }), shouldShowNonPrimaryWorktreeWarning && jsxs(Fragment, { children: [jsx("br", {}), NON_PRIMARY_WORKTREE_NOTE] }), shouldShowNonPrimaryWorktreeWarning && env.isWorkingDirHomeDir === true && jsxs(Fragment, { children: [jsx("br", {}), HOME_DIR_WORKTREE_NOTE] })] }) : jsx("p", { children: "Workspace Path: unknown" }), displayGitRepoStatusLine && jsxs("p", { children: ["Is directory a git repo: ", gitRepoStatusText] }), terminalsFolder && jsxs("p", { children: ["Terminals folder: ", terminalsFolder] }), showMountedAgentStores && jsx(MountedAgentStoresSection, { stores: mountedAgentStores }), displayTodaysDate && jsxs("p", { children: ["Today's date: ", todaysDate] }), shouldShowAgentNotesPaths && metaAgentNotesEnabled !== true && agentSharedNotesFolder && jsxs("p", { children: ["Agent shared notes folder: ", agentSharedNotesFolder] }), shouldShowAgentNotesPaths && (metaAgentNotesEnabled === true ? metaAgentNotesDirectory : agentConversationNotesFolder) && jsx("p", { children: metaAgentNotesEnabled === true ? `Meta-agent notes folder: ${metaAgentNotesDirectory}` : `Agent conversation notes folder: ${agentConversationNotesFolder}` }), jsx("p", { children: "Note: Prefer using absolute paths over relative paths as tool call args when possible." })] });
@@ -285,18 +287,18 @@ function AgentTranscriptsSection({ agentTranscriptsFolder, agentType, enableAgen
     `cite parent chat transcripts to the user as [<title for chat <=6 words>](<uuid excluding .jsonl>).${enableAgentChatLinks ? "" : " Do not cite subagent transcript files from this folder."}`,
     `Don't discuss the folder structure.`
   ].join(" ") : `Don't cite the file directly to the user.`;
-  return jsx("section", { title: "agent_transcripts", children: jsxs("p", { children: ["Agent transcripts (past chats) live in ", agentTranscriptsFolder, ". They have names like ", "<uuid>", ".jsonl, ", citationInstruction] }) });
+  return jsx("section", { title: "agent_transcripts", children: jsxs("p", { children: ["Agent transcripts (past chats) live in ", agentTranscriptsFolder, ". They have names like", " ", "<uuid>", ".jsonl, ", citationInstruction] }) });
 }
 function AlwaysAppliedWorkspaceRulesSection({ globalRules }) {
   return jsx("section", { title: "always_applied_workspace_rules", description: "These are workspace-level rules that the agent must always follow.", children: globalRules.map((rule) => jsx("x", { tag: "always_applied_workspace_rule", name: rule.fullPath, children: rule.content })) });
 }
 function AgentRequestableWorkspaceRulesSection({ agentRequestableRules, readToolName }) {
-  const description10 = readToolName ? `These are workspace-level rules that the agent should follow. Use the ${readToolName} tool to fetch full contents from the provided absolute path. Read each rule file using the ${readToolName} tool when it is relevant to your work.` : "These are workspace-level rules that the agent should follow. Fetch full contents from the provided absolute path.";
-  return jsx("section", { title: "agent_requestable_workspace_rules", description: description10, children: agentRequestableRules.map((rule) => {
+  const description9 = readToolName ? `These are workspace-level rules that the agent should follow. Use the ${readToolName} tool to fetch full contents from the provided absolute path. Read each rule file using the ${readToolName} tool when it is relevant to your work.` : "These are workspace-level rules that the agent should follow. Fetch full contents from the provided absolute path.";
+  return jsx("section", { title: "agent_requestable_workspace_rules", description: description9, children: agentRequestableRules.map((rule) => {
     const mdcPath = rule.fullPath;
     const ruleDir = getRuleDir2(mdcPath);
-    const description11 = getAgentRequestableRuleDescription(rule, ruleDir);
-    return jsx("x", { tag: "agent_requestable_workspace_rule", fullPath: rule.fullPath, children: description11 });
+    const description10 = getAgentRequestableRuleDescription(rule, ruleDir);
+    return jsx("x", { tag: "agent_requestable_workspace_rule", fullPath: rule.fullPath, children: description10 });
   }) });
 }
 function AgentSkillsSectionLayout({ skillItems, omittedNotice, hasOmittedSkills, hasListedSkills = skillItems.length > 0, raw, readToolName, isGpt56 }) {
@@ -384,9 +386,7 @@ function buildComposer2CustomUserRuleRealEnvironment({ includeCommandExecutionEn
   return [
     "IMPORTANT: This is a real environment with full shell access and network, not a simulated one.",
     "- You MUST run commands and use tools to investigate and solve problems yourself.",
-    ...includeCommandExecutionEnforcement ? [
-      "- You MUST NOT simply tell the user what to run \u2014 execute it yourself."
-    ] : [],
+    ...includeCommandExecutionEnforcement ? ["- You MUST NOT simply tell the user what to run \u2014 execute it yourself."] : [],
     "- You MUST NOT give up after a single failure \u2014 try alternative approaches, or diagnose and retry.",
     ...includeDateAuthority ? [
       "- The `Today's date:` field in the user info section is authoritative: when giving the current date, or picking a date for search or knowledge retrieval, default to that year (2026); the year is **NOT** 2025."
@@ -494,12 +494,14 @@ When writing a final response for the user, keep the following communication rul
 - Prefer pointed responses, think about what the user really wants to know and focus on clearly surfacing the information that is needed to satisfy the latest user query. Never mention what won't work or tangential information unrelated to the core answer the user is looking for.
 - Only provide thorough detail when requested. Prefer to keep it concise with a sentence or two if possible per point. Only expand into full sections when needed. Don't restate the bottom line in a dedicated section.
 `;
+var CONTRASTIVE_NEGATION_USER_RULE_INTERVENTION = `State points directly in affirmative language. Avoid unnecessary contrastive negation such as \u201CX, not Y,\u201D especially clarifications about alternatives the user did not mention.`;
 function getComposer2CustomUserRulesForModel(modelInfo, featureFlags, options2) {
   const uiBrowserVerificationRule = shouldInjectUiBrowserVerificationPrompt(modelInfo) ? [UI_BROWSER_VERIFICATION_USER_RULE] : [];
   if (modelInfo?.isComposerMatterhorn === true && modelInfo?.isRawTrainingSlug === true) {
     return [...uiBrowserVerificationRule];
   }
   const tahomaInterventionRule = featureFlags?.enableTahomaUserRuleIntervention === true ? [TAHOMA_USER_RULE_INTERVENTION] : [];
+  const contrastiveNegationInterventionRule = featureFlags?.enableDsv30226CommunicationV2 === true && featureFlags?.useGrok46CommunicationV2 !== true ? [CONTRASTIVE_NEGATION_USER_RULE_INTERVENTION] : [];
   const vegaFrontendInterventionRule = featureFlags?.enableVegaFrontendUserRuleIntervention === true ? [VEGA_FRONTEND_USER_RULE_INTERVENTION] : [];
   const composer2CustomUserRules = featureFlags?.enableComposer2CustomUserRules === true ? COMPOSER2_CUSTOM_USER_RULES : [];
   if (modelInfo?.isComposerMatterhorn !== true) {
@@ -507,14 +509,16 @@ function getComposer2CustomUserRulesForModel(modelInfo, featureFlags, options2) 
       ...composer2CustomUserRules,
       ...uiBrowserVerificationRule,
       ...vegaFrontendInterventionRule,
-      ...tahomaInterventionRule
+      ...tahomaInterventionRule,
+      ...contrastiveNegationInterventionRule
     ];
   }
   if (featureFlags?.enableComposer2CustomUserRules !== true) {
     return [
       ...uiBrowserVerificationRule,
       ...vegaFrontendInterventionRule,
-      ...tahomaInterventionRule
+      ...tahomaInterventionRule,
+      ...contrastiveNegationInterventionRule
     ];
   }
   const enableMatterhornPromptTweaks = featureFlags?.enableMatterhornPromptTweaks === true;
@@ -538,7 +542,8 @@ function getComposer2CustomUserRulesForModel(modelInfo, featureFlags, options2) 
     ...awaitToolRule,
     ...uiBrowserVerificationRule,
     ...vegaFrontendInterventionRule,
-    ...tahomaInterventionRule
+    ...tahomaInterventionRule,
+    ...contrastiveNegationInterventionRule
   ];
 }
 function stripWhitespace(s3) {
@@ -547,11 +552,12 @@ function stripWhitespace(s3) {
 var MULTITASK_MODE_ENTER_REMINDER_SENTINEL = stripWhitespace(renderMultitaskModeEnterUserReminderInner("Task").slice(0, 40));
 var COMPOSER2_RULES_PRESENCE_SENTINEL = stripWhitespace(COMPOSER2_CUSTOM_USER_RULE_INSTRUCTION_FOLLOWING);
 var TAHOMA_USER_RULE_INTERVENTION_SENTINEL = stripWhitespace(TAHOMA_USER_RULE_INTERVENTION);
+var CONTRASTIVE_NEGATION_USER_RULE_INTERVENTION_SENTINEL = stripWhitespace(CONTRASTIVE_NEGATION_USER_RULE_INTERVENTION);
 var VEGA_FRONTEND_USER_RULE_INTERVENTION_SENTINEL = stripWhitespace(VEGA_FRONTEND_USER_RULE_INTERVENTION);
 var UI_BROWSER_VERIFICATION_USER_RULE_SENTINEL = stripWhitespace(UI_BROWSER_VERIFICATION_USER_RULE);
 function userInfoHasAnyGeneratedCustomUserRules(content) {
   const stripped = stripWhitespace(content);
-  return stripped.includes(COMPOSER2_RULES_PRESENCE_SENTINEL) || stripped.includes(TAHOMA_USER_RULE_INTERVENTION_SENTINEL) || stripped.includes(VEGA_FRONTEND_USER_RULE_INTERVENTION_SENTINEL) || stripped.includes(UI_BROWSER_VERIFICATION_USER_RULE_SENTINEL);
+  return stripped.includes(COMPOSER2_RULES_PRESENCE_SENTINEL) || stripped.includes(TAHOMA_USER_RULE_INTERVENTION_SENTINEL) || stripped.includes(CONTRASTIVE_NEGATION_USER_RULE_INTERVENTION_SENTINEL) || stripped.includes(VEGA_FRONTEND_USER_RULE_INTERVENTION_SENTINEL) || stripped.includes(UI_BROWSER_VERIFICATION_USER_RULE_SENTINEL);
 }
 function userInfoHasExpectedCustomUserRules(content, modelInfo, featureFlags, options2) {
   const stripped = stripWhitespace(content);
@@ -563,13 +569,15 @@ function userInfoHasExpectedCustomUserRules(content, modelInfo, featureFlags, op
   const strippedRules = rules.map(stripWhitespace);
   const expectsTahomaIntervention = featureFlags?.enableTahomaUserRuleIntervention === true;
   const hasTahomaIntervention = stripped.includes(TAHOMA_USER_RULE_INTERVENTION_SENTINEL);
+  const expectsContrastiveNegationIntervention = featureFlags?.enableDsv30226CommunicationV2 === true && featureFlags?.useGrok46CommunicationV2 !== true;
+  const hasContrastiveNegationIntervention = stripped.includes(CONTRASTIVE_NEGATION_USER_RULE_INTERVENTION_SENTINEL);
   const expectsVegaFrontendIntervention = featureFlags?.enableVegaFrontendUserRuleIntervention === true;
   const hasVegaFrontendIntervention = stripped.includes(VEGA_FRONTEND_USER_RULE_INTERVENTION_SENTINEL);
   const expectsUiBrowserVerification = shouldInjectUiBrowserVerificationPrompt(modelInfo);
   const hasUiBrowserVerification = stripped.includes(UI_BROWSER_VERIFICATION_USER_RULE_SENTINEL);
   const expectsComposer2CustomRules = strippedRules.some((rule) => rule === COMPOSER2_RULES_PRESENCE_SENTINEL);
   const hasComposer2CustomRules = stripped.includes(COMPOSER2_RULES_PRESENCE_SENTINEL);
-  if (hasTahomaIntervention !== expectsTahomaIntervention || hasVegaFrontendIntervention !== expectsVegaFrontendIntervention || hasUiBrowserVerification !== expectsUiBrowserVerification || hasComposer2CustomRules !== expectsComposer2CustomRules) {
+  if (hasTahomaIntervention !== expectsTahomaIntervention || hasContrastiveNegationIntervention !== expectsContrastiveNegationIntervention || hasVegaFrontendIntervention !== expectsVegaFrontendIntervention || hasUiBrowserVerification !== expectsUiBrowserVerification || hasComposer2CustomRules !== expectsComposer2CustomRules) {
     return false;
   }
   return rules.length > 0 && strippedRules.every((rule) => stripped.includes(rule));
@@ -639,29 +647,29 @@ function McpMetaToolServersSection({ mcpMetaToolOptions, mcpInfoComplete }) {
   }
   return jsxs("section", { title: useDynamicToolNamespaces ? "dynamic_tool_catalog" : "mcp_server_catalog", children: [mcpInfoComplete === false && jsx("p", { children: useDynamicToolNamespaces ? "Dynamic namespace discovery is still warming. The namespace and tool list may be incomplete." : "MCP server discovery is still warming. The server and tool list below may be incomplete; additional servers may become available shortly." }), jsxs("p", { children: [useDynamicToolNamespaces ? "These dynamic tool namespaces were available when this conversation started. Availability may have changed, so " : "These were the available MCP servers and tools when this conversation started. Tool availability may have changed since then, so ", mcpMetaToolOptions.snapshotToolNames ? jsxs(Fragment, { children: ["use `", mcpMetaToolOptions.snapshotToolNames.discoveryToolName, "` to check current state before calling `", mcpMetaToolOptions.snapshotToolNames.invocationToolName, "`."] }) : jsx(Fragment, { children: "use the MCP tool-discovery meta tool to check current state before calling the MCP tool-invocation meta tool." })] }), serverList] });
 }
-function AvailableSubagentModelsSection({ description: description10 }) {
-  return jsx("section", { title: "available_subagent_models", children: jsx("p", { children: description10 }) });
+function AvailableSubagentModelsSection({ description: description9 }) {
+  return jsx("section", { title: "available_subagent_models", children: jsx("p", { children: description9 }) });
 }
-function AvailableSubagentTypesSection({ description: description10 }) {
-  return jsx("section", { title: "available_subagent_types", children: jsx("p", { children: description10 }) });
+function AvailableSubagentTypesSection({ description: description9 }) {
+  return jsx("section", { title: "available_subagent_types", children: jsx("p", { children: description9 }) });
 }
-function renderAvailableSubagentModelsSection(description10) {
-  return renderContent(jsx(AvailableSubagentModelsSection, { description: description10 }));
+function renderAvailableSubagentModelsSection(description9) {
+  return renderContent(jsx(AvailableSubagentModelsSection, { description: description9 }));
 }
-function renderAvailableSubagentTypesSection(description10) {
-  return renderContent(jsx(AvailableSubagentTypesSection, { description: description10 }));
+function renderAvailableSubagentTypesSection(description9) {
+  return renderContent(jsx(AvailableSubagentTypesSection, { description: description9 }));
 }
-function userInfoMatchesAvailableSubagentModels(content, description10) {
-  if (description10 === void 0) {
+function userInfoMatchesAvailableSubagentModels(content, description9) {
+  if (description9 === void 0) {
     return !content.includes("<available_subagent_models>");
   }
-  return content.includes(renderAvailableSubagentModelsSection(description10));
+  return content.includes(renderAvailableSubagentModelsSection(description9));
 }
-function userInfoMatchesAvailableSubagentTypes(content, description10) {
-  if (description10 === void 0) {
+function userInfoMatchesAvailableSubagentTypes(content, description9) {
+  if (description9 === void 0) {
     return !content.includes("<available_subagent_types>");
   }
-  return content.includes(renderAvailableSubagentTypesSection(description10));
+  return content.includes(renderAvailableSubagentTypesSection(description9));
 }
 function UserInfoComponent({ props }) {
   const dropCustomPromptContext = props.featureFlags?.dropCustomPromptContext === true;
@@ -746,7 +754,7 @@ ${mcpInstructionsForUserMsg}` : "";
   const shouldRenderCoordinatorNewProjectGuidance = !shouldRenderCloudTaskInstructions && props.omitCloudWorkerProcedure === true && props.startedAsNewProject === true && props.designatedBranches !== void 0 && !useLocalAgentPrompting && !isNamedAgentHome && props.displayOptions?.computerUseSubagentSurface !== true;
   const metaAgentNotesDirectory = resolveMetaAgentNotesDirectory(props);
   if (includeOnlyUserInfoAndGitStatus) {
-    return jsxs(Fragment, { children: [props.toolInfo?.availableSubagentTypesDescription !== void 0 && jsx(AvailableSubagentTypesSection, { description: props.toolInfo.availableSubagentTypesDescription }), props.toolInfo?.availableSubagentModelsDescription !== void 0 && jsx(AvailableSubagentModelsSection, { description: props.toolInfo.availableSubagentModelsDescription }), props.env !== void 0 && jsx(UserInfoSection, { env: props.env, dsv3: props.dsv3, mode: props.mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder: props.terminalsFolder, agentSharedNotesFolder: props.agentSharedNotesFolder, agentConversationNotesFolder: props.agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled: props.metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled: props.featureFlags?.agentStorePathsAdvertisedInPrompt === true, agentStorePrincipalAutoMount: props.featureFlags?.agentStorePrincipalAutoMount }), metaAgentNotesDirectory !== void 0 && jsx(MetaAgentProjectNotesDirectorySection, { notesDirectory: metaAgentNotesDirectory }), props.displayOptions?.displayGitStatus !== false && gitReposWithStatus.length > 0 && jsx(GitStatusSection, { gitRepos, gitReposWithStatus, initialWorkingDirectory, agentType: resolvedAgentType, toolInfo: props.toolInfo })] });
+    return jsxs(Fragment, { children: [props.toolInfo?.availableSubagentTypesDescription !== void 0 && jsx(AvailableSubagentTypesSection, { description: props.toolInfo.availableSubagentTypesDescription }), props.toolInfo?.availableSubagentModelsDescription !== void 0 && jsx(AvailableSubagentModelsSection, { description: props.toolInfo.availableSubagentModelsDescription }), props.env !== void 0 && jsx(UserInfoSection, { env: props.env, dsv3: props.dsv3, mode: props.mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder: props.terminalsFolder, agentSharedNotesFolder: props.agentSharedNotesFolder, agentConversationNotesFolder: props.agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled: props.metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled: props.featureFlags?.agentStorePathsAdvertisedInPrompt === true }), metaAgentNotesDirectory !== void 0 && jsx(MetaAgentProjectNotesDirectorySection, { notesDirectory: metaAgentNotesDirectory }), props.displayOptions?.displayGitStatus !== false && gitReposWithStatus.length > 0 && jsx(GitStatusSection, { gitRepos, gitReposWithStatus, initialWorkingDirectory, agentType: resolvedAgentType, toolInfo: props.toolInfo })] });
   }
   const computerUseSubagentSurface = props.displayOptions?.computerUseSubagentSurface === true;
   const composer2CloudTestingSections = !computerUseSubagentSurface && props.omitCloudWorkerProcedure !== true && getComposer2CloudTestingSectionsPlacement(props) === "user_info" ? getComposer2CloudTestingSectionElements({
@@ -754,7 +762,7 @@ ${mcpInstructionsForUserMsg}` : "";
     startedAsNewProject: props.startedAsNewProject === true
   }) : void 0;
   const automationInstructions = props.automationInstructions === void 0 ? void 0 : materializeAutomationMemoryInstruction(props.automationInstructions, props.env?.mountedAgentStores ?? []);
-  return jsxs(Fragment, { children: [props.env !== void 0 && jsx(UserInfoSection, { env: props.env, dsv3: props.dsv3, mode: props.mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder: props.terminalsFolder, agentSharedNotesFolder: props.agentSharedNotesFolder, agentConversationNotesFolder: props.agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled: props.metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled: props.featureFlags?.agentStorePathsAdvertisedInPrompt === true, agentStorePrincipalAutoMount: props.featureFlags?.agentStorePrincipalAutoMount }), props.namedAgentSelfDocumentBlock !== void 0 && jsx("p", { children: props.namedAgentSelfDocumentBlock }), metaAgentNotesDirectory !== void 0 && jsx(MetaAgentProjectNotesDirectorySection, { notesDirectory: metaAgentNotesDirectory }), userIntentContent.length > 0 && jsx(UserIntentSection, { content: userIntentContent }), props.displayOptions?.displayGitStatus !== false && gitReposWithStatus.length > 0 && jsx(GitStatusSection, { gitRepos, gitReposWithStatus, initialWorkingDirectory, agentType: resolvedAgentType, toolInfo: props.toolInfo }), composer2CloudTestingSections?.gitAndSubmission, !props.displayOptions?.excludeAgentTranscripts && props.env?.agentTranscriptsFolder && // Don't show agent transcripts section for cloud agents - they use a different
+  return jsxs(Fragment, { children: [props.env !== void 0 && jsx(UserInfoSection, { env: props.env, dsv3: props.dsv3, mode: props.mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder: props.terminalsFolder, agentSharedNotesFolder: props.agentSharedNotesFolder, agentConversationNotesFolder: props.agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled: props.metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled: props.featureFlags?.agentStorePathsAdvertisedInPrompt === true }), props.namedAgentSelfDocumentBlock !== void 0 && jsx("p", { children: props.namedAgentSelfDocumentBlock }), metaAgentNotesDirectory !== void 0 && jsx(MetaAgentProjectNotesDirectorySection, { notesDirectory: metaAgentNotesDirectory }), userIntentContent.length > 0 && jsx(UserIntentSection, { content: userIntentContent }), props.displayOptions?.displayGitStatus !== false && gitReposWithStatus.length > 0 && jsx(GitStatusSection, { gitRepos, gitReposWithStatus, initialWorkingDirectory, agentType: resolvedAgentType, toolInfo: props.toolInfo }), composer2CloudTestingSections?.gitAndSubmission, !props.displayOptions?.excludeAgentTranscripts && props.env?.agentTranscriptsFolder && // Don't show agent transcripts section for cloud agents - they use a different
   // mechanism (pastConversationExplorer subagent reads from /opt/cursor/past-transcripts/)
   props.displayOptions?.agentType !== AgentType.BACKGROUND && jsx(AgentTranscriptsSection, { agentTranscriptsFolder: props.env.agentTranscriptsFolder, agentType: props.displayOptions?.agentType, enableAgentChatLinks: props.featureFlags?.enableAgentChatLinks !== false }), !computerUseSubagentSurface && !dropCustomPromptContext && rulesSection, !computerUseSubagentSurface && props.toolInfo?.availableSubagentTypesDescription !== void 0 && jsx(AvailableSubagentTypesSection, { description: props.toolInfo.availableSubagentTypesDescription }), !computerUseSubagentSurface && props.toolInfo?.availableSubagentModelsDescription !== void 0 && jsx(AvailableSubagentModelsSection, { description: props.toolInfo.availableSubagentModelsDescription }), !dropCustomPromptContext && availableSkillsSection, !computerUseSubagentSurface && cloudRuleContent.length > 0 && props.useProjectCoordinatorPrompting !== true && jsx(CloudInstructionsSection, { cloudRuleContent }), composer2CloudTestingSections?.testing, composer2CloudTestingSections?.computerUse, shouldRenderCloudTaskInstructions && jsx(CloudTaskInstructions, {
     gitRepos,

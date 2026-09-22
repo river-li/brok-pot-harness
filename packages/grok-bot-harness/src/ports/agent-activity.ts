@@ -8,20 +8,20 @@ function clampPositiveInt(value, fallback2, cap) {
   const floored = typeof value === "number" ? Math.floor(value) : Number.NaN;
   return Number.isFinite(floored) && floored >= 1 ? Math.min(floored, cap) : fallback2;
 }
-function clampAgentActivityRequest(request3) {
+function clampAgentActivityRequest(request5) {
   return {
     sinceHours: clampPositiveInt(
-      request3?.sinceHours,
+      request5?.sinceHours,
       GROK_BOT_AGENT_ACTIVITY_DEFAULT_SINCE_HOURS,
       GROK_BOT_AGENT_ACTIVITY_MAX_SINCE_HOURS
     ),
     maxAgents: clampPositiveInt(
-      request3?.maxAgents,
+      request5?.maxAgents,
       GROK_BOT_AGENT_ACTIVITY_DEFAULT_MAX_AGENTS,
       GROK_BOT_AGENT_ACTIVITY_MAX_AGENTS
     ),
     excerptChars: clampPositiveInt(
-      request3?.excerptChars,
+      request5?.excerptChars,
       GROK_BOT_AGENT_ACTIVITY_DEFAULT_EXCERPT_CHARS,
       GROK_BOT_AGENT_ACTIVITY_MAX_EXCERPT_CHARS
     )

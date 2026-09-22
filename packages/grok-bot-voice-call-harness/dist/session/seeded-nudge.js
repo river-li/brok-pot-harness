@@ -28,10 +28,7 @@ var VoiceCallItemSeeding = class _VoiceCallItemSeeding {
    * what the voice side already said; offering it to the working side would
    * be offering a way to reach nobody.
    */
-  static SPOKEN_KINDS = [
-    "progress",
-    "outcome"
-  ];
+  static SPOKEN_KINDS = ["progress", "outcome"];
   /**
    * A seeded step rides in the model's context for the rest of the call, so it
    * is held to the same size a spoken nudge is.

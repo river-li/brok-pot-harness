@@ -28,15 +28,15 @@ function createBoxTimezoneService(deps) {
       try {
         await deps.applyZone(timeZone);
         applied = timeZone;
-      } catch (error41) {
+      } catch (error42) {
         deps.log(
-          `box-timezone: could not set the box clock to ${timeZone} (${errorLogTag(error41)})`
+          `box-timezone: could not set the box clock to ${timeZone} (${errorLogTag(error42)})`
         );
         if (pending === timeZone) pending = void 0;
       }
     }
   };
-  const request3 = (timeZone) => {
+  const request5 = (timeZone) => {
     if (disposed || timeZone === void 0) return;
     pending = timeZone;
     if (inFlight === void 0) {
@@ -47,8 +47,8 @@ function createBoxTimezoneService(deps) {
   };
   return {
     start() {
-      unsubscribe = deps.subscribeToUserTimeZone(request3);
-      request3(deps.getUserTimeZone());
+      unsubscribe = deps.subscribeToUserTimeZone(request5);
+      request5(deps.getUserTimeZone());
     },
     dispose() {
       disposed = true;

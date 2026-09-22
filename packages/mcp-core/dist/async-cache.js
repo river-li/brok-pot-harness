@@ -1,8 +1,8 @@
-var __awaiter24, AsyncCache;
+var __awaiter25, AsyncCache;
 var init_async_cache = __esm({
   "../packages/mcp-core/dist/async-cache.js"() {
     "use strict";
-    __awaiter24 = function(thisArg, _arguments, P2, generator) {
+    __awaiter25 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve14) {
           resolve14(value);
@@ -36,7 +36,7 @@ var init_async_cache = __esm({
         this.refreshGeneration = 0;
       }
       get(fetcher) {
-        return __awaiter24(this, void 0, void 0, function* () {
+        return __awaiter25(this, void 0, void 0, function* () {
           const now = performance.now();
           if (this.state && this.state.expiresAt > now && !this.staleDirty) {
             return this.state.value;
@@ -46,7 +46,7 @@ var init_async_cache = __esm({
             if (!this.refreshInFlight) {
               const gen = this.refreshGeneration;
               let refreshPromise;
-              refreshPromise = (() => __awaiter24(this, void 0, void 0, function* () {
+              refreshPromise = (() => __awaiter25(this, void 0, void 0, function* () {
                 try {
                   const value2 = yield fetcher();
                   if (gen !== this.refreshGeneration) {

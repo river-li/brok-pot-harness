@@ -81,19 +81,19 @@ function sanitizeProposedRule(proposedRule) {
   return trimmed.slice(0, 500);
 }
 function buildSandAutoReviewPendingApproval(args) {
-  const { request: request3 } = args;
-  const command = sanitizeCommand(request3.command);
-  const expiryPolicy = request3.expiryPolicy ?? "ttl";
-  const proposedRule = sanitizeProposedRule(request3.proposedRule);
-  const reason = sanitizeReason(request3.reason);
-  const reasonCopy = request3.reason.trim().length === 0 ? { kind: "approval_required" } : void 0;
-  const summary = sanitizeSummary(request3.summary);
-  const summaryCopy = sanitizeSummaryCopy(request3.summary, request3.summaryCopy);
+  const { request: request5 } = args;
+  const command = sanitizeCommand(request5.command);
+  const expiryPolicy = request5.expiryPolicy ?? "ttl";
+  const proposedRule = sanitizeProposedRule(request5.proposedRule);
+  const reason = sanitizeReason(request5.reason);
+  const reasonCopy = request5.reason.trim().length === 0 ? { kind: "approval_required" } : void 0;
+  const summary = sanitizeSummary(request5.summary);
+  const summaryCopy = sanitizeSummaryCopy(request5.summary, request5.summaryCopy);
   return {
     id: (0, import_node_crypto40.randomUUID)(),
     agentId: args.agentId,
-    surface: request3.surface,
-    fingerprint: request3.fingerprint,
+    surface: request5.surface,
+    fingerprint: request5.fingerprint,
     reason,
     ...reasonCopy === void 0 ? {} : { reasonCopy },
     summary,
@@ -157,22 +157,22 @@ var SandAutoReviewController = class {
       this.options.onDisplayRecheckFailed?.({
         agentId: agentId ?? this.options.agentId
       });
-    } catch (error41) {
+    } catch (error42) {
       process.stderr.write(
-        `sand.auto_review.display_recheck_observer_failed error_class=${errorLogTag(error41)}
+        `sand.auto_review.display_recheck_observer_failed error_class=${errorLogTag(error42)}
 `
       );
     }
   }
-  async requestApproval(request3) {
-    const agentId = request3.agentId ?? this.options.agentId;
-    if (request3.signal?.aborted === true) {
+  async requestApproval(request5) {
+    const agentId = request5.agentId ?? this.options.agentId;
+    if (request5.signal?.aborted === true) {
       return { approved: false, reason: "The action was cancelled." };
     }
     if (this.pausingForHostWindDown) {
       return {
         approved: false,
-        reason: formatSandAutoReviewInterruptedForUpdateReason(request3.reason)
+        reason: formatSandAutoReviewInterruptedForUpdateReason(request5.reason)
       };
     }
     if (!this.approvalsResolvable) {
@@ -187,9 +187,9 @@ var SandAutoReviewController = class {
         reason: "Too many actions are already waiting for Auto-review approval; resolve those first."
       };
     }
-    const expiryPolicy = request3.expiryPolicy ?? "ttl";
+    const expiryPolicy = request5.expiryPolicy ?? "ttl";
     const approval = buildSandAutoReviewPendingApproval({
-      request: request3,
+      request: request5,
       agentId,
       userMessageEpoch: this.userMessageEpoch,
       hostGeneration: this.options.hostGeneration,
@@ -211,9 +211,9 @@ var SandAutoReviewController = class {
         approval,
         resolve: resolve29,
         expiryAbort,
-        signal: request3.signal
+        signal: request5.signal
       };
-      if (request3.signal !== void 0) {
+      if (request5.signal !== void 0) {
         const abortListener = () => {
           this.retire(approval.id, "cancelled", {
             approved: false,
@@ -221,7 +221,7 @@ var SandAutoReviewController = class {
           });
         };
         record2.abortListener = abortListener;
-        request3.signal.addEventListener("abort", abortListener, {
+        request5.signal.addEventListener("abort", abortListener, {
           once: true
         });
       }

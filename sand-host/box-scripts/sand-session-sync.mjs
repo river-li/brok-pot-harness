@@ -20,10 +20,7 @@ import {
   toCookieParam,
 } from "./cdp-cookies.mjs";
 
-const POLL_INTERVAL_MS = Number.parseInt(
-  process.env.SAND_SESSION_SYNC_INTERVAL_MS ?? "1500",
-  10
-);
+const POLL_INTERVAL_MS = Number.parseInt(process.env.SAND_SESSION_SYNC_INTERVAL_MS ?? "1500", 10);
 
 const STORAGE_SEP = "\u0000";
 export function makeStorageKey(origin, key) {
@@ -96,9 +93,7 @@ export function readBusyMonitorPorts(ports, now = Date.now()) {
   const busy = new Set();
   for (const port of ports) {
     try {
-      const { mtimeMs } = statSync(
-        `/tmp/sand-monitor-busy-${port - CDP_PORT_BASE}`
-      );
+      const { mtimeMs } = statSync(`/tmp/sand-monitor-busy-${port - CDP_PORT_BASE}`);
       if (now - mtimeMs < MONITOR_BUSY_TTL_MS) busy.add(port);
     } catch (error) {
       if (error?.code !== "ENOENT") {
@@ -151,8 +146,7 @@ export class FreshIdentityReloadBreaker {
   request(port, host) {
     const t = this.now();
     const state = this.stateFor(port, host);
-    const quietForMs =
-      state.lastRequestAt == null ? Infinity : t - state.lastRequestAt;
+    const quietForMs = state.lastRequestAt == null ? Infinity : t - state.lastRequestAt;
     state.lastRequestAt = t;
     if (state.open) {
       if (quietForMs < RELOAD_QUIET_MS) {
@@ -164,7 +158,7 @@ export class FreshIdentityReloadBreaker {
       state.issued = [t];
       return "allow-after-quiet";
     }
-    state.issued = state.issued.filter(at => t - at < RELOAD_WINDOW_MS);
+    state.issued = state.issued.filter((at) => t - at < RELOAD_WINDOW_MS);
     if (state.issued.length >= RELOAD_MAX_PER_WINDOW) {
       state.open = true;
       return "trip";
@@ -179,10 +173,7 @@ export class FreshIdentityReloadBreaker {
     for (const [port, perHost] of this.byPort) {
       for (const [host, state] of perHost) {
         if (!state.open || !state.pending) continue;
-        if (
-          state.lastRequestAt != null &&
-          t - state.lastRequestAt < RELOAD_QUIET_MS
-        ) {
+        if (state.lastRequestAt != null && t - state.lastRequestAt < RELOAD_QUIET_MS) {
           continue;
         }
         if (availableByPort != null) {
@@ -325,7 +316,7 @@ export class SessionSyncer {
           origin,
           canonical,
           items,
-          this.storageOffered.get(port)
+          this.storageOffered.get(port),
         );
         if (entries.length === 0) continue;
         const originPage = pages.find((page) => page.origin === origin);
@@ -351,13 +342,13 @@ export class SessionSyncer {
 
   async tick() {
     await this.ensureConnections();
-    const live = [...this.browsers.values()].filter(b => !b.isClosed);
+    const live = [...this.browsers.values()].filter((b) => !b.isClosed);
     if (live.length === 0) return;
-    const livePorts = live.map(b => b.port);
+    const livePorts = live.map((b) => b.port);
     if (
       live.length < 2 &&
       !this.reloadBreaker.hasPendingDeferrals(livePorts) &&
-      !livePorts.some(port => this.busyWithheldReloads.has(port))
+      !livePorts.some((port) => this.busyWithheldReloads.has(port))
     ) {
       return;
     }
@@ -390,14 +381,14 @@ export class SessionSyncer {
     }
     if (perBrowser.size < 2) return;
 
-    const canonical = mergeCookies([...perBrowser.values()].map(v => v.cookies));
+    const canonical = mergeCookies([...perBrowser.values()].map((v) => v.cookies));
 
     let synced = 0;
     for (const [port, { browser, cookies }] of perBrowser) {
       const { cookies: seed, offeredKeys } = selectCookieSeed(
         canonical,
         cookies,
-        this.cookieOffered.get(port)
+        this.cookieOffered.get(port),
       );
       if (seed.length === 0) continue;
       await pushCookies(browser, seed.map(toCookieParam));
@@ -418,12 +409,7 @@ export class SessionSyncer {
     }
 
     const reloadHosts = await this.syncLocalStorage(pagesByPort);
-    await this.reloadReceivers(
-      pagesByPort,
-      reloadHosts,
-      newCookieDomains,
-      busyPorts
-    );
+    await this.reloadReceivers(pagesByPort, reloadHosts, newCookieDomains, busyPorts);
   }
 
   requestReload(port, host) {
@@ -433,12 +419,12 @@ export class SessionSyncer {
         `reload breaker OPEN for ${host} on CDP port ${port}: ` +
           `${RELOAD_MAX_PER_WINDOW} session-sync reloads within ${RELOAD_WINDOW_MS}ms ` +
           `(page storage is not converging); suppressing further reloads until it ` +
-          `pauses — cookie/localStorage seeding continues`
+          `pauses — cookie/localStorage seeding continues`,
       );
     } else if (status === "allow-after-quiet") {
       log(
         `reload breaker closed for ${host} on CDP port ${port} after a quiet ` +
-          `period; session-sync reloads re-enabled`
+          `period; session-sync reloads re-enabled`,
       );
     }
     return status === "allow" || status === "allow-after-quiet";
@@ -454,9 +440,7 @@ export class SessionSyncer {
       }
       availableByPort.set(port, liveHosts);
     }
-    for (const { port, host } of this.reloadBreaker.takeDueDeferredHosts(
-      availableByPort
-    )) {
+    for (const { port, host } of this.reloadBreaker.takeDueDeferredHosts(availableByPort)) {
       let delivered = false;
       for (const page of pagesByPort.get(port) ?? []) {
         if (hostOfOrigin(page.origin) !== host || page.browser.isClosed) continue;
@@ -466,7 +450,7 @@ export class SessionSyncer {
       if (delivered) {
         log(
           `reload breaker closed for ${host} on CDP port ${port} after a quiet ` +
-            `period; delivering the reload it deferred while open`
+            `period; delivering the reload it deferred while open`,
         );
       } else {
         this.reloadBreaker.requeueDeferral(port, host);
@@ -484,7 +468,7 @@ export class SessionSyncer {
         if (!this.requestReload(port, host)) continue;
         log(
           `delivering the ${host} reload withheld while CDP port ${port}'s ` +
-            `monitor was being driven`
+            `monitor was being driven`,
         );
         for (const page of pages) {
           if (hostOfOrigin(page.origin) !== host || page.browser.isClosed) continue;
@@ -505,7 +489,7 @@ export class SessionSyncer {
       for (const page of pages) {
         const host = hostOfOrigin(page.origin);
         const cookieHit =
-          domains != null && [...domains].some(d => hostMatchesCookieDomain(host, d));
+          domains != null && [...domains].some((d) => hostMatchesCookieDomain(host, d));
         const storageHit = hosts != null && hosts.has(host);
         if (!cookieHit && !storageHit) continue;
         let allowed = allowedByHost.get(host);
@@ -519,7 +503,7 @@ export class SessionSyncer {
             withheld.add(host);
             log(
               `withholding the ${host} reload on CDP port ${port}: its monitor is ` +
-                `being driven right now; seeding continues`
+                `being driven right now; seeding continues`,
             );
             allowed = false;
           } else {
@@ -544,13 +528,10 @@ async function main() {
     } catch (error) {
       log(`tick failed: ${String(error)}`);
     }
-    await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+    await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
   }
 }
 
-if (
-  process.argv[1] != null &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+if (process.argv[1] != null && import.meta.url === pathToFileURL(process.argv[1]).href) {
   void main();
 }

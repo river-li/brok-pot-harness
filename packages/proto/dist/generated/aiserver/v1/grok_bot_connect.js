@@ -194,6 +194,15 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * @generated from rpc aiserver.v1.GrokBotService.AdminRefreshSandBoxEgress
+         */
+        adminRefreshSandBoxEgress: {
+          name: "AdminRefreshSandBoxEgress",
+          I: AdminRefreshSandBoxEgressRequest,
+          O: AdminRefreshSandBoxEgressResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.GrokBotService.AdminListSandAgents
          */
         adminListSandAgents: {
@@ -1144,6 +1153,34 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * A team bot's context: the bot's own two-sentence account of its job,
+         * written by a flash-class model after turns that wrote shared memory and
+         * cached by shard version, plus the shared-memory facts themselves, read
+         * verbatim from the shard on every call. Owner-only by default; members read
+         * both once the owner turns `show_context_notes_to_members` on. Get also
+         * returns the bot's skills so the Context page has one source for what the
+         * bot can reference.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.GetGrokBotTeamContextSummary
+         */
+        getGrokBotTeamContextSummary: {
+          name: "GetGrokBotTeamContextSummary",
+          I: GetGrokBotTeamContextSummaryRequest,
+          O: GetGrokBotTeamContextSummaryResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Owner-only: whether members may read the summary and the learned log.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.SetGrokBotTeamContextVisibility
+         */
+        setGrokBotTeamContextVisibility: {
+          name: "SetGrokBotTeamContextVisibility",
+          I: SetGrokBotTeamContextVisibilityRequest,
+          O: SetGrokBotTeamContextVisibilityResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * Create-or-replace: upserts the caller's parent row by source_agent_id
          * (reusing its share id and public URL) and appends a new INACTIVE version.
          * Mints a short-lived PUT URL for that version's own S3 object key — a new
@@ -1621,6 +1658,120 @@ var init_grok_bot_connect = __esm({
           name: "ListGrokBotStripeLinkPaymentMethods",
           I: ListGrokBotStripeLinkPaymentMethodsRequest,
           O: ListGrokBotStripeLinkPaymentMethodsResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Passkeys: a WebAuthn credential enrolled against the Cursor user, so the
+         * backend can prove a human approved a virtual card in-app before it creates
+         * the Link spend request. RP ID is cursor.com; the backend is the RP
+         * verifier. Sand never handles credential material: the ceremony itself
+         * (navigator.credentials.*) runs on a hosted page the client opens at
+         * `<website base> + ceremony_path` with the ceremony token in the URL
+         * fragment, and the client learns the outcome by polling
+         * GetPasskeyCeremonyStatus.
+         *
+         * Enrollment step-up. Emails the session user a 6-digit code (10 min, 5
+         * attempts) that VerifyPasskeyEnrollmentCode exchanges for an enrollment
+         * ticket. The recipient is the caller, so the request is empty.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.StartPasskeyEnrollment
+         */
+        startPasskeyEnrollment: {
+          name: "StartPasskeyEnrollment",
+          I: StartPasskeyEnrollmentRequest,
+          O: StartPasskeyEnrollmentResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Exchanges the emailed code for a single-use enrollment ticket (5 min).
+         * InvalidArgument on a wrong code; ResourceExhausted once the attempts run
+         * out and the code is retired.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.VerifyPasskeyEnrollmentCode
+         */
+        verifyPasskeyEnrollmentCode: {
+          name: "VerifyPasskeyEnrollmentCode",
+          I: VerifyPasskeyEnrollmentCodeRequest,
+          O: VerifyPasskeyEnrollmentCodeResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Consumes the enrollment ticket and opens a registration ceremony: the
+         * WebAuthn creation options, plus the hosted-page path and the single-use
+         * ceremony token (5 min) that FinishPasskeyRegistration takes.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.BeginPasskeyRegistration
+         */
+        beginPasskeyRegistration: {
+          name: "BeginPasskeyRegistration",
+          I: BeginPasskeyRegistrationRequest,
+          O: BeginPasskeyRegistrationResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Verifies the attestation against the ceremony's stored options and stores
+         * the credential against the user the ceremony was opened for. The hosted
+         * page has no session, so the ceremony token is the only credential
+         * (route-level; no session) and is consumed here. FailedPrecondition when
+         * the user already holds the maximum of five passkeys.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.FinishPasskeyRegistration
+         */
+        finishPasskeyRegistration: {
+          name: "FinishPasskeyRegistration",
+          I: FinishPasskeyRegistrationRequest,
+          O: FinishPasskeyRegistrationResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Token-authenticated read of what the hosted page needs to run a ceremony:
+         * which kind it is, the WebAuthn options, and for approvals the amount and
+         * merchant the user is confirming. Does not consume the token; the matching
+         * Finish* call does. Callable with only the ceremony token.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.GetPasskeyCeremony
+         */
+        getPasskeyCeremony: {
+          name: "GetPasskeyCeremony",
+          I: GetPasskeyCeremonyRequest,
+          O: GetPasskeyCeremonyResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * How a ceremony ended, for the caller that opened it. This is the one
+         * completion signal whether the page ran in a hidden host, a visible window,
+         * or the system browser. NotFound once the ceremony record has aged out.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.GetPasskeyCeremonyStatus
+         */
+        getPasskeyCeremonyStatus: {
+          name: "GetPasskeyCeremonyStatus",
+          I: GetPasskeyCeremonyStatusRequest,
+          O: GetPasskeyCeremonyStatusResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * The caller's enrolled, unrevoked passkeys. Display detail only: no public
+         * key material crosses the wire.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.ListPasskeys
+         */
+        listPasskeys: {
+          name: "ListPasskeys",
+          I: ListPasskeysRequest,
+          O: ListPasskeysResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Soft-revokes one of the caller's passkeys. NotFound when the credential is
+         * not the caller's or is already revoked.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.RevokePasskey
+         */
+        revokePasskey: {
+          name: "RevokePasskey",
+          I: RevokePasskeyRequest,
+          O: RevokePasskeyResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -2111,6 +2262,33 @@ var init_grok_bot_connect = __esm({
           name: "ClearGrokBotHarnessMigrationHoldInternal",
           I: ClearGrokBotHarnessMigrationHoldInternalRequest,
           O: ClearGrokBotHarnessMigrationHoldInternalResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Preview a bounded internal Primary Bot migration cohort for Anytool.
+         * Team IDs and allowlisted email suffixes use OR semantics; only owners
+         * with a non-null grok_bot_user_settings.main_agent_id are returned.
+         * Read-only; returns a signed preview proof for a later execute.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.PreviewInternalPrimaryBotMigration
+         */
+        previewInternalPrimaryBotMigration: {
+          name: "PreviewInternalPrimaryBotMigration",
+          I: PreviewInternalPrimaryBotMigrationRequest,
+          O: PreviewInternalPrimaryBotMigrationResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Execute Primary Bot migration for selected owners from a prior preview.
+         * Revalidates filters, primary state, and live SYSTEM bot per owner;
+         * catches per-user failures without aborting the batch.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.ExecuteInternalPrimaryBotMigration
+         */
+        executeInternalPrimaryBotMigration: {
+          name: "ExecuteInternalPrimaryBotMigration",
+          I: ExecuteInternalPrimaryBotMigrationRequest,
+          O: ExecuteInternalPrimaryBotMigrationResponse,
           kind: MethodKind.Unary
         },
         /**

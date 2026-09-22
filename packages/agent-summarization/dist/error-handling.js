@@ -13,8 +13,8 @@ var CONNECT_ERROR_CODES = {
   Unavailable: 14,
   Unauthenticated: 16
 };
-function* iterateErrorChain(error41) {
-  let current = error41;
+function* iterateErrorChain(error42) {
+  let current = error42;
   const seen = /* @__PURE__ */ new Set();
   while (current !== void 0 && current !== null && !seen.has(current)) {
     seen.add(current);
@@ -26,42 +26,42 @@ function* iterateErrorChain(error41) {
     }
   }
 }
-function hasErrorName(error41, targetName) {
-  for (const current of iterateErrorChain(error41)) {
+function hasErrorName(error42, targetName) {
+  for (const current of iterateErrorChain(error42)) {
     if (current instanceof Error && current.name === targetName) {
       return true;
     }
   }
   return false;
 }
-function errorMessageIncludes(error41, needle) {
+function errorMessageIncludes(error42, needle) {
   const normalizedNeedle = needle.toLowerCase();
-  for (const current of iterateErrorChain(error41)) {
+  for (const current of iterateErrorChain(error42)) {
     if (current instanceof Error && current.message.toLowerCase().includes(normalizedNeedle)) {
       return true;
     }
   }
   return false;
 }
-function hasConnectCode(error41, targetCode) {
-  for (const current of iterateErrorChain(error41)) {
+function hasConnectCode(error42, targetCode) {
+  for (const current of iterateErrorChain(error42)) {
     if (typeof current === "object" && current !== null && "code" in current && current.code === targetCode) {
       return true;
     }
   }
   return false;
 }
-function isTextFieldsTooLargeError(error41) {
-  return errorMessageIncludes(error41, "request contains text fields that are too large");
+function isTextFieldsTooLargeError(error42) {
+  return errorMessageIncludes(error42, "request contains text fields that are too large");
 }
-function isInvalidJsonError(error41) {
-  return errorMessageIncludes(error41, "not valid json") || errorMessageIncludes(error41, "invalid json");
+function isInvalidJsonError(error42) {
+  return errorMessageIncludes(error42, "not valid json") || errorMessageIncludes(error42, "invalid json");
 }
-function isInvalidArgumentError(error41) {
-  return errorMessageIncludes(error41, "invalid argument");
+function isInvalidArgumentError(error42) {
+  return errorMessageIncludes(error42, "invalid argument");
 }
-function isUserApiKeyRateLimitExceededError(error41) {
-  return errorMessageIncludes(error41, "User API Key Rate limit exceeded");
+function isUserApiKeyRateLimitExceededError(error42) {
+  return errorMessageIncludes(error42, "User API Key Rate limit exceeded");
 }
 var TOO_MANY_IMAGES_OR_DOCUMENTS_MESSAGE_MARKERS = [
   "request contained too many images or documents",
@@ -69,8 +69,8 @@ var TOO_MANY_IMAGES_OR_DOCUMENTS_MESSAGE_MARKERS = [
   "too many images and documents",
   "too much media"
 ];
-function isTooManyImagesOrDocumentsError(error41) {
-  return TOO_MANY_IMAGES_OR_DOCUMENTS_MESSAGE_MARKERS.some((marker17) => errorMessageIncludes(error41, marker17));
+function isTooManyImagesOrDocumentsError(error42) {
+  return TOO_MANY_IMAGES_OR_DOCUMENTS_MESSAGE_MARKERS.some((marker17) => errorMessageIncludes(error42, marker17));
 }
 var CannotTruncatePromptError = class extends Error {
   constructor(message, details) {
@@ -82,9 +82,9 @@ var CannotTruncatePromptError = class extends Error {
     this.budgetChars = details.budgetChars;
   }
 };
-function getRetryDirective(error41, options2) {
+function getRetryDirective(error42, options2) {
   var _a19, _b2, _c2, _d, _e2, _f, _g;
-  if (error41 instanceof OutputTokensLimitExceededError || hasErrorName(error41, "OutputTokensLimitExceededError")) {
+  if (error42 instanceof OutputTokensLimitExceededError || hasErrorName(error42, "OutputTokensLimitExceededError")) {
     const enableRetryOutputTokenLimit = (_a19 = options2.enableRetryOutputTokenLimit) !== null && _a19 !== void 0 ? _a19 : true;
     return {
       errorType: "OutputTokensLimitExceededError",
@@ -98,7 +98,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: enableRetryOutputTokenLimit && ((_b2 = options2.enableReduceInputsRetry) !== null && _b2 !== void 0 ? _b2 : false)
     };
   }
-  if (error41 instanceof InputTokenLimitError || hasErrorName(error41, "InputTokenLimitError")) {
+  if (error42 instanceof InputTokenLimitError || hasErrorName(error42, "InputTokenLimitError")) {
     const reduceInputs = (_c2 = options2.enableReduceInputsRetry) !== null && _c2 !== void 0 ? _c2 : false;
     return {
       errorType: "InputTokenLimitError",
@@ -108,8 +108,8 @@ function getRetryDirective(error41, options2) {
       reduceInputs
     };
   }
-  if (hasConnectCode(error41, CONNECT_ERROR_CODES.ResourceExhausted) || hasErrorName(error41, "ResourceExhausted")) {
-    if (isTextFieldsTooLargeError(error41)) {
+  if (hasConnectCode(error42, CONNECT_ERROR_CODES.ResourceExhausted) || hasErrorName(error42, "ResourceExhausted")) {
+    if (isTextFieldsTooLargeError(error42)) {
       const reduceInputs = (_d = options2.enableReduceInputsRetry) !== null && _d !== void 0 ? _d : false;
       return {
         errorType: "InputTooLargeError",
@@ -119,7 +119,7 @@ function getRetryDirective(error41, options2) {
         reduceInputs
       };
     }
-    if (isInvalidJsonError(error41)) {
+    if (isInvalidJsonError(error42)) {
       return {
         errorType: "InvalidJson",
         shouldRetry: false,
@@ -128,7 +128,7 @@ function getRetryDirective(error41, options2) {
         reduceInputs: false
       };
     }
-    if (isInvalidArgumentError(error41)) {
+    if (isInvalidArgumentError(error42)) {
       return {
         errorType: "InvalidArgument",
         shouldRetry: false,
@@ -145,7 +145,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (hasConnectCode(error41, CONNECT_ERROR_CODES.Unavailable) || hasErrorName(error41, "Unavailable")) {
+  if (hasConnectCode(error42, CONNECT_ERROR_CODES.Unavailable) || hasErrorName(error42, "Unavailable")) {
     return {
       errorType: "Unavailable",
       shouldRetry: true,
@@ -154,7 +154,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (hasConnectCode(error41, CONNECT_ERROR_CODES.Aborted) || hasErrorName(error41, "UserAbortedError") || hasErrorName(error41, "AbortError")) {
+  if (hasConnectCode(error42, CONNECT_ERROR_CODES.Aborted) || hasErrorName(error42, "UserAbortedError") || hasErrorName(error42, "AbortError")) {
     return {
       errorType: "AbortError",
       shouldRetry: false,
@@ -163,7 +163,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (hasErrorName(error41, "InteractionListenerStreamClosedError")) {
+  if (hasErrorName(error42, "InteractionListenerStreamClosedError")) {
     return {
       errorType: "InteractionListenerStreamClosedError",
       shouldRetry: false,
@@ -172,7 +172,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (hasConnectCode(error41, CONNECT_ERROR_CODES.Unauthenticated) || hasErrorName(error41, "Unauthenticated")) {
+  if (hasConnectCode(error42, CONNECT_ERROR_CODES.Unauthenticated) || hasErrorName(error42, "Unauthenticated")) {
     return {
       errorType: "Unauthenticated",
       shouldRetry: false,
@@ -181,8 +181,8 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (hasConnectCode(error41, CONNECT_ERROR_CODES.InvalidArgument) || hasErrorName(error41, "InvalidArgument")) {
-    if (isUserApiKeyRateLimitExceededError(error41)) {
+  if (hasConnectCode(error42, CONNECT_ERROR_CODES.InvalidArgument) || hasErrorName(error42, "InvalidArgument")) {
+    if (isUserApiKeyRateLimitExceededError(error42)) {
       return {
         errorType: "InvalidArgument",
         shouldRetry: true,
@@ -199,7 +199,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (hasConnectCode(error41, CONNECT_ERROR_CODES.NotFound) || hasErrorName(error41, "NotFound") || hasErrorName(error41, "StringNotFoundError")) {
+  if (hasConnectCode(error42, CONNECT_ERROR_CODES.NotFound) || hasErrorName(error42, "NotFound") || hasErrorName(error42, "StringNotFoundError")) {
     return {
       errorType: "NotFound",
       shouldRetry: false,
@@ -208,7 +208,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (error41 instanceof NoSummaryResponseError || hasErrorName(error41, "NoSummaryResponseError")) {
+  if (error42 instanceof NoSummaryResponseError || hasErrorName(error42, "NoSummaryResponseError")) {
     return {
       errorType: "NoSummaryResponseError",
       shouldRetry: (_e2 = options2.enableRetryNoSummaryResponse) !== null && _e2 !== void 0 ? _e2 : false,
@@ -217,7 +217,7 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (error41 instanceof CannotTruncatePromptError || hasErrorName(error41, "CannotTruncatePromptError")) {
+  if (error42 instanceof CannotTruncatePromptError || hasErrorName(error42, "CannotTruncatePromptError")) {
     return {
       errorType: "CannotTruncatePromptError",
       shouldRetry: false,
@@ -226,9 +226,9 @@ function getRetryDirective(error41, options2) {
       reduceInputs: false
     };
   }
-  if (error41 instanceof Error) {
+  if (error42 instanceof Error) {
     return {
-      errorType: error41.name || "UncategorizedError",
+      errorType: error42.name || "UncategorizedError",
       shouldRetry: (_f = options2.enableRetryUncategorizedErrors) !== null && _f !== void 0 ? _f : true,
       retryDelayMs: ((_g = options2.enableRetryUncategorizedErrors) !== null && _g !== void 0 ? _g : true) ? options2.transientRetryDelayMs : 0,
       requestShorterOutput: false,

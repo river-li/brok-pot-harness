@@ -1,5 +1,5 @@
 init_shell_exec_pb();
-var __awaiter40 = function(thisArg, _arguments, P2, generator) {
+var __awaiter42 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -108,7 +108,7 @@ var shellStreamHooksConfig = {
    * Run beforeShellExecution hook before execution.
    * Throws HookDeniedError if hook denies execution.
    */
-  runPreExecutionHooks: (params) => __awaiter40(void 0, void 0, void 0, function* () {
+  runPreExecutionHooks: (params) => __awaiter42(void 0, void 0, void 0, function* () {
     const { args, baseHookRequest, hookExecutor } = params;
     const cwd = args.workingDirectory || "";
     const sandbox = isSandboxed(args.requestedSandboxPolicy);
@@ -123,7 +123,7 @@ var shellStreamHooksConfig = {
   /**
    * Run afterShellExecution hook after streaming completes.
    */
-  runPostExecutionHooks: (params) => __awaiter40(void 0, void 0, void 0, function* () {
+  runPostExecutionHooks: (params) => __awaiter42(void 0, void 0, void 0, function* () {
     const { args, baseHookRequest, hookExecutor, collector, executionDurationMs } = params;
     const sandbox = isSandboxed(args.requestedSandboxPolicy);
     yield hookExecutor.executeHookForStep(HookStep.afterShellExecution, Object.assign(Object.assign({}, baseHookRequest), { command: args.command, output: collector.getOutput(), duration: executionDurationMs, sandbox }));

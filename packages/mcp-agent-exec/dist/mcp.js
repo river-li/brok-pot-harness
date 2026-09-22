@@ -1,4 +1,4 @@
-var __awaiter33 = function(thisArg, _arguments, P2, generator) {
+var __awaiter34 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve14) {
       resolve14(value);
@@ -117,7 +117,7 @@ var InMemoryOAuthClientProvider = class {
     this._serverUrl = options2.serverUrl;
     this._restMcpProviderMetadata = options2.restMcpProviderMetadata;
     if (((_a20 = options2.restMcpProviderMetadata) === null || _a20 === void 0 ? void 0 : _a20.omitResourceIndicator) === true) {
-      this.validateResourceURL = () => __awaiter33(this, void 0, void 0, function* () {
+      this.validateResourceURL = () => __awaiter34(this, void 0, void 0, function* () {
         return void 0;
       });
     }
@@ -150,7 +150,7 @@ var InMemoryOAuthClientProvider = class {
     return this._clientInformation !== void 0;
   }
   saveClientInformation(info2) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       this._clientInformation = info2;
       yield this._saveClientInformation(info2);
     });
@@ -159,25 +159,25 @@ var InMemoryOAuthClientProvider = class {
     return this._tokens;
   }
   saveTokens(tokens) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       this._tokens = tokens;
       yield this._saveTokens(tokens);
     });
   }
   prepareForRefresh() {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20;
       yield (_a20 = this._prepareForRefresh) === null || _a20 === void 0 ? void 0 : _a20.call(this);
     });
   }
   releaseRefreshLeaseOnError(underlyingError) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20;
       yield (_a20 = this._releaseRefreshLeaseOnError) === null || _a20 === void 0 ? void 0 : _a20.call(this, underlyingError);
     });
   }
   invalidateCredentials(scope) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20;
       switch (scope) {
         case "tokens":
@@ -226,7 +226,7 @@ var InMemoryOAuthClientProvider = class {
     return this._lastRedirectUrl;
   }
   saveCodeVerifier(codeVerifier) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       this._codeVerifier = codeVerifier;
     });
   }
@@ -238,7 +238,7 @@ var InMemoryOAuthClientProvider = class {
   }
 };
 function createInMemoryOAuthClientProvider(args) {
-  return __awaiter33(this, void 0, void 0, function* () {
+  return __awaiter34(this, void 0, void 0, function* () {
     var _a20, _b2;
     const { serverName, config: config2, tokenStorage } = args;
     const restMcpProviderMetadata = yield resolveRestMcpProviderMetadataFromPrm(config2.url, args.fetchImpl);
@@ -324,6 +324,7 @@ var McpSdkClient = class _McpSdkClient {
     this.tools = new AsyncCache();
     this.stateValue = options2.initialState;
     this._authProvider = options2.authProvider;
+    this._authCodeExchange = options2.authCodeExchange;
     this._sessionId = options2.sessionId;
     this.config = options2.config;
     this._oauthLifecycleLogger = options2.oauthLifecycleLogger;
@@ -375,7 +376,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   setupElicitationHandler() {
-    this.client.setRequestHandler(ElicitRequestSchema, (request3) => __awaiter33(this, void 0, void 0, function* () {
+    this.client.setRequestHandler(ElicitRequestSchema, (request3) => __awaiter34(this, void 0, void 0, function* () {
       if (!this._currentElicitationProvider) {
         return {
           action: "decline"
@@ -403,7 +404,7 @@ var McpSdkClient = class _McpSdkClient {
     }));
   }
   static fromStreamableHttp(serverName, config2, tokenStorage, headers, authRedirectUrl, fetch2, httpExchangeLogging, oauthLifecycleLogger) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const url2 = new URL(config2.url);
       authRedirectUrl = authRedirectUrl !== null && authRedirectUrl !== void 0 ? authRedirectUrl : MCP_OAUTH_LOOPBACK_CALLBACK_URL;
       const tokens = yield tokenStorage.loadTokens();
@@ -437,6 +438,21 @@ var McpSdkClient = class _McpSdkClient {
       });
       const client = _McpSdkClient.createClient();
       const isConnectAuthFailure = (error3) => error3 instanceof UnauthorizedError || isOAuthCredentialRejectionError(error3);
+      const exchangeAuthorizationCode = (code) => __awaiter34(this, void 0, void 0, function* () {
+        if (!oauthProvider.hasClientInformation()) {
+          throw new Error("OAuth client registration has not completed. The MCP server may not support dynamic client registration or the registration failed.");
+        }
+        yield auth(oauthProvider, Object.assign({ serverUrl: url2.toString(), authorizationCode: code }, baseFetch !== void 0 ? { fetchFn: baseFetch } : {}));
+        if (oauthLifecycleLogger) {
+          emitMcpOAuthLifecycleLog({
+            logger: oauthLifecycleLogger,
+            event: "mcp_oauth_callback_completion",
+            metadata: Object.assign(Object.assign({ identifier: serverName }, snapshotServerUrlForLog(url2.toString())), buildOAuthTokensSnapshotForLog(oauthProvider.tokens(), {
+              expiresInIsFresh: true
+            }))
+          });
+        }
+      });
       const createRequiresAuthenticationClient = (sessionId) => {
         var _a20, _b2;
         var _c2;
@@ -446,21 +462,9 @@ var McpSdkClient = class _McpSdkClient {
           initialState: {
             kind: "requires_authentication",
             url: authUrl,
-            callback: (code) => __awaiter33(this, void 0, void 0, function* () {
+            callback: (code) => __awaiter34(this, void 0, void 0, function* () {
               try {
-                if (!oauthProvider.hasClientInformation()) {
-                  throw new Error("OAuth client registration has not completed. The MCP server may not support dynamic client registration or the registration failed.");
-                }
-                yield auth(oauthProvider, Object.assign({ serverUrl: url2.toString(), authorizationCode: code }, baseFetch !== void 0 ? { fetchFn: baseFetch } : {}));
-                if (oauthLifecycleLogger) {
-                  emitMcpOAuthLifecycleLog({
-                    logger: oauthLifecycleLogger,
-                    event: "mcp_oauth_callback_completion",
-                    metadata: Object.assign(Object.assign({ identifier: serverName }, snapshotServerUrlForLog(url2.toString())), buildOAuthTokensSnapshotForLog(oauthProvider.tokens(), {
-                      expiresInIsFresh: true
-                    }))
-                  });
-                }
+                yield exchangeAuthorizationCode(code);
                 mcpClient.updateState({ kind: "ready" });
               } catch (authError) {
                 const errorMessage4 = authError instanceof Error ? authError.message : "Authentication failed";
@@ -469,18 +473,20 @@ var McpSdkClient = class _McpSdkClient {
             })
           },
           authProvider: oauthProvider,
+          authCodeExchange: exchangeAuthorizationCode,
           sessionId,
           config: config2
         });
         return mcpClient;
       };
-      const connectSse = () => __awaiter33(this, void 0, void 0, function* () {
+      const connectSse = () => __awaiter34(this, void 0, void 0, function* () {
         const sseTransport = createSseTransport();
         try {
           yield client.connect(sseTransport);
           return new _McpSdkClient(serverName, client, {
             initialState: { kind: "ready" },
             authProvider: oauthProvider,
+            authCodeExchange: exchangeAuthorizationCode,
             config: config2,
             oauthLifecycleLogger
           });
@@ -513,6 +519,7 @@ var McpSdkClient = class _McpSdkClient {
         return new _McpSdkClient(serverName, client, {
           initialState: { kind: "ready" },
           authProvider: oauthProvider,
+          authCodeExchange: exchangeAuthorizationCode,
           sessionId: transport.sessionId,
           config: config2,
           oauthLifecycleLogger
@@ -540,7 +547,7 @@ var McpSdkClient = class _McpSdkClient {
    * On 404 (session expired), caller should fall back to fromStreamableHttp.
    */
   static fromCachedSession(serverName_1, config_1, cachedSession_1, tokenStorage_1, headers_1) {
-    return __awaiter33(this, arguments, void 0, function* (serverName, config2, cachedSession, tokenStorage, headers, authRedirectUrl = MCP_OAUTH_LOOPBACK_CALLBACK_URL, fetch2, httpExchangeLogging, oauthLifecycleLogger) {
+    return __awaiter34(this, arguments, void 0, function* (serverName, config2, cachedSession, tokenStorage, headers, authRedirectUrl = MCP_OAUTH_LOOPBACK_CALLBACK_URL, fetch2, httpExchangeLogging, oauthLifecycleLogger) {
       const url2 = new URL(config2.url);
       const oauthProvider = yield createInMemoryOAuthClientProvider({
         serverName,
@@ -580,7 +587,7 @@ var McpSdkClient = class _McpSdkClient {
     return this._sessionId;
   }
   static fromCommand(ctx, serverName, config2, env, options2) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20, _b2, _c2;
       const env_1 = { stack: [], error: void 0, hasError: false };
       try {
@@ -627,7 +634,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   close() {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       if (this._stdioChildPid !== void 0) {
         unregisterStdioMcpChildPid(this._stdioChildPid);
       }
@@ -635,7 +642,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   getTools(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20, _b2;
       var _c2;
       const env_2 = { stack: [], error: void 0, hasError: false };
@@ -645,7 +652,7 @@ var McpSdkClient = class _McpSdkClient {
           return [];
         }
         try {
-          return yield this.tools.get(() => __awaiter33(this, void 0, void 0, function* () {
+          return yield this.tools.get(() => __awaiter34(this, void 0, void 0, function* () {
             const tools = yield collectPaginatedMcpList({
               fetchPage: (cursor) => this.client.listTools({ cursor }),
               itemsOf: (page) => page.tools,
@@ -660,8 +667,7 @@ var McpSdkClient = class _McpSdkClient {
             this.stateValue = {
               kind: "requires_authentication",
               url: redirectUrl,
-              callback: (_code) => __awaiter33(this, void 0, void 0, function* () {
-              })
+              callback: (code) => this.completeRuntimeAuthorization(code)
             };
             this._logStateTransition(previousState, this.stateValue, "runtime_unauthorized", Object.assign({}, getMcpOAuthErrorLogMetadata(error3)));
             this._stateEnteredAtMs = Date.now();
@@ -677,7 +683,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   callTool(ctx, name17, args, toolCallId, elicitationProvider) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20, _b2;
       var _c2;
       const env_3 = { stack: [], error: void 0, hasError: false };
@@ -691,6 +697,9 @@ var McpSdkClient = class _McpSdkClient {
         });
         try {
           yield previousLock;
+          if (this.stateValue.kind === "requires_authentication") {
+            throw new UnauthorizedError(`MCP server "${this.serverName}" requires authentication`);
+          }
           this._currentToolCallId = toolCallId;
           this._currentToolName = name17;
           this._currentElicitationProvider = elicitationProvider;
@@ -710,8 +719,7 @@ var McpSdkClient = class _McpSdkClient {
               this.stateValue = {
                 kind: "requires_authentication",
                 url: redirectUrl,
-                callback: (_code) => __awaiter33(this, void 0, void 0, function* () {
-                })
+                callback: (code) => this.completeRuntimeAuthorization(code)
               };
               this._logStateTransition(previousState, this.stateValue, "runtime_unauthorized", Object.assign({}, getMcpOAuthErrorLogMetadata(error3)));
               this._stateEnteredAtMs = Date.now();
@@ -734,7 +742,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   getInstructions(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_4 = { stack: [], error: void 0, hasError: false };
       try {
         const _span = __addDisposableResource11(env_4, createSpan(ctx.withName("McpSdkClient.getInstructions")), false);
@@ -751,7 +759,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   listResources(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_5 = { stack: [], error: void 0, hasError: false };
       try {
         const _span = __addDisposableResource11(env_5, createSpan(ctx.withName("McpSdkClient.listResources")), false);
@@ -777,7 +785,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   readResource(ctx, args) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_6 = { stack: [], error: void 0, hasError: false };
       try {
         const _span = __addDisposableResource11(env_6, createSpan(ctx.withName("McpSdkClient.readResource")), false);
@@ -795,7 +803,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   listPrompts(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20;
       const env_7 = { stack: [], error: void 0, hasError: false };
       try {
@@ -835,7 +843,7 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   getPrompt(ctx, name17, args) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_8 = { stack: [], error: void 0, hasError: false };
       try {
         const _span = __addDisposableResource11(env_8, createSpan(ctx.withName("McpSdkClient.getPrompt")), false);
@@ -900,8 +908,28 @@ var McpSdkClient = class _McpSdkClient {
   }
   // Observable state API
   getState(_ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       return this.stateValue;
+    });
+  }
+  /**
+   * Finishes a login that started from a runtime 401 (see the
+   * `requires_authentication` transitions in getTools/callTool). Without the
+   * exchange hook there is nothing to redeem the code with, so the callback
+   * stays a no-op and the caller's reconnect will 401 again.
+   */
+  completeRuntimeAuthorization(code) {
+    return __awaiter34(this, void 0, void 0, function* () {
+      if (!this._authCodeExchange) {
+        throw new Error(`MCP server "${this.serverName}" cannot complete authorization: no code exchange is configured for this client.`);
+      }
+      try {
+        yield this._authCodeExchange(code);
+      } catch (authError) {
+        const errorMessage4 = authError instanceof Error ? authError.message : "Authentication failed";
+        throw new Error(`Authentication callback failed: ${errorMessage4}`);
+      }
+      this.updateState({ kind: "ready" }, "runtime_authorization_completed");
     });
   }
   updateState(newState, cause) {
@@ -942,7 +970,7 @@ var ExecutableMcpToolSet = class {
     this.tools = tools;
   }
   execute(name17, args, toolCallId, elicitationFactory) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const tool = this.tools[name17];
       if (!tool) {
         throw new McpToolNotFoundError(name17, Object.keys(this.tools));
@@ -959,17 +987,17 @@ var ManagerMcpLease = class {
     this.manager = manager;
   }
   getClients(_ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       return this.manager.getClients();
     });
   }
   getClient(_ctx, name17) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       return this.manager.getClient(name17);
     });
   }
   getInstructions(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_10 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource11(env_10, createSpan(ctx.withName("ManagerMcpLease.getInstructions")), false);
@@ -983,7 +1011,7 @@ var ManagerMcpLease = class {
     });
   }
   getToolSet(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_11 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource11(env_11, createSpan(ctx.withName("ManagerMcpLease.getToolSet")), false);
@@ -997,7 +1025,7 @@ var ManagerMcpLease = class {
     });
   }
   getTools(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_12 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource11(env_12, createSpan(ctx.withName("ManagerMcpLease.getTools")), false);
@@ -1012,7 +1040,7 @@ var ManagerMcpLease = class {
     });
   }
   getToolsForServers(ctx, serverIdentifiers) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const requestedServerIds = new Set(serverIdentifiers);
       const allTools = yield this.getTools(ctx);
       return allTools.filter((tool) => requestedServerIds.has(tool.clientKey));
@@ -1028,7 +1056,7 @@ var ManagerMcpLease = class {
    * other client. Mirrors the editor's MCPService transition handling.
    */
   reconcileSelection(ctx, changes, loadClient) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       var _a20;
       for (const identifier of changes.removed) {
         const existing = this.manager.getClient(identifier);
@@ -1092,9 +1120,9 @@ var McpManager = class {
    * Safe to call multiple times; failures from individual clients are ignored.
    */
   closeAllClients() {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const clients = Object.values(this.clients);
-      yield Promise.all(clients.map((client) => __awaiter33(this, void 0, void 0, function* () {
+      yield Promise.all(clients.map((client) => __awaiter34(this, void 0, void 0, function* () {
         var _a20;
         try {
           yield (_a20 = client.close) === null || _a20 === void 0 ? void 0 : _a20.call(client);
@@ -1104,7 +1132,7 @@ var McpManager = class {
     });
   }
   getToolSet(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_13 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource11(env_13, createSpan(ctx.withName("McpManager.getToolSet")), false);
@@ -1114,7 +1142,7 @@ var McpManager = class {
         for (const tool of tools) {
           toolsMap[`${tool.clientName}-${tool.name}`] = {
             definition: Object.assign(Object.assign({}, tool), { clientKey: tool.clientKey, providerIdentifier: tool.clientName, toolName: tool.name }),
-            execute: (args, toolCallId, elicitationFactory) => __awaiter33(this, void 0, void 0, function* () {
+            execute: (args, toolCallId, elicitationFactory) => __awaiter34(this, void 0, void 0, function* () {
               const elicitationProvider = elicitationFactory === null || elicitationFactory === void 0 ? void 0 : elicitationFactory.createProvider(tool.clientName, tool.name, toolCallId);
               const result = yield tool.client.callTool(span.ctx, tool.name, args, toolCallId, elicitationProvider);
               return result;
@@ -1131,7 +1159,7 @@ var McpManager = class {
     });
   }
   getInstructions(ctx) {
-    return __awaiter33(this, void 0, void 0, function* () {
+    return __awaiter34(this, void 0, void 0, function* () {
       const env_14 = { stack: [], error: void 0, hasError: false };
       try {
         const span = __addDisposableResource11(env_14, createSpan(ctx.withName("McpManager.getInstructions")), false);

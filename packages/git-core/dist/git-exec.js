@@ -1,4 +1,4 @@
-var __awaiter50 = function(thisArg, _arguments, P2, generator) {
+var __awaiter52 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -59,7 +59,7 @@ function withGitEnv(args, env) {
   });
 }
 function gitExecFile(file2, args, options2) {
-  return __awaiter50(this, void 0, void 0, function* () {
+  return __awaiter52(this, void 0, void 0, function* () {
     const _a19 = options2 !== null && options2 !== void 0 ? options2 : {}, { env, encoding = "utf8" } = _a19, rest = __rest4(_a19, ["env", "encoding"]);
     const result = yield execFileAsync(file2, args, Object.assign(Object.assign({}, rest), { encoding, env: withGitEnv(args, env) }));
     return {

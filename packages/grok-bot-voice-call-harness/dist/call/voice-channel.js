@@ -1,11 +1,7 @@
 var VOICE_CALL_ENDED_MESSAGE = "The call ended. This channel is closed from now on, so anything still owed goes in the chat.";
 var VOICE_CALL_SENDER = "the call";
 var ADDRESS_PREFIX = `${VOICE_CALL_CHANNEL_PLATFORM}:`;
-var OWNER_STARTED_SOURCES = [
-  "turn",
-  "voice-call",
-  "handoff-resume"
-];
+var OWNER_STARTED_SOURCES = ["turn", "voice-call", "handoff-resume"];
 var VoiceCallChannel = class {
   static address(callId) {
     return `${ADDRESS_PREFIX}${callId}`;

@@ -6,12 +6,12 @@ function pinMcpDiagnosticsReporter(reporter) {
   if (reporter == null) return;
   for (const failure2 of backlog) reporter(failure2);
 }
-function mcpErrorClassOf(error41) {
-  if (error41 instanceof ConnectError) return `ConnectError.${Code[error41.code]}`;
-  return errorClassOf(error41);
+function mcpErrorClassOf(error42) {
+  if (error42 instanceof ConnectError) return `ConnectError.${Code[error42.code]}`;
+  return errorClassOf(error42);
 }
-function reportMcpHostEdgeFailure(leg, error41) {
-  const failure2 = { leg, errorClass: mcpErrorClassOf(error41) };
+function reportMcpHostEdgeFailure(leg, error42) {
+  const failure2 = { leg, errorClass: mcpErrorClassOf(error42) };
   if (pinnedReporter3 != null) {
     pinnedReporter3(failure2);
     return;
@@ -40,16 +40,16 @@ function reportBoxStdioErrorStatus(serverIdentifier, statusDetail) {
   reportedBoxStdioStatuses.add(key);
   reportMcpHostEdgeDegraded("box-stdio-status", errorClass);
 }
-function recordMcpExecErrorClass(ctx, error41) {
+function recordMcpExecErrorClass(ctx, error42) {
   const attribution = ctx.get(mcpExecAttributionKey);
   if (attribution == null) return;
-  attribution.errorClass = mcpErrorClassOf(error41);
+  attribution.errorClass = mcpErrorClassOf(error42);
 }
 var PRE_PIN_BUFFER_CAP, pinnedReporter3, buffered, BOX_STDIO_STATUS_REPORT_CAP, reportedBoxStdioStatuses, MCP_ERROR_RESULT_CLASS, mcpExecAttributionKey;
 var init_mcp_diagnostics = __esm({
   "src/shared/node/mcp/mcp-diagnostics.ts"() {
     "use strict";
-    init_dist3();
+    init_dist4();
     init_esm2();
     init_errors();
     init_system_errno();

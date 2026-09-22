@@ -106,16 +106,16 @@ var GrokBotMetricsBackend = class {
     }
     const client = this.getOrCreateClient();
     const sends = [];
-    for (const request3 of drainNamedMetrics(this.incrementBuffer.values())) {
-      sends.push(client.reportIncrement(request3));
+    for (const request5 of drainNamedMetrics(this.incrementBuffer.values())) {
+      sends.push(client.reportIncrement(request5));
     }
     this.incrementBuffer.clear();
-    for (const request3 of drainNamedMetrics(this.gaugeBuffer.values())) {
-      sends.push(client.reportGauge(request3));
+    for (const request5 of drainNamedMetrics(this.gaugeBuffer.values())) {
+      sends.push(client.reportGauge(request5));
     }
     this.gaugeBuffer.clear();
-    for (const request3 of drainDistributions(this.distributionBuffer.values())) {
-      sends.push(client.reportDistribution(request3));
+    for (const request5 of drainDistributions(this.distributionBuffer.values())) {
+      sends.push(client.reportDistribution(request5));
     }
     this.distributionBuffer.clear();
     const settled = await Promise.allSettled(sends);

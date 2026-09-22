@@ -5,6 +5,15 @@ var SandAutomationSubagentRunIdMissingError = class extends SandDomainError {
     super("A subagent automation run requires the server fire's run id");
   }
 };
+function firstEmailWakeEvent(events) {
+  const emails = events.filter((event) => event.source === "email");
+  const only = emails.length === 1 ? emails[0] : void 0;
+  return only === void 0 ? void 0 : {
+    fromAddress: only.fromAddress,
+    inboxEmail: only.inboxEmail,
+    authPassed: only.authPassed
+  };
+}
 var AutomationRunPath = class {
   constructor(tm, spendGuard, eventFires) {
     this.tm = tm;
@@ -72,7 +81,7 @@ var AutomationRunPath = class {
     }
   }
   async runGroupAutomation(session, automation, events) {
-    const config2 = this.tm.groupChat.localGroupConfig((0, import_node_path158.dirname)(session.dbPath));
+    const config2 = this.tm.groupChat.localGroupConfig((0, import_node_path157.dirname)(session.dbPath));
     if (config2 == null) return;
     const isActive = this.tm.sessions.activeSession?.id === session.id;
     const entries = isActive ? getTranscript() : session.db.getTranscriptEntries();
@@ -137,15 +146,15 @@ var AutomationRunPath = class {
       let session;
       try {
         session = await this.tm.sessions.resolveBackgroundSession(agentId);
-      } catch (error41) {
-        if (!(error41 instanceof AgentGoneError)) {
+      } catch (error42) {
+        if (!(error42 instanceof AgentGoneError)) {
           this.eventFires.reportFireDropped({
             agentId,
             trigger: trigger2,
             reason: "delivery_error",
             scheduledForMs,
             runUuid,
-            error: error41
+            error: error42
           });
           return void 0;
         }
@@ -256,12 +265,12 @@ var AutomationRunPath = class {
                 requestId: requestId2
               });
               this.tm.automationRuntime.emitAutomations(session);
-            } catch (error41) {
+            } catch (error42) {
               this.tm.telemetry.reportAgentError({
                 source: "automation",
                 conversationId: session.id,
                 requestId: requestId2,
-                error: classifyAgentError(error41)
+                error: classifyAgentError(error42)
               });
             }
           };
@@ -283,6 +292,7 @@ var AutomationRunPath = class {
                 session.automations.markNoticeRaised(automation.id, notice.id);
               }
               const untrustedWhenCarryingEventContent = isEventFire ? { untrusted: true } : {};
+              const wakeEmail = firstEmailWakeEvent(eventBatch);
               const wakePrompt = buildAutomationWakePrompt(automationForWake, {
                 timeZone: this.tm.sessionStore.getUserTimeZone(),
                 ...isEventFire ? { events: eventBatch } : {},
@@ -316,7 +326,8 @@ ${spendGuardReminder}`);
                   automationWake: {
                     id: automation.id,
                     name: automation.name,
-                    ...untrustedWhenCarryingEventContent
+                    ...untrustedWhenCarryingEventContent,
+                    ...wakeEmail === void 0 ? {} : { email: wakeEmail }
                   },
                   requestSource: "automation",
                   onRequestId: captureRequestId,
@@ -372,23 +383,23 @@ ${spendGuardReminder}`);
             }
             await this.tm.roster.emitAgentUpdate(session.id);
             this.tm.automationRuntime.emitAutomations(session);
-          } catch (error41) {
+          } catch (error42) {
             this.tm.telemetry.reportAgentError({
               source: "automation",
               conversationId: session.id,
               requestId: this.tm.runLifecycle.lastRequestIdBySession.get(session.id),
-              error: classifyAgentError(error41),
-              detail: sandErrorDetail(error41)
+              error: classifyAgentError(error42),
+              detail: sandErrorDetail(error42)
             });
-            const description10 = describeAgentRunError(error41);
-            const runDetail = description10.detail ?? description10.errorParams?.technicalDetail;
+            const description9 = describeAgentRunError(error42);
+            const runDetail = description9.detail ?? description9.errorParams?.technicalDetail;
             this.finishAutomationRun(session, automation.id, runId, "error", {
               ...requestId2 !== void 0 ? { requestId: requestId2 } : {},
               ...runDetail !== void 0 ? { detail: runDetail } : {},
-              ...description10.errorKind !== void 0 ? { errorKind: description10.errorKind } : {}
+              ...description9.errorKind !== void 0 ? { errorKind: description9.errorKind } : {}
             });
             this.tm.automationRuntime.emitAutomations(session);
-            this.notifyAutomationFailure(session, automation, trigger2, description10);
+            this.notifyAutomationFailure(session, automation, trigger2, description9);
             telemetryOutcome = "error";
           } finally {
             if (telemetryOutcome === "ok") {
@@ -461,9 +472,9 @@ ${spendGuardReminder}`);
     if (live == null) return "automation_missing";
     return live.isEnabled ? void 0 : "automation_disabled";
   }
-  notifyAutomationFailure(session, automation, trigger2, description10) {
+  notifyAutomationFailure(session, automation, trigger2, description9) {
     if (isBackgroundAutomationTrigger(trigger2)) return;
-    const failureBucket = description10.errorKind === "backend_message" || description10.errorKind === "unknown_failure" ? failureBucketFromDetail(description10.detail ?? description10.errorParams?.technicalDetail) : description10.errorKind;
+    const failureBucket = description9.errorKind === "backend_message" || description9.errorKind === "unknown_failure" ? failureBucketFromDetail(description9.detail ?? description9.errorParams?.technicalDetail) : description9.errorKind;
     const key = `${session.id}:${automation.id}:${failureBucket}`;
     const occurrence = (this.automationFailureOccurrences.get(key) ?? 0) + 1;
     this.automationFailureOccurrences.set(key, occurrence);
@@ -471,11 +482,11 @@ ${spendGuardReminder}`);
     this.tm.trayErrors.pushError({
       agentId: session.id,
       ...hostTrayTitle({ kind: "automation_failed", name: automation.name }),
-      errorKind: description10.errorKind,
-      ...description10.detail != null ? { detail: description10.detail } : {},
-      ...description10.errorParams != null ? { errorParams: description10.errorParams } : {},
-      ...description10.rawDetail != null ? { rawDetail: description10.rawDetail } : {},
-      ...description10.actions != null ? { actions: description10.actions } : {},
+      errorKind: description9.errorKind,
+      ...description9.detail != null ? { detail: description9.detail } : {},
+      ...description9.errorParams != null ? { errorParams: description9.errorParams } : {},
+      ...description9.rawDetail != null ? { rawDetail: description9.rawDetail } : {},
+      ...description9.actions != null ? { actions: description9.actions } : {},
       dedupeKey: `automation-failure:${session.id}:${automation.id}:${failureBucket}`,
       count: occurrence
     });

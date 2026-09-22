@@ -1,3 +1,4 @@
+init_dist4();
 init_mcp_tool_annotations();
 init_esm();
 init_esm2();
@@ -18,9 +19,10 @@ var DEFINITIVE_OAUTH_REJECTION_CODES = /* @__PURE__ */ new Set([
   Code.Unauthenticated,
   Code.FailedPrecondition
 ]);
-function isDefinitiveOAuthCompletionRejection(error41) {
-  return error41 instanceof ConnectError && DEFINITIVE_OAUTH_REJECTION_CODES.has(error41.code);
+function isDefinitiveOAuthCompletionRejection(error42) {
+  return error42 instanceof ConnectError && DEFINITIVE_OAUTH_REJECTION_CODES.has(error42.code);
 }
+var sandAuditEventSequenceKey = createKey(/* @__PURE__ */ Symbol("sand.action-audit.event-sequence"), void 0);
 function accountKeyFromOAuthCompletion(result) {
   if (result == null || typeof result !== "object") return void 0;
   const raw = result.accountKey;
@@ -58,11 +60,11 @@ function errorResult(message) {
     }
   });
 }
-function errorLabel(error41) {
-  if (error41 instanceof ConnectError) {
-    return Code[error41.code];
+function errorLabel(error42) {
+  if (error42 instanceof ConnectError) {
+    return Code[error42.code];
   }
-  return errorClassOf(error41);
+  return errorClassOf(error42);
 }
 function normalizeAccountLabel(label) {
   return label != null && label.length > 0 ? label : "default";
@@ -90,12 +92,12 @@ function createDashboardSandBackendMcpExec(deps) {
           accountLabel: normalizeAccountLabel(server.accountLabel),
           rowServerIdentifier: server.rowServerIdentifier != null && server.rowServerIdentifier.length > 0 ? server.rowServerIdentifier : server.serverIdentifier
         }));
-      } catch (error41) {
-        reportMcpHostEdgeFailure("backend-list-tools", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("backend-list-tools", error42);
         throw new SandBackendMcpExecError(
-          `Backend MCP tool discovery failed: ${errorLabel(error41)}`,
+          `Backend MCP tool discovery failed: ${errorLabel(error42)}`,
           {
-            cause: error41
+            cause: error42
           }
         );
       }
@@ -112,20 +114,21 @@ function createDashboardSandBackendMcpExec(deps) {
             toolCallId: args.toolCallId,
             agentId: args.agentId ?? "",
             turnId: ctx.get(requestIdKey) ?? "",
+            eventSequence: BigInt(ctx.get(sandAuditEventSequenceKey) ?? 0),
             mcpConfigJson: args.mcpConfigJson
           }),
           { timeoutMs }
         );
         return response.result ?? errorResult(`Backend MCP execution returned no result for "${args.toolName}".`);
-      } catch (error41) {
-        recordMcpExecErrorClass(ctx, error41);
-        if (error41 instanceof ConnectError && error41.code === Code.DeadlineExceeded) {
+      } catch (error42) {
+        recordMcpExecErrorClass(ctx, error42);
+        if (error42 instanceof ConnectError && error42.code === Code.DeadlineExceeded) {
           return errorResult(
             `Backend MCP execution for "${args.toolName}" timed out after ${timeoutMs / 1e3}s. The connector may still have applied it, so retry only if repeating the call is safe.`
           );
         }
         return errorResult(
-          `Backend MCP execution failed for "${args.toolName}": ${errorLabel(error41)}`
+          `Backend MCP execution failed for "${args.toolName}": ${errorLabel(error42)}`
         );
       }
     },
@@ -156,12 +159,12 @@ function createDashboardSandBackendMcpExec(deps) {
           authUrl: status.authUrl,
           error: status.error
         };
-      } catch (error41) {
-        reportMcpHostEdgeFailure("backend-check-auth-status", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("backend-check-auth-status", error42);
         throw new SandBackendMcpExecError(
-          `Backend MCP OAuth status check failed: ${errorLabel(error41)}`,
+          `Backend MCP OAuth status check failed: ${errorLabel(error42)}`,
           {
-            cause: error41
+            cause: error42
           }
         );
       }
@@ -176,14 +179,14 @@ function createDashboardSandBackendMcpExec(deps) {
           { timeoutMs: CONTROL_RPC_TIMEOUT_MS }
         );
         return { accountKey: normalizeAccountLabel(response.accountKey) };
-      } catch (error41) {
-        if (isDefinitiveOAuthCompletionRejection(error41)) {
+      } catch (error42) {
+        if (isDefinitiveOAuthCompletionRejection(error42)) {
           throw new SandMcpOAuthCompletionRejectedError(
-            `Backend MCP OAuth completion was rejected: ${errorLabel(error41)}`,
-            { cause: error41 }
+            `Backend MCP OAuth completion was rejected: ${errorLabel(error42)}`,
+            { cause: error42 }
           );
         }
-        throw error41;
+        throw error42;
       }
     },
     async validateTokens(targets) {
@@ -211,8 +214,8 @@ function createDashboardSandBackendMcpExec(deps) {
           hasValidToken: result.hasValidToken,
           ...result.serverIdentifier == null || result.serverIdentifier.length === 0 ? {} : { serverIdentifier: result.serverIdentifier }
         }));
-      } catch (error41) {
-        reportMcpHostEdgeFailure("backend-validate-tokens", error41);
+      } catch (error42) {
+        reportMcpHostEdgeFailure("backend-validate-tokens", error42);
         return [];
       }
     },

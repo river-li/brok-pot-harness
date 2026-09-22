@@ -1,5 +1,5 @@
-init_dist3();
-var logger90 = createLogger("@anysphere/agent:mcp-direct-mode-clamp");
+init_dist4();
+var logger91 = createLogger("@anysphere/agent:mcp-direct-mode-clamp");
 var mcpDirectModeClamped = createCounter("agent.mcp.direct_mode_clamped", {
   description: "Direct-mode MCP tool lists sliced down to maxDirectMcpTools before advertisement"
 });

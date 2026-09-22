@@ -41,10 +41,10 @@ var SandAgentDb = class {
   constructor(dbPath, options2 = {}) {
     this.dbPath = dbPath;
     this.options = options2;
-    this.agentDirName = (0, import_node_path129.basename)((0, import_node_path129.dirname)(dbPath));
-    this.resolvedDbPath = (0, import_node_path129.resolve)(dbPath);
+    this.agentDirName = (0, import_node_path128.basename)((0, import_node_path128.dirname)(dbPath));
+    this.resolvedDbPath = (0, import_node_path128.resolve)(dbPath);
     this.onBusyError = options2.onBusyError;
-    (0, import_node_fs80.mkdirSync)((0, import_node_path129.dirname)(dbPath), { recursive: true });
+    (0, import_node_fs79.mkdirSync)((0, import_node_path128.dirname)(dbPath), { recursive: true });
     const hasOtherLiveHandles = liveDbHandleCount(this.resolvedDbPath) > 0;
     this.db = openConfiguredDb(dbPath, this.agentDirName, options2, hasOtherLiveHandles);
     this.statements = prepareStatements(this.db);
@@ -52,9 +52,9 @@ var SandAgentDb = class {
     this.handleRegistered = true;
     try {
       this.seedDefaultMetadataIfMissing();
-    } catch (error41) {
+    } catch (error42) {
       this.close();
-      throw error41;
+      throw error42;
     }
   }
   seedDefaultMetadataIfMissing() {
@@ -75,26 +75,26 @@ var SandAgentDb = class {
     if (options2.checkpoint) {
       try {
         this.db.exec("PRAGMA wal_checkpoint(TRUNCATE)");
-      } catch (error41) {
+      } catch (error42) {
         reportHostDiagnostic({
           kind: "fallback_taken",
           stage: "agent_session",
-          errorClass: boundedConnectErrorClassOf(error41)
+          errorClass: boundedConnectErrorClassOf(error42)
         });
-        this.options.onFailure?.({ kind: "checkpoint_on_close_failed", error: error41 });
+        this.options.onFailure?.({ kind: "checkpoint_on_close_failed", error: error42 });
       }
     }
     this.db.close();
   }
-  runWrite(operation, write) {
+  runWrite(operation, write2) {
     if (this.isClosed) return false;
     try {
-      const didWrite = write() !== false;
+      const didWrite = write2() !== false;
       if (didWrite) bumpDbWriteGeneration(this.resolvedDbPath);
       return true;
-    } catch (error41) {
-      if (isSqliteBusyError(error41)) {
-        const normalized = error41 instanceof Error ? error41 : new Error(String(error41));
+    } catch (error42) {
+      if (isSqliteBusyError(error42)) {
+        const normalized = error42 instanceof Error ? error42 : new Error(String(error42));
         reportHostDiagnostic({
           kind: "fallback_taken",
           stage: "agent_session",
@@ -104,11 +104,11 @@ var SandAgentDb = class {
         this.onBusyError?.(operation, normalized);
         return false;
       }
-      if ((this.options.recoverOnCorruption ?? true) && !this.hasRecoveredFromCorruption && isSqliteCorruptError(error41)) {
-        this.options.onFailure?.({ kind: "write_corrupt", operation, error: error41 });
-        if (this.recoverInPlace(error41)) {
+      if ((this.options.recoverOnCorruption ?? true) && !this.hasRecoveredFromCorruption && isSqliteCorruptError(error42)) {
+        this.options.onFailure?.({ kind: "write_corrupt", operation, error: error42 });
+        if (this.recoverInPlace(error42)) {
           try {
-            const didWrite = write() !== false;
+            const didWrite = write2() !== false;
             if (didWrite) bumpDbWriteGeneration(this.resolvedDbPath);
             return true;
           } catch (retryError) {
@@ -117,7 +117,7 @@ var SandAgentDb = class {
           }
         }
       }
-      throw error41;
+      throw error42;
     }
   }
   recoverInPlace(cause) {
@@ -138,7 +138,7 @@ var SandAgentDb = class {
       this.seedDefaultMetadataIfMissing();
       this.hasRecoveredFromCorruption = true;
       return true;
-    } catch (error41) {
+    } catch (error42) {
       this.isClosed = true;
       if (this.handleRegistered) {
         this.handleRegistered = false;
@@ -148,9 +148,9 @@ var SandAgentDb = class {
         family: "maintenance",
         kind: "recovery_failed",
         agentId: this.agentDirName,
-        errorClass: boundedConnectErrorClassOf(error41)
+        errorClass: boundedConnectErrorClassOf(error42)
       });
-      this.options.onFailure?.({ kind: "recovery_failed", error: error41 });
+      this.options.onFailure?.({ kind: "recovery_failed", error: error42 });
       return false;
     }
   }
@@ -259,9 +259,9 @@ var SandAgentDb = class {
         }
         this.db.exec("COMMIT");
         return next !== void 0;
-      } catch (error41) {
+      } catch (error42) {
         this.db.exec("ROLLBACK");
-        throw error41;
+        throw error42;
       }
     });
   }
@@ -399,7 +399,7 @@ var SandAgentDb = class {
     this.writeKv(KV_REQUEST_IDS, JSON.stringify(next));
   }
   getAgentOrigin() {
-    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path129.dirname)(this.dbPath)));
+    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path128.dirname)(this.dbPath)));
     return metadata.origin ?? (this.readKv(KV_ORIGIN) === "dev" ? "dev" : "user");
   }
   setAgentOrigin(origin) {
@@ -428,9 +428,9 @@ var SandAgentDb = class {
           this.statements.deleteKv.run(KV_INTRODUCTION_LANGUAGE);
         }
         this.db.exec("COMMIT");
-      } catch (error41) {
+      } catch (error42) {
         this.db.exec("ROLLBACK");
-        throw error41;
+        throw error42;
       }
     });
   }
@@ -572,9 +572,9 @@ var SandAgentDb = class {
         const row = this.statements.getAutomationCompletionState.get(completion.id);
         acknowledged = typeof row?.acknowledged === "number" ? row.acknowledged : void 0;
         this.db.exec("COMMIT");
-      } catch (error41) {
+      } catch (error42) {
         this.db.exec("ROLLBACK");
-        throw error41;
+        throw error42;
       }
     });
     if (!isCommitted || acknowledged === void 0) return "failed";
@@ -593,9 +593,9 @@ var SandAgentDb = class {
           this.statements.acknowledgeAutomationCompletion.run(id);
         }
         this.db.exec("COMMIT");
-      } catch (error41) {
+      } catch (error42) {
         this.db.exec("ROLLBACK");
-        throw error41;
+        throw error42;
       }
     });
   }
@@ -656,9 +656,9 @@ var SandAgentDb = class {
           if (changes > 0) inserted.push(entry);
         }
         this.db.exec("COMMIT");
-      } catch (error41) {
+      } catch (error42) {
         this.db.exec("ROLLBACK");
-        throw error41;
+        throw error42;
       }
     });
     if (isCommitted && inserted.length > 0) {
@@ -802,9 +802,9 @@ var SandAgentDb = class {
           })
         );
         this.db.exec("COMMIT");
-      } catch (error41) {
+      } catch (error42) {
         this.db.exec("ROLLBACK");
-        throw error41;
+        throw error42;
       }
     });
     if (!isCleared) return false;
@@ -819,7 +819,7 @@ var SandAgentDb = class {
     return true;
   }
   getAgentPurpose() {
-    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path129.dirname)(this.dbPath)));
+    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path128.dirname)(this.dbPath)));
     if (metadata.purpose !== void 0) return metadata.purpose;
     const stored = this.readKv(KV_PURPOSE);
     return isSandAgentPurpose(stored) ? stored : null;
@@ -845,9 +845,9 @@ var SandAgentDb = class {
         this.statements.clearBlobs.run();
         this.statements.setKv.run(KV_LEGACY_BLOB_RETIREMENT_VERSION, String(version3));
         this.db.exec("COMMIT");
-      } catch (error41) {
+      } catch (error42) {
         this.db.exec("ROLLBACK");
-        throw error41;
+        throw error42;
       }
     });
   }

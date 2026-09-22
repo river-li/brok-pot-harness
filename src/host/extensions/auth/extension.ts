@@ -56,19 +56,19 @@ var authExtension = defineHostExtension({
         log: (message) => context2.host.log(message)
       });
       const started2 = startGrokBotBoxIdentitySocketServer({
-        mint: (request3) => client.mint(request3),
+        mint: (request5) => client.mint(request5),
         log: (message) => context2.host.log(message)
       });
       context2.onStop(
         () => started2.then(
           (handle) => handle.stop(),
-          (error41) => {
-            context2.host.log(`identity socket stop skipped: ${errorLogTag(error41)}`);
+          (error42) => {
+            context2.host.log(`identity socket stop skipped: ${errorLogTag(error42)}`);
           }
         )
       );
-      void started2.catch((error41) => {
-        context2.host.log(`identity socket failed to bind: ${errorLogTag(error41)}`);
+      void started2.catch((error42) => {
+        context2.host.log(`identity socket failed to bind: ${errorLogTag(error42)}`);
       });
     }
     return {

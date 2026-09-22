@@ -110,8 +110,8 @@ var DefaultBoxStoreSyncService = class {
       if (removed > 0) {
         this.deps.log(`swept ${removed} leaked box-store temp file(s)`);
       }
-    }).catch((error41) => {
-      this.deps.log(`box-store temp sweep failed: ${errorMessage(error41)}`);
+    }).catch((error42) => {
+      this.deps.log(`box-store temp sweep failed: ${errorMessage(error42)}`);
     });
     this.pollingHandle = this.deps.polling.start(async () => {
       await startupSweep;
@@ -122,8 +122,8 @@ var DefaultBoxStoreSyncService = class {
       sessionDbNames: CHROME_SESSION_DB_NAMES,
       debounce: this.deps.chromeSessionDebounce,
       onSessionChange: () => {
-        void this.sync?.snapshotNow({ chromeSessionOnly: true, waitForInFlight: true }).catch((error41) => {
-          this.deps.log(`chrome-session snapshot rejected: ${errorMessage(error41)}`);
+        void this.sync?.snapshotNow({ chromeSessionOnly: true, waitForInFlight: true }).catch((error42) => {
+          this.deps.log(`chrome-session snapshot rejected: ${errorMessage(error42)}`);
         });
       },
       log: this.deps.log
@@ -199,8 +199,8 @@ var DefaultBoxStoreSyncService = class {
       includeStoreDbs: true,
       waitForInFlight: true,
       acceptMatchingCanonicalOnConflict: true
-    }).catch((error41) => {
-      this.deps.log(`flush snapshot rejected: ${errorMessage(error41)}`);
+    }).catch((error42) => {
+      this.deps.log(`flush snapshot rejected: ${errorMessage(error42)}`);
       return void 0;
     });
     return evaluateBoxStoreFlush(summary, {
@@ -240,8 +240,8 @@ var DefaultBoxStoreSyncService = class {
       includeStoreDbs: idle,
       skipLiveHandleStoreDbs: !sealHydrationHandoff,
       includePacks: includeIdleOnly
-    }).catch((error41) => {
-      this.deps.log(`periodic snapshot rejected: ${errorMessage(error41)}`);
+    }).catch((error42) => {
+      this.deps.log(`periodic snapshot rejected: ${errorMessage(error42)}`);
     });
   }
   reportChromeSessionStage(outcome) {

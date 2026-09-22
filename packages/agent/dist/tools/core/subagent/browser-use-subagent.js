@@ -1,7 +1,11 @@
-var BROWSER_USE_PROVIDER_IDS = /* @__PURE__ */ new Set([
-  CURSOR_IDE_BROWSER_PROVIDER_ID
+var BROWSER_USE_PROVIDER_IDS = /* @__PURE__ */ new Set([CURSOR_IDE_BROWSER_PROVIDER_ID]);
+var BROWSER_USE_LOCAL_CONTEXT_TOOL_IDENTIFIERS = /* @__PURE__ */ new Set([
+  "READ",
+  "GLOB",
+  "GREP",
+  "TODO_WRITE",
+  "SEMANTIC_SEARCH"
 ]);
-var BROWSER_USE_LOCAL_CONTEXT_TOOL_IDENTIFIERS = /* @__PURE__ */ new Set(["READ", "GLOB", "GREP", "TODO_WRITE", "SEMANTIC_SEARCH"]);
 var BROWSER_USE_SUBAGENT_PROMPT = `Enter BROWSER USE mode. Use the provided cursor-ide-browser tools to interact with web pages.
 
 Important: Every browser tool call automatically returns a screenshot of the current page state. You do NOT need to use the browser_take_screenshot tool explicitly - it would be redundant since you already receive screenshots after each action.

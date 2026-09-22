@@ -1,5 +1,5 @@
 init_dist5();
-var __awaiter34 = function(thisArg, _arguments, P2, generator) {
+var __awaiter35 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve14) {
       resolve14(value);
@@ -27,16 +27,16 @@ var __awaiter34 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function structuredLoggerToMcpOAuthLifecycleLogger(args) {
-  const { logger: logger107, ctx } = args;
+  const { logger: logger108, ctx } = args;
   return {
-    debug: (message, metadata) => logger107.debug(ctx, message, metadata),
-    info: (message, metadata) => logger107.info(ctx, message, metadata),
-    warn: (message, metadata) => logger107.warn(ctx, message, metadata),
-    error: (message, error3, metadata) => logger107.error(ctx, message, error3, metadata)
+    debug: (message, metadata) => logger108.debug(ctx, message, metadata),
+    info: (message, metadata) => logger108.info(ctx, message, metadata),
+    warn: (message, metadata) => logger108.warn(ctx, message, metadata),
+    error: (message, error3, metadata) => logger108.error(ctx, message, error3, metadata)
   };
 }
-function createContextStructuredLifecycleLogger(ctx, logger107) {
-  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger107 });
+function createContextStructuredLifecycleLogger(ctx, logger108) {
+  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger108 });
 }
 var LoggedScopedMcpTokenStorage = class {
   constructor(options2) {
@@ -51,7 +51,7 @@ var LoggedScopedMcpTokenStorage = class {
     return Object.assign({ identifier: this.options.identifier }, this.options.serverUrl ? { serverUrl: snapshotServerUrlForLog(this.options.serverUrl) } : {});
   }
   loadTokens() {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       const tokens = yield this.options.inner.loadTokens();
       emitMcpOAuthLifecycleLog({
         logger: this.options.logger,
@@ -63,7 +63,7 @@ var LoggedScopedMcpTokenStorage = class {
     });
   }
   saveTokens(tokens) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       yield this.options.inner.saveTokens(tokens);
       emitMcpOAuthLifecycleLog({
         logger: this.options.logger,
@@ -75,7 +75,7 @@ var LoggedScopedMcpTokenStorage = class {
     });
   }
   prepareForRefresh() {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       var _a20, _b2;
       emitMcpOAuthLifecycleLog({
         logger: this.options.logger,
@@ -86,7 +86,7 @@ var LoggedScopedMcpTokenStorage = class {
     });
   }
   releaseRefreshLeaseOnError(underlyingError) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       var _a20, _b2;
       emitMcpOAuthLifecycleLog({
         logger: this.options.logger,
@@ -99,7 +99,7 @@ var LoggedScopedMcpTokenStorage = class {
     });
   }
   loadClientInformation() {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       const clientInformation = yield this.options.inner.loadClientInformation();
       emitMcpOAuthLifecycleLog({
         logger: this.options.logger,
@@ -111,7 +111,7 @@ var LoggedScopedMcpTokenStorage = class {
     });
   }
   saveClientInformation(clientInfo) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       yield this.options.inner.saveClientInformation(clientInfo);
       emitMcpOAuthLifecycleLog({
         logger: this.options.logger,
@@ -121,7 +121,7 @@ var LoggedScopedMcpTokenStorage = class {
     });
   }
   invalidateCredentials(scope) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       if (this.options.inner.invalidateCredentials === void 0) {
         return;
       }
@@ -145,22 +145,22 @@ var IdentifierScopedTokenStorage = class {
     this.identifier = identifier;
   }
   loadTokens() {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return this.storage.loadTokens(this.identifier);
     });
   }
   saveTokens(tokens) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return this.storage.saveTokens(this.identifier, tokens);
     });
   }
   loadClientInformation() {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return this.storage.loadClientInformation(this.identifier);
     });
   }
   saveClientInformation(clientInfo) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return this.storage.saveClientInformation(this.identifier, clientInfo);
     });
   }
@@ -170,27 +170,27 @@ var NoOpScopedTokenStorage = class {
     this.inner = inner;
   }
   loadTokens() {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return void 0;
     });
   }
   loadClientInformation() {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return void 0;
     });
   }
   saveTokens(tokens) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return this.inner.saveTokens(tokens);
     });
   }
   saveClientInformation(clientInfo) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       return this.inner.saveClientInformation(clientInfo);
     });
   }
   invalidateCredentials(scope) {
-    return __awaiter34(this, void 0, void 0, function* () {
+    return __awaiter35(this, void 0, void 0, function* () {
       var _a20, _b2;
       yield (_b2 = (_a20 = this.inner).invalidateCredentials) === null || _b2 === void 0 ? void 0 : _b2.call(_a20, scope);
     });

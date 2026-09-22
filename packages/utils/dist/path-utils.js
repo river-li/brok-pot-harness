@@ -19,7 +19,7 @@ function resolvePath(path31, basePath) {
   return (0, import_node_path3.resolve)(untildified);
 }
 function resolveRealPathStrict(path31, basePath) {
-  return __awaiter12(this, void 0, void 0, function* () {
+  return __awaiter13(this, void 0, void 0, function* () {
     const normalized = resolvePath(path31, basePath);
     let current = normalized;
     while (true) {
@@ -111,7 +111,7 @@ function shouldBlockWorktreePath(params) {
   }
   return false;
 }
-var import_promises4, import_node_os2, import_node_path3, import_node_url2, __awaiter12, SEP, WORKTREE_GUARD_ERROR;
+var import_promises4, import_node_os2, import_node_path3, import_node_url2, __awaiter13, SEP, WORKTREE_GUARD_ERROR;
 var init_path_utils = __esm({
   "../packages/utils/dist/path-utils.js"() {
     "use strict";
@@ -119,7 +119,7 @@ var init_path_utils = __esm({
     import_node_os2 = require("node:os");
     import_node_path3 = require("node:path");
     import_node_url2 = require("node:url");
-    __awaiter12 = function(thisArg, _arguments, P2, generator) {
+    __awaiter13 = function(thisArg, _arguments, P2, generator) {
       function adopt(value) {
         return value instanceof P2 ? value : new P2(function(resolve29) {
           resolve29(value);

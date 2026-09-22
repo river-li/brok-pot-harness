@@ -67,18 +67,18 @@ function createSandRpcTracingInterceptor() {
       );
       span.end();
       return response;
-    } catch (error41) {
+    } catch (error42) {
       const label = (() => {
-        if (error41 instanceof ConnectError) return Code[error41.code];
-        if (error41 instanceof Error) return error41.name;
-        return typeof error41;
+        if (error42 instanceof ConnectError) return Code[error42.code];
+        if (error42 instanceof Error) return error42.name;
+        return typeof error42;
       })();
-      if (error41 instanceof ConnectError) {
+      if (error42 instanceof ConnectError) {
         span.setAttribute("rpc.connect_rpc.error_code", label);
       }
       span.setStatus({ code: SpanStatusCode.ERROR, message: label });
       span.end();
-      throw error41;
+      throw error42;
     }
   };
 }

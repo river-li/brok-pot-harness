@@ -50,9 +50,9 @@ async function collectRecentAssistantMessages(ctx, stateHandler, maxMessages) {
   return assistantMessagesNewestFirst.toReversed();
 }
 function formatComputerUseToolCallForClassifier(toolCall) {
-  const description10 = toolCall.args?.description?.trim();
+  const description9 = toolCall.args?.description?.trim();
   const input = {
-    ...description10 !== void 0 && description10.length > 0 ? { declared_purpose: description10 } : {},
+    ...description9 !== void 0 && description9.length > 0 ? { declared_purpose: description9 } : {},
     actions: toolCall.args?.actions.map((action) => action.toJson()) ?? []
   };
   const result = toolCall.result?.result;

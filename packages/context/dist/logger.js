@@ -172,18 +172,18 @@ function formatInlineValue(value, options2, colors, depth, seen, path31) {
   }
   return formatInlineObject(value, options2, colors, depth, seen, path31);
 }
-function formatErrorSummary(error41, options2, colors, depth, seen, path31) {
-  const errorObj = error41;
+function formatErrorSummary(error42, options2, colors, depth, seen, path31) {
+  const errorObj = error42;
   if (seen.has(errorObj)) {
     return colors.dim("[Circular]");
   }
   seen.add(errorObj);
-  const name17 = typeof error41.name === "string" ? error41.name : "Error";
-  const message = typeof error41.message === "string" ? error41.message : "";
+  const name17 = typeof error42.name === "string" ? error42.name : "Error";
+  const message = typeof error42.message === "string" ? error42.message : "";
   const summary = message ? `${name17}: ${message}` : name17;
   let result = colors.red(summary);
-  if ("cause" in error41 && error41.cause !== void 0) {
-    const causeValue = formatInlineValue(error41.cause, options2, colors, depth + 1, seen, path31.concat("cause"));
+  if ("cause" in error42 && error42.cause !== void 0) {
+    const causeValue = formatInlineValue(error42.cause, options2, colors, depth + 1, seen, path31.concat("cause"));
     result = `${result} ${colors.dim("cause=")}${causeValue}`;
   }
   seen.delete(errorObj);
@@ -288,20 +288,20 @@ function createPrettyTerminalLoggerBackend(options2 = {}) {
       }
       const seen = /* @__PURE__ */ new WeakSet();
       if (!isContext(entry.context) && entry.context && Object.keys(entry.context).length > 0) {
-        const contextValue = formatInlineValue(entry.context, renderOptions, colors, 0, seen, ["context"]);
+        const contextValue = formatInlineValue(entry.context, renderOptions, colors, 0, seen, [
+          "context"
+        ]);
         parts.push(`${colors.dim("context=")}${contextValue}`);
       }
       if (entry.metadata && Object.keys(entry.metadata).length > 0) {
-        const metaValue = formatInlineValue(entry.metadata, renderOptions, colors, 0, seen, ["metadata"]);
+        const metaValue = formatInlineValue(entry.metadata, renderOptions, colors, 0, seen, [
+          "metadata"
+        ]);
         parts.push(`${colors.dim("meta=")}${metaValue}`);
       }
       const outputLines = [parts.join(" ")];
       if (entry.error !== void 0) {
-        const errorValue = isErrorLike(entry.error) ? formatErrorSummary(entry.error, renderOptions, colors, 0, seen, [
-          "error"
-        ]) : formatInlineValue(entry.error, renderOptions, colors, 0, seen, [
-          "error"
-        ]);
+        const errorValue = isErrorLike(entry.error) ? formatErrorSummary(entry.error, renderOptions, colors, 0, seen, ["error"]) : formatInlineValue(entry.error, renderOptions, colors, 0, seen, ["error"]);
         outputLines[0] = `${outputLines[0]} ${colors.dim("error=")}${errorValue}`;
         if (isErrorLike(entry.error) && typeof entry.error.stack === "string") {
           const stackLines = entry.error.stack.split("\n").slice(1);
@@ -339,8 +339,8 @@ function getLoggerBackend(ctx) {
 function createLogger(name17) {
   function log4(ctx, entry) {
     const timestamp3 = /* @__PURE__ */ new Date();
-    const logger107 = getLoggerBackend(ctx);
-    logger107.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp3, logger: name17 }));
+    const logger108 = getLoggerBackend(ctx);
+    logger108.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp3, logger: name17 }));
   }
   return {
     debug: (ctx, message, metadata) => {
@@ -352,8 +352,8 @@ function createLogger(name17) {
     warn: (ctx, message, metadata) => {
       log4(ctx, { level: "warn", message, context: ctx, metadata });
     },
-    error: (ctx, message, error41, metadata) => {
-      log4(ctx, { level: "error", message, context: ctx, error: error41, metadata });
+    error: (ctx, message, error42, metadata) => {
+      log4(ctx, { level: "error", message, context: ctx, error: error42, metadata });
     }
   };
 }
@@ -371,7 +371,7 @@ var DEFAULT_INDENT, DEFAULT_MAX_DEPTH, DEFAULT_MAX_ENTRIES, DEFAULT_MAX_ARRAY_LE
 var init_logger = __esm({
   "../packages/context/dist/logger.js"() {
     "use strict";
-    init_dist3();
+    init_dist4();
     DEFAULT_INDENT = 2;
     DEFAULT_MAX_DEPTH = 6;
     DEFAULT_MAX_ENTRIES = 50;

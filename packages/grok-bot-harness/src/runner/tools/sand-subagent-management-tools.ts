@@ -52,7 +52,7 @@ var stopSubagentParameters = external_exports.object({
     "The Agent ID of one running subagent to abort (from the Task tool result that dispatched it). Omit it when all is true."
   ),
   all: external_exports.boolean().optional().describe(
-    "Set true to abort every background subagent you have running, in one call, instead of naming one, and with them, where this host can reach them, every other agent you handed work to: peers you messaged with priority and cloud agents you launched (the result says when it could not). Use this whenever the user asks you to stop, halt, cancel, or quit the current work: it stops each running child independently (browserUse, computerUse, executor, and any other Task children, plus anything those children started), delivers a stop to each peer (which then stops its own subagents the same way), cancels each running cloud agent, and the result lists exactly which ids were stopped, which had already finished, and which could not be stopped and why. Do not combine with subagent_id."
+    "Set true to abort every background subagent you have running, in one call, instead of naming one, and with them, where this host can reach them, every other agent you handed work to: peers you messaged with priority and cloud agents you launched (the result says when it could not). Use this whenever the user asks you to stop, halt, cancel, or quit the current work: it stops each running child independently (computerUse, executor, and any other Task children, plus anything those children started), delivers a stop to each peer (which then stops its own subagents the same way), cancels each running cloud agent, and the result lists exactly which ids were stopped, which had already finished, and which could not be stopped and why. Do not combine with subagent_id."
   )
 }).refine((args) => args.all === true !== hasSubagentId(args.subagent_id), {
   message: "Pass exactly one of subagent_id or all: true."
@@ -76,11 +76,11 @@ async function stopAllRunningSubagents(controller, args) {
       running.map(async (info2) => {
         try {
           return { info: info2, result: await controller.abortSubagent(info2.subagentId) };
-        } catch (error41) {
+        } catch (error42) {
           return {
             info: info2,
             result: "failed",
-            error: error41 instanceof Error ? error41.message : String(error41)
+            error: error42 instanceof Error ? error42.message : String(error42)
           };
         }
       })
@@ -113,14 +113,14 @@ async function stopDelegatedWorkSafely(controller, args) {
   if (controller.stopDelegatedWork === void 0) return [];
   try {
     return await controller.stopDelegatedWork(args);
-  } catch (error41) {
+  } catch (error42) {
     return [
       {
         kind: "peer",
         id: "",
         name: "delegated work",
         result: "failed",
-        detail: error41 instanceof Error ? error41.message : String(error41)
+        detail: error42 instanceof Error ? error42.message : String(error42)
       }
     ];
   }
@@ -141,6 +141,8 @@ function describeDelegatedWork(outcome) {
       return `- ${label}: could NOT be stopped from here${outcome.detail === void 0 ? "" : ` (${outcome.detail})`}. Tell the user it may still be working.`;
     case "failed":
       return `- ${label}: stop failed${outcome.detail === void 0 ? "" : ` (${outcome.detail})`}. Retry StopSubagent with all: true; if it fails again, tell the user it may still be working.`;
+    case "stale":
+      return `- ${label}: not contacted; that handoff is old${outcome.detail === void 0 ? "" : ` (${outcome.detail})`} and presumed finished. If the user says this peer is the one still working, message it with SendToAgent priority: true to stop.`;
   }
 }
 function formatDelegatedWorkLines(delegated) {

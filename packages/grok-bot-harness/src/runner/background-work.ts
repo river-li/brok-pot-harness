@@ -220,10 +220,10 @@ function createBackgroundWatches(host) {
         result: result.text.trim().length > 0 ? result.text : "(the cloud agent finished without producing any output)"
       })
     ).catch(
-      (error41) => settle({
+      (error42) => settle({
         ...base,
         status: "error",
-        result: errorMessage(error41)
+        result: errorMessage(error42)
       })
     ).finally(() => cloudAgentSettlements.delete(id));
     cloudAgentSettlements.set(id, settlement);

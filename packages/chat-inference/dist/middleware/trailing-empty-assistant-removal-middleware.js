@@ -1,5 +1,5 @@
-init_dist3();
-var logger4 = createLogger("@anysphere/chat-inference/trailing-empty-assistant-removal-middleware");
+init_dist4();
+var logger5 = createLogger("@anysphere/chat-inference/trailing-empty-assistant-removal-middleware");
 function isEmptyAssistantMessage2(message) {
   if (message.role !== "assistant") {
     return false;
@@ -23,7 +23,7 @@ var TrailingEmptyAssistantRemovalMiddleware = class extends BaseMiddleware {
     const messages2 = this.innerExecutor.getMessages();
     const { cleanedMessages, removedMessageCount } = removeTrailingEmptyAssistantMessages(messages2);
     if (removedMessageCount > 0) {
-      logger4.info(ctx, "[trailing-empty-assistant-removal] removing empty assistant message(s) before stream", {
+      logger5.info(ctx, "[trailing-empty-assistant-removal] removing empty assistant message(s) before stream", {
         messageCount: messages2.length,
         removedMessageCount
       });

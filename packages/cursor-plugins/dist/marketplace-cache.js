@@ -1,4 +1,4 @@
-var __awaiter55 = function(thisArg, _arguments, P2, generator) {
+var __awaiter57 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -79,16 +79,13 @@ var USER_GIT_ACCESS_PATTERNS = [
   "authentication failed",
   "unable to get password from user"
 ];
-var LOCAL_CACHE_PATTERNS = [
-  "enotempty: directory not empty, rename",
-  "/_staging/"
-];
+var LOCAL_CACHE_PATTERNS = ["enotempty: directory not empty, rename", "/_staging/"];
 var STALE_PINNED_REF_PATTERNS = [
   "upload-pack: not our ref",
   "server does not allow request for unadvertised object"
 ];
-function classifyCloneError(error41) {
-  const msg = String(error41).toLowerCase().replaceAll("\\", "/");
+function classifyCloneError(error42) {
+  const msg = String(error42).toLowerCase().replaceAll("\\", "/");
   if (USER_GIT_ACCESS_PATTERNS.some((p2) => msg.includes(p2))) {
     return "user_git_access";
   }
@@ -100,17 +97,17 @@ function classifyCloneError(error41) {
   }
   return "infrastructure";
 }
-function isKilledSubprocessError(error41) {
-  if (typeof error41 !== "object" || error41 === null) {
+function isKilledSubprocessError(error42) {
+  if (typeof error42 !== "object" || error42 === null) {
     return false;
   }
-  if (error41.killed === true) {
+  if (error42.killed === true) {
     return true;
   }
-  return isKilledSubprocessError(error41.cause);
+  return isKilledSubprocessError(error42.cause);
 }
-function cloneErrorTag(error41) {
-  return isKilledSubprocessError(error41) ? "killed_by_budget" : classifyCloneError(error41);
+function cloneErrorTag(error42) {
+  return isKilledSubprocessError(error42) ? "killed_by_budget" : classifyCloneError(error42);
 }
 function getCanonicalMarketplacePathSegments(gitUrl) {
   const scm = parseAndValidateScmUrl(gitUrl);
@@ -172,7 +169,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
     return this.sparsePluginClones ? LS_REMOTE_TIMEOUT_MS : void 0;
   }
   cloneResolvedRef(cloneDir, gitUrl, resolvedRef, options2) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       var _a19, _b2;
       var _c2;
       const execOpts = {
@@ -193,14 +190,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
           timeoutMs: this.localTimeoutMs()
         });
       }
-      const { stderr: fetchStderr } = yield execGitNonInteractive([
-        "fetch",
-        "--depth",
-        "1",
-        ...sparse ? ["--filter=blob:none"] : [],
-        gitUrl,
-        resolvedRef
-      ], Object.assign(Object.assign({}, execOpts), { timeoutMs: this.remoteTimeoutMs() }));
+      const { stderr: fetchStderr } = yield execGitNonInteractive(["fetch", "--depth", "1", ...sparse ? ["--filter=blob:none"] : [], gitUrl, resolvedRef], Object.assign(Object.assign({}, execOpts), { timeoutMs: this.remoteTimeoutMs() }));
       yield execGitNonInteractive(["checkout", "FETCH_HEAD"], Object.assign(Object.assign({}, execOpts), { timeoutMs: this.remoteTimeoutMs() }));
       return {
         strategy: sparse ? "sparse" : "full",
@@ -209,7 +199,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
     });
   }
   createStagingDir() {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       const stagingDir = (0, import_node_path61.join)(this.cacheRoot, "_staging", (0, import_node_crypto23.randomUUID)());
       yield (0, import_promises32.mkdir)(stagingDir, { recursive: true });
       return stagingDir;
@@ -220,7 +210,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * Last-writer-wins: any existing content at `cloneDir` is removed first.
    */
   moveToCanonicalDir(stagingDir, cloneDir) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       yield (0, import_promises32.mkdir)((0, import_node_path61.dirname)(cloneDir), { recursive: true });
       yield (0, import_promises32.rm)(cloneDir, RECURSIVE_RM_OPTIONS);
       yield (0, import_promises32.rename)(stagingDir, cloneDir);
@@ -228,12 +218,12 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
     });
   }
   cleanStaleStagingDirs() {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       const stagingRoot = (0, import_node_path61.join)(this.cacheRoot, "_staging");
       try {
         const entries = yield (0, import_promises32.readdir)(stagingRoot, { withFileTypes: true });
         const now = Date.now();
-        yield Promise.all(entries.filter((entry) => entry.isDirectory()).map((entry) => __awaiter55(this, void 0, void 0, function* () {
+        yield Promise.all(entries.filter((entry) => entry.isDirectory()).map((entry) => __awaiter57(this, void 0, void 0, function* () {
           try {
             const entryPath = (0, import_node_path61.join)(stagingRoot, entry.name);
             const stats = yield (0, import_promises32.stat)(entryPath);
@@ -259,7 +249,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
     return (0, import_node_path61.join)(this.cacheRoot, sanitize(host), ...pathSegments.map(sanitize));
   }
   pruneSiblingCloneDirs(gitUrl, keepRef, legacyCloneDir) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       const repoRootDir = this.getCanonicalRepoRootDir(gitUrl);
       const keepDirName = sanitize(keepRef);
       try {
@@ -303,7 +293,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * @returns Absolute path to the cloned repository root
    */
   ensureCloned(marketplaceId_1, gitUrl_1, ref_1) {
-    return __awaiter55(this, arguments, void 0, function* (marketplaceId, gitUrl, ref, pluginLogger = noopPluginMetricsLogger, options2) {
+    return __awaiter57(this, arguments, void 0, function* (marketplaceId, gitUrl, ref, pluginLogger = noopPluginMetricsLogger, options2) {
       const inner = this.serializedOnRepo(this.getCanonicalRepoRootDir(gitUrl), () => {
         var _a19;
         return this.ensureClonedImpl(marketplaceId, gitUrl, ref, pluginLogger, (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.materialize) !== null && _a19 !== void 0 ? _a19 : "all");
@@ -326,8 +316,8 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * index-lock contention.
    */
   ensureMaterialized(clonePath_1, spec_1) {
-    return __awaiter55(this, arguments, void 0, function* (clonePath, spec, pluginLogger = noopPluginMetricsLogger) {
-      const inner = this.serializedOnRepo((0, import_node_path61.dirname)(clonePath), () => __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, arguments, void 0, function* (clonePath, spec, pluginLogger = noopPluginMetricsLogger) {
+      const inner = this.serializedOnRepo((0, import_node_path61.dirname)(clonePath), () => __awaiter57(this, void 0, void 0, function* () {
         var _a19;
         const start = performance.now();
         try {
@@ -344,7 +334,9 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
             error: String(err),
             errorCategory: cloneErrorTag(err)
           });
-          pluginLogger.increment("marketplace_cache_manager.ensure_materialized.error", 1, { error_category: cloneErrorTag(err) });
+          pluginLogger.increment("marketplace_cache_manager.ensure_materialized.error", 1, {
+            error_category: cloneErrorTag(err)
+          });
           pluginLogger.distribution("marketplace_cache_manager.ensure_materialized.duration", performance.now() - start, { outcome: "error" });
           throw err;
         }
@@ -362,7 +354,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * operation runs at a time per repo root within a single process.
    */
   serializedOnRepo(repoRootDir, work) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       const serializationKey = `${this.cacheRoot}:${repoRootDir}`;
       const predecessor = _globalInFlight.get(serializationKey);
       const myWork = (predecessor !== null && predecessor !== void 0 ? predecessor : Promise.resolve()).catch(() => {
@@ -378,7 +370,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
     });
   }
   ensureClonedImpl(marketplaceId, gitUrl, ref, pluginLogger, materialize3) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       var _a19, _b2, _c2, _d;
       pluginLogger.log("info", `MarketplaceCacheManager: Ensuring cloned ${marketplaceId} at ${gitUrl}@${ref}`, {
         marketplaceId,
@@ -395,15 +387,15 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
             extraGitConfig: resolveExtraGitConfig((_a19 = this.options) === null || _a19 === void 0 ? void 0 : _a19.extraGitConfig),
             timeoutMs: this.lsRemoteTimeoutMs()
           })).fullSha;
-        } catch (error41) {
-          if (this.sparsePluginClones && isKilledSubprocessError(error41)) {
-            throw error41;
+        } catch (error42) {
+          if (this.sparsePluginClones && isKilledSubprocessError(error42)) {
+            throw error42;
           }
           pluginLogger.log("error", "Failed to resolve remote ref using SSH URL, falling back to HTTPS", {
             gitUrl,
             ref,
-            error: String(error41),
-            errorCategory: classifyCloneError(error41)
+            error: String(error42),
+            errorCategory: classifyCloneError(error42)
           });
           sshCloneUrl = null;
           resolvedRef = (yield resolveGitRemoteRef(gitUrl, originalRef, {
@@ -452,7 +444,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * Cross-process safe.
    */
   cloneViaStaging(cloneDir, gitUrl, sshCloneUrl, resolvedRef, legacyCloneDir, ref, pluginLogger, emitMetric, materialize3) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       var _a19;
       yield this.cleanStaleStagingDirs();
       const stagingDir = yield this.createStagingDir();
@@ -475,15 +467,15 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
               sshBatchMode: true,
               materialize: materialize3
             });
-          } catch (error41) {
-            if (this.sparsePluginClones && isKilledSubprocessError(error41)) {
-              throw error41;
+          } catch (error42) {
+            if (this.sparsePluginClones && isKilledSubprocessError(error42)) {
+              throw error42;
             }
             pluginLogger.log("error", "Falling back to HTTPS clone due to SSH clone failure", {
               gitUrl,
               ref,
-              error: String(error41),
-              errorCategory: cloneErrorTag(error41)
+              error: String(error42),
+              errorCategory: cloneErrorTag(error42)
             });
             yield (0, import_promises32.rm)(stagingDir, RECURSIVE_RM_OPTIONS);
             yield (0, import_promises32.mkdir)(stagingDir, { recursive: true });
@@ -534,7 +526,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * Distinguishes from an empty/incomplete dir left by mkdir or a failed clone.
    */
   isCloneComplete(cloneDir) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       try {
         const stats = yield (0, import_promises32.stat)(cloneDir);
         if (!stats.isDirectory())
@@ -575,7 +567,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * @param targetDir - Absolute path to the target plugin cache directory
    */
   copyPluginToDir(sourcePath, targetDir) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       yield (0, import_promises32.mkdir)(targetDir, { recursive: true });
       yield (0, import_promises32.cp)(sourcePath, targetDir, {
         recursive: true,
@@ -595,7 +587,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * @returns Parsed manifest, or null if not found / invalid
    */
   readManifest(clonePath_1) {
-    return __awaiter55(this, arguments, void 0, function* (clonePath, options2 = {}) {
+    return __awaiter57(this, arguments, void 0, function* (clonePath, options2 = {}) {
       var _a19;
       const cacheKey3 = manifestCacheKey(clonePath, options2);
       if (this.manifestCache.has(cacheKey3)) {
@@ -616,7 +608,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * @returns Resolved gitPath, or null if not found / external source
    */
   resolvePluginPath(clonePath, pluginName) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       var _a19;
       const manifest = yield this.readManifest(clonePath);
       if (!manifest)
@@ -641,7 +633,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    * @returns Array of discovered plugins with resolved source info
    */
   discoverPlugins(clonePath) {
-    return __awaiter55(this, void 0, void 0, function* () {
+    return __awaiter57(this, void 0, void 0, function* () {
       const manifest = yield this.readManifest(clonePath);
       if (!manifest)
         return [];
@@ -652,7 +644,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
 MarketplaceCacheManager.STALE_STAGING_THRESHOLD_MS = 5 * 60 * 1e3;
 MarketplaceCacheManager.STAGING_HEARTBEAT_INTERVAL_MS = 60 * 1e3;
 function readMarketplaceManifestFromDir(dir_1) {
-  return __awaiter55(this, arguments, void 0, function* (dir, options2 = {}) {
+  return __awaiter57(this, arguments, void 0, function* (dir, options2 = {}) {
     for (const manifestRelPath of MARKETPLACE_MANIFEST_PATHS) {
       const manifestPath2 = (0, import_node_path61.join)(dir, manifestRelPath);
       let content;
@@ -674,8 +666,8 @@ function discoverPluginsFromManifest(manifest) {
   const plugins = [];
   const classified = parseAndClassifyManifestEntries(manifest.plugins, (_a19 = manifest.metadata) === null || _a19 === void 0 ? void 0 : _a19.pluginRoot);
   for (const c of classified) {
-    const { name: name17, displayName: displayName2, description: description10, version: version3 } = c.entry;
-    const common2 = { name: name17, displayName: displayName2, description: description10, version: version3 };
+    const { name: name17, displayName: displayName2, description: description9, version: version3 } = c.entry;
+    const common2 = { name: name17, displayName: displayName2, description: description9, version: version3 };
     switch (c.kind) {
       case "local":
         if (isPathSafe(c.localPath)) {

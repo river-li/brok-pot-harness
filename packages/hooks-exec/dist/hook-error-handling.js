@@ -1,4 +1,4 @@
-var __awaiter34 = function(thisArg, _arguments, P2, generator) {
+var __awaiter36 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -43,13 +43,13 @@ var FailClosedError = class extends Error {
   }
 };
 function withFailClosed(fn, actionDescription) {
-  return __awaiter34(this, void 0, void 0, function* () {
+  return __awaiter36(this, void 0, void 0, function* () {
     try {
       return yield fn();
-    } catch (error41) {
-      const errorMessage6 = error41 instanceof Error ? error41.message : String(error41);
+    } catch (error42) {
+      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
       const reason = createHookFailClosedMessage(actionDescription, errorMessage6);
-      throw new FailClosedError(reason, error41);
+      throw new FailClosedError(reason, error42);
     }
   });
 }

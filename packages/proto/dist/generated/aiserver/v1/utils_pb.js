@@ -92,7 +92,7 @@ var init_utils_pb2 = __esm({
         return proto3.util.equals(_GetDiffRequest, a, b2);
       }
       static $() {
-        return ["GetDiffRequest|1 cwd 9|2 ref 9|3 base_ref 9|4 merge_base 8|5 target_paths 9*|6 unified_context_lines 5?|7 max_untracked_files 5|9 submodule_recurse_depth 5|10 include_space_changes 8|11 committed_only 8|12 compute_patch_id 8|13 return_head_sha 8?|14 max_response_bytes 5?|8 output_format #0?", GetDiffRequest_OutputFormat];
+        return ["GetDiffRequest|1 cwd 9|2 ref 9|3 base_ref 9|4 merge_base 8|5 target_paths 9*|6 unified_context_lines 5?|7 max_untracked_files 5|9 submodule_recurse_depth 5|10 include_space_changes 8|11 committed_only 8|12 compute_patch_id 8|13 return_head_sha 8?|14 max_response_bytes 5?|15 max_files_with_contents 13?|8 output_format #0?", GetDiffRequest_OutputFormat];
       }
     };
     GetDiffRequest_OutputFormat = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "GetDiffRequest.OutputFormat", [[0, "UNSPECIFIED"], [1, "NAME_STATUS"], [2, "NAME_STATUS_AND_NUMSTAT"], [3, "FILE_DIFFS"], [4, "DIFFS_WITH_BEFORE_AND_AFTER"]], 1);
@@ -184,7 +184,7 @@ var init_utils_pb2 = __esm({
         return proto3.util.equals(_GitDiff, a, b2);
       }
       static $() {
-        return ["GitDiff|1 diffs #0*|2 diff_type #1", FileDiff, GitDiff_DiffType];
+        return ["GitDiff|1 diffs #0*|2 diff_type #1|3 file_contents_omitted 8?", FileDiff, GitDiff_DiffType];
       }
     };
     GitDiff_DiffType = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "GitDiff.DiffType", [[0, "UNSPECIFIED"], [1, "DIFF_TO_HEAD"], [2, "DIFF_FROM_BRANCH_TO_MAIN"]], 1);

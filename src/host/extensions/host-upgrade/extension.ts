@@ -6,8 +6,8 @@ function createMarkerStore() {
       try {
         if (!(0, import_node_fs63.existsSync)(markerPath)) return null;
         return await (0, import_promises56.readFile)(markerPath, "utf8");
-      } catch (error41) {
-        reportFallbackUnlessAbsent("host_upgrade_extension", error41);
+      } catch (error42) {
+        reportFallbackUnlessAbsent("host_upgrade_extension", error42);
         return null;
       }
     },

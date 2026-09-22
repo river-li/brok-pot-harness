@@ -5,11 +5,7 @@ var MIN_TRUNCATED_DESCRIPTION_LENGTH = 24;
 var MAX_TRUNCATED_DESCRIPTION_LENGTH = 480;
 var SHORT_DESCRIPTION_PATH_ONLY_THRESHOLD = 80;
 var MAX_OMITTED_DIRECTORY_COUNT = 5;
-var PROTECTED_SKILL_NAMES = /* @__PURE__ */ new Set([
-  "canvas",
-  "env-setup",
-  "visualize"
-]);
+var PROTECTED_SKILL_NAMES = /* @__PURE__ */ new Set(["canvas", "env-setup", "visualize"]);
 var LOOP_PROTECTED_SKILL_NAMES = /* @__PURE__ */ new Set(["loop"]);
 function applySkillCatalogBudget({ skills, agentTokenLimit, renderSection: renderSection2, renderOmittedNotice, protectLoopSkill }) {
   const uncappedSection = renderSection2(skills);
@@ -151,12 +147,12 @@ function getSkillName(fullPath) {
 function isProtectedSkill(skill) {
   return PROTECTED_SKILL_NAMES.has(getSkillName(skill.fullPath));
 }
-function truncateDescription(description10, maxLength) {
-  if (description10 === void 0 || description10.length <= maxLength) {
-    return description10;
+function truncateDescription(description9, maxLength) {
+  if (description9 === void 0 || description9.length <= maxLength) {
+    return description9;
   }
   const contentLength = Math.max(0, maxLength - TRUNCATED_DESCRIPTION_SUFFIX2.length);
-  return `${description10.slice(0, contentLength).trimEnd()}${TRUNCATED_DESCRIPTION_SUFFIX2}`;
+  return `${description9.slice(0, contentLength).trimEnd()}${TRUNCATED_DESCRIPTION_SUFFIX2}`;
 }
 function getOmittedSkillDirectories(skills) {
   const directories = /* @__PURE__ */ new Set();

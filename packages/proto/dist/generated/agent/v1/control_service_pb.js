@@ -1,4 +1,4 @@
-var __protoPackage140, __protoMessage3133, EntryType, BatchGetDiffErrorKind, ArtifactUploadStatus, ArtifactPathErrorKind, ArtifactRootKind, ArtifactUploadDispatchStatus, PersistArtifactToAgentStoreStatus, ArtifactRestoreStatus, DesktopLeaseActorKind, DesktopLeaseStatus, ResourceScope, ResourcePressure, PingRequest, PingResponse, GetCapabilitiesRequest, GetCapabilitiesResponse, ReloadAgentSkillsRequest, ReloadAgentSkillsResponse, ReloadPluginsRequest, ReloadPluginsResponse, ExecRequest, ExecResponse, StdoutEvent, StderrEvent, ExitEvent, ListDirectoryRequest, ListDirectoryResponse, DirectoryEntry, ReadTextFileRequest, ReadTextFileResponse, WriteTextFileRequest, WriteTextFileResponse, ReadBinaryFileRequest2, ReadBinaryFileResponse2, ExportFileRequest, ExportFileMetadata, ExportFileResponse, WriteBinaryFileRequest, WriteBinaryFileResponse, GetWorkspaceChangesHashRequest, GetWorkspaceChangesHashResponse, BatchGetDiffRequest, BatchGetDiffItem, BatchGetDiffResponse, BatchGetDiffResult, BatchGetDiffError, RefreshGithubAccessTokenRequest, RefreshGithubAccessTokenResponse, WarmRemoteAccessServerRequest, WarmRemoteAccessServerResponse, ListArtifactsRequest, ArtifactUploadMetadata, ArtifactPathError, ListArtifactsResponse, UploadArtifactsRequest, ArtifactUploadInstruction, ArtifactUploadDispatchResult, UploadArtifactsResponse, PersistArtifactToAgentStoreInstruction, PersistArtifactsToAgentStoreRequest, PersistArtifactToAgentStoreResult, PersistArtifactsToAgentStoreResponse, PersistArtifactsToParentStoreRequest, PersistArtifactsToParentStoreResponse, RestoreArtifactInstruction, RestoreArtifactResult, RestoreArtifactsRequest, RestoreArtifactsResponse, GetMcpRefreshTokensRequest, GetMcpRefreshTokensResponse, UpdateEnvironmentVariablesRequest, RunScopedOverlay, UpdateEnvironmentVariablesResponse, ScopedSecretValues, SyncScopedSecretsRequest, SyncScopedSecretsResponse, DownloadCursorServerRequest, DownloadCursorServerResponse, InstallPluginArtifactRequest, InstallPluginArtifactResponse, LoadMcpServersRequest, LoadMcpServersResponse, DesktopLeaseAcquire, DesktopLeaseRelease, DesktopLeaseGetState, DesktopLeaseRequest, DesktopLeaseOwner, DesktopLeaseResponse, ResourceLimits, ResourceSample, GetResourceUsageRequest, GetResourceUsageResponse;
+var __protoPackage140, __protoMessage3133, EntryType, BatchGetDiffErrorKind, ArtifactUploadStatus, ArtifactPathErrorKind, ArtifactRootKind, ArtifactUploadDispatchStatus, PersistArtifactToAgentStoreStatus, ArtifactRestoreStatus, DesktopLeaseActorKind, DesktopLeaseStatus, ResourceScope, ResourcePressure, PingRequest, PingResponse, GetCapabilitiesRequest, GetCapabilitiesResponse, ReloadAgentSkillsRequest, ReloadAgentSkillsResponse, ReloadPluginsRequest, ReloadPluginsResponse, ExecRequest, ExecResponse, StdoutEvent, StderrEvent, ExitEvent, ListDirectoryRequest, ListDirectoryResponse, DirectoryEntry, ReadTextFileRequest, ReadTextFileResponse, WriteTextFileRequest, WriteTextFileResponse, ReadBinaryFileRequest2, ReadBinaryFileResponse2, ExportFileRequest, ExportFileMetadata, ExportFileResponse, WriteBinaryFileRequest, WriteBinaryFileResponse, GetWorkspaceChangesHashRequest, GetWorkspaceChangesHashResponse, BatchGetDiffRequest, BatchGetDiffItem, BatchGetDiffResponse, BatchGetDiffResult, BatchGetDiffUnchanged, BatchGetDiffError, RefreshGithubAccessTokenRequest, RefreshGithubAccessTokenResponse, WarmRemoteAccessServerRequest, WarmRemoteAccessServerResponse, ListArtifactsRequest, ArtifactUploadMetadata, ArtifactPathError, ListArtifactsResponse, UploadArtifactsRequest, ArtifactUploadInstruction, ArtifactUploadDispatchResult, UploadArtifactsResponse, PersistArtifactToAgentStoreInstruction, PersistArtifactsToAgentStoreRequest, PersistArtifactToAgentStoreResult, PersistArtifactsToAgentStoreResponse, PersistArtifactsToParentStoreRequest, PersistArtifactsToParentStoreResponse, RestoreArtifactInstruction, RestoreArtifactResult, RestoreArtifactsRequest, RestoreArtifactsResponse, GetMcpRefreshTokensRequest, GetMcpRefreshTokensResponse, UpdateEnvironmentVariablesRequest, RunScopedOverlay, UpdateEnvironmentVariablesResponse, ScopedSecretValues, SyncScopedSecretsRequest, SyncScopedSecretsResponse, DownloadCursorServerRequest, DownloadCursorServerResponse, InstallPluginArtifactRequest, InstallPluginArtifactResponse, LoadMcpServersRequest, LoadMcpServersResponse, DesktopLeaseAcquire, DesktopLeaseRelease, DesktopLeaseGetState, DesktopLeaseRequest, DesktopLeaseOwner, DesktopLeaseResponse, ResourceLimits, ResourceSample, GetResourceUsageRequest, GetResourceUsageResponse;
 var init_control_service_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/control_service_pb.js"() {
     "use strict";
@@ -707,7 +707,7 @@ var init_control_service_pb = __esm({
         return proto3.util.equals(_BatchGetDiffItem, a, b2);
       }
       static $() {
-        return ["BatchGetDiffItem|1 diff_request #0|2 fetch_branches 9*", GetDiffRequest];
+        return ["BatchGetDiffItem|1 diff_request #0|2 fetch_branches 9*|3 known_base_sha 9?|4 known_head_sha 9?|5 known_workspace_hash 9?|6 use_cat_file_batch 8?", GetDiffRequest];
       }
     };
     BatchGetDiffResponse = class _BatchGetDiffResponse extends __protoMessage3133 {
@@ -754,7 +754,28 @@ var init_control_service_pb = __esm({
         return proto3.util.equals(_BatchGetDiffResult, a, b2);
       }
       static $() {
-        return ["BatchGetDiffResult|1 item_index 13|4 fetched_branches 9*|5 failed_branches 9*|2 diff #0 result|3 error #1 result", GetDiffResponse, BatchGetDiffError];
+        return ["BatchGetDiffResult|1 item_index 13|4 fetched_branches 9*|5 failed_branches 9*|2 diff #0 result|3 error #1 result|6 unchanged #2 result|7 resolved_base_sha 9?|8 resolved_head_sha 9?|9 resolved_workspace_hash 9?", GetDiffResponse, BatchGetDiffError, BatchGetDiffUnchanged];
+      }
+    };
+    BatchGetDiffUnchanged = class _BatchGetDiffUnchanged extends __protoMessage3133 {
+      constructor(data) {
+        super();
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _BatchGetDiffUnchanged().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _BatchGetDiffUnchanged().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _BatchGetDiffUnchanged().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_BatchGetDiffUnchanged, a, b2);
+      }
+      static $() {
+        return ["BatchGetDiffUnchanged"];
       }
     };
     BatchGetDiffError = class _BatchGetDiffError extends __protoMessage3133 {

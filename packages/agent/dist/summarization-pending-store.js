@@ -1,11 +1,11 @@
-init_dist3();
+init_dist4();
 var logger59 = createLogger("summarization-pending-store");
 var pendingSummaryAdoption = createCounter("agent.background_summarization.pending_adoption", {
   description: "Outcomes of pending-summary adoption attempts at request start (adopted | persist_declined | rejected_prefix_mismatch | rejected_too_few_messages | rejected_threshold | rejected_version | error)",
   labelNames: ["model", "outcome"]
 });
 var backgroundSummarizationStashed = createCounter("agent.background_summarization.stashed", {
-  description: "Post-turn stash outcomes for background summarizations that outlived their turn (stored | skipped_too_large | skipped_error_result | store_error)",
+  description: "Post-turn stash outcomes for background summarizations that outlived their turn (stored | skipped_too_large | skipped_superseded | skipped_error_result | store_error)",
   labelNames: ["model", "outcome"]
 });
 function toBase642(bytes) {
@@ -73,7 +73,9 @@ async function buildPendingSummaryRecord(args) {
     // storage of code data (NO_STORAGE), so the stash is skipped — enforcing
     // the privacy decision at the redaction layer in addition to the
     // backend-side wiring gate.
-    summaryText: args.result.summary.summary.unwrap(PrivacyCapability.STORAGE_FOR_USAGE, { enforcing: true }),
+    summaryText: args.result.summary.summary.unwrap(PrivacyCapability.STORAGE_FOR_USAGE, {
+      enforcing: true
+    }),
     rawSummary: {
       text: args.result.rawSummary.text,
       inputTokens: args.result.rawSummary.inputTokens,
@@ -86,6 +88,9 @@ async function buildPendingSummaryRecord(args) {
     startMaxTokens: args.startMaxTokens,
     usedTokensThresholdToStartBackgroundSummarization: args.usedTokensThresholdToStartBackgroundSummarization,
     usedTokensThresholdToPersistBackgroundSummarization: args.usedTokensThresholdToPersistBackgroundSummarization,
+    triggerReason: args.triggerReason,
+    summaryLifecycleId: args.summaryLifecycleId,
+    launchedAtMs: args.launchedAtMs,
     createdAtMs: Date.now()
   };
 }
@@ -130,6 +135,7 @@ function rehydrateSummarizationResult(args) {
 }
 function stashSummarizationResultWhenOrphaned(args) {
   const { ctx } = args;
+  const launchedAtMs = Date.now();
   let completedResult;
   let stashStarted = false;
   const stashResult = async (result) => {
@@ -153,7 +159,10 @@ function stashSummarizationResultWhenOrphaned(args) {
         startUsedTokens: args.startUsedTokens,
         startMaxTokens: args.startMaxTokens,
         usedTokensThresholdToStartBackgroundSummarization: args.usedTokensThresholdToStartBackgroundSummarization,
-        usedTokensThresholdToPersistBackgroundSummarization: args.usedTokensThresholdToPersistBackgroundSummarization
+        usedTokensThresholdToPersistBackgroundSummarization: args.usedTokensThresholdToPersistBackgroundSummarization,
+        triggerReason: args.triggerReason,
+        summaryLifecycleId: args.summaryLifecycleId,
+        launchedAtMs
       });
       const storeOutcome = await args.store.store(ctx, record2);
       backgroundSummarizationStashed.increment(ctx, 1, {
@@ -172,21 +181,23 @@ function stashSummarizationResultWhenOrphaned(args) {
           summarization: { ...args.logFields, storeOutcome }
         });
       }
-    } catch (error41) {
+    } catch (error42) {
       backgroundSummarizationStashed.increment(ctx, 1, {
         model: args.modelId,
         outcome: "store_error"
       });
-      logger59.warn(ctx, "[summarization-stash] Failed to stash pending summary", { summarization: { ...args.logFields, error: error41 } });
+      logger59.warn(ctx, "[summarization-stash] Failed to stash pending summary", {
+        summarization: { ...args.logFields, error: error42 }
+      });
     }
   };
   const stashAndTrack = (result) => {
     if (result === void 0 || !args.cancellationToken.cancelled || stashStarted) {
       return void 0;
     }
-    const write = stashResult(result);
-    args.store.trackPendingWrite?.(write);
-    return write;
+    const write2 = stashResult(result);
+    args.store.trackPendingWrite?.(write2);
+    return write2;
   };
   args.cancellationToken.onCancelled = () => {
     void stashAndTrack(completedResult);
@@ -206,6 +217,16 @@ async function takePendingSummaryForAdoption(args) {
   if (record2 === void 0) {
     return void 0;
   }
+  const abandonPrefixInvalid = () => {
+    if (record2.summaryLifecycleId !== void 0) {
+      emitSummaryLifecycleAbandoned(ctx, resumeSummaryLifecycle({
+        ...record2,
+        summaryLifecycleId: record2.summaryLifecycleId,
+        summarizationModelId: record2.modelId
+      }), "prefix_invalid");
+    }
+    return void 0;
+  };
   if (record2.version !== 2) {
     pendingSummaryAdoption.increment(ctx, 1, {
       model: record2.modelId ?? "unknown",
@@ -218,7 +239,7 @@ async function takePendingSummaryForAdoption(args) {
       model: record2.modelId,
       outcome: "rejected_too_few_messages"
     });
-    return void 0;
+    return abandonPrefixInvalid();
   }
   if (!args.stillWarrantsCompaction(record2)) {
     pendingSummaryAdoption.increment(ctx, 1, {
@@ -239,7 +260,7 @@ async function takePendingSummaryForAdoption(args) {
       currentMessagesCount: args.currentMessages.length,
       stashAgeMs: Date.now() - record2.createdAtMs
     });
-    return void 0;
+    return abandonPrefixInvalid();
   }
   const result = rehydrateSummarizationResult({
     privacyMode: args.privacyMode,

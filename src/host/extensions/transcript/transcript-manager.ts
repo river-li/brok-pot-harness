@@ -13,10 +13,10 @@ var UNWIRED_TURN_EXECUTION = {
 var NOOP_TRANSCRIPT_ATTACHMENTS = {
   ingest: async (_agentDir, sourcePath) => ({ absolutePath: sourcePath }),
   ingestBytes: async (agentDir, filename) => ({
-    absolutePath: (0, import_node_path174.join)(getAgentAttachmentsDir(agentDir), filename)
+    absolutePath: (0, import_node_path172.join)(getAgentAttachmentsDir(agentDir), filename)
   }),
   persistImageBytes: async (targetDir, data) => {
-    const absolutePath = (0, import_node_path174.join)(targetDir, "unwired-image");
+    const absolutePath = (0, import_node_path172.join)(targetDir, "unwired-image");
     return {
       absolutePath,
       fileUrl: (0, import_node_url18.pathToFileURL)(absolutePath).href,
@@ -287,30 +287,30 @@ var TranscriptManager = class {
   }
   createAttachmentIngestor(session) {
     return async (sourcePath) => {
-      const agentDir = (0, import_node_path174.dirname)(session.dbPath);
+      const agentDir = (0, import_node_path172.dirname)(session.dbPath);
       const result = await this.attachments.ingest(agentDir, sourcePath);
       return result.absolutePath;
     };
   }
   createAssetImagePersister(session) {
     return async (data, mimeType) => {
-      const assetsDir = getAgentAssetsDir((0, import_node_path174.dirname)(session.dbPath));
+      const assetsDir = getAgentAssetsDir((0, import_node_path172.dirname)(session.dbPath));
       try {
         return await this.attachments.persistImageBytes(assetsDir, data, mimeType);
-      } catch (error41) {
-        reportFallback("transcript_manager", error41);
+      } catch (error42) {
+        reportFallback("transcript_manager", error42);
         return null;
       }
     };
   }
   createMediaBytesPersister(session) {
     return async (filename, data) => {
-      const agentDir = (0, import_node_path174.dirname)(session.dbPath);
+      const agentDir = (0, import_node_path172.dirname)(session.dbPath);
       try {
         const result = await this.attachments.ingestBytes(agentDir, filename, data);
         return (0, import_node_url18.pathToFileURL)(result.absolutePath).href;
-      } catch (error41) {
-        reportFallback("transcript_manager", error41);
+      } catch (error42) {
+        reportFallback("transcript_manager", error42);
         return null;
       }
     };
@@ -833,9 +833,6 @@ var TranscriptManager = class {
   }
   importAgentWorkflowUrl(...args) {
     return this.skillCommands.importAgentWorkflowUrl(...args);
-  }
-  portAgentLocalSkills(...args) {
-    return this.skillCommands.portAgentLocalSkills(...args);
   }
   runAgentWorkflowNow(...args) {
     return this.skillCommands.runAgentWorkflowNow(...args);

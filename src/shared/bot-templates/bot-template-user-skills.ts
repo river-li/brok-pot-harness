@@ -35,7 +35,7 @@ function toPackedSkill(skill, ref) {
   const body = ref.content?.trim() ?? "";
   if (name17.length === 0 || body.length === 0 || isRawSkillFileCopy(body)) return null;
   const fileDescription = overrideOrFallback2(ref.description, skill.description.trim());
-  const description10 = fileDescription.length > 0 ? fileDescription : name17;
+  const description9 = fileDescription.length > 0 ? fileDescription : name17;
   const content = serializeSkillFile({
     name: name17,
     description: fileDescription,
@@ -43,7 +43,7 @@ function toPackedSkill(skill, ref) {
     trigger: skill.trigger ?? null
   });
   if (content.trim().length === 0) return null;
-  return { name: name17, description: description10, content };
+  return { name: name17, description: description9, content };
 }
 function packSelectedUserSkillsWithRefNames(skills, selected) {
   const packable = skills.filter(isPackableUserSkill);

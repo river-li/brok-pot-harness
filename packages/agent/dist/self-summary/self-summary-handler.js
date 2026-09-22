@@ -180,7 +180,9 @@ async function executeSelfSummaryStream(parentCtx, executor, stateHandler, inter
       }
     }
     if (hasAnyToolCalls) {
-      logger38.error(ctx, "[self-summary] unexpected tool calls detected in summarization response", { summarization: { invocationId } });
+      logger38.error(ctx, "[self-summary] unexpected tool calls detected in summarization response", {
+        summarization: { invocationId }
+      });
     }
     if (response.messages.length > 1) {
       logger38.info(ctx, "[self-summary] self summary response stream contained more than one message", {
@@ -244,11 +246,7 @@ function reduceSelfSummaryInputMessages(inputMessages, preservedPrefixMessageCou
       return inputMessages;
     }
     const nextContent = onlyMessage.content.slice(Math.floor(onlyMessage.content.length / 2));
-    return [
-      ...prefixMessages,
-      { ...onlyMessage, content: nextContent },
-      promptMessage
-    ];
+    return [...prefixMessages, { ...onlyMessage, content: nextContent }, promptMessage];
   }
   let keptMiddleMessageStartIndex = Math.floor(middleMessages.length / 2);
   while (keptMiddleMessageStartIndex < middleMessages.length && middleMessages[keptMiddleMessageStartIndex]?.role === "tool") {
@@ -415,15 +413,17 @@ async function executeSelfSummaryWithRetry(parentCtx, summarizationPromptSession
   }
 }
 var SelfSummarizer = class {
-  constructor(promptSession, stateHandler, interactionListener, tools, extraT, modelId, retryOptions, enableTranscriptEnrichment) {
+  constructor(promptSession, stateHandler, interactionListener, tools, extraT, modelId, retryOptions, enableTranscriptEnrichment, promptVariant, deliveryTail) {
     this.promptSession = promptSession;
     this.stateHandler = stateHandler;
     this.interactionListener = interactionListener;
     this.tools = tools;
     this.extraT = extraT;
     this.modelId = modelId;
+    this.deliveryTail = deliveryTail;
     this.retryOptions = retryOptions ?? {};
     this.enableTranscriptEnrichment = enableTranscriptEnrichment ?? false;
+    this.summarizationPrompt = selfSummarizationPromptForVariant(promptVariant);
   }
   getModelId() {
     return this.modelId;
@@ -434,7 +434,7 @@ var SelfSummarizer = class {
   // ---------------------------------------------------------------------------
   // Phase 1: Decompose
   // ---------------------------------------------------------------------------
-  partitionMessages(messages, _options) {
+  partitionMessages(messages, options2) {
     if (messages.length < 3) {
       throw new Error(`Self-summary requires at least 3 messages, got ${messages.length}`);
     }
@@ -444,12 +444,13 @@ var SelfSummarizer = class {
     }
     const lastUserIdx = findLastUserMessageIndex2(messages);
     const lastUserQuery = messages[lastUserIdx];
+    const deliveryTail = lastUserQuery !== void 0 && this.deliveryTail !== void 0 && this.deliveryTail.triggerReasons.includes(options2.triggerReason) ? selectUserDeliveryTail(messages.slice(lastUserIdx + 1), this.deliveryTail) : [];
     const skillBlocks = collectAllSkillBlocks(messagesForSummarization);
     return {
       systemMessage,
       userInfoMessage,
       messagesToSummarize: messagesForSummarization,
-      preservedTailMessages: lastUserQuery ? [lastUserQuery] : [],
+      preservedTailMessages: lastUserQuery ? [lastUserQuery, ...deliveryTail] : [],
       skillBlocks
     };
   }
@@ -468,7 +469,7 @@ var SelfSummarizer = class {
       {
         _privacyMode: privacySource._privacyMode,
         role: "user",
-        content: safeString(SELF_SUMMARIZATION_PROMPT),
+        content: safeString(this.summarizationPrompt),
         providerOptions: SUMMARIZATION_CURSOR_PROVIDER_OPTIONS
       }
     ];
@@ -518,11 +519,13 @@ If the task is complete, respond to the user. Otherwise, continue working on the
     if (!partitioned.systemMessage) {
       throw new Error("Expected system message in conversation");
     }
+    const [lastUserQuery, ...deliveryTail] = partitioned.preservedTailMessages;
     return [
       partitioned.systemMessage,
       ...partitioned.userInfoMessage ? [partitioned.userInfoMessage] : [],
-      ...partitioned.preservedTailMessages,
-      summaryMessage
+      ...lastUserQuery === void 0 ? [] : [lastUserQuery],
+      summaryMessage,
+      ...deliveryTail
     ];
   }
   // ---------------------------------------------------------------------------

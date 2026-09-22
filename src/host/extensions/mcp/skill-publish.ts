@@ -2,7 +2,7 @@ var import_node_fs71 = require("node:fs");
 var import_promises59 = require("node:fs/promises");
 var import_node_os25 = require("node:os");
 var import_node_path118 = require("node:path");
-init_dist();
+init_dist2();
 init_dashboard_connect();
 init_dashboard_pb();
 init_errors();
@@ -74,13 +74,13 @@ var SandSkillPublishService = class {
       response = await this.options.client.getTeams(new GetTeamsRequest({ activeOnly: true }), {
         timeoutMs: PUBLISH_TARGETS_RPC_TIMEOUT_MS
       });
-    } catch (error41) {
+    } catch (error42) {
       this.options.log?.(
-        `[sand:skill-publish] failed to resolve publishable teams: ${errorMessage5(error41)}`
+        `[sand:skill-publish] failed to resolve publishable teams: ${errorMessage5(error42)}`
       );
       this.options.reportEdgeFailed?.({
         stage: "list_targets",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
       return {
         teams: [],
@@ -200,13 +200,13 @@ var SandSkillPublishService = class {
     } finally {
       try {
         await (0, import_promises59.rm)(workDir, { recursive: true, force: true });
-      } catch (error41) {
+      } catch (error42) {
         this.options.log?.(
-          `[sand:skill-publish] failed to clean up ${workDir}: ${errorMessage5(error41)}`
+          `[sand:skill-publish] failed to clean up ${workDir}: ${errorMessage5(error42)}`
         );
         this.options.reportEdgeFailed?.({
           stage: "cleanup",
-          errorClass: errorLogTag(error41)
+          errorClass: errorLogTag(error42)
         });
       }
     }
@@ -247,13 +247,13 @@ var SandSkillPublishService = class {
   async syncBestEffort() {
     try {
       await this.options.pluginSkills.sync("install");
-    } catch (error41) {
+    } catch (error42) {
       this.options.log?.(
-        `[sand:skill-publish] plugin-skills sync after publish failed: ${errorMessage5(error41)}`
+        `[sand:skill-publish] plugin-skills sync after publish failed: ${errorMessage5(error42)}`
       );
       this.options.reportEdgeFailed?.({
         stage: "sync",
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
     }
   }
@@ -262,8 +262,8 @@ function readSkillFrontmatter(filePath) {
   let parsed2 = null;
   try {
     parsed2 = parseSkillFile((0, import_node_fs71.readFileSync)(filePath, "utf8"));
-  } catch (error41) {
-    reportFallbackUnlessAbsent("skill_publish", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("skill_publish", error42);
     parsed2 = null;
   }
   if (parsed2 == null) {
@@ -278,8 +278,8 @@ async function readManifestName(pluginDir) {
     if (typeof manifest.name === "string" && manifest.name.trim() !== "") {
       return manifest.name;
     }
-  } catch (error41) {
-    reportFallbackUnlessAbsent("skill_publish", error41);
+  } catch (error42) {
+    reportFallbackUnlessAbsent("skill_publish", error42);
     return null;
   }
   return null;
@@ -301,6 +301,6 @@ function skillsRootRelativePath(skillRelativePath) {
   }
   return withoutRoot.join("/");
 }
-function errorMessage5(error41) {
-  return error41 instanceof Error ? error41.message : String(error41);
+function errorMessage5(error42) {
+  return error42 instanceof Error ? error42.message : String(error42);
 }

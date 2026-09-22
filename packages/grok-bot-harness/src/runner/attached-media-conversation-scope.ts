@@ -5,9 +5,9 @@ function scopeAttachedMediaToConversation({
 }) {
   if (provider === void 0 || transcriptId === conversationId) return provider;
   return {
-    getSignedUrlForAttachedMedia: (ctx, request3) => provider.getSignedUrlForAttachedMedia(
+    getSignedUrlForAttachedMedia: (ctx, request5) => provider.getSignedUrlForAttachedMedia(
       ctx,
-      request3.conversationId === transcriptId ? { ...request3, conversationId } : request3
+      request5.conversationId === transcriptId ? { ...request5, conversationId } : request5
     )
   };
 }

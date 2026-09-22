@@ -43,7 +43,8 @@ var REQUEST_SOURCES = [
   "background-revival",
   "web-search",
   "web-fetch",
-  "generate-image"
+  "generate-image",
+  "idle-compaction"
 ];
 function isRequestSource(value) {
   return REQUEST_SOURCES.some((source) => source === value);

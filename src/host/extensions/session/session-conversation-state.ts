@@ -5,9 +5,8 @@ var SandSessionConversationState = class {
   host;
   async resolveConversationState(structure, blobStore) {
     const cachedBlobStore = cacheBlobReads(blobStore);
-    if (!await conversationStructureFullyResolves(this.host.ctx, structure, cachedBlobStore)) {
-      return null;
-    }
+    const requestIds = await readDurableTurnRequestIds(this.host.ctx, structure, cachedBlobStore);
+    if (requestIds == null) return null;
     const state = await deriveConversationStateFromStructure(
       this.host.ctx,
       structure,
@@ -16,6 +15,7 @@ var SandSessionConversationState = class {
     if (state.turns.length === 0 || state.turns.length < structure.turns.length) {
       return null;
     }
+    applyTurnRequestIds(state, requestIds);
     return state;
   }
   async getTranscriptEntries(session) {
@@ -40,14 +40,14 @@ var SandSessionConversationState = class {
     try {
       db = this.host.createAgentDb(dbPath, { recoverOnCorruption: false });
       return read(db);
-    } catch (error41) {
+    } catch (error42) {
       reportSessionDiagnostic({
         family: "store_db",
         kind: "unreadable",
         agentId,
-        errorClass: errorLogTag(error41)
+        errorClass: errorLogTag(error42)
       });
-      throw new SandAgentStoreUnreadableError(agentId, { cause: error41 });
+      throw new SandAgentStoreUnreadableError(agentId, { cause: error42 });
     } finally {
       db?.close();
     }

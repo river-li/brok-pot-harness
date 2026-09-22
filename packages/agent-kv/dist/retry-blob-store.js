@@ -1,4 +1,4 @@
-init_dist3();
+init_dist4();
 var logger26 = createLogger("RetryBlobStore");
 var retryAttempts = createCounter("agent_kv.retry.retries", {
   description: "Number of RetryBlobStore retry attempts (one per re-issued operation, not counting the first try)",

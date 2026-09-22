@@ -18,6 +18,8 @@ function wrapMcpExecutorForAudit(inner, deps) {
     execute: async (ctx, args, options2) => {
       const startedAtMs = Date.now();
       const turn = turnAttributionFromContext(ctx, deps.agentId);
+      const sequence = deps.sequencer.next(turn.turnId);
+      const execCtx = ctx.with(sandAuditEventSequenceKey, sequence);
       const transportPromise = deps.resolveTransport(args.providerIdentifier).catch(() => "unknown");
       const report = (status) => {
         const durationMs = Date.now() - startedAtMs;
@@ -25,6 +27,7 @@ function wrapMcpExecutorForAudit(inner, deps) {
           deps.auditor.record({
             agentId: deps.agentId,
             ...turn,
+            sequence,
             occurredAtMs: startedAtMs,
             action: {
               kind: "mcpToolCall",
@@ -37,20 +40,20 @@ function wrapMcpExecutorForAudit(inner, deps) {
               durationMs
             }
           });
-        }).catch((error41) => {
+        }).catch((error42) => {
           process.stderr.write(
-            `sand.action_audit.mcp_record_failed error_class=${errorLogTag(error41)}
+            `sand.action_audit.mcp_record_failed error_class=${errorLogTag(error42)}
 `
           );
         });
       };
       try {
-        const result = await inner.execute(ctx, args, options2);
+        const result = await inner.execute(execCtx, args, options2);
         report(mcpAuditStatus(result));
         return result;
-      } catch (error41) {
+      } catch (error42) {
         report("error");
-        throw error41;
+        throw error42;
       }
     }
   };
@@ -133,9 +136,9 @@ function parseNavigationProbeOutput(stdout) {
               }
             }
           }
-        } catch (error41) {
+        } catch (error42) {
           process.stderr.write(
-            `sand.action_audit.navigation_probe_output_unparseable error_class=${errorLogTag(error41)}
+            `sand.action_audit.navigation_probe_output_unparseable error_class=${errorLogTag(error42)}
 `
           );
         }
@@ -222,9 +225,9 @@ function createSandNavigationProbe(deps) {
     }
     lastProbeAtMs = at2;
     inFlight = true;
-    inFlightPromise = runProbe(ctx, remoteAccessor, displayNumber, "report", generation).catch((error41) => {
+    inFlightPromise = runProbe(ctx, remoteAccessor, displayNumber, "report", generation).catch((error42) => {
       process.stderr.write(
-        `sand.turn.navigation_probe_failed error_class=${errorLogTag(error41)}
+        `sand.turn.navigation_probe_failed error_class=${errorLogTag(error42)}
 `
       );
     }).finally(() => {
@@ -248,9 +251,9 @@ function createSandNavigationProbe(deps) {
     inFlightPromise = Promise.all(
       [...probeTargetsByDisplay.entries()].map(
         ([displayNumber, target]) => runProbe(target.ctx, target.remoteAccessor, displayNumber, "report", generation).catch(
-          (error41) => {
+          (error42) => {
             process.stderr.write(
-              `sand.turn.navigation_probe_flush_failed error_class=${errorLogTag(error41)}
+              `sand.turn.navigation_probe_flush_failed error_class=${errorLogTag(error42)}
 `
             );
           }
@@ -270,9 +273,9 @@ function createSandNavigationProbe(deps) {
     if (baselinePromise !== void 0) return baselinePromise;
     inFlight = true;
     baselineInFlight = true;
-    baselinePromise = runProbe(ctx, remoteAccessor, displayNumber, "baseline", reportGeneration).catch((error41) => {
+    baselinePromise = runProbe(ctx, remoteAccessor, displayNumber, "baseline", reportGeneration).catch((error42) => {
       process.stderr.write(
-        `sand.turn.navigation_baseline_probe_failed error_class=${errorLogTag(error41)}
+        `sand.turn.navigation_baseline_probe_failed error_class=${errorLogTag(error42)}
 `
       );
     }).finally(() => {
@@ -323,6 +326,7 @@ function computerUseSessionAuditRecord(args) {
     rootTurnId: args.lineage?.rootParentRequestId ?? args.lineage?.parentRequestId,
     subagentId: args.subagentId,
     boxId: args.boxId,
+    initiatedBy: "subagent",
     occurredAtMs: args.startedAtMs,
     action: {
       kind: "computerUseSession",

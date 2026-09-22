@@ -41,17 +41,17 @@ var WebSocketCdpConnection = class {
             signal.removeEventListener("abort", abort);
             resolve29(result);
           },
-          reject: (error41) => {
+          reject: (error42) => {
             signal.removeEventListener("abort", abort);
-            reject2(error41);
+            reject2(error42);
           }
         });
         try {
           this.socket.send(JSON.stringify({ id, method, params }));
-        } catch (error41) {
+        } catch (error42) {
           this.pending.delete(id);
           signal.removeEventListener("abort", abort);
-          reject2(new Error("CDP command send failed.", { cause: error41 }));
+          reject2(new Error("CDP command send failed.", { cause: error42 }));
         }
       })
     );
@@ -60,8 +60,8 @@ var WebSocketCdpConnection = class {
     this.failPending("socket-closed");
     try {
       this.socket.close();
-    } catch (error41) {
-      this.reportFailure(`socket-close-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.reportFailure(`socket-close-${errorLogTag(error42)}`);
     }
   }
   receive(data) {
@@ -72,8 +72,8 @@ var WebSocketCdpConnection = class {
     let decoded;
     try {
       decoded = JSON.parse(data);
-    } catch (error41) {
-      this.reportFailure(`response-parse-${errorLogTag(error41)}`);
+    } catch (error42) {
+      this.reportFailure(`response-parse-${errorLogTag(error42)}`);
       return;
     }
     const parsed2 = cdpResponseSchema.safeParse(decoded);

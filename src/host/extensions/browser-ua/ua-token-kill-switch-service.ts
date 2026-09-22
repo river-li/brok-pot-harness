@@ -14,8 +14,8 @@ function createUaTokenKillSwitchReconciler(options2) {
         await import_promises47.default.rm(path31, { force: true });
       }
       lastApplied = disabled;
-    } catch (error41) {
-      options2.log(`ua-token kill-switch marker update failed: ${errorLogTag(error41)}`);
+    } catch (error42) {
+      options2.log(`ua-token kill-switch marker update failed: ${errorLogTag(error42)}`);
     }
   };
   return () => {

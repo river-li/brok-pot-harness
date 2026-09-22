@@ -5,18 +5,18 @@ function safeBuildRemoteHookContexts(ctx, toolName, toolCallId, hookEventName, a
       hookEventName,
       additionalContext
     });
-  } catch (error41) {
-    if (error41 instanceof HookAdditionalContextTooLargeError) {
+  } catch (error42) {
+    if (error42 instanceof HookAdditionalContextTooLargeError) {
       logger15.warn(ctx, `${hookEventName} additional_context exceeded max size; dropping carrier`, {
         toolName,
         toolCallId,
         hookEventName,
-        actualLength: error41.actualLength,
-        maxLength: error41.maxLength
+        actualLength: error42.actualLength,
+        maxLength: error42.maxLength
       });
       return [];
     }
-    throw error41;
+    throw error42;
   }
 }
 var remoteHookDuration = createHistogram("remote_hook.duration_ms", {
@@ -37,11 +37,11 @@ function recordRemoteHookMetrics(ctx, durationMs, hookType, outcome) {
     outcome
   });
 }
-function isHookExecutionTimeout(error41) {
-  if (!(error41 instanceof Error)) {
+function isHookExecutionTimeout(error42) {
+  if (!(error42 instanceof Error)) {
     return false;
   }
-  const msg = error41.message.toLowerCase();
+  const msg = error42.message.toLowerCase();
   return msg.includes("timed out") || msg.includes("timeout");
 }
 function toRemoteHookModelFields(requestContext, options2) {
@@ -58,11 +58,12 @@ var RemoteHookBlockedError = class extends Error {
   constructor(message, reason) {
     super(message);
     this.reason = reason;
+    this.toolCallAuditOutcome = "denied";
     this.name = "RemoteHookBlockedError";
   }
 };
-function isTimeoutError(error41) {
-  return error41 instanceof ToolTimeoutError || error41 instanceof Error && error41.name === "TimeoutError";
+function isTimeoutError(error42) {
+  return error42 instanceof ToolTimeoutError || error42 instanceof Error && error42.name === "TimeoutError";
 }
 function sanitizeToolInputForStruct(obj) {
   return JSON.parse(JSON.stringify(obj));
@@ -128,9 +129,9 @@ async function executeRemoteAfterAgentThoughtHook(args) {
       latencyMs: durationMs,
       failClosed: false
     });
-  } catch (error41) {
+  } catch (error42) {
     const durationMs = Math.round(performance.now() - startTime);
-    const timedOut = isHookExecutionTimeout(error41);
+    const timedOut = isHookExecutionTimeout(error42);
     recordRemoteHookMetrics(ctx, durationMs, "afterAgentThought", "failure");
     getAgentEventTracker(ctx).trackHookExecuted(ctx, {
       hookStep: "afterAgentThought",
@@ -143,7 +144,7 @@ async function executeRemoteAfterAgentThoughtHook(args) {
     });
     logger15.warn(ctx, "afterAgentThought hook execution failed", {
       toolCallId: requestContext.toolCallId,
-      error: error41 instanceof Error ? error41.message : String(error41),
+      error: error42 instanceof Error ? error42.message : String(error42),
       durationMs
     });
   }
@@ -227,23 +228,23 @@ async function executeRemoteSubagentStartHook(args) {
       permission: response.permission,
       userMessage: response.userMessage
     };
-  } catch (error41) {
+  } catch (error42) {
     const durationMs = Math.round(performance.now() - startTime);
     recordRemoteHookMetrics(ctx, durationMs, "subagentStart", "failure");
     getAgentEventTracker(ctx).trackHookExecuted(ctx, {
       hookStep: "subagentStart",
       hookSource: "remote",
       hookType: "subagentStart",
-      status: isHookExecutionTimeout(error41) ? "timeout" : "failed",
+      status: isHookExecutionTimeout(error42) ? "timeout" : "failed",
       latencyMs: durationMs,
       failClosed: false,
-      timedOut: isHookExecutionTimeout(error41)
+      timedOut: isHookExecutionTimeout(error42)
     });
-    throw error41;
+    throw error42;
   }
 }
 async function executeRemoteSubagentStopHook(args) {
-  const { ctx, subagentId, subagentType, status, durationMs: subagentDurationMs, summary, parentConversationId: providedParentConversationId, messageCount, toolCallCount: toolCallCount2, errorMessage: errorMessage6, modifiedFiles, gitBranch, loopCount, task, description: description10, requestContext, options: options2 } = args;
+  const { ctx, subagentId, subagentType, status, durationMs: subagentDurationMs, summary, parentConversationId: providedParentConversationId, messageCount, toolCallCount: toolCallCount2, errorMessage: errorMessage6, modifiedFiles, gitBranch, loopCount, task, description: description9, requestContext, options: options2 } = args;
   const remoteHookExecutor = getRemoteHookExecutor(options2, "subagentStop");
   if (!remoteHookExecutor) {
     return {};
@@ -280,7 +281,7 @@ async function executeRemoteSubagentStopHook(args) {
             ...toRemoteHookModelFields(requestContext, options2),
             loopCount,
             task,
-            description: description10
+            description: description9
           })
         }
       })
@@ -327,19 +328,19 @@ async function executeRemoteSubagentStopHook(args) {
     return {
       followupMessage: response.followupMessage?.trim()
     };
-  } catch (error41) {
+  } catch (error42) {
     const durationMs = Math.round(performance.now() - startTime);
     recordRemoteHookMetrics(ctx, durationMs, "subagentStop", "failure");
     getAgentEventTracker(ctx).trackHookExecuted(ctx, {
       hookStep: "subagentStop",
       hookSource: "remote",
       hookType: "subagentStop",
-      status: isHookExecutionTimeout(error41) ? "timeout" : "failed",
+      status: isHookExecutionTimeout(error42) ? "timeout" : "failed",
       latencyMs: durationMs,
       failClosed: false,
-      timedOut: isHookExecutionTimeout(error41)
+      timedOut: isHookExecutionTimeout(error42)
     });
-    throw error41;
+    throw error42;
   }
 }
 async function executeRemotePreToolUseHookWithPermissionCheck(args) {
@@ -432,18 +433,18 @@ async function executeRemotePreToolUseHook(args) {
       toolCallId: requestContext.toolCallId,
       durationMs
     });
-  } catch (error41) {
+  } catch (error42) {
     const durationMs = Math.round(performance.now() - startTime);
-    const timedOut = isHookExecutionTimeout(error41);
+    const timedOut = isHookExecutionTimeout(error42);
     recordRemoteHookMetrics(ctx, durationMs, "preToolUse", "failure");
     const hasFailClosed = remoteHookExecutor.hasFailClosedHooksForStep?.("preToolUse", toolName) ?? false;
     if (hasFailClosed) {
-      const detail = error41 instanceof Error ? error41.message : "preToolUse hook error";
+      const detail = error42 instanceof Error ? error42.message : "preToolUse hook error";
       const userMessage2 = `Tool blocked because this hook is configured to fail closed (block when it fails). preToolUse hook failed: ${detail}`;
       logger15.warn(ctx, "preToolUse hook failed (fail-closed)", {
         toolName,
         toolCallId: requestContext.toolCallId,
-        error: error41 instanceof Error ? error41.message : String(error41),
+        error: error42 instanceof Error ? error42.message : String(error42),
         durationMs
       });
       getAgentEventTracker(ctx).trackHookExecuted(ctx, {
@@ -461,7 +462,7 @@ async function executeRemotePreToolUseHook(args) {
     logger15.warn(ctx, "preToolUse hook execution failed (fail-open)", {
       toolName,
       toolCallId: requestContext.toolCallId,
-      error: error41 instanceof Error ? error41.message : String(error41),
+      error: error42 instanceof Error ? error42.message : String(error42),
       durationMs
     });
     getAgentEventTracker(ctx).trackHookExecuted(ctx, {
@@ -528,9 +529,9 @@ async function executeRemotePostToolUseHook(args) {
       durationMs
     });
     return hookAdditionalContexts;
-  } catch (error41) {
+  } catch (error42) {
     const durationMs = Math.round(performance.now() - startTime);
-    const timedOut = isHookExecutionTimeout(error41);
+    const timedOut = isHookExecutionTimeout(error42);
     const hasFailClosed = remoteHookExecutor.hasFailClosedHooksForStep?.("postToolUse", toolName) ?? false;
     recordRemoteHookMetrics(ctx, durationMs, "postToolUse", "failure");
     getAgentEventTracker(ctx).trackHookExecuted(ctx, {
@@ -546,7 +547,7 @@ async function executeRemotePostToolUseHook(args) {
     logger15.warn(ctx, "postToolUse hook execution failed", {
       toolName,
       toolCallId: requestContext.toolCallId,
-      error: error41 instanceof Error ? error41.message : String(error41),
+      error: error42 instanceof Error ? error42.message : String(error42),
       durationMs
     });
   }
@@ -607,9 +608,9 @@ async function executeRemotePostToolUseFailureHook(args) {
       durationMs
     });
     return hookAdditionalContexts;
-  } catch (error41) {
+  } catch (error42) {
     const durationMs = Math.round(performance.now() - startTime);
-    const timedOut = isHookExecutionTimeout(error41);
+    const timedOut = isHookExecutionTimeout(error42);
     const hasFailClosed = remoteHookExecutor.hasFailClosedHooksForStep?.("postToolUseFailure", toolName) ?? false;
     recordRemoteHookMetrics(ctx, durationMs, "postToolUseFailure", "failure");
     getAgentEventTracker(ctx).trackHookExecuted(ctx, {
@@ -626,7 +627,7 @@ async function executeRemotePostToolUseFailureHook(args) {
     logger15.warn(ctx, "postToolUseFailure hook execution failed", {
       toolName,
       toolCallId: requestContext.toolCallId,
-      error: error41 instanceof Error ? error41.message : String(error41),
+      error: error42 instanceof Error ? error42.message : String(error42),
       durationMs
     });
   }
@@ -663,16 +664,16 @@ function withRemoteHooks(args) {
     let result;
     try {
       result = await executeFn(ctx, toolArgs);
-    } catch (error41) {
+    } catch (error42) {
       const durationMs2 = performance.now() - startTime;
-      const errorObj = error41 instanceof Error ? error41 : new Error(String(error41));
+      const errorObj = error42 instanceof Error ? error42 : new Error(String(error42));
       try {
         await executeRemotePostToolUseFailureHook({
           ctx,
           toolName: config2.toolName,
           toolInput: actualToolInput,
           errorMessage: errorObj.message,
-          failureType: isTimeoutError(error41) ? "timeout" : "error",
+          failureType: isTimeoutError(error42) ? "timeout" : "error",
           durationMs: durationMs2,
           isInterrupt: false,
           requestContext,
@@ -685,7 +686,7 @@ function withRemoteHooks(args) {
           error: hookError instanceof Error ? hookError.message : String(hookError)
         });
       }
-      throw error41;
+      throw error42;
     }
     const durationMs = performance.now() - startTime;
     const failureInfo = config2.getFailureInfo?.(result);

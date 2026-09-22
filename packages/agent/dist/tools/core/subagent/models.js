@@ -1,5 +1,5 @@
 var DEFAULT_SUBAGENT_SLUG = SubagentComposerModelId.standard;
-function createSubagentModels(models, isModelBlocked, description10) {
+function createSubagentModels(models, isModelBlocked, description9) {
   const modelsBySlug = /* @__PURE__ */ new Map();
   for (const def of Object.values(models)) {
     if (isModelBlocked?.(def.slug)) {
@@ -7,7 +7,7 @@ function createSubagentModels(models, isModelBlocked, description10) {
     }
     modelsBySlug.set(def.slug, def);
   }
-  return { modelsBySlug, description: description10 };
+  return { modelsBySlug, description: description9 };
 }
 function buildAvailableModelsDescription(subagentModels, includeInheritOption = false) {
   if (subagentModels.modelsBySlug.size === 0) {

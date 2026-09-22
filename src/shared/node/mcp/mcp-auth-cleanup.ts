@@ -7,8 +7,8 @@ async function cleanupLegacyMcpAuthCredentials(rootDir) {
   let entries;
   try {
     entries = await (0, import_promises58.readdir)(rootDir);
-  } catch (error41) {
-    if (findSystemErrno(error41) === "ENOENT") {
+  } catch (error42) {
+    if (findSystemErrno(error42) === "ENOENT") {
       return { outcome: "not_found", removedCount: 0 };
     }
     return { outcome: "error", removedCount: 0 };
@@ -23,8 +23,8 @@ async function cleanupLegacyMcpAuthCredentials(rootDir) {
     try {
       await (0, import_promises58.rm)((0, import_node_path114.join)(rootDir, name17), { force: true });
       removedCount += 1;
-    } catch (error41) {
-      reportMcpHostEdgeFailure("auth-cleanup-remove", error41);
+    } catch (error42) {
+      reportMcpHostEdgeFailure("auth-cleanup-remove", error42);
       sawError = true;
     }
   }

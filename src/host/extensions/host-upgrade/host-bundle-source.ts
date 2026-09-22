@@ -1,4 +1,4 @@
-init_dist();
+init_dist2();
 init_errors();
 var SandHostBundleSourceError = class extends SandDomainError {
   name = "SandHostBundleSourceError";
@@ -33,8 +33,8 @@ async function fetchLatestHostBundleVersion(fetchFn = fetch, channel = resolveHo
     if (!SHORT_GIT_SHA_REGEX.test(raw)) return void 0;
     cachedVersions.set(channel, { version: raw, at: Date.now() });
     return raw;
-  } catch (error41) {
-    reportFallback("host_bundle_source", error41);
+  } catch (error42) {
+    reportFallback("host_bundle_source", error42);
     return void 0;
   }
 }

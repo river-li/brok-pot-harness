@@ -18,7 +18,7 @@ function createFeedbackSampler(deps) {
       deps.store.markShown(nowMs2);
       void deps.appendPrompt(event).then((entryId) => {
         if (entryId != null) deps.onPromptShown(event.agentId);
-      }).catch((error41) => deps.reportAppendFailure(errorLogTag(error41)));
+      }).catch((error42) => deps.reportAppendFailure(errorLogTag(error42)));
     }
   };
 }

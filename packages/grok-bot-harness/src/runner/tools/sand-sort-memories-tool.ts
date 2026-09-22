@@ -121,20 +121,20 @@ async function move({
   }
   try {
     await to3.flush?.();
-  } catch (error41) {
+  } catch (error42) {
     return {
       moved: 0,
       refused: records2.length,
       duplicated: 0,
-      failure: errorMessage(error41)
+      failure: errorMessage(error42)
     };
   }
   for (const record2 of copied) from2.removeMemoryByContent(record2.content);
   const outcome = { moved: copied.length, refused: records2.length - copied.length };
   try {
     await from2.flush?.();
-  } catch (error41) {
-    return { ...outcome, duplicated: copied.length, failure: errorMessage(error41) };
+  } catch (error42) {
+    return { ...outcome, duplicated: copied.length, failure: errorMessage(error42) };
   }
   return { ...outcome, duplicated: 0 };
 }

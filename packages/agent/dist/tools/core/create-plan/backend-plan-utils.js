@@ -1,4 +1,4 @@
-var logger81 = createLogger("@anysphere/agent:backend-plan-utils");
+var logger82 = createLogger("@anysphere/agent:backend-plan-utils");
 var planTodoFrontmatterSchema = external_exports.object({
   id: external_exports.string(),
   status: external_exports.unknown().optional()
@@ -67,14 +67,14 @@ async function syncLatestPlanTodosToFile(options2) {
       toolCallId
     }), { execId: generateSeededUuid(`${toolCallId}-sync-plan-read`) });
     if (readResult.result.case !== "success") {
-      logger81.warn(ctx, "Failed to read latest plan file while syncing todos", {
+      logger82.warn(ctx, "Failed to read latest plan file while syncing todos", {
         planPath: latestPlanEntry.path,
         resultCase: readResult.result.case
       });
       return;
     }
     if (readResult.result.value.output.case !== "content") {
-      logger81.warn(ctx, "Latest plan file is not readable as text", {
+      logger82.warn(ctx, "Latest plan file is not readable as text", {
         planPath: latestPlanEntry.path,
         outputCase: readResult.result.value.output.case
       });
@@ -141,8 +141,8 @@ async function syncLatestPlanTodosToFile(options2) {
       diffString,
       originalContent
     }, { toolCallId }, stateHandler);
-  } catch (error41) {
-    logger81.error(ctx, "Failed to sync latest plan file todos", error41, {
+  } catch (error42) {
+    logger82.error(ctx, "Failed to sync latest plan file todos", error42, {
       planPath: latestPlanEntry.path
     });
   }

@@ -1,10 +1,10 @@
 init_invariant();
 var AGENT_IDENTITY_SYNC_ERROR_CODE = "SAND-E0416";
-function isServerTemporalHarnessRefusal(error41) {
-  return error41 instanceof ConnectError && error41.code === Code.FailedPrecondition && error41.rawMessage === SAND_TEMPORAL_HARNESS_UNAVAILABLE_MESSAGE;
+function isServerTemporalHarnessRefusal(error42) {
+  return error42 instanceof ConnectError && error42.code === Code.FailedPrecondition && error42.rawMessage === SAND_TEMPORAL_HARNESS_UNAVAILABLE_MESSAGE;
 }
-function isServerAgentIdTakenRefusal(error41) {
-  return error41 instanceof ConnectError && error41.code === Code.AlreadyExists && error41.rawMessage === SAND_AGENT_ID_TAKEN_MESSAGE;
+function isServerAgentIdTakenRefusal(error42) {
+  return error42 instanceof ConnectError && error42.code === Code.AlreadyExists && error42.rawMessage === SAND_AGENT_ID_TAKEN_MESSAGE;
 }
 function serverBindingOf(binding) {
   return {
@@ -114,8 +114,8 @@ var SandAgentIdentityService = class {
       this.serverAvatarVersions.set(agent.handle, agent.avatarVersion);
       await this.deps.publishAgentRoster();
       return true;
-    }).catch((error41) => {
-      this.deps.log(`[sand:agent-identity] adopt failed: ${errorMessage2(error41)}`);
+    }).catch((error42) => {
+      this.deps.log(`[sand:agent-identity] adopt failed: ${errorMessage2(error42)}`);
       return false;
     });
   }
@@ -129,8 +129,8 @@ var SandAgentIdentityService = class {
       let rows;
       try {
         rows = await this.deps.listRemoteAgents();
-      } catch (error41) {
-        this.deps.log(`[sand:agent-identity] adopt ${agentId} failed: ${errorMessage2(error41)}`);
+      } catch (error42) {
+        this.deps.log(`[sand:agent-identity] adopt ${agentId} failed: ${errorMessage2(error42)}`);
         return local === null ? "unavailable" : "local";
       }
       const agent = rows.map(toRemoteGrokBotAgent).find((row) => row?.handle === agentId);
@@ -152,7 +152,7 @@ var SandAgentIdentityService = class {
       if (result.kind === "not_reconciled") return false;
       await this.deps.publishAgentRoster();
       return result.fullyReconciled;
-    }).catch((error41) => this.reportReconcileFailure(error41));
+    }).catch((error42) => this.reportReconcileFailure(error42));
   }
   reconcileResumeOwnershipNow(signal) {
     return this.runSerialized(async () => {
@@ -162,10 +162,10 @@ var SandAgentIdentityService = class {
       try {
         await this.deps.publishAgentRoster();
         signal?.throwIfAborted();
-      } catch (error41) {
+      } catch (error42) {
         signal?.throwIfAborted();
         this.deps.log(
-          `[sand:agent-identity] roster publication failed after ownership reconcile: ${errorMessage2(error41)}`
+          `[sand:agent-identity] roster publication failed after ownership reconcile: ${errorMessage2(error42)}`
         );
         this.deps.report("warn", {
           op: "reconcile",
@@ -174,9 +174,9 @@ var SandAgentIdentityService = class {
         });
       }
       return true;
-    }).catch((error41) => {
+    }).catch((error42) => {
       signal?.throwIfAborted();
-      return this.reportReconcileFailure(error41);
+      return this.reportReconcileFailure(error42);
     });
   }
   noteAgentMinted(agentId) {
@@ -210,9 +210,9 @@ var SandAgentIdentityService = class {
         avatarShape: dealt.avatarShape,
         avatarColor: dealt.avatarColor
       };
-    } catch (error41) {
+    } catch (error42) {
       this.pendingLocalMaterializationIds.delete(agentId);
-      throw error41;
+      throw error42;
     }
   }
   ensureServerRoomMembers(agentIds) {
@@ -409,17 +409,17 @@ var SandAgentIdentityService = class {
     });
     return confirmed;
   }
-  async requestMint(create, request3) {
+  async requestMint(create, request5) {
     try {
-      return await this.deps.retry.runWithRetry(() => create(request3));
-    } catch (error41) {
+      return await this.deps.retry.runWithRetry(() => create(request5));
+    } catch (error42) {
       this.deps.report("warn", {
         op: "mint",
         outcome: "error",
-        agent_id: request3.agentId,
+        agent_id: request5.agentId,
         error_code: AGENT_IDENTITY_SYNC_ERROR_CODE
       });
-      throw error41;
+      throw error42;
     }
   }
   rollbackRemoteAgent(args) {
@@ -428,10 +428,10 @@ var SandAgentIdentityService = class {
       this.pendingLocalMaterializationIds.delete(args.agentId);
     });
   }
-  async expectLocalEdit(agentId, write) {
+  async expectLocalEdit(agentId, write2) {
     this.expectedEditCounts.set(agentId, (this.expectedEditCounts.get(agentId) ?? 0) + 1);
     try {
-      return await write();
+      return await write2();
     } finally {
       const remaining = (this.expectedEditCounts.get(agentId) ?? 0) - 1;
       if (remaining > 0) this.expectedEditCounts.set(agentId, remaining);
@@ -469,14 +469,14 @@ var SandAgentIdentityService = class {
     const next = this.queue.then(run, run);
     this.queue = next.then(
       () => void 0,
-      (error41) => {
-        this.deps.log(`[sand:agent-identity] operation failed: ${errorMessage2(error41)}`);
+      (error42) => {
+        this.deps.log(`[sand:agent-identity] operation failed: ${errorMessage2(error42)}`);
       }
     );
     return next;
   }
-  reportReconcileFailure(error41) {
-    this.deps.log(`[sand:agent-identity] reconcile failed: ${errorMessage2(error41)}`);
+  reportReconcileFailure(error42) {
+    this.deps.log(`[sand:agent-identity] reconcile failed: ${errorMessage2(error42)}`);
     this.deps.report("warn", {
       op: "reconcile",
       outcome: "error",
@@ -494,10 +494,10 @@ var SandAgentIdentityService = class {
         const agents = await this.deps.listRemoteAgents(retrySignal);
         return agents.map(toRemoteGrokBotAgent).filter((agent) => agent != null);
       }, signal);
-    } catch (error41) {
+    } catch (error42) {
       signal?.throwIfAborted();
       this.deps.log(
-        `[sand:agent-identity] ListGrokBotAgents failed after retries: ${errorMessage2(error41)}`
+        `[sand:agent-identity] ListGrokBotAgents failed after retries: ${errorMessage2(error42)}`
       );
       this.deps.report("warn", {
         op: "reconcile",
@@ -560,11 +560,11 @@ var SandAgentIdentityService = class {
     let bytes;
     try {
       bytes = await this.deps.fetchRemoteAvatarBytes(agent.avatarUrl, signal);
-    } catch (error41) {
+    } catch (error42) {
       signal?.throwIfAborted();
       this.unresolvedAvatarBaselines.set(agent.handle, local.version);
       this.deps.log(
-        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage2(error41)}`
+        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage2(error42)}`
       );
       return "failed";
     }
@@ -585,11 +585,11 @@ var SandAgentIdentityService = class {
       this.unresolvedAvatarBaselines.delete(agent.handle);
       this.unsupportedLocalAvatarBaselines.delete(agent.handle);
       return "restored";
-    } catch (error41) {
+    } catch (error42) {
       signal?.throwIfAborted();
       this.unresolvedAvatarBaselines.set(agent.handle, expectedVersion);
       this.deps.log(
-        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage2(error41)}`
+        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage2(error42)}`
       );
       return "failed";
     }
@@ -703,8 +703,8 @@ var SandAgentIdentityService = class {
     let dataUrl;
     try {
       dataUrl = (await this.deps.getLocalAvatar(agentId)).dataUrl;
-    } catch (error41) {
-      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage2(error41)}`);
+    } catch (error42) {
+      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage2(error42)}`);
       return void 0;
     }
     return createAvatarDataUrl(dataUrl);
@@ -802,8 +802,8 @@ var SandAgentIdentityService = class {
     let localVersion;
     try {
       localVersion = (await this.deps.getLocalAvatar(agentId)).version;
-    } catch (error41) {
-      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage2(error41)}`);
+    } catch (error42) {
+      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage2(error42)}`);
       return;
     }
     this.serverAvatarVersions.set(agentId, rowAvatarVersion);
@@ -814,9 +814,9 @@ var SandAgentIdentityService = class {
   async runWrite(op, agentId, work) {
     try {
       return { ok: true, value: await this.deps.retry.runWithRetry(work) };
-    } catch (error41) {
+    } catch (error42) {
       this.deps.log(
-        `[sand:agent-identity] ${op} ${agentId} failed after retries: ${errorMessage2(error41)}`
+        `[sand:agent-identity] ${op} ${agentId} failed after retries: ${errorMessage2(error42)}`
       );
       this.deps.report("warn", {
         op,
@@ -828,8 +828,8 @@ var SandAgentIdentityService = class {
     }
   }
 };
-function errorMessage2(error41) {
-  return error41 instanceof Error ? error41.message : String(error41);
+function errorMessage2(error42) {
+  return error42 instanceof Error ? error42.message : String(error42);
 }
 function defaultedName(raw) {
   const trimmed = raw.trim();

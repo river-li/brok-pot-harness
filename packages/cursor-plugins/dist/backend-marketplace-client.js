@@ -1,4 +1,4 @@
-var __awaiter56 = function(thisArg, _arguments, P2, generator) {
+var __awaiter58 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
       resolve29(value);
@@ -193,7 +193,7 @@ function isSameCanonicalRepo(left, right) {
   return leftIdentity !== null && leftIdentity === rightIdentity;
 }
 function deriveGitPathFromMarketplaceManifest(cloneDir, pluginName) {
-  return __awaiter56(this, void 0, void 0, function* () {
+  return __awaiter58(this, void 0, void 0, function* () {
     var _a19;
     for (const manifestRelPath of MARKETPLACE_MANIFEST_PATHS) {
       const manifestPath2 = (0, import_node_path62.join)(cloneDir, manifestRelPath);
@@ -239,7 +239,7 @@ function deriveGitPathFromMarketplaceManifest(cloneDir, pluginName) {
   });
 }
 function shallowClone(gitUrl_1, ref_1, targetDir_1) {
-  return __awaiter56(this, arguments, void 0, function* (gitUrl, ref, targetDir, pluginLogger = noopPluginMetricsLogger, extraGitConfig, materialize3 = "all", sparsePluginClones = false) {
+  return __awaiter58(this, arguments, void 0, function* (gitUrl, ref, targetDir, pluginLogger = noopPluginMetricsLogger, extraGitConfig, materialize3 = "all", sparsePluginClones = false) {
     const startTime = performance.now();
     const isSha = SHA_REF_REGEX2.test(ref);
     const isHead = ref.toUpperCase() === "HEAD";
@@ -249,7 +249,7 @@ function shallowClone(gitUrl_1, ref_1, targetDir_1) {
     const { sparse, sparseDirs } = yield resolveSparseClonePlan(materialize3, sparsePluginClones);
     const sparseCloneArgs = sparse ? ["--filter=blob:none", "--sparse"] : [];
     const sparseSshBatchMode = sparse ? true : void 0;
-    const setSparseDirs = (timeoutMs) => __awaiter56(this, void 0, void 0, function* () {
+    const setSparseDirs = (timeoutMs) => __awaiter58(this, void 0, void 0, function* () {
       if (sparse) {
         yield setSparseCheckoutDirs(targetDir, sparseDirs, {
           extraGitConfig: gitConfig,
@@ -258,7 +258,7 @@ function shallowClone(gitUrl_1, ref_1, targetDir_1) {
         });
       }
     });
-    const attemptClone = (cloneUrl, sshBatchMode) => __awaiter56(this, void 0, void 0, function* () {
+    const attemptClone = (cloneUrl, sshBatchMode) => __awaiter58(this, void 0, void 0, function* () {
       let stderr = "";
       if (isHead) {
         ({ stderr } = yield execGitNonInteractive(["clone", "--depth", "1", ...sparseCloneArgs, cloneUrl, targetDir], {
@@ -279,14 +279,7 @@ function shallowClone(gitUrl_1, ref_1, targetDir_1) {
           timeoutMs: localTimeoutMs
         });
         yield setSparseDirs(localTimeoutMs);
-        ({ stderr } = yield execGitNonInteractive([
-          "fetch",
-          "--depth",
-          "1",
-          ...sparse ? ["--filter=blob:none"] : [],
-          "origin",
-          ref
-        ], {
+        ({ stderr } = yield execGitNonInteractive(["fetch", "--depth", "1", ...sparse ? ["--filter=blob:none"] : [], "origin", ref], {
           cwd: targetDir,
           extraGitConfig: gitConfig,
           timeoutMs: remoteTimeoutMs,
@@ -299,16 +292,7 @@ function shallowClone(gitUrl_1, ref_1, targetDir_1) {
           sshBatchMode
         });
       } else {
-        ({ stderr } = yield execGitNonInteractive([
-          "clone",
-          "--depth",
-          "1",
-          "--branch",
-          ref,
-          ...sparseCloneArgs,
-          cloneUrl,
-          targetDir
-        ], {
+        ({ stderr } = yield execGitNonInteractive(["clone", "--depth", "1", "--branch", ref, ...sparseCloneArgs, cloneUrl, targetDir], {
           extraGitConfig: gitConfig,
           timeoutMs: remoteTimeoutMs,
           sshBatchMode
@@ -323,9 +307,9 @@ function shallowClone(gitUrl_1, ref_1, targetDir_1) {
     if (sshUrl !== null) {
       try {
         cloneStderr = yield attemptClone(sshUrl, true);
-      } catch (error41) {
-        if (sparsePluginClones && isKilledSubprocessError(error41)) {
-          throw error41;
+      } catch (error42) {
+        if (sparsePluginClones && isKilledSubprocessError(error42)) {
+          throw error42;
         }
         yield (0, import_promises33.rm)(targetDir, { recursive: true, force: true });
         yield (0, import_promises33.mkdir)(targetDir, { recursive: true });
@@ -348,7 +332,7 @@ var MAX_EXTRACT_FILE_COUNT = 5e4;
 var MAX_EXTRACT_COMPRESSION_RATIO = 100;
 var MAX_RELEASE_ASSET_BYTES = 100 * 1024 * 1024;
 function downloadReleaseToDir(repo, asset, tag, targetDir, expectedSha256, githubToken) {
-  return __awaiter56(this, void 0, void 0, function* () {
+  return __awaiter58(this, void 0, void 0, function* () {
     const buffer = yield downloadReleaseAssetBuffer({
       repo,
       asset,
@@ -433,7 +417,7 @@ function isAllowedReleaseDownloadHost(downloadHost, repoHost) {
   return downloadHost.endsWith(`.${repoHost}`);
 }
 function downloadReleaseAssetBuffer(opts) {
-  return __awaiter56(this, void 0, void 0, function* () {
+  return __awaiter58(this, void 0, void 0, function* () {
     const { repo, asset, tag } = opts;
     const { apiBase, ownerRepo, host } = parseReleaseRepo(repo);
     const isTrustedHost = host === "github.com";
@@ -484,7 +468,7 @@ function downloadReleaseAssetBuffer(opts) {
   });
 }
 function clonePluginToDir(entry_1, targetDir_1) {
-  return __awaiter56(this, arguments, void 0, function* (entry, targetDir, pluginLogger = noopPluginMetricsLogger, extraGitConfig, options2) {
+  return __awaiter58(this, arguments, void 0, function* (entry, targetDir, pluginLogger = noopPluginMetricsLogger, extraGitConfig, options2) {
     var _a19;
     const sparsePluginClones = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.sparsePluginClones) !== null && _a19 !== void 0 ? _a19 : false;
     const materializeTimeoutMs = sparsePluginClones ? REMOTE_GIT_TIMEOUT_MS : void 0;
@@ -522,7 +506,10 @@ function clonePluginToDir(entry_1, targetDir_1) {
       } else {
         const derivedGitPath = yield deriveGitPathFromMarketplaceManifest(tempDir, entry.name);
         if (derivedGitPath.type === "resolved") {
-          yield materializeSparseDirs(tempDir, materializeSpecForGitPaths([derivedGitPath.gitPath]), { extraGitConfig, timeoutMs: materializeTimeoutMs });
+          yield materializeSparseDirs(tempDir, materializeSpecForGitPaths([derivedGitPath.gitPath]), {
+            extraGitConfig,
+            timeoutMs: materializeTimeoutMs
+          });
           sourceDir = validateAndResolveSubpath(tempDir, derivedGitPath.gitPath);
         } else if (derivedGitPath.type === "manifest-unresolved") {
           throw new Error(`Unable to install plugin ${JSON.stringify(entry.name)} without gitPath: ${derivedGitPath.reason}`);
@@ -573,7 +560,7 @@ var BackendMarketplaceClient = class {
     return (marketplace === null || marketplace === void 0 ? void 0 : marketplace.name) !== void 0 && this.allowedMarketplaceNames.has(marketplace.name);
   }
   listEnabledPlugins(_userId, _teamId) {
-    return __awaiter56(this, void 0, void 0, function* () {
+    return __awaiter58(this, void 0, void 0, function* () {
       var _a19;
       var _b2, _c2, _d, _e2, _f, _g, _h, _j, _k, _l, _m, _o2, _p, _q, _r2;
       const response = yield this.getEffectiveUserPlugins();
@@ -582,7 +569,7 @@ var BackendMarketplaceClient = class {
       const plugins = [];
       const listFailures = [];
       const resolvedShaByGitRef = /* @__PURE__ */ new Map();
-      const resolveVersionSha = (repoUrl, gitRef) => __awaiter56(this, void 0, void 0, function* () {
+      const resolveVersionSha = (repoUrl, gitRef) => __awaiter58(this, void 0, void 0, function* () {
         const key = `${repoUrl}\0${gitRef}`;
         let sha = resolvedShaByGitRef.get(key);
         if (!sha) {
@@ -590,7 +577,7 @@ var BackendMarketplaceClient = class {
           const timeoutMs = this.sparsePluginClones ? LS_REMOTE_TIMEOUT_MS : void 0;
           const alreadySsh = repoUrl.startsWith("git@") || repoUrl.startsWith("ssh://");
           const sshUrl = alreadySsh ? null : toScmSshUrl(repoUrl);
-          const runLsRemote = (url2, sshBatchMode) => __awaiter56(this, void 0, void 0, function* () {
+          const runLsRemote = (url2, sshBatchMode) => __awaiter58(this, void 0, void 0, function* () {
             const options2 = {};
             if (sshBatchMode)
               options2.sshBatchMode = true;
@@ -604,9 +591,9 @@ var BackendMarketplaceClient = class {
           if (sshUrl !== null) {
             try {
               sha = yield runLsRemote(sshUrl, true);
-            } catch (error41) {
-              if (this.sparsePluginClones && isKilledSubprocessError(error41)) {
-                throw error41;
+            } catch (error42) {
+              if (this.sparsePluginClones && isKilledSubprocessError(error42)) {
+                throw error42;
               }
               sha = yield runLsRemote(repoUrl, false);
             }
@@ -617,7 +604,7 @@ var BackendMarketplaceClient = class {
         }
         return sha;
       });
-      const resolveVersionShaWithSourceFallback = (args) => __awaiter56(this, void 0, void 0, function* () {
+      const resolveVersionShaWithSourceFallback = (args) => __awaiter58(this, void 0, void 0, function* () {
         const { preferredGitUrl, sourceGitUrl, gitRef, pluginId } = args;
         if (preferredGitUrl !== sourceGitUrl) {
           if (this.awaitAuthReady !== void 0) {
@@ -866,7 +853,7 @@ var BackendMarketplaceClient = class {
     return direct.ref === mkt.gitRef || entry.version === mkt.gitRef;
   }
   installPlugin(entry, targetDir) {
-    return __awaiter56(this, void 0, void 0, function* () {
+    return __awaiter58(this, void 0, void 0, function* () {
       var _a19;
       if (entry.inlineContentJson) {
         yield synthesizeInlinePluginDir({
@@ -914,7 +901,7 @@ var BackendMarketplaceClient = class {
    * Origin-vs-source URL selection belongs to the caller.
    */
   installFromEntryUrls(entry, targetDir) {
-    return __awaiter56(this, void 0, void 0, function* () {
+    return __awaiter58(this, void 0, void 0, function* () {
       const isReleaseBacked = decodeBackendReleaseSource(entry.downloadUrl) !== null;
       if (!isReleaseBacked) {
         try {
@@ -989,7 +976,7 @@ var BackendMarketplaceClient = class {
    * per-plugin path.
    */
   prewarmMarketplaceClones(entries) {
-    return __awaiter56(this, void 0, void 0, function* () {
+    return __awaiter58(this, void 0, void 0, function* () {
       var _a19;
       const cache3 = this.marketplaceCache;
       if (!cache3) {
@@ -1029,7 +1016,9 @@ var BackendMarketplaceClient = class {
             requestedDirs: group.gitPaths.length,
             materialize: materialize3 === "all" ? "all" : materialize3.length
           });
-          this.pluginLogger.increment("marketplace_cache_manager.prewarm.success", 1, { materialize: materialize3 === "all" ? "all" : "dirs" });
+          this.pluginLogger.increment("marketplace_cache_manager.prewarm.success", 1, {
+            materialize: materialize3 === "all" ? "all" : "dirs"
+          });
         } catch (err) {
           this.pluginLogger.captureException(err, {
             error_type: "prewarm_marketplace_clone"
@@ -1047,7 +1036,7 @@ var BackendMarketplaceClient = class {
     });
   }
   tryInstallFromMarketplaceCache(entry, targetDir) {
-    return __awaiter56(this, void 0, void 0, function* () {
+    return __awaiter58(this, void 0, void 0, function* () {
       var _a19, _b2;
       var _c2, _d;
       const cache3 = this.marketplaceCache;
@@ -1083,12 +1072,14 @@ var BackendMarketplaceClient = class {
     });
   }
   discoverMarketplacePlugins(marketplaceId, gitUrl, gitRef) {
-    return __awaiter56(this, void 0, void 0, function* () {
+    return __awaiter58(this, void 0, void 0, function* () {
       const cache3 = this.marketplaceCache;
       if (!cache3) {
         throw new Error("discoverMarketplacePlugins requires a MarketplaceCacheManager (marketplaceCacheRoot)");
       }
-      const clonePath = yield cache3.ensureCloned(marketplaceId, gitUrl, gitRef, this.pluginLogger, { materialize: [] });
+      const clonePath = yield cache3.ensureCloned(marketplaceId, gitUrl, gitRef, this.pluginLogger, {
+        materialize: []
+      });
       return cache3.discoverPlugins(clonePath);
     });
   }

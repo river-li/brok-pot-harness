@@ -1,12 +1,7 @@
 init_dist3();
 var ADMIN_COMMAND_DENYLIST_UNANALYZABLE_REASON = `Denied: this command could not be conclusively analyzed against your team's administrator command denylist, so it was blocked (fail-closed) and was not executed. It cannot be approved from this conversation; only a user can run it manually outside the agent. You may continue working on the task.`;
 function deriveAdminCommandDenylistMatchForms({ command, parsingResult }) {
-  return [
-    .../* @__PURE__ */ new Set([
-      command,
-      ...parsingResult.executableCommands.map((c) => c.fullText)
-    ])
-  ];
+  return [.../* @__PURE__ */ new Set([command, ...parsingResult.executableCommands.map((c) => c.fullText)])];
 }
 var ANSI_C_ESCAPES = {
   a: "\x07",

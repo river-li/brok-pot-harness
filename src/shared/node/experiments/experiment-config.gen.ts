@@ -1,4 +1,4 @@
-init_dist();
+init_dist2();
 init_zod();
 var ModelLifecycleTypeSchema = external_exports.enum([
   "off",
@@ -62,7 +62,7 @@ var FLAGS = {
   // The backend independently checks the same gate before returning identities.
   team_members_show_org_admins: {
     client: true,
-    default: false
+    default: true
   },
   // Org admins can copy selected team-owned policy onto a newly created
   // linked team (ENT-4505). Default OFF so create stays the root-team
@@ -269,6 +269,13 @@ var FLAGS = {
     client: true,
     default: false
   },
+  // Rollout for sand-mobile's Marketplace home. OFF (the default) keeps
+  // Settings → Plugins as the current plugins-only directory. ON shows the
+  // flagged home. Not a revival of retired desktop marketplace gates.
+  sand_mobile_unified_marketplace: {
+    client: true,
+    default: false
+  },
   // KILL SWITCH for sand-mobile's in-product feedback (Settings → Send
   // Feedback, which POSTs `/sand/feedback` to the same handler desktop uses).
   // When ON, Settings omits the row and the `/settings/feedback` route
@@ -293,6 +300,14 @@ var FLAGS = {
   // Info is the whole page it was before them. Default ON so the tabs ship
   // enabled; turning it OFF kills them with no app release.
   sand_mobile_profile_multimedia_tabs: {
+    client: true,
+    default: true
+  },
+  // Kill switch for sand-mobile's `/` skill trigger in the composer. When OFF,
+  // typing `/` does not open the skills list and a pick is not a skill run.
+  // Default ON so the menu ships enabled; turning it OFF kills it with no
+  // app release.
+  sand_mobile_slash_skill_trigger: {
     client: true,
     default: true
   },
@@ -565,7 +580,7 @@ var FLAGS = {
   },
   // Sand host: keep one StreamBackgroundComposerUpdates connection open per
   // running host and forward each update as a `cloud-agent-update` gateway
-  // event, so a Done row in the agent tray flips back to Running the moment
+  // event, so a Done cloud agent row flips back to Running the moment
   // a follow-up revives the run instead of never (the desktop stops polling
   // once the run is terminal), and an open bot-to-bot exchange sheet
   // re-reads the follow-up's messages on the resumed poll.
@@ -826,38 +841,11 @@ var FLAGS = {
     default: true,
     requiresAuthenticatedBootstrap: true
   },
-  // User-scoped rollout for Grok Bot canvases: the Canvases prompt section and
-  // its managed skill, the CloudAgent tool's canvas production launch (scratch
-  // prompt, hidden cursor-agent card, is_show_card), the canvas completion
-  // revival, and the Sand client's inline canvas rendering plus its
-  // sand-canvas: frame protocol. OFF (including a missing or failed Statsig
-  // read) leaves prompts, tools, and transcript byte-for-byte as they were.
-  // Read live per turn on both harnesses and per render in Sand.
-  sand_canvases: {
-    client: true,
-    default: false,
-    requiresAuthenticatedBootstrap: true
-  },
-  // Gates the Sand cloud agent tray: the chip beside the bot title in the chat
-  // header and the card it opens, listing this chat's cloud agents. Default
-  // OFF renders nothing.
-  sand_enable_agent_tray: {
-    client: true,
-    default: false
-  },
-  // Grok Bot CloudAgent tool: `project: true` launches a Cursor Project
-  // coordinator, on both harnesses. OFF leaves the tool schema and
-  // description unchanged.
-  sand_enable_projects: {
-    client: true,
-    default: false,
-    requiresAuthenticatedBootstrap: true
-  },
   // Sand renders a cloud agent through the bot-to-bot exchange UI (fold row
   // and exchange sheet with the Cursor icon and the agent's name) instead of
-  // the cloud agent card. OFF keeps the card, the compact row, the tray, and
-  // the PR references exactly as shipped, even for transcripts that already
-  // hold exchange entries.
+  // the cloud agent card. OFF keeps the card, the compact row, and the PR
+  // references exactly as shipped, even for transcripts that already hold
+  // exchange entries.
   sand_enable_bot2bot_cloud_agent_ui: {
     client: true,
     default: false,
@@ -1175,21 +1163,40 @@ var FLAGS = {
     client: true,
     default: false
   },
-  // Sand's chat-header template share dropdown (next to the computer button):
-  // Share as template before a template exists; view details / update / delete
-  // once one is published. When OFF (the default) the header shows no share
-  // trigger and template sharing stays reachable only through the info-pane
-  // footer and sidebar menus. sand_share_bot still gates the feature itself.
+  // Sand's macOS-only desktop mount: the "Mount on Desktop" sidebar row and the
+  // floating bot panel it opens. Default OFF hides the row and opens no window.
+  sand_desktop_mount: {
+    client: true,
+    default: false
+  },
+  // Sand marketplace "For you" judges a marketplace connector by authentication,
+  // not by its install record: an added connector whose server row is still
+  // needsAuth stays recommendable and its row shows a Connect button that starts
+  // the connector OAuth. Default OFF keeps the install-record predicate and the
+  // Added badge.
+  sand_marketplace_for_you_auth_aware: {
+    client: true,
+    default: false
+  },
   sand_header_template_share_menu: {
     client: true,
     default: true
   },
-  sand_hide_deprecated_context_menu_items: {
+  // Grok Bot multiplayer: team-visible bots, Add to Slack, team roster, and the session UI.
+  grok_bot_multiplayer: {
     client: true,
     default: false
   },
-  // Grok Bot multiplayer: team-visible bots, Add to Slack, team roster, and the session UI.
-  grok_bot_multiplayer: {
+  // Team-bot Context page in Sand: the Overview card's Context value becomes
+  // "N memories · N skills · N files" and opens the read-only Context page
+  // (the bot's model-written two-sentence summary, the team's memories
+  // verbatim, files, skills, the owner-only "show context notes to all
+  // members" toggle). OFF keeps the Add-context dialog, and the backend spends
+  // nothing: the post-turn hook and the RPCs return before reading the shard.
+  // Name predates the Context page (it first gated memory scope promotion);
+  // reused rather than minting a new Statsig object.
+  // Unit: userID (the bot's owner).
+  grok_bot_memory_scope_promotion: {
     client: true,
     default: false
   },
@@ -1198,8 +1205,17 @@ var FLAGS = {
     client: true,
     default: false
   },
+  grok_bot_convert_to_team: {
+    client: true,
+    default: false
+  },
   // Agent email inboxes, read on the caller: the user's email account and the inboxes under it. Off, every inbox RPC refuses and no address is claimed.
   grok_bot_agent_mail: {
+    client: true,
+    default: false
+  },
+  // More than one agent email address, on top of grok_bot_agent_mail and read on the inbox owner rather than the caller, because the bot's claim_email_inbox shares the settings UI's code path. On, the cap on live addresses per user rises from one to GROK_BOT_EMAIL_INBOX_MAX_PER_GATED_USER, the desktop Email row lists every address the user holds with a way to add another, and the agent's email prose teaches it to pick which address to send from. Off, the cap is one and the copy is unchanged. Losing the gate never removes an address: what a user already holds still lists, sends and deletes, and only a new claim past the cap is refused.
+  grok_bot_agent_mail_multiple_inboxes: {
     client: true,
     default: false
   },
@@ -1249,11 +1265,21 @@ var FLAGS = {
     client: true,
     default: false
   },
+  // Replaces the Sand details pane's model-authored todo list with one row per
+  // user ask: each prompt the user sends is summarized into a one-line task
+  // title by the NameTab task-summary prompt, and the row's status (queued,
+  // in progress, needs input, done, failed, interrupted) follows the agent's
+  // live roster state and the transcript. Implies the Tasks pane label. OFF
+  // keeps the todo card (or the Routines-only pane when
+  // sand_in_progress_tasks is also OFF). Default OFF.
+  sand_turn_task_list: {
+    client: true,
+    default: false
+  },
   // Sand right-hand Tasks pane: ON (with sand_in_progress_tasks) adds a
   // "Cloud agents" card under the bot's to-dos, grouped Running / Watching /
   // Done / Failed from the cloud agent status stream plus the subscription and
-  // durable-watch reads, and hides the chat-header cloud agent tray it
-  // replaces. OFF keeps the tray. Default OFF.
+  // durable-watch reads. Default OFF.
   sand_cloud_agent_tasks_card: {
     client: true,
     default: false
@@ -1352,7 +1378,7 @@ var FLAGS = {
   // render in Sand only; no prompt, tool, or transcript bytes change either way.
   sand_voice_memos: {
     client: true,
-    default: false
+    default: true
   },
   // Moves the voice-agent harness (prompt, tool list, tool execution) off the
   // Sand desktop onto the backend: ON has the desktop fetch its `session.update`
@@ -1387,12 +1413,6 @@ var FLAGS = {
     client: true,
     default: false
   },
-  // Enables the IDE setting that lets users keep their last-used model instead
-  // of receiving product model nudges. Team-admin model resets remain active.
-  model_nudge_opt_out_setting: {
-    client: true,
-    default: true
-  },
   // Prevents product app-open model nudges from changing a composer after its
   // model picker is already visible. Team-admin model policies are exempt.
   app_open_model_nudge_pre_render_only: {
@@ -1421,6 +1441,16 @@ var FLAGS = {
     default: false
   },
   glass_chat_switch_tracing: {
+    client: true,
+    default: false
+  },
+  // KILL SWITCH for Glass browser <webview> guest render throttling: hidden
+  // and idle offscreen guests get `visibility: hidden` so Chromium pauses
+  // their rAF/style/layout/paint/compositing while the page stays alive.
+  // OFF (default, and when the gate is absent in Statsig) keeps throttling
+  // on; turn ON to restore the pre-throttle behavior where hidden guests keep
+  // rendering at the display rate. Unit: userID.
+  glass_webview_guest_render_throttle_killswitch: {
     client: true,
     default: false
   },
@@ -1621,6 +1651,10 @@ var FLAGS = {
     client: true,
     default: false
   },
+  origin_app_deletion: {
+    client: true,
+    default: false
+  },
   codebase_branches_redesign_in_progress: {
     client: true,
     default: false
@@ -1647,6 +1681,14 @@ var FLAGS = {
   origin_raw_file_links: {
     client: true,
     default: true
+  },
+  origin_merge_queue_ui: {
+    client: true,
+    default: false
+  },
+  origin_inbox_osp_watch: {
+    client: true,
+    default: false
   },
   // Sand Auto-review enforce rollout (Shell/MCP/Computer).
   // Settings-on default is shadow for every reviewed surface. When this gate
@@ -1929,12 +1971,6 @@ var FLAGS = {
     client: true,
     default: false
   },
-  // Gates the client-side auto-GC of orphaned agentKv blobs in cursorDiskKV
-  // (see ComposerBlobGcContribution). Flip on in Statsig once we're ready.
-  agent_kv_auto_gc: {
-    client: true,
-    default: false
-  },
   // Service-account Repository Access modal: when on, the modal stops calling
   // `getTeamRepositoriesForServiceAccountScope` and instead fans out across
   // SCM providers via `useAllInstallations`. Default off keeps the legacy
@@ -2132,7 +2168,7 @@ var FLAGS = {
   // Ramp per team (GM first); no backend change is gated.
   automations_git_trigger_environment_targets: {
     client: true,
-    default: false
+    default: true
   },
   /**
    * Gate rolling out no-repo cloud agents: when on, start requests that
@@ -2468,10 +2504,6 @@ var FLAGS = {
   scm_connect_ad_cheap_probe: {
     client: true,
     default: true
-  },
-  glass_last_turn_diff_scope: {
-    client: true,
-    default: false
   },
   /**
    * Claude Code import: settings, actual import, empty-state CTA, and import
@@ -4203,6 +4235,15 @@ var FLAGS = {
     client: true,
     default: true
   },
+  /**
+   * Master switch for desktop and Glass managed-cloud outage banners. When
+   * false, clients skip Statuspage polling and hide outage trays. The portal
+   * website still reads `portal_outage_alert` independently.
+   */
+  client_outage_banners: {
+    client: true,
+    default: false
+  },
   solidjs_total_observers_metric: {
     client: true,
     default: false
@@ -4959,6 +5000,11 @@ var FLAGS = {
     client: true,
     default: true
   },
+  // Gates Orbit in the Sand host.
+  sand_orbit: {
+    client: true,
+    default: false
+  },
   // Kill switch for client-side codebase index building. When ON, the client
   // sends `x-codebase-indexing-enabled: false` on the indexing RPCs for ALL
   // users (semantic indexers included), so the server skips building/updating a
@@ -5001,10 +5047,6 @@ var FLAGS = {
   disable_push_request_context: {
     client: true,
     default: false
-  },
-  enable_ide_enterprise_plan_usage: {
-    client: true,
-    default: true
   },
   // Merged-PR scan ("we found a bug you merged" upsell). Master gate defaults
   // off; force-dry-run and circuit-breaker default on so the first enabled
@@ -6134,25 +6176,6 @@ var EXPERIMENTS = {
       group: parseEnum(["control", "treatment"])
     }
   },
-  /**
-   * Client-side model picker layout experiment allocated through the
-   * `model_picker_experiments` layer. See the type definition for arm
-   * semantics. Fallback is honest control: a Statsig outage keeps today's
-   * layout.
-   */
-  model_picker_promote_first_party: {
-    client: true,
-    fallbackValues: {
-      variant: "control"
-    },
-    parseValue: {
-      variant: parseEnum([
-        "control",
-        "grok_primary",
-        "pinned_selection"
-      ])
-    }
-  },
   // v3 in `model_picker_experiments`. Console groups set layer param
   // `promote_first_party_variant` to `control` / `grouped_auto_expand`.
   model_picker_promote_first_party_v3: {
@@ -6297,19 +6320,6 @@ var EXPERIMENTS = {
     },
     parseValue: {
       enabled: parseBoolean
-    }
-  },
-  cloud_agent_remove_on_demand_requirement: {
-    client: true,
-    fallbackValues: {
-      variant: "control"
-    },
-    parseValue: {
-      variant: parseEnum([
-        "control",
-        "treatment_suggest_switch",
-        "treatment_no_warning"
-      ])
     }
   },
   portal_od_enable_limit_hit_2026_08: {
@@ -6554,15 +6564,6 @@ var EXPERIMENTS = {
     }
   },
   glass_ftux_app_scan: {
-    client: true,
-    fallbackValues: {
-      enabled: false
-    },
-    parseValue: {
-      enabled: parseBoolean
-    }
-  },
-  glass_start_onboarding_pill: {
     client: true,
     fallbackValues: {
       enabled: false
@@ -6831,6 +6832,16 @@ var DYNAMIC_CONFIG_SCHEMAS = {
   }),
   grok_bot_loop_detection: external_exports.object({
     mode: external_exports.enum(["off", "shadow", "on"])
+  }),
+  // Replaces Grok Bot's built-in base system prompt (the static "You are Grok
+  // Bot..." sections) for a top-level agent turn on both harnesses. Every
+  // dynamic section after it (profile, memory, skills, automations, MCP,
+  // box, computer) and every tool stays as-is. Subagents and automation runs
+  // keep their own prompts. An empty or whitespace-only `basePrompt` keeps
+  // the built-in prompt. Read once per turn on the owner's Statsig user, so
+  // target userID/teamID to scope an experiment.
+  grok_bot_system_prompt_override: external_exports.object({
+    basePrompt: external_exports.string()
   }),
   remote_workspace_readiness_config: external_exports.object({
     healthcheck_timeout_ms: external_exports.number().int().positive(),
@@ -7685,6 +7696,11 @@ var DYNAMIC_CONFIG_SCHEMAS = {
   glass_loaded_agent_lru_cap: external_exports.object({
     max_loaded_agents: external_exports.number().int().min(2).max(10)
   }),
+  // Release a hidden chat's resident bubble bodies when its transcript unmounts, keeping the last `keep_recent_hidden` for instant re-open. Off until `enabled`.
+  composer_hidden_bubble_eviction: external_exports.object({
+    enabled: external_exports.boolean(),
+    keep_recent_hidden: external_exports.number().int().min(0)
+  }),
   // Client-tunable Glass large-file code gate (bytes); clients clamp to [150KB, 50MB].
   glass_large_file_gate_config: external_exports.object({
     code_gate_bytes: external_exports.number().int().min(153600).max(52428800)
@@ -8089,20 +8105,6 @@ var DYNAMIC_CONFIG_SCHEMAS = {
     marketplaceMaxCards: external_exports.number().int().positive()
   }),
   /**
-   * Presentation knobs for the Glass empty-state "Start onboarding" pill.
-   * Visibility is owned by the `glass_start_onboarding_pill` experiment;
-   * this config only describes the pill's copy + icon. The dispatched skill,
-   * trailing prompt text, and auto-submit behavior are deliberately code-
-   * defined (NOT dashboard-configurable) so a compromised Statsig publisher
-   * cannot redirect the click into an arbitrary skill or inject prompt text
-   * that auto-submits without user review. Client falls back to the
-   * hardcoded defaults if Statsig is unreachable or the entry is unset.
-   */
-  glass_start_onboarding_pill_config: external_exports.object({
-    label: external_exports.string(),
-    icon: external_exports.string()
-  }),
-  /**
    * First-action content by FTUX job role and use case. Role/use-case keys are
    * optional so the client fallback can remain empty and fail closed when the
    * Statsig config is unavailable. The dashboard schema requires the complete
@@ -8355,6 +8357,12 @@ var DYNAMIC_CONFIGS = {
     client: true,
     fallbackValues: {
       mode: "off"
+    }
+  },
+  grok_bot_system_prompt_override: {
+    client: true,
+    fallbackValues: {
+      basePrompt: ""
     }
   },
   remote_workspace_readiness_config: {
@@ -9237,6 +9245,14 @@ Requirements:
       max_loaded_agents: 5
     }
   },
+  // Release hidden chats' resident bubble bodies on transcript unmount; disabled until Statsig enables it.
+  composer_hidden_bubble_eviction: {
+    client: true,
+    fallbackValues: {
+      enabled: false,
+      keep_recent_hidden: 1
+    }
+  },
   // Client-tunable Glass large-file code gate; default 10MB matches the previously hardcoded LARGE_FILE_GATE_CODE_BYTES.
   glass_large_file_gate_config: {
     client: true,
@@ -9615,13 +9631,6 @@ Requirements:
       welcomePageEnabled: true,
       marketplaceCategoryKey: "canvas-featured",
       marketplaceMaxCards: 4
-    }
-  },
-  glass_start_onboarding_pill_config: {
-    client: true,
-    fallbackValues: {
-      label: "Start onboarding",
-      icon: "sparkles"
     }
   },
   glass_ftux_first_action_config: {
