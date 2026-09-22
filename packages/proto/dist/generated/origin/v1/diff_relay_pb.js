@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/diff_relay_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage163 = "origin.v1.";
@@ -242,3 +247,4 @@ var DiffRelayNotServed = class _DiffRelayNotServed extends __protoMessage3155 {
     return ["DiffRelayNotServed|1 reason #0", DiffRelayNotServedReason];
   }
 };
+

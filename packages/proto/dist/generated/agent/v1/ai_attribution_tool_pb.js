@@ -1,20 +1,25 @@
-var __protoPackage49, __protoMessage349, AiAttributionArgs, AiAttributionResult, AiAttributionSuccess, AiAttributionError, AiAttributionToolCall;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/ai_attribution_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __protoPackage57, __protoMessage354, AiAttributionArgs, AiAttributionResult, AiAttributionSuccess, AiAttributionError, AiAttributionToolCall;
 var init_ai_attribution_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/ai_attribution_tool_pb.js"() {
     "use strict";
-    init_esm13();
-    init_utils_pb();
+    init_esm();
+    init_utils_pb2();
     init_compact();
-    __protoPackage49 = "agent.v1.";
-    __protoMessage349 = class extends CompactMessage {
+    __protoPackage57 = "agent.v1.";
+    __protoMessage354 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage49;
+        return __protoPackage57;
       }
     };
-    AiAttributionArgs = class _AiAttributionArgs extends __protoMessage349 {
+    AiAttributionArgs = class _AiAttributionArgs extends __protoMessage354 {
       constructor(data) {
         super();
         this.filePaths = [];
@@ -37,7 +42,7 @@ var init_ai_attribution_tool_pb = __esm({
         return ["AiAttributionArgs|5 file_paths 9*|2 start_line 5?|3 end_line 5?|6 commit_hashes 9*|7 output_mode 9?|9 max_commits 5?|10 include_line_ranges 8?"];
       }
     };
-    AiAttributionResult = class _AiAttributionResult extends __protoMessage349 {
+    AiAttributionResult = class _AiAttributionResult extends __protoMessage354 {
       constructor(data) {
         super();
         this.result = { case: void 0 };
@@ -59,7 +64,7 @@ var init_ai_attribution_tool_pb = __esm({
         return ["AiAttributionResult|1 success #0 result|2 error #1 result", AiAttributionSuccess, AiAttributionError];
       }
     };
-    AiAttributionSuccess = class _AiAttributionSuccess extends __protoMessage349 {
+    AiAttributionSuccess = class _AiAttributionSuccess extends __protoMessage354 {
       constructor(data) {
         super();
         this.attributionText = "";
@@ -81,7 +86,7 @@ var init_ai_attribution_tool_pb = __esm({
         return ["AiAttributionSuccess|1 attribution_text 9|2 output_location #0?", OutputLocation];
       }
     };
-    AiAttributionError = class _AiAttributionError extends __protoMessage349 {
+    AiAttributionError = class _AiAttributionError extends __protoMessage354 {
       constructor(data) {
         super();
         this.error = "";
@@ -103,7 +108,7 @@ var init_ai_attribution_tool_pb = __esm({
         return ["AiAttributionError|1 error 9"];
       }
     };
-    AiAttributionToolCall = class _AiAttributionToolCall extends __protoMessage349 {
+    AiAttributionToolCall = class _AiAttributionToolCall extends __protoMessage354 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -126,3 +131,4 @@ var init_ai_attribution_tool_pb = __esm({
     };
   }
 });
+

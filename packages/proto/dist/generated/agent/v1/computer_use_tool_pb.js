@@ -1,21 +1,26 @@
-var __protoPackage40, __protoMessage340, MouseButton, ScrollDirection, Coordinate, ComputerUseArgs, ComputerUseAction, MouseMoveAction, ClickAction, MouseDownAction, MouseUpAction, DragAction, ScrollAction, TypeAction, KeyAction, WaitAction, ScreenshotAction, CursorPositionAction, ComputerUseResult, ComputerUseSuccess, ComputerUseError, ComputerUseToolCall;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/computer_use_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __protoPackage48, __protoMessage345, MouseButton, ScrollDirection, Coordinate, ComputerUseArgs, ComputerUseAction, MouseMoveAction, ClickAction, MouseDownAction, MouseUpAction, DragAction, ScrollAction, TypeAction, KeyAction, WaitAction, ScreenshotAction, CursorPositionAction, ComputerUseResult, ComputerUseSuccess, ComputerUseError, ComputerUseToolCall;
 var init_computer_use_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/computer_use_tool_pb.js"() {
     "use strict";
-    init_esm13();
+    init_esm();
     init_compact();
-    __protoPackage40 = "agent.v1.";
-    __protoMessage340 = class extends CompactMessage {
+    __protoPackage48 = "agent.v1.";
+    __protoMessage345 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage40;
+        return __protoPackage48;
       }
     };
-    MouseButton = /* @__PURE__ */ enumType2(proto3, __protoPackage40, "MouseButton", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"], [3, "MIDDLE"], [4, "BACK"], [5, "FORWARD"]], 1);
-    ScrollDirection = /* @__PURE__ */ enumType2(proto3, __protoPackage40, "ScrollDirection", [[0, "UNSPECIFIED"], [1, "UP"], [2, "DOWN"], [3, "LEFT"], [4, "RIGHT"]], 1);
-    Coordinate = class _Coordinate extends __protoMessage340 {
+    MouseButton = /* @__PURE__ */ enumType(proto3, __protoPackage48, "MouseButton", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"], [3, "MIDDLE"], [4, "BACK"], [5, "FORWARD"]], 1);
+    ScrollDirection = /* @__PURE__ */ enumType(proto3, __protoPackage48, "ScrollDirection", [[0, "UNSPECIFIED"], [1, "UP"], [2, "DOWN"], [3, "LEFT"], [4, "RIGHT"]], 1);
+    Coordinate = class _Coordinate extends __protoMessage345 {
       constructor(data) {
         super();
         this.x = 0;
@@ -38,7 +43,7 @@ var init_computer_use_tool_pb = __esm({
         return ["Coordinate|1 x 5|2 y 5"];
       }
     };
-    ComputerUseArgs = class _ComputerUseArgs extends __protoMessage340 {
+    ComputerUseArgs = class _ComputerUseArgs extends __protoMessage345 {
       constructor(data) {
         super();
         this.toolCallId = "";
@@ -61,7 +66,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ComputerUseArgs|1 tool_call_id 9|2 actions #0*|3 description 9?|4 bind_unmapped_characters 8?|5 desktop_lease_actor_id 9?", ComputerUseAction];
       }
     };
-    ComputerUseAction = class _ComputerUseAction extends __protoMessage340 {
+    ComputerUseAction = class _ComputerUseAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.action = { case: void 0 };
@@ -83,7 +88,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ComputerUseAction|1 mouse_move #0 action|2 click #1 action|3 mouse_down #2 action|4 mouse_up #3 action|5 drag #4 action|6 scroll #5 action|7 type #6 action|8 key #7 action|9 wait #8 action|10 screenshot #9 action|11 cursor_position #10 action", MouseMoveAction, ClickAction, MouseDownAction, MouseUpAction, DragAction, ScrollAction, TypeAction, KeyAction, WaitAction, ScreenshotAction, CursorPositionAction];
       }
     };
-    MouseMoveAction = class _MouseMoveAction extends __protoMessage340 {
+    MouseMoveAction = class _MouseMoveAction extends __protoMessage345 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -104,7 +109,7 @@ var init_computer_use_tool_pb = __esm({
         return ["MouseMoveAction|1 coordinate #0", Coordinate];
       }
     };
-    ClickAction = class _ClickAction extends __protoMessage340 {
+    ClickAction = class _ClickAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.button = MouseButton.UNSPECIFIED;
@@ -127,7 +132,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ClickAction|1 coordinate #0?|2 button #1|3 count 5|4 modifier_keys 9?", Coordinate, MouseButton];
       }
     };
-    MouseDownAction = class _MouseDownAction extends __protoMessage340 {
+    MouseDownAction = class _MouseDownAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.button = MouseButton.UNSPECIFIED;
@@ -149,7 +154,7 @@ var init_computer_use_tool_pb = __esm({
         return ["MouseDownAction|1 button #0", MouseButton];
       }
     };
-    MouseUpAction = class _MouseUpAction extends __protoMessage340 {
+    MouseUpAction = class _MouseUpAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.button = MouseButton.UNSPECIFIED;
@@ -171,7 +176,7 @@ var init_computer_use_tool_pb = __esm({
         return ["MouseUpAction|1 button #0", MouseButton];
       }
     };
-    DragAction = class _DragAction extends __protoMessage340 {
+    DragAction = class _DragAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.path = [];
@@ -194,7 +199,7 @@ var init_computer_use_tool_pb = __esm({
         return ["DragAction|1 path #0*|2 button #1|3 modifier_keys 9?", Coordinate, MouseButton];
       }
     };
-    ScrollAction = class _ScrollAction extends __protoMessage340 {
+    ScrollAction = class _ScrollAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.direction = ScrollDirection.UNSPECIFIED;
@@ -217,7 +222,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ScrollAction|1 coordinate #0?|2 direction #1|3 amount 5|4 modifier_keys 9?", Coordinate, ScrollDirection];
       }
     };
-    TypeAction = class _TypeAction extends __protoMessage340 {
+    TypeAction = class _TypeAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.text = "";
@@ -239,7 +244,7 @@ var init_computer_use_tool_pb = __esm({
         return ["TypeAction|1 text 9"];
       }
     };
-    KeyAction = class _KeyAction extends __protoMessage340 {
+    KeyAction = class _KeyAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.key = "";
@@ -261,7 +266,7 @@ var init_computer_use_tool_pb = __esm({
         return ["KeyAction|1 key 9|2 hold_duration_ms 5?"];
       }
     };
-    WaitAction = class _WaitAction extends __protoMessage340 {
+    WaitAction = class _WaitAction extends __protoMessage345 {
       constructor(data) {
         super();
         this.durationMs = 0;
@@ -283,7 +288,7 @@ var init_computer_use_tool_pb = __esm({
         return ["WaitAction|1 duration_ms 5"];
       }
     };
-    ScreenshotAction = class _ScreenshotAction extends __protoMessage340 {
+    ScreenshotAction = class _ScreenshotAction extends __protoMessage345 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -304,7 +309,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ScreenshotAction"];
       }
     };
-    CursorPositionAction = class _CursorPositionAction extends __protoMessage340 {
+    CursorPositionAction = class _CursorPositionAction extends __protoMessage345 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -325,7 +330,7 @@ var init_computer_use_tool_pb = __esm({
         return ["CursorPositionAction"];
       }
     };
-    ComputerUseResult = class _ComputerUseResult extends __protoMessage340 {
+    ComputerUseResult = class _ComputerUseResult extends __protoMessage345 {
       constructor(data) {
         super();
         this.result = { case: void 0 };
@@ -347,7 +352,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ComputerUseResult|1 success #0 result|2 error #1 result", ComputerUseSuccess, ComputerUseError];
       }
     };
-    ComputerUseSuccess = class _ComputerUseSuccess extends __protoMessage340 {
+    ComputerUseSuccess = class _ComputerUseSuccess extends __protoMessage345 {
       constructor(data) {
         super();
         this.actionCount = 0;
@@ -370,7 +375,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ComputerUseSuccess|1 action_count 5|2 duration_ms 5|3 screenshot 9?|4 log 9?|5 screenshot_path 9?|6 cursor_position #0?", Coordinate];
       }
     };
-    ComputerUseError = class _ComputerUseError extends __protoMessage340 {
+    ComputerUseError = class _ComputerUseError extends __protoMessage345 {
       constructor(data) {
         super();
         this.error = "";
@@ -394,7 +399,7 @@ var init_computer_use_tool_pb = __esm({
         return ["ComputerUseError|1 error 9|2 action_count 5|3 duration_ms 5|4 log 9?|5 screenshot 9?|6 screenshot_path 9?"];
       }
     };
-    ComputerUseToolCall = class _ComputerUseToolCall extends __protoMessage340 {
+    ComputerUseToolCall = class _ComputerUseToolCall extends __protoMessage345 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -417,3 +422,4 @@ var init_computer_use_tool_pb = __esm({
     };
   }
 });
+

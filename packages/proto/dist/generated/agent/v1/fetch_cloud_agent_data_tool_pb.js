@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/fetch_cloud_agent_data_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage71, __protoMessage368, FetchCloudAgentDataArgs, FetchCloudAgentDataResult, FetchCloudAgentDataSuccess, FetchCloudAgentDataError, FetchCloudAgentDataToolCall;
 var init_fetch_cloud_agent_data_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/fetch_cloud_agent_data_tool_pb.js"() {
@@ -133,3 +138,4 @@ var init_fetch_cloud_agent_data_tool_pb = __esm({
     };
   }
 });
+

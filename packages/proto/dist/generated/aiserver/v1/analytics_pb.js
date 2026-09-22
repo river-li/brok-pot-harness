@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/analytics_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage148, __protoMessage3141, ClientOS, ClientLogLevel, BootstrapStatsigRequest, BootstrapStatsigResponse, GetFirstWindowStatsigDecisionRequest, GetFirstWindowStatsigDecisionResponse, EventData, AnalyticsEvent, TrackEventsRequest, TrackEventsResponse, BatchEvent, AnalyticsContext, ClientInfo, BatchRequest, BatchResponse, ClientLogEntry, SubmitLogsRequest, SubmitLogsResponse, IngestConversationRequest, IngestConversationResponse, UploadIssueTraceRequest, UploadIssueTraceResponse, DownloadIssueTracesRequest, DownloadIssueTracesResponse;
 var init_analytics_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/analytics_pb.js"() {
@@ -514,3 +519,4 @@ var init_analytics_pb = __esm({
     };
   }
 });
+

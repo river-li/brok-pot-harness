@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/composer_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage8, __protoMessage36, ComposerCapabilityRequest, ComposerCapabilityRequest_ComposerCapabilityType, ComposerCapabilityRequest_ToolType, ComposerCapabilityRequest_ToolSchema, ComposerCapabilityRequest_SchemaProperty, ComposerCapabilityRequest_LoopOnLintsCapability, ComposerCapabilityRequest_LoopOnTestsCapability, ComposerCapabilityRequest_MegaPlannerCapability, ComposerCapabilityRequest_LoopOnCommandCapability, ComposerCapabilityRequest_ToolCallCapability, ComposerCapabilityRequest_DiffReviewCapability, ComposerCapabilityRequest_DiffReviewCapability_SimpleFileDiff, ComposerCapabilityRequest_DiffReviewCapability_SimpleFileDiff_Chunk, ComposerCapabilityRequest_DecomposerCapability, ComposerCapabilityRequest_ContextPickingCapability, ComposerCapabilityRequest_EditTrailCapability, ComposerCapabilityRequest_AutoContextCapability, ComposerCapabilityRequest_ContextPlannerCapability, ComposerCapabilityRequest_RememberThisCapability, ComposerCapabilityRequest_CursorRulesCapability, ComposerCapabilityContext, ComposerCapabilityContext_SlackIntegrationContext, ComposerCapabilityContext_MicrosoftTeamsIntegrationContext, ComposerCapabilityContext_GithubPRContext, ComposerCapabilityContext_GithubPRContext_CodeTourContext;
 var init_composer_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/composer_pb.js"() {
@@ -534,3 +539,4 @@ var init_composer_pb = __esm({
     };
   }
 });
+

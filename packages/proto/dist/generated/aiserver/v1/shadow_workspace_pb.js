@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/shadow_workspace_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage98, __protoMessage394, GetLintsForChangeResponse, GetLintsForChangeResponse_Lint, GetLintsForChangeResponse_Lint_QuickFix, GetLintsForChangeResponse_Lint_QuickFix_Edit;
 var init_shadow_workspace_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/shadow_workspace_pb.js"() {
@@ -118,3 +123,4 @@ var init_shadow_workspace_pb = __esm({
     };
   }
 });
+

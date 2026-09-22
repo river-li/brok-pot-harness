@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/sandbox_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage13, __protoMessage310, NetworkPolicyLoggingConfig, NetworkPolicy, NetworkPolicy_DefaultAction, SandboxPolicy, SandboxPolicy_Type, SandboxPolicy_ReadBoundaryMode;
 var init_sandbox_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/sandbox_pb.js"() {
@@ -88,3 +93,4 @@ var init_sandbox_pb = __esm({
     SandboxPolicy_ReadBoundaryMode = /* @__PURE__ */ enumType(proto3, __protoPackage13, "SandboxPolicy.ReadBoundaryMode", [[0, "UNSPECIFIED"], [1, "SYSTEM"], [2, "WORKSPACE"]], 1);
   }
 });
+

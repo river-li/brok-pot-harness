@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/control_service_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage140, __protoMessage3133, EntryType, BatchGetDiffErrorKind, ArtifactUploadStatus, ArtifactPathErrorKind, ArtifactRootKind, ArtifactUploadDispatchStatus, PersistArtifactToAgentStoreStatus, ArtifactRestoreStatus, DesktopLeaseActorKind, DesktopLeaseStatus, ResourceScope, ResourcePressure, PingRequest, PingResponse, GetCapabilitiesRequest, GetCapabilitiesResponse, ReloadAgentSkillsRequest, ReloadAgentSkillsResponse, ReloadPluginsRequest, ReloadPluginsResponse, ExecRequest, ExecResponse, StdoutEvent, StderrEvent, ExitEvent, ListDirectoryRequest, ListDirectoryResponse, DirectoryEntry, ReadTextFileRequest, ReadTextFileResponse, WriteTextFileRequest, WriteTextFileResponse, ReadBinaryFileRequest2, ReadBinaryFileResponse2, ExportFileRequest, ExportFileMetadata, ExportFileResponse, WriteBinaryFileRequest, WriteBinaryFileResponse, GetWorkspaceChangesHashRequest, GetWorkspaceChangesHashResponse, BatchGetDiffRequest, BatchGetDiffItem, BatchGetDiffResponse, BatchGetDiffResult, BatchGetDiffUnchanged, BatchGetDiffError, RefreshGithubAccessTokenRequest, RefreshGithubAccessTokenResponse, WarmRemoteAccessServerRequest, WarmRemoteAccessServerResponse, ListArtifactsRequest, ArtifactUploadMetadata, ArtifactPathError, ListArtifactsResponse, UploadArtifactsRequest, ArtifactUploadInstruction, ArtifactUploadDispatchResult, UploadArtifactsResponse, PersistArtifactToAgentStoreInstruction, PersistArtifactsToAgentStoreRequest, PersistArtifactToAgentStoreResult, PersistArtifactsToAgentStoreResponse, PersistArtifactsToParentStoreRequest, PersistArtifactsToParentStoreResponse, RestoreArtifactInstruction, RestoreArtifactResult, RestoreArtifactsRequest, RestoreArtifactsResponse, GetMcpRefreshTokensRequest, GetMcpRefreshTokensResponse, UpdateEnvironmentVariablesRequest, RunScopedOverlay, UpdateEnvironmentVariablesResponse, ScopedSecretValues, SyncScopedSecretsRequest, SyncScopedSecretsResponse, DownloadCursorServerRequest, DownloadCursorServerResponse, InstallPluginArtifactRequest, InstallPluginArtifactResponse, LoadMcpServersRequest, LoadMcpServersResponse, DesktopLeaseAcquire, DesktopLeaseRelease, DesktopLeaseGetState, DesktopLeaseRequest, DesktopLeaseOwner, DesktopLeaseResponse, ResourceLimits, ResourceSample, GetResourceUsageRequest, GetResourceUsageResponse;
 var init_control_service_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/control_service_pb.js"() {
@@ -1859,3 +1864,4 @@ var init_control_service_pb = __esm({
     };
   }
 });
+

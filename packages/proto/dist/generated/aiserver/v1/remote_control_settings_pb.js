@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/remote_control_settings_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage134, __protoMessage3128, RemoteControlV2AdminSettings, RemoteControlV2Policy;
 var init_remote_control_settings_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/remote_control_settings_pb.js"() {
@@ -57,3 +62,4 @@ var init_remote_control_settings_pb = __esm({
     };
   }
 });
+

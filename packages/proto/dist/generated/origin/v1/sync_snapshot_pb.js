@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/sync_snapshot_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage181 = "origin.v1.";
@@ -76,3 +81,4 @@ var ChangeSyncViewerState = class _ChangeSyncViewerState extends __protoMessage3
     return ["ChangeSyncViewerState|1 timeline_viewed_at #0?|2 pending_reviews #1*|3 pending_threads #2*", Timestamp, Review, CommentThread];
   }
 };
+

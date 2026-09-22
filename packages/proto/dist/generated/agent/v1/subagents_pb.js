@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/subagents_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage12, __protoMessage39, CustomSubagentPermissionMode, SubagentExecutionEnvironment, SubagentBackgroundReason, BackgroundTaskCompletionReason, TaskMode, SubagentType, SubagentTypeUnspecified, SubagentTypeComputerUse, SubagentTypeExplore, SubagentTypeMediaReview, SubagentTypeBash, SubagentTypeShell, SubagentTypeBrowserUse, SubagentTypeVmSetupHelper, SubagentTypeDebug, SubagentTypeCursorGuide, SubagentTypeWatchVideo, SubagentTypeCustom, CustomSubagent;
 var init_subagents_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/subagents_pb.js"() {
@@ -325,3 +330,4 @@ var init_subagents_pb = __esm({
     };
   }
 });
+

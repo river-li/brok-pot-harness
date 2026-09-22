@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/cmdk_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage123, __protoMessage3119, StreamCmdKResponse, StreamCmdKResponse_EditStart, StreamCmdKResponse_EditStream, StreamCmdKResponse_EditEnd, StreamCmdKResponse_Chat, StreamCmdKResponse_StatusUpdate;
 var init_cmdk_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/cmdk_pb.js"() {
@@ -150,3 +155,4 @@ var init_cmdk_pb = __esm({
     };
   }
 });
+

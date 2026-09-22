@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/internapi/v1/blob_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage131, __protoMessage3126, BlobType, ImageBlobData, BlobData, BlobDataPerMessage;
 var init_blob_pb = __esm({
   "../packages/proto/dist/generated/internapi/v1/blob_pb.js"() {
@@ -85,3 +90,4 @@ var init_blob_pb = __esm({
     };
   }
 });
+

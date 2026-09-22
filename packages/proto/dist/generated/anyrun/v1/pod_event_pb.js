@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/anyrun/v1/pod_event_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage4, __protoMessage33, PrivateWorkerWaitReason, ClonePurpose, PodIdentity, PodEvent, LifecycleProcessRestarted, LifecycleProcessExited, SpanStarted, SpanEnded, WaitingForWorkerStatus, HydrationProgress, PodErrorEvent, FeatureOutput, FeatureExitCode, BuildStepStarted, BuildStatusLine, InternalBuildMessage, ImagePullStarted, ImagePullLayerUpdate, ProgressDetail, ImagePullStatusUpdate, ImagePullCompleted, InstallCommand, CloneStarted, CloneCompleted;
 var init_pod_event_pb = __esm({
   "../packages/proto/dist/generated/anyrun/v1/pod_event_pb.js"() {
@@ -531,3 +536,4 @@ var init_pod_event_pb = __esm({
     };
   }
 });
+

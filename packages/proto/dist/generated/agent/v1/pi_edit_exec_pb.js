@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pi_edit_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage111, __protoMessage3107, PiEditExecArgs, PiEditExecResult, PiEditExecSuccess, PiEditExecError, PiEditExecRejected;
 var init_pi_edit_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_edit_exec_pb.js"() {
@@ -129,3 +134,4 @@ var init_pi_edit_exec_pb = __esm({
     };
   }
 });
+

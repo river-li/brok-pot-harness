@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/automations_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage154 = "aiserver.v1.";
@@ -4191,3 +4196,4 @@ var DisconnectSentryResponse = class _DisconnectSentryResponse extends __protoMe
     return ["DisconnectSentryResponse|1 success 8"];
   }
 };
+

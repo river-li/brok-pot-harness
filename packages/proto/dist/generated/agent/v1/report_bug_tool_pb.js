@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/report_bug_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage63, __protoMessage360, ReportBugArgs, ReportBugSuccess, ReportBugError, ReportBugResult, ReportBugToolCall;
 var init_report_bug_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/report_bug_tool_pb.js"() {
@@ -131,3 +136,4 @@ var init_report_bug_tool_pb = __esm({
     };
   }
 });
+

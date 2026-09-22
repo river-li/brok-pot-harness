@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/interface_agent_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage128, __protoMessage3123, InterfaceAgentClientState, InterfaceAgentStatus, InterfaceAgentStatus_Status;
 var init_interface_agent_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/interface_agent_pb.js"() {
@@ -80,3 +85,4 @@ var init_interface_agent_pb = __esm({
     InterfaceAgentStatus_Status = /* @__PURE__ */ enumType(proto3, __protoPackage128, "InterfaceAgentStatus.Status", [[0, "UNSPECIFIED"], [1, "WAITING"], [2, "RUNNING"], [3, "SUCCESS"], [4, "FAILURE"]], 1);
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/access_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage159 = "origin.v1.";
@@ -1584,3 +1589,4 @@ var LeaveMyExternalRepositoryResponse = class _LeaveMyExternalRepositoryResponse
     return ["LeaveMyExternalRepositoryResponse"];
   }
 };
+

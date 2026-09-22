@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/subagent_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage103, __protoMessage399, ForceBackgroundSubagentStatus, SubagentArgs, ClientContinuationConfig, SubagentResult, SubagentAwaitArgs, SubagentAwaitResult, SubagentAwaitComplete, SubagentAwaitStillRunning, SubagentAwaitNotFound, SubagentAwaitError, SubagentSuccess, SubagentError, ForceBackgroundSubagentArgs, ForceBackgroundSubagentResult;
 var init_subagent_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/subagent_exec_pb.js"() {
@@ -323,3 +328,4 @@ var init_subagent_exec_pb = __esm({
     };
   }
 });
+

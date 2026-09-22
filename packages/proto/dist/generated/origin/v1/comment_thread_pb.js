@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/comment_thread_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage167 = "origin.v1.";
@@ -450,3 +455,4 @@ var ListCommentReactionsResponse = class _ListCommentReactionsResponse extends _
     return ["ListCommentReactionsResponse|1 reactions #0*", CommentReaction];
   }
 };
+

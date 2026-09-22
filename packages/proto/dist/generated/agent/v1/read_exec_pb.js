@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/read_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage102, __protoMessage398, ReadArgs, ReadResult, ReadSuccess, ReadError, ReadRejected, ReadFileNotFound, ReadPermissionDenied, ReadInvalidFile;
 var init_read_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/read_exec_pb.js"() {
@@ -200,3 +205,4 @@ var init_read_exec_pb = __esm({
     };
   }
 });
+

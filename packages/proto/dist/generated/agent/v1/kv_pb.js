@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/kv_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage145, __protoMessage3138, Error2, GetBlobArgs, GetBlobResult, SetBlobArgs, SetBlobResult, KvServerMessage, KvClientMessage;
 var init_kv_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/kv_pb.js"() {
@@ -171,3 +176,4 @@ var init_kv_pb = __esm({
     };
   }
 });
+

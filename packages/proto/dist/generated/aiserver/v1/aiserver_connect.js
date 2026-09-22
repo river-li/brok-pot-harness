@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/aiserver_connect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AiService;
 var init_aiserver_connect = __esm({
   "../packages/proto/dist/generated/aiserver/v1/aiserver_connect.js"() {
@@ -1946,3 +1951,4 @@ var init_aiserver_connect = __esm({
     };
   }
 });
+

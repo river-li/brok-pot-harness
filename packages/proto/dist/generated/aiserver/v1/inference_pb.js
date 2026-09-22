@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/inference_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage153 = "aiserver.v1.";
@@ -1405,3 +1410,4 @@ var RunInferenceErrorDetail = class _RunInferenceErrorDetail extends __protoMess
     return ["RunInferenceErrorDetail|1 type 9|2 value 12"];
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/usage_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage127, __protoMessage3122, UsageEventKind, ModelSelectionSnapshot, ModelSelectionSnapshot_ModelParameterValue, UsageEventDetails, UsageEventDetails_PromptHook, UsageEventDetails_BugFinderTriggerV1, UsageEventDetails_BugBot, UsageEventDetails_Chat, UsageEventDetails_FastApply, UsageEventDetails_Composer, UsageEventDetails_ToolCallComposer, UsageEventDetails_WarmComposer, UsageEventDetails_ContextChat, UsageEventDetails_CmdK, UsageEventDetails_TerminalCmdK, UsageEventDetails_AiReviewAcceptedComment, UsageEventDetails_InterpreterChat, UsageEventDetails_SlashEdit, UsageEventDetails_AgentSdkManagedProduct, UsageEvent, UsageEventDisplay, TokenUsage;
 var init_usage_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/usage_pb.js"() {
@@ -498,3 +503,4 @@ var init_usage_pb = __esm({
     };
   }
 });
+

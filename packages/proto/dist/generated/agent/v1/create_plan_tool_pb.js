@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/create_plan_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage37, __protoMessage334, CreatePlanToolCall, Phase, CreatePlanArgs, CreatePlanResult, CreatePlanSuccess, CreatePlanError, CreatePlanRequestQuery, CreatePlanRequestResponse;
 var init_create_plan_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/create_plan_tool_pb.js"() {
@@ -196,3 +201,4 @@ var init_create_plan_tool_pb = __esm({
     };
   }
 });
+

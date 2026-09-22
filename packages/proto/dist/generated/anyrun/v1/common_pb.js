@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/anyrun/v1/common_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage5, __protoMessage34, WorkspaceGitSetupMode, WarmForkMode, EnvironmentBuildResolution, EnvironmentBuildBootInfo;
 var init_common_pb = __esm({
   "../packages/proto/dist/generated/anyrun/v1/common_pb.js"() {
@@ -45,3 +50,4 @@ var init_common_pb = __esm({
     };
   }
 });
+

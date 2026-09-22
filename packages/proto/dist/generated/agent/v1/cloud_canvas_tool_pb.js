@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/cloud_canvas_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage88, __protoMessage385, WriteCanvasFailReason, ReadCanvasFailReason, CloudCanvasToolDiagnosticPosition, CloudCanvasToolDiagnosticRange, CloudCanvasToolDiagnostic, WriteCanvasArgs, WriteCanvasSuccess, WriteCanvasFailure, WriteCanvasResult, WriteCanvasToolCall, ReadCanvasArgs, ReadCanvasSuccess, ReadCanvasFailure, ReadCanvasResult, ReadCanvasToolCall;
 var init_cloud_canvas_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/cloud_canvas_tool_pb.js"() {
@@ -304,3 +309,4 @@ var init_cloud_canvas_tool_pb = __esm({
     };
   }
 });
+

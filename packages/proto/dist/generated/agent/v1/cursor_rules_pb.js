@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/cursor_rules_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage23, __protoMessage320, CursorRuleSource, CursorRuleTypeGlobal, CursorRuleTypeFileGlobs, CursorRuleTypeAgentFetched, CursorRuleTypeManuallyAttached, CursorRuleType, CursorRule2;
 var init_cursor_rules_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/cursor_rules_pb.js"() {
@@ -152,3 +157,4 @@ var init_cursor_rules_pb = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/write_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage101, __protoMessage397, WriteArgs, WriteResult, WriteSuccess, WritePermissionDenied, WriteNoSpace, WriteError, WriteRejected;
 var init_write_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/write_exec_pb.js"() {
@@ -181,3 +186,4 @@ var init_write_exec_pb = __esm({
     };
   }
 });
+

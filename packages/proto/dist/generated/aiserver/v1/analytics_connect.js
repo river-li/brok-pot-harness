@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/analytics_connect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AnalyticsService;
 var init_analytics_connect = __esm({
   "../packages/proto/dist/generated/aiserver/v1/analytics_connect.js"() {
@@ -99,3 +104,4 @@ var init_analytics_connect = __esm({
     };
   }
 });
+

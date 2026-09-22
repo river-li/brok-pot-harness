@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/chat_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage99, __protoMessage395, ChunkType, SubagentType2, ConversationSummary2, ContextToRank, RankedContext, DocumentationCitation, WebCitation, WebReference, DocsReference, AiWebSearchResult, StatusUpdate, StatusUpdates, RerankDocumentsRequest, RerankDocumentsResponse, Document, DocumentIdsWithScores, ComposerFileDiffHistory, StreamUnifiedChatRequest_UnifiedMode, ContextPiece, ContextWindowStatus, ServiceStatusUpdate, SymbolLink, FileLink, RedDiff, DiffFile, ViewableCommitProps, ViewablePRProps, ViewableDiffProps, ViewableGitContext, ConversationMessage, ConversationMessage_MessageType, ConversationMessage_ThinkingStyle, ConversationMessage_CodeChunk, ConversationMessage_CodeChunk_Intent, ConversationMessage_CodeChunk_SummarizationStrategy, ConversationMessage_CodeChunk_CodeChunkGitContext, ConversationMessage_CodeChunk_CodeChunkGitContext_CodeChunkGitInfo, ConversationMessage_ToolResult, ConversationMessage_NotepadContext, ConversationMessage_ComposerContext, ConversationMessage_EditLocation, ConversationMessage_EditTrailContext, ConversationMessage_ApproximateLintError, ConversationMessage_Lints, ConversationMessage_RecentLocation, ConversationMessage_RenderedDiff, ConversationMessage_HumanChange, ConversationMessage_Thinking, ConversationMessage_DiffSinceLastApply, ConversationMessage_DeletedFile, ConversationMessage_KnowledgeItem, ConversationMessage_DocumentationSelection, ConversationMessage_IdeEditorsState, ConversationMessage_IdeEditorsState_File, ConversationMessage_PlanUpdate, ConversationMessage_SimulatedMessageMetadata, ConversationMessage_McpDescriptor, ConversationMessage_McpDescriptor_Tool, CurrentFileLocationData, FolderInfo, FolderFileInfo, InterpreterResult, SimpleFileDiff, SimpleFileDiff_Chunk, Commit, PullRequest, SuggestedCodeBlock, UserResponseToSuggestedCodeBlock, UserResponseToSuggestedCodeBlock_UserResponseType, ContextRerankingCandidateFile, ComposerFileDiff, ComposerFileDiff_Editor, ComposerFileDiff_ChunkDiff, DiffHistoryData, SubagentReturnCall, DeepSearchSubagentReturnValue, DeepSearchSubagentReturnValue_ContextItem, FixLintsSubagentReturnValue, TaskSubagentReturnValue, SpecSubagentReturnValue, StringReplacement, ProjectLayout, ProjectLayoutDirectoryContent, ProjectLayoutDirectory, ProjectLayoutFile;
 var init_chat_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/chat_pb.js"() {
@@ -1879,3 +1884,4 @@ var init_chat_pb = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/conversation_search_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage82, __protoMessage379, ConversationSearchSource, ConversationSearchArgs, ConversationSearchResult, ConversationSearchSuccess, ConversationSearchHit, ConversationSearchError;
 var init_conversation_search_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/conversation_search_exec_pb.js"() {
@@ -133,3 +138,4 @@ var init_conversation_search_exec_pb = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/app_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage176 = "origin.v1.";
@@ -1719,3 +1724,4 @@ var ConfirmAppUserConfirmationResponse = class _ConfirmAppUserConfirmationRespon
     return ["ConfirmAppUserConfirmationResponse|1 confirmation_receipt 9|2 redirect_uri 9"];
   }
 };
+

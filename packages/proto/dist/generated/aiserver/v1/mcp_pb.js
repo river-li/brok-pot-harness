@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/mcp_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage133, __protoMessage3127, McpOAuthStoredData;
 var init_mcp_pb2 = __esm({
   "../packages/proto/dist/generated/aiserver/v1/mcp_pb.js"() {
@@ -38,3 +43,4 @@ var init_mcp_pb2 = __esm({
     };
   }
 });
+

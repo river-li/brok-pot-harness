@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/system_prompt_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage92, __protoMessage388, SystemPromptSpec;
 var init_system_prompt_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/system_prompt_pb.js"() {
@@ -37,3 +42,4 @@ var init_system_prompt_pb = __esm({
     };
   }
 });
+

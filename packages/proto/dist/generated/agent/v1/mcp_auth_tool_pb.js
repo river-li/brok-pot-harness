@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/mcp_auth_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage59, __protoMessage356, McpAuthArgs, McpAuthResult, McpAuthSuccess, McpAuthError, McpAuthRejected, McpAuthToolCall, McpAuthRequestQuery, McpAuthRequestResponse, McpAuthRequestResponse_Approved, McpAuthRequestResponse_Rejected;
 var init_mcp_auth_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_auth_tool_pb.js"() {
@@ -233,3 +238,4 @@ var init_mcp_auth_tool_pb = __esm({
     };
   }
 });
+

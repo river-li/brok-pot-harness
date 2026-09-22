@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/full_self_driving_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage135, FullSelfDrivingMode;
 var init_full_self_driving_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/full_self_driving_pb.js"() {
@@ -8,3 +13,4 @@ var init_full_self_driving_pb = __esm({
     FullSelfDrivingMode = /* @__PURE__ */ enumType(proto3, __protoPackage135, "FullSelfDrivingMode", [[0, "UNSPECIFIED"], [1, "SUGGEST"], [2, "APPLY"]], 1);
   }
 });
+

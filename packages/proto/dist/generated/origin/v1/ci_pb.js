@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/ci_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_esm();
+
+// @recovered-fragment 2/2
 init_compact();
 var __protoPackage174 = "origin.v1.";
 var __protoMessage3165 = class extends CompactMessage {
@@ -1126,3 +1134,4 @@ var RestackStackResponse = class _RestackStackResponse extends __protoMessage316
     return ["RestackStackResponse|1 restacked_change_numbers 4*|2 dry_run_members #0*", RestackStackDryRunMember];
   }
 };
+

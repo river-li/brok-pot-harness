@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/shell_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage16, __protoMessage313, TimeoutBehavior, ShellBackgroundReason, ForceBackgroundShellStatus, ShellAbortReason, ShellCommandParsingResult, ShellCommandParsingResult_ExecutableCommandArg, ShellCommandParsingResult_ExecutableCommand, ShellCommandParsingResult_Redirect, CommandClassifierResult, CommandClassifierResult_SuggestedSandboxMode, CommandClassifierResult_ClassifiedCommand, ShellOutputNotificationConfig, ForceBackgroundShellArgs, ForceBackgroundShellResult, ShellHookApprovalRequirement, ShellHookApprovalRequirement_Kind, ShellArgs, ShellResult, ShellStreamStdout, ShellStreamStderr, ShellStreamExit, ShellStreamStart, ShellStreamBackgrounded, ShellStreamHookContext, ShellSandboxUnsupported, ShellStream, ShellSuccess, ShellFailure, ShellTimeout, ShellRejected, ShellPermissionDenied, ShellSpawnError;
 var init_shell_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/shell_exec_pb.js"() {
@@ -651,3 +656,4 @@ var init_shell_exec_pb = __esm({
     };
   }
 });
+

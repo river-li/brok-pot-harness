@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/atlas_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage177 = "origin.v1.";
@@ -292,3 +297,4 @@ var ListAtlasNodePathsResponse = class _ListAtlasNodePathsResponse extends __pro
     return ["ListAtlasNodePathsResponse|1 paths 9*|2 next_page_token 9"];
   }
 };
+

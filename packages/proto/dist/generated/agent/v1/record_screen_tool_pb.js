@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/record_screen_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage47, __protoMessage344, RecordScreenToolCall;
 var init_record_screen_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/record_screen_tool_pb.js"() {
@@ -37,3 +42,4 @@ var init_record_screen_tool_pb = __esm({
     };
   }
 });
+

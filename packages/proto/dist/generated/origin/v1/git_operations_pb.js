@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/git_operations_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_esm();
+
+// @recovered-fragment 2/2
 init_compact();
 var __protoPackage157 = "origin.v1.";
 var __protoMessage3149 = class extends CompactMessage {
@@ -1055,3 +1063,4 @@ var FastForwardBranchClientResponse = class _FastForwardBranchClientResponse ext
     return ["FastForwardBranchClientResponse|1 old_head_sha 9|2 new_head_sha 9|3 unchanged 8|4 reverse_mirror_push_failed 8"];
   }
 };
+

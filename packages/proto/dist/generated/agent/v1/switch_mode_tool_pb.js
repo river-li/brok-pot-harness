@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/switch_mode_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage44, __protoMessage341, SwitchModeArgs, SwitchModeResult, SwitchModeSuccess, SwitchModeError, SwitchModeRejected, SwitchModeToolCall, SwitchModeRequestQuery, SwitchModeRequestResponse, SwitchModeRequestResponse_Approved, SwitchModeRequestResponse_Rejected;
 var init_switch_mode_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/switch_mode_tool_pb.js"() {
@@ -234,3 +239,4 @@ var init_switch_mode_tool_pb = __esm({
     };
   }
 });
+

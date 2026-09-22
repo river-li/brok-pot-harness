@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/blame_by_file_path_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage61, __protoMessage358, BlameByFilePathArgs, BlameByFilePathSuccess, BlameByFilePathError, BlameByFilePathResult, BlameByFilePathToolCall;
 var init_blame_by_file_path_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/blame_by_file_path_tool_pb.js"() {
@@ -124,3 +129,4 @@ var init_blame_by_file_path_tool_pb = __esm({
     };
   }
 });
+

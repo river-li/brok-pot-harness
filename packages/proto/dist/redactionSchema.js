@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/redactionSchema.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var REDACTION_SCHEMA = {
   "agent.v1.AdoptArgs": {
     "source_agent_id": "SAFE"
@@ -4403,3 +4408,4 @@ var REDACTION_SCHEMA = {
     "close": "SAFE"
   }
 };
+

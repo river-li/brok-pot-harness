@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/blob_reference_metadata.js
+ * Bundle: sand-host/agent-isolation/agent-store-worker.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BLOB_REFERENCE_METADATA_BY_MESSAGE_ID = {
   "agent.v1.AgentConversationTurnStructure": {
     messageType: "agent.v1.AgentConversationTurnStructure",
@@ -192,3 +197,4 @@ var BLOB_REFERENCE_MESSAGE_TYPE_BY_NAME = {
 function isProtoBlobReferenceTypeName(blobReferenceType) {
   return Object.prototype.hasOwnProperty.call(BLOB_REFERENCE_MESSAGE_TYPE_BY_NAME, blobReferenceType);
 }
+

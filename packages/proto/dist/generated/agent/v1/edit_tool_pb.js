@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/edit_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage26, __protoMessage323, EditArgs, EditResult, EditSuccess, EditFileNotFound, EditReadPermissionDenied, EditWritePermissionDenied, EditRejected, EditError, EditToolCall, EditToolCallDelta;
 var init_edit_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/edit_tool_pb.js"() {
@@ -239,3 +244,4 @@ var init_edit_tool_pb = __esm({
     };
   }
 });
+

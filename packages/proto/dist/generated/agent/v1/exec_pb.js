@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage118, __protoMessage3114, ExecClientStreamClose, ExecClientThrow, ExecClientHeartbeat, ExecClientControlMessage, ExecServerAbort, ExecServerControlMessage, SpanContext, ExecServerMessage, ExecClientMessage, ExecuteHookArgs, ExecuteHookResult, ExecuteHookRequest, ExecuteHookResponse;
 var init_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/exec_pb.js"() {
@@ -338,3 +343,4 @@ var init_exec_pb = __esm({
     };
   }
 });
+

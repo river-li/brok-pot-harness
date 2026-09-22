@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/edit_pr_labels_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage68, __protoMessage365, EditPrLabelsArgs, EditPrLabelsResult, EditPrLabelsSuccess, EditPrLabelsError, EditPrLabelsToolCall;
 var init_edit_pr_labels_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/edit_pr_labels_tool_pb.js"() {
@@ -129,3 +134,4 @@ var init_edit_pr_labels_tool_pb = __esm({
     };
   }
 });
+

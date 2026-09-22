@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/exec_service_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_exec_pb();
 init_compact();
@@ -122,3 +127,4 @@ var ReadFileResponse = class _ReadFileResponse extends __protoMessage3144 {
     return ["ReadFileResponse|1 header #0 payload|2 chunk 12 payload|3 complete #1 payload", ReadFileHeader, ReadFileComplete];
   }
 };
+

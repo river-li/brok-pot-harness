@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/diagnostics_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage29, __protoMessage326, DiagnosticSeverity, DiagnosticsArgs, DiagnosticsResult, DiagnosticsSuccess, Diagnostic2, DiagnosticsError, DiagnosticsRejected, DiagnosticsFileNotFound, DiagnosticsPermissionDenied;
 var init_diagnostics_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/diagnostics_exec_pb.js"() {
@@ -202,3 +207,4 @@ var init_diagnostics_exec_pb = __esm({
     };
   }
 });
+

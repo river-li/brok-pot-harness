@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/usage_signals_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage147, __protoMessage3140, SubjectScore, ProjectionScoreSet, GetProjectionSnapshotRequest, GetProjectionSnapshotResponse;
 var init_usage_signals_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/usage_signals_pb.js"() {
@@ -112,3 +117,4 @@ var init_usage_signals_pb = __esm({
     };
   }
 });
+

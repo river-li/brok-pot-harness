@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/slack_notification_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage161 = "origin.v1.";
@@ -167,3 +172,4 @@ var GetOriginUserSlackNotificationResponse = class _GetOriginUserSlackNotificati
     return ["GetOriginUserSlackNotificationResponse|1 notification #0?", OriginSlackNotification];
   }
 };
+

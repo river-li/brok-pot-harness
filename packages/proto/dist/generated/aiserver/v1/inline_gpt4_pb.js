@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/inline_gpt4_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage141, __protoMessage3134, StreamInlineLongCompletionRequest, StreamInlineLongCompletionRequest_ContextBlock, StreamInlineLongCompletionRequest_ContextBlock_ContextType;
 var init_inline_gpt4_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/inline_gpt4_pb.js"() {
@@ -64,3 +69,4 @@ var init_inline_gpt4_pb = __esm({
     StreamInlineLongCompletionRequest_ContextBlock_ContextType = /* @__PURE__ */ enumType(proto3, __protoPackage141, "StreamInlineLongCompletionRequest.ContextBlock.ContextType", [[0, "UNSPECIFIED"], [1, "RECENT_LOCATIONS"]], 1);
   }
 });
+

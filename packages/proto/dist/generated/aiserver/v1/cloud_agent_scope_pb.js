@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/cloud_agent_scope_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage9, __protoMessage37, CloudAgentRequestScope, CloudAgentPersonalScope;
 var init_cloud_agent_scope_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/cloud_agent_scope_pb.js"() {
@@ -58,3 +63,4 @@ var init_cloud_agent_scope_pb = __esm({
     };
   }
 });
+

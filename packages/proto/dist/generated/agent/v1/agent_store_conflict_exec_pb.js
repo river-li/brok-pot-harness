@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/agent_store_conflict_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage116, __protoMessage3112, AgentStoreConflictCursor, AgentStoreConflictArgs, AgentStoreConflictEvent, AgentStoreConflictResult, AgentStoreConflictSuccess, AgentStoreConflictError;
 var init_agent_store_conflict_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/agent_store_conflict_exec_pb.js"() {
@@ -154,3 +159,4 @@ var init_agent_store_conflict_exec_pb = __esm({
     };
   }
 });
+

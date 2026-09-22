@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/context_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage122, __protoMessage3118, ContextItem, ContextItem_FileChunk, ContextItem_SparseFileChunk, ContextItem_SparseFileChunk_Line, ContextItem_OutlineChunk, ContextItem_CmdKSelection, ContextItem_FileDiffHistory, ContextItem_CmdKImmediateContext, ContextItem_CmdKImmediateContext_Line, ContextItem_CmdKQuery, ContextItem_TerminalCmdKQuery, ContextItem_TerminalCmdKQueryHistory, ContextItem_CmdKQueryHistory, ContextItem_CmdKQueryHistoryInDiffSession, ContextItem_CmdKQueryHistoryInDiffSession_PastCmdKQueryInDiffSession, ContextItem_ChatHistory, ContextItem_TerminalHistory, ContextItem_CustomInstructions, ContextItem_GoToDefinitionResult, ContextItem_DocumentationChunk, ContextItem_Lints, ContextItem_Lints_Line, ContextItem_NotebookCellOutput, ContextItem_LspSubgraphChunk, ContextItem_CommitNoteChunk, ContextIntent, ContextIntent_Type, ContextIntent_Documentation, ContextIntent_File, ContextIntent_File_Mode, ContextIntent_CodeSelection, ContextIntent_CommitNotes, ContextIntent_Lints, ContextIntent_Lints_CmdKScope, ContextIntent_Lints_FileScope, ContextIntent_RecentLocations, ContextIntent_PastCmdkConversationsInDiffSessions, ContextIntent_VisibleTabs, ContextIntent_CmdKCurrentFile, ContextIntent_CmdKQueryEtc, ContextIntent_CustomInstructions, ContextIntent_CmdKDefinitions, ContextIntent_ChatHistory, ContextIntent_DiffHistory, ContextIntent_TerminalCmdKDefaults, ContextIntent_TerminalHistory, ContextIntent_LspSubgraph;
 var init_context_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/context_pb.js"() {
@@ -1032,3 +1037,4 @@ var init_context_pb = __esm({
     };
   }
 });
+

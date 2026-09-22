@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/mcp_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage31, __protoMessage328, McpToolDefinition, McpTools, McpInstructions, McpDescriptor, McpToolDescriptor, McpFileSystemOptions, McpMetaToolOptions;
 var init_mcp_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_pb.js"() {
@@ -179,3 +184,4 @@ var init_mcp_pb = __esm({
     };
   }
 });
+

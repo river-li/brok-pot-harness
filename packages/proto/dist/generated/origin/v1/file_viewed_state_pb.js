@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/file_viewed_state_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage168 = "origin.v1.";
@@ -295,3 +300,4 @@ var FileViewedState = class _FileViewedState extends __protoMessage3160 {
     return ["FileViewedState|1 file_path 9|2 version_id 9|3 stale 8?"];
   }
 };
+

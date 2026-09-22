@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/anyrun/v1/snapshot_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage7, SnapshotState;
 var init_snapshot_pb = __esm({
   "../packages/proto/dist/generated/anyrun/v1/snapshot_pb.js"() {
@@ -8,3 +13,4 @@ var init_snapshot_pb = __esm({
     SnapshotState = /* @__PURE__ */ enumType(proto3, __protoPackage7, "SnapshotState", [[0, "UNSPECIFIED"], [1, "CREATING"], [2, "READY"], [3, "FAILED"], [4, "FINALIZING"]], 1);
   }
 });
+

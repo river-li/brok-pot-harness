@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/smart_mode_classifier_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage104, __protoMessage3100, SmartModeClassifierDecision, SmartModeClassifierConversationMessage, SmartModeClassifierArgs, SmartModeRiskTarget, SmartModeClassifierResult, SmartModeClassifierSuccess, SmartModeClassifierError;
 var init_smart_mode_classifier_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/smart_mode_classifier_exec_pb.js"() {
@@ -150,3 +155,4 @@ var init_smart_mode_classifier_exec_pb = __esm({
     };
   }
 });
+

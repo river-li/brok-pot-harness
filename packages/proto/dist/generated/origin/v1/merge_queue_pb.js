@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/merge_queue_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage172 = "origin.v1.";
@@ -552,3 +557,4 @@ var MergeQueueEntryStatus = class _MergeQueueEntryStatus extends __protoMessage3
   }
 };
 var MergeQueueEntryStatus_Kind = /* @__PURE__ */ enumType(proto3, __protoPackage172, "MergeQueueEntryStatus.Kind", [[0, "UNSPECIFIED"], [1, "QUEUED"], [2, "VALIDATING"], [3, "MERGING"], [4, "MERGED"], [5, "EVICTED"]], 1);
+

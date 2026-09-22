@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/git_forge/v1/rpc_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage155 = "git_forge.v1.";
@@ -1300,3 +1305,4 @@ var SearchRefsResponse = class _SearchRefsResponse extends __protoMessage3147 {
     return ["SearchRefsResponse|1 ref_infos #0*|2 exact_match 8", RefInfo];
   }
 };
+

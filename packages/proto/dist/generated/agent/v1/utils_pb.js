@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/utils_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage14, __protoMessage311, Range2, Position, OutputLocation, SmartModeApproval;
 var init_utils_pb2 = __esm({
   "../packages/proto/dist/generated/agent/v1/utils_pb.js"() {
@@ -106,3 +111,4 @@ var init_utils_pb2 = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pi_ls_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage80, __protoMessage377, PiLsToolCall, PiLsToolArgs, PiLsToolResult, PiLsToolSuccess, PiLsToolError;
 var init_pi_ls_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_ls_tool_pb.js"() {
@@ -124,3 +129,4 @@ var init_pi_ls_tool_pb = __esm({
     };
   }
 });
+

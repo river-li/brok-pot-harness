@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pi_write_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage77, __protoMessage374, PiWriteToolCall, PiWriteToolArgs, PiWriteToolResult, PiWriteToolSuccess, PiWriteToolError, PiWriteToolRejected;
 var init_pi_write_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_write_tool_pb.js"() {
@@ -147,3 +152,4 @@ var init_pi_write_tool_pb = __esm({
     };
   }
 });
+

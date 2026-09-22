@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pi_grep_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage113, __protoMessage3109, PiGrepExecArgs, PiGrepExecResult, PiGrepExecSuccess, PiGrepExecError;
 var init_pi_grep_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_grep_exec_pb.js"() {
@@ -105,3 +110,4 @@ var init_pi_grep_exec_pb = __esm({
     };
   }
 });
+

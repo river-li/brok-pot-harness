@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/record_ci_investigation_findings_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage69, __protoMessage366, RecordCiInvestigationFinding, RecordCiInvestigationOverall, RecordCiInvestigationFindingsArgs, RecordCiInvestigationFindingsSuccess, RecordCiInvestigationFindingsError, RecordCiInvestigationFindingsResult, RecordCiInvestigationFindingsToolCall;
 var init_record_ci_investigation_findings_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/record_ci_investigation_findings_tool_pb.js"() {
@@ -172,3 +177,4 @@ var init_record_ci_investigation_findings_tool_pb = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/hook_additional_context_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage15, __protoMessage312, HookAdditionalContext;
 var init_hook_additional_context_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/hook_additional_context_pb.js"() {
@@ -38,3 +43,4 @@ var init_hook_additional_context_pb = __esm({
     };
   }
 });
+

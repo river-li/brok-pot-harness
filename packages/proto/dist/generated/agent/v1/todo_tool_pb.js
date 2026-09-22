@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/todo_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage25, __protoMessage322, TodoStatus, TodoItem, UpdateTodosToolCall, UpdateTodosArgs, UpdateTodosResult, UpdateTodosSuccess, UpdateTodosError, ReadTodosToolCall, ReadTodosArgs, ReadTodosResult, ReadTodosSuccess, ReadTodosError;
 var init_todo_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/todo_tool_pb.js"() {
@@ -266,3 +271,4 @@ var init_todo_tool_pb = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/hooks_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage117, __protoMessage3113, PreCompactRequestQuery, PreCompactRequestResponse, SubagentStartRequestQuery, SubagentStartRequestResponse, SubagentStopRequestQuery, SubagentStopRequestResponse, BeforeSubmitPromptAttachment, BeforeSubmitPromptRequestQuery, BeforeSubmitPromptRequestResponse, AfterAgentResponseRequestQuery, AfterAgentResponseRequestResponse, AfterAgentThoughtRequestQuery, AfterAgentThoughtRequestResponse, StopRequestQuery, StopRequestResponse, PreToolUseRequestQuery, PreToolUseRequestResponse, PostToolUseRequestQuery, PostToolUseRequestResponse, PostToolUseFailureRequestQuery, PostToolUseFailureRequestResponse;
 var init_hooks_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/hooks_pb.js"() {
@@ -508,3 +513,4 @@ var init_hooks_pb = __esm({
     };
   }
 });
+

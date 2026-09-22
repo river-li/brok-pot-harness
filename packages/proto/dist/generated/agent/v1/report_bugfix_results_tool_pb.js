@@ -1,20 +1,25 @@
-var __protoPackage48, __protoMessage348, BugfixVerdict, BugfixResultItem, ReportBugfixResultsArgs, ReportBugfixResultsSuccess, ReportBugfixResultsError, ReportBugfixResultsResult, ReportBugfixResultsToolCall;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/report_bugfix_results_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __protoPackage56, __protoMessage353, BugfixVerdict, BugfixResultItem, ReportBugfixResultsArgs, ReportBugfixResultsSuccess, ReportBugfixResultsError, ReportBugfixResultsResult, ReportBugfixResultsToolCall;
 var init_report_bugfix_results_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/report_bugfix_results_tool_pb.js"() {
     "use strict";
-    init_esm13();
+    init_esm();
     init_compact();
-    __protoPackage48 = "agent.v1.";
-    __protoMessage348 = class extends CompactMessage {
+    __protoPackage56 = "agent.v1.";
+    __protoMessage353 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage48;
+        return __protoPackage56;
       }
     };
-    BugfixVerdict = /* @__PURE__ */ enumType2(proto3, __protoPackage48, "BugfixVerdict", [[0, "UNSPECIFIED"], [1, "FIXED"], [2, "FALSE_POSITIVE"], [3, "COULD_NOT_FIX"], [4, "RESOLVED_BY_OTHER_FIX"]], 1);
-    BugfixResultItem = class _BugfixResultItem extends __protoMessage348 {
+    BugfixVerdict = /* @__PURE__ */ enumType(proto3, __protoPackage56, "BugfixVerdict", [[0, "UNSPECIFIED"], [1, "FIXED"], [2, "FALSE_POSITIVE"], [3, "COULD_NOT_FIX"], [4, "RESOLVED_BY_OTHER_FIX"]], 1);
+    BugfixResultItem = class _BugfixResultItem extends __protoMessage353 {
       constructor(data) {
         super();
         this.bugId = "";
@@ -39,7 +44,7 @@ var init_report_bugfix_results_tool_pb = __esm({
         return ["BugfixResultItem|1 bug_id 9|2 bug_title 9|3 verdict #0|4 explanation 9|5 severity 9?", BugfixVerdict];
       }
     };
-    ReportBugfixResultsArgs = class _ReportBugfixResultsArgs extends __protoMessage348 {
+    ReportBugfixResultsArgs = class _ReportBugfixResultsArgs extends __protoMessage353 {
       constructor(data) {
         super();
         this.summary = "";
@@ -62,7 +67,7 @@ var init_report_bugfix_results_tool_pb = __esm({
         return ["ReportBugfixResultsArgs|1 summary 9|2 results #0*", BugfixResultItem];
       }
     };
-    ReportBugfixResultsSuccess = class _ReportBugfixResultsSuccess extends __protoMessage348 {
+    ReportBugfixResultsSuccess = class _ReportBugfixResultsSuccess extends __protoMessage353 {
       constructor(data) {
         super();
         this.results = [];
@@ -84,7 +89,7 @@ var init_report_bugfix_results_tool_pb = __esm({
         return ["ReportBugfixResultsSuccess|1 results #0*", BugfixResultItem];
       }
     };
-    ReportBugfixResultsError = class _ReportBugfixResultsError extends __protoMessage348 {
+    ReportBugfixResultsError = class _ReportBugfixResultsError extends __protoMessage353 {
       constructor(data) {
         super();
         this.error = "";
@@ -106,7 +111,7 @@ var init_report_bugfix_results_tool_pb = __esm({
         return ["ReportBugfixResultsError|1 error 9"];
       }
     };
-    ReportBugfixResultsResult = class _ReportBugfixResultsResult extends __protoMessage348 {
+    ReportBugfixResultsResult = class _ReportBugfixResultsResult extends __protoMessage353 {
       constructor(data) {
         super();
         this.result = { case: void 0 };
@@ -128,7 +133,7 @@ var init_report_bugfix_results_tool_pb = __esm({
         return ["ReportBugfixResultsResult|1 success #0 result|2 error #1 result", ReportBugfixResultsSuccess, ReportBugfixResultsError];
       }
     };
-    ReportBugfixResultsToolCall = class _ReportBugfixResultsToolCall extends __protoMessage348 {
+    ReportBugfixResultsToolCall = class _ReportBugfixResultsToolCall extends __protoMessage353 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -151,3 +156,4 @@ var init_report_bugfix_results_tool_pb = __esm({
     };
   }
 });
+

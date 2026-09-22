@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/waterfall_update_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage130, __protoMessage3125, WaterfallLogLevel, WaterfallSpanStatusType, WaterfallSpanEndStatus, WaterfallPhaseType, WaterfallUpdate, SetupWaterfallSentinel, SpanStart, SpanUpdate, SpanEnd, SpanLog, SpanStatusUpdate, CallToAction, OpenUrlCallToAction, GitReposSetupSpanDetails, GitRepoSetupSpanDetails, GenericLogSpanUpdate;
 var init_waterfall_update_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/waterfall_update_pb.js"() {
@@ -291,3 +296,4 @@ var init_waterfall_update_pb = __esm({
     };
   }
 });
+

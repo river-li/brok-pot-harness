@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/anyrun/v1/pod_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage6, __protoMessage35, PodCreatingPhase, GitCloneFailureCategory, ImagePullFailureCategory, PodStatus, PodCreatingStatus, PodRunningStatus, PodFailedStatus, PodTerminatedStatus, PodFailureDetails, ContainerWaitFailure, InstallCommandFailure, DockerBuildFailure, GitCloneFailure, GitCheckoutFailure, ImagePullFailure;
 var init_pod_pb = __esm({
   "../packages/proto/dist/generated/anyrun/v1/pod_pb.js"() {
@@ -285,3 +290,4 @@ var init_pod_pb = __esm({
     };
   }
 });
+

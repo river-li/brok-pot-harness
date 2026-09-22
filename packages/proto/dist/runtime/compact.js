@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/runtime/compact.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function defineOwn(target, key, value) {
   Object.defineProperty(target, key, {
     value,
@@ -75,7 +80,7 @@ function enumLocalNames(enumName, names3) {
 function enumValuePrefix(enumName) {
   return (enumName.charAt(0) + enumName.slice(1).replace(/[A-Z]/g, (c) => "_" + c)).toUpperCase() + "_";
 }
-function enumType2(runtime, packagePrefix, enumName, values, names3) {
+function enumType(runtime, packagePrefix, enumName, values, names3) {
   const simpleName = enumName.slice(enumName.lastIndexOf(".") + 1);
   let protoNames;
   let localNames;
@@ -102,7 +107,7 @@ var CompactMessage;
 var init_compact = __esm({
   "../packages/proto/dist/runtime/compact.js"() {
     "use strict";
-    init_esm13();
+    init_esm();
     CompactMessage = class extends Message {
       static get typeName() {
         const cls = this;
@@ -118,3 +123,4 @@ var init_compact = __esm({
     };
   }
 });
+

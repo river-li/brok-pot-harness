@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/agent_startup_trace_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage138, __protoMessage3131, AgentStartupTraceEvent, AgentStartupTraceEvent_ContextLink, AgentStartupTraceEvent_SpanStarted, AgentStartupTraceEvent_SpanEnded, AgentStartupTraceEvent_UserAction, AgentStartupTraceEvent_TurnClose;
 var init_agent_startup_trace_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/agent_startup_trace_pb.js"() {
@@ -150,3 +155,4 @@ var init_agent_startup_trace_pb = __esm({
     };
   }
 });
+

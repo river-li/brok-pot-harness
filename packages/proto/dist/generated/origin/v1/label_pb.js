@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/label_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage179 = "origin.v1.";
@@ -336,3 +341,4 @@ var RemoveLabelFromChangeResponse = class _RemoveLabelFromChangeResponse extends
     return ["RemoveLabelFromChangeResponse"];
   }
 };
+

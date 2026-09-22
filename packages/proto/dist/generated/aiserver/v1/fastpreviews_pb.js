@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/fastpreviews_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage142, __protoMessage3135, StreamAiPreviewsIntent, StreamAiPreviewsRequest, StreamAiPreviewsResponse;
 var init_fastpreviews_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/fastpreviews_pb.js"() {
@@ -83,3 +88,4 @@ var init_fastpreviews_pb = __esm({
     };
   }
 });
+

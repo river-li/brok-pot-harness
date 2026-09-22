@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/mcp_resource_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage39, __protoMessage336, ListMcpResourcesToolCall, ReadMcpResourceToolCall;
 var init_mcp_resource_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_resource_tool_pb.js"() {
@@ -58,3 +63,4 @@ var init_mcp_resource_tool_pb = __esm({
     };
   }
 });
+

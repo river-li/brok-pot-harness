@@ -1,4 +1,9 @@
-init_esm13();
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/inference_connect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+init_esm();
 var InferenceService = {
   typeName: "aiserver.v1.InferenceService",
   methods: {
@@ -70,3 +75,4 @@ var InferenceService = {
     }
   }
 };
+

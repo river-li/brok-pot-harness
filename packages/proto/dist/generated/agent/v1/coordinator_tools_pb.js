@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/coordinator_tools_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage86, __protoMessage383, CreateAgentPlacementApprovalState, GetAgentStatusArgs, GetAgentStatusWorker, GetAgentStatusSuccess, GetAgentStatusError, GetAgentStatusResult, GetAgentStatusToolCall, SendToAgentArgs, SendToAgentSuccess, SendToAgentError, SendToAgentResult, SendToAgentToolCall, ReadAgentTranscriptArgs, ReadAgentTranscriptSuccess, ReadAgentTranscriptError, ReadAgentTranscriptResult, ReadAgentTranscriptToolCall, CreateAgentArgs, CreateAgentSuccess, CreateAgentError, CreateAgentResult, CreateAgentToolCall, StopAgentArgs, StopAgentSuccess, StopAgentError, StopAgentResult, StopAgentToolCall;
 var init_coordinator_tools_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/coordinator_tools_pb.js"() {
@@ -606,3 +611,4 @@ var init_coordinator_tools_pb = __esm({
     };
   }
 });
+

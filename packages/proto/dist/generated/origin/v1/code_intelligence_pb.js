@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/code_intelligence_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage162 = "origin.v1.";
@@ -280,3 +285,4 @@ var FindCodeIntelligenceReferencesAtPositionResponse = class _FindCodeIntelligen
     return ["FindCodeIntelligenceReferencesAtPositionResponse|1 header #0 chunk|2 result #1 chunk|3 trailer #2 chunk", FindCodeIntelligenceReferencesAtPositionHeader, FindCodeIntelligenceReferencesAtPositionResult, FindCodeIntelligenceReferencesAtPositionTrailer];
   }
 };
+

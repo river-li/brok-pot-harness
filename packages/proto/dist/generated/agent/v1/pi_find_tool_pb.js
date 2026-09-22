@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pi_find_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage79, __protoMessage376, PiFindToolCall, PiFindToolArgs, PiFindToolResult, PiFindToolSuccess, PiFindToolError;
 var init_pi_find_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_find_tool_pb.js"() {
@@ -125,3 +130,4 @@ var init_pi_find_tool_pb = __esm({
     };
   }
 });
+

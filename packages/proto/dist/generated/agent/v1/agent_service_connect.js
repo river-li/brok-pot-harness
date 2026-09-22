@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/agent_service_connect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_service_pb();
 init_esm();
 init_bidi_pb();
@@ -227,3 +232,4 @@ var AgentService = {
     }
   }
 };
+

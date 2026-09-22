@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/selected_context_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage94, __protoMessage390, SelectedPluginCapabilityType, SelectedImage, SelectedImage_BlobIdWithData, SelectedImage_Dimension, PromptUploadRef, SelectedDocument, SelectedDocument_BlobIdWithData, SelectedVideo, SelectedVideo_BlobIdWithData, SelectedVideo_SignedUrl, ExtraContextEntry, SelectedFile, SelectedCodeSelection, SelectedTerminal, SelectedTerminalSelection, SelectedFolder, SelectedExternalLink, SelectedCursorRule, SelectedGitDiff, SelectedGitDiffFromBranchToMain, SelectedGitCommit, SelectedPullRequest, SelectedGitPRDiffSelection, SelectedPluginCapabilityRef, SelectedCursorCommand, SelectedDocumentation, SelectedPastChat, RecentAgent, RecentAgentsContext, CallFrame, StackTrace, SelectedConsoleLog, SelectedUIElement, SelectedSubagent, SelectedBrowser, SelectedAgenticGitActionCommitParams, SelectedAgenticGitActionCreateBranchParams, SelectedAgenticGitFileWithStatus, SelectedAgenticGitActionPushParams, SelectedAgenticGitActionFixMergeConflictsParams, SelectedAgenticGitActionBabysitPrInCloudParams, SelectedAgenticGitActionUpdateBranchParams, SelectedAgenticGitActionPullLocallyParams, SelectedAgenticGitAction, SelectedGitBranchContext, SelectedContext, InvocationContext, InvocationContext_SlackThread, InvocationContext_MicrosoftTeamsThread, InvocationContext_GithubPR, InvocationContext_IdeState, InvocationContext_IdeState_File, InvocationContext_IdeState_File_CursorPosition, InvocationContext_IdeState_ViewedPullRequest;
 var init_selected_context_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/selected_context_pb.js"() {
@@ -1259,3 +1264,4 @@ var init_selected_context_pb = __esm({
     };
   }
 });
+

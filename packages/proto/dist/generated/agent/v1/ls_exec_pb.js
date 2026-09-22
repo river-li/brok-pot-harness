@@ -1,20 +1,25 @@
-var __protoPackage18, __protoMessage318, LsArgs, LsResult, LsSuccess, LsDirectoryTreeNode, LsDirectoryTreeNode_File, LsError, LsRejected, LsTimeout, TerminalMetadata, TerminalMetadata_Command;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/ls_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __protoPackage27, __protoMessage324, LsArgs, LsResult, LsSuccess, LsDirectoryTreeNode, LsDirectoryTreeNode_File, LsError, LsRejected, LsTimeout, TerminalMetadata, TerminalMetadata_Command;
 var init_ls_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/ls_exec_pb.js"() {
     "use strict";
-    init_esm13();
+    init_esm();
     init_sandbox_pb();
     init_compact();
-    __protoPackage18 = "agent.v1.";
-    __protoMessage318 = class extends CompactMessage {
+    __protoPackage27 = "agent.v1.";
+    __protoMessage324 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage18;
+        return __protoPackage27;
       }
     };
-    LsArgs = class _LsArgs extends __protoMessage318 {
+    LsArgs = class _LsArgs extends __protoMessage324 {
       constructor(data) {
         super();
         this.path = "";
@@ -38,7 +43,7 @@ var init_ls_exec_pb = __esm({
         return ["LsArgs|1 path 9|2 ignore 9*|3 tool_call_id 9|4 sandbox_policy #0?|5 timeout_ms 13?", SandboxPolicy];
       }
     };
-    LsResult = class _LsResult extends __protoMessage318 {
+    LsResult = class _LsResult extends __protoMessage324 {
       constructor(data) {
         super();
         this.result = { case: void 0 };
@@ -60,7 +65,7 @@ var init_ls_exec_pb = __esm({
         return ["LsResult|1 success #0 result|2 error #1 result|3 rejected #2 result|4 timeout #3 result", LsSuccess, LsError, LsRejected, LsTimeout];
       }
     };
-    LsSuccess = class _LsSuccess extends __protoMessage318 {
+    LsSuccess = class _LsSuccess extends __protoMessage324 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -81,7 +86,7 @@ var init_ls_exec_pb = __esm({
         return ["LsSuccess|1 directory_tree_root #0", LsDirectoryTreeNode];
       }
     };
-    LsDirectoryTreeNode = class _LsDirectoryTreeNode extends __protoMessage318 {
+    LsDirectoryTreeNode = class _LsDirectoryTreeNode extends __protoMessage324 {
       constructor(data) {
         super();
         this.absPath = "";
@@ -108,7 +113,7 @@ var init_ls_exec_pb = __esm({
         return ["LsDirectoryTreeNode|1 abs_path 9|2 children_dirs #0*|3 children_files #1*|4 children_were_processed 8|5 full_subtree_extension_counts 9,5|6 num_files 5", _LsDirectoryTreeNode, LsDirectoryTreeNode_File];
       }
     };
-    LsDirectoryTreeNode_File = class _LsDirectoryTreeNode_File extends __protoMessage318 {
+    LsDirectoryTreeNode_File = class _LsDirectoryTreeNode_File extends __protoMessage324 {
       constructor(data) {
         super();
         this.name = "";
@@ -130,7 +135,7 @@ var init_ls_exec_pb = __esm({
         return ["LsDirectoryTreeNode.File|1 name 9|2 terminal_metadata #0?", TerminalMetadata];
       }
     };
-    LsError = class _LsError extends __protoMessage318 {
+    LsError = class _LsError extends __protoMessage324 {
       constructor(data) {
         super();
         this.path = "";
@@ -153,7 +158,7 @@ var init_ls_exec_pb = __esm({
         return ["LsError|1 path 9|2 error 9"];
       }
     };
-    LsRejected = class _LsRejected extends __protoMessage318 {
+    LsRejected = class _LsRejected extends __protoMessage324 {
       constructor(data) {
         super();
         this.path = "";
@@ -176,7 +181,7 @@ var init_ls_exec_pb = __esm({
         return ["LsRejected|1 path 9|2 reason 9"];
       }
     };
-    LsTimeout = class _LsTimeout extends __protoMessage318 {
+    LsTimeout = class _LsTimeout extends __protoMessage324 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -197,7 +202,7 @@ var init_ls_exec_pb = __esm({
         return ["LsTimeout|1 directory_tree_root #0", LsDirectoryTreeNode];
       }
     };
-    TerminalMetadata = class _TerminalMetadata extends __protoMessage318 {
+    TerminalMetadata = class _TerminalMetadata extends __protoMessage324 {
       constructor(data) {
         super();
         this.lastCommands = [];
@@ -219,7 +224,7 @@ var init_ls_exec_pb = __esm({
         return ["TerminalMetadata|1 cwd 9?|2 last_commands #0*|3 last_modified_ms 3?|4 current_command #0?", TerminalMetadata_Command];
       }
     };
-    TerminalMetadata_Command = class _TerminalMetadata_Command extends __protoMessage318 {
+    TerminalMetadata_Command = class _TerminalMetadata_Command extends __protoMessage324 {
       constructor(data) {
         super();
         this.command = "";
@@ -243,3 +248,4 @@ var init_ls_exec_pb = __esm({
     };
   }
 });
+

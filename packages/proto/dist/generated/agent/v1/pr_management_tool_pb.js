@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pr_management_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage58, __protoMessage355, PullRequestStatus, PrManagementArgs, CreatePrAction, UpdatePrAction, PostCommentAction, ResolveCommentAction, GetCiStatusAction, SetPrStatusAction, PrManagementResult, PrManagementSuccess, PrManagementError, PrManagementRejected, PrManagementRegistered, PrManagementNeedsConfirmation, PrManagementToolCall, PrManagementRequestQuery;
 var init_pr_management_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pr_management_tool_pb.js"() {
@@ -357,3 +362,4 @@ var init_pr_management_tool_pb = __esm({
     };
   }
 });
+

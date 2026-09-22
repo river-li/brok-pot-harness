@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/background_composer_connect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var BackgroundComposerService;
 var init_background_composer_connect = __esm({
   "../packages/proto/dist/generated/aiserver/v1/background_composer_connect.js"() {
@@ -2796,3 +2801,4 @@ var init_background_composer_connect = __esm({
     };
   }
 });
+

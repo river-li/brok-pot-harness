@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/agent_service_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage146, __protoMessage3139, LocalPromptQualityInvocationStatus, LocalAgentMailboxGapReason, LocalAgentMailboxEndedReason, ClientHeartbeat, PrewarmRequest, AgentClientMessage, TtftBreakdown, AgentServerMessage, NameAgentRequest, NameAgentResponse, UpdateConversationMetadataRequest, UpdateConversationMetadataResponse, GetPromptContextUsageRequest, GetPromptContextUsageResponse, CreateTranscriptOverviewRequest, CreateTranscriptOverviewResponse, GetUsableModelsRequest, GetUsableModelsResponse, GetDefaultModelForCliRequest, GetDefaultModelForCliResponse, GetAllowedModelIntentsRequest, GetAllowedModelIntentsResponse, BlobEntry, UploadConversationBlobsRequest, UploadConversationBlobsResponse, LocalPromptQualityInvocation, UploadLocalAgentRunToPromptQualityRequest, UploadLocalAgentRunToPromptQualityResponse, GetSignedUrlForAttachedMediaRequest, GetSignedUrlForAttachedMediaResponse, NotifyConversationCloneRequest, NotifyConversationCloneResponse, GetNewChatNudgeLegacyModelPickerRequest, GetNewChatNudgeLegacyModelPickerResponse, NudgeBumpVariant, NudgeAskVariant, NudgeSilentSwitchVariant, NewChatNudge, ListLocalSubscriptionToolsRequest, LocalSubscriptionToolDefinition, ListLocalSubscriptionToolsResponse, CallLocalSubscriptionToolRequest, CallLocalSubscriptionToolResponse, SubscriptionDeliveryEntry, SubscriptionRemovedEntry, LocalAgentMailboxEntry, StreamLocalAgentMailboxRequest, StreamLocalAgentMailboxRequest_ConversationCursor, LocalAgentMailboxDelivery, LocalAgentMailboxGap, LocalAgentMailboxEnded, StreamLocalAgentMailboxHeartbeat, StreamLocalAgentMailboxResponse, GetNewChatNudgeParameterizedModelPickerRequest, GetNewChatNudgeParameterizedModelPickerResponse, NewChatNudgeV2;
 var init_agent_service_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/agent_service_pb.js"() {
@@ -1237,3 +1242,4 @@ var init_agent_service_pb = __esm({
     };
   }
 });
+

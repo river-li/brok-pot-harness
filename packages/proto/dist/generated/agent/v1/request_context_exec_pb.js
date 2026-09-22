@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/request_context_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage93, __protoMessage389, MountedAgentStoreKind, RequestContextArgs, RequestContextResult, RequestContextSuccess, RequestContextError, RequestContextRejected, GitRepoInfo, RequestContextEnv, MountedAgentStore, UserAgentStoreWebContext, DebugModeConfig, SkillDescriptor, SkillOptions, HooksConfigInfo, PermissionsAutoRunInstructions, PrecomputedHumanChangeRenderedDiff, PrecomputedHumanChange, RequestContext, RequestContextPartReferences, RecentlyAddedPlugin, RecentlyAddedPlugin_CapabilityDescriptor, MatchedInstalledPlugin;
 var init_request_context_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/request_context_exec_pb.js"() {
@@ -551,3 +556,4 @@ var init_request_context_exec_pb = __esm({
     };
   }
 });
+

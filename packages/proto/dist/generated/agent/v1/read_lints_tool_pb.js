@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/read_lints_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage30, __protoMessage327, ReadLintsToolCall, ReadLintsToolArgs, ReadLintsToolResult, ReadLintsToolSuccess, FileDiagnostics, DiagnosticItem, DiagnosticRange, ReadLintsToolError;
 var init_read_lints_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/read_lints_tool_pb.js"() {
@@ -199,3 +204,4 @@ var init_read_lints_tool_pb = __esm({
     };
   }
 });
+

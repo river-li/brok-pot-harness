@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/origin_connect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_esm();
+
+// @recovered-fragment 2/2
 var OriginService = {
   typeName: "origin.v1.OriginService",
   methods: {
@@ -2571,3 +2579,4 @@ var OriginService = {
     }
   }
 };
+

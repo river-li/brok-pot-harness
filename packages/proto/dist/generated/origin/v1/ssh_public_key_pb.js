@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/ssh_public_key_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage160 = "origin.v1.";
@@ -164,3 +169,4 @@ var DeleteSshPublicKeyResponse = class _DeleteSshPublicKeyResponse extends __pro
     return ["DeleteSshPublicKeyResponse"];
   }
 };
+

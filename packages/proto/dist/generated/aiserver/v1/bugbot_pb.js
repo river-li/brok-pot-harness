@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/bugbot_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage100, __protoMessage396, BugLocation, BugReport, BugReports, StreamBugBotRequest, StreamBugBotRequest_Range;
 var init_bugbot_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/bugbot_pb.js"() {
@@ -134,3 +139,4 @@ var init_bugbot_pb = __esm({
     };
   }
 });
+

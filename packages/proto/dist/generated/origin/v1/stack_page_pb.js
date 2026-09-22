@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/stack_page_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_esm();
+
+// @recovered-fragment 2/2
 init_compact();
 var __protoPackage175 = "origin.v1.";
 var __protoMessage3166 = class extends CompactMessage {
@@ -78,3 +86,4 @@ var ChangeStackPageItem = class _ChangeStackPageItem extends __protoMessage3166 
     return ["ChangeStackPageItem|1 change #0|2 versions #1*|3 assignments #2*|4 reviews #3*|5 mergeability #4|6 total_thread_count 5|7 unresolved_thread_count 5", Change, Version2, ChangeAssignment, Review, GetChangesetMergeabilityResponse];
   }
 };
+

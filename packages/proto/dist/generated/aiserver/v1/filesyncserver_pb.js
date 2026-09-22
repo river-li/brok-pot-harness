@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/filesyncserver_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage120, __protoMessage3116, FilesyncUpdateWithModelVersion, SingleUpdateRequest;
 var init_filesyncserver_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/filesyncserver_pb.js"() {
@@ -66,3 +71,4 @@ var init_filesyncserver_pb = __esm({
     };
   }
 });
+

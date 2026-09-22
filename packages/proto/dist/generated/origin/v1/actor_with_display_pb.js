@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/actor_with_display_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage164 = "origin.v1.";
@@ -34,3 +39,4 @@ var ActorWithDisplay = class _ActorWithDisplay extends __protoMessage3156 {
     return ["ActorWithDisplay|1 id 9|2 kind 9|3 display_name 9|4 avatar_url 9|6 owner #0", _ActorWithDisplay];
   }
 };
+

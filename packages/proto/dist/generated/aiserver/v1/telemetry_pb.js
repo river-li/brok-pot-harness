@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/telemetry_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage143, __protoMessage3136, PerformanceEventType, ProfileKind, InteractionType, SpanKind, ReportInlineActionRequest, ReportInlineActionResponse, ReportMetricsRequest, ReportMetricsRequest_Metric, ReportMetricsRequest_NamedMetric, ReportMetricsResponse, ScriptTiming, PerformanceEvent, SystemMetadata, SubmitPerformanceEventsRequest, SubmitPerformanceEventsResponse, CapturedProfile, Interaction, CapturedWebProfile, SubmitProfileRequest, SubmitProfileResponse, SubmitInteractionWindowRequest, SubmitInteractionWindowResponse, PerformanceMetric, TraceSpan, Status, Status_StatusCode, TraceLink, SubmitSpansRequest, SubmitSpansResponse, SubmitToolCallEventsRequest, SubmitToolCallEventsResponse, ToolCallTelemetryEvent, SubmitChatRequestEventsRequest, SubmitChatRequestEventsResponse, ChatRequestTelemetryEvent;
 var init_telemetry_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/telemetry_pb.js"() {
@@ -741,3 +746,4 @@ var init_telemetry_pb = __esm({
     };
   }
 });
+

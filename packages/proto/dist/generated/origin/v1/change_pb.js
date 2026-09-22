@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/change_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_esm();
+
+// @recovered-fragment 2/2
 init_compact();
 var __protoPackage165 = "origin.v1.";
 var __protoMessage3157 = class extends CompactMessage {
@@ -3430,3 +3438,4 @@ var CheckChangeCreationAccessResponse = class _CheckChangeCreationAccessResponse
     return ["CheckChangeCreationAccessResponse"];
   }
 };
+

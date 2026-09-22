@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/scm_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage137, __protoMessage3130, PRCheckStatus, PRCheckAnnotation, PRCheck;
 var init_scm_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/scm_pb.js"() {
@@ -94,3 +99,4 @@ var init_scm_pb = __esm({
     };
   }
 });
+

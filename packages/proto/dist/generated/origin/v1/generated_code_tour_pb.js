@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/generated_code_tour_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage170 = "origin.v1.";
@@ -149,3 +154,4 @@ var UpsertGeneratedCodeTourResponse = class _UpsertGeneratedCodeTourResponse ext
     return ["UpsertGeneratedCodeTourResponse|1 tour #0", GeneratedCodeTour];
   }
 };
+

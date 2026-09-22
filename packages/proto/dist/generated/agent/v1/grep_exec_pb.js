@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/grep_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage21, __protoMessage318, GrepArgs, GrepResult, GrepError, GrepSuccess, GrepUnionResult, GrepCountResult, GrepFileCount, GrepFilesResult, GrepContentResult, GrepFileMatch, GrepContentMatch;
 var init_grep_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/grep_exec_pb.js"() {
@@ -278,3 +283,4 @@ var init_grep_exec_pb = __esm({
     };
   }
 });
+

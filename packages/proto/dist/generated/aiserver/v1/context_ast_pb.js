@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/context_ast_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage126, __protoMessage3121, ContextAST, ContainerTree, ContainerTreeNode, ContainerTreeNode_Symbol, ContainerTreeNode_Container, ContainerTreeNode_Blob, ContainerTreeNode_Reference;
 var init_context_ast_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/context_ast_pb.js"() {
@@ -178,3 +183,4 @@ var init_context_ast_pb = __esm({
     };
   }
 });
+

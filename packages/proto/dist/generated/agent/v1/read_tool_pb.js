@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/read_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage24, __protoMessage321, ReadToolCall, ReadToolArgs, ReadToolResult, ReadRange, ReadToolSuccess, ReadToolError;
 var init_read_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/read_tool_pb.js"() {
@@ -155,3 +160,4 @@ var init_read_tool_pb = __esm({
     };
   }
 });
+

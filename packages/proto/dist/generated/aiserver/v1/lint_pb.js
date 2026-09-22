@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/lint_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage125, __protoMessage3120, LintDiscriminator, LintGenerator, LintDiscriminatorResult, AiLintBug, LogprobsLintPayload, AiLintRule;
 var init_lint_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/lint_pb.js"() {
@@ -120,3 +125,4 @@ var init_lint_pb = __esm({
     };
   }
 });
+

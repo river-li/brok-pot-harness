@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/origin_common_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage156 = "origin.v1.";
@@ -55,3 +60,4 @@ var GithubRepoIdentifier = class _GithubRepoIdentifier extends __protoMessage314
     return ["GithubRepoIdentifier|1 owner 9|2 repo 9|3 enterprise_id 9?"];
   }
 };
+

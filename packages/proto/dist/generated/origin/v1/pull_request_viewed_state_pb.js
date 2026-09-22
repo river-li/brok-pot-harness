@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/origin/v1/pull_request_viewed_state_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_esm();
 init_compact();
 var __protoPackage169 = "origin.v1.";
@@ -53,3 +58,4 @@ var MarkPullRequestAsViewedResponse = class _MarkPullRequestAsViewedResponse ext
     return ["MarkPullRequestAsViewedResponse|1 viewed_at #0|2 timeline_viewed_at #0?", Timestamp];
   }
 };
+

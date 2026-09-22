@@ -1,24 +1,29 @@
-var __protoPackage27, __protoMessage327, RerankerAlgorithm, DatabaseProvider, RechunkerChoice, QueryOnlyRepoAccess, CodeResult, FileResult, RepositoryInfo, NodeResult, ReflectionResult, SearchRepositoryDeepContextResponse;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/repository_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __protoPackage35, __protoMessage332, RerankerAlgorithm, DatabaseProvider, RechunkerChoice, QueryOnlyRepoAccess, CodeResult, FileResult, RepositoryInfo, NodeResult, ReflectionResult, SearchRepositoryDeepContextResponse;
 var init_repository_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/repository_pb.js"() {
     "use strict";
-    init_esm13();
-    init_utils_pb2();
+    init_esm();
+    init_utils_pb();
     init_symbolic_context_pb();
     init_compact();
-    __protoPackage27 = "aiserver.v1.";
-    __protoMessage327 = class extends CompactMessage {
+    __protoPackage35 = "aiserver.v1.";
+    __protoMessage332 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage27;
+        return __protoPackage35;
       }
     };
-    RerankerAlgorithm = /* @__PURE__ */ enumType2(proto3, __protoPackage27, "RerankerAlgorithm", [[0, "UNSPECIFIED"], [1, "LULEA"], [2, "UMEA"], [3, "NONE"], [4, "LLAMA"], [5, "STARCODER_V1"], [6, "GPT_3_5_LOGPROBS"], [7, "LULEA_HAIKU"], [8, "COHERE"], [9, "VOYAGE"], [10, "VOYAGE_EMBEDS"], [11, "IDENTITY"], [12, "ADA_EMBEDS"]], 1);
-    DatabaseProvider = /* @__PURE__ */ enumType2(proto3, __protoPackage27, "DatabaseProvider", [[0, "UNSPECIFIED"], [1, "AURORA"], [2, "PLANETSCALE"]], 1);
-    RechunkerChoice = /* @__PURE__ */ enumType2(proto3, __protoPackage27, "RechunkerChoice", [[0, "RECHUNKER_CHOICE_UNSPECIFIED"], [1, "RECHUNKER_CHOICE_IDENTITY"], [2, "RECHUNKER_CHOICE_600_TOKS"], [3, "RECHUNKER_CHOICE_2400_TOKS"], [4, "RECHUNKER_CHOICE_4000_TOKS"]]);
-    QueryOnlyRepoAccess = class _QueryOnlyRepoAccess extends __protoMessage327 {
+    RerankerAlgorithm = /* @__PURE__ */ enumType(proto3, __protoPackage35, "RerankerAlgorithm", [[0, "UNSPECIFIED"], [1, "LULEA"], [2, "UMEA"], [3, "NONE"], [4, "LLAMA"], [5, "STARCODER_V1"], [6, "GPT_3_5_LOGPROBS"], [7, "LULEA_HAIKU"], [8, "COHERE"], [9, "VOYAGE"], [10, "VOYAGE_EMBEDS"], [11, "IDENTITY"], [12, "ADA_EMBEDS"]], 1);
+    DatabaseProvider = /* @__PURE__ */ enumType(proto3, __protoPackage35, "DatabaseProvider", [[0, "UNSPECIFIED"], [1, "AURORA"], [2, "PLANETSCALE"]], 1);
+    RechunkerChoice = /* @__PURE__ */ enumType(proto3, __protoPackage35, "RechunkerChoice", [[0, "RECHUNKER_CHOICE_UNSPECIFIED"], [1, "RECHUNKER_CHOICE_IDENTITY"], [2, "RECHUNKER_CHOICE_600_TOKS"], [3, "RECHUNKER_CHOICE_2400_TOKS"], [4, "RECHUNKER_CHOICE_4000_TOKS"]]);
+    QueryOnlyRepoAccess = class _QueryOnlyRepoAccess extends __protoMessage332 {
       constructor(data) {
         super();
         this.ownerAuthId = "";
@@ -43,7 +48,7 @@ var init_repository_pb = __esm({
         return ["QueryOnlyRepoAccess|1 owner_auth_id 9|2 access_token 9|3 user_repo_owner 9|4 user_repo_name 9"];
       }
     };
-    CodeResult = class _CodeResult extends __protoMessage327 {
+    CodeResult = class _CodeResult extends __protoMessage332 {
       constructor(data) {
         super();
         this.score = 0;
@@ -65,7 +70,7 @@ var init_repository_pb = __esm({
         return ["CodeResult|1 code_block #0|2 score 2", CodeBlock];
       }
     };
-    FileResult = class _FileResult extends __protoMessage327 {
+    FileResult = class _FileResult extends __protoMessage332 {
       constructor(data) {
         super();
         this.score = 0;
@@ -87,7 +92,7 @@ var init_repository_pb = __esm({
         return ["FileResult|1 file #0|2 score 2", File2];
       }
     };
-    RepositoryInfo = class _RepositoryInfo extends __protoMessage327 {
+    RepositoryInfo = class _RepositoryInfo extends __protoMessage332 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -116,7 +121,7 @@ var init_repository_pb = __esm({
         return ["RepositoryInfo|1 relative_workspace_path 9|2 remote_urls 9*|3 remote_names 9*|4 repo_name 9|5 repo_owner 9|6 is_tracked 8|7 is_local 8|8 num_files 5?|9 orthogonal_transform_seed 1?|10 preferred_embedding_model #0?|11 workspace_uri 9|12 preferred_db_provider #1?", EmbeddingModel, DatabaseProvider];
       }
     };
-    NodeResult = class _NodeResult extends __protoMessage327 {
+    NodeResult = class _NodeResult extends __protoMessage332 {
       constructor(data) {
         super();
         this.score = 0;
@@ -138,7 +143,7 @@ var init_repository_pb = __esm({
         return ["NodeResult|1 node #0|2 file #1|3 score 2", IndexFileData_NodeData, File2];
       }
     };
-    ReflectionResult = class _ReflectionResult extends __protoMessage327 {
+    ReflectionResult = class _ReflectionResult extends __protoMessage332 {
       constructor(data) {
         super();
         this.score = 0;
@@ -160,7 +165,7 @@ var init_repository_pb = __esm({
         return ["ReflectionResult|1 reflection #0|2 score 2", ReflectionData];
       }
     };
-    SearchRepositoryDeepContextResponse = class _SearchRepositoryDeepContextResponse extends __protoMessage327 {
+    SearchRepositoryDeepContextResponse = class _SearchRepositoryDeepContextResponse extends __protoMessage332 {
       constructor(data) {
         super();
         this.topNodes = [];
@@ -186,3 +191,4 @@ var init_repository_pb = __esm({
     };
   }
 });
+

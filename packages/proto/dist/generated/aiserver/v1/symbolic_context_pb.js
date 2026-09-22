@@ -1,20 +1,25 @@
-var __protoPackage26, __protoMessage326, CreateExperimentalIndexRequest, CreateExperimentalIndexResponse, ListExperimentalIndexFilesRequest, ListExperimentalIndexFilesResponse, ListenExperimentalIndexRequest, ListenExperimentalIndexResponse, ListenExperimentalIndexResponse_ReadyItem, ListenExperimentalIndexResponse_RegisterItem, ListenExperimentalIndexResponse_ChooseItem, ListenExperimentalIndexResponse_SummarizeItem, ListenExperimentalIndexResponse_ErrorItem, RegisterFileToIndexRequest, RegisterFileToIndexResponse, SetupIndexDependenciesRequest, SetupIndexDependenciesResponse, ComputeIndexTopoSortRequest, ComputeIndexTopoSortResponse, ChooseCodeReferencesRequest, ChooseCodeReferencesRequest_FileRequest, ChooseCodeReferencesRequest_NodeRequest, ChooseCodeReferencesResponse, ChooseCodeReferencesResponse_NodeResponse, ChooseCodeReferencesResponse_FileResponse, RegisterCodeReferencesRequest, RegisterCodeReferencesResponse, SummarizeWithReferencesRequest, SummarizeWithReferencesResponse, SummarizeWithReferencesResponse_Success, SummarizeWithReferencesResponse_Dependency, RequestReceivedResponse, ReflectionData, IndexFileData, IndexFileData_NodeData, SerializedContextNode, URIResolutionAttempt, URIResolutionResult, ExtractPathsRequest, ExtractPathsResponse, SymbolActionResults, SymbolActionResultReference, FileCodeSnippets, CodeSnippet, CodeSymbolWithAction, CodeSymbolWithAction_CodeSymbolAction;
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/symbolic_context_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+var __protoPackage34, __protoMessage331, CreateExperimentalIndexRequest, CreateExperimentalIndexResponse, ListExperimentalIndexFilesRequest, ListExperimentalIndexFilesResponse, ListenExperimentalIndexRequest, ListenExperimentalIndexResponse, ListenExperimentalIndexResponse_ReadyItem, ListenExperimentalIndexResponse_RegisterItem, ListenExperimentalIndexResponse_ChooseItem, ListenExperimentalIndexResponse_SummarizeItem, ListenExperimentalIndexResponse_ErrorItem, RegisterFileToIndexRequest, RegisterFileToIndexResponse, SetupIndexDependenciesRequest, SetupIndexDependenciesResponse, ComputeIndexTopoSortRequest, ComputeIndexTopoSortResponse, ChooseCodeReferencesRequest, ChooseCodeReferencesRequest_FileRequest, ChooseCodeReferencesRequest_NodeRequest, ChooseCodeReferencesResponse, ChooseCodeReferencesResponse_NodeResponse, ChooseCodeReferencesResponse_FileResponse, RegisterCodeReferencesRequest, RegisterCodeReferencesResponse, SummarizeWithReferencesRequest, SummarizeWithReferencesResponse, SummarizeWithReferencesResponse_Success, SummarizeWithReferencesResponse_Dependency, RequestReceivedResponse, ReflectionData, IndexFileData, IndexFileData_NodeData, SerializedContextNode, URIResolutionAttempt, URIResolutionResult, ExtractPathsRequest, ExtractPathsResponse, SymbolActionResults, SymbolActionResultReference, FileCodeSnippets, CodeSnippet, CodeSymbolWithAction, CodeSymbolWithAction_CodeSymbolAction;
 var init_symbolic_context_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/symbolic_context_pb.js"() {
     "use strict";
-    init_esm13();
-    init_utils_pb2();
+    init_esm();
+    init_utils_pb();
     init_compact();
-    __protoPackage26 = "aiserver.v1.";
-    __protoMessage326 = class extends CompactMessage {
+    __protoPackage34 = "aiserver.v1.";
+    __protoMessage331 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage26;
+        return __protoPackage34;
       }
     };
-    CreateExperimentalIndexRequest = class _CreateExperimentalIndexRequest extends __protoMessage326 {
+    CreateExperimentalIndexRequest = class _CreateExperimentalIndexRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.files = [];
@@ -38,7 +43,7 @@ var init_symbolic_context_pb = __esm({
         return ["CreateExperimentalIndexRequest|1 files 9*|2 target_dir 9|3 repo 9"];
       }
     };
-    CreateExperimentalIndexResponse = class _CreateExperimentalIndexResponse extends __protoMessage326 {
+    CreateExperimentalIndexResponse = class _CreateExperimentalIndexResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -60,7 +65,7 @@ var init_symbolic_context_pb = __esm({
         return ["CreateExperimentalIndexResponse|1 index_id 9"];
       }
     };
-    ListExperimentalIndexFilesRequest = class _ListExperimentalIndexFilesRequest extends __protoMessage326 {
+    ListExperimentalIndexFilesRequest = class _ListExperimentalIndexFilesRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -82,7 +87,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListExperimentalIndexFilesRequest|1 index_id 9"];
       }
     };
-    ListExperimentalIndexFilesResponse = class _ListExperimentalIndexFilesResponse extends __protoMessage326 {
+    ListExperimentalIndexFilesResponse = class _ListExperimentalIndexFilesResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -105,7 +110,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListExperimentalIndexFilesResponse|1 index_id 9|2 files #0*", IndexFileData];
       }
     };
-    ListenExperimentalIndexRequest = class _ListenExperimentalIndexRequest extends __protoMessage326 {
+    ListenExperimentalIndexRequest = class _ListenExperimentalIndexRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -127,7 +132,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListenExperimentalIndexRequest|1 index_id 9"];
       }
     };
-    ListenExperimentalIndexResponse = class _ListenExperimentalIndexResponse extends __protoMessage326 {
+    ListenExperimentalIndexResponse = class _ListenExperimentalIndexResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -150,7 +155,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListenExperimentalIndexResponse|1 index_id 9|2 ready #0 item|3 register #1 item|4 choose #2 item|5 summarize #3 item|6 error #4 item", ListenExperimentalIndexResponse_ReadyItem, ListenExperimentalIndexResponse_RegisterItem, ListenExperimentalIndexResponse_ChooseItem, ListenExperimentalIndexResponse_SummarizeItem, ListenExperimentalIndexResponse_ErrorItem];
       }
     };
-    ListenExperimentalIndexResponse_ReadyItem = class _ListenExperimentalIndexResponse_ReadyItem extends __protoMessage326 {
+    ListenExperimentalIndexResponse_ReadyItem = class _ListenExperimentalIndexResponse_ReadyItem extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -172,7 +177,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListenExperimentalIndexResponse.ReadyItem|1 index_id 9|2 request #0", ListenExperimentalIndexRequest];
       }
     };
-    ListenExperimentalIndexResponse_RegisterItem = class _ListenExperimentalIndexResponse_RegisterItem extends __protoMessage326 {
+    ListenExperimentalIndexResponse_RegisterItem = class _ListenExperimentalIndexResponse_RegisterItem extends __protoMessage331 {
       constructor(data) {
         super();
         this.reqUuid = "";
@@ -194,7 +199,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListenExperimentalIndexResponse.RegisterItem|1 response #0|2 request #1|3 req_uuid 9", RegisterFileToIndexResponse, RegisterFileToIndexRequest];
       }
     };
-    ListenExperimentalIndexResponse_ChooseItem = class _ListenExperimentalIndexResponse_ChooseItem extends __protoMessage326 {
+    ListenExperimentalIndexResponse_ChooseItem = class _ListenExperimentalIndexResponse_ChooseItem extends __protoMessage331 {
       constructor(data) {
         super();
         this.reqUuid = "";
@@ -216,7 +221,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListenExperimentalIndexResponse.ChooseItem|1 response #0|2 request #1|3 req_uuid 9", ChooseCodeReferencesResponse, ChooseCodeReferencesRequest];
       }
     };
-    ListenExperimentalIndexResponse_SummarizeItem = class _ListenExperimentalIndexResponse_SummarizeItem extends __protoMessage326 {
+    ListenExperimentalIndexResponse_SummarizeItem = class _ListenExperimentalIndexResponse_SummarizeItem extends __protoMessage331 {
       constructor(data) {
         super();
         this.reqUuid = "";
@@ -238,7 +243,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListenExperimentalIndexResponse.SummarizeItem|1 response #0|2 request #1|3 req_uuid 9", SummarizeWithReferencesResponse, SummarizeWithReferencesRequest];
       }
     };
-    ListenExperimentalIndexResponse_ErrorItem = class _ListenExperimentalIndexResponse_ErrorItem extends __protoMessage326 {
+    ListenExperimentalIndexResponse_ErrorItem = class _ListenExperimentalIndexResponse_ErrorItem extends __protoMessage331 {
       constructor(data) {
         super();
         this.message = "";
@@ -263,7 +268,7 @@ var init_symbolic_context_pb = __esm({
         return ["ListenExperimentalIndexResponse.ErrorItem|1 message 9|2 status_code 5|3 register #0 request|4 choose #1 request|5 summarize #2 request|6 req_uuid 9", RegisterFileToIndexRequest, ChooseCodeReferencesRequest, SummarizeWithReferencesRequest];
       }
     };
-    RegisterFileToIndexRequest = class _RegisterFileToIndexRequest extends __protoMessage326 {
+    RegisterFileToIndexRequest = class _RegisterFileToIndexRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -287,7 +292,7 @@ var init_symbolic_context_pb = __esm({
         return ["RegisterFileToIndexRequest|1 index_id 9|2 workspace_relative_path 9|3 root_context_node #0|4 content 9*", SerializedContextNode];
       }
     };
-    RegisterFileToIndexResponse = class _RegisterFileToIndexResponse extends __protoMessage326 {
+    RegisterFileToIndexResponse = class _RegisterFileToIndexResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.fileId = "";
@@ -311,7 +316,7 @@ var init_symbolic_context_pb = __esm({
         return ["RegisterFileToIndexResponse|1 file_id 9|2 root_context_node_id 9|3 dependency_resolution_attempts #0*|4 file_data #1", URIResolutionAttempt, IndexFileData];
       }
     };
-    SetupIndexDependenciesRequest = class _SetupIndexDependenciesRequest extends __protoMessage326 {
+    SetupIndexDependenciesRequest = class _SetupIndexDependenciesRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -335,7 +340,7 @@ var init_symbolic_context_pb = __esm({
         return ["SetupIndexDependenciesRequest|1 index_id 9|3 file_id 9|2 dependency_resolution_results #0*", URIResolutionResult];
       }
     };
-    SetupIndexDependenciesResponse = class _SetupIndexDependenciesResponse extends __protoMessage326 {
+    SetupIndexDependenciesResponse = class _SetupIndexDependenciesResponse extends __protoMessage331 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -356,7 +361,7 @@ var init_symbolic_context_pb = __esm({
         return ["SetupIndexDependenciesResponse"];
       }
     };
-    ComputeIndexTopoSortRequest = class _ComputeIndexTopoSortRequest extends __protoMessage326 {
+    ComputeIndexTopoSortRequest = class _ComputeIndexTopoSortRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -378,7 +383,7 @@ var init_symbolic_context_pb = __esm({
         return ["ComputeIndexTopoSortRequest|1 index_id 9"];
       }
     };
-    ComputeIndexTopoSortResponse = class _ComputeIndexTopoSortResponse extends __protoMessage326 {
+    ComputeIndexTopoSortResponse = class _ComputeIndexTopoSortResponse extends __protoMessage331 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -399,7 +404,7 @@ var init_symbolic_context_pb = __esm({
         return ["ComputeIndexTopoSortResponse"];
       }
     };
-    ChooseCodeReferencesRequest = class _ChooseCodeReferencesRequest extends __protoMessage326 {
+    ChooseCodeReferencesRequest = class _ChooseCodeReferencesRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -423,7 +428,7 @@ var init_symbolic_context_pb = __esm({
         return ["ChooseCodeReferencesRequest|1 index_id 9|2 file #0 request|3 node #1 request|4 recompute 8", ChooseCodeReferencesRequest_FileRequest, ChooseCodeReferencesRequest_NodeRequest];
       }
     };
-    ChooseCodeReferencesRequest_FileRequest = class _ChooseCodeReferencesRequest_FileRequest extends __protoMessage326 {
+    ChooseCodeReferencesRequest_FileRequest = class _ChooseCodeReferencesRequest_FileRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.fileId = "";
@@ -445,7 +450,7 @@ var init_symbolic_context_pb = __esm({
         return ["ChooseCodeReferencesRequest.FileRequest|1 file_id 9"];
       }
     };
-    ChooseCodeReferencesRequest_NodeRequest = class _ChooseCodeReferencesRequest_NodeRequest extends __protoMessage326 {
+    ChooseCodeReferencesRequest_NodeRequest = class _ChooseCodeReferencesRequest_NodeRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.nodeId = "";
@@ -467,7 +472,7 @@ var init_symbolic_context_pb = __esm({
         return ["ChooseCodeReferencesRequest.NodeRequest|1 node_id 9"];
       }
     };
-    ChooseCodeReferencesResponse = class _ChooseCodeReferencesResponse extends __protoMessage326 {
+    ChooseCodeReferencesResponse = class _ChooseCodeReferencesResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.response = { case: void 0 };
@@ -489,7 +494,7 @@ var init_symbolic_context_pb = __esm({
         return ["ChooseCodeReferencesResponse|1 file #0 response|2 node #1 response", ChooseCodeReferencesResponse_FileResponse, ChooseCodeReferencesResponse_NodeResponse];
       }
     };
-    ChooseCodeReferencesResponse_NodeResponse = class _ChooseCodeReferencesResponse_NodeResponse extends __protoMessage326 {
+    ChooseCodeReferencesResponse_NodeResponse = class _ChooseCodeReferencesResponse_NodeResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.nodeId = "";
@@ -514,7 +519,7 @@ var init_symbolic_context_pb = __esm({
         return ["ChooseCodeReferencesResponse.NodeResponse|1 node_id 9|2 actions #0*|3 skipped 8|4 dependencies 9*", CodeSymbolWithAction];
       }
     };
-    ChooseCodeReferencesResponse_FileResponse = class _ChooseCodeReferencesResponse_FileResponse extends __protoMessage326 {
+    ChooseCodeReferencesResponse_FileResponse = class _ChooseCodeReferencesResponse_FileResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.fileId = "";
@@ -537,7 +542,7 @@ var init_symbolic_context_pb = __esm({
         return ["ChooseCodeReferencesResponse.FileResponse|1 file_id 9|2 node_responses #0*", ChooseCodeReferencesResponse_NodeResponse];
       }
     };
-    RegisterCodeReferencesRequest = class _RegisterCodeReferencesRequest extends __protoMessage326 {
+    RegisterCodeReferencesRequest = class _RegisterCodeReferencesRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.nodeId = "";
@@ -560,7 +565,7 @@ var init_symbolic_context_pb = __esm({
         return ["RegisterCodeReferencesRequest|1 node_id 9|2 references #0*", SymbolActionResults];
       }
     };
-    RegisterCodeReferencesResponse = class _RegisterCodeReferencesResponse extends __protoMessage326 {
+    RegisterCodeReferencesResponse = class _RegisterCodeReferencesResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.dependencies = [];
@@ -582,7 +587,7 @@ var init_symbolic_context_pb = __esm({
         return ["RegisterCodeReferencesResponse|1 dependencies 9*"];
       }
     };
-    SummarizeWithReferencesRequest = class _SummarizeWithReferencesRequest extends __protoMessage326 {
+    SummarizeWithReferencesRequest = class _SummarizeWithReferencesRequest extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -606,7 +611,7 @@ var init_symbolic_context_pb = __esm({
         return ["SummarizeWithReferencesRequest|1 index_id 9|2 node_id 9|3 recompute 8"];
       }
     };
-    SummarizeWithReferencesResponse = class _SummarizeWithReferencesResponse extends __protoMessage326 {
+    SummarizeWithReferencesResponse = class _SummarizeWithReferencesResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.response = { case: void 0 };
@@ -629,7 +634,7 @@ var init_symbolic_context_pb = __esm({
         return ["SummarizeWithReferencesResponse|1 success #0 response|2 dependency #1 response|3 node_id 9", SummarizeWithReferencesResponse_Success, SummarizeWithReferencesResponse_Dependency];
       }
     };
-    SummarizeWithReferencesResponse_Success = class _SummarizeWithReferencesResponse_Success extends __protoMessage326 {
+    SummarizeWithReferencesResponse_Success = class _SummarizeWithReferencesResponse_Success extends __protoMessage331 {
       constructor(data) {
         super();
         this.summary = "";
@@ -651,7 +656,7 @@ var init_symbolic_context_pb = __esm({
         return ["SummarizeWithReferencesResponse.Success|1 summary 9"];
       }
     };
-    SummarizeWithReferencesResponse_Dependency = class _SummarizeWithReferencesResponse_Dependency extends __protoMessage326 {
+    SummarizeWithReferencesResponse_Dependency = class _SummarizeWithReferencesResponse_Dependency extends __protoMessage331 {
       constructor(data) {
         super();
         this.nodes = [];
@@ -673,7 +678,7 @@ var init_symbolic_context_pb = __esm({
         return ["SummarizeWithReferencesResponse.Dependency|2 nodes 9*"];
       }
     };
-    RequestReceivedResponse = class _RequestReceivedResponse extends __protoMessage326 {
+    RequestReceivedResponse = class _RequestReceivedResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.reqUuid = "";
@@ -695,7 +700,7 @@ var init_symbolic_context_pb = __esm({
         return ["RequestReceivedResponse|1 req_uuid 9"];
       }
     };
-    ReflectionData = class _ReflectionData extends __protoMessage326 {
+    ReflectionData = class _ReflectionData extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -719,7 +724,7 @@ var init_symbolic_context_pb = __esm({
         return ["ReflectionData|1 index_id 9|2 id 9|3 summary 9"];
       }
     };
-    IndexFileData = class _IndexFileData extends __protoMessage326 {
+    IndexFileData = class _IndexFileData extends __protoMessage331 {
       constructor(data) {
         super();
         this.indexId = "";
@@ -745,7 +750,7 @@ var init_symbolic_context_pb = __esm({
         return ["IndexFileData|1 index_id 9|2 workspace_relative_path 9|3 stage 9|4 order 5|5 nodes #0*", IndexFileData_NodeData];
       }
     };
-    IndexFileData_NodeData = class _IndexFileData_NodeData extends __protoMessage326 {
+    IndexFileData_NodeData = class _IndexFileData_NodeData extends __protoMessage331 {
       constructor(data) {
         super();
         this.nodeId = "";
@@ -770,7 +775,7 @@ var init_symbolic_context_pb = __esm({
         return ["IndexFileData.NodeData|1 node_id 9|2 stage 9|3 content 9|4 summary 9"];
       }
     };
-    SerializedContextNode = class _SerializedContextNode extends __protoMessage326 {
+    SerializedContextNode = class _SerializedContextNode extends __protoMessage331 {
       constructor(data) {
         super();
         this.workspaceRelativePath = "";
@@ -795,7 +800,7 @@ var init_symbolic_context_pb = __esm({
         return ["SerializedContextNode|1 workspace_relative_path 9|2 start_line_number 5|3 end_line_number 5|4 children #0*|5 node_snippets #1", _SerializedContextNode, FileCodeSnippets];
       }
     };
-    URIResolutionAttempt = class _URIResolutionAttempt extends __protoMessage326 {
+    URIResolutionAttempt = class _URIResolutionAttempt extends __protoMessage331 {
       constructor(data) {
         super();
         this.workspaceRelativePath = "";
@@ -818,7 +823,7 @@ var init_symbolic_context_pb = __esm({
         return ["URIResolutionAttempt|1 workspace_relative_path 9|2 node_id 9|3 symbol #0", CodeSymbolWithAction];
       }
     };
-    URIResolutionResult = class _URIResolutionResult extends __protoMessage326 {
+    URIResolutionResult = class _URIResolutionResult extends __protoMessage331 {
       constructor(data) {
         super();
         this.resolvedPaths = [];
@@ -840,7 +845,7 @@ var init_symbolic_context_pb = __esm({
         return ["URIResolutionResult|1 request #0|2 resolved_paths 9*", URIResolutionAttempt];
       }
     };
-    ExtractPathsRequest = class _ExtractPathsRequest extends __protoMessage326 {
+    ExtractPathsRequest = class _ExtractPathsRequest extends __protoMessage331 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -861,7 +866,7 @@ var init_symbolic_context_pb = __esm({
         return ["ExtractPathsRequest|1 file_code_snippets #0", FileCodeSnippets];
       }
     };
-    ExtractPathsResponse = class _ExtractPathsResponse extends __protoMessage326 {
+    ExtractPathsResponse = class _ExtractPathsResponse extends __protoMessage331 {
       constructor(data) {
         super();
         this.paths = [];
@@ -883,7 +888,7 @@ var init_symbolic_context_pb = __esm({
         return ["ExtractPathsResponse|1 paths #0*", CodeSymbolWithAction];
       }
     };
-    SymbolActionResults = class _SymbolActionResults extends __protoMessage326 {
+    SymbolActionResults = class _SymbolActionResults extends __protoMessage331 {
       constructor(data) {
         super();
         this.references = [];
@@ -905,7 +910,7 @@ var init_symbolic_context_pb = __esm({
         return ["SymbolActionResults|1 action #0|2 references #1*", CodeSymbolWithAction, SymbolActionResultReference];
       }
     };
-    SymbolActionResultReference = class _SymbolActionResultReference extends __protoMessage326 {
+    SymbolActionResultReference = class _SymbolActionResultReference extends __protoMessage331 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -926,7 +931,7 @@ var init_symbolic_context_pb = __esm({
         return ["SymbolActionResultReference|1 range #0|2 reference #1", SimpleRange, FileCodeSnippets];
       }
     };
-    FileCodeSnippets = class _FileCodeSnippets extends __protoMessage326 {
+    FileCodeSnippets = class _FileCodeSnippets extends __protoMessage331 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -950,7 +955,7 @@ var init_symbolic_context_pb = __esm({
         return ["FileCodeSnippets|1 relative_workspace_path 9|2 total_lines 5|3 snippets #0*", CodeSnippet];
       }
     };
-    CodeSnippet = class _CodeSnippet extends __protoMessage326 {
+    CodeSnippet = class _CodeSnippet extends __protoMessage331 {
       constructor(data) {
         super();
         this.startLineNumber = 0;
@@ -974,7 +979,7 @@ var init_symbolic_context_pb = __esm({
         return ["CodeSnippet|1 start_line_number 5|2 end_line_number 5|3 lines 9*"];
       }
     };
-    CodeSymbolWithAction = class _CodeSymbolWithAction extends __protoMessage326 {
+    CodeSymbolWithAction = class _CodeSymbolWithAction extends __protoMessage331 {
       constructor(data) {
         super();
         this.workspaceRelativePath = "";
@@ -1001,6 +1006,7 @@ var init_symbolic_context_pb = __esm({
         return ["CodeSymbolWithAction|1 workspace_relative_path 9|2 line_number 5|3 symbol_start_column 5|4 symbol_end_column 5|5 action #0|6 symbol 9", CodeSymbolWithAction_CodeSymbolAction];
       }
     };
-    CodeSymbolWithAction_CodeSymbolAction = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "CodeSymbolWithAction.CodeSymbolAction", [[0, "UNSPECIFIED"], [1, "GO_TO_DEFINITION"], [2, "GO_TO_IMPLEMENTATION"], [3, "REFERENCES"]], 1);
+    CodeSymbolWithAction_CodeSymbolAction = /* @__PURE__ */ enumType(proto3, __protoPackage34, "CodeSymbolWithAction.CodeSymbolAction", [[0, "UNSPECIFIED"], [1, "GO_TO_DEFINITION"], [2, "GO_TO_IMPLEMENTATION"], [3, "REFERENCES"]], 1);
   }
 });
+

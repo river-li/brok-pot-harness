@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/bidi_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage144, __protoMessage3137, BidiRequestId, BidiPollRequest, BidiPollResponse;
 var init_bidi_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/bidi_pb.js"() {
@@ -81,3 +86,4 @@ var init_bidi_pb = __esm({
     };
   }
 });
+

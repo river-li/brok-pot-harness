@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/send_message_tool_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage70, __protoMessage367, SendMessageText, SendMessageAttachment, SendMessageArgs, SendMessageSuccess, SendMessageError, SendMessageResult, SendMessageToolCall;
 var init_send_message_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/send_message_tool_pb.js"() {
@@ -169,3 +174,4 @@ var init_send_message_tool_pb = __esm({
     };
   }
 });
+

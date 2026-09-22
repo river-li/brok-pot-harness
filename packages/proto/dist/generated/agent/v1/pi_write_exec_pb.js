@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pi_write_exec_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage112, __protoMessage3108, PiWriteExecArgs, PiWriteExecResult, PiWriteExecSuccess, PiWriteExecError, PiWriteExecRejected;
 var init_pi_write_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_write_exec_pb.js"() {
@@ -126,3 +131,4 @@ var init_pi_write_exec_pb = __esm({
     };
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/grok_bot_connect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var GrokBotService;
 var init_grok_bot_connect = __esm({
   "../packages/proto/dist/generated/aiserver/v1/grok_bot_connect.js"() {
@@ -2613,3 +2618,4 @@ var init_grok_bot_connect = __esm({
     };
   }
 });
+

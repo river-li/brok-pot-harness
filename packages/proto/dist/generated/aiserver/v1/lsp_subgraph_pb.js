@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/lsp_subgraph_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage119, __protoMessage3115, LspSubgraphPosition, LspSubgraphRange, LspSubgraphContextItem, LspSubgraphFullContext;
 var init_lsp_subgraph_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/lsp_subgraph_pb.js"() {
@@ -112,3 +117,4 @@ var init_lsp_subgraph_pb = __esm({
     };
   }
 });
+

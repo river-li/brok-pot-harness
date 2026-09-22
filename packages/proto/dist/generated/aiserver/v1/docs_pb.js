@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/docs_pb.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var __protoPackage97, __protoMessage393, DocumentationMetadata, DocumentationChunk, DocumentationQueryRequest, DocumentationQueryResponse, DocumentationQueryResponse_Status;
 var init_docs_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/docs_pb.js"() {
@@ -118,3 +123,4 @@ var init_docs_pb = __esm({
     DocumentationQueryResponse_Status = /* @__PURE__ */ enumType(proto3, __protoPackage97, "DocumentationQueryResponse.Status", [[0, "UNSPECIFIED"], [1, "NOT_FOUND"], [2, "SUCCESS"], [3, "FAILURE"]], 1);
   }
 });
+
