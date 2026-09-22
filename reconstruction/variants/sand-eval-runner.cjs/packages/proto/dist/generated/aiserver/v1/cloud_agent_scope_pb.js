@@ -1,0 +1,60 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/aiserver/v1/cloud_agent_scope_pb.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+init_esm13();
+init_compact();
+var __protoPackage120 = "aiserver.v1.";
+var __protoMessage3119 = class extends CompactMessage {
+  static get runtime() {
+    return defineOwn(this, "runtime", proto3);
+  }
+  static $p() {
+    return __protoPackage120;
+  }
+};
+var CloudAgentRequestScope = class _CloudAgentRequestScope extends __protoMessage3119 {
+  constructor(data) {
+    super();
+    this.scope = { case: void 0 };
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _CloudAgentRequestScope().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _CloudAgentRequestScope().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _CloudAgentRequestScope().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_CloudAgentRequestScope, a, b2);
+  }
+  static $() {
+    return ["CloudAgentRequestScope|1 personal #0 scope|2 team_id 5 scope", CloudAgentPersonalScope];
+  }
+};
+var CloudAgentPersonalScope = class _CloudAgentPersonalScope extends __protoMessage3119 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _CloudAgentPersonalScope().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _CloudAgentPersonalScope().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _CloudAgentPersonalScope().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_CloudAgentPersonalScope, a, b2);
+  }
+  static $() {
+    return ["CloudAgentPersonalScope"];
+  }
+};
+

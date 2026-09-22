@@ -1,0 +1,105 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/setup_vm_environment_tool_pb.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+init_esm13();
+init_compact();
+var __protoPackage44 = "agent.v1.";
+var __protoMessage344 = class extends CompactMessage {
+  static get runtime() {
+    return defineOwn(this, "runtime", proto3);
+  }
+  static $p() {
+    return __protoPackage44;
+  }
+};
+var SetupVmEnvironmentArgs = class _SetupVmEnvironmentArgs extends __protoMessage344 {
+  constructor(data) {
+    super();
+    this.installCommand = "";
+    this.startCommand = "";
+    this.dockerfileContents = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _SetupVmEnvironmentArgs().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _SetupVmEnvironmentArgs().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _SetupVmEnvironmentArgs().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_SetupVmEnvironmentArgs, a, b2);
+  }
+  static $() {
+    return ["SetupVmEnvironmentArgs|2 install_command 9|3 start_command 9|4 dockerfile_contents 9"];
+  }
+};
+var SetupVmEnvironmentResult = class _SetupVmEnvironmentResult extends __protoMessage344 {
+  constructor(data) {
+    super();
+    this.result = { case: void 0 };
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _SetupVmEnvironmentResult().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _SetupVmEnvironmentResult().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _SetupVmEnvironmentResult().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_SetupVmEnvironmentResult, a, b2);
+  }
+  static $() {
+    return ["SetupVmEnvironmentResult|1 success #0 result", SetupVmEnvironmentSuccess];
+  }
+};
+var SetupVmEnvironmentSuccess = class _SetupVmEnvironmentSuccess extends __protoMessage344 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _SetupVmEnvironmentSuccess().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _SetupVmEnvironmentSuccess().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _SetupVmEnvironmentSuccess().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_SetupVmEnvironmentSuccess, a, b2);
+  }
+  static $() {
+    return ["SetupVmEnvironmentSuccess"];
+  }
+};
+var SetupVmEnvironmentToolCall = class _SetupVmEnvironmentToolCall extends __protoMessage344 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _SetupVmEnvironmentToolCall().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _SetupVmEnvironmentToolCall().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _SetupVmEnvironmentToolCall().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_SetupVmEnvironmentToolCall, a, b2);
+  }
+  static $() {
+    return ["SetupVmEnvironmentToolCall|1 args #0|2 result #1", SetupVmEnvironmentArgs, SetupVmEnvironmentResult];
+  }
+};
+

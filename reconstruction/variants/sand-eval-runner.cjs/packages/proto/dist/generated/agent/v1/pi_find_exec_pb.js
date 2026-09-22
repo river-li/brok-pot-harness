@@ -1,0 +1,105 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/proto/dist/generated/agent/v1/pi_find_exec_pb.js
+ * Bundle: sand-host/sand-eval-runner.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
+init_esm13();
+init_compact();
+var __protoPackage101 = "agent.v1.";
+var __protoMessage3100 = class extends CompactMessage {
+  static get runtime() {
+    return defineOwn(this, "runtime", proto3);
+  }
+  static $p() {
+    return __protoPackage101;
+  }
+};
+var PiFindExecArgs = class _PiFindExecArgs extends __protoMessage3100 {
+  constructor(data) {
+    super();
+    this.pattern = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _PiFindExecArgs().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _PiFindExecArgs().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _PiFindExecArgs().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_PiFindExecArgs, a, b2);
+  }
+  static $() {
+    return ["PiFindExecArgs|1 pattern 9|2 path 9?|3 limit 5?"];
+  }
+};
+var PiFindExecResult = class _PiFindExecResult extends __protoMessage3100 {
+  constructor(data) {
+    super();
+    this.result = { case: void 0 };
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _PiFindExecResult().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _PiFindExecResult().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _PiFindExecResult().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_PiFindExecResult, a, b2);
+  }
+  static $() {
+    return ["PiFindExecResult|1 success #0 result|2 error #1 result", PiFindExecSuccess, PiFindExecError];
+  }
+};
+var PiFindExecSuccess = class _PiFindExecSuccess extends __protoMessage3100 {
+  constructor(data) {
+    super();
+    this.output = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _PiFindExecSuccess().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _PiFindExecSuccess().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _PiFindExecSuccess().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_PiFindExecSuccess, a, b2);
+  }
+  static $() {
+    return ["PiFindExecSuccess|1 output 9|2 truncation #0?|3 result_limit_reached 13?", PiTruncation];
+  }
+};
+var PiFindExecError = class _PiFindExecError extends __protoMessage3100 {
+  constructor(data) {
+    super();
+    this.error = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _PiFindExecError().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _PiFindExecError().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _PiFindExecError().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_PiFindExecError, a, b2);
+  }
+  static $() {
+    return ["PiFindExecError|1 error 9"];
+  }
+};
+
