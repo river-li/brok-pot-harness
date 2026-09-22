@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/session-diagnostic-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var WARN_KINDS3 = /* @__PURE__ */ new Set([
   "open_io_retry",
   "wal_unavailable",
@@ -44,3 +49,4 @@ function sessionDiagnosticTelemetry(report) {
     }
   };
 }
+

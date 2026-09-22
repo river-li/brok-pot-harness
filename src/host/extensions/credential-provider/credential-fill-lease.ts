@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/credential-fill-lease.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 init_errors();
 var DEFAULT_AUTOFILL_WAIT_MS = 8e3;
@@ -315,3 +320,4 @@ function createLeasedCredentialFill(options2) {
     }
   };
 }
+

@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/action-audit/action-audit-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises24 = require("node:fs/promises");
+var import_node_path30 = require("node:path");
+init_errors();
+
+// @recovered-fragment 2/2
 var ACTION_AUDIT_FLUSH_INTERVAL_MS = 5e3;
 var MAX_BATCH_SIZE = 50;
 var MAX_PENDING_EVENTS = 2e3;
@@ -230,3 +240,4 @@ function createSandActionAuditor(deps) {
     dispose
   };
 }
+

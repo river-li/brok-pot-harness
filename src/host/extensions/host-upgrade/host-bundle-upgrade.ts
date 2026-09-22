@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/host-upgrade/host-bundle-upgrade.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises55 = require("node:fs/promises");
 var import_node_path111 = require("node:path");
 init_dist2();
@@ -161,3 +166,4 @@ function hostBundleWatchNextDelayMs(baseMs, jitterRatio2, random = Math.random) 
   const delta = (clampWatchValue(random(), 0, 1) * 2 - 1) * base * ratio;
   return Math.max(0, Math.round(base + delta));
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/host-upgrade/host-bundle-source.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist2();
 init_errors();
 var SandHostBundleSourceError = class extends SandDomainError {
@@ -82,3 +87,4 @@ async function resolveHostBundleSource(fetchFn = fetch, channel = resolveHostBun
     loadBundle: () => fetchHostBundle(fetchFn, version3, base)
   };
 }
+

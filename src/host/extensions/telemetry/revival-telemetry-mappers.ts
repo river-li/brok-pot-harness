@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/revival-telemetry-mappers.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function subagentRevivalTelemetry(report) {
   return {
     level: report.outcome === "dropped" && report.reason !== "agent_deleted" ? "warn" : "info",
@@ -28,3 +33,4 @@ function shellRevivalTelemetry(report) {
     }
   };
 }
+

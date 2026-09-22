@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/email/email-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 function createEmailService(deps) {
   const { client, deadline, logWarning } = deps;
@@ -13,3 +18,4 @@ function createEmailService(deps) {
     reportUnexpectedError: (error42) => logWarning(`[sand:email] rpc failed (${errorLogTag(error42)})`)
   });
 }
+

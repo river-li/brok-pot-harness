@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/inference/sand-labeling.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 init_cursor_inference();
 var SAND_AGENT_MODE = "sand-agent";
@@ -78,3 +83,4 @@ function recordSandPostTurnLabeling(client, args) {
     logLabelingError("post_turn_labeling_prepare", error42);
   }
 }
+

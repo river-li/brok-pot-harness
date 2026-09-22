@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/managed-setup/managed-setup-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process14 = require("node:child_process");
 var import_node_fs65 = require("node:fs");
 var import_promises57 = require("node:fs/promises");
@@ -256,3 +261,4 @@ async function writeJsonAtomic(path31, value) {
   await writeFileAtomic(path31, `${JSON.stringify(value, null, 2)}
 `, { mode: 384 });
 }
+

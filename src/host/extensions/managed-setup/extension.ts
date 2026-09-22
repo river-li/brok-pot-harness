@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/managed-setup/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 function resolvePollIntervalMs(watchIntervalMsRaw) {
   const raw = Number.parseInt(watchIntervalMsRaw ?? "", 10);
   return Number.isInteger(raw) && raw > 0 ? raw : MANAGED_SETUP_POLL_INTERVAL_MS;
@@ -117,3 +127,4 @@ var managedSetupExtension = defineHostExtension({
   dependencies: [HostExtensions.Auth, HostExtensions.Settings, HostExtensions.Telemetry],
   start: startManagedSetup
 });
+

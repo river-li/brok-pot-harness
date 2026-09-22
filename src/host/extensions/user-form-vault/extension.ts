@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/user-form-vault/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto83 = require("node:crypto");
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 function entryOfProto(proto) {
   if (!isVaultKind(proto.kind)) return void 0;
   return {
@@ -64,3 +74,4 @@ var userFormVaultExtension = defineHostExtension({
   dependencies: [HostExtensions.Auth, HostExtensions.Experiments],
   start: startUserFormVault
 });
+

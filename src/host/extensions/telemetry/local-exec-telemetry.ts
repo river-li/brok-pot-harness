@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/local-exec-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function refusalError(cause) {
   switch (cause) {
     case "no_providers":
@@ -68,3 +73,4 @@ function localExecProviderTelemetry(report) {
     }
   };
 }
+

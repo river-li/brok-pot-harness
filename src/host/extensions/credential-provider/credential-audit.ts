@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/credential-audit.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_DESCRIPTOR_LENGTH = 80;
 var MAX_ELEMENT_COUNT = 8;
 function sensitiveVariants(value) {
@@ -89,3 +94,4 @@ function createCredentialAuditLogger(log4) {
     );
   };
 }
+

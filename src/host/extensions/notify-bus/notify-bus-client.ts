@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/notify-bus/notify-bus-client.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 init_cursor_inference();
 init_sand_client_metadata();
@@ -157,3 +162,4 @@ function parseNotifyFrame(frame) {
   }
   return { kind: "ignored" };
 }
+

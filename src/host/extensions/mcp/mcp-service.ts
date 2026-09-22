@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/mcp/mcp-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 init_cursor_marketplace_client();
 init_mcp_marketplace();
@@ -170,3 +175,4 @@ var McpHostService = class {
 function createMcpService(deps) {
   return new McpHostService(deps);
 }
+

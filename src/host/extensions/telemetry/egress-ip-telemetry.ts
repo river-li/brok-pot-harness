@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/egress-ip-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto68 = require("node:crypto");
 init_errors();
 var EGRESS_IP_TRACE_URL = "https://one.one.one.one/cdn-cgi/trace";
@@ -34,3 +39,4 @@ async function probeEgressIpHash(options2) {
   if (ip === void 0) throw new EgressIpProbeError("no_ip_line");
   return pseudonymizeEgressIp(ip);
 }
+

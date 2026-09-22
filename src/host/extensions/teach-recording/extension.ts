@@ -1,3 +1,18 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/teach-recording/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto67 = require("node:crypto");
+var import_promises70 = require("node:fs/promises");
+var import_node_path145 = require("node:path");
+init_scheduling();
+init_grok_bot_connect();
+init_grok_bot_pb();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var CAP_SLACK_MS = 2e3;
 var LEARNING_PROMPT_SEND_TIMEOUT_MS = 3e4;
 var TEACH_QUEUE_KEY_FILENAME = "teach-queue-key.json";
@@ -155,3 +170,4 @@ function schedulePendingRecovery({
   void attempt();
   return unsubscribe;
 }
+

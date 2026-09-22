@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-fill/credential-fill-cdp.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 init_zod();
 init_errors();
@@ -121,3 +126,4 @@ async function openCdpConnection(url2, reportFailure) {
   );
   return new WebSocketCdpConnection(socket, reportFailure);
 }
+

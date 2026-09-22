@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/host-crash-marker-forward.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function hostCrashMarkerMetadata(marker17) {
   const times = {
     ...marker17.startedAtMs === void 0 ? {} : { started_at_ms: String(Math.round(marker17.startedAtMs)) },
@@ -51,3 +56,4 @@ async function forwardHostCrashMarkerWith(forwarder) {
   if (deletion === "failed") return "delete_deferred";
   return deletion === "changed" ? "pending" : "delivered";
 }
+

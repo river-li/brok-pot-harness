@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/bot-template-share/bot-template-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var BotTemplateShareEmptyResponse = class extends SandDomainError {
   name = "BotTemplateShareEmptyResponse";
@@ -23,3 +28,4 @@ var BotTemplateShareRecipeInvalid = class extends SandDomainError {
     super(`Grok Bot template recipe is invalid: ${detail}`, options2);
   }
 };
+

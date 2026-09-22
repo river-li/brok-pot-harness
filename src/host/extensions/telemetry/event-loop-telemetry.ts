@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/event-loop-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_perf_hooks = require("node:perf_hooks");
 init_bounded();
 var EVENT_LOOP_RESOLUTION_MS = 20;
@@ -66,3 +71,4 @@ function createEventLoopTelemetry(options2) {
     }
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/host-upgrade/host-upgrade-marker.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 function parseHostUpgradeMarker(raw) {
   let value;
@@ -79,3 +84,4 @@ async function forwardHostUpgradeMarkerWith(deps) {
   await deleteIfUnchanged2();
   return "emitted";
 }
+

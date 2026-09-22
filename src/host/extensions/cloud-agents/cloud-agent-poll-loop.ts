@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cloud-agents/cloud-agent-poll-loop.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_background_composer_pb();
+init_invariant();
+
+// @recovered-fragment 2/2
 var CLOUD_AGENT_MAX_WAIT_MS = 5 * 60 * 6e4;
 var CLOUD_AGENT_POLL_INTERVAL_MS = 1e4;
 var CLOUD_AGENT_POLL_RPC_TIMEOUT_MS = 3e4;
@@ -156,3 +165,4 @@ var CloudAgentCompletionPoller = class {
     });
   }
 };
+

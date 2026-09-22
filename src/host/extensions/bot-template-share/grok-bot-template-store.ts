@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/bot-template-share/grok-bot-template-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_grok_bot_pb();
 init_esm2();
 function visibilityOf(value) {
@@ -187,3 +192,4 @@ var GrokBotTemplateStore = class {
 function createGrokBotTemplateStore(args) {
   return new GrokBotTemplateStore(args.client, args.ensureServerBacked);
 }
+

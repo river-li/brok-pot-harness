@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/settings/settings-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path143 = require("node:path");
+init_sand_agent_model();
+
+// @recovered-fragment 2/2
 var SettingsService = class {
   store;
   settingsPath;
@@ -258,3 +267,4 @@ var SettingsService = class {
     this.store.deleteMcpCustomInstructionByServerId(args);
   }
 };
+

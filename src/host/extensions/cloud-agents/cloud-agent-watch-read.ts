@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cloud-agents/cloud-agent-watch-read.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_background_composer_pb();
 init_grok_bot_pb();
 var SOURCE_BY_TYPE_PREFIX = {
@@ -65,3 +70,4 @@ async function readCloudAgentWatch(clients, bcId) {
   if (subscriptions.kind === "failed") return subscriptions;
   return { ...subscriptions, watchers };
 }
+

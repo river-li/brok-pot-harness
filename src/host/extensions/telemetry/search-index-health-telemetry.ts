@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/search-index-health-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var WARN_KINDS2 = /* @__PURE__ */ new Set([
   "dispose_drain_cut",
   "worker_terminate_failed",
@@ -15,3 +20,4 @@ function searchIndexHealthTelemetry(report) {
     }
   };
 }
+

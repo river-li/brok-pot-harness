@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/bot-template-share/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var botTemplateShareExtension = defineHostExtension({
   id: "bot-template-share",
   dependencies: [HostExtensions.AgentIdentity, HostExtensions.Auth, HostExtensions.Telemetry],
@@ -17,3 +26,4 @@ var botTemplateShareExtension = defineHostExtension({
     })
   )
 });
+

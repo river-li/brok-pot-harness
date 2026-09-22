@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/user-skills-cache/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var PUBLISH_TIMEOUT_MS = 15e3;
 var userSkillsCacheExtension = defineHostExtension({
   id: "user-skills-cache",
@@ -29,3 +39,4 @@ var userSkillsCacheExtension = defineHostExtension({
     return service.api;
   }
 });
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/host-extension-diagnostic-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function hostExtensionDiagnosticTelemetry(diagnostic) {
   switch (diagnostic.extension) {
     case "box_store":
@@ -64,3 +69,4 @@ function hostExtensionDiagnosticTelemetry(diagnostic) {
       };
   }
 }
+

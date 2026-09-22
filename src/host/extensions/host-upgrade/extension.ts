@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/host-upgrade/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs63 = require("node:fs");
+var import_promises56 = require("node:fs/promises");
+init_scheduling();
+
+// @recovered-fragment 2/2
 var HOST_UPGRADE_MARKER_FORWARD_INTERVAL_MS = 5 * 6e4;
 function createMarkerStore() {
   const markerPath = getHostUpgradeMarkerPath();
@@ -81,3 +91,4 @@ var hostUpgradeExtension = defineHostExtension({
     return service;
   }
 });
+

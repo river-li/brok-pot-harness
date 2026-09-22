@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/notify-bus/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_errors();
+
+// @recovered-fragment 2/2
 var RECONNECT_INITIAL_DELAY_MS = 1e3;
 var RECONNECT_MAX_DELAY_MS = 6e4;
 var NOTIFY_STREAM_STALL_MS = 35e3;
@@ -85,3 +94,4 @@ var notifyBusExtension = defineHostExtension({
     };
   }
 });
+

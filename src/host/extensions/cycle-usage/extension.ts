@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cycle-usage/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_dashboard_connect();
+init_dashboard_pb();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var cycleUsageDeadline = createDeadlinePolicy({
   name: "cycle-usage-lookup",
   timeoutMs: 5e3
@@ -22,3 +33,4 @@ var cycleUsageExtension = defineHostExtension({
     };
   }
 });
+

@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/registry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var hostExtensionRegistry = [
   notificationsExtension,
   contentSearchExtension,
@@ -68,3 +76,4 @@ async function startHostPluginRegistry(options2) {
     stop: () => started2.stop()
   };
 }
+

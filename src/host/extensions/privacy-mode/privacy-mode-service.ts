@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/privacy-mode/privacy-mode-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 init_privacy_mode_pb();
 init_esm2();
@@ -141,3 +146,4 @@ function toPrivacyMode2(value) {
       return PrivacyMode.UNSPECIFIED;
   }
 }
+

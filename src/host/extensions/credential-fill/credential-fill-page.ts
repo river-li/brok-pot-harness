@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-fill/credential-fill-page.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function prepareCredentialFillInPage(policy) {
   const refusal = (reason) => ({
     kind: "refused",
@@ -864,3 +869,4 @@ function prepareCredentialFillInPage(policy) {
     secretResidue
   };
 }
+

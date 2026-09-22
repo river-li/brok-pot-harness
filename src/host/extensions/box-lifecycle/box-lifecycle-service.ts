@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-lifecycle/box-lifecycle-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_grok_bot_pb();
 var DISK_PRESSURE_LEVEL = {
   none: GrokBotBoxDiskPressureLevel.NONE,
@@ -38,3 +43,4 @@ var BoxLifecycleService = class {
     }
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-timezone/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var boxTimezoneExtension = defineHostExtension({
   id: "box-timezone",
   dependencies: [HostExtensions.Settings],
@@ -16,3 +21,4 @@ var boxTimezoneExtension = defineHostExtension({
     return { isEnabled: true };
   }
 });
+

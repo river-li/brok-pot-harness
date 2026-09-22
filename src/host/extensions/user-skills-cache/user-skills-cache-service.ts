@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/user-skills-cache/user-skills-cache-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 init_errors();
 var USER_SKILLS_CACHE_PUBLISH_DEBOUNCE_MS = 1500;
@@ -95,3 +100,4 @@ function createUserSkillsCacheService(deps) {
     }
   };
 }
+

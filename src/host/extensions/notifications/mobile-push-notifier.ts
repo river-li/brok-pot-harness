@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/notifications/mobile-push-notifier.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createSandMobilePushSender(client) {
   return async (input) => {
     await client.notifySandAgentTurnFinished({
@@ -88,3 +93,4 @@ var SandMobilePushNotifier = class {
     });
   }
 };
+

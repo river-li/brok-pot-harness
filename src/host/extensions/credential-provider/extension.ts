@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var SAND_1PASS_INTEGRATION_GATE = "sand_1pass_integration";
 var CLEAR_RETRY_INTERVAL_MS = 3e3;
 var INTEGRATION_DISABLED_DETAIL = "Credential integration is disabled.";
@@ -415,3 +423,4 @@ var credentialProviderExtension = defineHostExtension({
   ],
   start: startCredentialProvider
 });
+

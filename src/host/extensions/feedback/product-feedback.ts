@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/feedback/product-feedback.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto46 = require("node:crypto");
 init_scheduling();
 init_errors();
@@ -86,3 +91,4 @@ function createSandProductFeedbackSubmitter(deps) {
     }
   };
 }
+

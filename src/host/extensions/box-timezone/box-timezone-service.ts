@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-timezone/box-timezone-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process11 = require("node:child_process");
 var import_node_fs55 = require("node:fs");
 var import_node_util9 = require("node:util");
@@ -58,3 +63,4 @@ function createBoxTimezoneService(deps) {
     settled: () => inFlight ?? Promise.resolve()
   };
 }
+

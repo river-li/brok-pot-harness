@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-tool-permission/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var localToolPermissionExtension = defineHostExtension({
   id: "local-tool-permission",
   dependencies: [HostExtensions.Settings, HostExtensions.Telemetry, HostExtensions.Transcript],
@@ -53,3 +61,4 @@ var localToolPermissionExtension = defineHostExtension({
     });
   }
 });
+

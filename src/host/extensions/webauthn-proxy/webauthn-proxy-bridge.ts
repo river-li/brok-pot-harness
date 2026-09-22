@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/webauthn-proxy/webauthn-proxy-bridge.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto85 = require("node:crypto");
 init_scheduling();
 function failure(name17, message) {
@@ -242,3 +247,4 @@ var SandWebAuthnBridge = class {
     return best;
   }
 };
+

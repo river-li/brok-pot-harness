@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/managed-setup/managed-skills-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+
+// @recovered-fragment 2/2
 var SandManagedSkillsService = class {
   constructor(options2) {
     this.options = options2;
@@ -63,3 +71,4 @@ var SandManagedSkillsService = class {
     }
   }
 };
+

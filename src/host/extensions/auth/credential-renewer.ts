@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/auth/credential-renewer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises6 = require("node:fs/promises");
 init_errors();
 init_cursor_token();
@@ -199,3 +204,4 @@ var SandInferenceCredentialRenewer = class {
 function redactRenewalErrorForReport(raw) {
   return raw.replace(/https?:\/\/\S+/gi, "<url>").replace(/\/[^\s"']+/g, "<path>").replace(/[A-Za-z0-9_-]{24,}/g, "<id>").replace(/\s+/g, " ").trim().slice(0, 160);
 }
+

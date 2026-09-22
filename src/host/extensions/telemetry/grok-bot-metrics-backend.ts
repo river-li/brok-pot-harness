@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/grok-bot-metrics-backend.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_telemetry_pb();
 init_cursor_inference();
 var GROK_BOT_METRICS_FLUSH_INTERVAL_MS = 3e4;
@@ -175,3 +180,4 @@ function* drainDistributions(entries) {
     yield new ReportMetricsRequest({ metricsList });
   }
 }
+

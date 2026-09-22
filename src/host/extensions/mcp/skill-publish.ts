@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/mcp/skill-publish.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs71 = require("node:fs");
 var import_promises59 = require("node:fs/promises");
 var import_node_os25 = require("node:os");
@@ -304,3 +309,4 @@ function skillsRootRelativePath(skillRelativePath) {
 function errorMessage5(error42) {
   return error42 instanceof Error ? error42.message : String(error42);
 }
+

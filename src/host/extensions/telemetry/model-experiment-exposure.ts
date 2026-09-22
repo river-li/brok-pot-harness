@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/model-experiment-exposure.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var HYDRATION_WAIT_MS = 6e4;
 function createModelExperimentExposureLatch(deps) {
   let logged = false;
@@ -30,3 +35,4 @@ function createModelExperimentExposureLatch(deps) {
     }
   };
 }
+

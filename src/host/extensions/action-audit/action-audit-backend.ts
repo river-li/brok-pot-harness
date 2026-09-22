@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/action-audit/action-audit-backend.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dashboard_connect();
 init_dashboard_pb();
 init_cursor_inference();
@@ -17,3 +22,4 @@ function createSandAuditBatchSender(deps) {
     );
   };
 }
+

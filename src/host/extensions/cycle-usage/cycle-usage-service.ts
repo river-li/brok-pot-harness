@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cycle-usage/cycle-usage-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function timestampMs(value) {
   if (value === void 0) return null;
   const ms2 = value.toDate().getTime();
@@ -27,3 +32,4 @@ function cycleUsageFromStatusResponse(response) {
     onDemand: onDemandFromSettings(response.onDemandSettings)
   };
 }
+

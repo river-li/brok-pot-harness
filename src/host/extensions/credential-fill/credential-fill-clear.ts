@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-fill/credential-fill-clear.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto45 = require("node:crypto");
 function passwordDigest(password) {
   return (0, import_node_crypto45.createHash)("sha256").update(password, "utf8").digest("hex");
@@ -82,3 +87,4 @@ async function clearFilledSecretsInPage(secrets, settle) {
   await settle();
   return { cleared: !await residue() };
 }
+

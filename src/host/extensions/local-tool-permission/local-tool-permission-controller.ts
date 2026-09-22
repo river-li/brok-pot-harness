@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-tool-permission/local-tool-permission-controller.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto51 = require("node:crypto");
 var SAND_LOCAL_TOOL_SETTLED_ID_MEMORY = 64;
 var SETTLED_STATUS_OF_RESOLUTION = {
@@ -486,3 +491,4 @@ var SandLocalToolPermissionController = class {
     for (const listener of this.listeners) listener(event);
   }
 };
+

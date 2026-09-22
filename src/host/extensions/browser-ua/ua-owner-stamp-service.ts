@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/browser-ua/ua-owner-stamp-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto43 = require("node:crypto");
 init_errors();
 init_cursor_token();
@@ -22,3 +27,4 @@ function createUaOwnerStampWriter(options2) {
     }
   };
 }
+

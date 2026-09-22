@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/conversation-gc-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 function cappedCount(value) {
   return String(Math.min(Number.MAX_SAFE_INTEGER, Math.max(0, Math.round(value))));
@@ -35,3 +40,4 @@ function conversationGcTelemetry(report) {
     }
   };
 }
+

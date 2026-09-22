@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/secrets/secrets-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs76 = require("node:fs");
+var import_node_path125 = require("node:path");
+init_zod();
+
+// @recovered-fragment 2/2
 init_errors();
 var SandBoxSecretsValidationError = class extends SandDomainError {
   name = "SandBoxSecretsValidationError";
@@ -266,3 +276,4 @@ var BoxSecretsApplier = class {
     }
   }
 };
+

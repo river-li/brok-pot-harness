@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/source-map/source-map-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs6 = require("node:fs");
 var import_node_path7 = require("node:path");
 init_zod();
@@ -61,3 +66,4 @@ var SandSourceMap = class {
     await writeFileAtomic(this.path, JSON.stringify(map4, null, 2));
   }
 };
+

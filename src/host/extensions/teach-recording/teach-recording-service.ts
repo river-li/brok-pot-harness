@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/teach-recording/teach-recording-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto66 = require("node:crypto");
+init_dist4();
+
+// @recovered-fragment 2/2
 init_errors();
 var TEACH_SESSIONS_DIR = "/workspace/teach-sessions";
 var TEACH_QUEUES_DIR = `${TEACH_SESSIONS_DIR}/queues`;
@@ -688,3 +697,4 @@ ${queuedFile}`).digest("hex");
     dispose
   };
 }
+

@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/auth/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_errors();
+init_cursor_inference();
+init_cursor_token();
+
+// @recovered-fragment 2/2
 var authExtension = defineHostExtension({
   id: "auth",
   dependencies: [HostExtensions.Settings],
@@ -84,3 +95,4 @@ var authExtension = defineHostExtension({
     };
   }
 });
+

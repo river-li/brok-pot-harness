@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/credential-one-time-code-follow-up.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var ONE_TIME_CODE_FOLLOW_UP_WINDOW_MS = 5 * 6e4;
 var MAX_ONE_TIME_CODE_ATTEMPTS = 3;
 function challengeSignature(target, state) {
@@ -142,3 +147,4 @@ var CredentialOneTimeCodeFollowUp = class {
     return (this.options.now ?? Date.now)();
   }
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/managed-setup/cursor-skills-marketplace.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dashboard_pb();
 init_errors();
 init_cursor_marketplace_client();
@@ -57,3 +62,4 @@ async function fetchSkillCatalog(backend, getAccessToken, getMachineId, report) 
   entries.sort((a, b2) => a.name.localeCompare(b2.name));
   return entries;
 }
+

@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/box-lifecycle/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 function startBoxLifecycle(context2, createClient2 = createSandCursorBackendClient) {
   return new BoxLifecycleService(
     createClient2(GrokBotService, {
@@ -13,3 +22,4 @@ var boxLifecycleExtension = defineHostExtension({
   dependencies: [HostExtensions.Auth],
   start: startBoxLifecycle
 });
+

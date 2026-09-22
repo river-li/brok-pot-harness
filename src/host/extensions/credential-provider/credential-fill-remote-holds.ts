@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/credential-fill-remote-holds.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 var CREDENTIAL_FILL_REMOTE_HOLD_DEFAULT_TTL_MS = 12e4;
 var CREDENTIAL_FILL_REMOTE_HOLD_MAX_TTL_MS = 3e5;
@@ -70,3 +75,4 @@ function createCredentialFillRemoteHolds(lease, options2 = {}) {
     }
   };
 }
+

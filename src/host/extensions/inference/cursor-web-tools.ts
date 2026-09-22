@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/inference/cursor-web-tools.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_aiserver_connect();
 init_aiserver_pb();
 init_cursor_inference();
@@ -57,3 +62,4 @@ function createCursorWebFetchService(options2, createClient2 = createSandCursorB
     }
   };
 }
+

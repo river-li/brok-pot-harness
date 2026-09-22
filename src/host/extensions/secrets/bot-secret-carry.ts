@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/secrets/bot-secret-carry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var BOT_SECRET_PUT_TIMEOUT_MS = 3e4;
 async function carryBoxSecretsToBot(deps, args) {
@@ -14,3 +19,4 @@ async function carryBoxSecretsToBot(deps, args) {
     args
   );
 }
+

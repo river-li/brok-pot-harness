@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/user-form-vault/vault-logic.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VAULT_MAX_ENTRIES = 200;
 var VAULT_MAX_VALUE_LENGTH = 1024;
 var VAULT_BACKEND_MAX_LABEL_LENGTH = 120;
@@ -203,3 +208,4 @@ function applyVaultSave(args) {
   );
   return next.filter((entry) => entry.id !== leastRecentlyUsed.id);
 }
+

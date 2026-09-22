@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/managed-setup/sand-managed-setup-client.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_sand_team_converge();
 init_sand_box_pb();
 init_errors();
@@ -40,3 +45,4 @@ function setupScopeKind(kind) {
       throw new SandManagedSetupClientError(`Unsupported managed setup scope kind ${kind}.`);
   }
 }
+

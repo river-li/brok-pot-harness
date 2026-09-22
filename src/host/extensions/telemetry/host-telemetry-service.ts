@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/host-telemetry-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_fs89 = require("node:fs");
+var import_promises74 = require("node:fs/promises");
+var import_node_util14 = require("node:util");
+init_dist2();
+init_errors();
+
+// @recovered-fragment 2/2
 var SUPERVISOR_LOG_PATH = "/tmp/sand-supervisor.log";
 var DESKTOP_HEALTH_FORWARD_INTERVAL_MS = 3e4;
 var DESKTOP_HEALTH_HEARTBEAT_MS = 5 * 6e4;
@@ -364,3 +376,4 @@ var HostTelemetryService = class {
     };
   }
 };
+

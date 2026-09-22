@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-exec/local-exec-bridge.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto50 = require("node:crypto");
+init_scheduling();
+
+// @recovered-fragment 2/2
 var FrameQueue = class {
   buffer = [];
   wake;
@@ -355,3 +364,4 @@ var SandLocalExecBridge = class {
     }
   }
 };
+

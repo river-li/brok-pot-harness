@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/team-admin-policy/team-admin-policy-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_dashboard_pb();
+
+// @recovered-fragment 2/2
 init_errors();
 var TEAM_ADMIN_POLICY_TTL_MS = 5 * 6e4;
 var TEAM_ADMIN_POLICY_REQUEST_TIMEOUT_MS = 1e4;
@@ -143,3 +152,4 @@ function createTeamAdminPolicyService(deps) {
     }
   };
 }
+

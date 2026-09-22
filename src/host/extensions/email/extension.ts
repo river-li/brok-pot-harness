@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/email/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var emailDeadline = createDeadlinePolicy({
   name: "email-read",
   timeoutMs: 15e3
@@ -30,3 +40,4 @@ var emailExtension = defineHostExtension({
     };
   }
 });
+

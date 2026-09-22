@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/mcp/plugin-skills.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs70 = require("node:fs");
 var import_node_path117 = require("node:path");
 init_dashboard_connect();
@@ -333,3 +338,4 @@ var SandPluginSkillsService = class {
     }
   }
 };
+

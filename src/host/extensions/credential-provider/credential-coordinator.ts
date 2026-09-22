@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/credential-coordinator.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var siteMatchSortScore = { exact: 2, subdomain: 1 };
 var CredentialCoordinator = class {
   constructor(options2) {
@@ -161,3 +166,4 @@ var CredentialCoordinator = class {
     };
   }
 };
+

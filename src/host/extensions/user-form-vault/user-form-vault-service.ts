@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/user-form-vault/user-form-vault-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var VAULT_KINDS = new Set(SAND_VAULT_FIELD_KINDS);
 function isVaultKind(kind) {
   return VAULT_KINDS.has(kind);
@@ -75,3 +80,4 @@ function createUserFormVaultService(deps) {
   return { api, dispose: () => {
   } };
 }
+

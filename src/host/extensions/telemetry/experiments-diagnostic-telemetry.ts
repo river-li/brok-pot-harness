@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/experiments-diagnostic-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var INFO_KINDS = /* @__PURE__ */ new Set([
   "bootstrap_resolved",
   "bootstrap_anonymous",
@@ -33,3 +38,4 @@ function experimentsDiagnosticTelemetry(diagnostic) {
     }
   };
 }
+

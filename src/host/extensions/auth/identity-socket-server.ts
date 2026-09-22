@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/auth/identity-socket-server.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises45 = require("node:fs/promises");
 var import_node_http4 = __toESM(require("node:http"), 1);
 var import_node_net4 = __toESM(require("node:net"), 1);
@@ -364,3 +369,4 @@ async function startGrokBotBoxIdentitySocketServer(options2) {
     }
   };
 }
+

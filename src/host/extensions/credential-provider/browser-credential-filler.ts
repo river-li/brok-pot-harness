@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/browser-credential-filler.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_promises50 = require("node:fs/promises");
+init_scheduling();
+
+// @recovered-fragment 2/2
 init_dist3();
 init_zod();
 init_system_errno();
@@ -1193,3 +1202,4 @@ function allowedFormActionOriginsForFill(item, expectedOrigin, state) {
 function stepOf(execution) {
   return execution.step === void 0 ? {} : { step: execution.step };
 }
+

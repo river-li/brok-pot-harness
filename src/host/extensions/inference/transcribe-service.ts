@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/inference/transcribe-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_aiserver_connect();
+init_aiserver_pb();
+
+// @recovered-fragment 2/2
 init_cursor_inference();
 var transcribeDeadline = createDeadlinePolicy({
   name: "cursor-transcribe-audio",
@@ -37,3 +47,4 @@ function createSandTranscribeAudio(backend, auth2, options2, createClient2 = cre
     };
   };
 }
+

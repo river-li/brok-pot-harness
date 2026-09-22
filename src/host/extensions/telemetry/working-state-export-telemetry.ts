@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/working-state-export-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 function workingStateDetailMetadata(report) {
   return {
@@ -71,3 +76,4 @@ function brandedBooleanTag(value) {
   if (value) return brandLiteralEnum("true");
   return brandLiteralEnum("false");
 }
+

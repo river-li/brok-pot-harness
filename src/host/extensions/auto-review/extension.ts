@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/auto-review/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function startAutoReview(context2) {
   const service = new AutoReviewService({
     auth: context2.deps.auth,
@@ -34,3 +39,4 @@ var autoReviewExtension = defineHostExtension({
   ],
   start: (context2) => startAutoReview(context2)
 });
+

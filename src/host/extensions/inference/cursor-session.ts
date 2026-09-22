@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/inference/cursor-session.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_requested_model_pb();
+init_sand_agent_model();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 function resolveSandRequestedModel(inputs) {
   const { sessionOptions, envModelOverride, storedDefaultModel } = inputs;
   const effectiveDefaultModel = inputs.experimentModelOverride ?? storedDefaultModel;
@@ -131,3 +141,4 @@ function createCursorSandInference(options2) {
     }
   };
 }
+

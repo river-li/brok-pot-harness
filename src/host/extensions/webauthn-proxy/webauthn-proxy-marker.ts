@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/webauthn-proxy/webauthn-proxy-marker.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process16 = require("node:child_process");
 var import_node_fs99 = require("node:fs");
 var import_node_path176 = require("node:path");
@@ -21,3 +26,4 @@ function applyWebAuthnProxyMarker(enabled, markerPath = SAND_WEBAUTHN_PROXY_MARK
   }
   return "applied";
 }
+

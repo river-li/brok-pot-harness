@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cloud-agents/cloud-agent-updates-stream.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 init_background_composer_pb();
 init_esm2();
@@ -193,3 +198,4 @@ var CloudAgentUpdatesStream = class {
     }
   }
 };
+

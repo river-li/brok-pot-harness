@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cookie-origin-approval/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_errors();
+
+// @recovered-fragment 2/2
 var cookieOriginApprovalExtension = defineHostExtension({
   id: "cookie-origin-approval",
   dependencies: [
@@ -41,3 +50,4 @@ var cookieOriginApprovalExtension = defineHostExtension({
     };
   }
 });
+

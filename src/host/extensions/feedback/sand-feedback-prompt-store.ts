@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/feedback/sand-feedback-prompt-store.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs61 = require("node:fs");
 var import_node_path105 = require("node:path");
 init_unknown_record();
@@ -55,3 +60,4 @@ var SandFeedbackPromptStore = class {
     }
   }
 };
+

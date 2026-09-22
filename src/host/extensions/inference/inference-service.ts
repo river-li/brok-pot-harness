@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/inference/inference-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_sand_agent_model();
+
+// @recovered-fragment 2/2
 function createHostInference(options2) {
   const { auth: auth2, experiments, settings } = options2;
   return createCursorSandInference({
@@ -26,3 +34,4 @@ function createHostInference(options2) {
     getConfiguredAutomationsModel: () => experiments.getConfiguredAutomationsModel()
   });
 }
+

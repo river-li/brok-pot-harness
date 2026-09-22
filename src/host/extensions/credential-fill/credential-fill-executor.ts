@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-fill/credential-fill-executor.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_dist3();
+init_zod();
+init_errors();
+
+// @recovered-fragment 2/2
 var TARGET_LOOKUP_DEADLINE = createDeadlinePolicy({
   name: "credential-fill.target-lookup",
   timeoutMs: 3e3
@@ -630,3 +641,4 @@ var CredentialFillExecutor = class {
     return clearance.success && clearance.data.cleared;
   }
 };
+

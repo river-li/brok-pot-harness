@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/privacy-mode/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_dashboard_connect();
+init_dashboard_pb();
+init_privacy_mode_pb();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var privacyModeExtension = defineHostExtension({
   id: "privacy-mode",
   dependencies: [HostExtensions.Auth],
@@ -44,3 +56,4 @@ var privacyModeExtension = defineHostExtension({
     return service;
   }
 });
+

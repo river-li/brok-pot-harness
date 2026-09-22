@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/feedback/feedback-sampler.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 function createFeedbackSampler(deps) {
   const now = deps.now ?? Date.now;
@@ -22,3 +27,4 @@ function createFeedbackSampler(deps) {
     }
   };
 }
+

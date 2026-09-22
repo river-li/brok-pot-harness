@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-exec/server-local-exec-sand-box.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_scheduling();
 init_exec_pb();
 init_grok_bot_pb();
@@ -471,3 +476,4 @@ function createServerUserComputers(options2) {
     }
   };
 }
+

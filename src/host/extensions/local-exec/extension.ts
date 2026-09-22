@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-exec/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_grok_bot_connect();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 function startLocalExec(context2, createClient2 = createSandCursorBackendClient) {
   const gate = context2.deps["local-tool-permission"];
   const logs = context2.deps.telemetry.logs;
@@ -106,3 +117,4 @@ var localExecExtension = defineHostExtension({
   dependencies: [HostExtensions.LocalToolPermission, HostExtensions.Telemetry, HostExtensions.Auth],
   start: startLocalExec
 });
+

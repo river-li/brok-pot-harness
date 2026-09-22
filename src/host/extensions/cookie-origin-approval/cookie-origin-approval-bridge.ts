@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cookie-origin-approval/cookie-origin-approval-bridge.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto44 = require("node:crypto");
 init_scheduling();
 function isLive(provider, now) {
@@ -288,3 +293,4 @@ var SandCookieOriginApprovalBridge = class {
     return best;
   }
 };
+

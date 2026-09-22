@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/inference/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var inferenceExtension = defineHostExtension({
   id: "inference",
   dependencies: [HostExtensions.Auth, HostExtensions.Experiments, HostExtensions.Settings],
@@ -38,3 +43,4 @@ var inferenceExtension = defineHostExtension({
     };
   }
 });
+

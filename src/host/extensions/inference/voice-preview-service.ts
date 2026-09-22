@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/inference/voice-preview-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_scheduling();
+init_aiserver_connect();
+init_aiserver_pb();
+
+// @recovered-fragment 2/2
 init_cursor_inference();
 var previewDeadline = createDeadlinePolicy({
   name: "cursor-voice-preview",
@@ -30,3 +40,4 @@ function createSandVoicePreview(backend, auth2, createClient2 = createSandCursor
     };
   };
 }
+

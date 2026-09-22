@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/desktop-health-forwarder.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_unknown_record();
 var DESKTOP_COMPONENT_KINDS = [
   "xvfb",
@@ -178,3 +183,4 @@ async function forwardDesktopHealthWith(deps) {
   deps.setLast(snapshot.revision, nowMs2);
   return "emitted";
 }
+

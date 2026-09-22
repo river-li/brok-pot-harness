@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cloud-agents/cloud-agent-artifact-cache.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs57 = require("node:fs");
 init_dist4();
 init_system_errno();
@@ -80,3 +85,4 @@ var CloudAgentArtifactCache = class {
     return { present, missing };
   }
 };
+

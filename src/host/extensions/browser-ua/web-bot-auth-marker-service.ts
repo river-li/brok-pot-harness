@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/browser-ua/web-bot-auth-marker-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises48 = __toESM(require("node:fs/promises"), 1);
 init_errors();
 var WEB_BOT_AUTH_MARKER_PATH = "/tmp/sand-web-bot-auth";
@@ -26,3 +31,4 @@ function createWebBotAuthMarkerReconciler(options2) {
     return queue;
   };
 }
+

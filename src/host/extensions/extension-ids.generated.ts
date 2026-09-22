@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/extension-ids.generated.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var HostExtensions = {
   ActionAudit: "action-audit",
   AgentIdentity: "agent-identity",
@@ -54,3 +59,4 @@ var HostExtensions = {
   WebauthnProxy: "webauthn-proxy",
   WorkingStateExport: "working-state-export"
 };
+

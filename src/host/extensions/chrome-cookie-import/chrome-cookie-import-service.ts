@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/chrome-cookie-import/chrome-cookie-import-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_child_process12 = require("node:child_process");
 var import_node_fs56 = require("node:fs");
 var import_promises49 = require("node:fs/promises");
@@ -93,3 +98,4 @@ async function runCookieImportScript(batchPath) {
   });
   return stdout;
 }
+

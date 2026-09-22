@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/host-tracing.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_os27 = __toESM(require("node:os"), 1);
+var import_core71 = __toESM(require_src3(), 1);
+var import_exporter_trace_otlp_proto = __toESM(require_src14(), 1);
+var import_resources = __toESM(require_src4(), 1);
+var import_sdk_trace_node3 = __toESM(require_src6(), 1);
+init_errors();
+init_sand_client_metadata();
+
+// @recovered-fragment 2/2
 var initialized = false;
 var hostTracing;
 var NOOP_HOST_TRACING = {
@@ -148,3 +162,4 @@ function initSandHostTracing(options2) {
     return NOOP_HOST_TRACING;
   }
 }
+

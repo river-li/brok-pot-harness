@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/credential-provider/credential-password-step-follow-up.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var PASSWORD_STEP_FOLLOW_UP_WINDOW_MS = 9e4;
 var PASSWORD_STEP_RESOLVE_RETRY_DELAY_MS = 1e4;
 var MAX_PASSWORD_STEP_ATTEMPTS = 3;
@@ -162,3 +167,4 @@ var CredentialPasswordStepFollowUp = class {
     return (this.options.now ?? Date.now)();
   }
 };
+

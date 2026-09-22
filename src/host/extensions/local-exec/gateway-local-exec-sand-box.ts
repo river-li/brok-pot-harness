@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-exec/gateway-local-exec-sand-box.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_exec_pb();
+init_local_exec_failure_classifier();
+
+// @recovered-fragment 2/2
 async function runBridgeMessagesOp(bridge, gate, ctx, op, computerId, display) {
   const scope = ctx.get(sandLocalToolScopeKey);
   if (computerId !== void 0) {
@@ -264,3 +273,4 @@ function createBridgeUserComputers(bridge, gate, reportFailure) {
     }
   };
 }
+

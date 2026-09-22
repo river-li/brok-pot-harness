@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/mcp/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_mcp_diagnostics();
+
+// @recovered-fragment 2/2
 function startPluginSkillsWhenAuthenticated(options2) {
   let started2 = false;
   let disposed = false;
@@ -124,3 +132,4 @@ var mcpExtension = defineHostExtension({
     return { ...service.api, skillPublish };
   }
 });
+

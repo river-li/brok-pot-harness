@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-tool-permission/local-tool-permission-resolution.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_errors();
 var SandLocalToolPermissionResolutionError = class extends SandDomainError {
   name = "SandLocalToolPermissionResolutionError";
@@ -47,3 +52,4 @@ async function resolveLocalToolPermissionAsk(deps, args) {
     status: settled.status
   });
 }
+

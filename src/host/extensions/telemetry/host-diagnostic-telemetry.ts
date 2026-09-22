@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/host-diagnostic-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function hostDiagnosticTelemetry(diagnostic) {
   return {
     level: diagnostic.kind === "send_ledger_degraded" ? "error" : "warn",
@@ -62,3 +67,4 @@ function hostDiagnosticMetadata(diagnostic) {
       return { kind: diagnostic.kind, error_class: diagnostic.errorClass };
   }
 }
+

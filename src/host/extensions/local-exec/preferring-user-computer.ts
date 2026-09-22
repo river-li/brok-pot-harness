@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/local-exec/preferring-user-computer.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function createPreferringUserComputerBox(preferred, fallback2, isFallbackAvailable = () => true) {
   const pick2 = async () => {
     await preferred.prepare();
@@ -43,3 +48,4 @@ function createPreferringUserComputers(preferred, fallback2, routeFor = () => vo
     }
   };
 }
+

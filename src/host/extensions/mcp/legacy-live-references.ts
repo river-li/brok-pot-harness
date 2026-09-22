@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/mcp/legacy-live-references.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_errors();
+init_cursor_marketplace_client();
+init_mcp_marketplace();
+
+// @recovered-fragment 2/2
 function isLiveReferencePointerBody(body) {
   return body.includes("is a live reference to the skill at");
 }
@@ -74,3 +84,4 @@ async function sweepLegacyPluginSkillReferences(deps) {
     return 0;
   }
 }
+

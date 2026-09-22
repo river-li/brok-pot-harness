@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/webauthn-proxy-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 var KNOWN_DOM_ERROR_NAMES = [
   "NotAllowedError",
@@ -77,3 +82,4 @@ function webauthnProviderTelemetry(report) {
     }
   };
 }
+

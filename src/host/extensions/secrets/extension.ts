@@ -1,3 +1,14 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/secrets/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_scheduling();
+init_grok_bot_connect();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var secretsExtension = defineHostExtension({
   id: "secrets",
   dependencies: [HostExtensions.Auth, HostExtensions.ForeverBox],
@@ -41,3 +52,4 @@ var secretsExtension = defineHostExtension({
     };
   }
 });
+

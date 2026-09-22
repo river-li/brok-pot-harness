@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/pressure-cpu-profiler.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs88 = require("node:fs");
 var import_promises73 = require("node:inspector/promises");
 var import_node_path147 = require("node:path");
@@ -154,3 +159,4 @@ function createPressureCpuProfiler(options2) {
     }
   };
 }
+

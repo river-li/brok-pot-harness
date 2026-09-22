@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/structured-log-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_analytics_connect();
+init_bounded();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 function getHostBuiltAtMs() {
   return true ? "1790001078000" : void 0;
 }
@@ -969,3 +979,4 @@ var SandTurnTelemetryImpl = class {
     this.telemetry.emitTurnEvent(TURN_START_EVENT, this.baseTags());
   }
 };
+

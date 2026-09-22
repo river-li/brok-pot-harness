@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/automation-fire-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 var AUTOMATION_LATE_FIRE_THRESHOLD_MS = 5 * 6e4;
 var AUTOMATION_RUN_EVENT = "sand.automation.run";
@@ -57,3 +62,4 @@ function automationAgentGoneRecoveredTelemetry(report) {
     }
   };
 }
+

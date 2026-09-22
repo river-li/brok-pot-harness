@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/host-upgrade/host-upgrade-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist2();
+init_errors();
+
+// @recovered-fragment 2/2
 var HostUpgradeService = class {
   constructor(deps) {
     this.deps = deps;
@@ -333,3 +342,4 @@ var HostUpgradeService = class {
     }
   }
 };
+

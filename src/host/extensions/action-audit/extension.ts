@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/action-audit/extension.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var actionAuditExtension = defineHostExtension({
   id: "action-audit",
   dependencies: [HostExtensions.Auth, HostExtensions.Experiments, HostExtensions.Telemetry],
@@ -22,3 +27,4 @@ var actionAuditExtension = defineHostExtension({
     return service.auditor;
   }
 });
+

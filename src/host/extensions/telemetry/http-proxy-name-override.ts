@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/http-proxy-name-override.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_promises72 = require("node:fs/promises");
 init_errors();
 init_unknown_record();
@@ -59,3 +64,4 @@ async function resolveStartupHttpProxyName(args) {
   if (args.envName !== void 0) return { name: args.envName, source: "env" };
   return { name: void 0, source: "unset" };
 }
+

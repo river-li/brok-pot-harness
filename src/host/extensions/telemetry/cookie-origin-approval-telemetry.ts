@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/cookie-origin-approval-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_bounded();
 var COOKIE_ORIGIN_APPROVAL_COUNT_CAP = 9999;
 var COOKIE_ORIGIN_APPROVAL_DURATION_MS_CAP = 60 * 60 * 1e3;
@@ -66,3 +71,4 @@ function cookieOriginApprovalTelemetry(report) {
     }
   };
 }
+

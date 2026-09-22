@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/auto-review/auto-review-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var AUTO_REVIEW_TEAM_POLICY_WAIT_MS = 1e4;
 var SETTLED_APPROVAL_MEMORY = 256;
 var AutoReviewService = class {
@@ -169,3 +174,4 @@ var AutoReviewService = class {
     });
   }
 };
+

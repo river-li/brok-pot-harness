@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/managed-setup/team-rules.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dashboard_connect();
+init_dashboard_pb();
+init_esm2();
+init_errors();
+init_cursor_inference();
+
+// @recovered-fragment 2/2
 var TEAM_RULES_REQUEST_TIMEOUT_MS = 1e4;
 function appliesToSand(rule) {
   return rule.agentType === TeamRuleAgentType.SAND || rule.agentType === TeamRuleAgentType.ALL;
@@ -78,3 +90,4 @@ function createSandTeamRulesResolver(options2) {
     }
   });
 }
+

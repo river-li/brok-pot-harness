@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/journal-outcome-telemetry.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function corruptTailKind(cause) {
   return cause !== void 0 && "tail" in cause ? cause.tail : void 0;
 }
@@ -22,3 +27,4 @@ function journalOutcomeTelemetry(report) {
     }
   };
 }
+

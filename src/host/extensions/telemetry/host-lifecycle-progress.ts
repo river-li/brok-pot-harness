@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/telemetry/host-lifecycle-progress.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_invariant();
 var HostLifecycleProgress = class {
   constructor(options2) {
@@ -57,3 +62,4 @@ var HostLifecycleProgress = class {
     return Math.max(0, Math.round(this.options.now() - this.phaseStartedAt));
   }
 };
+

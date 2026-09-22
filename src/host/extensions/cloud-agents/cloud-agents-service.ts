@@ -1,3 +1,19 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: src/host/extensions/cloud-agents/cloud-agents-service.ts
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_background_composer_connect();
+init_dashboard_connect();
+init_dashboard_pb();
+init_grok_bot_connect();
+
+// @recovered-fragment 2/3
+init_dist3();
+init_esm2();
+init_cursor_inference();
+
+// @recovered-fragment 3/3
 function originUrlsOf(backend) {
   const api = backend.originBackendUrl;
   const parsedApi = new URL(api);
@@ -308,3 +324,4 @@ var SandCloudAgentManager = class {
     );
   }
 };
+
