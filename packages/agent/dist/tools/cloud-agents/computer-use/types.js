@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/computer-use/types.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var anthropicComputerInputSchema = external_exports.object({
   action: external_exports.enum([
@@ -66,3 +71,4 @@ var openaiComputerInputSchema = external_exports.object({
   keys: external_exports.array(external_exports.string()).optional(),
   path: external_exports.array(external_exports.tuple([external_exports.number(), external_exports.number()])).optional()
 });
+

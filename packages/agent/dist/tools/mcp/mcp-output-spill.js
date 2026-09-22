@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/mcp/mcp-output-spill.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_mcp_exec_pb();
 function normalizeProjectDir(projectDir) {
   return projectDir === void 0 || projectDir.length === 0 ? void 0 : projectDir;
@@ -88,3 +93,4 @@ function truncateUtf82(text2, maxBytes) {
   const decoded = new TextDecoder("utf-8", { fatal: false }).decode(buffer.subarray(0, maxBytes));
   return decoded.endsWith("\uFFFD") ? decoded.slice(0, -1) : decoded;
 }
+

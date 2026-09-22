@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/computer-use/shared.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_agent_pb();
+init_computer_use_tool_pb();
+init_dist3();
+
+// @recovered-fragment 2/2
 var DEFAULT_SCREENSHOT_MIME_TYPE = "image/webp";
 function isModelCanvasWebp(bytes) {
   const dimensions = readWebpDimensions(bytes);
@@ -102,3 +112,4 @@ async function renderComputerUseResult(_ctx, output, includeCursorPosition = fal
   }
   return createStringResult("Unknown error", true);
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/reflect.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var parametersSchema7 = external_exports.object({
   unexpected_action_outcomes: external_exports.string().describe("(1-2 sentences) Look through each action you have tried so far, and identify what changed from the screenshot before the action to the screenshot after the action, if anything. You must look at past screenshots yourself to determine what the results were. Then, in a few words, analyze each case where the action did *not* have the desired effect (e.g. a click or scroll that did not change the page at all). NEVER rely on past commentary, you MUST analyze the screenshots yourself. For each surprising observation, analyze why it might have happened, now that you are looking at it closely. Common cases: 1. Popups/models: If a step didn't produce the expected result, a common cause is that there was a popup or modal elsewhere on the page that blocked the action you were trying to take. 2. Scrolling in a page region: If a scroll step didn't work as intended, the most common cause (if a popup didn't block the action entirely) is that you were trying to scroll in a specific region of the page. To do that, you must position the cursor in that region (ideally on the scrollbar associated with that region) and then scroll an appropriate amount. For smaller regions, you usually want to scroll a smaller amount (1 or 2 mouse wheel units). 3. State already set: Sometimes clicking on an element has no effect because the page already is in the desired state. For instance, in Google Sheets, clicking a sheet that is already selected has no visible effect."),
@@ -6,3 +11,4 @@ var parametersSchema7 = external_exports.object({
   critical_synthesis: external_exports.string().describe("(1 sentence) Based on all of your analysis so far, reflect on whether you are on the right track to achieve your task, or have already completed it. If the task is not complete, how can you update your approach to be more effective and efficient?"),
   next_steps: external_exports.string().describe("Your decision for how to proceed based on your analysis. Can be one of: 1. 'Continue with the current approach' 2. 'Try [new idea for what to do next]' 3. 'Give up' 4. 'Task is complete (<confidence_score>%)' ")
 });
+

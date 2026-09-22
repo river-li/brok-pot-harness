@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/replace-env/replace-env.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var replaceEnvToolModes = ["custom", "clean_slate", "default"];
 var parametersSchema8 = external_exports.object({
@@ -43,3 +48,4 @@ var parametersSchema8 = external_exports.object({
     }
   });
 }).describe("Replace the cloud-agent environment using an explicit mode: `custom`, `clean_slate`, or `default`.");
+

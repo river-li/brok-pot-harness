@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/grind-swarm-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var path22 = __toESM(require("node:path"), 1);
+init_subagents_pb();
+
+// @recovered-fragment 2/2
 var SWARM_GENERIC_PROPS = {
   agentId: "",
   repoPath: ".",
@@ -71,3 +80,4 @@ function createWorkerAgentConfig() {
     }
   };
 }
+

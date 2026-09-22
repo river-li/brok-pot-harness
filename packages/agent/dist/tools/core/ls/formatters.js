@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/ls/formatters.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path41 = __toESM(require("node:path"), 1);
 var LS_CHARACTER_BUDGET = 1e4;
 function renderDirectoryTreeWithinBudget(rootDirectory, characterBudget) {
@@ -119,3 +124,4 @@ function renderDirectoryTree(rootDirectory, renderExtensionCounts = true, render
   const result = _render(rootDirectory, 0);
   return { result, atLeastOneExtensionCountRendered };
 }
+

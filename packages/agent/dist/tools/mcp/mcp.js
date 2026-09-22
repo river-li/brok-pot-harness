@@ -1,3 +1,23 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/mcp/mcp.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+var import_node_crypto28 = require("node:crypto");
+init_dist4();
+init_mcp_tool_annotations();
+
+// @recovered-fragment 2/3
+init_agent_pb();
+init_mcp_auth_tool_pb();
+init_mcp_exec_pb();
+init_mcp_pb();
+init_mcp_tool_pb();
+init_utils_pb2();
+init_esm();
+init_zod();
+
+// @recovered-fragment 3/3
 var __addDisposableResource17 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -1862,3 +1882,4 @@ async function renderMcpTool(_ctx, { result }, _props) {
     }
   }
 }
+

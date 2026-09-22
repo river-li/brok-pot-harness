@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/retry-helpers.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var NETWORK_COMMANDS = [
   "curl",
   "wget",
@@ -82,3 +87,4 @@ function analyzeFailure(exitCode, stderr, command) {
   const looksSandbox = (exitCode ?? -1) !== 0 && /operation not permitted|EPERM|EACCES/i.test(s3);
   return looksSandbox ? "sandbox" : "unknown";
 }
+

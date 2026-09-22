@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/subagent-config.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_agent_pb();
+init_subagents_pb();
+init_background_composer_pb();
+
+// @recovered-fragment 2/2
 var GENERAL_PURPOSE_SUBAGENT_TYPE = "generalPurpose";
 var EXPLORE_SUBAGENT_TYPE = "explore";
 var BEST_OF_N_RUNNER_SUBAGENT_TYPE = "best-of-n-runner";
@@ -287,3 +297,4 @@ function applyConversationStateMapping(config2, callerState) {
   }
   return new ConversationStateStructure();
 }
+

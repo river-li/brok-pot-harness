@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/grep/grep.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_zod();
 var logger84 = createLogger("tools/grep");
@@ -39,3 +44,4 @@ var parametersSchema08193 = external_exports.object({
   offset: lenientNumber(external_exports.number().min(0)).optional().describe('Skip first N entries. For "content" mode: skips first N matches. For "files_with_matches" and "count" modes: skips first N files. Use with head_limit for pagination.'),
   multiline: external_exports.preprocess(coerceBooleanLike, external_exports.boolean().optional().describe("Enable multiline mode where . matches newlines and patterns can span lines (rg -U --multiline-dotall). Default: false.").default(false))
 });
+

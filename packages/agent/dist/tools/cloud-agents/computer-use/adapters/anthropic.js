@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/computer-use/adapters/anthropic.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_computer_use_tool_pb();
 function mapScrollDirection(direction) {
   switch (direction) {
@@ -294,3 +299,4 @@ var AnthropicAdapter = class {
   }
 };
 var anthropicAdapter = new AnthropicAdapter();
+

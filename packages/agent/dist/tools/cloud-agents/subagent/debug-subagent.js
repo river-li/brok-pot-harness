@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/subagent/debug-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_subagents_pb();
+
+// @recovered-fragment 2/2
 var DEBUG_SUBAGENT_RESULT_SUFFIX = `The debug subagent has finished.
 - After reproducing the bug: "Issue reproduced, please proceed. <additional notes>"
 - To clean up debug logs: "<The issue has been fixed.> Please clean up the instrumentation."`;
@@ -19,3 +27,4 @@ var DEBUG_SUBAGENT_CONFIG = {
 function createDebugSubagentConfig() {
   return DEBUG_SUBAGENT_CONFIG;
 }
+

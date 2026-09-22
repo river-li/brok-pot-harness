@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/ask-question/index.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_ask_question();
+init_dist4();
+init_zod();
+
+// @recovered-fragment 2/2
 var logger61 = createLogger("tools/ask-question");
 var askQuestionDegenerate = createCounter("ask_question.degenerate", {
   description: "AskQuestion calls whose title, prompt, or options are placeholder-shaped",
@@ -74,3 +84,4 @@ ${answerDescriptions?.join("\n") ?? ""}`;
     }
   }
 }
+

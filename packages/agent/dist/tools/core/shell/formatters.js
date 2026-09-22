@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/formatters.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_sandbox_pb();
+init_shell_exec_pb();
+
+// @recovered-fragment 2/2
 var SHELL_CHAR_HARD_LIMIT = 2e4;
 var SHELL_MISSING_EXIT_ERROR_MESSAGE = "The shell command returned no exit status, so its result is unknown \u2014 do not assume it ran or succeeded. If this repeats, the execution environment may need to be restarted.";
 function formatCompletionMessage(isAborted2, executionTimeMs) {
@@ -404,3 +413,4 @@ On the next terminal tool call, the directory of the shell will already be ${cur
   }
   return formatted;
 }
+

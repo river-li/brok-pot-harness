@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/mcp/get-mcp-tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_agent_pb();
 init_get_mcp_tools_tool_pb();
@@ -707,3 +712,4 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
     }
   });
 };
+

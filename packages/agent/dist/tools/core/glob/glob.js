@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/glob/glob.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var globEmptyPatternFallback = createCounter("glob.empty_pattern_fallback", {
   description: "Glob retries after an executor rejected the empty-pattern invocation shape",
@@ -24,3 +29,4 @@ Examples:
 	- "**/test/**/test_*.ts" - find all test_*.ts files in any test directory
 `)
 });
+

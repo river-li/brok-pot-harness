@@ -1,3 +1,19 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/await.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_buffer2 = require("node:buffer");
+init_dist4();
+init_agent_pb();
+init_await_tool_pb();
+init_ls_exec_pb();
+init_read_exec_pb();
+init_subagent_exec_pb();
+init_dist3();
+init_zod();
+
+// @recovered-fragment 2/2
 var __addDisposableResource30 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -1096,3 +1112,4 @@ output_length: ${value.outputLength.toString()}`);
     }
   });
 };
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/subagent-registry.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var SubagentRegistry = class {
   constructor() {
     this.subagents = /* @__PURE__ */ new Map();
@@ -106,3 +111,4 @@ var subagentRegistryResource = createResource((_remoteExecManager) => {
   return new SubagentRegistry();
 }, (_implementation, _controlledExecManager) => {
 });
+

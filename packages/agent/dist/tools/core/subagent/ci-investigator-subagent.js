@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/ci-investigator-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_subagents_pb();
+
+// @recovered-fragment 2/2
 var CI_INVESTIGATOR_SUBAGENT_TYPE = "ci-investigator";
 function formatToolRef(toolName) {
   return `\`${toolName}\``;
@@ -104,3 +112,4 @@ function createCiInvestigatorSubagentConfig() {
     systemReminder: (toolSetHandle) => buildCiInvestigatorSystemReminder(toolSetHandle)
   };
 }
+

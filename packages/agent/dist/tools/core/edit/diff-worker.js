@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/edit/diff-worker.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function withGitDiffPrefix(path31, prefix) {
   if (path31 === "/dev/null") {
     return path31;
@@ -36,3 +41,4 @@ function calculateDiff(params) {
     linesRemoved: hunks.reduce((sum, h) => sum + h.lines.filter((l) => l.startsWith("-")).length, 0)
   };
 }
+

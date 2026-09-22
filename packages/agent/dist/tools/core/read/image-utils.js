@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/read/image-utils.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_image_type = __toESM(require_image_type(), 1);
 var import_mime_types = __toESM(require_mime_types(), 1);
 function detectImageMimeType(bytes, filePath) {
@@ -23,3 +28,4 @@ function detectImageMimeType(bytes, filePath) {
   }
   return void 0;
 }
+

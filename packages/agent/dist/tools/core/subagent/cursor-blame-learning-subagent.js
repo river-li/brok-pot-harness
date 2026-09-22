@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/cursor-blame-learning-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var CODE_LINEAGE_TOOL_IDENTIFIER = "CODE_LINEAGE";
 var SHELL_TOOL_IDENTIFIER = "SHELL";
@@ -79,3 +84,4 @@ var CURSOR_BLAME_LEARNING_SUBAGENT_CONFIG = {
   permissionMode: CustomSubagentPermissionMode.READONLY,
   systemReminder: () => CURSOR_BLAME_LEARNING_SUBAGENT_PROMPT
 };
+

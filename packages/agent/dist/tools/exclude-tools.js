@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/exclude-tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 var TOOL_CALL_TOOL_FIELDS = ToolCall.fields.list().filter((field) => field.oneof?.localName === "tool");
 var AGENT_PROTO_TOOL_NAMES = TOOL_CALL_TOOL_FIELDS.map((field) => field.name);
@@ -56,3 +61,4 @@ function partitionDynamicTools(tools, profile) {
   }
   return { staticTools, dynamicTools };
 }
+

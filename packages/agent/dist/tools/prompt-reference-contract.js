@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/prompt-reference-contract.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto30 = require("node:crypto");
 var PROMPT_REFERENCE_ID_LENGTH = 7;
 var PROMPT_REFERENCE_ID_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -66,3 +71,4 @@ function parseLeadingUserMessageIdTag(text2) {
     strippedText: text2.slice(match2[0].length)
   };
 }
+

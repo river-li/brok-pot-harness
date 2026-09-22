@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/inline-image.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger27 = createLogger("tools/inline-image");
 var inlineImageBoundCounter = createCounter("agent.tools.inline_image.bound", {
@@ -42,3 +47,4 @@ async function boundInlineImageForModel(ctx, bytes, { mimeType, source }) {
   recordBound(ctx, source, unchanged ? "unchanged" : "resized", original.byteLength, resized.data.byteLength);
   return { data: unchanged ? bytes : resized.data, mimeType: resized.mimeType };
 }
+

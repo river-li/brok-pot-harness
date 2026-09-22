@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/subagent/past-conversation-explorer-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var PAST_CONVERSATION_EXPLORER_PROMPT = `
 You are a specialist for exploring past agent conversations to find relevant context, patterns, and insights.
@@ -79,3 +84,4 @@ var PAST_CONVERSATION_EXPLORER_SUBAGENT_CONFIG = {
   systemReminder: () => PAST_CONVERSATION_EXPLORER_PROMPT,
   defaultModelIds: ["claude-4.5-opus-high", "claude-4.5-sonnet"]
 };
+

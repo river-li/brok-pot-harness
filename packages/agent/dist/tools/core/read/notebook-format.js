@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/read/notebook-format.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_OUTPUT_CHARS_PER_CELL = 2e3;
 function extractTextFromData(data) {
   if (data["text/plain"]) {
@@ -96,3 +101,4 @@ ${outputContent}`);
 `;
 }
 var isJupyterNotebook2 = isJupyterNotebook;
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/image-processing.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var hasImageTags = (text2) => {
   const imgTagRegex = /<img\s+[^>]*src=["']([^"']+)["'][^>]*\/?>/gi;
   return imgTagRegex.test(text2);
@@ -82,3 +87,4 @@ var tryHydrateReferencedImages = (text2, conversationSteps) => {
   const content = buildInterleavedContent(text2, screenshotLookup);
   return { content, isError: false };
 };
+

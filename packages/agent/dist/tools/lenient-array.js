@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/lenient-array.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var parseWholeArray = (text2) => {
   if (namesAKeyTwice(text2)) {
@@ -106,3 +111,4 @@ function preprocessLenientArray(value, options2) {
 function lenientArray(schema2, options2) {
   return external_exports.preprocess((value) => preprocessLenientArray(value, options2), schema2);
 }
+

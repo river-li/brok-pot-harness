@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/canvas/tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_cloud_canvas_tool_pb();
 init_dist3();
@@ -359,3 +364,4 @@ function buildReadCanvasTool(port) {
 function createCloudCanvasTools({ port }) {
   return [buildWriteCanvasTool(port), buildReadCanvasTool(port)];
 }
+

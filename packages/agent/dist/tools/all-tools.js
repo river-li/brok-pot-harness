@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/all-tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var TOOL_OWNER_TEAM_MAP = {
   ADOPT: "async",
   ANTHROPIC_COMPUTER_USE: "async",
@@ -144,3 +149,4 @@ function getToolOwnerTeam(toolIdentifier) {
   }
   return TOOL_OWNER_TEAM_MAP[toolIdentifier];
 }
+

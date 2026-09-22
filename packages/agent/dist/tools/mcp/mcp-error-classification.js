@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/mcp/mcp-error-classification.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MCP_JSON_RPC_ERROR_CODE_REGEX = /MCP error\s*(-\d+):/i;
 var MCP_AUTH_ERROR_FRAGMENTS = [
   "requires authentication",
@@ -86,3 +91,4 @@ function classifyMcpErrorMessage(errorMessage6) {
   }
   return ToolErrorClassification.OTHER_ERROR;
 }
+

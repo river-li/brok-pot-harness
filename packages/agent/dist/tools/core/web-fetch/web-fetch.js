@@ -1,3 +1,17 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/web-fetch/web-fetch.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_crypto37 = require("node:crypto");
+init_dist4();
+init_agent_pb();
+init_utils_pb2();
+init_web_fetch_tool_pb();
+init_esm();
+init_zod();
+
+// @recovered-fragment 2/2
 var __addDisposableResource35 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -600,3 +614,4 @@ ${options2.descriptionSuffix}` : base;
     }
   });
 };
+

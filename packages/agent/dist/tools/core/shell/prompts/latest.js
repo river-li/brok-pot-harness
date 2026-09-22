@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/prompts/latest.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 function ShellDescriptionComponent({ enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, enableBlockUntilMs, defaultBlockUntilMs = 3e4, enableTmuxGuidance, tmuxSharedSessionName, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }) {
   if (useMinimalHarness) {
     return jsxs(Fragment, { children: [jsx("p", { children: "Execute shell commands in the workspace." }), jsxs("ul", { children: [jsx("li", { children: "The shell is stateful - cwd & env vars persist for subsequent calls." }), jsx("li", { children: "Make efficient use of shell calls and minimize wasted tokens." }), jsx("li", { children: "Batch related shell work together or run independent checks in parallel when safe. Make liberal use of `&&`, `;`, pipes, greps, and other efficient shell use." }), jsx("li", { children: "Use targeted, output-limited terminal commands such as `rg`, `head`, `tail`, and `sed -n` when relevant to limit output." }), jsx("li", { children: "NEVER use `set -x`; it breaks this tool. If it gets set, run `set +x` to fix the shell." }), jsx("li", { children: "Optimize for overall cost, including cache reads, cache writes, and output tokens." }), jsx("li", { children: "Use the 'Workspace Path' field in the `<user_info>` section to resolve the workspace path. It will likely NOT be at `/workspace`; don't waste time trying that." }), jsx("li", { children: "Still do whatever validation is necessary to ensure the judgment is correct; efficiency means avoiding waste, not skipping verification." }), jsx("li", { children: "This may still be a long-running investigation if correctness requires it, but do not spend tokens on status updates, progress narration, or UX niceties while judging." }), jsx("li", { children: "Always quote paths that contain spaces." })] })] });
@@ -71,3 +79,4 @@ function getParametersSchemaWithBlockUntil(defaultBlockUntilMs = 3e4) {
     description: descriptionSchema
   });
 }
+

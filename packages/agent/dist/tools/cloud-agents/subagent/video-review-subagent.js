@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/subagent/video-review-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_subagents_pb();
+
+// @recovered-fragment 2/2
 var VIDEO_REVIEW_SUBAGENT_PROMPT = `
 You are a visual video analysis specialist. Your job is to answer questions about attached videos.
 
@@ -64,3 +72,4 @@ var VIDEO_REVIEW_SUBAGENT_CONFIG = {
   // No tools - this subagent only does Q&A over the inputted media.
   toolsOverride: () => []
 };
+

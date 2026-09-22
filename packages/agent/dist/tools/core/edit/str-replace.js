@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/edit/str-replace.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var strReplaceTotalCounter = createCounter("agent.tools.str_replace.total", {
   description: "Total str-replace operations",
@@ -35,3 +40,4 @@ var parametersSchema1018 = external_exports.object({
   new_string: external_exports.string().describe("The text to replace it with (must be different from old_string)"),
   replace_all: external_exports.boolean().optional().describe("Replace all occurences of old_string (default false)").default(false)
 });
+

@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/todo/common.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/3
+init_agent_pb();
+init_todo_tool_pb();
+
+// @recovered-fragment 2/3
+init_zod();
+
+// @recovered-fragment 3/3
 var todoStatusSchema = lenientEnum(external_exports.enum(["pending", "in_progress", "completed", "cancelled"]));
 var todoItemSchema = external_exports.object({
   id: external_exports.string(),
@@ -98,3 +110,4 @@ function createStreamingTodoParser(ctx, interactionHandler, meta, existingTodosM
   };
   return { parser, streamedTodos };
 }
+

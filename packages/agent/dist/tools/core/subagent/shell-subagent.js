@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/shell-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var SHELL_TOOL_IDENTIFIERS = /* @__PURE__ */ new Set(["SHELL"]);
 function createShellToolsOverride(callerTools, _props, _modelId) {
@@ -35,3 +40,4 @@ function createShellSubagentConfig() {
     messageHistoryModifier: void 0
   };
 }
+

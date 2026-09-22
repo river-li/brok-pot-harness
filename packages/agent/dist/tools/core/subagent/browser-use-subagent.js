@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/browser-use-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_subagents_pb();
+
+// @recovered-fragment 2/2
 var BROWSER_USE_PROVIDER_IDS = /* @__PURE__ */ new Set([CURSOR_IDE_BROWSER_PROVIDER_ID]);
 var BROWSER_USE_LOCAL_CONTEXT_TOOL_IDENTIFIERS = /* @__PURE__ */ new Set([
   "READ",
@@ -79,3 +87,4 @@ var BROWSER_USE_SUBAGENT_CONFIG = {
   systemReminder: () => BROWSER_USE_SUBAGENT_PROMPT,
   resumeModeOverride: SubagentResumeMode.LAST_AGENT_SAME_TYPE
 };
+

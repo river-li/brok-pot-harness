@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/prompts/sandbox-shared.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 function hasNetworkAllowlist(info2) {
   if (!info2)
@@ -22,3 +27,4 @@ function getRequiredPermissionsSchema({ isReadonly, strict = false }) {
     primitiveItems: true
   }).optional().describe("Optional list of permissions to request if the command needs them (full_network, all).");
 }
+

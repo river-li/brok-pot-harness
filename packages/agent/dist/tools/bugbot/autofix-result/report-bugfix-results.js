@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/bugbot/autofix-result/report-bugfix-results.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var reportBugfixResultsSchemaTowardsModel = external_exports.object({
   results: external_exports.array(external_exports.object({
@@ -11,3 +16,4 @@ var reportBugfixResultsSchemaTowardsModel = external_exports.object({
 var reportBugfixResultsSchemaForParsing = external_exports.object({
   results: external_exports.array(bugfixResultItemSchema)
 });
+

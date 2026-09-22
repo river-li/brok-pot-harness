@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/update-pr-code-tour.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var parametersSchema17 = external_exports.object({
   feedback: external_exports.string().optional().describe("Natural-language instructions for regenerating the PR code tour, such as 'make it shorter' or 'focus on review risks'. Do not combine with markdown or artifactPath."),
@@ -12,3 +17,4 @@ var parametersSchema17 = external_exports.object({
   scopeCommitHashes: external_exports.array(external_exports.string()).optional().describe("Commit SHAs selecting a subset of the pull request's commits. When set, the subset selection takes effect for tour regeneration; omit or pass an empty list for the full diff."),
   explicitUserPrompt: external_exports.string().optional().describe("Verbatim user prompt that takes effect for tour regeneration, kept distinct from agent-authored feedback.")
 });
+

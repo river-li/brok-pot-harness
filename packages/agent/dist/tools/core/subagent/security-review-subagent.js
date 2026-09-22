@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/security-review-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var SECURITY_REVIEW_SUBAGENT_TYPE = "security-review";
 var SECURITY_REVIEW_SUBAGENT_PROMPT = `You are a security expert performing a thorough security review of local code changes. Your analysis will be used to catch concrete security vulnerabilities before they reach production.
@@ -58,3 +63,4 @@ function createSecurityReviewSubagentConfig() {
     toolsOverride: (callerTools) => callerTools.filter((tool) => SECURITY_REVIEW_INCLUDED_TOOL_IDENTIFIERS.has(tool.toolIdentifier))
   };
 }
+

@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/mcp/backend-routed-mcp-hooks.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_mcp_exec_pb();
 function isBackendRoutedMcpServer(executor, providerIdentifier) {
   return executor.isBackendRouted?.(providerIdentifier) === true;
@@ -77,3 +82,4 @@ function redactBackendMcpResultForHook(result) {
   }
   return { redacted: true };
 }
+

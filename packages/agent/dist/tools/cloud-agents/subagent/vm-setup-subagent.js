@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/subagent/vm-setup-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var VM_SETUP_HELPER_SUBAGENT_PROMPT = `
 You are a codebase analysis helper for development environment setup.
@@ -33,3 +38,4 @@ var VM_SETUP_HELPER_SUBAGENT_CONFIG = {
   preserveTaskTool: false,
   systemPromptOverride: () => VM_SETUP_HELPER_SUBAGENT_PROMPT
 };
+

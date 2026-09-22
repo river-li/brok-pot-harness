@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/explore-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_subagents_pb();
 var GROK_4_5_HIGH_FAST = "cursor-grok-4.5-high-fast";
 var GROK_4_5_HIGH = "cursor-grok-4.5-high";
@@ -46,3 +51,4 @@ function createExploreSubagentConfig(options2) {
     userRequestedModelId: options2?.userRequestedModelId
   };
 }
+

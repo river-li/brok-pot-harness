@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/generate-image.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path88 = __toESM(require("node:path"), 1);
 init_dist4();
 init_agent_pb();
@@ -851,3 +856,4 @@ Always use this absolute path when referring to the image. Do not repeat this im
     }
   });
 };
+

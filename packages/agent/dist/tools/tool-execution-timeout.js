@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/tool-execution-timeout.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var LONG_RUNNING_TOOL_NAMES = /* @__PURE__ */ new Set(["task", "mcp_task", "subagent"]);
 var EXTRA_SHORT_TOOL_TIMEOUT_MS = 5 * 60 * 1e3;
 var SHORT_TOOL_TIMEOUT_MS = 15 * 60 * 1e3;
@@ -73,3 +78,4 @@ function buildToolCallExecutionTimedOutMessage({ toolName, executionTimeoutMs })
   const shellHint = toolName.toLowerCase() === "shell" ? " For long-running commands, re-run with block_until_ms set to a small value (or 0) so the command runs in the background, then poll its output instead of blocking on it." : "";
   return executionTimeoutMs === 0 ? `The ${toolName} tool call could not start because activity setup exceeded the per-call time limit. The execution environment may be slow or overloaded.${shellHint}` : `The ${toolName} tool call timed out after ${Math.round(executionTimeoutMs / 1e3)} seconds and was terminated. The execution environment may be unresponsive, or the operation needs longer than the per-call time limit.${shellHint}`;
 }
+

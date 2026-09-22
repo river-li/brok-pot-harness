@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/models.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var DEFAULT_SUBAGENT_SLUG = SubagentComposerModelId.standard;
 function createSubagentModels(models, isModelBlocked, description9) {
   const modelsBySlug = /* @__PURE__ */ new Map();
@@ -27,3 +32,4 @@ IMPORTANT: If the user requests a model that is NOT in the list above, do NOT su
 
 When speaking to the USER about which model you selected for a subagent, do NOT use the kebab-case model names unless the user requested the model using that format. Ue the same naming scheme the user used to discuss the model when they requested it.`;
 }
+

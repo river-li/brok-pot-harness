@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/subagent-forced-model-resolution.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 async function resolvePinnedForceModelId(args) {
   const { forceModelId, subagentModelForcePolicy, isModelBlocked, isMaxModeCompatible, logForcedModel } = args;
   if (forceModelId !== void 0 && !isModelBlocked(forceModelId) && await isMaxModeCompatible(forceModelId)) {
@@ -52,3 +57,4 @@ async function tryResolveForcedSubagentModel(args) {
     }
   }
 }
+

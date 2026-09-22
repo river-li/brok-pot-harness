@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/task-subagent-completion.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_agent_pb();
 var logger71 = createLogger("task-subagent-completion");
@@ -331,3 +336,4 @@ async function handleSubagentExecutionError(error42, state, iterState, completio
   }
   throw error42;
 }
+

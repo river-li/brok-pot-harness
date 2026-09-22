@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/computer-use/observation.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function trackComputerUseExecution(ctx, args) {
   const requested = summarizeComputerUseActions(args.input.actions);
   const { result } = args.output;
@@ -66,3 +71,4 @@ function trackComputerUseFailure(ctx, args) {
     isSubagent: getIsSubagentFromContext(ctx)
   });
 }
+

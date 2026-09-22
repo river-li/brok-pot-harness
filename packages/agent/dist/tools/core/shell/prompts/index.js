@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/prompts/index.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 function getDescription2({ version: version3, enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, enableBlockUntilMs, requireBlockUntilMs, defaultBlockUntilMs, enableTmuxGuidance, tmuxSharedSessionName, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }) {
   if (version3 === "cursor-0226") {
     if (useMinimalHarness) {
@@ -99,3 +107,4 @@ function getParametersSchema2({ version: version3, sandboxEnabled, isReadonly, e
   }
   return baseSchema;
 }
+

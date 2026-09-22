@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/search-conversations/search-conversations.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_conversation_search_exec_pb();
 init_zod();
 var parametersSchema24 = external_exports.object({
@@ -9,3 +14,4 @@ var CONVERSATION_SEARCH_SOURCE_LABELS = {
   [ConversationSearchSource.LOCAL]: "local",
   [ConversationSearchSource.CLOUD_CACHE]: "cloud-cache"
 };
+

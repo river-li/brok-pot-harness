@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/worker-script-location.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_fs47 = __toESM(require("node:fs"), 1);
 var import_node_path85 = __toESM(require("node:path"), 1);
 var import_node_url11 = require("node:url");
@@ -18,3 +23,4 @@ function resolveWorkerLocation(moduleUrl, representativeWorker) {
   }
   return { dir: moduleDir, extension: "js" };
 }
+

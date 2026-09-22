@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/command-modifiers.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist2();
 var import_tree_sitter2 = __toESM(require("tree-sitter"), 1);
 var import_tree_sitter_bash2 = __toESM(require("tree-sitter-bash"), 1);
@@ -199,3 +204,4 @@ function addGitCommitTrailer(shellType) {
 function addPRGeneratedByFooter(shellType) {
   return isPowerShell(shellType) ? addPRGeneratedByFooterPowerShell : addPRGeneratedByFooterBash;
 }
+

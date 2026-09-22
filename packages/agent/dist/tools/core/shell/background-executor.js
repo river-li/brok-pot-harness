@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/background-executor.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_agent_pb();
+init_background_shell_exec_pb();
+init_shell_exec_pb();
+init_shell_tool_pb();
+
+// @recovered-fragment 2/2
 var logger87 = createLogger("tools/shell/background-executor");
 function createShellToolCall2(shellTool) {
   return new ToolCall({
@@ -127,3 +139,4 @@ async function executeBackgroundCommand(ctx, backgroundShellExecutor, interactio
     }
   }, (r) => createShellToolCall2(new ShellToolCall({ ...shellTool, result: r })), options2.hookContextCollector);
 }
+

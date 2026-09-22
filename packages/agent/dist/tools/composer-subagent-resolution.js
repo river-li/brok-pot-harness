@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/composer-subagent-resolution.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var LEGACY_SUBAGENT_COMPOSER_SLUG = "composer-1.5";
 var BUILT_IN_COMPOSER_MODEL_ID_PATTERN = /^composer-\d+(?:\.\d+)?(?:-fast)?$/;
 function isBuiltInComposerSubagentSlug(modelId) {
@@ -55,3 +60,4 @@ function resolveTaskArgToSubagentComposerSlug(requestedModel, modelsBySlug, norm
   }
   return void 0;
 }
+

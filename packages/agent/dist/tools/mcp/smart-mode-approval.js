@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/mcp/smart-mode-approval.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto27 = require("node:crypto");
 var SMART_MODE_MCP_APPROVAL_MISSING_CONVERSATION_REASON = "Auto-review MCP approvals require a conversation id";
 function normalizeForFingerprint(value) {
@@ -45,3 +50,4 @@ async function createSmartModeMcpApprovalRequest(ctx, store, target) {
 async function cancelSmartModeMcpApprovalRequest(ctx, store, requestId2) {
   await store.deletePendingRequest(ctx, requestId2);
 }
+

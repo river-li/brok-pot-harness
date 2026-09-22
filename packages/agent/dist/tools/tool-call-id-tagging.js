@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/tool-call-id-tagging.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function hasTagAtEnd(text2, tag) {
   return text2.trimEnd().endsWith(tag);
 }
@@ -51,3 +56,4 @@ function appendToolCallIdTagsToToolResults(messages2) {
 function shouldTagToolCallIdsForCurrentContext(ctx) {
   return getIsDirectMetaParentChildSubagentFromContext(ctx);
 }
+

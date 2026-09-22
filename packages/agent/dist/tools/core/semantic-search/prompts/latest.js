@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/semantic-search/prompts/latest.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var createParametersSchemaLatest2 = (numResultsConfig) => {
   const baseSchema = external_exports.object({
@@ -14,3 +19,4 @@ var createParametersSchemaLatest2 = (numResultsConfig) => {
   return baseSchema;
 };
 var parametersSchemaLatest3 = createParametersSchemaLatest2();
+

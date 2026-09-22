@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/todo/todo.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 init_todo_tool_pb();
 init_zod();
@@ -509,3 +514,4 @@ When in doubt, use this tool. Proactive task management demonstrates attentivene
     }
   });
 };
+

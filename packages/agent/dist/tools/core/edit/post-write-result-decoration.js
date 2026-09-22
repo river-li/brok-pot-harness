@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/edit/post-write-result-decoration.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_dist3();
+
+// @recovered-fragment 2/2
 var logger80 = createLogger("@anysphere/agent");
 var eagerStoreConflictBarrier = createCounter("agent.store.eager_barrier", {
   description: "Eager same-result agent-store conflict barrier outcomes."
@@ -285,3 +294,4 @@ ${reminder}`;
     })
   ]);
 }
+

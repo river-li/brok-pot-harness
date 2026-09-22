@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/semantic-search/prompts/dsv3.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var EXPLANATION_DESCRIPTION = "One sentence explanation as to why this tool is being used, and how it contributes to the goal.";
 var createParametersSchema = (options2) => {
@@ -20,3 +25,4 @@ var createParametersSchemaForModelDsv3 = (numResultsConfig) => createParametersS
 var createParametersSchemaDsv32 = (numResultsConfig) => createParametersSchema({ explanationRequired: false, numResultsConfig });
 var parametersSchemaForModelDsv3 = createParametersSchemaForModelDsv3();
 var parametersSchemaDsv33 = createParametersSchemaDsv32();
+

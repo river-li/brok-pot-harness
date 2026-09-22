@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/subagent/computer-use-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_subagents_pb();
+
+// @recovered-fragment 2/2
 var DEFAULT_COMPUTER_USE_MODEL_IDS = [
   "claude-sonnet-5-thinking-high",
   "claude-4.5-sonnet"
@@ -51,3 +59,4 @@ function createComputerUseSubagentConfig(overrides = {}) {
   };
 }
 var COMPUTER_USE_SUBAGENT_CONFIG = createComputerUseSubagentConfig();
+

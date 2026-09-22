@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/mcp/dynamic-tool-argument-repair.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function* jsonTokens(text2, start) {
   for (let index = start; index < text2.length; index++) {
     const char = text2[index];
@@ -179,3 +184,4 @@ var parseArgumentsLeniently = (blob) => {
   }
   return Object.keys(leaked).some((field) => field !== "description") ? void 0 : { args: decoded.value, repaired: true, envelopeFields: leaked };
 };
+

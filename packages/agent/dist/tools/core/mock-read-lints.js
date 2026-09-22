@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/mock-read-lints.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var parametersSchema22 = external_exports.object({
   paths: lenientArray(external_exports.array(external_exports.string()), {
@@ -5,3 +10,4 @@ var parametersSchema22 = external_exports.object({
     primitiveItems: true
   }).optional().describe("Optional. An array of paths to files or directories to read linter errors for. You can use either relative paths in the workspace or absolute paths. If provided, returns diagnostics for the specified files/directories only. If not provided, returns diagnostics for all files in the workspace.")
 });
+

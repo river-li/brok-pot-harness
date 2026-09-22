@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/interrupted-shell-output.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var MAX_SHELL_SNAPSHOT_CHARS = 2e4;
 var MAX_SHELL_SNAPSHOT_COUNT = 100;
 var shellOutputSnapshots = /* @__PURE__ */ new Map();
@@ -32,3 +37,4 @@ function getInterruptedShellOutputSnapshot(toolCallId) {
 function clearInterruptedShellOutputSnapshot(toolCallId) {
   shellOutputSnapshots.delete(toolCallId);
 }
+

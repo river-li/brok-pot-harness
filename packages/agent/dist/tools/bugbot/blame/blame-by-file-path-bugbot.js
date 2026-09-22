@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/bugbot/blame/blame-by-file-path-bugbot.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var blameByFilePathDuration = createHistogram("bugbot.context.get_blame_by_file_path.duration_ms", {
   description: "Latency of CursorBlame file path lookups in milliseconds",
@@ -8,3 +13,4 @@ var parametersSchema2 = external_exports.object({
   start_line: external_exports.number().int().positive().optional().describe("Optional start line number to narrow the blame lookup to a specific range within the file."),
   end_line: external_exports.number().int().positive().optional().describe("Optional end line number to narrow the blame lookup to a specific range within the file. Defaults to start_line if start_line is provided.")
 });
+

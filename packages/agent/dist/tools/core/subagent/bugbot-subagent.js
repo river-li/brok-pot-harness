@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/bugbot-subagent.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_subagents_pb();
+
+// @recovered-fragment 2/2
 var BUGBOT_SUBAGENT_TYPE = "bugbot";
 function buildBugbotSubagentPrompt(supportNaturalLanguage) {
   const reviewTargetParagraph = supportNaturalLanguage ? "You are performing a code review of local code changes. The user message contains the changes to review \u2014 either a diff or, when no diff is available, a natural-language description of what changed \u2014 along with the exact XML response format you must use. When you are given a description instead of a diff, use your tools to open the referenced files and base every finding on the real code." : "You are performing a code review of a local diff. The user message contains the diff to review and the exact XML response format you must use.";
@@ -76,3 +84,4 @@ function createBugbotSubagentConfig(options2) {
     isGithubBugbotSubagent: false
   };
 }
+

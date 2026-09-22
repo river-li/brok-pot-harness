@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/task-subagent-preparation.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_path84 = __toESM(require("node:path"), 1);
 init_dist4();
 init_agent_pb();
@@ -607,3 +612,4 @@ function trackTaskSubagentCreated(ctx, details, { isParallel, parallelBatchSize 
     subagentSource: details.subagentSource
   });
 }
+

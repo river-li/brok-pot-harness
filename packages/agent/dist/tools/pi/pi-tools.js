@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/pi/pi-tools.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var editReplacementSchema = external_exports.object({
   oldText: external_exports.string().describe("Exact text for one targeted replacement. It must be unique in the original file and must not overlap with any other edits[].oldText in the same call."),
@@ -38,3 +43,4 @@ var lsSchema = external_exports.object({
   path: external_exports.string().optional().describe("Directory to list (default: current directory)"),
   limit: external_exports.number().optional().describe("Maximum number of entries to return (default: 500)")
 });
+

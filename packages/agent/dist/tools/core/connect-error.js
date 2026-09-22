@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/connect-error.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_utils_pb();
 init_esm2();
 var AGENT_STREAM_START_TIMEOUT_TITLE = "Workspace Disconnected";
@@ -225,3 +230,4 @@ function getConnectErrorCode(error42) {
   }
   return void 0;
 }
+

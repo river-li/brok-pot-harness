@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/read/pdf-utils.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_os21 = __toESM(require("node:os"), 1);
 var import_node_path89 = __toESM(require("node:path"), 1);
 var import_piscina2 = require("piscina");
@@ -50,3 +55,4 @@ async function extractPdfText(bytes) {
   });
   return result.text;
 }
+

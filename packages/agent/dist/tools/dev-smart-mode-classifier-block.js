@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/dev-smart-mode-classifier-block.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist2();
 init_dist3();
 var DEV_SMART_MODE_CLASSIFIER_BLOCK_REASON = "This is a dev block whatever just retry it";
@@ -35,3 +40,4 @@ async function delayDevSmartModeClassifierIfRequested(state) {
     await delay2(DEV_SMART_MODE_CLASSIFIER_DELAY_MS);
   }
 }
+

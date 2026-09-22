@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/file-operation-lock-manager.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var FileOperationLockManager = class {
   constructor() {
     this.lockedFiles = /* @__PURE__ */ new Set();
@@ -132,3 +137,4 @@ var FileOperationLockManager = class {
     }
   }
 };
+

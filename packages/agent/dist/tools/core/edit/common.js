@@ -1,7 +1,21 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/edit/common.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_os20 = __toESM(require("node:os"), 1);
+var import_node_path87 = __toESM(require("node:path"), 1);
+init_dist4();
+init_agent_pb();
+init_write_exec_pb();
+init_dist3();
+var import_piscina = require("piscina");
+
+// @recovered-fragment 2/2
 var logger81 = createLogger("@anysphere/agent");
 var PLAN_MODE_NON_MARKDOWN_EDIT_ERROR = "Cannot edit non markdown files in plan mode";
-function assertPlanModeAllowsFileEdit(path30, stateHandler) {
-  if (stateHandler.mode !== AgentMode.PLAN || isPlanModeAllowedEditPath(path30)) {
+function assertPlanModeAllowsFileEdit(path31, stateHandler) {
+  if (stateHandler.mode !== AgentMode.PLAN || isPlanModeAllowedEditPath(path31)) {
     return;
   }
   throw new ToolCallRejectedError(PLAN_MODE_NON_MARKDOWN_EDIT_ERROR);
@@ -42,8 +56,8 @@ function getPiscinaWorkerPool() {
   }
   if (_piscinaWorkerPool === void 0) {
     _piscinaWorkerPool = new import_piscina.Piscina({
-      minThreads: Math.max(1, Math.floor(import_node_os14.default.availableParallelism() / 2)),
-      maxThreads: Math.max(1, Math.floor(import_node_os14.default.availableParallelism() / 2)),
+      minThreads: Math.max(1, Math.floor(import_node_os20.default.availableParallelism() / 2)),
+      maxThreads: Math.max(1, Math.floor(import_node_os20.default.availableParallelism() / 2)),
       execArgv: extension === "ts" ? ["--experimental-strip-types"] : void 0,
       env: sanitizedEnvForWorkers
     });
@@ -51,8 +65,8 @@ function getPiscinaWorkerPool() {
   return _piscinaWorkerPool;
 }
 var DIFF_SIZE_THRESHOLD = 256 * 1024;
-function isNotebookViewTypeResolutionError(errorMessage4) {
-  return errorMessage4.includes("Missing viewType for");
+function isNotebookViewTypeResolutionError(errorMessage6) {
+  return errorMessage6.includes("Missing viewType for");
 }
 var NOTEBOOK_VIEW_TYPE_MODEL_ERROR = "This notebook could not be opened for editing because the editor environment has no notebook provider for it (for example, Jupyter/notebook support is unavailable). This is an environment limitation, not a problem with the edit itself \u2014 retrying will not help.";
 var WritePermissionDeniedError = class extends CustomToolCallError {
@@ -75,24 +89,24 @@ var WriteRejectedError = class extends CustomToolCallError {
     this.reason = reason;
   }
 };
-async function performWrite(ctx, resourceAccessor, path30, content, editInfo, meta, stateHandler) {
+async function performWrite(ctx, resourceAccessor, path31, content, editInfo, meta, stateHandler) {
   editCommonPerformWriteCounter.increment(ctx, 1);
-  assertPlanModeAllowsFileEdit(path30, stateHandler);
+  assertPlanModeAllowsFileEdit(path31, stateHandler);
   const writeExecutor = resourceAccessor.get(writeExecutorResource);
   const writeArgs = new WriteArgs({
-    path: path30,
+    path: path31,
     fileText: content,
     toolCallId: meta.toolCallId
   });
   const writeExecId = generateSeededUuid(`${meta.toolCallId}-write`);
-  const writeResult2 = await writeExecutor.execute(ctx, writeArgs, {
+  const writeResult = await writeExecutor.execute(ctx, writeArgs, {
     execId: writeExecId,
     hookContextCollector: meta.hookContextCollector,
     // So skipPathWriteDrain only applies when eager decoration will
     // actually run for this write (meta.enableAgentStoreConflictNotices).
     enableAgentStoreConflictNotices: meta.enableAgentStoreConflictNotices === true
   });
-  if (writeResult2.result.case === void 0) {
+  if (writeResult.result.case === void 0) {
     editCommonPerformWriteErrorCounter.increment(ctx, 1, {
       error_type: "unknown"
     });
@@ -102,10 +116,10 @@ async function performWrite(ctx, resourceAccessor, path30, content, editInfo, me
       error: "Unknown error"
     });
   }
-  switch (writeResult2.result.case) {
+  switch (writeResult.result.case) {
     case "success": {
-      void stateHandler.recordFileState(writeResult2.result.value.path, content, editInfo.originalContent);
-      const resultForModel = await decoratePostWriteResultForModel(ctx, resourceAccessor, writeResult2.result.value.path, editInfo.resultForModel, meta.toolCallId, {
+      void stateHandler.recordFileState(writeResult.result.value.path, content, editInfo.originalContent);
+      const resultForModel = await decoratePostWriteResultForModel(ctx, resourceAccessor, writeResult.result.value.path, editInfo.resultForModel, meta.toolCallId, {
         enableAgentStoreConflictNotices: meta.enableAgentStoreConflictNotices === true,
         writeBarrierTimeoutMs: meta.writeBarrierTimeoutMs,
         onWriteBarrier: meta.onWriteBarrier
@@ -126,9 +140,9 @@ async function performWrite(ctx, resourceAccessor, path30, content, editInfo, me
       editCommonPerformWriteErrorCounter.increment(ctx, 1, {
         error_type: "permission_denied"
       });
-      const permissionDenied = writeResult2.result.value;
+      const permissionDenied = writeResult.result.value;
       const detail = permissionDenied.error ? `: ${permissionDenied.error}` : "";
-      throw new WritePermissionDeniedError(permissionDenied.isReadonly ?? false, `Write permission denied: ${path30}${detail}`, `Write permission denied: ${path30}${detail}`);
+      throw new WritePermissionDeniedError(permissionDenied.isReadonly ?? false, `Write permission denied: ${path31}${detail}`, `Write permission denied: ${path31}${detail}`);
     }
     case "noSpace":
       editCommonPerformWriteErrorCounter.increment(ctx, 1, {
@@ -140,7 +154,7 @@ async function performWrite(ctx, resourceAccessor, path30, content, editInfo, me
         error: "No space left on device"
       });
     case "rejected": {
-      const writeRejectedReason = writeResult2.result.value.reason;
+      const writeRejectedReason = writeResult.result.value.reason;
       if (writeRejectedReason.includes("Failed to find tool call context")) {
         editCommonPerformWriteErrorCounter.increment(ctx, 1, {
           error_type: "write_error"
@@ -157,7 +171,7 @@ async function performWrite(ctx, resourceAccessor, path30, content, editInfo, me
       throw new WriteRejectedError(writeRejectedReason, `Edit rejected: ${writeRejectedReason}`);
     }
     case "error": {
-      const writeError = writeResult2.result.value.error;
+      const writeError = writeResult.result.value.error;
       if (writeError === WORKTREE_GUARD_ERROR) {
         throw new ToolCallUnexpectedEnvironmentError(writeError);
       }
@@ -181,8 +195,8 @@ async function performWrite(ctx, resourceAccessor, path30, content, editInfo, me
       });
     }
     default: {
-      const _exhaustiveCheck = writeResult2.result;
-      throw new Error(`Unhandled writeResult.result: ${String(writeResult2.result)}`);
+      const _exhaustiveCheck = writeResult.result;
+      throw new Error(`Unhandled writeResult.result: ${String(writeResult.result)}`);
     }
   }
 }
@@ -191,9 +205,10 @@ var getDiffString = async (params) => {
   const useWorker = totalSize > DIFF_SIZE_THRESHOLD && !isSeaProcess();
   if (useWorker) {
     return await getPiscinaWorkerPool().run(params, {
-      filename: import_node_path52.default.join(workerDir, `./diff-worker.${extension}`)
+      filename: import_node_path87.default.join(workerDir, `./diff-worker.${extension}`)
     });
   } else {
     return calculateDiff(params);
   }
 };
+

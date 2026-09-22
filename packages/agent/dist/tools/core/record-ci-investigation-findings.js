@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/record-ci-investigation-findings.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_zod();
 var findingSchema = external_exports.object({
   checkName: external_exports.string().min(1),
@@ -27,3 +32,4 @@ var parametersSchema23 = external_exports.object({
   findings: external_exports.array(findingSchema).min(1).describe("One entry per failing CI check investigated. checkName and detailsUrl must match the check identity from the prompt verbatim."),
   overall: overallSchema.optional().describe("Optional cross-check summary when multiple checks were investigated in one turn.")
 });
+

@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/edit/canvas-post-edit-diagnostics.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+var import_node_path86 = require("node:path");
+
+// @recovered-fragment 2/2
 init_canvas_diagnostics_exec_pb();
 init_diagnostics_exec_pb();
 var TIMEOUT = /* @__PURE__ */ Symbol("canvasPostEditDiagnosticsTimeout");
@@ -105,3 +113,4 @@ function formatCanvasDiagnostics(path31, diagnostics) {
   }
   return lines2.join("\n");
 }
+

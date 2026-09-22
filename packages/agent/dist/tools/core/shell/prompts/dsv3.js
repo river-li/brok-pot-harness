@@ -1,3 +1,11 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/prompts/dsv3.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_zod();
+
+// @recovered-fragment 2/2
 var baseDescriptionDsv3 = `PROPOSE a command to run on behalf of the user.
 If you have this tool, note that you DO have the ability to run commands directly on the USER's system.
 Note that the user may have to approve the command before it is executed.
@@ -244,3 +252,4 @@ function getParametersSchemaDsv3(sandboxEnabled, version3, options2) {
   }
   return finalizeSchema(baseParametersSchemaDsv3);
 }
+

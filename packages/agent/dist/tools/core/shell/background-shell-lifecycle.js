@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/background-shell-lifecycle.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_dist4();
 var logger55 = createLogger("tools/shell/background-shell-lifecycle");
 var MAX_TRACKED_SHELLS = 4096;
@@ -77,3 +82,4 @@ function recordBackgroundShellExited(ctx, taskId, outcome) {
     reason: outcome.aborted ? "aborted" : "exited"
   });
 }
+

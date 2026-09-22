@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/subagent/swarm-prompts.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function swarmSystemPrompt(props) {
   const { role, isolationMode = "isolated" } = props;
   if (isolationMode === "shared" || isolationMode === "shared-no-git") {
@@ -62,3 +67,4 @@ function swarmEscapeHatchMessage(idleTurns, escapeToken, role) {
 function swarmContinuationMessage(role) {
   return role === "planner" ? "Review your scratchpad and submit any remaining tasks. Don't check on any subagent's work unless you were already told it completed." : "Continue working on your task if there are deliverables left for your objective. Make sure you completely implement all tasks to the fullest degree. Otherwise, report what you've done.";
 }
+

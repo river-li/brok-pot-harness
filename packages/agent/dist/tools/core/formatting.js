@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/formatting.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function formatCodeBlock(codeBlock, options2) {
   let result;
   if (codeBlock.formattingOptions.enableLineNumbers === false) {
@@ -122,3 +127,4 @@ function addLineNumbersGpt5(code, startLineNumber) {
     }).join("\n");
   }
 }
+

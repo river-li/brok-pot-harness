@@ -1,3 +1,13 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/create-plan/backend-plan-utils.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_read_exec_pb();
+init_zod();
+
+// @recovered-fragment 2/2
 var logger82 = createLogger("@anysphere/agent:backend-plan-utils");
 var planTodoFrontmatterSchema = external_exports.object({
   id: external_exports.string(),
@@ -147,3 +157,4 @@ async function syncLatestPlanTodosToFile(options2) {
     });
   }
 }
+

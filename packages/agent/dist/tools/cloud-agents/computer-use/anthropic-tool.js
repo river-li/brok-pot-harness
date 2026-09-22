@@ -1,3 +1,12 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/computer-use/anthropic-tool.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_computer_use_tool_pb();
+
+// @recovered-fragment 2/2
 var __addDisposableResource10 = function(env, value, async) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -149,3 +158,4 @@ function createAnthropicComputerTool(config2) {
     render: (ctx, output, props) => renderComputerUseResult(ctx, output, true, props)
   };
 }
+

@@ -1,3 +1,15 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/remote-hooks.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/2
+init_dist4();
+init_exec_pb();
+init_hooks_pb();
+init_requested_model_pb();
+init_esm();
+
+// @recovered-fragment 2/2
 var logger15 = createLogger("remote-hooks");
 function safeBuildRemoteHookContexts(ctx, toolName, toolCallId, hookEventName, additionalContext) {
   try {
@@ -717,3 +729,4 @@ function withRemoteHooks(args) {
     return result;
   };
 }
+

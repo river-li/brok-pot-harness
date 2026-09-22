@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/cloud-agents/subagent/media-subagent-prompt.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var NO_TOOLS_SECTION = `
 ## No tools
 
@@ -10,3 +15,4 @@ function createMediaSubagentSystemPromptOverride(specialistPrompt) {
 ${NO_TOOLS_SECTION}`;
   return () => prompt;
 }
+

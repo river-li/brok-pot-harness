@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/ask-question/replay-horizon.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function readAsyncOriginalToolCallId(args) {
   let parsedArgs;
   try {
@@ -33,3 +38,4 @@ function collectLiveAskQuestionOriginalIds(messages2) {
   }
   return liveOriginalIds;
 }
+

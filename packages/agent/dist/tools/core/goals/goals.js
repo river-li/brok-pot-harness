@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/goals/goals.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_goal_tool_pb();
 init_zod();
 var GOAL_STATUSES = ["active", "complete"];
@@ -12,3 +17,4 @@ var createGoalSchema = external_exports.object({
 var updateGoalSchema = external_exports.object({
   status: external_exports.enum(GOAL_STATUSES)
 });
+

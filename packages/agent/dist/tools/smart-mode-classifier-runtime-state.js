@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/smart-mode-classifier-runtime-state.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function getSmartModeClassifierRuntimeState({ agentType, requestContext, smartModeClassifierMode, smartModeClassifierShadowMode, devBlockState, devDelayState }) {
   const isBackgroundAgent = agentType === AgentType.BACKGROUND;
   const autoModeSelected = smartModeClassifierMode === true && requestContext?.env?.smartModeClassifierAutoModeEnabled === true;
@@ -10,3 +15,4 @@ function getSmartModeClassifierRuntimeState({ agentType, requestContext, smartMo
     devDelayState: devDelayState ?? createDevSmartModeClassifierDelayState(requestContext)
   };
 }
+

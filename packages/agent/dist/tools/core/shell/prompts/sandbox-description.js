@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/prompts/sandbox-description.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 function NetworkAllowlistDescription({ sandboxNetworkInfo }) {
   return jsxs(Fragment, { children: [sandboxNetworkInfo.hasDefaults && jsx("p", { children: "The sandbox includes network access for common package managers and version control providers (e.g. npm, pypi, crates.io, Maven Central, GitHub, etc.). Standard operations like package installs and fetching dependencies will work without requesting additional permissions." }), sandboxNetworkInfo.explicitEntries.length > 0 && jsxs("p", { children: [sandboxNetworkInfo.hasDefaults ? "Additionally, the" : "The", " sandbox includes network access for the following domains: ", sandboxNetworkInfo.explicitEntries.join(", "), ". You do not need to request 'full_network' permissions for these domains."] }), jsx("p", { children: "For broader network access beyond the allowed domains, you may still need to request 'full_network' permissions." })] });
 }
@@ -11,3 +16,4 @@ function SandboxingDescriptionBody({ isReadonly, sandboxNetworkInfo }) {
 function SandboxingDescription({ isReadonly, sandboxNetworkInfo }) {
   return jsx("section", { title: "Sandboxing", children: jsx(SandboxingDescriptionBody, { isReadonly, sandboxNetworkInfo }) });
 }
+

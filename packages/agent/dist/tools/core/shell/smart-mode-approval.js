@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/smart-mode-approval.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 var import_node_crypto36 = require("node:crypto");
 var SMART_MODE_APPROVAL_MISSING_CONVERSATION_REASON = "Auto-review shell approvals require a conversation id";
 function policyFingerprint(policy) {
@@ -38,3 +43,4 @@ async function createSmartModeShellApprovalRequest(ctx, store, target) {
     blockReason: target.blockReason
   };
 }
+

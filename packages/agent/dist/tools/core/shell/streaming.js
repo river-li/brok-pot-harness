@@ -1,3 +1,8 @@
+/* Recovered emitted JavaScript; original types/imports may be absent.
+ * Source: ../packages/agent/dist/tools/core/shell/streaming.js
+ * Bundle: sand-host/host-main.cjs
+ * See reconstruction-manifest.json for exact byte ranges. */
+// @recovered-fragment 1/1
 init_agent_pb();
 init_shell_tool_pb();
 function createShellToolCall(shellTool) {
@@ -64,3 +69,4 @@ function createStreamingShellHandler(interactionHandler, meta, _shellArgs, optio
     handleShellEvent
   };
 }
+
