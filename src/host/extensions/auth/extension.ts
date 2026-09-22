@@ -13,6 +13,9 @@ var authExtension = defineHostExtension({
   id: "auth",
   dependencies: [HostExtensions.Settings],
   start: (context2) => {
+    if (process.env.GROKBOT_LOCAL_MODE === "1") {
+      return require("./local/host-auth.js").createLocalHostAuth(() => getOrCreateHostMachineId());
+    }
     const { backend } = context2.host.environment;
     const service = createHostAuthService({
       backend,

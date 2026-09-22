@@ -92,6 +92,7 @@ var DefaultBoxStoreSyncService = class {
       clearBoxStoreNow: () => this.clearBoxStoreNow(),
       scheduleStoreDbSnapshot: (agentId) => this.sync?.scheduleStoreDbSnapshot(agentId),
       forgetAgent: async (agentId) => {
+        if (process.env.GROKBOT_LOCAL_MODE === "1") return;
         await (this.sync ?? this.accessor()).forgetAgent(agentId);
       }
     };
@@ -372,4 +373,3 @@ function buildBoxStoreCategories(args) {
 function createBoxStoreSyncService(deps) {
   return new DefaultBoxStoreSyncService(deps);
 }
-

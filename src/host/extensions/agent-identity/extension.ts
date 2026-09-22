@@ -119,6 +119,9 @@ function startAgentIdentity({
     void service.reconcileNow();
   };
   const getCreationPolicy = async (signal = lifetime.signal) => {
+    if (process.env.GROKBOT_LOCAL_MODE === "1") return {
+      isLegacy: true, durableIdentityEnabled: false, durableIdentityWritesEnabled: false, temporalCreationEnabled: false
+    };
     const capabilities = await readAgentIdentityCapabilities({
       client,
       deadline: capabilitiesDeadline,

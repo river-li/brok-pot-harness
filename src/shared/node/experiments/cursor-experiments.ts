@@ -142,6 +142,11 @@ var SandExperimentServiceCore = class {
   bootstrapDeadline;
   refreshPoll;
   start() {
+    if (process.env.GROKBOT_LOCAL_MODE === "1") {
+      this.authenticatedBootstrapPending = false;
+      this.refreshSnapshot();
+      return;
+    }
     const cached2 = loadCachedBootstrap(this.options.getCacheDir());
     if (cached2 != null) {
       this.savedBootstrap = cached2;
@@ -163,6 +168,7 @@ var SandExperimentServiceCore = class {
     });
   }
   handleAuthChange() {
+    if (process.env.GROKBOT_LOCAL_MODE === "1") return;
     this.authRevision += 1;
     this.hasFreshAuthenticatedExperimentBootstrap = false;
     this.authenticatedBootstrapPending = true;
@@ -170,6 +176,7 @@ var SandExperimentServiceCore = class {
     void this.refresh("auth_change");
   }
   async refreshNow() {
+    if (process.env.GROKBOT_LOCAL_MODE === "1") return;
     await this.refresh("manual");
   }
   subscribe(listener) {
@@ -881,4 +888,3 @@ var SandExperimentService = class extends SandExperimentServiceCore {
     super({ ...options2, registry: SAND_EXPERIMENT_REGISTRY });
   }
 };
-

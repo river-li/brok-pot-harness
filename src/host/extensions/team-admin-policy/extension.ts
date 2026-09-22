@@ -12,6 +12,14 @@ var teamAdminPolicyExtension = defineHostExtension({
   id: "team-admin-policy",
   dependencies: [HostExtensions.Auth, HostExtensions.Settings],
   start: (context2) => {
+    // There is no organization administrator or remote policy in a local workspace.
+    // Cloud-agent tools are unavailable; normal local tool approval remains intact.
+    if (process.env.GROKBOT_LOCAL_MODE === "1") return {
+      isCloudAgentsDisabled: () => true,
+      isAutoReviewEnforced: () => false,
+      waitForPolicy: async () => true,
+      prefetch() {}, invalidate() {}, dispose() {}
+    };
     const auth2 = context2.deps.auth;
     const log4 = (message) => context2.host.log(message);
     let dashboardClient;
@@ -36,4 +44,3 @@ var teamAdminPolicyExtension = defineHostExtension({
     return service;
   }
 });
-

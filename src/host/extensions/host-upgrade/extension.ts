@@ -68,15 +68,15 @@ var hostUpgradeExtension = defineHostExtension({
       }),
       clock: realClock,
       random: Math.random,
-      isInBox: environment.inBox,
-      isAutoUpdateEnabled: !environment.boxAutoUpdateOptedOut,
+      isInBox: environment.inBox && process.env.GROKBOT_LOCAL_MODE !== "1",
+      isAutoUpdateEnabled: process.env.GROKBOT_LOCAL_MODE !== "1" && !environment.boxAutoUpdateOptedOut,
       getUpdateWatchIntervalMs: () => resolveHostBundleWatchIntervalMs(
         readLiveReleaseConfig().watchIntervalMs,
         environment.boxUpdateWatchIntervalMsRaw
       ),
       updateWatchJitterRatio: environment.boxUpdateWatchJitterRatio ?? HOST_BUNDLE_WATCH_JITTER_RATIO,
       hostDevErrorDetail: environment.hostDevErrorDetail,
-      resolveBundleSource: () => resolveHostBundleSource(
+      resolveBundleSource: () => process.env.GROKBOT_LOCAL_MODE === "1" ? Promise.resolve(null) : resolveHostBundleSource(
         fetch,
         resolveChannel(),
         hostBundleBaseUrl(environment.hostBundleS3BaseUrl)
@@ -91,4 +91,3 @@ var hostUpgradeExtension = defineHostExtension({
     return service;
   }
 });
-

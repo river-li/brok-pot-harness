@@ -95,6 +95,7 @@ var TokenRefreshingSpanExporter = class {
   }
 };
 function initSandHostTracing(options2) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1" || process.env.SAND_DISABLE_TELEMETRY === "1") return NOOP_HOST_TRACING;
   if (initialized) return hostTracing ?? NOOP_HOST_TRACING;
   try {
     const traceUrl = `${options2.backendUrl.replace(/\/+$/, "")}/v1/traces`;
@@ -162,4 +163,3 @@ function initSandHostTracing(options2) {
     return NOOP_HOST_TRACING;
   }
 }
-
