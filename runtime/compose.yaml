@@ -1,0 +1,82 @@
+name: gbh-local
+services:
+  speech:
+    build:
+      context: ./speech
+    image: gbh-local-speech:reconstructed
+    platform: linux/amd64
+    environment:
+      GROKBOT_SPEECH_MODEL_ROOT: /models
+      GROKBOT_TTS_MODEL_ROOT: /tts-models
+      GROKBOT_SPEECH_THREADS: ${GROKBOT_SPEECH_THREADS:-4}
+    volumes:
+      - ../.runtime/models/whisper:/models
+      - ../.runtime/models/kokoro:/tts-models
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).close()"]
+      interval: 15s
+      timeout: 3s
+      start_period: 300s
+      retries: 3
+  search:
+    image: docker.io/searxng/searxng@sha256:6869f20676fd91e3f856bcaefc510bc363fdd126f7bd860f49f2ffcb3b305da0
+    platform: linux/amd64
+    user: "977:977"
+    environment:
+      SEARXNG_SECRET: ${GROKBOT_SEARCH_SECRET:?Use npm start to generate the local search secret}
+      FORCE_OWNERSHIP: "false"
+      GRANIAN_WORKERS: "1"
+    volumes:
+      - ./search:/etc/searxng:ro
+    tmpfs:
+      - /var/cache/searxng:uid=977,gid=977,mode=0700,size=128m
+    healthcheck:
+      test: ["CMD", "/usr/local/searxng/.venv/bin/python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/', timeout=2).close()"]
+      interval: 15s
+      timeout: 3s
+      start_period: 15s
+      retries: 3
+  app:
+    image: ${GROKBOT_SANDBOX_IMAGE:-public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8}
+    platform: linux/amd64
+    init: true
+    shm_size: 1gb
+    entrypoint: ["/bin/bash", "/opt/grokbot/box-entrypoint.sh"]
+    environment:
+      SAND_PACKAGED: "1"
+      SAND_HOST_IN_BOX: "1"
+      SAND_DATA_ROOT: /home/box/sand-data
+      SAND_GATEWAY_BIND_HOST: 0.0.0.0
+      SAND_HOST_PORT: "1340"
+      SAND_GATEWAY_TOKEN: ${GROKBOT_GATEWAY_TOKEN:?Use npm start to generate the local gateway token}
+      GROKBOT_RESPONSES_BASE_URL: ${GROKBOT_CONTAINER_API_URL:-http://litellm.home/v1}
+      GROKBOT_MODEL: ${GROKBOT_MODEL:-gpt-5.6-sol}
+      GROKBOT_CONTEXT_TOKENS: ${GROKBOT_CONTEXT_TOKENS:-128000}
+      GROKBOT_REASONING_EFFORT: ${GROKBOT_REASONING_EFFORT:-low}
+      GROKBOT_INFERENCE_TIMEOUT_MS: ${GROKBOT_INFERENCE_TIMEOUT_MS:-180000}
+      LITELLM_API_KEY: ${LITELLM_API_KEY:-}
+      GROKBOT_SEARCH_BASE_URL: ${GROKBOT_SEARCH_BASE_URL:-http://search:8080}
+      GROKBOT_TRANSCRIPTION_BASE_URL: ${GROKBOT_TRANSCRIPTION_BASE_URL:-http://speech:8000}
+      GROKBOT_TTS_BASE_URL: ${GROKBOT_TTS_BASE_URL:-http://speech:8000}
+    depends_on:
+      - search
+      - speech
+    ports:
+      - "127.0.0.1:1540:1340"
+      - "127.0.0.1:6180:6080"
+      - "127.0.0.1:6181:6081"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ../.runtime/build/sand-host:/home/box/sand-host:ro
+      - ../.runtime/build/deps:/home/box/deps:ro
+      - ../.runtime/data:/home/box/sand-data
+      - ${GROKBOT_WORKSPACE_DIR:-../.runtime/workspace}:/workspace
+      - ./box-entrypoint.sh:/opt/grokbot/box-entrypoint.sh:ro
+      - ./tests:/opt/grokbot/tests:ro
+    healthcheck:
+      test: ["CMD", "/exec-daemon/node", "-e", "fetch('http://127.0.0.1:1340/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      start_period: 60s
+      retries: 3
