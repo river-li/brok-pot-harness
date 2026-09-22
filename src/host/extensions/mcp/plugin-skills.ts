@@ -102,6 +102,10 @@ function selectedTeamGetMeRequest(teamId) {
   return new GetMeRequest(teamId === void 0 ? {} : { teamId });
 }
 function createSharedInstalledPluginsLoader(deps) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1") {
+    const local = createLocalInstalledPluginsStore(deps.sandRootDir);
+    return () => local.installedContents();
+  }
   const pluginsRoot = getPluginsRootDir(deps.sandRootDir);
   const dashboardClient = createSandCursorBackendClient(DashboardService, {
     backend: deps.backend,
@@ -187,6 +191,17 @@ function createSharedInstalledPluginsLoader(deps) {
       currentUserId: currentUserIdForPass
     };
   };
+}
+function createLocalInstalledPluginsStore(root) {
+  init_mcp_plugin_variables();
+  return require("./local/plugins.js").createLocalPluginStore(root, {
+    load: (path, info) => loadCursorPluginFromPath(path, "user-local", info),
+    fields: pluginVariablesSchemaToFields,
+    validateVariables: (schema, values) => ajv.validate(schema, values),
+    validateConfig: value => mcpConfigSchema2.parse(value),
+    validateName: validateServerName,
+    validateManifest: parsePluginManifest
+  });
 }
 function pruneUninstalledPluginDirs(cacheRoot, listedCacheKeys, indexedFilePaths) {
   const keep = new Set(listedCacheKeys.map((key) => getPluginInstallCachePath(cacheRoot, key)));
@@ -338,4 +353,3 @@ var SandPluginSkillsService = class {
     }
   }
 };
-

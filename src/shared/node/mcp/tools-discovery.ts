@@ -74,6 +74,7 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     });
   }
   async function _getTools(ctx, mcpConfigJson) {
+    if (process.env.GROKBOT_LOCAL_MODE === "1" && mcpConfigJson !== void 0) return _getToolsRaw(ctx, mcpConfigJson);
     return _filterDisabledTools(await _getToolsRaw(ctx, mcpConfigJson));
   }
   async function _getToolsRaw(_ctx, mcpConfigJson) {
@@ -83,12 +84,14 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     return (await _getDiscovered(mcpConfigJson)).statuses;
   }
   async function _getDiscovered(mcpConfigJson) {
+    // Temporary clients are recreated for each turn, even for identical JSON.
+    if (process.env.GROKBOT_LOCAL_MODE === "1" && mcpConfigJson !== void 0) return _getToolsViaBackend(mcpConfigJson);
     const entry = toolsCacheEntry;
     const serverNames = _peekDiscoveryServerNames();
     if (entry !== null && entry.fulfilled === void 0) {
       const inFlightRequestedKey = serverNames === void 0 ? void 0 : _toolServerSetKey(serverNames, mcpConfigJson);
       if (inFlightRequestedKey === entry.requestedKey) {
-        if (entry.stale !== void 0) {
+        if (entry.stale !== void 0 && (process.env.GROKBOT_LOCAL_MODE !== "1" || entry.stale.resolvedKey === inFlightRequestedKey && !_localServersInitializing(entry.stale))) {
           return entry.stale;
         }
         return await entry.promise;
@@ -101,6 +104,7 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     if (entry?.fulfilled !== void 0 && serverNames !== void 0) {
       const key = _toolServerSetKey(serverNames, mcpConfigJson);
       if (entry.fulfilled.resolvedKey === key) {
+        if (_localServersInitializing(entry.fulfilled)) return await _startToolsResolution(key, false, mcpConfigJson).promise;
         if (Date.now() - entry.fulfilled.atMs >= MCP_TOOLS_CACHE_TTL_MS) {
           _startToolsResolution(key, true, mcpConfigJson);
         }
@@ -269,7 +273,10 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     if (entry.fulfilled === void 0) {
       return entry.requestedKey === key;
     }
-    return entry.fulfilled.resolvedKey === key && Date.now() - entry.fulfilled.atMs < MCP_TOOLS_CACHE_TTL_MS;
+    return entry.fulfilled.resolvedKey === key && !_localServersInitializing(entry.fulfilled) && Date.now() - entry.fulfilled.atMs < MCP_TOOLS_CACHE_TTL_MS;
+  }
+  function _localServersInitializing(discovered) {
+    return process.env.GROKBOT_LOCAL_MODE === "1" && [...discovered.statuses.values()].some(status => status === "initializing" || status === "loading");
   }
   function _dropSettledCacheForEmptyServerSet() {
     if (toolsCacheEntry?.fulfilled !== void 0) {
@@ -350,6 +357,7 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     }
   }
   async function _executeTool(ctx, args, auditIdentity, mcpConfigJson) {
+    if (process.env.GROKBOT_LOCAL_MODE === "1" && mcpConfigJson !== void 0) return _executeToolRaw(ctx, args, auditIdentity, mcpConfigJson);
     const displayServer = _displayRowForIdentifier(args.providerIdentifier);
     const displayName2 = displayServer?.name ?? args.providerIdentifier;
     if (displayServer != null && (core2.settingsStore().getMcpDisabledToolsByServerId()[displayServer.id]?.includes(args.toolName) ?? false)) {
@@ -520,6 +528,8 @@ function createMcpToolsDiscovery(core2, deps = {}) {
   }
   async function _isHttpProvider(providerIdentifier, mcpConfigJson) {
     if (mcpConfigJson !== void 0) {
+      // Both inline transports use isolated registrations in the local Box.
+      if (process.env.GROKBOT_LOCAL_MODE === "1") return Object.hasOwn(parseAccountMcpConfigJson(mcpConfigJson)?.mcpServers ?? {}, providerIdentifier);
       return _inlineHttpServerNames(mcpConfigJson).has(providerIdentifier);
     }
     try {
@@ -619,4 +629,3 @@ var SandMcpExecutor = class {
     return await augmentMcpResultWithSavedImages(spilled, this.persistImage);
   }
 };
-

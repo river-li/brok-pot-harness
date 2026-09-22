@@ -335,6 +335,7 @@ var SandMcpManager = class {
   }
   async addServersToAccount(servers) {
     const writer = this.requireAccountWriter();
+    if (process.env.GROKBOT_LOCAL_MODE === "1" && writer.addServers != null) return await writer.addServers(servers);
     const { config: config2, serverIdsByName } = await writer.getConfigForEdit();
     await writer.setConfig({ mcpServers: { ...config2.mcpServers, ...servers } }, serverIdsByName);
   }
@@ -363,7 +364,8 @@ var SandMcpManager = class {
         if (id !== void 0) nextIds[serverName] = id;
       }
     }
-    await writer.setConfig({ mcpServers: nextServers }, nextIds);
+    if (process.env.GROKBOT_LOCAL_MODE === "1" && writer.removeServer != null) await writer.removeServer(serverId);
+    else await writer.setConfig({ mcpServers: nextServers }, nextIds);
     this.authWatches.clearPendingAuthWatchesForServer(serverId);
     const sameNameRows = this.lastAccountDisplayConfigView()?.servers.filter((server) => server.name === displayName2).length ?? 1;
     this.settingsStore.deleteMcpCustomInstructionByServerId({
@@ -588,4 +590,3 @@ var SandMcpManager = class {
     this.boxRuntime?.resetPushState();
   }
 };
-

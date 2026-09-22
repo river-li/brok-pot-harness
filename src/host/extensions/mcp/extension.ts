@@ -34,7 +34,7 @@ function startPluginSkillsWhenAuthenticated(options2) {
     if (event.isFirstCredential) options2.service.handleAuthChange();
   };
   const unsubscribe = options2.auth.subscribeToRenewal(handleRenewal);
-  if (options2.auth.peekAccessToken() !== null) start();
+  if (process.env.GROKBOT_LOCAL_MODE === "1" || options2.auth.peekAccessToken() !== null) start();
   return () => {
     if (disposed) return;
     disposed = true;
@@ -85,6 +85,7 @@ var mcpExtension = defineHostExtension({
         intervalMs: PLUGIN_SKILLS_REFRESH_INTERVAL_MS
       }),
       onStartupSyncSucceeded: () => {
+        if (process.env.GROKBOT_LOCAL_MODE === "1") return;
         void sweepLegacyPluginSkillReferences({
           sandRootDir,
           backend,
@@ -132,4 +133,3 @@ var mcpExtension = defineHostExtension({
     return { ...service.api, skillPublish };
   }
 });
-

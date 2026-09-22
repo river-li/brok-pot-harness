@@ -22,7 +22,7 @@ var SAND_FORCED_STATIC_TOOL_NAMES = /* @__PURE__ */ new Set([
   SAND_REACT_TO_MESSAGE_TOOL_NAME
 ]);
 var SAND_WEB_SEARCH_DESCRIPTION_SUFFIX = `Results come from an external search index that some sites block, so a missing or stale result is not evidence a page or fact does not exist. When search comes up empty for something that should exist, try WebFetch on a likely URL, then fall back to a browser subagent when one is available, or \`curl\` via Shell.`;
-var SAND_WEB_FETCH_DESCRIPTION_SUFFIX = `Some sites' firewalls block this tool's fetch provider with a 403 or a block page (e.g. "Request Rejected"). That is not evidence the page does not exist: fall back to a browser subagent when one is available, or \`curl\` via Shell (your box egresses from a different network).`;
+var SAND_WEB_FETCH_DESCRIPTION_SUFFIX = process.env.GROKBOT_LOCAL_MODE === "1" ? `Some sites block automated HTTP clients with a 403 or a block page (e.g. "Request Rejected"). That is not evidence the page does not exist. A browser subagent can render pages that require JavaScript or browser interaction.` : `Some sites' firewalls block this tool's fetch provider with a 403 or a block page (e.g. "Request Rejected"). That is not evidence the page does not exist: fall back to a browser subagent when one is available, or \`curl\` via Shell (your box egresses from a different network).`;
 var SAND_DYNAMIC_TOOL_HINTS = {
   CLOUD_AGENT: "Launch and manage Cursor cloud coding agents for repository work. A Project is a coordinator cloud agent the user can ask for explicitly, and the CloudAgent tool description has the details.",
   SEARCH_PLUGINS: "Search installable plugins/connectors when a task needs a service.",
@@ -1189,4 +1189,3 @@ function buildTurnTools(host, turn, props) {
     dynamicToolRegistry
   );
 }
-

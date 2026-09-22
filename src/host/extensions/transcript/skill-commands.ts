@@ -142,6 +142,7 @@ var SkillCommands = class {
       return;
     }
     await this.tm.sendPrompt(`@${skill.name}`, {
+      agentId,
       richText: JSON.stringify({
         type: "doc",
         content: [
@@ -204,4 +205,3 @@ var SkillCommands = class {
 ${promptForRun}` : context2;
   }
 };
-

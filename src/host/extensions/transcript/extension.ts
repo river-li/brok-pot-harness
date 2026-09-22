@@ -99,7 +99,7 @@ var transcriptExtension = defineHostExtension({
       })
     );
     manager.voiceCalls.setFinalWordGate(
-      () => context2.deps.experiments.checkFeatureGate("sand_voice_final_word", {
+      () => process.env.GROKBOT_LOCAL_MODE === "1" || context2.deps.experiments.checkFeatureGate("sand_voice_final_word", {
         disableExposureLog: true
       })
     );
@@ -195,4 +195,3 @@ var transcriptExtension = defineHostExtension({
     return Object.assign(manager, { feedback: new FeedbackEntries(manager) });
   }
 });
-

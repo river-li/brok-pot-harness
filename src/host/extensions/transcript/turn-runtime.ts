@@ -464,6 +464,7 @@ var TurnRuntime = class {
           this.tm.upgradeResume.markAgentResumePending(session, "turn", { spendRequestId });
         } else if (!result.aborted && epoch === this.tm.sendPipeline.currentTurnEpoch(session)) {
           const settled = await this.ensureUserReply(runner, result, session, epoch, {
+            mcpConfigJson: options2.mcpConfigJson,
             advanceChainOnDelivery: false,
             ackToken: options2.ackToken,
             traceCtx: turnCtx,
@@ -565,6 +566,7 @@ var TurnRuntime = class {
   }
   async ensureUserReply(runner, result, session, epoch, options2 = {}) {
     const nudgeRunOptions = {
+      mcpConfigJson: options2.mcpConfigJson,
       hidden: true,
       continuesTurn: true,
       advanceChainOnDelivery: options2.advanceChainOnDelivery,
@@ -868,4 +870,3 @@ var TurnRuntime = class {
     }
   }
 };
-

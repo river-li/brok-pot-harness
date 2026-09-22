@@ -21,7 +21,7 @@ var userSkillsCacheExtension = defineHostExtension({
       getMachineId: context2.deps.auth.getMachineId
     });
     const service = createUserSkillsCacheService({
-      isInBox: environment.inBox,
+      isInBox: environment.inBox && process.env.GROKBOT_LOCAL_MODE !== "1",
       libraryDir: getGlobalSkillsDir(getSandRootDir()),
       fingerprintLibrary: fingerprintUserSkillsLibrary,
       publish: async ({ fingerprint, signal }) => {
@@ -39,4 +39,3 @@ var userSkillsCacheExtension = defineHostExtension({
     return service.api;
   }
 });
-

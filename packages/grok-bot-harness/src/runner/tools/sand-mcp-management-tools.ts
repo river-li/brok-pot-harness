@@ -369,7 +369,13 @@ var TEAM_MCP_MANAGEMENT_COPY = {
 var MCP_AWAITING_SELECTION_MESSAGE = "You just sent a question widget, so this turn is waiting on the user's selection \u2014 their answer arrives as the next message. Don't install, uninstall, restart, or authenticate an MCP server in the same turn as the confirmation widget; wait for the user to confirm, then do it on your next turn.";
 var MCP_TEAM_SETUP_UNDERWAY_MESSAGE = "Nothing was added. This bot's setup is already running from the owner's message: a background pass is picking its plugins, and the owner sees them as a card in this chat to tick and set up. Leave plugins to that card this turn; when the owner later names one and asks for it, add it then.";
 function createMcpManagementTools(management, getRequestingAgentId, isAwaitingUserSelection, isMultiAccountEnabled, emitConnectorCard, mcpMetaToolNames = SAND_STATIC_MCP_META_TOOL_NAMES, options2) {
-  const copy = options2?.teamBot === true ? TEAM_MCP_MANAGEMENT_COPY : PERSONAL_MCP_MANAGEMENT_COPY;
+  const copy = process.env.GROKBOT_LOCAL_MODE === "1" ? {
+    ...PERSONAL_MCP_MANAGEMENT_COPY,
+    searchEmpty: "No local plugin catalog is configured. Use AddMcpServer for a server whose endpoint or launch command the user supplies.",
+    addDescription: "Add an MCP server to this local workspace. Its configuration is shared by the workspace's agents and persists across restarts. Get the user's agreement before adding it; ask with a question widget if they have not agreed. Provide either a server url with optional static headers, or a command with args and env. Both transports execute through the local Linux sandbox. The command server can run programs and either transport can reach services on the user's behalf. Use only the endpoint, command and credentials supplied or confirmed by the user. Vendor account login and vendor OAuth are unavailable in local mode.",
+    added: name17 => `Added \"${name17}\" to this local workspace.`,
+    uninstallServerDescription: () => "Remove one custom MCP server from this local workspace by its server identifier. This affects all agents in this workspace. Get the user's agreement before removing it. Plugin bundles must be removed with UninstallPlugin instead."
+  } : options2?.teamBot === true ? TEAM_MCP_MANAGEMENT_COPY : PERSONAL_MCP_MANAGEMENT_COPY;
   const {
     serverIdParameters,
     serverStatusParameters,
@@ -723,4 +729,3 @@ function createMcpManagementTools(management, getRequestingAgentId, isAwaitingUs
     ]
   ];
 }
-

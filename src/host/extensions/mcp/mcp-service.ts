@@ -9,6 +9,17 @@ init_mcp_marketplace();
 var McpHostService = class {
   constructor(deps) {
     this.deps = deps;
+    const localMode = process.env.GROKBOT_LOCAL_MODE === "1";
+    const localCustomStore = localMode ? require("./local/mcp-store.js").createLocalMcpStore(getSandRootDir(), {
+      parseConfig: value => mcpConfigSchema2.parse(value), validateName: validateServerName
+    }) : void 0;
+    const localPlugins = localMode ? createLocalInstalledPluginsStore(getSandRootDir()) : void 0;
+    const localStore = localMode ? require("./local/plugins.js").combineLocalMcpStores(localCustomStore, localPlugins) : void 0;
+    const boxMcpExec = createBoxSandMcpExec(deps.foreverBox.box);
+    const boxServers = async () => {
+      const turn = this.boxServersTurn;
+      return turn === void 0 || !turn.gates.browserUsePlaywright() ? {} : playwrightBoxMcpServersForBox(deps.foreverBox.box, turn.ctx, turn.agentId, {kind:"image_only"});
+    };
     const marketplaceClient = marketplaceDashboardClientFor(deps.backend);
     const accountMcpDeps = {
       backend: deps.backend,
@@ -23,6 +34,7 @@ var McpHostService = class {
       ...deps.isCatalogServerStatusDisabled === void 0 ? {} : { isCatalogServerStatusDisabled: deps.isCatalogServerStatusDisabled },
       ...deps.pluginSkills != null ? { pluginSkills: deps.pluginSkills } : {},
       getAccessToken: async () => {
+        if (localMode) return null;
         try {
           const token = await deps.auth.getAccessToken({
             backendUrl: deps.backend.backendUrl
@@ -34,23 +46,19 @@ var McpHostService = class {
         }
       },
       getMachineId: deps.auth.getMachineId,
-      fetchMarketplacePlugins: (getAccessToken, getMachineId) => fetchMarketplaceMcpPlugins(getAccessToken, getMachineId, marketplaceClient),
-      accountServersProvider: () => fetchAccountMcpServers(accountMcpDeps),
-      accountMcpWriter: createAccountMcpWriter(accountMcpDeps),
-      effectivePluginsProvider: () => fetchEffectiveUserPlugins(accountMcpDeps),
-      backendMcpExec: createDashboardSandBackendMcpExec(accountMcpDeps),
-      boxMcpExec: createBoxSandMcpExec(deps.foreverBox.box),
-      boxServers: async () => {
-        const turn = this.boxServersTurn;
-        return turn === void 0 || !turn.gates.browserUsePlaywright() ? {} : playwrightBoxMcpServersForBox(deps.foreverBox.box, turn.ctx, turn.agentId, {
-          kind: "image_only"
-        });
-      },
+      fetchMarketplacePlugins: localPlugins ? () => localPlugins.catalog() : (getAccessToken, getMachineId) => fetchMarketplaceMcpPlugins(getAccessToken, getMachineId, marketplaceClient),
+      accountServersProvider: localStore ? () => localStore.listServers() : () => fetchAccountMcpServers(accountMcpDeps),
+      accountMcpWriter: localStore ?? createAccountMcpWriter(accountMcpDeps),
+      effectivePluginsProvider: localPlugins ? () => localPlugins.effective() : () => fetchEffectiveUserPlugins(accountMcpDeps),
+      backendMcpExec: localStore ? createLocalBoxBackendMcpExec(localStore, boxMcpExec, boxServers) : createDashboardSandBackendMcpExec(accountMcpDeps),
+      boxMcpExec,
+      boxServers,
       settingsStore: deps.settings,
       onDiscoveryFailed: deps.onDiscoveryFailed,
       onConnectorAuth: deps.onConnectorAuth
     });
     const kickInstallBackfillOnce = () => {
+      if (localMode) return;
       this.installBackfill ??= backfillUserPluginInstalls(accountMcpDeps).then(
         () => void 0,
         (error42) => {
@@ -175,4 +183,3 @@ var McpHostService = class {
 function createMcpService(deps) {
   return new McpHostService(deps);
 }
-

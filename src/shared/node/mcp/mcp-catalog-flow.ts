@@ -22,7 +22,7 @@ var SandMcpCatalogFlow = class {
     const isAuthenticated = await bestEffortToken2(getAccessToken) != null;
     const cached2 = this.catalogViewsCache;
     const isCacheUsable = cached2 != null && cached2.includesPrivateMarketplaces === isAuthenticated;
-    if (options2?.forceRefresh !== true && isCacheUsable && Date.now() - cached2.atMs < CATALOG_CACHE_TTL_MS) {
+    if (process.env.GROKBOT_LOCAL_MODE !== "1" && options2?.forceRefresh !== true && isCacheUsable && Date.now() - cached2.atMs < CATALOG_CACHE_TTL_MS) {
       return cached2.views;
     }
     const fetchPlugins = this.core.fetchMarketplacePlugins ?? this.marketplaceFetcherForBackend(fetchMarketplaceMcpPlugins2);
@@ -126,4 +126,3 @@ var SandMcpCatalogFlow = class {
     }
   }
 };
-

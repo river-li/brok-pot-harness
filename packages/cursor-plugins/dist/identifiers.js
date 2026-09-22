@@ -9,13 +9,13 @@ function getPluginDbId(ident) {
     case "cursor-third-party":
       return ident.sourceInfo.pluginDbId;
     case "claude-plugin":
-    case "user-local":
     case "extension":
       return void 0;
+    case "user-local":
+      return process.env.GROKBOT_LOCAL_MODE === "1" ? ident.sourceInfo.localPluginId : void 0;
     default: {
       const _exhaustive = ident;
       return void 0;
     }
   }
 }
-

@@ -24,6 +24,7 @@ async function fetchSandManagedSkills(options2) {
   }));
 }
 async function fetchSkillCatalog(backend, getAccessToken, getMachineId, report) {
+  if (process.env.GROKBOT_LOCAL_MODE === "1") return [];
   const client = createDashboardClient(backend, getAccessToken, getMachineId);
   const entries = [];
   const seen = /* @__PURE__ */ new Set();
@@ -62,4 +63,3 @@ async function fetchSkillCatalog(backend, getAccessToken, getMachineId, report) 
   entries.sort((a, b2) => a.name.localeCompare(b2.name));
   return entries;
 }
-

@@ -192,11 +192,13 @@ function createHostMcp(deps) {
     async updatePluginInstall(request5) {
       const state = await manager.updatePluginInstall(request5, getAccessToken);
       serversMutated();
+      if (process.env.GROKBOT_LOCAL_MODE === "1") syncPluginSkillsInBackground(deps.pluginSkills, "update");
       return state;
     },
     async removeServer(serverId) {
       const result = await manager.removeServer(serverId);
       serversMutated();
+      if (process.env.GROKBOT_LOCAL_MODE === "1") syncPluginSkillsInBackground(deps.pluginSkills, "remove");
       return result;
     },
     async uninstallPlugin(pluginId) {
@@ -246,6 +248,7 @@ function createHostMcp(deps) {
     }
   };
   const mcp = {
+    ...deps.boxMcpExec?.withConfigScope == null ? {} : { withConfigScope: (configJson, run) => deps.boxMcpExec.withConfigScope(configJson, run) },
     getTools: (ctx, mcpConfigJson) => deps.resolveToolsAtTurnStart === true ? discovery.getTools(ctx, mcpConfigJson) : discovery.getToolsForTurnStart(ctx, mcpConfigJson),
     createExecutor: (persistImage, spillLargeText, auditIdentity, mcpConfigJson) => new SandMcpExecutor(discovery, persistImage, spillLargeText, auditIdentity, mcpConfigJson),
     refreshAccountConfig: () => {
@@ -259,7 +262,7 @@ function createHostMcp(deps) {
       ...mcpConfigJson === void 0 ? { getServerStatuses: catalogServerStatuses } : {}
     }),
     getCustomInstructions: async () => manager.getMcpCustomInstructions(),
-    resolveToolTransport: (providerIdentifier) => discovery.resolveProviderTransport(providerIdentifier),
+    resolveToolTransport: async (providerIdentifier) => deps.boxMcpExec?.currentTransport?.(providerIdentifier) ?? await discovery.resolveProviderTransport(providerIdentifier),
     resolveNeedsAuthSlot: async (providerIdentifier) => {
       const state = await manager.listServers();
       const summary = state.servers.find(
@@ -405,7 +408,9 @@ function createHostMcp(deps) {
       }
       return manager.peekMemberPublishMarketplaces();
     },
-    dispose: () => manager.dispose()
+    dispose: async () => {
+      await manager.dispose();
+      await deps.boxMcpExec?.dispose?.();
+    }
   };
 }
-

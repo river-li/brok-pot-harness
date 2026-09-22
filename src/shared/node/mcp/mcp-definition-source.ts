@@ -84,7 +84,7 @@ var SandMcpDefinitionSource = class {
     return stdioServers;
   }
   async getPushedServerConfigs() {
-    const stdioServers = await this.getStdioServerConfigs();
+    const stdioServers = process.env.GROKBOT_LOCAL_MODE === "1" ? await this.getUserServerConfigs() : await this.getStdioServerConfigs();
     const boxServers = await this.boxServersPromise;
     if (boxServers instanceof UnresolvedBoxServers) throw boxServers.error;
     return { ...stdioServers, ...boxServers };
@@ -153,4 +153,3 @@ var SandMcpDefinitionSource = class {
     return [...builtinDefinitions, ...userDefinitions];
   }
 };
-

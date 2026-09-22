@@ -501,6 +501,11 @@ function mcpParseOptionsFromPluginSource(sourceInfo) {
   if (sourceInfo === void 0) {
     return void 0;
   }
+  if (process.env.GROKBOT_LOCAL_MODE === "1" && sourceInfo.localPluginId !== void 0) {
+    // Plugin configuration is explicit. Never expand the host's inference key
+    // or unrelated process environment into a plugin command or HTTP header.
+    return { cloudAgentEnvLookup: Object.fromEntries(Object.entries(sourceInfo.configuredVariables ?? {}).map(([key, value]) => [key, String(value)])) };
+  }
   return { configuredVariables: sourceInfo.configuredVariables };
 }
 function createSafeFsPluginMcpFileReader(installPath) {
@@ -897,4 +902,3 @@ function loadFromMarketplaceSource(options2) {
     return { plugins, failures, sourceUnavailable: false };
   });
 }
-
