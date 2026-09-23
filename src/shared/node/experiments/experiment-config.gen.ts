@@ -314,6 +314,13 @@ var FLAGS = {
     client: true,
     default: false
   },
+  // KILL SWITCH for sand-mobile Settings → Usage → Change Limit. When ON,
+  // the button that opens the web spending dashboard is omitted. Default OFF,
+  // so the existing button remains visible until the switch is enabled.
+  sand_mobile_change_limit_kill_switch: {
+    client: true,
+    default: false
+  },
   // Rollout for the drag-down refresh on the sand-mobile home roster — iOS's
   // overscroll pill and Android's RefreshControl are the same gesture behind
   // this one gate. When OFF (the default) the roster offers no pull-to-refresh
@@ -359,6 +366,16 @@ var FLAGS = {
   grok_bot_active_reactions: {
     client: true,
     default: false
+  },
+  // Kill switch, default ON, read per turn on both Sand hosts (client: true
+  // for the box host's registry). On: a
+  // `SendToUser end_turn` ends the run through the agent loop, so the
+  // turn-end checkpoint (and a summary still generating) run on a live
+  // context. Off: the run shell cancels the context after the step, which
+  // fails the turn-end checkpoint flush with AbortError on ~2% of turns.
+  grok_bot_turn_end_through_agent: {
+    client: true,
+    default: true
   },
   // Per-user Sand rollout for the native SendMessage delivery scan. Default OFF
   // makes Sand skip historical hydration and keep generic empty-response
@@ -535,18 +552,7 @@ var FLAGS = {
   // (scripts/create-statsig-gate.sh --client sand_1pass_manual_service_acct).
   sand_1pass_manual_service_acct: {
     client: true,
-    default: false
-  },
-  // Default-off visibility for Sand 1Password's Auto fill toggle. Off hides
-  // the per-account opt-out and leaves Auto fill on for new connections. On
-  // shows the toggle so a user can turn Auto fill off. Evaluated in the Sand
-  // renderer. Unit: userID. Default OFF.
-  // NOTE: the gate does not exist in Statsig yet, so it reads false everywhere.
-  // Create it before trying to enable this
-  // (scripts/create-statsig-gate.sh --client grok_bot_show_autofill_toggle).
-  grok_bot_show_autofill_toggle: {
-    client: true,
-    default: false
+    default: true
   },
   // Sand's append-only transcript journal. Assignment unit: userID. Control
   // keeps the production legacy mirror; treatment pins a conversation to the
@@ -1158,6 +1164,12 @@ var FLAGS = {
     client: true,
     default: false
   },
+  // Opens the primary-bot chooser only together with sand_grok_main_agent,
+  // and keeps it open until a main agent is selected.
+  sand_grok_force_main_agent_selection: {
+    client: true,
+    default: false
+  },
   // Sand's macOS-only desktop mount: the "Mount on Desktop" sidebar row and the
   // floating bot panel it opens. Default OFF hides the row and opens no window.
   sand_desktop_mount: {
@@ -1468,13 +1480,6 @@ var FLAGS = {
   glass_chat_switch_post_paint_commit: {
     client: true,
     default: false
-  },
-  // When on, Glass chat switches reuse the window-scoped cloud catalog TTL
-  // (MCP servers, HTTP MCP status, managed skills). Off force-refreshes
-  // every read; concurrent callers still coalesce.
-  cloud_catalog_cache: {
-    client: true,
-    default: true
   },
   // ON: closing a Glass agent workspace disposes its InstantiationService
   // after a 30s grace period. OFF keeps today's behavior: released containers
@@ -3266,16 +3271,6 @@ var FLAGS = {
     client: true,
     default: false
   },
-  // Tour Walk chrome on the review Tour tab: next/prev section stepping, an
-  // "N of M" counter, and resuming the viewer's last-read section on reopen
-  // (localStorage, keyed per viewer + PR + tour scope). Console gate is
-  // created manually: anysphere project, tag `origin`, target apps
-  // `graphite-client` AND `client` (cursor.com portal). Fail-closed: off or
-  // absent keeps the tour outline walk-free and writes no resume state.
-  enable_code_tour_walk: {
-    client: true,
-    default: false
-  },
   // Per-section reviewed marks persisted on the tour revision. Fail-closed:
   // when off or missing, no chrome renders and no persist writes happen.
   enable_code_tour_section_reviewed: {
@@ -3515,6 +3510,24 @@ var FLAGS = {
    * userID. Default OFF; enable for internal dogfooders only.
    */
   unified_sku_billing_ui: {
+    client: true,
+    default: false
+  },
+  /**
+   * Shows the quiet "Bundle your subscriptions" Unify banner on the portal
+   * dashboard Billing tab for the 9/30 soft launch. The banner also requires
+   * `auth_unification`, so it never deep-links into a funnel the viewer
+   * cannot reach. Independent of the louder Unify entry CTAs. Unit: userID.
+   */
+  auth_unification_ctas_930: {
+    client: true,
+    default: false
+  },
+  /**
+   * Enables unified grok_ service-token creation, dashboard management, and
+   * scoped API/CLI authentication. Unit: userID. Default OFF.
+   */
+  use_unified_service_tokens: {
     client: true,
     default: false
   },
@@ -5435,6 +5448,19 @@ var EXPERIMENTS = {
       enabled: parseBoolean
     }
   },
+  // Grok Bot SendToUser progress-reminder wording A/B. Control keeps the
+  // shipped reminder; treatment adds a nudge to delegate nontrivial work to a
+  // subagent. Temporal harness only; the box harness pins control. Fallback
+  // is control so unallocated users see no change.
+  grok_bot_send_to_user_reminder_delegation: {
+    client: true,
+    fallbackValues: {
+      enabled: false
+    },
+    parseValue: {
+      enabled: parseBoolean
+    }
+  },
   // Grok Bot Playwright browser A/B. Control keeps the driver browser tools;
   // treatment offers the Playwright MCP surface. Fallback is control so an
   // unallocated user without the dogfood gate sees no change.
@@ -5489,6 +5515,18 @@ var EXPERIMENTS = {
   // `sand_hide_at_mentions` gate until the experiment is started. An allocated
   // control user stays on `enabled: false` even when they pass the gate.
   sand_hide_at_mentions_ab: {
+    client: true,
+    fallbackValues: {
+      enabled: false
+    },
+    parseValue: {
+      enabled: parseBoolean
+    }
+  },
+  // Sand onboarding job-role screen A/B. Unit: userID. Control
+  // (`enabled: false`) skips the screen; treatment (`enabled: true`) shows
+  // it. Fallback (not started / unallocated) is `enabled: false`.
+  sand_onboarding_job_role: {
     client: true,
     fallbackValues: {
       enabled: false
@@ -7544,6 +7582,21 @@ var DYNAMIC_CONFIG_SCHEMAS = {
     rpc_retry_base_delay_ms: external_exports.number().int().min(1).max(6e4),
     rpc_retry_max_delay_ms: external_exports.number().int().min(1).max(5 * 6e4),
     rpc_retry_multiplier: external_exports.number().min(1).max(10),
+    // Optional: existing console values omit these keys.
+    token_refresh_jitter_ratio: external_exports.union([external_exports.literal(0), external_exports.number().min(0.05).max(0.9)]).optional(),
+    min_token_slack_ms: external_exports.number().int().min(0).max(6e4).optional(),
+    mint_retry_policy_version: external_exports.union([external_exports.literal(0), external_exports.literal(1)]).optional(),
+    mint_retry_max_attempts: external_exports.number().int().min(1).max(5).optional(),
+    mint_retry_base_delay_ms: external_exports.number().int().min(1).max(1e4).optional(),
+    mint_retry_max_delay_ms: external_exports.number().int().min(1).max(6e4).optional(),
+    mint_retry_budget_ratio: external_exports.number().min(0).max(1).optional(),
+    mint_retry_budget_floor: external_exports.number().int().min(0).max(100).optional(),
+    mint_transient_negative_cache_base_ms: external_exports.number().int().min(100).max(10 * 6e4).optional(),
+    mint_transient_negative_cache_max_ms: external_exports.number().int().min(100).max(60 * 6e4).optional(),
+    mint_gate_open_threshold: external_exports.number().int().min(1).max(1e3).optional(),
+    mint_gate_window_ms: external_exports.number().int().min(1e3).max(10 * 6e4).optional(),
+    mint_gate_open_base_ms: external_exports.number().int().min(100).max(10 * 6e4).optional(),
+    mint_gate_open_max_ms: external_exports.number().int().min(100).max(60 * 6e4).optional(),
     rpc_timeout_ms: external_exports.number().int().min(1e3).max(6e5),
     blob_idle_timeout_ms: external_exports.union([
       external_exports.literal(0),
@@ -7614,6 +7667,20 @@ var DYNAMIC_CONFIG_SCHEMAS = {
         rpc_retry_base_delay_ms: external_exports.number().int().min(1).max(6e4).optional(),
         rpc_retry_max_delay_ms: external_exports.number().int().min(1).max(5 * 6e4).optional(),
         rpc_retry_multiplier: external_exports.number().min(1).max(10).optional(),
+        token_refresh_jitter_ratio: external_exports.union([external_exports.literal(0), external_exports.number().min(0.05).max(0.9)]).optional(),
+        min_token_slack_ms: external_exports.number().int().min(0).max(6e4).optional(),
+        mint_retry_policy_version: external_exports.union([external_exports.literal(0), external_exports.literal(1)]).optional(),
+        mint_retry_max_attempts: external_exports.number().int().min(1).max(5).optional(),
+        mint_retry_base_delay_ms: external_exports.number().int().min(1).max(1e4).optional(),
+        mint_retry_max_delay_ms: external_exports.number().int().min(1).max(6e4).optional(),
+        mint_retry_budget_ratio: external_exports.number().min(0).max(1).optional(),
+        mint_retry_budget_floor: external_exports.number().int().min(0).max(100).optional(),
+        mint_transient_negative_cache_base_ms: external_exports.number().int().min(100).max(10 * 6e4).optional(),
+        mint_transient_negative_cache_max_ms: external_exports.number().int().min(100).max(60 * 6e4).optional(),
+        mint_gate_open_threshold: external_exports.number().int().min(1).max(1e3).optional(),
+        mint_gate_window_ms: external_exports.number().int().min(1e3).max(10 * 6e4).optional(),
+        mint_gate_open_base_ms: external_exports.number().int().min(100).max(10 * 6e4).optional(),
+        mint_gate_open_max_ms: external_exports.number().int().min(100).max(60 * 6e4).optional(),
         rpc_timeout_ms: external_exports.number().int().min(1e3).max(6e5).optional(),
         blob_idle_timeout_ms: external_exports.union([external_exports.literal(0), external_exports.number().int().min(1e3).max(6e5)]).optional(),
         sync_round_timeout_ms: external_exports.union([
@@ -8974,6 +9041,20 @@ var DYNAMIC_CONFIGS = {
       rpc_retry_base_delay_ms: 250,
       rpc_retry_max_delay_ms: 5e3,
       rpc_retry_multiplier: 2,
+      token_refresh_jitter_ratio: 0.5,
+      min_token_slack_ms: 5e3,
+      mint_retry_policy_version: 1,
+      mint_retry_max_attempts: 2,
+      mint_retry_base_delay_ms: 250,
+      mint_retry_max_delay_ms: 2e3,
+      mint_retry_budget_ratio: 0.1,
+      mint_retry_budget_floor: 3,
+      mint_transient_negative_cache_base_ms: 5e3,
+      mint_transient_negative_cache_max_ms: 12e4,
+      mint_gate_open_threshold: 5,
+      mint_gate_window_ms: 3e4,
+      mint_gate_open_base_ms: 5e3,
+      mint_gate_open_max_ms: 12e4,
       rpc_timeout_ms: 6e4,
       blob_idle_timeout_ms: 6e4,
       sync_round_timeout_ms: 3e5,

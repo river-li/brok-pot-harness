@@ -6,6 +6,8 @@ var NOOP_RESILIENCE_LISTENER = Object.freeze({
   onNetworkError() {
   },
   onThrottled() {
+  },
+  onMintGateStateChanged() {
   }
 });
 function safeNotifyListener(listener, method, event) {

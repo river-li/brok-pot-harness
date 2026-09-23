@@ -148,7 +148,9 @@ var BackgroundWakes = class {
           await runner.run(buildChannelDeliveryFailureWakePrompt(failures), {
             hidden: true,
             requestSource,
-            ...this.tm.widgetResponses.collectUnansweredQuestionPrompts(session)
+            ...this.tm.widgetResponses.collectUnansweredQuestionPrompts(session, {
+              isOpenQuestionKept: runner.gates.widgetV0()
+            })
           });
           await this.tm.roster.emitAgentUpdate(session.id);
         } catch (error42) {
@@ -252,7 +254,10 @@ var BackgroundWakes = class {
         this.dmPreemptedWakeAgentIds.delete(session.id);
         try {
           this.notifyChannelActivity(session.id, sourceAddresses, true);
-          const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(session);
+          const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(
+            session,
+            { isOpenQuestionKept: runner.gates.widgetV0() }
+          );
           const result = await runner.run(buildChannelInboundWakePrompt(envelopes), {
             hidden: true,
             requestSource,

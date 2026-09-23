@@ -16,8 +16,8 @@ var SEND_MESSAGE_DM_DESTINATION = "dm";
 var SEND_MESSAGE_DM_DESCRIPTION = `Optional, only meaningful during a local group-chat turn. Pass "dm" to deliver this message privately to YOUR OWN user's 1:1 chat instead of the room; the room never sees it. Only valid with type:text. Outside a group-chat turn it is ignored because your user is already the audience.`;
 var SEND_MESSAGE_DM_TEXT_ONLY_ERROR = 'to:"dm" can only be set for type:text';
 var SEND_MESSAGE_DM_CHANNEL_CONFLICT_ERROR = 'to:"dm" and channel are mutually exclusive; pick one destination';
-var VOICE_MEMO_SEND_GUIDANCE = "A voice memo (whatever they call it: voice note, voice message, audio note) is type:text with voice_memo: true. Write the words to speak in content \u2014 complete spoken sentences, no numbered lists, headers, or markdown. A requested list is spoken as first / next / last, not digits. Start with the thing they asked to hear; never \u201Chit play.\u201D The client plays those words as a pellet. When they asked to receive a memo, send only that one message: no status ack, no ordinary-text copy of the answer, and no audio file (.m4a, .mp3). Silence until then is correct.";
-var REQUESTED_VOICE_MEMO_SILENCE_CLAUSE = "If they asked to hear the answer spoken, do not send an acknowledgement or status update \u2014 keep working in silence until the spoken answer is ready, then that first SendToUser is the memo.";
+var VOICE_MEMO_SEND_GUIDANCE = "A voice memo (whatever they call it: voice note, voice message, audio note) is type:text with voice_memo: true. Write the words to speak in content, as complete spoken sentences with no numbered lists, headers, or markdown. A requested list is spoken as first / next / last, not digits. Start with the thing they asked to hear; never \u201Chit play.\u201D The client plays those words as a pellet. When they asked to receive a memo, send only that one message: no status ack, no ordinary-text copy of the answer, and no audio file (.m4a, .mp3). Silence until then is correct.";
+var REQUESTED_VOICE_MEMO_SILENCE_CLAUSE = "If they asked to hear the answer spoken, do not send an acknowledgement or status update. Keep working in silence until the spoken answer is ready, then that first SendToUser is the memo.";
 var VOICE_MEMO_FIELD_DESCRIPTION = `${VOICE_MEMO_SEND_GUIDANCE} Optional, only for type:text with no images or channel. Set it only on that spoken answer. Later SendToUser calls stay ordinary text unless they ask for another memo.`;
 var AUDIO_ATTACHMENT_VOICE_MEMO_ERROR = "Audio files are not voice memos. If the user asked to hear the answer spoken, send type:text with voice_memo: true and the words to speak in content. Do not attach an audio file.";
 var AUDIO_ATTACHMENT_PATH_PATTERN = /\.(?:m4a|mp3|wav|aac|ogg|opus|flac|wma)(?:$|[?#])/i;
@@ -40,10 +40,10 @@ var sendMessageObjectSchemaWithCredentialRequest = external_exports.object({
       )
     })
   ).optional().describe(
-    "Optional, only for type:text. Image(s) that belong with this message; they render inside the same chat bubble, below your text \u2014 one image full width, several as a compact gallery. Use whenever you're showing something you're talking about; use type:attachment only for an image that IS the whole message."
+    "Optional, only for type:text. Image(s) that belong with this message; they render inside the same chat bubble, below your text. One image renders full width, and several render as a compact gallery. Use whenever you're showing something you're talking about; use type:attachment only for an image that IS the whole message."
   ),
   alt: external_exports.string().trim().optional().describe(
-    "Optional. A short description (alt text) of the image for type:attachment \u2014 what the image shows. Shown to the user on hover and in the fullscreen viewer."
+    "Optional. A short description (alt text) of what the image shows, for type:attachment. Shown to the user on hover and in the fullscreen viewer."
   ),
   reply_to: external_exports.string().trim().optional().describe(
     "Optional. Address of a prior message to reply under (for example, t3u or t3s1). If the current user message was sent through Reply, omit this to reply under the same message automatically. Otherwise, omitting it posts normally in the main chat. Set it only to choose a different prior message."
@@ -54,7 +54,7 @@ var sendMessageObjectSchemaWithCredentialRequest = external_exports.object({
   to: external_exports.enum([SEND_MESSAGE_DM_DESTINATION]).optional().describe(SEND_MESSAGE_DM_DESCRIPTION),
   voice_memo: external_exports.boolean().optional().describe(VOICE_MEMO_FIELD_DESCRIPTION),
   widget: sandWidgetSchema.optional().describe(
-    "Required when type is widget. A question with selectable options: { prompt, helpText?, options: [{ label, value?, description?, style? }], multiSelect?, allowCustom?, dismissOnMoveOn? }. The user picks one option; its value comes back as their reply, and the chat shows the resolved card with their selection checked under your prompt \u2014 so phrase the prompt as a natural question, not a menu instruction. Set multiSelect: true when several options may apply. The user toggles any subset and submits once, and the picked values return together in one reply, one per line. The user can also dismiss the question without answering; you'll be told on your next turn, so treat that as a decline and don't re-ask. Set allowCustom: true to also let the user type their own free-text answer instead of picking an option. Set dismissOnMoveOn: true only for low-stakes questions that become moot if the user moves on (it auto-dismisses once they send a newer message without answering); leave it off for real decisions you still need answered. Only valid with type:widget."
+    "Required when type is widget. A question with selectable options: { prompt, helpText?, options: [{ label, value?, description?, style? }], multiSelect?, allowCustom?, dismissOnMoveOn? }. The user picks one option; its value comes back as their reply, and the chat shows the resolved card with their selection checked under your prompt, so phrase the prompt as a natural question, not a menu instruction. Set multiSelect: true when several options may apply. The user toggles any subset and submits once, and the picked values return together in one reply, one per line. The user can also dismiss the question without answering; you'll be told on your next turn, so treat that as a decline and don't re-ask. Set allowCustom: true to also let the user type their own free-text answer instead of picking an option. Set dismissOnMoveOn: true only for low-stakes questions that become moot if the user moves on (it auto-dismisses once they send a newer message without answering); leave it off for real decisions you still need answered. Only valid with type:widget."
   ),
   bcId: external_exports.string().trim().optional().describe(
     "Required when type is cursor-agent. The bcId of the Cursor cloud agent to reference (e.g. bc-xxxxxxxx-...)."
@@ -132,7 +132,7 @@ function refineSendMessage(value, ctx) {
     ctx.addIssue({
       code: external_exports.ZodIssueCode.custom,
       path: [field],
-      message: `${field} is only valid with ${allowed} and cannot ride a type:${value.type} message \u2014 it would be silently dropped. Nothing was sent. Re-send as separate SendToUser calls, one per type: this field on its own properly-typed message (${allowed}), and any text as its own type:text message.`
+      message: `${field} is only valid with ${allowed} and cannot be sent on a type:${value.type} message. It would be silently dropped. Nothing was sent. Re-send as separate SendToUser calls, one per type: this field on its own properly-typed message (${allowed}), and any text as its own type:text message.`
     });
   }
   if (value.channel != null && value.channel.length > 0 && value.type !== "text" && value.type !== "attachment") {
@@ -174,7 +174,7 @@ function refineSendMessage(value, ctx) {
     ctx.addIssue({
       code: external_exports.ZodIssueCode.custom,
       path: ["voice_memo"],
-      message: "voice_memo cannot ride a text message that also has images"
+      message: "voice_memo cannot be sent on a text message that also has images"
     });
   }
   if (value.voice_memo === true && value.channel != null && value.channel.length > 0) {

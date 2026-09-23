@@ -369,6 +369,15 @@ var AgentStoreSyncEngine = class {
   setTombstonePruneSlackMs(slackMs) {
     this.tombstonePruneSlackMsValue = normalizeTombstonePruneSlackMs(slackMs);
   }
+  setPassiveRetryIntervalMs(intervalMs) {
+    if (intervalMs === this.passiveRetryIntervalMs) {
+      return;
+    }
+    this.passiveRetryIntervalMs = intervalMs;
+    if (!this.disposed && this.state === "passive") {
+      this.startPassiveTimers();
+    }
+  }
   setPassiveIndexPollIntervalMs(intervalMs) {
     if (intervalMs === this.passiveIndexPollIntervalMs) {
       return;

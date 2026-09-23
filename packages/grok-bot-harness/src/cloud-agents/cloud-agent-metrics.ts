@@ -1,7 +1,7 @@
 init_errors();
 var wakeTurn = createCounter("grok_bot.cloud_agent.wake_turn", {
-  description: "A cloud agent completion woke Grok Bot and the turn settled: responded (a user-visible message, reaction, or a widget awaiting the user), quiet (nothing visible), or aborted (interrupted, paused, or failed for good); one increment per completion in the wake batch",
-  labelNames: ["harness", "outcome", "status", "wake_origin"]
+  description: "A cloud agent completion woke Grok Bot and the turn settled: responded (a user-visible message, reaction, or a widget awaiting the user), quiet (nothing visible), or aborted (interrupted, paused, or failed for good); one increment per completion in the wake batch. turn_origin is who started the run; held is whether the report row was written suppressed, to be revealed only by an answer",
+  labelNames: ["harness", "outcome", "status", "wake_origin", "turn_origin", "held"]
 });
 var reply = createCounter("grok_bot.cloud_agent.reply", {
   description: "CloudAgent reply action per requested mode (queue, steer, interrupt): accepted by the backend, queued_fallback when a steer landed as the agent's next run instead, or rejected by the backend",
@@ -40,7 +40,9 @@ function recordCloudAgentWakeTurns(metrics2, wakes, outcome) {
         harness: scope.harness,
         outcome,
         status: wake.status,
-        wake_origin: wake.wakeOrigin
+        wake_origin: wake.wakeOrigin,
+        turn_origin: wake.turnOrigin ?? "none",
+        held: wake.held === true ? "true" : "false"
       });
     }
   });

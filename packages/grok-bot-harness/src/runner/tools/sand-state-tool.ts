@@ -12,7 +12,7 @@ var OPERATIONS = {
     delete: "(id) remove a finite watch as soon as it has done its job."
   },
   skill: {
-    write: 'save or rewrite a reusable skill (name, description, body; id to rewrite). The description is REQUIRED and is what a reader uses to decide whether the skill applies, so write it as "use this when \u2026". A skill has no trigger \u2014 a saved task that runs on a schedule is a routine.',
+    write: 'save or rewrite a reusable skill (name, description, body; id to rewrite). The description is REQUIRED and is what a reader uses to decide whether the skill applies, so write it as "use this when \u2026". A skill has no trigger. A saved task that runs on a schedule is a routine.',
     delete: "(id). Cursor-managed skills can't be edited or deleted."
   },
   profile: {
@@ -25,13 +25,23 @@ var OPERATIONS = {
     disconnect: "(platform). The connector closes the live connection within a few seconds."
   },
   avatar: {
-    set: "(path to an image on your box or the host \u2014 write/download it first, then install it here; a box path under /workspace is fine).",
+    set: "(path to an image on your box or the host). Write/download it first, then install it here; a box path under /workspace is fine.",
     clear: "back to the default picture."
   }
 };
-var TEAM_BOT_SKILL_OPERATIONS = {
-  write: `save or rewrite one of this bot's team skills, visible to every teammate on your next turn (name, description, body; to rewrite, id = the slug from the skill's catalog path, the folder under skills/, or that path itself). The description is REQUIRED and is what a reader uses to decide whether the skill applies, so write it as "use this when \u2026". A skill has no trigger \u2014 a saved task that runs on a schedule is a routine. Only the bot owner can save one; a teammate (even a team admin) is told the owner can add it from main or Team access.`,
-  delete: "(id = the slug from the skill's catalog path, the folder under skills/, or that path itself). Removes the team skill for everyone; only the bot owner can. Cursor-managed and other plugins' skills can't be edited or deleted; only this bot's own bot-skills entries can."
+var TEAM_BOT_OWNER_MAIN_ONLY = "Only the bot owner can, and only from their own main conversation with you; a teammate (even a team admin), a Slack conversation, a group chat, or any other session is refused and told the owner can change it from main.";
+var TEAM_BOT_OPERATIONS = {
+  skill: {
+    write: `save or rewrite one of this bot's team skills, visible to every teammate on your next turn (name, description, body; to rewrite, id = the slug from the skill's catalog path, the folder under skills/, or that path itself). The description is REQUIRED and is what a reader uses to decide whether the skill applies, so write it as "use this when \u2026". A skill has no trigger. A saved task that runs on a schedule is a routine. Only the bot owner can save one; a teammate (even a team admin) is told the owner can add it from main or Team access.`,
+    delete: "(id = the slug from the skill's catalog path, the folder under skills/, or that path itself). Removes the team skill for everyone; only the bot owner can. Cursor-managed and other plugins' skills can't be edited or deleted; only this bot's own bot-skills entries can."
+  },
+  profile: {
+    set: `your name (the chat title every teammate sees in their sidebar and header), description (the intro every teammate reads), title (the short role label beside your name), avatar_shape, and/or avatar_color (your default mark, hidden while a custom picture is installed). Only the fields you pass change. For your picture use target avatar. ${TEAM_BOT_OWNER_MAIN_ONLY}`
+  },
+  avatar: {
+    set: `(path to an image on your box or the host). Write/download it first, then install it here; a box path under /workspace is fine. Every teammate sees the picture. ${TEAM_BOT_OWNER_MAIN_ONLY}`,
+    clear: `back to the default picture, for every teammate. ${TEAM_BOT_OWNER_MAIN_ONLY}`
+  }
 };
 function nonEmptyTuple(items) {
   if (items.length === 0) {
@@ -62,8 +72,9 @@ var ACTION_MATRIX = OPERATION_ENTRIES.map(
 function operationText(args) {
   const { target, action } = args;
   if (target === "memory" && action === "write") return args.memoryWrite;
-  if (args.teamBot && target === "skill" && isKeyOf(TEAM_BOT_SKILL_OPERATIONS, action)) {
-    return TEAM_BOT_SKILL_OPERATIONS[action];
+  const teamOperations = args.teamBot ? TEAM_BOT_OPERATIONS[target] : void 0;
+  if (teamOperations !== void 0 && isKeyOf(teamOperations, action)) {
+    return teamOperations[action];
   }
   return args.stock;
 }
@@ -89,7 +100,7 @@ var slackListener2 = external_exports.object({
       emoji: external_exports.array(external_exports.string().trim().min(1)).optional().describe(
         'Normalized short names without colons ("eyes", "white_check_mark"). Absent or empty means any emoji.'
       ),
-      bySelf: external_exports.boolean().optional().describe("When true, only the user's own reactions fire it \u2014 not a colleague's.")
+      bySelf: external_exports.boolean().optional().describe("When true, only the user's own reactions fire it, not a colleague's.")
     })
   ]).describe("What makes a message count as a match.")
 });
@@ -103,7 +114,7 @@ var githubListener2 = external_exports.object({
     "Optional pull request number. When set, only events for that PR fire; a listener containing pr-merged or pr-closed deletes itself after that terminal wake finishes."
   ),
   userAllowlist: external_exports.array(external_exports.string().trim().min(1)).optional().describe(
-    'Git usernames that may fire this listener ("alice", "@bob"). Absent or empty means anyone. Does not apply to ci-passed/ci-failed \u2014 CI is never user-gated.'
+    'Git usernames that may fire this listener ("alice", "@bob"). Absent or empty means anyone. Does not apply to ci-passed/ci-failed. CI is never user-gated.'
   ),
   ciBranch: external_exports.string().trim().min(1).optional().describe(
     'REQUIRED when repo-wide events includes ci-passed or ci-failed: the one branch whose settled checks fire them ("main"). Omit it when pr is set; that PR scopes CI instead.'
@@ -193,7 +204,7 @@ var automationSchedule = external_exports.string().trim().min(1).refine(isValidS
 var cronTriggerMember = external_exports.object({
   type: external_exports.literal("cron"),
   schedule: automationSchedule.describe(
-    `A 5-field cron expression in the user's local time ("0 7 * * *"), or a shorthand (@hourly/@daily/@weekly/@monthly, "@every 30m"). Calendar shorthands take their clock fields from the routine's creation time, and unphased @every intervals anchor to creation. A clock time the user names is saved as named, so "8am" is "0 8 * * *" and "daily at 2" is "0 2 * * *"; only an ask that names no time takes the current minute off the <timestamp>, so asked at 1:32 "hourly" is "32 * * * *".`
+    `A 5-field cron expression in the user's local time ("47 6 * * *"), or a shorthand (@hourly/@daily/@weekly/@monthly, "@every 2h"). Calendar shorthands take their clock fields from the routine's creation time, and unphased @every intervals anchor to creation. Take every minute field off the <timestamp> on the user's latest message, never :00 or :30: asked at 1:47, "hourly" is "47 * * * *", "every half hour during the workday" is "17,47 9-17 * * 1-5" (never "*/30"), and a named hour with no minute lands within 15 minutes of it on that minute ("8am" is "47 7 * * *"; asked at 1:12 it is "12 8 * * *"). Only a minute the user names is saved as named ("9:30" is "30 9 * * *").`
   )
 });
 var triggerMember = external_exports.discriminatedUnion("type", [
@@ -288,7 +299,7 @@ var sandUpdateStateParameters = external_exports.object({
     "routine only. What you should do each time it fires, written to your future self. Write it as an INTENT, not a frozen tool recipe: a connector's schema can change between fires, so describe the goal and let each run look the tool up. Required on create; on update, omit to keep the current prompt."
   ),
   schedule: automationSchedule.optional().describe(
-    `routine only. Shorthand for a cron trigger \u2014 "0 7 * * *", "@daily", "@every 2h" \u2014 interpreted in the user's local time. Calendar shorthands take their clock fields from the routine's creation time, and unphased @every intervals anchor to creation. A clock time the user names is saved as named, so "8am" is "0 8 * * *" and "daily at 2" is "0 2 * * *"; only an ask that names no time takes the current minute off the <timestamp>, so asked at 1:32 "hourly" is "32 * * * *". Use this OR trigger, never both. On update, omit (with trigger) to keep the current fire condition.`
+    `routine only. Shorthand for a cron trigger, such as "47 6 * * *", "@daily", or "@every 2h", interpreted in the user's local time. Calendar shorthands take their clock fields from the routine's creation time, and unphased @every intervals anchor to creation. Take every minute field off the <timestamp> on the user's latest message, never :00 or :30: asked at 1:47, "hourly" is "47 * * * *", "every half hour during the workday" is "17,47 9-17 * * 1-5" (never "*/30"), and a named hour with no minute lands within 15 minutes of it on that minute ("8am" is "47 7 * * *"; asked at 1:12 it is "12 8 * * *"). Only a minute the user names is saved as named ("9:30" is "30 9 * * *"). Use this OR trigger, never both. On update, omit (with trigger) to keep the current fire condition.`
   ),
   trigger: automationTrigger2.optional(),
   enabled: external_exports.boolean().optional().describe(
@@ -299,7 +310,7 @@ var sandUpdateStateParameters = external_exports.object({
   ),
   body: external_exports.string().trim().min(1).optional().describe("skill write only. The recipe, in markdown."),
   title: external_exports.string().trim().optional().describe(
-    'profile set only. The short role label shown as a chip beside your name ("Designer"), not the chat title \u2014 that is your name. Pass "" to clear it.'
+    'profile set only. The short role label shown as a chip beside your name ("Designer"), not the chat title, which is your name. Pass "" to clear it.'
   ),
   avatar_shape: external_exports.enum(nonEmptyTuple(GROK_BOT_MARK_SHAPES)).optional().describe(
     "profile set only. The shape of your default mark in the sidebar. Not visible while a custom picture is installed."
@@ -313,7 +324,7 @@ var sandUpdateStateParameters = external_exports.object({
   notify_on_updates: external_exports.boolean().optional().describe('settings set only. The "Notify me about this assistant" toggle.'),
   platform: external_exports.string().trim().min(1).optional().describe("channel disconnect only. The platform to disconnect."),
   path: external_exports.string().trim().min(1).optional().describe(
-    "avatar set only. Absolute path to an image you already have (write or download it first, with Shell on your own computer or Shell using the user's computer's machineId, then install it here). A path on your box under /workspace is fine \u2014 no CopyFromBox needed. png/jpg/webp/gif/svg under 5 MB."
+    "avatar set only. Absolute path to an image you already have (write or download it first, with Shell on your own computer or Shell using the user's computer's machineId, then install it here). A path on your box under /workspace is fine and needs no CopyFromBox. png/jpg/webp/gif/svg under 5 MB."
   )
 });
 function sandConversationUpdateStateParameters(defaultScope) {
@@ -429,7 +440,7 @@ async function writeAutomation(args, deps, need) {
   const existing = id === void 0 ? void 0 : deps.automationStore?.list().find((automation) => automation.id === id);
   if (isUpdate && deps.automationStore != null && existing == null) {
     throw new SandToolInputError(
-      `no routine with folder "${id}" exists \u2014 list the automations folder, then pass its id.`
+      `no routine with folder "${id}" exists. List the automations folder, then pass its id.`
     );
   }
   if (isUpdate && deps.canReviewAutomationWrites?.() === false && existing?.provenance === "user") {
@@ -713,12 +724,12 @@ async function applySandStateUpdate(args, deps) {
 }
 function stateToolDescription(memoryWrite, teamBot = false) {
   return [
-    "Change your OWN durable state: what you remember (own or shared user), the routines you run, the skills you save, your profile and settings, which channels you're connected to, and your picture. Prefer this over editing those files with the shell \u2014 read them with RecallMemory, or with Read and grep when they are on your computer.",
+    "Change your OWN durable state: what you remember (own or shared user), the routines you run, the skills you save, your profile and settings, which channels you're connected to, and your picture. Prefer this over editing those files with the shell. Read them with RecallMemory, or with Read and grep when they are on your computer.",
     "",
     "target + action:",
     ...operationLines(memoryWrite, teamBot),
     "",
-    "Just do it and mention it in passing \u2014 don't narrate a save or ask permission for an ordinary one. Creating or changing a ROUTINE may ask the user to confirm, since it's the one change that acts while they're away; if it does, they'll see a card and you'll get their answer back as the tool result."
+    "Just do it and mention it in passing. Don't narrate a save or ask permission for an ordinary one. Creating or changing a ROUTINE may ask the user to confirm, since it's the one change that acts while they're away; if it does, they'll see a card and you'll get their answer back as the tool result."
   ].join("\n");
 }
 var description8 = stateToolDescription(OPERATIONS.memory.write);
@@ -760,12 +771,13 @@ function createSandStateTool(deps) {
     name: SAND_UPDATE_STATE_TOOL_NAME,
     description: variant.description,
     parameters: variant.parameters,
+    infrastructureErrorMessage: "Couldn't save due to a temporary server issue.",
     describeActivity: (args) => ({ detail: describeStateUpdate(args) }),
     execute: async (ctx, args, d) => {
       d.assertNoPendingAutoReviewApproval?.();
       const outcome = await applySandStateUpdate(args, d);
       recordMemoryOutcome(ctx, args, d, outcome);
-      return outcome.ok ? outcome.detail : `Not saved \u2014 ${outcome.reason}`;
+      return outcome.ok ? outcome.detail : `Not saved: ${outcome.reason}`;
     }
   });
 }

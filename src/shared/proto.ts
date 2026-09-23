@@ -14,6 +14,7 @@ var init_proto = __esm({
     init_dashboard_pb();
     init_grok_bot_connect();
     init_grok_bot_pb();
+    init_default_main_agent_outcome();
     init_privacy_mode_pb();
     AiService2 = {
       typeName: AiService.typeName,

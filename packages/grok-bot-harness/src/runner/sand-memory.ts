@@ -198,7 +198,7 @@ function renderMemoryFactSnapshot(recall, location2, opts) {
     const omitted = profile.length - shown;
     if (omitted > 0) {
       lines2.push(
-        location2 != null ? `(${omitted} more profile facts on disk \u2014 call ${SAND_RECALL_MEMORY_TOOL_NAME} or grep profile.md for them.)` : `(${omitted} more profile facts not shown \u2014 call ${SAND_RECALL_MEMORY_TOOL_NAME} to search them.)`
+        location2 != null ? `(${omitted} more profile facts on disk. Call ${SAND_RECALL_MEMORY_TOOL_NAME} or grep profile.md for them.)` : `(${omitted} more profile facts not shown. Call ${SAND_RECALL_MEMORY_TOOL_NAME} to search them.)`
       );
     }
   }
@@ -216,7 +216,7 @@ function renderMemoryFactSnapshot(recall, location2, opts) {
     const omitted = recent.length - shown;
     if (omitted > 0) {
       lines2.push(
-        location2 != null ? `(${omitted} more log facts on disk \u2014 call ${SAND_RECALL_MEMORY_TOOL_NAME} or grep the log/ folder for them.)` : `(${omitted} more log facts not shown \u2014 call ${SAND_RECALL_MEMORY_TOOL_NAME} to search them.)`
+        location2 != null ? `(${omitted} more log facts on disk. Call ${SAND_RECALL_MEMORY_TOOL_NAME} or grep the log/ folder for them.)` : `(${omitted} more log facts not shown. Call ${SAND_RECALL_MEMORY_TOOL_NAME} to search them.)`
       );
     }
   }
@@ -235,16 +235,16 @@ function renderMemorySystemPrompt(recall, location2, opts) {
 function buildExtractionSystemPrompt() {
   return [
     MEMORY_EXTRACTION_PROMPT_MARKER,
-    "You maintain the long-term memory of a personal assistant. Read the latest exchange and decide what \u2014 if anything \u2014 is worth remembering for future, unrelated conversations.",
+    "You maintain the long-term memory of a personal assistant. Read the latest exchange and decide what, if anything, is worth remembering for future, unrelated conversations.",
     "",
     "Tag each fact you keep with a category:",
-    '- "profile": enduring facts about who the user is and how to work with them \u2014 their name and how to address them, role, location, languages, lasting preferences and constraints, and important people or relationships. These are remembered indefinitely.',
-    '- "log": substantive history worth keeping \u2014 ongoing projects and tasks, decisions, commitments, and time-bound details.',
+    '- "profile": enduring facts about who the user is and how to work with them, such as their name and how to address them, role, location, languages, lasting preferences and constraints, and important people or relationships. These are remembered indefinitely.',
+    '- "log": substantive history worth keeping, such as ongoing projects and tasks, decisions, commitments, and time-bound details.',
     '- "note": minor, low-stakes details that might help someday but are not worth keeping in mind every turn (small one-off preferences, incidental context). Notes fade from the always-visible list fastest but stay on disk.',
     "",
     "Do NOT record one-off request mechanics, what the assistant did this turn, general knowledge, or anything already present in the existing memory list.",
     "",
-    'If the new exchange updates or contradicts a fact in the existing memory list (e.g. the user moved, changed jobs, or renamed something), drop anything clearly superseded: output a line "remove: <the exact existing fact text>" and then add the corrected fact. Only remove facts that appear verbatim in the existing list \u2014 never invent removals.',
+    'If the new exchange updates or contradicts a fact in the existing memory list (e.g. the user moved, changed jobs, or renamed something), drop anything clearly superseded: output a line "remove: <the exact existing fact text>" and then add the corrected fact. Only remove facts that appear verbatim in the existing list. Never invent removals.',
     "",
     `Write each fact as a self-contained statement, one per line: "profile: <fact>", "log: <fact>", or "note: <fact>" to add (e.g. "profile: The user's name is Ian", "log: Planning a trip to Tokyo in October 2025"), or "remove: <existing fact>" to drop a superseded one.`,
     `Output exactly ${MEMORY_EXTRACTION_NONE_SENTINEL} (and nothing else) when there is nothing to add or remove.`
@@ -426,7 +426,7 @@ function buildEpisodeSystemPrompt() {
     MEMORY_EPISODE_PROMPT_MARKER,
     "You maintain the long-term memory of a personal desktop assistant named Grok Bot.",
     "You are given the most recent turns of a conversation between the user and Grok Bot, in order, each tagged with its date.",
-    "Write ONE short journal-style sentence (two at most) capturing what the user and Grok Bot were actually working on across these turns \u2014 the throughline, key decisions, and outcomes \u2014 so it stays useful months from now.",
+    "Write ONE short journal-style sentence (two at most) capturing the throughline, key decisions, and outcomes of what the user and Grok Bot were actually working on across these turns, so it stays useful months from now.",
     'Anchor any time references with the absolute dates shown, never relative words like "yesterday". Drop greetings, acknowledgements, and anything ephemeral. Never invent details.',
     `Output just the sentence(s), no preamble or bullets. Output exactly ${MEMORY_EXTRACTION_NONE_SENTINEL} if nothing in this stretch is worth remembering.`
   ].join("\n");
@@ -546,7 +546,7 @@ function renderActiveSessionsDigest(sessions, nowMs2 = Date.now()) {
   if (active.length === 0) return "";
   const lines2 = [...active].sort(byRecentActivity).slice(0, GROK_BOT_ACTIVE_SESSIONS_DIGEST_MAX).sort(bySessionId).map((session) => {
     const title = session.title?.trim() ?? "";
-    const label = title.length > 0 ? `${title} \u2014 session_id: ${session.sessionId}` : session.sessionId;
+    const label = title.length > 0 ? `${title}, session_id: ${session.sessionId}` : session.sessionId;
     const activity = session.lastActivityAtMs != null && session.lastActivityAtMs > 0 ? `, last active ${formatMemoryDate(session.lastActivityAtMs)}` : "";
     return `- ${label} (${session.kind}${activity})`;
   });
@@ -580,13 +580,13 @@ function appendBudgetedProvenancedFacts(lines2, records2, charBudget, moreLabel,
     lines2.push(`(${omitted} more shared ${moreLabel} ${moreHint} for them.)`);
   }
 }
-var USER_MEMORY_MORE_HINT_ON_DISK = `on disk \u2014 call ${SAND_RECALL_MEMORY_TOOL_NAME} (scope "user") or grep the user-memory/ folder`;
-var USER_MEMORY_MORE_HINT_SERVER = `not shown \u2014 call ${SAND_RECALL_MEMORY_TOOL_NAME} (scope "user")`;
-var USER_MEMORY_PROMPT_HEADER = "User memory: durable facts shared across every assistant this user runs \u2014 their name, timezone, lasting preferences, and anything all of the user's assistants should know. This is separate from your own memory (shown below) and is visible to all of them.";
+var USER_MEMORY_MORE_HINT_ON_DISK = `on disk. Call ${SAND_RECALL_MEMORY_TOOL_NAME} (scope "user") or grep the user-memory/ folder`;
+var USER_MEMORY_MORE_HINT_SERVER = `not shown. Call ${SAND_RECALL_MEMORY_TOOL_NAME} (scope "user")`;
+var USER_MEMORY_PROMPT_HEADER = "User memory: durable facts shared across every assistant this user runs. Those include their name, timezone, lasting preferences, and anything all of the user's assistants should know. This is separate from your own memory (shown below) and is visible to all of them.";
 function renderUserMemorySystemPolicyPrompt(ctx) {
   const lines2 = [
     USER_MEMORY_PROMPT_HEADER,
-    "Precedence: when a shared user fact conflicts with your OWN memory, prefer your own \u2014 it is curated for your role and may deliberately override a shared default."
+    "Precedence: when a shared user fact conflicts with your OWN memory, prefer your own. It is curated for your role and may deliberately override a shared default."
   ];
   if (ctx.userMemoryDir != null && ctx.ownShardDir != null) {
     lines2.push(
@@ -598,7 +598,7 @@ function renderUserMemorySystemPolicyPrompt(ctx) {
     );
   }
   lines2.push(
-    'To fix or replace a shared fact another assistant recorded, write the corrected fact into YOUR shard via update_state \u2014 the newest wins on conflict. Record a fact here only when it is clearly about the user and useful to every assistant; keep role-specific facts in your own memory (scope "agent").',
+    'To fix or replace a shared fact another assistant recorded, write the corrected fact into YOUR shard via update_state. The newest wins on conflict. Record a fact here only when it is clearly about the user and useful to every assistant; keep role-specific facts in your own memory (scope "agent").',
     "Shared facts are tagged [via <assistant>] so you can tell which assistant learned each one."
   );
   return lines2.join("\n");

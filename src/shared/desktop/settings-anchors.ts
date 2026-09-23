@@ -20,6 +20,7 @@ var ANCHOR_ROWS = [
   ["auto-review", "general"],
   ["auto-review-rules", "general"],
   ["security-keys", "general"],
+  ["team-bot-connector-preferences", "general"],
   ["usage", "usage"],
   ["plan", "usage"],
   ["cancel-trial", "usage"],

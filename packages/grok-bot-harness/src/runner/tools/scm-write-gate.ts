@@ -8,5 +8,5 @@ async function scmWriteBlock(args) {
   );
   if (tool !== void 0 && isDeclaredReadOnlyMcpTool(tool.annotations)) return null;
   const reason = await args.blockedReason();
-  return reason === void 0 ? null : `This write is not available in this turn: ${reason} Ask the owner to confirm \u2014 their reply unblocks it. Reads still work.`;
+  return reason === void 0 ? null : `This write is not available in this turn: ${reason} Ask the owner to confirm. Their reply unblocks it. Reads still work.`;
 }

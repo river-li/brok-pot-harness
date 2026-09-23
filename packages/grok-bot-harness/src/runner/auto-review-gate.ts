@@ -1,4 +1,4 @@
-var SandAutoReviewPendingApprovalError = class extends Error {
+var SandAutoReviewPendingApprovalError = class extends SandModelVisibleError {
 };
 function sameAutoReviewModes(a, b2) {
   const modesOfB = new Map(Object.entries(b2));

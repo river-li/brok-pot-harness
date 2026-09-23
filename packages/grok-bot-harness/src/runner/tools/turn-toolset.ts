@@ -27,7 +27,6 @@ var SAND_DYNAMIC_TOOL_HINTS = {
   REQUEST_VIRTUAL_CARD: "Ask the user to authorize a one-time virtual card for a specific purchase.",
   SEND_FEEDBACK: "Send the user's product feedback to the SpaceXAI team when they ask. Ask whether they want a reply unless they already said.",
   CHECK_SUBSCRIPTION_USAGE: "Report the user's Grok Bot subscription plan, usage so far this cycle, and when it resets.",
-  TASK: "Spawn agents.",
   CHECK_SUBAGENT: "Inspect a running background subagent's status and recent actions.",
   MESSAGE_SUBAGENT: "Send a new instruction into a running background subagent.",
   STOP_SUBAGENT: "Abort a running background subagent.",
@@ -794,13 +793,11 @@ function buildTurnTools(host, turn, props) {
       );
     }
   }
-  const resolveCredentialFillWindow = async (ctx) => {
+  const resolveAgentDisplay = async (ctx) => {
     await host.remoteBox.ensureReady(ctx, host.resolveBoxId());
-    const windowIndex = boxAgentWindowIndex(host.remoteBox, host.resolveBoxId());
-    if (windowIndex !== void 0) return windowIndex;
-    return boxSupportsMultiWindow(host.remoteBox) ? void 0 : 1;
+    return boxAgentWindowIndex(host.remoteBox, host.resolveBoxId()) ?? SAND_BOX_PRIMARY_WINDOW_INDEX;
   };
-  const gateOnCredentialFillLease = (tool) => gateToolOnCredentialFillLease(tool, host.credentialFillLease, resolveCredentialFillWindow);
+  const gateOnCredentialFillLease = (tool) => gateToolOnCredentialFillLease(tool, host.credentialFillLease, resolveAgentDisplay);
   if (host.isComputerUseSubagent && host.remoteBoxHasDesktop && host.getRemoteBoxAvailable()) {
     tools.push(
       gateOnCredentialFillLease(
@@ -819,12 +816,7 @@ function buildTurnTools(host, turn, props) {
                 boxId: host.resolveBoxId(),
                 windowGeneration: `${host.autoReviewController?.hostGeneration ?? "host"}:${host.resolveBoxId()}`
               },
-              resolveDisplayNumber: async (ctx) => {
-                await host.remoteBox.ensureReady(ctx, host.resolveBoxId());
-                const windowIndex = boxAgentWindowIndex(host.remoteBox, host.resolveBoxId());
-                if (windowIndex !== void 0) return windowIndex;
-                return boxSupportsMultiWindow(host.remoteBox) ? void 0 : 1;
-              },
+              resolveDisplayNumber: resolveAgentDisplay,
               autoReviewController: host.autoReviewController,
               getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
               personalInstructions: host.getAutoReviewInstructions?.(),
@@ -848,12 +840,7 @@ function buildTurnTools(host, turn, props) {
         boxId: host.resolveBoxId(),
         windowGeneration: `${host.autoReviewController?.hostGeneration ?? "host"}:${host.resolveBoxId()}`
       },
-      resolveDisplayNumber: async (ctx) => {
-        await host.remoteBox.ensureReady(ctx, host.resolveBoxId());
-        const windowIndex = boxAgentWindowIndex(host.remoteBox, host.resolveBoxId());
-        if (windowIndex !== void 0) return windowIndex;
-        return boxSupportsMultiWindow(host.remoteBox) ? void 0 : 1;
-      },
+      resolveDisplayNumber: resolveAgentDisplay,
       autoReviewController: host.autoReviewController,
       getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
       personalInstructions: host.getAutoReviewInstructions?.(),

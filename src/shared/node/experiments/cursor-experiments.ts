@@ -421,6 +421,12 @@ var SandExperimentServiceCore = class {
     if (groupName == null || groupName === "") return void 0;
     return this.getExperiment(SAND_GROUP_CHAT_DISCOURAGEMENT_EXPERIMENT_NAME, PEEK_OPTIONS).policy;
   }
+  getOnboardingJobRoleEnabled() {
+    if (!Object.hasOwn(this.registry.EXPERIMENTS, SAND_ONBOARDING_JOB_ROLE_EXPERIMENT_NAME)) {
+      return false;
+    }
+    return this.getExperiment(SAND_ONBOARDING_JOB_ROLE_EXPERIMENT_NAME, PEEK_OPTIONS).enabled;
+  }
   offerLessSubagentFanout() {
     return this.offerEnabledArm(
       SAND_LESS_SUBAGENT_FANOUT_EXPERIMENT_NAME,
@@ -482,6 +488,9 @@ var SandExperimentServiceCore = class {
   }
   logGroupChatDiscouragementExperimentExposure() {
     return this.logExperimentExposure(SAND_GROUP_CHAT_DISCOURAGEMENT_EXPERIMENT_NAME);
+  }
+  logOnboardingJobRoleExperimentExposure() {
+    return this.logExperimentExposure(SAND_ONBOARDING_JOB_ROLE_EXPERIMENT_NAME);
   }
   peekUsageWarningAssignment() {
     if (!this.hasAuthenticatedNetworkBootstrap || !this.hasLiveNetworkBootstrap) return null;
@@ -809,6 +818,7 @@ var SandExperimentServiceCore = class {
     const sandModelExperiment = this.getSandModelExperimentState();
     const composerTriggerExperimentEnabled = this.getComposerTriggerExperimentEnabled();
     const groupChatDiscouragementPolicy = this.getGroupChatDiscouragementPolicy();
+    const onboardingJobRoleEnabled = this.getOnboardingJobRoleEnabled();
     const rawAllowedModelIds = this.hasAuthenticatedNetworkBootstrap && sandModelExperiment == null && Object.hasOwn(this.registry.DYNAMIC_CONFIGS, SAND_MODEL_FILTER_CONFIG_NAME) ? this.getDynamicConfig(SAND_MODEL_FILTER_CONFIG_NAME, PEEK_OPTIONS).allowedModelIds : void 0;
     const allowedModelIds = Array.isArray(rawAllowedModelIds) ? rawAllowedModelIds.filter((modelId) => typeof modelId === "string") : [];
     const sandModelFilterAllowedIds = Array.isArray(rawAllowedModelIds) && allowedModelIds.length === rawAllowedModelIds.length && allowedModelIds.length > 0 ? [...new Set(allowedModelIds)] : [];
@@ -821,6 +831,7 @@ var SandExperimentServiceCore = class {
       sandModelExperiment,
       composerTriggerExperimentEnabled,
       groupChatDiscouragementPolicy,
+      onboardingJobRoleEnabled,
       sandModelFilterAllowedIds,
       featureFlags: this.computeFeatureFlagDevPanel()
     };

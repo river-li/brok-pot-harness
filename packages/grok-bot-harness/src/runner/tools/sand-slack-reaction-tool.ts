@@ -14,7 +14,7 @@ function createReactToSlackMessageTool(reaction) {
   return defineCommunicateTool(reaction, {
     id: "PLATFORM_ACTION",
     name: SAND_REACT_TO_SLACK_MESSAGE_TOOL_NAME,
-    description: "Add an emoji reaction to a Slack message as yourself \u2014 your own Slack app's bot user, the same identity your Slack replies carry. This is how you acknowledge, approve, or flag a message in Slack without posting text, and it works in every channel your Slack app is in, including Slack Connect channels shared with other companies. Prefer it over any connector tool named slack_add_reaction: that one reacts as a person's Slack account, not as you, and Slack refuses it in Slack Connect channels. Pass the conversation id and the message ts exactly as Slack shows them. Reacting with an emoji that is already on the message from you is a no-op. A reaction never carries an answer: when someone is waiting on a result, send it with SendToUser as well.",
+    description: "Add an emoji reaction to a Slack message as yourself, your own Slack app's bot user, the same identity your Slack replies carry. This is how you acknowledge, approve, or flag a message in Slack without posting text, and it works in every channel your Slack app is in, including Slack Connect channels shared with other companies. Prefer it over any connector tool named slack_add_reaction: that one reacts as a person's Slack account, not as you, and Slack refuses it in Slack Connect channels. Pass the conversation id and the message ts exactly as Slack shows them. Reacting with an emoji that is already on the message from you is a no-op. A reaction never carries an answer: when someone is waiting on a result, send it with SendToUser as well.",
     parameters: reactToSlackMessageParameters,
     describeActivity: (args) => ({ detail: args.emoji.trim(), target: args.channel.trim() }),
     execute: async (_ctx, args, slack) => {
@@ -29,7 +29,7 @@ function createReactToSlackMessageTool(reaction) {
         messageTs: args.message_ts.trim(),
         emoji: emoji3
       });
-      return outcome.ok ? outcome.detail : `Not reacted \u2014 ${outcome.reason}`;
+      return outcome.ok ? outcome.detail : `Not reacted: ${outcome.reason}`;
     }
   });
 }

@@ -33,7 +33,7 @@ function createUpdateAppHomeTool(appHome) {
     describeActivity: (args) => ({ detail: describeBoard(args) }),
     execute: async (_ctx, args, home) => {
       const outcome = args.action === "clear" ? await home.clear() : await home.publish(sandAppHomeDocumentFromArgs(args));
-      return outcome.ok ? outcome.detail : `Not published \u2014 ${outcome.reason}`;
+      return outcome.ok ? outcome.detail : `Not published: ${outcome.reason}`;
     }
   });
 }

@@ -12,6 +12,7 @@ function composeBoxRunnerGates(deps) {
     lessSubagentFanout: () => experiments.offerLessSubagentFanout(),
     reducePeerChatter: temporalOnlyExperimentControlArm,
     leanSendToUserDescription: temporalOnlyExperimentControlArm,
+    sendToUserReminderDelegation: temporalOnlyExperimentControlArm,
     dynamicTools: gate("grok_bot_dynamic_tools"),
     memoryFactsInUserInfo: (options2) => experiments.memoryFactsInUserInfo({
       disableExposureLog: options2?.logExposure !== true
@@ -62,9 +63,11 @@ function composeBoxRunnerGates(deps) {
       false,
       "the box host keeps the trained coding compaction prompt; the generalized self-summary prompt is Temporal-only"
     ),
+    turnEndThroughAgent: gate("grok_bot_turn_end_through_agent"),
     checkSubscriptionUsage: gate("grok_bot_check_subscription_usage"),
     connectedActivity: gate("sand_connected_activity_tool"),
     activeReactions: gate("grok_bot_active_reactions"),
+    widgetV0: gate("sand_widget_v0"),
     internalDetailsBoundary: gate("grok_bot_hide_internal_details"),
     agentDescription: () => !simplifiedRightPane(),
     fiveMinuteAutomationFloor: gate("sand_five_min_automation_floor")

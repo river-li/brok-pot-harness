@@ -2,6 +2,21 @@ var completedToolResultsByDeferredError = /* @__PURE__ */ new WeakMap();
 function getToolResultsCompletedBeforeDeferral(error42) {
   return completedToolResultsByDeferredError.get(error42) ?? [];
 }
+var streamErrorsBeforeToolExecution = /* @__PURE__ */ new WeakSet();
+function failedBeforeAnyToolExecution(error42) {
+  return error42 instanceof Error && streamErrorsBeforeToolExecution.has(error42);
+}
+function hasCustomToolFormat(tool) {
+  return tool !== void 0 && "customToolFormat" in tool && tool.customToolFormat !== void 0;
+}
+function isJsonText(text2) {
+  try {
+    JSON.parse(text2);
+    return true;
+  } catch {
+    return false;
+  }
+}
 function auditOutcomeField(error42) {
   const auditOutcome = toolCallAuditOutcomeOf(error42);
   return auditOutcome === void 0 ? {} : { auditOutcome };
@@ -742,7 +757,7 @@ function streamModelAndCollectToolCalls(ctx, executor, interactionHandler, model
         });
         handledToolCalls.add(stream3.toolCallId);
         const tool = toolMap[stream3.toolName];
-        const isCustomFormatTool = tool !== void 0 && "customToolFormat" in tool && tool.customToolFormat !== void 0;
+        const isCustomFormatTool = hasCustomToolFormat(tool);
         let argsParseError;
         const args = (() => {
           if (stream3.written.length === 0)
@@ -1010,6 +1025,12 @@ function streamModelAndCollectToolCalls(ctx, executor, interactionHandler, model
         newMessages.push(...response.messages);
       }
     } catch (e) {
+      const streamError = e instanceof Error ? e : new Error("Unknown error");
+      const inFlight = currentStream;
+      const inFlightCannotRun = inFlight === void 0 || inFlight.written.length > 0 && !hasCustomToolFormat(toolMap[inFlight.toolName]) && !isJsonText(inFlight.written);
+      if (!emitToolCallEvents || handledToolCalls.size === 0 && inFlightCannotRun) {
+        streamErrorsBeforeToolExecution.add(streamError);
+      }
       closeCurrentStream();
       closeToolIterables();
       await settledResultResponse;
@@ -1020,7 +1041,7 @@ function streamModelAndCollectToolCalls(ctx, executor, interactionHandler, model
         id: "1"
       });
       response = {
-        error: e instanceof Error ? e : new Error("Unknown error"),
+        error: streamError,
         messages: messages2,
         id: "1",
         timestamp: /* @__PURE__ */ new Date(),
@@ -1164,7 +1185,7 @@ function executeToolStream(ctx, executor, interactionHandler, tools, extraT, rec
           toolName: event.toolName,
           args: {}
         };
-        trackToolPromise(executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHandler, extraT, circuitBreakerRecordToolCallResult, renderProps, event.argsStream, event.completedArgs, directDynamicToolNames));
+        trackToolPromise(executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHandler, extraT, circuitBreakerRecordToolCallResult, renderProps, withholdLoopingOutboundToolArgs(interactionHandler.singleMessageLoopPolicy, event.toolName, event.argsStream), event.completedArgs, directDynamicToolNames));
       }
       if (listedCount > 0) {
         await interactionHandler.sendToolRequestsListed(ctx, listedCount);

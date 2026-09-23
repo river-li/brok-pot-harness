@@ -21,7 +21,7 @@ function createContext() {
   return new ContextImpl();
 }
 var ContextImpl;
-var init_core3 = __esm({
+var init_core = __esm({
   "../packages/context/dist/core.js"() {
     "use strict";
     ContextImpl = class _ContextImpl {

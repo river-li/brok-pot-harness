@@ -116,6 +116,8 @@ var WidgetResponses = class {
         unconfirmedDraftPrompts.push(summary);
       } else if (entry.widgetDismissed === true) {
         dismissedQuestionPrompts.push(summary);
+      } else if (options2?.isOpenQuestionKept === true) {
+        continue;
       } else {
         skippedQuestionPrompts.push(summary);
       }

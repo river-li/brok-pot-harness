@@ -9,6 +9,6 @@ function formatSandBoxStartupSummary(args) {
   return `[sand-host] agent box backend: loopback (in-box); image: host's own container; auto-update: ${args.autoUpdateEnabled ? "on" : "off"}; build: ${args.isPackaged ? "packaged" : "dev"}`;
 }
 function applySharedDesktop(box, options2 = {}) {
-  if (!boxSupportsMultiWindow(box)) return box;
+  if (boxMaxWindows(box) <= 1) return box;
   return new SharedDesktopSandBox(box, options2);
 }

@@ -2106,7 +2106,8 @@ var OriginService = {
     },
     /**
      * Atomic restack of an Origin stack identified by its top change. All-or-nothing: either every
-     * head ref moves in one forge transaction, or none do.
+     * head ref moves in one forge transaction, or none do. A conflict fails with FAILED_PRECONDITION
+     * carrying the conflicted member as a RestackStackDryRunMember detail.
      *
      * @generated from rpc origin.v1.OriginService.RestackStack
      */
@@ -2672,6 +2673,19 @@ var OriginService = {
       name: "ConfirmAppUserConfirmation",
       I: ConfirmAppUserConfirmationRequest,
       O: ConfirmAppUserConfirmationResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * -- Staging GitHub-outage drill
+     * Negative control for Origin's breaker: one intercepted GitHub dispatch on
+     * the caller's armed request. Staging only.
+     *
+     * @generated from rpc origin.v1.OriginService.GithubOutageDrillProbe
+     */
+    githubOutageDrillProbe: {
+      name: "GithubOutageDrillProbe",
+      I: GithubOutageDrillProbeRequest,
+      O: GithubOutageDrillProbeResponse,
       kind: MethodKind.Unary
     }
   }

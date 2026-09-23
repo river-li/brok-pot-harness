@@ -22,7 +22,6 @@ var targetRuleSchema = external_exports.discriminatedUnion("kind", [
 ]);
 var directoryResponseSchema = external_exports.object({
   directory: external_exports.object({
-    alwaysAllowConnectionIds: external_exports.array(external_exports.string().uuid()).max(10).default([]),
     items: external_exports.array(
       external_exports.object({
         credentialId: external_exports.string().uuid(),
@@ -59,7 +58,6 @@ function createCredentialProviderDirectoryReader(options2) {
     try {
       payload = await deadline.run(async (signal) => {
         const directoryUrl = new URL("/sand/credential-provider-directory", backendUrl);
-        directoryUrl.searchParams.set("includeAutofill", "1");
         directoryUrl.searchParams.set("includeOneTimeCode", "1");
         if (probe !== void 0) directoryUrl.searchParams.set("probe", probe);
         const response = await fetchImpl(directoryUrl.toString(), {

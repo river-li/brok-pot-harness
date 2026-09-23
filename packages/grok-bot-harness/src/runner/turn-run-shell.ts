@@ -238,8 +238,8 @@ function createTurnRunShell(host) {
       const attachedFilePaths = options2.attachedFilePaths ?? [];
       const selectedVideoInputs = options2.selectedVideos ?? [];
       const resumeTurn = options2.resumeTurn === true;
-      const idleCompaction = options2.idleCompaction === void 0 ? void 0 : createIdleCompactionCollector();
-      const idleServedModel = options2.idleCompaction?.armingTurnServedModel;
+      const idleCompaction = options2.idleCompaction === true ? createIdleCompactionCollector() : void 0;
+      const lastServedModel = options2.lastServedModel;
       const promptlessAction = idleCompaction !== void 0 ? SUMMARIZE_ACTION : RESUME_TURN_ACTION;
       const actionOnly = resumeTurn || idleCompaction !== void 0;
       if (!actionOnly && trimmedPrompt.length === 0 && selectedImageInputs.length === 0 && attachedFilePaths.length === 0 && selectedVideoInputs.length === 0) {
@@ -433,7 +433,9 @@ function createTurnRunShell(host) {
       host.setActiveRunIsCanceled(() => ctx.canceled);
       host.setActiveRunInterrupted(false);
       const isRunAwaitingUserSelection = () => stopRequest.kind === "awaiting-user";
+      const isRunCompletionRequested = () => stopRequest.kind === "complete";
       const isRunStopped = () => stopRequest.kind !== "none";
+      const turnEndThroughAgent = host.gates.turnEndThroughAgent();
       const completeThisRun = (requestId2 = inferenceRequestId) => {
         if (!ctx.canceled && cancelActiveRun === cancelRun && stopRequest.kind === "none") {
           stopRequest = { kind: "complete", requestId: requestId2 };
@@ -469,6 +471,9 @@ function createTurnRunShell(host) {
       const stopRunIfRequested = () => {
         if (ctx.canceled) return;
         if (isRunStopped()) {
+          if (isRunCompletionRequested() && turnEndThroughAgent) {
+            return;
+          }
           cancelRun(
             new SandRunAbortError({
               intentional: true,
@@ -698,8 +703,8 @@ function createTurnRunShell(host) {
               agent: turnSession,
               canUseSelfSummary: () => {
                 const resolved = turnSession.getResolvedModelId();
-                if (resolved === void 0 && idleServedModel !== void 0) {
-                  return idleServedModel.selfSummary;
+                if (resolved === void 0 && lastServedModel !== void 0) {
+                  return lastServedModel.selfSummary;
                 }
                 return sandSelfSummarySupported(resolved ?? turnSession.getModelId());
               },
@@ -725,6 +730,8 @@ function createTurnRunShell(host) {
               streamWatchdog,
               updateObservers,
               isRunAwaitingUserSelection,
+              isRunCompletionRequested,
+              turnEndThroughAgent,
               isTeamSetupUnderway: () => options2.teamSetupUnderway === true,
               endThisRunAwaitingUser,
               requestAutomationParentWake,

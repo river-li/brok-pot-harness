@@ -63,8 +63,16 @@ async function describeScmToolError(error42, toolName) {
         blockedAction
       });
     }
-    case REST_MCP_SCM_ERROR_CODES.tokenUnavailable:
     case REST_MCP_SCM_ERROR_CODES.orgBlocked:
+      return describeScmOrgBlocked(error42, provider, blockedAction);
+    case REST_MCP_SCM_ERROR_CODES.tokenUnavailable:
       return null;
   }
+}
+function describeScmOrgBlocked(error42, provider, blockedAction) {
+  if (error42.reason !== "sso_required") return null;
+  const displayName2 = scmProviderDisplayName(provider);
+  const orgPhrase = `the ${error42.org ?? error42.repo?.split("/")[0] ?? "repository's"} organization`;
+  const userAction = error42.authorizationUrl == null ? `authorize Cursor's ${displayName2} App for ${orgPhrase} on ${displayName2} (${displayName2} settings \u2192 Applications \u2192 Cursor \u2192 Organization access)` : `open ${error42.authorizationUrl} and authorize Cursor's ${displayName2} App for ${orgPhrase}`;
+  return `${displayName2} is connected, but ${orgPhrase} requires SAML SSO authorization for Cursor's ${displayName2} App with the user's connected account, so it refused ${blockedAction}. Nothing was shown to the user, and no connect or repository-access request helps here. Ask the user to ${userAction}; access is re-checked within about 30 seconds of authorizing, so confirm with them before retrying the blocked action.`;
 }

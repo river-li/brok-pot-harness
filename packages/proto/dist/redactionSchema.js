@@ -1224,7 +1224,8 @@ var REDACTION_SCHEMA = {
     "agent_id": "SAFE",
     "message": "CODE",
     "delivery": "SAFE",
-    "title": "CODE"
+    "title": "CODE",
+    "model": "SAFE"
   },
   "agent.v1.SendToAgentSuccess": {
     "worker_bc_id": "SAFE",

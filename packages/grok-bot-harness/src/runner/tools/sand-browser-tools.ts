@@ -814,7 +814,7 @@ function createSandBrowserTools(deps) {
         ),
         maxDepth: external_exports.number().optional().describe("Maximum depth for snapshot output. Defaults to 20."),
         selector: external_exports.string().optional().describe(
-          `Optional CSS selector to scope the snapshot to a subtree. Resolved deeply \u2014 open shadow roots and same-origin iframes are searched \u2014 and the explicit '>>>' combinator re-roots each following stage at the previous match (e.g. 'faceplate-text-input[name="username"] >>> input').`
+          `Optional CSS selector to scope the snapshot to a subtree. It is resolved deeply, meaning open shadow roots and same-origin iframes are searched, and the explicit '>>>' combinator re-roots each following stage at the previous match (e.g. 'faceplate-text-input[name="username"] >>> input').`
         )
       })
     }),

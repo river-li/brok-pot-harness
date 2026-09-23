@@ -235,6 +235,39 @@ var InteractionHandler = class {
     const loopPolicy = this.singleMessageLoopPolicy;
     const singleMessageLoopDetector = loopPolicy !== void 0 ? new SingleMessageLoopDetector2() : null;
     const reasoningLoopDetector = loopPolicy !== void 0 ? new SingleMessageLoopDetector2() : null;
+    const isOutboundMessageTool = loopPolicy?.isOutboundMessageTool;
+    const streamingToolNames = /* @__PURE__ */ new Map();
+    const outboundArgsLoopDetectors = /* @__PURE__ */ new Map();
+    const checkOutboundArgsForLoop = (toolCallId, toolName, argsTextDelta) => {
+      if (isOutboundMessageTool === void 0 || !isOutboundMessageTool(toolName)) {
+        return;
+      }
+      let state = outboundArgsLoopDetectors.get(toolCallId);
+      if (state === void 0) {
+        state = { args: new JsonStringContentStream(), detector: new SingleMessageLoopDetector2() };
+        outboundArgsLoopDetectors.set(toolCallId, state);
+      }
+      const newText = state.args.push(argsTextDelta);
+      if (newText.length === 0) {
+        return;
+      }
+      const result = checkForAgentSingleMessageLooping({
+        ctx,
+        newText,
+        detector: state.detector,
+        caller: "nal",
+        reporting: loopPolicy?.reporting
+      });
+      if (result.loopDetected && loopPolicy?.responseAction === "retry_once") {
+        throw new AgentLoopError({
+          loopType: "singleMessage",
+          loopKind: result.loopKind ?? "single_message_multi_line",
+          repetitions: result.repetitions ?? 0,
+          period: result.period,
+          evidenceFingerprint: result.evidenceFingerprint
+        });
+      }
+    };
     const sealCurrentAssistant = async () => {
       if (!currentAssistantActive || assistantStartTime === void 0) {
         return;
@@ -360,7 +393,10 @@ var InteractionHandler = class {
           await this.interactionProvider.sendUpdate(ctx, Updates.thinkingDelta(delta, this.thinkingStyle, startedAtMs));
           await this.emitTokenDeltaFromChars(ctx, delta);
           await textHandler.recordThinking(ctx, delta, void 0, startedAtMs);
+        } else if (chunk.type === "tool-call-streaming-start") {
+          streamingToolNames.set(chunk.toolCallId, chunk.toolName);
         } else if (chunk.type === "tool-call-delta") {
+          checkOutboundArgsForLoop(chunk.toolCallId, chunk.toolName || (streamingToolNames.get(chunk.toolCallId) ?? ""), chunk.argsTextDelta);
           await this.emitTokenDeltaFromChars(ctx, chunk.argsTextDelta);
         }
       }

@@ -1,8 +1,12 @@
 init_dist4();
 var logger59 = createLogger("summarization-pending-store");
 var pendingSummaryAdoption = createCounter("agent.background_summarization.pending_adoption", {
-  description: "Outcomes of pending-summary adoption attempts at request start (adopted | persist_declined | rejected_prefix_mismatch | rejected_too_few_messages | rejected_threshold | rejected_version | error)",
+  description: "Outcomes of pending-summary adoption attempts at request start (adopted | persist_declined | rejected_prefix_mismatch | rejected_too_few_messages | rejected_threshold | rejected_version | error | empty)",
   labelNames: ["model", "outcome"]
+});
+var pendingSummaryAgeAtTake = createHistogram("agent.background_summarization.pending_age_ms", {
+  description: "Age of a stashed pending summary when the next request takes it; ages near the store's TTL mean stashes are expiring before the conversation returns",
+  labelNames: ["model"]
 });
 var backgroundSummarizationStashed = createCounter("agent.background_summarization.stashed", {
   description: "Post-turn stash outcomes for background summarizations that outlived their turn (stored | skipped_too_large | skipped_superseded | skipped_error_result | store_error)",
@@ -215,8 +219,12 @@ async function takePendingSummaryForAdoption(args) {
   const { ctx } = args;
   const record2 = await args.store.take(ctx, args.conversationId);
   if (record2 === void 0) {
+    pendingSummaryAdoption.increment(ctx, 1, { model: "none", outcome: "empty" });
     return void 0;
   }
+  pendingSummaryAgeAtTake.histogram(ctx, Date.now() - record2.createdAtMs, {
+    model: record2.modelId ?? "unknown"
+  });
   const abandonPrefixInvalid = () => {
     if (record2.summaryLifecycleId !== void 0) {
       emitSummaryLifecycleAbandoned(ctx, resumeSummaryLifecycle({

@@ -2270,6 +2270,10 @@ ${errorMessages.join("\n")}`);
   };
   return createZodAgentTool("TASK", {
     name: toolName,
+    contextType: {
+      type: "dynamic",
+      conciseStaticContext: "Spawn local and cloud agents natively."
+    },
     descriptionGenerator: buildTaskDescription,
     descriptionTokenPartsGenerator: (props, options3) => {
       const catalogsInUserInfo = areCatalogsInUserInfo(options3);

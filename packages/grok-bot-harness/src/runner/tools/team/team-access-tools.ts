@@ -10,14 +10,14 @@ function createOfferTeamAccessTool(deps) {
   return defineCommunicateTool(deps, {
     id: "OFFER_TEAM_ACCESS",
     name: SAND_OFFER_TEAM_ACCESS_TOOL_NAME,
-    description: "Show an in-chat card offering to share this bot with the user's team, with an Enable button and a Skip button. Use when the user works with teammates who would benefit from messaging this bot \u2014 typically once, near the end of getting-started. Enable runs the existing team-access flow and the user's choice comes back as their reply; Skip is a decline, so don't re-offer. The card is the whole ask: don't also paste instructions, links, or settings paths.",
+    description: "Show an in-chat card offering to share this bot with the user's team, with an Enable button and a Skip button. Use when the user works with teammates who would benefit from messaging this bot, typically once, near the end of getting-started. Enable runs the existing team-access flow and the user's choice comes back as their reply; Skip is a decline, so don't re-offer. The card is the whole ask: don't also paste instructions, links, or settings paths.",
     parameters: offerCardParameters,
     execute: async (_ctx, args, d) => {
       d.onSendMessage(
         { type: "team-access", ...args.reason == null ? {} : { reason: args.reason } },
         Date.now()
       );
-      return "The team-access card is in the chat. The user's choice arrives as their reply \u2014 enabled means teammates can now see and message this bot; a skip is a decline, so continue without it and don't re-offer.";
+      return "The team-access card is in the chat. The user's choice arrives as their reply. Enabled means teammates can now see and message this bot; a skip is a decline, so continue without it and don't re-offer.";
     }
   });
 }

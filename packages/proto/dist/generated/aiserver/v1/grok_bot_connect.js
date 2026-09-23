@@ -484,15 +484,6 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
-         * @generated from rpc aiserver.v1.GrokBotService.SetOnePasswordAlwaysAllow
-         */
-        setOnePasswordAlwaysAllow: {
-          name: "SetOnePasswordAlwaysAllow",
-          I: SetOnePasswordAlwaysAllowRequest,
-          O: OnePasswordState,
-          kind: MethodKind.Unary
-        },
-        /**
          * @generated from rpc aiserver.v1.GrokBotService.ApproveOnePasswordCredentialRequest
          */
         approveOnePasswordCredentialRequest: {
@@ -1209,10 +1200,9 @@ var init_grok_bot_connect = __esm({
          * A team bot's context: the bot's own two-sentence account of its job,
          * written by a flash-class model after turns that wrote shared memory and
          * cached by shard version, plus the shared-memory facts themselves, read
-         * verbatim from the shard on every call. Owner-only by default; members read
-         * both once the owner turns `show_context_notes_to_members` on. Get also
-         * returns the bot's skills so the Context page has one source for what the
-         * bot can reference.
+         * verbatim from the shard on every call. Every viewer of the bot (owner and
+         * members) gets the same shared-scope answer; user- and session-scope
+         * memories are never read here. Get also returns the bot's skills.
          *
          * @generated from rpc aiserver.v1.GrokBotService.GetGrokBotTeamContextSummary
          */
@@ -1220,17 +1210,6 @@ var init_grok_bot_connect = __esm({
           name: "GetGrokBotTeamContextSummary",
           I: GetGrokBotTeamContextSummaryRequest,
           O: GetGrokBotTeamContextSummaryResponse,
-          kind: MethodKind.Unary
-        },
-        /**
-         * Owner-only: whether members may read the summary and the learned log.
-         *
-         * @generated from rpc aiserver.v1.GrokBotService.SetGrokBotTeamContextVisibility
-         */
-        setGrokBotTeamContextVisibility: {
-          name: "SetGrokBotTeamContextVisibility",
-          I: SetGrokBotTeamContextVisibilityRequest,
-          O: SetGrokBotTeamContextVisibilityResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -1677,6 +1656,20 @@ var init_grok_bot_connect = __esm({
           name: "ResolveGrokBotConnectorGrant",
           I: ResolveGrokBotConnectorGrantRequest,
           O: ResolveGrokBotConnectorGrantResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Forgets every "Always allow" the caller has stored for TEAM bots, on
+         * every team and in both scopes (this bot, all of a team's bots), so the
+         * next connector use asks again. The caller's own rows only; idempotent,
+         * a clear with nothing stored succeeds with cleared_count 0.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.ClearGrokBotConnectorAlwaysAllow
+         */
+        clearGrokBotConnectorAlwaysAllow: {
+          name: "ClearGrokBotConnectorAlwaysAllow",
+          I: ClearGrokBotConnectorAlwaysAllowRequest,
+          O: ClearGrokBotConnectorAlwaysAllowResponse,
           kind: MethodKind.Unary
         },
         /**

@@ -1,3 +1,4 @@
+var CREDENTIAL_PAGE_INPUT_BUCKETS = ["0", "1", "2-3", "4+"];
 var MAX_DESCRIPTOR_LENGTH = 80;
 var MAX_ELEMENT_COUNT = 8;
 function sensitiveVariants(value) {

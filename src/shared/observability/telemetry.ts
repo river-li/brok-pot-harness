@@ -9,6 +9,7 @@ var SAND_CLIENT_PERSISTENCE_SLICES = [
   "selection.last-agent",
   "send-journal",
   "sidebar.last-sections",
+  "transcript.cloud-agent-peers",
   "transcript.replicas",
   "ui-agent-refs",
   "ui-layout",

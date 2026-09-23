@@ -1,9 +1,6 @@
 function boxMaxWindows(box) {
   return box.maxWindows?.() ?? 1;
 }
-function boxSupportsMultiWindow(box) {
-  return boxMaxWindows(box) > 1;
-}
 function boxAgentWindowIndex(box, agentId) {
   return box.getAgentWindowIndex?.(agentId);
 }

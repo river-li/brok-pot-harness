@@ -176,7 +176,7 @@ var init_coordinator_tools_pb = __esm({
         return proto3.util.equals(_SendToAgentArgs, a, b2);
       }
       static $() {
-        return ["SendToAgentArgs|1 tool_call_id 9|2 agent_id 9|3 message 9|4 delivery 9|5 title 9"];
+        return ["SendToAgentArgs|1 tool_call_id 9|2 agent_id 9|3 message 9|4 delivery 9|5 title 9|6 model 9?"];
       }
     };
     SendToAgentSuccess = class _SendToAgentSuccess extends __protoMessage383 {

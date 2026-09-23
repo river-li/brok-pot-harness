@@ -5562,6 +5562,60 @@ var init_dashboard_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * @generated from rpc aiserver.v1.DashboardService.ListGrokApiKeys
+         */
+        listGrokApiKeys: {
+          name: "ListGrokApiKeys",
+          I: ListGrokApiKeysRequest,
+          O: ListGrokApiKeysResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.CreateGrokApiKey
+         */
+        createGrokApiKey: {
+          name: "CreateGrokApiKey",
+          I: CreateGrokApiKeyRequest,
+          O: CreateGrokApiKeyResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.DeleteGrokApiKey
+         */
+        deleteGrokApiKey: {
+          name: "DeleteGrokApiKey",
+          I: DeleteGrokApiKeyRequest,
+          O: DeleteGrokApiKeyResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.UpdateGrokApiKey
+         */
+        updateGrokApiKey: {
+          name: "UpdateGrokApiKey",
+          I: UpdateGrokApiKeyRequest,
+          O: UpdateGrokApiKeyResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.SetGrokApiKeyAcls
+         */
+        setGrokApiKeyAcls: {
+          name: "SetGrokApiKeyAcls",
+          I: SetGrokApiKeyAclsRequest,
+          O: SetGrokApiKeyAclsResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.RotateGrokApiKey
+         */
+        rotateGrokApiKey: {
+          name: "RotateGrokApiKey",
+          I: RotateGrokApiKeyRequest,
+          O: RotateGrokApiKeyResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.DashboardService.CreateOrganizationApiKey
          */
         createOrganizationApiKey: {
@@ -5689,6 +5743,42 @@ var init_dashboard_connect = __esm({
           name: "ListUserApiKeys",
           I: ListUserApiKeysRequest,
           O: ListUserApiKeysResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.CreateServiceToken
+         */
+        createServiceToken: {
+          name: "CreateServiceToken",
+          I: CreateServiceTokenRequest,
+          O: CreateServiceTokenResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.ListServiceTokens
+         */
+        listServiceTokens: {
+          name: "ListServiceTokens",
+          I: ListServiceTokensRequest,
+          O: ListServiceTokensResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.RevokeServiceToken
+         */
+        revokeServiceToken: {
+          name: "RevokeServiceToken",
+          I: RevokeServiceTokenRequest,
+          O: RevokeServiceTokenResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.RotateServiceToken
+         */
+        rotateServiceToken: {
+          name: "RotateServiceToken",
+          I: RotateServiceTokenRequest,
+          O: RotateServiceTokenResponse,
           kind: MethodKind.Unary
         },
         /**

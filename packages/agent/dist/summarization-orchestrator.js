@@ -330,6 +330,8 @@ ${formatProjectCompactionPrompt({
           summarizerType
         });
         emitSummaryLifecycleStarted(ctx, lifecycle);
+        const detachedGenerationTimeoutMs = options2.backgroundSummarizationMode === BackgroundSummarizationMode.Background ? config2.pendingSummaryStore?.detachedGenerationTimeoutMs : void 0;
+        const [generationCtx, releaseGenerationCtx] = detachedGenerationTimeoutMs === void 0 ? [ctx, void 0] : ctx.withDetached().withTimeoutAndCancel(detachedGenerationTimeoutMs);
         const summarizationPromise = (async () => {
           const generationStart = performance.now();
           try {
@@ -350,7 +352,7 @@ ${formatProjectCompactionPrompt({
             const todoItems = await Promise.all(stateHandler.todos.map((todoRef) => todoRef.get(ctx)));
             const todoContent = formatTodosForSummarization(todoItems);
             const includeTranscriptInSummary = config2.enableTranscriptInSummary === true && requestContext.env?.agentTranscriptsFolder !== void 0 && config2.agentType !== AgentType.BACKGROUND;
-            const result = await summarizer.summarize(ctx, settledMessages, {
+            const result = await summarizer.summarize(generationCtx, settledMessages, {
               privacyMode: stateHandler.getPrivacyMode(),
               fullSummarization: options2.fullSummarization,
               currentPlan: options2.currentPlan,
@@ -409,6 +411,7 @@ ${formatProjectCompactionPrompt({
             throw e;
           } finally {
             ctx.signal.removeEventListener("abort", onRunCancelled);
+            releaseGenerationCtx?.();
           }
         })();
         const promiseInfo = {

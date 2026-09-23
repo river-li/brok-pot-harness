@@ -1,5 +1,5 @@
 function getHostBuiltAtMs() {
-  return true ? "1790120245000" : void 0;
+  return true ? "1790153931000" : void 0;
 }
 var TELEMETRY_FLUSH_TICK_MS = 3e3;
 var HOST_IDENTITY_HOLD_BACKSTOP_MS = 9e4;
@@ -54,7 +54,7 @@ var SandStructuredLogTelemetry = class {
         client: SAND_CLIENT_TYPE,
         "client.type": SAND_CLIENT_TYPE,
         client_version: options2.backend.clientVersion,
-        app_version: options2.appVersion ?? (true ? "0.59.0-pre.2" : "unknown"),
+        app_version: options2.appVersion ?? (true ? "0.59.0-pre.7" : "unknown"),
         arch: process.arch,
         platform: process.platform,
         ...options2.identityTags ?? resolveSandBoxIdentityTags()
@@ -310,6 +310,7 @@ var SandStructuredLogTelemetry = class {
   }
   reportCredentialFillOutcome(report) {
     const reason = report.fillRefusalReason ?? report.reason;
+    const page = report.pageDiagnostics;
     this.enqueue(report.outcome === "success" ? "info" : "warn", CREDENTIAL_FILL_OUTCOME_EVENT, {
       operation: brandLiteralEnum(report.operation),
       outcome: brandLiteralEnum(report.outcome),
@@ -320,7 +321,15 @@ var SandStructuredLogTelemetry = class {
       in_form: report.inForm === void 0 ? void 0 : booleanTag(report.inForm),
       target_domain: brandedId(report.targetDomain),
       harness: "box",
-      ...reason === "submit-failed" ? sandErrorTags(SandError.credentialSubmitFailed()) : {}
+      ...reason === "submit-failed" ? sandErrorTags(SandError.credentialSubmitFailed()) : {},
+      ...page === void 0 ? {} : {
+        inspect_inputs: brandLiteralEnum(page.inputs),
+        has_password_input: booleanTag(page.hasPasswordInput),
+        has_visible_password_input: booleanTag(page.hasVisiblePasswordInput),
+        username_only_found: booleanTag(page.usernameOnlyFound),
+        has_cross_origin_iframe: booleanTag(page.hasCrossOriginIframe),
+        has_shadow_inputs: booleanTag(page.hasShadowInputs)
+      }
     });
   }
   reportTranscriptPublish(level, metadata) {

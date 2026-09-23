@@ -48,10 +48,10 @@ function resolveSandAutoReviewModes(args) {
 }
 var SAND_AUTO_REVIEW_UNAVAILABLE_REASON = "This action needs Auto-review approval, which isn't available in this conversation. Run it from a direct chat with the assistant.";
 function formatSandAutoReviewDeniedReason(classifierReason) {
-  return `Auto-review blocked this action: ${classifierReason}. Do not retry the same action, and do not switch to another anonymous public file host, pastebin, disposable transfer link, or similar courier \u2014 that is the same unauthorized data-exposure crossing. Ask the user what they want next. Use a safer alternative only when it is a genuinely authorized path.`;
+  return `Auto-review blocked this action: ${classifierReason}. Do not retry the same action, and do not switch to another anonymous public file host, pastebin, disposable transfer link, or similar courier. That is the same unauthorized data-exposure crossing. Ask the user what they want next. Use a safer alternative only when it is a genuinely authorized path.`;
 }
 function formatSandAutoReviewInterruptedForUpdateReason(classifierReason) {
-  return `A host update interrupted this approval request before the user could answer \u2014 the user did NOT deny it. After you resume, re-run the action; if it is blocked again, use the tool's approval-retry parameter to raise a fresh approval card. The pending review reason was: ${classifierReason}`;
+  return `A host update interrupted this approval request before the user could answer. The user did NOT deny it. After you resume, re-run the action; if it is blocked again, use the tool's approval-retry parameter to raise a fresh approval card. The pending review reason was: ${classifierReason}`;
 }
 var SAND_AUTO_REVIEW_REASON_MAX_CHARS = 500;
 function sanitizeReason(reason) {

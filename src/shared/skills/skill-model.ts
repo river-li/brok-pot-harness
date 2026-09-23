@@ -321,7 +321,7 @@ function promptReferencesSkill(prompt, skill) {
 function buildSkillRunPrompt(skill, options2, timeZone) {
   const lines2 = [];
   if (options2.trigger === "schedule") {
-    lines2.push(`${AUTOMATION_WAKE_CUE} skill "${skill.name}" (folder ${skill.id}) is due on its schedule \u2014 fired ${formatTimestamp2(Date.now(), timeZone)}.`, "This is your own routine firing on schedule, not a message the user just typed.");
+    lines2.push(`${AUTOMATION_WAKE_CUE} skill "${skill.name}" (folder ${skill.id}) is due on its schedule. It fired at ${formatTimestamp2(Date.now(), timeZone)}.`, "This is your own routine firing on schedule, not a message the user just typed.");
   } else {
     let identity;
     if (skill.source === "managed") {
@@ -346,7 +346,7 @@ function buildSkillRunPrompt(skill, options2, timeZone) {
     lines2.push(`Helper files live beside this skill in ${dir}: ${skill.helperScripts.join(", ")}. Use them with Shell as the recipe directs.`);
   }
   if (options2.trigger === "schedule") {
-    lines2.push("Carry it out now and surface anything worth sharing with SendToUser, casually \u2014 unless the recipe says to stay quiet when there's nothing to report.");
+    lines2.push("Carry it out now and surface anything worth sharing with SendToUser, casually, unless the recipe says to stay quiet when there's nothing to report.");
   } else if (options2.trigger === "first-run") {
     lines2.push("Carry out the recipe now. There is no user message to adapt to; the recipe is the whole instruction for this turn.");
   } else {
@@ -359,7 +359,7 @@ function skillDir(filePath) {
   return slash === -1 ? filePath : filePath.slice(0, slash);
 }
 var SKILLS_LIBRARY_LINE = "Skills are a GLOBAL, shared library across all of the user's assistants. A skill is a clean generic template with no assistant-specific details, that any assistant can run. Every skill is available to every assistant; Cursor-managed skills and installed plugin skills are additionally read-only.";
-var SKILLS_CATALOG_ON_DISK_LINE = "Your skills are cataloged (file path plus a when-to-use description) in the agent_skills section of the user_info block near the start of the conversation. That catalog refreshes when the conversation is summarized, so a skill you just saved or that was just installed may not be listed yet \u2014 it is still on disk, readable, and invocable immediately.";
+var SKILLS_CATALOG_ON_DISK_LINE = "Your skills are cataloged (file path plus a when-to-use description) in the agent_skills section of the user_info block near the start of the conversation. That catalog refreshes when the conversation is summarized, so a skill you just saved or that was just installed may not be listed yet. It is still on disk, readable, and invocable immediately.";
 var SKILLS_CATALOG_VIRTUAL_LINE = "Your skills are cataloged (file path plus a when-to-use description) in the agent_skills section of the user_info block near the start of the conversation. That catalog refreshes when the conversation is summarized, so a skill that was just added may not be listed yet.";
 function skillsLocationLine(location2) {
   return `User-created skills live as files at ${location2}: one subfolder per skill (a short kebab-case slug is its id), each holding a SKILL.md you can read and grep with Read and Shell on your own computer. Prefer the update_state tool (target "skill") to save, rewrite, and delete them. Cursor-managed skills are supplied by Cursor, do NOT live in those folders, and cannot be edited or deleted at all.`;
@@ -367,7 +367,7 @@ function skillsLocationLine(location2) {
 function virtualSkillFilesLines(location2) {
   return [`Cursor-managed and plugin skill paths in the catalog (every catalog path outside ${location2}) are not files on your computer. Open them only with the Read tool at exactly the listed path. Shell commands (ls, find, grep, cat) cannot see them, so a listed path that is missing from Shell output does not mean the skill was removed.`, "A skill's name is the name field in its SKILL.md frontmatter, which can differ from its folder and its description. When the user asks for a skill by name and no catalog entry clearly matches, Read the SKILL.md of each entry whose description could fit and check its name before answering. If none matches, tell the user the skill is not in your skill list yet instead of searching your computer for it."];
 }
-var PLUGIN_SKILL_FILES_ON_DISK_LINE = "Skills from installed Cursor plugins are real SKILL.md files on your own computer too (their file paths appear in the agent_skills catalog). Read them \u2014 and any helper files beside them \u2014 with Read and Shell like any other skill file, but treat them as READ-ONLY: they are managed by installing or uninstalling the plugin in Settings, never by editing the files.";
+var PLUGIN_SKILL_FILES_ON_DISK_LINE = "Skills from installed Cursor plugins are real SKILL.md files on your own computer too (their file paths appear in the agent_skills catalog). Read them and any helper files beside them with Read and Shell like any other skill file, but treat them as READ-ONLY. They are managed by installing or uninstalling the plugin in Settings, never by editing the files.";
 var SKILL_FORMAT_LINE = "SKILL.md is the same format Cursor uses: YAML frontmatter followed by the markdown recipe body.";
 var SKILL_FRONTMATTER_EXAMPLE_LINE = "  ---\n  name: Daily standup\n  description: One line on WHEN to use this skill (required)\n  ---\n  # Steps\n  1. ...\n  2. ...";
 var SKILL_OTHER_FRONTMATTER_LINE = "A SKILL.md may carry other frontmatter Cursor understands and Grok Bot does not (globs, alwaysApply, environments, metadata). Leave those keys alone: update_state preserves them, and hand-editing the file to drop them breaks the skill for whoever shares it.";

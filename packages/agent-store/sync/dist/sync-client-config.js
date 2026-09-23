@@ -41,7 +41,21 @@ var AGENT_STORE_SYNC_CLIENT_CONFIG_DEFAULTS = Object.freeze({
   staleStoreRootMaxIdleMs: 7 * DAY_MS,
   tombstoneFullRefreshRounds: DEFAULT_TOMBSTONE_FULL_REFRESH_ROUNDS,
   tombstoneFullRefreshIntervalMs: DEFAULT_TOMBSTONE_FULL_REFRESH_INTERVAL_MS,
-  tombstonePruneSlackMs: DEFAULT_TOMBSTONE_PRUNE_SLACK_MS
+  tombstonePruneSlackMs: DEFAULT_TOMBSTONE_PRUNE_SLACK_MS,
+  mintRetryPolicyVersion: 1,
+  mintRetryMaxAttempts: 2,
+  mintRetryBaseDelayMs: 250,
+  mintRetryMaxDelayMs: 2e3,
+  mintRetryBudgetRatio: 0.1,
+  mintRetryBudgetFloor: 3,
+  mintTransientNegativeCacheBaseMs: 5e3,
+  mintTransientNegativeCacheMaxMs: 12e4,
+  mintGateOpenThreshold: 5,
+  mintGateWindowMs: 3e4,
+  mintGateOpenBaseMs: 5e3,
+  mintGateOpenMaxMs: 12e4,
+  tokenRefreshJitterRatio: 0.5,
+  minTokenSlackMs: 5e3
 });
 var MIB = 1024 * 1024;
 var BOUNDS = {
@@ -99,5 +113,19 @@ var BOUNDS = {
   tombstoneFullRefreshIntervalMs: { min: 0, max: Number.MAX_SAFE_INTEGER },
   // Present so the bounds map stays complete. Not applied: any non-negative
   // integer is kept, including `0`.
-  tombstonePruneSlackMs: { min: 0, max: Number.MAX_SAFE_INTEGER }
+  tombstonePruneSlackMs: { min: 0, max: Number.MAX_SAFE_INTEGER },
+  mintRetryPolicyVersion: { min: 0, max: 1 },
+  mintRetryMaxAttempts: { min: 1, max: 5 },
+  mintRetryBaseDelayMs: { min: 1, max: 6e4 },
+  mintRetryMaxDelayMs: { min: 1, max: 6e4 },
+  mintRetryBudgetRatio: { min: 0, max: 1 },
+  mintRetryBudgetFloor: { min: 0, max: 100 },
+  mintTransientNegativeCacheBaseMs: { min: 100, max: 36e5 },
+  mintTransientNegativeCacheMaxMs: { min: 100, max: 36e5 },
+  mintGateOpenThreshold: { min: 1, max: 1e3 },
+  mintGateWindowMs: { min: 1e3, max: 36e5 },
+  mintGateOpenBaseMs: { min: 100, max: 36e5 },
+  mintGateOpenMaxMs: { min: 100, max: 36e5 },
+  tokenRefreshJitterRatio: { min: 0, max: 1 },
+  minTokenSlackMs: { min: 1, max: 6e4 }
 };

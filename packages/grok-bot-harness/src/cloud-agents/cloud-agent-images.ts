@@ -65,7 +65,7 @@ function unsupportedTypeMessage(url2, channel) {
   if (channel === "images") {
     return `'${url2}' is not a recognized image (${CLOUD_AGENT_IMAGE_EXTENSIONS_HINT}). Only images ride the cloud agent's vision channel; pass a document or video in files instead, so it is saved to the agent's workspace.`;
   }
-  return `'${url2}' is not a file type the cloud agent attachments support. files takes documents (${CLOUD_AGENT_DOCUMENT_EXTENSIONS_HINT}), any text file (source, scripts, patches, configs \u2014 recognized by content), videos (${CLOUD_AGENT_VIDEO_EXTENSIONS_HINT}), and images to hand over as files; binary files of other kinds are refused. Describe or paste its contents in the prompt instead.`;
+  return `'${url2}' is not a file type the cloud agent attachments support. files takes documents (${CLOUD_AGENT_DOCUMENT_EXTENSIONS_HINT}), any text file (source, scripts, patches, configs) recognized by content, videos (${CLOUD_AGENT_VIDEO_EXTENSIONS_HINT}), and images to hand over as files; binary files of other kinds are refused. Describe or paste its contents in the prompt instead.`;
 }
 function unreadableMessage(url2, channel) {
   return `Could not read the ${describeChannelNoun(channel)} at '${url2}'. The path is one you're allowed to read, so check it actually exists in your box.`;

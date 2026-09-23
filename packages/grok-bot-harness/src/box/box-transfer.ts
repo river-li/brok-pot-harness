@@ -1,4 +1,3 @@
-var import_node_path10 = require("node:path");
 init_errors();
 init_system_errno();
 init_invariant();
@@ -37,6 +36,7 @@ async function transferFileBetweenBoxes(ctx, args) {
   try {
     data = await source.box.downloadFile(ctx, source.agentId, source.path);
   } catch (error42) {
+    if (error42 instanceof DeferredInteractionResponseError) throw error42;
     if (isSourceMissingError(error42)) {
       throw new BoxTransferError(
         "source_missing",
@@ -59,6 +59,7 @@ async function transferFileBetweenBoxes(ctx, args) {
   try {
     await dest.box.uploadFile(ctx, dest.agentId, dest.path, data);
   } catch (error42) {
+    if (error42 instanceof DeferredInteractionResponseError) throw error42;
     throw new BoxTransferError(
       "write_failed",
       `failed to write ${dest.path} on ${dest.label}: ${errorMessage(error42)}`,

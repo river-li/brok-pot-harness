@@ -1,8 +1,3 @@
-init_agent_pb();
-init_communicate_update_tool_pb();
-init_bounded();
-init_errors();
-init_zod();
 var SAND_TOOL_MARKER2 = "__sand_tool__";
 function encodeSandStep2(payload) {
   return JSON.stringify({ [SAND_TOOL_MARKER2]: true, ...payload });
@@ -52,6 +47,62 @@ function buildSuccessResult(text2) {
     }
   });
 }
+var DEFAULT_INFRASTRUCTURE_ERROR_MESSAGE = "Couldn't finish due to a temporary server issue.";
+var INFRASTRUCTURE_ERROR_NAMES = /* @__PURE__ */ new Set([
+  "PrismaClientKnownRequestError",
+  "PrismaClientUnknownRequestError",
+  "PrismaClientInitializationError",
+  "PrismaClientRustPanicError",
+  "DriverAdapterError",
+  "DbUnavailableError"
+]);
+var VITESS_ERROR_MARKER = "vttablet: ";
+var MAX_CAUSE_DEPTH = 4;
+function isInfrastructureError(error42) {
+  let current = error42;
+  for (let depth = 0; depth <= MAX_CAUSE_DEPTH && current instanceof Error; depth += 1) {
+    if (INFRASTRUCTURE_ERROR_NAMES.has(current.name) || INFRASTRUCTURE_ERROR_NAMES.has(current.constructor.name) || current.message.includes(VITESS_ERROR_MARKER)) {
+      return true;
+    }
+    current = current.cause;
+  }
+  return false;
+}
+function classifyToolError(error42) {
+  if (isInfrastructureError(error42)) return "infrastructure";
+  if (error42 instanceof SandModelVisibleError || error42 instanceof ToolCallError) {
+    return "model_visible";
+  }
+  return "unclassified";
+}
+var toolCallErrors = createCounter("grok_bot.tool_call.error", {
+  description: "A Sand tool call threw, by tool, the thrown error's class, and whether the model sees its message: model_visible (a class written for the model), infrastructure (replaced with a fixed message), or unclassified (still shown today; the classes to convert before tool errors become allow-list only)",
+  labelNames: ["tool", "visibility", "error_class"]
+});
+function errorClassLabel(error42) {
+  if (!(error42 instanceof Error)) return typeof error42;
+  const constructorName = error42.constructor.name;
+  return constructorName.length > 0 && constructorName !== "Error" ? constructorName : error42.name;
+}
+function recordToolCallError(ctx, toolName, visibility, error42) {
+  try {
+    toolCallErrors.increment(ctx, 1, {
+      tool: toolName,
+      visibility,
+      error_class: errorClassLabel(error42)
+    });
+  } catch (metricsError) {
+    process.stderr.write(
+      `sand.tool_call.error_metrics_failed error_class=${errorLogTag(metricsError)}
+`
+    );
+  }
+}
+function modelVisibleErrorMessage(ctx, toolName, error42, infrastructureErrorMessage) {
+  const visibility = classifyToolError(error42);
+  if (ctx !== void 0) recordToolCallError(ctx, toolName, visibility, error42);
+  return visibility === "infrastructure" ? infrastructureErrorMessage : errorMessage(error42);
+}
 function buildErrorResult(message) {
   return new CommunicateUpdateResult({
     result: {
@@ -83,6 +134,7 @@ function argIssueFolder(knownFields) {
 }
 function defineCommunicateTool(deps, spec) {
   const render2 = makeRender();
+  const infrastructureErrorMessage = spec.infrastructureErrorMessage ?? DEFAULT_INFRASTRUCTURE_ERROR_MESSAGE;
   const parseAndExecute = withSafeParsedArgs(
     spec.parameters,
     async (ctx, interactionHandler, parsedArgs, meta) => {
@@ -111,7 +163,9 @@ function defineCommunicateTool(deps, spec) {
             if (error42 instanceof DeferredInteractionResponseError) {
               throw error42;
             }
-            return buildErrorResult(errorMessage(error42));
+            return buildErrorResult(
+              modelVisibleErrorMessage(ctx, spec.name, error42, infrastructureErrorMessage)
+            );
           }
         },
         (result) => {
@@ -186,7 +240,12 @@ function defineCommunicateTool(deps, spec) {
     execute,
     render: render2,
     serializeError: (error42) => {
-      const message = errorMessage(error42);
+      const message = modelVisibleErrorMessage(
+        void 0,
+        spec.name,
+        error42,
+        infrastructureErrorMessage
+      );
       return new ToolCall({
         tool: {
           case: "communicateUpdateToolCall",

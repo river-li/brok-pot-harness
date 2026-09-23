@@ -7,7 +7,7 @@ var requestBoxHelpParameters = external_exports.object({
     'Why the user is needed: "auth" for any sign-in step (login, SSO, passkey, 2FA), "captcha" for a puzzle or image captcha (a press-and-hold button is a mouse hold the subagent does itself), "payment", or "other".'
   ),
   domain: external_exports.string().trim().optional().catch(void 0).describe(
-    'Destination app/site the user is trying to access (e.g. "salesforce.com", "google.com"). On a normal login page this is the browser-bar host. On an SSO/IdP page (Okta, Google accounts, Azure AD, \u2026) this is the *destination* app that started SSO \u2014 NOT the IdP host (put that in idp_domain). Omit when unknown or the step is not on a website.'
+    'Destination app/site the user is trying to access (e.g. "salesforce.com", "google.com"). On a normal login page this is the browser-bar host. On an SSO/IdP page (Okta, Google accounts, Azure AD, \u2026) this is the *destination* app that started SSO, NOT the IdP host (put that in idp_domain). Omit when unknown or the step is not on a website.'
   ),
   idp_domain: external_exports.string().trim().optional().catch(void 0).describe(
     'When the browser is on an SSO/IdP page, the IdP host from the URL bar (e.g. "anysphere.okta.com", "accounts.google.com", "login.microsoftonline.com"). Omit on a direct app login with no separate IdP.'
@@ -69,7 +69,7 @@ function createRequestBoxHelpTool(deps) {
         }
         ctx.signal.throwIfAborted();
         if (outcome.kind === "already-pending") {
-          return `The user still has the box: you handed it to them for "${outcome.instruction}" and they haven't handed it back, so this request was NOT sent \u2014 asking twice would put a second copy of the same request in their chat. Do not ask again. If you have something to tell them (what you're waiting on, or that you need a different step), say it with SendToUser; otherwise just wait, and you'll be resumed automatically when they hand the box back.`;
+          return `The user still has the box. You handed it to them for "${outcome.instruction}" and they haven't handed it back, so this request was NOT sent. Asking twice would put a second copy of the same request in their chat. Do not ask again. If you have something to tell them (what you're waiting on, or that you need a different step), say it with SendToUser; otherwise just wait, and you'll be resumed automatically when they hand the box back.`;
         }
         return "Handed the box to the user. They have control now; wait for them to hand it back, and you'll be resumed automatically.";
       });

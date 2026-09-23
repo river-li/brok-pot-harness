@@ -9,10 +9,10 @@ var draftExternalMessageObjectSchema = external_exports.object({
   ),
   body: external_exports.string().trim().min(1).describe("The message body, written in the user's voice. Required for both platforms."),
   from: external_exports.string().trim().optional().describe(
-    `Required when platform is email. The exact email address the chosen account sends from, shown on the card's From row \u2014 a plain address like ariel@acme.com, never a display name and never guessed. If you don't already know it, read it from the mailbox first: call the Gmail connector's search_threads with query "in:sent" and use a returned message's sender field.`
+    `Required when platform is email. The exact email address the chosen account sends from, shown on the card's From row. It is a plain address like ariel@acme.com, never a display name and never guessed. If you don't already know it, read it from the mailbox first. Call the Gmail connector's search_threads with query "in:sent" and use a returned message's sender field.`
   ),
   to: external_exports.array(external_exports.string().trim().min(1)).optional().describe(
-    'Required when platform is email. The recipient(s), each a plain email address ("user@example.com" \u2014 the "Name <user@example.com>" form is not accepted).'
+    'Required when platform is email. The recipient(s), each a plain email address such as "user@example.com". The "Name <user@example.com>" form is not accepted.'
   ),
   cc: external_exports.array(external_exports.string().trim().min(1)).optional().describe("Optional, email only. Cc recipient(s), each a plain email address."),
   subject: external_exports.string().trim().optional().describe("Required when platform is email. The subject line."),
@@ -23,7 +23,7 @@ var draftExternalMessageObjectSchema = external_exports.object({
     'Required when platform is slack. Where the message goes, as the user reads it: a channel ("#general") or a person ("Ariel Chen").'
   ),
   channelId: external_exports.string().trim().optional().describe(
-    "Required when platform is slack. The channel or DM conversation id the send is addressed to (e.g. C0123456789), resolved with the connector's search tools \u2014 never guessed."
+    "Required when platform is slack. The channel or DM conversation id the send is addressed to (e.g. C0123456789), resolved with the connector's search tools, never guessed."
   ),
   threadTs: external_exports.string().trim().optional().describe(
     "Optional, slack only. The parent message's ts when this draft replies in a thread; omit for a new message."
@@ -61,7 +61,7 @@ function requireAddresses(ctx, field, values) {
   ctx.addIssue({
     code: external_exports.ZodIssueCode.custom,
     path: [field],
-    message: `${field} must carry plain email address(es) like user@example.com \u2014 not a display name or "Name <addr>" form. Got: ${invalid.join(", ")}`
+    message: `${field} must carry plain email address(es) like user@example.com, not a display name or "Name <addr>" form. Got: ${invalid.join(", ")}`
   });
 }
 function refineDraftExternalMessage(value, ctx) {
@@ -71,7 +71,7 @@ function refineDraftExternalMessage(value, ctx) {
     ctx.addIssue({
       code: external_exports.ZodIssueCode.custom,
       path: [field],
-      message: `${field} is only valid with platform:${platform2} and cannot ride a platform:${value.platform} draft \u2014 it would be silently dropped. Nothing was drafted. Re-send with only the fields that belong to platform:${value.platform}.`
+      message: `${field} is only valid with platform:${platform2} and cannot be included in a platform:${value.platform} draft. It would be silently dropped. Nothing was drafted. Re-send with only the fields that belong to platform:${value.platform}.`
     });
   }
   if (value.platform === "email") {

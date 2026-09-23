@@ -91,7 +91,6 @@ var init_requested_model_pb = __esm({
         this.parameters = [];
         this.credentials = { case: void 0 };
         this.builtInModel = false;
-        this.isVariantStringRepresentation = false;
         proto3.util.initPartial(data, this);
       }
       static fromBinary(bytes, options2) {
@@ -107,7 +106,7 @@ var init_requested_model_pb = __esm({
         return proto3.util.equals(_RequestedModel, a, b2);
       }
       static $() {
-        return ["RequestedModel|1 model_id 9|2 max_mode 8|3 parameters #0*|4 api_key_credentials #1 credentials|5 azure_credentials #2 credentials|6 bedrock_credentials #3 credentials|7 built_in_model 8|8 is_variant_string_representation 8", RequestedModel_ModelParameterValue, ApiKeyCredentials, AzureCredentials, BedrockCredentials];
+        return ["RequestedModel|1 model_id 9|2 max_mode 8|3 parameters #0*|4 api_key_credentials #1 credentials|5 azure_credentials #2 credentials|6 bedrock_credentials #3 credentials|7 built_in_model 8", RequestedModel_ModelParameterValue, ApiKeyCredentials, AzureCredentials, BedrockCredentials];
       }
     };
     RequestedModel_ModelParameterValue = class _RequestedModel_ModelParameterValue extends __protoMessage38 {

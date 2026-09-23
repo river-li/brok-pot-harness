@@ -70,9 +70,9 @@ function attachmentLines(message) {
     const detail = `${attachment.contentType}, ${formatEmailAttachmentSize(attachment.sizeBytes)}`;
     const inline = isInlineEmailAttachment(attachment) ? `, inline in the body as [inline image: ${attachment.contentId}]` : "";
     if (attachment.skipReason !== null) {
-      return `- attachment_id ${attachment.attachmentId}: ${name17} (${detail}${inline}) \u2014 skipped: ${attachment.skipReason.replaceAll("_", " ")}, cannot be opened`;
+      return `- attachment_id ${attachment.attachmentId}: ${name17} (${detail}${inline}). Skipped: ${attachment.skipReason.replaceAll("_", " ")}, cannot be opened`;
     }
-    return `- attachment_id ${attachment.attachmentId}: ${name17} (${detail}${inline}) \u2014 open with ${SAND_READ_EMAIL_ATTACHMENT_TOOL_NAME}`;
+    return `- attachment_id ${attachment.attachmentId}: ${name17} (${detail}${inline}). Open with ${SAND_READ_EMAIL_ATTACHMENT_TOOL_NAME}`;
   });
 }
 function renderEmailThread(threadId, thread) {

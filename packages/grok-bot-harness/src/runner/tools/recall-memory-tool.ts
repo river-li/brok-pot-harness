@@ -80,7 +80,7 @@ function renderRecallMemoryResult(args) {
   }
   const omitted = matches.length - shown;
   if (omitted > 0) {
-    lines2.push(`(${omitted} more matches not shown \u2014 narrow the query.)`);
+    lines2.push(`(${omitted} more matches not shown. Narrow the query.)`);
   }
   return lines2.join("\n");
 }

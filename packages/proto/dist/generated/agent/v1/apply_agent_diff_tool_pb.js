@@ -1,19 +1,19 @@
-var __protoPackage32, __protoMessage332, ApplyAgentDiffToolCall, ApplyAgentDiffArgs, ApplyAgentDiffResult, ApplyAgentDiffSuccess, AppliedAgentChange, AppliedAgentChange_ChangeType, ApplyAgentDiffError;
+var __protoPackage33, __protoMessage333, ApplyAgentDiffToolCall, ApplyAgentDiffArgs, ApplyAgentDiffResult, ApplyAgentDiffSuccess, AppliedAgentChange, AppliedAgentChange_ChangeType, ApplyAgentDiffError;
 var init_apply_agent_diff_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/apply_agent_diff_tool_pb.js"() {
     "use strict";
     init_esm13();
     init_compact();
-    __protoPackage32 = "agent.v1.";
-    __protoMessage332 = class extends CompactMessage {
+    __protoPackage33 = "agent.v1.";
+    __protoMessage333 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage32;
+        return __protoPackage33;
       }
     };
-    ApplyAgentDiffToolCall = class _ApplyAgentDiffToolCall extends __protoMessage332 {
+    ApplyAgentDiffToolCall = class _ApplyAgentDiffToolCall extends __protoMessage333 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -34,7 +34,7 @@ var init_apply_agent_diff_tool_pb = __esm({
         return ["ApplyAgentDiffToolCall|1 args #0|2 result #1", ApplyAgentDiffArgs, ApplyAgentDiffResult];
       }
     };
-    ApplyAgentDiffArgs = class _ApplyAgentDiffArgs extends __protoMessage332 {
+    ApplyAgentDiffArgs = class _ApplyAgentDiffArgs extends __protoMessage333 {
       constructor(data) {
         super();
         this.agentId = "";
@@ -56,7 +56,7 @@ var init_apply_agent_diff_tool_pb = __esm({
         return ["ApplyAgentDiffArgs|1 agent_id 9"];
       }
     };
-    ApplyAgentDiffResult = class _ApplyAgentDiffResult extends __protoMessage332 {
+    ApplyAgentDiffResult = class _ApplyAgentDiffResult extends __protoMessage333 {
       constructor(data) {
         super();
         this.result = { case: void 0 };
@@ -78,7 +78,7 @@ var init_apply_agent_diff_tool_pb = __esm({
         return ["ApplyAgentDiffResult|1 success #0 result|2 error #1 result", ApplyAgentDiffSuccess, ApplyAgentDiffError];
       }
     };
-    ApplyAgentDiffSuccess = class _ApplyAgentDiffSuccess extends __protoMessage332 {
+    ApplyAgentDiffSuccess = class _ApplyAgentDiffSuccess extends __protoMessage333 {
       constructor(data) {
         super();
         this.appliedChanges = [];
@@ -100,7 +100,7 @@ var init_apply_agent_diff_tool_pb = __esm({
         return ["ApplyAgentDiffSuccess|1 applied_changes #0*", AppliedAgentChange];
       }
     };
-    AppliedAgentChange = class _AppliedAgentChange extends __protoMessage332 {
+    AppliedAgentChange = class _AppliedAgentChange extends __protoMessage333 {
       constructor(data) {
         super();
         this.path = "";
@@ -123,8 +123,8 @@ var init_apply_agent_diff_tool_pb = __esm({
         return ["AppliedAgentChange|1 path 9|2 change_type #0|3 before_content 9?|4 after_content 9?|5 error 9?|6 message_for_model 9?", AppliedAgentChange_ChangeType];
       }
     };
-    AppliedAgentChange_ChangeType = /* @__PURE__ */ enumType2(proto3, __protoPackage32, "AppliedAgentChange.ChangeType", [[0, "UNSPECIFIED"], [1, "CREATED"], [2, "MODIFIED"], [3, "DELETED"]], 1);
-    ApplyAgentDiffError = class _ApplyAgentDiffError extends __protoMessage332 {
+    AppliedAgentChange_ChangeType = /* @__PURE__ */ enumType2(proto3, __protoPackage33, "AppliedAgentChange.ChangeType", [[0, "UNSPECIFIED"], [1, "CREATED"], [2, "MODIFIED"], [3, "DELETED"]], 1);
+    ApplyAgentDiffError = class _ApplyAgentDiffError extends __protoMessage333 {
       constructor(data) {
         super();
         this.error = "";

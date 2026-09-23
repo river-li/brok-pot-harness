@@ -24,7 +24,7 @@ function changedSandProfileFields(patch) {
 function refuseSandProfileUpdate(patch) {
   if (changedSandProfileFields(patch).length === 0) {
     return stateWriteFailed(
-      "nothing to change \u2014 pass at least one of name, description, title, avatar_shape, or avatar_color."
+      "nothing to change. Pass at least one of name, description, title, avatar_shape, or avatar_color."
     );
   }
   if (patch.name !== void 0 && patch.name.trim().length === 0) {

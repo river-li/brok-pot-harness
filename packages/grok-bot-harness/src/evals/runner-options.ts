@@ -35,6 +35,7 @@ function composeEvalRunnerGates(overrides = {}) {
     lessSubagentFanout: fixedGate(false, EVAL_RUNNER_PIN),
     reducePeerChatter: fixedGate(false, EVAL_RUNNER_PIN),
     leanSendToUserDescription: fixedGate(false, EVAL_RUNNER_PIN),
+    sendToUserReminderDelegation: fixedGate(false, EVAL_RUNNER_PIN),
     activeReactions: fixedGate(false, EVAL_RUNNER_PIN),
     internalDetailsBoundary: fixedGate(false, EVAL_RUNNER_PIN),
     agentDescription: fixedGate(true, EVAL_RUNNER_PIN),
@@ -50,7 +51,9 @@ function composeEvalRunnerGates(overrides = {}) {
     onePasswordIntegration: fixedGate(false, EVAL_RUNNER_PIN),
     agentEmail: fixedGate(false, EVAL_RUNNER_PIN),
     agentEmailMultipleInboxes: fixedGate(false, EVAL_RUNNER_PIN),
-    generalizedSelfSummaryPrompt: fixedGate(false, EVAL_RUNNER_PIN)
+    generalizedSelfSummaryPrompt: fixedGate(false, EVAL_RUNNER_PIN),
+    widgetV0: fixedGate(false, EVAL_RUNNER_PIN),
+    turnEndThroughAgent: fixedGate(true, EVAL_RUNNER_PIN)
   });
   const gates = { ...baseline };
   for (const name17 in overrides) {

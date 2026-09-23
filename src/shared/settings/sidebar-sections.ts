@@ -45,6 +45,12 @@ var SidebarSections = class _SidebarSections {
     }
     return _SidebarSections.normalize(records2);
   }
+  static areEqual(left, right) {
+    return left.length === right.length && left.every((section, index) => {
+      const other = right[index];
+      return other !== void 0 && section.id === other.id && section.name === other.name && section.agentIds.length === other.agentIds.length && section.agentIds.every((agentId, at3) => agentId === other.agentIds[at3]);
+    });
+  }
   static withFolds(sections, collapsedSectionIds) {
     const collapsed = new Set(collapsedSectionIds);
     return sections.map((section) => ({

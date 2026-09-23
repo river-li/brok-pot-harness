@@ -73,7 +73,7 @@ function buildComputerActionCoreSchema(actions = COMPUTER_ACTIONS, options2) {
     text: withFieldDescription(external_exports.string().optional(), "Text to type. Required for type."),
     key: withFieldDescription(
       external_exports.string().optional(),
-      "Key or chord in xdotool form, e.g. Return, ctrl+a, Alt+Left. Required for key. A shortcut meant to open a palette or search may not register \u2014 check the returned screenshot that it opened and holds focus before typing a query into it."
+      "Key or chord in xdotool form, e.g. Return, ctrl+a, Alt+Left. Required for key. A shortcut meant to open a palette or search may not register. Check the returned screenshot that it opened and holds focus before typing a query into it."
     ),
     button: withFieldDescription(
       external_exports.enum(["left", "right", "middle"]).optional(),
@@ -168,7 +168,7 @@ function buildFollowUpParameter(autoReview) {
   );
 }
 function batchingSentence(autoReview) {
-  return isAutoReviewEnforcing(autoReview) ? "When you already know the next few steps without needing to see the screen between them \u2014 scrolling several times to read further down, nudging the pointer before acting \u2014 put them in then so they run in one call; that is several times faster than one call per action." : "When you already know the next few steps without needing to see the screen between them \u2014 typing into a field you just clicked, scrolling several times to read further down, pressing Tab through a form \u2014 put them in then so they run in one call; that is several times faster than one call per action.";
+  return isAutoReviewEnforcing(autoReview) ? "When you already know the next few steps without needing to see the screen between them, such as scrolling several times to read further down or nudging the pointer before acting, put them in then so they run in one call; that is several times faster than one call per action." : "When you already know the next few steps without needing to see the screen between them, such as typing into a field you just clicked, scrolling several times to read further down, or pressing Tab through a form, put them in then so they run in one call; that is several times faster than one call per action.";
 }
 function buildComputerParameters(autoReview) {
   const shape = {
@@ -358,7 +358,7 @@ function describeOutcome(result, operation) {
   ];
   if (success2.screenshotPath != null && success2.screenshotPath.length > 0) {
     lines2.push(
-      operation === "screenshot" ? `Screenshot saved to ${success2.screenshotPath} \u2014 attach this file:// path with SendToUser to show the user the box.` : `Screenshot of the resulting screen saved to ${success2.screenshotPath} \u2014 include this file:// path in your report to the parent if it should be shown to the user.`
+      operation === "screenshot" ? `Screenshot saved to ${success2.screenshotPath}, and to show the user the box, attach this file:// path with SendToUser.` : `Screenshot of the resulting screen saved to ${success2.screenshotPath}, and if it should be shown to the user, include this file:// path in your report to the parent.`
     );
   }
   if (success2.cursorPosition != null) {

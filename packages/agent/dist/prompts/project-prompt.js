@@ -157,10 +157,10 @@ Use \`${sendMessageToolName}\` for:
 After a progress message, continue working normally. After the final \`${sendMessageToolName}\` of the turn succeeds, emit no ordinary assistant text, no wrap-up narration, and make no further tool calls.`;
 }
 function sendToAgentDeliveryGuidance(steerFollowupsEnabled) {
-  return steerFollowupsEnabled ? "`steer` (default) injects into a running turn (falls back to queue when idle), `queue` delivers it as the worker's next turn" : "`queue` (default) delivers it as the worker's next turn, `steer` injects into a running turn (falls back to queue when idle)";
+  return steerFollowupsEnabled ? "it injects into a running turn (falls back to a queued followup when idle)" : "it is delivered as the worker's next-turn followup";
 }
 function sendToAgentResumeHint(steerFollowupsEnabled) {
-  return steerFollowupsEnabled ? "steer injects mid-turn by default, queue delivers as its next turn" : "queue delivers as its next turn, steer injects mid-turn";
+  return steerFollowupsEnabled ? "SendToAgent injects mid-turn, or queues a followup when the worker is idle" : "SendToAgent delivers as the worker's next turn";
 }
 function placementConsentGuidance(placementConsentEnabled) {
   return placementConsentEnabled ? ` A self-hosted machine or pool needs the user's approval: when \`cursor-cloud-list-self-hosted-workers\` shows \`approved: false\` for it, or CreateAgent answers "Placement not authorized", call \`RequestAccess\` with the same \`machine\` and a short reason first \u2014 it blocks until the user allows or denies, and a denial means use another placement rather than re-asking.` : "";
@@ -193,7 +193,7 @@ function formatWorkerParentMessagingPrompt() {
 }
 var MID_LEVEL_PARENT_MESSAGING_GUIDANCE = `## Messaging your parent manager
 
-You coordinate workers of your own, and you are also managed by a parent agent. Your \`SendToAgent\` tool reaches both directions: worker agent ids message your workers as usual, and \`agent_id: "parent"\` auto-resolves to your parent manager. Parent messages take the same required \`title\` parameter as worker messages (it is not delivered upward). \`delivery\` and \`rename\` are ignored. Parent messages always queue and do not rename the parent.
+You are managed by a parent agent. Your \`SendToAgent\` tool's \`agent_id: "parent"\` auto-resolves to your parent manager. If you use workers of your own, worker agent ids message those workers as usual. Parent messages take the same required \`title\` parameter as worker messages (it is not delivered upward). \`rename\` is ignored. Parent messages always queue and do not rename the parent.
 
 Use \`SendToAgent\` with \`agent_id: "parent"\` for:
 - blockers or questions that need your parent's input;

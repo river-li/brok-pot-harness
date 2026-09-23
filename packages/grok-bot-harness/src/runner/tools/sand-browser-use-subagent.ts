@@ -12,7 +12,7 @@ function createSandBrowserUseSubagentConfig(options2) {
       }
     }),
     description: [
-      "Delegate a self-contained web task to a background subagent that drives your box's browser at the page level \u2014 navigating, reading structured page snapshots, clicking elements by reference, filling forms, and taking screenshots \u2014 without touching the desktop's mouse or keyboard.",
+      "Delegate a self-contained web task to a background subagent that drives your box's browser at the page level without touching the desktop's mouse or keyboard. It navigates, reads structured page snapshots, clicks elements by reference, fills forms, and takes screenshots.",
       "Prefer it over computerUse for browser-only work: page snapshots give it exact element targets, so it is faster and more reliable than pixel clicking, and it shares the box browser's persistent logins.",
       "Use computerUse instead when the task needs the desktop itself (GUI apps, file dialogs, drag interactions) or a site that defeats DOM automation.",
       "It runs in the background like any Task: you are notified when it finishes, so do not poll or await it.",

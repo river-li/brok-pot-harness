@@ -1,22 +1,22 @@
-var __protoPackage25, __protoMessage325, LintSeverity, FeatureType, EmbeddingModel, CursorPosition, SelectionWithOrientation, GetDiffRequest, GetDiffRequest_OutputFormat, GetDiffResponse, GetDiffResponse_SubmoduleDiff, SimplestRange, GitDiff, GitDiff_DiffType, FileDiff, FileDiff_Chunk, SimpleRange, CmdKDebugInfo, CmdKDebugInfo_UnsavedFiles, CmdKDebugInfo_OpenEditor, CmdKDebugInfo_CppFileDiffHistory, CmdKDebugInfo_PastThought, LineRange, CursorRange, DetailedLine, CodeBlock, CodeBlock_Signatures, GitCommit, FileGit, File2, Diagnostic2, Diagnostic_DiagnosticSeverity, Diagnostic_RelatedInformation, Lint, BM25Chunk, CurrentFileInfo, CurrentFileInfo_NotebookCell, AzureState, BedrockState, ModelDetails, CloudAgentModelSelection, CloudAgentModelSelection_ParameterValue, ModelInfo, DataframeInfo, DataframeInfo_Column, LinterError, LinterErrors, LinterErrorsWithoutFileContents, CursorRule2, ExplicitContext, MCPInstructions, DocumentSymbol, DocumentSymbol_SymbolKind, DocumentSymbol_Range, HoverDetails, UriComponents, DocumentSymbolWithText, ErrorDetails, ErrorDetails_Error, CustomErrorDetails, ErrorAnalyticsMetadata, PlanChoice, ErrorButton, ClientAction, ReloadWindowAction, DashboardAction, UpgradeChoice, UpgradeAction, SwitchModelAction, SwitchModelAction_ModelParameterValue, ConfigureSpendLimitAction, UrlAction, ImageProto, ImageProto_Dimension, ChatQuote, ChatExternalLink, ComposerExternalLink, CmdKExternalLink, CommitNote, CommitNoteWithEmbeddings, CommitDiffString, CodeChunk, CodeChunk_Intent, CodeChunk_SummarizationStrategy, RCPCallFrame, RCPStackTrace, RCPLogEntry, RCPUIElementPicked;
+var __protoPackage26, __protoMessage326, LintSeverity, FeatureType, EmbeddingModel, CursorPosition, SelectionWithOrientation, GetDiffRequest, GetDiffRequest_OutputFormat, GetDiffResponse, GetDiffResponse_SubmoduleDiff, SimplestRange, GitDiff, GitDiff_DiffType, FileDiff, FileDiff_Chunk, SimpleRange, CmdKDebugInfo, CmdKDebugInfo_UnsavedFiles, CmdKDebugInfo_OpenEditor, CmdKDebugInfo_CppFileDiffHistory, CmdKDebugInfo_PastThought, LineRange, CursorRange, DetailedLine, CodeBlock, CodeBlock_Signatures, GitCommit, FileGit, File2, Diagnostic2, Diagnostic_DiagnosticSeverity, Diagnostic_RelatedInformation, Lint, BM25Chunk, CurrentFileInfo, CurrentFileInfo_NotebookCell, AzureState, BedrockState, ModelDetails, CloudAgentModelSelection, CloudAgentModelSelection_ParameterValue, ModelInfo, DataframeInfo, DataframeInfo_Column, LinterError, LinterErrors, LinterErrorsWithoutFileContents, CursorRule2, ExplicitContext, MCPInstructions, DocumentSymbol, DocumentSymbol_SymbolKind, DocumentSymbol_Range, HoverDetails, UriComponents, DocumentSymbolWithText, ErrorDetails, ErrorDetails_Error, CustomErrorDetails, ErrorAnalyticsMetadata, PlanChoice, ErrorButton, ClientAction, ReloadWindowAction, DashboardAction, UpgradeChoice, UpgradeAction, SwitchModelAction, SwitchModelAction_ModelParameterValue, ConfigureSpendLimitAction, UrlAction, ImageProto, ImageProto_Dimension, ChatQuote, ChatExternalLink, ComposerExternalLink, CmdKExternalLink, CommitNote, CommitNoteWithEmbeddings, CommitDiffString, CodeChunk, CodeChunk_Intent, CodeChunk_SummarizationStrategy, RCPCallFrame, RCPStackTrace, RCPLogEntry, RCPUIElementPicked;
 var init_utils_pb2 = __esm({
   "../packages/proto/dist/generated/aiserver/v1/utils_pb.js"() {
     "use strict";
     init_esm13();
     init_compact();
-    __protoPackage25 = "aiserver.v1.";
-    __protoMessage325 = class extends CompactMessage {
+    __protoPackage26 = "aiserver.v1.";
+    __protoMessage326 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage25;
+        return __protoPackage26;
       }
     };
-    LintSeverity = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "LintSeverity", [[0, "UNSPECIFIED"], [1, "ERROR"], [2, "WARNING"], [3, "INFO"], [4, "HINT"], [5, "AI"]], 1);
-    FeatureType = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "FeatureType", [[0, "UNSPECIFIED"], [1, "EDIT"], [2, "GENERATE"], [3, "INLINE_LONG_COMPLETION"]], 1);
-    EmbeddingModel = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "EmbeddingModel", [[0, "UNSPECIFIED"], [1, "VOYAGE_CODE_2"], [2, "TEXT_EMBEDDINGS_LARGE_3"], [3, "QWEN_1_5B_CUSTOM"], [4, "MOCK_CHUNKER_ERROR"], [5, "QWEN_1_5B_0618_CUSTOM"], [6, "QWEN_1_5B_0618_FP8_MM_CUSTOM"]], 1);
-    CursorPosition = class _CursorPosition extends __protoMessage325 {
+    LintSeverity = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "LintSeverity", [[0, "UNSPECIFIED"], [1, "ERROR"], [2, "WARNING"], [3, "INFO"], [4, "HINT"], [5, "AI"]], 1);
+    FeatureType = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "FeatureType", [[0, "UNSPECIFIED"], [1, "EDIT"], [2, "GENERATE"], [3, "INLINE_LONG_COMPLETION"]], 1);
+    EmbeddingModel = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "EmbeddingModel", [[0, "UNSPECIFIED"], [1, "VOYAGE_CODE_2"], [2, "TEXT_EMBEDDINGS_LARGE_3"], [3, "QWEN_1_5B_CUSTOM"], [4, "MOCK_CHUNKER_ERROR"], [5, "QWEN_1_5B_0618_CUSTOM"], [6, "QWEN_1_5B_0618_FP8_MM_CUSTOM"]], 1);
+    CursorPosition = class _CursorPosition extends __protoMessage326 {
       constructor(data) {
         super();
         this.line = 0;
@@ -39,7 +39,7 @@ var init_utils_pb2 = __esm({
         return ["CursorPosition|1 line 5|2 column 5"];
       }
     };
-    SelectionWithOrientation = class _SelectionWithOrientation extends __protoMessage325 {
+    SelectionWithOrientation = class _SelectionWithOrientation extends __protoMessage326 {
       constructor(data) {
         super();
         this.selectionStartLineNumber = 0;
@@ -64,7 +64,7 @@ var init_utils_pb2 = __esm({
         return ["SelectionWithOrientation|1 selection_start_line_number 5|2 selection_start_column 5|3 position_line_number 5|4 position_column 5"];
       }
     };
-    GetDiffRequest = class _GetDiffRequest extends __protoMessage325 {
+    GetDiffRequest = class _GetDiffRequest extends __protoMessage326 {
       constructor(data) {
         super();
         this.cwd = "";
@@ -95,8 +95,8 @@ var init_utils_pb2 = __esm({
         return ["GetDiffRequest|1 cwd 9|2 ref 9|3 base_ref 9|4 merge_base 8|5 target_paths 9*|6 unified_context_lines 5?|7 max_untracked_files 5|9 submodule_recurse_depth 5|10 include_space_changes 8|11 committed_only 8|12 compute_patch_id 8|13 return_head_sha 8?|14 max_response_bytes 5?|15 max_files_with_contents 13?|8 output_format #0?", GetDiffRequest_OutputFormat];
       }
     };
-    GetDiffRequest_OutputFormat = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "GetDiffRequest.OutputFormat", [[0, "UNSPECIFIED"], [1, "NAME_STATUS"], [2, "NAME_STATUS_AND_NUMSTAT"], [3, "FILE_DIFFS"], [4, "DIFFS_WITH_BEFORE_AND_AFTER"]], 1);
-    GetDiffResponse = class _GetDiffResponse extends __protoMessage325 {
+    GetDiffRequest_OutputFormat = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "GetDiffRequest.OutputFormat", [[0, "UNSPECIFIED"], [1, "NAME_STATUS"], [2, "NAME_STATUS_AND_NUMSTAT"], [3, "FILE_DIFFS"], [4, "DIFFS_WITH_BEFORE_AND_AFTER"]], 1);
+    GetDiffResponse = class _GetDiffResponse extends __protoMessage326 {
       constructor(data) {
         super();
         this.submoduleDiffs = [];
@@ -118,7 +118,7 @@ var init_utils_pb2 = __esm({
         return ["GetDiffResponse|1 diff #0|2 submodule_diffs #1*|3 patch_id 9?|4 head_sha 9?|5 has_uncommitted_changes 8?", GitDiff, GetDiffResponse_SubmoduleDiff];
       }
     };
-    GetDiffResponse_SubmoduleDiff = class _GetDiffResponse_SubmoduleDiff extends __protoMessage325 {
+    GetDiffResponse_SubmoduleDiff = class _GetDiffResponse_SubmoduleDiff extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativePath = "";
@@ -141,7 +141,7 @@ var init_utils_pb2 = __esm({
         return ["GetDiffResponse.SubmoduleDiff|1 relative_path 9|2 diff #0|3 errored 8", GitDiff];
       }
     };
-    SimplestRange = class _SimplestRange extends __protoMessage325 {
+    SimplestRange = class _SimplestRange extends __protoMessage326 {
       constructor(data) {
         super();
         this.startLine = 0;
@@ -164,7 +164,7 @@ var init_utils_pb2 = __esm({
         return ["SimplestRange|1 start_line 5|2 end_line_inclusive 5"];
       }
     };
-    GitDiff = class _GitDiff extends __protoMessage325 {
+    GitDiff = class _GitDiff extends __protoMessage326 {
       constructor(data) {
         super();
         this.diffs = [];
@@ -187,8 +187,8 @@ var init_utils_pb2 = __esm({
         return ["GitDiff|1 diffs #0*|2 diff_type #1|3 file_contents_omitted 8?", FileDiff, GitDiff_DiffType];
       }
     };
-    GitDiff_DiffType = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "GitDiff.DiffType", [[0, "UNSPECIFIED"], [1, "DIFF_TO_HEAD"], [2, "DIFF_FROM_BRANCH_TO_MAIN"]], 1);
-    FileDiff = class _FileDiff extends __protoMessage325 {
+    GitDiff_DiffType = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "GitDiff.DiffType", [[0, "UNSPECIFIED"], [1, "DIFF_TO_HEAD"], [2, "DIFF_FROM_BRANCH_TO_MAIN"]], 1);
+    FileDiff = class _FileDiff extends __protoMessage326 {
       constructor(data) {
         super();
         this.added = 0;
@@ -214,7 +214,7 @@ var init_utils_pb2 = __esm({
         return ["FileDiff|4 added 5|5 removed 5|1 from 9|2 to 9|3 chunks #0*|6 before_file_contents 9?|7 after_file_contents 9?|8 is_generated 8?", FileDiff_Chunk];
       }
     };
-    FileDiff_Chunk = class _FileDiff_Chunk extends __protoMessage325 {
+    FileDiff_Chunk = class _FileDiff_Chunk extends __protoMessage326 {
       constructor(data) {
         super();
         this.content = "";
@@ -241,7 +241,7 @@ var init_utils_pb2 = __esm({
         return ["FileDiff.Chunk|1 content 9|2 lines 9*|3 old_start 5|4 old_lines 5|5 new_start 5|6 new_lines 5"];
       }
     };
-    SimpleRange = class _SimpleRange extends __protoMessage325 {
+    SimpleRange = class _SimpleRange extends __protoMessage326 {
       constructor(data) {
         super();
         this.startLineNumber = 0;
@@ -266,7 +266,7 @@ var init_utils_pb2 = __esm({
         return ["SimpleRange|1 start_line_number 5|2 start_column 5|3 end_line_number_inclusive 5|4 end_column 5"];
       }
     };
-    CmdKDebugInfo = class _CmdKDebugInfo extends __protoMessage325 {
+    CmdKDebugInfo = class _CmdKDebugInfo extends __protoMessage326 {
       constructor(data) {
         super();
         this.remoteUrl = "";
@@ -301,7 +301,7 @@ var init_utils_pb2 = __esm({
         return ["CmdKDebugInfo|1 remote_url 9|2 commit_id 9|3 git_patch 9|4 unsaved_files #0*|5 unix_timestamp_ms 1|6 open_editors #1*|7 file_diff_histories #2*|8 branch_name 9|9 branch_notes 9|12 branch_notes_rich 9|10 global_notes 9|11 past_thoughts #3*|13 base_branch_name 9|14 base_branch_commit_id 9", CmdKDebugInfo_UnsavedFiles, CmdKDebugInfo_OpenEditor, CmdKDebugInfo_CppFileDiffHistory, CmdKDebugInfo_PastThought];
       }
     };
-    CmdKDebugInfo_UnsavedFiles = class _CmdKDebugInfo_UnsavedFiles extends __protoMessage325 {
+    CmdKDebugInfo_UnsavedFiles = class _CmdKDebugInfo_UnsavedFiles extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -324,7 +324,7 @@ var init_utils_pb2 = __esm({
         return ["CmdKDebugInfo.UnsavedFiles|1 relative_workspace_path 9|2 contents 9"];
       }
     };
-    CmdKDebugInfo_OpenEditor = class _CmdKDebugInfo_OpenEditor extends __protoMessage325 {
+    CmdKDebugInfo_OpenEditor = class _CmdKDebugInfo_OpenEditor extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -349,7 +349,7 @@ var init_utils_pb2 = __esm({
         return ["CmdKDebugInfo.OpenEditor|1 relative_workspace_path 9|2 editor_group_index 5|3 editor_group_id 5|4 is_active 8"];
       }
     };
-    CmdKDebugInfo_CppFileDiffHistory = class _CmdKDebugInfo_CppFileDiffHistory extends __protoMessage325 {
+    CmdKDebugInfo_CppFileDiffHistory = class _CmdKDebugInfo_CppFileDiffHistory extends __protoMessage326 {
       constructor(data) {
         super();
         this.fileName = "";
@@ -372,7 +372,7 @@ var init_utils_pb2 = __esm({
         return ["CmdKDebugInfo.CppFileDiffHistory|1 file_name 9|2 diff_history 9*"];
       }
     };
-    CmdKDebugInfo_PastThought = class _CmdKDebugInfo_PastThought extends __protoMessage325 {
+    CmdKDebugInfo_PastThought = class _CmdKDebugInfo_PastThought extends __protoMessage326 {
       constructor(data) {
         super();
         this.text = "";
@@ -395,7 +395,7 @@ var init_utils_pb2 = __esm({
         return ["CmdKDebugInfo.PastThought|1 text 9|2 time_in_unix_seconds 1"];
       }
     };
-    LineRange = class _LineRange extends __protoMessage325 {
+    LineRange = class _LineRange extends __protoMessage326 {
       constructor(data) {
         super();
         this.startLineNumber = 0;
@@ -418,7 +418,7 @@ var init_utils_pb2 = __esm({
         return ["LineRange|1 start_line_number 5|2 end_line_number_inclusive 5"];
       }
     };
-    CursorRange = class _CursorRange extends __protoMessage325 {
+    CursorRange = class _CursorRange extends __protoMessage326 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -439,7 +439,7 @@ var init_utils_pb2 = __esm({
         return ["CursorRange|1 start_position #0|2 end_position #0", CursorPosition];
       }
     };
-    DetailedLine = class _DetailedLine extends __protoMessage325 {
+    DetailedLine = class _DetailedLine extends __protoMessage326 {
       constructor(data) {
         super();
         this.text = "";
@@ -463,7 +463,7 @@ var init_utils_pb2 = __esm({
         return ["DetailedLine|1 text 9|2 line_number 2|3 is_signature 8"];
       }
     };
-    CodeBlock = class _CodeBlock extends __protoMessage325 {
+    CodeBlock = class _CodeBlock extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -487,7 +487,7 @@ var init_utils_pb2 = __esm({
         return ["CodeBlock|1 relative_workspace_path 9|2 file_contents 9?|9 file_contents_length 5?|3 range #0|4 contents 9|5 signatures #1|6 override_contents 9?|7 original_contents 9?|8 detailed_lines #2*|10 file_git_context #3", CursorRange, CodeBlock_Signatures, DetailedLine, FileGit];
       }
     };
-    CodeBlock_Signatures = class _CodeBlock_Signatures extends __protoMessage325 {
+    CodeBlock_Signatures = class _CodeBlock_Signatures extends __protoMessage326 {
       constructor(data) {
         super();
         this.ranges = [];
@@ -509,7 +509,7 @@ var init_utils_pb2 = __esm({
         return ["CodeBlock.Signatures|1 ranges #0*", CursorRange];
       }
     };
-    GitCommit = class _GitCommit extends __protoMessage325 {
+    GitCommit = class _GitCommit extends __protoMessage326 {
       constructor(data) {
         super();
         this.commit = "";
@@ -534,7 +534,7 @@ var init_utils_pb2 = __esm({
         return ["GitCommit|1 commit 9|2 author 9|3 date 9|4 message 9"];
       }
     };
-    FileGit = class _FileGit extends __protoMessage325 {
+    FileGit = class _FileGit extends __protoMessage326 {
       constructor(data) {
         super();
         this.commits = [];
@@ -556,7 +556,7 @@ var init_utils_pb2 = __esm({
         return ["FileGit|1 commits #0*", GitCommit];
       }
     };
-    File2 = class _File extends __protoMessage325 {
+    File2 = class _File extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -579,7 +579,7 @@ var init_utils_pb2 = __esm({
         return ["File|1 relative_workspace_path 9|2 contents 9|3 file_git_context #0", FileGit];
       }
     };
-    Diagnostic2 = class _Diagnostic extends __protoMessage325 {
+    Diagnostic2 = class _Diagnostic extends __protoMessage326 {
       constructor(data) {
         super();
         this.message = "";
@@ -603,8 +603,8 @@ var init_utils_pb2 = __esm({
         return ["Diagnostic|1 message 9|2 range #0|3 severity #1|4 related_information #2*", CursorRange, Diagnostic_DiagnosticSeverity, Diagnostic_RelatedInformation];
       }
     };
-    Diagnostic_DiagnosticSeverity = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "Diagnostic.DiagnosticSeverity", [[0, "UNSPECIFIED"], [1, "ERROR"], [2, "WARNING"], [3, "INFORMATION"], [4, "HINT"]], 1);
-    Diagnostic_RelatedInformation = class _Diagnostic_RelatedInformation extends __protoMessage325 {
+    Diagnostic_DiagnosticSeverity = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "Diagnostic.DiagnosticSeverity", [[0, "UNSPECIFIED"], [1, "ERROR"], [2, "WARNING"], [3, "INFORMATION"], [4, "HINT"]], 1);
+    Diagnostic_RelatedInformation = class _Diagnostic_RelatedInformation extends __protoMessage326 {
       constructor(data) {
         super();
         this.message = "";
@@ -626,7 +626,7 @@ var init_utils_pb2 = __esm({
         return ["Diagnostic.RelatedInformation|1 message 9|2 range #0", CursorRange];
       }
     };
-    Lint = class _Lint extends __protoMessage325 {
+    Lint = class _Lint extends __protoMessage326 {
       constructor(data) {
         super();
         this.message = "";
@@ -649,7 +649,7 @@ var init_utils_pb2 = __esm({
         return ["Lint|1 message 9|2 range #0|3 severity #1", SimpleRange, LintSeverity];
       }
     };
-    BM25Chunk = class _BM25Chunk extends __protoMessage325 {
+    BM25Chunk = class _BM25Chunk extends __protoMessage326 {
       constructor(data) {
         super();
         this.content = "";
@@ -673,7 +673,7 @@ var init_utils_pb2 = __esm({
         return ["BM25Chunk|1 content 9|2 range #0|3 score 5|4 relative_path 9", SimplestRange];
       }
     };
-    CurrentFileInfo = class _CurrentFileInfo extends __protoMessage325 {
+    CurrentFileInfo = class _CurrentFileInfo extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -706,7 +706,7 @@ var init_utils_pb2 = __esm({
         return ["CurrentFileInfo|1 relative_workspace_path 9|2 contents 9|18 rely_on_filesync 8|17 sha_256_hash 9?|16 cells #0*|10 top_chunks #1*|9 contents_start_at_line 5|3 cursor_position #2|4 dataframes #3*|8 total_number_of_lines 5|5 language_id 9|6 selection #4|11 alternative_version_id 5?|7 diagnostics #5*|14 file_version 5?|15 cell_start_lines 5*|19 workspace_root_path 9|20 line_ending 9?", CurrentFileInfo_NotebookCell, BM25Chunk, CursorPosition, DataframeInfo, CursorRange, Diagnostic2];
       }
     };
-    CurrentFileInfo_NotebookCell = class _CurrentFileInfo_NotebookCell extends __protoMessage325 {
+    CurrentFileInfo_NotebookCell = class _CurrentFileInfo_NotebookCell extends __protoMessage326 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -727,7 +727,7 @@ var init_utils_pb2 = __esm({
         return ["CurrentFileInfo.NotebookCell"];
       }
     };
-    AzureState = class _AzureState extends __protoMessage325 {
+    AzureState = class _AzureState extends __protoMessage326 {
       constructor(data) {
         super();
         this.apiKey = "";
@@ -752,7 +752,7 @@ var init_utils_pb2 = __esm({
         return ["AzureState|1 api_key 9|2 base_url 9|3 deployment 9|4 use_azure 8"];
       }
     };
-    BedrockState = class _BedrockState extends __protoMessage325 {
+    BedrockState = class _BedrockState extends __protoMessage326 {
       constructor(data) {
         super();
         this.accessKey = "";
@@ -778,7 +778,7 @@ var init_utils_pb2 = __esm({
         return ["BedrockState|1 access_key 9|2 secret_key 9|3 region 9|4 use_bedrock 8|5 session_token 9"];
       }
     };
-    ModelDetails = class _ModelDetails extends __protoMessage325 {
+    ModelDetails = class _ModelDetails extends __protoMessage326 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -799,7 +799,7 @@ var init_utils_pb2 = __esm({
         return ["ModelDetails|1 model_name 9?|2 api_key 9?|3 enable_ghost_mode 8?|4 azure_state #0?|5 enable_slow_pool 8?|6 openai_api_base_url 9?|7 bedrock_state #1?|8 max_mode 8?", AzureState, BedrockState];
       }
     };
-    CloudAgentModelSelection = class _CloudAgentModelSelection extends __protoMessage325 {
+    CloudAgentModelSelection = class _CloudAgentModelSelection extends __protoMessage326 {
       constructor(data) {
         super();
         this.modelId = "";
@@ -822,7 +822,7 @@ var init_utils_pb2 = __esm({
         return ["CloudAgentModelSelection|1 model_id 9|2 parameters #0*|3 max_mode 8?", CloudAgentModelSelection_ParameterValue];
       }
     };
-    CloudAgentModelSelection_ParameterValue = class _CloudAgentModelSelection_ParameterValue extends __protoMessage325 {
+    CloudAgentModelSelection_ParameterValue = class _CloudAgentModelSelection_ParameterValue extends __protoMessage326 {
       constructor(data) {
         super();
         this.id = "";
@@ -845,7 +845,7 @@ var init_utils_pb2 = __esm({
         return ["CloudAgentModelSelection.ParameterValue|1 id 9|2 value 9"];
       }
     };
-    ModelInfo = class _ModelInfo extends __protoMessage325 {
+    ModelInfo = class _ModelInfo extends __protoMessage326 {
       constructor(data) {
         super();
         this.modelName = "";
@@ -867,7 +867,7 @@ var init_utils_pb2 = __esm({
         return ["ModelInfo|1 model_name 9"];
       }
     };
-    DataframeInfo = class _DataframeInfo extends __protoMessage325 {
+    DataframeInfo = class _DataframeInfo extends __protoMessage326 {
       constructor(data) {
         super();
         this.name = "";
@@ -894,7 +894,7 @@ var init_utils_pb2 = __esm({
         return ["DataframeInfo|1 name 9|2 shape 9|3 data_dimensionality 5|6 columns #0*|7 row_count 5|8 index_column 9", DataframeInfo_Column];
       }
     };
-    DataframeInfo_Column = class _DataframeInfo_Column extends __protoMessage325 {
+    DataframeInfo_Column = class _DataframeInfo_Column extends __protoMessage326 {
       constructor(data) {
         super();
         this.key = "";
@@ -917,7 +917,7 @@ var init_utils_pb2 = __esm({
         return ["DataframeInfo.Column|1 key 9|2 type 9"];
       }
     };
-    LinterError = class _LinterError extends __protoMessage325 {
+    LinterError = class _LinterError extends __protoMessage326 {
       constructor(data) {
         super();
         this.message = "";
@@ -940,7 +940,7 @@ var init_utils_pb2 = __esm({
         return ["LinterError|1 message 9|2 range #0|3 source 9?|4 related_information #1*|5 severity #2?|6 is_stale 8?", CursorRange, Diagnostic_RelatedInformation, Diagnostic_DiagnosticSeverity];
       }
     };
-    LinterErrors = class _LinterErrors extends __protoMessage325 {
+    LinterErrors = class _LinterErrors extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -964,7 +964,7 @@ var init_utils_pb2 = __esm({
         return ["LinterErrors|1 relative_workspace_path 9|2 errors #0*|3 file_contents 9", LinterError];
       }
     };
-    LinterErrorsWithoutFileContents = class _LinterErrorsWithoutFileContents extends __protoMessage325 {
+    LinterErrorsWithoutFileContents = class _LinterErrorsWithoutFileContents extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -987,7 +987,7 @@ var init_utils_pb2 = __esm({
         return ["LinterErrorsWithoutFileContents|1 relative_workspace_path 9|2 errors #0*", LinterError];
       }
     };
-    CursorRule2 = class _CursorRule extends __protoMessage325 {
+    CursorRule2 = class _CursorRule extends __protoMessage326 {
       constructor(data) {
         super();
         this.name = "";
@@ -1012,7 +1012,7 @@ var init_utils_pb2 = __esm({
         return ["CursorRule|1 name 9|2 description 9|3 body 9?|4 is_from_glob 8?|5 always_apply 8?|6 attach_to_background_agents 8?|7 full_path 9?|8 environments 9*|9 disabled_environments 9*|10 plugin 9?|11 marketplace 9?"];
       }
     };
-    ExplicitContext = class _ExplicitContext extends __protoMessage325 {
+    ExplicitContext = class _ExplicitContext extends __protoMessage326 {
       constructor(data) {
         super();
         this.context = "";
@@ -1036,7 +1036,7 @@ var init_utils_pb2 = __esm({
         return ["ExplicitContext|1 context 9|2 repo_context 9?|3 rules #0*|4 mode_specific_context 9?|5 mcp_instructions #1*", CursorRule2, MCPInstructions];
       }
     };
-    MCPInstructions = class _MCPInstructions extends __protoMessage325 {
+    MCPInstructions = class _MCPInstructions extends __protoMessage326 {
       constructor(data) {
         super();
         this.serverName = "";
@@ -1060,7 +1060,7 @@ var init_utils_pb2 = __esm({
         return ["MCPInstructions|1 server_name 9|2 server_identifier 9|3 instructions 9"];
       }
     };
-    DocumentSymbol = class _DocumentSymbol extends __protoMessage325 {
+    DocumentSymbol = class _DocumentSymbol extends __protoMessage326 {
       constructor(data) {
         super();
         this.name = "";
@@ -1086,8 +1086,8 @@ var init_utils_pb2 = __esm({
         return ["DocumentSymbol|1 name 9|2 detail 9|3 kind #0|5 container_name 9|6 range #1|7 selection_range #1|8 children #2*", DocumentSymbol_SymbolKind, DocumentSymbol_Range, _DocumentSymbol];
       }
     };
-    DocumentSymbol_SymbolKind = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "DocumentSymbol.SymbolKind", [[0, "UNSPECIFIED"], [1, "FILE"], [2, "MODULE"], [3, "NAMESPACE"], [4, "PACKAGE"], [5, "CLASS"], [6, "METHOD"], [7, "PROPERTY"], [8, "FIELD"], [9, "CONSTRUCTOR"], [10, "ENUM"], [11, "INTERFACE"], [12, "FUNCTION"], [13, "VARIABLE"], [14, "CONSTANT"], [15, "STRING"], [16, "NUMBER"], [17, "BOOLEAN"], [18, "ARRAY"], [19, "OBJECT"], [20, "KEY"], [21, "NULL"], [22, "ENUM_MEMBER"], [23, "STRUCT"], [24, "EVENT"], [25, "OPERATOR"], [26, "TYPE_PARAMETER"]], 1);
-    DocumentSymbol_Range = class _DocumentSymbol_Range extends __protoMessage325 {
+    DocumentSymbol_SymbolKind = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "DocumentSymbol.SymbolKind", [[0, "UNSPECIFIED"], [1, "FILE"], [2, "MODULE"], [3, "NAMESPACE"], [4, "PACKAGE"], [5, "CLASS"], [6, "METHOD"], [7, "PROPERTY"], [8, "FIELD"], [9, "CONSTRUCTOR"], [10, "ENUM"], [11, "INTERFACE"], [12, "FUNCTION"], [13, "VARIABLE"], [14, "CONSTANT"], [15, "STRING"], [16, "NUMBER"], [17, "BOOLEAN"], [18, "ARRAY"], [19, "OBJECT"], [20, "KEY"], [21, "NULL"], [22, "ENUM_MEMBER"], [23, "STRUCT"], [24, "EVENT"], [25, "OPERATOR"], [26, "TYPE_PARAMETER"]], 1);
+    DocumentSymbol_Range = class _DocumentSymbol_Range extends __protoMessage326 {
       constructor(data) {
         super();
         this.startLineNumber = 0;
@@ -1112,7 +1112,7 @@ var init_utils_pb2 = __esm({
         return ["DocumentSymbol.Range|1 start_line_number 5|2 start_column 5|3 end_line_number 5|4 end_column 5"];
       }
     };
-    HoverDetails = class _HoverDetails extends __protoMessage325 {
+    HoverDetails = class _HoverDetails extends __protoMessage326 {
       constructor(data) {
         super();
         this.codeDetails = "";
@@ -1135,7 +1135,7 @@ var init_utils_pb2 = __esm({
         return ["HoverDetails|1 code_details 9|2 markdown_blocks 9*"];
       }
     };
-    UriComponents = class _UriComponents extends __protoMessage325 {
+    UriComponents = class _UriComponents extends __protoMessage326 {
       constructor(data) {
         super();
         this.scheme = "";
@@ -1157,7 +1157,7 @@ var init_utils_pb2 = __esm({
         return ["UriComponents|1 scheme 9|2 authority 9?|3 path 9?|4 query 9?|5 fragment 9?"];
       }
     };
-    DocumentSymbolWithText = class _DocumentSymbolWithText extends __protoMessage325 {
+    DocumentSymbolWithText = class _DocumentSymbolWithText extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -1180,7 +1180,7 @@ var init_utils_pb2 = __esm({
         return ["DocumentSymbolWithText|1 symbol #0|2 relative_workspace_path 9|3 text_in_symbol_range 9|4 uri_components #1", DocumentSymbol, UriComponents];
       }
     };
-    ErrorDetails = class _ErrorDetails extends __protoMessage325 {
+    ErrorDetails = class _ErrorDetails extends __protoMessage326 {
       constructor(data) {
         super();
         this.error = ErrorDetails_Error.UNSPECIFIED;
@@ -1202,8 +1202,8 @@ var init_utils_pb2 = __esm({
         return ["ErrorDetails|1 error #0|2 details #1|3 is_expected 8?", ErrorDetails_Error, CustomErrorDetails];
       }
     };
-    ErrorDetails_Error = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "ErrorDetails.Error", [[0, "UNSPECIFIED"], [1, "BAD_API_KEY"], [42, "BAD_USER_API_KEY"], [2, "NOT_LOGGED_IN"], [3, "INVALID_AUTH_ID"], [4, "NOT_HIGH_ENOUGH_PERMISSIONS"], [18, "AGENT_REQUIRES_LOGIN"], [5, "BAD_MODEL_NAME"], [39, "NOT_FOUND"], [40, "DEPRECATED"], [6, "USER_NOT_FOUND"], [7, "FREE_USER_RATE_LIMIT_EXCEEDED"], [8, "PRO_USER_RATE_LIMIT_EXCEEDED"], [9, "FREE_USER_USAGE_LIMIT"], [10, "PRO_USER_USAGE_LIMIT"], [41, "RESOURCE_EXHAUSTED"], [11, "AUTH_TOKEN_NOT_FOUND"], [12, "AUTH_TOKEN_EXPIRED"], [13, "OPENAI"], [14, "OPENAI_RATE_LIMIT_EXCEEDED"], [20, "MAX_TOKENS"], [23, "PRO_USER_ONLY"], [21, "USER_ABORTED_REQUEST"], [25, "TIMEOUT"], [22, "GENERIC_RATE_LIMIT_EXCEEDED"], [28, "GPT_4_VISION_PREVIEW_RATE_LIMIT"], [29, "CUSTOM_MESSAGE"], [30, "OUTDATED_CLIENT"], [31, "CLAUDE_IMAGE_TOO_LARGE"], [33, "FILE_NOT_FOUND"], [34, "API_KEY_RATE_LIMIT"], [35, "DEBOUNCED"], [36, "BAD_REQUEST"], [37, "REPOSITORY_SERVICE_REPOSITORY_IS_NOT_INITIALIZED"], [38, "UNAUTHORIZED"], [43, "CONVERSATION_TOO_LONG"], [44, "USAGE_PRICING_REQUIRED"], [45, "USAGE_PRICING_REQUIRED_CHANGEABLE"], [46, "GITHUB_NO_USER_CREDENTIALS"], [47, "GITHUB_USER_NO_ACCESS"], [48, "GITHUB_APP_NO_ACCESS"], [49, "GITHUB_MULTIPLE_OWNERS"], [50, "RATE_LIMITED"], [51, "RATE_LIMITED_CHANGEABLE"], [52, "CUSTOM"], [53, "HOOKS_BLOCKED"], [54, "SUSPICIOUS_USAGE_BLOCKED"], [55, "EXTENSION_HOST_TIMEOUT"], [56, "NETWORK_ERROR"], [57, "PROVIDER_ERROR"], [58, "MODEL_BLOCKED"], [59, "INTERNAL"], [60, "MAX_MODE_REQUIRED"], [61, "MODEL_NO_LONGER_SUPPORTED"], [62, "PRICING_WARNING"], [63, "SLOW_POOL"], [64, "UNSUPPORTED_REGION"], [65, "ACCOUNT_CLOSED"]], 1);
-    CustomErrorDetails = class _CustomErrorDetails extends __protoMessage325 {
+    ErrorDetails_Error = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "ErrorDetails.Error", [[0, "UNSPECIFIED"], [1, "BAD_API_KEY"], [42, "BAD_USER_API_KEY"], [2, "NOT_LOGGED_IN"], [3, "INVALID_AUTH_ID"], [4, "NOT_HIGH_ENOUGH_PERMISSIONS"], [18, "AGENT_REQUIRES_LOGIN"], [5, "BAD_MODEL_NAME"], [39, "NOT_FOUND"], [40, "DEPRECATED"], [6, "USER_NOT_FOUND"], [7, "FREE_USER_RATE_LIMIT_EXCEEDED"], [8, "PRO_USER_RATE_LIMIT_EXCEEDED"], [9, "FREE_USER_USAGE_LIMIT"], [10, "PRO_USER_USAGE_LIMIT"], [41, "RESOURCE_EXHAUSTED"], [11, "AUTH_TOKEN_NOT_FOUND"], [12, "AUTH_TOKEN_EXPIRED"], [13, "OPENAI"], [14, "OPENAI_RATE_LIMIT_EXCEEDED"], [20, "MAX_TOKENS"], [23, "PRO_USER_ONLY"], [21, "USER_ABORTED_REQUEST"], [25, "TIMEOUT"], [22, "GENERIC_RATE_LIMIT_EXCEEDED"], [28, "GPT_4_VISION_PREVIEW_RATE_LIMIT"], [29, "CUSTOM_MESSAGE"], [30, "OUTDATED_CLIENT"], [31, "CLAUDE_IMAGE_TOO_LARGE"], [33, "FILE_NOT_FOUND"], [34, "API_KEY_RATE_LIMIT"], [35, "DEBOUNCED"], [36, "BAD_REQUEST"], [37, "REPOSITORY_SERVICE_REPOSITORY_IS_NOT_INITIALIZED"], [38, "UNAUTHORIZED"], [43, "CONVERSATION_TOO_LONG"], [44, "USAGE_PRICING_REQUIRED"], [45, "USAGE_PRICING_REQUIRED_CHANGEABLE"], [46, "GITHUB_NO_USER_CREDENTIALS"], [47, "GITHUB_USER_NO_ACCESS"], [48, "GITHUB_APP_NO_ACCESS"], [49, "GITHUB_MULTIPLE_OWNERS"], [50, "RATE_LIMITED"], [51, "RATE_LIMITED_CHANGEABLE"], [52, "CUSTOM"], [53, "HOOKS_BLOCKED"], [54, "SUSPICIOUS_USAGE_BLOCKED"], [55, "EXTENSION_HOST_TIMEOUT"], [56, "NETWORK_ERROR"], [57, "PROVIDER_ERROR"], [58, "MODEL_BLOCKED"], [59, "INTERNAL"], [60, "MAX_MODE_REQUIRED"], [61, "MODEL_NO_LONGER_SUPPORTED"], [62, "PRICING_WARNING"], [63, "SLOW_POOL"], [64, "UNSUPPORTED_REGION"], [65, "ACCOUNT_CLOSED"]], 1);
+    CustomErrorDetails = class _CustomErrorDetails extends __protoMessage326 {
       constructor(data) {
         super();
         this.title = "";
@@ -1229,7 +1229,7 @@ var init_utils_pb2 = __esm({
         return ["CustomErrorDetails|1 title 9|2 detail 9|3 allow_command_links_potentially_unsafe_please_only_use_for_handwritten_trusted_markdown 8?|4 is_retryable 8?|5 show_request_id 8?|6 should_show_immediate_error 8?|8 buttons #0*|7 additional_info 9,9|9 plan_choices #1*|10 analytics_metadata #2?", ErrorButton, PlanChoice, ErrorAnalyticsMetadata];
       }
     };
-    ErrorAnalyticsMetadata = class _ErrorAnalyticsMetadata extends __protoMessage325 {
+    ErrorAnalyticsMetadata = class _ErrorAnalyticsMetadata extends __protoMessage326 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -1250,7 +1250,7 @@ var init_utils_pb2 = __esm({
         return ["ErrorAnalyticsMetadata|1 action_required 9?"];
       }
     };
-    PlanChoice = class _PlanChoice extends __protoMessage325 {
+    PlanChoice = class _PlanChoice extends __protoMessage326 {
       constructor(data) {
         super();
         this.label = "";
@@ -1273,7 +1273,7 @@ var init_utils_pb2 = __esm({
         return ["PlanChoice|1 label 9|2 sublabel 9?|3 description 9?|4 value 9"];
       }
     };
-    ErrorButton = class _ErrorButton extends __protoMessage325 {
+    ErrorButton = class _ErrorButton extends __protoMessage326 {
       constructor(data) {
         super();
         this.label = "";
@@ -1296,7 +1296,7 @@ var init_utils_pb2 = __esm({
         return ["ErrorButton|1 label 9|2 upgrade #0 action|3 switch_model #1 action|4 configure_spend_limit #2 action|5 url #3 action|6 upgrade_choice #4 action|7 dashboard_action #5 action|8 reload_window #6 action|9 client_action #7 action", UpgradeAction, SwitchModelAction, ConfigureSpendLimitAction, UrlAction, UpgradeChoice, DashboardAction, ReloadWindowAction, ClientAction];
       }
     };
-    ClientAction = class _ClientAction extends __protoMessage325 {
+    ClientAction = class _ClientAction extends __protoMessage326 {
       constructor(data) {
         super();
         this.commandId = "";
@@ -1319,7 +1319,7 @@ var init_utils_pb2 = __esm({
         return ["ClientAction|1 command_id 9|2 args 9,9"];
       }
     };
-    ReloadWindowAction = class _ReloadWindowAction extends __protoMessage325 {
+    ReloadWindowAction = class _ReloadWindowAction extends __protoMessage326 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -1340,7 +1340,7 @@ var init_utils_pb2 = __esm({
         return ["ReloadWindowAction"];
       }
     };
-    DashboardAction = class _DashboardAction extends __protoMessage325 {
+    DashboardAction = class _DashboardAction extends __protoMessage326 {
       constructor(data) {
         super();
         this.action = "";
@@ -1363,7 +1363,7 @@ var init_utils_pb2 = __esm({
         return ["DashboardAction|1 action 9|2 args 9,9|3 success_message 9?"];
       }
     };
-    UpgradeChoice = class _UpgradeChoice extends __protoMessage325 {
+    UpgradeChoice = class _UpgradeChoice extends __protoMessage326 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -1384,7 +1384,7 @@ var init_utils_pb2 = __esm({
         return ["UpgradeChoice"];
       }
     };
-    UpgradeAction = class _UpgradeAction extends __protoMessage325 {
+    UpgradeAction = class _UpgradeAction extends __protoMessage326 {
       constructor(data) {
         super();
         this.membershipToUpgradeTo = "";
@@ -1406,7 +1406,7 @@ var init_utils_pb2 = __esm({
         return ["UpgradeAction|1 membership_to_upgrade_to 9|2 try_immediate_upgrade 8?|3 allow_trial 8?|4 dashboard_action #0?", DashboardAction];
       }
     };
-    SwitchModelAction = class _SwitchModelAction extends __protoMessage325 {
+    SwitchModelAction = class _SwitchModelAction extends __protoMessage326 {
       constructor(data) {
         super();
         this.parameters = [];
@@ -1428,7 +1428,7 @@ var init_utils_pb2 = __esm({
         return ["SwitchModelAction|1 suggested_model 9?|2 parameters #0*|3 max_mode 8?", SwitchModelAction_ModelParameterValue];
       }
     };
-    SwitchModelAction_ModelParameterValue = class _SwitchModelAction_ModelParameterValue extends __protoMessage325 {
+    SwitchModelAction_ModelParameterValue = class _SwitchModelAction_ModelParameterValue extends __protoMessage326 {
       constructor(data) {
         super();
         this.id = "";
@@ -1451,7 +1451,7 @@ var init_utils_pb2 = __esm({
         return ["SwitchModelAction.ModelParameterValue|1 id 9|2 value 9"];
       }
     };
-    ConfigureSpendLimitAction = class _ConfigureSpendLimitAction extends __protoMessage325 {
+    ConfigureSpendLimitAction = class _ConfigureSpendLimitAction extends __protoMessage326 {
       constructor(data) {
         super();
         this.confirmLabel = "";
@@ -1473,7 +1473,7 @@ var init_utils_pb2 = __esm({
         return ["ConfigureSpendLimitAction|1 confirm_label 9"];
       }
     };
-    UrlAction = class _UrlAction extends __protoMessage325 {
+    UrlAction = class _UrlAction extends __protoMessage326 {
       constructor(data) {
         super();
         this.url = "";
@@ -1495,7 +1495,7 @@ var init_utils_pb2 = __esm({
         return ["UrlAction|1 url 9"];
       }
     };
-    ImageProto = class _ImageProto extends __protoMessage325 {
+    ImageProto = class _ImageProto extends __protoMessage326 {
       constructor(data) {
         super();
         this.data = new Uint8Array(0);
@@ -1518,7 +1518,7 @@ var init_utils_pb2 = __esm({
         return ["ImageProto|1 data 12|2 dimension #0|3 uuid 9|4 task_specific_description 9?", ImageProto_Dimension];
       }
     };
-    ImageProto_Dimension = class _ImageProto_Dimension extends __protoMessage325 {
+    ImageProto_Dimension = class _ImageProto_Dimension extends __protoMessage326 {
       constructor(data) {
         super();
         this.width = 0;
@@ -1541,7 +1541,7 @@ var init_utils_pb2 = __esm({
         return ["ImageProto.Dimension|1 width 5|2 height 5"];
       }
     };
-    ChatQuote = class _ChatQuote extends __protoMessage325 {
+    ChatQuote = class _ChatQuote extends __protoMessage326 {
       constructor(data) {
         super();
         this.markdown = "";
@@ -1565,7 +1565,7 @@ var init_utils_pb2 = __esm({
         return ["ChatQuote|1 markdown 9|2 bubble_id 9|3 section_index 5"];
       }
     };
-    ChatExternalLink = class _ChatExternalLink extends __protoMessage325 {
+    ChatExternalLink = class _ChatExternalLink extends __protoMessage326 {
       constructor(data) {
         super();
         this.url = "";
@@ -1588,7 +1588,7 @@ var init_utils_pb2 = __esm({
         return ["ChatExternalLink|1 url 9|2 uuid 9|3 pdf_content 9?|4 is_pdf 8?|5 filename 9?"];
       }
     };
-    ComposerExternalLink = class _ComposerExternalLink extends __protoMessage325 {
+    ComposerExternalLink = class _ComposerExternalLink extends __protoMessage326 {
       constructor(data) {
         super();
         this.url = "";
@@ -1611,7 +1611,7 @@ var init_utils_pb2 = __esm({
         return ["ComposerExternalLink|1 url 9|2 uuid 9|3 pdf_content 9?|4 is_pdf 8?|5 filename 9?"];
       }
     };
-    CmdKExternalLink = class _CmdKExternalLink extends __protoMessage325 {
+    CmdKExternalLink = class _CmdKExternalLink extends __protoMessage326 {
       constructor(data) {
         super();
         this.url = "";
@@ -1634,7 +1634,7 @@ var init_utils_pb2 = __esm({
         return ["CmdKExternalLink|1 url 9|2 uuid 9"];
       }
     };
-    CommitNote = class _CommitNote extends __protoMessage325 {
+    CommitNote = class _CommitNote extends __protoMessage326 {
       constructor(data) {
         super();
         this.note = "";
@@ -1657,7 +1657,7 @@ var init_utils_pb2 = __esm({
         return ["CommitNote|1 note 9|2 commit_hash 9"];
       }
     };
-    CommitNoteWithEmbeddings = class _CommitNoteWithEmbeddings extends __protoMessage325 {
+    CommitNoteWithEmbeddings = class _CommitNoteWithEmbeddings extends __protoMessage326 {
       constructor(data) {
         super();
         this.note = "";
@@ -1681,7 +1681,7 @@ var init_utils_pb2 = __esm({
         return ["CommitNoteWithEmbeddings|1 note 9|2 commit_hash 9|3 embeddings 1*"];
       }
     };
-    CommitDiffString = class _CommitDiffString extends __protoMessage325 {
+    CommitDiffString = class _CommitDiffString extends __protoMessage326 {
       constructor(data) {
         super();
         this.diff = "";
@@ -1703,7 +1703,7 @@ var init_utils_pb2 = __esm({
         return ["CommitDiffString|1 diff 9"];
       }
     };
-    CodeChunk = class _CodeChunk extends __protoMessage325 {
+    CodeChunk = class _CodeChunk extends __protoMessage326 {
       constructor(data) {
         super();
         this.relativeWorkspacePath = "";
@@ -1728,9 +1728,9 @@ var init_utils_pb2 = __esm({
         return ["CodeChunk|1 relative_workspace_path 9|2 start_line_number 5|3 lines 9*|4 summarization_strategy #0?|5 language_identifier 9|6 intent #1?|7 is_final_version 8?|8 is_first_version 8?", CodeChunk_SummarizationStrategy, CodeChunk_Intent];
       }
     };
-    CodeChunk_Intent = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "CodeChunk.Intent", [[0, "UNSPECIFIED"], [1, "COMPOSER_FILE"], [2, "COMPRESSED_COMPOSER_FILE"]], 1);
-    CodeChunk_SummarizationStrategy = /* @__PURE__ */ enumType2(proto3, __protoPackage25, "CodeChunk.SummarizationStrategy", [[0, "NONE_UNSPECIFIED"], [1, "SUMMARIZED"], [2, "EMBEDDED"]], 1);
-    RCPCallFrame = class _RCPCallFrame extends __protoMessage325 {
+    CodeChunk_Intent = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "CodeChunk.Intent", [[0, "UNSPECIFIED"], [1, "COMPOSER_FILE"], [2, "COMPRESSED_COMPOSER_FILE"]], 1);
+    CodeChunk_SummarizationStrategy = /* @__PURE__ */ enumType2(proto3, __protoPackage26, "CodeChunk.SummarizationStrategy", [[0, "NONE_UNSPECIFIED"], [1, "SUMMARIZED"], [2, "EMBEDDED"]], 1);
+    RCPCallFrame = class _RCPCallFrame extends __protoMessage326 {
       constructor(data) {
         super();
         proto3.util.initPartial(data, this);
@@ -1751,7 +1751,7 @@ var init_utils_pb2 = __esm({
         return ["RCPCallFrame|1 function_name 9?|2 url 9?|3 line_number 5?|4 column_number 5?"];
       }
     };
-    RCPStackTrace = class _RCPStackTrace extends __protoMessage325 {
+    RCPStackTrace = class _RCPStackTrace extends __protoMessage326 {
       constructor(data) {
         super();
         this.callFrames = [];
@@ -1773,7 +1773,7 @@ var init_utils_pb2 = __esm({
         return ["RCPStackTrace|1 call_frames #0*|2 raw_stack_trace 9?", RCPCallFrame];
       }
     };
-    RCPLogEntry = class _RCPLogEntry extends __protoMessage325 {
+    RCPLogEntry = class _RCPLogEntry extends __protoMessage326 {
       constructor(data) {
         super();
         this.message = "";
@@ -1799,7 +1799,7 @@ var init_utils_pb2 = __esm({
         return ["RCPLogEntry|1 message 9|2 timestamp 1|3 level 9|4 client_name 9|5 session_id 9|6 stack_trace #0?|7 object_data_json 9?", RCPStackTrace];
       }
     };
-    RCPUIElementPicked = class _RCPUIElementPicked extends __protoMessage325 {
+    RCPUIElementPicked = class _RCPUIElementPicked extends __protoMessage326 {
       constructor(data) {
         super();
         this.element = "";

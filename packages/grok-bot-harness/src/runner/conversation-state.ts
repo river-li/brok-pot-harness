@@ -57,55 +57,57 @@ Treat these as things you already know: take them into account together with the
 Treat these as settled and already handled on the user's side: take them into account together with the message below, follow the guidance each one carries, and don't raise the same cards again.`
     );
   }
+  const isComposerAnswerPath = prompts.isComposerAnswerPath === true;
   if (skipped2.length === 1) {
     sections.push(
-      `Earlier you prompted the user and they moved on without responding ("${skipped2[0]}") \u2014 treat it as skipped. Don't wait for or assume a response; continue with what you already know, and only ask again if you still genuinely need it.`
+      isComposerAnswerPath ? `You asked the user a question ("${skipped2[0]}") and they replied in chat instead of answering on the card. Their message below may be the answer or may be about something else; decide from what they wrote. If it answers the question, act on it without asking again. If not, treat the question as skipped: continue with what you already know, and only ask again if you still genuinely need it.` : `Earlier you prompted the user and they moved on without responding ("${skipped2[0]}"). Treat it as skipped. Don't wait for or assume a response; continue with what you already know, and only ask again if you still genuinely need it.`
     );
   } else if (skipped2.length > 1) {
     const list = skipped2.map((prompt) => `
 - "${prompt}"`).join("");
     sections.push(
-      `Earlier you prompted the user for these and they moved on without responding \u2014 treat them as skipped:${list}
+      isComposerAnswerPath ? `You asked the user these questions and they replied in chat instead of answering on the cards:${list}
+Their message below may answer some of them or may be about something else; decide from what they wrote. Act on any answer it gives without asking again, and treat the rest as skipped: continue with what you already know, and only ask again if you still genuinely need to.` : `Earlier you prompted the user for these and they moved on without responding. Treat them as skipped:${list}
 Don't wait for or assume responses; continue with what you already know, and only ask again if you still genuinely need to.`
     );
   }
   if (dismissed.length === 1) {
     sections.push(
-      `The user dismissed your question ("${dismissed[0]}") without answering \u2014 they'd rather not respond. Don't ask it again or wait for an answer; continue with what you already know and decide yourself.`
+      `The user dismissed your question ("${dismissed[0]}") without answering. They'd rather not respond. Don't ask it again or wait for an answer; continue with what you already know and decide yourself.`
     );
   } else if (dismissed.length > 1) {
     const list = dismissed.map((prompt) => `
 - "${prompt}"`).join("");
     sections.push(
-      `The user dismissed these questions without answering \u2014 they'd rather not respond:${list}
+      `The user dismissed these questions without answering. They'd rather not respond:${list}
 Don't ask them again or wait for answers; continue with what you already know and decide yourself.`
     );
   }
   if (discardedDrafts.length === 1) {
     sections.push(
       /* eslint-disable-next-line lingui/no-unlocalized-strings -- model-facing hidden prompt */
-      `The user discarded your draft without sending ("${discardedDrafts[0]}") \u2014 they refused to send it. Do not send that message yourself (including via CallMcpTool or any connector send tool). Treat the draft as rejected; only draft or send again if the user explicitly asks.`
+      `The user discarded your draft without sending ("${discardedDrafts[0]}"). They refused to send it. Do not send that message yourself (including via CallMcpTool or any connector send tool). Treat the draft as rejected; only draft or send again if the user explicitly asks.`
     );
   } else if (discardedDrafts.length > 1) {
     const list = discardedDrafts.map((prompt) => `
 - "${prompt}"`).join("");
     sections.push(
       /* eslint-disable-next-line lingui/no-unlocalized-strings -- model-facing hidden prompt */
-      `The user discarded these drafts without sending \u2014 they refused to send them:${list}
+      `The user discarded these drafts without sending. They refused to send them:${list}
 Do not send those messages yourself (including via CallMcpTool or any connector send tool). Treat the drafts as rejected; only draft or send again if the user explicitly asks.`
     );
   }
   if (unconfirmedDrafts.length === 1) {
     sections.push(
       /* eslint-disable-next-line lingui/no-unlocalized-strings -- model-facing hidden prompt */
-      `A send of your draft did not confirm ("${unconfirmedDrafts[0]}") \u2014 it may or may not have gone out. Do not send that message yourself (including via CallMcpTool or any connector send tool). Check the destination before drafting or sending it again.`
+      `A send of your draft did not confirm ("${unconfirmedDrafts[0]}"). It may or may not have gone out. Do not send that message yourself (including via CallMcpTool or any connector send tool). Check the destination before drafting or sending it again.`
     );
   } else if (unconfirmedDrafts.length > 1) {
     const list = unconfirmedDrafts.map((prompt) => `
 - "${prompt}"`).join("");
     sections.push(
       /* eslint-disable-next-line lingui/no-unlocalized-strings -- model-facing hidden prompt */
-      `Sends of these drafts did not confirm \u2014 they may or may not have gone out:${list}
+      `Sends of these drafts did not confirm. They may or may not have gone out:${list}
 Do not send those messages yourself (including via CallMcpTool or any connector send tool). Check the destination before drafting or sending them again.`
     );
   }

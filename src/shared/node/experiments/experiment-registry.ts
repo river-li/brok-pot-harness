@@ -3,6 +3,7 @@ var GROK_BOT_BROWSER_USE_PLAYWRIGHT_EXPERIMENT_NAME = "grok_bot_browser_use_play
 var SAND_MEMORY_FACTS_IN_USER_INFO_EXPERIMENT_NAME = "sand_memory_facts_in_user_info_ab";
 var SAND_USAGE_WARNING_EXPERIMENT_NAME = "sand_usage_warning_policy_2026_08";
 var SAND_GROUP_CHAT_DISCOURAGEMENT_EXPERIMENT_NAME = "sand_group_chat_discouragement_2026_09";
+var SAND_ONBOARDING_JOB_ROLE_EXPERIMENT_NAME = "sand_onboarding_job_role";
 var SAND_COMPUTER_USE_MODEL_CONFIG_NAME = "sand_computer_use_playwright_config";
 var SAND_BROWSER_USE_MODEL_CONFIG_NAME = "sand_browser_use_model";
 var SandConfigParseError = class extends Error {

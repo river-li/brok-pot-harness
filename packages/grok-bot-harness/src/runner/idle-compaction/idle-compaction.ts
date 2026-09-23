@@ -19,7 +19,7 @@ var SandSummaryLifecycleWatch = class {
     };
   }
 };
-async function startIdleCompaction(runner, { armingTurnServedModel, ...options2 } = {}) {
+async function startIdleCompaction(runner, options2 = {}) {
   const startedAt = performance.now();
   const durationMs = () => Math.round(performance.now() - startedAt);
   const settled = Promise.withResolvers();
@@ -51,7 +51,7 @@ async function startIdleCompaction(runner, { armingTurnServedModel, ...options2 
   try {
     const result = await runner.run("", {
       ...options2,
-      idleCompaction: armingTurnServedModel === void 0 ? {} : { armingTurnServedModel },
+      idleCompaction: true,
       requestSource: "idle-compaction",
       isSilenceAllowed: true,
       autoReviewEpoch: "continue"

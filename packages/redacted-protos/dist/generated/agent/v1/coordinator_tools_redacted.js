@@ -130,7 +130,8 @@ function toRedactedSendToAgentArgs(msg, privacyMode) {
     agentId: msg.agentId,
     message: createRedactedString(msg.message, DataClassification.CODE, "message", privacyMode),
     delivery: msg.delivery,
-    title: createRedactedString(msg.title, DataClassification.CODE, "title", privacyMode)
+    title: createRedactedString(msg.title, DataClassification.CODE, "title", privacyMode),
+    model: msg.model
   };
 }
 function fromRedactedSendToAgentArgs(msg, purpose, opts) {
@@ -141,7 +142,8 @@ function fromRedactedSendToAgentArgs(msg, purpose, opts) {
     agentId: msg.agentId,
     message: msg.message.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing }),
     delivery: msg.delivery,
-    title: msg.title.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
+    title: msg.title.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing }),
+    model: msg.model
   });
 }
 function toRedactedSendToAgentSuccess(msg, privacyMode) {

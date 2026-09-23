@@ -7,11 +7,11 @@ function elapsedLabel(elapsedMs3) {
   return seconds === 0 ? `${minutes}m` : `${minutes}m ${seconds}s`;
 }
 function describeRunningSubagent(info2, options2) {
-  const header = `- ${info2.subagentId} [${info2.subagentType}] "${info2.title}" \u2014 running for ${elapsedLabel(info2.elapsedMs)}, ${info2.toolCallCount} tool call(s)`;
+  const header = `- ${info2.subagentId} [${info2.subagentType}] "${info2.title}": running for ${elapsedLabel(info2.elapsedMs)}, ${info2.toolCallCount} tool call(s)`;
   if (!options2.detailed) return header;
   const lines2 = [header];
   if (info2.recentActivity.length > 0) {
-    lines2.push("  Recent activity (oldest \u2192 newest):");
+    lines2.push("  Recent activity (oldest first):");
     for (const entry of info2.recentActivity) {
       lines2.push(`    ${entry}`);
     }
@@ -195,7 +195,7 @@ function createSubagentManagementTools(controller) {
     defineCommunicateTool(controller, {
       id: "CHECK_SUBAGENT",
       name: "CheckSubagent",
-      description: "Check how a background subagent you dispatched (via Task) is doing without waiting for it to finish. Returns its status, how long it has been running, the tool calls it has made recently, and where to read its full play-by-play. Pass the subagent's Agent ID (from the Task result), or omit it to list every running subagent. Use this when a subagent \u2014 especially a computerUse one driving the box desktop \u2014 is taking a long time or might be stuck or looping, so you can decide whether to MessageSubagent it or StopSubagent it. This is read-only; it's not polling for completion (you're revived automatically when a subagent finishes).",
+      description: "Check how a background subagent you dispatched (via Task) is doing without waiting for it to finish. Returns its status, how long it has been running, the tool calls it has made recently, and where to read its full play-by-play. Pass the subagent's Agent ID (from the Task result), or omit it to list every running subagent. Use this when a subagent, especially a computerUse one driving the box desktop, is taking a long time or might be stuck or looping, so you can decide whether to MessageSubagent it or StopSubagent it. This is read-only; it's not polling for completion (you're revived automatically when a subagent finishes).",
       parameters: checkSubagentParameters,
       execute: async (_ctx, args, deps) => {
         const id = args.subagent_id;
@@ -220,7 +220,7 @@ function createSubagentManagementTools(controller) {
     defineCommunicateTool(controller, {
       id: "MESSAGE_SUBAGENT",
       name: "MessageSubagent",
-      description: "Force a message into a running background subagent to course-correct it without aborting it. The subagent interrupts its current step, reads your message, and continues from where it was (its context is preserved \u2014 it does not start over). Use this to unstick or redirect a subagent that is looping, stuck, or heading the wrong way \u2014 for example to tell a computerUse subagent to try a different element, that the user just signed in so it can proceed, or to wrap up and report what it has. Pass the subagent's Agent ID (from the Task result). You're still revived with its result when it finishes; to follow up AFTER a subagent has already finished, use Task with the resume parameter instead.",
+      description: "Force a message into a running background subagent to course-correct it without aborting it. The subagent interrupts its current step, reads your message, and continues from where it was (its context is preserved, so it does not start over). Use this to unstick or redirect a subagent that is looping, stuck, or heading the wrong way, for example to tell a computerUse subagent to try a different element, that the user just signed in so it can proceed, or to wrap up and report what it has. Pass the subagent's Agent ID (from the Task result). You're still revived with its result when it finishes; to follow up AFTER a subagent has already finished, use Task with the resume parameter instead.",
       parameters: messageSubagentParameters,
       execute: async (ctx, args, deps) => {
         if (deps.reviewSteer !== void 0) {
@@ -237,13 +237,13 @@ function createSubagentManagementTools(controller) {
         if (result === "not-running") {
           return notRunningMessage(args.subagent_id, await deps.listRunningSubagents());
         }
-        return `Message delivered to subagent ${args.subagent_id}. It will interrupt what it's doing, take your message into account, and keep working. You'll be revived with its result when it finishes \u2014 don't wait on it.`;
+        return `Message delivered to subagent ${args.subagent_id}. It will interrupt what it's doing, take your message into account, and keep working. You'll be revived with its result when it finishes, so don't wait on it.`;
       }
     }),
     defineCommunicateTool(controller, {
       id: "STOP_SUBAGENT",
       name: "StopSubagent",
-      description: "Abort background subagents you dispatched (via Task). Pass one subagent's Agent ID (from the Task result) to kill a subagent that is wedged, looping with no progress, or no longer needed \u2014 for example a computerUse subagent stuck on the box desktop. Pass all: true instead to stop everything at once: every running subagent, plus, where this host can reach them, the other agents you handed work to (peers you messaged with priority and cloud agents you launched); the result says when it could not reach them. This is the call to make when the user asks you to stop, halt, cancel, or quit the current work, and it must be your first action for that request rather than checking or stopping children one by one. Stopping tears the subagent down and frees its box desktop window; it does not come back, and you are not separately revived for it (this tool's result is the confirmation, and with all: true it lists exactly which ids were stopped, which had already finished, which could not be stopped, and what happened to each peer and cloud agent). If you instead want a subagent to change course and keep going, use MessageSubagent.",
+      description: "Abort background subagents you dispatched (via Task). Pass one subagent's Agent ID (from the Task result) to kill a subagent that is wedged, looping with no progress, or no longer needed, for example a computerUse subagent stuck on the box desktop. Pass all: true instead to stop everything at once: every running subagent, plus, where this host can reach them, the other agents you handed work to (peers you messaged with priority and cloud agents you launched); the result says when it could not reach them. This is the call to make when the user asks you to stop, halt, cancel, or quit the current work, and it must be your first action for that request rather than checking or stopping children one by one. Stopping tears the subagent down and frees its box desktop window; it does not come back, and you are not separately revived for it (this tool's result is the confirmation, and with all: true it lists exactly which ids were stopped, which had already finished, which could not be stopped, and what happened to each peer and cloud agent). If you instead want a subagent to change course and keep going, use MessageSubagent.",
       parameters: stopSubagentParameters,
       execute: async (ctx, args, deps) => {
         const recordStopped = (subagentId2) => recordDelegationCompleted(ctx, {

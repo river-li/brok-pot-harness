@@ -30,7 +30,7 @@ function describeCloudAgentWorker(worker) {
     worker.repos.length > 0 ? `repos ${worker.repos.join(", ")}` : void 0,
     worker.name === void 0 ? `no registered name, target it by worker id` : void 0
   ].filter((part) => part !== void 0);
-  return `${name17} \u2014 ${parts.join("; ")}`;
+  return `${name17}: ${parts.join("; ")}`;
 }
 function connectedWorkersNote(workers) {
   if (workers.length === 0) {

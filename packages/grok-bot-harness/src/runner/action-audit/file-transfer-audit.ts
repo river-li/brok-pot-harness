@@ -14,7 +14,10 @@ function createFileTransferAudit(auditor, identity) {
   };
 }
 function bindFileTransferAudit(audit, ctx, call) {
-  return (result) => audit?.(ctx, { ...call, ...result });
+  return (result) => {
+    if (result === void 0) return;
+    audit?.(ctx, { ...call, ...result });
+  };
 }
 var DAEMON_REFUSAL_CODES = /* @__PURE__ */ new Set([
   "local_tools_disabled",
@@ -72,6 +75,7 @@ function wrapReadExecutorForFileTransferAudit(inner, audit, resolveMachineId) {
   };
 }
 function failedFileTransferResult(error42) {
+  if (error42 instanceof DeferredInteractionResponseError) return void 0;
   let innermost = error42;
   while (innermost instanceof Error) {
     if (isLocalToolRefusal(innermost)) return { outcome: "denied" };

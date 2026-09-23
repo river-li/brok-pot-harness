@@ -1,6 +1,6 @@
 var SandSubagentDispatchError = class extends Error {
 };
-var SAND_COMPUTER_USE_DESKTOP_BUSY_MESSAGE = "A computerUse subagent is already using the box's desktop. Only one can run at a time \u2014 wait for it to finish (you're notified automatically), then dispatch another.";
+var SAND_COMPUTER_USE_DESKTOP_BUSY_MESSAGE = "A computerUse subagent is already using the box's desktop. Only one can run at a time. Wait for it to finish (you're notified automatically), then dispatch another.";
 var SandRequestContextExecutor = class {
   constructor(requestContext, includeTranscripts, autoReviewEnforceEnabled, resolveAgentSkills, modelVisibleTime) {
     this.requestContext = requestContext;
@@ -103,7 +103,7 @@ var SandSubagentHostAdapter = class {
     if (args.resumeAgentId != null && args.resumeAgentId.length > 0) {
       if (this.dispatcher.isRunning(args.resumeAgentId)) {
         throw new SandSubagentDispatchError(
-          "That background subagent is still running, so it can't be resumed yet \u2014 you're notified automatically when it finishes. To act on it while it runs, use MessageSubagent to send it an instruction or StopSubagent to abort it (CheckSubagent shows how it's doing)."
+          "That background subagent is still running, so it can't be resumed yet. You're notified automatically when it finishes. To act on it while it runs, use MessageSubagent to send it an instruction or StopSubagent to abort it (CheckSubagent shows how it's doing)."
         );
       }
       if (this.sessions.has(args.resumeAgentId)) return args.resumeAgentId;

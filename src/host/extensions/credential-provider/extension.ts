@@ -37,7 +37,8 @@ async function startCredentialProvider(context2) {
       submitRequested: entry.submitRequested,
       inForm: entry.inForm,
       approvalMode: entry.approvalMode,
-      targetDomain: credentialTargetDomain(entry.targetUrl, context2.deps["privacy-mode"].get())
+      targetDomain: credentialTargetDomain(entry.targetUrl, context2.deps["privacy-mode"].get()),
+      pageDiagnostics: entry.pageDiagnostics
     });
   };
   const enabled = await context2.deps.experiments.checkGate(SAND_1PASS_INTEGRATION_GATE, {
@@ -240,7 +241,7 @@ async function startCredentialProvider(context2) {
         auditRequest("refused", "approval-required");
         return {
           accepted: false,
-          detail: decision.detail ?? "Auto fill is off for this login."
+          detail: decision.detail ?? "This 1Password login needs your approval."
         };
       }
       if (decision.filled !== true) {

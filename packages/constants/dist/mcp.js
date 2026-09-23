@@ -22,7 +22,42 @@ function parseRestMcpScmToolError(args) {
   if (typeof body.error !== "string" || !REST_MCP_SCM_ERROR_CODE_SET.has(body.error) || body.provider !== boundProvider) {
     return void 0;
   }
-  return Object.assign({ code: body.error, provider: body.provider }, typeof body.repo === "string" ? { repo: body.repo } : {});
+  const code = body.error;
+  const provider = body.provider;
+  const repo = typeof body.repo === "string" ? { repo: body.repo } : {};
+  if (code !== REST_MCP_SCM_ERROR_CODES.orgBlocked) {
+    return Object.assign({ code, provider }, repo);
+  }
+  const org = typeof body.org === "string" && body.org.length > 0 ? { org: body.org } : {};
+  switch (body.reason) {
+    case "sso_required": {
+      const authorizationUrl = parseScmSsoAuthorizationUrl(boundProvider, body.authorizationUrl);
+      return Object.assign(Object.assign(Object.assign(Object.assign({
+        code,
+        provider
+      }, repo), org), { reason: "sso_required" }), authorizationUrl === void 0 ? {} : { authorizationUrl });
+    }
+    case "ip_allowlist":
+      return Object.assign(Object.assign(Object.assign({ code, provider }, repo), org), { reason: "ip_allowlist" });
+    default:
+      return Object.assign(Object.assign({ code, provider }, repo), org);
+  }
+}
+function parseScmSsoAuthorizationUrl(provider, value) {
+  if (typeof value !== "string") {
+    return void 0;
+  }
+  let url2;
+  try {
+    url2 = new URL(value);
+  } catch (_a20) {
+    return void 0;
+  }
+  const page = CURSOR_SCM_SSO_AUTHORIZATION_PAGES[provider];
+  if (url2.protocol !== "https:" || url2.hostname.toLowerCase() !== page.hostname || !page.pathname.test(url2.pathname) || url2.username.length > 0 || url2.password.length > 0) {
+    return void 0;
+  }
+  return url2.toString();
 }
 function getRestMcpProviderIdForUrlPath(serverUrl) {
   if (serverUrl === void 0) {
@@ -117,7 +152,7 @@ function getCanonicalMcpOAuthRedirectUris(currentRedirectUri) {
   }
   return Array.from(redirectUris);
 }
-var GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, GROK_CONNECTORS_POLICY_BASE, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
+var GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, CURSOR_SCM_SSO_AUTHORIZATION_PAGES, GROK_CONNECTORS_POLICY_BASE, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
 var init_mcp = __esm({
   "../packages/constants/dist/mcp.js"() {
     "use strict";
@@ -155,14 +190,19 @@ var init_mcp = __esm({
       repoNotAccessible: "scm_repo_not_accessible",
       /**
        * `repo`'s organization blocks the connection (SAML SSO not authorized for
-       * the App, or an IP allow list). Fixed on the organization side, never by a
-       * repo grant, so no connect / access card: the message carries the remedy.
+       * the App, or an IP allow list). Never fixed by a repo grant, so no connect
+       * / access card. The body carries `reason` and `org`; for `sso_required`
+       * it also carries GitHub's `authorizationUrl`, the page the connected
+       * user visits to authorize the App for that organization themselves.
        */
       orgBlocked: "scm_org_blocked"
     };
     CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX = "cursor-";
     CURSOR_SCM_MCP_PROVIDERS = ["github"];
     REST_MCP_SCM_ERROR_CODE_SET = new Set(Object.values(REST_MCP_SCM_ERROR_CODES));
+    CURSOR_SCM_SSO_AUTHORIZATION_PAGES = {
+      github: { hostname: "github.com", pathname: /^\/orgs\/[^/]+\/sso$/ }
+    };
     GROK_CONNECTORS_POLICY_BASE = {
       provider: "grok-connectors",
       clientRegistration: "static",

@@ -315,8 +315,7 @@ function buildStreamRequest(options2) {
       id: parameter.id,
       value: parameter.value
     })),
-    builtInModel: requestedModel.builtInModel,
-    isVariantStringRepresentation: requestedModel.isVariantStringRepresentation
+    builtInModel: requestedModel.builtInModel
   });
   if (invocationId) {
     request5.invocationId = invocationId;

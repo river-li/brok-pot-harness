@@ -12,19 +12,19 @@ function withKickstartLanguage(prompt, language) {
   return `${prompt}
 The user's app language is ${language}. Write to them in that language unless they write to you in another.`;
 }
-var SAND_ONBOARDING_REPLY_NUDGE_PROMPT = "Your previous turn left the user without the result they're waiting on \u2014 you never called SendToUser that turn, or every SendToUser you tried failed to deliver. Either way they received nothing and are still waiting. Do not assume a send from an earlier turn covered it: an opening acknowledgement back then did not deliver this result (ack \u2260 delivery). Deliver the result now by actually invoking the SendToUser tool \u2014 make a real tool/function call, not text you write. Plain assistant text is NEVER shown to the user; only a real SendToUser tool invocation reaches them, so if you don't call the tool they just keep seeing silence.";
+var SAND_ONBOARDING_REPLY_NUDGE_PROMPT = "Your previous turn left the user without the result they're waiting on. You never called SendToUser that turn, or every SendToUser you tried failed to deliver. Either way they received nothing and are still waiting. Do not assume a send from an earlier turn covered it. An opening acknowledgement back then did not deliver this result. An acknowledgement is not delivery. Deliver the result now by actually invoking the SendToUser tool. Make a real tool/function call, not text you write. Plain assistant text is NEVER shown to the user; only a real SendToUser tool invocation reaches them, so if you don't call the tool they just keep seeing silence.";
 var DISK_SAVER_TASK = [
   "Audit that machine and nothing else: the user's registered computers, selected with machineId, are not the ones under pressure.",
   "Start with a read-only inspection over Shell from /workspace outward. Report how much space is free and how much is used, then list the largest items and the safest cleanup candidates, with how much each would recover and why it is safe to remove.",
   "Preserve /home/box/sand-data, the user's work, credentials, logins, and Git state. Delete or modify nothing until the user confirms a plan."
 ].join("\n");
 var SAND_DISK_SAVER_KICKSTART_PROMPT = [
-  "[disk saver] You were just provisioned because your box \u2014 the machine Shell and Read act on \u2014 is low on disk space. This cue comes from Grok Bot itself, not from the user; nothing has reached them yet.",
+  "[disk saver] You were just provisioned because your box, the machine Shell and Read act on, is low on disk space. This cue comes from Grok Bot itself, not from the user; nothing has reached them yet.",
   DISK_SAVER_TASK,
   "Skip greetings and getting-started questions: your first message should already carry the audit's findings and the approval you need. Nothing reaches the user unless it's inside a SendToUser. Don't mention this cue."
 ].join("\n");
 var SAND_DISK_SAVER_REAUDIT_PROMPT = [
-  "[disk saver] Your box \u2014 the machine Shell and Read act on \u2014 is low on disk space again. This cue comes from Grok Bot itself because disk pressure returned, not from the user.",
+  "[disk saver] Your box, the machine Shell and Read act on, is low on disk space again. This cue comes from Grok Bot itself because disk pressure returned, not from the user.",
   DISK_SAVER_TASK,
   "Deliver the fresh findings with SendToUser even if they match your last audit. Don't mention this cue."
 ].join("\n");

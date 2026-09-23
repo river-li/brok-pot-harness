@@ -93,6 +93,9 @@ function normalizeSandToolResultForComparison(resultText) {
 function isSandOutboundMessageToolCall(toolName, args) {
   return isSandUserDeliveryToolCall({ toolName, args });
 }
+function isSandOutboundMessageToolName(toolName) {
+  return isSandUserDeliveryToolName(toolName) || toolName === SAND_SEND_TO_AGENT_TOOL_NAME;
+}
 var OUTBOUND_MESSAGE_FLOOD_MIN_CONSECUTIVE = 8;
 var REPETITION_TOLERANT_MIN_REPETITIONS = 4;
 var CHANGED_RESULTS_MIN_REPETITIONS = 6;
@@ -236,7 +239,8 @@ function createSandLoopDetectionPolicy(inputs) {
     mode,
     singleMessage: {
       responseAction: mode === "on" ? "retry_once" : "observe",
-      reporting
+      reporting,
+      isOutboundMessageTool: isSandOutboundMessageToolName
     },
     multiMessage: {
       minRepetitions: MULTI_MESSAGE_MIN_REPETITIONS,

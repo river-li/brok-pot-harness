@@ -14,6 +14,10 @@ function whatToTellTheUser(watched) {
   return watched ? " Tell the user the call has been placed and that you will report back once it is over." : " Tell the user the call has been placed and that you will not be able to report how it went.";
 }
 async function placePhoneCall(deps, args) {
+  const eligibility = await deps.outboundCall.checkEligibility(args.to);
+  if (eligibility.kind === "ineligible") {
+    return eligibility.reason;
+  }
   const decision = await deps.reviewCall({
     toolCallId: deps.toolCallId ?? "",
     target: args,

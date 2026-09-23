@@ -5,10 +5,10 @@ function summarizeUserFormRequest(form) {
 }
 var FILL_FAILED_STATUS_BY_KIND = {
   driver_unavailable: "FILL FAILED: the host could not reach the box browser (its driver or the browser itself was down), so nothing was written for this field and nothing is known to be wrong with the target. Take a fresh browser_snapshot (it brings the browser back if needed) and re-ask for just this field with a target from it",
-  target_gone: "FILL FAILED: the ref no longer resolves \u2014 the page re-rendered or navigated since your snapshot. Take a fresh browser_snapshot and re-ask for just this field with a fresh target",
+  target_gone: "FILL FAILED: the ref no longer resolves. The page re-rendered or navigated since your snapshot. Take a fresh browser_snapshot and re-ask for just this field with a fresh target",
   target_missing: "FILL FAILED: nothing on the live page matched the target (snapshots pierce open shadow roots and same-origin iframes, so it is not merely nested in one). Take a fresh browser_snapshot and re-ask with a target from it",
-  in_unreachable_frame: "FILL FAILED: the target was not found, and the page embeds a frame the host cannot enter (cross-origin iframe) where the field may live. Re-issuing the SAME target would fail the same way \u2014 hand the user the screen with request_box_help, unless a fresh browser_snapshot actually shows the field (then re-ask once with a ref from it)",
-  in_closed_shadow: "FILL FAILED: the target matched a custom element whose internals sit behind a closed shadow root the host cannot reach. Re-issuing the same form would fail the same way \u2014 hand the user the screen with request_box_help",
+  in_unreachable_frame: "FILL FAILED: the target was not found, and the page embeds a frame the host cannot enter (cross-origin iframe) where the field may be. Re-issuing the SAME target would fail the same way. Hand the user the screen with request_box_help, unless a fresh browser_snapshot actually shows the field (then re-ask once with a ref from it)",
+  in_closed_shadow: "FILL FAILED: the target matched a custom element whose internals sit behind a closed shadow root the host cannot reach. Re-issuing the same form would fail the same way. Hand the user the screen with request_box_help",
   fill_op_failed: "FILL FAILED: the target resolved to a live element but the write errored. Take a fresh browser_snapshot and re-ask with a fresh target, or hand the user the screen with request_box_help"
 };
 var FILL_FAILED_STATUS_UNCLASSIFIED = "FILL FAILED (the target was gone, unresolvable, or the fill errored)";
@@ -20,7 +20,7 @@ function buildUserFormSubmittedAck(form, outcomes, domainMismatch, submit, fillF
   let mismatchLine = [];
   if (domainMismatch != null) {
     mismatchLine = [
-      anyFilled ? `The host STOPPED filling mid-form: the live page (${liveHostText}) left ${consentedHost}, the exact host the card showed the user as the destination. Fields marked "filled into the page" below were written while the page was still on that host; every remaining value was refused and discarded. Bring the browser back to the right page, take a fresh snapshot, and re-ask for just the missing fields with a new form.` : `The host REFUSED to fill: the live page (${liveHostText}) is not ${consentedHost}, the exact host the card showed the user as the destination (fills only ever go to that exact host \u2014 never another subdomain). NOTHING was written; the submitted values were discarded. Navigate the browser to the right page, take a fresh snapshot, and re-issue the form with the exact browser-bar domain and fresh targets.`
+      anyFilled ? `The host STOPPED filling mid-form: the live page (${liveHostText}) left ${consentedHost}, the exact host the card showed the user as the destination. Fields marked "filled into the page" below were written while the page was still on that host; every remaining value was refused and discarded. Bring the browser back to the right page, take a fresh snapshot, and re-ask for just the missing fields with a new form.` : `The host REFUSED to fill: the live page (${liveHostText}) is not ${consentedHost}, the exact host the card showed the user as the destination (fills only ever go to that exact host, never another subdomain). NOTHING was written; the submitted values were discarded. Navigate the browser to the right page, take a fresh snapshot, and re-issue the form with the exact browser-bar domain and fresh targets.`
     ];
   }
   const heldForRemap = new Set(domainMismatch == null ? remap?.fieldIds ?? [] : []);
@@ -34,9 +34,9 @@ function buildUserFormSubmittedAck(form, outcomes, domainMismatch, submit, fillF
     let status = "not filled (no usable browser target)";
     if (outcome?.fillFailed === true) {
       if (heldForRemap.has(field.id)) {
-        status = `NOT FILLED \u2014 ${failureKind !== void 0 ? HELD_FIELD_MISS_BY_KIND[failureKind] : "the page moved before this field was written"}. The host still HOLDS the submitted value: name its new target through ${SAND_REMAP_USER_FORM_TARGETS_TOOL_NAME} in the cursor dynamic namespace (see below)`;
+        status = `NOT FILLED: ${failureKind !== void 0 ? HELD_FIELD_MISS_BY_KIND[failureKind] : "the page moved before this field was written"}. The host still HOLDS the submitted value. Name its new target through ${SAND_REMAP_USER_FORM_TARGETS_TOOL_NAME} in the cursor dynamic namespace (see below)`;
       } else if (handedBackAsPageMoved) {
-        status = "not filled: the page moved before this field was written \u2014 its value was discarded";
+        status = "not filled: the page moved before this field was written, and its value was discarded";
       } else if (failureKind !== void 0) {
         status = FILL_FAILED_STATUS_BY_KIND[failureKind];
       } else {
@@ -59,7 +59,7 @@ function buildUserFormSubmittedAck(form, outcomes, domainMismatch, submit, fillF
     ...pageMovedLines,
     ...remapLines,
     ...lines2,
-    `Submitted values are write-only for EVERY field: the host filled them into the page and never returns them to you. The per-field statuses above ARE the verification for secret fields \u2014 do NOT take a screenshot to check what landed in a secret field (structured snapshots redact secret values; a screenshot is raw page pixels and redacts nothing). ${nextStep} \u2014 never ask the user to paste values in chat.`,
+    `Submitted values are write-only for EVERY field. The host filled them into the page and never returns them to you. The per-field statuses above ARE the verification for secret fields. Do NOT take a screenshot to check what landed in a secret field (structured snapshots redact secret values; a screenshot is raw page pixels and redacts nothing). ${nextStep}. Never ask the user to paste values in chat.`,
     buildSubmitAfterFillLine(form, submit)
   ].join("\n");
 }
@@ -80,7 +80,7 @@ function buildRemapOfferLines(heldFieldIds, consentedHost, remap, pageMoved) {
     snapshotWhere = "the fresh snapshot below";
   }
   return [
-    `REMAP OFFERED \u2014 the user is NOT being asked again. The host still holds the submitted value of ${[...heldFieldIds].map((id) => `"${id}"`).join(", ")} for ONE remap on ${consentedHost}. Look at ${snapshotWhere}: if the SAME field is on the page under a new ref (the page re-rendered, revealed the next step, or swapped the control), remap NOW, in this turn, via ${SAND_REMAP_USER_FORM_TARGETS_CALL_HINT} \u2014 one entry per held field you can place, all in one call. The host writes the value the user already typed into that target \u2014 one write, same host, and only into a control the user can see (a hidden twin is refused). You cannot supply, change, or see a value: remap is target-only, and the held values are discarded the moment this turn ends or the remap runs. If the field is genuinely no longer on the page (the step moved on), do NOT remap it and do NOT re-issue a form for it \u2014 continue the task from the current page, or hand the user the screen with request_box_help.`,
+    `REMAP OFFERED: the user is NOT being asked again. The host still holds the submitted value of ${[...heldFieldIds].map((id) => `"${id}"`).join(", ")} for ONE remap on ${consentedHost}. Look at ${snapshotWhere}. If the SAME field is on the page under a new ref (the page re-rendered, revealed the next step, or swapped the control), remap NOW, in this turn, via ${SAND_REMAP_USER_FORM_TARGETS_CALL_HINT}, with one entry per held field you can place, all in one call. The host writes the value the user already typed into that target: one write, same host, and only into a control the user can see (a hidden twin is refused). You cannot supply, change, or see a value. Remap is target-only, and the held values are discarded the moment this turn ends or the remap runs. If the field is genuinely no longer on the page (the step moved on), do NOT remap it and do NOT re-issue a form for it. Continue the task from the current page, or hand the user the screen with request_box_help.`,
     ...snapshot !== void 0 && pageMoved?.valueScrubbedFreshSnapshot === void 0 ? [
       "What is on the page now (fresh structured snapshot; submitted values withheld):",
       snapshot
@@ -89,9 +89,9 @@ function buildRemapOfferLines(heldFieldIds, consentedHost, remap, pageMoved) {
 }
 function buildPageMovedLinesThatSteerTheAgentToRePlanNotRetry(pageMoved, anyFilled, remapOffered) {
   if (pageMoved == null) return [];
-  const why = pageMoved.signal === "navigated" ? "the live tab navigated to a different page or step while the host was filling" : "a target went stale, and when the host re-looked that field up by its own label on the still-open page the control was GONE \u2014 the page replaced this form, it did not merely re-render";
+  const why = pageMoved.signal === "navigated" ? "the live tab navigated to a different page or step while the host was filling" : "a target went stale, and when the host re-looked that field up by its own label on the still-open page the control was GONE. The page replaced this form, it did not merely re-render";
   const remaining = remapOffered ? "remaining value is HELD for the one remap described below, not written anywhere" : "remaining value was refused and DISCARDED";
-  const nextStep = remapOffered ? "Do NOT retry this form's old targets \u2014 they describe a page that is no longer there. Read the current page state below, then remap the held fields that are still on screen, or continue the task if the step moved on." : `Do NOT retry this form or its targets \u2014 the refs and labels it carried describe a page that is no longer there. Re-plan from the current page state${pageMoved.valueScrubbedFreshSnapshot !== void 0 ? " below" : " (take a fresh browser_snapshot)"}: if the step you meant is still on screen, issue a NEW request_user_form with fresh targets; if the page moved on to the next step, continue the task from there; if the user has to act on the page itself, hand them the screen with request_box_help.`;
+  const nextStep = remapOffered ? "Do NOT retry this form's old targets. They describe a page that is no longer there. Read the current page state below, then remap the held fields that are still on screen, or continue the task if the step moved on." : `Do NOT retry this form or its targets. The refs and labels it carried describe a page that is no longer there. Re-plan from the current page state${pageMoved.valueScrubbedFreshSnapshot !== void 0 ? " below" : " (take a fresh browser_snapshot)"}. If the step you meant is still on screen, issue a NEW request_user_form with fresh targets; if the page moved on to the next step, continue the task from there; if the user has to act on the page itself, hand them the screen with request_box_help.`;
   return [
     `The host STOPPED filling: ${why}. ${anyFilled ? 'Fields marked "filled into the page" below were written before the page moved; every' : "NOTHING was written; every"} ${remaining}. ${nextStep}`,
     ...pageMoved.valueScrubbedFreshSnapshot !== void 0 ? [
@@ -102,12 +102,12 @@ function buildPageMovedLinesThatSteerTheAgentToRePlanNotRetry(pageMoved, anyFill
 }
 var REMAP_FAILED_STATUS_BY_KIND = {
   driver_unavailable: "NOT FILLED: the host could not reach the box browser, so nothing was written",
-  target_gone: "NOT FILLED: the new ref no longer resolves \u2014 the page re-rendered since that snapshot",
+  target_gone: "NOT FILLED: the new ref no longer resolves. The page re-rendered since that snapshot",
   target_missing: "NOT FILLED: nothing on the live page matched the new target",
   in_unreachable_frame: "NOT FILLED: the new target sits in a frame the host cannot enter (cross-origin iframe)",
   in_closed_shadow: "NOT FILLED: the new target sits behind a closed shadow root the host cannot reach",
   fill_op_failed: "NOT FILLED: the new target resolved to a live element but the write errored",
-  hidden_target: "REFUSED: the new target resolved, but it is a control the user cannot see (display:none, zero-size, or aria-hidden) \u2014 a hidden twin, honeypot, or not-yet-revealed step. The host never writes into a hidden control",
+  hidden_target: "REFUSED: the new target resolved, but it is a control the user cannot see (display:none, zero-size, or aria-hidden), such as a hidden twin, honeypot, or not-yet-revealed step. The host never writes into a hidden control",
   page_moved: "NOT FILLED: the live tab moved to a different page or step before this write, so the host stopped"
 };
 function buildUserFormRemapReceipt(outcome) {
@@ -115,7 +115,7 @@ function buildUserFormRemapReceipt(outcome) {
     return `Nothing to remap: the host holds no submitted values for this agent. A remap is offered on a fill receipt and is spent by the first ${SAND_REMAP_USER_FORM_TARGETS_TOOL_NAME} call or by the end of that turn. If a field still needs filling, re-ask with a new request_user_form or hand the user the screen with request_box_help.`;
   }
   if (outcome.kind === "unknown_fields") {
-    return `Nothing was written: ${outcome.unknownFieldIds.map((id) => `"${id}"`).join(", ")} ${outcome.unknownFieldIds.length === 1 ? "is not a field" : "are not fields"} the host holds a value for. The held field ids are ${outcome.heldFieldIds.map((id) => `"${id}"`).join(", ")} \u2014 call again via ${SAND_REMAP_USER_FORM_TARGETS_CALL_HINT} with only those (the hold stands until this turn ends).`;
+    return `Nothing was written: ${outcome.unknownFieldIds.map((id) => `"${id}"`).join(", ")} ${outcome.unknownFieldIds.length === 1 ? "is not a field" : "are not fields"} the host holds a value for. The held field ids are ${outcome.heldFieldIds.map((id) => `"${id}"`).join(", ")}. Call again via ${SAND_REMAP_USER_FORM_TARGETS_CALL_HINT} with only those (the hold stands until this turn ends).`;
   }
   const lines2 = outcome.outcomes.map((fieldOutcome) => {
     const kind = outcome.fillFailureKinds?.[fieldOutcome.id];
@@ -128,14 +128,14 @@ function buildUserFormRemapReceipt(outcome) {
     return `- ${fieldOutcome.id}: ${status}`;
   });
   const notRemapped = outcome.notRemappedFieldIds.map(
-    (id) => `- ${id}: not remapped \u2014 its held value was discarded`
+    (id) => `- ${id}: not remapped, and its held value was discarded`
   );
   const mismatch = outcome.domainMismatch != null ? [
     `The host REFUSED to write: the live page (${outcome.domainMismatch.liveHost != null ? `host ${outcome.domainMismatch.liveHost}` : "host unknown"}) is not the host the user consented to. Nothing was written.`
   ] : [];
   const anyFailed = outcome.outcomes.some((fieldOutcome) => !fieldOutcome.filled) || notRemapped.length > 0;
   return [
-    "[Remap result \u2014 the host wrote the values the user already submitted; no value is returned to you:",
+    "[Remap result: the host wrote the values the user already submitted; no value is returned to you:",
     ...mismatch,
     ...lines2,
     ...notRemapped,
@@ -144,15 +144,15 @@ function buildUserFormRemapReceipt(outcome) {
 }
 function buildSubmitAfterFillLine(form, submit) {
   if (form.submitAfterFill !== true) {
-    return "The host only filled values; it did NOT click the site's own submit button and did not navigate. Start from a fresh page snapshot \u2014 not a screenshot, while a submitted secret could still be visible on the page \u2014 and do not assume the page moved on; then click the submit control yourself.]";
+    return "The host only filled values; it did NOT click the site's own submit button and did not navigate. Start from a fresh page snapshot, not a screenshot while a submitted secret could still be visible on the page, and do not assume the page moved on; then click the submit control yourself.]";
   }
   if (submit?.attempted === true && submit.succeeded) {
-    return "You asked for submitAfterFill: after the fills, the host pressed Enter in the last filled field, so the page may have submitted and moved on. Take a fresh page snapshot to verify the outcome before anything else \u2014 not a screenshot, in case a submitted secret is still visible on the page \u2014 and do not submit again unless the page shows the step did not go through.]";
+    return "You asked for submitAfterFill. After the fills, the host pressed Enter in the last filled field, so the page may have submitted and moved on. Take a fresh page snapshot to verify the outcome before anything else, not a screenshot in case a submitted secret is still visible on the page, and do not submit again unless the page shows the step did not go through.]";
   }
   if (submit?.attempted === true) {
-    return "You asked for submitAfterFill, but the host's Enter-press submit FAILED after the fills. The filled values are still in the page and nothing was submitted \u2014 take a fresh snapshot and click the site's submit control yourself.]";
+    return "You asked for submitAfterFill, but the host's Enter-press submit FAILED after the fills. The filled values are still in the page and nothing was submitted. Take a fresh snapshot and click the site's submit control yourself.]";
   }
-  return "You asked for submitAfterFill, but the host did not attempt it: the Enter press runs only after a fully successful one-shot fill \u2014 every targeted field filled, with the form's single text code field to press Enter in (a failed fill, a non-one-shot form shape, or a field Enter cannot submit from all skip it). Nothing was submitted and the site's own submit button was never clicked.]";
+  return "You asked for submitAfterFill, but the host did not attempt it. The Enter press runs only after a fully successful one-shot fill, one where every targeted field filled and the form has a single text code field to press Enter in (a failed fill, a non-one-shot form shape, or a field Enter cannot submit from all skip it). Nothing was submitted and the site's own submit button was never clicked.]";
 }
 var STRUCTURAL_FAILURE_PHRASE = {
   in_unreachable_frame: "inside a frame the host cannot enter (cross-origin iframe)",
@@ -184,7 +184,7 @@ function buildUserFormSkippedFieldsNote(skippedFieldKinds) {
     ([id, kind]) => `- ${id}: target is ${STRUCTURAL_FAILURE_PHRASE[kind]}`
   );
   return [
-    "NOTE: the host preflighted the targeted fields against the live page and DROPPED these from the card \u2014 their targets are structurally unreachable, so the user was not asked to type them and they will not appear on the receipt as filled:",
+    "NOTE: the host preflighted the targeted fields against the live page and DROPPED these from the card. Their targets are structurally unreachable, so the user was not asked to type them and they will not appear on the receipt as filled:",
     ...lines2,
     "Do not re-ask for them with another form into the same frame or shadow root; if the step cannot proceed without them, hand the user the screen with request_box_help."
   ].join("\n");

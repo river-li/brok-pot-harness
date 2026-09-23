@@ -211,19 +211,19 @@ function createZodAgentTool(toolIdentifier, tool) {
   };
 }
 var ToolCallError = class extends Error {
-  constructor({ clientVisibleErrorMessage, modelVisibleErrorMessage, error: error42 }) {
+  constructor({ clientVisibleErrorMessage, modelVisibleErrorMessage: modelVisibleErrorMessage2, error: error42 }) {
     super(error42);
     this.clientVisibleErrorMessage = clientVisibleErrorMessage;
-    this.modelVisibleErrorMessage = modelVisibleErrorMessage;
+    this.modelVisibleErrorMessage = modelVisibleErrorMessage2;
   }
 };
 var ToolTimeoutError = class extends ToolCallError {
 };
 var CustomToolCallError = class extends ToolCallError {
-  constructor(classification, { clientVisibleErrorMessage, modelVisibleErrorMessage, error: error42 }) {
+  constructor(classification, { clientVisibleErrorMessage, modelVisibleErrorMessage: modelVisibleErrorMessage2, error: error42 }) {
     super({
       clientVisibleErrorMessage,
-      modelVisibleErrorMessage,
+      modelVisibleErrorMessage: modelVisibleErrorMessage2,
       error: error42
     });
     this.classification = classification;

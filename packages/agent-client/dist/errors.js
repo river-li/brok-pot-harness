@@ -114,7 +114,7 @@ var NETWORK_ERRNO_CODES = /* @__PURE__ */ new Set([
   "ENETUNREACH"
 ]);
 var NETWORK_ERRNO_RE = new RegExp(`\\b(${[...NETWORK_ERRNO_CODES].join("|")})\\b`);
-var INFERENCE_REQUEST_ERROR_TYPE_HEADER = "x-cursor-inference-request-error-type";
+var INFERENCE_REQUEST_ERROR_TYPE_HEADER2 = "x-cursor-inference-request-error-type";
 var AGENT_WEBSOCKET_DELIVERY_AMBIGUOUS_ERROR_NAME = "AgentWebSocketDeliveryAmbiguousError";
 function classifyError2(error42, options2 = {}) {
   const { requestId: requestId2 } = options2;
@@ -184,7 +184,7 @@ function classifyConnectError(error42, requestId2) {
     isRetryable: (_c2 = details === null || details === void 0 ? void 0 : details.details) === null || _c2 === void 0 ? void 0 : _c2.isRetryable,
     connectCode: code,
     errorCode: details === null || details === void 0 ? void 0 : details.error,
-    inferenceRequestErrorType: (_j = getConnectMetadata(underlying, INFERENCE_REQUEST_ERROR_TYPE_HEADER)) !== null && _j !== void 0 ? _j : getConnectMetadata(error42, INFERENCE_REQUEST_ERROR_TYPE_HEADER),
+    inferenceRequestErrorType: (_j = getConnectMetadata(underlying, INFERENCE_REQUEST_ERROR_TYPE_HEADER2)) !== null && _j !== void 0 ? _j : getConnectMetadata(error42, INFERENCE_REQUEST_ERROR_TYPE_HEADER2),
     errorDetails: details
   };
   const opts = { cause: error42, requestId: requestId2, displayInfo };

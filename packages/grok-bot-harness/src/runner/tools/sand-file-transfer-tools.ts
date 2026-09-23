@@ -97,7 +97,7 @@ async function copyFileFromBox(ctx, args, controller) {
 }
 var copyToBoxParameters = external_exports.object({
   computer_path: external_exports.string().trim().min(1).describe(
-    "Absolute path of the file to pull, on the selected user's computer. Any file type and any size; copied verbatim, so binaries and large files are safe \u2014 unlike reading then re-writing it as text."
+    "Absolute path of the file to pull, on the selected user's computer. Any file type and any size; copied verbatim, so binaries and large files are safe, unlike reading then re-writing it as text."
   ),
   box_path: external_exports.string().trim().min(1).optional().describe(
     "Where to put it inside your box. Absolute (e.g. /workspace/data.csv) or relative to /workspace. Omit to land it in /workspace/uploads under its original filename."
@@ -126,7 +126,7 @@ function createFileTransferTools(controller, machineIds) {
     defineCommunicateTool(controller, {
       id: "COPY_TO_BOX",
       name: SAND_COPY_TO_BOX_TOOL_NAME,
-      description: "Copy a file from the user's computer into your box, verbatim. Use this to bring a user's file (any type or size \u2014 a CSV, PDF, archive, image, dataset, binary) onto your box so you can work on it with Shell or Read, or open it in the box browser (parent agents delegate that GUI interaction to computerUse). This is the deliberate way to get a file into the box: the user does not have to drag it into chat first, and unlike reading the file and re-writing it, the bytes are copied exactly (no truncation, binaries are safe). Give the file's absolute path on the selected user's computer and its machineId; it lands in /workspace/uploads by default, or at a box_path you choose. Then open it with Shell at the path reported back.",
+      description: "Copy a file from the user's computer into your box, verbatim. Use this to bring a user's file (any type or size: a CSV, PDF, archive, image, dataset, binary) onto your box so you can work on it with Shell or Read, or open it in the box browser (parent agents delegate that GUI interaction to computerUse). This is the deliberate way to get a file into the box: the user does not have to drag it into chat first, and unlike reading the file and re-writing it, the bytes are copied exactly (no truncation, binaries are safe). Give the file's absolute path on the selected user's computer and its machineId; it lands in /workspace/uploads by default, or at a box_path you choose. Then open it with Shell at the path reported back.",
       parameters: copyToBoxToolParameters,
       /*
        * Paths from the user's computer can use Windows or POSIX separators.

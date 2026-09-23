@@ -180,7 +180,7 @@ function parseSecretEnvelope(raw) {
         typeof secret.name !== "string" ||
         !ENV_NAME.test(secret.name) ||
         RESERVED_ENV_NAMES.has(secret.name) ||
-        RESERVED_ENV_PREFIXES.some(prefix => secret.name.startsWith(prefix)) ||
+        RESERVED_ENV_PREFIXES.some((prefix) => secret.name.startsWith(prefix)) ||
         CURSOR_SANDBOX_ENV_NAME.test(secret.name) ||
         typeof secret.value !== "string" ||
         Buffer.byteLength(secret.value, "utf8") > MAX_SECRET_VALUE_BYTES ||
@@ -189,8 +189,7 @@ function parseSecretEnvelope(raw) {
         throw new Error("managed setup Team Secret is invalid");
       }
       totalBytes +=
-        Buffer.byteLength(secret.name, "utf8") +
-        Buffer.byteLength(secret.value, "utf8");
+        Buffer.byteLength(secret.name, "utf8") + Buffer.byteLength(secret.value, "utf8");
       env[secret.name] = secret.value;
     }
     if (totalBytes > MAX_SECRET_ENV_BYTES) {
@@ -279,10 +278,8 @@ function runScript(entryId, kind, script, secrets, secretValues) {
     timeout: SCRIPT_TIMEOUT_MS,
     killSignal: "SIGKILL",
   });
-  if (result.stdout)
-    process.stdout.write(redactSecrets(result.stdout, secretValues));
-  if (result.stderr)
-    process.stderr.write(redactSecrets(result.stderr, secretValues));
+  if (result.stdout) process.stdout.write(redactSecrets(result.stdout, secretValues));
+  if (result.stderr) process.stderr.write(redactSecrets(result.stderr, secretValues));
   if (result.error != null) {
     if (result.error.code === "ETIMEDOUT") {
       return `${kind} timed out after ${SCRIPT_TIMEOUT_MS}ms`;
@@ -334,14 +331,7 @@ function writeReceipt(ref, manifestHash, entry, imageSha) {
   });
 }
 
-function reconcileEntry(
-  ref,
-  manifestHash,
-  entry,
-  imageSha,
-  secrets,
-  secretValues
-) {
+function reconcileEntry(ref, manifestHash, entry, imageSha, secrets, secretValues) {
   const path = receiptPath(ref, entry.id);
   const hadReceipt = existsSync(path);
   const entryReceipt = readEntryReceipt(ref, entry);
@@ -353,13 +343,7 @@ function reconcileEntry(
     hadReceipt && receipt === null && (entryReceipt === null || imageSha.length !== 0);
 
   if (!FORCE_SETUP && entry.check !== undefined && !receiptInvalidated) {
-    const checkError = runScript(
-      entry.id,
-      "check",
-      entry.check,
-      secrets,
-      secretValues
-    );
+    const checkError = runScript(entry.id, "check", entry.check, secrets, secretValues);
     if (checkError === null) {
       log(`entry ${entry.id}: already compliant`);
       if (receipt === null || !receiptMatchesCurrentManifest(receipt, ref, manifestHash)) {
@@ -377,22 +361,10 @@ function reconcileEntry(
   }
 
   rmSync(path, { force: true });
-  const setupError = runScript(
-    entry.id,
-    "setup",
-    entry.setup,
-    secrets,
-    secretValues
-  );
+  const setupError = runScript(entry.id, "setup", entry.setup, secrets, secretValues);
   if (setupError !== null) return setupError;
   if (entry.check !== undefined) {
-    const checkError = runScript(
-      entry.id,
-      "check",
-      entry.check,
-      secrets,
-      secretValues
-    );
+    const checkError = runScript(entry.id, "check", entry.check, secrets, secretValues);
     if (checkError !== null) return checkError;
   }
   writeReceipt(ref, manifestHash, entry, imageSha);
@@ -439,10 +411,8 @@ function main(secretsByTeam, secretValues) {
     });
     return;
   }
-  const assignedTeamIds = new Set(
-    assignment.manifests.map(ref => ref.scope.id)
-  );
-  if ([...secretsByTeam.keys()].some(teamId => !assignedTeamIds.has(teamId))) {
+  const assignedTeamIds = new Set(assignment.manifests.map((ref) => ref.scope.id));
+  if ([...secretsByTeam.keys()].some((teamId) => !assignedTeamIds.has(teamId))) {
     throw new Error("managed setup Team Secrets include an unassigned team");
   }
 
@@ -522,14 +492,7 @@ function main(secretsByTeam, secretValues) {
       publishApplying(assignmentHash, manifestStatuses);
       let error;
       try {
-        error = reconcileEntry(
-          ref,
-          currentManifestHash,
-          entry,
-          imageSha,
-          secrets,
-          secretValues
-        );
+        error = reconcileEntry(ref, currentManifestHash, entry, imageSha, secrets, secretValues);
       } catch (reconcileError) {
         error = `reconciliation failed: ${reconcileError}`;
         try {
@@ -599,9 +562,7 @@ try {
   } else {
     const secretsByTeam = parseSecretEnvelope(envelopeRaw);
     const secretValues = [
-      ...new Set(
-        [...secretsByTeam.values()].flatMap(secrets => Object.values(secrets))
-      ),
+      ...new Set([...secretsByTeam.values()].flatMap((secrets) => Object.values(secrets))),
     ].sort((a, b) => b.length - a.length);
     releaseLock = acquireLock();
     if (releaseLock === null) {

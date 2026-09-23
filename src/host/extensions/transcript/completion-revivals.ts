@@ -213,7 +213,10 @@ var CompletionRevivals = class {
         this.tm.turnRuntime.activeRequestPrompts.delete(session.id);
         this.tm.turnRuntime.activeRequestSources.set(session.id, "background-revival");
         try {
-          const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(session);
+          const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(
+            session,
+            { isOpenQuestionKept: runner.gates.widgetV0() }
+          );
           const runResult = await runner.run(
             buildSubagentRevival(completions, {
               canvasCursorAgentIds: runner.canvasCursorAgentIds
@@ -333,7 +336,10 @@ var CompletionRevivals = class {
         this.tm.turnRuntime.activeRequestPrompts.delete(session.id);
         this.tm.turnRuntime.activeRequestSources.set(session.id, "background-revival");
         try {
-          const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(session);
+          const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(
+            session,
+            { isOpenQuestionKept: runner.gates.widgetV0() }
+          );
           const runResult = await runner.run(buildShellRevivalPrompt(completions), {
             hidden: true,
             isSilenceAllowed: true,

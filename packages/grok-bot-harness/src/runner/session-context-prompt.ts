@@ -2,8 +2,8 @@ var GROK_BOT_SESSION_PARTICIPANTS_PROMPT_MAX = 8;
 var SLACK_ONE_REPLY_LINE = "In Slack, each SendToUser call is a separate message in this conversation, and people read it as one exchange, so gather your answer and send it once; split only when the parts are genuinely separate, such as a quick acknowledgement before a long task";
 var SLACK_READING_MEDIUM_LINES = [
   "People read this on a phone or in Slack's narrow thread pane, where one long paragraph becomes a wall of text and the opening line decides whether the rest gets read",
-  "Your text is posted as standard markdown, so **double asterisks** make bold and a single pair makes italics, - starts a bullet and 1. a numbered step, and links, inline code and fenced code render as written",
-  "A heading renders as one oversized line, and a table renders as a Slack table that is cramped past two or three short columns in that pane",
+  "Write standard markdown and it is converted for Slack, so **double asterisks** make bold and a single pair makes italics, - starts a bullet and 1. a numbered step, and links, inline code and fenced code render as written",
+  "A heading renders as one bold line. Use at most one compact table per message, only for genuinely tabular information: it renders as a Slack table that is cramped past two or three short columns in that pane, and a second table in the same message shows as a code block, so put any other dataset in bullets. An image you attach is shared as its own file right after your text",
   "In a long analysis, the headline and the two or three points that decide it are what gets read in a thread, and the full detail is something people would rather ask for than scroll past",
   "When naming a Slack channel in a reply, write <#CHANNEL_ID> so it renders as the channel name, and never paste a bare #C\u2026 or #G\u2026 ID"
 ];
@@ -29,16 +29,16 @@ function whereLine(session) {
   const slack = slackSegments(session.sessionId);
   const participants = session.participants ?? [];
   if (session.kind === GROK_BOT_SESSION_KIND_SLACK_THREAD && slack?.anchor !== void 0) {
-    return `You are replying in a Slack thread \u2014 channel ${slack.channel}, thread ${slack.anchor}.` + (participants.length > 0 ? speakersSentence(participants, "thread") : "");
+    return `You are replying in a Slack thread, channel ${slack.channel}, thread ${slack.anchor}.` + (participants.length > 0 ? speakersSentence(participants, "thread") : "");
   }
   if (session.kind === GROK_BOT_SESSION_KIND_SLACK_GROUP_DM && slack != null) {
-    return `You are replying in a Slack group direct message \u2014 conversation ${slack.channel}.` + (participants.length > 0 ? speakersSentence(participants, "conversation") : "");
+    return `You are replying in a Slack group direct message, conversation ${slack.channel}.` + (participants.length > 0 ? speakersSentence(participants, "conversation") : "");
   }
   if (session.kind === GROK_BOT_SESSION_KIND_SLACK_DM && slack != null) {
     if (slack.channel.startsWith("D") && participants.length === 1) {
-      return `You are replying in a Slack direct message with ${participants[0]} \u2014 conversation ${slack.channel}.`;
+      return `You are replying in a Slack direct message with ${participants[0]}, conversation ${slack.channel}.`;
     }
-    return `You are replying in a Slack direct message \u2014 conversation ${slack.channel}.` + (participants.length > 0 ? speakersSentence(participants, "conversation") : "");
+    return `You are replying in a Slack direct message, conversation ${slack.channel}.` + (participants.length > 0 ? speakersSentence(participants, "conversation") : "");
   }
   if (session.kind === GROK_BOT_SESSION_KIND_DM) {
     return "You are in a direct-message conversation with one teammate in the Grok Bot app.";

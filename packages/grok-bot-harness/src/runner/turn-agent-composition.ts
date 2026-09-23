@@ -40,8 +40,8 @@ function createSandBackgroundSummarizationProps(session, canUseSelfSummary, isSu
     },
     unusedTokensThresholdToStartBackgroundSummarization: 1e4,
     unusedPercentTokensThresholdToStartBackgroundSummarization: 0.1,
-    unusedTokensThresholdToPersistBackgroundSummarization: 5e3,
-    unusedPercentTokensThresholdToPersistBackgroundSummarization: 0.05,
+    unusedTokensThresholdToPersistBackgroundSummarization: 1e4,
+    unusedPercentTokensThresholdToPersistBackgroundSummarization: 0.1,
     discardOnError: true,
     requireTriggerThresholdForMidLoopPersist: true
   };
@@ -277,6 +277,8 @@ function createTurnAgentComposition(host) {
       streamWatchdog,
       updateObservers,
       isRunAwaitingUserSelection: isThisRunAwaitingUser,
+      isRunCompletionRequested,
+      turnEndThroughAgent,
       isTeamSetupUnderway,
       endThisRunAwaitingUser,
       requestAutomationParentWake,
@@ -351,7 +353,9 @@ function createTurnAgentComposition(host) {
       isUnavailable: () => turnToolHost.isMcpDiscoveryUnavailableForTurn?.() === true,
       episodeId: childRequestLineage.parentRequestId
     });
-    const applySendMessageReminder = createSendMessageReminderMiddleware();
+    const applySendMessageReminder = createSendMessageReminderMiddleware({
+      delegationWording: () => host.gates.sendToUserReminderDelegation()
+    });
     const toolDescriptionSnapshots = host.toolDescriptionSnapshots();
     const applyFrozenToolDescriptions = toolDescriptionSnapshots === void 0 ? void 0 : createFrozenToolDescriptionsMiddleware({
       store: toolDescriptionSnapshots,
@@ -518,7 +522,7 @@ function createTurnAgentComposition(host) {
           serverId: slot.serverId,
           variant: "connect"
         });
-        return `"${slot.serverName}" needs authentication; its connect card is now in the chat. Finish unrelated work, then end your turn \u2014 you're resumed automatically when the user authorizes. Don't call AuthenticateMcpServer, send a link, or reach the service another way meanwhile.`;
+        return `"${slot.serverName}" needs authentication; its connect card is now in the chat. Finish unrelated work, then end your turn. You're resumed automatically when the user authorizes. Don't call AuthenticateMcpServer, send a link, or reach the service another way meanwhile.`;
       };
       const describeScmError = async (result, providerIdentifier, toolName) => {
         if (!hasParentToolParity || !host.turnToolHost.gates.scmConnectCard()) return null;
@@ -765,6 +769,7 @@ ${note}`;
         host.backgroundSummarizationPropsOverride
       ),
       pendingSummaryStore: host.pendingSummaryStore,
+      ...turnEndThroughAgent ? { isTurnEndRequested: isRunCompletionRequested } : {},
       agentType: AgentType.IDE,
       featureFlags: {
         enableWatchVideoInIdeSubagent: true,

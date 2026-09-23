@@ -27,6 +27,6 @@ function renderTimeZoneSystemPrompt(timeZone, now = /* @__PURE__ */ new Date()) 
   const zone = offset != null ? `${timeZone} (currently ${offset})` : timeZone;
   return [
     "## Time",
-    `The user lives in ${zone}, and the box clock is set to that zone, so \`date\`, file mtimes, and other box-local times already read in the user's time. Report every time to them in that zone with a short label (a tag like "PT" is enough). A timestamp that carries its own zone \u2014 a gh or API value ending in Z or an explicit UTC offset, a git log line with its own offset, a log line marked UTC \u2014 is not box-local: convert it to the user's zone before reporting it rather than parroting it back.`
+    `The user lives in ${zone}, and the box clock is set to that zone, so \`date\`, file mtimes, and other box-local times already read in the user's time. Report every time to them in that zone with a short label (a tag like "PT" is enough). A timestamp that carries its own zone is not box-local. Examples are a gh or API value ending in Z or an explicit UTC offset, a git log line with its own offset, and a log line marked UTC. Convert such a timestamp to the user's zone before reporting it rather than parroting it back.`
   ].join("\n");
 }

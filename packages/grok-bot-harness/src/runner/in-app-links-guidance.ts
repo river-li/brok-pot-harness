@@ -2,7 +2,8 @@ var PROMPT_EXCLUDED_ANCHORS = [
   "messages",
   "messages-send-without-asking",
   "messages-allowed-recipients",
-  "model"
+  "model",
+  "team-bot-connector-preferences"
 ];
 var LINKABLE_SETTINGS_ANCHOR_IDS = SETTINGS_DEEP_LINK_ANCHOR_IDS.filter((anchor) => !PROMPT_EXCLUDED_ANCHORS.includes(anchor));
 function taughtSettingsAnchorIds(visibility) {

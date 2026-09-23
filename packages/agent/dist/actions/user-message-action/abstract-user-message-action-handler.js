@@ -573,6 +573,16 @@ var loopRetryOutcome = createCounter("nal.loop.retry_outcome", {
   description: "Outcome of the NAL single-message loop in-step retry (observe only)",
   labelNames: ["outcome", "loop_kind"]
 });
+var providerDecodeRetryOutcome = createCounter("nal.provider_decode_error.retry_outcome", {
+  description: "Outcome of the one-shot step retry after a provider output-decode error",
+  labelNames: ["outcome"]
+});
+function incrementProviderDecodeRetryOutcome(ctx, outcome) {
+  providerDecodeRetryOutcome.increment(ctx, 1, { outcome });
+}
+function willRetryProviderDecodeError(error42, maxOutputTokenRetryDebug) {
+  return maxOutputTokenRetryDebug !== void 0 && maxOutputTokenRetryDebug.didRetryAfterProviderDecodeError !== true && (maxOutputTokenRetryDebug.retryLoopIteration ?? 0) < MAX_RETRY_ITERATIONS - 1 && isProviderDecodeError(error42) && failedBeforeAnyToolExecution(error42);
+}
 function incrementLoopRetryOutcome(ctx, outcome, loopKind) {
   loopRetryOutcome.increment(ctx, 1, {
     outcome,
@@ -1504,7 +1514,7 @@ var AbstractUserMessageActionHandler = class {
       }));
       if (response.error || ctx.signal.aborted) {
         await this.cancelPendingAgentResponseComparison();
-        if (this.config.skipErrorStateCheckpoint !== true) {
+        if (this.config.skipErrorStateCheckpoint !== true && !willRetryProviderDecodeError(response.error, maxOutputTokenRetryDebug)) {
           turn.appendPromptMessages(toRedactedCoreMessages(response.messages, stateHandler.getPrivacyMode()));
           const currentState = await stateHandler.computeNewStructure(ctx);
           if (onStateUpdate) {
@@ -1719,6 +1729,7 @@ var AbstractUserMessageActionHandler = class {
       let outputTokenLimitRetryCount = 0;
       let didRetryAfterSingleMessageLoop = false;
       let didRetryAfterEmptyResponse = false;
+      let didRetryAfterProviderDecodeError = false;
       let lastSingleMessageLoopKind;
       let lastSingleMessageLoopFingerprint;
       let lastRetryError;
@@ -1736,16 +1747,21 @@ var AbstractUserMessageActionHandler = class {
         });
       };
       for (let i = 0; i < MAX_RETRY_ITERATIONS; i++) {
+        const retryDebug = {
+          didAddOutputTokenReminder,
+          outputTokenLimitRetryCount,
+          didRetryAfterEmptyResponse,
+          didRetryAfterProviderDecodeError,
+          retryLoopIteration: i,
+          emptyResponseRetryTurnBudget
+        };
         try {
-          const result = await fn(ctx, {
-            didAddOutputTokenReminder,
-            outputTokenLimitRetryCount,
-            didRetryAfterEmptyResponse,
-            retryLoopIteration: i,
-            emptyResponseRetryTurnBudget
-          });
+          const result = await fn(ctx, retryDebug);
           if (didRetryAfterSingleMessageLoop) {
             incrementLoopRetryOutcome(ctx, "recovered", lastSingleMessageLoopKind);
+          }
+          if (didRetryAfterProviderDecodeError) {
+            incrementProviderDecodeRetryOutcome(ctx, "recovered");
           }
           return result;
         } catch (error42) {
@@ -1807,7 +1823,14 @@ var AbstractUserMessageActionHandler = class {
               repetitions: error42.repetitions,
               period: error42.period
             });
+          } else if (willRetryProviderDecodeError(error42, retryDebug)) {
+            didRetryAfterProviderDecodeError = true;
+            incrementProviderDecodeRetryOutcome(ctx, "retried");
+            logger65.info(ctx, "Provider rejected sampled output before any tool ran; retrying step");
           } else {
+            if (isProviderDecodeError(error42)) {
+              incrementProviderDecodeRetryOutcome(ctx, didRetryAfterProviderDecodeError ? "failed_again" : "ineligible");
+            }
             if (didRetryAfterSingleMessageLoop) {
               reportSingleMessageLoopStage("failed");
             }
@@ -2142,7 +2165,8 @@ var AbstractUserMessageActionHandler = class {
             }
             turn = updatedTurn;
             currentMcpTools = updatedMcpTools;
-            const hasEnded = !hasToolCall && !hasQueuedMessages || isLastIteration;
+            const hostRequestedTurnEnd = this.config.isTurnEndRequested?.() === true;
+            const hasEnded = !hasToolCall && !hasQueuedMessages || isLastIteration || hostRequestedTurnEnd;
             if (!hasToolCall && !hasQueuedMessages && conflictBarrierInjectionsRemaining > 0 && !isLastIteration && this.config.featureFlags?.enableAgentStoreConflictNotices === true && await this.maybeInjectPreFinalConflictBarrier(ctx, rootPromptExecutor, stateHandler.getPrivacyMode())) {
               conflictBarrierInjectionsRemaining -= 1;
               this.responseComparisonCandidate = void 0;
@@ -2320,6 +2344,10 @@ var AbstractUserMessageActionHandler = class {
                 await this.cancelPendingAgentResponseComparison();
                 break;
               }
+            }
+            if (hostRequestedTurnEnd) {
+              logger65.info(ctx, "Host requested turn end after this step");
+              break;
             }
             if (!hasToolCall && !hasQueuedMessages) {
               break;
@@ -3449,7 +3477,7 @@ ${sanitizedReminder}
       }));
       if (response.error || ctx.signal.aborted) {
         await this.cancelPendingAgentResponseComparison();
-        if (this.config.skipErrorStateCheckpoint !== true) {
+        if (this.config.skipErrorStateCheckpoint !== true && !willRetryProviderDecodeError(response.error, maxOutputTokenRetryDebug)) {
           turn.appendPromptMessages(toRedactedCoreMessages(response.messages, stateHandler.getPrivacyMode()));
           const currentState = await stateHandler.computeNewStructure(ctx);
           if (onStateUpdate) {

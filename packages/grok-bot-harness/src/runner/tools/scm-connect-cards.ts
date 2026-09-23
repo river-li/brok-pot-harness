@@ -155,13 +155,13 @@ async function describeScmConnectBlocker({
   if (provider == null && knownIntent != null) {
     leadSentence = `No source control integration is connected to the user's Cursor account.`;
   } else if (provider == null) {
-    leadSentence = intent === "access" ? `The repo reference didn't identify a source control integration, and the connected one can't see this repository \u2014 it may be on another provider, need an access grant, or not exist.` : `The repo reference didn't identify a source control integration, and none is connected to the user's Cursor account.`;
+    leadSentence = intent === "access" ? `The repo reference didn't identify a source control integration, and the connected one can't see this repository. It may be on another provider, need an access grant, or not exist.` : `The repo reference didn't identify a source control integration, and none is connected to the user's Cursor account.`;
   } else if (intent === "access") {
-    leadSentence = `${displayName2} is connected but can't see this repository \u2014 the user may need to add it to Cursor's ${displayName2} access, or the repo may not exist or be on another provider.`;
+    leadSentence = `${displayName2} is connected but can't see this repository. The user may need to add it to Cursor's ${displayName2} access, or the repo may not exist or be on another provider.`;
   } else if (reconnectShaped) {
     leadSentence = `${displayName2} is connected to the user's Cursor account but the saved connection no longer works; it has to be connected again.`;
   } else {
     leadSentence = `${displayName2} isn't connected to the user's Cursor account (or can't see this repository).`;
   }
-  return `${leadSentence} Nothing was shown to the user. To ask them to fix it, call ${example}; its result says whether you're woken automatically when they do. Either way, confirm with the owner before retrying the blocked action (${blockedAction}) \u2014 do not reuse a parked prompt or repo URL unless they ask.`;
+  return `${leadSentence} Nothing was shown to the user. To ask them to fix it, call ${example}; its result says whether you're woken automatically when they do. Either way, confirm with the owner before retrying the blocked action (${blockedAction}). Do not reuse a parked prompt or repo URL unless they ask.`;
 }

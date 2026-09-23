@@ -7,6 +7,8 @@ var NOOP_METRICS_EMITTER = Object.freeze({
   },
   onThrottled() {
   },
+  onMintGateStateChanged() {
+  },
   onRoundCompleted() {
   },
   onRoundLifecycle() {
@@ -38,6 +40,12 @@ var NOOP_METRICS_EMITTER = Object.freeze({
   tokenMintNegativeCached() {
   },
   tokenMintFailureCached() {
+  },
+  tokenMintRetried() {
+  },
+  tokenMintRetryDenied() {
+  },
+  tokenRefreshFailedKeptExisting() {
   }
 });
 function buildRoundCompletedEvent({ agentId, summary }) {

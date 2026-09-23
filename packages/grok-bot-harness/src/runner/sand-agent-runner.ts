@@ -951,6 +951,7 @@ var SandAgentRunner = class _SandAgentRunner {
       backgroundWatches: this.backgroundWatches,
       turnAgentComposition: this.turnAgentComposition,
       subagents: this.subagents,
+      gates: this.gates,
       resolveUserFormVaultKeysForRun: async () => this.userForm?.listVaultKeys != null && this.gates.userForm() && this.gates.formVault() ? await this.userForm.listVaultKeys() : void 0,
       getConversationId: () => this.getConversationId(),
       getTranscriptId: () => this.getTranscriptId(),

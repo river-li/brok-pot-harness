@@ -7,7 +7,7 @@ var GROUP_MESSAGE_TEXT_MAX_LENGTH = 8e3;
 var GROUP_MAX_MESSAGES_PER_TURN = 3;
 var GROUP_WIND_DOWN_REMAINING_BUDGET = 2;
 var GROUP_WIND_DOWN_NOTE = "The room is wrapping up this turn: reply only if it's essential, otherwise stay silent.";
-var GROUP_MEMBER_TURN_MESSAGE_LIMIT_NOTICE = `Not delivered \u2014 you've reached this room turn's ${GROUP_MAX_MESSAGES_PER_TURN}-message limit. Consolidate, or wait for your next turn.`;
+var GROUP_MEMBER_TURN_MESSAGE_LIMIT_NOTICE = `This message was not delivered. You've reached this room turn's ${GROUP_MAX_MESSAGES_PER_TURN}-message limit. Consolidate, or wait for your next turn.`;
 function orderRoundSpeakers(memberIds, round) {
   if (memberIds.length === 0) return [];
   const offset = (round % memberIds.length + memberIds.length) % memberIds.length;
@@ -102,7 +102,7 @@ function stripLeadingPass(text2) {
 function buildGroupRedriveNote() {
   return [
     "",
-    "(Redelivery: your previous attempt at this turn was interrupted by a direct message to you. The room has NOT seen any reply from you for the messages above \u2014 anything you said or did while handling that direct message stayed in that private chat. If you already did the work, send the result to this room with SendToUser now; otherwise take the turn normally.)"
+    "(Redelivery: your previous attempt at this turn was interrupted by a direct message to you. The room has NOT seen any reply from you for the messages above. Anything you said or did while handling that direct message stayed in that private chat. If you already did the work, send the result to this room with SendToUser now; otherwise take the turn normally.)"
   ].join("\n");
 }
 function groupSpeakerLabel(speaker, viewerId) {

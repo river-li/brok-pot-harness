@@ -11,7 +11,7 @@ var VIRTUAL_CARD_MAX_LINE_ITEM_LABEL_LENGTH = 80;
 var VIRTUAL_CARD_CURRENCY = "usd";
 var requestVirtualCardParameters = external_exports.object({
   amountCents: external_exports.number().int().positive().max(VIRTUAL_CARD_MAX_AMOUNT_CENTS).describe(
-    `The total to authorize, in CENTS \u2014 4200 means $42.00, not $4200. Whole cents only, at most ${VIRTUAL_CARD_MAX_AMOUNT_CENTS} (Link's ceiling). Include tax and shipping, and make lineItems sum to exactly this: it is the total that gets charged, and a card issued for less than the cart total is declined at checkout.`
+    `The total to authorize, in CENTS. 4200 means $42.00, not $4200. Whole cents only, at most ${VIRTUAL_CARD_MAX_AMOUNT_CENTS} (Link's ceiling). Include tax and shipping, and make lineItems sum to exactly this. It is the total that gets charged, and a card issued for less than the cart total is declined at checkout.`
   ),
   currency: external_exports.string().trim().toLowerCase().default(VIRTUAL_CARD_CURRENCY).describe(
     `Currency code. Only "${VIRTUAL_CARD_CURRENCY}" is supported, so omit this and pass amountCents in cents.`
@@ -101,7 +101,7 @@ async function runRequestVirtualCard(args, deps) {
   const card = normalizeVirtualCardRequest(args);
   const outcome = await deps.requestCard({ agentId, card });
   if (outcome.kind === "already-pending") {
-    return `The user still has your card request for ${outcome.merchantName} open and hasn't answered it, so this request was NOT sent \u2014 two live purchase cards would let whichever they click first decide what gets bought. Do not ask again. If you need to tell them something, use SendToUser; otherwise wait, and you'll be resumed when they answer.`;
+    return `The user still has your card request for ${outcome.merchantName} open and hasn't answered it, so this request was NOT sent. Two live purchase cards would let whichever they click first decide what gets bought. Do not ask again. If you need to tell them something, use SendToUser; otherwise wait, and you'll be resumed when they answer.`;
   }
   if (outcome.kind === "canceled") {
     return "The card request was NOT shown: it was canceled while being prepared (the conversation or agent was shut down or reset). Do not re-issue it.";
@@ -124,7 +124,7 @@ function createRequestVirtualCardTool(deps) {
   return defineCommunicateTool(deps, {
     id: "REQUEST_VIRTUAL_CARD",
     name: "request_virtual_card",
-    description: `Ask the user to authorize a one-time virtual card for a specific purchase. You cannot create a purchase yourself \u2014 this only ASKS; the user sees a card with the amount, the merchant, your reason, and the cart broken down line by line, and nothing is created unless they approve. Your turn ends when you call this. On approval they finish authorizing on Stripe Link's own page in their browser, and you are resumed with the spend request id; poll get_spend_request with it on a widening delay, waiting ${VIRTUAL_CARD_POLL_SCHEDULE} seconds before each check and saying NOTHING to the user in between, then fetch the card with include: ["card"] and type those details into the merchant's checkout. If it is still pending after the last check, give up and tell the user rather than polling on. Get the amount right the first time: it is the exact total that will be charged including tax and shipping, and a card issued for too little is declined at checkout. Raising a card while the user still has one open replaces it \u2014 the older card is retired unanswered \u2014 so do that only when the purchase itself has changed or they asked for a new one, never to nudge them. If they deny, take that as final and do not re-ask for the same purchase.`,
+    description: `Ask the user to authorize a one-time virtual card for a specific purchase. You cannot create a purchase yourself. This only ASKS; the user sees a card with the amount, the merchant, your reason, and the cart broken down line by line, and nothing is created unless they approve. Your turn ends when you call this. On approval they finish authorizing on Stripe Link's own page in their browser, and you are resumed with the spend request id; poll get_spend_request with it on a widening delay, waiting ${VIRTUAL_CARD_POLL_SCHEDULE} seconds before each check and saying NOTHING to the user in between, then fetch the card with include: ["card"] and type those details into the merchant's checkout. If it is still pending after the last check, give up and tell the user rather than polling on. Get the amount right the first time. It is the exact total that will be charged including tax and shipping, and a card issued for too little is declined at checkout. Raising a card while the user still has one open replaces it, and the older card is retired unanswered, so do that only when the purchase itself has changed or they asked for a new one, never to nudge them. If they deny, take that as final and do not re-ask for the same purchase.`,
     parameters: requestVirtualCardParameters,
     execute: async (ctx, args, d) => {
       const merchant = parseMerchantUrl(args.merchantUrl);

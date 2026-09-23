@@ -4,6 +4,7 @@ var SAND_CARRY_OVER_SUBAGENT_TYPE = "carryOver";
 function isCarryOverSubagentType(subagentType) {
   return subagentType === SAND_CARRY_OVER_SUBAGENT_TYPE;
 }
+var SAND_CARRY_OVER_PLUGINS_MAX = 5;
 var SAND_CARRY_OVER_SUGGESTIONS_MAX = 3;
 var REASON_TARGET_CHARS = 80;
 var REASON_MAX_CHARS = 120;
@@ -27,7 +28,7 @@ var carryOverParameters = external_exports.object({
     "Secrets from the inventory that the team bot's skills or routines use, each with its reason; they come ticked on the card."
   ),
   plugins: pluginPickList.describe(
-    "Plugins from the inventory the team bot's job needs, only the ones you are sure of and five at most, each with its reason; they come ticked on the card."
+    `Plugins from the inventory the team bot's job clearly needs, only the ones you are sure of and ${SAND_CARRY_OVER_PLUGINS_MAX} at most, surest first, each with its reason; they come ticked on the card.`
   ),
   suggestions: pluginPickList.describe(
     `Up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} more plugins from the inventory the team bot would likely need next, each with its reason; they come unticked under the picks, and none is fine.`
@@ -46,7 +47,7 @@ function carryOverProposalOf(args) {
   const secrets = firstPickOfEachName(
     args.secrets.map((pick2) => ({ ...pick2, name: pick2.name.toUpperCase() }))
   );
-  const plugins = firstPickOfEachName(args.plugins);
+  const plugins = firstPickOfEachName(args.plugins).slice(0, SAND_CARRY_OVER_PLUGINS_MAX);
   const picked = new Set(plugins.map((pick2) => pick2.name.toLowerCase()));
   const suggestions = firstPickOfEachName(args.suggestions).filter((pick2) => !picked.has(pick2.name.toLowerCase())).slice(0, SAND_CARRY_OVER_SUGGESTIONS_MAX);
   const reasons = {};
@@ -64,7 +65,7 @@ function createCarryOverTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_CARRY_OVER_TOOL_NAME,
-    description: `Propose which of the owner's plugins and secrets (by name) the team bot should have, from the inventory in your instructions. The secrets and plugins come ticked on the owner's card and up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} suggestions come unticked, each with a short reason; the owner decides on the card and their desktop does the copying, so this call copies nothing and you never see a secret value.`,
+    description: `Propose which of the owner's plugins and secrets (by name) the team bot should have, from the inventory in your instructions. The secrets and up to ${SAND_CARRY_OVER_PLUGINS_MAX} plugins come ticked on the owner's card and up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} suggestions come unticked, each with a short reason; the owner decides on the card and their desktop does the copying, so this call copies nothing and you never see a secret value.`,
     parameters: carryOverParameters,
     describeActivity: () => ({ detail: "propose" }),
     execute: async (_ctx, args, d) => await d.onProposal(carryOverProposalOf(args))

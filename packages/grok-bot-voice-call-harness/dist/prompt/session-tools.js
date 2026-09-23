@@ -33,6 +33,45 @@ var TOOLS = [
     parameters: { type: "object", properties: {} }
   }
 ];
+var EXPERIMENTAL = [
+  {
+    type: "function",
+    name: VOICE_CALL_SEARCH_CONVERSATIONS_TOOL,
+    description: VoiceCallToolDescriptions.searchConversations(),
+    parameters: {
+      type: "object",
+      properties: {
+        query: {
+          type: "string",
+          description: VoiceCallToolDescriptions.searchConversationsQuery()
+        },
+        scope: {
+          type: "string",
+          description: VoiceCallToolDescriptions.searchConversationsScope(),
+          enum: VOICE_CALL_SEARCH_SCOPES
+        },
+        id: {
+          type: "string",
+          description: VoiceCallToolDescriptions.searchConversationsId()
+        },
+        from: {
+          type: "string",
+          description: VoiceCallToolDescriptions.searchConversationsFrom()
+        },
+        to: {
+          type: "string",
+          description: VoiceCallToolDescriptions.searchConversationsTo()
+        },
+        if_missing: {
+          type: "string",
+          description: VoiceCallToolDescriptions.searchConversationsIfMissing(),
+          enum: VOICE_CALL_SEARCH_MISS_FALLBACKS
+        }
+      },
+      required: ["query", "if_missing"]
+    }
+  }
+];
 var VoiceCallSessionTools = class {
   static all() {
     return TOOLS;
@@ -41,7 +80,7 @@ var VoiceCallSessionTools = class {
     return TOOLS.filter((tool) => names3.includes(tool.name));
   }
   static descriptor(name17) {
-    const descriptor2 = TOOLS.find((tool) => tool.name === name17);
+    const descriptor2 = [...TOOLS, ...EXPERIMENTAL].find((tool) => tool.name === name17);
     if (descriptor2 === void 0) {
       throw new Error(`VoiceCallSessionTools.descriptor: ${name17} is not a voice tool`);
     }

@@ -41,12 +41,12 @@ function createSystemPromptAssembly(deps) {
         `Your profile is a JSON config file at ${profile.filePath} with ${fields2}, which you can read with your shell tools. ${selfEdit}, use the update_state tool (target "profile", action "set"); it preserves every field you do not pass. ${announced} are announced in a profile-update message for the current context and folded into this Agent profile section after the next conversation summary.`
       );
       lines2.push(
-        'Your profile picture is NOT part of that config \u2014 it is a conventional image file named "avatar.png" (or avatar.jpg/.jpeg/.webp/.gif/.svg) in the same directory, which you can read with your shell tools. To set it, put the image somewhere first (Shell under /workspace is fine \u2014 no CopyFromBox needed \u2014 or Shell with machineId on a selected registered user computer), then call update_state (target "avatar", action "set", path=...); to go back to the default picture, update_state target "avatar", action "clear". Never change your picture unless the user asks.'
+        'Your profile picture is NOT part of that config. It is a conventional image file named "avatar.png" (or avatar.jpg/.jpeg/.webp/.gif/.svg) in the same directory, which you can read with your shell tools. To set it, put the image somewhere first (Shell under /workspace is fine and needs no CopyFromBox, or Shell with machineId on a selected registered user computer), then call update_state (target "avatar", action "set", path=...); to go back to the default picture, update_state target "avatar", action "clear". Never change your picture unless the user asks.'
       );
     }
     if (profile.settingsFilePath.length > 0) {
       lines2.push(
-        `Your per-agent settings live in a separate JSON config file at ${profile.settingsFilePath}, readable the same way and changed with update_state (target "settings", action "set"). "hidden_from_sidebar" (true/false) removes your own row from the user's sidebar: you stay fully functional \u2014 you keep your conversation, keep receiving messages, keep running your routines, and still accrue unread \u2014 and the user can still reach you through the Hidden chats manager and Cmd-K; the default is visible. Pass only the fields you mean to change; the rest are preserved.`
+        `Your per-agent settings live in a separate JSON config file at ${profile.settingsFilePath}, readable the same way and changed with update_state (target "settings", action "set"). "hidden_from_sidebar" (true/false) removes your own row from the user's sidebar. You stay fully functional: you keep your conversation, keep receiving messages, keep running your routines, and still accrue unread. The user can still reach you through the Hidden chats manager and Cmd-K; the default is visible. Pass only the fields you mean to change; the rest are preserved.`
       );
     }
     if (lines2.length === 0) return null;

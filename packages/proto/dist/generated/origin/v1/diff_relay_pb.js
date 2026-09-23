@@ -102,7 +102,29 @@ var StreamDiffFilesClientRequest = class _StreamDiffFilesClientRequest extends _
     return proto3.util.equals(_StreamDiffFilesClientRequest, a, b2);
   }
   static $() {
-    return ["StreamDiffFilesClientRequest|1 target #0|2 service_request 12", DiffRelayTarget];
+    return ["StreamDiffFilesClientRequest|1 target #0|2 service_request 12|3 thread_anchors #1?", DiffRelayTarget, DiffRelayStreamThreadAnchorSource];
+  }
+};
+var DiffRelayStreamThreadAnchorSource = class _DiffRelayStreamThreadAnchorSource extends __protoMessage3157 {
+  constructor(data) {
+    super();
+    this.changeNumber = protoInt64.zero;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DiffRelayStreamThreadAnchorSource().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DiffRelayStreamThreadAnchorSource().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DiffRelayStreamThreadAnchorSource().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DiffRelayStreamThreadAnchorSource, a, b2);
+  }
+  static $() {
+    return ["DiffRelayStreamThreadAnchorSource|1 change_number 4"];
   }
 };
 var GetDiffFileClientRequest = class _GetDiffFileClientRequest extends __protoMessage3157 {
@@ -125,7 +147,31 @@ var GetDiffFileClientRequest = class _GetDiffFileClientRequest extends __protoMe
     return proto3.util.equals(_GetDiffFileClientRequest, a, b2);
   }
   static $() {
-    return ["GetDiffFileClientRequest|1 target #0|2 service_request 12|3 shadow 8", DiffRelayTarget];
+    return ["GetDiffFileClientRequest|1 target #0|2 service_request 12|3 shadow 8|4 thread_anchors #1?", DiffRelayTarget, DiffRelayThreadAnchorSource];
+  }
+};
+var DiffRelayThreadAnchorSource = class _DiffRelayThreadAnchorSource extends __protoMessage3157 {
+  constructor(data) {
+    super();
+    this.changeNumber = protoInt64.zero;
+    this.fromPath = "";
+    this.toPath = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DiffRelayThreadAnchorSource().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DiffRelayThreadAnchorSource().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DiffRelayThreadAnchorSource().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DiffRelayThreadAnchorSource, a, b2);
+  }
+  static $() {
+    return ["DiffRelayThreadAnchorSource|1 change_number 4|2 from_path 9|3 to_path 9"];
   }
 };
 var GetDiffEngineInfoClientRequest = class _GetDiffEngineInfoClientRequest extends __protoMessage3157 {

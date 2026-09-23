@@ -122,7 +122,7 @@ function formatSteerPrompt(message) {
   return [
     "[Steering message from the parent agent that dispatched you]",
     message.trim(),
-    "Take this into account and continue your task from where you are \u2014 do not start over."
+    "Take this into account and continue your task from where you are. Do not start over."
   ].join("\n\n");
 }
 function createBackgroundWatches(host) {

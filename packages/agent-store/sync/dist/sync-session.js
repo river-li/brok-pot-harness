@@ -232,6 +232,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     this.maxFileSizeBytes = options2.maxFileSizeBytes;
     this.blobIdleTimeoutMs = options2.blobIdleTimeoutMs;
     this.passiveRetryIntervalMs = options2.passiveRetryIntervalMs;
+    this.mintGate = options2.mintGate;
     this.passiveIndexPollIntervalMs = options2.passiveIndexPollIntervalMs;
     this.multipartUploadThresholdBytes = options2.multipartUploadThresholdBytes;
     this.multipartPartSizeBytes = options2.multipartPartSizeBytes;
@@ -288,8 +289,8 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     return true;
   }
   setRemoteTiming(timing) {
-    var _a19, _b2, _c2, _d, _e2, _f;
-    var _g, _h;
+    var _a19, _b2, _c2, _d, _e2, _f, _g, _h;
+    var _j, _k, _l;
     const previousDebounceMs = this.syncDebounceMs;
     const previousResumeGapThresholdMs = this.resumeGapThresholdMs;
     if (timing.syncDebounceMs !== void 0) {
@@ -307,12 +308,19 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
         (_a19 = this.engine) === null || _a19 === void 0 ? void 0 : _a19.setPassiveIndexPollIntervalMs(timing.passiveIndexPollIntervalMs);
       }
     }
+    if (timing.passiveRetryIntervalMs !== void 0) {
+      this.passiveRetryIntervalMs = timing.passiveRetryIntervalMs;
+      if (!this.isClosing()) {
+        const gateMs = (_j = (_b2 = this.mintGate) === null || _b2 === void 0 ? void 0 : _b2.remainingMs) !== null && _j !== void 0 ? _j : 0;
+        (_c2 = this.engine) === null || _c2 === void 0 ? void 0 : _c2.setPassiveRetryIntervalMs(Math.max(timing.passiveRetryIntervalMs, gateMs));
+      }
+    }
     if (this.resumeGapThresholdMs !== previousResumeGapThresholdMs && !this.isClosing()) {
       this.stopResumeDetector();
       this.startResumeDetector();
     }
-    const nextBase = (_g = timing.syncBackoffBaseMs) !== null && _g !== void 0 ? _g : this.syncBackoffBaseMs;
-    const nextMax = (_h = timing.syncBackoffMaxMs) !== null && _h !== void 0 ? _h : this.syncBackoffMaxMs;
+    const nextBase = (_k = timing.syncBackoffBaseMs) !== null && _k !== void 0 ? _k : this.syncBackoffBaseMs;
+    const nextMax = (_l = timing.syncBackoffMaxMs) !== null && _l !== void 0 ? _l : this.syncBackoffMaxMs;
     if (nextBase !== this.syncBackoffBaseMs || nextMax !== this.syncBackoffMaxMs) {
       const priorFailures = this.syncBackoff.failures;
       this.syncBackoffBaseMs = nextBase;
@@ -329,19 +337,19 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     if (timing.tombstoneFullRefreshRounds !== void 0) {
       this.tombstoneFullRefreshRounds = timing.tombstoneFullRefreshRounds;
       if (!this.isClosing()) {
-        (_b2 = this.engine) === null || _b2 === void 0 ? void 0 : _b2.setTombstoneFullRefreshRounds(timing.tombstoneFullRefreshRounds);
+        (_d = this.engine) === null || _d === void 0 ? void 0 : _d.setTombstoneFullRefreshRounds(timing.tombstoneFullRefreshRounds);
       }
     }
     if (timing.tombstoneFullRefreshIntervalMs !== void 0) {
       this.tombstoneFullRefreshIntervalMs = timing.tombstoneFullRefreshIntervalMs;
       if (!this.isClosing()) {
-        (_c2 = this.engine) === null || _c2 === void 0 ? void 0 : _c2.setTombstoneFullRefreshIntervalMs(timing.tombstoneFullRefreshIntervalMs);
+        (_e2 = this.engine) === null || _e2 === void 0 ? void 0 : _e2.setTombstoneFullRefreshIntervalMs(timing.tombstoneFullRefreshIntervalMs);
       }
     }
     if (timing.tombstonePruneSlackMs !== void 0) {
       this.tombstonePruneSlackMs = timing.tombstonePruneSlackMs;
       if (!this.isClosing()) {
-        (_d = this.engine) === null || _d === void 0 ? void 0 : _d.setTombstonePruneSlackMs(timing.tombstonePruneSlackMs);
+        (_f = this.engine) === null || _f === void 0 ? void 0 : _f.setTombstonePruneSlackMs(timing.tombstonePruneSlackMs);
       }
     }
     if (timing.pathSyncRequestWaitPollMs !== void 0) {
@@ -349,14 +357,14 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
     }
     if (timing.pathSyncRequestPollMs !== void 0 && timing.pathSyncRequestPollMs !== this.pathSyncRequestPollMs) {
       this.pathSyncRequestPollMs = timing.pathSyncRequestPollMs;
-      if (((_e2 = this.engine) === null || _e2 === void 0 ? void 0 : _e2.getState()) === "running" && !this.isClosing()) {
+      if (((_g = this.engine) === null || _g === void 0 ? void 0 : _g.getState()) === "running" && !this.isClosing()) {
         this.stopPathSyncRequestPolling();
         this.startPathSyncRequestPolling();
       }
     }
     if (timing.exclusiveMutationClaimPollMs !== void 0 && timing.exclusiveMutationClaimPollMs !== this.exclusiveMutationClaimPollMs) {
       this.exclusiveMutationClaimPollMs = timing.exclusiveMutationClaimPollMs;
-      if (((_f = this.engine) === null || _f === void 0 ? void 0 : _f.getState()) === "running" && !this.isClosing()) {
+      if (((_h = this.engine) === null || _h === void 0 ? void 0 : _h.getState()) === "running" && !this.isClosing()) {
         this.stopExclusiveMutationClaimPolling();
         this.startExclusiveMutationClaimPolling();
       }
@@ -1165,13 +1173,13 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
           if (this.isClosing() || ((_a20 = this.engine) === null || _a20 === void 0 ? void 0 : _a20.getState()) !== "running") {
             return;
           }
-          const requests = listPathSyncRequests({ filesDir: this.filesDir });
-          if (requests.length === 0) {
+          const requests2 = listPathSyncRequests({ filesDir: this.filesDir });
+          if (requests2.length === 0) {
             this.clearPathSyncRequestDrainFailure();
             return;
           }
           const relPaths = /* @__PURE__ */ new Set();
-          for (const request5 of requests) {
+          for (const request5 of requests2) {
             for (const relPath of request5.relPaths) {
               relPaths.add(relPath);
             }
@@ -1195,7 +1203,7 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
                 failedRelPaths.add(error42.relPath);
               }
             }
-            const ackedIds = hasUnscopedError ? [] : requests.filter((request5) => request5.relPaths.every((relPath) => !failedRelPaths.has(relPath))).map((request5) => request5.id);
+            const ackedIds = hasUnscopedError ? [] : requests2.filter((request5) => request5.relPaths.every((relPath) => !failedRelPaths.has(relPath))).map((request5) => request5.id);
             if (ackedIds.length === 0) {
               this.notePathSyncRequestDrainFailure();
               return;
@@ -1581,10 +1589,13 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
               this.resumeBackoffResetPending = false;
               this.syncBackoff.recordSuccess();
             } else if (failed2) {
-              nextDelayMs = this.syncBackoff.recordFailure();
+              nextDelayMs = this.delayAfterRoundFailure();
               nextKind = "backoff";
             } else if (!stoodAside) {
               this.syncBackoff.recordSuccess();
+              this.restorePassiveRetryInterval();
+            } else if (this.mintGate !== void 0 && this.mintGate.remainingMs <= 0) {
+              this.restorePassiveRetryInterval();
             }
             if (this.isClosing()) {
               if (this.followUpNeeded) {
@@ -1653,6 +1664,31 @@ var AgentStoreSyncSession = class _AgentStoreSyncSession {
         });
       }
       return false;
+    }
+  }
+  delayAfterRoundFailure() {
+    const backoffMs = this.syncBackoff.recordFailure();
+    if (this.mintGate === void 0) {
+      return backoffMs;
+    }
+    const gateMs = this.mintGate.remainingMs;
+    if (gateMs <= 0) {
+      this.restorePassiveRetryInterval();
+      return backoffMs;
+    }
+    this.extendPassiveRetryInterval(gateMs);
+    return Math.max(backoffMs, gateMs);
+  }
+  extendPassiveRetryInterval(gateMs) {
+    var _a19;
+    var _b2;
+    const configured2 = (_b2 = this.passiveRetryIntervalMs) !== null && _b2 !== void 0 ? _b2 : 0;
+    (_a19 = this.engine) === null || _a19 === void 0 ? void 0 : _a19.setPassiveRetryIntervalMs(Math.max(configured2, gateMs));
+  }
+  restorePassiveRetryInterval() {
+    var _a19;
+    if (this.passiveRetryIntervalMs !== void 0) {
+      (_a19 = this.engine) === null || _a19 === void 0 ? void 0 : _a19.setPassiveRetryIntervalMs(this.passiveRetryIntervalMs);
     }
   }
   emitSyncMetrics(summary) {

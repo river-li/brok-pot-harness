@@ -391,7 +391,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
           if (this.sparsePluginClones && isKilledSubprocessError(error42)) {
             throw error42;
           }
-          pluginLogger.log("error", "Failed to resolve remote ref using SSH URL, falling back to HTTPS", {
+          pluginLogger.log("debug", "Failed to resolve remote ref using SSH URL, falling back to HTTPS", {
             gitUrl,
             ref,
             error: String(error42),
@@ -471,7 +471,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
             if (this.sparsePluginClones && isKilledSubprocessError(error42)) {
               throw error42;
             }
-            pluginLogger.log("error", "Falling back to HTTPS clone due to SSH clone failure", {
+            pluginLogger.log("debug", "Falling back to HTTPS clone due to SSH clone failure", {
               gitUrl,
               ref,
               error: String(error42),

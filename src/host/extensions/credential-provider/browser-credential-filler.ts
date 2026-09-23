@@ -1,6 +1,3 @@
-init_dist3();
-init_zod();
-init_system_errno();
 var X11_UNIX_DIR = "/tmp/.X11-unix";
 var CDP_PORT_BASE = 9222;
 var MAX_DISPLAY_NUMBER = 256;
@@ -44,7 +41,15 @@ var browserPageStateSchema = external_exports.object({
   hasFocus: external_exports.boolean(),
   formKind: external_exports.enum(BROWSER_PAGE_FORM_KINDS).optional(),
   documentTimeOriginMs: external_exports.number().finite().nonnegative().optional(),
-  audit: browserFillAuditContextSchema.optional()
+  audit: browserFillAuditContextSchema.optional(),
+  diagnostics: external_exports.object({
+    inputs: external_exports.enum(CREDENTIAL_PAGE_INPUT_BUCKETS),
+    hasPasswordInput: external_exports.boolean(),
+    hasVisiblePasswordInput: external_exports.boolean(),
+    usernameOnlyFound: external_exports.boolean(),
+    hasCrossOriginIframe: external_exports.boolean(),
+    hasShadowInputs: external_exports.boolean()
+  }).strict().optional()
 }).strict();
 var cdpTargetSchema = external_exports.object({
   id: external_exports.string(),
@@ -241,9 +246,11 @@ async function evaluateOnTarget(target, expression) {
 }
 function inspectBrowserDocument() {
   const inputs = [];
+  const frames = [];
   const unownedControls = [];
   const visit2 = (root) => {
     inputs.push(...root.querySelectorAll("input"));
+    frames.push(...root.querySelectorAll("iframe"));
     for (const element of root.querySelectorAll("input, select, textarea")) {
       if ((element instanceof HTMLInputElement || element instanceof HTMLSelectElement || element instanceof HTMLTextAreaElement) && element.form === null) {
         unownedControls.push(element);
@@ -577,6 +584,34 @@ function inspectBrowserDocument() {
       ...method !== null && method.length > 0 ? { formMethod: method } : {}
     };
   });
+  const renderedAtLeast = (element, minSide) => {
+    const rect = element.getBoundingClientRect();
+    return rect.width >= minSide && rect.height >= minSide;
+  };
+  const visibleTextInputs = inputs.filter(
+    (input) => ["text", "email", "tel", "password", "search", "number", "url"].includes(
+      input.type.toLowerCase()
+    ) && elementAndAncestorsAreVisible(input) && renderedAtLeast(input, 8)
+  );
+  const crossOriginFrame = (frame) => {
+    try {
+      if (URL.canParse(frame.src)) {
+        const source = new URL(frame.src);
+        if ((source.protocol === "https:" || source.protocol === "http:") && source.origin !== location.origin) {
+          return true;
+        }
+      }
+      return frame.contentWindow !== null && frame.contentWindow.location.origin !== location.origin;
+    } catch {
+      return true;
+    }
+  };
+  const CROSS_ORIGIN_FRAME_MIN_SIDE_PX = 100;
+  const visibleInputCount = visibleTextInputs.length;
+  let inputBucket = "4+";
+  if (visibleInputCount === 0) inputBucket = "0";
+  else if (visibleInputCount === 1) inputBucket = "1";
+  else if (visibleInputCount <= 3) inputBucket = "2-3";
   return {
     hasFocus: document.hasFocus(),
     formKind,
@@ -584,6 +619,16 @@ function inspectBrowserDocument() {
     audit: {
       targetUrl: location.href,
       elements: auditElements
+    },
+    diagnostics: {
+      inputs: inputBucket,
+      hasPasswordInput: inputs.some((input) => input.type.toLowerCase() === "password"),
+      hasVisiblePasswordInput: passwordControlVisible,
+      usernameOnlyFound: usernameOnly.kind === "found",
+      hasCrossOriginIframe: frames.some(
+        (frame) => elementAndAncestorsAreVisible(frame) && renderedAtLeast(frame, CROSS_ORIGIN_FRAME_MIN_SIDE_PX) && crossOriginFrame(frame)
+      ),
+      hasShadowInputs: visibleTextInputs.some((input) => input.getRootNode() instanceof ShadowRoot)
     }
   };
 }
@@ -641,6 +686,21 @@ async function chooseBrowserCredentialTarget(targets, targetSite, inspect) {
   );
   const focused = states.filter((candidate) => candidate.state?.hasFocus === true);
   return focused.length === 1 ? focused[0].target : null;
+}
+function mergedPageDiagnostics(pages) {
+  const [first, ...rest] = pages;
+  if (first === void 0) return void 0;
+  return rest.reduce(
+    (merged, page) => ({
+      inputs: CREDENTIAL_PAGE_INPUT_BUCKETS.indexOf(page.inputs) > CREDENTIAL_PAGE_INPUT_BUCKETS.indexOf(merged.inputs) ? page.inputs : merged.inputs,
+      hasPasswordInput: merged.hasPasswordInput || page.hasPasswordInput,
+      hasVisiblePasswordInput: merged.hasVisiblePasswordInput || page.hasVisiblePasswordInput,
+      usernameOnlyFound: merged.usernameOnlyFound || page.usernameOnlyFound,
+      hasCrossOriginIframe: merged.hasCrossOriginIframe || page.hasCrossOriginIframe,
+      hasShadowInputs: merged.hasShadowInputs || page.hasShadowInputs
+    }),
+    first
+  );
 }
 function clearanceOf(result) {
   return result.cleared ? { cleared: true } : { cleared: false, clearTarget: result.clearTarget };
@@ -1028,10 +1088,16 @@ var BrowserCredentialFiller = class {
           })
         };
       }
+      const pageDiagnostics = mergedPageDiagnostics(
+        inspected.flatMap(
+          ({ state }) => state?.diagnostics === void 0 || state.formKind === "signup-or-reset" ? [] : [state.diagnostics]
+        )
+      );
       return {
         ok: false,
         reason: "target-no-login-form",
-        detail: "The matching page does not have a complete sign-in form with an eligible password field. Open the password step and try again."
+        detail: "The matching page does not have a complete sign-in form with an eligible password field. Open the password step and try again.",
+        ...pageDiagnostics === void 0 ? {} : { pageDiagnostics }
       };
     }
     const states = new Map(inspected.map((candidate) => [candidate.target, candidate.state]));

@@ -37,7 +37,7 @@ var InferenceStreamRequest = class _InferenceStreamRequest extends __protoMessag
     return proto3.util.equals(_InferenceStreamRequest, a, b2);
   }
   static $() {
-    return ["InferenceStreamRequest|1 messages #0*|2 tools #1*|3 provider_defined_tools #2*|4 model_config #3?|5 model_id 9?|6 invocation_id 9?|7 requested_model #4?|8 conversation_id 9?|9 accepted_unadvertised_tool_names 9*|10 automation_id 9?|11 inference_reason #5?|12 conversation_group_id 9?|13 parent_request_id 9?|14 root_parent_request_id 9?|15 parent_agent_tool_call_id 9?|16 subagent_type 9?|17 compaction_epoch 5?|18 turn_unit_id 9?|19 turn_unit_type 9?", InferenceCoreMessage, InferenceAgentTool, InferenceNamedProviderDefinedTool, InferenceModelConfig, InferenceRequestedModel, InferenceReason];
+    return ["InferenceStreamRequest|1 messages #0*|2 tools #1*|3 provider_defined_tools #2*|4 model_config #3?|5 model_id 9?|6 invocation_id 9?|7 requested_model #4?|8 conversation_id 9?|9 accepted_unadvertised_tool_names 9*|10 automation_id 9?|11 inference_reason #5?|12 conversation_group_id 9?|13 parent_request_id 9?|14 root_parent_request_id 9?|15 parent_agent_tool_call_id 9?|16 subagent_type 9?|17 compaction_epoch 5?|18 turn_unit_id 9?|19 turn_unit_type 9?|20 originating_flow 9?", InferenceCoreMessage, InferenceAgentTool, InferenceNamedProviderDefinedTool, InferenceModelConfig, InferenceRequestedModel, InferenceReason];
   }
 };
 var InferenceRequestedModel = class _InferenceRequestedModel extends __protoMessage3145 {
@@ -47,7 +47,6 @@ var InferenceRequestedModel = class _InferenceRequestedModel extends __protoMess
     this.maxMode = false;
     this.parameters = [];
     this.builtInModel = false;
-    this.isVariantStringRepresentation = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -63,7 +62,7 @@ var InferenceRequestedModel = class _InferenceRequestedModel extends __protoMess
     return proto3.util.equals(_InferenceRequestedModel, a, b2);
   }
   static $() {
-    return ["InferenceRequestedModel|1 model_id 9|2 max_mode 8|3 parameters #0*|4 built_in_model 8|5 is_variant_string_representation 8", InferenceModelParameterValue];
+    return ["InferenceRequestedModel|1 model_id 9|2 max_mode 8|3 parameters #0*|4 built_in_model 8", InferenceModelParameterValue];
   }
 };
 var InferenceModelParameterValue = class _InferenceModelParameterValue extends __protoMessage3145 {
@@ -963,7 +962,28 @@ var RunInferenceClientMessage = class _RunInferenceClientMessage extends __proto
     return proto3.util.equals(_RunInferenceClientMessage, a, b2);
   }
   static $() {
-    return ["RunInferenceClientMessage|1 run_request #0 message|2 invoke_model #1 message|3 cancel_invocation #2 message|4 finish_run #3 message", RunInferenceRunRequest, RunInferenceInvokeModel, RunInferenceCancelInvocation, RunInferenceFinishRun];
+    return ["RunInferenceClientMessage|1 run_request #0 message|2 invoke_model #1 message|3 cancel_invocation #2 message|4 finish_run #3 message|5 client_heartbeat #4 message", RunInferenceRunRequest, RunInferenceInvokeModel, RunInferenceCancelInvocation, RunInferenceFinishRun, RunInferenceClientHeartbeat];
+  }
+};
+var RunInferenceClientHeartbeat = class _RunInferenceClientHeartbeat extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceClientHeartbeat().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceClientHeartbeat().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceClientHeartbeat().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceClientHeartbeat, a, b2);
+  }
+  static $() {
+    return ["RunInferenceClientHeartbeat"];
   }
 };
 var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessage3145 {
@@ -1151,6 +1171,7 @@ var RunInferenceRunReady = class _RunInferenceRunReady extends __protoMessage314
     super();
     this.supportsSelfSummary = false;
     this.nonFileRules = [];
+    this.acceptsClientHeartbeat = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1166,7 +1187,7 @@ var RunInferenceRunReady = class _RunInferenceRunReady extends __protoMessage314
     return proto3.util.equals(_RunInferenceRunReady, a, b2);
   }
   static $() {
-    return ["RunInferenceRunReady|1 resolved_model #0|2 supports_self_summary 8|3 routed_model_display_name 9?|4 prompt_model_metadata #1|5 summarization #2|6 non_file_rules #3*", InferenceRequestedModel, RunInferencePromptModelMetadata, RunInferenceSummarizationConfig, CursorRule2];
+    return ["RunInferenceRunReady|1 resolved_model #0|2 supports_self_summary 8|3 routed_model_display_name 9?|4 prompt_model_metadata #1|5 summarization #2|6 non_file_rules #3*|7 accepts_client_heartbeat 8", InferenceRequestedModel, RunInferencePromptModelMetadata, RunInferenceSummarizationConfig, CursorRule2];
   }
 };
 var RunInferenceSummarizationConfig = class _RunInferenceSummarizationConfig extends __protoMessage3145 {

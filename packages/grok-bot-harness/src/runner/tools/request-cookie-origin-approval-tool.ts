@@ -65,7 +65,7 @@ function formatCookieOriginApprovalOutcome(outcome) {
     return [
       "Available Chrome cookie origins:",
       ...outcome.items.map(
-        (item) => `- ${item.origin} \u2014 profileId: ${JSON.stringify(item.profileId)} (display name: ${JSON.stringify(item.profileDisplayName)})`
+        (item) => `- ${item.origin}, profileId: ${JSON.stringify(item.profileId)} (display name: ${JSON.stringify(item.profileDisplayName)})`
       )
     ].join("\n");
   }

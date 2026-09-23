@@ -1,11 +1,11 @@
 function describeAutomationWrite(automation, verb) {
   if (automation == null) {
     return stateWriteFailed(
-      "the routine could not be saved \u2014 check that the name and instruction are non-empty and the trigger is valid."
+      "the routine could not be saved. Check that the name and instruction are non-empty and the trigger is valid."
     );
   }
   return stateWriteOk(
-    `${verb} routine "${automation.name}" (folder ${automation.id}) \u2014 ${describeTrigger(
+    `${verb} routine "${automation.name}" (folder ${automation.id}): ${describeTrigger(
       automation.trigger
     )}${automation.isEnabled ? "" : ", paused"}.`
   );
@@ -34,7 +34,7 @@ function rememberFact(store, content, tier, now, label) {
   const record2 = store.addMemory(body, now, tier === "profile" ? "profile" : "log");
   if (record2 == null) {
     return stateWriteFailed(
-      `nothing was saved to ${label} \u2014 the fact was empty or already recorded. Grep the memory folder to see what is already there.`
+      `nothing was saved to ${label}. The fact was empty or already recorded. Grep the memory folder to see what is already there.`
     );
   }
   return stateWriteOk(`Remembered in ${label} (${tier}): ${record2.content}`);
@@ -99,7 +99,7 @@ function createSandAgentState(deps) {
       const written = args.id == null ? deps.skills.create(spec, args.provenance) : deps.skills.update(args.id, spec, args.provenance);
       if (written == null) {
         return stateWriteFailed(
-          args.id == null ? "the skill could not be saved \u2014 a name and a non-empty body are both required." : `no skill with id "${args.id}" exists, or the new fields were invalid. Cursor-managed skills cannot be edited.`
+          args.id == null ? "the skill could not be saved. A name and a non-empty body are both required." : `no skill with id "${args.id}" exists, or the new fields were invalid. Cursor-managed skills cannot be edited.`
         );
       }
       return stateWriteOk(
@@ -135,7 +135,7 @@ function createSandAgentState(deps) {
       };
       const fields2 = Object.keys(update);
       if (fields2.length === 0) {
-        return stateWriteFailed("nothing to change \u2014 pass at least one setting field.");
+        return stateWriteFailed("nothing to change. Pass at least one setting field.");
       }
       writeSandSettingsFile(settingsPath, update);
       return stateWriteOk(`Updated your settings: ${fields2.join(", ")}.`);
@@ -167,7 +167,7 @@ function createSandAgentState(deps) {
       }
       if (bytes == null) {
         return stateWriteFailed(
-          isBoxRootPath(absolute) ? `could not read "${(0, import_node_path124.basename)(absolute)}" from your box \u2014 write the image with Shell (or CopyFromBox onto a host path) first, then pass that path.` : `could not read "${(0, import_node_path124.basename)(absolute)}" \u2014 download or write the image somewhere first, then pass that path.`
+          isBoxRootPath(absolute) ? `could not read "${(0, import_node_path124.basename)(absolute)}" from your box. Write the image with Shell (or CopyFromBox onto a host path) first, then pass that path.` : `could not read "${(0, import_node_path124.basename)(absolute)}". Download or write the image somewhere first, then pass that path.`
         );
       }
       if (bytes.length === 0 || bytes.length > AVATAR_MAX_BYTES) {
@@ -193,7 +193,7 @@ function createSandAgentState(deps) {
         return stateWriteFailed("you already have the default picture.");
       }
       await replaceAvatarFiles(deps.agentDir, null);
-      return stateWriteOk("Cleared your picture \u2014 back to the default.");
+      return stateWriteOk("Cleared your picture. It is back to the default.");
     }
   };
 }

@@ -47,7 +47,8 @@ var CredentialCoordinator = class {
       reason: args.reason,
       targetUrl: args.targetUrl,
       ...args.credentialId !== void 0 ? { credentialId: args.credentialId } : {},
-      approvalMode: "allow-once"
+      approvalMode: "allow-once",
+      ...args.pageDiagnostics !== void 0 ? { pageDiagnostics: args.pageDiagnostics } : {}
     });
   }
   async resolveBrowserTarget(item, siteHint, windowIndex) {
@@ -79,7 +80,8 @@ var CredentialCoordinator = class {
       outcome: result.ok ? "success" : "refused",
       reason: result.ok ? "target-resolved" : result.reason,
       targetUrl: result.ok ? result.targetSite : siteHint,
-      credentialId: item.credentialId
+      credentialId: item.credentialId,
+      ...result.ok ? {} : { pageDiagnostics: result.pageDiagnostics }
     });
     this.log(
       `credentials: browser target ${result.ok ? "resolved" : `unavailable (${result.reason})`}`
@@ -126,8 +128,7 @@ var CredentialCoordinator = class {
       },
       resolveBrowserTarget: async (reference, siteHint) => {
         await this.refresh();
-        const directory = this.directory;
-        const item = directory?.items.find(
+        const item = this.directory?.items.find(
           (candidate) => candidate.credentialId === reference.credentialId && candidate.connectionId === reference.connectionId && candidate.catalogRevision === reference.catalogRevision
         );
         if (item == null) {
@@ -153,12 +154,7 @@ var CredentialCoordinator = class {
             detail: "That credential is not an allowed 1Password browser login."
           };
         }
-        const binding = await this.resolveBrowserTarget(item, siteHint, await resolveWindow());
-        if (!binding.ok) return binding;
-        return {
-          ...binding,
-          autoFill: (directory?.alwaysAllowConnectionIds ?? []).includes(item.connectionId)
-        };
+        return await this.resolveBrowserTarget(item, siteHint, await resolveWindow());
       }
     };
   }

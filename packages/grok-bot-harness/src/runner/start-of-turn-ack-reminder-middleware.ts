@@ -11,7 +11,7 @@ function chatSilenceRemindersCoverThisTurn({
 }
 var DEFAULT_START_OF_TURN_ACK_THRESHOLD = 1;
 var START_OF_TURN_ACK_REMINDER_MESSAGE = `<system_reminder>
-You opened this turn by calling tools without first sending to the user, so they are watching silence and may think the app froze. Acknowledge them RIGHT NOW by actually invoking the SendToUser tool \u2014 make a real tool/function call, not text you write. Plain assistant text is NEVER shown to the user; only a real SendToUser tool invocation reaches them, so if you don't call the tool they just keep seeing silence. Make that first SendToUser a one-line text acknowledgement, before any further tool call, then continue the work. A widget, attachment, or cursor-agent card does not count as this acknowledgement. ${REQUESTED_VOICE_MEMO_SILENCE_CLAUSE}
+You opened this turn by calling tools without first sending to the user, so they are watching silence and may think the app froze. Acknowledge them RIGHT NOW by actually invoking the SendToUser tool. Make a real tool/function call, not text you write. Plain assistant text is NEVER shown to the user; only a real SendToUser tool invocation reaches them, so if you don't call the tool they just keep seeing silence. Make that first SendToUser a one-line text acknowledgement, before any further tool call, then continue the work. A widget, attachment, or cursor-agent card does not count as this acknowledgement. ${REQUESTED_VOICE_MEMO_SILENCE_CLAUSE}
 </system_reminder>`;
 function buildReminderMessage(content) {
   return {

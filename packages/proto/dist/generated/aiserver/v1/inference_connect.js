@@ -1,4 +1,5 @@
-init_esm13();
+init_esm();
+init_bidi_pb();
 var InferenceService = {
   typeName: "aiserver.v1.InferenceService",
   methods: {
@@ -67,6 +68,31 @@ var InferenceService = {
       I: RunInferenceClientMessage,
       O: RunInferenceServerMessage,
       kind: MethodKind.BiDiStreaming
+    },
+    /**
+     * HTTP/1 companions of RunInference, the same shape as AgentService.RunSSE
+     * and RunPoll: a client that cannot negotiate HTTP/2 opens the attempt as
+     * RunInferenceSSE (or RunInferencePoll when SSE is blocked too) and sends
+     * its RunInferenceClientMessage frames through BidiService.BidiAppend under
+     * the same request id. The server runs the identical RunInference attempt
+     * on the appended frames.
+     *
+     * @generated from rpc aiserver.v1.InferenceService.RunInferenceSSE
+     */
+    runInferenceSSE: {
+      name: "RunInferenceSSE",
+      I: BidiRequestId,
+      O: RunInferenceServerMessage,
+      kind: MethodKind.ServerStreaming
+    },
+    /**
+     * @generated from rpc aiserver.v1.InferenceService.RunInferencePoll
+     */
+    runInferencePoll: {
+      name: "RunInferencePoll",
+      I: BidiPollRequest,
+      O: BidiPollResponse,
+      kind: MethodKind.ServerStreaming
     }
   }
 };

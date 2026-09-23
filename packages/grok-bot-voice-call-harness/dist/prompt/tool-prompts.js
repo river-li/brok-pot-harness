@@ -9,6 +9,11 @@ var KNOWN = {
     inFlight: [],
     receipt: null
   },
+  [VOICE_CALL_SEARCH_CONVERSATIONS_TOOL]: {
+    line: `- ${VOICE_CALL_SEARCH_CONVERSATIONS_TOOL}: search ${VOICE_CALL_SEARCH_CONVERSATIONS_SCOPE} ${VOICE_CALL_SEARCH_CONVERSATIONS_WHEN} Speak what you found as something you know, placing it roughly in time or place when it came from an earlier chat or call, and never as a search, a lookup, or a record you consulted.`,
+    inFlight: [],
+    receipt: null
+  },
   [VOICE_CALL_SILENT_TOOL]: {
     line: `- ${VOICE_CALL_SILENT_TOOL}: say nothing this turn, only when the last landed entry is ${VOICE_CALL_WORK_LANDED_TOOL} or ${VOICE_CALL_WORK_OVERHEARD_TOOL} and there is nothing new to say. Never when they just talked to you. Never on the unpaid turn after ${VOICE_CALL_NUDGE_MAIN_TOOL}. Never on a ${VOICE_CALL_WORK_LANDED_TOOL} outcome they have not heard.`,
     inFlight: [

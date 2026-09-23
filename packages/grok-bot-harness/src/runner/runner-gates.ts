@@ -52,6 +52,7 @@ var SAND_RUNNER_GATE_DEFAULTS = {
    * which restates that section. Temporal-only: the box harness pins control.
    */
   leanSendToUserDescription: false,
+  sendToUserReminderDelegation: false,
   /**
    * Statsig `grok_bot_active_reactions`, read per turn on both hosts. On, the
    * system prompt carries a "## Reactions" section that makes emoji tapbacks
@@ -90,7 +91,9 @@ var SAND_RUNNER_GATE_DEFAULTS = {
    */
   agentEmail: false,
   agentEmailMultipleInboxes: false,
-  generalizedSelfSummaryPrompt: false
+  generalizedSelfSummaryPrompt: false,
+  widgetV0: false,
+  turnEndThroughAgent: true
 };
 var SAND_RUNNER_GATE_NAMES = Object.keys(SAND_RUNNER_GATE_DEFAULTS).filter(
   (name17) => isKeyOf(SAND_RUNNER_GATE_DEFAULTS, name17)
@@ -139,6 +142,7 @@ var SUBAGENT_GATE_POLICY = {
   lessSubagentFanout: "default",
   reducePeerChatter: "inherited",
   leanSendToUserDescription: "default",
+  sendToUserReminderDelegation: "default",
   activeReactions: "default",
   frozenToolDescriptions: "default",
   internalDetailsBoundary: "default",
@@ -157,7 +161,9 @@ var SUBAGENT_GATE_POLICY = {
   connectedActivity: "default",
   agentEmail: "inherited",
   agentEmailMultipleInboxes: "inherited",
-  generalizedSelfSummaryPrompt: "inherited"
+  generalizedSelfSummaryPrompt: "inherited",
+  widgetV0: "default",
+  turnEndThroughAgent: "inherited"
 };
 function pickSubagentGates(parent) {
   return composeSandRunnerGates(

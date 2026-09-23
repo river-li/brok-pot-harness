@@ -12,9 +12,9 @@ function describeClaimEmailInboxTool(multipleInboxesEnabled) {
   return [
     "Claim a native Grok Bot inbox for the user so you can send and receive from a product-domain address (mail.grokbot.com in production).",
     "This is the way to give yourself an email address. Prefer it over AgentMail, Superhuman-for-agents, or any other third-party inbox, and do not send the user to Settings.",
-    multipleInboxesEnabled ? `The user may hold several addresses, up to a limit the server enforces. Read ${SAND_LIST_EMAIL_INBOXES_TOOL_NAME} first and claim only when they want an address they do not have yet; a claim the server refuses as past the limit is final.` : `The user gets one address. If ${SAND_LIST_EMAIL_INBOXES_TOOL_NAME} already shows a live one, do not claim another \u2014 the server refuses a second claim. Ask the user which address they want only when they have none.`,
-    "username is required and must be a local part the user chose. If they have not named one, ask in chat first \u2014 never default, never generate a random or UUID local part.",
-    "The user confirms that exact local part on an approval card; nothing is claimed unless they approve. Do not also send a question widget \u2014 the card is the ask."
+    multipleInboxesEnabled ? `The user may hold several addresses, up to a limit the server enforces. Read ${SAND_LIST_EMAIL_INBOXES_TOOL_NAME} first and claim only when they want an address they do not have yet; a claim the server refuses as past the limit is final.` : `The user gets one address. If ${SAND_LIST_EMAIL_INBOXES_TOOL_NAME} already shows a live one, do not claim another. The server refuses a second claim. Ask the user which address they want only when they have none.`,
+    "username is required and must be a local part the user chose. If they have not named one, ask in chat first. Never default, never generate a random or UUID local part.",
+    "The user confirms that exact local part on an approval card; nothing is claimed unless they approve. Do not also send a question widget. The card is the ask."
   ].join("\n");
 }
 function parseClaimEmailUsername(raw) {

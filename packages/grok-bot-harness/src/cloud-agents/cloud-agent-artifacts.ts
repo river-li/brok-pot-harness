@@ -202,7 +202,7 @@ function formatCloudAgentArtifactsNote(bcId, outcome) {
     lines2.push(
       `The ${outcome.synced.length} artifact(s) the cloud agent's report references are copied to ${cloudAgentArtifactsBoxDir(bcId)}/ on your box:`,
       ...outcome.synced.map((artifact) => `- ${artifact.boxPath} (${artifact.sizeBytes} bytes)`),
-      `These are files on your own box. Attach them to your completion message as SendMessage/SendToUser attachments, using each listed box path as a file:// url (file://${cloudAgentArtifactsBoxDir(bcId)}/\u2026). Never attach the cloud agent's own /opt/cursor/artifacts/\u2026 paths \u2014 they are on its VM, not your box.`
+      `These are files on your own box. Attach them to your completion message as SendMessage/SendToUser attachments, using each listed box path as a file:// url (file://${cloudAgentArtifactsBoxDir(bcId)}/\u2026). Never attach the cloud agent's own /opt/cursor/artifacts/\u2026 paths, which are on its VM, not your box.`
     );
   }
   if (outcome.skipped.length > 0) {
