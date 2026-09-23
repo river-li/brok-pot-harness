@@ -591,19 +591,19 @@ def load_json(path: Path, top_type: type) -> Any:
     return value
 
 
-def fetch_issues(limit: int, snapshot: Path | None) -> list[dict[str, Any]]:
+def fetch_issues(limit: int, snapshot: Path | None, repo: str) -> list[dict[str, Any]]:
     data = load_json(snapshot, list) if snapshot else gh_json([
-        "issue", "list", "--state", "open", "--limit", str(limit), "--json",
+        "issue", "list", "--repo", repo, "--state", "open", "--limit", str(limit), "--json",
         "number,title,body,labels,createdAt,updatedAt",
     ])
     return [item for item in data if isinstance(item, dict)][:limit]
 
 
-def fetch_runs(limit: int, snapshot: Path | None) -> list[dict[str, Any]]:
+def fetch_runs(limit: int, snapshot: Path | None, repo: str) -> list[dict[str, Any]]:
     if snapshot:
         data = load_json(snapshot, list)
     else:
-        data = gh_json(["run", "list", "--limit", str(limit), "--json",
+        data = gh_json(["run", "list", "--repo", repo, "--limit", str(limit), "--json",
                         "databaseId,name,workflowName,headBranch,headSha,event,createdAt,updatedAt,conclusion,status"])
         result = []
         detail_requests = 0
@@ -614,7 +614,7 @@ def fetch_runs(limit: int, snapshot: Path | None) -> list[dict[str, Any]]:
                 ident = run_id(run)
                 if ident and detail_requests < 10:
                     try:
-                        jobs = gh_json(["run", "view", ident, "--json", "jobs"], 2 * 1024 * 1024)
+                        jobs = gh_json(["run", "view", ident, "--repo", repo, "--json", "jobs"], 2 * 1024 * 1024)
                     except TriageError:
                         jobs = {}
                     if isinstance(jobs, dict):
@@ -625,7 +625,9 @@ def fetch_runs(limit: int, snapshot: Path | None) -> list[dict[str, Any]]:
     return [item for item in data if isinstance(item, dict)][:limit]
 
 
-def fetch_prs(issues: list[dict[str, Any]], snapshot: Path | None, offline: bool = False) -> dict[int, dict[str, Any]]:
+def fetch_prs(
+    issues: list[dict[str, Any]], snapshot: Path | None, repo: str, offline: bool = False,
+) -> dict[int, dict[str, Any]]:
     if snapshot:
         data = load_json(snapshot, list)
         return {x["number"]: x for x in data if isinstance(x, dict) and isinstance(x.get("number"), int)}
@@ -635,7 +637,7 @@ def fetch_prs(issues: list[dict[str, Any]], snapshot: Path | None, offline: bool
     numbers = sorted({n for issue in issues if (n := pr_number(issue)) is not None})[:MAX_PR_READS]
     for number in numbers:
         try:
-            value = gh_json(["pr", "view", str(number), "--json", "number,state,mergedAt"], 64 * 1024)
+            value = gh_json(["pr", "view", str(number), "--repo", repo, "--json", "number,state,mergedAt"], 64 * 1024)
         except TriageError:
             continue
         if isinstance(value, dict):
@@ -698,9 +700,9 @@ def main(argv: list[str] | None = None) -> int:
         else:
             data = gh_json(["repo", "view", "--json", "nameWithOwner"], 64 * 1024)
             repo = safe_repo(str(data.get("nameWithOwner") or ""))
-        issues = fetch_issues(args.max_issues, args.issues_json)
-        runs = fetch_runs(args.max_runs, args.runs_json)
-        prs = fetch_prs(issues, args.pull_requests_json, offline=offline)
+        issues = fetch_issues(args.max_issues, args.issues_json, repo)
+        runs = fetch_runs(args.max_runs, args.runs_json, repo)
+        prs = fetch_prs(issues, args.pull_requests_json, repo, offline=offline)
         report = build_report(
             issues, runs, prs, repo=repo, root=ROOT, diagnostics_dir=diagnostics_dir,
             issue_limit=args.max_issues, run_limit=args.max_runs, max_proposals=args.max_proposals,

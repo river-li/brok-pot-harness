@@ -20,7 +20,7 @@ They are not a live CI badge or a claim that every check runs on every launch.
 | Native dependencies | Piscina diff workers, tree-sitter/Bash, chunker loading |
 | Runtime settings | Custom image, absolute workspace, explicit overlay, read-only Host mounts, isolation from other stacks |
 | Branding and startup | Rounded PNG/ICNS, ad-hoc signed app; instrumented live desktop startup recorded zero safeStorage calls |
-| Issue triage | Nine offline fixtures cover bounded reporting, exact-signature deduplication, privacy filtering, regression comparison, and fixed-but-unverified follow-up; a read-only dry run retrieved 18 open issues and 6 workflow runs, grouped 2 failed runs, and wrote 1 proposal without issue changes |
+| Issue triage | Ten offline fixtures cover bounded reporting, exact-signature deduplication, privacy filtering, repository scoping for issue/run/job/PR reads, regression comparison, and fixed-but-unverified follow-up; no live GitHub dry-run is recorded |
 
 Contracts cover Responses/Auto-review, voice, MCP store/scopes, plugin files, web fetch/search, transcription, and TTS.
 See the [test guide](../../runtime/tests/README.md) and [demo metadata](../media/capture.json).

@@ -38,6 +38,8 @@ See [Publishing](../docs/wiki/Publishing.md) for prerequisites and the separate 
 
 Run `npm run triage:dry-run` to read up to 100 open issues and the 50 most recent workflow runs through GitHub CLI.
 The report is written to `.runtime/triage/report.md`; it does not create issues, comments, labels, or status changes.
+Pass `--repo owner/name` to scope issue, workflow, failed-job, and linked-PR reads to a selected repository.
+Without it, the CLI resolves the current GitHub repository once and scopes those reads to that same repository.
 Use `npm run triage:dry-run -- --output -` to print it, or place sanitized per-run excerpts in
 `.runtime/triage/sanitized-input` and pass `--diagnostics-dir .runtime/triage/sanitized-input`
 (files are named `<run-id>.txt`, capped at 64 KiB each). The report omits issue titles,

@@ -175,6 +175,35 @@ class TriageReportTest(unittest.TestCase):
         gh_command.assert_not_called()
         self.assertIn("Read-only issue triage report", output.getvalue())
 
+    def test_cli_selected_repo_scopes_issue_run_job_and_pr_reads(self):
+        commands = []
+
+        def fake_gh_json(args, max_bytes=triage.MAX_RESPONSE_BYTES):
+            commands.append(args)
+            if args[:2] == ["issue", "list"]:
+                return [self.issue(7, "Fix PR: #88")]
+            if args[:2] == ["run", "list"]:
+                return [self.ci_run(123, "failure", "2026-09-22T00:00:00Z", "a" * 40)]
+            if args[:2] == ["run", "view"]:
+                return {"jobs": [{"name": "tests", "conclusion": "failure"}]}
+            if args[:2] == ["pr", "view"]:
+                return {"number": 88, "state": "MERGED", "mergedAt": "2026-09-22T00:00:00Z"}
+            self.fail(f"Unexpected GitHub read command: {args[:2]}")
+
+        output = io.StringIO()
+        with patch.object(triage, "gh_json", side_effect=fake_gh_json), redirect_stdout(output):
+            status = triage.main(["--dry-run", "--repo", "example/target", "--output", "-"])
+
+        self.assertEqual(status, 0)
+        self.assertEqual([args[:2] for args in commands], [
+            ["issue", "list"], ["run", "list"], ["run", "view"], ["pr", "view"],
+        ])
+        for args in commands:
+            with self.subTest(command=args[:2]):
+                self.assertIn("--repo", args)
+                self.assertEqual(args[args.index("--repo") + 1], "example/target")
+        self.assertIn("Read-only issue triage report", output.getvalue())
+
     def test_cli_requires_explicit_dry_run_and_bounds_inputs(self):
         for args in ([], ["--dry-run", "--max-issues", "101"]):
             with redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
