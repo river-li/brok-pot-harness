@@ -50,3 +50,5 @@ patches, matching nearby naming/style. Run git diff --check before handing off.
 Do not commit or publish unless requested. Existing user changes must be preserved.
 For the end-to-end issue workflow, evidence standards, handoff states, and
 decision boundaries, follow the [agent maintainer playbook](docs/wiki/Agent-Maintainer-Playbook.md).
+Workflow-specific repository skills are indexed at [.agents/skills/README.md](.agents/skills/README.md);
+they supplement this guidance and the playbook, and do not override applicable `AGENTS.md` instructions.
