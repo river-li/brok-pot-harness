@@ -253,6 +253,16 @@ const BOX_IMAGE =
       ),
     };
   };
+  const readInstallState = () =>
+    docker(
+      "exec",
+      "--user",
+      "0",
+      container,
+      "/exec-daemon/node",
+      "-e",
+      'process.stdout.write(require("node:fs").readFileSync("/home/box/sand-data/plugins/local-installs.json", "utf8"));',
+    );
   const call = async (method, args = {}, status = 200) => {
     const r = await fetch(`${base}/api/${method}`, {
       method: "POST",
@@ -442,7 +452,7 @@ const BOX_IMAGE =
       const newer = importPlugin();
       assert.notEqual(newer.digest, imported.digest);
       assert.equal(
-        JSON.parse(fs.readFileSync(statePath)).plugins[pluginId].digest,
+        JSON.parse(readInstallState()).plugins[pluginId].digest,
         imported.digest,
         "Import must not silently update an enabled plugin",
       );
@@ -465,7 +475,7 @@ const BOX_IMAGE =
       skill = (await workflows()).find((s) => s.pluginId === pluginId);
       assert.ok(skill.filePath.includes(newer.digest));
       await runAgent();
-      const validState = fs.readFileSync(statePath, "utf8");
+      const validState = readInstallState();
       fs.writeFileSync(
         path.join(source, ".cursor-plugin/plugin.json"),
         "{ invalid",
@@ -477,7 +487,7 @@ const BOX_IMAGE =
         500,
       );
       assert.equal(
-        fs.readFileSync(statePath, "utf8"),
+        readInstallState(),
         validState,
         "Broken update must preserve the working installation",
       );
