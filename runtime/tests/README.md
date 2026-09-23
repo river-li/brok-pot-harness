@@ -6,7 +6,8 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 | Layer | npm script | Prerequisites / coverage |
 | --- | --- | --- |
 | Types | `check:local` | Strict local TypeScript |
-| Build | `test:recovery`, `test:runtime-build` | Python; recovery, fragments, profiles, documentation exporter |
+| Syntax | `check:syntax` | Build first; parses maintained runtime scripts and generated local app outputs |
+| Build | `build -- --profile local`, `test:recovery`, `test:runtime-build` | Python; reconstructed artifacts, recovery, fragments, profiles, documentation exporter |
 | Inference/review contracts | `test:responses-contract` | Compiled adapters; events, conversion, errors, review protocols |
 | Web contracts | `test:web-fetch`, `test:web-search` | Local test services; boundaries and failures |
 | Speech contracts | `test:transcription`, `test:tts`, `test:voice` | Adapters, tickets, call protocols |
@@ -18,6 +19,17 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 | Mac execution | `test:mac-exec-live` | Desktop bridge and relevant system capabilities |
 | Audio integration | `test:desktop-transcription`, `test:desktop-tts` | Speech service, desktop, synthetic audio fixture |
 | Call integration | `test:desktop-voice`, `test:voice-real-api` | See [voice bridge](../VOICE.md); the latter calls a real model |
+
+## CI tiers
+
+The [CI tiers guide](../../docs/wiki/CI.md) defines the check required on every pull request and which extra lane applies
+by changed area. The required job runs offline contracts on every PR. It does not need Docker, secrets, provider requests,
+or a desktop. Optional Docker integration uses a private fixture-model Box and desktop profile; optional real-provider
+verification makes an external request; optional macOS desktop verification runs natively on a dedicated Mac runner.
+
+CI artifacts contain only check outcomes, commit, build profile, and verification layer. They exclude test logs,
+credentials, prompts, transcripts, responses, and screenshots. Fixture/model checks are not reported as live-provider
+success.
 
 ## Common preparation
 

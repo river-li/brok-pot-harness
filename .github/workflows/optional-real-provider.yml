@@ -1,0 +1,75 @@
+name: Optional real-provider verification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: real-provider-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  responses-api:
+    name: live Responses API
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.16.0
+          package-manager-cache: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: 3.12.10
+
+      - name: Install root dependencies from lockfile
+        run: npm ci --no-audit --no-fund
+
+      - name: Build the local profile
+        run: npm run build -- --profile local
+
+      - name: Call the configured provider
+        env:
+          GROKBOT_RESPONSES_BASE_URL: ${{ vars.GBH_CI_RESPONSES_BASE_URL }}
+          GROKBOT_MODEL: ${{ vars.GBH_CI_MODEL }}
+          LITELLM_API_KEY: ${{ secrets.GBH_CI_LITELLM_API_KEY }}
+        run: |
+          if [[ -z "$GROKBOT_RESPONSES_BASE_URL" || -z "$GROKBOT_MODEL" || -z "$LITELLM_API_KEY" ]]; then
+            echo "Configure GBH_CI_RESPONSES_BASE_URL, GBH_CI_MODEL, and GBH_CI_LITELLM_API_KEY to run this optional lane." >&2
+            exit 2
+          fi
+          echo "LIVE_TEST_SCRIPT_STARTED=true" >> "$GITHUB_ENV"
+          npm run test:responses
+
+      - name: Write concise live-provider evidence
+        if: always()
+        env:
+          JOB_RESULT: ${{ job.status }}
+          LIVE_TEST_SCRIPT_STARTED: ${{ env.LIVE_TEST_SCRIPT_STARTED }}
+        run: |
+          mkdir -p .runtime/tests/ci
+          checked_out_sha="$(git rev-parse HEAD 2>/dev/null || printf 'unavailable')"
+          cat > .runtime/tests/ci/real-provider.md <<EOF
+          # Optional real-provider evidence
+
+          - Result: **${JOB_RESULT}**
+          - Build profile: \`local\`
+          - Verification layer: **live Responses API**
+          - Checked-out commit: \`${checked_out_sha}\`
+          - Live test script: **${LIVE_TEST_SCRIPT_STARTED:-not started}**
+          - Data handling: the test uses its fixed verification prompt; this artifact contains no prompt, response, transcript, screenshot, log, credential, or environment value.
+          EOF
+
+      - name: Upload concise live-provider evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: real-provider-evidence
+          path: .runtime/tests/ci/real-provider.md
+          if-no-files-found: error
+          retention-days: 14

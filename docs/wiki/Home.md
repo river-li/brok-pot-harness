@@ -31,6 +31,7 @@ Build your desktop agent workspace, connect a model, and turn a task into files 
 | [Agent maintainer playbook](Agent-Maintainer-Playbook.md) | Take an issue through investigation, verification, and review handoff |
 | [Source recovery](Source-Recovery.md) | Fragments, bundles, manifests, and strict TypeScript |
 | [Verification](Verification.md) | Existing evidence and workflows that need broader coverage |
+| [CI tiers](CI.md) | Required PR gates, optional integration lanes, and evidence limits |
 | [Publish this Wiki](Publishing.md) | Export and host the documentation on GitHub |
 
 New users: start with **Installation → Configuration → Sandbox → Permissions**.

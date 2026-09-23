@@ -1,0 +1,94 @@
+name: Optional macOS desktop verification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-desktop-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  desktop:
+    name: macOS desktop with fixture model
+    # Configure a dedicated runner with these labels, a logged-in GUI session,
+    # Docker, and linux/amd64 container support. This lane uses no provider key.
+    runs-on: [self-hosted, macOS, gbh-desktop-ci]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.16.0
+          package-manager-cache: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: 3.12.10
+
+      - name: Install root dependencies from lockfile
+        run: npm ci --no-audit --no-fund
+
+      - name: Install desktop dependencies from lockfile
+        run: npm ci --prefix runtime --no-audit --no-fund
+
+      - name: Build the local profile
+        run: npm run build -- --profile local
+
+      - name: Prepare desktop test artifact
+        run: npm run prepare:desktop -- --profile local
+
+      - name: Confirm private Docker runtime is available
+        run: docker info
+
+      - name: Pull the pinned private-test Box image
+        run: docker pull --platform linux/amd64 public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8
+
+      - name: Run isolated native macOS desktop and private Box integration
+        env:
+          GBH_TEST_RUN_ID: macos-${{ github.run_id }}-${{ github.run_attempt }}
+          GBH_TEST_CI_CLEANUP: "1"
+        run: |
+          echo "MACOS_INTEGRATION_STARTED=true" >> "$GITHUB_ENV"
+          node runtime/tests/plugins-live.cjs
+
+      - name: Clean up only this run's Box container and test directory
+        if: always()
+        env:
+          GBH_TEST_RUN_ID: macos-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          docker rm -f "grokbot-plugin-test-${GBH_TEST_RUN_ID}" >/dev/null 2>&1 || true
+          rm -rf -- ".runtime/tests/plugins-${GBH_TEST_RUN_ID}"
+
+      - name: Write concise macOS desktop evidence
+        if: always()
+        env:
+          JOB_RESULT: ${{ job.status }}
+          INTEGRATION_STARTED: ${{ env.MACOS_INTEGRATION_STARTED }}
+        run: |
+          mkdir -p .runtime/tests/ci
+          checked_out_sha="$(git rev-parse HEAD 2>/dev/null || printf 'unavailable')"
+          cat > .runtime/tests/ci/macos-desktop.md <<EOF
+          # Optional macOS desktop evidence
+
+          - Result: **${JOB_RESULT}**
+          - Build profile: \`local\`
+          - Verification layer: **native macOS desktop + private Box container + fixture model**
+          - Checked-out commit: \`${checked_out_sha}\`
+          - Fixture integration script: **${INTEGRATION_STARTED:-not started}**
+          - External inference: **not attempted**. This pass does not establish provider availability or quality.
+          - Contents: gate metadata only; no prompts, transcripts, screenshots, logs, credentials, or environment values.
+          - Cleanup: the test owns and removes its Box container and private desktop profile.
+          EOF
+
+      - name: Upload concise macOS desktop evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: macos-desktop-evidence
+          path: .runtime/tests/ci/macos-desktop.md
+          if-no-files-found: error
+          retention-days: 14

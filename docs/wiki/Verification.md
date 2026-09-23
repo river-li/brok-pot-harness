@@ -5,6 +5,14 @@ For user-facing support, see [Features](Features.md).
 The results below were recorded for the current repository on **2026-09-21**, with Host bfe1879 and desktop resources 0.44.0.
 They are not a live CI badge or a claim that every check runs on every launch.
 
+## CI policy
+
+Every pull request runs the required offline `local`-profile gate. It covers recovery/build integrity, strict local
+TypeScript, generated/runtime JavaScript syntax, offline contracts, docs export, and diff hygiene. Optional Docker,
+real-provider, and macOS desktop lanes are defined by changed area and evidence layer in the [CI tiers guide](CI.md).
+Recorded coverage below remains dated evidence; current CI reports the checked-out commit and, for a pull request, its
+source base and head separately. Workflow definitions alone do not establish a hosted check result.
+
 ## Recorded coverage
 
 | Layer | Evidence |

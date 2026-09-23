@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && python3 runtime/tools/build-bundles.py",
     "check": "tsc -p tsconfig.local.json",
+    "check:syntax": "python3 tools/ci/check-syntax.py",
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "recover": "python3 tools/recover-native.py",
     "test:recovery": "python3 -m unittest discover -s tools -p \"test_*.py\"",

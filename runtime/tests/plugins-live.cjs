@@ -1,5 +1,5 @@
-/* Original plugin parser/manager, real MCP process and original Agent. Run on
- * the Mac; all state belongs to a private Box and private desktop profile. */
+/* Original plugin parser/manager, real MCP process and original Agent. Run in
+ * an isolated environment; all state belongs to a private Box and desktop profile. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -11,8 +11,10 @@ const { importLocalPlugin } = require("../../dist/local/plugin-files.js");
 const { desktopFixture } = require("./desktop-fixture.cjs");
 
 (async () => {
-  const root = path.resolve(__dirname, "../.."),
-    run = randomUUID();
+  const run = process.env.GBH_TEST_RUN_ID || randomUUID();
+  if (!/^[A-Za-z0-9][A-Za-z0-9_.-]{7,39}$/.test(run))
+    throw Error("GBH_TEST_RUN_ID must be 8 to 40 filename-safe characters");
+  const root = path.resolve(__dirname, "../..");
   const temp = path.join(root, ".runtime/tests/plugins-" + run),
     data = path.join(temp, "data"),
     source = path.join(temp, "source");
@@ -80,12 +82,13 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
   const imported = importLocalPlugin(data, source, "local-proof");
   const pluginId = imported.pluginId,
     namespace = `local_plugin_${pluginId}_echo`;
-  const container = "grokbot-plugin-test-" + run.slice(0, 8),
+  const container = "grokbot-plugin-test-" + run,
     token = randomUUID(),
     modelToken = "fixture-model-key";
   let base,
     app,
     started = false,
+    startAttempted = false,
     failure,
     skill,
     step = 0,
@@ -217,7 +220,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
   const docker = (...args) =>
     execFileSync("docker", args, {
       encoding: "utf8",
-      timeout: 30000,
+      timeout: 300000,
       stdio: ["ignore", "pipe", "pipe"],
     }).trim();
   const call = async (method, args = {}, status = 200) => {
@@ -340,6 +343,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       "public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8",
       "/opt/grokbot/box-entrypoint.sh",
     );
+    startAttempted = true;
     docker(...args);
     started = true;
     const mapped = docker("port", container, "1340/tcp");
@@ -603,10 +607,12 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       );
       await app.close();
     }
-    if (started) {
-      try {
-        fs.writeFileSync(path.join(temp, "box.log"), docker("logs", container));
-      } catch {}
+    if (startAttempted) {
+      if (started) {
+        try {
+          fs.writeFileSync(path.join(temp, "box.log"), docker("logs", container));
+        } catch {}
+      }
       try {
         docker("rm", "-f", container);
       } catch {}
@@ -617,7 +623,12 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
     );
     server.closeAllConnections();
     await new Promise((r) => server.close(r));
-    console.log("Plugin diagnostics:", temp);
+    if (process.env.GBH_TEST_CI_CLEANUP === "1") {
+      fs.rmSync(temp, { recursive: true, force: true });
+      console.log("Removed this CI run's private plugin test data and diagnostics.");
+    } else {
+      console.log("Plugin diagnostics:", temp);
+    }
   }
 })().catch((error) => {
   console.error(error.stack);

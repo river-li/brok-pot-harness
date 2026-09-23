@@ -1,0 +1,78 @@
+name: Required CI
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: required-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline:
+    name: offline gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CI_EVENT: ${{ github.event_name }}
+      CI_EVENT_SHA: ${{ github.sha }}
+      CI_BEFORE_SHA: ${{ github.event.before }}
+      CI_PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      CI_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      CI_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.16.0
+          package-manager-cache: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: 3.12.10
+
+      - name: Install root dependencies from lockfile
+        run: npm ci --no-audit --no-fund
+
+      - name: Run required offline gates
+        run: python3 tools/ci/run-required-gates.py
+
+      - name: Write fallback evidence if setup failed
+        if: always()
+        env:
+          JOB_RESULT: ${{ job.status }}
+        run: |
+          report=.runtime/tests/ci/required-gates.md
+          if [[ ! -f "$report" ]]; then
+            mkdir -p .runtime/tests/ci
+            checked_out_sha="$(git rev-parse HEAD 2>/dev/null || printf 'unavailable')"
+            cat > "$report" <<EOF
+          # Required CI evidence
+
+          - Result: **${JOB_RESULT}**
+          - Build profile: \`local\`
+          - Verification layer: \`required offline PR gates\`
+          - Event: \`${CI_EVENT}\`
+          - Checked-out commit: \`${checked_out_sha}\`
+          - Pull request base commit: \`${CI_PR_BASE_SHA:-not applicable}\`
+          - Pull request head commit: \`${CI_PR_HEAD_SHA:-not applicable}\`
+          - External inference: **not attempted**.
+          - Contents: setup outcome only; no prompts, transcripts, screenshots, logs, credentials, or environment values.
+          EOF
+          fi
+
+      - name: Upload concise required-gate evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: required-ci-evidence
+          path: .runtime/tests/ci/required-gates.md
+          if-no-files-found: error
+          retention-days: 14

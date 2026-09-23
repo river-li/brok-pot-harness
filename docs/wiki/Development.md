@@ -18,6 +18,7 @@ Build from the repository root. Do not initialize new npm packages inside recove
 | Recognition or synthesis | [speech](../../runtime/speech/README.md) | Service contracts, offline models, desktop audio |
 | Bundle reconstruction and mappings | [Source recovery](Source-Recovery.md) | Recovery and runtime-build tests |
 | Documentation and Wiki export | [Publishing](Publishing.md), [exporter](../../tools/export-wiki.py) | `docs:check`, exporter tests, preview |
+| CI gates and evidence | [CI tiers](CI.md), [test guide](../../runtime/tests/README.md) | Required offline gates; optional Docker, provider, or macOS lane by change area |
 
 ## Edit and rebuild
 
@@ -42,6 +43,7 @@ See [Packaging](Packaging.md) for icon and app changes.
 The [test guide](../../runtime/tests/README.md) groups commands by dependency and purpose.
 Contracts verify protocols, boundaries, and errors. Live API/UI tests verify external services and complete flows.
 A deterministic model fixture can prove tool execution, but not real provider availability.
+The [CI tiers guide](CI.md) names the required PR check, optional changed-area lanes, evidence artifacts, and runner prerequisites.
 
 Run tests sharing a Box or display serially, or give them separate containers and profiles.
 Tests must clean up only their own resources. Existing evidence and coverage gaps are in [Verification](Verification.md).

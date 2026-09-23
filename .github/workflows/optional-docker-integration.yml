@@ -1,0 +1,117 @@
+name: Optional Docker integration
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "runtime/compose.yaml"
+      - "runtime/box-entrypoint.sh"
+      - "runtime/tests/**"
+      - "runtime/tools/**"
+      - "runtime/desktop-src/**"
+      - "runtime/renderer-src/**"
+      - "packages/agent/**"
+      - "packages/grok-bot-harness/**"
+      - "src/host/extensions/mcp/**"
+      - "src/host/extensions/agent/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-integration-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  isolated-fixture-integration:
+    name: isolated fixture-model Docker integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22.16.0
+          package-manager-cache: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: 3.12.10
+
+      - name: Install root dependencies from lockfile
+        run: npm ci --no-audit --no-fund
+
+      - name: Install desktop dependencies from lockfile
+        run: npm ci --prefix runtime --no-audit --no-fund
+
+      - name: Build the local profile
+        run: npm run build -- --profile local
+
+      - name: Prepare desktop test artifact
+        run: npm run prepare:desktop -- --profile local
+
+      - name: Confirm isolated Docker runtime is available
+        run: docker info
+
+      - name: Pull the pinned private-test Box image
+        run: docker pull --platform linux/amd64 public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8
+
+      - name: Validate Compose without starting services
+        env:
+          GROKBOT_SEARCH_SECRET: ci-local-search-sentinel
+          GROKBOT_GATEWAY_TOKEN: ci-local-gateway-sentinel
+        run: docker compose -f runtime/compose.yaml config --quiet
+
+      - name: Run private Box and desktop plugin integration
+        env:
+          GBH_TEST_RUN_ID: docker-${{ github.run_id }}-${{ github.run_attempt }}
+          GBH_TEST_CI_CLEANUP: "1"
+        run: |
+          echo "DOCKER_INTEGRATION_STARTED=true" >> "$GITHUB_ENV"
+          xvfb-run -a --server-args="-screen 0 1440x1000x24" node runtime/tests/plugins-live.cjs
+
+      - name: Clean up only this run's Box container and test directory
+        if: always()
+        env:
+          GBH_TEST_RUN_ID: docker-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          docker rm -f "grokbot-plugin-test-${GBH_TEST_RUN_ID}" >/dev/null 2>&1 || true
+          rm -rf -- ".runtime/tests/plugins-${GBH_TEST_RUN_ID}"
+
+      - name: Write concise fixture integration evidence
+        if: always()
+        env:
+          JOB_RESULT: ${{ job.status }}
+          INTEGRATION_STARTED: ${{ env.DOCKER_INTEGRATION_STARTED }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          mkdir -p .runtime/tests/ci
+          checked_out_sha="$(git rev-parse HEAD 2>/dev/null || printf 'unavailable')"
+          cat > .runtime/tests/ci/docker-integration.md <<EOF
+          # Optional Docker integration evidence
+
+          - Result: **${JOB_RESULT}**
+          - Build profile: \`local\`
+          - Verification layer: **fixture-model + private Box container + private desktop profile**
+          - Checked-out commit: \`${checked_out_sha}\`
+          - Pull request base commit: \`${PR_BASE_SHA:-not applicable}\`
+          - Pull request head commit: \`${PR_HEAD_SHA:-not applicable}\`
+          - Fixture integration script: **${INTEGRATION_STARTED:-not started}**
+          - External inference: **not attempted**. This pass does not establish provider availability or quality.
+          - Contents: gate metadata only; no prompts, transcripts, screenshots, logs, credentials, or environment values.
+          - Cleanup: the test owns and removes its Box container; the GitHub-hosted runner is discarded after the job.
+          EOF
+
+      - name: Upload concise Docker integration evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: docker-integration-evidence
+          path: .runtime/tests/ci/docker-integration.md
+          if-no-files-found: error
+          retention-days: 14

@@ -1,6 +1,6 @@
 # Repository tools
 
-Release recovery and documentation publishing utilities. Daily runtime builds use `npm run build` and
+Release recovery, documentation publishing, and CI gate helpers. Daily runtime builds use `npm run build` and
 [runtime/tools](../runtime/tools/README.md).
 
 | Tool | Responsibility |
@@ -10,6 +10,7 @@ Release recovery and documentation publishing utilities. Daily runtime builds us
 | [test_recovery.py](test_recovery.py) | Recovery boundary and mapping tests |
 | [export-wiki.py](export-wiki.py) | Validate English documentation and export native GitHub Wiki pages |
 | [test_wiki.py](test_wiki.py) | Wiki navigation, media, source links, and validation tests |
+| [ci](ci) | Required offline gate runner and generated/runtime JavaScript syntax check |
 
 ## Clean source recovery
 
@@ -31,5 +32,8 @@ npm run docs:wiki
 
 The Wiki exporter writes `.runtime/wiki` and performs no network writes.
 See [Publishing](../docs/wiki/Publishing.md) for prerequisites and the separate GitHub Wiki repository workflow.
+
+The required and optional GitHub Actions lanes, check selection, and sanitized artifacts are documented in
+[CI tiers](../docs/wiki/CI.md).
 
 [Source recovery](../docs/wiki/Source-Recovery.md) · [Maintenance rules](AGENTS.md)
