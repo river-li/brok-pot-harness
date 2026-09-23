@@ -90,7 +90,6 @@ jobs:
         if: always()
         env:
           JOB_RESULT: ${{ job.status }}
-          INTEGRATION_STARTED: ${{ env.DOCKER_INTEGRATION_STARTED }}
           PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
@@ -105,7 +104,7 @@ jobs:
           - Checked-out commit: \`${checked_out_sha}\`
           - Pull request base commit: \`${PR_BASE_SHA:-not applicable}\`
           - Pull request head commit: \`${PR_HEAD_SHA:-not applicable}\`
-          - Fixture integration script: **${INTEGRATION_STARTED:-not started}**
+          - Fixture integration script: **${DOCKER_INTEGRATION_STARTED:-not started}**
           - External inference: **not attempted**. This pass does not establish provider availability or quality.
           - Contents: gate metadata only; no prompts, transcripts, screenshots, logs, credentials, or environment values.
           - Native desktop UI: **not run**; the optional macOS lane covers it.

@@ -50,7 +50,6 @@ jobs:
         if: always()
         env:
           JOB_RESULT: ${{ job.status }}
-          LIVE_TEST_SCRIPT_STARTED: ${{ env.LIVE_TEST_SCRIPT_STARTED }}
         run: |
           mkdir -p .runtime/tests/ci
           checked_out_sha="$(git rev-parse HEAD 2>/dev/null || printf 'unavailable')"

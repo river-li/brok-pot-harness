@@ -76,7 +76,6 @@ jobs:
         if: always()
         env:
           JOB_RESULT: ${{ job.status }}
-          INTEGRATION_STARTED: ${{ env.MACOS_INTEGRATION_STARTED }}
         run: |
           mkdir -p .runtime/tests/ci
           checked_out_sha="$(git rev-parse HEAD 2>/dev/null || printf 'unavailable')"
@@ -87,7 +86,7 @@ jobs:
           - Build profile: \`local\`
           - Verification layer: **native macOS desktop + private Box container + fixture model**
           - Checked-out commit: \`${checked_out_sha}\`
-          - Fixture integration script: **${INTEGRATION_STARTED:-not started}**
+          - Fixture integration script: **${MACOS_INTEGRATION_STARTED:-not started}**
           - External inference: **not attempted**. This pass does not establish provider availability or quality.
           - Contents: gate metadata only; no prompts, transcripts, screenshots, logs, credentials, or environment values.
           - Cleanup: the test owns and removes its Box container and private desktop profile.
