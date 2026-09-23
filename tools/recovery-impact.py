@@ -19,6 +19,7 @@ IDENTIFIER = re.compile(r'^[A-Za-z_$][\w$]*$')
 IMPORT_FROM = re.compile(r'''^\s*import\s+(?!\()(?:.+?\s+from\s+)?(['"])[^'"\r\n]+\1\s*;?\s*$''')
 IMPORT_EXPORT_FROM = re.compile(r'''^\s*export\s+(?:\*|\{)[^;\r\n]*?\s+from\s+(['"])[^'"\r\n]+\1''')
 RECOVERED_ROOTS = ('src/', 'dune/', 'packages/', 'reconstruction/')
+LOCAL_RUNTIME_DEPENDENCIES = ('turndown', 'turndown-plugin-gfm', '@mixmark-io/domino', 'ws')
 
 
 def digest(data: bytes) -> str:
@@ -523,6 +524,67 @@ def compare_tree(source: Path, target: Path, label: str, *, ignore_node_modules:
     return errors
 
 
+def compare_local_runtime_dependencies(root: Path, built_root: Path) -> list[str]:
+    """Compare the whole copied WebFetch dependency tree with its four build inputs."""
+    dependency_root = built_root / 'local' / 'node_modules'
+    local_source = root / 'dist' / 'local'
+    expected_packages = LOCAL_RUNTIME_DEPENDENCIES if (local_source / 'web-fetch.js').is_file() else ()
+    expected_files: dict[str, Path] = {}
+    expected_directories = set()
+    errors = []
+    for package in expected_packages:
+        relative_package = PurePosixPath(package)
+        for parent in reversed(relative_package.parents):
+            if parent.as_posix() != '.':
+                expected_directories.add(parent.as_posix())
+        expected_directories.add(relative_package.as_posix())
+        source = root / 'node_modules' / package
+        if not source.is_dir():
+            errors.append(f'{source} is missing; cannot verify the expected local dependency tree')
+            continue
+        for member in source.rglob('*'):
+            relative = (relative_package / member.relative_to(source).as_posix()).as_posix()
+            if member.is_dir():
+                expected_directories.add(relative)
+            elif member.is_file():
+                expected_files[relative] = member
+            else:
+                errors.append(f'{source}/{member.relative_to(source).as_posix()} is not a regular build input')
+
+    if not dependency_root.exists():
+        if expected_packages:
+            errors.append(f'.runtime/build/sand-host/local/node_modules is missing')
+        return errors
+    if not dependency_root.is_dir():
+        return errors + ['.runtime/build/sand-host/local/node_modules is not a directory']
+
+    actual_files = set()
+    actual_directories = set()
+    for member in dependency_root.rglob('*'):
+        relative = member.relative_to(dependency_root).as_posix()
+        if member.is_dir():
+            actual_directories.add(relative)
+        elif member.is_file():
+            actual_files.add(relative)
+        else:
+            errors.append(f'.runtime/build/sand-host/local/node_modules/{relative} is not a regular file or directory')
+
+    for relative in sorted(expected_directories - actual_directories):
+        errors.append(f'.runtime/build/sand-host/local/node_modules/{relative} is missing')
+    for relative in sorted(actual_directories - expected_directories):
+        errors.append(f'.runtime/build/sand-host/local/node_modules/{relative} is not in the expected dependency set')
+    expected_file_paths = set(expected_files)
+    for relative in sorted(expected_file_paths - actual_files):
+        errors.append(f'.runtime/build/sand-host/local/node_modules/{relative} is missing')
+    for relative in sorted(actual_files - expected_file_paths):
+        errors.append(f'.runtime/build/sand-host/local/node_modules/{relative} is not in the expected dependency set')
+    for relative in sorted(expected_file_paths & actual_files):
+        target = dependency_root / relative
+        if digest(expected_files[relative].read_bytes()) != digest(target.read_bytes()):
+            errors.append(f'.runtime/build/sand-host/local/node_modules/{relative} differs from its build source')
+    return errors
+
+
 def verify_runtime_build(root: Path) -> list[str]:
     errors = []
     output = root / '.runtime' / 'build'
@@ -601,10 +663,7 @@ def verify_runtime_build(root: Path) -> list[str]:
     errors.extend(compare_tree(root / 'dist/local', built_root / 'local', '.runtime/build/sand-host/local', ignore_node_modules=True))
     errors.extend(compare_tree(root / 'vendor/host-modules', built_root / 'node_modules', '.runtime/build/sand-host/node_modules'))
     errors.extend(compare_tree(root / 'vendor/deps', output / 'deps', '.runtime/build/deps'))
-    for package in ('turndown', 'turndown-plugin-gfm', '@mixmark-io/domino', 'ws'):
-        source = root / 'node_modules' / package
-        target = built_root / 'local/node_modules' / package
-        errors.extend(compare_tree(source, target, f'.runtime/build/sand-host/local/node_modules/{package}'))
+    errors.extend(compare_local_runtime_dependencies(root, built_root))
     return errors
 
 

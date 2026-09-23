@@ -215,6 +215,56 @@ class RecoveryImpactTests(unittest.TestCase):
             errors = ri.verify_runtime_build(root)
             self.assertTrue(any('differs from build-manifest.json' in error for error in errors), errors)
 
+    def test_generated_build_integrity_rejects_unknown_local_dependency_package(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            release = b'release artifact'
+            built_artifact = b'built artifact'
+            config = {'features': {'localWorkspace': True}}
+            (root / 'sand-host').mkdir()
+            (root / 'sand-host/host-main.cjs').write_bytes(release)
+            (root / ri.MANIFEST_NAME).write_text(json.dumps({
+                'bundles': [{'path': 'host-main.cjs', 'bytes': len(release), 'sha256': ri.digest(release)}],
+            }))
+
+            source_local = root / 'dist/local'
+            source_local.mkdir(parents=True)
+            (source_local / 'web-fetch.js').write_text('maintained web fetch entry')
+            built_root = root / '.runtime/build/sand-host'
+            built_local = built_root / 'local'
+            built_local.mkdir(parents=True)
+            shutil.copy2(source_local / 'web-fetch.js', built_local / 'web-fetch.js')
+            dependencies = built_local / 'node_modules'
+            for package in ri.LOCAL_RUNTIME_DEPENDENCIES:
+                source = root / 'node_modules' / package
+                source.mkdir(parents=True)
+                (source / 'index.js').write_text(f'{package} source')
+                shutil.copytree(source, dependencies / package)
+
+            (built_root / 'host-main.cjs').write_bytes(built_artifact)
+            (built_root / 'build-profile.json').write_text(json.dumps(config, indent=2) + '\n')
+            (built_root / 'build-profile.cjs').write_text(
+                '// Generated from runtime/build-profiles.json. Rebuild to change mode.\n'
+                f'const config = {json.dumps(config, separators=(",", ":"))};\n'
+                'Object.freeze(config.features);\nObject.freeze(config);\n'
+                'process.env.GROKBOT_LOCAL_MODE = config.features.localWorkspace ? "1" : "0";\n'
+                'module.exports = config;\n'
+            )
+            (root / '.runtime/build/build-manifest.json').write_text(json.dumps({
+                'configuration': config,
+                'bundles': [{'path': 'host-main.cjs', 'sha256': ri.digest(built_artifact)}],
+            }))
+
+            self.assertEqual(ri.verify_runtime_build(root), [])
+            unexpected = dependencies / 'unexpected-pkg' / 'index.js'
+            unexpected.parent.mkdir()
+            unexpected.write_text('not part of the local runtime dependency set')
+            errors = ri.verify_runtime_build(root)
+            self.assertTrue(any(
+                '.runtime/build/sand-host/local/node_modules/unexpected-pkg/index.js is not in the expected dependency set' in error
+                for error in errors
+            ), errors)
+
 
 if __name__ == '__main__':
     unittest.main()

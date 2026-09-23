@@ -45,7 +45,7 @@ npm run recovery:impact -- --base origin/main
 npm run recovery:check
 ```
 
-Impact output lists rebuilt artifacts for both profiles, mapped ranges, adjacent bundle fragments, same-directory modules to inspect for interfaces, and relevant checks. Adjacent files are navigation context, not a dependency graph. `check` validates fragment marker counts/order and manifest bundle hashes; when `.runtime/build` exists, it also compares built bundles to `build-manifest.json` and the remaining copied release files to `sand-host`. Use `npm run recovery:check -- --source PATH` for a focused marker check without full bundle/build verification.
+Impact output lists rebuilt artifacts for both profiles, mapped ranges, adjacent bundle fragments, same-directory modules to inspect for interfaces, and relevant checks. Adjacent files are navigation context, not a dependency graph. `check` validates fragment marker counts/order and manifest bundle hashes; when `.runtime/build` exists, it compares built bundles to `build-manifest.json`, copied release files to `sand-host`, and the complete local `node_modules` tree to the four WebFetch runtime dependency sources. Unknown packages and files fail the check. Use `npm run recovery:check -- --source PATH` for a focused marker check without full bundle/build verification.
 
 Possible standalone imports in recovered fragments are a lexical advisory only. The check never fails for an import candidate because comments, strings, or retained syntax may look like imports.
 

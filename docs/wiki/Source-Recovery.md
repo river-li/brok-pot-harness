@@ -64,7 +64,7 @@ Artifact offsets are zero-based UTF-8 byte positions in the immutable `sand-host
 
 Generate an impact report for the current Git diff with `npm run recovery:impact`, or compare against another base with `npm run recovery:impact -- --base origin/main`. The report maps changed files to artifacts and both profile output roots, shows neighboring bundle fragments and same-directory modules for interface review, and recommends checks for the changed component. Neighboring files are context based on bundle order or directory; the report does not infer a dependency graph. Untracked, non-ignored files are included.
 
-Run `npm run recovery:check` to validate all fragment marker counts and order, manifest ranges and release bundle hashes, protected `sand-host` edits, and generated `.runtime/build` contents when present. A clean worktree reports no recovery source drift. `npm run recovery:check -- --source PATH` limits the run to selected source markers and explicitly skips full bundle/build verification.
+Run `npm run recovery:check` to validate all fragment marker counts and order, manifest ranges and release bundle hashes, protected `sand-host` edits, and generated `.runtime/build` contents when present. The check compares the complete local `node_modules` tree with the four WebFetch runtime dependency sources and flags unknown packages or files. A clean worktree reports no recovery source drift. `npm run recovery:check -- --source PATH` limits the run to selected source markers and explicitly skips full bundle/build verification.
 
 Static import detection is a lexical advisory. It can match comments, strings, and retained syntax, so it never blocks the check; review any reported candidate manually.
 
