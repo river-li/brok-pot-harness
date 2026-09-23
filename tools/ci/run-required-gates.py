@@ -215,7 +215,7 @@ def validate_pre_pr(root: Path = ROOT, fetch: bool = False) -> Tuple[Optional[st
     if not ancestor:
         return "branch does not contain current origin/main; update it and rerun the checks", details
 
-    changed = git_command(["diff", "--name-only", "-z", "{}...{}".format(main, head)], root)
+    changed = git_command(["diff", "--name-only", "--no-renames", "-z", "{}...{}".format(main, head)], root)
     if changed.returncode:
         return "could not select the branch changes against current origin/main", details
     paths = [part.decode("utf-8", "surrogateescape") for part in changed.stdout.split(b"\0") if part]
@@ -324,7 +324,7 @@ def changed_paths(details: Mapping[str, str], root: Path = ROOT) -> Tuple[List[s
         revision = "{} {}".format(base, head) if base and head else ""
     if not revision:
         return [], "verified source range is unavailable for changed-path selection"
-    result = git_command(["diff", "--name-only", "-z"] + revision.split(), root)
+    result = git_command(["diff", "--name-only", "--no-renames", "-z"] + revision.split(), root)
     if result.returncode:
         return [], "could not read changed paths from the verified source range"
     return [part.decode("utf-8", "surrogateescape") for part in result.stdout.split(b"\0") if part], None

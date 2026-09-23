@@ -306,6 +306,51 @@ class RequiredGateTests(unittest.TestCase):
         self.assertEqual(details["changed_paths"], ["docs/change.md"])
         self.assertEqual(CI.gate_plan(details["changed_paths"])[0], "documentation-only")
 
+    def test_git_rename_selects_full_lane_for_pre_pr_and_ci(self) -> None:
+        base = commit_file(
+            self.repo, "tools/check-example.js", "console.log('fixture');\n", "add example"
+        )
+        self.add_origin_main(base)
+        linked = self.repo / "rename-worktree"
+        git(self.repo, "worktree", "add", "--quiet", "-b", "agent/rename", str(linked), base)
+        (linked / "docs").mkdir()
+        git(linked, "mv", "tools/check-example.js", "docs/check-example.md")
+        git(linked, "commit", "-m", "rename unchanged example")
+        head = git(linked, "rev-parse", "HEAD")
+
+        self.assertEqual(
+            git(self.repo, "diff", "--name-only", "{}...{}".format(base, head)).splitlines(),
+            ["docs/check-example.md"],
+            "the fixture must reproduce Git's default rename detection",
+        )
+
+        error, pre_pr = CI.validate_pre_pr(linked, fetch=False)
+
+        self.assertIsNone(error)
+        self.assertEqual(set(pre_pr["changed_paths"]), {"docs/check-example.md", "tools/check-example.js"})
+        self.assertEqual(CI.gate_plan(pre_pr["changed_paths"])[0], "full source and contract")
+
+        git(self.repo, "merge", "--no-ff", "agent/rename", "-m", "synthetic PR merge")
+        merge_checkout = git(self.repo, "rev-parse", "HEAD")
+        _, _, ci_details, error = CI.select_diff_command(
+            "pull_request",
+            {
+                "CI_EVENT_SHA": merge_checkout,
+                "CI_DEFAULT_BRANCH": "main",
+                "CI_PR_BASE_REF": "main",
+                "CI_PR_BASE_SHA": base,
+                "CI_PR_HEAD_SHA": head,
+            },
+            self.repo,
+        )
+
+        self.assertIsNone(error)
+        ci_paths, error = CI.changed_paths(ci_details, self.repo)
+
+        self.assertIsNone(error)
+        self.assertEqual(set(ci_paths), {"docs/check-example.md", "tools/check-example.js"})
+        self.assertEqual(CI.gate_plan(ci_paths)[0], "full source and contract")
+
     def test_pre_pr_rejects_stale_main_and_uncommitted_worktree_changes(self) -> None:
         linked = self.linked_task_worktree()
         (linked / "untracked.txt").write_text("not committed\n", encoding="utf-8")

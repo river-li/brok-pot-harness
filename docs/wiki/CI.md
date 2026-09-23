@@ -35,7 +35,7 @@ The job summary and short-lived artifact record the result, build profile, verif
 
 ## Main branch enforcement
 
-Main branch protection requires the offline gates check from the GitHub Actions app (app ID 15368), with strict up-to-date checks and stale-review dismissal. The owner verified the effective rule. The GitHub approval count is zero because the publishing account cannot provide an independent approval; the process still requires a separate agent's published-head comment and verdict. Keep the required check context in sync if the job name changes. This server-side rule enforces check success; useful scope, sound design, readable explanation, and truly independent review remain human/agent judgments that CI cannot prove.
+Main branch protection requires the offline gates check from the GitHub Actions app (app ID 15368), with strict up-to-date checks and stale-review dismissal. The owner verified the effective rule. The GitHub approval count is zero because the publishing account cannot provide an independent approval; the process still requires the fresh separate-agent review described in the [maintainer workflow](Agent-Maintainer-Playbook.md). Keep the required check context in sync if the job name changes. This server-side rule enforces check success; useful scope, sound design, readable explanation, and truly independent review remain human/agent judgments that CI cannot prove.
 
 Provider, live service, and desktop checks remain separate from this required offline workflow. Choose those checks only when the issue needs that evidence; see the [runtime test guide](../../runtime/tests/README.md) and [Verification](Verification.md).
 
