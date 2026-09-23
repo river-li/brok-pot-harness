@@ -12,3 +12,10 @@ the separate GitHub Wiki repository. Keep generated output under .runtime, never
 include credentials or user data, and reject unowned output directories. Export
 commands must not push or alter remotes. Test page/asset/source links and invalid
 inputs before changing the exporter.
+
+`check-guidance.py` defines source components as directories under its listed
+maintained-source roots that have both a README and direct implementation
+files. Keep the current source suffix list accurate when this repository adds a
+language, and add direct `AGENTS.md` guidance when a component README is added.
+Do not expand the check to generated outputs, release baselines, vendor assets,
+or documentation-only folders.

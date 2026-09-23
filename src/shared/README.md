@@ -5,7 +5,7 @@ Check serialization, defaults, and both sides of an interface before changing cr
 
 | Directory / file | Contents |
 | --- | --- |
-| [gateway](gateway), [rpc](rpc), [proto.ts](proto.ts) | Gateway/RPC representations and protocol entry |
+| [gateway](gateway/README.md), [rpc](rpc), [proto.ts](proto.ts) | Gateway wire constants, RPC representations, and protocol entry |
 | [settings](settings), [experiments](experiments) | Settings schemas and retained runtime experiments |
 | [permissions](permissions), [local-exec](local-exec), [auto-review](auto-review) | Shared permission and execution definitions |
 | [agents](agents), [transcript](transcript), [send](send) | Agent, message, and send representations |

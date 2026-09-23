@@ -3,21 +3,24 @@
 Run from the repository root. Choose checks for the affected behavior and distinguish contracts, live services,
 and complete desktop workflows. Recorded results are in [Verification](../../docs/wiki/Verification.md).
 
-| Layer | npm script | Prerequisites / coverage |
+| Layer | Command | Prerequisites / coverage |
 | --- | --- | --- |
-| Types | `check:local` | Strict local TypeScript |
-| Build | `test:recovery`, `test:runtime-build` | Python; recovery, fragments, profiles, documentation exporter |
-| Inference/review contracts | `test:responses-contract` | Compiled adapters; events, conversion, errors, review protocols |
-| Web contracts | `test:web-fetch`, `test:web-search` | Local test services; boundaries and failures |
-| Speech contracts | `test:transcription`, `test:tts`, `test:voice` | Adapters, tickets, call protocols |
-| MCP/plugin contracts | `test:mcp-store`, `test:mcp-scopes`, `test:plugin-files` | Configuration, scope, filesystem handling |
-| Keychain policy | `test:desktop-keychain` | Conditional storage and machine identity |
-| Real model | `test:responses` | Current endpoint/key; may incur API charges |
-| Real desktop | `test:desktop-live`, `test:desktop-keychain-live` | Prepared Electron and local runtime |
-| MCP/plugin integration | `test:plugins-live`; `mcp-inline-live.cjs` and related scripts | Running Box and test services |
-| Mac execution | `test:mac-exec-live` | Desktop bridge and relevant system capabilities |
-| Audio integration | `test:desktop-transcription`, `test:desktop-tts` | Speech service, desktop, synthetic audio fixture |
-| Call integration | `test:desktop-voice`, `test:voice-real-api` | See [voice bridge](../VOICE.md); the latter calls a real model |
+| Types | `npm run check:local` | Strict local TypeScript |
+| Reconstruction / profiles | `npm run test:recovery`, `npm run test:runtime-build` | Clean recovery and fragment mapping; runtime reconstruction/profile selection. `npm run docs:check` separately validates Wiki links and scoped guidance. |
+| Inference/review contracts | `npm run test:responses-contract` | Compiled adapters; events, conversion, errors, review protocols |
+| Agent runner fixture | `docker compose -f runtime/compose.yaml exec app node /opt/grokbot/tests/agent-sandbox.cjs` | Ready `gbh-local` app; retained Agent loop and sandbox tools against a deterministic Responses fixture, not external inference |
+| Agent real-model flow | `docker compose -f runtime/compose.yaml exec app node /opt/grokbot/tests/agent-live.cjs` | Ready `gbh-local` app and `LITELLM_API_KEY`; calls the configured API and may incur charges |
+| Host Gateway smoke | `SAND_GATEWAY_TOKEN="$(cat .runtime/gateway-token)" node runtime/tests/gateway.cjs` | Ready isolated Host and disposable data; exercises basic APIs and transcript persistence, leaves a test Agent record |
+| Web contracts | `npm run test:web-fetch`, `npm run test:web-search` | Local test services; boundaries and failures |
+| Speech contracts | `npm run test:transcription`, `npm run test:tts`, `npm run test:voice` | Adapters, tickets, call protocols |
+| MCP/plugin contracts | `npm run test:mcp-store`, `npm run test:mcp-scopes`, `npm run test:plugin-files` | Configuration, scope, filesystem handling |
+| Keychain policy | `npm run test:desktop-keychain` | Conditional storage and machine identity |
+| Real model | `npm run test:responses` | Current endpoint/key; may incur API charges |
+| Real desktop | `npm run test:desktop-live`, `npm run test:desktop-keychain-live` | Prepared Electron and local runtime |
+| MCP/plugin integration | `npm run test:plugins-live`; `node runtime/tests/mcp-inline-live.cjs` | Running Box and test services |
+| Mac execution | `npm run test:mac-exec-live` | Desktop bridge and relevant system capabilities |
+| Audio integration | `npm run test:desktop-transcription`, `npm run test:desktop-tts` | Speech service, desktop, synthetic audio fixture |
+| Call integration | `npm run test:desktop-voice`, `npm run test:voice-real-api` | See [voice bridge](../VOICE.md); the latter calls a real model |
 
 ## Common preparation
 
@@ -39,5 +42,10 @@ A deterministic model fixture with a real Box can prove tool execution and appro
 Synthetic microphone input covers encoding and IPC, not hardware permissions or acoustic echo.
 Contracts do not replace real UI workflows.
 
-Run shared-Box/display tests serially. Isolated tests use private containers and profiles and clean up only their own resources.
-Keep useful diagnostics under ignored `.runtime/tests`, without secrets or user sessions.
+Run shared-Box/display tests serially. The Agent fixture runs inside the local
+app container but creates its own temporary Host/data and uses a deterministic
+Responses fixture. The Gateway smoke uses the selected Host data directory and
+leaves its test Agent in place, so point it at disposable data. Isolated tests
+use private containers and profiles and clean up only their own resources.
+Keep useful diagnostics under ignored `.runtime/tests`, without secrets or user
+sessions.

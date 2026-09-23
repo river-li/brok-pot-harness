@@ -10,6 +10,7 @@ Release recovery and documentation publishing utilities. Daily runtime builds us
 | [test_recovery.py](test_recovery.py) | Recovery boundary and mapping tests |
 | [export-wiki.py](export-wiki.py) | Validate English documentation and export native GitHub Wiki pages |
 | [test_wiki.py](test_wiki.py) | Wiki navigation, media, source links, and validation tests |
+| [check-guidance.py](check-guidance.py) | Ensure README-declared maintained source components have scoped AGENTS.md guidance |
 
 ## Clean source recovery
 
@@ -28,6 +29,11 @@ Recovery does not overwrite maintained source and is not an application upgrade/
 npm run docs:check
 npm run docs:wiki
 ```
+
+`docs:check` validates Wiki links and checks source component guidance under
+`src/`, `packages/`, `dune/`, `reconstruction/`, `runtime/`, and `tools/`.
+The [Development guide](../docs/wiki/Development.md#scoped-guidance-coverage)
+defines which directories the check treats as components.
 
 The Wiki exporter writes `.runtime/wiki` and performs no network writes.
 See [Publishing](../docs/wiki/Publishing.md) for prerequisites and the separate GitHub Wiki repository workflow.

@@ -7,15 +7,16 @@ Build from the repository root. Do not initialize new npm packages inside recove
 
 | Change | Start reading | Relevant checks |
 | --- | --- | --- |
-| Model requests, streaming events, tool results | [responses.ts](../../packages/grok-bot-harness/src/local/responses.ts) | Responses contracts and live API test |
-| Toolsets or prompts | [Harness runner](../../packages/grok-bot-harness/src/runner), [Agent](../../packages/agent/README.md) | Rebuild and relevant Agent/sandbox integration |
-| Host messages and run lifecycle | [transcript](../../src/host/extensions/transcript/README.md), [turn-execution](../../src/host/extensions/turn-execution/README.md) | Host build and desktop task integration |
+| Model requests, streaming events, tool results | [responses.ts](../../packages/grok-bot-harness/src/local/responses.ts) | `npm run check:local`, `npm run test:responses-contract`; live API is separate |
+| Toolsets or prompts | [Harness runner](../../packages/grok-bot-harness/src/runner), [Agent](../../packages/agent/README.md) | `npm run build -- --profile local`, `npm run test:runtime-build`, Agent fixture in [test guide](../../runtime/tests/README.md) |
+| Host messages and run lifecycle | [transcript](../../src/host/extensions/transcript/README.md), [turn-execution](../../src/host/extensions/turn-execution/README.md) | `npm run build -- --profile local`, Gateway smoke; no focused scheduler lane/race test is present |
+| Gateway methods and events | [Gateway wire](../../src/shared/gateway/README.md), [Host](../../src/host/README.md) | `npm run build -- --profile local`, `npm run test:runtime-build`, isolated Gateway smoke |
 | Mac permissions and approval | [local-tool-permission](../../src/host/extensions/local-tool-permission/README.md), [auto-review](../../src/host/extensions/auto-review/README.md) | Review contracts and Mac execution tests |
-| MCP/plugin lifecycle | [Local adapters](../../packages/grok-bot-harness/src/local/README.md) | Scope, store, plugin-files, and live tests |
-| Electron startup, Keychain, Dock icon | [desktop-src](../../runtime/desktop-src/README.md) | Prepare, Keychain contracts, desktop startup |
-| UI, settings presentation, CSP | [renderer-src](../../runtime/renderer-src/README.md) | Prepare and relevant desktop interaction |
-| Images, mounts, launch configuration | [runtime](../../runtime/README.md) | Compose configuration and startup |
-| Recognition or synthesis | [speech](../../runtime/speech/README.md) | Service contracts, offline models, desktop audio |
+| MCP/plugin lifecycle | [Local adapters](../../packages/grok-bot-harness/src/local/README.md) | `npm run check:local`, then matching MCP/plugin contract |
+| Electron startup, Keychain, Dock icon | [desktop-src](../../runtime/desktop-src/README.md) | `npm run prepare:desktop -- --profile local`, `npm run test:desktop-keychain`; live startup audit when changed |
+| UI, settings presentation, CSP | [renderer-src](../../runtime/renderer-src/README.md) | `npm run prepare:desktop -- --profile local`, then relevant desktop interaction |
+| Images, mounts, launch configuration | [runtime](../../runtime/README.md) | `npm run test:runtime-build`, Compose config with dummy values |
+| Recognition or synthesis | [speech](../../runtime/speech/README.md) | Matching `npm run test:transcription` / `npm run test:tts`, offline models, desktop audio |
 | Bundle reconstruction and mappings | [Source recovery](Source-Recovery.md) | Recovery and runtime-build tests |
 | Documentation and Wiki export | [Publishing](Publishing.md), [exporter](../../tools/export-wiki.py) | `docs:check`, exporter tests, preview |
 
@@ -45,6 +46,19 @@ A deterministic model fixture can prove tool execution, but not real provider av
 
 Run tests sharing a Box or display serially, or give them separate containers and profiles.
 Tests must clean up only their own resources. Existing evidence and coverage gaps are in [Verification](Verification.md).
+
+## Scoped guidance coverage
+
+For this repository, a source component is declared by a directory containing a
+README and direct implementation files under `src/`, `packages/`, `dune/`,
+`reconstruction/`, `runtime/`, or `tools/`. Such directories need their own
+`AGENTS.md`; nested helper folders without a component README inherit the
+nearest component's rules. `npm run docs:check` checks every README-declared
+source component for a direct guide, so a new component README without scoped
+maintenance instructions fails the check. Update the checker's source suffix
+list if a new implementation language is introduced. Vendor/release baselines,
+generated output, and documentation/asset-only directories are intentionally
+outside this source-component audit.
 
 ## Documentation conventions
 
