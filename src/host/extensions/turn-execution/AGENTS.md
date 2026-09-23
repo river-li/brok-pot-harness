@@ -1,9 +1,32 @@
-# turn-execution maintenance
+# Turn-execution maintenance
 
-The turn-execution Host extension and its lifecycle-bound services. Read extension.ts for dependencies and registration.
+This extension binds Host turn services to the Harness. Its README identifies
+the service entry point and neighboring scheduler.
 
-Follow the repository AGENTS.md. Preserve emitted identifiers and recovered-fragment markers.
-These files are reconstructed in bundle scope; do not invent standalone imports
-or replace newer upstream behavior with older code. Keep vendor paths intact
-and apply local adaptations conditionally. Build from the repository root and
-run the tests appropriate to the changed component.
+## Edit boundaries and invariants
+
+- `extension.ts` owns extension registration/lifecycle;
+  `turn-execution-service.ts` owns `TurnExecutionRegistry` and delegates
+  `createRunner` / `createGroupMemberRunner` to the bound executor.
+- Preserve the single-bind invariant. `canExecute` reflects executor binding;
+  `isRunReady` also checks the local-work gate and inference readiness. Keep the
+  existing unbound and double-bind failures actionable.
+- Message acceptance, queue priority, and per-Agent serialization belong to
+  `extensions/transcript`. Agent/tool iteration belongs to
+  `packages/grok-bot-harness`; do not duplicate either loop here.
+- Keep startup dependencies and stop cleanup in sync with `extension.ts`.
+  Preserve recovered-fragment markers, generated identifiers, and bundle
+  scope. Local policy must not remove the original service implementation.
+
+## Verify changes
+
+```sh
+npm run build -- --profile local
+npm run test:runtime-build
+```
+
+`test:runtime-build` checks source reconstruction and profile selection, not
+turn readiness or scheduler behavior. For externally observable Host changes,
+use the disposable-stack instructions in the
+[test guide](../../../../runtime/tests/README.md); `check:local` does not type
+check recovered Host fragments.
