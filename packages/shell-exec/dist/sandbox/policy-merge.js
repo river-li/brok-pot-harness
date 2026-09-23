@@ -267,8 +267,9 @@ function mergeCommonWorkspaceFields(sources, options2) {
     recordSource("networkPolicyStrict", 3);
   }
   const readBoundary = takeHighestPriorityDefined(perUser?.readBoundary, perRepo?.readBoundary, teamAdmin?.readBoundary) ?? "system";
-  const additionalReadPaths = takeHighestPriorityDefined(perUser?.additionalReadPaths, perRepo?.additionalReadPaths, teamAdmin?.additionalReadPaths);
-  const mergedReadPaths = readBoundary === "workspace" ? additionalReadPaths ?? [] : void 0;
+  const localReadPaths = takeHighestPriorityDefined(perUser?.additionalReadPaths, perRepo?.additionalReadPaths);
+  const additionalReadPaths = mergePathsUnion(localReadPaths, teamAdmin?.additionalReadPaths);
+  const mergedReadPaths = readBoundary === "workspace" ? additionalReadPaths : void 0;
   const additionalReadonlyPaths = mergePathsUnion(perUser?.additionalReadonlyPaths, perRepo?.additionalReadonlyPaths, teamAdmin?.additionalReadonlyPaths, hardcoded.additionalReadonlyPaths);
   const mergedReadonlyPaths = additionalReadonlyPaths.length > 0 ? additionalReadonlyPaths : void 0;
   let mergedNetworkPolicy = mergeNetworkPolicies(perUser?.networkPolicy, perRepo?.networkPolicy, teamAdmin?.networkPolicy, hardcoded.networkPolicy);

@@ -250,7 +250,7 @@ function createServerAgentProxy(deps) {
       } catch (error42) {
         return classifyServerAgentActionError(error42);
       }
-      const agentId = (0, import_node_crypto62.randomUUID)();
+      const agentId = (0, import_node_crypto63.randomUUID)();
       let confirmed;
       let attempts2 = 0;
       try {

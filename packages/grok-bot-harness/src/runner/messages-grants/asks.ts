@@ -1,4 +1,4 @@
-var import_node_crypto59 = require("node:crypto");
+var import_node_crypto60 = require("node:crypto");
 init_scheduling();
 var ABORTED = {
   kind: "refused",
@@ -49,7 +49,7 @@ function createMessagesGrantsAsks(deps) {
     for (const waiter of [...ask.waiters.values()]) waiter(outcome);
   };
   const open9 = (requestId2, grants) => {
-    const askId = (0, import_node_crypto59.randomUUID)();
+    const askId = (0, import_node_crypto60.randomUUID)();
     const ask = {
       askId,
       grants,

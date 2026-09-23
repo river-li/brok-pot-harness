@@ -5,7 +5,7 @@ var CREDENTIAL_FILL_REMOTE_HOLD_DEFAULT_WAIT_MS = 25e3;
 var CREDENTIAL_FILL_REMOTE_HOLD_MAX_WAIT_MS = 3e4;
 function createCredentialFillRemoteHolds(lease, options2 = {}) {
   const clock = options2.clock ?? realClock;
-  const log4 = options2.log ?? (() => void 0);
+  const log5 = options2.log ?? (() => void 0);
   const holds = /* @__PURE__ */ new Map();
   const bounded = (value, fallback2, max) => Math.min(Math.max(1, Math.round(value ?? fallback2)), max);
   return {
@@ -44,7 +44,7 @@ function createCredentialFillRemoteHolds(lease, options2 = {}) {
       }
       const expiry = clock.schedule(ttlMs, () => {
         if (!holds.delete(request5.holdId)) return;
-        log4(
+        log5(
           `credentials: remote ${request5.toolName} hold lapsed after ${ttlMs}ms without a release`
         );
         acquisition.release();

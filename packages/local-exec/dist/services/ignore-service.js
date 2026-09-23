@@ -586,7 +586,7 @@ var LocalIgnoreService = class _LocalIgnoreService {
       return true;
     }
     try {
-      const isMatch = (0, import_picomatch.default)(trimmedPattern);
+      const isMatch = (0, import_picomatch.default)(trimmedPattern, { dot: true });
       return isMatch(value);
     } catch {
       return trimmedPattern === value;

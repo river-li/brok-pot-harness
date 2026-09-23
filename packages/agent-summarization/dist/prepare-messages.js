@@ -24,7 +24,8 @@ var INJECTED_REMINDER_CURSOR_FLAGS = [
   "sandSendMessageReminder",
   "sandEarlyResultReminder",
   "sandStartOfTurnAckReminder",
-  "sandDiskPressureReminder"
+  "sandDiskPressureReminder",
+  "sandMcpUnavailableReminder"
 ];
 function isInjectedReminderMessage(message) {
   var _a19;
@@ -35,7 +36,7 @@ function isInjectedReminderMessage(message) {
   if (cursor === void 0) {
     return false;
   }
-  return INJECTED_REMINDER_CURSOR_FLAGS.some((flag) => cursor[flag] === true);
+  return INJECTED_REMINDER_CURSOR_FLAGS.some((flag2) => cursor[flag2] === true);
 }
 function prepareMessagesForCompaction(messages2) {
   const systemMessage = messages2.find((message) => message.role === "system");

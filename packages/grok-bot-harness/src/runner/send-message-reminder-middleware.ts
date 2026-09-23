@@ -6,10 +6,10 @@ var DEFAULT_SEND_MESSAGE_REMINDER_THRESHOLD = 6;
 var DEFAULT_EARLY_RESULT_REMINDER_THRESHOLD = 0;
 var SEND_MESSAGE_REMINDER_LEAD = "You have made several tool calls without a SendToUser, so the user is currently watching silence. Actually invoke the SendToUser tool now \u2014 make a real tool/function call, not text you write. Plain assistant text is NEVER shown to the user; only a real SendToUser tool invocation reaches them, so if you don't call the tool they just keep seeing silence.";
 var SEND_MESSAGE_REMINDER_MESSAGE = `<system_reminder>
-${SEND_MESSAGE_REMINDER_LEAD} Send a brief, specific update on what you are doing or what you just found before continuing. ${REQUESTED_VOICE_MEMO_SILENCE_CLAUSE}
-</system_reminder>`;
-var SEND_MESSAGE_REMINDER_MESSAGE_UPDATE_COMMUNICATION = `<system_reminder>
 ${SEND_MESSAGE_REMINDER_LEAD} Send one brief update in a complete sentence, saying what you found or what happens next, not a play-by-play of each step, before continuing. ${REQUESTED_VOICE_MEMO_SILENCE_CLAUSE}
+</system_reminder>`;
+var LEGACY_SEND_MESSAGE_REMINDER_MESSAGE = `<system_reminder>
+${SEND_MESSAGE_REMINDER_LEAD} Send a brief, specific update on what you are doing or what you just found before continuing. ${REQUESTED_VOICE_MEMO_SILENCE_CLAUSE}
 </system_reminder>`;
 var EARLY_RESULT_REMINDER_MESSAGE = `<system_reminder>
 Remember: the user cannot see tool output or your thinking \u2014 only SendToUser reaches them. If you have produced a result or finished what they asked, send it now with a SendToUser tool call before continuing or ending the turn. If you are still mid-task, keep working and send the result once you have it.
@@ -31,7 +31,7 @@ function getUserMessageText(message) {
 function isSendMessageReminderMessage(message) {
   const text2 = getUserMessageText(message);
   if (text2 === void 0) return false;
-  return text2.includes(SEND_MESSAGE_REMINDER_MESSAGE) || text2.includes(SEND_MESSAGE_REMINDER_MESSAGE_UPDATE_COMMUNICATION);
+  return text2.includes(SEND_MESSAGE_REMINDER_MESSAGE) || text2.includes(LEGACY_SEND_MESSAGE_REMINDER_MESSAGE);
 }
 function isInjectedReminderMessage2(message) {
   return isInjectedReminderMessage(message) || isSendMessageReminderMessage(message) || (getUserMessageText(message)?.includes(EARLY_RESULT_REMINDER_MESSAGE) ?? false);
@@ -96,10 +96,10 @@ function hasReminderFiredThisSilentStreak(messages2) {
   }
   return false;
 }
-function createSendMessageReminderMessage(updateCommunication = false) {
+function createSendMessageReminderMessage() {
   return {
     role: "user",
-    content: updateCommunication ? SEND_MESSAGE_REMINDER_MESSAGE_UPDATE_COMMUNICATION : SEND_MESSAGE_REMINDER_MESSAGE,
+    content: SEND_MESSAGE_REMINDER_MESSAGE,
     providerOptions: {
       cursor: {
         sandSendMessageReminder: true
@@ -149,12 +149,10 @@ function createDiskPressureReminderMiddleware(episodeId) {
 var SendMessageReminderMiddleware = class extends BaseMiddleware {
   threshold;
   earlyResultThreshold;
-  updateCommunication;
   constructor(innerExecutor, thresholds) {
     super(innerExecutor);
     this.threshold = thresholds.threshold;
     this.earlyResultThreshold = thresholds.earlyResultThreshold;
-    this.updateCommunication = thresholds.updateCommunication ?? (() => false);
   }
   stream(ctx, invocationId, tools, options2) {
     const messages2 = this.innerExecutor.getMessages();
@@ -169,9 +167,7 @@ var SendMessageReminderMiddleware = class extends BaseMiddleware {
         threshold: this.threshold,
         messageCount: messages2.length
       });
-      this.innerExecutor.appendMessages(
-        createSendMessageReminderMessage(this.updateCommunication() === true)
-      );
+      this.innerExecutor.appendMessages(createSendMessageReminderMessage());
     } else if (toolCallsSinceLastSend > this.earlyResultThreshold && hasSendMessageSinceRealTurnStart(messages2) && !hasReminderFiredThisSilentStreak(messages2)) {
       logger100.info(ctx, "[sand-send-message-reminder] injecting early result reminder", {
         toolCallsSinceLastSend,
@@ -188,7 +184,6 @@ function createSendMessageReminderMiddleware(options2) {
   const earlyResultThreshold = options2?.earlyResultThreshold ?? DEFAULT_EARLY_RESULT_REMINDER_THRESHOLD;
   return (executor) => new SendMessageReminderMiddleware(executor, {
     threshold,
-    earlyResultThreshold,
-    updateCommunication: options2?.updateCommunication
+    earlyResultThreshold
   });
 }

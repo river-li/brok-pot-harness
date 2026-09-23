@@ -1,17 +1,17 @@
-var __protoPackage19, __protoMessage316, DeleteToolCall;
+var __protoPackage20, __protoMessage316, DeleteToolCall;
 var init_delete_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/delete_tool_pb.js"() {
     "use strict";
     init_esm();
     init_delete_exec_pb();
     init_compact();
-    __protoPackage19 = "agent.v1.";
+    __protoPackage20 = "agent.v1.";
     __protoMessage316 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage19;
+        return __protoPackage20;
       }
     };
     DeleteToolCall = class _DeleteToolCall extends __protoMessage316 {

@@ -9,6 +9,11 @@ function loopMitigationOutcomeOf(turnOutcome2) {
       return "aborted";
   }
 }
+function stampsInferenceTurnUnit(options2, host) {
+  if (options2.turnUnitId == null) return false;
+  if (options2.isGroupMemberTurn === true) return false;
+  return !host.isSubagentRunner || host.isParentMediatedAutomationSubagent;
+}
 var SandEmptyPromptError = class extends Error {
   constructor() {
     super("Type a message before sending");
@@ -75,6 +80,14 @@ function getToolDescriptionUpdatesForTurn(host) {
 }
 function createTurnRunShell(host) {
   const resolvedModelTracker = createSandResolvedModelTracker();
+  const errorFreeSteps = createErrorFreeStepTracker({
+    ctx: host.ctx,
+    harness: host.metricsHarness,
+    clock: host.metricsClock,
+    isSubagentRunner: host.isSubagentRunner,
+    inheritedRequestSource: host.inheritedRequestSource,
+    userMessagesAccepted: host.metricsUserMessagesAccepted
+  });
   let pausingForUpgrade = false;
   let cancelActiveRun = null;
   let activeRunDispatched = false;
@@ -155,6 +168,7 @@ function createTurnRunShell(host) {
     const conversationId = host.getConversationId();
     beginTurnBotBlock({ conversationId });
     const hostReceiptPerfMs = host.metricsClock.monotonicNow();
+    const errorFreeStep2 = errorFreeSteps.beginRun(options2, hostReceiptPerfMs);
     const performanceObservation = createTurnPerformanceObservation({
       ctx: host.ctx,
       harness: host.metricsHarness,
@@ -170,12 +184,19 @@ function createTurnRunShell(host) {
       activityStartedAt: host.metricsActivityStartedAt,
       runRole: options2.metricsRunRole ?? "other",
       ...options2.metricsRunRole === "turn_start" && host.metricsUserMessageSentAt !== void 0 ? { userMessageSentAt: host.metricsUserMessageSentAt } : {},
+      ...options2.metricsRunRole === "turn_start" && host.metricsTurnStartedAt !== void 0 ? { turnStartedAt: host.metricsTurnStartedAt } : {},
       clock: host.metricsClock
     });
     let outcome = "error";
     let failure2;
     try {
-      const result = await runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation);
+      const result = await runTurn(
+        prompt,
+        options2,
+        hostReceiptPerfMs,
+        performanceObservation,
+        errorFreeStep2
+      );
       outcome = resolveTurnTraceOutcome(result);
       return result;
     } catch (error42) {
@@ -184,9 +205,10 @@ function createTurnRunShell(host) {
     } finally {
       const tags = resolveTurnOutcomeTags({ conversationId, outcome, error: failure2 });
       performanceObservation.complete(tags.outcome, tags.errorType);
+      errorFreeStep2?.ended(tags.outcome, tags.errorType);
     }
   }
-  async function runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation) {
+  async function runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation, errorFreeStep2) {
     var _stack = [];
     try {
       const turnRequestSource = options2.requestSource ?? host.inheritedRequestSource;
@@ -210,13 +232,14 @@ function createTurnRunShell(host) {
       if (!host.isSubagentRunner && options2.autoReviewEpoch !== "continue") {
         host.beginAutoReviewUserMessageEpoch();
       }
-      const trimmedPrompt = prompt.trim();
+      const [promptText, revival] = typeof prompt === "string" ? [prompt, void 0] : [prompt.prompt, prompt];
+      const trimmedPrompt = promptText.trim();
       const selectedImageInputs = options2.selectedImages ?? [];
       const attachedFilePaths = options2.attachedFilePaths ?? [];
       const selectedVideoInputs = options2.selectedVideos ?? [];
       const resumeTurn = options2.resumeTurn === true;
-      const idleCompaction = options2.idleCompaction === true ? createIdleCompactionCollector() : void 0;
-      const lastServedModel = options2.lastServedModel;
+      const idleCompaction = options2.idleCompaction === void 0 ? void 0 : createIdleCompactionCollector();
+      const idleServedModel = options2.idleCompaction?.armingTurnServedModel;
       const promptlessAction = idleCompaction !== void 0 ? SUMMARIZE_ACTION : RESUME_TURN_ACTION;
       const actionOnly = resumeTurn || idleCompaction !== void 0;
       if (!actionOnly && trimmedPrompt.length === 0 && selectedImageInputs.length === 0 && attachedFilePaths.length === 0 && selectedVideoInputs.length === 0) {
@@ -253,7 +276,12 @@ function createTurnRunShell(host) {
           endedAtMs: Date.now()
         });
       };
-      const loopDetection = host.resolveTurnLoopDetection(inferenceRequestId);
+      const transcriptId = host.getTranscriptId();
+      const loopDetection = host.resolveTurnLoopDetection(inferenceRequestId, {
+        turnId: inferenceRequestId,
+        rootTurnId: options2.lineage?.rootParentRequestId ?? inferenceRequestId,
+        subagentId: transcriptId !== host.getConversationId() ? transcriptId : void 0
+      });
       let loopMitigationOutcome = "error";
       host.emitRunLifecycle({ type: "started", ...lifecycleIdentity });
       const _runLifecycle = __using(_stack, {
@@ -325,7 +353,8 @@ function createTurnRunShell(host) {
       }) : host.inheritedAutomationId;
       host.setActiveTurnAutomationId(turnAutomationId);
       const lineage = options2.lineage;
-      let baseCtx = runCtx.with(conversationIdKey, host.getTranscriptId()).with(conversationGroupIdKey, conversationId).with(secretScopeIdKey, host.secretScopeId).with(automationIdKey, turnAutomationId).with(sandQuietWorkOriginKey, runQuietOrigin).with(sandTurnDirectionEpochKey, runDirectionEpoch).with(requestIdKey, inferenceRequestId).with(requestIdKey2, inferenceRequestId).with(suppressAgentLoopEvidencePreviewKey, loopDetection.kind === "active");
+      const delegationAuditor = createDelegationAuditor(host.actionAuditor(), host);
+      let baseCtx = runCtx.with(conversationIdKey, host.getTranscriptId()).with(conversationGroupIdKey, conversationId).with(secretScopeIdKey, host.secretScopeId).with(automationIdKey, turnAutomationId).with(sandQuietWorkOriginKey, runQuietOrigin).with(sandDelegationAuditorKey, delegationAuditor).with(sandTurnDirectionEpochKey, runDirectionEpoch).with(requestIdKey, inferenceRequestId).with(requestIdKey2, inferenceRequestId).with(suppressAgentLoopEvidencePreviewKey, loopDetection.kind === "active");
       if (lineage != null) {
         baseCtx = baseCtx.with(parentRequestIdKey2, lineage.parentRequestId).with(rootParentRequestIdKey2, lineage.rootParentRequestId).with(parentRequestIdKey, lineage.parentRequestId).with(rootParentRequestIdKey, lineage.rootParentRequestId);
         if (lineage.parentAgentToolCallId != null) {
@@ -335,19 +364,18 @@ function createTurnRunShell(host) {
       if (host.isSubagentRunner && host.subagentType != null) {
         baseCtx = baseCtx.with(subagentTypeKey2, host.subagentType).with(subagentTypeKey, host.subagentType);
       }
+      baseCtx = baseCtx.with(turnUnitIdKey, void 0).with(turnUnitTypeKey, void 0);
+      if (stampsInferenceTurnUnit(options2, host)) {
+        baseCtx = baseCtx.with(turnUnitIdKey, options2.turnUnitId).with(turnUnitTypeKey, options2.turnUnitType);
+      }
       const [ctx, cancelRun] = baseCtx.withCancel();
       const _releaseTurnContext = __using(_stack, {
         [Symbol.dispose]: () => cancelRun(new SandRunAbortError({ intentional: true, reason: "turn run settled" }))
       });
+      for (const settledDelegation of revival?.settledDelegations ?? []) {
+        delegationAuditor?.completed(ctx, settledDelegation);
+      }
       const streamWatchdog = createStreamWatchdog();
-      const armedHold = host.armedTurnEndSummaryHold();
-      const turnEndSummaryHold = armedHold === void 0 ? void 0 : {
-        maxWaitMs: armedHold.maxWaitMs(),
-        onHoldStart: () => {
-          streamWatchdog.resetDeadline();
-          armedHold.onHoldStart?.();
-        }
-      };
       let supersededByUser = false;
       let stopRequest = { kind: "none" };
       let deferredFollowupLabeling;
@@ -405,7 +433,6 @@ function createTurnRunShell(host) {
       host.setActiveRunIsCanceled(() => ctx.canceled);
       host.setActiveRunInterrupted(false);
       const isRunAwaitingUserSelection = () => stopRequest.kind === "awaiting-user";
-      const isRunCompletionRequested = () => stopRequest.kind === "complete";
       const isRunStopped = () => stopRequest.kind !== "none";
       const completeThisRun = (requestId2 = inferenceRequestId) => {
         if (!ctx.canceled && cancelActiveRun === cancelRun && stopRequest.kind === "none") {
@@ -442,9 +469,6 @@ function createTurnRunShell(host) {
       const stopRunIfRequested = () => {
         if (ctx.canceled) return;
         if (isRunStopped()) {
-          if (isRunCompletionRequested() && turnEndSummaryHold !== void 0) {
-            return;
-          }
           cancelRun(
             new SandRunAbortError({
               intentional: true,
@@ -473,7 +497,22 @@ function createTurnRunShell(host) {
         collectors: settle.collectors,
         observeFirstToken: (chunkType) => armedDispatchObservation?.observeFirstToken(chunkType),
         pause: pauseThisRun,
-        onMessageDispatched: () => performanceObservation.firstMessageDispatch()
+        onDelivered: (update) => {
+          switch (update.type) {
+            case "send-message":
+              performanceObservation.firstMessageDispatch();
+              errorFreeStep2?.visibleOutput("message");
+              return;
+            case "text-delta":
+              if (update.text.length > 0) errorFreeStep2?.visibleOutput("text");
+              return;
+            case "tool-call":
+              errorFreeStep2?.visibleOutput("tool_call");
+              return;
+            default:
+              return;
+          }
+        }
       });
       try {
         if (!host.isSubagentRunner) {
@@ -659,8 +698,8 @@ function createTurnRunShell(host) {
               agent: turnSession,
               canUseSelfSummary: () => {
                 const resolved = turnSession.getResolvedModelId();
-                if (resolved === void 0 && lastServedModel !== void 0) {
-                  return lastServedModel.selfSummary;
+                if (resolved === void 0 && idleServedModel !== void 0) {
+                  return idleServedModel.selfSummary;
                 }
                 return sandSelfSummarySupported(resolved ?? turnSession.getModelId());
               },
@@ -686,8 +725,6 @@ function createTurnRunShell(host) {
               streamWatchdog,
               updateObservers,
               isRunAwaitingUserSelection,
-              isRunCompletionRequested,
-              turnEndSummaryHold,
               isTeamSetupUnderway: () => options2.teamSetupUnderway === true,
               endThisRunAwaitingUser,
               requestAutomationParentWake,
@@ -706,7 +743,7 @@ function createTurnRunShell(host) {
             }
           );
         };
-        const agent = await traceSendPhase(
+        const { agent, outOfStepToolCallRecorder } = await traceSendPhase(
           ctx,
           "buildAgentForRun",
           async () => buildTurnAgent(session)
@@ -753,7 +790,7 @@ function createTurnRunShell(host) {
             return agent.runStream(
               attemptCtx.with(turnToolCallAttributionStartKey, (callId) => {
                 performanceObservation.toolCall({ event: "toolCallStarted", callId });
-              }),
+              }).with(toolCallEventRecorderKey, outOfStepToolCallRecorder),
               toRedactedConversationStateStructure(state, privacyMode),
               toRedactedConversationAction(
                 resumeFrom != null ? RESUME_TURN_ACTION : action,

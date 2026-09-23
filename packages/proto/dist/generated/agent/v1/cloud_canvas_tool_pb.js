@@ -1,20 +1,20 @@
-var __protoPackage88, __protoMessage385, WriteCanvasFailReason, ReadCanvasFailReason, CloudCanvasToolDiagnosticPosition, CloudCanvasToolDiagnosticRange, CloudCanvasToolDiagnostic, WriteCanvasArgs, WriteCanvasSuccess, WriteCanvasFailure, WriteCanvasResult, WriteCanvasToolCall, ReadCanvasArgs, ReadCanvasSuccess, ReadCanvasFailure, ReadCanvasResult, ReadCanvasToolCall;
+var __protoPackage89, __protoMessage385, WriteCanvasFailReason, ReadCanvasFailReason, CloudCanvasToolDiagnosticPosition, CloudCanvasToolDiagnosticRange, CloudCanvasToolDiagnostic, WriteCanvasArgs, WriteCanvasSuccess, WriteCanvasFailure, WriteCanvasResult, WriteCanvasToolCall, ReadCanvasArgs, ReadCanvasSuccess, ReadCanvasFailure, ReadCanvasResult, ReadCanvasToolCall;
 var init_cloud_canvas_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/cloud_canvas_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage88 = "agent.v1.";
+    __protoPackage89 = "agent.v1.";
     __protoMessage385 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage88;
+        return __protoPackage89;
       }
     };
-    WriteCanvasFailReason = /* @__PURE__ */ enumType(proto3, __protoPackage88, "WriteCanvasFailReason", [[0, "UNSPECIFIED"], [1, "TYPECHECK_FAILED"], [2, "COMPILE_FAILED"], [3, "TOO_LARGE"], [4, "UNAVAILABLE"], [5, "NOT_FOUND"], [6, "REFUSED"]], 1);
-    ReadCanvasFailReason = /* @__PURE__ */ enumType(proto3, __protoPackage88, "ReadCanvasFailReason", [[0, "UNSPECIFIED"], [1, "NOT_FOUND"], [2, "UNAVAILABLE"], [3, "REFUSED"], [4, "INVALID_REFERENCE"]], 1);
+    WriteCanvasFailReason = /* @__PURE__ */ enumType(proto3, __protoPackage89, "WriteCanvasFailReason", [[0, "UNSPECIFIED"], [1, "TYPECHECK_FAILED"], [2, "COMPILE_FAILED"], [3, "TOO_LARGE"], [4, "UNAVAILABLE"], [5, "NOT_FOUND"], [6, "REFUSED"]], 1);
+    ReadCanvasFailReason = /* @__PURE__ */ enumType(proto3, __protoPackage89, "ReadCanvasFailReason", [[0, "UNSPECIFIED"], [1, "NOT_FOUND"], [2, "UNAVAILABLE"], [3, "REFUSED"], [4, "INVALID_REFERENCE"]], 1);
     CloudCanvasToolDiagnosticPosition = class _CloudCanvasToolDiagnosticPosition extends __protoMessage385 {
       constructor(data) {
         super();

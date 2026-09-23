@@ -134,11 +134,11 @@ var SandMcpManager = class {
       const resolvedDisplay = mergeUnresolvedAccountServers(display, cachedForScope);
       this.accountSlots.noteAccountDisplayConfig(resolvedDisplay);
       this.definitionSource.adoptAccountConfig(runtimeConfigFromDisplay(resolvedDisplay));
-      const fingerprint = accountCredentialFingerprint(resolvedDisplay);
-      if (this.lastAccountCredentialFingerprint !== void 0 && this.lastAccountCredentialFingerprint !== fingerprint) {
+      const fingerprint2 = accountCredentialFingerprint(resolvedDisplay);
+      if (this.lastAccountCredentialFingerprint !== void 0 && this.lastAccountCredentialFingerprint !== fingerprint2) {
         this.boxRuntime?.invalidateToolsCache();
       }
-      this.lastAccountCredentialFingerprint = fingerprint;
+      this.lastAccountCredentialFingerprint = fingerprint2;
       this.instructionsAndToggles.migrateCustomInstructions(resolvedDisplay.servers);
       return resolvedDisplay;
     });
@@ -201,10 +201,10 @@ var SandMcpManager = class {
     );
     this.instructionsAndToggles.migrateCustomInstructions(visibleServers);
     const httpServers = visibleServers.filter(
-      (server) => server.serverIdentifier != null && !server.disabledByTeamAdminPolicy && (server.config == null || "url" in server.config)
+      (server) => server.serverIdentifier != null && !isWithheldMcpDisplayServer(server) && (server.config == null || "url" in server.config)
     );
     const stdioServers = visibleServers.filter(
-      (server) => server.serverIdentifier != null && !server.disabledByTeamAdminPolicy && server.config != null && "command" in server.config
+      (server) => server.serverIdentifier != null && !isWithheldMcpDisplayServer(server) && server.config != null && "command" in server.config
     );
     let backendEntries = [];
     if (httpServers.length > 0) {
@@ -236,8 +236,8 @@ var SandMcpManager = class {
     }
     const servers = [];
     for (const server of visibleServers) {
-      if (server.disabledByTeamAdminPolicy) {
-        servers.push(this.summaries.createAdminDisabledServerSummary(server));
+      if (isWithheldMcpDisplayServer(server)) {
+        servers.push(this.summaries.createWithheldServerSummary(server));
         continue;
       }
       if (server.config != null && !("url" in server.config)) {
@@ -266,8 +266,8 @@ var SandMcpManager = class {
     const display = await this.loadGrokBotAgentServers(agentId);
     const servers = [];
     for (const server of display.servers) {
-      if (server.disabledByTeamAdminPolicy) {
-        servers.push(this.summaries.createAdminDisabledServerSummary(server));
+      if (isWithheldMcpDisplayServer(server)) {
+        servers.push(this.summaries.createWithheldServerSummary(server));
         continue;
       }
       servers.push(...this.summaries.createCredentialPresenceSummaries(server));

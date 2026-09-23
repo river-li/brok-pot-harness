@@ -1,4 +1,4 @@
-var import_node_crypto69 = require("node:crypto");
+var import_node_crypto70 = require("node:crypto");
 init_mcp_exec_pb();
 init_esm();
 function buildDraftCallArgs(spec) {
@@ -6,7 +6,7 @@ function buildDraftCallArgs(spec) {
     name: `${spec.providerIdentifier}-${spec.toolName}`,
     providerIdentifier: spec.providerIdentifier,
     toolName: spec.toolName,
-    toolCallId: `${spec.callIdPrefix}-${(0, import_node_crypto69.randomUUID)()}`,
+    toolCallId: `${spec.callIdPrefix}-${(0, import_node_crypto70.randomUUID)()}`,
     args: Object.fromEntries(
       Object.entries(spec.args).map(([key, value]) => [key, Value.fromJson(value)])
     )

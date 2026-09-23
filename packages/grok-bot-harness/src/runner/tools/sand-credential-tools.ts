@@ -36,14 +36,15 @@ function createCredentialTools(access5) {
       name: "ListCredentials",
       description: `Search the 1Password logins the user shares with you through the 1Password integration, by website/domain or service name: titles and sites only \u2014 never values. Only items in ${SHARED_VAULT} are visible; anything the user keeps elsewhere in 1Password is not. MANDATORY FIRST STEP at a direct username/password login, before any in-chat form, request_box_help, or asking the user to type: pass the current URL/domain in site. Matching follows each item's 1Password hostname behavior; saved URL paths and queries are ignored. Each result says whether the login carries a one-time code in 1Password. Then fill the matching login with SendToUser type credential-request; Grok Bot binds your site hint to the actual open allowed page and fills it there, and a one-time code the login carries is filled for you when the site asks. When a needed login is missing, tell the user it is not in ${SHARED_VAULT} and that they may need to add or move it there in 1Password. On their next request to log in or retry, call again with forceRefresh true before reporting it missing again; they do not need to mention 1Password. Only hand off when there is no usable match and the user prefers to sign in themselves, or the remaining step is SSO, passkey, captcha, payment, or a code the login does not carry. To the user, call these their 1Password logins, never "saved login". This is read-only, metadata-only, and never needs permission.`,
       parameters: listCredentialsParameters,
-      execute: async (_ctx, args, deps) => {
+      execute: async (ctx, args, deps) => {
+        const site = args.site != null && args.site.length > 0 ? args.site : void 0;
+        if (site != null) noteToolTargetHost(ctx, deps.toolCallId, site);
         if (deps.turnRefusal !== void 0) {
           return `No 1Password logins were listed: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[deps.turnRefusal]}.`;
         }
         if (!await deps.isConnected()) {
           return `No 1Password vault is connected. Connecting one shares ${SHARED_VAULT} with you. ${ONEPASSWORD_CONNECT_CARD_HINT}`;
         }
-        const site = args.site != null && args.site.length > 0 ? args.site : void 0;
         const query = args.query != null && args.query.length > 0 ? args.query : void 0;
         const views = await deps.list({
           ...site != null ? { site } : {},

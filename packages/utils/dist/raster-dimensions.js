@@ -1,4 +1,4 @@
-var PNG_SIGNATURE2 = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+var PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 var PNG_IHDR_CHUNK_BYTES = 25;
 var PNG_IEND_TRAILER = Buffer.from([
   0,
@@ -14,8 +14,8 @@ var PNG_IEND_TRAILER = Buffer.from([
   96,
   130
 ]);
-var readPngDimensions2 = (buffer) => {
-  if (buffer.length < PNG_SIGNATURE2.length + PNG_IHDR_CHUNK_BYTES + PNG_IEND_TRAILER.length || !buffer.subarray(0, PNG_SIGNATURE2.length).equals(PNG_SIGNATURE2) || buffer.readUInt32BE(8) !== 13 || buffer.toString("ascii", 12, 16) !== "IHDR" || !buffer.subarray(buffer.length - PNG_IEND_TRAILER.length).equals(PNG_IEND_TRAILER)) {
+var readPngDimensions = (buffer) => {
+  if (buffer.length < PNG_SIGNATURE.length + PNG_IHDR_CHUNK_BYTES + PNG_IEND_TRAILER.length || !buffer.subarray(0, PNG_SIGNATURE.length).equals(PNG_SIGNATURE) || buffer.readUInt32BE(8) !== 13 || buffer.toString("ascii", 12, 16) !== "IHDR" || !buffer.subarray(buffer.length - PNG_IEND_TRAILER.length).equals(PNG_IEND_TRAILER)) {
     return void 0;
   }
   const width = buffer.readUInt32BE(16);
@@ -30,7 +30,7 @@ var JPEG_END_OF_IMAGE = 217;
 var isStandaloneJpegMarker = (marker17) => marker17 === 1 || marker17 >= 208 && marker17 <= 216;
 var isDecodableJpegFrame = (marker17) => marker17 === 192 || marker17 === 193 || marker17 === 194;
 var isUndecodableJpegFrame = (marker17) => marker17 >= 195 && marker17 <= 207 && marker17 !== 196 && marker17 !== 200 && marker17 !== 204;
-var readJpegDimensions2 = (buffer) => {
+var readJpegDimensions = (buffer) => {
   if (buffer.length < 4 || buffer[0] !== 255 || buffer[1] !== 216 || buffer[buffer.length - 2] !== 255 || buffer[buffer.length - 1] !== JPEG_END_OF_IMAGE) {
     return void 0;
   }
@@ -72,5 +72,5 @@ var readJpegDimensions2 = (buffer) => {
 };
 var readRasterDimensions = (buffer) => {
   var _a19;
-  return (_a19 = readPngDimensions2(buffer)) !== null && _a19 !== void 0 ? _a19 : readJpegDimensions2(buffer);
+  return (_a19 = readPngDimensions(buffer)) !== null && _a19 !== void 0 ? _a19 : readJpegDimensions(buffer);
 };

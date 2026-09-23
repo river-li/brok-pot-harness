@@ -783,7 +783,7 @@ var AbstractUserMessageActionHandler = class {
       kind: "awaiting-parent",
       ...args,
       preparedAttempt,
-      comparisonId: (0, import_node_crypto32.randomUUID)(),
+      comparisonId: (0, import_node_crypto31.randomUUID)(),
       alternateInvocationId: getInvocationId(args.ctx)
     };
     this.pendingResponseComparison = pending;
@@ -984,7 +984,7 @@ var AbstractUserMessageActionHandler = class {
     if (args.privacyMode !== PrivacyMode.USAGE_CODEBASE_TRAINING_ALLOWED) {
       return;
     }
-    const comparisonId = args.comparisonId ?? (0, import_node_crypto32.randomUUID)();
+    const comparisonId = args.comparisonId ?? (0, import_node_crypto31.randomUUID)();
     const alternateInvocationId = args.alternateInvocationId ?? getInvocationId(args.ctx);
     const comparisonCtx = args.ctx.withTimeout(AGENT_RESPONSE_COMPARISON_TIMEOUT_MS);
     const sendEvent = async (event, eventCtx = comparisonCtx) => {
@@ -2100,7 +2100,7 @@ var AbstractUserMessageActionHandler = class {
                 resultFormat: "json-object"
               });
               if (application.outcome === "applied") {
-                const syntheticModelCallId = (0, import_node_crypto32.randomUUID)();
+                const syntheticModelCallId = (0, import_node_crypto31.randomUUID)();
                 await this.interactionListener.sendUpdate(ctx, RedactedUpdates.toolCallStarted(application.recordedToolCallId, application.toolCall, syntheticModelCallId));
                 await this.interactionListener.sendUpdate(ctx, RedactedUpdates.toolCallCompleted(application.recordedToolCallId, application.toolCall, syntheticModelCallId));
                 logger65.info(ctx, "Injected async completion into current turn", {
@@ -2142,8 +2142,7 @@ var AbstractUserMessageActionHandler = class {
             }
             turn = updatedTurn;
             currentMcpTools = updatedMcpTools;
-            const hostRequestedTurnEnd = this.config.isTurnEndRequested?.() === true;
-            const hasEnded = !hasToolCall && !hasQueuedMessages || isLastIteration || hostRequestedTurnEnd;
+            const hasEnded = !hasToolCall && !hasQueuedMessages || isLastIteration;
             if (!hasToolCall && !hasQueuedMessages && conflictBarrierInjectionsRemaining > 0 && !isLastIteration && this.config.featureFlags?.enableAgentStoreConflictNotices === true && await this.maybeInjectPreFinalConflictBarrier(ctx, rootPromptExecutor, stateHandler.getPrivacyMode())) {
               conflictBarrierInjectionsRemaining -= 1;
               this.responseComparisonCandidate = void 0;
@@ -2183,7 +2182,7 @@ var AbstractUserMessageActionHandler = class {
               const shouldPersist = shouldPersistForTokenThreshold || shouldPersistForImageThreshold || persistsWithoutThreshold(backgroundSummarizationPromiseInfo);
               const completedPersistTriggerReason = shouldPersistForImageThreshold ? "approaching_image_limit" : isSelfSummary ? "self_summary_completed" : "threshold_met";
               if (shouldPersist) {
-                const persistCompletedSummarization = async () => {
+                if (stateHandler.backgroundSummarizationHasCompleted) {
                   if (stateHandler.shouldSuppressSelfSummaryAfterInputLimitFailure(tokenDetails.usedTokens)) {
                     emitSummaryLifecycleDeferred(ctx, backgroundSummarizationPromiseInfo, "self_summary_suppressed_after_input_limit");
                     logger65.info(ctx, "[summarization-discard] At end of turn, suppressing completed self-summary persistence after input-limit failure", {
@@ -2210,9 +2209,6 @@ var AbstractUserMessageActionHandler = class {
                       resourceAccessor: this.resourceAccessor
                     });
                   }
-                };
-                if (stateHandler.backgroundSummarizationHasCompleted) {
-                  await persistCompletedSummarization();
                 } else {
                   const overageThreshold = getSignificantOverageThreshold(tokenDetails.maxTokens);
                   const shouldBlockForTokenOverage = isSignificantlyOverTokenLimit(tokenDetails);
@@ -2235,41 +2231,18 @@ var AbstractUserMessageActionHandler = class {
                       resourceAccessor: this.resourceAccessor
                     });
                   } else {
-                    const holdOutcome = await this.holdForInFlightSummarizationAtTurnEnd(ctx, stateHandler, backgroundSummarizationPromiseInfo);
-                    if (holdOutcome === "aborted") {
-                      emitSummaryLifecycleAbandoned(ctx, backgroundSummarizationPromiseInfo, "turn_end_hold_aborted");
-                      logger65.info(ctx, "[summarization-discard] The turn was cancelled during the turn-end hold; the in-flight background summarization ends with it", {
-                        usedTokens: tokenDetails.usedTokens,
-                        maxTokens: tokenDetails.maxTokens
-                      });
-                      throw new ConnectError("User aborted request", Code.Canceled);
-                    }
-                    if (holdOutcome === "completed") {
-                      await persistCompletedSummarization();
-                    } else if (holdOutcome === "failed") {
-                      logger65.info(ctx, "[summarization-discard] At end of turn, the in-flight background summarization failed during the turn-end hold", {
-                        usedTokens: tokenDetails.usedTokens,
-                        maxTokens: tokenDetails.maxTokens
-                      });
-                    } else {
-                      if (holdOutcome === "timed_out") {
-                        emitSummaryLifecycleAbandoned(ctx, backgroundSummarizationPromiseInfo, "turn_end_hold_timed_out");
-                      } else {
-                        emitSummaryLifecycleDeferred(ctx, backgroundSummarizationPromiseInfo, "generation_running_at_turn_end");
-                      }
-                      logger65.info(ctx, "[summarization-discard] At end of turn, persistence threshold is met, but we are discarding background summarization as it has not completed", {
-                        usedTokens: tokenDetails.usedTokens,
-                        maxTokens: tokenDetails.maxTokens,
-                        imageCountAtTurnEnd,
-                        imageThreshold: IMAGE_SUMMARIZATION_TRIGGER_COUNT,
-                        shouldPersistForImageThreshold,
-                        turnEndHoldOutcome: holdOutcome
-                      });
-                      backgroundSummarizationDiscarded.increment(ctx, 1, {
-                        reason: "not_completed",
-                        model: backgroundSummarizationPromiseInfo.modelId
-                      });
-                    }
+                    emitSummaryLifecycleDeferred(ctx, backgroundSummarizationPromiseInfo, "generation_running_at_turn_end");
+                    logger65.info(ctx, "[summarization-discard] At end of turn, persistence threshold is met, but we are discarding background summarization as it has not completed", {
+                      usedTokens: tokenDetails.usedTokens,
+                      maxTokens: tokenDetails.maxTokens,
+                      imageCountAtTurnEnd,
+                      imageThreshold: IMAGE_SUMMARIZATION_TRIGGER_COUNT,
+                      shouldPersistForImageThreshold
+                    });
+                    backgroundSummarizationDiscarded.increment(ctx, 1, {
+                      reason: "not_completed",
+                      model: backgroundSummarizationPromiseInfo.modelId
+                    });
                   }
                 }
               } else {
@@ -2347,10 +2320,6 @@ var AbstractUserMessageActionHandler = class {
                 await this.cancelPendingAgentResponseComparison();
                 break;
               }
-            }
-            if (hostRequestedTurnEnd) {
-              logger65.info(ctx, "Host requested turn end after this step");
-              break;
             }
             if (!hasToolCall && !hasQueuedMessages) {
               break;
@@ -2757,7 +2726,7 @@ ${sanitizedReminder}
   async createCliReflectGeneralFollowUpTurn(ctx, stateHandler, _turn, reminderText, requestContext, onStateUpdate) {
     const syntheticUserMessage = new UserMessage({
       text: reminderText,
-      messageId: (0, import_node_crypto32.randomUUID)(),
+      messageId: (0, import_node_crypto31.randomUUID)(),
       isSimulatedMsg: true
     });
     ensureUserMessageTiming(syntheticUserMessage);
@@ -2843,58 +2812,6 @@ ${sanitizedReminder}
       messageCountAtLastCompaction: stateHandler.messageCountAtLastCompaction,
       messageCount: messages2.length
     });
-  }
-  /**
-   * Keeps the turn open for the host-configured bound so an in-flight
-   * background summary can land instead of dying with the turn. Presence is
-   * flipped to idle first, so the hold is not rendered as the agent working.
-   */
-  async holdForInFlightSummarizationAtTurnEnd(ctx, stateHandler, promiseInfo) {
-    const hold = this.config.turnEndSummaryHold;
-    const holdDisabled = hold === void 0 || hold.maxWaitMs <= 0;
-    if (holdDisabled) {
-      return "skipped";
-    }
-    if (ctx.signal.aborted) {
-      return "aborted";
-    }
-    const labels = {
-      model: promiseInfo.modelId,
-      summarizer: promiseInfo.summarizerType
-    };
-    logger65.info(ctx, "[summarization-persist] At end of turn, holding the turn open for the in-flight background summarization", { maxWaitMs: hold.maxWaitMs, ...labels });
-    try {
-      hold.onHoldStart?.(ctx);
-    } catch (error42) {
-      logger65.warn(ctx, "Turn-end summarization hold start hook failed", {
-        error: error42
-      });
-    }
-    const startedAt = performance.now();
-    const waitEnd = await settledAbortedOrTimedOut(promiseInfo.promise, ctx.signal, hold.maxWaitMs);
-    const waitedMs = performance.now() - startedAt;
-    const generationFailed = stateHandler.backgroundSummarizationPromiseInfo === null;
-    const generationLanded = stateHandler.backgroundSummarizationPromiseInfo === promiseInfo && stateHandler.backgroundSummarizationHasCompleted;
-    let outcome;
-    if (waitEnd === "aborted") {
-      outcome = "aborted";
-    } else if (generationFailed) {
-      outcome = "failed";
-    } else if (generationLanded) {
-      outcome = "completed";
-    } else {
-      outcome = waitEnd === "timed_out" ? "timed_out" : "failed";
-    }
-    backgroundSummarizationTurnEndHoldMs.histogram(ctx, waitedMs, {
-      outcome,
-      ...labels
-    });
-    logger65.info(ctx, "[summarization-persist] Turn-end hold for background summarization ended", {
-      outcome,
-      waitedMs: Math.round(waitedMs),
-      ...labels
-    });
-    return outcome;
   }
   /**
    * Adopt a completed summary stashed by a previous turn of this
@@ -3576,6 +3493,10 @@ ${sanitizedReminder}
       }
       if (toolCallDescriptors.length === 0) {
         await this.finalizePendingAgentResponseComparison(true);
+      }
+      const listedCount = countStartingToolRequests(toolCallDescriptors, toolSetHandle.getToolExecutionSet());
+      if (listedCount > 0) {
+        await interactionHandler.sendToolRequestsListed(ctx, listedCount);
       }
       return {
         toolCallDescriptors,

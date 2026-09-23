@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage171 = "origin.v1.";
-var __protoMessage3163 = class extends CompactMessage {
+var __protoPackage173 = "origin.v1.";
+var __protoMessage3165 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage171;
+    return __protoPackage173;
   }
 };
-var ChangeMergeWhenReady = class _ChangeMergeWhenReady extends __protoMessage3163 {
+var ChangeMergeWhenReady = class _ChangeMergeWhenReady extends __protoMessage3165 {
   constructor(data) {
     super();
     this.id = "";
@@ -39,7 +39,7 @@ var ChangeMergeWhenReady = class _ChangeMergeWhenReady extends __protoMessage316
     return ["ChangeMergeWhenReady|1 id 9|2 change_id 9|3 repo_uuid 9|4 change_number 4|6 status 9|7 source 9|8 trunk_branch 9|9 lock_expires_at #0?|10 consecutive_failed_attempts 5|11 dev 8|12 repo_org 9?|13 repo_name 9?|14 enabled_by #1", Timestamp, ActorWithDisplay];
   }
 };
-var EnableChangeMergeWhenReadyRequest = class _EnableChangeMergeWhenReadyRequest extends __protoMessage3163 {
+var EnableChangeMergeWhenReadyRequest = class _EnableChangeMergeWhenReadyRequest extends __protoMessage3165 {
   constructor(data) {
     super();
     this.trunkBranch = "";
@@ -61,7 +61,7 @@ var EnableChangeMergeWhenReadyRequest = class _EnableChangeMergeWhenReadyRequest
     return ["EnableChangeMergeWhenReadyRequest|1 change #0|2 trunk_branch 9|3 source 9?|4 dev 8?", ChangeIdentifier];
   }
 };
-var EnableChangeMergeWhenReadyResponse = class _EnableChangeMergeWhenReadyResponse extends __protoMessage3163 {
+var EnableChangeMergeWhenReadyResponse = class _EnableChangeMergeWhenReadyResponse extends __protoMessage3165 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -82,7 +82,7 @@ var EnableChangeMergeWhenReadyResponse = class _EnableChangeMergeWhenReadyRespon
     return ["EnableChangeMergeWhenReadyResponse|1 record #0", ChangeMergeWhenReady];
   }
 };
-var GetChangeMergeWhenReadyRequest = class _GetChangeMergeWhenReadyRequest extends __protoMessage3163 {
+var GetChangeMergeWhenReadyRequest = class _GetChangeMergeWhenReadyRequest extends __protoMessage3165 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -103,7 +103,7 @@ var GetChangeMergeWhenReadyRequest = class _GetChangeMergeWhenReadyRequest exten
     return ["GetChangeMergeWhenReadyRequest|1 change #0|2 status 9?", ChangeIdentifier];
   }
 };
-var GetChangeMergeWhenReadyResponse = class _GetChangeMergeWhenReadyResponse extends __protoMessage3163 {
+var GetChangeMergeWhenReadyResponse = class _GetChangeMergeWhenReadyResponse extends __protoMessage3165 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -124,7 +124,7 @@ var GetChangeMergeWhenReadyResponse = class _GetChangeMergeWhenReadyResponse ext
     return ["GetChangeMergeWhenReadyResponse|1 record #0?", ChangeMergeWhenReady];
   }
 };
-var DisableChangeMergeWhenReadyRequest = class _DisableChangeMergeWhenReadyRequest extends __protoMessage3163 {
+var DisableChangeMergeWhenReadyRequest = class _DisableChangeMergeWhenReadyRequest extends __protoMessage3165 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -145,7 +145,7 @@ var DisableChangeMergeWhenReadyRequest = class _DisableChangeMergeWhenReadyReque
     return ["DisableChangeMergeWhenReadyRequest|1 change #0", ChangeIdentifier];
   }
 };
-var DisableChangeMergeWhenReadyResponse = class _DisableChangeMergeWhenReadyResponse extends __protoMessage3163 {
+var DisableChangeMergeWhenReadyResponse = class _DisableChangeMergeWhenReadyResponse extends __protoMessage3165 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);

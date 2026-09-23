@@ -41,10 +41,10 @@ var SandAgentDb = class {
   constructor(dbPath, options2 = {}) {
     this.dbPath = dbPath;
     this.options = options2;
-    this.agentDirName = (0, import_node_path128.basename)((0, import_node_path128.dirname)(dbPath));
-    this.resolvedDbPath = (0, import_node_path128.resolve)(dbPath);
+    this.agentDirName = (0, import_node_path129.basename)((0, import_node_path129.dirname)(dbPath));
+    this.resolvedDbPath = (0, import_node_path129.resolve)(dbPath);
     this.onBusyError = options2.onBusyError;
-    (0, import_node_fs79.mkdirSync)((0, import_node_path128.dirname)(dbPath), { recursive: true });
+    (0, import_node_fs81.mkdirSync)((0, import_node_path129.dirname)(dbPath), { recursive: true });
     const hasOtherLiveHandles = liveDbHandleCount(this.resolvedDbPath) > 0;
     this.db = openConfiguredDb(dbPath, this.agentDirName, options2, hasOtherLiveHandles);
     this.statements = prepareStatements(this.db);
@@ -265,34 +265,34 @@ var SandAgentDb = class {
       }
     });
   }
-  markActivity(at2 = Date.now(), options2 = {}) {
+  markActivity(at3 = Date.now(), options2 = {}) {
     this.updateUnreadState("markActivity", (current) => {
-      const incrementsUnread = options2.incrementsUnread !== false && at2 > current.lastViewedAt && at2 > current.lastUnreadActivityAt;
-      if (current.lastActivityAt >= at2 && !incrementsUnread) return void 0;
+      const incrementsUnread = options2.incrementsUnread !== false && at3 > current.lastViewedAt && at3 > current.lastUnreadActivityAt;
+      if (current.lastActivityAt >= at3 && !incrementsUnread) return void 0;
       return {
         ...current,
-        lastActivityAt: Math.max(current.lastActivityAt, at2),
-        lastUnreadActivityAt: incrementsUnread ? at2 : current.lastUnreadActivityAt,
+        lastActivityAt: Math.max(current.lastActivityAt, at3),
+        lastUnreadActivityAt: incrementsUnread ? at3 : current.lastUnreadActivityAt,
         unreadCount: current.unreadCount + (incrementsUnread ? 1 : 0)
       };
     });
   }
-  seedActivityAsRead(at2) {
+  seedActivityAsRead(at3) {
     this.updateUnreadState("seedActivityAsRead", (current) => {
-      if (current.lastActivityAt >= at2) return void 0;
+      if (current.lastActivityAt >= at3) return void 0;
       return {
         ...current,
-        lastActivityAt: at2,
-        lastUnreadActivityAt: Math.max(current.lastUnreadActivityAt, at2),
-        lastViewedAt: Math.max(current.lastViewedAt, at2)
+        lastActivityAt: at3,
+        lastUnreadActivityAt: Math.max(current.lastUnreadActivityAt, at3),
+        lastViewedAt: Math.max(current.lastViewedAt, at3)
       };
     });
   }
-  markViewed(at2 = Date.now(), options2 = {}) {
+  markViewed(at3 = Date.now(), options2 = {}) {
     this.updateUnreadState("markViewed", (current) => {
       if (options2.preserveManualUnread && current.isManuallyUnread) return void 0;
-      if (!current.isManuallyUnread && current.lastViewedAt >= at2) return void 0;
-      const lastViewedAt = Math.max(current.lastViewedAt, at2);
+      if (!current.isManuallyUnread && current.lastViewedAt >= at3) return void 0;
+      const lastViewedAt = Math.max(current.lastViewedAt, at3);
       return {
         ...current,
         lastViewedAt,
@@ -301,15 +301,15 @@ var SandAgentDb = class {
       };
     });
   }
-  markUnread(at2 = Date.now()) {
+  markUnread(at3 = Date.now()) {
     this.updateUnreadState("markUnread", (current) => {
-      const lastActivityAt = current.lastActivityAt > 0 ? current.lastActivityAt : at2;
+      const lastActivityAt = current.lastActivityAt > 0 ? current.lastActivityAt : at3;
       const lastUnreadActivityAt = lastActivityAt;
       const newestEntryAt = this.getNewestDividerAnchorTimestampMs();
       const lastViewedAt = Math.min(
         current.lastViewedAt,
         lastUnreadActivityAt - 1,
-        at2 - 1,
+        at3 - 1,
         newestEntryAt > 0 ? newestEntryAt - 1 : Number.POSITIVE_INFINITY
       );
       const unreadCount = Math.max(current.unreadCount, 1);
@@ -325,9 +325,9 @@ var SandAgentDb = class {
       };
     });
   }
-  markRead(at2 = Date.now()) {
+  markRead(at3 = Date.now()) {
     this.updateUnreadState("markRead", (current) => {
-      const lastViewedAt = Math.max(current.lastActivityAt, current.lastUnreadActivityAt, at2);
+      const lastViewedAt = Math.max(current.lastActivityAt, current.lastUnreadActivityAt, at3);
       if (!current.isManuallyUnread && current.lastViewedAt >= lastViewedAt) {
         return void 0;
       }
@@ -383,7 +383,7 @@ var SandAgentDb = class {
     const legacy = this.readKv(KV_LATEST_REQUEST_ID)?.trim();
     return legacy != null && legacy.length > 0 ? [{ id: legacy, at: 0 }] : [];
   }
-  recordRequestId(requestId2, at2 = Date.now(), prompt, source) {
+  recordRequestId(requestId2, at3 = Date.now(), prompt, source) {
     const trimmed = requestId2.trim();
     if (trimmed.length === 0) return;
     const records2 = this.getRequestIds();
@@ -391,7 +391,7 @@ var SandAgentDb = class {
     const label = prompt?.trim().slice(0, REQUEST_ID_PROMPT_MAX);
     const record2 = {
       id: trimmed,
-      at: at2,
+      at: at3,
       ...label != null && label.length > 0 ? { prompt: label } : {},
       ...source != null ? { source } : {}
     };
@@ -399,7 +399,7 @@ var SandAgentDb = class {
     this.writeKv(KV_REQUEST_IDS, JSON.stringify(next));
   }
   getAgentOrigin() {
-    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path128.dirname)(this.dbPath)));
+    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path129.dirname)(this.dbPath)));
     return metadata.origin ?? (this.readKv(KV_ORIGIN) === "dev" ? "dev" : "user");
   }
   setAgentOrigin(origin) {
@@ -819,7 +819,7 @@ var SandAgentDb = class {
     return true;
   }
   getAgentPurpose() {
-    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path128.dirname)(this.dbPath)));
+    const metadata = readSandProfileCreationMetadata(getSandProfilePath((0, import_node_path129.dirname)(this.dbPath)));
     if (metadata.purpose !== void 0) return metadata.purpose;
     const stored = this.readKv(KV_PURPOSE);
     return isSandAgentPurpose(stored) ? stored : null;

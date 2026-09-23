@@ -1,4 +1,4 @@
-var import_node_crypto79 = require("node:crypto");
+var import_node_crypto81 = require("node:crypto");
 init_dist4();
 init_scheduling();
 init_esm2();
@@ -15,7 +15,7 @@ var ComputerOperationObservation = class {
     this.options = options2;
     this.clock = options2.clock ?? realClock;
     this.startedAt = this.clock.monotonicNow();
-    this.attemptId = (0, import_node_crypto79.randomUUID)();
+    this.attemptId = (0, import_node_crypto81.randomUUID)();
   }
   options;
   stage = "admission";

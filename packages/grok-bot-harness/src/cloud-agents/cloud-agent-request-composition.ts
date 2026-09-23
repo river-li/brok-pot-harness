@@ -30,6 +30,7 @@ function buildCloudAgentUserMessage(args) {
     text: args.prompt,
     messageId: args.messageId ?? crypto.randomUUID(),
     ...args.mode != null ? { mode: args.mode } : {},
+    ...args.customModeIntent != null ? { customModeIntent: args.customModeIntent } : {},
     ...images.length > 0 || files.length > 0 ? {
       selectedContext: new SelectedContext({
         selectedImages: images.map(

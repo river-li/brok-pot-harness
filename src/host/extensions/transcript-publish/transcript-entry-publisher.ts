@@ -1,6 +1,6 @@
-var import_node_fs90 = require("node:fs");
+var import_node_fs92 = require("node:fs");
 var import_promises75 = require("node:fs/promises");
-var import_node_path148 = require("node:path");
+var import_node_path149 = require("node:path");
 var import_node_sqlite6 = require("node:sqlite");
 init_scheduling();
 init_dist3();
@@ -163,7 +163,7 @@ var TranscriptEntryPublisher = class {
       const dirents = await (0, import_promises75.readdir)(this.deps.agentsRootDir, { withFileTypes: true });
       for (const dirent of dirents) {
         if (!dirent.isDirectory()) continue;
-        if (!(0, import_node_fs90.existsSync)((0, import_node_path148.join)(this.deps.agentsRootDir, dirent.name, STORE_FILENAME3))) continue;
+        if (!(0, import_node_fs92.existsSync)((0, import_node_path149.join)(this.deps.agentsRootDir, dirent.name, STORE_FILENAME3))) continue;
         this.dirtyFor(dirent.name).backfill = true;
         swept += 1;
       }
@@ -202,7 +202,7 @@ var TranscriptEntryPublisher = class {
     return state;
   }
   ledgerPath(agentId) {
-    return (0, import_node_path148.join)(this.deps.ledgerDir, `${agentId}.json`);
+    return (0, import_node_path149.join)(this.deps.ledgerDir, `${agentId}.json`);
   }
   async drain(scope) {
     const batch = this.dirty;
@@ -310,8 +310,8 @@ var TranscriptEntryPublisher = class {
     this.ledgers.set(agentId, ledger);
   }
   async publishAgentInner(agentId, state) {
-    const dbPath = (0, import_node_path148.join)(this.deps.agentsRootDir, agentId, STORE_FILENAME3);
-    if (!(0, import_node_fs90.existsSync)(dbPath)) return null;
+    const dbPath = (0, import_node_path149.join)(this.deps.agentsRootDir, agentId, STORE_FILENAME3);
+    if (!(0, import_node_fs92.existsSync)(dbPath)) return null;
     let ledger = await this.loadLedger(agentId);
     let maxSeq = 0;
     let minRow = null;

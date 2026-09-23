@@ -291,6 +291,91 @@ var REDACTION_SCHEMA = {
   "agent.v1.AgentHostPluginsSnapshotResult": {},
   "agent.v1.AgentHostPluginsReloadArgs": {},
   "agent.v1.AgentHostPluginsReloadResult": {},
+  "agent.v1.AgentHostAgentStoreExtraEnvArgs": {
+    "session_id": "SAFE",
+    "conversation_id": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreExtraEnvResult": {
+    "env": "CREDENTIALS"
+  },
+  "agent.v1.AgentHostAgentStoreSkillRootsArgs": {},
+  "agent.v1.AgentHostAgentStoreSkillRootsResult": {
+    "skill_dirs": "PATH",
+    "user_home_directory": "PATH"
+  },
+  "agent.v1.AgentHostAgentStoreApplySubagentMountsArgs": {
+    "parent_conversation_id": "SAFE",
+    "child_conversation_id": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreApplySubagentMountsResult": {
+    "inherited_source_ids": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreClearSubagentMountsArgs": {
+    "child_conversation_id": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreClearSubagentMountsResult": {},
+  "agent.v1.AgentHostAgentStoreFlushSubagentArgs": {
+    "agent_ids": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreFlushSubagentResult": {},
+  "agent.v1.AgentHostAgentStoreScopePathsArgs": {
+    "agent_id": "SAFE",
+    "mount": "SAFE",
+    "sync_agent_path": "PATH"
+  },
+  "agent.v1.AgentHostAgentStoreScopeDescriptor": {
+    "scope": "SAFE",
+    "path": "PATH",
+    "root_link_policy": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreScopeUnavailable": {
+    "scope": "SAFE",
+    "reason": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreScopePathsResult": {},
+  "agent.v1.AgentHostAgentStoreConflictNoticeEvent": {
+    "event_id": "SAFE",
+    "journal_epoch": "SAFE",
+    "kind": "SAFE",
+    "store_id": "SAFE",
+    "original_rel_path": "PATH",
+    "conflict_rel_path": "PATH",
+    "original_abs_path": "PATH",
+    "conflict_abs_path": "PATH",
+    "scope_kind": "SAFE",
+    "source": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeSyncAndPeekArgs": {
+    "conversation_id": "SAFE",
+    "written_paths": "PATH"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticePeekArgs": {
+    "conversation_id": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeAckArgs": {
+    "event_ids": "SAFE",
+    "conversation_id": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeReleaseArgs": {
+    "event_ids": "SAFE",
+    "conversation_id": "SAFE"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeNoteDeferredArgs": {
+    "conversation_id": "SAFE",
+    "written_paths": "PATH"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeCompleted": {
+    "reminder": "CODE"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeTimedOut": {
+    "reminder": "CODE"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeFailed": {
+    "error": "CODE"
+  },
+  "agent.v1.AgentHostAgentStoreConflictNoticeEmpty": {},
+  "agent.v1.AgentHostAgentStoreConflictNoticeCount": {},
+  "agent.v1.AgentHostAgentStoreConflictNoticeResult": {},
   "agent.v1.AgentHostSurfaceMcpWriterRequest": {},
   "agent.v1.AgentHostSurfaceMcpWriterResult": {},
   "agent.v1.AgentHostSurfaceCloudSubagentCreateOrResume": {},
@@ -373,6 +458,14 @@ var REDACTION_SCHEMA = {
     "missing_blob_ids": "SAFE",
     "oversize_blob_ids": "SAFE",
     "remaining_blob_ids": "SAFE"
+  },
+  // File paths name files on the user's computer; chunk bytes are file
+  // contents.
+  "agent.v1.ReadAgentHostFileRequest": {
+    "path": "PATH"
+  },
+  "agent.v1.AgentHostFileChunk": {
+    "data": "CODE"
   },
   "agent.v1.GetAgentHostDaemonInfoRequest": {
     "expected_api_schema_revision": "SAFE"
@@ -1409,7 +1502,8 @@ var REDACTION_SCHEMA = {
   "agent.v1.ProjectDetails": {
     "name": "CODE",
     "subagent": "CODE",
-    "side_chat": "CODE"
+    "side_chat": "CODE",
+    "init_description": "CODE"
   },
   "agent.v1.ProjectSubagentDetails": {
     "store_dir": "CODE"
@@ -1440,6 +1534,9 @@ var REDACTION_SCHEMA = {
   },
   "agent.v1.InteractionUpdate": {
     "message_started_at_ms": "SAFE"
+  },
+  "agent.v1.ToolRequestsListedUpdate": {
+    "call_count": "SAFE"
   },
   "agent.v1.ShellCommand": {
     "command": "CODE"
@@ -1564,7 +1661,8 @@ var REDACTION_SCHEMA = {
     "prepend_user_messages": "CODE",
     "backgrounded_tool_call_ids": "SAFE",
     "interrupted_pending_tool_call_resolutions": "CODE",
-    "conversation_history": "CODE"
+    "conversation_history": "CODE",
+    "trailing_conversation_history": "CODE"
   },
   "agent.v1.SubscriptionNotificationAction": {
     "notifications": "CODE",
@@ -3497,6 +3595,7 @@ var REDACTION_SCHEMA = {
     "tool_use_id": "SAFE",
     "cwd": "PATH",
     "conversation_id": "SAFE",
+    "parent_tool_call_id": "SAFE",
     "generation_id": "SAFE",
     "model": "SAFE",
     "model_id": "SAFE",
@@ -3517,6 +3616,7 @@ var REDACTION_SCHEMA = {
     "tool_use_id": "SAFE",
     "cwd": "PATH",
     "conversation_id": "SAFE",
+    "parent_tool_call_id": "SAFE",
     "generation_id": "SAFE",
     "model": "SAFE",
     "model_id": "SAFE",
@@ -3534,6 +3634,7 @@ var REDACTION_SCHEMA = {
     "tool_use_id": "SAFE",
     "is_interrupt": "SAFE",
     "conversation_id": "SAFE",
+    "parent_tool_call_id": "SAFE",
     "generation_id": "SAFE",
     "model": "SAFE",
     "model_id": "SAFE",
@@ -3626,7 +3727,8 @@ var REDACTION_SCHEMA = {
     "task": "CODE",
     "description": "CODE",
     "model_id": "SAFE",
-    "model_params": "CODE"
+    "model_params": "CODE",
+    "child_conversation_id": "SAFE"
   },
   "agent.v1.SubagentStopRequestResponse": {
     "followup_message": "CODE",
@@ -3735,6 +3837,9 @@ var REDACTION_SCHEMA = {
   },
   "agent.v1.ReadFileRequest": {
     "path": "PATH"
+  },
+  "agent.v1.ReadFileHeader": {
+    "real_path": "PATH"
   },
   "agent.v1.ReadFileResponse": {
     "chunk": "CODE"

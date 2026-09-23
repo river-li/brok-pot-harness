@@ -61,22 +61,22 @@ var FileTranscriptMirror = class {
   }
   jsonlPathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.jsonl`);
+    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.jsonl`);
   }
   pendingPathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.journal-pending.json`);
+    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.journal-pending.json`);
   }
   cursorPathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.journal-cursor.json`);
+    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.journal-cursor.json`);
   }
   modePathFor(conversationId) {
     const id = getSafeConversationId2(conversationId);
-    return (0, import_node_path179.join)(this.transcriptsDir, id, `${id}.journal-mode`);
+    return (0, import_node_path181.join)(this.transcriptsDir, id, `${id}.journal-mode`);
   }
   async syncParentDirectory(path31) {
-    const handle = await (0, import_promises82.open)((0, import_node_path179.dirname)(path31), "r");
+    const handle = await (0, import_promises82.open)((0, import_node_path181.dirname)(path31), "r");
     try {
       await handle.sync();
     } finally {
@@ -84,7 +84,7 @@ var FileTranscriptMirror = class {
     }
   }
   async installAtomicFile(path31, write2) {
-    const temporary = (0, import_node_path179.join)((0, import_node_path179.dirname)(path31), `.transcript.${(0, import_node_crypto87.randomUUID)()}.part`);
+    const temporary = (0, import_node_path181.join)((0, import_node_path181.dirname)(path31), `.transcript.${(0, import_node_crypto90.randomUUID)()}.part`);
     let handle;
     try {
       handle = await (0, import_promises82.open)(temporary, "wx");
@@ -111,7 +111,7 @@ var FileTranscriptMirror = class {
   }
   async claimConversation(conversationId) {
     const path31 = this.modePathFor(conversationId);
-    await (0, import_promises82.mkdir)((0, import_node_path179.dirname)(path31), { recursive: true });
+    await (0, import_promises82.mkdir)((0, import_node_path181.dirname)(path31), { recursive: true });
     try {
       await (0, import_promises82.stat)(path31);
       return;
@@ -154,7 +154,7 @@ var FileTranscriptMirror = class {
   }
   async initialize(ctx, conversationId, checkpoint, blobStore) {
     const id = getSafeConversationId2(conversationId);
-    await (0, import_promises82.mkdir)((0, import_node_path179.join)(this.transcriptsDir, id), { recursive: true });
+    await (0, import_promises82.mkdir)((0, import_node_path181.join)(this.transcriptsDir, id), { recursive: true });
     const path31 = this.jsonlPathFor(conversationId);
     let rebuild = false;
     let tail;
@@ -517,7 +517,7 @@ var FileTranscriptMirror = class {
   }
   async replay(ctx, conversationId, checkpoint, blobStore) {
     let applied;
-    await (0, import_promises82.mkdir)((0, import_node_path179.dirname)(this.jsonlPathFor(conversationId)), { recursive: true });
+    await (0, import_promises82.mkdir)((0, import_node_path181.dirname)(this.jsonlPathFor(conversationId)), { recursive: true });
     const pending = await this.readPending(conversationId);
     let state = this.states.get(conversationId);
     const previous = this.durableCheckpoints.get(conversationId);

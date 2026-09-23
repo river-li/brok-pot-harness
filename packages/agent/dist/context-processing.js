@@ -47,9 +47,9 @@ function canUseWatchVideoSubagent(config2) {
   });
 }
 function isPathWithinPrefix({ targetPath, prefix }) {
-  const resolvedTarget = import_node_path80.default.resolve(targetPath);
-  const resolvedPrefix = import_node_path80.default.resolve(prefix);
-  return resolvedTarget === resolvedPrefix || resolvedTarget.startsWith(resolvedPrefix + import_node_path80.default.sep);
+  const resolvedTarget = import_node_path71.default.resolve(targetPath);
+  const resolvedPrefix = import_node_path71.default.resolve(prefix);
+  return resolvedTarget === resolvedPrefix || resolvedTarget.startsWith(resolvedPrefix + import_node_path71.default.sep);
 }
 function isPathWithinAnyPrefix(targetPath, prefixes) {
   return prefixes.some((prefix) => isPathWithinPrefix({ targetPath, prefix }));
@@ -61,16 +61,16 @@ function isAttachmentStoragePath(targetPath, projectFolder) {
   if (!isPathWithinPrefix({ targetPath, prefix: projectFolder })) {
     return false;
   }
-  const relativePath = import_node_path80.default.relative(import_node_path80.default.resolve(projectFolder), import_node_path80.default.resolve(targetPath));
-  const segments = relativePath.split(import_node_path80.default.sep).filter(Boolean);
+  const relativePath = import_node_path71.default.relative(import_node_path71.default.resolve(projectFolder), import_node_path71.default.resolve(targetPath));
+  const segments = relativePath.split(import_node_path71.default.sep).filter(Boolean);
   return segments.length >= 3 && segments[0] === "attachments" && segments[1] !== void 0 && segments[2] !== void 0;
 }
 function getTrustedSelectedDocumentPath(documentPath, requestContext) {
-  const canonicalPath = import_node_path80.default.resolve(documentPath);
+  const canonicalPath = import_node_path71.default.resolve(documentPath);
   const env = requestContext?.env;
   const allowedPrefixes = [
-    env?.projectFolder ? import_node_path80.default.join(env.projectFolder, "uploads") : void 0,
-    ...env?.workspacePaths.map((workspacePath) => import_node_path80.default.join(workspacePath, "uploads")) ?? [],
+    env?.projectFolder ? import_node_path71.default.join(env.projectFolder, "uploads") : void 0,
+    ...env?.workspacePaths.map((workspacePath) => import_node_path71.default.join(workspacePath, "uploads")) ?? [],
     env?.artifactsFolder
   ].filter((prefix) => prefix !== void 0);
   const isTrusted = isPathWithinAnyPrefix(canonicalPath, allowedPrefixes) || isAttachmentStoragePath(canonicalPath, env?.projectFolder);
@@ -124,7 +124,7 @@ async function hydrateSelectedAttachmentData(args) {
 }
 async function resolveTrustedPathOnlyAttachmentPath(args) {
   const { ctx, readablePath, requestContext, attachmentKind, treatNonAbsoluteAsPathOnly } = args;
-  const hasPathOnlyPayload = readablePath.length > 0 && (treatNonAbsoluteAsPathOnly || import_node_path80.default.isAbsolute(readablePath));
+  const hasPathOnlyPayload = readablePath.length > 0 && (treatNonAbsoluteAsPathOnly || import_node_path71.default.isAbsolute(readablePath));
   if (!hasPathOnlyPayload) {
     return { hasPathOnlyPayload: false, trustedPath: void 0 };
   }
@@ -139,11 +139,11 @@ async function resolveTrustedPathOnlyAttachmentPath(args) {
   return { hasPathOnlyPayload: true, trustedPath };
 }
 async function resolveTrustedPathOnlyAttachmentCandidate(args) {
-  if (!import_node_path80.default.isAbsolute(args.readablePath)) {
+  if (!import_node_path71.default.isAbsolute(args.readablePath)) {
     return void 0;
   }
   if (args.attachmentKind === "video") {
-    return import_node_path80.default.resolve(args.readablePath);
+    return import_node_path71.default.resolve(args.readablePath);
   }
   return getTrustedSelectedDocumentPath(args.readablePath, args.requestContext);
 }
@@ -155,8 +155,8 @@ function getSkillIdFromPath(fullPath) {
 }
 function appendRandomUploadSuffix(filename, fallbackFilename) {
   const sanitizedFilename = sanitizeFilename(filename) || fallbackFilename;
-  const suffix = (0, import_node_crypto29.randomUUID)().replace(/[^a-zA-Z0-9]/g, "").slice(0, 4) || "file";
-  const extension3 = import_node_path80.default.extname(sanitizedFilename);
+  const suffix = (0, import_node_crypto28.randomUUID)().replace(/[^a-zA-Z0-9]/g, "").slice(0, 4) || "file";
+  const extension3 = import_node_path71.default.extname(sanitizedFilename);
   if (extension3.length === 0) {
     return `${sanitizedFilename}_${suffix}`;
   }
@@ -200,7 +200,7 @@ function normalizeCustomModeSkillPath(skillPath) {
   let comparable = trimmed;
   if (trimmed.startsWith("file:")) {
     try {
-      comparable = (0, import_node_url9.fileURLToPath)(trimmed);
+      comparable = (0, import_node_url8.fileURLToPath)(trimmed);
     } catch {
       comparable = trimmed;
     }
@@ -632,7 +632,7 @@ ${requestContext.sharedNotesListing}
         try {
           const mimeType = resolvedMimeType;
           const originalPath = selectedImg.path;
-          const extensionFromPath = originalPath !== void 0 ? import_node_path80.default.extname(originalPath).replace(/^\./, "").toLowerCase() : void 0;
+          const extensionFromPath = originalPath !== void 0 ? import_node_path71.default.extname(originalPath).replace(/^\./, "").toLowerCase() : void 0;
           let extension3 = "png";
           if (extensionFromPath && extensionFromPath !== "") {
             extension3 = extensionFromPath === "jpeg" ? "jpg" : extensionFromPath;
@@ -643,23 +643,23 @@ ${requestContext.sharedNotesListing}
           } else if (mimeType.includes("webp")) {
             extension3 = "webp";
           }
-          const originalFilename = originalPath !== void 0 ? import_node_path80.default.basename(originalPath) : void 0;
-          const baseFilename = originalFilename !== void 0 && originalFilename !== "" ? import_node_path80.default.basename(originalFilename, import_node_path80.default.extname(originalFilename)) : selectedImg.uuid || `image-${Date.now()}-${i}`;
+          const originalFilename = originalPath !== void 0 ? import_node_path71.default.basename(originalPath) : void 0;
+          const baseFilename = originalFilename !== void 0 && originalFilename !== "" ? import_node_path71.default.basename(originalFilename, import_node_path71.default.extname(originalFilename)) : selectedImg.uuid || `image-${Date.now()}-${i}`;
           const safeBaseFilename = sanitizeFilename(baseFilename) || `image-${Date.now()}-${i}`;
           const fileName = `${safeBaseFilename}.${extension3}`;
           const workspaceRoot = requestContext.env.workspacePaths[0];
           if (workspaceRoot !== void 0 && originalPath !== void 0 && originalPath !== "") {
-            const normalizedOriginalPath = import_node_path80.default.normalize(originalPath);
-            const normalizedWorkspaceRoot = import_node_path80.default.normalize(workspaceRoot);
-            const relativePath = import_node_path80.default.relative(normalizedWorkspaceRoot, normalizedOriginalPath);
-            if (!relativePath.startsWith("..") && !import_node_path80.default.isAbsolute(relativePath)) {
+            const normalizedOriginalPath = import_node_path71.default.normalize(originalPath);
+            const normalizedWorkspaceRoot = import_node_path71.default.normalize(workspaceRoot);
+            const relativePath = import_node_path71.default.relative(normalizedWorkspaceRoot, normalizedOriginalPath);
+            if (!relativePath.startsWith("..") && !import_node_path71.default.isAbsolute(relativePath)) {
               imageFilePath = normalizedOriginalPath;
             }
           }
           if (imageFilePath === void 0) {
             const projectFolder = requestContext.env.projectFolder;
-            const assetsDir = import_node_path80.default.join(projectFolder, "assets");
-            const filePath = import_node_path80.default.join(assetsDir, fileName);
+            const assetsDir = import_node_path71.default.join(projectFolder, "assets");
+            const filePath = import_node_path71.default.join(assetsDir, fileName);
             imageFilePath = filePath;
             const writeExecutor = resourceAccessor.get(writeExecutorResource);
             void writeExecutor.execute(ctx, new WriteArgs({
@@ -717,7 +717,7 @@ ${requestContext.sharedNotesListing}
         mimeType,
         fps,
         localFilePath: trustedPathOnlyVideoPath,
-        filename: displayFilename || import_node_path80.default.basename(trustedPathOnlyVideoPath)
+        filename: displayFilename || import_node_path71.default.basename(trustedPathOnlyVideoPath)
       };
     }
     const materializeToFilesystem = selectedVideo.materializeToFilesystem === true;
@@ -814,14 +814,14 @@ ${requestContext.sharedNotesListing}
       throw new Error("Video attachment has no data");
     }
     let videoFilePath;
-    const filename = selectedVideo.filename || (selectedVideo.path.length > 0 ? import_node_path80.default.basename(selectedVideo.path) : `video-${Date.now()}-${i}`);
+    const filename = selectedVideo.filename || (selectedVideo.path.length > 0 ? import_node_path71.default.basename(selectedVideo.path) : `video-${Date.now()}-${i}`);
     if (materializeToFilesystem && videoData) {
       const videoRootPath = requestContext?.env?.projectFolder ?? requestContext?.env?.workspacePaths?.[0];
       if (resourceAccessor && videoRootPath !== void 0) {
         try {
           const safeFilename = appendRandomUploadSuffix(filename, `video-${Date.now()}-${i}`);
-          const uploadsDir = import_node_path80.default.join(videoRootPath, "uploads");
-          const filePath = import_node_path80.default.join(uploadsDir, safeFilename);
+          const uploadsDir = import_node_path71.default.join(videoRootPath, "uploads");
+          const filePath = import_node_path71.default.join(uploadsDir, safeFilename);
           const writeExecutor = resourceAccessor.get(writeExecutorResource);
           await writeExecutor.execute(ctx, new WriteArgs({
             path: filePath,
@@ -886,8 +886,8 @@ ${requestContext.sharedNotesListing}
   const documentProcessingPromise = Promise.all(selectedContext.selectedDocuments.map(async (selectedDoc, i) => {
     const selectedDocPath = selectedDoc.path.trim();
     const trimmedFilename = selectedDoc.filename.trim();
-    const readablePath = selectedDocPath || (import_node_path80.default.isAbsolute(trimmedFilename) ? trimmedFilename : "");
-    const displayFilename = trimmedFilename && !import_node_path80.default.isAbsolute(trimmedFilename) ? trimmedFilename : import_node_path80.default.basename(readablePath);
+    const readablePath = selectedDocPath || (import_node_path71.default.isAbsolute(trimmedFilename) ? trimmedFilename : "");
+    const displayFilename = trimmedFilename && !import_node_path71.default.isAbsolute(trimmedFilename) ? trimmedFilename : import_node_path71.default.basename(readablePath);
     const hydratedDocument = await hydrateSelectedAttachmentData({
       ctx,
       blobStore,
@@ -927,8 +927,8 @@ ${requestContext.sharedNotesListing}
       if (resourceAccessor && documentRootPath !== void 0) {
         try {
           const safeFilename = appendRandomUploadSuffix(filename, `document-${Date.now()}-${i}`);
-          const uploadsDir = import_node_path80.default.join(documentRootPath, "uploads");
-          const filePath = import_node_path80.default.join(uploadsDir, safeFilename);
+          const uploadsDir = import_node_path71.default.join(documentRootPath, "uploads");
+          const filePath = import_node_path71.default.join(uploadsDir, safeFilename);
           const writeExecutor = resourceAccessor.get(writeExecutorResource);
           await writeExecutor.execute(ctx, new WriteArgs({
             path: filePath,
@@ -1033,8 +1033,8 @@ ${requestContext.sharedNotesListing}
     if (!resourceAccessor || documentRootPath === void 0) {
       return void 0;
     }
-    const uploadsDir = import_node_path80.default.join(documentRootPath, "uploads");
-    const filePath = import_node_path80.default.join(uploadsDir, safeFilename);
+    const uploadsDir = import_node_path71.default.join(documentRootPath, "uploads");
+    const filePath = import_node_path71.default.join(uploadsDir, safeFilename);
     const writeExecutor = resourceAccessor.get(writeExecutorResource);
     await writeExecutor.execute(ctx, new WriteArgs({
       path: filePath,
@@ -1046,8 +1046,8 @@ ${requestContext.sharedNotesListing}
   const writeCodeSelectionToFile = async (opts) => {
     const { content, originalPath, startLine, endLine, index } = opts;
     try {
-      const originalBasename = import_node_path80.default.basename(originalPath) || "selection";
-      const originalExt = import_node_path80.default.extname(originalBasename);
+      const originalBasename = import_node_path71.default.basename(originalPath) || "selection";
+      const originalExt = import_node_path71.default.extname(originalBasename);
       const stem = originalExt.length > 0 ? originalBasename.slice(0, -originalExt.length) : originalBasename;
       const safeStem = sanitizeFilename(stem) || "selection";
       const safeExt = originalExt.length > 0 ? sanitizeFilename(originalExt.replace(/^\./, "")) || "txt" : "txt";
@@ -1670,7 +1670,7 @@ ${prDiffText}
     });
   }
   if (selectedContext.consoleLogs.length > 0) {
-    const logsText = selectedContext.consoleLogs.map((log4) => `${log4.level} ${new Date(log4.timestamp).toLocaleTimeString()}: ${log4.message}`).join("\n");
+    const logsText = selectedContext.consoleLogs.map((log5) => `${log5.level} ${new Date(log5.timestamp).toLocaleTimeString()}: ${log5.message}`).join("\n");
     userContent.push({
       type: "text",
       text: `<console_logs_context>

@@ -1,4 +1,4 @@
-var import_node_fs61 = require("node:fs");
+var import_node_fs63 = require("node:fs");
 var import_node_path105 = require("node:path");
 init_unknown_record();
 function coerceEpochMs(value) {
@@ -41,7 +41,7 @@ var SandFeedbackPromptStore = class {
   }
   read() {
     try {
-      return parseFeedbackPromptFile((0, import_node_fs61.readFileSync)(this.filePath, "utf8"));
+      return parseFeedbackPromptFile((0, import_node_fs63.readFileSync)(this.filePath, "utf8"));
     } catch (error42) {
       reportFallbackUnlessAbsent("sand_feedback_prompt_store", error42);
       return { version: 1 };

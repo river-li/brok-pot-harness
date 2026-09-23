@@ -29,7 +29,7 @@ var MAX_FILE_SIZE = 10 * 1024 * 1024;
 function isSymlink2(filePath) {
   return __awaiter60(this, void 0, void 0, function* () {
     try {
-      const stats = yield (0, import_promises34.lstat)(filePath);
+      const stats = yield (0, import_promises32.lstat)(filePath);
       return stats.isSymbolicLink();
     } catch (_a19) {
       return false;
@@ -41,12 +41,12 @@ function readFileNoSymlink(filePath) {
     if (yield isSymlink2(filePath)) {
       throw new Error(`Refusing to read symlink: ${filePath}`);
     }
-    return (0, import_promises34.readFile)(filePath, "utf-8");
+    return (0, import_promises32.readFile)(filePath, "utf-8");
   });
 }
 function checkFileSize(filePath) {
   return __awaiter60(this, void 0, void 0, function* () {
-    const stats = yield (0, import_promises34.stat)(filePath);
+    const stats = yield (0, import_promises32.stat)(filePath);
     if (stats.size > MAX_FILE_SIZE) {
       throw new Error(`File ${filePath} exceeds maximum size of ${MAX_FILE_SIZE} bytes`);
     }
@@ -69,11 +69,11 @@ function classifyLoadError(error42) {
 function createLocalPluginFileFetcher(basePath, options2) {
   var _a19;
   const fileContentCache = /* @__PURE__ */ new Map();
-  const resolvedBasePath = (0, import_node_path64.resolve)(basePath);
-  const resolvedSymlinkTargetRoot = (0, import_node_path64.resolve)((_a19 = options2 === null || options2 === void 0 ? void 0 : options2.symlinkTargetRoot) !== null && _a19 !== void 0 ? _a19 : resolvedBasePath);
-  const resolvedSymlinkTargetRootPromise = (0, import_promises34.realpath)(resolvedSymlinkTargetRoot).catch(() => resolvedSymlinkTargetRoot);
+  const resolvedBasePath = (0, import_node_path55.resolve)(basePath);
+  const resolvedSymlinkTargetRoot = (0, import_node_path55.resolve)((_a19 = options2 === null || options2 === void 0 ? void 0 : options2.symlinkTargetRoot) !== null && _a19 !== void 0 ? _a19 : resolvedBasePath);
+  const resolvedSymlinkTargetRootPromise = (0, import_promises32.realpath)(resolvedSymlinkTargetRoot).catch(() => resolvedSymlinkTargetRoot);
   function assertContained(fullPath) {
-    const resolvedFullPath = (0, import_node_path64.resolve)(fullPath);
+    const resolvedFullPath = (0, import_node_path55.resolve)(fullPath);
     try {
       return validateAndResolveSubpath(resolvedBasePath, resolvedFullPath);
     } catch (_a20) {
@@ -84,7 +84,7 @@ function createLocalPluginFileFetcher(basePath, options2) {
     return __awaiter60(this, void 0, void 0, function* () {
       const containedPath = assertContained(fullPath);
       const resolvedAllowedRealPath = yield resolvedSymlinkTargetRootPromise;
-      const resolvedRealPath = yield (0, import_promises34.realpath)(containedPath);
+      const resolvedRealPath = yield (0, import_promises32.realpath)(containedPath);
       try {
         return validateAndResolveSubpath(resolvedAllowedRealPath, resolvedRealPath);
       } catch (_a20) {
@@ -95,22 +95,22 @@ function createLocalPluginFileFetcher(basePath, options2) {
   return {
     listDirectory(dirPath, visitedRealDirPaths) {
       return __awaiter60(this, void 0, void 0, function* () {
-        const candidatePath = assertContained(dirPath ? (0, import_node_path64.join)(basePath, dirPath) : basePath);
+        const candidatePath = assertContained(dirPath ? (0, import_node_path55.join)(basePath, dirPath) : basePath);
         try {
           const fullPath = yield assertContainedRealPath(candidatePath);
           if (visitedRealDirPaths === null || visitedRealDirPaths === void 0 ? void 0 : visitedRealDirPaths.has(fullPath)) {
             return [];
           }
           visitedRealDirPaths === null || visitedRealDirPaths === void 0 ? void 0 : visitedRealDirPaths.add(fullPath);
-          const entries = yield (0, import_promises34.readdir)(fullPath, { withFileTypes: true });
+          const entries = yield (0, import_promises32.readdir)(fullPath, { withFileTypes: true });
           const results = [];
           for (const e of entries) {
-            const entryFullPath = (0, import_node_path64.join)(candidatePath, e.name);
+            const entryFullPath = (0, import_node_path55.join)(candidatePath, e.name);
             let entryType = e.isDirectory() ? "dir" : "file";
             if (e.isSymbolicLink()) {
               try {
                 const resolvedEntryPath = yield assertContainedRealPath(entryFullPath);
-                const resolvedEntryStats = yield (0, import_promises34.stat)(resolvedEntryPath);
+                const resolvedEntryStats = yield (0, import_promises32.stat)(resolvedEntryPath);
                 entryType = resolvedEntryStats.isDirectory() ? "dir" : "file";
               } catch (_a20) {
                 continue;
@@ -134,10 +134,10 @@ function createLocalPluginFileFetcher(basePath, options2) {
         if (cached2 !== void 0) {
           return { content: cached2 };
         }
-        const candidatePath = assertContained((0, import_node_path64.join)(basePath, filePath));
+        const candidatePath = assertContained((0, import_node_path55.join)(basePath, filePath));
         const fullPath = yield assertContainedRealPath(candidatePath);
         yield checkFileSize(fullPath);
-        const content = yield (0, import_promises34.readFile)(fullPath, "utf-8");
+        const content = yield (0, import_promises32.readFile)(fullPath, "utf-8");
         fileContentCache.set(filePath, content);
         return { content };
       });
@@ -145,9 +145,9 @@ function createLocalPluginFileFetcher(basePath, options2) {
     fileExists(filePath) {
       return __awaiter60(this, void 0, void 0, function* () {
         try {
-          const candidatePath = assertContained((0, import_node_path64.join)(basePath, filePath));
+          const candidatePath = assertContained((0, import_node_path55.join)(basePath, filePath));
           const fullPath = yield assertContainedRealPath(candidatePath);
-          const stats = yield (0, import_promises34.stat)(fullPath);
+          const stats = yield (0, import_promises32.stat)(fullPath);
           return stats.isFile();
         } catch (_a20) {
           return false;
@@ -159,20 +159,20 @@ function createLocalPluginFileFetcher(basePath, options2) {
 function resolveLocalPluginLogoUrl(_a19) {
   return __awaiter60(this, arguments, void 0, function* ({ installPath, logo }) {
     const relativeLogoPath = logo === null || logo === void 0 ? void 0 : logo.trim();
-    if (!relativeLogoPath || (0, import_node_path64.isAbsolute)(relativeLogoPath) || relativeLogoPath.includes("://")) {
+    if (!relativeLogoPath || (0, import_node_path55.isAbsolute)(relativeLogoPath) || relativeLogoPath.includes("://")) {
       return void 0;
     }
     try {
-      const canonicalRoot = yield (0, import_promises34.realpath)(installPath);
+      const canonicalRoot = yield (0, import_promises32.realpath)(installPath);
       const targetPath = validateAndResolveSubpath(canonicalRoot, relativeLogoPath);
-      const canonicalTarget = yield (0, import_promises34.realpath)(targetPath);
+      const canonicalTarget = yield (0, import_promises32.realpath)(targetPath);
       validateAndResolveSubpath(canonicalRoot, canonicalTarget);
-      const targetStats = yield (0, import_promises34.stat)(canonicalTarget);
+      const targetStats = yield (0, import_promises32.stat)(canonicalTarget);
       if (!targetStats.isFile()) {
         return void 0;
       }
       yield checkFileSize(canonicalTarget);
-      return (0, import_node_url7.pathToFileURL)(canonicalTarget).href;
+      return (0, import_node_url6.pathToFileURL)(canonicalTarget).href;
     } catch (_b2) {
       return void 0;
     }
@@ -207,12 +207,12 @@ function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogge
     var _a19;
     let identityOnly;
     for (const manifestPath2 of PLUGIN_MANIFEST_PATHS) {
-      const fullPath = (0, import_node_path64.join)(installPath, manifestPath2);
+      const fullPath = (0, import_node_path55.join)(installPath, manifestPath2);
       let content;
       try {
         if (yield isSymlink2(fullPath))
           continue;
-        const stats = yield (0, import_promises34.stat)(fullPath);
+        const stats = yield (0, import_promises32.stat)(fullPath);
         if (!stats.isFile())
           continue;
         yield checkFileSize(fullPath);
@@ -256,7 +256,7 @@ function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogge
         continue;
       }
       if (parseResult.unrecognizedSchemaId !== void 0) {
-        pluginLogger.log("warn", `${pluginDisplayName}: ${manifestPath2} declares an unrecognized $schema, loading anyway: ${parseResult.unrecognizedSchemaId}`);
+        pluginLogger.log("debug", `${pluginDisplayName}: ${manifestPath2} declares an unrecognized $schema, loading anyway: ${parseResult.unrecognizedSchemaId}`);
       }
       const mergedIdentity = preferIdentity(identity, identityOnly === null || identityOnly === void 0 ? void 0 : identityOnly.fields);
       const hasMetadata = hasUiMetadata || hasIdentity(mergedIdentity);
@@ -285,7 +285,7 @@ function readLocalPluginManifestData(installPath, pluginDisplayName, pluginLogge
       return void 0;
     }
     if (identityOnly.unrecognizedSchemaId !== void 0) {
-      pluginLogger.log("warn", `${pluginDisplayName}: ${identityOnly.relPath} declares an unrecognized $schema, loading anyway: ${identityOnly.unrecognizedSchemaId}`);
+      pluginLogger.log("debug", `${pluginDisplayName}: ${identityOnly.relPath} declares an unrecognized $schema, loading anyway: ${identityOnly.unrecognizedSchemaId}`);
     }
     return {
       manifestFilePath: identityOnly.path,
@@ -451,10 +451,10 @@ function parseAgentContent({ content, relativePath }) {
       tools = parsed2.data.tools.map((t) => typeof t === "string" ? t.trim() : String(t)).filter(Boolean);
     }
     const permissionModeRaw = (_a19 = parsed2.data.permissionMode) !== null && _a19 !== void 0 ? _a19 : parsed2.data.permissionmode;
-    const fileName = (0, import_node_path64.basename)(relativePath);
+    const fileName = (0, import_node_path55.basename)(relativePath);
     return {
       path: relativePath,
-      name: typeof parsed2.data.name === "string" ? parsed2.data.name : (0, import_node_path64.basename)(fileName, (0, import_node_path64.extname)(fileName)).replace(/[\s_]+/g, "-"),
+      name: typeof parsed2.data.name === "string" ? parsed2.data.name : (0, import_node_path55.basename)(fileName, (0, import_node_path55.extname)(fileName)).replace(/[\s_]+/g, "-"),
       description: typeof parsed2.data.description === "string" ? parsed2.data.description : void 0,
       tools,
       model: typeof parsed2.data.model === "string" ? parsed2.data.model : "inherit",
@@ -475,10 +475,10 @@ function parseCommandContent({ content, relativePath }) {
     } else if (Array.isArray(argumentHintRaw)) {
       argumentHint = `[${argumentHintRaw.join(" ")}]`;
     }
-    const fileName = (0, import_node_path64.basename)(relativePath);
+    const fileName = (0, import_node_path55.basename)(relativePath);
     return {
       path: relativePath,
-      name: typeof parsed2.data.name === "string" ? parsed2.data.name : (0, import_node_path64.basename)(fileName, (0, import_node_path64.extname)(fileName)),
+      name: typeof parsed2.data.name === "string" ? parsed2.data.name : (0, import_node_path55.basename)(fileName, (0, import_node_path55.extname)(fileName)),
       description: typeof parsed2.data.description === "string" ? parsed2.data.description : void 0,
       argumentHint,
       content: parsed2.content.trim()
@@ -498,11 +498,11 @@ function createSafeFsPluginMcpFileReader(installPath) {
     if (!isPathSafe(relativePath)) {
       return null;
     }
-    const fullPath = (0, import_node_path64.join)(installPath, relativePath);
+    const fullPath = (0, import_node_path55.join)(installPath, relativePath);
     try {
       if (yield isSymlink2(fullPath))
         return null;
-      const fileStats = yield (0, import_promises34.stat)(fullPath);
+      const fileStats = yield (0, import_promises32.stat)(fullPath);
       if (!fileStats.isFile())
         return null;
       yield checkFileSize(fullPath);
@@ -518,7 +518,7 @@ function readPluginMcpConfigSimple(installPath, sourceInfo, explicitMcpOptions) 
     return resolvePluginMcpConfigWithManifestLookup(createSafeFsPluginMcpFileReader(installPath), {
       fallbackFileNames: resolvePluginMcpConfigPaths(),
       manifestPrecedence: "override",
-      toSourcePath: (relativePath) => (0, import_node_path64.join)(installPath, relativePath),
+      toSourcePath: (relativePath) => (0, import_node_path55.join)(installPath, relativePath),
       installPathForExpansion: installPath,
       parserOptions: mcpOptions
     });
@@ -558,14 +558,14 @@ function loadPluginHooksInternal(installPath, pluginDisplayName, manifestHooks, 
       if (!isPathSafe(resolved)) {
         return void 0;
       }
-      hooksPath = resolved.endsWith(".json") ? (0, import_node_path64.join)(installPath, resolved) : (0, import_node_path64.join)(installPath, resolved, "hooks.json");
+      hooksPath = resolved.endsWith(".json") ? (0, import_node_path55.join)(installPath, resolved) : (0, import_node_path55.join)(installPath, resolved, "hooks.json");
     } else {
-      hooksPath = (0, import_node_path64.join)(installPath, "hooks", "hooks.json");
+      hooksPath = (0, import_node_path55.join)(installPath, "hooks", "hooks.json");
     }
     try {
       if (yield isSymlink2(hooksPath))
         return void 0;
-      const st2 = yield (0, import_promises34.stat)(hooksPath);
+      const st2 = yield (0, import_promises32.stat)(hooksPath);
       if (!st2.isFile())
         return void 0;
     } catch (_a19) {
@@ -574,7 +574,7 @@ function loadPluginHooksInternal(installPath, pluginDisplayName, manifestHooks, 
     let raw;
     try {
       yield checkFileSize(hooksPath);
-      raw = yield (0, import_promises34.readFile)(hooksPath, "utf-8");
+      raw = yield (0, import_promises32.readFile)(hooksPath, "utf-8");
     } catch (_b2) {
       return void 0;
     }
@@ -791,7 +791,7 @@ function loadFromMarketplaceSource(options2) {
             gitRef: entry.version,
             marketplaceId: (_c2 = entry.marketplace) === null || _c2 === void 0 ? void 0 : _c2.id
           });
-          yield (0, import_promises34.mkdir)(targetDir, { recursive: true });
+          yield (0, import_promises32.mkdir)(targetDir, { recursive: true });
           try {
             yield client.installPlugin(entry, targetDir);
             yield cacheManager.markCacheComplete({
@@ -801,7 +801,7 @@ function loadFromMarketplaceSource(options2) {
             });
           } catch (err) {
             try {
-              yield (0, import_promises34.rm)(targetDir, { recursive: true, force: true });
+              yield (0, import_promises32.rm)(targetDir, { recursive: true, force: true });
             } catch (_j) {
             }
             throw err;

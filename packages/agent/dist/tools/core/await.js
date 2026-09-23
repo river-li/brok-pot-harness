@@ -358,12 +358,12 @@ function findTranscriptInTree(root, targetFileName) {
   }
   return void 0;
 }
-function isTimeoutLikeError(errorMessage6) {
-  const message = errorMessage6.toLowerCase();
+function isTimeoutLikeError(errorMessage7) {
+  const message = errorMessage7.toLowerCase();
   return message.includes("timed out") || message.includes("timeout") || message.includes("aborted by the user") || message.includes("aborted");
 }
-function isNoRunningBackgroundSubagentError(errorMessage6) {
-  const message = errorMessage6.toLowerCase();
+function isNoRunningBackgroundSubagentError(errorMessage7) {
+  const message = errorMessage7.toLowerCase();
   return message.includes("no running background subagent found") || message.includes("no background subagent found for id");
 }
 var snapshotReadSequence = 0;
@@ -689,8 +689,8 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
               }
               case "error": {
                 const subagentError = legacyResult.result.value;
-                const errorMessage6 = subagentError.error || "";
-                if (isTimeoutLikeError(errorMessage6)) {
+                const errorMessage7 = subagentError.error || "";
+                if (isTimeoutLikeError(errorMessage7)) {
                   return new SubagentAwaitResult({
                     result: {
                       case: "stillRunning",
@@ -701,7 +701,7 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
                     }
                   });
                 }
-                if (isNoRunningBackgroundSubagentError(errorMessage6)) {
+                if (isNoRunningBackgroundSubagentError(errorMessage7)) {
                   return new SubagentAwaitResult({
                     result: {
                       case: "notFound",
@@ -716,7 +716,7 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
                     case: "error",
                     value: new SubagentAwaitError({
                       agentId: subagentError.agentId || taskId,
-                      error: errorMessage6
+                      error: errorMessage7
                     })
                   }
                 });
@@ -840,11 +840,11 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
               throw new Error("Subagent not found");
             }
             case "error": {
-              const errorMessage6 = subagentAwaitResult.result.value.error || "";
-              if (isTimeoutLikeError(errorMessage6) || isNoRunningBackgroundSubagentError(errorMessage6)) {
+              const errorMessage7 = subagentAwaitResult.result.value.error || "";
+              if (isTimeoutLikeError(errorMessage7) || isNoRunningBackgroundSubagentError(errorMessage7)) {
                 throwIfAborted(toolCtx);
               }
-              throw new Error(errorMessage6 || "Failed to await subagent task");
+              throw new Error(errorMessage7 || "Failed to await subagent task");
             }
             case void 0:
               throw new Error("Unknown subagent await result");
@@ -995,29 +995,29 @@ var createAwaitTool = (resourceAccessor, options2, promptVersion) => {
         }
         const regexLine = formatRegexLine(value);
         const shellExitCode = isShellTaskId(value.taskId) ? value.exitCode : void 0;
-        let firstLine;
+        let firstLine2;
         if (isShellTaskId(value.taskId)) {
           const runtimeMs = (value.runtimeMs ?? BigInt(0)).toString();
           const exitCodeText = shellExitCode !== void 0 ? String(shellExitCode) : "unknown";
-          firstLine = `Task completed in ${runtimeMs}ms with exit code: ${exitCodeText}.`;
+          firstLine2 = `Task completed in ${runtimeMs}ms with exit code: ${exitCodeText}.`;
         } else {
-          firstLine = "Task complete.";
+          firstLine2 = "Task complete.";
         }
         if (regexLine.length > 0) {
-          firstLine = `${firstLine} ${regexLine}`;
+          firstLine2 = `${firstLine2} ${regexLine}`;
         }
-        return createStringResult(`${firstLine}
+        return createStringResult(`${firstLine2}
 output_file_path: ${value.outputFilePath}
 output_length: ${value.outputLength.toString()}`);
       }
       case "stillRunning": {
         const value = normalizedResult.value;
         const regexLine = formatRegexLine(value);
-        let firstLine = isShellTaskId(value.taskId) ? `Task still running after ${(value.runtimeMs ?? BigInt(0)).toString()}ms...` : "Task still running.";
+        let firstLine2 = isShellTaskId(value.taskId) ? `Task still running after ${(value.runtimeMs ?? BigInt(0)).toString()}ms...` : "Task still running.";
         if (value.wakeReason === WAKE_REASON_CONTEXT_INJECTION) {
-          firstLine = `${firstLine} Wait released early: a new user message is arriving.`;
+          firstLine2 = `${firstLine2} Wait released early: a new user message is arriving.`;
         }
-        const firstLineWithRegex = regexLine.length > 0 ? `${firstLine} ${regexLine}` : firstLine;
+        const firstLineWithRegex = regexLine.length > 0 ? `${firstLine2} ${regexLine}` : firstLine2;
         return createStringResult(`${firstLineWithRegex}
 output_file_path: ${value.outputFilePath}
 output_length: ${value.outputLength.toString()}`);
@@ -1082,13 +1082,13 @@ output_length: ${value.outputLength.toString()}`);
     execute: withSafeParsedArgs(parsingParametersSchema, execute, createAwaitToolCall(new AwaitToolCall())),
     render: render2,
     serializeError: (error42) => {
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
       return createAwaitToolCall(new AwaitToolCall({
         result: new AwaitResult({
           result: {
             case: "error",
             value: new AwaitError({
-              error: errorMessage6
+              error: errorMessage7
             })
           }
         })

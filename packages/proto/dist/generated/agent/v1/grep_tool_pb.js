@@ -1,17 +1,17 @@
-var __protoPackage22, __protoMessage319, GrepToolCall;
+var __protoPackage23, __protoMessage319, GrepToolCall;
 var init_grep_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/grep_tool_pb.js"() {
     "use strict";
     init_esm();
     init_grep_exec_pb();
     init_compact();
-    __protoPackage22 = "agent.v1.";
+    __protoPackage23 = "agent.v1.";
     __protoMessage319 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage22;
+        return __protoPackage23;
       }
     };
     GrepToolCall = class _GrepToolCall extends __protoMessage319 {

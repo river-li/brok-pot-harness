@@ -1,4 +1,4 @@
-var import_node_path76 = require("node:path");
+var import_node_path67 = require("node:path");
 function normalizeFsPath(p2) {
   return p2.replace(/\\/g, "/");
 }
@@ -27,7 +27,7 @@ function buildPromptSortPrefixes(ctx) {
   const userDirs = getUserExtensibilitySkillRoots(ctx.userHomeDirectory, true).map((r) => r.dirPath);
   const workspaceDirs = [];
   for (const ws2 of ctx.workspacePaths) {
-    workspaceDirs.push((0, import_node_path76.join)(ws2, ".cursor", "rules"));
+    workspaceDirs.push((0, import_node_path67.join)(ws2, ".cursor", "rules"));
     for (const root of getProjectExtensibilitySkillRoots(ws2, true)) {
       workspaceDirs.push(root.dirPath);
     }

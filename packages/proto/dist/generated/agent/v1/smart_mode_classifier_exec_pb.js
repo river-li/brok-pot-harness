@@ -1,19 +1,19 @@
-var __protoPackage104, __protoMessage3100, SmartModeClassifierDecision, SmartModeClassifierConversationMessage, SmartModeClassifierArgs, SmartModeRiskTarget, SmartModeClassifierResult, SmartModeClassifierSuccess, SmartModeClassifierError;
+var __protoPackage105, __protoMessage3100, SmartModeClassifierDecision, SmartModeClassifierConversationMessage, SmartModeClassifierArgs, SmartModeRiskTarget, SmartModeClassifierResult, SmartModeClassifierSuccess, SmartModeClassifierError;
 var init_smart_mode_classifier_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/smart_mode_classifier_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage104 = "agent.v1.";
+    __protoPackage105 = "agent.v1.";
     __protoMessage3100 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage104;
+        return __protoPackage105;
       }
     };
-    SmartModeClassifierDecision = /* @__PURE__ */ enumType(proto3, __protoPackage104, "SmartModeClassifierDecision", [[0, "UNSPECIFIED"], [1, "ALLOW"], [2, "BLOCK"]], 1);
+    SmartModeClassifierDecision = /* @__PURE__ */ enumType(proto3, __protoPackage105, "SmartModeClassifierDecision", [[0, "UNSPECIFIED"], [1, "ALLOW"], [2, "BLOCK"]], 1);
     SmartModeClassifierConversationMessage = class _SmartModeClassifierConversationMessage extends __protoMessage3100 {
       constructor(data) {
         super();

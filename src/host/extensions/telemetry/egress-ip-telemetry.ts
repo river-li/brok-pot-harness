@@ -1,4 +1,4 @@
-var import_node_crypto68 = require("node:crypto");
+var import_node_crypto69 = require("node:crypto");
 init_errors();
 var EGRESS_IP_TRACE_URL = "https://one.one.one.one/cdn-cgi/trace";
 var EGRESS_IP_PROBE_INTERVAL_MS = 15 * 6e4;
@@ -13,7 +13,7 @@ function parseTraceIp(body) {
   return void 0;
 }
 function pseudonymizeEgressIp(ip) {
-  return (0, import_node_crypto68.createHash)("sha256").update(ip).digest("hex");
+  return (0, import_node_crypto69.createHash)("sha256").update(ip).digest("hex");
 }
 var EgressIpProbeError = class extends SandDomainError {
   constructor(code) {

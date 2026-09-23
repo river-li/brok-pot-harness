@@ -1,9 +1,9 @@
-var import_node_fs57 = require("node:fs");
+var import_node_fs59 = require("node:fs");
 init_dist4();
 init_system_errno();
 async function statIsFile(boxPath) {
   try {
-    return (await import_node_fs57.promises.stat(boxPath)).isFile();
+    return (await import_node_fs59.promises.stat(boxPath)).isFile();
   } catch (error42) {
     if (findSystemErrno(error42) === "ENOENT" || findSystemErrno(error42) === "ENOTDIR") {
       return false;

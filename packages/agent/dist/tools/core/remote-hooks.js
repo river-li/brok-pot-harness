@@ -244,7 +244,7 @@ async function executeRemoteSubagentStartHook(args) {
   }
 }
 async function executeRemoteSubagentStopHook(args) {
-  const { ctx, subagentId, subagentType, status, durationMs: subagentDurationMs, summary, parentConversationId: providedParentConversationId, messageCount, toolCallCount: toolCallCount2, errorMessage: errorMessage6, modifiedFiles, gitBranch, loopCount, task, description: description9, requestContext, options: options2 } = args;
+  const { ctx, subagentId, subagentType, status, durationMs: subagentDurationMs, summary, parentConversationId: providedParentConversationId, messageCount, toolCallCount: toolCallCount2, errorMessage: errorMessage7, modifiedFiles, gitBranch, loopCount, task, description: description9, requestContext, options: options2 } = args;
   const remoteHookExecutor = getRemoteHookExecutor(options2, "subagentStop");
   if (!remoteHookExecutor) {
     return {};
@@ -272,7 +272,7 @@ async function executeRemoteSubagentStopHook(args) {
             parentConversationId,
             messageCount,
             toolCallCount: toolCallCount2,
-            errorMessage: errorMessage6,
+            errorMessage: errorMessage7,
             modifiedFiles,
             gitBranch,
             conversationId,
@@ -554,7 +554,7 @@ async function executeRemotePostToolUseHook(args) {
   return [];
 }
 async function executeRemotePostToolUseFailureHook(args) {
-  const { ctx, toolName, toolInput, errorMessage: errorMessage6, failureType, durationMs: toolDurationMs, isInterrupt = false, requestContext, options: options2 } = args;
+  const { ctx, toolName, toolInput, errorMessage: errorMessage7, failureType, durationMs: toolDurationMs, isInterrupt = false, requestContext, options: options2 } = args;
   const remoteHookExecutor = getRemoteHookExecutor(options2, "postToolUseFailure");
   if (!remoteHookExecutor) {
     return [];
@@ -573,7 +573,7 @@ async function executeRemotePostToolUseFailureHook(args) {
         value: new PostToolUseFailureRequestQuery({
           toolName,
           toolInput: Struct.fromJson(sanitizeToolInputForStruct(toolInput)),
-          errorMessage: errorMessage6,
+          errorMessage: errorMessage7,
           failureType,
           durationMs: BigInt(Math.round(toolDurationMs)),
           toolUseId: requestContext.toolCallId,

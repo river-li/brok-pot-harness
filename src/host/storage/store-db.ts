@@ -40,11 +40,11 @@ function hasLiveSandAgentDbHandle(dbPath) {
   return liveDbHandleCount((0, import_node_path13.resolve)(dbPath)) > 0;
 }
 function walFramesFullyFolded(row) {
-  const log4 = typeof row?.log === "number" ? row.log : void 0;
+  const log5 = typeof row?.log === "number" ? row.log : void 0;
   const checkpointed = typeof row?.checkpointed === "number" ? row.checkpointed : void 0;
-  if (log4 === void 0 || checkpointed === void 0) return void 0;
-  if (log4 < 0 || checkpointed < 0) return void 0;
-  return checkpointed >= log4;
+  if (log5 === void 0 || checkpointed === void 0) return void 0;
+  if (log5 < 0 || checkpointed < 0) return void 0;
+  return checkpointed >= log5;
 }
 function checkpointSandAgentDb(dbPath, busyTimeoutMs = DB_BUSY_TIMEOUT_MS) {
   if (!(0, import_node_fs13.existsSync)(dbPath)) return true;

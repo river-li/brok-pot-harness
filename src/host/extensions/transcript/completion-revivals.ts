@@ -215,7 +215,7 @@ var CompletionRevivals = class {
         try {
           const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(session);
           const runResult = await runner.run(
-            buildSubagentRevivalPrompt(completions, {
+            buildSubagentRevival(completions, {
               canvasCursorAgentIds: runner.canvasCursorAgentIds
             }),
             {

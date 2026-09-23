@@ -1,4 +1,4 @@
-var import_node_net3 = require("node:net");
+var import_node_net = require("node:net");
 var COMMON_PUBLIC_GTLDS = /* @__PURE__ */ new Set([
   "app",
   "biz",
@@ -311,9 +311,9 @@ var MAX_BUCKET_LENGTH = 100;
 function mint(bucket) {
   return bucket;
 }
-function boundedSiteBucket(hostname2) {
-  const host = hostname2.toLowerCase().replace(/\.$/, "");
-  if (host.startsWith("[") || (0, import_node_net3.isIP)(host) !== 0) return mint("ip");
+function boundedSiteBucket(hostname3) {
+  const host = hostname3.toLowerCase().replace(/\.$/, "");
+  if (host.startsWith("[") || (0, import_node_net.isIP)(host) !== 0) return mint("ip");
   if (host === "localhost" || host.endsWith(".localhost")) return mint("local");
   const labels = host.split(".");
   if (labels.length < 2) return mint("private");
@@ -326,23 +326,78 @@ function boundedSiteBucket(hostname2) {
   const bucket = labels.slice(-registrableLabels).join(".");
   return bucket.length > MAX_BUCKET_LENGTH ? mint("private") : mint(bucket);
 }
+var SITE_SECTIONS_BY_BUCKET = /* @__PURE__ */ new Map([
+  ["airbnb.com", { rest: "airbnb" }],
+  ["bestbuy.com", { rest: "bestbuy" }],
+  ["costco.com", { rest: "costco" }],
+  ["craigslist.org", { rest: "craigslist" }],
+  ["doordash.com", { rest: "doordash" }],
+  ["ebay.com", { rest: "ebay" }],
+  ["etsy.com", { rest: "etsy" }],
+  ["expedia.com", { rest: "expedia" }],
+  [
+    "facebook.com",
+    {
+      rules: [{ kind: "path", prefix: "/marketplace", section: "facebook_marketplace" }],
+      rest: "facebook"
+    }
+  ],
+  ["fedex.com", { rest: "fedex" }],
+  [
+    "google.com",
+    {
+      rules: [
+        { kind: "path", prefix: "/travel/flights", section: "google_flights" },
+        { kind: "subdomain", label: "flights", section: "google_flights" },
+        { kind: "path", prefix: "/maps", section: "google_maps" },
+        { kind: "subdomain", label: "maps", section: "google_maps" }
+      ],
+      rest: "google_search"
+    }
+  ],
+  ["instacart.com", { rest: "instacart" }],
+  ["irs.gov", { rest: "irs" }],
+  ["linkedin.com", { rest: "linkedin" }],
+  ["luma.com", { rest: "luma" }],
+  ["realtor.com", { rest: "realtor" }],
+  ["resy.com", { rest: "resy" }],
+  ["southwest.com", { rest: "southwest" }],
+  ["target.com", { rest: "target" }],
+  ["united.com", { rest: "united" }],
+  ["ups.com", { rest: "ups" }],
+  ["usps.com", { rest: "usps" }],
+  ["yelp.com", { rest: "yelp" }]
+]);
+function siteSectionForUrl(url2) {
+  const bucket = boundedSiteBucket(url2.hostname);
+  const sections = SITE_SECTIONS_BY_BUCKET.get(bucket);
+  if (sections === void 0) return "other";
+  const host = url2.hostname.toLowerCase().replace(/\.$/, "");
+  for (const rule of sections.rules ?? []) {
+    const matches = rule.kind === "path" ? url2.pathname === rule.prefix || url2.pathname.startsWith(`${rule.prefix}/`) : host === `${rule.label}.${bucket}`;
+    if (matches) return rule.section;
+  }
+  return sections.rest;
+}
 function visitedSiteBucket(rawUrl) {
   if (!URL.canParse(rawUrl)) return void 0;
-  const hostname2 = new URL(rawUrl).hostname;
-  return hostname2.length === 0 ? void 0 : boundedSiteBucket(hostname2);
+  const hostname3 = new URL(rawUrl).hostname;
+  return hostname3.length === 0 ? void 0 : boundedSiteBucket(hostname3);
 }
 function withSiteVisitTracking(auditor, onVisit, lookupSigned = () => void 0, lookupWallEpisode = () => void 0) {
   return {
     record: (record2) => {
       auditor.record(record2);
       if (record2.action.kind !== "browserNavigation") return;
-      const siteBucket = visitedSiteBucket(record2.action.url);
-      if (siteBucket === void 0) return;
-      const signed = lookupSigned(new URL(record2.action.url).origin);
+      if (!URL.canParse(record2.action.url)) return;
+      const url2 = new URL(record2.action.url);
+      if (url2.hostname.length === 0) return;
+      const signed = lookupSigned(url2.origin);
       const wallEpisodeId = lookupWallEpisode(record2);
       onVisit(
         {
-          siteBucket,
+          siteBucket: boundedSiteBucket(url2.hostname),
+          siteSection: siteSectionForUrl(url2),
           ...signed === void 0 ? {} : { webBotAuthSigned: signed },
           ...wallEpisodeId === void 0 ? {} : { wallEpisodeId }
         },

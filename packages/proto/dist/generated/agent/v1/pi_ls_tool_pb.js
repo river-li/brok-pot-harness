@@ -1,17 +1,17 @@
-var __protoPackage80, __protoMessage377, PiLsToolCall, PiLsToolArgs, PiLsToolResult, PiLsToolSuccess, PiLsToolError;
+var __protoPackage81, __protoMessage377, PiLsToolCall, PiLsToolArgs, PiLsToolResult, PiLsToolSuccess, PiLsToolError;
 var init_pi_ls_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_ls_tool_pb.js"() {
     "use strict";
     init_esm();
     init_pi_common_pb();
     init_compact();
-    __protoPackage80 = "agent.v1.";
+    __protoPackage81 = "agent.v1.";
     __protoMessage377 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage80;
+        return __protoPackage81;
       }
     };
     PiLsToolCall = class _PiLsToolCall extends __protoMessage377 {

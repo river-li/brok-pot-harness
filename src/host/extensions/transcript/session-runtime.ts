@@ -1,4 +1,4 @@
-var import_node_path156 = require("node:path");
+var import_node_path157 = require("node:path");
 init_dist3();
 init_errors();
 function readActivationGap(db, shippedThroughId) {
@@ -69,7 +69,7 @@ var SessionRuntime = class {
   }
   getActiveAgentDir() {
     const session = this.activeSession;
-    return session == null ? void 0 : (0, import_node_path156.dirname)(session.dbPath);
+    return session == null ? void 0 : (0, import_node_path157.dirname)(session.dbPath);
   }
   async ensureLoaded() {
     const session = await this.restoreSession();
@@ -187,9 +187,9 @@ var SessionRuntime = class {
     this.invalidateDeferredActivation();
     this.pendingActivationAgentId = agentId;
     if (previousAgentId === agentId) return Promise.resolve();
-    const at2 = Date.now();
-    this.markSessionLeftBehind(this.activeSession, at2);
-    this.tm.sessionStore.markAgentViewed(agentId, at2);
+    const at3 = Date.now();
+    this.markSessionLeftBehind(this.activeSession, at3);
+    this.tm.sessionStore.markAgentViewed(agentId, at3);
     return this.announceActivation({ agentId, previousAgentId });
   }
   announcedAgentId() {
@@ -246,9 +246,9 @@ var SessionRuntime = class {
     void this.tm.runLifecycle.retireSession(live);
     return void 0;
   }
-  markSessionLeftBehind(current, at2) {
+  markSessionLeftBehind(current, at3) {
     if (current == null || !this.isWindowFocused) return;
-    this.tm.sessionStore.markSessionViewedNow(current, at2, { preserveManualUnread: true });
+    this.tm.sessionStore.markSessionViewedNow(current, at3, { preserveManualUnread: true });
   }
   announceActivation(roles) {
     const flushed = this.tm.roster.emitAgentUpdate(roles.agentId);

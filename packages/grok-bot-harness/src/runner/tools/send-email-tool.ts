@@ -148,6 +148,20 @@ function describeSuppressed(suppressed) {
   return ` Not sent to ${listed}; tell the user. Do not try these addresses again.`;
 }
 async function sendEmail(deps, args) {
+  let outcome;
+  try {
+    outcome = await attemptEmailSend(deps, args);
+  } catch (error42) {
+    deps.reportDelivery?.failed(
+      error42,
+      error42 instanceof SandToolInputError ? "invalid_input" : errorClassOf(error42)
+    );
+    throw error42;
+  }
+  deps.reportDelivery?.settled(outcome.delivery);
+  return outcome.text;
+}
+async function attemptEmailSend(deps, args) {
   const input = normalizeSendEmailArgs(args);
   const attachmentPaths = resolveAttachmentPaths(input.attachments, deps.getAgentDir?.());
   if (attachmentPaths.length > 0 && deps.email.describeAttachments === void 0) {
@@ -156,7 +170,13 @@ async function sendEmail(deps, args) {
   const inboxes = await deps.email.listInboxes();
   if (!inboxes.some((inbox) => inbox.email.toLowerCase() === input.fromInboxEmail)) {
     const owned = inboxes.map((inbox) => inbox.email);
-    return owned.length === 0 ? "Nothing was sent: the user has no agent email addresses, so there is nothing to send from. Ask which local part they want and claim it with claim_email_inbox before sending. Do not invent a username or use a third-party inbox." : `Nothing was sent: ${input.fromInboxEmail} is not one of the user's agent email addresses. Send from one of: ${owned.join(", ")}.`;
+    return owned.length === 0 ? {
+      text: "Nothing was sent: the user has no agent email addresses, so there is nothing to send from. Ask which local part they want and claim it with claim_email_inbox before sending. Do not invent a username or use a third-party inbox.",
+      delivery: { result: "failed", failureCategory: "no_inbox" }
+    } : {
+      text: `Nothing was sent: ${input.fromInboxEmail} is not one of the user's agent email addresses. Send from one of: ${owned.join(", ")}.`,
+      delivery: { result: "failed", failureCategory: "sender_not_owned" }
+    };
   }
   const described = attachmentPaths.length === 0 || deps.email.describeAttachments === void 0 ? [] : await deps.email.describeAttachments(attachmentPaths);
   if (deps.reviewSend !== void 0) {
@@ -183,7 +203,10 @@ async function sendEmail(deps, args) {
       ...deps.signal === void 0 ? {} : { signal: deps.signal }
     });
     if (!decision.allowed) {
-      return `The email was not approved: ${decision.reason} Nothing was sent. Do not retry the same send unless the user asks for it.`;
+      return {
+        text: `The email was not approved: ${decision.reason} Nothing was sent. Do not retry the same send unless the user asks for it.`,
+        delivery: { result: "failed", failureCategory: "not_approved" }
+      };
     }
   }
   const result = await deps.email.send({
@@ -208,7 +231,10 @@ async function sendEmail(deps, args) {
   const replyToNote = input.replyTo.length === 0 ? "" : ` Reply-To ${input.replyTo.map(
     (address) => address.name.length === 0 ? address.email : `${address.name} <${address.email}>`
   ).join(", ")}.`;
-  return `Sent from ${fromMailbox} ${describeRecipients(input.to, input.cc, input.bcc)}.${replyToNote}${describeAttachments(described)}${describeSuppressed(result.suppressedRecipients)} Message id ${result.messageId} (thread ${result.threadId}); pass it as replyToMessageId to continue this conversation.`;
+  return {
+    text: `Sent from ${fromMailbox} ${describeRecipients(input.to, input.cc, input.bcc)}.${replyToNote}${describeAttachments(described)}${describeSuppressed(result.suppressedRecipients)} Message id ${result.messageId} (thread ${result.threadId}); pass it as replyToMessageId to continue this conversation.`,
+    delivery: { result: "sent" }
+  };
 }
 function createSendEmailTool(deps) {
   return defineCommunicateTool(deps, {
@@ -219,6 +245,15 @@ function createSendEmailTool(deps) {
     describeActivity: (args) => ({
       detail: `email to ${args.to.join(", ")}${args.attachments === void 0 || args.attachments.length === 0 ? "" : ` with ${args.attachments.length} attachment${args.attachments.length === 1 ? "" : "s"}`}`
     }),
-    execute: async (ctx, args, d) => sendEmail({ ...d, signal: ctx.signal }, args)
+    execute: async (ctx, args, { recordDelivery, ...d }) => sendEmail(
+      {
+        ...d,
+        signal: ctx.signal,
+        reportDelivery: bindMessageDeliveryReport(recordDelivery, ctx, d.toolCallId, {
+          destinationType: "email"
+        })
+      },
+      args
+    )
   });
 }

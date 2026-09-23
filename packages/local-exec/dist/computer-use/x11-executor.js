@@ -92,8 +92,8 @@ var X11Executor = class {
    * Set the InputEventLogger to use for recording.
    * Pass undefined to disable event logging.
    */
-  setInputEventLogger(logger108) {
-    this.inputEventLogger = logger108;
+  setInputEventLogger(logger110) {
+    this.inputEventLogger = logger110;
   }
   /**
    * Get the current InputEventLogger (if any).

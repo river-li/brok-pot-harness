@@ -436,7 +436,7 @@ var BackgroundTaskCompletionActionHandler = class extends AbstractUserMessageAct
       const completionMessage = isLast ? `${body}
 ${acknowledgementQuery}` : body;
       const systemReminder = isLast && batchSystemReminder !== void 0 && batchSystemReminder !== "" ? batchSystemReminder : void 0;
-      const messageId = (0, import_node_crypto33.randomUUID)();
+      const messageId = (0, import_node_crypto32.randomUUID)();
       const incomingMessageIdTag = sendMessageEnabled ? renderIncomingMessageIdTag(messageId) : void 0;
       return {
         completionMessage,

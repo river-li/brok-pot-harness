@@ -1,6 +1,6 @@
-var import_promises31 = require("node:fs/promises");
-var import_node_os13 = require("node:os");
-var import_node_path59 = require("node:path");
+var import_promises29 = require("node:fs/promises");
+var import_node_os12 = require("node:os");
+var import_node_path50 = require("node:path");
 init_dist3();
 var __awaiter56 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -30,7 +30,7 @@ var __awaiter56 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function currentOperatingSystemName() {
-  const currentPlatform = (0, import_node_os13.platform)();
+  const currentPlatform = (0, import_node_os12.platform)();
   if (currentPlatform === "win32") {
     return "Windows";
   }
@@ -50,11 +50,11 @@ function synthesizeInlinePluginDir(options2) {
     var _a19, _b2;
     const { targetDir, inlineContentJson, pluginName } = options2;
     const content = JSON.parse(inlineContentJson);
-    yield (0, import_promises31.mkdir)(targetDir, { recursive: true });
+    yield (0, import_promises29.mkdir)(targetDir, { recursive: true });
     const manifestPaths = {};
     if (content.rules && content.rules.length > 0) {
-      const rulesDir = (0, import_node_path59.join)(targetDir, "rules");
-      yield (0, import_promises31.mkdir)(rulesDir, { recursive: true });
+      const rulesDir = (0, import_node_path50.join)(targetDir, "rules");
+      yield (0, import_promises29.mkdir)(rulesDir, { recursive: true });
       const rulePaths = [];
       for (const rule of content.rules) {
         if (!rule.content)
@@ -73,7 +73,7 @@ ${frontmatterLines.join("\n")}
 ---
 
 `;
-        yield (0, import_promises31.writeFile)((0, import_node_path59.join)(rulesDir, fileName), header + rule.content, "utf-8");
+        yield (0, import_promises29.writeFile)((0, import_node_path50.join)(rulesDir, fileName), header + rule.content, "utf-8");
         rulePaths.push(`rules/${fileName}`);
       }
       if (rulePaths.length > 0) {
@@ -81,8 +81,8 @@ ${frontmatterLines.join("\n")}
       }
     }
     if (content.commands && content.commands.length > 0) {
-      const commandsDir = (0, import_node_path59.join)(targetDir, "commands");
-      yield (0, import_promises31.mkdir)(commandsDir, { recursive: true });
+      const commandsDir = (0, import_node_path50.join)(targetDir, "commands");
+      yield (0, import_promises29.mkdir)(commandsDir, { recursive: true });
       const commandPaths = [];
       for (const cmd of content.commands) {
         if (!cmd.content)
@@ -95,7 +95,7 @@ description: ${yamlQuote(cmd.description)}
 ---
 
 ` : "";
-        yield (0, import_promises31.writeFile)((0, import_node_path59.join)(commandsDir, fileName), header + cmd.content, "utf-8");
+        yield (0, import_promises29.writeFile)((0, import_node_path50.join)(commandsDir, fileName), header + cmd.content, "utf-8");
         commandPaths.push(`commands/${fileName}`);
       }
       if (commandPaths.length > 0) {
@@ -103,8 +103,8 @@ description: ${yamlQuote(cmd.description)}
       }
     }
     if (content.hooks && content.hooks.length > 0) {
-      const hooksDir = (0, import_node_path59.join)(targetDir, "hooks");
-      yield (0, import_promises31.mkdir)(hooksDir, { recursive: true });
+      const hooksDir = (0, import_node_path50.join)(targetDir, "hooks");
+      yield (0, import_promises29.mkdir)(hooksDir, { recursive: true });
       const hooksConfig = {};
       for (const hook of content.hooks) {
         const step = hook.hookStep;
@@ -126,7 +126,7 @@ description: ${yamlQuote(cmd.description)}
           });
         }
       }
-      yield (0, import_promises31.writeFile)((0, import_node_path59.join)(hooksDir, "hooks.json"), JSON.stringify({ version: 1, hooks: hooksConfig }, null, 2), "utf-8");
+      yield (0, import_promises29.writeFile)((0, import_node_path50.join)(hooksDir, "hooks.json"), JSON.stringify({ version: 1, hooks: hooksConfig }, null, 2), "utf-8");
     }
     if (content.mcpServers && content.mcpServers.length > 0) {
       const mcpConfig = {};
@@ -136,13 +136,13 @@ description: ${yamlQuote(cmd.description)}
         }
       }
       if (Object.keys(mcpConfig).length > 0) {
-        yield (0, import_promises31.writeFile)((0, import_node_path59.join)(targetDir, ".mcp.json"), JSON.stringify({ mcpServers: mcpConfig }, null, 2), "utf-8");
+        yield (0, import_promises29.writeFile)((0, import_node_path50.join)(targetDir, ".mcp.json"), JSON.stringify({ mcpServers: mcpConfig }, null, 2), "utf-8");
       }
     }
     const manifest = Object.assign({ name: pluginName }, manifestPaths);
-    const pluginJsonDir = (0, import_node_path59.join)(targetDir, ".cursor-plugin");
-    yield (0, import_promises31.mkdir)(pluginJsonDir, { recursive: true });
-    yield (0, import_promises31.writeFile)((0, import_node_path59.join)(pluginJsonDir, "plugin.json"), JSON.stringify(manifest, null, 2), "utf-8");
+    const pluginJsonDir = (0, import_node_path50.join)(targetDir, ".cursor-plugin");
+    yield (0, import_promises29.mkdir)(pluginJsonDir, { recursive: true });
+    yield (0, import_promises29.writeFile)((0, import_node_path50.join)(pluginJsonDir, "plugin.json"), JSON.stringify(manifest, null, 2), "utf-8");
   });
 }
 function yamlQuote(value) {

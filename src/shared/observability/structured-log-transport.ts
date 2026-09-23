@@ -315,7 +315,7 @@ var StructuredLogTransport = class {
     this.buffer = [...remaining];
     this.activeBatch = batch;
     const logs = batch.map(
-      (log4) => this.buildLogEntry(log4.level, log4.message, log4.metadata, log4.timestamp)
+      (log5) => this.buildLogEntry(log5.level, log5.message, log5.metadata, log5.timestamp)
     );
     const result = await this.shipLogs(logs);
     if (generation !== this.deliveryGeneration) {
@@ -340,10 +340,10 @@ var StructuredLogTransport = class {
   expireBufferedLogs() {
     const nowMs2 = Date.now();
     const expired = this.buffer.filter(
-      (log4) => nowMs2 - log4.timestamp > STRUCTURED_LOG_REPLAY_MAX_AGE_MS
+      (log5) => nowMs2 - log5.timestamp > STRUCTURED_LOG_REPLAY_MAX_AGE_MS
     );
     const fresh = this.buffer.filter(
-      (log4) => nowMs2 - log4.timestamp <= STRUCTURED_LOG_REPLAY_MAX_AGE_MS
+      (log5) => nowMs2 - log5.timestamp <= STRUCTURED_LOG_REPLAY_MAX_AGE_MS
     );
     this.recordDrop("replay_expired", expired.length);
     this.settle(expired, "dropped");
@@ -425,8 +425,8 @@ var StructuredLogTransport = class {
     this.settle(evicted, "dropped");
   }
   settle(logs, settlement) {
-    for (const log4 of logs) {
-      log4.onSettled?.(settlement);
+    for (const log5 of logs) {
+      log5.onSettled?.(settlement);
     }
   }
   buildLogEntry(level, message, metadata, timestampMs2) {

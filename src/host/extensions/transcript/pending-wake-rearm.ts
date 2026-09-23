@@ -21,7 +21,8 @@ var PendingWakeRearm = class {
         ...event.labelKind != null && event.labelParams != null ? { labelKind: event.labelKind, labelParams: event.labelParams } : {},
         ...event.subagentType != null ? { subagentType: event.subagentType } : {},
         ...event.automationRunUuid != null ? { automationRunUuid: event.automationRunUuid } : {},
-        ...event.hiddenCard === true ? { hiddenCard: true } : {}
+        ...event.hiddenCard === true ? { hiddenCard: true } : {},
+        ...event.startedBy != null ? { startedBy: event.startedBy } : {}
       })
     );
     this.tm.telemetry.reportPendingWake({
@@ -177,7 +178,8 @@ var PendingWakeRearm = class {
         title: marker17.title ?? `Cloud agent ${marker17.workId}`,
         ...marker17.labelKind != null && marker17.labelParams != null ? { labelKind: marker17.labelKind, labelParams: marker17.labelParams } : {},
         ...marker17.quietOrigin != null ? { quietOrigin: marker17.quietOrigin } : {},
-        ...hiddenCard
+        ...hiddenCard,
+        ...marker17.startedBy != null ? { startedBy: marker17.startedBy } : {}
       });
       report("rearmed");
       return;
@@ -185,7 +187,8 @@ var PendingWakeRearm = class {
     runner.watchCloudAgent(marker17.workId, {
       afterFollowup: false,
       ...marker17.quietOrigin != null ? { quietOrigin: marker17.quietOrigin } : {},
-      ...hiddenCard
+      ...hiddenCard,
+      ...marker17.startedBy != null ? { startedBy: marker17.startedBy } : {}
     });
     if (runner.getPendingCloudAgentWatchBcIds().includes(marker17.workId)) {
       report("rearmed");

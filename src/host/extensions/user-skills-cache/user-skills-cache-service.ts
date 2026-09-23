@@ -42,16 +42,16 @@ function createUserSkillsCacheService(deps) {
     void publishSnapshot();
   });
   const publishAttempt = async (attempt, signal) => {
-    const fingerprint = await deps.fingerprintLibrary(deps.libraryDir);
-    if (fingerprint === lastFingerprint) return void 0;
+    const fingerprint2 = await deps.fingerprintLibrary(deps.libraryDir);
+    if (fingerprint2 === lastFingerprint) return void 0;
     await deps.publishDeadline.run(
-      (rpcSignal) => deps.publish({ fingerprint, signal: rpcSignal }),
+      (rpcSignal) => deps.publish({ fingerprint: fingerprint2, signal: rpcSignal }),
       signal
     );
     if (attempt > 1) {
       deps.log(`[sand:user-skills-cache] publish recovered on attempt ${attempt}`);
     }
-    return fingerprint;
+    return fingerprint2;
   };
   const publishes = createSingleFlight({
     read: () => deps.publishRetry.runWithRetry(
@@ -63,8 +63,8 @@ function createUserSkillsCacheService(deps) {
       }),
       stopped2.signal
     ),
-    install: (fingerprint) => {
-      if (fingerprint !== void 0) lastFingerprint = fingerprint;
+    install: (fingerprint2) => {
+      if (fingerprint2 !== void 0) lastFingerprint = fingerprint2;
     },
     installFailure: (error42) => {
       if (stopped2.signal.aborted) return;

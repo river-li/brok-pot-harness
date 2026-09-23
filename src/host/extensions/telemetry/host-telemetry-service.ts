@@ -308,7 +308,7 @@ var HostTelemetryService = class {
         heartbeatMs: DESKTOP_HEALTH_HEARTBEAT_MS,
         readRaw: async () => {
           try {
-            if (!(0, import_node_fs89.existsSync)(SAND_SUPERVISOR_DESKTOP_HEALTH_PATH)) return null;
+            if (!(0, import_node_fs91.existsSync)(SAND_SUPERVISOR_DESKTOP_HEALTH_PATH)) return null;
             return await (0, import_promises74.readFile)(SAND_SUPERVISOR_DESKTOP_HEALTH_PATH, "utf8");
           } catch (error42) {
             reportFallbackUnlessAbsent("host_telemetry_service", error42);
@@ -342,7 +342,7 @@ var HostTelemetryService = class {
       }
       forwarding = true;
       try {
-        this.logs.reportHostLog(level, (0, import_node_util14.format)(...args));
+        this.logs.reportHostLog(level, (0, import_node_util15.format)(...args));
       } catch {
       } finally {
         forwarding = false;

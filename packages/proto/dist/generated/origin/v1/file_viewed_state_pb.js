@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage168 = "origin.v1.";
-var __protoMessage3160 = class extends CompactMessage {
+var __protoPackage170 = "origin.v1.";
+var __protoMessage3162 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage168;
+    return __protoPackage170;
   }
 };
-var MarkFileAsViewedRequest = class _MarkFileAsViewedRequest extends __protoMessage3160 {
+var MarkFileAsViewedRequest = class _MarkFileAsViewedRequest extends __protoMessage3162 {
   constructor(data) {
     super();
     this.filePath = "";
@@ -33,7 +33,7 @@ var MarkFileAsViewedRequest = class _MarkFileAsViewedRequest extends __protoMess
     return ["MarkFileAsViewedRequest|1 change #0|2 file_path 9|3 version_id 9|4 head_commit_sha 9", ChangeIdentifier];
   }
 };
-var MarkFileAsViewedResponse = class _MarkFileAsViewedResponse extends __protoMessage3160 {
+var MarkFileAsViewedResponse = class _MarkFileAsViewedResponse extends __protoMessage3162 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -54,7 +54,7 @@ var MarkFileAsViewedResponse = class _MarkFileAsViewedResponse extends __protoMe
     return ["MarkFileAsViewedResponse"];
   }
 };
-var UnmarkFileAsViewedRequest = class _UnmarkFileAsViewedRequest extends __protoMessage3160 {
+var UnmarkFileAsViewedRequest = class _UnmarkFileAsViewedRequest extends __protoMessage3162 {
   constructor(data) {
     super();
     this.filePath = "";
@@ -76,7 +76,7 @@ var UnmarkFileAsViewedRequest = class _UnmarkFileAsViewedRequest extends __proto
     return ["UnmarkFileAsViewedRequest|1 change #0|2 file_path 9", ChangeIdentifier];
   }
 };
-var UnmarkFileAsViewedResponse = class _UnmarkFileAsViewedResponse extends __protoMessage3160 {
+var UnmarkFileAsViewedResponse = class _UnmarkFileAsViewedResponse extends __protoMessage3162 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -97,7 +97,7 @@ var UnmarkFileAsViewedResponse = class _UnmarkFileAsViewedResponse extends __pro
     return ["UnmarkFileAsViewedResponse"];
   }
 };
-var MarkDirectoryAsViewedRequest = class _MarkDirectoryAsViewedRequest extends __protoMessage3160 {
+var MarkDirectoryAsViewedRequest = class _MarkDirectoryAsViewedRequest extends __protoMessage3162 {
   constructor(data) {
     super();
     this.directoryPath = "";
@@ -121,7 +121,7 @@ var MarkDirectoryAsViewedRequest = class _MarkDirectoryAsViewedRequest extends _
     return ["MarkDirectoryAsViewedRequest|1 change #0|2 directory_path 9|3 file_paths 9*|4 version_id 9", ChangeIdentifier];
   }
 };
-var MarkDirectoryAsViewedResponse = class _MarkDirectoryAsViewedResponse extends __protoMessage3160 {
+var MarkDirectoryAsViewedResponse = class _MarkDirectoryAsViewedResponse extends __protoMessage3162 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -142,7 +142,7 @@ var MarkDirectoryAsViewedResponse = class _MarkDirectoryAsViewedResponse extends
     return ["MarkDirectoryAsViewedResponse"];
   }
 };
-var MarkAllFilesAsViewedRequest = class _MarkAllFilesAsViewedRequest extends __protoMessage3160 {
+var MarkAllFilesAsViewedRequest = class _MarkAllFilesAsViewedRequest extends __protoMessage3162 {
   constructor(data) {
     super();
     this.filePaths = [];
@@ -165,7 +165,7 @@ var MarkAllFilesAsViewedRequest = class _MarkAllFilesAsViewedRequest extends __p
     return ["MarkAllFilesAsViewedRequest|1 change #0|2 file_paths 9*|3 version_id 9", ChangeIdentifier];
   }
 };
-var MarkAllFilesAsViewedResponse = class _MarkAllFilesAsViewedResponse extends __protoMessage3160 {
+var MarkAllFilesAsViewedResponse = class _MarkAllFilesAsViewedResponse extends __protoMessage3162 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -186,7 +186,7 @@ var MarkAllFilesAsViewedResponse = class _MarkAllFilesAsViewedResponse extends _
     return ["MarkAllFilesAsViewedResponse"];
   }
 };
-var UnmarkAllFilesAsViewedRequest = class _UnmarkAllFilesAsViewedRequest extends __protoMessage3160 {
+var UnmarkAllFilesAsViewedRequest = class _UnmarkAllFilesAsViewedRequest extends __protoMessage3162 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -207,7 +207,7 @@ var UnmarkAllFilesAsViewedRequest = class _UnmarkAllFilesAsViewedRequest extends
     return ["UnmarkAllFilesAsViewedRequest|1 change #0", ChangeIdentifier];
   }
 };
-var UnmarkAllFilesAsViewedResponse = class _UnmarkAllFilesAsViewedResponse extends __protoMessage3160 {
+var UnmarkAllFilesAsViewedResponse = class _UnmarkAllFilesAsViewedResponse extends __protoMessage3162 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -228,7 +228,7 @@ var UnmarkAllFilesAsViewedResponse = class _UnmarkAllFilesAsViewedResponse exten
     return ["UnmarkAllFilesAsViewedResponse"];
   }
 };
-var ListFileViewedStatesRequest = class _ListFileViewedStatesRequest extends __protoMessage3160 {
+var ListFileViewedStatesRequest = class _ListFileViewedStatesRequest extends __protoMessage3162 {
   constructor(data) {
     super();
     this.headCommitSha = "";
@@ -250,7 +250,7 @@ var ListFileViewedStatesRequest = class _ListFileViewedStatesRequest extends __p
     return ["ListFileViewedStatesRequest|1 change #0|2 head_commit_sha 9", ChangeIdentifier];
   }
 };
-var ListFileViewedStatesResponse = class _ListFileViewedStatesResponse extends __protoMessage3160 {
+var ListFileViewedStatesResponse = class _ListFileViewedStatesResponse extends __protoMessage3162 {
   constructor(data) {
     super();
     this.fileViewedStates = [];
@@ -272,7 +272,7 @@ var ListFileViewedStatesResponse = class _ListFileViewedStatesResponse extends _
     return ["ListFileViewedStatesResponse|1 file_viewed_states #0*|2 head_version_id 9?", FileViewedState];
   }
 };
-var FileViewedState = class _FileViewedState extends __protoMessage3160 {
+var FileViewedState = class _FileViewedState extends __protoMessage3162 {
   constructor(data) {
     super();
     this.filePath = "";

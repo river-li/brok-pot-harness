@@ -1,16 +1,16 @@
-var __protoPackage65, __protoMessage362, SendFinalSummaryArgs, SendFinalSummarySuccess, SendFinalSummaryError, SendFinalSummaryResult, SendFinalSummaryToolCall;
+var __protoPackage66, __protoMessage362, SendFinalSummaryArgs, SendFinalSummarySuccess, SendFinalSummaryError, SendFinalSummaryResult, SendFinalSummaryToolCall;
 var init_send_final_summary_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/send_final_summary_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage65 = "agent.v1.";
+    __protoPackage66 = "agent.v1.";
     __protoMessage362 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage65;
+        return __protoPackage66;
       }
     };
     SendFinalSummaryArgs = class _SendFinalSummaryArgs extends __protoMessage362 {

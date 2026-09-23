@@ -127,7 +127,7 @@ async function ensurePlaywrightMcpInstalled(args) {
     attach("present", probe.boxImageSha);
     return { kind: "present", boxImageSha: probe.boxImageSha };
   }
-  const stageDir = `${STAGE_PARENT}/${(0, import_node_crypto54.randomUUID)()}`;
+  const stageDir = `${STAGE_PARENT}/${(0, import_node_crypto55.randomUUID)()}`;
   try {
     await box.uploadFile(
       ctx,

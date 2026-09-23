@@ -25,12 +25,12 @@ var __awaiter59 = function(thisArg, _arguments, P2, generator) {
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 };
-var MARKDOWN_EXTENSIONS2 = [".md", ".mdc", ".markdown"];
+var MARKDOWN_EXTENSIONS = [".md", ".mdc", ".markdown"];
 var COMMAND_EXTRA_EXTENSIONS = [".txt"];
-var COMMAND_EXTENSIONS = [...MARKDOWN_EXTENSIONS2, ...COMMAND_EXTRA_EXTENSIONS];
+var COMMAND_EXTENSIONS = [...MARKDOWN_EXTENSIONS, ...COMMAND_EXTRA_EXTENSIONS];
 var FRONTMATTER_REGEX = /^---\s*\n([\s\S]*?)\n---/;
-function toKebabCase(str3) {
-  return str3.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9.-]/g, "");
+function toKebabCase(str4) {
+  return str4.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9.-]/g, "");
 }
 function parseNameAndDescription(content) {
   var _a19, _b2;
@@ -79,7 +79,7 @@ function normalizeEnvironmentList(value) {
   return void 0;
 }
 function deriveNameFromPath(filePath) {
-  const fileName = (0, import_node_path63.basename)(filePath);
+  const fileName = (0, import_node_path54.basename)(filePath);
   const baseName = fileName.replace(/\.(md|mdc|markdown|txt)$/i, "");
   return toKebabCase(baseName);
 }
@@ -117,15 +117,15 @@ var PluginComponentDiscovery = class {
         // Root-level SKILL.md (only if no manifest.skills defined)
         hasRootSkillMd && (manifest === null || manifest === void 0 ? void 0 : manifest.skills) === void 0 ? this.discoverRootSkill(basePrefix) : Promise.resolve(null),
         // Skills: manifest paths or folder discovery
-        (manifest === null || manifest === void 0 ? void 0 : manifest.skills) !== void 0 ? this.discoverFromManifestPaths(basePrefix, manifest.skills, true, MARKDOWN_EXTENSIONS2) : folderNames.has("skills") ? this.discoverSkills(`${basePrefix}skills`) : Promise.resolve([]),
+        (manifest === null || manifest === void 0 ? void 0 : manifest.skills) !== void 0 ? this.discoverFromManifestPaths(basePrefix, manifest.skills, true, MARKDOWN_EXTENSIONS) : folderNames.has("skills") ? this.discoverSkills(`${basePrefix}skills`) : Promise.resolve([]),
         // Agents: manifest paths or folder discovery
-        (manifest === null || manifest === void 0 ? void 0 : manifest.agents) !== void 0 ? this.discoverFromManifestPaths(basePrefix, manifest.agents, false, MARKDOWN_EXTENSIONS2) : folderNames.has("agents") ? this.discoverMarkdownComponents(`${basePrefix}agents`, MARKDOWN_EXTENSIONS2) : Promise.resolve([]),
+        (manifest === null || manifest === void 0 ? void 0 : manifest.agents) !== void 0 ? this.discoverFromManifestPaths(basePrefix, manifest.agents, false, MARKDOWN_EXTENSIONS) : folderNames.has("agents") ? this.discoverMarkdownComponents(`${basePrefix}agents`, MARKDOWN_EXTENSIONS) : Promise.resolve([]),
         // Hooks: manifest or folder discovery
         (manifest === null || manifest === void 0 ? void 0 : manifest.hooks) !== void 0 ? this.discoverHooksFromManifest(basePrefix, manifest.hooks) : folderNames.has("hooks") ? this.discoverHooksFromJson(`${basePrefix}hooks/hooks.json`) : Promise.resolve([]),
         // Commands: manifest paths or folder discovery (also accepts .txt files)
         (manifest === null || manifest === void 0 ? void 0 : manifest.commands) !== void 0 ? this.discoverFromManifestPaths(basePrefix, manifest.commands, false, COMMAND_EXTENSIONS) : folderNames.has("commands") ? this.discoverMarkdownComponents(`${basePrefix}commands`, COMMAND_EXTENSIONS) : Promise.resolve([]),
         // Rules: manifest paths or folder discovery
-        (manifest === null || manifest === void 0 ? void 0 : manifest.rules) !== void 0 ? this.discoverFromManifestPaths(basePrefix, manifest.rules, false, MARKDOWN_EXTENSIONS2) : folderNames.has("rules") ? this.discoverMarkdownComponents(`${basePrefix}rules`, MARKDOWN_EXTENSIONS2) : Promise.resolve([]),
+        (manifest === null || manifest === void 0 ? void 0 : manifest.rules) !== void 0 ? this.discoverFromManifestPaths(basePrefix, manifest.rules, false, MARKDOWN_EXTENSIONS) : folderNames.has("rules") ? this.discoverMarkdownComponents(`${basePrefix}rules`, MARKDOWN_EXTENSIONS) : Promise.resolve([]),
         // MCP servers: default config files present in the plugin root plus the
         // manifest's declared `mcpServers` location, via the shared resolver.
         this.discoverMcpServers(basePrefix, manifest === null || manifest === void 0 ? void 0 : manifest.mcpServers, presentMcpConfigFiles)
@@ -202,7 +202,7 @@ var PluginComponentDiscovery = class {
    * - `extensions` controls which file extensions are accepted (defaults to MARKDOWN_EXTENSIONS)
    */
   discoverFromManifestPaths(basePrefix_1, paths_1) {
-    return __awaiter59(this, arguments, void 0, function* (basePrefix, paths, isSkillDir = false, extensions = MARKDOWN_EXTENSIONS2) {
+    return __awaiter59(this, arguments, void 0, function* (basePrefix, paths, isSkillDir = false, extensions = MARKDOWN_EXTENSIONS) {
       var _a19, _b2;
       if (typeof paths === "string") {
         if (!isPathSafe(paths)) {
@@ -275,7 +275,7 @@ var PluginComponentDiscovery = class {
     });
   }
   discoverMarkdownComponents(folderPath_1) {
-    return __awaiter59(this, arguments, void 0, function* (folderPath, extensions = MARKDOWN_EXTENSIONS2, visitedRealDirPaths = /* @__PURE__ */ new Set()) {
+    return __awaiter59(this, arguments, void 0, function* (folderPath, extensions = MARKDOWN_EXTENSIONS, visitedRealDirPaths = /* @__PURE__ */ new Set()) {
       let contents;
       try {
         contents = yield this.fetcher.listDirectory(folderPath, visitedRealDirPaths);
@@ -323,7 +323,7 @@ var PluginComponentDiscovery = class {
     return __awaiter59(this, void 0, void 0, function* () {
       try {
         const skillMdPath = `${basePrefix}SKILL.md`;
-        const dirName = (0, import_node_path63.basename)(basePrefix.replace(/[\\/]+$/, ""));
+        const dirName = (0, import_node_path54.basename)(basePrefix.replace(/[\\/]+$/, ""));
         let finalName = toKebabCase(dirName);
         const { content } = yield this.fetcher.fetchFile(skillMdPath);
         const parsed2 = parseNameAndDescription(content);

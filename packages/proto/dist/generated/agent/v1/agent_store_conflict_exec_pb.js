@@ -1,16 +1,16 @@
-var __protoPackage116, __protoMessage3112, AgentStoreConflictCursor, AgentStoreConflictArgs, AgentStoreConflictEvent, AgentStoreConflictResult, AgentStoreConflictSuccess, AgentStoreConflictError;
+var __protoPackage117, __protoMessage3112, AgentStoreConflictCursor, AgentStoreConflictArgs, AgentStoreConflictEvent, AgentStoreConflictResult, AgentStoreConflictSuccess, AgentStoreConflictError;
 var init_agent_store_conflict_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/agent_store_conflict_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage116 = "agent.v1.";
+    __protoPackage117 = "agent.v1.";
     __protoMessage3112 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage116;
+        return __protoPackage117;
       }
     };
     AgentStoreConflictCursor = class _AgentStoreConflictCursor extends __protoMessage3112 {

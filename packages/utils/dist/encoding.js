@@ -27,12 +27,12 @@ function readText(file, encodingHint) {
       encodingToUse = format2.encoding;
     }
     const { text: text2, encoding } = decodeBufferWithEncoding(buf, encodingToUse);
-    const str3 = stripUtf8Bom(text2);
+    const str4 = stripUtf8Bom(text2);
     setFileEncoding(file, encoding === UTF8_ENCODING && hasUtf8Bom(buf) ? UTF8_BOM_ENCODING : encoding);
     if (format2.lineEnding === LineEnding.CRLF) {
-      return str3.replaceAll("\r\n", "\n");
+      return str4.replaceAll("\r\n", "\n");
     }
-    return str3;
+    return str4;
   });
 }
 function getFormatForFile(file) {

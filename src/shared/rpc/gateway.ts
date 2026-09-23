@@ -220,6 +220,17 @@ var localToolPermissionResolution = payloadShape(
   "local tool permission resolution",
   isSandLocalToolPermissionResolution
 );
+function cardResolveArgs(resolution) {
+  return rpcObject({
+    entryId: rpcString(),
+    requestId: rpcString(),
+    resolution,
+    agentId: rpcString(),
+    sessionId: rpcOptional(rpcString())
+  });
+}
+var localToolPermissionArgs = cardResolveArgs(localToolPermissionResolution);
+var connectorGrantArgs = cardResolveArgs(oneOf("connector grant resolution", SAND_CONNECTOR_GRANT_RESOLUTIONS));
 var skillTrigger = rpcObject({
   schedule: rpcString(),
   isEnabled: rpcBoolean()
@@ -508,13 +519,8 @@ var gatewayRpcEdge = declareRpcEdge("gateway", {
       approvedCommand: rpcOptional(rpcString()),
       sessionId: rpcOptional(rpcString())
     }),
-    resolveLocalToolPermission: rpcMethod().args({
-      entryId: rpcString(),
-      requestId: rpcString(),
-      resolution: localToolPermissionResolution,
-      agentId: rpcString(),
-      sessionId: rpcOptional(rpcString())
-    }),
+    resolveLocalToolPermission: rpcMethod().args(localToolPermissionArgs),
+    resolveConnectorGrant: rpcMethod().args(connectorGrantArgs),
     resolveVirtualCardApproval: rpcMethod().args({
       entryId: rpcString(),
       requestId: rpcString(),
@@ -858,7 +864,8 @@ var gatewayRpcEdge = declareRpcEdge("gateway", {
     uploadAttachment: rpcMethod().args(uploadAttachmentArgs),
     uploadAttachmentChunk: rpcMethod().args(uploadAttachmentChunkArgs),
     readAttachmentImage: rpcMethod().args({
-      path: rpcString()
+      path: rpcString(),
+      rendition: rpcOptional(rpcUnion(rpcLiteral("preview"), rpcLiteral("original")))
     }),
     readAttachmentText: rpcMethod().args(readAttachmentTextArgs),
     readAttachmentChunk: rpcMethod().args(readAttachmentChunkArgs),

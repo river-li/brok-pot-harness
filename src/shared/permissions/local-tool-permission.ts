@@ -13,6 +13,7 @@ var SAND_LOCAL_TOOL_ACTIONS = [
   "read-file",
   "list-directory",
   "write-file",
+  "read-ai-tool-setup",
   "read-messages",
   "send-imessage"
 ];
@@ -22,6 +23,7 @@ var SAND_LOCAL_TOOL_STANDING = {
   "read-file": "global",
   "list-directory": "global",
   "write-file": "global",
+  "read-ai-tool-setup": "global",
   "read-messages": "setting",
   "send-imessage": "subject"
 };
@@ -49,7 +51,7 @@ var SAND_LOCAL_TOOL_PERMISSION_RANK = {
   ask: 1,
   always: 2
 };
-function resolveSandLocalToolPermission(choice, adminCeiling) {
-  if (adminCeiling === void 0) return choice;
-  return SAND_LOCAL_TOOL_PERMISSION_RANK[choice] <= SAND_LOCAL_TOOL_PERMISSION_RANK[adminCeiling] ? choice : adminCeiling;
+function resolveSandLocalToolPermission(choice2, adminCeiling) {
+  if (adminCeiling === void 0) return choice2;
+  return SAND_LOCAL_TOOL_PERMISSION_RANK[choice2] <= SAND_LOCAL_TOOL_PERMISSION_RANK[adminCeiling] ? choice2 : adminCeiling;
 }

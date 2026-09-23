@@ -2,7 +2,7 @@ var SKILL_CHANGE_DEBOUNCE_MS = 50;
 var RESERVED_SKILL_FILES = /* @__PURE__ */ new Set([SKILL_FILENAME, LEGACY_WORKFLOW_FILENAME, "runs.json"]);
 var recordParseCache = new StatKeyedParseCache();
 function getGlobalSkillsDir(sandRoot) {
-  return (0, import_node_path116.join)(sandRoot, "workflows");
+  return (0, import_node_path117.join)(sandRoot, "workflows");
 }
 var GlobalSkillLibrary = class {
   constructor(libraryDir) {
@@ -20,19 +20,19 @@ var GlobalSkillLibrary = class {
   dir;
   renameLegacyRecipeFiles() {
     for (const id of this.listIds()) {
-      const legacyPath = (0, import_node_path116.join)(this.folder(id), LEGACY_WORKFLOW_FILENAME);
+      const legacyPath = (0, import_node_path117.join)(this.folder(id), LEGACY_WORKFLOW_FILENAME);
       try {
-        if (!(0, import_node_fs68.statSync)(legacyPath).isFile()) continue;
+        if (!(0, import_node_fs70.statSync)(legacyPath).isFile()) continue;
       } catch {
         continue;
       }
       try {
-        (0, import_node_fs68.statSync)(this.path(id));
+        (0, import_node_fs70.statSync)(this.path(id));
         continue;
       } catch {
       }
       try {
-        (0, import_node_fs68.renameSync)(legacyPath, this.path(id));
+        (0, import_node_fs70.renameSync)(legacyPath, this.path(id));
       } catch {
         continue;
       }
@@ -45,10 +45,10 @@ var GlobalSkillLibrary = class {
     this.dir.setOnChange(onChange);
   }
   folder(id) {
-    return (0, import_node_path116.join)(this.libraryDir, id);
+    return (0, import_node_path117.join)(this.libraryDir, id);
   }
   path(id) {
-    return (0, import_node_path116.join)(this.folder(id), SKILL_FILENAME);
+    return (0, import_node_path117.join)(this.folder(id), SKILL_FILENAME);
   }
   listIds() {
     return this.dir.listSubdirectoryNames();
@@ -56,7 +56,7 @@ var GlobalSkillLibrary = class {
   listHelperScripts(id) {
     let entries;
     try {
-      entries = (0, import_node_fs68.readdirSync)(this.folder(id), { withFileTypes: true });
+      entries = (0, import_node_fs70.readdirSync)(this.folder(id), { withFileTypes: true });
     } catch (error42) {
       reportFallbackUnlessAbsent("skill_library", error42);
       return [];
@@ -70,7 +70,7 @@ var GlobalSkillLibrary = class {
   readRecord(id) {
     let raw;
     try {
-      raw = (0, import_node_fs68.readFileSync)(this.path(id), "utf8");
+      raw = (0, import_node_fs70.readFileSync)(this.path(id), "utf8");
     } catch (error42) {
       reportFallbackUnlessAbsent("skill_library", error42);
       return null;
@@ -79,7 +79,7 @@ var GlobalSkillLibrary = class {
     if (parsed2 == null || parsed2.body.length === 0) return null;
     let createdAt = Date.now();
     try {
-      const stats = (0, import_node_fs68.statSync)(this.path(id));
+      const stats = (0, import_node_fs70.statSync)(this.path(id));
       createdAt = Math.floor(stats.birthtimeMs || stats.mtimeMs);
     } catch {
     }
@@ -153,7 +153,7 @@ var GlobalSkillLibrary = class {
   existingFrontmatter(id) {
     let raw;
     try {
-      raw = (0, import_node_fs68.readFileSync)(this.path(id), "utf8");
+      raw = (0, import_node_fs70.readFileSync)(this.path(id), "utf8");
     } catch (error42) {
       reportFallbackUnlessAbsent("skill_library", error42);
       return {};
@@ -168,12 +168,12 @@ var GlobalSkillLibrary = class {
     if (!isSafeFolderId(id)) return false;
     const folder = this.folder(id);
     try {
-      if (!(0, import_node_fs68.statSync)(folder).isDirectory()) return false;
+      if (!(0, import_node_fs70.statSync)(folder).isDirectory()) return false;
     } catch (error42) {
       reportFallbackUnlessAbsent("skill_library", error42);
       return false;
     }
-    (0, import_node_fs68.rmSync)(folder, { recursive: true, force: true });
+    (0, import_node_fs70.rmSync)(folder, { recursive: true, force: true });
     this.dir.scheduleNotify();
     return true;
   }

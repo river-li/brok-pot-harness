@@ -89,13 +89,15 @@ function createTemplateImportGatewayMethod(deps) {
             }
             throw error42;
           }
-          if (imported.kind === "local_only") identity.noteAgentMinted(agentId);
+          if (imported.kind === "local_only") {
+            identity.noteAgentMinted(agentId, "register-existing-local");
+          }
         } else {
           const updated = await manager.updateAgent(agentId, profile);
           if (imported.kind === "server_backed") {
             identity.noteAgentImported(imported.agent);
           } else {
-            identity.noteAgentMinted(agentId);
+            identity.noteAgentMinted(agentId, "register-existing-local");
           }
           local = {
             agent: updated ?? existing,
@@ -409,6 +411,15 @@ function wrapGatewayApiWithServerAgentProxy(args) {
         }
       );
     },
+    resolveConnectorGrant: async (grantArgs) => {
+      if (!proxy.isProxiedAgent(grantArgs.agentId)) {
+        return api.resolveConnectorGrant(grantArgs);
+      }
+      await act({ method: "resolveConnectorGrant", args: grantArgs }, discardValue, async () => {
+        await api.resolveConnectorGrant(grantArgs);
+        return null;
+      });
+    },
     resolveVirtualCardApproval: async (cardArgs) => {
       const { resolution } = cardArgs;
       if (!proxy.isProxiedAgent(cardArgs.agentId) || resolution !== "approved" && resolution !== "denied") {
@@ -629,7 +640,7 @@ ${args.request.trim()}`;
       throw error42;
     }
     if (remote === null) {
-      identity.noteAgentMinted(result.agent.id);
+      identity.noteAgentMinted(result.agent.id, "register-existing-local");
     }
     deps.extensions.api("telemetry").analytics.markActive("user_action");
     const templateId = sanitizeTemplateId(args.templateId);
@@ -746,6 +757,12 @@ ${args.request.trim()}`;
     resolveLocalToolPermission: async (args) => {
       deps.extensions.api("telemetry").analytics.markActive("user_action");
       await localToolPermission2.resolveAsk(args);
+    },
+    resolveConnectorGrant: async () => {
+      deps.extensions.api("telemetry").analytics.markActive("user_action");
+      throw Object.assign(new Error(SAND_CONNECTOR_GRANT_STALE_MESSAGE), {
+        failureCode: SAND_CONNECTOR_GRANT_STALE
+      });
     },
     resolveVirtualCardApproval: async (args) => {
       deps.extensions.api("telemetry").analytics.markActive("user_action");
@@ -868,7 +885,7 @@ ${args.request.trim()}`;
     deleteAgents: (args) => deleteAgentsAndReport(args.ids),
     duplicateAgent: async (args) => {
       const result = await manager.cloneAgent(args.id);
-      deps.extensions.api("agent-identity").noteAgentMinted(result.agent.id);
+      deps.extensions.api("agent-identity").noteAgentMinted(result.agent.id, "register-existing-local");
       return result;
     },
     setAgentUnread: (args) => manager.setAgentUnread(args.id, args.isUnread, args.atMs),
@@ -1142,9 +1159,13 @@ ${args.request.trim()}`;
       return { ok: true };
     },
     setHttpProxyName: (args) => deps.extensions.api("telemetry").setHttpProxyName(args.name),
-    getHttpProxyName: async () => ({
-      name: deps.extensions.api("telemetry").logs.getHttpProxyName() ?? null
+    getNavigationTelemetryIdentity: async () => ({
+      httpProxyName: deps.extensions.api("telemetry").logs.getHttpProxyName() ?? null,
+      ipHash: deps.extensions.api("telemetry").logs.getEgressIpHash() ?? null,
+      webBotAuthSignedCache: readWebBotAuthSignedCacheRaw() ?? null
     }),
+    markAgentRequestStarted: async ({ requestId: requestId2 }) => deps.extensions.api("codebase-telemetry").markAgentRequestStarted(requestId2),
+    markAgentRequestEnded: async ({ requestId: requestId2 }) => deps.extensions.api("codebase-telemetry").markAgentRequestEnded(requestId2),
     syncUserSecrets: async (args) => await deps.extensions.api("secrets").syncUserSecrets(args),
     prepareBoxForRecreate: () => deps.extensions.api("resume-ownership").prepareForRecreate(),
     resumeBoxAfterRecreate: (args) => deps.extensions.api("resume-ownership").resumeAfterRecreate({
@@ -1256,10 +1277,11 @@ ${args.request.trim()}`;
     injectChromeCookies: async ({ cookies }) => deps.extensions.api("chrome-cookie-import").inject(cookies),
     getBoxSecretsStatus: async () => deps.extensions.api("secrets").getStatus(),
     readVoiceCallAgentContext: (args) => manager.readMainAgentContext({ agentId: args.id }),
-    resolveCredentialBrowserTarget: ({ item, siteHint }) => deps.extensions.api("credential-provider").resolveBrowserCredentialTarget(
-      { ...item, hasOneTimeCode: item.hasOneTimeCode === true },
+    resolveCredentialBrowserTarget: ({ agentId, item, siteHint }) => deps.extensions.api("credential-provider").resolveBrowserCredentialTarget({
+      agentId,
+      item: { ...item, hasOneTimeCode: item.hasOneTimeCode === true },
       siteHint
-    ),
+    }),
     fillBrowserCredentialDirect: ({ approvalMode, ...args }) => deps.extensions.api("credential-provider").fillBrowserCredential({
       ...args,
       item: { ...args.item, hasOneTimeCode: args.item.hasOneTimeCode === true },
@@ -1308,6 +1330,7 @@ ${args.request.trim()}`;
           return { filled: false, resolved: resolved2, detail };
         }
         const result = await provider.fillBrowserCredential({
+          agentId: args.agentId,
           item,
           targetSite: request5.targetSite,
           ...request5.targetWebSocketDebuggerUrl == null ? {} : { targetWebSocketDebuggerUrl: request5.targetWebSocketDebuggerUrl },

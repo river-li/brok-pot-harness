@@ -18,7 +18,9 @@ function playwrightBoxMcpServers(windowIndexes) {
           "--cdp-endpoint",
           `http://127.0.0.1:${SAND_BOX_CDP_PORT_BASE + windowIndex}`,
           "--timeout-action",
-          String(PLAYWRIGHT_ACTION_TIMEOUT_MS)
+          String(PLAYWRIGHT_ACTION_TIMEOUT_MS),
+          "--codegen",
+          "none"
         ]
       }
     ])

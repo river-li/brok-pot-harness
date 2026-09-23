@@ -96,7 +96,7 @@ function sanitizeRemoteUrlForPrompt(remoteUrl) {
 }
 function getRuleDir2(mdcPath) {
   const normalizedPath = normalizeToUnixPath(mdcPath);
-  const literalRuleDir = normalizeToUnixPath((0, import_node_path83.normalize)((0, import_node_path83.dirname)(normalizedPath)));
+  const literalRuleDir = normalizeToUnixPath((0, import_node_path74.normalize)((0, import_node_path74.dirname)(normalizedPath)));
   const segments = literalRuleDir.split(SEP3);
   for (let i = segments.length - 2; i >= 0; i--) {
     if (segments[i] === ".cursor" && segments[i + 1] === "rules") {
@@ -248,7 +248,7 @@ function resolveMetaAgentNotesDirectory(props) {
   const notesSessionId = props.notesSessionId;
   const projectFolder = props.env?.projectFolder;
   if (notesSessionId && notesSessionId.length > 0 && projectFolder && projectFolder.length > 0) {
-    return (0, import_node_path83.join)(projectFolder, "agent-notes", notesSessionId);
+    return (0, import_node_path74.join)(projectFolder, "agent-notes", notesSessionId);
   }
   return void 0;
 }
@@ -762,7 +762,7 @@ ${mcpInstructionsForUserMsg}` : "";
     startedAsNewProject: props.startedAsNewProject === true
   }) : void 0;
   const automationInstructions = props.automationInstructions === void 0 ? void 0 : materializeAutomationMemoryInstruction(props.automationInstructions, props.env?.mountedAgentStores ?? []);
-  return jsxs(Fragment, { children: [props.env !== void 0 && jsx(UserInfoSection, { env: props.env, dsv3: props.dsv3, mode: props.mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder: props.terminalsFolder, agentSharedNotesFolder: props.agentSharedNotesFolder, agentConversationNotesFolder: props.agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled: props.metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled: props.featureFlags?.agentStorePathsAdvertisedInPrompt === true }), props.namedAgentSelfDocumentBlock !== void 0 && jsx("p", { children: props.namedAgentSelfDocumentBlock }), metaAgentNotesDirectory !== void 0 && jsx(MetaAgentProjectNotesDirectorySection, { notesDirectory: metaAgentNotesDirectory }), userIntentContent.length > 0 && jsx(UserIntentSection, { content: userIntentContent }), props.displayOptions?.displayGitStatus !== false && gitReposWithStatus.length > 0 && jsx(GitStatusSection, { gitRepos, gitReposWithStatus, initialWorkingDirectory, agentType: resolvedAgentType, toolInfo: props.toolInfo }), composer2CloudTestingSections?.gitAndSubmission, !props.displayOptions?.excludeAgentTranscripts && props.env?.agentTranscriptsFolder && // Don't show agent transcripts section for cloud agents - they use a different
+  return jsxs(Fragment, { children: [props.env !== void 0 && jsx(UserInfoSection, { env: props.env, dsv3: props.dsv3, mode: props.mode, hasGitRepos, gitRepoInfoComplete, gitRepos, todaysDate, terminalsFolder: props.terminalsFolder, agentSharedNotesFolder: props.agentSharedNotesFolder, agentConversationNotesFolder: props.agentConversationNotesFolder, metaAgentNotesDirectory, metaAgentNotesEnabled: props.metaAgentNotesEnabled, displayTodaysDate, displayGitRepoStatusLine, agentStorePathsAdvertisedInPromptEnabled: props.featureFlags?.agentStorePathsAdvertisedInPrompt === true }), props.memoryContextBlock !== void 0 && jsx("p", { children: props.memoryContextBlock }), props.namedAgentSelfDocumentBlock !== void 0 && jsx("p", { children: props.namedAgentSelfDocumentBlock }), metaAgentNotesDirectory !== void 0 && jsx(MetaAgentProjectNotesDirectorySection, { notesDirectory: metaAgentNotesDirectory }), userIntentContent.length > 0 && jsx(UserIntentSection, { content: userIntentContent }), props.displayOptions?.displayGitStatus !== false && gitReposWithStatus.length > 0 && jsx(GitStatusSection, { gitRepos, gitReposWithStatus, initialWorkingDirectory, agentType: resolvedAgentType, toolInfo: props.toolInfo }), composer2CloudTestingSections?.gitAndSubmission, !props.displayOptions?.excludeAgentTranscripts && props.env?.agentTranscriptsFolder && // Don't show agent transcripts section for cloud agents - they use a different
   // mechanism (pastConversationExplorer subagent reads from /opt/cursor/past-transcripts/)
   props.displayOptions?.agentType !== AgentType.BACKGROUND && jsx(AgentTranscriptsSection, { agentTranscriptsFolder: props.env.agentTranscriptsFolder, agentType: props.displayOptions?.agentType, enableAgentChatLinks: props.featureFlags?.enableAgentChatLinks !== false }), !computerUseSubagentSurface && !dropCustomPromptContext && rulesSection, !computerUseSubagentSurface && props.toolInfo?.availableSubagentTypesDescription !== void 0 && jsx(AvailableSubagentTypesSection, { description: props.toolInfo.availableSubagentTypesDescription }), !computerUseSubagentSurface && props.toolInfo?.availableSubagentModelsDescription !== void 0 && jsx(AvailableSubagentModelsSection, { description: props.toolInfo.availableSubagentModelsDescription }), !dropCustomPromptContext && availableSkillsSection, !computerUseSubagentSurface && cloudRuleContent.length > 0 && props.useProjectCoordinatorPrompting !== true && jsx(CloudInstructionsSection, { cloudRuleContent }), composer2CloudTestingSections?.testing, composer2CloudTestingSections?.computerUse, shouldRenderCloudTaskInstructions && jsx(CloudTaskInstructions, {
     gitRepos,

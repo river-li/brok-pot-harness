@@ -16,12 +16,12 @@ function storedAttachmentName(summary) {
   if (summary.filename.length > 0) return summary.filename;
   return `email-attachment-${summary.attachmentId}.bin`;
 }
-function describe(summary) {
+function describe2(summary) {
   return `"${displayAttachmentName(summary)}" (${summary.contentType}, ${formatEmailAttachmentSize(summary.sizeBytes)})`;
 }
 function renderEmailAttachmentText(attachment, text2, truncated) {
   const lines2 = [
-    `Attachment ${describe(attachment.summary)}, attachment_id ${attachment.summary.attachmentId}:`,
+    `Attachment ${describe2(attachment.summary)}, attachment_id ${attachment.summary.attachmentId}:`,
     "",
     text2.trimEnd()
   ];
@@ -35,7 +35,7 @@ function renderEmailAttachmentText(attachment, text2, truncated) {
 }
 function renderEmailAttachmentSaved(attachment, path31) {
   return [
-    `Saved attachment ${describe(attachment.summary)} to ${path31}.`,
+    `Saved attachment ${describe2(attachment.summary)} to ${path31}.`,
     "Read it there with the box Read tool or Shell, or attach it to a message by that path."
   ].join("\n");
 }
@@ -52,13 +52,13 @@ async function readEmailAttachment(deps, args) {
       const persist = deps.getPersistMediaBytes();
       if (persist === void 0) {
         throw new SandToolInputError(
-          `Attachment ${describe(attachment.summary)} is not text and your attachments folder is unavailable right now, so it cannot be opened in this turn.`
+          `Attachment ${describe2(attachment.summary)} is not text and your attachments folder is unavailable right now, so it cannot be opened in this turn.`
         );
       }
       const url2 = await persist(storedAttachmentName(attachment.summary), attachment.content.data);
       if (url2 === null) {
         throw new SandToolInputError(
-          `Attachment ${describe(attachment.summary)} could not be saved to your attachments folder.`
+          `Attachment ${describe2(attachment.summary)} could not be saved to your attachments folder.`
         );
       }
       return renderEmailAttachmentSaved(

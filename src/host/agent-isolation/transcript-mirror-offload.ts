@@ -1,6 +1,6 @@
 function defaultMirrorWorkerEntryPath() {
-  const here = (0, import_node_path178.dirname)((0, import_node_url19.fileURLToPath)(__import_meta_url));
-  return (0, import_node_path178.join)(here, "agent-isolation", "transcript-mirror-worker.cjs");
+  const here = (0, import_node_path180.dirname)((0, import_node_url19.fileURLToPath)(__import_meta_url));
+  return (0, import_node_path180.join)(here, "agent-isolation", "transcript-mirror-worker.cjs");
 }
 var DEFAULT_MIRROR_WORKERS = 2;
 var MirrorWorkerConnection = class {

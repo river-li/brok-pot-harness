@@ -1,4 +1,4 @@
-var import_node_crypto82 = require("node:crypto");
+var import_node_crypto85 = require("node:crypto");
 init_dist4();
 var VOICE_CALL_CARD_COPY_DEADLINE_MS = 8e3;
 async function authorVoiceCallCardCopy({
@@ -23,7 +23,7 @@ async function streamText2({
   prompt,
   signal
 }) {
-  const [ctx, cancel] = createContext().with(conversationIdKey, (0, import_node_crypto82.randomUUID)()).with(requestIdKey, (0, import_node_crypto82.randomUUID)()).withCancel();
+  const [ctx, cancel] = createContext().with(conversationIdKey, (0, import_node_crypto85.randomUUID)()).with(requestIdKey, (0, import_node_crypto85.randomUUID)()).withCancel();
   const abort = () => {
     cancel(new SandRunAbortError({ intentional: false, reason: "voice call card copy deadline" }));
   };

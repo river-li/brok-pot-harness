@@ -7,24 +7,24 @@ function parseHostUpgradeMarker(raw) {
     return null;
   }
   if (!isUnknownRecord(value)) return null;
-  const str3 = (x) => typeof x === "string" && x.length > 0 ? x : void 0;
-  const num = (x) => typeof x === "number" && Number.isFinite(x) ? x : void 0;
+  const str4 = (x) => typeof x === "string" && x.length > 0 ? x : void 0;
+  const num2 = (x) => typeof x === "number" && Number.isFinite(x) ? x : void 0;
   const outcome = value.outcome === "applied" || value.outcome === "failed" ? value.outcome : void 0;
-  const commandId = str3(value.commandId);
+  const commandId = str4(value.commandId);
   if (value.outcome !== void 0 && outcome === void 0 || outcome === void 0 && commandId === void 0) {
     return null;
   }
   return {
     outcome,
     commandId,
-    fromVersion: str3(value.fromVersion),
-    toVersion: str3(value.toVersion),
-    mode: str3(value.mode),
-    reason: str3(value.reason),
-    issuedAtMs: num(value.issuedAtMs),
-    appliedAtMs: num(value.appliedAtMs),
-    swapMs: num(value.swapMs),
-    swapError: str3(value.swapError)
+    fromVersion: str4(value.fromVersion),
+    toVersion: str4(value.toVersion),
+    mode: str4(value.mode),
+    reason: str4(value.reason),
+    issuedAtMs: num2(value.issuedAtMs),
+    appliedAtMs: num2(value.appliedAtMs),
+    swapMs: num2(value.swapMs),
+    swapError: str4(value.swapError)
   };
 }
 function computeHostUpgradeMetadata(marker17, nowMs2) {

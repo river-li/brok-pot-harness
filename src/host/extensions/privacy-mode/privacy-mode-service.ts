@@ -7,7 +7,7 @@ function createPrivacyModeService({
   load: load2,
   policies: policies2,
   clock,
-  logger: logger108
+  logger: logger110
 }) {
   let activeAuth;
   let activeRefresh;
@@ -18,7 +18,7 @@ function createPrivacyModeService({
       kind: "unresolved",
       authId: null
     },
-    onSubscriberError: (error42) => logger108.error("Privacy mode subscriber failed", error42)
+    onSubscriberError: (error42) => logger110.error("Privacy mode subscriber failed", error42)
   });
   const publish = (next) => {
     const current = observationReceiver.get();
@@ -51,7 +51,7 @@ function createPrivacyModeService({
       }
     } catch (error42) {
       if (!disposed && refreshGeneration === generation) {
-        logger108.warn("Privacy mode lookup failed", error42);
+        logger110.warn("Privacy mode lookup failed", error42);
       }
     } finally {
       if (activeRefresh === refreshController) {
@@ -60,7 +60,7 @@ function createPrivacyModeService({
     }
   };
   const reconcileAuth = () => {
-    const nextAuth = readAuth(auth2.peekAccessToken(), logger108);
+    const nextAuth = readAuth(auth2.peekAccessToken(), logger110);
     if (nextAuth?.authId === activeAuth?.authId && nextAuth?.authToken === activeAuth?.authToken) {
       return;
     }
@@ -107,9 +107,9 @@ function createPrivacyModeService({
     }
   };
 }
-function createPrivacyModeLogger(log4) {
+function createPrivacyModeLogger(log5) {
   const write2 = (level, message, error42) => {
-    log4(`[privacy-mode] ${level}: ${formatLogMessage(message, error42)}`);
+    log5(`[privacy-mode] ${level}: ${formatLogMessage(message, error42)}`);
   };
   return {
     error: (message, error42) => write2("error", message, error42),
@@ -119,13 +119,13 @@ function createPrivacyModeLogger(log4) {
 function isRetryablePrivacyModeLookupError(error42) {
   return error42 instanceof DeadlineExceededError || error42 instanceof ConnectError && (error42.code === Code.DeadlineExceeded || error42.code === Code.Unavailable && !error42.metadata.has("retry-after"));
 }
-function readAuth(accessToken, logger108) {
+function readAuth(accessToken, logger110) {
   if (accessToken === null || accessToken.length === 0) {
     return void 0;
   }
   const authId = parseJwtPayload(accessToken)?.sub;
   if (authId === void 0 || authId.length === 0) {
-    logger108.warn("Credential has no usable subject claim");
+    logger110.warn("Credential has no usable subject claim");
     return void 0;
   }
   return { authId, authToken: accessToken };

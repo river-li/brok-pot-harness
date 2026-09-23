@@ -1,16 +1,16 @@
 init_esm();
 init_compact();
-var __protoPackage162 = "origin.v1.";
-var __protoMessage3154 = class extends CompactMessage {
+var __protoPackage164 = "origin.v1.";
+var __protoMessage3156 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage162;
+    return __protoPackage164;
   }
 };
-var CodeIntelligenceProvenance = /* @__PURE__ */ enumType(proto3, __protoPackage162, "CodeIntelligenceProvenance", [[0, "UNSPECIFIED"], [1, "EXACT_SCIP"], [2, "HYBRID"], [3, "SEARCH"]], 1);
-var CodeIntelligenceIndex = class _CodeIntelligenceIndex extends __protoMessage3154 {
+var CodeIntelligenceProvenance = /* @__PURE__ */ enumType(proto3, __protoPackage164, "CodeIntelligenceProvenance", [[0, "UNSPECIFIED"], [1, "EXACT_SCIP"], [2, "HYBRID"], [3, "SEARCH"]], 1);
+var CodeIntelligenceIndex = class _CodeIntelligenceIndex extends __protoMessage3156 {
   constructor(data) {
     super();
     this.indexedCommitSha = "";
@@ -33,7 +33,7 @@ var CodeIntelligenceIndex = class _CodeIntelligenceIndex extends __protoMessage3
     return ["CodeIntelligenceIndex|1 indexed_commit_sha 9|2 provenance #0", CodeIntelligenceProvenance];
   }
 };
-var CodeIntelligencePosition = class _CodeIntelligencePosition extends __protoMessage3154 {
+var CodeIntelligencePosition = class _CodeIntelligencePosition extends __protoMessage3156 {
   constructor(data) {
     super();
     this.line = 0;
@@ -56,7 +56,7 @@ var CodeIntelligencePosition = class _CodeIntelligencePosition extends __protoMe
     return ["CodeIntelligencePosition|1 line 13|2 utf16_column 13"];
   }
 };
-var CodeIntelligenceRange = class _CodeIntelligenceRange extends __protoMessage3154 {
+var CodeIntelligenceRange = class _CodeIntelligenceRange extends __protoMessage3156 {
   constructor(data) {
     super();
     this.startLine = 0;
@@ -81,7 +81,7 @@ var CodeIntelligenceRange = class _CodeIntelligenceRange extends __protoMessage3
     return ["CodeIntelligenceRange|1 start_line 13|2 start_utf16_column 13|3 end_line 13|4 end_utf16_column 13"];
   }
 };
-var CodeIntelligenceLocation = class _CodeIntelligenceLocation extends __protoMessage3154 {
+var CodeIntelligenceLocation = class _CodeIntelligenceLocation extends __protoMessage3156 {
   constructor(data) {
     super();
     this.path = "";
@@ -103,7 +103,7 @@ var CodeIntelligenceLocation = class _CodeIntelligenceLocation extends __protoMe
     return ["CodeIntelligenceLocation|1 path 9|2 range #0", CodeIntelligenceRange];
   }
 };
-var ResolvedCodeIntelligenceSymbol = class _ResolvedCodeIntelligenceSymbol extends __protoMessage3154 {
+var ResolvedCodeIntelligenceSymbol = class _ResolvedCodeIntelligenceSymbol extends __protoMessage3156 {
   constructor(data) {
     super();
     this.opaqueId = "";
@@ -126,7 +126,7 @@ var ResolvedCodeIntelligenceSymbol = class _ResolvedCodeIntelligenceSymbol exten
     return ["ResolvedCodeIntelligenceSymbol|1 opaque_id 9|2 occurrence_range #0|3 definition #1?|4 signature 9?|5 documentation 9?|6 definitions #1*|7 kind 9?", CodeIntelligenceRange, CodeIntelligenceLocation];
   }
 };
-var ResolveCodeIntelligenceSymbolAtPositionRequest = class _ResolveCodeIntelligenceSymbolAtPositionRequest extends __protoMessage3154 {
+var ResolveCodeIntelligenceSymbolAtPositionRequest = class _ResolveCodeIntelligenceSymbolAtPositionRequest extends __protoMessage3156 {
   constructor(data) {
     super();
     this.commitSha = "";
@@ -149,7 +149,7 @@ var ResolveCodeIntelligenceSymbolAtPositionRequest = class _ResolveCodeIntellige
     return ["ResolveCodeIntelligenceSymbolAtPositionRequest|1 repo #0|2 commit_sha 9|3 path 9|4 position #1", ClientRepoIdentifier, CodeIntelligencePosition];
   }
 };
-var ResolveCodeIntelligenceSymbolAtPositionResponse = class _ResolveCodeIntelligenceSymbolAtPositionResponse extends __protoMessage3154 {
+var ResolveCodeIntelligenceSymbolAtPositionResponse = class _ResolveCodeIntelligenceSymbolAtPositionResponse extends __protoMessage3156 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -170,7 +170,7 @@ var ResolveCodeIntelligenceSymbolAtPositionResponse = class _ResolveCodeIntellig
     return ["ResolveCodeIntelligenceSymbolAtPositionResponse|1 index #0|2 symbol #1?", CodeIntelligenceIndex, ResolvedCodeIntelligenceSymbol];
   }
 };
-var FindCodeIntelligenceReferencesAtPositionRequest = class _FindCodeIntelligenceReferencesAtPositionRequest extends __protoMessage3154 {
+var FindCodeIntelligenceReferencesAtPositionRequest = class _FindCodeIntelligenceReferencesAtPositionRequest extends __protoMessage3156 {
   constructor(data) {
     super();
     this.commitSha = "";
@@ -193,7 +193,7 @@ var FindCodeIntelligenceReferencesAtPositionRequest = class _FindCodeIntelligenc
     return ["FindCodeIntelligenceReferencesAtPositionRequest|1 repo #0|2 commit_sha 9|3 path 9|4 position #1", ClientRepoIdentifier, CodeIntelligencePosition];
   }
 };
-var FindCodeIntelligenceReferencesAtPositionHeader = class _FindCodeIntelligenceReferencesAtPositionHeader extends __protoMessage3154 {
+var FindCodeIntelligenceReferencesAtPositionHeader = class _FindCodeIntelligenceReferencesAtPositionHeader extends __protoMessage3156 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -214,7 +214,7 @@ var FindCodeIntelligenceReferencesAtPositionHeader = class _FindCodeIntelligence
     return ["FindCodeIntelligenceReferencesAtPositionHeader|1 index #0|2 symbol #1?", CodeIntelligenceIndex, ResolvedCodeIntelligenceSymbol];
   }
 };
-var FindCodeIntelligenceReferencesAtPositionResult = class _FindCodeIntelligenceReferencesAtPositionResult extends __protoMessage3154 {
+var FindCodeIntelligenceReferencesAtPositionResult = class _FindCodeIntelligenceReferencesAtPositionResult extends __protoMessage3156 {
   constructor(data) {
     super();
     this.isDefinition = false;
@@ -236,7 +236,7 @@ var FindCodeIntelligenceReferencesAtPositionResult = class _FindCodeIntelligence
     return ["FindCodeIntelligenceReferencesAtPositionResult|1 location #0|2 is_definition 8", CodeIntelligenceLocation];
   }
 };
-var FindCodeIntelligenceReferencesAtPositionTrailer = class _FindCodeIntelligenceReferencesAtPositionTrailer extends __protoMessage3154 {
+var FindCodeIntelligenceReferencesAtPositionTrailer = class _FindCodeIntelligenceReferencesAtPositionTrailer extends __protoMessage3156 {
   constructor(data) {
     super();
     this.totalCount = 0;
@@ -258,7 +258,7 @@ var FindCodeIntelligenceReferencesAtPositionTrailer = class _FindCodeIntelligenc
     return ["FindCodeIntelligenceReferencesAtPositionTrailer|1 total_count 13"];
   }
 };
-var FindCodeIntelligenceReferencesAtPositionResponse = class _FindCodeIntelligenceReferencesAtPositionResponse extends __protoMessage3154 {
+var FindCodeIntelligenceReferencesAtPositionResponse = class _FindCodeIntelligenceReferencesAtPositionResponse extends __protoMessage3156 {
   constructor(data) {
     super();
     this.chunk = { case: void 0 };

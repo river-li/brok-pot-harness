@@ -1,4 +1,4 @@
-var __protoPackage16, __protoMessage313, TimeoutBehavior, ShellBackgroundReason, ForceBackgroundShellStatus, ShellAbortReason, ShellCommandParsingResult, ShellCommandParsingResult_ExecutableCommandArg, ShellCommandParsingResult_ExecutableCommand, ShellCommandParsingResult_Redirect, CommandClassifierResult, CommandClassifierResult_SuggestedSandboxMode, CommandClassifierResult_ClassifiedCommand, ShellOutputNotificationConfig, ForceBackgroundShellArgs, ForceBackgroundShellResult, ShellHookApprovalRequirement, ShellHookApprovalRequirement_Kind, ShellArgs, ShellResult, ShellStreamStdout, ShellStreamStderr, ShellStreamExit, ShellStreamStart, ShellStreamBackgrounded, ShellStreamHookContext, ShellSandboxUnsupported, ShellStream, ShellSuccess, ShellFailure, ShellTimeout, ShellRejected, ShellPermissionDenied, ShellSpawnError;
+var __protoPackage17, __protoMessage313, TimeoutBehavior, ShellBackgroundReason, ForceBackgroundShellStatus, ShellAbortReason, ShellCommandParsingResult, ShellCommandParsingResult_ExecutableCommandArg, ShellCommandParsingResult_ExecutableCommand, ShellCommandParsingResult_Redirect, CommandClassifierResult, CommandClassifierResult_SuggestedSandboxMode, CommandClassifierResult_ClassifiedCommand, ShellOutputNotificationConfig, ForceBackgroundShellArgs, ForceBackgroundShellResult, ShellHookApprovalRequirement, ShellHookApprovalRequirement_Kind, ShellArgs, ShellResult, ShellStreamStdout, ShellStreamStderr, ShellStreamExit, ShellStreamStart, ShellStreamBackgrounded, ShellStreamHookContext, ShellSandboxUnsupported, ShellStream, ShellSuccess, ShellFailure, ShellTimeout, ShellRejected, ShellPermissionDenied, ShellSpawnError;
 var init_shell_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/shell_exec_pb.js"() {
     "use strict";
@@ -7,19 +7,19 @@ var init_shell_exec_pb = __esm({
     init_utils_pb2();
     init_hook_additional_context_pb();
     init_compact();
-    __protoPackage16 = "agent.v1.";
+    __protoPackage17 = "agent.v1.";
     __protoMessage313 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage16;
+        return __protoPackage17;
       }
     };
-    TimeoutBehavior = /* @__PURE__ */ enumType(proto3, __protoPackage16, "TimeoutBehavior", [[0, "UNSPECIFIED"], [1, "CANCEL"], [2, "BACKGROUND"]], 1);
-    ShellBackgroundReason = /* @__PURE__ */ enumType(proto3, __protoPackage16, "ShellBackgroundReason", [[0, "UNSPECIFIED"], [1, "TIMEOUT"], [2, "USER_REQUEST"]], 1);
-    ForceBackgroundShellStatus = /* @__PURE__ */ enumType(proto3, __protoPackage16, "ForceBackgroundShellStatus", [[0, "UNSPECIFIED"], [1, "ACCEPTED"], [2, "NOT_FOUND"]], 1);
-    ShellAbortReason = /* @__PURE__ */ enumType(proto3, __protoPackage16, "ShellAbortReason", [[0, "UNSPECIFIED"], [1, "USER_ABORT"], [2, "TIMEOUT"]], 1);
+    TimeoutBehavior = /* @__PURE__ */ enumType(proto3, __protoPackage17, "TimeoutBehavior", [[0, "UNSPECIFIED"], [1, "CANCEL"], [2, "BACKGROUND"]], 1);
+    ShellBackgroundReason = /* @__PURE__ */ enumType(proto3, __protoPackage17, "ShellBackgroundReason", [[0, "UNSPECIFIED"], [1, "TIMEOUT"], [2, "USER_REQUEST"]], 1);
+    ForceBackgroundShellStatus = /* @__PURE__ */ enumType(proto3, __protoPackage17, "ForceBackgroundShellStatus", [[0, "UNSPECIFIED"], [1, "ACCEPTED"], [2, "NOT_FOUND"]], 1);
+    ShellAbortReason = /* @__PURE__ */ enumType(proto3, __protoPackage17, "ShellAbortReason", [[0, "UNSPECIFIED"], [1, "USER_ABORT"], [2, "TIMEOUT"]], 1);
     ShellCommandParsingResult = class _ShellCommandParsingResult extends __protoMessage313 {
       constructor(data) {
         super();
@@ -141,7 +141,7 @@ var init_shell_exec_pb = __esm({
         return ["CommandClassifierResult|1 commands #0*|2 suggested_sandbox_mode #1|3 classification_failed 8", CommandClassifierResult_ClassifiedCommand, CommandClassifierResult_SuggestedSandboxMode];
       }
     };
-    CommandClassifierResult_SuggestedSandboxMode = /* @__PURE__ */ enumType(proto3, __protoPackage16, "CommandClassifierResult.SuggestedSandboxMode", [[0, "UNSPECIFIED"], [1, "SANDBOX"], [2, "NO_SANDBOX"], [3, "UNDETERMINED"]], 1);
+    CommandClassifierResult_SuggestedSandboxMode = /* @__PURE__ */ enumType(proto3, __protoPackage17, "CommandClassifierResult.SuggestedSandboxMode", [[0, "UNSPECIFIED"], [1, "SANDBOX"], [2, "NO_SANDBOX"], [3, "UNDETERMINED"]], 1);
     CommandClassifierResult_ClassifiedCommand = class _CommandClassifierResult_ClassifiedCommand extends __protoMessage313 {
       constructor(data) {
         super();
@@ -255,7 +255,7 @@ var init_shell_exec_pb = __esm({
         return ["ShellHookApprovalRequirement|1 kind #0|2 reason 9?", ShellHookApprovalRequirement_Kind];
       }
     };
-    ShellHookApprovalRequirement_Kind = /* @__PURE__ */ enumType(proto3, __protoPackage16, "ShellHookApprovalRequirement.Kind", [[0, "UNSPECIFIED"], [1, "FORCE_PROMPT"]], 1);
+    ShellHookApprovalRequirement_Kind = /* @__PURE__ */ enumType(proto3, __protoPackage17, "ShellHookApprovalRequirement.Kind", [[0, "UNSPECIFIED"], [1, "FORCE_PROMPT"]], 1);
     ShellArgs = class _ShellArgs extends __protoMessage313 {
       constructor(data) {
         super();

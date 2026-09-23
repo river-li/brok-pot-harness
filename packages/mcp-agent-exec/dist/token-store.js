@@ -1,4 +1,4 @@
-var import_promises39 = require("node:fs/promises");
+var import_promises37 = require("node:fs/promises");
 var path20 = __toESM(require("node:path"), 1);
 var __awaiter65 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
@@ -50,7 +50,7 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
   loadMcpAuth() {
     return __awaiter65(this, void 0, void 0, function* () {
       try {
-        const mcpAuth = yield (0, import_promises39.readFile)(this.mcpAuthPath, "utf8");
+        const mcpAuth = yield (0, import_promises37.readFile)(this.mcpAuthPath, "utf8");
         const data = JSON.parse(mcpAuth);
         if (data && typeof data === "object") {
           const hasDirectTokens = Object.values(data).some((value) => value && typeof value === "object" && value !== null && ("access_token" in value || "refresh_token" in value) && !("tokens" in value) && !("clientInfo" in value));
@@ -148,8 +148,8 @@ var FileBasedTokenStore = class _FileBasedTokenStore {
   }
   saveMcpAuth(data) {
     return __awaiter65(this, void 0, void 0, function* () {
-      yield (0, import_promises39.mkdir)(path20.dirname(this.mcpAuthPath), { recursive: true });
-      yield (0, import_promises39.writeFile)(this.mcpAuthPath, JSON.stringify(data, null, 2));
+      yield (0, import_promises37.mkdir)(path20.dirname(this.mcpAuthPath), { recursive: true });
+      yield (0, import_promises37.writeFile)(this.mcpAuthPath, JSON.stringify(data, null, 2));
     });
   }
 };

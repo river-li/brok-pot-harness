@@ -18,10 +18,15 @@ function describeTimelineEvent(event) {
       return `${AUTOMATION_ACTION_VERB[event.action] ?? "Changed"} routine "${event.automationName}"`;
     case "team-shared":
       return TEAM_SHARED_EVENT_LINE;
+    case "team-bot-publish":
+      return TEAM_BOT_PUBLISH_EVENT_LINE;
+    case "person-added":
+      return `${event.person.name} was added to the chat`;
   }
   return fallbackForUnknownTimelineEvent(event, GENERIC_TIMELINE_EVENT_LINE);
 }
-var TEAM_SHARED_EVENT_LINE = "Setting up team bot";
+var TEAM_SHARED_EVENT_LINE = "Setting up Team Bot";
+var TEAM_BOT_PUBLISH_EVENT_LINE = "Ready to publish to the team";
 function fallbackForUnknownTimelineEvent(_event, fallback2) {
   return fallback2;
 }

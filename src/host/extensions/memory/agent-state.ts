@@ -22,10 +22,10 @@ function memoryShardFor(deps, scope) {
 async function replaceAvatarFiles(agentDir, file2) {
   await (0, import_promises61.mkdir)(agentDir, { recursive: true });
   for (const name17 of listConventionalAvatarFilenames(agentDir)) {
-    await (0, import_promises61.rm)((0, import_node_path123.join)(agentDir, name17), { force: true });
+    await (0, import_promises61.rm)((0, import_node_path124.join)(agentDir, name17), { force: true });
   }
   if (file2 != null) {
-    await (0, import_promises61.writeFile)((0, import_node_path123.join)(agentDir, file2.filename), file2.bytes);
+    await (0, import_promises61.writeFile)((0, import_node_path124.join)(agentDir, file2.filename), file2.bytes);
   }
   invalidateAvatarDataUrlCache(agentDir);
 }
@@ -150,7 +150,7 @@ function createSandAgentState(deps) {
       if (trimmed.length === 0) {
         return stateWriteFailed("pass the path of an image file to install.");
       }
-      const absolute = (0, import_node_path123.isAbsolute)(trimmed) ? trimmed : (0, import_node_path123.resolve)(trimmed);
+      const absolute = (0, import_node_path124.isAbsolute)(trimmed) ? trimmed : (0, import_node_path124.resolve)(trimmed);
       let bytes = null;
       try {
         bytes = await (0, import_promises61.readFile)(absolute);
@@ -167,7 +167,7 @@ function createSandAgentState(deps) {
       }
       if (bytes == null) {
         return stateWriteFailed(
-          isBoxRootPath(absolute) ? `could not read "${(0, import_node_path123.basename)(absolute)}" from your box \u2014 write the image with Shell (or CopyFromBox onto a host path) first, then pass that path.` : `could not read "${(0, import_node_path123.basename)(absolute)}" \u2014 download or write the image somewhere first, then pass that path.`
+          isBoxRootPath(absolute) ? `could not read "${(0, import_node_path124.basename)(absolute)}" from your box \u2014 write the image with Shell (or CopyFromBox onto a host path) first, then pass that path.` : `could not read "${(0, import_node_path124.basename)(absolute)}" \u2014 download or write the image somewhere first, then pass that path.`
         );
       }
       if (bytes.length === 0 || bytes.length > AVATAR_MAX_BYTES) {
@@ -185,7 +185,7 @@ function createSandAgentState(deps) {
       const filename = ext2 === "png" ? CANONICAL_AVATAR_FILENAME : `avatar.${ext2}`;
       await replaceAvatarFiles(deps.agentDir, { filename, bytes });
       return stateWriteOk(
-        `Updated your picture (${filename}). Source ${(0, import_node_path123.basename)(absolute)} can be deleted if you no longer need it.`
+        `Updated your picture (${filename}). Source ${(0, import_node_path124.basename)(absolute)} can be deleted if you no longer need it.`
       );
     },
     async clearAvatar() {

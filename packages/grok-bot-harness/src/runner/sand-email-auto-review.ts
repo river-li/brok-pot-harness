@@ -167,16 +167,20 @@ function sandEmailClaimFingerprintPayload(target) {
 var SAND_EMAIL_CLAIM_UNAVAILABLE_REASON = "Claiming an inbox needs the user's approval, which is not available in this conversation.";
 var SAND_EMAIL_CLAIM_CANCELLED_REASON = "The inbox claim was cancelled before it completed.";
 async function reviewSandEmailClaim(args) {
+  const ledger = humanOnlyReviewLedger(args.options.toolDecisions, args.toolCallId);
   if (args.signal?.aborted === true) {
+    ledger.ruleRefused();
     return { allowed: false, reason: SAND_EMAIL_CLAIM_CANCELLED_REASON };
   }
   const controller = args.options.autoReviewController;
   if (controller === void 0) {
+    ledger.ruleRefused();
     return { allowed: false, reason: SAND_EMAIL_CLAIM_UNAVAILABLE_REASON };
   }
-  const approval = await withToolExecutionTimeoutSuspended(
+  const approval = await requestReviewedApproval(
     args.ctx,
-    () => controller.requestApproval({
+    controller,
+    {
       agentId: args.options.agentId,
       surface: "mcp",
       fingerprint: fingerprintSandAutoReviewTarget(sandEmailClaimFingerprintPayload(args.target)),
@@ -187,10 +191,13 @@ async function reviewSandEmailClaim(args) {
         mcpArguments: claimReviewArguments(args.target)
       }),
       command: args.target.username,
+      onCardShown: ledger.cardShown,
       ...args.signal !== void 0 ? { signal: args.signal } : {},
       ...args.options.getApprovalExpiryPolicy !== void 0 ? { expiryPolicy: args.options.getApprovalExpiryPolicy() } : {}
-    })
+    },
+    { toolCallId: args.toolCallId, approvalMode: "ask_human" }
   );
+  ledger.answered(approval);
   if (approval.approved) {
     return { allowed: true };
   }

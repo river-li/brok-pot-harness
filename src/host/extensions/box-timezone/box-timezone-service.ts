@@ -1,13 +1,13 @@
 var import_node_child_process11 = require("node:child_process");
-var import_node_fs55 = require("node:fs");
-var import_node_util9 = require("node:util");
+var import_node_fs57 = require("node:fs");
+var import_node_util10 = require("node:util");
 init_errors();
-var runCommand = (0, import_node_util9.promisify)(import_node_child_process11.execFile);
+var runCommand = (0, import_node_util10.promisify)(import_node_child_process11.execFile);
 var SAND_BOX_TIMEZONE_COMMAND = "/usr/local/bin/sand-box-timezone";
 var COMMAND_TIMEOUT_MS = 15e3;
 function createBoxTimezoneApplier(options2) {
   const commandPath = options2.commandPath ?? SAND_BOX_TIMEZONE_COMMAND;
-  if (!(0, import_node_fs55.existsSync)(commandPath)) return void 0;
+  if (!(0, import_node_fs57.existsSync)(commandPath)) return void 0;
   return async (timeZone) => {
     const { stdout } = await runCommand(commandPath, ["apply", timeZone], {
       timeout: COMMAND_TIMEOUT_MS

@@ -111,9 +111,21 @@ function createTurnObservation(host, timing) {
   }
   const recentActivity = [];
   let observedToolCallCount = 0;
+  const observedToolCallNames = [];
+  const modelToolNamesByCallId = /* @__PURE__ */ new Map();
+  function noteToolCallModelName(callId, name17) {
+    if (name17.length === 0) return;
+    if (modelToolNamesByCallId.size >= 256) {
+      const oldest = modelToolNamesByCallId.keys().next().value;
+      if (oldest != null) modelToolNamesByCallId.delete(oldest);
+    }
+    modelToolNamesByCallId.set(callId, name17);
+  }
   function recordToolActivity(update) {
     if (update.status === "done" || update.status === "failed") {
       observedToolCallCount++;
+      observedToolCallNames.push(modelToolNamesByCallId.get(update.id) ?? update.name);
+      modelToolNamesByCallId.delete(update.id);
     }
     const summary = update.summary != null && update.summary.length > 0 ? `: ${update.summary}` : "";
     const line = `[${update.status}] ${update.name}${summary}`;
@@ -129,6 +141,9 @@ function createTurnObservation(host, timing) {
   }
   function getObservedToolCallCount() {
     return observedToolCallCount;
+  }
+  function getObservedToolCallNames() {
+    return [...observedToolCallNames];
   }
   function setTurnAwaitHandler(handler) {
     onTurnAwait = handler;
@@ -354,6 +369,8 @@ function createTurnObservation(host, timing) {
     recordToolActivity,
     getActivitySnapshot,
     getObservedToolCallCount,
+    getObservedToolCallNames,
+    noteToolCallModelName,
     emitAsyncTasksChanged,
     listAsyncTasks
   };

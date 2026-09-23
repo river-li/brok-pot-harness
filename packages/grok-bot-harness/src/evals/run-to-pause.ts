@@ -10,7 +10,7 @@ async function runSandAgentToPause(runner, options2) {
     const completions = pendingCompletions.splice(0);
     if (completions.length === 0) return result;
     revivalIndex += 1;
-    result = await runner.run(buildSubagentRevivalPrompt(completions, runner), {
+    result = await runner.run(buildSubagentRevival(completions, runner), {
       ...options2.revivalRunOptions?.(revivalIndex, completions),
       hidden: true,
       isSilenceAllowed: true

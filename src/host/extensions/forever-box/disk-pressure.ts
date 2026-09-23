@@ -19,7 +19,7 @@ function createDiskPressureReminderEpisodes(options2) {
   };
   if (filePath !== void 0) {
     try {
-      const parsed2 = JSON.parse((0, import_node_fs62.readFileSync)(filePath, "utf8"));
+      const parsed2 = JSON.parse((0, import_node_fs64.readFileSync)(filePath, "utf8"));
       if (!isUnknownRecord(parsed2) || parsed2.version !== 1) {
         throw new SandDiskPressureLedgerError("invalid disk-pressure reminder ledger");
       }
@@ -47,7 +47,7 @@ function createDiskPressureReminderEpisodes(options2) {
     if (filePath === void 0) return true;
     try {
       if (activeEpisodeId === null && pendingEpisodeIds.size === 0) {
-        (0, import_node_fs62.rmSync)(filePath, { force: true });
+        (0, import_node_fs64.rmSync)(filePath, { force: true });
         return true;
       }
       const ledger = {

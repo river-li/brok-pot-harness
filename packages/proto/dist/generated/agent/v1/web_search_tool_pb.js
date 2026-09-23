@@ -1,16 +1,16 @@
-var __protoPackage38, __protoMessage335, WebSearchArgs, WebSearchResult, WebSearchSuccess, WebSearchError, WebSearchRejected, WebSearchReference, WebSearchToolCall, WebSearchRequestQuery, WebSearchRequestResponse, WebSearchRequestResponse_Approved, WebSearchRequestResponse_Rejected;
+var __protoPackage39, __protoMessage335, WebSearchArgs, WebSearchResult, WebSearchSuccess, WebSearchError, WebSearchRejected, WebSearchReference, WebSearchToolCall, WebSearchRequestQuery, WebSearchRequestResponse, WebSearchRequestResponse_Approved, WebSearchRequestResponse_Rejected;
 var init_web_search_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/web_search_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage38 = "agent.v1.";
+    __protoPackage39 = "agent.v1.";
     __protoMessage335 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage38;
+        return __protoPackage39;
       }
     };
     WebSearchArgs = class _WebSearchArgs extends __protoMessage335 {

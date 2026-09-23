@@ -1,17 +1,17 @@
-var __protoPackage83, __protoMessage380, SearchConversationsToolCall;
+var __protoPackage84, __protoMessage380, SearchConversationsToolCall;
 var init_search_conversations_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/search_conversations_tool_pb.js"() {
     "use strict";
     init_esm();
     init_conversation_search_exec_pb();
     init_compact();
-    __protoPackage83 = "agent.v1.";
+    __protoPackage84 = "agent.v1.";
     __protoMessage380 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage83;
+        return __protoPackage84;
       }
     };
     SearchConversationsToolCall = class _SearchConversationsToolCall extends __protoMessage380 {

@@ -14,7 +14,7 @@ function createRunUpdateObservers(run) {
           return;
         case "send-message":
           run.collectors.collectSendMessage();
-          if (update.message.type === "widget" || update.message.type === "secret-request" || update.message.type === "auto-review-approval" || update.message.type === "credential-request") {
+          if (update.message.type === "widget" || update.message.type === "secret-request" || update.message.type === "auto-review-approval" || update.message.type === "connector-grant" || update.message.type === "credential-request") {
             run.pause();
           }
           if (update.message.type === "text") {
@@ -25,7 +25,7 @@ function createRunUpdateObservers(run) {
           return;
       }
     },
-    noteMessageDispatched: run.onMessageDispatched,
+    noteDelivered: run.onDelivered,
     noteReactionApplied: run.collectors.collectReaction
   };
 }

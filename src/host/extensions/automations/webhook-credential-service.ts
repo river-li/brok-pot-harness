@@ -1,4 +1,4 @@
-var import_node_fs54 = require("node:fs");
+var import_node_fs56 = require("node:fs");
 var import_node_path97 = require("node:path");
 init_dashboard_pb();
 init_dist3();
@@ -93,7 +93,7 @@ var SandWebhookCredentialService = class {
   async readKeys() {
     let raw;
     try {
-      raw = (await import_node_fs54.promises.readFile(this.storePath)).toString();
+      raw = (await import_node_fs56.promises.readFile(this.storePath)).toString();
     } catch (error42) {
       if (findSystemErrno(error42) === "ENOENT") return {};
       this.log(`webhook key store read failed (${errorLogTag(error42)}); keeping existing keys`);

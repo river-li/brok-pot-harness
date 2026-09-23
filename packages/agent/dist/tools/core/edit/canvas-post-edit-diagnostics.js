@@ -77,7 +77,7 @@ function formatCanvasSaveFooter(result, filePath) {
   }
 }
 function storeCanvasSourcePath(savedFilePath, canvasId) {
-  const resolved = import_node_path86.posix.resolve(savedFilePath);
+  const resolved = import_node_path77.posix.resolve(savedFilePath);
   for (const canvasesRoot of CANVAS_STORE_PERSIST_ROOTS) {
     if (resolved === formatStoreCanvasSourcePath(canvasesRoot, canvasId)) {
       return resolved;

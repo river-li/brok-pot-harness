@@ -197,7 +197,7 @@ function createSubagentRuntime(host, timing) {
     host.computerUse.freeWindow(subagentAgentId);
     subagentSessions.delete(subagentAgentId);
     subagentMeta.delete(subagentAgentId);
-    if (meta != null && (isComputerUseSubagentType(meta.subagentType) || meta.subagentType === "browserUse")) {
+    if (meta != null && (isComputerUseSubagentType(meta.subagentType) || meta.subagentType === "browserUse" || meta.subagentType === "browserUseJev")) {
       const usage = runner?.getComputerUseUsageSnapshot();
       const reportBase = {
         ...meta.resume === true ? { resume: true } : {},
@@ -260,6 +260,7 @@ function createSubagentRuntime(host, timing) {
       toolCallId: meta.toolCallId,
       title: meta.title,
       status: outcome.status === "completed" ? "completed" : "error",
+      durationMs: Math.max(0, Date.now() - meta.startedAtMs),
       result: (() => {
         if (outcome.status === "completed") {
           return outcome.text.trim();

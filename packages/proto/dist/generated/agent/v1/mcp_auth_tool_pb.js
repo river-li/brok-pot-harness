@@ -1,16 +1,16 @@
-var __protoPackage59, __protoMessage356, McpAuthArgs, McpAuthResult, McpAuthSuccess, McpAuthError, McpAuthRejected, McpAuthToolCall, McpAuthRequestQuery, McpAuthRequestResponse, McpAuthRequestResponse_Approved, McpAuthRequestResponse_Rejected;
+var __protoPackage60, __protoMessage356, McpAuthArgs, McpAuthResult, McpAuthSuccess, McpAuthError, McpAuthRejected, McpAuthToolCall, McpAuthRequestQuery, McpAuthRequestResponse, McpAuthRequestResponse_Approved, McpAuthRequestResponse_Rejected;
 var init_mcp_auth_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_auth_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage59 = "agent.v1.";
+    __protoPackage60 = "agent.v1.";
     __protoMessage356 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage59;
+        return __protoPackage60;
       }
     };
     McpAuthArgs = class _McpAuthArgs extends __protoMessage356 {

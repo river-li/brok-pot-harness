@@ -1,17 +1,17 @@
-var __protoPackage55, __protoMessage352, WebFetchArgs, WebFetchResult, WebFetchSuccess, WebFetchError, WebFetchRejected, WebFetchToolCall, WebFetchRequestQuery, WebFetchRequestResponse, WebFetchRequestResponse_Approved, WebFetchRequestResponse_Rejected;
+var __protoPackage56, __protoMessage352, WebFetchArgs, WebFetchResult, WebFetchSuccess, WebFetchError, WebFetchRejected, WebFetchToolCall, WebFetchRequestQuery, WebFetchRequestResponse, WebFetchRequestResponse_Approved, WebFetchRequestResponse_Rejected;
 var init_web_fetch_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/web_fetch_tool_pb.js"() {
     "use strict";
     init_esm();
     init_utils_pb2();
     init_compact();
-    __protoPackage55 = "agent.v1.";
+    __protoPackage56 = "agent.v1.";
     __protoMessage352 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage55;
+        return __protoPackage56;
       }
     };
     WebFetchArgs = class _WebFetchArgs extends __protoMessage352 {

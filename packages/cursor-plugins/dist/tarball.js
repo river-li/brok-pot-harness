@@ -1,6 +1,6 @@
-var import_promises35 = require("node:fs/promises");
-var import_node_os16 = require("node:os");
-var import_node_path66 = require("node:path");
+var import_promises33 = require("node:fs/promises");
+var import_node_os15 = require("node:os");
+var import_node_path57 = require("node:path");
 var __awaiter61 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -30,9 +30,9 @@ var __awaiter61 = function(thisArg, _arguments, P2, generator) {
 };
 function packPluginArtifact(dirPath) {
   return __awaiter61(this, void 0, void 0, function* () {
-    const archivePath = (0, import_node_path66.join)(yield (0, import_promises35.mkdtemp)((0, import_node_path66.join)((0, import_node_os16.tmpdir)(), "cursor-plugin-artifact-")), "plugin.tgz");
+    const archivePath = (0, import_node_path57.join)(yield (0, import_promises33.mkdtemp)((0, import_node_path57.join)((0, import_node_os15.tmpdir)(), "cursor-plugin-artifact-")), "plugin.tgz");
     try {
-      const entries = yield (0, import_promises35.readdir)(dirPath);
+      const entries = yield (0, import_promises33.readdir)(dirPath);
       yield Qn({
         cwd: dirPath,
         file: archivePath,
@@ -44,9 +44,9 @@ function packPluginArtifact(dirPath) {
           return !((_a19 = stat28.isSymbolicLink) === null || _a19 === void 0 ? void 0 : _a19.call(stat28));
         }
       }, entries);
-      return yield (0, import_promises35.readFile)(archivePath);
+      return yield (0, import_promises33.readFile)(archivePath);
     } finally {
-      yield (0, import_promises35.rm)((0, import_node_path66.dirname)(archivePath), { recursive: true, force: true }).catch(() => {
+      yield (0, import_promises33.rm)((0, import_node_path57.dirname)(archivePath), { recursive: true, force: true }).catch(() => {
       });
     }
   });

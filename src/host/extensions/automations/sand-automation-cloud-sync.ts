@@ -165,19 +165,19 @@ var SandAutomationCloudSync = class {
       const localInspection = this.deps.inspectLocalDefinitions?.(agentId);
       const retainUndesired = retainsUndesiredShadows(localInspection?.state);
       const leaveUndesired = leavesUndesiredShadowsUntouched(localInspection?.state);
-      const fingerprint = [
+      const fingerprint2 = [
         ...[...desired.values()].sort((a, b2) => a.automationId.localeCompare(b2.automationId)).map(
           (definition2) => `${definition2.automationId}:${definition2.marker}:${String(definition2.enabled)}`
         ),
         ...retainUndesired ? ["retain-undesired"] : [],
         ...leaveUndesired ? ["leave-undesired"] : []
       ].join("\0");
-      if (this.lastSuccessfulFingerprintByAgent.get(agentId) === fingerprint) {
+      if (this.lastSuccessfulFingerprintByAgent.get(agentId) === fingerprint2) {
         continue;
       }
       try {
         if (await this.reconcileAgent(agentId, desired, localInspection)) {
-          this.lastSuccessfulFingerprintByAgent.set(agentId, fingerprint);
+          this.lastSuccessfulFingerprintByAgent.set(agentId, fingerprint2);
         }
       } catch (error42) {
         this.recordFailure({

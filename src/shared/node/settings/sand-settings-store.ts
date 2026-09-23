@@ -183,7 +183,7 @@ function withSortedKeys(value) {
 }
 function createNodeSettingsFileIo(settingsPath) {
   return {
-    readText: () => (0, import_node_fs69.existsSync)(settingsPath) ? (0, import_node_fs69.readFileSync)(settingsPath, "utf-8") : void 0,
+    readText: () => (0, import_node_fs71.existsSync)(settingsPath) ? (0, import_node_fs71.readFileSync)(settingsPath, "utf-8") : void 0,
     writeText: (contents) => {
       writeFileAtomicSync(settingsPath, contents);
     }

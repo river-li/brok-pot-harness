@@ -53,7 +53,7 @@ var AckObligations = class {
     if (this.tm.ackObligationStore == null || this.tm.runLifecycle.runScheduler == null) {
       return void 0;
     }
-    const token = (0, import_node_crypto72.randomUUID)();
+    const token = (0, import_node_crypto73.randomUUID)();
     const tokens = this.ackRunTokens.get(agentId) ?? /* @__PURE__ */ new Set();
     tokens.add(token);
     this.ackRunTokens.set(agentId, tokens);
@@ -183,7 +183,7 @@ var AckObligations = class {
           if (store.get(agentId) == null) return;
           const redriveStartedAtMs = Date.now();
           const prompt = buildAckRedrivePrompt();
-          const messageId = `ack-redrive-${(0, import_node_crypto72.randomUUID)()}`;
+          const messageId = `ack-redrive-${(0, import_node_crypto73.randomUUID)()}`;
           const recentUserMessages = [
             ...session.db.getTranscriptEntries().filter(
               (entry) => entry.kind === "message" && entry.role === "user" && entry.fromAgent == null && entry.channel == null

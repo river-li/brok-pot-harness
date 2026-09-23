@@ -129,6 +129,7 @@ function createTurnAgentComposition(host) {
       onLoopMitigation: host.onLoopMitigation,
       localToolPermission: host.localToolPermission,
       ...host.credentialFillLease === void 0 ? {} : { credentialFillLease: host.credentialFillLease },
+      ...host.jevBrowserUse === void 0 ? {} : { jevBrowserUse: host.jevBrowserUse },
       inheritedDirectionEpoch: directionEpoch,
       autoReviewController: host.autoReviewController,
       autoReviewModes: host.autoReviewGate.currentModes(),
@@ -193,6 +194,7 @@ function createTurnAgentComposition(host) {
       hidden: true,
       isSilenceAllowed: true,
       ...args.onRequestId !== void 0 ? { onRequestId: args.onRequestId } : {},
+      ...args.turnUnitId === void 0 ? {} : { turnUnitId: args.turnUnitId, turnUnitType: "wake" },
       automationWake: {
         ...automationWake,
         ...args.untrusted === true ? { untrusted: true } : {}
@@ -216,9 +218,7 @@ function createTurnAgentComposition(host) {
         const completions = nestedCompletions.splice(0);
         if (completions.length === 0) continue;
         result = await runner.run(
-          buildSubagentRevivalPrompt(completions, {
-            canvasCursorAgentIds: host.canvasCursorAgentIds
-          }),
+          buildSubagentRevival(completions, { canvasCursorAgentIds: host.canvasCursorAgentIds }),
           revivalRunOptions
         );
       }
@@ -277,8 +277,6 @@ function createTurnAgentComposition(host) {
       streamWatchdog,
       updateObservers,
       isRunAwaitingUserSelection: isThisRunAwaitingUser,
-      isRunCompletionRequested,
-      turnEndSummaryHold,
       isTeamSetupUnderway,
       endThisRunAwaitingUser,
       requestAutomationParentWake,
@@ -321,6 +319,7 @@ function createTurnAgentComposition(host) {
       agentId: host.getConversationId(),
       surface: "host_shell",
       getExpiryPolicy: getApprovalExpiryPolicy,
+      toolDecisionAudit: host.toolDecisionAudit,
       ...localToolPermission2 !== void 0 ? {
         beforeApproval: (request5) => localToolPermission2.awaitDesktopStandingDecision({
           agentId: host.getConversationId(),
@@ -336,18 +335,23 @@ function createTurnAgentComposition(host) {
       controller: host.autoReviewController,
       agentId: host.getConversationId(),
       surface: "box_shell",
-      getExpiryPolicy: getApprovalExpiryPolicy
+      getExpiryPolicy: getApprovalExpiryPolicy,
+      toolDecisionAudit: host.toolDecisionAudit
     }) : void 0;
     const mcpApprovalProvider = autoReviewModes.mcp === "enforce" && host.autoReviewController !== void 0 ? createSandMcpApprovalProvider({
       controller: host.autoReviewController,
       agentId: host.getConversationId(),
-      getExpiryPolicy: getApprovalExpiryPolicy
+      getExpiryPolicy: getApprovalExpiryPolicy,
+      toolDecisionAudit: host.toolDecisionAudit
     }) : void 0;
     const { agent: session, summarization: summarizationSession, canUseSelfSummary } = sessions;
     const applyDiskPressureReminder = diskPressureReminderEpisodeId !== null ? createDiskPressureReminderMiddleware(diskPressureReminderEpisodeId) : void 0;
-    const applySendMessageReminder = createSendMessageReminderMiddleware({
-      updateCommunication: host.gates.updateCommunication
+    const turnToolHost = host.turnToolHost;
+    const applyMcpUnavailableReminder = turnToolHost.isSubagentRunner && !turnToolHost.isParentMediatedAutomationSubagent || turnToolHost.mcp == null ? void 0 : createMcpUnavailableReminderMiddleware({
+      isUnavailable: () => turnToolHost.isMcpDiscoveryUnavailableForTurn?.() === true,
+      episodeId: childRequestLineage.parentRequestId
     });
+    const applySendMessageReminder = createSendMessageReminderMiddleware();
     const toolDescriptionSnapshots = host.toolDescriptionSnapshots();
     const applyFrozenToolDescriptions = toolDescriptionSnapshots === void 0 ? void 0 : createFrozenToolDescriptionsMiddleware({
       store: toolDescriptionSnapshots,
@@ -357,13 +361,20 @@ function createTurnAgentComposition(host) {
     const applyLoopNudge = loopDetection.kind === "active" ? createLoopNudgeMiddleware(loopDetection.multiMessage) : void 0;
     const onToolCallEvents = host.onToolCallEvents;
     const actionAuditor = host.actionAuditor;
-    const applyToolCallTelemetry = onToolCallEvents === void 0 && actionAuditor === void 0 ? void 0 : createToolCallEventMiddleware({
+    const toolCallEventSink = onToolCallEvents === void 0 && actionAuditor === void 0 ? void 0 : {
       getModelId: () => session.getModelId(),
       onEvents: (events) => {
         if (actionAuditor !== void 0) {
           const identity = { agentId: host.getConversationId(), boxId: host.resolveBoxId() };
           for (const event of events) {
-            const record2 = toolResultAuditRecord(event, identity);
+            for (const decision of host.toolDecisionAudit?.settle(event, identity) ?? []) {
+              actionAuditor.record(decision);
+            }
+            const record2 = toolResultAuditRecord(
+              event,
+              identity,
+              host.toolTargets?.take(event.toolCallId)
+            );
             if (record2 !== void 0) actionAuditor.record(record2);
           }
         }
@@ -375,19 +386,22 @@ function createTurnAgentComposition(host) {
           }))
         );
       }
-    });
+    };
+    const applyToolCallTelemetry = toolCallEventSink === void 0 ? void 0 : createToolCallEventMiddleware(toolCallEventSink);
+    const outOfStepToolCallRecorder = toolCallEventSink === void 0 ? void 0 : createOutOfStepToolCallEventRecorder(toolCallEventSink);
     const toolSession = {
       getExecutor: () => {
         const baseExecutor = session.getExecutor();
         const frozenToolsExecutor = applyFrozenToolDescriptions?.(baseExecutor) ?? baseExecutor;
         const modelVisibleExecutor = createModelVisiblePathMiddleware(frozenToolsExecutor);
         const diskPressureExecutor = applyDiskPressureReminder?.(modelVisibleExecutor) ?? modelVisibleExecutor;
+        const mcpUnavailableExecutor = applyMcpUnavailableReminder?.(diskPressureExecutor) ?? diskPressureExecutor;
         const reminderExecutor = chatSilenceRemindersCoverThisTurn({
           isSubagentRunner: host.isSubagentRunner,
           isSilenceAllowed,
           isGroupMemberTurn,
           requestSource: host.activeTurnRequestSource()
-        }) ? applyStartOfTurnAckReminder(applySendMessageReminder(diskPressureExecutor)) : diskPressureExecutor;
+        }) ? applyStartOfTurnAckReminder(applySendMessageReminder(mcpUnavailableExecutor)) : mcpUnavailableExecutor;
         const executor = applyLoopNudge?.(reminderExecutor) ?? reminderExecutor;
         const automationCompletions = host.isSubagentRunner ? void 0 : host.automationCompletions();
         const snapshotExecutor = captureFollowupLabelingMessages === void 0 ? executor : createFirstStreamMessageSnapshotMiddleware(captureFollowupLabelingMessages)(executor);
@@ -417,7 +431,8 @@ function createTurnAgentComposition(host) {
       quietOrigin,
       childRequestLineage,
       () => executorProfileNamesForRun,
-      host.actionAuditSequencer
+      host.actionAuditSequencer,
+      host.gates.browserUseJev() ? /* @__PURE__ */ new Map([["computerUse", "browserUseJev"]]) : void 0
     );
     const isUserFacingRunner = hasParentToolParity;
     const emitConnectorCard = (emission) => {
@@ -474,7 +489,8 @@ function createTurnAgentComposition(host) {
         auditor: host.actionAuditor,
         sequencer: host.actionAuditSequencer,
         agentId: host.getConversationId(),
-        resolveTransport: (providerIdentifier) => mcp.resolveToolTransport(providerIdentifier)
+        resolveTransport: (providerIdentifier) => mcp.resolveToolTransport(providerIdentifier),
+        resolveDisplayName: (providerIdentifier) => mcp.resolveServerDisplayName?.(providerIdentifier)
       }) : mcpExecutor;
       const turnMcpExecutor = withPlaywrightSnapshotFallback(
         auditedMcpExecutor,
@@ -600,27 +616,33 @@ ${note}`;
       );
     }
     if (host.actionAuditor != null || host.autoReviewController != null) {
-      const agentId = host.getConversationId();
       const base = boxConnection.remoteAccessor;
-      const audit = (ctx, kind, command) => {
-        host.autoReviewGate.assertNoPendingApproval();
-        host.auditShellCommand(agentId, kind, command, "user_machine", {
-          ...turnAttributionFromContext(ctx, agentId),
-          boxId: void 0
-        });
+      const shellAudit = {
+        auditor: host.actionAuditor,
+        agentId: host.getConversationId(),
+        target: (options2) => ({
+          target: "user_machine",
+          machineId: auditedUserMachineId(machineIds, options2)
+        })
       };
-      const baseShellStream = base.get(shellStreamExecutorResource);
-      const baseBackgroundShell = base.get(backgroundShellExecutorResource);
+      const baseShellStream = wrapShellStreamExecutorForAudit(
+        base.get(shellStreamExecutorResource),
+        shellAudit
+      );
+      const baseBackgroundShell = wrapBackgroundShellExecutorForAudit(
+        base.get(backgroundShellExecutorResource),
+        shellAudit
+      );
       localEntries.push(
         resourceEntry(shellStreamExecutorResource, {
           execute: (ctx, args, options2) => {
-            audit(ctx, "foreground", args.command);
+            host.autoReviewGate.assertNoPendingApproval();
             return baseShellStream.execute(ctx, args, options2);
           }
         }),
         resourceEntry(backgroundShellExecutorResource, {
           execute: async (ctx, args, options2) => {
-            audit(ctx, "background", args.command);
+            host.autoReviewGate.assertNoPendingApproval();
             return await baseBackgroundShell.execute(ctx, args, options2);
           }
         })
@@ -652,6 +674,7 @@ ${note}`;
             resourceAccessor,
             stateHandler,
             autoReviewController: host.autoReviewController,
+            toolDecisions: host.toolDecisionAudit,
             getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
             userAutoRunInstructions: getAutoReviewUserInstructions(),
             extractConversationContext: extractAutoReviewConversationContext
@@ -681,9 +704,13 @@ ${note}`;
     if (subagentConfigs != null && host.remoteBoxHasDesktop && host.getRemoteBoxAvailable()) {
       const combined = host.isCombinedComputerUseAvailable();
       const credentialFillEnabled = !host.isSubagentRunner && !host.isSystemPromptOverridden && host.turnToolHost.credentialAccess != null;
-      subagentConfigs.push(
-        createSandComputerUseSubagentConfig({ combined, credentialFillEnabled })
-      );
+      if (host.gates.browserUseJev()) {
+        subagentConfigs.push(createSandBrowserUseJevSubagentConfig());
+      } else {
+        subagentConfigs.push(
+          createSandComputerUseSubagentConfig({ combined, credentialFillEnabled })
+        );
+      }
     }
     if (subagentConfigs != null && !host.isSystemPromptOverridden) {
       const generalPurposeIndex = subagentConfigs.findIndex(
@@ -714,9 +741,12 @@ ${note}`;
     const usesGeminiDeveloperVideoUpload = host.isSubagentRunner && isMediaReviewSubagent(host.subagentType) && geminiVideoAttachedMediaUrlProvider !== void 0;
     const selfSummaryConfig = {
       promptSession: {
-        getExecutor: (state) => new SandSelfSummaryPromptToolExecutor(
-          session.getExecutorWithoutResolvedModelTracking(state)
-        )
+        getExecutor: (state) => {
+          const sameToolDescriptionsAsTurn = session.getExecutorWithoutResolvedModelTracking(state);
+          return new SandSelfSummaryPromptToolExecutor(
+            applyFrozenToolDescriptions?.(sameToolDescriptionsAsTurn) ?? sameToolDescriptionsAsTurn
+          );
+        }
       },
       canUseSelfSummary,
       enableTranscriptEnrichment: true,
@@ -735,8 +765,6 @@ ${note}`;
         host.backgroundSummarizationPropsOverride
       ),
       pendingSummaryStore: host.pendingSummaryStore,
-      turnEndSummaryHold,
-      ...turnEndSummaryHold === void 0 ? {} : { isTurnEndRequested: isRunCompletionRequested },
       agentType: AgentType.IDE,
       featureFlags: {
         enableWatchVideoInIdeSubagent: true,
@@ -754,11 +782,11 @@ ${note}`;
          * The offloaded tool set and the subagent roster follow live box,
          * device, and gate state. Rewriting the first message for them
          * would drop the provider cache for the whole conversation, so the
-         * current catalogs ride on the new user turn instead. Same gate as
-         * the static GetDynamicTools description: the two render the same
-         * names, and one half alone recovers no cache.
+         * current catalogs ride on the new user turn instead. The static
+         * GetDynamicTools description follows the same policy: the two
+         * surfaces render the same names, and one half alone recovers no cache.
          */
-        deferUserInfoCatalogRerender: host.gates.stableDynamicToolCatalog(),
+        deferUserInfoCatalogRerender: true,
         skipPreTurnStateSnapshot: true,
         ...usesGeminiDeveloperVideoUpload ? { geminiVideoAttachmentSignedUrlMaxBytes: GEMINI_VIDEO_SUBAGENT_MAX_BYTES } : {}
       },
@@ -767,6 +795,7 @@ ${note}`;
       conversationGroupId: host.getConversationId(),
       attachedMediaUrlProvider: usesGeminiDeveloperVideoUpload ? geminiVideoAttachedMediaUrlProvider : void 0,
       systemPromptGenerator: systemPromptGenerator2,
+      getUserInfoMemoryContext: () => host.systemPromptAssembly.getMemoryContextForUserInfo(),
       messageHistoryModifier: profilePromptSnapshot != null && onProfileUpdateAppended != null ? (messages2) => host.promptGlue.appendProfileUpdateToHistory(
         messages2,
         profilePromptSnapshot,
@@ -839,7 +868,7 @@ ${note}`;
       fireAndForgetCheckpoints: host.fireAndForgetCheckpoints,
       afterStepCheckpoint: (_ctx, persisted) => afterStepCheckpoint(persisted)
     };
-    return new AnysphereAgent(
+    const agent = new AnysphereAgent(
       config2,
       toolSession,
       toRedactedInteractionListener(
@@ -850,6 +879,10 @@ ${note}`;
           },
           {
             onToolCall: (event, callId, toolCall) => {
+              if (toolCall.tool.case === "mcpToolCall") {
+                const args = toolCall.tool.value.args;
+                host.observation.noteToolCallModelName(callId, args?.toolName || args?.name || "");
+              }
               host.observation.observeAwaitToolCall(
                 event,
                 callId,
@@ -876,6 +909,7 @@ ${note}`;
       }),
       conversationActionReceiver ?? new NoopConversationActionReceiver()
     );
+    return { agent, outOfStepToolCallRecorder };
   }
   return { buildAgentForRun, dispatchAutomationSubagent };
 }

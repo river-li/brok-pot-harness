@@ -147,6 +147,16 @@ var Updates = {
       }
     });
   },
+  toolRequestsListed(callCount) {
+    return new InteractionUpdate({
+      message: {
+        case: "toolRequestsListed",
+        value: new ToolRequestsListedUpdate({
+          callCount: Math.max(0, callCount)
+        })
+      }
+    });
+  },
   stepCompleted(stepId, stepDurationMs) {
     return new InteractionUpdate({
       message: {

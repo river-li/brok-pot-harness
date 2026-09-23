@@ -218,7 +218,7 @@ function shouldRetryTurnAttempt(input) {
   if (input.canceled) return false;
   if (typeof input.error === "object" && input.error != null) {
     const fields2 = input.error;
-    if (fields2.isTranscriptAppendAfterCheckpointError === true || fields2.isSandAutoReviewPause === true || fields2.isSandLocalToolPermissionPause === true) {
+    if (fields2.isTranscriptAppendAfterCheckpointError === true || fields2.isSandAutoReviewPause === true || fields2.isSandLocalToolPermissionPause === true || fields2.isSandConnectorGrantPause === true) {
       return false;
     }
   }

@@ -205,7 +205,7 @@ var LocalShellExecutor = class {
       reportEvent(ctx, "LocalShellExecutor.execute");
       const command = args.command;
       const policy = args.requestedSandboxPolicy ? convertProtoToInternalPolicy(args.requestedSandboxPolicy) : void 0;
-      const workingDirectory = args.workingDirectory || await this.coreExecutor.getCwd();
+      const workingDirectory = args.workingDirectory || await this.coreExecutor.getCwd(args.conversationId);
       const timeout2 = resolveShellTimeoutMs(args);
       const resolvedWorkingDir = resolvePath(workingDirectory);
       if (!args.parsingResult) {

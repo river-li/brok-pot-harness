@@ -553,7 +553,8 @@ function executeSummarizationWithRetry(ctx, promptSession, messages2, options2) 
       inputTokens: void 0,
       outputTokens: void 0,
       hadError: true,
-      errorKind
+      errorKind,
+      isPlaceholder: true
     };
   });
 }
@@ -629,7 +630,7 @@ var summarizationFallbackFailures = createCounter("agent.summarization.fallback_
 var timeBetweenLastTwoMessagesMs = createHistogram("agent.summarization.time_between_last_two_messages_ms", {
   description: "Time between last two messages in conversation"
 });
-var DEBUG_SUMMARIZATION_STRATEGY_FILE = import_node_path39.default.join(import_node_os7.default.homedir(), "debug-summarization-strategy.txt");
+var DEBUG_SUMMARIZATION_STRATEGY_FILE = import_node_path30.default.join(import_node_os6.default.homedir(), "debug-summarization-strategy.txt");
 function hasToolInvocation(message) {
   const content = message.content;
   if (!Array.isArray(content)) {
@@ -666,7 +667,7 @@ function shouldForceSummarizationForTesting(messages2, evalCompletionMode) {
     return BackgroundSummarizationMode.WaitForCompletionIfStarted;
   }
   try {
-    const strategy = import_node_fs33.default.readFileSync(DEBUG_SUMMARIZATION_STRATEGY_FILE, "utf8").trim();
+    const strategy = import_node_fs31.default.readFileSync(DEBUG_SUMMARIZATION_STRATEGY_FILE, "utf8").trim();
     if (strategy.startsWith("every-human")) {
       const numHumanMessages = messages2.filter((message) => message.role === "user").length;
       const numHumanMessagesLimit = Number.parseInt(strategy.includes(":") ? (_a19 = strategy.split(":")[1]) !== null && _a19 !== void 0 ? _a19 : "1" : "1", 10);
@@ -674,13 +675,13 @@ function shouldForceSummarizationForTesting(messages2, evalCompletionMode) {
     }
     if (strategy === "next-human") {
       if (lastMessageIsUser) {
-        import_node_fs33.default.rmSync(DEBUG_SUMMARIZATION_STRATEGY_FILE);
+        import_node_fs31.default.rmSync(DEBUG_SUMMARIZATION_STRATEGY_FILE);
       }
       return lastMessageIsUser ? BackgroundSummarizationMode.WaitForCompletion : void 0;
     }
     if (strategy === "next-tool") {
       if (lastMessageIsToolResult) {
-        import_node_fs33.default.rmSync(DEBUG_SUMMARIZATION_STRATEGY_FILE);
+        import_node_fs31.default.rmSync(DEBUG_SUMMARIZATION_STRATEGY_FILE);
       }
       return lastMessageIsToolResult ? BackgroundSummarizationMode.WaitForCompletion : void 0;
     }
@@ -870,7 +871,7 @@ var SummarizationHandler = class {
       if (this.shouldUseDeterministicFallback(result) && partitioned.messagesToSummarize.length > 0) {
         const fallbackText = this.buildDeterministicFallbackText(ctx, partitioned, options2, result.errorKind);
         if (fallbackText !== null) {
-          return Object.assign(Object.assign({}, result), { text: fallbackText });
+          return Object.assign(Object.assign({}, result), { text: fallbackText, isPlaceholder: false });
         }
       }
       return result;
@@ -1045,7 +1046,7 @@ var SummarizationHandler = class {
             errorKind: pipelineResult.rawSummary.errorKind
           })
         });
-        return Object.assign(Object.assign({}, pipelineResult), { summary: { summary }, hadError, errorKind: pipelineResult.rawSummary.errorKind });
+        return Object.assign(Object.assign({}, pipelineResult), { summary: { summary }, hadError, errorKind: pipelineResult.rawSummary.errorKind, isPlaceholder: pipelineResult.rawSummary.isPlaceholder === true });
       } catch (error42) {
         const durationMs = performance.now() - startTime;
         summaryBlockingDurationMs.histogram(ctx, durationMs);

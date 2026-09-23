@@ -1,7 +1,7 @@
-var import_node_fs71 = require("node:fs");
+var import_node_fs73 = require("node:fs");
 var import_promises59 = require("node:fs/promises");
 var import_node_os25 = require("node:os");
-var import_node_path118 = require("node:path");
+var import_node_path119 = require("node:path");
 init_dist2();
 init_dashboard_connect();
 init_dashboard_pb();
@@ -50,13 +50,13 @@ function publishableTeams(response, memberPublishSettingsOrUnknown = void 0) {
   ).map((team) => ({ teamId: team.id, name: team.name }));
 }
 async function stageSkillDirForPublish(args) {
-  const staged = (0, import_node_path118.join)(args.targetDir, (0, import_node_path118.basename)(args.skillDir));
+  const staged = (0, import_node_path119.join)(args.targetDir, (0, import_node_path119.basename)(args.skillDir));
   await (0, import_promises59.cp)(args.skillDir, staged, {
     recursive: true,
     dereference: true,
     filter: (source) => {
-      if ((0, import_node_path118.dirname)(source) !== args.skillDir) return true;
-      return !UNPUBLISHABLE_FILES.has((0, import_node_path118.basename)(source));
+      if ((0, import_node_path119.dirname)(source) !== args.skillDir) return true;
+      return !UNPUBLISHABLE_FILES.has((0, import_node_path119.basename)(source));
     }
   });
   return staged;
@@ -107,7 +107,7 @@ var SandSkillPublishService = class {
       throw new SandSkillPublishError("Choose a team to publish this skill to.");
     }
     const published = await this.upload({
-      skillDir: (0, import_node_path118.dirname)(record2.filePath),
+      skillDir: (0, import_node_path119.dirname)(record2.filePath),
       skillRelativePath: record2.id,
       name: record2.name,
       description: record2.description,
@@ -129,7 +129,7 @@ var SandSkillPublishService = class {
     const parsed2 = readSkillFrontmatter(record2.filePath);
     const name17 = parsed2.name.length > 0 ? parsed2.name : record2.name;
     const published = await this.upload({
-      skillDir: (0, import_node_path118.dirname)(record2.filePath),
+      skillDir: (0, import_node_path119.dirname)(record2.filePath),
       skillRelativePath: skillsRootRelativePath(record2.skillRelativePath),
       name: name17,
       description: parsed2.description,
@@ -152,15 +152,15 @@ var SandSkillPublishService = class {
   }
   async restoreToLibrary(record2) {
     const skillsRoot = getGlobalSkillsDir(this.options.sandRootDir);
-    const skillDir2 = (0, import_node_path118.dirname)(record2.filePath);
-    const libraryId = (0, import_node_path118.basename)(skillDir2);
+    const skillDir2 = (0, import_node_path119.dirname)(record2.filePath);
+    const libraryId = (0, import_node_path119.basename)(skillDir2);
     if (this.library.get(libraryId) != null) return libraryId;
     const [restored] = await restoreSkillsFromPluginDir({
       skillDirs: [skillDir2],
-      pluginSkillsRoot: (0, import_node_path118.join)(record2.installPath, "skills"),
+      pluginSkillsRoot: (0, import_node_path119.join)(record2.installPath, "skills"),
       skillsRoot
     });
-    return restored != null && (0, import_node_path118.dirname)(restored) === skillsRoot ? (0, import_node_path118.basename)(restored) : null;
+    return restored != null && (0, import_node_path119.dirname)(restored) === skillsRoot ? (0, import_node_path119.basename)(restored) : null;
   }
   async upload(args) {
     if (args.description.trim().length === 0) {
@@ -169,15 +169,15 @@ var SandSkillPublishService = class {
         "description_required"
       );
     }
-    const workDir = await (0, import_promises59.mkdtemp)((0, import_node_path118.join)((0, import_node_os25.tmpdir)(), "sand-publish-skill-"));
+    const workDir = await (0, import_promises59.mkdtemp)((0, import_node_path119.join)((0, import_node_os25.tmpdir)(), "sand-publish-skill-"));
     try {
       const staged = await stageSkillDirForPublish({
         skillDir: args.skillDir,
-        targetDir: (0, import_node_path118.join)(workDir, "staged")
+        targetDir: (0, import_node_path119.join)(workDir, "staged")
       });
       const pluginDir = await synthesizeSkillPluginDir({
         skills: [{ dir: staged, relativePath: args.skillRelativePath }],
-        targetDir: (0, import_node_path118.join)(workDir, "plugin"),
+        targetDir: (0, import_node_path119.join)(workDir, "plugin"),
         pluginName: args.pluginName,
         ...args.displayName != null ? { displayName: args.displayName } : {}
       });
@@ -215,7 +215,7 @@ var SandSkillPublishService = class {
     for (let attempt = 0; attempt < CONFIRM_PUBLISH_MAX_ATTEMPTS; attempt++) {
       await this.syncBestEffort();
       const landed = this.options.pluginSkills.currentIndex()?.skills.find(
-        (record2) => record2.pluginId === published.pluginId && record2.pluginVersion === published.commitSha && (0, import_node_fs71.existsSync)(record2.filePath)
+        (record2) => record2.pluginId === published.pluginId && record2.pluginVersion === published.commitSha && (0, import_node_fs73.existsSync)(record2.filePath)
       );
       if (landed != null) return landed.id;
     }
@@ -261,7 +261,7 @@ var SandSkillPublishService = class {
 function readSkillFrontmatter(filePath) {
   let parsed2 = null;
   try {
-    parsed2 = parseSkillFile((0, import_node_fs71.readFileSync)(filePath, "utf8"));
+    parsed2 = parseSkillFile((0, import_node_fs73.readFileSync)(filePath, "utf8"));
   } catch (error42) {
     reportFallbackUnlessAbsent("skill_publish", error42);
     parsed2 = null;
@@ -273,7 +273,7 @@ function readSkillFrontmatter(filePath) {
 }
 async function readManifestName(pluginDir) {
   try {
-    const raw = await (0, import_promises59.readFile)((0, import_node_path118.join)(pluginDir, "plugin.json"), "utf-8");
+    const raw = await (0, import_promises59.readFile)((0, import_node_path119.join)(pluginDir, "plugin.json"), "utf-8");
     const manifest = JSON.parse(raw);
     if (typeof manifest.name === "string" && manifest.name.trim() !== "") {
       return manifest.name;
@@ -294,7 +294,7 @@ async function requireManifestName(installPath) {
   return name17;
 }
 function skillsRootRelativePath(skillRelativePath) {
-  const segments = (0, import_node_path118.dirname)(skillRelativePath).split(/[/\\]/).filter((segment) => segment.length > 0);
+  const segments = (0, import_node_path119.dirname)(skillRelativePath).split(/[/\\]/).filter((segment) => segment.length > 0);
   const withoutRoot = segments[0] === "skills" ? segments.slice(1) : segments;
   if (withoutRoot.length === 0) {
     throw new SandSkillPublishError("That skill sits at a path Sand cannot re-pack.");

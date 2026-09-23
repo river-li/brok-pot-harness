@@ -1,6 +1,6 @@
 var SAND_LESS_SUBAGENT_FANOUT_EXPERIMENT_NAME = "sand_less_subagent_fanout";
-var GROK_BOT_UPDATE_COMMUNICATION_EXPERIMENT_NAME = "grok_bot_update_communication";
 var GROK_BOT_BROWSER_USE_PLAYWRIGHT_EXPERIMENT_NAME = "grok_bot_browser_use_playwright_ab";
+var SAND_MEMORY_FACTS_IN_USER_INFO_EXPERIMENT_NAME = "sand_memory_facts_in_user_info_ab";
 var SAND_USAGE_WARNING_EXPERIMENT_NAME = "sand_usage_warning_policy_2026_08";
 var SAND_GROUP_CHAT_DISCOURAGEMENT_EXPERIMENT_NAME = "sand_group_chat_discouragement_2026_09";
 var SAND_COMPUTER_USE_MODEL_CONFIG_NAME = "sand_computer_use_playwright_config";

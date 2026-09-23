@@ -186,7 +186,7 @@ function getMcpOAuthErrorLogMetadata(error3) {
   const errorName = error3 instanceof Error ? error3.name : error3 != null ? typeof error3 : void 0;
   const causeName = cause instanceof Error ? cause.name : void 0;
   const causeMessage = usefulErrorMessage(cause);
-  const errorMessage4 = (_a20 = usefulErrorMessage(error3)) !== null && _a20 !== void 0 ? _a20 : causeMessage;
+  const errorMessage5 = (_a20 = usefulErrorMessage(error3)) !== null && _a20 !== void 0 ? _a20 : causeMessage;
   const systemErrorCode = firstString(error3, ["code", "cause.code"]);
   const oauthErrorCode = (_c2 = (_b2 = readSdkOAuthErrorCode(error3)) !== null && _b2 !== void 0 ? _b2 : readSdkOAuthErrorCode(cause)) !== null && _c2 !== void 0 ? _c2 : firstString(error3, [
     "errorCode",
@@ -205,16 +205,16 @@ function getMcpOAuthErrorLogMetadata(error3) {
     "cause.statusCode",
     "cause.response.status",
     "cause.response.statusCode"
-  ])) !== null && _d !== void 0 ? _d : parseHttpStatusFromErrorMessage(errorMessage4)) !== null && _e2 !== void 0 ? _e2 : parseHttpStatusFromErrorMessage(causeMessage);
+  ])) !== null && _d !== void 0 ? _d : parseHttpStatusFromErrorMessage(errorMessage5)) !== null && _e2 !== void 0 ? _e2 : parseHttpStatusFromErrorMessage(causeMessage);
   const errorResponseSummary = sanitizeStructuredValue((_j = (_h = (_g = (_f = readNestedRecordValue(error3, ["response", "body"])) !== null && _f !== void 0 ? _f : readNestedRecordValue(error3, ["body"])) !== null && _g !== void 0 ? _g : readNestedRecordValue(error3, ["data"])) !== null && _h !== void 0 ? _h : readNestedRecordValue(error3, ["cause", "body"])) !== null && _j !== void 0 ? _j : readNestedRecordValue(error3, ["cause", "response", "body"]));
   const networkClassification = classifyNetworkError({
-    message: errorMessage4,
+    message: errorMessage5,
     code: systemErrorCode
   });
-  const sdkErrorKind = oauthErrorCode ? "oauth_error" : networkClassification ? "auth_transport_error" : errorMessage4 ? "generic_error" : void 0;
+  const sdkErrorKind = oauthErrorCode ? "oauth_error" : networkClassification ? "auth_transport_error" : errorMessage5 ? "generic_error" : void 0;
   return compactLogMetadata({
     errorName,
-    errorMessage: errorMessage4,
+    errorMessage: errorMessage5,
     errorType: error3 != null ? typeof error3 : void 0,
     httpStatus,
     oauthErrorCode,

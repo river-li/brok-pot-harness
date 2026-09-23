@@ -35,16 +35,16 @@ function fencedBlockRanges(input) {
 function blankLineGaps(input) {
   const gaps = [];
   let previous = -1;
-  for (let at2 = input.indexOf("\n"); at2 >= 0; at2 = input.indexOf("\n", at2 + 1)) {
+  for (let at3 = input.indexOf("\n"); at3 >= 0; at3 = input.indexOf("\n", at3 + 1)) {
     if (previous >= 0) {
       let blank = true;
-      for (let between = previous + 1; between < at2 && blank; between++) {
+      for (let between = previous + 1; between < at3 && blank; between++) {
         const char = input[between];
         blank = char === " " || char === "	";
       }
-      if (blank) gaps.push([previous, at2 + 1]);
+      if (blank) gaps.push([previous, at3 + 1]);
     }
-    previous = at2;
+    previous = at3;
   }
   return gaps;
 }

@@ -45,7 +45,7 @@ function sortMemoriesConfirmationCode({
   toPrivate
 }) {
   const ids = (records2) => records2.map((r) => r.id).sort();
-  return (0, import_node_crypto81.createHash)("sha1").update(JSON.stringify([ids(toTeam), ids(toPrivate)])).digest("hex").slice(0, 10);
+  return (0, import_node_crypto83.createHash)("sha1").update(JSON.stringify([ids(toTeam), ids(toPrivate)])).digest("hex").slice(0, 10);
 }
 function annotated(found, named) {
   const byName = new Map(

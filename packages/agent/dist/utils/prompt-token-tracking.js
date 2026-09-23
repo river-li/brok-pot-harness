@@ -249,9 +249,9 @@ function countFileAttachmentTokens(selectedContext) {
   }
   return { fileAttachmentTokens, fileAttachmentCount };
 }
-function estimateRedactedStringTokenCount(str3) {
-  if (!str3 || str3.length === 0) {
+function estimateRedactedStringTokenCount(str4) {
+  if (!str4 || str4.length === 0) {
     return 0;
   }
-  return estimateStringTokenCount(str3.unwrap(PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
+  return estimateStringTokenCount(str4.unwrap(PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
 }

@@ -44,17 +44,17 @@ var PermissionsFileProvider = class _PermissionsFileProvider {
     this.autoRunInstructions = autoRunInstructions;
   }
   static getPermissionsFilePath() {
-    return (0, import_node_path78.join)(getConfigDir(), "permissions.json");
+    return (0, import_node_path69.join)(getConfigDir(), "permissions.json");
   }
   static load(filePath) {
     return __awaiter66(this, void 0, void 0, function* () {
       var _a19, _b2, _c2;
       const path31 = filePath !== null && filePath !== void 0 ? filePath : _PermissionsFileProvider.getPermissionsFilePath();
-      if (!(0, import_node_fs45.existsSync)(path31)) {
+      if (!(0, import_node_fs43.existsSync)(path31)) {
         return void 0;
       }
       try {
-        const raw = yield (0, import_promises43.readFile)(path31, "utf8");
+        const raw = yield (0, import_promises41.readFile)(path31, "utf8");
         const parsed2 = parse9(raw);
         if (!parsed2 || typeof parsed2 !== "object") {
           return void 0;

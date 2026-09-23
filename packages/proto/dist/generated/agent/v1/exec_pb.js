@@ -1,4 +1,4 @@
-var __protoPackage118, __protoMessage3114, ExecClientStreamClose, ExecClientThrow, ExecClientHeartbeat, ExecClientControlMessage, ExecServerAbort, ExecServerControlMessage, SpanContext, ExecServerMessage, ExecClientMessage, ExecuteHookArgs, ExecuteHookResult, ExecuteHookRequest, ExecuteHookResponse;
+var __protoPackage119, __protoMessage3114, ExecClientStreamClose, ExecClientThrow, ExecClientHeartbeat, ExecClientControlMessage, ExecServerAbort, ExecServerControlMessage, SpanContext, ExecServerMessage, ExecClientMessage, ExecuteHookArgs, ExecuteHookResult, ExecuteHookRequest, ExecuteHookResponse;
 var init_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/exec_pb.js"() {
     "use strict";
@@ -36,13 +36,13 @@ var init_exec_pb = __esm({
     init_hook_additional_context_pb();
     init_hooks_pb();
     init_compact();
-    __protoPackage118 = "agent.v1.";
+    __protoPackage119 = "agent.v1.";
     __protoMessage3114 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage118;
+        return __protoPackage119;
       }
     };
     ExecClientStreamClose = class _ExecClientStreamClose extends __protoMessage3114 {

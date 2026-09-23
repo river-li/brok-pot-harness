@@ -1,4 +1,4 @@
-var __protoPackage95, __protoMessage391, AgentMode, BackgroundTaskKind, BackgroundTaskStatus, BackgroundTaskNotificationContext, SubagentRunStatus, SubagentDispatchTool, CustomModeSource, SimulatedMsgReason, SubscriptionSource, ThinkingStyle, ResponseComparisonDisplayOrder, ResponseComparisonSkipReason, TaskArgs, TargetMachine, SameMachineTarget, NewCloudVmTarget, SelfHostedWorkerTarget, SelfHostedPoolTarget, SelfHostedWorkerLabel, TaskSuccess, TaskError, TaskResult, TaskToolCall, TaskToolCallDelta, SetActiveBranchArgs, SetActiveBranchSuccess, SetActiveBranchError, SetActiveBranchResult, SetActiveBranchToolCall, ToolCall, TruncatedToolCallArgs, TruncatedToolCallSuccess, TruncatedToolCallError, TruncatedToolCallResult, TruncatedToolCall, ToolCallDelta, ConversationStep, ConversationAction, TriggeringUserInfo, BackgroundTaskCompletionAction, BackgroundTaskCompletion, SubagentRunState, SubagentDispatchStep, CancelSubagentAction, BackgroundShellAction, BackgroundSubagentAction, InterruptedPendingToolCallResolution, InterruptedPendingToolCallResolutions, ConversationHistory, ConversationHistoryMessage, ConversationHistoryUserMessage, ConversationHistoryUserContent, ConversationHistoryTextContent, ConversationHistoryImageContent, ConversationHistoryAssistantMessage, ConversationHistoryAssistantContent, ConversationHistoryReasoningContent, ConversationHistoryRedactedReasoningContent, ConversationHistoryToolCall, ConversationHistoryToolMessage, ConversationHistoryToolResultContent, UserMessageAction, SubscriptionNotificationAction, GoalContinuationAction, InjectContextAction, UserContextInjection, SystemContextInjection, ContextInjectionState, ContextInjectionQueued, ContextInjectionDelivered, ContextInjectionQueuedForNextTurn, ContextInjectionCancelled, ContextInjectionRejected, SubmittedCustomMode, CustomModeDescriptor, SubmittedExitedCustomMode, CustomModeExitIntent, CustomModeIntent, CancelAction, ResumeAction, AsyncAskQuestionCompletionAction, SummarizeAction, ShellCommandAction, StartPlanAction, ExecutePlanAction, SubscriptionEventDisplay, UserDisplayInfo, ExecutePlanInfo, ProjectDetails, ProjectSubagentDetails, ProjectSideChatDetails, UserMessage, UserMessage_SimulatedMessageMetadata, AssistantMessage, ThinkingMessage, ShellCommand, ShellOutput, ConversationTurn, ConversationPlan, PlanRegistryEntry, GoalState, ConversationTurnStructure, AgentConversationTurn, AgentConversationTurnStructure, ShellConversationTurn, ShellConversationTurnStructure, ConversationSummary, ConversationSummaryArchive, PromptTokenBreakdownCategory, PromptTokenBreakdownSnapshot, PromptContextSourceRef, PromptContextNode, PromptContextUsageTree, PromptContextUsageSnapshot, ConversationTokenDetails, FileState, FileStateStructure, StepTiming, ConversationState, CommunicateUpdateHistoryEntry, CommunicateUpdateTurnState, SubagentPersistedState, CloudSubagentReference, TrackedGitRepo, ConversationStateStructure, ThinkingDetails, ClientLlmGatewayCredential, ModelDetails2, SubagentModelOverride, PreFetchedBlob, AgentRunRequest, TextDeltaUpdate, RoutedModelUpdate, ToolCallStartedUpdate, ToolCallCompletedUpdate, ToolCallDeltaUpdate, PartialToolCallUpdate, ThinkingDeltaUpdate, ThinkingCompletedUpdate, TokenDeltaUpdate, SummaryUpdate, SummaryStartedUpdate, HeartbeatUpdate, SummaryCompletedUpdate, ShellOutputDeltaUpdate, TurnEndedUpdate, UserMessageAppendedUpdate, StepStartedUpdate, StepCompletedUpdate, PromptSuggestionUpdate, ActiveBranchChange, FeedbackRequestCategory, FeedbackRequestCategoryGroup, FeedbackRequestUpdate, ResponseComparisonStarted, ResponseComparisonTextDelta, ResponseComparisonCompleted, ResponseComparisonSkipped, ResponseComparisonUpdate, InteractionUpdate, ContextInjectionStateUpdate, PostRequestPromptUpdate, GrokBotNudgeUpdate, InteractionQuery, InteractionResponse, AskQuestionInteractionQuery, AskQuestionInteractionResponse, TaskToolCallArgsProto, SubagentCredentials, CloudSubagentInheritedContext, PreparedTaskSubagent;
+var __protoPackage96, __protoMessage391, AgentMode, BackgroundTaskKind, BackgroundTaskStatus, BackgroundTaskNotificationContext, SubagentRunStatus, SubagentDispatchTool, CustomModeSource, SimulatedMsgReason, SubscriptionSource, ThinkingStyle, ResponseComparisonDisplayOrder, ResponseComparisonSkipReason, TaskArgs, TargetMachine, SameMachineTarget, NewCloudVmTarget, SelfHostedWorkerTarget, SelfHostedPoolTarget, SelfHostedWorkerLabel, TaskSuccess, TaskError, TaskResult, TaskToolCall, TaskToolCallDelta, SetActiveBranchArgs, SetActiveBranchSuccess, SetActiveBranchError, SetActiveBranchResult, SetActiveBranchToolCall, ToolCall, TruncatedToolCallArgs, TruncatedToolCallSuccess, TruncatedToolCallError, TruncatedToolCallResult, TruncatedToolCall, ToolCallDelta, ConversationStep, ConversationAction, TriggeringUserInfo, BackgroundTaskCompletionAction, BackgroundTaskCompletion, SubagentRunState, SubagentDispatchStep, CancelSubagentAction, BackgroundShellAction, BackgroundSubagentAction, InterruptedPendingToolCallResolution, InterruptedPendingToolCallResolutions, ConversationHistory, ConversationHistoryMessage, ConversationHistoryUserMessage, ConversationHistoryUserContent, ConversationHistoryTextContent, ConversationHistoryImageContent, ConversationHistoryAssistantMessage, ConversationHistoryAssistantContent, ConversationHistoryReasoningContent, ConversationHistoryRedactedReasoningContent, ConversationHistoryToolCall, ConversationHistoryToolMessage, ConversationHistoryToolResultContent, UserMessageAction, SubscriptionNotificationAction, GoalContinuationAction, InjectContextAction, UserContextInjection, SystemContextInjection, ContextInjectionState, ContextInjectionQueued, ContextInjectionDelivered, ContextInjectionQueuedForNextTurn, ContextInjectionCancelled, ContextInjectionRejected, SubmittedCustomMode, CustomModeDescriptor, SubmittedExitedCustomMode, CustomModeExitIntent, CustomModeIntent, CancelAction, ResumeAction, AsyncAskQuestionCompletionAction, SummarizeAction, ShellCommandAction, StartPlanAction, ExecutePlanAction, SubscriptionEventDisplay, UserDisplayInfo, ExecutePlanInfo, ProjectDetails, ProjectSubagentDetails, ProjectSideChatDetails, UserMessage, UserMessage_SimulatedMessageMetadata, AssistantMessage, ThinkingMessage, ShellCommand, ShellOutput, ConversationTurn, ConversationPlan, PlanRegistryEntry, GoalState, ConversationTurnStructure, AgentConversationTurn, AgentConversationTurnStructure, ShellConversationTurn, ShellConversationTurnStructure, ConversationSummary, ConversationSummaryArchive, PromptTokenBreakdownCategory, PromptTokenBreakdownSnapshot, PromptContextSourceRef, PromptContextNode, PromptContextUsageTree, PromptContextUsageSnapshot, ConversationTokenDetails, FileState, FileStateStructure, StepTiming, ConversationState, CommunicateUpdateHistoryEntry, CommunicateUpdateTurnState, SubagentPersistedState, CloudSubagentReference, TrackedGitRepo, ConversationStateStructure, ThinkingDetails, ClientLlmGatewayCredential, ModelDetails2, SubagentModelOverride, PreFetchedBlob, AgentRunRequest, TextDeltaUpdate, RoutedModelUpdate, ToolCallStartedUpdate, ToolCallCompletedUpdate, ToolCallDeltaUpdate, PartialToolCallUpdate, ThinkingDeltaUpdate, ThinkingCompletedUpdate, TokenDeltaUpdate, SummaryUpdate, SummaryStartedUpdate, HeartbeatUpdate, SummaryCompletedUpdate, ShellOutputDeltaUpdate, TurnEndedUpdate, UserMessageAppendedUpdate, StepStartedUpdate, ToolRequestsListedUpdate, StepCompletedUpdate, PromptSuggestionUpdate, ActiveBranchChange, FeedbackRequestCategory, FeedbackRequestCategoryGroup, FeedbackRequestUpdate, ResponseComparisonStarted, ResponseComparisonTextDelta, ResponseComparisonCompleted, ResponseComparisonSkipped, ResponseComparisonUpdate, InteractionUpdate, ContextInjectionStateUpdate, PostRequestPromptUpdate, GrokBotNudgeUpdate, InteractionQuery, InteractionResponse, AskQuestionInteractionQuery, AskQuestionInteractionResponse, TaskToolCallArgsProto, SubagentCredentials, CloudSubagentInheritedContext, PreparedTaskSubagent;
 var init_agent_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/agent_pb.js"() {
     "use strict";
@@ -70,27 +70,27 @@ var init_agent_pb = __esm({
     init_mcp_pb();
     init_system_prompt_pb();
     init_compact();
-    __protoPackage95 = "agent.v1.";
+    __protoPackage96 = "agent.v1.";
     __protoMessage391 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage95;
+        return __protoPackage96;
       }
     };
-    AgentMode = /* @__PURE__ */ enumType(proto3, __protoPackage95, "AgentMode", [[0, "UNSPECIFIED"], [1, "AGENT"], [2, "ASK"], [3, "PLAN"], [4, "DEBUG"], [5, "TRIAGE"], [6, "PROJECT"], [7, "MULTITASK"], [8, "CUSTOM"]], 1);
-    BackgroundTaskKind = /* @__PURE__ */ enumType(proto3, __protoPackage95, "BackgroundTaskKind", [[0, "UNSPECIFIED"], [1, "SHELL"], [2, "SUBAGENT"]], 1);
-    BackgroundTaskStatus = /* @__PURE__ */ enumType(proto3, __protoPackage95, "BackgroundTaskStatus", [[0, "UNSPECIFIED"], [1, "SUCCESS"], [2, "ERROR"], [3, "ABORTED"]], 1);
-    BackgroundTaskNotificationContext = /* @__PURE__ */ enumType(proto3, __protoPackage95, "BackgroundTaskNotificationContext", [[0, "UNSPECIFIED"], [1, "USER_DRIVEN_INTERACTIVE_CHILD"]], 1);
-    SubagentRunStatus = /* @__PURE__ */ enumType(proto3, __protoPackage95, "SubagentRunStatus", [[0, "UNSPECIFIED"], [1, "RUNNING"], [2, "BACKGROUNDED"], [3, "SUCCESS"], [4, "ERROR"], [5, "ABORTED"]], 1);
-    SubagentDispatchTool = /* @__PURE__ */ enumType(proto3, __protoPackage95, "SubagentDispatchTool", [[0, "UNSPECIFIED"], [1, "TASK"], [2, "CREATE_AGENT"], [3, "SEND_TO_AGENT"]], 1);
-    CustomModeSource = /* @__PURE__ */ enumType(proto3, __protoPackage95, "CustomModeSource", [[0, "UNSPECIFIED"], [1, "AGENT_SKILL"], [2, "PLUGIN_SKILL"], [3, "REPO_SKILL"], [4, "MANAGED_SKILL"]], 1);
-    SimulatedMsgReason = /* @__PURE__ */ enumType(proto3, __protoPackage95, "SimulatedMsgReason", [[0, "UNSPECIFIED"], [1, "PLAN_EXECUTION"], [2, "COMMIT_REMINDER"], [3, "BACKGROUND_TASK_COMPLETION"], [4, "DIFF_TAB_COMMIT"], [5, "DIFF_TAB_COMMIT_AND_PUSH"], [6, "DIFF_TAB_PUSH"], [7, "DIFF_TAB_CREATE_PR"], [8, "DIFF_TAB_FIX_MERGE_CONFLICTS"], [9, "USER_SENT_TO_SUBAGENT"], [10, "USER_INTERRUPTED_SUBAGENT"], [11, "USER_QUEUED_TO_SUBAGENT"], [12, "BABYSIT_PR_IN_CLOUD"], [13, "CI_PANEL_INVESTIGATE_FAILURE"], [14, "MULTITASK"], [15, "BUILD_IN_PARALLEL"], [16, "MULTITASK_SPLIT_PRS"], [17, "APPLY_LOCALLY"], [18, "CHECKOUT_BRANCH"], [19, "DIFF_TAB_UPDATE_BRANCH"], [20, "PR_TAB_BUGBOT_FIX"], [22, "RUN_BUGBOT_REVIEW"], [23, "RUN_SECURITY_REVIEW"], [24, "FSD_APPLY_FINDING"], [25, "FSD_UNDO_FINDING"], [26, "FSD_START"], [27, "FSD_PR_INTERRUPT"], [28, "SUBSCRIPTION"], [29, "DIFF_TAB_CREATE_BRANCH"], [30, "AGENT_STORE_CONFLICT"], [31, "GOAL_CONTINUATION"], [32, "PROJECT_KICKOFF"], [33, "MARKDOWN_PROMPT_BUTTON"], [34, "USER_QUICK_ACTION"]], 1);
-    SubscriptionSource = /* @__PURE__ */ enumType(proto3, __protoPackage95, "SubscriptionSource", [[0, "UNSPECIFIED"], [1, "SLACK"], [2, "GITHUB"], [3, "LINEAR"], [4, "ORIGIN"]], 1);
-    ThinkingStyle = /* @__PURE__ */ enumType(proto3, __protoPackage95, "ThinkingStyle", [[0, "UNSPECIFIED"], [1, "DEFAULT"], [2, "CODEX"], [3, "GPT5"]], 1);
-    ResponseComparisonDisplayOrder = /* @__PURE__ */ enumType(proto3, __protoPackage95, "ResponseComparisonDisplayOrder", [[0, "UNSPECIFIED"], [1, "PARENT_FIRST"], [2, "ALTERNATE_FIRST"]], 1);
-    ResponseComparisonSkipReason = /* @__PURE__ */ enumType(proto3, __protoPackage95, "ResponseComparisonSkipReason", [[0, "UNSPECIFIED"], [1, "ALTERNATE_TOOL_CALL"], [2, "INFERENCE_ERROR"], [3, "TIMEOUT"], [4, "CANCELLED"]], 1);
+    AgentMode = /* @__PURE__ */ enumType(proto3, __protoPackage96, "AgentMode", [[0, "UNSPECIFIED"], [1, "AGENT"], [2, "ASK"], [3, "PLAN"], [4, "DEBUG"], [5, "TRIAGE"], [6, "PROJECT"], [7, "MULTITASK"], [8, "CUSTOM"]], 1);
+    BackgroundTaskKind = /* @__PURE__ */ enumType(proto3, __protoPackage96, "BackgroundTaskKind", [[0, "UNSPECIFIED"], [1, "SHELL"], [2, "SUBAGENT"]], 1);
+    BackgroundTaskStatus = /* @__PURE__ */ enumType(proto3, __protoPackage96, "BackgroundTaskStatus", [[0, "UNSPECIFIED"], [1, "SUCCESS"], [2, "ERROR"], [3, "ABORTED"]], 1);
+    BackgroundTaskNotificationContext = /* @__PURE__ */ enumType(proto3, __protoPackage96, "BackgroundTaskNotificationContext", [[0, "UNSPECIFIED"], [1, "USER_DRIVEN_INTERACTIVE_CHILD"]], 1);
+    SubagentRunStatus = /* @__PURE__ */ enumType(proto3, __protoPackage96, "SubagentRunStatus", [[0, "UNSPECIFIED"], [1, "RUNNING"], [2, "BACKGROUNDED"], [3, "SUCCESS"], [4, "ERROR"], [5, "ABORTED"]], 1);
+    SubagentDispatchTool = /* @__PURE__ */ enumType(proto3, __protoPackage96, "SubagentDispatchTool", [[0, "UNSPECIFIED"], [1, "TASK"], [2, "CREATE_AGENT"], [3, "SEND_TO_AGENT"]], 1);
+    CustomModeSource = /* @__PURE__ */ enumType(proto3, __protoPackage96, "CustomModeSource", [[0, "UNSPECIFIED"], [1, "AGENT_SKILL"], [2, "PLUGIN_SKILL"], [3, "REPO_SKILL"], [4, "MANAGED_SKILL"]], 1);
+    SimulatedMsgReason = /* @__PURE__ */ enumType(proto3, __protoPackage96, "SimulatedMsgReason", [[0, "UNSPECIFIED"], [1, "PLAN_EXECUTION"], [2, "COMMIT_REMINDER"], [3, "BACKGROUND_TASK_COMPLETION"], [4, "DIFF_TAB_COMMIT"], [5, "DIFF_TAB_COMMIT_AND_PUSH"], [6, "DIFF_TAB_PUSH"], [7, "DIFF_TAB_CREATE_PR"], [8, "DIFF_TAB_FIX_MERGE_CONFLICTS"], [9, "USER_SENT_TO_SUBAGENT"], [10, "USER_INTERRUPTED_SUBAGENT"], [11, "USER_QUEUED_TO_SUBAGENT"], [12, "BABYSIT_PR_IN_CLOUD"], [13, "CI_PANEL_INVESTIGATE_FAILURE"], [14, "MULTITASK"], [15, "BUILD_IN_PARALLEL"], [16, "MULTITASK_SPLIT_PRS"], [17, "APPLY_LOCALLY"], [18, "CHECKOUT_BRANCH"], [19, "DIFF_TAB_UPDATE_BRANCH"], [20, "PR_TAB_BUGBOT_FIX"], [22, "RUN_BUGBOT_REVIEW"], [23, "RUN_SECURITY_REVIEW"], [24, "FSD_APPLY_FINDING"], [25, "FSD_UNDO_FINDING"], [26, "FSD_START"], [27, "FSD_PR_INTERRUPT"], [28, "SUBSCRIPTION"], [29, "DIFF_TAB_CREATE_BRANCH"], [30, "AGENT_STORE_CONFLICT"], [31, "GOAL_CONTINUATION"], [32, "PROJECT_KICKOFF"], [33, "MARKDOWN_PROMPT_BUTTON"], [34, "USER_QUICK_ACTION"]], 1);
+    SubscriptionSource = /* @__PURE__ */ enumType(proto3, __protoPackage96, "SubscriptionSource", [[0, "UNSPECIFIED"], [1, "SLACK"], [2, "GITHUB"], [3, "LINEAR"], [4, "ORIGIN"]], 1);
+    ThinkingStyle = /* @__PURE__ */ enumType(proto3, __protoPackage96, "ThinkingStyle", [[0, "UNSPECIFIED"], [1, "DEFAULT"], [2, "CODEX"], [3, "GPT5"]], 1);
+    ResponseComparisonDisplayOrder = /* @__PURE__ */ enumType(proto3, __protoPackage96, "ResponseComparisonDisplayOrder", [[0, "UNSPECIFIED"], [1, "PARENT_FIRST"], [2, "ALTERNATE_FIRST"]], 1);
+    ResponseComparisonSkipReason = /* @__PURE__ */ enumType(proto3, __protoPackage96, "ResponseComparisonSkipReason", [[0, "UNSPECIFIED"], [1, "ALTERNATE_TOOL_CALL"], [2, "INFERENCE_ERROR"], [3, "TIMEOUT"], [4, "CANCELLED"]], 1);
     TaskArgs = class _TaskArgs extends __protoMessage391 {
       constructor(data) {
         super();
@@ -1206,7 +1206,7 @@ var init_agent_pb = __esm({
         return proto3.util.equals(_UserMessageAction, a, b2);
       }
       static $() {
-        return ["UserMessageAction|1 user_message #0|2 request_context #1|3 send_to_interaction_listener 8?|4 prepend_user_messages #0*|6 interrupted_pending_tool_call_resolutions #2?|7 conversation_history #3?", UserMessage, RequestContext, InterruptedPendingToolCallResolutions, ConversationHistory];
+        return ["UserMessageAction|1 user_message #0|2 request_context #1|3 send_to_interaction_listener 8?|4 prepend_user_messages #0*|6 interrupted_pending_tool_call_resolutions #2?|7 conversation_history #3?|8 trailing_conversation_history #3?", UserMessage, RequestContext, InterruptedPendingToolCallResolutions, ConversationHistory];
       }
     };
     SubscriptionNotificationAction = class _SubscriptionNotificationAction extends __protoMessage391 {
@@ -1802,7 +1802,7 @@ var init_agent_pb = __esm({
         return proto3.util.equals(_ProjectDetails, a, b2);
       }
       static $() {
-        return ["ProjectDetails|1 name 9?|2 subagent #0?|3 side_chat #1?", ProjectSubagentDetails, ProjectSideChatDetails];
+        return ["ProjectDetails|1 name 9?|2 subagent #0?|3 side_chat #1?|4 init_description 9?", ProjectSubagentDetails, ProjectSideChatDetails];
       }
     };
     ProjectSubagentDetails = class _ProjectSubagentDetails extends __protoMessage391 {
@@ -3179,6 +3179,28 @@ var init_agent_pb = __esm({
         return ["StepStartedUpdate|1 step_id 4"];
       }
     };
+    ToolRequestsListedUpdate = class _ToolRequestsListedUpdate extends __protoMessage391 {
+      constructor(data) {
+        super();
+        this.callCount = 0;
+        proto3.util.initPartial(data, this);
+      }
+      static fromBinary(bytes, options2) {
+        return new _ToolRequestsListedUpdate().fromBinary(bytes, options2);
+      }
+      static fromJson(jsonValue, options2) {
+        return new _ToolRequestsListedUpdate().fromJson(jsonValue, options2);
+      }
+      static fromJsonString(jsonString, options2) {
+        return new _ToolRequestsListedUpdate().fromJsonString(jsonString, options2);
+      }
+      static equals(a, b2) {
+        return proto3.util.equals(_ToolRequestsListedUpdate, a, b2);
+      }
+      static $() {
+        return ["ToolRequestsListedUpdate|1 call_count 13"];
+      }
+    };
     StepCompletedUpdate = class _StepCompletedUpdate extends __protoMessage391 {
       constructor(data) {
         super();
@@ -3453,7 +3475,7 @@ var init_agent_pb = __esm({
         return proto3.util.equals(_InteractionUpdate, a, b2);
       }
       static $() {
-        return ["InteractionUpdate|1 text_delta #0 message|7 partial_tool_call #1 message|15 tool_call_delta #2 message|2 tool_call_started #3 message|3 tool_call_completed #4 message|4 thinking_delta #5 message|5 thinking_completed #6 message|6 user_message_appended #7 message|8 token_delta #8 message|9 summary #9 message|10 summary_started #10 message|11 summary_completed #11 message|12 shell_output_delta #12 message|13 heartbeat #13 message|14 turn_ended #14 message|16 step_started #15 message|17 step_completed #16 message|18 prompt_suggestion #17 message|19 post_request_prompt #18 message|20 active_branch_change #19 message|21 feedback_request #20 message|22 response_comparison #21 message|23 context_injection_state #22 message|24 routed_model #23 message|26 grok_bot_nudge #24 message|25 message_started_at_ms 4?", TextDeltaUpdate, PartialToolCallUpdate, ToolCallDeltaUpdate, ToolCallStartedUpdate, ToolCallCompletedUpdate, ThinkingDeltaUpdate, ThinkingCompletedUpdate, UserMessageAppendedUpdate, TokenDeltaUpdate, SummaryUpdate, SummaryStartedUpdate, SummaryCompletedUpdate, ShellOutputDeltaUpdate, HeartbeatUpdate, TurnEndedUpdate, StepStartedUpdate, StepCompletedUpdate, PromptSuggestionUpdate, PostRequestPromptUpdate, ActiveBranchChange, FeedbackRequestUpdate, ResponseComparisonUpdate, ContextInjectionStateUpdate, RoutedModelUpdate, GrokBotNudgeUpdate];
+        return ["InteractionUpdate|1 text_delta #0 message|7 partial_tool_call #1 message|15 tool_call_delta #2 message|2 tool_call_started #3 message|3 tool_call_completed #4 message|4 thinking_delta #5 message|5 thinking_completed #6 message|6 user_message_appended #7 message|8 token_delta #8 message|9 summary #9 message|10 summary_started #10 message|11 summary_completed #11 message|12 shell_output_delta #12 message|13 heartbeat #13 message|14 turn_ended #14 message|16 step_started #15 message|17 step_completed #16 message|27 tool_requests_listed #17 message|18 prompt_suggestion #18 message|19 post_request_prompt #19 message|20 active_branch_change #20 message|21 feedback_request #21 message|22 response_comparison #22 message|23 context_injection_state #23 message|24 routed_model #24 message|26 grok_bot_nudge #25 message|25 message_started_at_ms 4?", TextDeltaUpdate, PartialToolCallUpdate, ToolCallDeltaUpdate, ToolCallStartedUpdate, ToolCallCompletedUpdate, ThinkingDeltaUpdate, ThinkingCompletedUpdate, UserMessageAppendedUpdate, TokenDeltaUpdate, SummaryUpdate, SummaryStartedUpdate, SummaryCompletedUpdate, ShellOutputDeltaUpdate, HeartbeatUpdate, TurnEndedUpdate, StepStartedUpdate, StepCompletedUpdate, ToolRequestsListedUpdate, PromptSuggestionUpdate, PostRequestPromptUpdate, ActiveBranchChange, FeedbackRequestUpdate, ResponseComparisonUpdate, ContextInjectionStateUpdate, RoutedModelUpdate, GrokBotNudgeUpdate];
       }
     };
     ContextInjectionStateUpdate = class _ContextInjectionStateUpdate extends __protoMessage391 {

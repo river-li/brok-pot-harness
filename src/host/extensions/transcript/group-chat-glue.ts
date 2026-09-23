@@ -68,7 +68,7 @@ var GroupChatGlue = class {
       if (!isAgentAbsent(error42)) reportFallback("group_chat_glue", error42);
       return { status: "not_found", reply: `No group found with id ${groupId}.` };
     }
-    const config2 = this.localGroupConfig((0, import_node_path158.dirname)(groupSession.dbPath));
+    const config2 = this.localGroupConfig((0, import_node_path159.dirname)(groupSession.dbPath));
     if (config2 == null) {
       return { status: "not_found", reply: `${groupId} is not a group chat.` };
     }
@@ -207,7 +207,7 @@ var GroupChatGlue = class {
     return summary == null ? null : this.tm.roster.finalizeSummaryForRpc(summary, stamp);
   }
   isGroupSession(session) {
-    return isSandGroupDir((0, import_node_path158.dirname)(session.dbPath));
+    return isSandGroupDir((0, import_node_path159.dirname)(session.dbPath));
   }
   localGroupConfig(dir) {
     const config2 = readSandGroupConfig(dir);
@@ -215,7 +215,7 @@ var GroupChatGlue = class {
     return readSandProfileHarness(getSandProfilePath(dir)) === "temporal" ? null : config2;
   }
   isServerRoomSession(session) {
-    const dir = (0, import_node_path158.dirname)(session.dbPath);
+    const dir = (0, import_node_path159.dirname)(session.dbPath);
     return isSandGroupDir(dir) && this.localGroupConfig(dir) == null;
   }
   isGroupAgentId(agentId) {
@@ -228,7 +228,7 @@ var GroupChatGlue = class {
   async runGroupTurn(session, epoch, options2 = {}) {
     try {
       const { traceCtx, lane = "background", attachments, isAttachmentOnlyTurn } = options2;
-      const config2 = this.localGroupConfig((0, import_node_path158.dirname)(session.dbPath));
+      const config2 = this.localGroupConfig((0, import_node_path159.dirname)(session.dbPath));
       if (config2 == null) return;
       const orchestrator = new GroupChatOrchestrator(
         this.groupOrchestratorDeps(session, epoch, traceCtx, lane, void 0, attachments)
@@ -272,7 +272,7 @@ var GroupChatGlue = class {
     const members = [];
     for (const id of memberIds) {
       const dir = this.tm.sessionStore.getAgentDir(id);
-      if (!(0, import_node_fs96.existsSync)(dir)) continue;
+      if (!(0, import_node_fs98.existsSync)(dir)) continue;
       if (isSandGroupDir(dir)) {
         this.tm.hostLog(
           `Sand group: ignoring nested group member ${id}; a group chat cannot be a member of another group.`,
@@ -292,8 +292,8 @@ var GroupChatGlue = class {
   }
   memberKindOf(memberId) {
     const profilePath = getSandProfilePath(this.tm.sessionStore.getAgentDir(memberId));
-    if (!(0, import_node_fs96.existsSync)(profilePath)) return "local";
-    const profile = parseProfileJson((0, import_node_fs96.readFileSync)(profilePath, "utf8"));
+    if (!(0, import_node_fs98.existsSync)(profilePath)) return "local";
+    const profile = parseProfileJson((0, import_node_fs98.readFileSync)(profilePath, "utf8"));
     if (profile === null) throw new SandGroupMemberHarnessError("Invalid member profile.");
     if (profile.harness === "temporal") return "temporal";
     if (profile.harness == null || profile.harness === "box") return "local";
@@ -498,7 +498,7 @@ var GroupChatGlue = class {
       this.reportMemberTurnOutcome(roomSession, member.id, "skipped");
       return [];
     }
-    const config2 = readSandGroupConfig((0, import_node_path158.dirname)(roomSession.dbPath));
+    const config2 = readSandGroupConfig((0, import_node_path159.dirname)(roomSession.dbPath));
     if (config2 == null) {
       this.reportMemberTurnOutcome(roomSession, member.id, "skipped");
       return [];

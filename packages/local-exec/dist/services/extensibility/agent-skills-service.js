@@ -56,7 +56,7 @@ var __disposeResources16 = /* @__PURE__ */ (function(SuppressedError2) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var log3 = (0, import_node_util8.debuglog)("merged-agent-skills");
+var log4 = (0, import_node_util9.debuglog)("merged-agent-skills");
 var MergedAgentSkillsService = class _MergedAgentSkillsService {
   constructor(services, getDisabledManagedSkillPaths = () => [], getPromptSortContext) {
     this.services = services;
@@ -69,13 +69,13 @@ var MergedAgentSkillsService = class _MergedAgentSkillsService {
     try {
       const span = __addDisposableResource16(env_1, createSpan(ctx.withName("MergedAgentSkillsService.getAllAgentSkills")), false);
       const allPromises = this.services.map((service) => service.getAllAgentSkills(span.ctx).catch((err) => {
-        log3("Failed to load agent skills from service: %s", err instanceof Error ? err.message : String(err));
+        log4("Failed to load agent skills from service: %s", err instanceof Error ? err.message : String(err));
         return [];
       }));
       const [allArrays, disabledPaths] = await Promise.all([
         Promise.all(allPromises),
         Promise.resolve(this.getDisabledManagedSkillPaths()).catch((err) => {
-          log3("getDisabledManagedSkillPaths rejected; fail-open: %s", err instanceof Error ? err.message : String(err));
+          log4("getDisabledManagedSkillPaths rejected; fail-open: %s", err instanceof Error ? err.message : String(err));
           return [];
         })
       ]);

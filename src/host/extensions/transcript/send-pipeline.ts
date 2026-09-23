@@ -355,7 +355,7 @@ var SendPipeline = class {
     if (session == null) return message;
     try {
       const ingested = await this.tm.createAttachmentIngestor(session)(filePath);
-      const fileName = (0, import_node_path160.basename)(filePath);
+      const fileName = (0, import_node_path161.basename)(filePath);
       const resolvedFileName = fileName.length > 0 ? fileName : message.file_name;
       return {
         type: "attachment",

@@ -27,16 +27,16 @@ var __awaiter35 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function structuredLoggerToMcpOAuthLifecycleLogger(args) {
-  const { logger: logger108, ctx } = args;
+  const { logger: logger110, ctx } = args;
   return {
-    debug: (message, metadata) => logger108.debug(ctx, message, metadata),
-    info: (message, metadata) => logger108.info(ctx, message, metadata),
-    warn: (message, metadata) => logger108.warn(ctx, message, metadata),
-    error: (message, error3, metadata) => logger108.error(ctx, message, error3, metadata)
+    debug: (message, metadata) => logger110.debug(ctx, message, metadata),
+    info: (message, metadata) => logger110.info(ctx, message, metadata),
+    warn: (message, metadata) => logger110.warn(ctx, message, metadata),
+    error: (message, error3, metadata) => logger110.error(ctx, message, error3, metadata)
   };
 }
-function createContextStructuredLifecycleLogger(ctx, logger108) {
-  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger108 });
+function createContextStructuredLifecycleLogger(ctx, logger110) {
+  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger110 });
 }
 var LoggedScopedMcpTokenStorage = class {
   constructor(options2) {

@@ -47,8 +47,8 @@ function withFailClosed(fn, actionDescription) {
     try {
       return yield fn();
     } catch (error42) {
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
-      const reason = createHookFailClosedMessage(actionDescription, errorMessage6);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
+      const reason = createHookFailClosedMessage(actionDescription, errorMessage7);
       throw new FailClosedError(reason, error42);
     }
   });
@@ -69,9 +69,9 @@ function createHookDenialMessage(actionDescription, userMessage2) {
 
 ${HOOK_SETTINGS_HINT}`);
 }
-function createHookFailClosedMessage(actionDescription, errorMessage6) {
+function createHookFailClosedMessage(actionDescription, errorMessage7) {
   const action = actionDescription !== null && actionDescription !== void 0 ? actionDescription : "Action";
-  const errorDetail = errorMessage6 ? `: ${errorMessage6}` : ".";
+  const errorDetail = errorMessage7 ? `: ${errorMessage7}` : ".";
   const baseMessage = `${action} was blocked because a configured hook failed to execute${errorDetail}
 
 This is a safety measure (fail-closed) - when hooks cannot be evaluated, the action is blocked to prevent potentially unsafe operations.`;

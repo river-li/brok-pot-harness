@@ -1,4 +1,4 @@
-var import_node_crypto30 = require("node:crypto");
+var import_node_crypto29 = require("node:crypto");
 var PROMPT_REFERENCE_ID_LENGTH = 7;
 var PROMPT_REFERENCE_ID_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 var PROMPT_REFERENCE_ID_ALPHABET_LENGTH = PROMPT_REFERENCE_ID_ALPHABET.length;
@@ -11,7 +11,7 @@ var PROMPT_REFERENCE_ID_PATTERN = new RegExp(`^${PROMPT_REFERENCE_ID_REGEX_SOURC
 var LEADING_USER_MESSAGE_ID_TAG_PATTERN = new RegExp(`^${USER_MESSAGE_ID_TAG_TEXT_PREFIX}\\s*(${PROMPT_REFERENCE_ID_REGEX_SOURCE})\\s*${USER_MESSAGE_ID_TAG_TEXT_SUFFIX}\\n?`);
 var LEADING_USER_MESSAGE_ID_TAG_LEGACY_PATTERN = new RegExp(`^${USER_MESSAGE_ID_TAG_TEXT_PREFIX}\\s*message_id=(${PROMPT_REFERENCE_ID_REGEX_SOURCE})\\s*${USER_MESSAGE_ID_TAG_TEXT_SUFFIX}\\n?`);
 function createPromptReferenceIdFromMessageId(messageId) {
-  const digest = (0, import_node_crypto30.createHash)("sha256").update(messageId).digest();
+  const digest = (0, import_node_crypto29.createHash)("sha256").update(messageId).digest();
   let id = "";
   for (let i = 0; i < PROMPT_REFERENCE_ID_LENGTH; i++) {
     id += PROMPT_REFERENCE_ID_ALPHABET[digest[i] % PROMPT_REFERENCE_ID_ALPHABET_LENGTH];
@@ -25,7 +25,7 @@ function createPromptReferenceId(messageId) {
   }
   let id = "";
   for (let i = 0; i < PROMPT_REFERENCE_ID_LENGTH; i++) {
-    id += PROMPT_REFERENCE_ID_ALPHABET[(0, import_node_crypto30.randomInt)(0, PROMPT_REFERENCE_ID_ALPHABET_LENGTH)];
+    id += PROMPT_REFERENCE_ID_ALPHABET[(0, import_node_crypto29.randomInt)(0, PROMPT_REFERENCE_ID_ALPHABET_LENGTH)];
   }
   return id;
 }

@@ -1,18 +1,18 @@
 init_compact();
-var __protoPackage174 = "origin.v1.";
-var __protoMessage3165 = class extends CompactMessage {
+var __protoPackage175 = "origin.v1.";
+var __protoMessage3166 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage174;
+    return __protoPackage175;
   }
 };
-var CommitCheckRollupState = /* @__PURE__ */ enumType(proto3, __protoPackage174, "CommitCheckRollupState", [[0, "UNSPECIFIED"], [1, "NONE"], [2, "SUCCESS"], [3, "PENDING"], [4, "FAILURE"]], 1);
-var CheckRunAnnotationLevel = /* @__PURE__ */ enumType(proto3, __protoPackage174, "CheckRunAnnotationLevel", [[0, "UNSPECIFIED"], [1, "NOTICE"], [2, "WARNING"], [3, "FAILURE"]], 1);
-var MergeabilityScope = /* @__PURE__ */ enumType(proto3, __protoPackage174, "MergeabilityScope", [[0, "UNSPECIFIED"], [1, "STACK"], [2, "SINGLE_CHANGE"]], 1);
-var RestackStackMemberOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage174, "RestackStackMemberOutcome", [[0, "UNSPECIFIED"], [1, "OK"], [2, "ALREADY_CURRENT"], [3, "CONFLICT"], [4, "SKIPPED"]], 1);
-var GetCiStateRequest = class _GetCiStateRequest extends __protoMessage3165 {
+var CommitCheckRollupState = /* @__PURE__ */ enumType(proto3, __protoPackage175, "CommitCheckRollupState", [[0, "UNSPECIFIED"], [1, "NONE"], [2, "SUCCESS"], [3, "PENDING"], [4, "FAILURE"]], 1);
+var CheckRunAnnotationLevel = /* @__PURE__ */ enumType(proto3, __protoPackage175, "CheckRunAnnotationLevel", [[0, "UNSPECIFIED"], [1, "NOTICE"], [2, "WARNING"], [3, "FAILURE"]], 1);
+var MergeabilityScope = /* @__PURE__ */ enumType(proto3, __protoPackage175, "MergeabilityScope", [[0, "UNSPECIFIED"], [1, "STACK"], [2, "SINGLE_CHANGE"]], 1);
+var RestackStackMemberOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage175, "RestackStackMemberOutcome", [[0, "UNSPECIFIED"], [1, "OK"], [2, "ALREADY_CURRENT"], [3, "CONFLICT"], [4, "SKIPPED"]], 1);
+var GetCiStateRequest = class _GetCiStateRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.sha = "";
@@ -34,7 +34,7 @@ var GetCiStateRequest = class _GetCiStateRequest extends __protoMessage3165 {
     return ["GetCiStateRequest|1 identifier #0|2 sha 9|3 change_number 4?|4 version_number 4?|5 use_latest_version 8?|6 include_check_run_annotations 8?", ClientRepoIdentifier];
   }
 };
-var GetCiStateResponse = class _GetCiStateResponse extends __protoMessage3165 {
+var GetCiStateResponse = class _GetCiStateResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.checkRunGroups = [];
@@ -57,7 +57,7 @@ var GetCiStateResponse = class _GetCiStateResponse extends __protoMessage3165 {
     return ["GetCiStateResponse|1 check_run_groups #0*|2 missing_required_checks #1*|3 resolved_head_sha 9?", CheckRunGroup, MissingRequiredCheck];
   }
 };
-var BatchGetCommitCheckRollupsRequest = class _BatchGetCommitCheckRollupsRequest extends __protoMessage3165 {
+var BatchGetCommitCheckRollupsRequest = class _BatchGetCommitCheckRollupsRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.shas = [];
@@ -79,7 +79,7 @@ var BatchGetCommitCheckRollupsRequest = class _BatchGetCommitCheckRollupsRequest
     return ["BatchGetCommitCheckRollupsRequest|1 identifier #0|2 shas 9*", ClientRepoIdentifier];
   }
 };
-var CommitCheckRollup = class _CommitCheckRollup extends __protoMessage3165 {
+var CommitCheckRollup = class _CommitCheckRollup extends __protoMessage3166 {
   constructor(data) {
     super();
     this.sha = "";
@@ -105,7 +105,7 @@ var CommitCheckRollup = class _CommitCheckRollup extends __protoMessage3165 {
     return ["CommitCheckRollup|1 sha 9|2 state #0|3 success_count 13|4 pending_count 13|5 failure_count 13", CommitCheckRollupState];
   }
 };
-var BatchGetCommitCheckRollupsResponse = class _BatchGetCommitCheckRollupsResponse extends __protoMessage3165 {
+var BatchGetCommitCheckRollupsResponse = class _BatchGetCommitCheckRollupsResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.rollups = [];
@@ -127,7 +127,7 @@ var BatchGetCommitCheckRollupsResponse = class _BatchGetCommitCheckRollupsRespon
     return ["BatchGetCommitCheckRollupsResponse|1 rollups #0*", CommitCheckRollup];
   }
 };
-var GetCheckRunRequest = class _GetCheckRunRequest extends __protoMessage3165 {
+var GetCheckRunRequest = class _GetCheckRunRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.checkRunId = "";
@@ -149,7 +149,7 @@ var GetCheckRunRequest = class _GetCheckRunRequest extends __protoMessage3165 {
     return ["GetCheckRunRequest|1 identifier #0|2 check_run_id 9", ClientRepoIdentifier];
   }
 };
-var GetCheckRunResponse = class _GetCheckRunResponse extends __protoMessage3165 {
+var GetCheckRunResponse = class _GetCheckRunResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -170,7 +170,7 @@ var GetCheckRunResponse = class _GetCheckRunResponse extends __protoMessage3165 
     return ["GetCheckRunResponse|1 check_run #0", CheckRunStatus];
   }
 };
-var ListRepoCheckSourcesRequest = class _ListRepoCheckSourcesRequest extends __protoMessage3165 {
+var ListRepoCheckSourcesRequest = class _ListRepoCheckSourcesRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -191,7 +191,7 @@ var ListRepoCheckSourcesRequest = class _ListRepoCheckSourcesRequest extends __p
     return ["ListRepoCheckSourcesRequest|1 identifier #0", ClientRepoIdentifier];
   }
 };
-var RepoCheckSourceRun = class _RepoCheckSourceRun extends __protoMessage3165 {
+var RepoCheckSourceRun = class _RepoCheckSourceRun extends __protoMessage3166 {
   constructor(data) {
     super();
     this.runKey = "";
@@ -214,7 +214,7 @@ var RepoCheckSourceRun = class _RepoCheckSourceRun extends __protoMessage3165 {
     return ["RepoCheckSourceRun|1 run_key 9|2 name 9"];
   }
 };
-var RepoCheckSource = class _RepoCheckSource extends __protoMessage3165 {
+var RepoCheckSource = class _RepoCheckSource extends __protoMessage3166 {
   constructor(data) {
     super();
     this.groupKey = "";
@@ -239,7 +239,7 @@ var RepoCheckSource = class _RepoCheckSource extends __protoMessage3165 {
     return ["RepoCheckSource|1 actor #0|2 group_key 9|3 suite_name 9|4 runs #1*|5 last_seen_at_unix_ms 3", CheckRunActor, RepoCheckSourceRun];
   }
 };
-var ListRepoCheckSourcesResponse = class _ListRepoCheckSourcesResponse extends __protoMessage3165 {
+var ListRepoCheckSourcesResponse = class _ListRepoCheckSourcesResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.sources = [];
@@ -261,7 +261,7 @@ var ListRepoCheckSourcesResponse = class _ListRepoCheckSourcesResponse extends _
     return ["ListRepoCheckSourcesResponse|1 sources #0*", RepoCheckSource];
   }
 };
-var MissingRequiredCheck = class _MissingRequiredCheck extends __protoMessage3165 {
+var MissingRequiredCheck = class _MissingRequiredCheck extends __protoMessage3166 {
   constructor(data) {
     super();
     this.displayName = "";
@@ -284,7 +284,7 @@ var MissingRequiredCheck = class _MissingRequiredCheck extends __protoMessage316
     return ["MissingRequiredCheck|1 display_name 9|2 identity_path 9"];
   }
 };
-var CheckRunActor = class _CheckRunActor extends __protoMessage3165 {
+var CheckRunActor = class _CheckRunActor extends __protoMessage3166 {
   constructor(data) {
     super();
     this.kind = "";
@@ -310,7 +310,7 @@ var CheckRunActor = class _CheckRunActor extends __protoMessage3165 {
     return ["CheckRunActor|1 kind 9|2 id 9|3 display_name 9|5 icon_url 9|6 app_id 9"];
   }
 };
-var CheckRunOutput = class _CheckRunOutput extends __protoMessage3165 {
+var CheckRunOutput = class _CheckRunOutput extends __protoMessage3166 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -331,7 +331,7 @@ var CheckRunOutput = class _CheckRunOutput extends __protoMessage3165 {
     return ["CheckRunOutput|1 title 9?|2 summary 9?|3 text 9?"];
   }
 };
-var CheckRunStatus = class _CheckRunStatus extends __protoMessage3165 {
+var CheckRunStatus = class _CheckRunStatus extends __protoMessage3166 {
   constructor(data) {
     super();
     this.id = "";
@@ -356,7 +356,7 @@ var CheckRunStatus = class _CheckRunStatus extends __protoMessage3165 {
     return ["CheckRunStatus|1 id 9|2 name 9|4 details_url 9?|5 status #0|6 conclusion #1?|7 started_at_unix_ms 3?|8 completed_at_unix_ms 3?|9 external_id 9|10 required 8?|11 output #2?|12 deadline_at_unix_ms 3?|13 is_rerequestable 8?|14 rerequested_at_unix_ms 3?|15 annotations #3?", CheckRunLifecycleStatus, CheckRunConclusion, CheckRunOutput, CheckRunAnnotationBatch];
   }
 };
-var CheckRunAnnotationBatch = class _CheckRunAnnotationBatch extends __protoMessage3165 {
+var CheckRunAnnotationBatch = class _CheckRunAnnotationBatch extends __protoMessage3166 {
   constructor(data) {
     super();
     this.annotations = [];
@@ -379,7 +379,7 @@ var CheckRunAnnotationBatch = class _CheckRunAnnotationBatch extends __protoMess
     return ["CheckRunAnnotationBatch|1 annotations #0*|2 truncated 8", CheckRunAnnotation];
   }
 };
-var CheckRunGroup = class _CheckRunGroup extends __protoMessage3165 {
+var CheckRunGroup = class _CheckRunGroup extends __protoMessage3166 {
   constructor(data) {
     super();
     this.id = "";
@@ -404,7 +404,7 @@ var CheckRunGroup = class _CheckRunGroup extends __protoMessage3165 {
     return ["CheckRunGroup|1 id 9|2 name 9|4 details_url 9?|5 check_runs #0*|6 actor #1|7 external_id 9", CheckRunStatus, CheckRunActor];
   }
 };
-var CiState = class _CiState extends __protoMessage3165 {
+var CiState = class _CiState extends __protoMessage3166 {
   constructor(data) {
     super();
     this.checkRunGroups = [];
@@ -426,7 +426,7 @@ var CiState = class _CiState extends __protoMessage3165 {
     return ["CiState|1 check_run_groups #0*", CheckRunGroup];
   }
 };
-var PostCheckRunRequest = class _PostCheckRunRequest extends __protoMessage3165 {
+var PostCheckRunRequest = class _PostCheckRunRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.headSha = "";
@@ -448,7 +448,7 @@ var PostCheckRunRequest = class _PostCheckRunRequest extends __protoMessage3165 
     return ["PostCheckRunRequest|1 identifier #0|2 head_sha 9|3 group #1|4 check #2", ClientRepoIdentifier, CheckRunGroupInput, CheckRunInput];
   }
 };
-var CheckRunGroupInput = class _CheckRunGroupInput extends __protoMessage3165 {
+var CheckRunGroupInput = class _CheckRunGroupInput extends __protoMessage3166 {
   constructor(data) {
     super();
     this.key = "";
@@ -472,7 +472,7 @@ var CheckRunGroupInput = class _CheckRunGroupInput extends __protoMessage3165 {
     return ["CheckRunGroupInput|1 key 9|2 name 9|3 external_id 9|4 details_url 9?"];
   }
 };
-var CheckRunInput = class _CheckRunInput extends __protoMessage3165 {
+var CheckRunInput = class _CheckRunInput extends __protoMessage3166 {
   constructor(data) {
     super();
     this.key = "";
@@ -498,7 +498,7 @@ var CheckRunInput = class _CheckRunInput extends __protoMessage3165 {
     return ["CheckRunInput|1 key 9|2 name 9|3 external_id 9|4 status #0|5 conclusion #1?|6 external_updated_at_unix_ms 3|7 started_at_unix_ms 3?|8 completed_at_unix_ms 3?|10 details_url 9?|11 output #2?|12 deadline_at_unix_ms 3?|13 is_rerequestable 8?", CheckRunLifecycleStatus, CheckRunConclusion, CheckRunOutput];
   }
 };
-var PostCheckRunResponse = class _PostCheckRunResponse extends __protoMessage3165 {
+var PostCheckRunResponse = class _PostCheckRunResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.repoId = "";
@@ -523,7 +523,7 @@ var PostCheckRunResponse = class _PostCheckRunResponse extends __protoMessage316
     return ["PostCheckRunResponse|1 repo_id 9|2 sha 9|3 check_run_group_id 9|4 check_run_id 9"];
   }
 };
-var CheckRunAnnotationColumnRange = class _CheckRunAnnotationColumnRange extends __protoMessage3165 {
+var CheckRunAnnotationColumnRange = class _CheckRunAnnotationColumnRange extends __protoMessage3166 {
   constructor(data) {
     super();
     this.startColumn = 0;
@@ -546,7 +546,7 @@ var CheckRunAnnotationColumnRange = class _CheckRunAnnotationColumnRange extends
     return ["CheckRunAnnotationColumnRange|1 start_column 5|2 end_column 5"];
   }
 };
-var CheckRunAnnotationLocation = class _CheckRunAnnotationLocation extends __protoMessage3165 {
+var CheckRunAnnotationLocation = class _CheckRunAnnotationLocation extends __protoMessage3166 {
   constructor(data) {
     super();
     this.path = "";
@@ -570,7 +570,7 @@ var CheckRunAnnotationLocation = class _CheckRunAnnotationLocation extends __pro
     return ["CheckRunAnnotationLocation|1 path 9|2 start_line 5|3 end_line 5|4 columns #0", CheckRunAnnotationColumnRange];
   }
 };
-var CheckRunAnnotationInput = class _CheckRunAnnotationInput extends __protoMessage3165 {
+var CheckRunAnnotationInput = class _CheckRunAnnotationInput extends __protoMessage3166 {
   constructor(data) {
     super();
     this.annotationLevel = CheckRunAnnotationLevel.UNSPECIFIED;
@@ -593,7 +593,7 @@ var CheckRunAnnotationInput = class _CheckRunAnnotationInput extends __protoMess
     return ["CheckRunAnnotationInput|4 annotation_level #0|5 message 9|8 title 9?|9 raw_details 9?|11 location #1", CheckRunAnnotationLevel, CheckRunAnnotationLocation];
   }
 };
-var CheckRunAnnotation = class _CheckRunAnnotation extends __protoMessage3165 {
+var CheckRunAnnotation = class _CheckRunAnnotation extends __protoMessage3166 {
   constructor(data) {
     super();
     this.id = "";
@@ -620,7 +620,7 @@ var CheckRunAnnotation = class _CheckRunAnnotation extends __protoMessage3165 {
     return ["CheckRunAnnotation|1 id 9|2 check_run_id 9|3 annotation_level #0|4 message 9|5 title 9?|6 raw_details 9?|7 created_at_unix_ms 3|8 updated_at_unix_ms 3|9 location #1", CheckRunAnnotationLevel, CheckRunAnnotationLocation];
   }
 };
-var CreateCheckRunAnnotationsRequest = class _CreateCheckRunAnnotationsRequest extends __protoMessage3165 {
+var CreateCheckRunAnnotationsRequest = class _CreateCheckRunAnnotationsRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.checkRunId = "";
@@ -643,7 +643,7 @@ var CreateCheckRunAnnotationsRequest = class _CreateCheckRunAnnotationsRequest e
     return ["CreateCheckRunAnnotationsRequest|1 identifier #0|2 check_run_id 9|3 annotations #1*", ClientRepoIdentifier, CheckRunAnnotationInput];
   }
 };
-var CreateCheckRunAnnotationsResponse = class _CreateCheckRunAnnotationsResponse extends __protoMessage3165 {
+var CreateCheckRunAnnotationsResponse = class _CreateCheckRunAnnotationsResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.annotations = [];
@@ -665,7 +665,7 @@ var CreateCheckRunAnnotationsResponse = class _CreateCheckRunAnnotationsResponse
     return ["CreateCheckRunAnnotationsResponse|1 annotations #0*", CheckRunAnnotation];
   }
 };
-var ListCheckRunAnnotationsRequest = class _ListCheckRunAnnotationsRequest extends __protoMessage3165 {
+var ListCheckRunAnnotationsRequest = class _ListCheckRunAnnotationsRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.checkRunId = "";
@@ -689,7 +689,7 @@ var ListCheckRunAnnotationsRequest = class _ListCheckRunAnnotationsRequest exten
     return ["ListCheckRunAnnotationsRequest|1 identifier #0|2 check_run_id 9|3 page_size 5|4 page_token 9", ClientRepoIdentifier];
   }
 };
-var ListCheckRunAnnotationsResponse = class _ListCheckRunAnnotationsResponse extends __protoMessage3165 {
+var ListCheckRunAnnotationsResponse = class _ListCheckRunAnnotationsResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.annotations = [];
@@ -712,7 +712,7 @@ var ListCheckRunAnnotationsResponse = class _ListCheckRunAnnotationsResponse ext
     return ["ListCheckRunAnnotationsResponse|1 annotations #0*|2 next_page_token 9", CheckRunAnnotation];
   }
 };
-var RerequestCheckRunRequest = class _RerequestCheckRunRequest extends __protoMessage3165 {
+var RerequestCheckRunRequest = class _RerequestCheckRunRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.checkRunId = "";
@@ -734,7 +734,7 @@ var RerequestCheckRunRequest = class _RerequestCheckRunRequest extends __protoMe
     return ["RerequestCheckRunRequest|1 change #0|2 check_run_id 9", ChangeIdentifier];
   }
 };
-var RerequestCheckRunResponse = class _RerequestCheckRunResponse extends __protoMessage3165 {
+var RerequestCheckRunResponse = class _RerequestCheckRunResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -755,7 +755,7 @@ var RerequestCheckRunResponse = class _RerequestCheckRunResponse extends __proto
     return ["RerequestCheckRunResponse|1 check_run #0", CheckRunStatus];
   }
 };
-var GetChangesetMergeabilityRequest = class _GetChangesetMergeabilityRequest extends __protoMessage3165 {
+var GetChangesetMergeabilityRequest = class _GetChangesetMergeabilityRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.changeNumber = protoInt64.zero;
@@ -778,7 +778,7 @@ var GetChangesetMergeabilityRequest = class _GetChangesetMergeabilityRequest ext
     return ["GetChangesetMergeabilityRequest|1 identifier #0|2 change_number 4|3 expected_head_sha 9?|4 scope #1", ClientRepoIdentifier, MergeabilityScope];
   }
 };
-var GetChangesetMergeabilityResponse = class _GetChangesetMergeabilityResponse extends __protoMessage3165 {
+var GetChangesetMergeabilityResponse = class _GetChangesetMergeabilityResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.mergeable = false;
@@ -804,7 +804,7 @@ var GetChangesetMergeabilityResponse = class _GetChangesetMergeabilityResponse e
     return ["GetChangesetMergeabilityResponse|1 mergeable 8|2 ci_passing 8|3 ci_state #0|4 meets_approval_requirements 8|5 has_merge_conflicts 8|6 mergeability #1|7 stack_mergeability #2?|8 conflicted_paths 9*", CiState, ChangesetMergeability, StackMergeability];
   }
 };
-var ChangesetMergeability = class _ChangesetMergeability extends __protoMessage3165 {
+var ChangesetMergeability = class _ChangesetMergeability extends __protoMessage3166 {
   constructor(data) {
     super();
     this.verdict = "";
@@ -829,7 +829,7 @@ var ChangesetMergeability = class _ChangesetMergeability extends __protoMessage3
     return ["ChangesetMergeability|1 verdict 9|2 evaluations #0*|3 blockers #1*|4 configuration_diagnostics #2*", ChangesetRuleEvaluation, ChangesetMergeBlocker, ChangesetRuleConfigurationDiagnostic];
   }
 };
-var ChangesetRuleEvaluation = class _ChangesetRuleEvaluation extends __protoMessage3165 {
+var ChangesetRuleEvaluation = class _ChangesetRuleEvaluation extends __protoMessage3166 {
   constructor(data) {
     super();
     this.ruleType = "";
@@ -859,7 +859,7 @@ var ChangesetRuleEvaluation = class _ChangesetRuleEvaluation extends __protoMess
     return ["ChangesetRuleEvaluation|1 rule_type 9|2 ruleset_id 9|3 ruleset_name 9|4 rule_id 9|5 enforcement 9|6 result 9|7 message 9|8 category 9|9 violations #0*", ChangesetRuleViolation];
   }
 };
-var ChangesetRuleViolation = class _ChangesetRuleViolation extends __protoMessage3165 {
+var ChangesetRuleViolation = class _ChangesetRuleViolation extends __protoMessage3166 {
   constructor(data) {
     super();
     this.ruleType = "";
@@ -882,7 +882,7 @@ var ChangesetRuleViolation = class _ChangesetRuleViolation extends __protoMessag
     return ["ChangesetRuleViolation|1 rule_type 9|2 detail 9|3 remediation 9?|4 actionable_signal #0?", ChangesetRuleActionableSignal];
   }
 };
-var ChangesetRuleActionableSignal = class _ChangesetRuleActionableSignal extends __protoMessage3165 {
+var ChangesetRuleActionableSignal = class _ChangesetRuleActionableSignal extends __protoMessage3166 {
   constructor(data) {
     super();
     this.kind = "";
@@ -907,7 +907,7 @@ var ChangesetRuleActionableSignal = class _ChangesetRuleActionableSignal extends
     return ["ChangesetRuleActionableSignal|1 kind 9|2 check_names 9*|3 required_count 5?|4 actual_count 5?|5 owner_labels 9*|6 paths 9*"];
   }
 };
-var ChangesetMergeBlocker = class _ChangesetMergeBlocker extends __protoMessage3165 {
+var ChangesetMergeBlocker = class _ChangesetMergeBlocker extends __protoMessage3166 {
   constructor(data) {
     super();
     this.kind = "";
@@ -932,7 +932,7 @@ var ChangesetMergeBlocker = class _ChangesetMergeBlocker extends __protoMessage3
     return ["ChangesetMergeBlocker|1 kind 9|2 rule_failure #0?|3 merge_ref_sha 9?|4 base_tip_sha_at_computation 9?|5 current_base_tip_sha 9?|6 ruleset_id 9?|7 rule_id 9?|8 enforcement 9?|9 message 9?|10 change_number 4?|11 merge_commit_oid 9?|12 merged_change_numbers 4*|13 open_change_numbers 4*|14 top_change_number 4?|15 downstack_change_number 4?|16 top_head_sha 9?|17 downstack_head_sha 9?|18 compare_status 9?|19 topology_reason 9?|20 root_base_ref 9?|21 conflicted_paths 9*|22 conflict_inherited_from_downstack 8?|23 recorded_base_sha 9?|24 target_base_ref 9?", ChangesetRuleEvaluation];
   }
 };
-var ChangesetRuleConfigurationDiagnostic = class _ChangesetRuleConfigurationDiagnostic extends __protoMessage3165 {
+var ChangesetRuleConfigurationDiagnostic = class _ChangesetRuleConfigurationDiagnostic extends __protoMessage3166 {
   constructor(data) {
     super();
     this.kind = "";
@@ -956,7 +956,7 @@ var ChangesetRuleConfigurationDiagnostic = class _ChangesetRuleConfigurationDiag
     return ["ChangesetRuleConfigurationDiagnostic|1 kind 9|2 severity 9|3 message 9|4 ruleset_id 9?|5 rule_id 9?|6 bypass_actor_id 9?|7 enforcement 9?"];
   }
 };
-var StackMergeability = class _StackMergeability extends __protoMessage3165 {
+var StackMergeability = class _StackMergeability extends __protoMessage3166 {
   constructor(data) {
     super();
     this.targetChangeNumber = protoInt64.zero;
@@ -984,7 +984,7 @@ var StackMergeability = class _StackMergeability extends __protoMessage3165 {
     return ["StackMergeability|1 target_change_number 4|2 prefix_change_numbers 4*|3 root_base_ref 9|4 verdict 9|5 blockers #0*|6 member_evaluations #1*|7 convergence_state 9?|8 convergence_conflicted_change_number 4?|9 convergence_conflicted_paths 9*|10 convergence_updated_at 9?", ChangesetMergeBlocker, StackMemberEvaluation];
   }
 };
-var StackMemberEvaluation = class _StackMemberEvaluation extends __protoMessage3165 {
+var StackMemberEvaluation = class _StackMemberEvaluation extends __protoMessage3166 {
   constructor(data) {
     super();
     this.changeNumber = protoInt64.zero;
@@ -1007,7 +1007,7 @@ var StackMemberEvaluation = class _StackMemberEvaluation extends __protoMessage3
     return ["StackMemberEvaluation|1 change_number 4|2 role 9|3 mergeability #0", ChangesetMergeability];
   }
 };
-var MergeStackRequest = class _MergeStackRequest extends __protoMessage3165 {
+var MergeStackRequest = class _MergeStackRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.topChangeNumber = protoInt64.zero;
@@ -1031,11 +1031,12 @@ var MergeStackRequest = class _MergeStackRequest extends __protoMessage3165 {
     return ["MergeStackRequest|1 identifier #0|2 top_change_number 4|3 mode #1|4 expected_target_head_sha 9|5 commit_title 9?|6 commit_message 9?", ClientRepoIdentifier, MergeMode];
   }
 };
-var MergeStackResponse = class _MergeStackResponse extends __protoMessage3165 {
+var MergeStackResponse = class _MergeStackResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.mergeCommitSha = "";
     this.mergedChangeNumbers = [];
+    this.mergeQueueEntryId = "";
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1051,10 +1052,10 @@ var MergeStackResponse = class _MergeStackResponse extends __protoMessage3165 {
     return proto3.util.equals(_MergeStackResponse, a, b2);
   }
   static $() {
-    return ["MergeStackResponse|1 merge_commit_sha 9|2 merged_change_numbers 4*"];
+    return ["MergeStackResponse|1 merge_commit_sha 9|2 merged_change_numbers 4*|3 merge_queue_entry_id 9"];
   }
 };
-var RestackStackRequest = class _RestackStackRequest extends __protoMessage3165 {
+var RestackStackRequest = class _RestackStackRequest extends __protoMessage3166 {
   constructor(data) {
     super();
     this.topChangeNumber = protoInt64.zero;
@@ -1077,7 +1078,7 @@ var RestackStackRequest = class _RestackStackRequest extends __protoMessage3165 
     return ["RestackStackRequest|1 identifier #0|2 top_change_number 4|3 dry_run 8", ClientRepoIdentifier];
   }
 };
-var RestackStackDryRunMember = class _RestackStackDryRunMember extends __protoMessage3165 {
+var RestackStackDryRunMember = class _RestackStackDryRunMember extends __protoMessage3166 {
   constructor(data) {
     super();
     this.changeNumber = protoInt64.zero;
@@ -1103,7 +1104,7 @@ var RestackStackDryRunMember = class _RestackStackDryRunMember extends __protoMe
     return ["RestackStackDryRunMember|1 change_number 4|2 head_sha 9|3 onto_ref 9|4 onto_sha 9?|5 new_head_sha 9?|6 outcome #0|7 conflicted_paths 9*", RestackStackMemberOutcome];
   }
 };
-var RestackStackResponse = class _RestackStackResponse extends __protoMessage3165 {
+var RestackStackResponse = class _RestackStackResponse extends __protoMessage3166 {
   constructor(data) {
     super();
     this.restackedChangeNumbers = [];

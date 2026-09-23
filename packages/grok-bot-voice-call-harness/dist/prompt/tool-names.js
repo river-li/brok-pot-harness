@@ -4,6 +4,7 @@ var VOICE_CALL_RECALL_TEXTS_TOOL = "recall_text_messages";
 var VOICE_CALL_SILENT_TOOL = "stay_silent";
 var VOICE_CALL_WORK_LANDED_TOOL = "work_landed";
 var VOICE_CALL_WORK_OVERHEARD_TOOL = "work_overheard";
+var VOICE_CALL_USER_MESSAGE_TOPIC = "user_message";
 var VOICE_CALL_SENT_MESSAGE_LIMIT = 8;
 var VOICE_CALL_RECALL_TEXTS_SCOPE = `the written chat between you and this caller: "you" is what you sent them, "them" is what they typed to you. Nobody else writes in it, and nothing anyone else sent them is in it: not their other agents, not other people, not Slack, mail, or any other app. Word from any of those is a ${VOICE_CALL_NUDGE_MAIN_TOOL} job, never a read of this chat.`;
 var VOICE_CALL_RECALL_TEXTS_WHEN = `If the answer might already be in the written chat, call ${VOICE_CALL_RECALL_TEXTS_TOOL}. Do not guess it, do not say you do not know, and do not ${VOICE_CALL_NUDGE_MAIN_TOOL} for it until you have read that chat.`;

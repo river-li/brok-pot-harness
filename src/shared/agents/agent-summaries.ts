@@ -1,5 +1,8 @@
+function agentRecencyOf(summary) {
+  return Math.max(summary.updatedAt, summary.lastActivityAt ?? 0);
+}
 function compareAgentSummaries(a, b2) {
-  return b2.updatedAt - a.updatedAt;
+  return agentRecencyOf(b2) - agentRecencyOf(a);
 }
 function upsertAgentSummary(summaries, updated) {
   let found = false;

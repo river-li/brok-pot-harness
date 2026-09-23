@@ -24,7 +24,7 @@ reap_targets() {
 		[ "${pid}" = "$$" ] && continue
 		comm="$( (cat "/proc/${pid}/comm") 2>/dev/null || true)"
 		[ "${comm}" = "picom" ] || continue
-		env_display="$( (tr '\0' '\n' <"/proc/${pid}/environ" | sed -n 's/^DISPLAY=//p' | head -n 1) 2>/dev/null || true)"
+		env_display="$( (grep -z -m 1 '^DISPLAY=' "/proc/${pid}/environ" | tr -d '\0' | sed 's/^DISPLAY=//') 2>/dev/null || true)"
 		if [ -n "${display}" ] && [ "${env_display}" = "${display}" ]; then
 			printf '%s\n' "${pid}"
 		fi

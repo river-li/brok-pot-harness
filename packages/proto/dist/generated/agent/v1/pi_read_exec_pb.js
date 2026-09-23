@@ -1,17 +1,17 @@
-var __protoPackage109, __protoMessage3105, PiReadExecArgs, PiReadExecResult, PiReadExecSuccess, PiReadExecError;
+var __protoPackage110, __protoMessage3105, PiReadExecArgs, PiReadExecResult, PiReadExecSuccess, PiReadExecError;
 var init_pi_read_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_read_exec_pb.js"() {
     "use strict";
     init_esm();
     init_pi_common_pb();
     init_compact();
-    __protoPackage109 = "agent.v1.";
+    __protoPackage110 = "agent.v1.";
     __protoMessage3105 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage109;
+        return __protoPackage110;
       }
     };
     PiReadExecArgs = class _PiReadExecArgs extends __protoMessage3105 {

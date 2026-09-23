@@ -99,6 +99,7 @@ function displayServerFields(server, id) {
     serverIdentifier: server.serverIdentifier,
     isTeamServer: server.isTeamServer,
     disabledByTeamAdminPolicy: server.disabledByTeamAdminPolicy,
+    ...server.needsGrant ? { needsGrant: true } : {},
     ...pluginAttributionFromAvailableServer(server),
     ...accounts != null ? { accounts } : {},
     ...server.userHasAccessToken == null ? {} : { hasDefaultSlotToken: server.userHasAccessToken },
@@ -186,7 +187,7 @@ async function fetchAccountMcpServers(deps) {
       const id = displayServerId(server);
       if (id == null) continue;
       const isStdio = server.type.toLowerCase() === "stdio";
-      if (!server.enabled && server.disabledByTeamAdminPolicy && !server.isTeamServer) {
+      if (!server.enabled && (server.needsGrant || !server.isTeamServer && server.disabledByTeamAdminPolicy)) {
         let config3 = void 0;
         if (isStdio) {
           config3 = stdioConfigFromAvailableServer(server);

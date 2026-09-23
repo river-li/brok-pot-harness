@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage180 = "origin.v1.";
-var __protoMessage3171 = class extends CompactMessage {
+var __protoPackage182 = "origin.v1.";
+var __protoMessage3173 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage180;
+    return __protoPackage182;
   }
 };
-var WatchChangeSyncEventsRequest = class _WatchChangeSyncEventsRequest extends __protoMessage3171 {
+var WatchChangeSyncEventsRequest = class _WatchChangeSyncEventsRequest extends __protoMessage3173 {
   constructor(data) {
     super();
     this.changeNumber = protoInt64.zero;
@@ -31,7 +31,7 @@ var WatchChangeSyncEventsRequest = class _WatchChangeSyncEventsRequest extends _
     return ["WatchChangeSyncEventsRequest|1 identifier #0|2 change_number 4", ClientRepoIdentifier];
   }
 };
-var WatchChangeSyncEventsResponse = class _WatchChangeSyncEventsResponse extends __protoMessage3171 {
+var WatchChangeSyncEventsResponse = class _WatchChangeSyncEventsResponse extends __protoMessage3173 {
   constructor(data) {
     super();
     this.frame = { case: void 0 };
@@ -53,7 +53,7 @@ var WatchChangeSyncEventsResponse = class _WatchChangeSyncEventsResponse extends
     return ["WatchChangeSyncEventsResponse|1 snapshot_json 9 frame|2 event_json 9 frame|3 heartbeat #0 frame", SyncEventHeartbeat];
   }
 };
-var SyncEventHeartbeat = class _SyncEventHeartbeat extends __protoMessage3171 {
+var SyncEventHeartbeat = class _SyncEventHeartbeat extends __protoMessage3173 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -74,7 +74,7 @@ var SyncEventHeartbeat = class _SyncEventHeartbeat extends __protoMessage3171 {
     return ["SyncEventHeartbeat"];
   }
 };
-var ChangeSyncTarget = class _ChangeSyncTarget extends __protoMessage3171 {
+var ChangeSyncTarget = class _ChangeSyncTarget extends __protoMessage3173 {
   constructor(data) {
     super();
     this.changeNumber = protoInt64.zero;
@@ -96,7 +96,7 @@ var ChangeSyncTarget = class _ChangeSyncTarget extends __protoMessage3171 {
     return ["ChangeSyncTarget|1 identifier #0|2 change_number 4", ClientRepoIdentifier];
   }
 };
-var WatchChangeSyncEventsV2Request = class _WatchChangeSyncEventsV2Request extends __protoMessage3171 {
+var WatchChangeSyncEventsV2Request = class _WatchChangeSyncEventsV2Request extends __protoMessage3173 {
   constructor(data) {
     super();
     this.subscriptions = [];
@@ -118,7 +118,7 @@ var WatchChangeSyncEventsV2Request = class _WatchChangeSyncEventsV2Request exten
     return ["WatchChangeSyncEventsV2Request|1 subscriptions #0*", ChangeSyncTarget];
   }
 };
-var WatchSyncSessionStarted = class _WatchSyncSessionStarted extends __protoMessage3171 {
+var WatchSyncSessionStarted = class _WatchSyncSessionStarted extends __protoMessage3173 {
   constructor(data) {
     super();
     this.connectionId = "";
@@ -140,7 +140,7 @@ var WatchSyncSessionStarted = class _WatchSyncSessionStarted extends __protoMess
     return ["WatchSyncSessionStarted|1 connection_id 9"];
   }
 };
-var TaggedSyncSnapshot = class _TaggedSyncSnapshot extends __protoMessage3171 {
+var TaggedSyncSnapshot = class _TaggedSyncSnapshot extends __protoMessage3173 {
   constructor(data) {
     super();
     this.snapshotJson = "";
@@ -162,7 +162,7 @@ var TaggedSyncSnapshot = class _TaggedSyncSnapshot extends __protoMessage3171 {
     return ["TaggedSyncSnapshot|1 target #0|2 snapshot_json 9", ChangeSyncTarget];
   }
 };
-var TaggedSyncEvent = class _TaggedSyncEvent extends __protoMessage3171 {
+var TaggedSyncEvent = class _TaggedSyncEvent extends __protoMessage3173 {
   constructor(data) {
     super();
     this.eventJson = "";
@@ -184,7 +184,7 @@ var TaggedSyncEvent = class _TaggedSyncEvent extends __protoMessage3171 {
     return ["TaggedSyncEvent|1 target #0|2 event_json 9", ChangeSyncTarget];
   }
 };
-var WatchSyncSubscriptionNack = class _WatchSyncSubscriptionNack extends __protoMessage3171 {
+var WatchSyncSubscriptionNack = class _WatchSyncSubscriptionNack extends __protoMessage3173 {
   constructor(data) {
     super();
     this.reason = "";
@@ -207,7 +207,7 @@ var WatchSyncSubscriptionNack = class _WatchSyncSubscriptionNack extends __proto
     return ["WatchSyncSubscriptionNack|1 target #0|2 reason 9|3 message 9", ChangeSyncTarget];
   }
 };
-var WatchSyncSubscriptionRemoved = class _WatchSyncSubscriptionRemoved extends __protoMessage3171 {
+var WatchSyncSubscriptionRemoved = class _WatchSyncSubscriptionRemoved extends __protoMessage3173 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -228,7 +228,7 @@ var WatchSyncSubscriptionRemoved = class _WatchSyncSubscriptionRemoved extends _
     return ["WatchSyncSubscriptionRemoved|1 target #0", ChangeSyncTarget];
   }
 };
-var WatchChangeSyncEventsV2Response = class _WatchChangeSyncEventsV2Response extends __protoMessage3171 {
+var WatchChangeSyncEventsV2Response = class _WatchChangeSyncEventsV2Response extends __protoMessage3173 {
   constructor(data) {
     super();
     this.frame = { case: void 0 };
@@ -250,7 +250,7 @@ var WatchChangeSyncEventsV2Response = class _WatchChangeSyncEventsV2Response ext
     return ["WatchChangeSyncEventsV2Response|1 session #0 frame|2 snapshot #1 frame|3 event #2 frame|4 heartbeat #3 frame|5 nack #4 frame|6 removed #5 frame", WatchSyncSessionStarted, TaggedSyncSnapshot, TaggedSyncEvent, SyncEventHeartbeat, WatchSyncSubscriptionNack, WatchSyncSubscriptionRemoved];
   }
 };
-var UpdateWatchChangeSyncSubscriptionsRequest = class _UpdateWatchChangeSyncSubscriptionsRequest extends __protoMessage3171 {
+var UpdateWatchChangeSyncSubscriptionsRequest = class _UpdateWatchChangeSyncSubscriptionsRequest extends __protoMessage3173 {
   constructor(data) {
     super();
     this.connectionId = "";
@@ -274,7 +274,7 @@ var UpdateWatchChangeSyncSubscriptionsRequest = class _UpdateWatchChangeSyncSubs
     return ["UpdateWatchChangeSyncSubscriptionsRequest|1 connection_id 9|2 add #0*|3 remove #0*", ChangeSyncTarget];
   }
 };
-var UpdateWatchChangeSyncSubscriptionsResponse = class _UpdateWatchChangeSyncSubscriptionsResponse extends __protoMessage3171 {
+var UpdateWatchChangeSyncSubscriptionsResponse = class _UpdateWatchChangeSyncSubscriptionsResponse extends __protoMessage3173 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);

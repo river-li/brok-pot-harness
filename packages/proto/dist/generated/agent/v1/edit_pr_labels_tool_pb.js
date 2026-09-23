@@ -1,16 +1,16 @@
-var __protoPackage68, __protoMessage365, EditPrLabelsArgs, EditPrLabelsResult, EditPrLabelsSuccess, EditPrLabelsError, EditPrLabelsToolCall;
+var __protoPackage69, __protoMessage365, EditPrLabelsArgs, EditPrLabelsResult, EditPrLabelsSuccess, EditPrLabelsError, EditPrLabelsToolCall;
 var init_edit_pr_labels_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/edit_pr_labels_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage68 = "agent.v1.";
+    __protoPackage69 = "agent.v1.";
     __protoMessage365 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage68;
+        return __protoPackage69;
       }
     };
     EditPrLabelsArgs = class _EditPrLabelsArgs extends __protoMessage365 {

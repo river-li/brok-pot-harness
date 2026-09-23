@@ -23,7 +23,7 @@ function defaultDelay(ms2) {
 function readLockPid(path31) {
   let raw;
   try {
-    raw = (0, import_node_fs29.readFileSync)(path31, "utf8");
+    raw = (0, import_node_fs30.readFileSync)(path31, "utf8");
   } catch (error42) {
     reportFallbackUnlessAbsent("host_lock", error42);
     return null;
@@ -33,17 +33,17 @@ function readLockPid(path31) {
 }
 function removeLock(path31) {
   try {
-    (0, import_node_fs29.unlinkSync)(path31);
+    (0, import_node_fs30.unlinkSync)(path31);
   } catch {
   }
 }
 function tryCreateLock(path31, pid) {
   try {
-    const fd = (0, import_node_fs29.openSync)(path31, "wx");
+    const fd = (0, import_node_fs30.openSync)(path31, "wx");
     try {
-      (0, import_node_fs29.writeFileSync)(fd, String(pid), "utf8");
+      (0, import_node_fs30.writeFileSync)(fd, String(pid), "utf8");
     } finally {
-      (0, import_node_fs29.closeSync)(fd);
+      (0, import_node_fs30.closeSync)(fd);
     }
     return true;
   } catch (error42) {
@@ -76,7 +76,7 @@ async function acquireHostLock(options2 = {}) {
   const delay5 = options2.delay ?? defaultDelay;
   const takeoverTimeoutMs = options2.takeoverTimeoutMs ?? DEFAULT_TAKEOVER_TIMEOUT_MS;
   const pollIntervalMs = options2.pollIntervalMs ?? DEFAULT_POLL_INTERVAL_MS;
-  (0, import_node_fs29.mkdirSync)((0, import_node_path28.dirname)(path31), { recursive: true });
+  (0, import_node_fs30.mkdirSync)((0, import_node_path28.dirname)(path31), { recursive: true });
   let outcome = "created";
   let previousPid;
   for (let attempt = 0; attempt < MAX_ACQUIRE_ATTEMPTS; attempt++) {
@@ -115,6 +115,6 @@ async function acquireHostLock(options2 = {}) {
     }
     removeLock(path31);
   }
-  (0, import_node_fs29.writeFileSync)(path31, String(pid), "utf8");
+  (0, import_node_fs30.writeFileSync)(path31, String(pid), "utf8");
   return { outcome, lock: makeHandle(path31, pid), previousPid };
 }

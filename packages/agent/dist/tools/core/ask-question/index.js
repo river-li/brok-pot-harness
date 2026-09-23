@@ -57,14 +57,14 @@ ${answerDescriptions?.join("\n") ?? ""}`;
     case "rejected":
       return result.result.value.reason?.trim() || "Questions skipped by the user, continue with the information you already have";
     case "error": {
-      const errorMessage6 = result.result.value.errorMessage;
-      if (errorMessage6 === FIRST_ASK_QUESTION_CLIENT_ERROR_MESSAGE) {
+      const errorMessage7 = result.result.value.errorMessage;
+      if (errorMessage7 === FIRST_ASK_QUESTION_CLIENT_ERROR_MESSAGE) {
         return `Error: ${FIRST_ASK_QUESTION_MODEL_ERROR_MESSAGE}`;
       }
-      if (errorMessage6 === PLACEHOLDER_ASK_QUESTION_CLIENT_ERROR_MESSAGE) {
+      if (errorMessage7 === PLACEHOLDER_ASK_QUESTION_CLIENT_ERROR_MESSAGE) {
         return buildPlaceholderAskQuestionModelMessage(askQuestionToolName);
       }
-      return `Error: ${errorMessage6}`;
+      return `Error: ${errorMessage7}`;
     }
     case void 0:
       return "Unknown error";

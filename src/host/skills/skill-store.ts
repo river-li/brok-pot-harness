@@ -1,5 +1,5 @@
-var import_node_fs83 = require("node:fs");
-var import_node_path134 = require("node:path");
+var import_node_fs85 = require("node:fs");
+var import_node_path135 = require("node:path");
 init_scheduling();
 var LEGACY_WORKFLOWS_DIRNAME = "workflows";
 var MANAGED_SKILLS_CHANGE_DEBOUNCE_MS = 50;
@@ -9,7 +9,7 @@ var pluginSkillsIndexCache = new StatKeyedParseCache();
 function readPluginSkillFileFacts(filePath) {
   let raw;
   try {
-    raw = (0, import_node_fs83.readFileSync)(filePath, "utf8");
+    raw = (0, import_node_fs85.readFileSync)(filePath, "utf8");
   } catch (error42) {
     reportFallbackUnlessAbsent("skill_store", error42);
     return null;
@@ -18,7 +18,7 @@ function readPluginSkillFileFacts(filePath) {
   if (parsed2 == null || parsed2.body.length === 0) return null;
   let helperScripts = [];
   try {
-    helperScripts = (0, import_node_fs83.readdirSync)((0, import_node_path134.dirname)(filePath), {
+    helperScripts = (0, import_node_fs85.readdirSync)((0, import_node_path135.dirname)(filePath), {
       withFileTypes: true
     }).filter((entry) => entry.isFile() && entry.name !== "SKILL.md").map((entry) => entry.name).sort();
   } catch (error42) {
@@ -34,10 +34,10 @@ function readPluginSkillFileFacts(filePath) {
   };
 }
 function agentHasSkills(agentDir) {
-  const legacyDir = (0, import_node_path134.join)(agentDir, LEGACY_WORKFLOWS_DIRNAME);
+  const legacyDir = (0, import_node_path135.join)(agentDir, LEGACY_WORKFLOWS_DIRNAME);
   let entries;
   try {
-    entries = (0, import_node_fs83.readdirSync)(legacyDir, { withFileTypes: true });
+    entries = (0, import_node_fs85.readdirSync)(legacyDir, { withFileTypes: true });
   } catch (error42) {
     reportFallbackUnlessAbsent("skill_store", error42);
     return false;
@@ -45,7 +45,7 @@ function agentHasSkills(agentDir) {
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     try {
-      (0, import_node_fs83.statSync)((0, import_node_path134.join)(legacyDir, entry.name, LEGACY_WORKFLOW_FILENAME));
+      (0, import_node_fs85.statSync)((0, import_node_path135.join)(legacyDir, entry.name, LEGACY_WORKFLOW_FILENAME));
       return true;
     } catch {
       continue;
@@ -57,7 +57,7 @@ var FileSkillStore = class {
   constructor(agentDir, globalDir, resolveUserTimeZone = () => void 0, isFiveMinuteAutomationFloorEnabled = () => false) {
     this.agentDir = agentDir;
     this.library = new GlobalSkillLibrary(globalDir);
-    this.managedDir = getManagedSkillsDir((0, import_node_path134.dirname)(globalDir));
+    this.managedDir = getManagedSkillsDir((0, import_node_path135.dirname)(globalDir));
     this.managedDirWatcher = new WatchedDirectory(
       this.managedDir,
       createDebouncePolicy({
@@ -65,7 +65,7 @@ var FileSkillStore = class {
         delayMs: MANAGED_SKILLS_CHANGE_DEBOUNCE_MS
       })
     );
-    this.pluginSkillsDir = getPluginSkillsDir((0, import_node_path134.dirname)(globalDir));
+    this.pluginSkillsDir = getPluginSkillsDir((0, import_node_path135.dirname)(globalDir));
     this.pluginSkillsDirWatcher = new WatchedDirectory(
       this.pluginSkillsDir,
       createDebouncePolicy({
@@ -120,7 +120,7 @@ var FileSkillStore = class {
     const skillFilePath = getManagedSkillFilePath(this.managedDir, skill.id);
     let hasSkillFile = false;
     try {
-      hasSkillFile = (0, import_node_fs83.statSync)(skillFilePath).isFile();
+      hasSkillFile = (0, import_node_fs85.statSync)(skillFilePath).isFile();
     } catch (error42) {
       reportFallbackUnlessAbsent("skill_store", error42);
       hasSkillFile = false;
@@ -163,7 +163,7 @@ var FileSkillStore = class {
   }
   pluginSkillToSkill(record2, index) {
     const facts = pluginSkillParseCache.read(
-      [record2.filePath, (0, import_node_path134.dirname)(record2.filePath)],
+      [record2.filePath, (0, import_node_path135.dirname)(record2.filePath)],
       () => readPluginSkillFileFacts(record2.filePath)
     );
     if (facts == null) return null;
@@ -306,7 +306,7 @@ var FileSkillStore = class {
     if (record2 == null) return null;
     let existing = {};
     try {
-      existing = parseSkillFile((0, import_node_fs83.readFileSync)(record2.filePath, "utf8"))?.data ?? {};
+      existing = parseSkillFile((0, import_node_fs85.readFileSync)(record2.filePath, "utf8"))?.data ?? {};
     } catch (error42) {
       reportFallbackUnlessAbsent("skill_store", error42);
       return null;
@@ -352,24 +352,24 @@ var FileSkillStore = class {
     return { id: record2.id, name: record2.name };
   }
   migrateLegacyPerAgentSkills() {
-    const legacyDir = (0, import_node_path134.join)(this.agentDir, LEGACY_WORKFLOWS_DIRNAME);
+    const legacyDir = (0, import_node_path135.join)(this.agentDir, LEGACY_WORKFLOWS_DIRNAME);
     let entries;
     try {
-      entries = (0, import_node_fs83.readdirSync)(legacyDir, { withFileTypes: true });
+      entries = (0, import_node_fs85.readdirSync)(legacyDir, { withFileTypes: true });
     } catch {
       return;
     }
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
       const id = entry.name;
-      const legacyFolder = (0, import_node_path134.join)(legacyDir, id);
+      const legacyFolder = (0, import_node_path135.join)(legacyDir, id);
       if (this.library.has(id)) continue;
       try {
-        (0, import_node_fs83.renameSync)(legacyFolder, (0, import_node_path134.join)(this.library.getLocation(), id));
+        (0, import_node_fs85.renameSync)(legacyFolder, (0, import_node_path135.join)(this.library.getLocation(), id));
       } catch {
         let raw;
         try {
-          raw = (0, import_node_fs83.readFileSync)((0, import_node_path134.join)(legacyFolder, LEGACY_WORKFLOW_FILENAME), "utf8");
+          raw = (0, import_node_fs85.readFileSync)((0, import_node_path135.join)(legacyFolder, LEGACY_WORKFLOW_FILENAME), "utf8");
         } catch {
           continue;
         }
@@ -384,6 +384,6 @@ var FileSkillStore = class {
       }
     }
     this.library.renameLegacyRecipeFiles();
-    (0, import_node_fs83.rmSync)(legacyDir, { recursive: true, force: true });
+    (0, import_node_fs85.rmSync)(legacyDir, { recursive: true, force: true });
   }
 };

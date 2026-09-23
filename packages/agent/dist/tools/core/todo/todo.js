@@ -495,13 +495,13 @@ When in doubt, use this tool. Proactive task management demonstrates attentivene
     execute,
     render: render2,
     serializeError: (error42) => {
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
       return createUpdateTodosToolCall(new UpdateTodosToolCall({
         result: new UpdateTodosResult({
           result: {
             case: "error",
             value: new UpdateTodosError({
-              error: errorMessage6
+              error: errorMessage7
             })
           }
         })

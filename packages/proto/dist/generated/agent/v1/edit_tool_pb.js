@@ -1,16 +1,16 @@
-var __protoPackage26, __protoMessage323, EditArgs, EditResult, EditSuccess, EditFileNotFound, EditReadPermissionDenied, EditWritePermissionDenied, EditRejected, EditError, EditToolCall, EditToolCallDelta;
+var __protoPackage27, __protoMessage323, EditArgs, EditResult, EditSuccess, EditFileNotFound, EditReadPermissionDenied, EditWritePermissionDenied, EditRejected, EditError, EditToolCall, EditToolCallDelta;
 var init_edit_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/edit_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage26 = "agent.v1.";
+    __protoPackage27 = "agent.v1.";
     __protoMessage323 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage26;
+        return __protoPackage27;
       }
     };
     EditArgs = class _EditArgs extends __protoMessage323 {

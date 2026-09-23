@@ -1,16 +1,16 @@
-var __protoPackage69, __protoMessage366, RecordCiInvestigationFinding, RecordCiInvestigationOverall, RecordCiInvestigationFindingsArgs, RecordCiInvestigationFindingsSuccess, RecordCiInvestigationFindingsError, RecordCiInvestigationFindingsResult, RecordCiInvestigationFindingsToolCall;
+var __protoPackage70, __protoMessage366, RecordCiInvestigationFinding, RecordCiInvestigationOverall, RecordCiInvestigationFindingsArgs, RecordCiInvestigationFindingsSuccess, RecordCiInvestigationFindingsError, RecordCiInvestigationFindingsResult, RecordCiInvestigationFindingsToolCall;
 var init_record_ci_investigation_findings_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/record_ci_investigation_findings_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage69 = "agent.v1.";
+    __protoPackage70 = "agent.v1.";
     __protoMessage366 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage69;
+        return __protoPackage70;
       }
     };
     RecordCiInvestigationFinding = class _RecordCiInvestigationFinding extends __protoMessage366 {

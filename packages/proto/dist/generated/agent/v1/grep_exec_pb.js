@@ -1,17 +1,17 @@
-var __protoPackage21, __protoMessage318, GrepArgs, GrepResult, GrepError, GrepSuccess, GrepUnionResult, GrepCountResult, GrepFileCount, GrepFilesResult, GrepContentResult, GrepFileMatch, GrepContentMatch;
+var __protoPackage22, __protoMessage318, GrepArgs, GrepResult, GrepError, GrepSuccess, GrepUnionResult, GrepCountResult, GrepFileCount, GrepFilesResult, GrepContentResult, GrepFileMatch, GrepContentMatch;
 var init_grep_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/grep_exec_pb.js"() {
     "use strict";
     init_esm();
     init_sandbox_pb();
     init_compact();
-    __protoPackage21 = "agent.v1.";
+    __protoPackage22 = "agent.v1.";
     __protoMessage318 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage21;
+        return __protoPackage22;
       }
     };
     GrepArgs = class _GrepArgs extends __protoMessage318 {

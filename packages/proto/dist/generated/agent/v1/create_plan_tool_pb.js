@@ -1,17 +1,17 @@
-var __protoPackage37, __protoMessage334, CreatePlanToolCall, Phase, CreatePlanArgs, CreatePlanResult, CreatePlanSuccess, CreatePlanError, CreatePlanRequestQuery, CreatePlanRequestResponse;
+var __protoPackage38, __protoMessage334, CreatePlanToolCall, Phase, CreatePlanArgs, CreatePlanResult, CreatePlanSuccess, CreatePlanError, CreatePlanRequestQuery, CreatePlanRequestResponse;
 var init_create_plan_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/create_plan_tool_pb.js"() {
     "use strict";
     init_esm();
     init_todo_tool_pb();
     init_compact();
-    __protoPackage37 = "agent.v1.";
+    __protoPackage38 = "agent.v1.";
     __protoMessage334 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage37;
+        return __protoPackage38;
       }
     };
     CreatePlanToolCall = class _CreatePlanToolCall extends __protoMessage334 {

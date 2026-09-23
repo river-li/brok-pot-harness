@@ -23,6 +23,10 @@ var cloudAgentsExtension = defineHostExtension({
       isConversationEnabled: () => experiments.checkFeatureGate("sand_enable_bot2bot_cloud_agent_ui", {
         disableExposureLog: true
       }),
+      isJitNamespaceEnabled: () => experiments.checkFeatureGate("cloud_agent_new_project_jit_no_namespace", {
+        disableExposureLog: true
+      }),
+      isCustomModeEnabled: () => experiments.checkFeatureGate("glass_custom_modes", { disableExposureLog: true }),
       artifacts: {
         box: context2.deps["forever-box"].box,
         isEnabled: () => experiments.checkFeatureGate("sand_cloud_agent_artifacts", {

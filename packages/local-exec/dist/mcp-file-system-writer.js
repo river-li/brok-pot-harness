@@ -1,7 +1,7 @@
-var import_node_crypto26 = require("node:crypto");
-var import_promises40 = require("node:fs/promises");
-var import_node_os17 = require("node:os");
-var import_node_path72 = require("node:path");
+var import_node_crypto25 = require("node:crypto");
+var import_promises38 = require("node:fs/promises");
+var import_node_os16 = require("node:os");
+var import_node_path63 = require("node:path");
 init_dist4();
 init_mcp_tool_annotations();
 init_mcp_pb();
@@ -185,22 +185,22 @@ var CURSOR_DIR_GITIGNORE_CONTENT = [
   "!rules/**"
 ].join("\n");
 async function ensureCursorDirGitignore(cursorDir) {
-  const gitignorePath = (0, import_node_path72.join)(cursorDir, ".gitignore");
+  const gitignorePath = (0, import_node_path63.join)(cursorDir, ".gitignore");
   const managedBlock = `${CURSOR_DIR_GITIGNORE_MANAGED_START}
 ${CURSOR_DIR_GITIGNORE_CONTENT}
 ${CURSOR_DIR_GITIGNORE_MANAGED_END}
 `;
-  await (0, import_promises40.mkdir)(cursorDir, { recursive: true });
+  await (0, import_promises38.mkdir)(cursorDir, { recursive: true });
   let existingContent;
   try {
-    existingContent = await (0, import_promises40.readFile)(gitignorePath, "utf-8");
+    existingContent = await (0, import_promises38.readFile)(gitignorePath, "utf-8");
   } catch (error42) {
     if (error42?.code !== "ENOENT") {
       throw error42;
     }
   }
   if (existingContent === void 0) {
-    await (0, import_promises40.writeFile)(gitignorePath, managedBlock);
+    await (0, import_promises38.writeFile)(gitignorePath, managedBlock);
     return;
   }
   const startIdx = existingContent.indexOf(CURSOR_DIR_GITIGNORE_MANAGED_START);
@@ -210,11 +210,11 @@ ${CURSOR_DIR_GITIGNORE_MANAGED_END}
     const after = existingContent.slice(endIdx + CURSOR_DIR_GITIGNORE_MANAGED_END.length).replace(/^\n/, "");
     const updatedContent = `${before}${managedBlock}${after}`;
     if (updatedContent !== existingContent) {
-      await (0, import_promises40.writeFile)(gitignorePath, updatedContent);
+      await (0, import_promises38.writeFile)(gitignorePath, updatedContent);
     }
     return;
   }
-  await (0, import_promises40.writeFile)(gitignorePath, managedBlock);
+  await (0, import_promises38.writeFile)(gitignorePath, managedBlock);
 }
 var DEFAULT_DEBOUNCE_MS = 100;
 var CLIENT_FETCH_TIMEOUT_MS = 15e3;
@@ -361,16 +361,16 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
    * Enables LS tool to list MCP config when user has * in ~/.gitignore.
    */
   ensureCursorDirGitignore() {
-    void ensureCursorDirGitignore((0, import_node_path72.join)((0, import_node_os17.homedir)(), ".cursor")).catch((err) => {
+    void ensureCursorDirGitignore((0, import_node_path63.join)((0, import_node_os16.homedir)(), ".cursor")).catch((err) => {
       logger36.warn(this.ctx, "Failed to ensure ~/.cursor/.gitignore", err);
     });
   }
   async cleanupStaleStagingDirs(ctx) {
     const logCtx = this.getLogContext(ctx);
-    const mcpsPath = (0, import_node_path72.join)(this.projectDir, MCPS_SUBDIR);
+    const mcpsPath = (0, import_node_path63.join)(this.projectDir, MCPS_SUBDIR);
     try {
-      const entries = await (0, import_promises40.readdir)(mcpsPath);
-      await Promise.allSettled(entries.filter((entry) => entry.endsWith(STAGING_SUFFIX)).map((entry) => (0, import_promises40.rm)((0, import_node_path72.join)(mcpsPath, entry), {
+      const entries = await (0, import_promises38.readdir)(mcpsPath);
+      await Promise.allSettled(entries.filter((entry) => entry.endsWith(STAGING_SUFFIX)).map((entry) => (0, import_promises38.rm)((0, import_node_path63.join)(mcpsPath, entry), {
         recursive: true,
         force: true
       })));
@@ -567,7 +567,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
         pluginId: data.pluginId,
         marketplaceId: data.marketplaceId,
         sanitizedId,
-        folderPath: (0, import_node_path72.join)(this.projectDir, MCPS_SUBDIR, sanitizedId),
+        folderPath: (0, import_node_path63.join)(this.projectDir, MCPS_SUBDIR, sanitizedId),
         tools: [],
         resources: data.resources,
         prompts: data.prompts,
@@ -587,7 +587,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
           pluginId: tool.pluginId,
           marketplaceId: tool.marketplaceId,
           sanitizedId,
-          folderPath: (0, import_node_path72.join)(this.projectDir, MCPS_SUBDIR, sanitizedId),
+          folderPath: (0, import_node_path63.join)(this.projectDir, MCPS_SUBDIR, sanitizedId),
           tools: [],
           resources: [],
           prompts: [],
@@ -841,7 +841,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
         folderPath: server.folderPath,
         tools: server.tools.map((tool) => ({
           toolName: tool.toolName,
-          definitionPath: (0, import_node_path72.join)(server.folderPath, MCP_TOOLS_SUBDIR, `${sanitizeFileName(tool.toolName)}.json`)
+          definitionPath: (0, import_node_path63.join)(server.folderPath, MCP_TOOLS_SUBDIR, `${sanitizeFileName(tool.toolName)}.json`)
         }))
       }));
       this.onDidWrite(descriptors);
@@ -853,8 +853,8 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
     try {
       const _span = __addDisposableResource13(env_2, createSpan(ctx.withName("McpFileSystemWriter.writeServerData")), false);
       const logCtx = this.getLogContext(ctx);
-      const mcpsPath = (0, import_node_path72.join)(this.projectDir, MCPS_SUBDIR);
-      await (0, import_promises40.mkdir)(mcpsPath, { recursive: true });
+      const mcpsPath = (0, import_node_path63.join)(this.projectDir, MCPS_SUBDIR);
+      await (0, import_promises38.mkdir)(mcpsPath, { recursive: true });
       const newFingerprints = /* @__PURE__ */ new Map();
       for (const server of servers) {
         try {
@@ -882,7 +882,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
           continue;
         }
         try {
-          await (0, import_promises40.stat)((0, import_node_path72.join)(mcpsPath, server.sanitizedId));
+          await (0, import_promises38.stat)((0, import_node_path63.join)(mcpsPath, server.sanitizedId));
         } catch {
           logger36.info(logCtx, `Server "${server.serverIdentifier}" directory missing on disk, forcing write`);
           toWrite.push(server);
@@ -905,26 +905,26 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       const coldStartReconcile = this.cachedServerData === void 0;
       if (coldStartReconcile) {
         try {
-          const existingEntries = await (0, import_promises40.readdir)(mcpsPath);
+          const existingEntries = await (0, import_promises38.readdir)(mcpsPath);
           const liveEntries = new Set(existingEntries.filter((e) => !e.endsWith(STAGING_SUFFIX) && !e.endsWith(PREV_SUFFIX)));
           for (const entry of existingEntries) {
             if (entry.endsWith(STAGING_SUFFIX)) {
-              await (0, import_promises40.rm)((0, import_node_path72.join)(mcpsPath, entry), { recursive: true, force: true });
+              await (0, import_promises38.rm)((0, import_node_path63.join)(mcpsPath, entry), { recursive: true, force: true });
             } else if (entry.endsWith(PREV_SUFFIX)) {
               const liveName = entry.slice(0, -PREV_SUFFIX.length);
               if (!liveEntries.has(liveName)) {
                 try {
-                  await (0, import_promises40.rename)((0, import_node_path72.join)(mcpsPath, entry), (0, import_node_path72.join)(mcpsPath, liveName));
+                  await (0, import_promises38.rename)((0, import_node_path63.join)(mcpsPath, entry), (0, import_node_path63.join)(mcpsPath, liveName));
                   liveEntries.add(liveName);
                 } catch {
-                  await (0, import_promises40.rm)((0, import_node_path72.join)(mcpsPath, entry), {
+                  await (0, import_promises38.rm)((0, import_node_path63.join)(mcpsPath, entry), {
                     recursive: true,
                     force: true
                   }).catch(() => {
                   });
                 }
               } else {
-                await (0, import_promises40.rm)((0, import_node_path72.join)(mcpsPath, entry), { recursive: true, force: true });
+                await (0, import_promises38.rm)((0, import_node_path63.join)(mcpsPath, entry), { recursive: true, force: true });
               }
             }
           }
@@ -967,7 +967,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
           // the server set show up here as one digest with conflicting writes.
           // Hashed rather than logged raw: the path names the user's home and
           // the workspace they have open.
-          projectDirHash: (0, import_node_crypto26.createHash)("sha256").update(this.projectDir).digest("hex")
+          projectDirHash: (0, import_node_crypto25.createHash)("sha256").update(this.projectDir).digest("hex")
         }, {
           includeStructuredLogs: true
         });
@@ -991,7 +991,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
           });
         }
       }
-      const removalResults = await Promise.allSettled(toRemoveIds.map((sanitizedId) => (0, import_promises40.rm)((0, import_node_path72.join)(mcpsPath, sanitizedId), { recursive: true, force: true })));
+      const removalResults = await Promise.allSettled(toRemoveIds.map((sanitizedId) => (0, import_promises38.rm)((0, import_node_path63.join)(mcpsPath, sanitizedId), { recursive: true, force: true })));
       for (let i = 0; i < removalResults.length; i++) {
         const removalResult = removalResults[i];
         if (removalResult.status === "rejected") {
@@ -1022,14 +1022,14 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       const _span = __addDisposableResource13(env_3, createSpan(ctx.withName("McpFileSystemWriter.writeServerAtomic")), false);
       const stagingName = `${server.sanitizedId}${STAGING_SUFFIX}`;
       const prevName = `${server.sanitizedId}${PREV_SUFFIX}`;
-      const stagingDir = (0, import_node_path72.join)(mcpsPath, stagingName);
-      const prevDir = (0, import_node_path72.join)(mcpsPath, prevName);
-      const liveDir = (0, import_node_path72.join)(mcpsPath, server.sanitizedId);
-      await (0, import_promises40.rm)(stagingDir, { recursive: true, force: true });
+      const stagingDir = (0, import_node_path63.join)(mcpsPath, stagingName);
+      const prevDir = (0, import_node_path63.join)(mcpsPath, prevName);
+      const liveDir = (0, import_node_path63.join)(mcpsPath, server.sanitizedId);
+      await (0, import_promises38.rm)(stagingDir, { recursive: true, force: true });
       try {
-        await (0, import_promises40.rename)(prevDir, liveDir);
+        await (0, import_promises38.rename)(prevDir, liveDir);
       } catch {
-        await (0, import_promises40.rm)(prevDir, { recursive: true, force: true });
+        await (0, import_promises38.rm)(prevDir, { recursive: true, force: true });
       }
       await this.writeServerDirectory(ctx, server, {
         basePath: mcpsPath,
@@ -1037,10 +1037,10 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       });
       try {
         try {
-          await (0, import_promises40.rename)(liveDir, prevDir);
+          await (0, import_promises38.rename)(liveDir, prevDir);
         } catch {
         }
-        await (0, import_promises40.rename)(stagingDir, liveDir);
+        await (0, import_promises38.rename)(stagingDir, liveDir);
       } catch (error42) {
         logger36.error(ctx, "Per-server swap failed", error42, {
           serverIdentifier: server.serverIdentifier,
@@ -1049,13 +1049,13 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
           includeStructuredLogs: true
         });
         try {
-          await (0, import_promises40.rename)(prevDir, liveDir);
+          await (0, import_promises38.rename)(prevDir, liveDir);
         } catch {
         }
-        await (0, import_promises40.rm)(stagingDir, { recursive: true, force: true });
+        await (0, import_promises38.rm)(stagingDir, { recursive: true, force: true });
         throw error42;
       }
-      await (0, import_promises40.rm)(prevDir, { recursive: true, force: true }).catch(() => {
+      await (0, import_promises38.rm)(prevDir, { recursive: true, force: true }).catch(() => {
       });
     } catch (e_3) {
       env_3.error = e_3;
@@ -1068,63 +1068,63 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
     const env_4 = { stack: [], error: void 0, hasError: false };
     try {
       const _span = __addDisposableResource13(env_4, createSpan(ctx.withName("McpFileSystemWriter.writeServerDirectory")), false);
-      const serverDir = (0, import_node_path72.join)(opts.basePath, opts.dirName ?? server.sanitizedId);
-      await (0, import_promises40.mkdir)(serverDir, { recursive: true });
+      const serverDir = (0, import_node_path63.join)(opts.basePath, opts.dirName ?? server.sanitizedId);
+      await (0, import_promises38.mkdir)(serverDir, { recursive: true });
       if (server.tools.length > 0) {
-        const toolsDir = (0, import_node_path72.join)(serverDir, MCP_TOOLS_SUBDIR);
-        await (0, import_promises40.mkdir)(toolsDir, { recursive: true });
+        const toolsDir = (0, import_node_path63.join)(serverDir, MCP_TOOLS_SUBDIR);
+        await (0, import_promises38.mkdir)(toolsDir, { recursive: true });
         for (const tool of server.tools) {
           const safeToolName = sanitizeFileName(tool.toolName);
-          const toolPath = (0, import_node_path72.join)(toolsDir, `${safeToolName}.json`);
+          const toolPath = (0, import_node_path63.join)(toolsDir, `${safeToolName}.json`);
           const content = buildMcpToolFileContent(tool);
-          await (0, import_promises40.writeFile)(toolPath, JSON.stringify(content, null, 2));
+          await (0, import_promises38.writeFile)(toolPath, JSON.stringify(content, null, 2));
         }
       }
       if (server.resources.length > 0) {
-        const resourcesDir = (0, import_node_path72.join)(serverDir, MCP_RESOURCES_SUBDIR);
-        await (0, import_promises40.mkdir)(resourcesDir, { recursive: true });
+        const resourcesDir = (0, import_node_path63.join)(serverDir, MCP_RESOURCES_SUBDIR);
+        await (0, import_promises38.mkdir)(resourcesDir, { recursive: true });
         for (const resource of server.resources) {
           const resourceName = resource.name || resource.uri.replace(/[^a-zA-Z0-9_-]/g, "_");
           const safeResourceName = sanitizeFileName(resourceName);
-          const resourcePath = (0, import_node_path72.join)(resourcesDir, `${safeResourceName}.json`);
+          const resourcePath = (0, import_node_path63.join)(resourcesDir, `${safeResourceName}.json`);
           const content = {
             uri: resource.uri,
             name: resource.name,
             description: resource.description,
             mimeType: resource.mimeType
           };
-          await (0, import_promises40.writeFile)(resourcePath, JSON.stringify(content, null, 2));
+          await (0, import_promises38.writeFile)(resourcePath, JSON.stringify(content, null, 2));
         }
       }
       if (server.prompts.length > 0) {
-        const promptsDir = (0, import_node_path72.join)(serverDir, MCP_PROMPTS_SUBDIR);
-        await (0, import_promises40.mkdir)(promptsDir, { recursive: true });
+        const promptsDir = (0, import_node_path63.join)(serverDir, MCP_PROMPTS_SUBDIR);
+        await (0, import_promises38.mkdir)(promptsDir, { recursive: true });
         for (const prompt of server.prompts) {
           const safePromptName = sanitizeFileName(prompt.name);
-          const promptPath = (0, import_node_path72.join)(promptsDir, `${safePromptName}.json`);
+          const promptPath = (0, import_node_path63.join)(promptsDir, `${safePromptName}.json`);
           const content = {
             name: prompt.name,
             description: prompt.description,
             arguments: prompt.arguments
           };
-          await (0, import_promises40.writeFile)(promptPath, JSON.stringify(content, null, 2));
+          await (0, import_promises38.writeFile)(promptPath, JSON.stringify(content, null, 2));
         }
       }
       if (server.instructions && server.instructions.trim().length > 0) {
-        const instructionsPath = (0, import_node_path72.join)(serverDir, INSTRUCTIONS_FILENAME);
-        await (0, import_promises40.writeFile)(instructionsPath, server.instructions.trim());
+        const instructionsPath = (0, import_node_path63.join)(serverDir, INSTRUCTIONS_FILENAME);
+        await (0, import_promises38.writeFile)(instructionsPath, server.instructions.trim());
       }
       if (server.status === "error" || server.status === "needsAuth") {
-        const statusPath = (0, import_node_path72.join)(serverDir, STATUS_FILENAME);
+        const statusPath = (0, import_node_path63.join)(serverDir, STATUS_FILENAME);
         const statusMessage = server.status === "error" ? this.getErrorStatusMessage() : this.getNeedsAuthStatusMessageForWrite(server.serverIdentifier);
-        await (0, import_promises40.writeFile)(statusPath, statusMessage);
+        await (0, import_promises38.writeFile)(statusPath, statusMessage);
       }
-      const metadataPath = (0, import_node_path72.join)(serverDir, SERVER_METADATA_FILENAME);
+      const metadataPath = (0, import_node_path63.join)(serverDir, SERVER_METADATA_FILENAME);
       const metadataContent = {
         serverIdentifier: server.serverIdentifier,
         serverName: server.serverName
       };
-      await (0, import_promises40.writeFile)(metadataPath, JSON.stringify(metadataContent, null, 2));
+      await (0, import_promises38.writeFile)(metadataPath, JSON.stringify(metadataContent, null, 2));
     } catch (e_4) {
       env_4.error = e_4;
       env_4.hasError = true;
@@ -1159,7 +1159,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       const mcpDescriptors = servers.map((server) => {
         const tools = server.tools.map((tool) => {
           const safeToolName = sanitizeFileName(tool.toolName);
-          const toolFilePath = (0, import_node_path72.join)(server.folderPath, MCP_TOOLS_SUBDIR, `${safeToolName}.json`);
+          const toolFilePath = (0, import_node_path63.join)(server.folderPath, MCP_TOOLS_SUBDIR, `${safeToolName}.json`);
           return new McpToolDescriptor({
             toolName: tool.toolName,
             definitionPath: toolFilePath,
@@ -1245,15 +1245,15 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
       const logCtx = this.getLogContext(ctx);
       const startMs = Date.now();
       const snapshots = await this.snapshotProvider.getAllSnapshots(ctx);
-      const mcpDir = (0, import_node_path72.join)(this.projectDir, MCPS_SUBDIR);
+      const mcpDir = (0, import_node_path63.join)(this.projectDir, MCPS_SUBDIR);
       const mcpDescriptors = snapshots.filter((s3) => s3.tools.length > 0 || s3.resources.length > 0 || s3.prompts.length > 0 || s3.instructions !== void 0 || this.shouldExposeVirtualMcpAuthToolForStatus(s3.serverIdentifier, s3.status) || s3.status === "needsAuth" || s3.status === "error").map((snapshot) => {
         const sanitizedId = sanitizeServerName(snapshot.serverIdentifier);
-        const folderPath = (0, import_node_path72.join)(mcpDir, sanitizedId);
+        const folderPath = (0, import_node_path63.join)(mcpDir, sanitizedId);
         const tools = snapshot.tools.map((tool) => {
           const safeToolName = sanitizeFileName(tool.name);
           return new McpToolDescriptor({
             toolName: tool.name,
-            definitionPath: (0, import_node_path72.join)(folderPath, MCP_TOOLS_SUBDIR, `${safeToolName}.json`),
+            definitionPath: (0, import_node_path63.join)(folderPath, MCP_TOOLS_SUBDIR, `${safeToolName}.json`),
             // Annotations are tiny and behavior-relevant (e.g. steer-aware
             // release gates on readOnlyHint), so they ride the descriptor
             // instead of only the definition file.
@@ -1264,7 +1264,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
           const safeToolName = sanitizeFileName(MCP_AUTH_TOOL_NAME);
           tools.push(new McpToolDescriptor({
             toolName: MCP_AUTH_TOOL_NAME,
-            definitionPath: (0, import_node_path72.join)(folderPath, MCP_TOOLS_SUBDIR, `${safeToolName}.json`)
+            definitionPath: (0, import_node_path63.join)(folderPath, MCP_TOOLS_SUBDIR, `${safeToolName}.json`)
           }));
         }
         return new McpDescriptor({
@@ -1345,7 +1345,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
   }
   async _checkDescriptorsVsFilesystemAsync(ctx, descriptors, source) {
     const logCtx = this.getLogContext(ctx);
-    const mcpsPath = (0, import_node_path72.join)(this.projectDir, MCPS_SUBDIR);
+    const mcpsPath = (0, import_node_path63.join)(this.projectDir, MCPS_SUBDIR);
     const expectedServerIds = /* @__PURE__ */ new Set();
     const expectedToolCounts = /* @__PURE__ */ new Map();
     for (const descriptor2 of descriptors) {
@@ -1355,7 +1355,7 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
     }
     let actualDirs = [];
     try {
-      actualDirs = await (0, import_promises40.readdir)(mcpsPath);
+      actualDirs = await (0, import_promises38.readdir)(mcpsPath);
       actualDirs = actualDirs.filter((d) => !d.endsWith(STAGING_SUFFIX) && !d.endsWith(PREV_SUFFIX));
     } catch (err) {
       if (err?.code !== "ENOENT") {
@@ -1404,10 +1404,10 @@ var McpFileSystemWriter = class _McpFileSystemWriter {
         continue;
       }
       const expectedCount = expectedToolCounts.get(serverId) ?? 0;
-      const toolsPath = (0, import_node_path72.join)(mcpsPath, serverId, MCP_TOOLS_SUBDIR);
+      const toolsPath = (0, import_node_path63.join)(mcpsPath, serverId, MCP_TOOLS_SUBDIR);
       let actualCount = 0;
       try {
-        const files = await (0, import_promises40.readdir)(toolsPath);
+        const files = await (0, import_promises38.readdir)(toolsPath);
         actualCount = files.filter((f2) => f2.endsWith(".json")).length;
       } catch {
       }

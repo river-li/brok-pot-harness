@@ -105,7 +105,7 @@ function createRequestCookieOriginApprovalTool(deps) {
     },
     execute: async (ctx, args, toolDeps) => {
       const origins = normalizeCookieOriginApprovalOrigins(args.origins);
-      const request5 = () => toolDeps.request({ origins, signal: ctx.signal });
+      const request5 = () => toolDeps.request({ origins, signal: ctx.signal, toolCallId: toolDeps.toolCallId });
       if (origins.length === 0) return formatCookieOriginApprovalOutcome(await request5());
       const requestedIds = pinnedProfileIds(origins);
       if (requestedIds.length > 0) {

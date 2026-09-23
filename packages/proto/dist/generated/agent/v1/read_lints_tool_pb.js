@@ -1,4 +1,4 @@
-var __protoPackage30, __protoMessage327, ReadLintsToolCall, ReadLintsToolArgs, ReadLintsToolResult, ReadLintsToolSuccess, FileDiagnostics, DiagnosticItem, DiagnosticRange, ReadLintsToolError;
+var __protoPackage31, __protoMessage327, ReadLintsToolCall, ReadLintsToolArgs, ReadLintsToolResult, ReadLintsToolSuccess, FileDiagnostics, DiagnosticItem, DiagnosticRange, ReadLintsToolError;
 var init_read_lints_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/read_lints_tool_pb.js"() {
     "use strict";
@@ -6,13 +6,13 @@ var init_read_lints_tool_pb = __esm({
     init_diagnostics_exec_pb();
     init_utils_pb2();
     init_compact();
-    __protoPackage30 = "agent.v1.";
+    __protoPackage31 = "agent.v1.";
     __protoMessage327 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage30;
+        return __protoPackage31;
       }
     };
     ReadLintsToolCall = class _ReadLintsToolCall extends __protoMessage327 {

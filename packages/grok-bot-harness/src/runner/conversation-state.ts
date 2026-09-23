@@ -29,7 +29,22 @@ function buildUnansweredQuestionsNote(prompts) {
   const discardedDrafts = clean(prompts.discardedDrafts ?? []);
   const unconfirmedDrafts = clean(prompts.unconfirmedDrafts ?? []);
   const unseenWakeOutcomes = clean(prompts.unseenWakeOutcomes ?? []);
+  const unseenCloudAgentReports = clean(prompts.unseenCloudAgentReports ?? []);
   const sections = [];
+  if (unseenCloudAgentReports.length === 1) {
+    sections.push(
+      `Earlier a cloud agent you were watching finished and you were not woken for it. Its report: ${unseenCloudAgentReports[0]} Treat it as something you already know: take it into account together with the message below, and don't relaunch or re-ask for work it already did.`
+    );
+  } else if (unseenCloudAgentReports.length > 1) {
+    const list = unseenCloudAgentReports.map(
+      (report) => `
+- ${report}`
+    ).join("");
+    sections.push(
+      `Earlier cloud agents you were watching finished and you were not woken for them. Their reports:${list}
+Treat these as things you already know: take them into account together with the message below, and don't relaunch or re-ask for work they already did.`
+    );
+  }
   if (unseenWakeOutcomes.length === 1) {
     sections.push(
       `Earlier a card you raised was settled, but the turn carrying that outcome was cut off before you saw it. ${unseenWakeOutcomes[0]} Treat it as settled and already handled on the user's side: take it into account together with the message below, follow the guidance it carries, and don't raise the same card again.`

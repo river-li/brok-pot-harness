@@ -78,9 +78,9 @@ var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
             break;
           }
           case "drag": {
-            const path31 = a.value.path.map((point) => ({
-              x: point.x,
-              y: point.y
+            const path31 = a.value.path.map((point2) => ({
+              x: point2.x,
+              y: point2.y
             }));
             await this.ensureGeometryCached();
             this.recordActuation(await this.sidecar.drag(this.ctx, {
@@ -272,13 +272,13 @@ var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
       return { failed: true, reason };
     }
   }
-  static coordinateFromPoint(point) {
-    if (point === void 0 || !Number.isFinite(point.x) || !Number.isFinite(point.y)) {
+  static coordinateFromPoint(point2) {
+    if (point2 === void 0 || !Number.isFinite(point2.x) || !Number.isFinite(point2.y)) {
       return void 0;
     }
     return new Coordinate({
-      x: Math.round(point.x),
-      y: Math.round(point.y)
+      x: Math.round(point2.x),
+      y: Math.round(point2.y)
     });
   }
   static cursorFromResult(result) {

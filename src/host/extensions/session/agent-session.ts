@@ -12,14 +12,14 @@ var SandAgentSessionStore = class {
     this.createAgentDb = (dbPath, options2) => createAgentDb(dbPath, {
       ...options2,
       onFailure: (failure2) => {
-        const agentId = (0, import_node_path141.basename)((0, import_node_path141.dirname)(dbPath));
+        const agentId = (0, import_node_path142.basename)((0, import_node_path142.dirname)(dbPath));
         let text2;
         switch (failure2.kind) {
           case "checkpoint_on_close_failed":
             text2 = `[sand-agent-db] checkpoint-on-close failed for ${agentId}: ${errorLogTag(failure2.error)}`;
             break;
           case "write_busy":
-            text2 = (0, import_node_util13.format)(
+            text2 = (0, import_node_util14.format)(
               `[sand-agent-db] ${failure2.operation} dropped on locked db (${agentId}):`,
               failure2.error
             );
@@ -135,7 +135,7 @@ var SandAgentSessionStore = class {
       }
       const walk = liveRootBlobId.length === 0 ? { outcome: "skipped", reason: "no-root" } : await this.materialization.requireWorkerPool().walkExportClosure({
         agentId,
-        blobDbPath: (0, import_node_path141.join)((0, import_node_path141.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
+        blobDbPath: (0, import_node_path142.join)((0, import_node_path142.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
         retainedRootIdHex: toHex3(liveRootBlobId),
         legacyBlobDbPath: dbPath,
         maxClosureBytes: limits.maxClosureBytes,
@@ -156,20 +156,20 @@ var SandAgentSessionStore = class {
     return await this.materialization.requireWorkerPool().getConversationBlobsByHexIds(
       {
         agentId,
-        blobDbPath: (0, import_node_path141.join)((0, import_node_path141.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
+        blobDbPath: (0, import_node_path142.join)((0, import_node_path142.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
         legacyBlobDbPath: dbPath
       },
       [...blobIdsHex]
     );
   }
   getAgentDir(agentId) {
-    return (0, import_node_path141.dirname)(getAgentDbPath(this.rootDir, agentId));
+    return (0, import_node_path142.dirname)(getAgentDbPath(this.rootDir, agentId));
   }
   agentExists(agentId) {
-    return (0, import_node_fs86.existsSync)(getAgentDbPath(this.rootDir, agentId));
+    return (0, import_node_fs88.existsSync)(getAgentDbPath(this.rootDir, agentId));
   }
   agentDirExists(agentId) {
-    return (0, import_node_fs86.existsSync)(this.getAgentDir(agentId));
+    return (0, import_node_fs88.existsSync)(this.getAgentDir(agentId));
   }
   cloneAgentDir(sourceDir, targetDir, newAgentId, cloneName) {
     cloneAgentDir(sourceDir, targetDir, newAgentId, cloneName, this.createAgentDb);
@@ -202,16 +202,16 @@ var SandAgentSessionStore = class {
     const dbPath = getAgentDbPath(this.rootDir, agentId);
     this.extrasCache.delete(agentId);
     deleteSandAgentDbWriteGeneration(dbPath);
-    await (0, import_promises69.rm)((0, import_node_path141.dirname)(dbPath), { recursive: true, force: true });
+    await (0, import_promises69.rm)((0, import_node_path142.dirname)(dbPath), { recursive: true, force: true });
     publishTranscriptMutation({ kind: "agent-removed", agentId });
   }
   activeAgentPointerPath() {
-    return (0, import_node_path141.join)(this.rootDir, ACTIVE_AGENT_FILENAME);
+    return (0, import_node_path142.join)(this.rootDir, ACTIVE_AGENT_FILENAME);
   }
   readActiveAgentId() {
     let raw;
     try {
-      raw = (0, import_node_fs86.readFileSync)(this.activeAgentPointerPath(), "utf8");
+      raw = (0, import_node_fs88.readFileSync)(this.activeAgentPointerPath(), "utf8");
     } catch (error42) {
       reportFallbackUnlessAbsent("agent_session", error42);
       return null;
@@ -297,11 +297,11 @@ var SandAgentSessionStore = class {
   }
   adoptMaterializedAgentDb(agentId) {
     if (this.agentExists(agentId)) return;
-    if (!(0, import_node_fs86.existsSync)(getSandProfilePath(this.getAgentDir(agentId)))) return;
+    if (!(0, import_node_fs88.existsSync)(getSandProfilePath(this.getAgentDir(agentId)))) return;
     this.reseedMinimalStoreDbIfMissing(getAgentDbPath(this.rootDir, agentId));
   }
   reseedMinimalStoreDbIfMissing(dbPath) {
-    if ((0, import_node_fs86.existsSync)(dbPath)) return;
+    if ((0, import_node_fs88.existsSync)(dbPath)) return;
     if (hasLiveSandAgentDbHandle(dbPath)) return;
     try {
       const db = this.createAgentDb(dbPath);
@@ -310,7 +310,7 @@ var SandAgentSessionStore = class {
       reportSessionDiagnostic({
         family: "store_db",
         kind: "reseed_failed",
-        agentId: (0, import_node_path141.basename)((0, import_node_path141.dirname)(dbPath)),
+        agentId: (0, import_node_path142.basename)((0, import_node_path142.dirname)(dbPath)),
         errorClass: errorLogTag(error42)
       });
     }
@@ -328,7 +328,7 @@ var SandAgentSessionStore = class {
     const generation = getSandAgentDbWriteGeneration(dbPath);
     const key = `${generation}:${dbStats.size}:${dbStats.mtimeMs}:${walStats?.size ?? -1}:${walStats?.mtimeMs ?? -1}`;
     const cached2 = this.extrasCache.get(dirName);
-    if (cached2 != null && cached2.key === key && (0, import_node_fs86.existsSync)(getSandProfilePath((0, import_node_path141.dirname)(dbPath)))) {
+    if (cached2 != null && cached2.key === key && (0, import_node_fs88.existsSync)(getSandProfilePath((0, import_node_path142.dirname)(dbPath)))) {
       return cached2.extras;
     }
     if (this.isAgentBeingDeleted(dirName)) return null;
@@ -346,7 +346,7 @@ var SandAgentSessionStore = class {
       reportSessionDiagnostic({
         family: "store_db",
         kind: "unreadable",
-        agentId: (0, import_node_path141.basename)((0, import_node_path141.dirname)(dbPath)),
+        agentId: (0, import_node_path142.basename)((0, import_node_path142.dirname)(dbPath)),
         errorClass: errorLogTag(error42)
       });
       return null;
@@ -427,35 +427,35 @@ var SandAgentSessionStore = class {
   async getAgentTranscriptEntries(agentId) {
     return await this.conversationState.getAgentTranscriptEntries(agentId);
   }
-  async markSessionViewed(session, at2 = Date.now(), options2 = {}) {
+  async markSessionViewed(session, at3 = Date.now(), options2 = {}) {
     await this.seedSessionActivityFromDbMtime(session);
-    session.db.markViewed(at2, options2);
+    session.db.markViewed(at3, options2);
   }
   markSessionActivity(session, options2 = {}) {
     session.db.markActivity(options2.at, options2);
   }
-  markSessionViewedNow(session, at2 = Date.now(), options2 = {}) {
-    session.db.markViewed(at2, options2);
+  markSessionViewedNow(session, at3 = Date.now(), options2 = {}) {
+    session.db.markViewed(at3, options2);
   }
-  markAgentViewed(agentId, at2 = Date.now(), options2 = {}) {
+  markAgentViewed(agentId, at3 = Date.now(), options2 = {}) {
     const dbPath = getAgentDbPath(this.rootDir, agentId);
     let db;
     try {
       db = this.createAgentDb(dbPath, { recoverOnCorruption: false });
-      db.markViewed(at2, options2);
+      db.markViewed(at3, options2);
     } catch {
     } finally {
       db?.close();
     }
   }
-  async setSessionUnread(agentId, isUnread, at2 = Date.now()) {
+  async setSessionUnread(agentId, isUnread, at3 = Date.now()) {
     await this.withAgentDb(agentId, async (db, dbPath) => {
       if (isUnread) {
         const dbStats = await this.statOpenDb({ dbPath, agentId });
         seedActivityFromMtime(db, agentId, dbStats);
-        db.markUnread(at2);
+        db.markUnread(at3);
       } else {
-        db.markRead(at2);
+        db.markRead(at3);
       }
     });
   }

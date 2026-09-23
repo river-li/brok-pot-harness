@@ -1,4 +1,4 @@
-var __protoPackage99, __protoMessage395, ChunkType, SubagentType2, ConversationSummary2, ContextToRank, RankedContext, DocumentationCitation, WebCitation, WebReference, DocsReference, AiWebSearchResult, StatusUpdate, StatusUpdates, RerankDocumentsRequest, RerankDocumentsResponse, Document, DocumentIdsWithScores, ComposerFileDiffHistory, StreamUnifiedChatRequest_UnifiedMode, ContextPiece, ContextWindowStatus, ServiceStatusUpdate, SymbolLink, FileLink, RedDiff, DiffFile, ViewableCommitProps, ViewablePRProps, ViewableDiffProps, ViewableGitContext, ConversationMessage, ConversationMessage_MessageType, ConversationMessage_ThinkingStyle, ConversationMessage_CodeChunk, ConversationMessage_CodeChunk_Intent, ConversationMessage_CodeChunk_SummarizationStrategy, ConversationMessage_CodeChunk_CodeChunkGitContext, ConversationMessage_CodeChunk_CodeChunkGitContext_CodeChunkGitInfo, ConversationMessage_ToolResult, ConversationMessage_NotepadContext, ConversationMessage_ComposerContext, ConversationMessage_EditLocation, ConversationMessage_EditTrailContext, ConversationMessage_ApproximateLintError, ConversationMessage_Lints, ConversationMessage_RecentLocation, ConversationMessage_RenderedDiff, ConversationMessage_HumanChange, ConversationMessage_Thinking, ConversationMessage_DiffSinceLastApply, ConversationMessage_DeletedFile, ConversationMessage_KnowledgeItem, ConversationMessage_DocumentationSelection, ConversationMessage_IdeEditorsState, ConversationMessage_IdeEditorsState_File, ConversationMessage_PlanUpdate, ConversationMessage_SimulatedMessageMetadata, ConversationMessage_McpDescriptor, ConversationMessage_McpDescriptor_Tool, CurrentFileLocationData, FolderInfo, FolderFileInfo, InterpreterResult, SimpleFileDiff, SimpleFileDiff_Chunk, Commit, PullRequest, SuggestedCodeBlock, UserResponseToSuggestedCodeBlock, UserResponseToSuggestedCodeBlock_UserResponseType, ContextRerankingCandidateFile, ComposerFileDiff, ComposerFileDiff_Editor, ComposerFileDiff_ChunkDiff, DiffHistoryData, SubagentReturnCall, DeepSearchSubagentReturnValue, DeepSearchSubagentReturnValue_ContextItem, FixLintsSubagentReturnValue, TaskSubagentReturnValue, SpecSubagentReturnValue, StringReplacement, ProjectLayout, ProjectLayoutDirectoryContent, ProjectLayoutDirectory, ProjectLayoutFile;
+var __protoPackage100, __protoMessage395, ChunkType, SubagentType2, ConversationSummary2, ContextToRank, RankedContext, DocumentationCitation, WebCitation, WebReference, DocsReference, AiWebSearchResult, StatusUpdate, StatusUpdates, RerankDocumentsRequest, RerankDocumentsResponse, Document, DocumentIdsWithScores, ComposerFileDiffHistory, StreamUnifiedChatRequest_UnifiedMode, ContextPiece, ContextWindowStatus, ServiceStatusUpdate, SymbolLink, FileLink, RedDiff, DiffFile, ViewableCommitProps, ViewablePRProps, ViewableDiffProps, ViewableGitContext, ConversationMessage, ConversationMessage_MessageType, ConversationMessage_ThinkingStyle, ConversationMessage_CodeChunk, ConversationMessage_CodeChunk_Intent, ConversationMessage_CodeChunk_SummarizationStrategy, ConversationMessage_CodeChunk_CodeChunkGitContext, ConversationMessage_CodeChunk_CodeChunkGitContext_CodeChunkGitInfo, ConversationMessage_ToolResult, ConversationMessage_NotepadContext, ConversationMessage_ComposerContext, ConversationMessage_EditLocation, ConversationMessage_EditTrailContext, ConversationMessage_ApproximateLintError, ConversationMessage_Lints, ConversationMessage_RecentLocation, ConversationMessage_RenderedDiff, ConversationMessage_HumanChange, ConversationMessage_Thinking, ConversationMessage_DiffSinceLastApply, ConversationMessage_DeletedFile, ConversationMessage_KnowledgeItem, ConversationMessage_DocumentationSelection, ConversationMessage_IdeEditorsState, ConversationMessage_IdeEditorsState_File, ConversationMessage_PlanUpdate, ConversationMessage_SimulatedMessageMetadata, ConversationMessage_McpDescriptor, ConversationMessage_McpDescriptor_Tool, CurrentFileLocationData, FolderInfo, FolderFileInfo, InterpreterResult, SimpleFileDiff, SimpleFileDiff_Chunk, Commit, PullRequest, SuggestedCodeBlock, UserResponseToSuggestedCodeBlock, UserResponseToSuggestedCodeBlock_UserResponseType, ContextRerankingCandidateFile, ComposerFileDiff, ComposerFileDiff_Editor, ComposerFileDiff_ChunkDiff, DiffHistoryData, SubagentReturnCall, DeepSearchSubagentReturnValue, DeepSearchSubagentReturnValue_ContextItem, FixLintsSubagentReturnValue, TaskSubagentReturnValue, SpecSubagentReturnValue, StringReplacement, ProjectLayout, ProjectLayoutDirectoryContent, ProjectLayoutDirectory, ProjectLayoutFile;
 var init_chat_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/chat_pb.js"() {
     "use strict";
@@ -12,17 +12,17 @@ var init_chat_pb = __esm({
     init_selected_context_pb();
     init_shadow_workspace_pb();
     init_compact();
-    __protoPackage99 = "aiserver.v1.";
+    __protoPackage100 = "aiserver.v1.";
     __protoMessage395 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage99;
+        return __protoPackage100;
       }
     };
-    ChunkType = /* @__PURE__ */ enumType(proto3, __protoPackage99, "ChunkType", [[0, "UNSPECIFIED"], [1, "CODEBASE"], [2, "LONG_FILE"], [3, "DOCS"]], 1);
-    SubagentType2 = /* @__PURE__ */ enumType(proto3, __protoPackage99, "SubagentType", [[0, "UNSPECIFIED"], [1, "DEEP_SEARCH"], [2, "FIX_LINTS"], [3, "TASK"], [4, "SPEC"]], 1);
+    ChunkType = /* @__PURE__ */ enumType(proto3, __protoPackage100, "ChunkType", [[0, "UNSPECIFIED"], [1, "CODEBASE"], [2, "LONG_FILE"], [3, "DOCS"]], 1);
+    SubagentType2 = /* @__PURE__ */ enumType(proto3, __protoPackage100, "SubagentType", [[0, "UNSPECIFIED"], [1, "DEEP_SEARCH"], [2, "FIX_LINTS"], [3, "TASK"], [4, "SPEC"]], 1);
     ConversationSummary2 = class _ConversationSummary extends __protoMessage395 {
       constructor(data) {
         super();
@@ -370,7 +370,7 @@ var init_chat_pb = __esm({
         return ["ComposerFileDiffHistory|1 file_name 9|2 diff_history 9*|3 diff_history_timestamps 1*"];
       }
     };
-    StreamUnifiedChatRequest_UnifiedMode = /* @__PURE__ */ enumType(proto3, __protoPackage99, "StreamUnifiedChatRequest.UnifiedMode", [[0, "UNSPECIFIED"], [1, "CHAT"], [2, "AGENT"], [3, "EDIT"], [4, "CUSTOM"], [5, "PLAN"], [6, "DEBUG"]], 1);
+    StreamUnifiedChatRequest_UnifiedMode = /* @__PURE__ */ enumType(proto3, __protoPackage100, "StreamUnifiedChatRequest.UnifiedMode", [[0, "UNSPECIFIED"], [1, "CHAT"], [2, "AGENT"], [3, "EDIT"], [4, "CUSTOM"], [5, "PLAN"], [6, "DEBUG"]], 1);
     ContextPiece = class _ContextPiece extends __protoMessage395 {
       constructor(data) {
         super();
@@ -711,8 +711,8 @@ var init_chat_pb = __esm({
         return ["ConversationMessage|1 text 9|2 type #0|3 attached_code_chunks #1*|4 codebase_context_chunks #2*|5 commits #3*|6 pull_requests #4*|7 git_diffs #5*|8 assistant_suggested_diffs #6*|9 interpreter_results #7*|10 images #8*|11 attached_folders 9*|12 approximate_lint_errors #9*|13 bubble_id 9|32 server_bubble_id 9?|14 attached_folders_new #10*|15 lints #11*|16 user_responses_to_suggested_code_blocks #12*|17 relevant_files 9*|18 tool_results #13*|19 notepads #14*|20 is_capability_iteration 8?|21 capabilities #15*|22 edit_trail_contexts #16*|23 suggested_code_blocks #17*|24 diffs_for_compressing_files #18*|25 multi_file_linter_errors #19*|26 diff_histories #20*|27 recently_viewed_files #1*|28 recent_locations_history #21*|29 is_agentic 8|30 file_diff_trajectories #22*|31 conversation_summary #23?|33 existed_subsequent_terminal_command 8|34 existed_previous_terminal_command 8|35 docs_references #24*|36 web_references #25*|75 ai_web_search_results #26*|37 git_context #27?|38 attached_folders_list_dir_results #28*|39 cached_conversation_summary #23?|40 human_changes #29*|41 attached_human_changes 8|42 summarized_composers #30*|43 cursor_rules #31*|44 context_pieces #32*|45 thinking #33?|46 all_thinking_blocks #33*|85 thinking_style #34?|47 unified_mode #35?|98 agent_mode #36?|48 diffs_since_last_apply #37*|49 deleted_files #38*|50 usage_uuid 9?|51 supported_tools #39*|52 current_file_location_data #40?|53 edit_tool_supports_search_and_replace 8?|54 last_terminal_cwd 9?|55 user_explicitly_asked_to_generate_cursor_rules 8?|56 console_logs #41*|57 rich_text 9?|58 knowledge_items #42*|59 ui_element_picked #43*|60 user_explicitly_asked_to_add_to_knowledge_base 8?|61 documentation_selections #44*|62 external_links #45*|63 use_web 8?|64 project_layouts #46*|65 thinking_duration_ms 5?|88 step_duration_ms 5?|66 subagent_return #47?|67 is_simple_looping_message 8?|68 capability_contexts #48*|69 checkpoint_commit_hash 9?|70 git_status_raw 9?|71 todos #49*|72 is_review_edits_followup 8?|74 request_id 9|73 ide_editors_state #50?|76 context_window_status #51?|77 is_plan_execution 8?|78 created_at 9|79 model_info #52|80 is_quick_search_query 8?|81 plan_update #53?|82 is_simulated_msg 8?|95 simulated_msg_reason #54?|97 simulated_message_metadata #55?|83 mcp_descriptors #56*|84 workspace_project_dir 9?|87 workspace_uris 9*|86 debug_mode_config #57?|89 text_blob_id 12?|90 rich_text_blob_id 12?|91 cursor_commands #58*|92 cursor_commands_explicitly_set 8|93 past_chats #59*|94 past_chats_explicitly_set 8|96 triggering_user_info #60?|99 turn_steer 8?|100 sent_by_agent_id 9?", ConversationMessage_MessageType, ConversationMessage_CodeChunk, CodeBlock, Commit, PullRequest, GitDiff, SimpleFileDiff, InterpreterResult, ImageProto, ConversationMessage_ApproximateLintError, FolderInfo, ConversationMessage_Lints, UserResponseToSuggestedCodeBlock, ConversationMessage_ToolResult, ConversationMessage_NotepadContext, ComposerCapabilityRequest, ConversationMessage_EditTrailContext, SuggestedCodeBlock, RedDiff, LinterErrorsWithoutFileContents, DiffHistoryData, ConversationMessage_RecentLocation, ComposerFileDiffHistory, ConversationSummary2, DocsReference, WebReference, AiWebSearchResult, ViewableGitContext, ListDirResult, ConversationMessage_HumanChange, ConversationMessage_ComposerContext, CursorRule, ContextPiece, ConversationMessage_Thinking, ConversationMessage_ThinkingStyle, StreamUnifiedChatRequest_UnifiedMode, AgentMode, ConversationMessage_DiffSinceLastApply, ConversationMessage_DeletedFile, ClientSideToolV2, CurrentFileLocationData, RCPLogEntry, ConversationMessage_KnowledgeItem, RCPUIElementPicked, ConversationMessage_DocumentationSelection, ComposerExternalLink, ProjectLayout, SubagentReturnCall, ComposerCapabilityContext, TodoItem2, ConversationMessage_IdeEditorsState, ContextWindowStatus, ModelInfo, ConversationMessage_PlanUpdate, SimulatedMsgReason, ConversationMessage_SimulatedMessageMetadata, ConversationMessage_McpDescriptor, DebugModeConfig, SelectedCursorCommand, SelectedPastChat, TriggeringUserInfo];
       }
     };
-    ConversationMessage_MessageType = /* @__PURE__ */ enumType(proto3, __protoPackage99, "ConversationMessage.MessageType", [[0, "UNSPECIFIED"], [1, "HUMAN"], [2, "AI"]], 1);
-    ConversationMessage_ThinkingStyle = /* @__PURE__ */ enumType(proto3, __protoPackage99, "ConversationMessage.ThinkingStyle", [[0, "UNSPECIFIED"], [1, "DEFAULT"], [2, "CODEX"], [3, "GPT5"]], 1);
+    ConversationMessage_MessageType = /* @__PURE__ */ enumType(proto3, __protoPackage100, "ConversationMessage.MessageType", [[0, "UNSPECIFIED"], [1, "HUMAN"], [2, "AI"]], 1);
+    ConversationMessage_ThinkingStyle = /* @__PURE__ */ enumType(proto3, __protoPackage100, "ConversationMessage.ThinkingStyle", [[0, "UNSPECIFIED"], [1, "DEFAULT"], [2, "CODEX"], [3, "GPT5"]], 1);
     ConversationMessage_CodeChunk = class _ConversationMessage_CodeChunk extends __protoMessage395 {
       constructor(data) {
         super();
@@ -738,8 +738,8 @@ var init_chat_pb = __esm({
         return ["ConversationMessage.CodeChunk|1 relative_workspace_path 9|2 start_line_number 5|3 lines 9*|4 summarization_strategy #0?|5 language_identifier 9|6 intent #1?|7 is_final_version 8?|8 is_first_version 8?|9 contents_are_missing 8?|10 is_only_included_from_folder 8?|11 code_chunk_git_context #2?", ConversationMessage_CodeChunk_SummarizationStrategy, ConversationMessage_CodeChunk_Intent, ConversationMessage_CodeChunk_CodeChunkGitContext];
       }
     };
-    ConversationMessage_CodeChunk_Intent = /* @__PURE__ */ enumType(proto3, __protoPackage99, "ConversationMessage.CodeChunk.Intent", [[0, "UNSPECIFIED"], [1, "COMPOSER_FILE"], [2, "COMPRESSED_COMPOSER_FILE"], [3, "RECENTLY_VIEWED_FILE"], [4, "OUTLINE"], [5, "MENTIONED_FILE"], [6, "CODE_SELECTION"], [7, "AI_EDITED_FILE"], [8, "VISIBLE_FILE"], [9, "TERMINAL_SELECTION"]], 1);
-    ConversationMessage_CodeChunk_SummarizationStrategy = /* @__PURE__ */ enumType(proto3, __protoPackage99, "ConversationMessage.CodeChunk.SummarizationStrategy", [[0, "NONE_UNSPECIFIED"], [1, "SUMMARIZED"], [2, "EMBEDDED"]], 1);
+    ConversationMessage_CodeChunk_Intent = /* @__PURE__ */ enumType(proto3, __protoPackage100, "ConversationMessage.CodeChunk.Intent", [[0, "UNSPECIFIED"], [1, "COMPOSER_FILE"], [2, "COMPRESSED_COMPOSER_FILE"], [3, "RECENTLY_VIEWED_FILE"], [4, "OUTLINE"], [5, "MENTIONED_FILE"], [6, "CODE_SELECTION"], [7, "AI_EDITED_FILE"], [8, "VISIBLE_FILE"], [9, "TERMINAL_SELECTION"]], 1);
+    ConversationMessage_CodeChunk_SummarizationStrategy = /* @__PURE__ */ enumType(proto3, __protoPackage100, "ConversationMessage.CodeChunk.SummarizationStrategy", [[0, "NONE_UNSPECIFIED"], [1, "SUMMARIZED"], [2, "EMBEDDED"]], 1);
     ConversationMessage_CodeChunk_CodeChunkGitContext = class _ConversationMessage_CodeChunk_CodeChunkGitContext extends __protoMessage395 {
       constructor(data) {
         super();
@@ -1528,7 +1528,7 @@ var init_chat_pb = __esm({
         return ["UserResponseToSuggestedCodeBlock|1 user_response_type #0|2 file_path 9|3 user_modifications_to_suggested_code_blocks #1?", UserResponseToSuggestedCodeBlock_UserResponseType, FileDiff];
       }
     };
-    UserResponseToSuggestedCodeBlock_UserResponseType = /* @__PURE__ */ enumType(proto3, __protoPackage99, "UserResponseToSuggestedCodeBlock.UserResponseType", [[0, "UNSPECIFIED"], [1, "ACCEPT"], [2, "REJECT"], [3, "MODIFY"]], 1);
+    UserResponseToSuggestedCodeBlock_UserResponseType = /* @__PURE__ */ enumType(proto3, __protoPackage100, "UserResponseToSuggestedCodeBlock.UserResponseType", [[0, "UNSPECIFIED"], [1, "ACCEPT"], [2, "REJECT"], [3, "MODIFY"]], 1);
     ContextRerankingCandidateFile = class _ContextRerankingCandidateFile extends __protoMessage395 {
       constructor(data) {
         super();
@@ -1576,7 +1576,7 @@ var init_chat_pb = __esm({
         return ["ComposerFileDiff|1 chunks #0*|2 editor #1|3 hit_timeout 8", ComposerFileDiff_ChunkDiff, ComposerFileDiff_Editor];
       }
     };
-    ComposerFileDiff_Editor = /* @__PURE__ */ enumType(proto3, __protoPackage99, "ComposerFileDiff.Editor", [[0, "UNSPECIFIED"], [1, "AI"], [2, "HUMAN"]], 1);
+    ComposerFileDiff_Editor = /* @__PURE__ */ enumType(proto3, __protoPackage100, "ComposerFileDiff.Editor", [[0, "UNSPECIFIED"], [1, "AI"], [2, "HUMAN"]], 1);
     ComposerFileDiff_ChunkDiff = class _ComposerFileDiff_ChunkDiff extends __protoMessage395 {
       constructor(data) {
         super();

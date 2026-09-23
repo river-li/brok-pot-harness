@@ -11,7 +11,7 @@ function getSandProfilePath(agentDir) {
 function parseProfileJson2(path31) {
   let raw;
   try {
-    raw = (0, import_node_fs26.readFileSync)(path31, "utf8");
+    raw = (0, import_node_fs27.readFileSync)(path31, "utf8");
   } catch (error42) {
     reportFallbackUnlessAbsent("agent_profile", error42);
     return null;
@@ -47,7 +47,7 @@ function readSandProfileCreationMetadata(path31) {
 }
 function writeProfileJson(path31, serialized) {
   try {
-    if ((0, import_node_fs26.readFileSync)(path31, "utf8") === serialized) return;
+    if ((0, import_node_fs27.readFileSync)(path31, "utf8") === serialized) return;
   } catch (error42) {
     reportFallbackUnlessAbsent("agent_profile", error42);
   }

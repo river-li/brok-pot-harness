@@ -1,6 +1,6 @@
 var import_node_child_process10 = require("node:child_process");
 var import_node_crypto38 = require("node:crypto");
-var import_node_fs49 = require("node:fs");
+var import_node_fs50 = require("node:fs");
 var import_node_os22 = require("node:os");
 var import_node_path91 = require("node:path");
 init_dist3();
@@ -48,7 +48,7 @@ function isMissingPath(error42) {
   return findSystemErrno(error42) === "ENOENT";
 }
 async function hasRendition(renditionPath, step) {
-  const stat28 = await step.attempt("cache_stat", () => import_node_fs49.promises.stat(renditionPath), isMissingPath);
+  const stat28 = await step.attempt("cache_stat", () => import_node_fs50.promises.stat(renditionPath), isMissingPath);
   return stat28 !== null && stat28.isFile() && stat28.size > 0;
 }
 function createMediaRenditionCache(recipe) {
@@ -59,7 +59,7 @@ function createMediaRenditionCache(recipe) {
     if (!resolution.evicted || resolution.activeReaders > 0) return;
     void resolution.step.attempt("evicted_cleanup", async () => {
       await resolution.promise;
-      await import_node_fs49.promises.rm(resolution.renditionPath, { force: true });
+      await import_node_fs50.promises.rm(resolution.renditionPath, { force: true });
     });
   }
   async function produce({
@@ -75,7 +75,7 @@ function createMediaRenditionCache(recipe) {
       "queue",
       () => queue.enqueue(async () => {
         if (await hasRendition(renditionPath, step)) return renditionPath;
-        await import_node_fs49.promises.mkdir(cacheDir, { recursive: true });
+        await import_node_fs50.promises.mkdir(cacheDir, { recursive: true });
         const tempPath = `${renditionPath}.${(0, import_node_crypto38.randomUUID)()}.tmp${recipe.renditionExtension}`;
         try {
           const command = await step.attempt(
@@ -83,12 +83,12 @@ function createMediaRenditionCache(recipe) {
             () => step.run("ffmpeg", plan.ffmpegArgs(tempPath))
           );
           if (command === null) return null;
-          const output = await step.attempt("output_stat", () => import_node_fs49.promises.stat(tempPath));
+          const output = await step.attempt("output_stat", () => import_node_fs50.promises.stat(tempPath));
           if (output === null || !output.isFile() || output.size <= 0) return null;
-          const rename7 = await step.attempt("rename", () => import_node_fs49.promises.rename(tempPath, renditionPath));
+          const rename7 = await step.attempt("rename", () => import_node_fs50.promises.rename(tempPath, renditionPath));
           return rename7 === null ? null : renditionPath;
         } finally {
-          await step.attempt("temporary_cleanup", () => import_node_fs49.promises.rm(tempPath, { force: true }));
+          await step.attempt("temporary_cleanup", () => import_node_fs50.promises.rm(tempPath, { force: true }));
         }
       })
     );
@@ -96,7 +96,7 @@ function createMediaRenditionCache(recipe) {
   return async (sourcePath, read, reportFailure = () => {
   }) => {
     const step = stepFor(recipe.medium, reportFailure);
-    const stat28 = await step.attempt("source_stat", () => import_node_fs49.promises.stat(sourcePath), isMissingPath);
+    const stat28 = await step.attempt("source_stat", () => import_node_fs50.promises.stat(sourcePath), isMissingPath);
     if (stat28 === null || !stat28.isFile()) return await read(sourcePath);
     const sourceVersion = (0, import_node_crypto38.createHash)("sha256").update(sourcePath).update("\0").update(String(stat28.size)).update("\0").update(String(stat28.mtimeMs)).digest("hex");
     let resolution = resolutionBySourceVersion.get(sourceVersion);

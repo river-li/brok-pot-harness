@@ -117,6 +117,7 @@ async function runRequestVirtualCard(args, deps) {
     buildVirtualCardApprovalMessage({ requestId: outcome.requestId, card }),
     Date.now()
   );
+  if (deps.toolCallId !== void 0) deps.toolDecisions?.askAPerson(deps.toolCallId);
   return "Asked the user to authorize the card; your turn is over. If they approve, they finish on Link's page and you'll be resumed with the spend request id to poll. If they deny, you'll be resumed with that instead.";
 }
 function createRequestVirtualCardTool(deps) {
@@ -125,6 +126,10 @@ function createRequestVirtualCardTool(deps) {
     name: "request_virtual_card",
     description: `Ask the user to authorize a one-time virtual card for a specific purchase. You cannot create a purchase yourself \u2014 this only ASKS; the user sees a card with the amount, the merchant, your reason, and the cart broken down line by line, and nothing is created unless they approve. Your turn ends when you call this. On approval they finish authorizing on Stripe Link's own page in their browser, and you are resumed with the spend request id; poll get_spend_request with it on a widening delay, waiting ${VIRTUAL_CARD_POLL_SCHEDULE} seconds before each check and saying NOTHING to the user in between, then fetch the card with include: ["card"] and type those details into the merchant's checkout. If it is still pending after the last check, give up and tell the user rather than polling on. Get the amount right the first time: it is the exact total that will be charged including tax and shipping, and a card issued for too little is declined at checkout. Raising a card while the user still has one open replaces it \u2014 the older card is retired unanswered \u2014 so do that only when the purchase itself has changed or they asked for a new one, never to nudge them. If they deny, take that as final and do not re-ask for the same purchase.`,
     parameters: requestVirtualCardParameters,
-    execute: async (_ctx, args, d) => runRequestVirtualCard(args, d)
+    execute: async (ctx, args, d) => {
+      const merchant = parseMerchantUrl(args.merchantUrl);
+      if (merchant.kind === "ok") noteToolTargetHost(ctx, d.toolCallId, merchant.url);
+      return runRequestVirtualCard(args, d);
+    }
   });
 }

@@ -1,7 +1,7 @@
 var import_node_child_process9 = require("node:child_process");
-var fs20 = __toESM(require("node:fs/promises"), 1);
+var fs19 = __toESM(require("node:fs/promises"), 1);
 var path21 = __toESM(require("node:path"), 1);
-var import_node_util7 = require("node:util");
+var import_node_util8 = require("node:util");
 init_dist4();
 init_record_screen_exec_pb();
 init_dist3();
@@ -64,14 +64,14 @@ var __disposeResources15 = /* @__PURE__ */ (function(SuppressedError2) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
-var execFileAsync3 = (0, import_node_util7.promisify)(import_node_child_process9.execFile);
+var execFileAsync3 = (0, import_node_util8.promisify)(import_node_child_process9.execFile);
 function hasFfmpegExited(child) {
   return child.exitCode !== null || child.signalCode !== null || child.killed;
 }
 function isErrnoCode(error42, code) {
   return typeof error42 === "object" && error42 !== null && "code" in error42 && error42.code === code;
 }
-function errorMessage3(error42) {
+function errorMessage2(error42) {
   return error42 instanceof Error ? error42.message : String(error42);
 }
 function describeRecordedFfmpegExit(state, saveStartedAtMs) {
@@ -91,7 +91,7 @@ function formatProxyValidationError(message, state, stopError, saveStartedAtMs) 
     extras.push(ffmpegExit);
   }
   if (stopError !== void 0) {
-    extras.push(`stop failed: ${errorMessage3(stopError)}`);
+    extras.push(`stop failed: ${errorMessage2(stopError)}`);
   }
   return extras.length > 0 ? `${message} (${extras.join("; ")})` : message;
 }
@@ -180,7 +180,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       await this.cleanupRecording(this.activeRecording);
       this.invokeStoppedCallbackOnce();
       try {
-        await fs20.rm(this.activeRecording.sessionDir, {
+        await fs19.rm(this.activeRecording.sessionDir, {
           force: true,
           recursive: true
         });
@@ -212,8 +212,8 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
    * Ensure the recordings directory exists
    */
   async ensureRecordingDirectoryExists() {
-    await fs20.mkdir(this.stagingDir, { recursive: true });
-    await fs20.mkdir(this.artifactsDir, { recursive: true });
+    await fs19.mkdir(this.stagingDir, { recursive: true });
+    await fs19.mkdir(this.artifactsDir, { recursive: true });
   }
   /**
    * Build a unique session directory for a recording.
@@ -222,8 +222,8 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
   buildSessionDir(toolCallId) {
     const sanitized = this.sanitizeToolCallId(toolCallId);
     const timestamp3 = (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
-    const dirname65 = `session-${timestamp3}-${sanitized}`;
-    return path21.join(this.stagingDir, dirname65);
+    const dirname66 = `session-${timestamp3}-${sanitized}`;
+    return path21.join(this.stagingDir, dirname66);
   }
   /**
    * Validate and normalize save_as_filename.
@@ -270,7 +270,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
   }
   async movePolishedVideo(sourcePath, destinationPath) {
     try {
-      await fs20.rename(sourcePath, destinationPath);
+      await fs19.rename(sourcePath, destinationPath);
       return;
     } catch (error42) {
       if (!isErrnoCode(error42, "EXDEV")) {
@@ -278,15 +278,15 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       }
     }
     try {
-      await fs20.copyFile(sourcePath, destinationPath);
+      await fs19.copyFile(sourcePath, destinationPath);
     } catch (error42) {
-      await fs20.rm(destinationPath, { force: true }).catch(() => void 0);
+      await fs19.rm(destinationPath, { force: true }).catch(() => void 0);
       throw error42;
     }
     try {
-      await fs20.unlink(sourcePath);
+      await fs19.unlink(sourcePath);
     } catch (error42) {
-      await fs20.rm(destinationPath, { force: true }).catch(() => void 0);
+      await fs19.rm(destinationPath, { force: true }).catch(() => void 0);
       throw error42;
     }
   }
@@ -303,7 +303,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
     for (; ; ) {
       const candidatePath = path21.join(this.artifactsDir, candidateFilename);
       try {
-        const handle = await fs20.open(candidatePath, "wx");
+        const handle = await fs19.open(candidatePath, "wx");
         await handle.close();
         return candidatePath;
       } catch (error42) {
@@ -390,7 +390,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       fps: _LocalRecordScreenExecutor.PROXY_TARGET_FPS,
       includeBrandTag: true
     });
-    await fs20.access(polishedVideoPath, fs20.constants.R_OK);
+    await fs19.access(polishedVideoPath, fs19.constants.R_OK);
     return polishedVideoPath;
   }
   /**
@@ -413,10 +413,10 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       const rate = stdout.trim();
       if (rate.includes("/")) {
         const [numStr, denStr] = rate.split("/");
-        const num = Number.parseFloat(numStr);
+        const num2 = Number.parseFloat(numStr);
         const den = Number.parseFloat(denStr);
-        if (Number.isFinite(num) && Number.isFinite(den) && den !== 0) {
-          const fps = num / den;
+        if (Number.isFinite(num2) && Number.isFinite(den) && den !== 0) {
+          const fps = num2 / den;
           if (fps > 0 && fps < 500) {
             return Math.round(fps);
           }
@@ -442,7 +442,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
    */
   async startFfmpegRecording(resolution, sessionDir) {
     const recordingDir = path21.join(sessionDir, "recording");
-    await fs20.mkdir(recordingDir, { recursive: true });
+    await fs19.mkdir(recordingDir, { recursive: true });
     const proxyPath = path21.join(recordingDir, "recording_render_proxy_1080p.mp4");
     let refreshRate;
     try {
@@ -594,7 +594,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       inputEvents: serializedEvents,
       renderProxies: renderProxies ?? null
     };
-    await fs20.writeFile(dataPath, JSON.stringify(dataPackage, null, 2));
+    await fs19.writeFile(dataPath, JSON.stringify(dataPackage, null, 2));
   }
   /**
    * Serialize a ComputerUseAction to a JSON-safe format.
@@ -725,7 +725,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         }
       } catch (error42) {
         stopError = error42;
-        console.warn(`[record-screen] Failed to stop ffmpeg: ${errorMessage3(error42)}`);
+        console.warn(`[record-screen] Failed to stop ffmpeg: ${errorMessage2(error42)}`);
       }
       const ffmpegStartedEpochMs = state.ffmpegStartedEpochMs ?? recordingStartEpochMs;
       const stagingSessionDir = state.sessionDir;
@@ -735,11 +735,11 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       let videoDimensions;
       let sourceFps;
       try {
-        await fs20.access(proxyPath, fs20.constants.R_OK);
+        await fs19.access(proxyPath, fs19.constants.R_OK);
       } catch (error42) {
         await this.cleanupRecording(state);
         this.clearActiveRecordingIfCurrent(state);
-        const message = isErrnoCode(error42, "ENOENT") ? `Recording proxy not found at ${proxyPath}` : `Recording proxy at ${proxyPath} could not be validated: ${errorMessage3(error42)}`;
+        const message = isErrnoCode(error42, "ENOENT") ? `Recording proxy not found at ${proxyPath}` : `Recording proxy at ${proxyPath} could not be validated: ${errorMessage2(error42)}`;
         return new RecordScreenResult({
           result: {
             case: "failure",
@@ -760,7 +760,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         }
       } catch (error42) {
         await this.cleanupRecording(state);
-        const detail = errorMessage3(error42);
+        const detail = errorMessage2(error42);
         const message = detail.includes(proxyPath) ? detail : `Recording proxy at ${proxyPath} could not be validated: ${detail}`;
         return new RecordScreenResult({
           result: {
@@ -810,19 +810,19 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
       });
       try {
         if (this.disablePolishedRendering) {
-          await fs20.copyFile(proxyPath, finalVideoPath);
+          await fs19.copyFile(proxyPath, finalVideoPath);
         } else {
           const polishedVideoPath = await this.renderPolished(stagingSessionDir);
           await this.movePolishedVideo(polishedVideoPath, finalVideoPath);
         }
       } catch (error42) {
-        await fs20.rm(finalVideoPath, { force: true }).catch(() => void 0);
+        await fs19.rm(finalVideoPath, { force: true }).catch(() => void 0);
         throw error42;
       }
       try {
-        await fs20.rm(stagingSessionDir, { force: true, recursive: true });
+        await fs19.rm(stagingSessionDir, { force: true, recursive: true });
       } catch (error42) {
-        console.warn(`[record-screen] Failed to remove staging session ${stagingSessionDir}: ${errorMessage3(error42)}`);
+        console.warn(`[record-screen] Failed to remove staging session ${stagingSessionDir}: ${errorMessage2(error42)}`);
       }
       this.clearActiveRecordingIfCurrent(state);
       return new RecordScreenResult({
@@ -842,7 +842,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
         result: {
           case: "failure",
           value: new RecordScreenFailure({
-            error: errorMessage3(error42)
+            error: errorMessage2(error42)
           })
         }
       });
@@ -884,7 +884,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
               wasPriorRecordingCancelled = true;
               try {
                 await this.cleanupRecording(prior);
-                await fs20.rm(prior.sessionDir, {
+                await fs19.rm(prior.sessionDir, {
                   force: true,
                   recursive: true
                 }).catch(() => {
@@ -899,7 +899,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
           let sessionDir = null;
           try {
             sessionDir = this.buildSessionDir(args.toolCallId || "recording");
-            await fs20.mkdir(sessionDir, { recursive: true });
+            await fs19.mkdir(sessionDir, { recursive: true });
             const { resolutionString, resolution: resolutionConfig } = await detectDisplay(this.display);
             const { process: ffmpegProcess, videoStartedPromise } = await this.startFfmpegRecording(resolutionString, sessionDir);
             childProcess = ffmpegProcess;
@@ -962,7 +962,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
               }
             }
             if (sessionDir) {
-              await fs20.rm(sessionDir, { force: true, recursive: true }).catch(() => {
+              await fs19.rm(sessionDir, { force: true, recursive: true }).catch(() => {
               });
             }
             this.activeRecording = null;
@@ -1032,7 +1032,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
             if (!hasFfmpegExited(state.childProcess) && state.childProcess.pid) {
               await this.stopFfmpegRecording(state);
             }
-            await fs20.rm(state.sessionDir, { force: true, recursive: true });
+            await fs19.rm(state.sessionDir, { force: true, recursive: true });
             this.activeRecording = null;
             return new RecordScreenResult({
               result: {
@@ -1046,7 +1046,7 @@ var LocalRecordScreenExecutor = class _LocalRecordScreenExecutor {
             const sessionDir = state.sessionDir;
             let removed = false;
             try {
-              await fs20.rm(sessionDir, { force: true, recursive: true });
+              await fs19.rm(sessionDir, { force: true, recursive: true });
               removed = true;
             } catch {
             }

@@ -1,6 +1,6 @@
 init_dist4();
 init_errors();
-var logger102 = createLogger("sand:automation-completion-middleware");
+var logger103 = createLogger("sand:automation-completion-middleware");
 var SAND_AUTOMATION_COMPLETION_PROMPT_TAG = "sandAutomationCompletionId";
 function completionIdOf(message) {
   const value = message.providerOptions?.cursor?.[SAND_AUTOMATION_COMPLETION_PROMPT_TAG];
@@ -33,7 +33,7 @@ var AutomationCompletionMiddleware = class extends BaseMiddleware {
     try {
       completions = this.source.drain();
     } catch (error42) {
-      logger102.warn(ctx, "Failed to drain automation completion inbox", {
+      logger103.warn(ctx, "Failed to drain automation completion inbox", {
         error: errorLogTag(error42)
       });
       return;
@@ -46,13 +46,13 @@ var AutomationCompletionMiddleware = class extends BaseMiddleware {
         if (completionId !== void 0) this.injectedIds.add(completionId);
       }
     }
-    const completionMessages = [];
+    const completionMessages2 = [];
     for (const completion of completions) {
       if (this.injectedIds.has(completion.id)) continue;
       this.injectedIds.add(completion.id);
-      completionMessages.push(createAutomationCompletionPromptMessage(completion));
+      completionMessages2.push(createAutomationCompletionPromptMessage(completion));
     }
-    if (completionMessages.length > 0) {
+    if (completionMessages2.length > 0) {
       let trailingUserStart = existingMessages.length;
       while (trailingUserStart > 0) {
         const message = existingMessages[trailingUserStart - 1];
@@ -62,12 +62,12 @@ var AutomationCompletionMiddleware = class extends BaseMiddleware {
         trailingUserStart--;
       }
       if (trailingUserStart === existingMessages.length) {
-        this.innerExecutor.appendMessages(completionMessages);
+        this.innerExecutor.appendMessages(completionMessages2);
       } else {
         this.innerExecutor.clearMessages();
         this.innerExecutor.appendMessages([
           ...existingMessages.slice(0, trailingUserStart),
-          ...completionMessages,
+          ...completionMessages2,
           ...existingMessages.slice(trailingUserStart)
         ]);
       }

@@ -34,7 +34,7 @@ function pinConversationGcReporter(reporter) {
   pinnedConversationGcReporter = reporter;
 }
 function reportConversationGcVerdict(trigger2, dbPath, verdict, stillOverCap = false) {
-  const agentId = (0, import_node_path131.basename)((0, import_node_path131.dirname)(dbPath));
+  const agentId = (0, import_node_path132.basename)((0, import_node_path132.dirname)(dbPath));
   if (verdict == null) {
     pinnedConversationGcReporter?.({ trigger: trigger2, agentId, outcome: "skipped", skipReason: "no-root" });
     return;
@@ -90,13 +90,13 @@ async function measureConversationBlobBytes(blobDbPath) {
 }
 var softGcStateByBlobDbPath = /* @__PURE__ */ new Map();
 function blobDbPathFor(dbPath) {
-  return (0, import_node_path131.join)((0, import_node_path131.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME);
+  return (0, import_node_path132.join)((0, import_node_path132.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME);
 }
 async function runConversationGc(host, dbPath, db) {
   const liveRootBlobId = db.get("latestRootBlobId");
   if (liveRootBlobId.length === 0) return null;
   return await host.requireWorkerPool().collectConversationGarbage({
-    agentId: (0, import_node_path131.basename)((0, import_node_path131.dirname)(dbPath)),
+    agentId: (0, import_node_path132.basename)((0, import_node_path132.dirname)(dbPath)),
     blobDbPath: blobDbPathFor(dbPath),
     retainedRootIdHex: toHex3(liveRootBlobId),
     pendingWriteRetentionMs: GC_PENDING_WRITE_RETENTION_MS,
@@ -122,7 +122,7 @@ function scheduleConversationSizeMaintenance(host, dbPath, db) {
       reportSessionDiagnostic({
         family: "maintenance",
         kind: "conversation_gc_failed",
-        agentId: (0, import_node_path131.basename)((0, import_node_path131.dirname)(dbPath)),
+        agentId: (0, import_node_path132.basename)((0, import_node_path132.dirname)(dbPath)),
         errorClass: errorLogTag(error42)
       });
     } finally {
@@ -147,7 +147,7 @@ async function ensureConversationCapacityForTurn(host, dbPath, db) {
     reportSessionDiagnostic({
       family: "maintenance",
       kind: "conversation_gc_failed",
-      agentId: (0, import_node_path131.basename)((0, import_node_path131.dirname)(dbPath)),
+      agentId: (0, import_node_path132.basename)((0, import_node_path132.dirname)(dbPath)),
       errorClass: errorLogTag(error42)
     });
     return;

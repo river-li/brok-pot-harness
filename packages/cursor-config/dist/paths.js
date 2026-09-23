@@ -1,13 +1,13 @@
-var import_node_os19 = require("node:os");
-var import_node_path77 = require("node:path");
+var import_node_os18 = require("node:os");
+var import_node_path68 = require("node:path");
 function getConfigDir() {
   const override = process.env.CURSOR_CONFIG_DIR;
   if (override === null || override === void 0 ? void 0 : override.trim())
     return override;
   const xdg = process.env.XDG_CONFIG_HOME;
   if (xdg === null || xdg === void 0 ? void 0 : xdg.trim())
-    return (0, import_node_path77.join)(xdg, "cursor");
-  return (0, import_node_path77.join)((0, import_node_os19.homedir)(), ".cursor");
+    return (0, import_node_path68.join)(xdg, "cursor");
+  return (0, import_node_path68.join)((0, import_node_os18.homedir)(), ".cursor");
 }
 var HASH_LENGTH = 7;
 var MAX_SOCKET_PATH_LENGTH = 104;

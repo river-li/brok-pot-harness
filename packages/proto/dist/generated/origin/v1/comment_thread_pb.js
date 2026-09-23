@@ -1,17 +1,17 @@
 init_esm();
 init_compact();
-var __protoPackage167 = "origin.v1.";
-var __protoMessage3159 = class extends CompactMessage {
+var __protoPackage169 = "origin.v1.";
+var __protoMessage3161 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage167;
+    return __protoPackage169;
   }
 };
-var CommentSide = /* @__PURE__ */ enumType(proto3, __protoPackage167, "CommentSide", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"]], 1);
-var CommentThreadPortingStatus = /* @__PURE__ */ enumType(proto3, __protoPackage167, "CommentThreadPortingStatus", [[0, "UNSPECIFIED"], [1, "PORTED"], [2, "ORPHANED"]], 1);
-var CommentThread = class _CommentThread extends __protoMessage3159 {
+var CommentSide = /* @__PURE__ */ enumType(proto3, __protoPackage169, "CommentSide", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"]], 1);
+var CommentThreadPortingStatus = /* @__PURE__ */ enumType(proto3, __protoPackage169, "CommentThreadPortingStatus", [[0, "UNSPECIFIED"], [1, "PORTED"], [2, "ORPHANED"]], 1);
+var CommentThread = class _CommentThread extends __protoMessage3161 {
   constructor(data) {
     super();
     this.id = "";
@@ -50,7 +50,7 @@ var CommentThread = class _CommentThread extends __protoMessage3159 {
     return ["CommentThread|1 id 9|2 change_id 9|3 version_id 9|4 version_number 4|5 review_id 9|6 resolved_at #0|8 path 9|9 side #1|10 start_line 13|11 end_line 13|12 external_id 9|13 created_at #0|14 updated_at #0|15 comments #2*|19 resolved_by #3|20 ported_to_version_number 4|21 porting_status #4|22 ported_path 9|23 ported_start_line 13|24 ported_end_line 13|25 version_head_sha 9|26 version_base_sha 9|27 version_created_at #0", Timestamp, CommentSide, Comment2, ActorWithDisplay, CommentThreadPortingStatus];
   }
 };
-var CreateCommentThreadRequest = class _CreateCommentThreadRequest extends __protoMessage3159 {
+var CreateCommentThreadRequest = class _CreateCommentThreadRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.body = "";
@@ -78,7 +78,7 @@ var CreateCommentThreadRequest = class _CreateCommentThreadRequest extends __pro
     return ["CreateCommentThreadRequest|1 change #0|2 body 9|3 version_number 4|4 path 9|5 side #1|6 start_line 13|7 end_line 13|8 review_id 9", ChangeIdentifier, CommentSide];
   }
 };
-var CreateCommentThreadResponse = class _CreateCommentThreadResponse extends __protoMessage3159 {
+var CreateCommentThreadResponse = class _CreateCommentThreadResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -99,7 +99,7 @@ var CreateCommentThreadResponse = class _CreateCommentThreadResponse extends __p
     return ["CreateCommentThreadResponse|1 thread #0", CommentThread];
   }
 };
-var ListCommentThreadsRequest = class _ListCommentThreadsRequest extends __protoMessage3159 {
+var ListCommentThreadsRequest = class _ListCommentThreadsRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.versionNumber = protoInt64.zero;
@@ -121,7 +121,7 @@ var ListCommentThreadsRequest = class _ListCommentThreadsRequest extends __proto
     return ["ListCommentThreadsRequest|1 change #0|2 version_number 4", ChangeIdentifier];
   }
 };
-var ListCommentThreadsResponse = class _ListCommentThreadsResponse extends __protoMessage3159 {
+var ListCommentThreadsResponse = class _ListCommentThreadsResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     this.threads = [];
@@ -143,7 +143,7 @@ var ListCommentThreadsResponse = class _ListCommentThreadsResponse extends __pro
     return ["ListCommentThreadsResponse|1 threads #0*", CommentThread];
   }
 };
-var AddCommentToThreadRequest = class _AddCommentToThreadRequest extends __protoMessage3159 {
+var AddCommentToThreadRequest = class _AddCommentToThreadRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.threadId = "";
@@ -167,7 +167,7 @@ var AddCommentToThreadRequest = class _AddCommentToThreadRequest extends __proto
     return ["AddCommentToThreadRequest|1 change #0|2 thread_id 9|3 body 9|4 review_id 9", ChangeIdentifier];
   }
 };
-var AddCommentToThreadResponse = class _AddCommentToThreadResponse extends __protoMessage3159 {
+var AddCommentToThreadResponse = class _AddCommentToThreadResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -188,7 +188,7 @@ var AddCommentToThreadResponse = class _AddCommentToThreadResponse extends __pro
     return ["AddCommentToThreadResponse|1 comment #0", Comment2];
   }
 };
-var ResolveCommentThreadRequest = class _ResolveCommentThreadRequest extends __protoMessage3159 {
+var ResolveCommentThreadRequest = class _ResolveCommentThreadRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.threadId = "";
@@ -210,7 +210,7 @@ var ResolveCommentThreadRequest = class _ResolveCommentThreadRequest extends __p
     return ["ResolveCommentThreadRequest|1 change #0|2 thread_id 9", ChangeIdentifier];
   }
 };
-var ResolveCommentThreadResponse = class _ResolveCommentThreadResponse extends __protoMessage3159 {
+var ResolveCommentThreadResponse = class _ResolveCommentThreadResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -231,7 +231,7 @@ var ResolveCommentThreadResponse = class _ResolveCommentThreadResponse extends _
     return ["ResolveCommentThreadResponse|1 thread #0", CommentThread];
   }
 };
-var ReopenCommentThreadRequest = class _ReopenCommentThreadRequest extends __protoMessage3159 {
+var ReopenCommentThreadRequest = class _ReopenCommentThreadRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.threadId = "";
@@ -253,7 +253,7 @@ var ReopenCommentThreadRequest = class _ReopenCommentThreadRequest extends __pro
     return ["ReopenCommentThreadRequest|1 change #0|2 thread_id 9", ChangeIdentifier];
   }
 };
-var ReopenCommentThreadResponse = class _ReopenCommentThreadResponse extends __protoMessage3159 {
+var ReopenCommentThreadResponse = class _ReopenCommentThreadResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -274,7 +274,7 @@ var ReopenCommentThreadResponse = class _ReopenCommentThreadResponse extends __p
     return ["ReopenCommentThreadResponse|1 thread #0", CommentThread];
   }
 };
-var UpdateCommentRequest = class _UpdateCommentRequest extends __protoMessage3159 {
+var UpdateCommentRequest = class _UpdateCommentRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.commentId = "";
@@ -297,7 +297,7 @@ var UpdateCommentRequest = class _UpdateCommentRequest extends __protoMessage315
     return ["UpdateCommentRequest|1 comment_id 9|2 body 9"];
   }
 };
-var UpdateCommentResponse = class _UpdateCommentResponse extends __protoMessage3159 {
+var UpdateCommentResponse = class _UpdateCommentResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -318,7 +318,7 @@ var UpdateCommentResponse = class _UpdateCommentResponse extends __protoMessage3
     return ["UpdateCommentResponse|1 comment #0", Comment2];
   }
 };
-var DeleteCommentRequest = class _DeleteCommentRequest extends __protoMessage3159 {
+var DeleteCommentRequest = class _DeleteCommentRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.commentId = "";
@@ -340,7 +340,7 @@ var DeleteCommentRequest = class _DeleteCommentRequest extends __protoMessage315
     return ["DeleteCommentRequest|1 comment_id 9"];
   }
 };
-var DeleteCommentResponse = class _DeleteCommentResponse extends __protoMessage3159 {
+var DeleteCommentResponse = class _DeleteCommentResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -361,7 +361,7 @@ var DeleteCommentResponse = class _DeleteCommentResponse extends __protoMessage3
     return ["DeleteCommentResponse"];
   }
 };
-var SetCommentReactionRequest = class _SetCommentReactionRequest extends __protoMessage3159 {
+var SetCommentReactionRequest = class _SetCommentReactionRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.commentId = "";
@@ -385,7 +385,7 @@ var SetCommentReactionRequest = class _SetCommentReactionRequest extends __proto
     return ["SetCommentReactionRequest|1 comment_id 9|2 emoji 9|3 active 8"];
   }
 };
-var SetCommentReactionResponse = class _SetCommentReactionResponse extends __protoMessage3159 {
+var SetCommentReactionResponse = class _SetCommentReactionResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -406,7 +406,7 @@ var SetCommentReactionResponse = class _SetCommentReactionResponse extends __pro
     return ["SetCommentReactionResponse"];
   }
 };
-var ListCommentReactionsRequest = class _ListCommentReactionsRequest extends __protoMessage3159 {
+var ListCommentReactionsRequest = class _ListCommentReactionsRequest extends __protoMessage3161 {
   constructor(data) {
     super();
     this.commentId = "";
@@ -428,7 +428,7 @@ var ListCommentReactionsRequest = class _ListCommentReactionsRequest extends __p
     return ["ListCommentReactionsRequest|1 comment_id 9"];
   }
 };
-var ListCommentReactionsResponse = class _ListCommentReactionsResponse extends __protoMessage3159 {
+var ListCommentReactionsResponse = class _ListCommentReactionsResponse extends __protoMessage3161 {
   constructor(data) {
     super();
     this.reactions = [];

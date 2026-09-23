@@ -1,3 +1,6 @@
+var import_node_fs78 = require("node:fs");
+var import_node_path126 = require("node:path");
+init_zod();
 init_errors();
 var SandBoxSecretsValidationError = class extends SandDomainError {
   name = "SandBoxSecretsValidationError";
@@ -19,7 +22,7 @@ function effectiveBoxSecrets(owned) {
   return { ...owned.desktop, ...owned.card };
 }
 function getBoxSecretsStorePath() {
-  return (0, import_node_path125.join)(getSandRootDir(), BOX_SECRETS_FILENAME);
+  return (0, import_node_path126.join)(getSandRootDir(), BOX_SECRETS_FILENAME);
 }
 var SECRETS_APPLY_WAIT_MS = 5e3;
 var SECRETS_RETRY_INITIAL_MS = 1e3;
@@ -244,7 +247,7 @@ var BoxSecretsApplier = class {
   async loadPersisted() {
     let raw;
     try {
-      raw = await import_node_fs76.promises.readFile(this.storePath, "utf8");
+      raw = await import_node_fs78.promises.readFile(this.storePath, "utf8");
     } catch (error42) {
       reportFallbackUnlessAbsent("secrets_service", error42);
       return null;

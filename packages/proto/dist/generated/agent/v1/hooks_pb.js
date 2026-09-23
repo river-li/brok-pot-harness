@@ -1,17 +1,17 @@
-var __protoPackage117, __protoMessage3113, PreCompactRequestQuery, PreCompactRequestResponse, SubagentStartRequestQuery, SubagentStartRequestResponse, SubagentStopRequestQuery, SubagentStopRequestResponse, BeforeSubmitPromptAttachment, BeforeSubmitPromptRequestQuery, BeforeSubmitPromptRequestResponse, AfterAgentResponseRequestQuery, AfterAgentResponseRequestResponse, AfterAgentThoughtRequestQuery, AfterAgentThoughtRequestResponse, StopRequestQuery, StopRequestResponse, PreToolUseRequestQuery, PreToolUseRequestResponse, PostToolUseRequestQuery, PostToolUseRequestResponse, PostToolUseFailureRequestQuery, PostToolUseFailureRequestResponse;
+var __protoPackage118, __protoMessage3113, PreCompactRequestQuery, PreCompactRequestResponse, SubagentStartRequestQuery, SubagentStartRequestResponse, SubagentStopRequestQuery, SubagentStopRequestResponse, BeforeSubmitPromptAttachment, BeforeSubmitPromptRequestQuery, BeforeSubmitPromptRequestResponse, AfterAgentResponseRequestQuery, AfterAgentResponseRequestResponse, AfterAgentThoughtRequestQuery, AfterAgentThoughtRequestResponse, StopRequestQuery, StopRequestResponse, PreToolUseRequestQuery, PreToolUseRequestResponse, PostToolUseRequestQuery, PostToolUseRequestResponse, PostToolUseFailureRequestQuery, PostToolUseFailureRequestResponse;
 var init_hooks_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/hooks_pb.js"() {
     "use strict";
     init_esm();
     init_requested_model_pb();
     init_compact();
-    __protoPackage117 = "agent.v1.";
+    __protoPackage118 = "agent.v1.";
     __protoMessage3113 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage117;
+        return __protoPackage118;
       }
     };
     PreCompactRequestQuery = class _PreCompactRequestQuery extends __protoMessage3113 {
@@ -140,7 +140,7 @@ var init_hooks_pb = __esm({
         return proto3.util.equals(_SubagentStopRequestQuery, a, b2);
       }
       static $() {
-        return ["SubagentStopRequestQuery|1 subagent_id 9|2 subagent_type 9|3 status 9|4 duration_ms 3|5 summary 9?|6 parent_conversation_id 9|7 message_count 5|8 tool_call_count 5|9 error_message 9?|10 modified_files 9*|11 git_branch 9?|12 conversation_id 9?|13 generation_id 9?|14 model 9?|15 loop_count 5|16 task 9?|17 description 9?|18 model_id 9?|19 model_params #0*", RequestedModel_ModelParameterValue];
+        return ["SubagentStopRequestQuery|1 subagent_id 9|2 subagent_type 9|3 status 9|4 duration_ms 3|5 summary 9?|6 parent_conversation_id 9|7 message_count 5|8 tool_call_count 5|9 error_message 9?|10 modified_files 9*|11 git_branch 9?|12 conversation_id 9?|13 generation_id 9?|14 model 9?|15 loop_count 5|16 task 9?|17 description 9?|18 model_id 9?|19 model_params #0*|20 child_conversation_id 9?", RequestedModel_ModelParameterValue];
       }
     };
     SubagentStopRequestResponse = class _SubagentStopRequestResponse extends __protoMessage3113 {
@@ -386,7 +386,7 @@ var init_hooks_pb = __esm({
         return proto3.util.equals(_PreToolUseRequestQuery, a, b2);
       }
       static $() {
-        return ["PreToolUseRequestQuery|1 tool_name 9|2 tool_input #0|3 tool_use_id 9|4 cwd 9?|5 conversation_id 9?|6 generation_id 9?|7 model 9?|8 model_id 9?|9 model_params #1*", Struct, RequestedModel_ModelParameterValue];
+        return ["PreToolUseRequestQuery|1 tool_name 9|2 tool_input #0|3 tool_use_id 9|4 cwd 9?|5 conversation_id 9?|6 generation_id 9?|7 model 9?|8 model_id 9?|9 model_params #1*|10 parent_tool_call_id 9?", Struct, RequestedModel_ModelParameterValue];
       }
     };
     PreToolUseRequestResponse = class _PreToolUseRequestResponse extends __protoMessage3113 {
@@ -433,7 +433,7 @@ var init_hooks_pb = __esm({
         return proto3.util.equals(_PostToolUseRequestQuery, a, b2);
       }
       static $() {
-        return ["PostToolUseRequestQuery|1 tool_name 9|2 tool_input #0|3 tool_output 9|4 duration_ms 3|5 tool_use_id 9|6 cwd 9?|7 conversation_id 9?|8 generation_id 9?|9 model 9?|10 model_id 9?|11 model_params #1*", Struct, RequestedModel_ModelParameterValue];
+        return ["PostToolUseRequestQuery|1 tool_name 9|2 tool_input #0|3 tool_output 9|4 duration_ms 3|5 tool_use_id 9|6 cwd 9?|7 conversation_id 9?|8 generation_id 9?|9 model 9?|10 model_id 9?|11 model_params #1*|12 parent_tool_call_id 9?", Struct, RequestedModel_ModelParameterValue];
       }
     };
     PostToolUseRequestResponse = class _PostToolUseRequestResponse extends __protoMessage3113 {
@@ -482,7 +482,7 @@ var init_hooks_pb = __esm({
         return proto3.util.equals(_PostToolUseFailureRequestQuery, a, b2);
       }
       static $() {
-        return ["PostToolUseFailureRequestQuery|1 tool_name 9|2 tool_input #0|3 error_message 9|4 failure_type 9|5 duration_ms 3|6 tool_use_id 9|7 is_interrupt 8|8 conversation_id 9?|9 generation_id 9?|10 model 9?|11 model_id 9?|12 model_params #1*", Struct, RequestedModel_ModelParameterValue];
+        return ["PostToolUseFailureRequestQuery|1 tool_name 9|2 tool_input #0|3 error_message 9|4 failure_type 9|5 duration_ms 3|6 tool_use_id 9|7 is_interrupt 8|8 conversation_id 9?|9 generation_id 9?|10 model 9?|11 model_id 9?|12 model_params #1*|13 parent_tool_call_id 9?", Struct, RequestedModel_ModelParameterValue];
       }
     };
     PostToolUseFailureRequestResponse = class _PostToolUseFailureRequestResponse extends __protoMessage3113 {

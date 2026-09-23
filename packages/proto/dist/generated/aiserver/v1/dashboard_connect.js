@@ -3333,6 +3333,15 @@ var init_dashboard_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * @generated from rpc aiserver.v1.DashboardService.UpdateTeamDefaultMemberBillingTier
+         */
+        updateTeamDefaultMemberBillingTier: {
+          name: "UpdateTeamDefaultMemberBillingTier",
+          I: UpdateTeamDefaultMemberBillingTierRequest,
+          O: UpdateTeamDefaultMemberBillingTierResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.DashboardService.UpdateTeamSandOnboardingCompleted
          */
         updateTeamSandOnboardingCompleted: {
@@ -3454,6 +3463,34 @@ var init_dashboard_connect = __esm({
           name: "GetTrialSpendLimitInternal",
           I: GetTrialSpendLimitInternalRequest,
           O: GetTrialSpendLimitInternalResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Service-to-service: accountingsphere org-wide trial extend (ENT-4670).
+         * Authenticated with the same shared service token as
+         * CreateTeamFreeTrialCodeInternal. Returns the named team's org (if any)
+         * and every linked team's membership type / trial end so Stripe can
+         * pull-forward trial siblings without touching paid teams.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.GetOrganizationEnterpriseTrialExtendContextInternal
+         */
+        getOrganizationEnterpriseTrialExtendContextInternal: {
+          name: "GetOrganizationEnterpriseTrialExtendContextInternal",
+          I: GetOrganizationEnterpriseTrialExtendContextInternalRequest,
+          O: GetOrganizationEnterpriseTrialExtendContextInternalResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Writes the dedicated organization.enterprise_trial_end clock and denorms
+         * membership_expiration onto trial membership types that need pull-forward.
+         * Does not write Stripe and does not mint trial SKUs.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.ApplyOrganizationEnterpriseTrialEndInternal
+         */
+        applyOrganizationEnterpriseTrialEndInternal: {
+          name: "ApplyOrganizationEnterpriseTrialEndInternal",
+          I: ApplyOrganizationEnterpriseTrialEndInternalRequest,
+          O: ApplyOrganizationEnterpriseTrialEndInternalResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -4099,6 +4136,20 @@ var init_dashboard_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * Live seat capacity for the selected team: seats paid for, seats occupied,
+         * and seats free to fill without a new purchase. Served from the team's
+         * billing system of record (Stripe, or xAI's commerce platform for teams
+         * billed there).
+         *
+         * @generated from rpc aiserver.v1.DashboardService.GetTeamSeatCapacity
+         */
+        getTeamSeatCapacity: {
+          name: "GetTeamSeatCapacity",
+          I: GetTeamSeatCapacityRequest,
+          O: GetTeamSeatCapacityResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.DashboardService.GetCurrentBillingCycle
          */
         getCurrentBillingCycle: {
@@ -4278,8 +4329,17 @@ var init_dashboard_connect = __esm({
         },
         /**
          * GitHub->Origin migration-window tool: resolves GitHub identities to the
-         * Cursor users of a team/org the caller administers. Snapshot producer, not
-         * a live resolver — the identity bridge decays continuously (unlinking
+         * Cursor users of a team/org scope. Team scope requires BOTH member-tier
+         * permissions, conjunctively: `team.github_identity_mappings.read` (the
+         * mapping capability, revocable per custom role) AND `team.members.read`
+         * (roster visibility — the response embeds roster fields such as emails
+         * and display names, so mapping access without roster access must not
+         * open an email side-channel). Every default member holds both. The
+         * response is always the same full shape (no projection tiers); a caller
+         * missing either permission gets a denial that reveals neither which
+         * permission was missing nor whether the scope exists. Org scope stays
+         * admin-only until member-tier org permissions exist. Snapshot producer,
+         * not a live resolver — the identity bridge decays continuously (unlinking
          * GitHub hard-deletes its rows) and freezes at GitHub decommissioning, so
          * callers must persist results (github_user_node_id + resolved_at) instead
          * of re-resolving at use time.
@@ -5144,6 +5204,28 @@ var init_dashboard_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * "Manage team bots": which members get each TEAM-visible Grok Bot in
+         * their sidebar by default (groups or the whole team). Team-admin only
+         * (ManageTeamSettings); gate grok_bot_team_default_bots on the team.
+         *
+         * @generated from rpc aiserver.v1.DashboardService.ListTeamGrokBotDefaultAgents
+         */
+        listTeamGrokBotDefaultAgents: {
+          name: "ListTeamGrokBotDefaultAgents",
+          I: ListTeamGrokBotDefaultAgentsRequest,
+          O: ListTeamGrokBotDefaultAgentsResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.SetTeamGrokBotDefaultAudience
+         */
+        setTeamGrokBotDefaultAudience: {
+          name: "SetTeamGrokBotDefaultAudience",
+          I: SetTeamGrokBotDefaultAudienceRequest,
+          O: SetTeamGrokBotDefaultAudienceResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * Smart Auto routing settings (team admin control for auto v3 / smart
          * routing). Admins may only enable when the smart_auto_routing_admin_enabled
          * Statsig gate passes for the team.
@@ -5331,6 +5413,15 @@ var init_dashboard_connect = __esm({
           name: "ListInvoices",
           I: ListInvoicesRequest,
           O: ListInvoicesResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.DashboardService.ListUnifiedInvoices
+         */
+        listUnifiedInvoices: {
+          name: "ListUnifiedInvoices",
+          I: ListUnifiedInvoicesRequest,
+          O: ListUnifiedInvoicesResponse,
           kind: MethodKind.Unary
         },
         /**

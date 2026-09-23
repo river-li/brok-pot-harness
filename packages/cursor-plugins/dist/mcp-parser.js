@@ -110,11 +110,11 @@ function parsePluginMcpConfig(content, installPath, options2) {
     const data = parse9(content);
     const mcpSchemaId = readSchemaId(data);
     if (mcpSchemaId !== void 0) {
-      const logger108 = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.log) !== null && _a19 !== void 0 ? _a19 : noopPluginMetricsLogger;
+      const logger110 = (_a19 = options2 === null || options2 === void 0 ? void 0 : options2.log) !== null && _a19 !== void 0 ? _a19 : noopPluginMetricsLogger;
       if (resolveSchemaVersion(mcpSchemaId).kind === "unsupported") {
-        logger108.log("warn", `mcp.json declares an unrecognized $schema, loading anyway: ${mcpSchemaId}`);
+        logger110.log("debug", `mcp.json declares an unrecognized $schema, loading anyway: ${mcpSchemaId}`);
       } else if (schemaVersionsDisagree(options2 === null || options2 === void 0 ? void 0 : options2.pluginSchemaId, mcpSchemaId)) {
-        logger108.log("warn", `mcp.json $schema ${mcpSchemaId} disagrees with plugin.json $schema ${options2 === null || options2 === void 0 ? void 0 : options2.pluginSchemaId}, loading anyway`);
+        logger110.log("debug", `mcp.json $schema ${mcpSchemaId} disagrees with plugin.json $schema ${options2 === null || options2 === void 0 ? void 0 : options2.pluginSchemaId}, loading anyway`);
       }
     }
     const parsed2 = mcpConfigSchema.safeParse(data);

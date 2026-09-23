@@ -99,13 +99,13 @@ function createTeachRecordingService(deps) {
     null,
     2
   );
-  const queueScope = (agentId) => (0, import_node_crypto66.createHash)("sha256").update(agentId).digest("hex");
+  const queueScope = (agentId) => (0, import_node_crypto67.createHash)("sha256").update(agentId).digest("hex");
   const clientNonceForQueue = (agentId, file2) => `${TEACH_RECORDING_NONCE_PREFIX}${queueScope(agentId)}:${file2}`;
   const signQueueEntry = ({
     key,
     agentId,
     queuedFile
-  }) => (0, import_node_crypto66.createHmac)("sha256", key).update(`${agentId}
+  }) => (0, import_node_crypto67.createHmac)("sha256", key).update(`${agentId}
 ${queuedFile}`).digest("hex");
   const queueFileForSessionDir = (sessionDir) => `${sessionDir.split("/").at(-1) ?? ""}.json`;
   const queueFile = (recording) => queueFileForSessionDir(recording.sessionDir);
@@ -241,7 +241,7 @@ ${queuedFile}`).digest("hex");
       }
       const expected = Buffer.from(signQueueEntry({ key, agentId, queuedFile }), "hex");
       const given = Buffer.from(value.signature, "hex");
-      if (given.length !== expected.length || !(0, import_node_crypto66.timingSafeEqual)(given, expected)) {
+      if (given.length !== expected.length || !(0, import_node_crypto67.timingSafeEqual)(given, expected)) {
         return null;
       }
       return {

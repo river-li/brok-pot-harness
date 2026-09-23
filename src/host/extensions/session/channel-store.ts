@@ -1,12 +1,12 @@
-var import_node_fs84 = require("node:fs");
-var import_node_path135 = require("node:path");
+var import_node_fs86 = require("node:fs");
+var import_node_path136 = require("node:path");
 init_scheduling();
 init_errors();
 init_system_errno();
 var CHANNELS_DIRNAME = "channels";
 var CHANNEL_CHANGE_DEBOUNCE_MS = 50;
 function getAgentChannelsDir(agentDir) {
-  return (0, import_node_path135.join)(agentDir, CHANNELS_DIRNAME);
+  return (0, import_node_path136.join)(agentDir, CHANNELS_DIRNAME);
 }
 function labelFor(platform2, raw) {
   const clamped = raw != null ? clampChannelLabel(raw) : "";
@@ -49,12 +49,12 @@ var FileChannelStore = class {
     this.dir.setOnChange(onChange);
   }
   configPath(platform2) {
-    return (0, import_node_path135.join)(this.channelsDir, platform2, CHANNEL_CONFIG_FILENAME);
+    return (0, import_node_path136.join)(this.channelsDir, platform2, CHANNEL_CONFIG_FILENAME);
   }
   readConnection(platform2) {
     let raw;
     try {
-      raw = (0, import_node_fs84.readFileSync)(this.configPath(platform2), "utf8");
+      raw = (0, import_node_fs86.readFileSync)(this.configPath(platform2), "utf8");
     } catch (error42) {
       if (isMissingPathError(error42)) return null;
       return degradedConnection(platform2, "unreadable", error42);
@@ -85,14 +85,14 @@ var FileChannelStore = class {
   }
   remove(platform2) {
     if (!isSafeFolderId(platform2)) return false;
-    const platformDir = (0, import_node_path135.join)(this.channelsDir, platform2);
+    const platformDir = (0, import_node_path136.join)(this.channelsDir, platform2);
     try {
-      if (!(0, import_node_fs84.statSync)(platformDir).isDirectory()) return false;
+      if (!(0, import_node_fs86.statSync)(platformDir).isDirectory()) return false;
     } catch (error42) {
       reportFallbackUnlessAbsent("channel_store", error42);
       return false;
     }
-    (0, import_node_fs84.rmSync)(platformDir, { recursive: true, force: true });
+    (0, import_node_fs86.rmSync)(platformDir, { recursive: true, force: true });
     this.dir.scheduleNotify();
     return true;
   }

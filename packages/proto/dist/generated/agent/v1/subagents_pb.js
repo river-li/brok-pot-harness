@@ -1,23 +1,23 @@
-var __protoPackage12, __protoMessage39, CustomSubagentPermissionMode, SubagentExecutionEnvironment, SubagentBackgroundReason, BackgroundTaskCompletionReason, TaskMode, SubagentType, SubagentTypeUnspecified, SubagentTypeComputerUse, SubagentTypeExplore, SubagentTypeMediaReview, SubagentTypeBash, SubagentTypeShell, SubagentTypeBrowserUse, SubagentTypeVmSetupHelper, SubagentTypeDebug, SubagentTypeCursorGuide, SubagentTypeWatchVideo, SubagentTypeCustom, CustomSubagent;
+var __protoPackage13, __protoMessage39, CustomSubagentPermissionMode, SubagentExecutionEnvironment, SubagentBackgroundReason, BackgroundTaskCompletionReason, TaskMode, SubagentType, SubagentTypeUnspecified, SubagentTypeComputerUse, SubagentTypeExplore, SubagentTypeMediaReview, SubagentTypeBash, SubagentTypeShell, SubagentTypeBrowserUse, SubagentTypeVmSetupHelper, SubagentTypeDebug, SubagentTypeCursorGuide, SubagentTypeWatchVideo, SubagentTypeCustom, CustomSubagent;
 var init_subagents_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/subagents_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage12 = "agent.v1.";
+    __protoPackage13 = "agent.v1.";
     __protoMessage39 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage12;
+        return __protoPackage13;
       }
     };
-    CustomSubagentPermissionMode = /* @__PURE__ */ enumType(proto3, __protoPackage12, "CustomSubagentPermissionMode", [[0, "UNSPECIFIED"], [1, "DEFAULT"], [2, "READONLY"], [3, "AGENT_ONLY"]], 1);
-    SubagentExecutionEnvironment = /* @__PURE__ */ enumType(proto3, __protoPackage12, "SubagentExecutionEnvironment", [[0, "UNSPECIFIED"], [1, "LOCAL"], [2, "CLOUD"]], 1);
-    SubagentBackgroundReason = /* @__PURE__ */ enumType(proto3, __protoPackage12, "SubagentBackgroundReason", [[0, "UNSPECIFIED"], [1, "AGENT_REQUEST"], [2, "USER_REQUEST"], [3, "QUEUED_FOLLOW_UP"]], 1);
-    BackgroundTaskCompletionReason = /* @__PURE__ */ enumType(proto3, __protoPackage12, "BackgroundTaskCompletionReason", [[0, "UNSPECIFIED"], [1, "TASK_FINISHED"], [2, "TASK_PROGRESS"], [3, "WORKER_REPARENTED"], [4, "WORKER_MESSAGE"], [5, "WORKER_NEEDS_ATTENTION"]], 1);
-    TaskMode = /* @__PURE__ */ enumType(proto3, __protoPackage12, "TaskMode", [[0, "UNSPECIFIED"], [1, "AGENT"], [2, "PLAN"]], 1);
+    CustomSubagentPermissionMode = /* @__PURE__ */ enumType(proto3, __protoPackage13, "CustomSubagentPermissionMode", [[0, "UNSPECIFIED"], [1, "DEFAULT"], [2, "READONLY"], [3, "AGENT_ONLY"]], 1);
+    SubagentExecutionEnvironment = /* @__PURE__ */ enumType(proto3, __protoPackage13, "SubagentExecutionEnvironment", [[0, "UNSPECIFIED"], [1, "LOCAL"], [2, "CLOUD"]], 1);
+    SubagentBackgroundReason = /* @__PURE__ */ enumType(proto3, __protoPackage13, "SubagentBackgroundReason", [[0, "UNSPECIFIED"], [1, "AGENT_REQUEST"], [2, "USER_REQUEST"], [3, "QUEUED_FOLLOW_UP"]], 1);
+    BackgroundTaskCompletionReason = /* @__PURE__ */ enumType(proto3, __protoPackage13, "BackgroundTaskCompletionReason", [[0, "UNSPECIFIED"], [1, "TASK_FINISHED"], [2, "TASK_PROGRESS"], [3, "WORKER_REPARENTED"], [4, "WORKER_MESSAGE"], [5, "WORKER_NEEDS_ATTENTION"]], 1);
+    TaskMode = /* @__PURE__ */ enumType(proto3, __protoPackage13, "TaskMode", [[0, "UNSPECIFIED"], [1, "AGENT"], [2, "PLAN"]], 1);
     SubagentType = class _SubagentType extends __protoMessage39 {
       constructor(data) {
         super();

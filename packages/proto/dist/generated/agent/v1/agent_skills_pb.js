@@ -1,16 +1,16 @@
-var __protoPackage91, __protoMessage387, AgentSkill;
+var __protoPackage92, __protoMessage387, AgentSkill;
 var init_agent_skills_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/agent_skills_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage91 = "agent.v1.";
+    __protoPackage92 = "agent.v1.";
     __protoMessage387 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage91;
+        return __protoPackage92;
       }
     };
     AgentSkill = class _AgentSkill extends __protoMessage387 {

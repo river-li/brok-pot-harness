@@ -1,16 +1,16 @@
-var __protoPackage41, __protoMessage338, AskQuestionToolCall, AskQuestionArgs, AskQuestionArgs_Question, AskQuestionArgs_Option, AskQuestionAsync, AskQuestionResult, AskQuestionSuccess, AskQuestionSuccess_Answer, AskQuestionError, AskQuestionRejected;
+var __protoPackage42, __protoMessage338, AskQuestionToolCall, AskQuestionArgs, AskQuestionArgs_Question, AskQuestionArgs_Option, AskQuestionAsync, AskQuestionResult, AskQuestionSuccess, AskQuestionSuccess_Answer, AskQuestionError, AskQuestionRejected;
 var init_ask_question_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/ask_question_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage41 = "agent.v1.";
+    __protoPackage42 = "agent.v1.";
     __protoMessage338 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage41;
+        return __protoPackage42;
       }
     };
     AskQuestionToolCall = class _AskQuestionToolCall extends __protoMessage338 {

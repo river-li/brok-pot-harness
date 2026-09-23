@@ -7,7 +7,7 @@ function sha256(input) {
 }
 async function sha256OfFile(filePath) {
   const hash = (0, import_node_crypto39.createHash)("sha256");
-  for await (const chunk of (0, import_node_fs51.createReadStream)(filePath)) hash.update(chunk);
+  for await (const chunk of (0, import_node_fs53.createReadStream)(filePath)) hash.update(chunk);
   return hash.digest("hex");
 }
 function contentAddressedPath(attachmentsDir, content) {
@@ -15,14 +15,14 @@ function contentAddressedPath(attachmentsDir, content) {
   return (0, import_node_path92.join)(attachmentsDir, `${content.hash}${sourceExt.length > 0 ? sourceExt : ".bin"}`);
 }
 async function ensureDir(dir) {
-  await import_node_fs51.promises.mkdir(dir, { recursive: true });
+  await import_node_fs53.promises.mkdir(dir, { recursive: true });
 }
 async function writeContentAddressedFile(dir, targetPath, buffer) {
   await ensureDir(dir);
   try {
-    await import_node_fs51.promises.access(targetPath);
+    await import_node_fs53.promises.access(targetPath);
   } catch {
-    await import_node_fs51.promises.writeFile(targetPath, buffer);
+    await import_node_fs53.promises.writeFile(targetPath, buffer);
   }
 }
 async function ingestAttachment(agentDir, sourcePath) {
@@ -34,14 +34,14 @@ async function ingestAttachment(agentDir, sourcePath) {
   }
   const attachmentsDir = getAgentAttachmentsDir(agentDir);
   if (isPathWithin(attachmentsDir, sourcePath, { isInclusive: true })) {
-    const stat29 = await import_node_fs51.promises.stat(sourcePath);
+    const stat29 = await import_node_fs53.promises.stat(sourcePath);
     return {
       absolutePath: sourcePath,
       hash: "preserved",
       bytes: stat29.size
     };
   }
-  const stat28 = await import_node_fs51.promises.stat(sourcePath);
+  const stat28 = await import_node_fs53.promises.stat(sourcePath);
   if (!stat28.isFile()) {
     throw new SandAttachmentError(`Attachment source is not a file: ${sourcePath}`);
   }
@@ -49,7 +49,7 @@ async function ingestAttachment(agentDir, sourcePath) {
   if (stat28.size > byteLimit) {
     throw new AttachmentTooLargeError(byteLimit);
   }
-  const buffer = await import_node_fs51.promises.readFile(sourcePath);
+  const buffer = await import_node_fs53.promises.readFile(sourcePath);
   const hash = sha256(buffer);
   const targetPath = contentAddressedPath(attachmentsDir, { hash, filename: sourcePath });
   await writeContentAddressedFile(attachmentsDir, targetPath, buffer);
@@ -78,11 +78,11 @@ var STALE_UPLOAD_PART_MS = 60 * 60 * 1e3;
 var UPLOAD_ID = /^[A-Za-z0-9-]{8,64}$/;
 async function sweepStaleUploadParts(partsDir) {
   const cutoff = Date.now() - STALE_UPLOAD_PART_MS;
-  for (const name17 of await import_node_fs51.promises.readdir(partsDir)) {
+  for (const name17 of await import_node_fs53.promises.readdir(partsDir)) {
     const partPath = (0, import_node_path92.join)(partsDir, name17);
     try {
-      const stat28 = await import_node_fs51.promises.stat(partPath);
-      if (stat28.mtimeMs < cutoff) await import_node_fs51.promises.rm(partPath, { force: true });
+      const stat28 = await import_node_fs53.promises.stat(partPath);
+      if (stat28.mtimeMs < cutoff) await import_node_fs53.promises.rm(partPath, { force: true });
     } catch (error42) {
       if (findSystemErrno(error42) !== "ENOENT") throw error42;
     }
@@ -114,7 +114,7 @@ async function ingestAttachmentChunk(agentDir, chunk) {
     await ensureDir(partsDir);
     await sweepStaleUploadParts(partsDir);
   }
-  const handle = await import_node_fs51.promises.open(partPath, offset === 0 ? "w" : "r+");
+  const handle = await import_node_fs53.promises.open(partPath, offset === 0 ? "w" : "r+");
   try {
     await handle.write(bytes, 0, bytes.byteLength, offset);
   } finally {
@@ -123,38 +123,74 @@ async function ingestAttachmentChunk(agentDir, chunk) {
   if (end < totalSize) return null;
   const hash = await sha256OfFile(partPath);
   const targetPath = contentAddressedPath(attachmentsDir, { hash, filename });
-  await import_node_fs51.promises.rename(partPath, targetPath);
+  await import_node_fs53.promises.rename(partPath, targetPath);
   return { absolutePath: targetPath, hash, bytes: totalSize };
 }
 async function isCloudAgentArtifactPath(resolved) {
   return await containWithin([SAND_CLOUD_AGENT_ARTIFACTS_BOX_ROOT], resolved) != null;
 }
-async function isReadableHostAttachmentPath(resolved) {
-  return isPathWithin(getSandRootDir(), resolved) || await isCloudAgentArtifactPath(resolved);
+function claimedAttachmentFolder(resolved) {
+  const ownerDir = resolveAttachmentOwnerDir(resolved);
+  if (ownerDir != null) {
+    const root = getSandRootDir();
+    const bucket = (0, import_node_path92.relative)(ownerDir, resolved).split(import_node_path92.sep)[0] ?? "";
+    return { root, folder: (0, import_node_path92.relative)(root, (0, import_node_path92.join)(ownerDir, bucket)).split(import_node_path92.sep) };
+  }
+  if (isPathWithin(SAND_CLOUD_AGENT_ARTIFACTS_BOX_ROOT, resolved)) {
+    const folder = (0, import_node_path92.relative)(SAND_CLOUD_AGENT_ARTIFACTS_BOX_ROOT, (0, import_node_path92.dirname)(resolved));
+    return {
+      root: SAND_CLOUD_AGENT_ARTIFACTS_BOX_ROOT,
+      folder: folder.length === 0 ? [] : folder.split(import_node_path92.sep)
+    };
+  }
+  return null;
 }
-async function readHostAttachmentImage(filePath, reportRenditionFailure = () => {
+async function realHostAttachmentPath(filePath) {
+  const resolved = reanchorHostPath(filePath);
+  const claim = claimedAttachmentFolder(resolved);
+  if (claim == null) {
+    throw new AttachmentOutsideRootError(
+      `Attachment path lies outside an agent's attachments or assets folder: ${resolved}`
+    );
+  }
+  let real;
+  let realRoot;
+  try {
+    [real, realRoot] = await Promise.all([import_node_fs53.promises.realpath(resolved), import_node_fs53.promises.realpath(claim.root)]);
+  } catch (error42) {
+    const errno = findSystemErrno(error42);
+    if (errno === "ENOENT" || errno === "ENOTDIR") return null;
+    throw error42;
+  }
+  const expected = (0, import_node_path92.join)(realRoot, ...claim.folder);
+  if (!isPathWithin(expected, real)) {
+    throw new AttachmentOutsideRootError(
+      `Attachment path resolves outside ${expected}: ${resolved}`
+    );
+  }
+  return real;
+}
+async function readHostAttachmentImage(filePath, rendition, reportRenditionFailure = () => {
 }) {
   if (typeof filePath !== "string" || filePath.length === 0) return null;
   const boxFile = await resolvePreviewBoxFile(filePath);
-  if (boxFile != null) return await readImageAttachment(boxFile, reportRenditionFailure);
-  const resolved = reanchorHostPath(filePath);
-  if (!await isReadableHostAttachmentPath(resolved)) {
-    return null;
+  if (boxFile != null) {
+    return await readImageAttachment(boxFile, rendition, reportRenditionFailure);
   }
-  return await readImageAttachment(resolved, reportRenditionFailure);
+  const real = await realHostAttachmentPath(filePath);
+  if (real == null) return null;
+  return await readImageAttachment(real, rendition, reportRenditionFailure);
 }
 async function readHostAttachmentVideoBytes(filePath) {
   if (typeof filePath !== "string" || filePath.length === 0) return null;
   const boxFile = await resolvePreviewBoxFile(filePath);
-  const resolved = boxFile ?? reanchorHostPath(filePath);
-  if (boxFile == null && !await isReadableHostAttachmentPath(resolved)) {
-    return null;
-  }
+  const resolved = boxFile ?? await realHostAttachmentPath(filePath);
+  if (resolved == null) return null;
   if (videoMimeFromPath(resolved) === void 0) return null;
   try {
-    const stat28 = await import_node_fs51.promises.stat(resolved);
+    const stat28 = await import_node_fs53.promises.stat(resolved);
     if (!stat28.isFile() || stat28.size > VIDEO_BYTE_LIMIT) return null;
-    return new Uint8Array(await import_node_fs51.promises.readFile(resolved));
+    return new Uint8Array(await import_node_fs53.promises.readFile(resolved));
   } catch (error42) {
     reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
@@ -168,12 +204,17 @@ async function readHostAttachmentChunk(agentDir, filePath, offset, length, video
   const inAgentMedia = isPathWithin(getAgentAttachmentsDir(agentDir), reanchored) || isPathWithin(getAgentAssetsDir(agentDir), reanchored);
   const cloudArtifact = inAgentMedia ? false : await isCloudAgentArtifactPath(reanchored);
   const boxFile = inAgentMedia || cloudArtifact ? null : await resolvePreviewBoxFile(filePath);
-  const source = boxFile ?? reanchored;
-  if (!inAgentMedia && !cloudArtifact && boxFile == null) return null;
+  if (!inAgentMedia && !cloudArtifact && boxFile == null) {
+    throw new AttachmentOutsideRootError(
+      `Attachment path lies outside the agent's media folders and the box: ${reanchored}`
+    );
+  }
+  const source = boxFile ?? await realHostAttachmentPath(filePath);
+  if (source == null) return null;
   if (videoPlayback && videoMimeFromPath(source) == null) return null;
   try {
     const readResolved = async (resolved) => {
-      const stat28 = await import_node_fs51.promises.stat(resolved);
+      const stat28 = await import_node_fs53.promises.stat(resolved);
       if (!stat28.isFile()) return null;
       const totalSize = stat28.size;
       const mime2 = imageMimeFromPath(resolved) ?? videoMimeFromPath(resolved) ?? audioMimeFromPath(resolved) ?? null;
@@ -184,7 +225,7 @@ async function readHostAttachmentChunk(agentDir, filePath, offset, length, video
       if (len <= 0) {
         return { bytesBase64: "", totalSize, mime: mime2 };
       }
-      const handle = await import_node_fs51.promises.open(resolved, "r");
+      const handle = await import_node_fs53.promises.open(resolved, "r");
       try {
         const buffer = Buffer.alloc(len);
         const { bytesRead } = await handle.read(buffer, 0, len, start);
@@ -208,29 +249,39 @@ async function readHostAttachmentChunk(agentDir, filePath, offset, length, video
 }
 async function readImageSize(buffer) {
   try {
-    return readImageFileDimensions(buffer);
+    return readDisplayedImageDimensions(buffer);
   } catch (error42) {
     if (error42 instanceof RangeError) return null;
     throw error42;
   }
 }
-async function readImageAttachment(filePath, reportRenditionFailure = () => {
+async function readImageAttachment(filePath, rendition, reportRenditionFailure = () => {
 }) {
   const resolved = reanchorHostPath(filePath);
   const sourceMime = servableImageMimeFromPath(resolved);
   if (sourceMime == null) return null;
+  const attachmentOf = async (renditionPath, data, size, isRendition) => {
+    const own = isRendition && size != null ? await readImageSize(data) : null;
+    return {
+      dataUrl: `data:${servableImageMimeFromPath(renditionPath) ?? sourceMime};base64,${data.toString("base64")}`,
+      width: size?.width ?? null,
+      height: size?.height ?? null,
+      ...own != null && size != null ? { scale: own.width / size.width } : {}
+    };
+  };
   try {
     return await withDisplayableImageSource(
       resolved,
       async (displayPath) => {
-        const data = await import_node_fs51.promises.readFile(displayPath);
-        const size = await readImageSize(data);
-        const mime2 = servableImageMimeFromPath(displayPath) ?? sourceMime;
-        return {
-          dataUrl: `data:${mime2};base64,${data.toString("base64")}`,
-          width: size?.width ?? null,
-          height: size?.height ?? null
-        };
+        const displayData = await import_node_fs53.promises.readFile(displayPath);
+        const size = await readImageSize(displayData);
+        if (rendition === "original")
+          return await attachmentOf(displayPath, displayData, size, false);
+        return await withPreviewImageSource(
+          displayPath,
+          async (previewPath) => previewPath === displayPath ? await attachmentOf(displayPath, displayData, size, false) : await attachmentOf(previewPath, await import_node_fs53.promises.readFile(previewPath), size, true),
+          reportRenditionFailure
+        );
       },
       reportRenditionFailure
     );
@@ -243,7 +294,7 @@ async function readImageDimensions(filePath) {
   const resolved = reanchorHostPath(filePath);
   if (servableImageMimeFromPath(resolved) == null) return null;
   try {
-    const data = await import_node_fs51.promises.readFile(resolved);
+    const data = await import_node_fs53.promises.readFile(resolved);
     return await readImageSize(data);
   } catch (error42) {
     reportFallbackUnlessAbsent("attachments_service", error42);
@@ -257,7 +308,7 @@ async function readVideoDimensions(filePath) {
   if (!isPathWithin(getSandRootDir(), resolved)) return null;
   if (videoMimeFromPath(resolved) === void 0) return null;
   try {
-    const handle = await import_node_fs51.promises.open(resolved, "r");
+    const handle = await import_node_fs53.promises.open(resolved, "r");
     try {
       const { size } = await handle.stat();
       const headLength = Math.min(size, VIDEO_DIMENSIONS_HEAD_BYTES);
@@ -309,14 +360,14 @@ async function resolvePreviewBoxFile(filePath) {
   if (lexical == null) return null;
   let real;
   try {
-    real = await import_node_fs51.promises.realpath(lexical);
+    real = await import_node_fs53.promises.realpath(lexical);
   } catch (error42) {
     reportFallbackUnlessAbsent("attachments_service", error42);
     return null;
   }
   if (resolvedBoxFilePath(real) == null) return null;
   try {
-    const stat28 = await import_node_fs51.promises.stat(real);
+    const stat28 = await import_node_fs53.promises.stat(real);
     if (!stat28.isFile()) return null;
   } catch (error42) {
     reportFallbackUnlessAbsent("attachments_service", error42);
@@ -324,11 +375,22 @@ async function resolvePreviewBoxFile(filePath) {
   }
   return real;
 }
+async function realAttachmentTextPath(agentDir, filePath) {
+  if (resolveScopedAttachmentPath(agentDir, filePath) != null) {
+    return await realHostAttachmentPath(filePath);
+  }
+  const reanchored = reanchorHostPath(filePath);
+  if (lexicalBoxFilePath(reanchored) != null) return await resolvePreviewBoxFile(filePath);
+  throw new AttachmentOutsideRootError(
+    `Attachment path lies outside the agent's attachments and the box: ${reanchored}`
+  );
+}
 async function readAttachmentText(agentDir, filePath) {
-  const resolved = resolveScopedAttachmentPath(agentDir, filePath) ?? await resolvePreviewBoxFile(filePath);
+  if (typeof filePath !== "string" || filePath.length === 0) return null;
+  const resolved = await realAttachmentTextPath(agentDir, filePath);
   if (resolved == null) return null;
   try {
-    const stat28 = await import_node_fs51.promises.stat(resolved);
+    const stat28 = await import_node_fs53.promises.stat(resolved);
     if (!stat28.isFile()) return null;
     const bytes = stat28.size;
     if (!isTextPreviewableName(resolved)) return { kind: "binary", bytes };
@@ -346,7 +408,7 @@ async function readAttachmentText(agentDir, filePath) {
   }
 }
 async function readFileHead(filePath, maxBytes) {
-  const handle = await import_node_fs51.promises.open(filePath, "r");
+  const handle = await import_node_fs53.promises.open(filePath, "r");
   try {
     const buffer = Buffer.alloc(maxBytes);
     const { bytesRead } = await handle.read(buffer, 0, maxBytes, 0);
@@ -412,7 +474,7 @@ function createAttachmentsService(deps) {
       });
       return { committedPath: result?.absolutePath ?? null };
     },
-    readImage: (args) => readHostAttachmentImage(args.path, deps.reportRenditionFailure),
+    readImage: (args) => readHostAttachmentImage(args.path, args.rendition ?? "original", deps.reportRenditionFailure),
     async readText(args) {
       const agentDir = resolveReadAgentDir(args.path, args.agentId);
       if (agentDir == null) {

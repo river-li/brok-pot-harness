@@ -219,7 +219,8 @@ ${formatProjectCompactionPrompt({
         coordinatorToolsEnabled: config2.featureFlags?.cloudCoordinatorToolsEnabled === true,
         coordinatorProgressEnabled: config2.featureFlags?.cloudCoordinatorProgressEnabled === true,
         coordinatorSteerFollowupsEnabled: config2.featureFlags?.cloudCoordinatorSteerFollowupsEnabled === true,
-        coordinatorPlacementConsentEnabled: config2.featureFlags?.cloudCoordinatorPlacementConsentEnabled === true
+        coordinatorPlacementConsentEnabled: config2.featureFlags?.cloudCoordinatorPlacementConsentEnabled === true,
+        coordinatorAskQuestionEnabled: config2.featureFlags?.cloudCoordinatorAskQuestionEnabled !== false
       })}
 </system_reminder>` : void 0;
       const allMessages = rootPromptExecutor.getMessages();
@@ -313,6 +314,16 @@ ${formatProjectCompactionPrompt({
           });
         }
         const cancellationToken = { cancelled: false };
+        const onRunCancelled = () => {
+          if (!cancellationToken.cancelled) {
+            cancellationToken.cancelled = true;
+            cancellationToken.onCancelled?.();
+          }
+        };
+        ctx.signal.addEventListener("abort", onRunCancelled, { once: true });
+        if (ctx.canceled) {
+          onRunCancelled();
+        }
         const lifecycle = createLiveSummaryLifecycle({
           summarizationModelId: summarizerModelId,
           mainModelId: config2.modelId,
@@ -396,6 +407,8 @@ ${formatProjectCompactionPrompt({
             emitSummaryLifecycleAbandoned(ctx, lifecycle, "generation_failed");
             stateHandler.clearBackgroundSummarizationState();
             throw e;
+          } finally {
+            ctx.signal.removeEventListener("abort", onRunCancelled);
           }
         })();
         const promiseInfo = {
@@ -543,21 +556,52 @@ ${formatProjectCompactionPrompt({
         const { messagesActuallySummarized, newSummaryMessage, preservedOriginalTailMessages, rawSummary, summary, fullReplacementMessages, onPersisted } = result;
         const summarizationDuration = performance.now() - beforeSummarize;
         const hadAbortError = result.errorKind?.toLowerCase()?.includes("abort") === true;
-        const candidateWasAborted = hadAbortError || result.errorKind === "Cancelled";
-        if (this.backgroundSummarizationProps?.discardOnError !== false && result.hadError && (options2.backgroundSummarizationMode !== BackgroundSummarizationMode.WaitForCompletion && options2.backgroundSummarizationMode !== BackgroundSummarizationMode.WaitForCompletionIfStarted || hadAbortError)) {
+        const runWasCancelled = result.hadError && ctx.canceled;
+        const candidateWasAborted = hadAbortError || runWasCancelled || result.errorKind === "Cancelled";
+        if (this.backgroundSummarizationProps?.discardOnError !== false && result.hadError && (options2.backgroundSummarizationMode !== BackgroundSummarizationMode.WaitForCompletion && options2.backgroundSummarizationMode !== BackgroundSummarizationMode.WaitForCompletionIfStarted || hadAbortError || runWasCancelled)) {
           summarizationFailed = true;
           stateHandler.clearBackgroundSummarizationState();
           backgroundSummarizationDiscarded.increment(ctx, 1, {
-            reason: hadAbortError ? "abort_error" : "summarization_error",
+            reason: hadAbortError || runWasCancelled ? "abort_error" : "summarization_error",
             model: backgroundSummarizationModelId
           });
           emitSummaryLifecycleAbandoned(ctx, backgroundSummarizationPromiseInfo, candidateWasAborted ? "candidate_aborted" : "candidate_error");
           logger60.warn(ctx, "Discarding background summarization due to generation error", {
             summarization: {
               ...summarizationLogFields,
-              errorKind: result.errorKind ?? "unknown"
+              errorKind: result.errorKind ?? "unknown",
+              runWasCancelled
             }
           });
+          return void 0;
+        }
+        if (result.isPlaceholder === true) {
+          summarizationFailed = true;
+          stateHandler.clearBackgroundSummarizationState();
+          backgroundSummarizationDiscarded.increment(ctx, 1, {
+            reason: candidateWasAborted ? "abort_error" : "placeholder_summary",
+            model: backgroundSummarizationModelId
+          });
+          emitSummaryLifecycleAbandoned(ctx, backgroundSummarizationPromiseInfo, candidateWasAborted ? "candidate_aborted" : "candidate_error");
+          const errorKind = result.errorKind ?? "unknown";
+          const placeholderLogFields = {
+            summarization: {
+              ...summarizationLogFields,
+              errorKind,
+              summarizationMode: options2.backgroundSummarizationMode
+            }
+          };
+          if (candidateWasAborted) {
+            logger60.warn(ctx, "Discarding a placeholder summary from an aborted summarization", placeholderLogFields);
+          } else {
+            logger60.error(ctx, "Refusing to persist a placeholder summary; keeping the pre-summary context", placeholderLogFields);
+          }
+          if (!candidateWasAborted && (options2.backgroundSummarizationMode === BackgroundSummarizationMode.WaitForCompletion || options2.backgroundSummarizationMode === BackgroundSummarizationMode.WaitForCompletionIfStarted)) {
+            throw new SummaryPlaceholderRejectedError({
+              errorKind,
+              summarizerModelId: backgroundSummarizationModelId
+            });
+          }
           return void 0;
         }
         const redactedCoreMessageSerde = createRedactedCoreMessageSerde(stateHandler.getPrivacyMode());

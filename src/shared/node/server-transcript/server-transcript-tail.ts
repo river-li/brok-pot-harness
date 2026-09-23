@@ -948,6 +948,7 @@ function createServerTranscriptTail(deps) {
         if (frame.frame.case === "connected") {
           connectedAt = clock.monotonicNow();
           activate();
+          deps.onConnected?.();
         }
         if (connectedAt !== null) await handleFrame(frame, signal);
         if (arrivedLateEnoughToProveHealth) onProvenHealthy();

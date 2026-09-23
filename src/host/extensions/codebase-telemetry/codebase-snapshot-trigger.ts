@@ -5,19 +5,19 @@ var CodebaseSnapshotTrigger = class {
   handledReasonKeys = /* @__PURE__ */ new Set();
   failureCount = 0;
   nextFailureLogAt = 1;
-  constructor({ getSession, logger: logger108 }) {
+  constructor({ getSession, logger: logger110 }) {
     this.getSession = getSession;
-    this.logger = logger108;
+    this.logger = logger110;
   }
   handle(reason) {
     const session = this.getSession();
     if (session === void 0) {
       this.logger.debug(`snapshot trigger dropped (telemetry inactive): ${reason.type}`);
-      return;
+      return "inactive";
     }
     const reasonKey = snapshotReasonKey(reason);
     if (this.handledReasonKeys.has(reasonKey)) {
-      return;
+      return "duplicate";
     }
     this.handledReasonKeys.add(reasonKey);
     this.pruneIfNeeded();
@@ -30,6 +30,7 @@ var CodebaseSnapshotTrigger = class {
       this.nextFailureLogAt *= 2;
       this.logger.warn(`snapshot trigger failed (failure #${this.failureCount})`, err);
     });
+    return "accepted";
   }
   pruneIfNeeded() {
     if (this.handledReasonKeys.size <= MAX_HANDLED_REASONS) {

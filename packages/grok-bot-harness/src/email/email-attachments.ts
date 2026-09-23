@@ -1,4 +1,4 @@
-var import_node_path167 = require("node:path");
+var import_node_path169 = require("node:path");
 var SAND_EMAIL_MAX_ATTACHMENTS = 10;
 var SAND_EMAIL_ATTACHMENT_PREVIEW_MAX_BYTES = 8 * 1024;
 var SAND_EMAIL_ATTACHMENT_PREVIEW_TRUNCATED_MARKER = "\n[\u2026 truncated]";
@@ -28,18 +28,18 @@ function resolveSandEmailAttachmentPath({
   if (unsafeSegments(raw)) {
     return { ok: false, reason: "may not contain `..` or `.` segments." };
   }
-  const agentRoot = toBoxDataRootPath(import_node_path167.posix.normalize(agentDir));
-  const candidate = import_node_path167.posix.isAbsolute(raw) ? raw : import_node_path167.posix.join(agentRoot, raw);
-  const normalized = toBoxDataRootPath(import_node_path167.posix.normalize(candidate));
-  const relative18 = import_node_path167.posix.relative(agentRoot, normalized);
-  if (relative18.length === 0 || relative18.startsWith("..") || import_node_path167.posix.isAbsolute(relative18)) {
+  const agentRoot = toBoxDataRootPath(import_node_path169.posix.normalize(agentDir));
+  const candidate = import_node_path169.posix.isAbsolute(raw) ? raw : import_node_path169.posix.join(agentRoot, raw);
+  const normalized = toBoxDataRootPath(import_node_path169.posix.normalize(candidate));
+  const relative18 = import_node_path169.posix.relative(agentRoot, normalized);
+  if (relative18.length === 0 || relative18.startsWith("..") || import_node_path169.posix.isAbsolute(relative18)) {
     return { ok: false, reason: "is outside your agent directory." };
   }
   const [bucket, ...rest] = relative18.split("/");
   if (bucket === void 0 || !EMAIL_ATTACHMENT_BUCKETS.has(bucket) || rest.length === 0) {
     return {
       ok: false,
-      reason: `must be under ${import_node_path167.posix.join(agentDir, ATTACHMENTS_DIRNAME)} or ${import_node_path167.posix.join(agentDir, ASSETS_DIRNAME)}.`
+      reason: `must be under ${import_node_path169.posix.join(agentDir, ATTACHMENTS_DIRNAME)} or ${import_node_path169.posix.join(agentDir, ASSETS_DIRNAME)}.`
     };
   }
   return { ok: true, path: normalized };

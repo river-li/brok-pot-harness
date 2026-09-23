@@ -11,6 +11,10 @@ var artifactCopy = createCounter("grok_bot.cloud_agent.artifact_copy", {
   description: "Copy-to-box outcome per cited artifact on the completion path: copied, write_failed, or skipped with the plan or fetch reason",
   labelNames: ["harness", "kind", "outcome", "reason"]
 });
+var artifactCompletionCopied = createCounter("grok_bot.cloud_agent.artifact_completion_copied", {
+  description: "A completion whose cited artifacts were copied onto the bot's box, at least one file; one increment per completion, the denominator for artifact_completion_attached; capped when the 12-file cap skipped some of its citations",
+  labelNames: ["harness", "capped"]
+});
 function recordArtifactMetrics(metrics2, record2) {
   if (metrics2 === void 0) return;
   try {
@@ -46,6 +50,12 @@ function recordArtifactsCited(metrics2, plan) {
   }
 }
 function recordCloudAgentArtifactCopies(metrics2, outcome) {
+  if (outcome.synced.length > 0) {
+    artifactCompletionCopied.increment(metrics2.ctx, 1, {
+      harness: metrics2.harness,
+      capped: String(outcome.skipped.some((artifact) => artifact.reason === "over-count-limit"))
+    });
+  }
   for (const artifact of outcome.synced) {
     artifactCopy.increment(metrics2.ctx, 1, {
       harness: metrics2.harness,

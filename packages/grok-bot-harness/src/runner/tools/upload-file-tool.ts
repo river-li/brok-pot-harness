@@ -1,4 +1,4 @@
-var import_node_path166 = require("node:path");
+var import_node_path168 = require("node:path");
 init_invariant();
 init_unknown_record();
 init_zod();
@@ -40,13 +40,13 @@ function explainMissingSourcePath(value, ctx) {
   return value;
 }
 var uploadFileParameters = external_exports.preprocess(explainMissingSourcePath, uploadFileObjectSchema);
-function nonEmpty5(value) {
+function nonEmpty6(value) {
   return value === void 0 || value.length === 0 ? void 0 : value;
 }
 function normalizeDestination(destination) {
-  const path31 = nonEmpty5(destination.path);
-  const folderId = nonEmpty5(destination.folderId);
-  const draftId = nonEmpty5(destination.draftId);
+  const path31 = nonEmpty6(destination.path);
+  const folderId = nonEmpty6(destination.folderId);
+  const draftId = nonEmpty6(destination.draftId);
   const targetsGiven = [path31, folderId, draftId].filter((value) => value !== void 0).length;
   if (targetsGiven > 1) {
     throw new SandToolInputError(
@@ -77,12 +77,12 @@ function normalizeSourcePath(raw) {
   if (raw.includes("\0")) {
     throw new SandToolInputError("sourcePath contains an invalid character.");
   }
-  if (!import_node_path166.posix.isAbsolute(raw)) {
+  if (!import_node_path168.posix.isAbsolute(raw)) {
     throw new SandToolInputError(
       `sourcePath ${JSON.stringify(raw)} is not absolute. Pass the full path on your computer, e.g. "/home/box/agent-data/agents/<id>/attachments/report.pdf".`
     );
   }
-  const normalized = import_node_path166.posix.normalize(raw);
+  const normalized = import_node_path168.posix.normalize(raw);
   if (normalized.endsWith("/")) {
     throw new SandToolInputError("sourcePath must name a file, not a directory.");
   }
@@ -147,28 +147,40 @@ async function runUploadFile(args, deps) {
   }
   const connection = resolution.connection;
   const request5 = { connection, sourcePath };
-  const staged = await deps.stage({ agentId, sourcePath });
-  if (staged.kind !== "staged") {
-    return describeUploadFileOutcome(staged, request5);
-  }
-  if (deps.reviewUpload !== void 0) {
-    const decision = await deps.reviewUpload({
-      toolCallId: deps.toolCallId ?? "",
-      target: {
-        connection,
-        sourcePath,
-        sha256: staged.sha256,
-        sizeBytes: staged.sizeBytes,
-        destination
-      },
-      ...deps.signal === void 0 ? {} : { signal: deps.signal }
-    });
-    if (!decision.allowed) {
-      return `The upload to ${connection} was not approved: ${decision.reason} Nothing was uploaded. Do not retry the same upload unless the user asks for it.`;
+  const record2 = deps.recordTransfer ?? (() => {
+  });
+  try {
+    const staged = await deps.stage({ agentId, sourcePath });
+    if (staged.kind !== "staged") {
+      record2({ outcome: "error", errorCategory: staged.kind });
+      return describeUploadFileOutcome(staged, request5);
     }
+    if (deps.reviewUpload !== void 0) {
+      const decision = await deps.reviewUpload({
+        toolCallId: deps.toolCallId ?? "",
+        target: {
+          connection,
+          sourcePath,
+          sha256: staged.sha256,
+          sizeBytes: staged.sizeBytes,
+          destination
+        },
+        ...deps.signal === void 0 ? {} : { signal: deps.signal }
+      });
+      if (!decision.allowed) {
+        record2({ outcome: "denied" });
+        return `The upload to ${connection} was not approved: ${decision.reason} Nothing was uploaded. Do not retry the same upload unless the user asks for it.`;
+      }
+    }
+    const outcome = await staged.upload({ connection, destination });
+    record2(
+      outcome.kind === "uploaded" ? { outcome: "success", byteCount: outcome.sizeBytes } : { outcome: "error", errorCategory: outcome.kind }
+    );
+    return describeUploadFileOutcome(outcome, request5);
+  } catch (error42) {
+    record2(failedFileTransferResult(error42));
+    throw error42;
   }
-  const outcome = await staged.upload({ connection, destination });
-  return describeUploadFileOutcome(outcome, request5);
 }
 function createUploadFileTool(deps) {
   return defineCommunicateTool(deps, {
@@ -178,9 +190,17 @@ function createUploadFileTool(deps) {
     parameters: uploadFileParameters,
     onArgsRejected: deps.onArgsRejected,
     describeActivity: (args) => ({
-      detail: import_node_path166.posix.basename(args.sourcePath),
+      detail: import_node_path168.posix.basename(args.sourcePath),
       target: args.connection
     }),
-    execute: async (ctx, args, d) => runUploadFile(args, { ...d, signal: ctx.signal })
+    execute: async (ctx, args, d) => runUploadFile(args, {
+      ...d,
+      signal: ctx.signal,
+      recordTransfer: bindFileTransferAudit(deps.auditTransfer, ctx, {
+        toolCallId: d.toolCallId,
+        direction: "upload",
+        target: "cloud"
+      })
+    })
   });
 }

@@ -1,9 +1,3 @@
-var import_node_child_process14 = require("node:child_process");
-var import_node_fs65 = require("node:fs");
-var import_promises57 = require("node:fs/promises");
-var import_node_path113 = require("node:path");
-init_dist2();
-init_dist3();
 init_errors();
 init_system_errno();
 var SandManagedSetupError = class extends SandDomainError {
@@ -89,15 +83,16 @@ var ManagedSetupService = class {
         const forceSetup = this.refreshForceQueued;
         this.refreshForceQueued = false;
         try {
-          const manifests = await this.options.client.fetchSetupManifests();
+          const { manifests, teamSecrets } = await this.options.client.fetchSetupManifests();
           if (this.stopped) return { refreshed: false, failure: null };
           if (this.refreshQueued) {
             this.refreshForceQueued ||= forceSetup;
             continue;
           }
+          validateTeamSecrets(manifests, teamSecrets);
           await this.publish(manifests);
           if (this.stopped) return { refreshed: false, failure: null };
-          await this.launchConverge({ force: forceSetup });
+          await this.launchConverge({ force: forceSetup, teamSecrets });
           refreshed = true;
           failure2 = null;
         } catch (error42) {
@@ -172,16 +167,20 @@ async function pruneUnreferencedManifests(manifestsRoot, manifests) {
   }
 }
 async function launchSandSetupConverge(options2 = {}) {
-  const logFd = (0, import_node_fs65.openSync)(SAND_SETUP_CONVERGE_LOG_PATH, "a", 384);
+  const logFd = (0, import_node_fs67.openSync)(SAND_SETUP_CONVERGE_LOG_PATH, "a", 384);
   try {
+    const envelope = {
+      version: SAND_SETUP_SECRET_ENVELOPE_VERSION,
+      teams: options2.teamSecrets ?? []
+    };
     const child = (0, import_node_child_process14.spawn)(process.execPath, [resolveConvergeEntrypoint()], {
       detached: true,
       env: options2.force === true ? { ...process.env, SAND_MANAGED_SETUP_FORCE: "1" } : process.env,
-      stdio: ["ignore", logFd, logFd]
+      stdio: ["pipe", logFd, logFd]
     });
     resetChildOomScoreAdj(child.pid);
     child.unref();
-    await new Promise((resolve29, reject2) => {
+    const exited = new Promise((resolve29, reject2) => {
       child.once("error", reject2);
       child.once("exit", (code, signal) => {
         if (code === 0) {
@@ -195,13 +194,22 @@ async function launchSandSetupConverge(options2 = {}) {
         );
       });
     });
+    const inputWritten = new Promise((resolve29, reject2) => {
+      if (child.stdin === null) {
+        reject2(new Error("managed setup converge stdin is unavailable"));
+        return;
+      }
+      child.stdin.once("error", reject2);
+      child.stdin.end(JSON.stringify(envelope), resolve29);
+    });
+    await Promise.all([exited, inputWritten]);
   } finally {
-    (0, import_node_fs65.closeSync)(logFd);
+    (0, import_node_fs67.closeSync)(logFd);
   }
 }
 function resolveConvergeEntrypoint() {
   const bundled = (0, import_node_path113.join)((0, import_node_path113.dirname)(process.argv[1] ?? ""), "box-scripts", "sand-team-converge.mjs");
-  return (0, import_node_fs65.existsSync)(bundled) ? bundled : IMAGE_CONVERGE_ENTRYPOINT;
+  return (0, import_node_fs67.existsSync)(bundled) ? bundled : IMAGE_CONVERGE_ENTRYPOINT;
 }
 function validateManifests(manifests) {
   const identities = /* @__PURE__ */ new Set();
@@ -228,6 +236,35 @@ function validateManifests(manifests) {
         throw new SandManagedSetupError("Managed setup manifest entry ids must be unique.");
       }
       entryIds.add(entry.id);
+    }
+  }
+}
+function validateTeamSecrets(manifests, bundles) {
+  const assignedTeamIds = new Set(manifests.map((manifest) => manifest.scope.id));
+  const seenTeams = /* @__PURE__ */ new Set();
+  for (const bundle of bundles) {
+    if (!assignedTeamIds.has(bundle.teamId) || seenTeams.has(bundle.teamId)) {
+      throw new SandManagedSetupError("Managed setup Team Secrets have invalid scope.");
+    }
+    seenTeams.add(bundle.teamId);
+    if (bundle.secrets.length > SAND_SETUP_MAX_SECRETS_PER_TEAM) {
+      throw new SandManagedSetupError("Too many Team Secrets for managed setup.");
+    }
+    const seenNames = /* @__PURE__ */ new Set();
+    let totalBytes = 0;
+    for (const secret of bundle.secrets) {
+      if (validateBoxSecretKey(secret.name) !== null || seenNames.has(secret.name)) {
+        throw new SandManagedSetupError("Managed setup Team Secret names are invalid.");
+      }
+      seenNames.add(secret.name);
+      const valueBytes = Buffer.byteLength(secret.value, "utf8");
+      if (valueBytes > SAND_SETUP_MAX_SECRET_VALUE_BYTES) {
+        throw new SandManagedSetupError("A Team Secret is too large for managed setup.");
+      }
+      totalBytes += Buffer.byteLength(secret.name, "utf8") + valueBytes;
+    }
+    if (totalBytes > SAND_SETUP_MAX_SECRET_ENV_BYTES) {
+      throw new SandManagedSetupError("Team Secrets are too large for managed setup.");
     }
   }
 }

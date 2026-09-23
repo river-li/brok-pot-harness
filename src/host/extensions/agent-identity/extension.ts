@@ -1,7 +1,22 @@
 var IDENTITY_BACKFILL_SENTINEL_FILENAME = "agent-identity-backfill.json";
 var TEMPORAL_CREATE_GATE = "sand_create_temporal_agents";
 function harnessKindOf(harness) {
-  return harness === "temporal" ? GrokBotAgentHarnessKind.TEMPORAL : GrokBotAgentHarnessKind.UNSPECIFIED;
+  switch (harness) {
+    case "box":
+      return GrokBotAgentHarnessKind.BOX;
+    case "temporal":
+      return GrokBotAgentHarnessKind.TEMPORAL;
+    case void 0:
+      return GrokBotAgentHarnessKind.UNSPECIFIED;
+  }
+}
+function createIntentKindOf(intent) {
+  switch (intent) {
+    case "fresh":
+      return GrokBotAgentCreateIntent.FRESH;
+    case "register-existing-local":
+      return GrokBotAgentCreateIntent.REGISTER_EXISTING_LOCAL;
+  }
 }
 var templateRecipeDeadline = createDeadlinePolicy({
   name: "sand-template-import-recipe",
@@ -116,7 +131,7 @@ function startAgentIdentity({
     return capabilities;
   };
   const isWriteEnabled = async () => (await getCreationPolicy()).durableIdentityWritesEnabled;
-  const identityBackfillSentinelPath = (0, import_node_path35.join)(getSandRootDir(), IDENTITY_BACKFILL_SENTINEL_FILENAME);
+  const identityBackfillSentinelPath = (0, import_node_path87.join)(getSandRootDir(), IDENTITY_BACKFILL_SENTINEL_FILENAME);
   let lastMigrationCoverage;
   const getHarnessMigrationCoverage = async () => {
     let coverage;
@@ -231,13 +246,21 @@ function startAgentIdentity({
   };
   const service = new SandAgentIdentityService({
     getAgentsRootDir: () => getSandAgentsRootDir(),
-    newAgentId: () => (0, import_node_crypto16.randomUUID)(),
+    newAgentId: () => (0, import_node_crypto37.randomUUID)(),
     listRemoteAgents: async (signal) => (await client.listGrokBotAgents({}, { signal })).agents,
     createRemoteAgent: async (req) => {
-      const { harness, kickstartRequested, introductionSuppressed, purpose, ...fields2 } = req;
+      const {
+        createIntent,
+        harness,
+        kickstartRequested,
+        introductionSuppressed,
+        purpose,
+        ...fields2
+      } = req;
       try {
         const { agent } = await client.createGrokBotAgent({
           ...fields2,
+          createIntent: createIntentKindOf(createIntent),
           harness: harnessKindOf(harness),
           kickstartRequested,
           introductionSuppressed,
@@ -514,8 +537,8 @@ function startAgentIdentity({
     },
     noteAgentImported: (agent) => service.noteAgentImported(agent),
     rollbackRemoteAgent: (args) => service.rollbackRemoteAgent(args),
-    noteAgentMinted: (agentId) => {
-      void service.noteAgentMinted(agentId).then(
+    noteAgentMinted: (agentId, createIntent) => {
+      void service.noteAgentMinted(agentId, createIntent).then(
         async (outcome) => {
           if (outcome === "minted" || outcome === "already_bound" || outcome === "writes_off") {
             return;
@@ -552,7 +575,7 @@ function startAgentIdentity({
     expectLocalEdit: (agentId, write2) => service.expectLocalEdit(agentId, write2),
     clearGeneratedRoomNameStamps: (rooms) => clearGeneratedRoomNameStamps({
       agentsRootDir: getSandAgentsRootDir(),
-      sentinelPath: (0, import_node_path35.join)(getSandRootDir(), GENERATED_ROOM_NAME_STAMP_CLEANUP_SENTINEL_FILENAME),
+      sentinelPath: (0, import_node_path87.join)(getSandRootDir(), GENERATED_ROOM_NAME_STAMP_CLEANUP_SENTINEL_FILENAME),
       rooms,
       publishAgentRoster: () => context2.deps.transcript.refreshAgentRoster()
     }),

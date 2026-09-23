@@ -1,4 +1,7 @@
-init_errors();
+function watchStartedBy(options2) {
+  const startedBy = cloudAgentStartedBy(cloudAgentWatchArmedBy(options2)) ?? options2?.startedBy;
+  return startedBy === void 0 ? {} : { startedBy };
+}
 var RevivingBackgroundWorkRegistry = class extends InMemoryBackgroundWorkRegistry {
   constructor(onShellCompletion, onShellWorkRegistered, onWorkSetChanged) {
     super();
@@ -188,12 +191,14 @@ function createBackgroundWatches(host) {
     watchedCloudAgentBcIds.set(id, watch4);
     const quietOrigin = options2?.quietOrigin;
     const hiddenCard = options2?.hiddenCard === true ? { hiddenCard: true } : {};
+    const startedBy = watchStartedBy(options2);
     const base = {
       parentAgentId: host.getConversationId(),
       subagentAgentId: id,
       subagentType: "cursor-agent",
       toolCallId: "",
       title: fallback2.text,
+      ...startedBy,
       ...quietOrigin != null ? { quietOrigin } : {}
     };
     host.pendingWakeArmedHandler()?.({
@@ -204,14 +209,19 @@ function createBackgroundWatches(host) {
       labelKind: fallback2.labelKind,
       labelParams: fallback2.labelParams,
       ...quietOrigin != null ? { quietOrigin } : {},
-      ...hiddenCard
+      ...hiddenCard,
+      ...startedBy
     });
     host.emitAsyncTasksChanged();
+    const timed2 = options2?.startedBy === void 0;
     const settle = (completion) => {
       if (watchedCloudAgentBcIds.get(id) !== watch4) return;
       watchedCloudAgentBcIds.delete(id);
       host.emitAsyncTasksChanged();
-      host.notifyBackgroundWorkSettled(completion);
+      host.notifyBackgroundWorkSettled({
+        ...completion,
+        ...timed2 ? { durationMs: Math.max(0, Date.now() - watch4.startedAtMs) } : {}
+      });
     };
     const settlement = watcher.awaitCompletion(id, { waitForRestart: options2?.afterFollowup ?? false, ...hiddenCard }).then(
       (result) => settle({

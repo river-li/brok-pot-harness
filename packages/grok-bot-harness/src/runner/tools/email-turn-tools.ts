@@ -1,4 +1,4 @@
-function emailTurnTools(host, review) {
+function emailTurnTools(host, review, recordDelivery) {
   const email3 = host.email;
   if (email3 == null) return [];
   const refusing = email3.unavailableReason !== void 0;
@@ -8,6 +8,7 @@ function emailTurnTools(host, review) {
     tools.push(
       createSendEmailTool({
         email: email3,
+        recordDelivery,
         ...host.getAgentDirImpl === void 0 ? {} : { getAgentDir: host.getAgentDirImpl },
         ...refusing || review.mode === "off" ? {} : {
           reviewSend: async ({ toolCallId, target, signal }) => {
@@ -23,6 +24,7 @@ function emailTurnTools(host, review) {
                 resourceAccessor: review.resourceAccessor,
                 stateHandler: review.stateHandler,
                 autoReviewController: host.autoReviewController,
+                toolDecisions: host.toolDecisionAudit,
                 getApprovalExpiryPolicy,
                 provenance: {
                   requestSource: host.activeTurnRequestSource(),
@@ -44,15 +46,17 @@ function emailTurnTools(host, review) {
       email: email3,
       multipleInboxesEnabled: host.gates.agentEmailMultipleInboxes(),
       ...refusing ? {} : {
-        reviewClaim: async ({ target, signal }) => {
+        reviewClaim: async ({ toolCallId, target, signal }) => {
           host.assertNoPendingAutoReviewApproval();
           return reviewSandEmailClaim({
             ctx: host.ctx,
+            toolCallId,
             target,
             ...signal !== void 0 ? { signal } : {},
             options: {
               agentId: host.getConversationId(),
               autoReviewController: host.autoReviewController,
+              toolDecisions: host.toolDecisionAudit,
               getApprovalExpiryPolicy
             }
           });

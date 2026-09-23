@@ -46,7 +46,8 @@ function createHostRunnerComposition(deps) {
           family: hit.family,
           confidence: hit.confidence,
           blocked_host: hit.blockedHost,
-          blocked_url: hit.blockedUrl
+          blocked_url: hit.blockedUrl,
+          site_section: hit.siteSection
         });
       },
       onSiteVisited: (visit2, record2) => {
@@ -54,6 +55,7 @@ function createHostRunnerComposition(deps) {
           agent_id: record2.agentId,
           ...record2.subagentId === void 0 ? {} : { subagent_agent_id: record2.subagentId },
           host: visit2.siteBucket,
+          site_section: visit2.siteSection,
           ...record2.turnId === void 0 ? {} : { request_id: record2.turnId },
           ...record2.rootTurnId === void 0 ? {} : { root_parent_request_id: record2.rootTurnId },
           ...visit2.webBotAuthSigned === void 0 ? {} : { web_bot_auth_signed: visit2.webBotAuthSigned }
@@ -63,6 +65,7 @@ function createHostRunnerComposition(deps) {
     };
     const mcp = extensions.api("mcp");
     const credentialProvider = extensions.api("credential-provider");
+    const credentialAccess = credentialProvider.accessForAgentWindow(session.id);
     const sessionApi = extensions.api("session");
     const transcriptsDir = sessionApi.transcriptsDir();
     const settings = extensions.api("settings");
@@ -172,6 +175,7 @@ function createHostRunnerComposition(deps) {
         message.timestampMs
       )
     };
+    const ownerActsInTurn = () => overrides?.groupMemberTurn !== true && transcript.activeTurnActsAsBoxOwner(session);
     const runner = buildRunner({
       inference: extensions.api("inference").port,
       summaryTelemetry: telemetryApi.brain,
@@ -240,7 +244,7 @@ function createHostRunnerComposition(deps) {
       ),
       mcp: mcp.mcpForAgent(session.id, gates),
       mcpManagement: mcp.management,
-      ...credentialProvider.access === void 0 ? {} : { credentialAccess: credentialProvider.access },
+      ...credentialAccess === void 0 ? {} : { credentialAccess },
       ...credentialProvider.status === void 0 ? {} : { credentialProviderStatus: credentialProvider.status },
       ...credentialProvider.agentToolLease === void 0 ? {} : { credentialFillLease: credentialProvider.agentToolLease },
       agentState: memory.createAgentState({
@@ -248,7 +252,7 @@ function createHostRunnerComposition(deps) {
         automations: session.automations,
         skills: session.skills,
         channels: session.channels,
-        agentDir: (0, import_node_path180.dirname)(session.dbPath),
+        agentDir: (0, import_node_path182.dirname)(session.dbPath),
         agentId: session.id,
         readBoxFile: (boxPath) => remoteBox.downloadFile(ctx, session.id, boxPath)
       }),
@@ -259,6 +263,14 @@ function createHostRunnerComposition(deps) {
       canReviewAutomationWrites: () => true,
       actionAuditor: extensions.api("action-audit"),
       navigationTelemetry,
+      onManagedSkillRead: (read) => analytics.trackEvent("sand.managed_skill.read", {
+        agent_id: read.agentId,
+        skill_id: read.skillId,
+        harness: "box",
+        ...read.subagentId === void 0 ? {} : { subagent_agent_id: read.subagentId },
+        ...read.turnId === void 0 ? {} : { request_id: read.turnId },
+        ...read.rootTurnId === void 0 ? {} : { root_parent_request_id: read.rootTurnId }
+      }),
       webSearchService: extensions.api("inference").createWebSearch({
         modelId: environment.agentModelOverride ?? DEFAULT_SAND_MODEL,
         onRequestId: onRequestIdFor("web-search")
@@ -271,9 +283,9 @@ function createHostRunnerComposition(deps) {
         onRequestId: onRequestIdFor("generate-image")
       }),
       generateImageResourceAccessor: attachments.createGenerateImageResourceAccessor(
-        (0, import_node_path180.dirname)(session.dbPath)
+        (0, import_node_path182.dirname)(session.dbPath)
       ),
-      getAgentDir: () => (0, import_node_path180.dirname)(session.dbPath),
+      getAgentDir: () => (0, import_node_path182.dirname)(session.dbPath),
       onComputerAction: ({ agentId, action }) => deps.emitGatewayEvent({
         channel: "computer-action",
         payload: { agentId, ...action }
@@ -335,9 +347,13 @@ function createHostRunnerComposition(deps) {
       readVideoAttachmentBytes: attachments.readVideoBytes,
       readMediaDimensions: attachments.readMediaDimensions,
       getAgentId: () => session.id,
-      connectedActivity: createCursorConnectedActivityPort(cloudAgents, {
-        isAvailable: () => overrides?.groupMemberTurn !== true && transcript.activeTurnActsAsBoxOwner(session)
-      }),
+      connectedActivity: combineConnectedActivityPorts([
+        createCursorConnectedActivityPort(cloudAgents, { isAvailable: ownerActsInTurn }),
+        createLocalAiToolActivityPort({
+          userComputers: localExec.userComputers,
+          isAvailable: ownerActsInTurn
+        })
+      ]),
       createCloudAgentTool: (options2) => createCloudAgentTool({
         api: cloudAgents,
         launchedIds: cloudAgents.launchedIds,
@@ -348,7 +364,7 @@ function createHostRunnerComposition(deps) {
         ...options2.exchangeEnabled ? { exchange } : {},
         watch: (bcId, watchOptions) => runnerRef?.watchCloudAgent(bcId, watchOptions),
         writeBoxFile: (toolCtx, boxPath, data) => remoteBox.uploadFile(toolCtx, session.id, boxPath, data),
-        agentDir: (0, import_node_path180.dirname)(session.dbPath),
+        agentDir: (0, import_node_path182.dirname)(session.dbPath),
         readBoxFile: (toolCtx, boxPath, options3) => remoteBox.downloadFile(toolCtx, session.id, boxPath, options3),
         harness: "box",
         onLaunched: (info2) => analytics.trackEvent("sand.cloud_agent.launched", {
@@ -418,23 +434,54 @@ function createHostRunnerComposition(deps) {
         const target = transcript.listAgentsSync().find((agent) => agent.id === toAgentId);
         const store = extensions.api("session").store;
         const profilePath = store.agentDirExists(toAgentId) ? getSandProfilePath(store.getAgentDir(toAgentId)) : void 0;
-        const profile = profilePath !== void 0 && (0, import_node_fs101.existsSync)(profilePath) ? parseProfileJson((0, import_node_fs101.readFileSync)(profilePath, "utf8")) : void 0;
-        if (profile === null) return "Cannot message this agent: invalid profile.";
+        const profile = profilePath !== void 0 && (0, import_node_fs102.existsSync)(profilePath) ? parseProfileJson((0, import_node_fs102.readFileSync)(profilePath, "utf8")) : void 0;
+        const known = target !== void 0 || profilePath !== void 0;
+        const refused2 = (failure2) => ({
+          ack: failure2.ack,
+          failureCategory: failure2.failureCategory,
+          delivery: "failed",
+          ...failure2.resolved ?? known ? { destinationId: toAgentId } : {}
+        });
+        if (profile === null) {
+          return refused2({
+            ack: "Cannot message this agent: invalid profile.",
+            failureCategory: "invalid_profile"
+          });
+        }
         const harness = profile?.harness ?? target?.harness;
         if (harness != null && harness !== "box" && harness !== "temporal") {
-          return "Cannot message this agent: unsupported harness.";
+          return refused2({
+            ack: "Cannot message this agent: unsupported harness.",
+            failureCategory: "unknown_harness"
+          });
         }
+        const boxResult = (ack, outcome) => !outcome.undelivered && (ack.startsWith("Sent to ") || ack.startsWith("Posted to ")) ? { ack, delivery: "sent", destinationId: toAgentId } : refused2({
+          ack,
+          failureCategory: outcome.undelivered ? "undelivered" : "refused",
+          resolved: outcome.resolved
+        });
         if (harness === "temporal" || target === void 0 && profile === void 0 && remoteAgentMessaging.isEnabled()) {
-          return await transcript.sendToRemotePeer({
+          let undelivered = false;
+          let resolved = known;
+          const ack = await transcript.sendToRemotePeer({
             fromAgentId: session.id,
             toAgentId,
             text: text2,
             images,
             priority,
-            deliver: (send) => remoteAgentMessaging.sendToRemoteAgent(send)
+            deliver: async (send) => {
+              const result = await remoteAgentMessaging.sendToRemoteAgent(send);
+              undelivered = !result.delivered;
+              resolved ||= result.target !== null;
+              return result;
+            }
           });
+          return boxResult(ack, { undelivered, resolved });
         }
-        return await transcript.sendToAgent(session.id, toAgentId, text2, images, priority);
+        return boxResult(
+          await transcript.sendToAgent(session.id, toAgentId, text2, images, priority),
+          { undelivered: false, resolved: known }
+        );
       },
       submitProductFeedback: (args) => extensions.api("feedback").submitProductFeedback(args),
       getCycleUsage: () => extensions.api("cycle-usage").getCycleUsage(),
@@ -582,7 +629,7 @@ function createHostRunnerComposition(deps) {
             { name: input.name, description: input.description },
             "user"
           );
-          extensions.api("agent-identity").noteAgentMinted(agent.id);
+          extensions.api("agent-identity").noteAgentMinted(agent.id, "register-existing-local");
           if (input.sectionId !== void 0 && settings.assignAgentToSidebarSection(agent.id, input.sectionId) === null) {
             throw new SandAgentSectionNotFoundError(
               `No sidebar section found with id ${input.sectionId}.`
@@ -650,7 +697,7 @@ function createHostRunnerComposition(deps) {
           };
         }
       },
-      agentsRootDir: () => (0, import_node_path180.dirname)((0, import_node_path180.dirname)(session.dbPath))
+      agentsRootDir: () => (0, import_node_path182.dirname)((0, import_node_path182.dirname)(session.dbPath))
     });
     runnerRef = runner;
     return runner;

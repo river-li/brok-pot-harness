@@ -30,7 +30,7 @@ async function stageBoxChromeSession(deps) {
   const fileExists = deps.fileExists ?? import_node_fs19.existsSync;
   const vacuum = deps.vacuum ?? ((src, dest) => sqliteVacuumInto(src, dest, CHROME_SESSION_STAGE_VACUUM_BUSY_TIMEOUT_MS));
   const copyLockedDb = deps.copyLockedDb ?? copyLockedSqliteDb;
-  const log4 = deps.log ?? ((message) => console.log(`[chrome-session-stage] ${message}`));
+  const log5 = deps.log ?? ((message) => console.log(`[chrome-session-stage] ${message}`));
   const dir = await (0, import_promises22.mkdtemp)((0, import_node_path20.join)((0, import_node_os5.tmpdir)(), "sand-chrome-session-"));
   const files = [];
   const skippedDbNames = [];
@@ -51,14 +51,14 @@ async function stageBoxChromeSession(deps) {
         "read_source_main",
         "source_main"
       ).errorClass;
-      log4(`stage skipped ${name17} because its mode could not be read: ${String(error42)}`);
+      log5(`stage skipped ${name17} because its mode could not be read: ${String(error42)}`);
       continue;
     }
     try {
       await vacuumIntoWithRetry(src, dest, {
         vacuum,
         retry: deps.retry,
-        log: log4
+        log: log5
       });
       files.push({
         relPath: `${sessionDbRelDir}/${name17}`,
@@ -97,11 +97,11 @@ async function stageBoxChromeSession(deps) {
       skippedDbNames.push(name17);
       lastErrorClass = failure2.errorClass;
       lastFailure = failure2;
-      log4(`stage skipped ${name17} after retries: ${String(error42)}`);
+      log5(`stage skipped ${name17} after retries: ${String(error42)}`);
     }
   }
   if (copiedDbNames.length > 0) {
-    log4(
+    log5(
       `staged ${copiedDbNames.length} exclusively-locked db(s) via raw-copy fallback: ${copiedDbNames.join(", ")}`
     );
   }

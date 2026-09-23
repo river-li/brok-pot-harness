@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage164 = "origin.v1.";
-var __protoMessage3156 = class extends CompactMessage {
+var __protoPackage166 = "origin.v1.";
+var __protoMessage3158 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage164;
+    return __protoPackage166;
   }
 };
-var ActorWithDisplay = class _ActorWithDisplay extends __protoMessage3156 {
+var ActorWithDisplay = class _ActorWithDisplay extends __protoMessage3158 {
   constructor(data) {
     super();
     this.id = "";

@@ -1,16 +1,16 @@
-var __protoPackage44, __protoMessage341, SwitchModeArgs, SwitchModeResult, SwitchModeSuccess, SwitchModeError, SwitchModeRejected, SwitchModeToolCall, SwitchModeRequestQuery, SwitchModeRequestResponse, SwitchModeRequestResponse_Approved, SwitchModeRequestResponse_Rejected;
+var __protoPackage45, __protoMessage341, SwitchModeArgs, SwitchModeResult, SwitchModeSuccess, SwitchModeError, SwitchModeRejected, SwitchModeToolCall, SwitchModeRequestQuery, SwitchModeRequestResponse, SwitchModeRequestResponse_Approved, SwitchModeRequestResponse_Rejected;
 var init_switch_mode_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/switch_mode_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage44 = "agent.v1.";
+    __protoPackage45 = "agent.v1.";
     __protoMessage341 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage44;
+        return __protoPackage45;
       }
     };
     SwitchModeArgs = class _SwitchModeArgs extends __protoMessage341 {

@@ -1,16 +1,16 @@
-var __protoPackage123, __protoMessage3119, StreamCmdKResponse, StreamCmdKResponse_EditStart, StreamCmdKResponse_EditStream, StreamCmdKResponse_EditEnd, StreamCmdKResponse_Chat, StreamCmdKResponse_StatusUpdate;
+var __protoPackage124, __protoMessage3119, StreamCmdKResponse, StreamCmdKResponse_EditStart, StreamCmdKResponse_EditStream, StreamCmdKResponse_EditEnd, StreamCmdKResponse_Chat, StreamCmdKResponse_StatusUpdate;
 var init_cmdk_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/cmdk_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage123 = "aiserver.v1.";
+    __protoPackage124 = "aiserver.v1.";
     __protoMessage3119 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage123;
+        return __protoPackage124;
       }
     };
     StreamCmdKResponse = class _StreamCmdKResponse extends __protoMessage3119 {

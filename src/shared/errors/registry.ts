@@ -295,6 +295,22 @@ var SAND_ERROR_DEFINITIONS = {
     payload: [],
     seededFrom: "submit-failed refusal in credential-fill-executor.ts execute, projected by reportCredentialFillOutcome in structured-log-telemetry.ts"
   },
+  "SAND-E0221": {
+    name: "credentialProviderSetupNotReady",
+    domain: "auth",
+    retryable: true,
+    summary: "1Password connect wizard probed the desktop and found no usable 1Password CLI or app (missing CLI, CLI integration off, app unreachable, or the probe itself failed), so the mint step could not be offered.",
+    payload: ["reason"],
+    seededFrom: "detectMint not-ready readiness states in onepassword-connection-service.ts"
+  },
+  "SAND-E0222": {
+    name: "credentialProviderSetupFailed",
+    domain: "auth",
+    retryable: true,
+    summary: "1Password connect attempt ended without a stored credential: the CLI mint was denied, cancelled, timed out, or failed, or the backend refused to store the delivered token.",
+    payload: ["reason"],
+    seededFrom: "startMint failure mapping (mintError) in onepassword-connection-service.ts"
+  },
   "SAND-E0301": {
     name: "bootStageStalled",
     domain: "rebuild",

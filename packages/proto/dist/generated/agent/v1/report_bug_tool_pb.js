@@ -1,16 +1,16 @@
-var __protoPackage63, __protoMessage360, ReportBugArgs, ReportBugSuccess, ReportBugError, ReportBugResult, ReportBugToolCall;
+var __protoPackage64, __protoMessage360, ReportBugArgs, ReportBugSuccess, ReportBugError, ReportBugResult, ReportBugToolCall;
 var init_report_bug_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/report_bug_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage63 = "agent.v1.";
+    __protoPackage64 = "agent.v1.";
     __protoMessage360 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage63;
+        return __protoPackage64;
       }
     };
     ReportBugArgs = class _ReportBugArgs extends __protoMessage360 {

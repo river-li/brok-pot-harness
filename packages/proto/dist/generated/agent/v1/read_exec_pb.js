@@ -1,16 +1,16 @@
-var __protoPackage102, __protoMessage398, ReadArgs, ReadResult, ReadSuccess, ReadError, ReadRejected, ReadFileNotFound, ReadPermissionDenied, ReadInvalidFile;
+var __protoPackage103, __protoMessage398, ReadArgs, ReadResult, ReadSuccess, ReadError, ReadRejected, ReadFileNotFound, ReadPermissionDenied, ReadInvalidFile;
 var init_read_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/read_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage102 = "agent.v1.";
+    __protoPackage103 = "agent.v1.";
     __protoMessage398 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage102;
+        return __protoPackage103;
       }
     };
     ReadArgs = class _ReadArgs extends __protoMessage398 {

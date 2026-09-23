@@ -1,16 +1,16 @@
 init_esm();
 init_compact();
-var __protoPackage169 = "origin.v1.";
-var __protoMessage3161 = class extends CompactMessage {
+var __protoPackage171 = "origin.v1.";
+var __protoMessage3163 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage169;
+    return __protoPackage171;
   }
 };
-var PullRequestViewedCursor = /* @__PURE__ */ enumType(proto3, __protoPackage169, "PullRequestViewedCursor", [[0, "UNSPECIFIED"], [1, "OPENED"], [2, "TIMELINE"]], 1);
-var MarkPullRequestAsViewedRequest = class _MarkPullRequestAsViewedRequest extends __protoMessage3161 {
+var PullRequestViewedCursor = /* @__PURE__ */ enumType(proto3, __protoPackage171, "PullRequestViewedCursor", [[0, "UNSPECIFIED"], [1, "OPENED"], [2, "TIMELINE"]], 1);
+var MarkPullRequestAsViewedRequest = class _MarkPullRequestAsViewedRequest extends __protoMessage3163 {
   constructor(data) {
     super();
     this.cursor = PullRequestViewedCursor.UNSPECIFIED;
@@ -32,7 +32,7 @@ var MarkPullRequestAsViewedRequest = class _MarkPullRequestAsViewedRequest exten
     return ["MarkPullRequestAsViewedRequest|1 change #0|2 viewed_at #1|3 cursor #2", ChangeIdentifier, Timestamp, PullRequestViewedCursor];
   }
 };
-var MarkPullRequestAsViewedResponse = class _MarkPullRequestAsViewedResponse extends __protoMessage3161 {
+var MarkPullRequestAsViewedResponse = class _MarkPullRequestAsViewedResponse extends __protoMessage3163 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);

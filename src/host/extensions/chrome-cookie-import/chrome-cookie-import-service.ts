@@ -1,17 +1,17 @@
 var import_node_child_process12 = require("node:child_process");
-var import_node_fs56 = require("node:fs");
+var import_node_fs58 = require("node:fs");
 var import_promises49 = require("node:fs/promises");
 var import_node_os23 = require("node:os");
 var import_node_path99 = require("node:path");
-var import_node_util10 = require("node:util");
+var import_node_util11 = require("node:util");
 init_errors();
 init_unknown_record();
 var SAND_COOKIE_IMPORT_TOKEN = "sand-cookie-import-host";
-var runFile = (0, import_node_util10.promisify)(import_node_child_process12.execFile);
+var runFile = (0, import_node_util11.promisify)(import_node_child_process12.execFile);
 var SAND_COOKIE_IMPORT_SCRIPT = "/usr/local/bin/sand-cookie-import.mjs";
 function resolveImportScript() {
   const bundled = (0, import_node_path99.join)((0, import_node_path99.dirname)(process.argv[1] ?? ""), "box-scripts", "sand-cookie-import.mjs");
-  return (0, import_node_fs56.existsSync)(bundled) ? bundled : SAND_COOKIE_IMPORT_SCRIPT;
+  return (0, import_node_fs58.existsSync)(bundled) ? bundled : SAND_COOKIE_IMPORT_SCRIPT;
 }
 var ChromeCookieImportResultError = class extends SandDomainError {
   name = "ChromeCookieImportResultError";

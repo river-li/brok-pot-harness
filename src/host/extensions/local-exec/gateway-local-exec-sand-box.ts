@@ -13,7 +13,7 @@ async function runBridgeMessagesOp(bridge, gate, ctx, op, computerId, display) {
     const blocked = gate.blockedReason(resolvedComputerId);
     if (blocked !== void 0) throw new SandLocalToolPermissionDeniedError(blocked);
   }
-  const approvalId = await authorizeLocalToolAction(gate, scope, {
+  const approvalId = await authorizeLocalToolAction(ctx, gate, scope, {
     ...describeMessagesOp(op),
     ...display?.recipientName === void 0 ? {} : { recipientName: display.recipientName },
     machineId: resolvedComputerId,
@@ -76,7 +76,7 @@ var GatewayLocalExecManager = class {
     if (described === void 0 && this.gate.requiresApproval(resolvedComputerId)) {
       throw new SandLocalToolPermissionDeniedError(SAND_LOCAL_TOOLS_UNDESCRIBABLE_MESSAGE);
     }
-    const approvalId = described === void 0 ? void 0 : await authorizeLocalToolAction(this.gate, scope, {
+    const approvalId = described === void 0 ? void 0 : await authorizeLocalToolAction(ctx, this.gate, scope, {
       ...described,
       machineId: resolvedComputerId,
       signal: ctx.signal
@@ -192,12 +192,17 @@ var GatewayLocalExecSandBox = class {
       throw new SandLocalExecError(localExecFileTooLargeMessage(data.length, this.maxFileBytes));
     }
     const { computerId } = this.requireUsableComputer(ctx, "upload");
-    const approvalId = await authorizeLocalToolAction(this.gate, ctx.get(sandLocalToolScopeKey), {
-      action: "write-file",
-      target: boxPath,
-      machineId: computerId,
-      signal: ctx.signal
-    });
+    const approvalId = await authorizeLocalToolAction(
+      ctx,
+      this.gate,
+      ctx.get(sandLocalToolScopeKey),
+      {
+        action: "write-file",
+        target: boxPath,
+        machineId: computerId,
+        signal: ctx.signal
+      }
+    );
     for await (const frame of this.bridge.request(
       ctx,
       {
@@ -216,12 +221,17 @@ var GatewayLocalExecSandBox = class {
   }
   async downloadFile(ctx, _agentId, boxPath) {
     const { computerId } = this.requireUsableComputer(ctx, "download");
-    const approvalId = await authorizeLocalToolAction(this.gate, ctx.get(sandLocalToolScopeKey), {
-      action: "read-file",
-      target: boxPath,
-      machineId: computerId,
-      signal: ctx.signal
-    });
+    const approvalId = await authorizeLocalToolAction(
+      ctx,
+      this.gate,
+      ctx.get(sandLocalToolScopeKey),
+      {
+        action: "read-file",
+        target: boxPath,
+        machineId: computerId,
+        signal: ctx.signal
+      }
+    );
     for await (const frame of this.bridge.request(
       ctx,
       {
@@ -234,6 +244,37 @@ var GatewayLocalExecSandBox = class {
     )) {
       if (frame.kind === "file") {
         return new Uint8Array(Buffer.from(frame.bytesBase64 ?? "", "base64"));
+      }
+      if (frame.kind === "file-error") throw new SandLocalExecError(frame.error);
+    }
+    throw new SandLocalExecError(SAND_NO_LOCAL_MACHINE_MESSAGE);
+  }
+  async readAiToolSetup(ctx, source) {
+    const { computerId } = this.requireUsableComputer(ctx, "discover-ai-tool");
+    const approvalId = await authorizeLocalToolAction(
+      ctx,
+      this.gate,
+      ctx.get(sandLocalToolScopeKey),
+      {
+        ...describeAiToolSetupRead(source),
+        machineId: computerId,
+        signal: ctx.signal
+      }
+    );
+    for await (const frame of this.bridge.request(
+      ctx,
+      {
+        kind: "discover-ai-tool",
+        source,
+        ...approvalId !== void 0 ? { approvalId } : {}
+      },
+      computerId,
+      { permissionMachineId: computerId, watchResponse: true }
+    )) {
+      if (frame.kind === "file") {
+        return parseSandAiToolSetup(
+          JSON.parse(Buffer.from(frame.bytesBase64 ?? "", "base64").toString("utf8"))
+        );
       }
       if (frame.kind === "file-error") throw new SandLocalExecError(frame.error);
     }
@@ -259,7 +300,8 @@ function createBridgeUserComputers(bridge, gate, reportFailure) {
         id: match2.id,
         label: match2.label,
         box,
-        terminalsFolder: () => box.getTerminalsFolder()
+        terminalsFolder: () => box.getTerminalsFolder(),
+        readAiToolSetup: (ctx, source) => box.readAiToolSetup(ctx, source)
       };
     }
   };

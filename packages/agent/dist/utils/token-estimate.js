@@ -1,3 +1,3 @@
-function estimateStringTokenCount(str3) {
-  return Math.round(str3.length / 4);
+function estimateStringTokenCount(str4) {
+  return Math.round(str4.length / 4);
 }

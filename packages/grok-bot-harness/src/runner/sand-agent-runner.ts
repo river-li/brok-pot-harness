@@ -1,5 +1,5 @@
 var BOX_CDP_PORT_BASE4 = 9222;
-var BROWSER_OPERATION_HARNESS = { box: "BOX", temporal: "TEMPORAL" };
+var BROWSER_OPERATION_HARNESS2 = { box: "BOX", temporal: "TEMPORAL" };
 var SandAgentRunner = class _SandAgentRunner {
   state = new ConversationStateStructure();
   runGeneration = 0;
@@ -105,6 +105,7 @@ var SandAgentRunner = class _SandAgentRunner {
   credentialAccess;
   credentialProviderStatus;
   credentialFillLease;
+  jevBrowserUse;
   mcpConnectedServerNamesForTurn = [];
   mcpConfigJsonForTurn = void 0;
   mcpCustomInstructionsForTurn = /* @__PURE__ */ new Map();
@@ -128,6 +129,7 @@ var SandAgentRunner = class _SandAgentRunner {
   isSystemPromptOverridden;
   skillStore;
   readManagedSkill;
+  onManagedSkillRead;
   combinedComputerUse;
   getCombinedComputerUseDecision;
   channelStore;
@@ -144,6 +146,8 @@ var SandAgentRunner = class _SandAgentRunner {
   getAutoReviewInstructions;
   actionAuditor;
   actionAuditSequencer;
+  toolDecisionAudit;
+  toolTargets;
   attachBoxServers;
   computerUse;
   autoReviewGate;
@@ -174,6 +178,7 @@ var SandAgentRunner = class _SandAgentRunner {
   appHome;
   slackReaction;
   slackSetup;
+  teamPublish;
   backgroundWatches;
   constructor(options2) {
     this.subagentOwnership = options2.subagentOwnership;
@@ -189,10 +194,13 @@ var SandAgentRunner = class _SandAgentRunner {
     if (options2.metricsBackend !== void 0) {
       metricsCtx = metricsCtx.with(metricsKey, options2.metricsBackend);
     }
-    const eventTracker = options2.summaryTelemetry === void 0 ? getAgentEventTracker(metricsCtx) : createSandAgentEventTracker({
+    const eventTracker = createSandAgentEventTracker({
       telemetry: options2.summaryTelemetry,
       fallback: getAgentEventTracker(metricsCtx),
-      getConversationId: () => this.getConversationId()
+      getConversationId: () => this.getConversationId(),
+      actionAuditor: () => this.actionAuditor,
+      resolveBoxId: () => this.resolveBoxId(),
+      skills: () => this.skillStore?.list() ?? []
     });
     this.ctx = metricsCtx.with(agentEventTrackerKey, {
       ...eventTracker,
@@ -261,6 +269,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.credentialAccess = options2.credentialAccess;
     this.credentialProviderStatus = options2.credentialProviderStatus;
     this.credentialFillLease = options2.credentialFillLease;
+    this.jevBrowserUse = options2.jevBrowserUse;
     this.memoryStore = options2.memoryStore;
     this.sortMemoriesProposal = options2.sortMemoriesProposal;
     this.carryOver = options2.carryOver;
@@ -277,10 +286,12 @@ var SandAgentRunner = class _SandAgentRunner {
     this.combinedComputerUse = createCombinedComputerUseSelection(options2);
     this.getCombinedComputerUseDecision = this.combinedComputerUse.peekDecision;
     this.gates = options2.gates;
-    this.loopDetection = createRunnerLoopDetection({
-      ...options2,
-      getConversationId: () => this.getConversationId()
+    const detectors = createAuditedDetectors({
+      actionAuditor: () => this.actionAuditor,
+      getConversationId: () => this.getConversationId(),
+      resolveBoxId: () => this.resolveBoxId()
     });
+    this.loopDetection = detectors.loopDetection(options2);
     this.isListenerPlatformConnected = options2.isListenerPlatformConnected;
     this.registerScmConnectWait = options2.registerScmConnectWait;
     this.registerMcpAuthWait = options2.registerMcpAuthWait;
@@ -289,6 +300,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.streamDeadlineClock = options2.streamDeadlineClock;
     this.skillStore = options2.skillStore;
     this.readManagedSkill = options2.readManagedSkill;
+    this.onManagedSkillRead = options2.onManagedSkillRead;
     this.channelStore = options2.channelStore;
     this.connectorManifests = options2.connectorManifests ?? CONNECTOR_MANIFESTS;
     this.localToolPermission = options2.localToolPermission;
@@ -298,16 +310,19 @@ var SandAgentRunner = class _SandAgentRunner {
     this.autoReviewController = options2.autoReviewController;
     this.autoReviewModes = options2.autoReviewModes ?? SAND_AUTO_REVIEW_MODES_OFF;
     this.getAutoReviewModes = options2.getAutoReviewModes;
-    this.autoReviewClassifierExecutor = options2.autoReviewClassifierExecutor;
     this.getAutoReviewInstructions = options2.getAutoReviewInstructions;
     this.attachBoxServers = options2.attachBoxServers;
-    this.actionAuditSequencer = options2.actionAuditSequencer ?? createActionAuditSequencer();
-    const auditedActions = withNavigationTelemetry(
-      options2.actionAuditor,
-      options2.navigationTelemetry
+    const audit = composeRunnerActionAudit(
+      options2,
+      () => this.activeTurnInitiatedBy,
+      detectors.navigation
     );
-    const sequenced = auditedActions && withEventSequence(auditedActions, this.actionAuditSequencer);
-    this.actionAuditor = sequenced && withInitiatedBy(sequenced, () => this.activeTurnInitiatedBy);
+    this.actionAuditSequencer = audit.sequencer;
+    this.actionAuditor = audit.actionAuditor;
+    this.autoReviewClassifierExecutor = audit.autoReviewClassifierExecutor;
+    this.toolDecisionAudit = audit.toolDecisionAudit;
+    this.toolTargets = audit.toolTargets;
+    this.ctx = audit.withLedgers(this.ctx);
     this.createCloudAgentTool = options2.createCloudAgentTool;
     this.connectedActivity = options2.connectedActivity;
     this.cloudCanvas = options2.cloudCanvas;
@@ -335,6 +350,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.appHome = options2.appHome;
     this.slackReaction = options2.slackReaction;
     this.slackSetup = options2.slackSetup;
+    this.teamPublish = options2.teamPublish;
     this.systemPromptAssembly = createSystemPromptAssembly({
       activeTurnRequestSource: () => this.activeTurnRequestSource,
       basePrompt: options2.systemPrompt ?? "",
@@ -370,10 +386,10 @@ var SandAgentRunner = class _SandAgentRunner {
       compactionEpoch: () => this.getConversationState().summaryArchives.length,
       activeSessionsDigest: () => this.activeSessionsDigest?.(),
       currentSession: () => options2.currentSession?.(),
+      relatedConversations: options2.relatedConversations,
       teamBot: () => options2.teamBot?.(),
       mcpCustomInstructionsSection: () => this.promptGlue.getMcpCustomInstructionsSection(),
       toolNotesSection: () => this.renderToolNotesSection(options2.resolveSecretRequestTarget),
-      mcpDiscoveryStatusSection: () => this.promptGlue.getMcpDiscoveryStatusSection(),
       remoteBoxSection: () => this.promptGlue.getRemoteBoxSection(),
       botSecrets: () => this.botSecrets,
       computerSection: (skillify) => this.promptGlue.getComputerSection(skillify)
@@ -494,8 +510,7 @@ var SandAgentRunner = class _SandAgentRunner {
       resolveBoxBrowser: () => this.resolveBoxBrowser(),
       mcpConnectedServerNamesForTurn: () => this.mcpConnectedServerNamesForTurn,
       mcpConfigJsonForTurn: () => this.mcpConfigJsonForTurn,
-      mcpCustomInstructionsForTurn: () => this.mcpCustomInstructionsForTurn,
-      isMcpDiscoveryUnavailableForTurn: () => this.mcpDiscoveryUnavailableForTurn
+      mcpCustomInstructionsForTurn: () => this.mcpCustomInstructionsForTurn
     });
     this.autoReviewGate = createAutoReviewGate({
       controller: () => this.autoReviewController,
@@ -581,6 +596,9 @@ var SandAgentRunner = class _SandAgentRunner {
       },
       get credentialFillLease() {
         return self2.credentialFillLease;
+      },
+      get jevBrowserUse() {
+        return self2.jevBrowserUse;
       },
       registerPauseMcpCancel: (cancel) => {
         if (this.isPausingForUpgrade()) {
@@ -675,6 +693,9 @@ var SandAgentRunner = class _SandAgentRunner {
       get slackSetup() {
         return self2.slackSetup;
       },
+      get teamPublish() {
+        return self2.teamPublish;
+      },
       get createCloudAgentTool() {
         return self2.createCloudAgentTool;
       },
@@ -705,9 +726,9 @@ var SandAgentRunner = class _SandAgentRunner {
       get imageGenerationConcurrencyLimiter() {
         return self2.promptGlue.imageGenerationLimiter();
       },
-      get autoReviewController() {
-        return self2.autoReviewController;
-      },
+      autoReviewController: self2.autoReviewController,
+      actionAuditor: self2.actionAuditor,
+      toolDecisionAudit: this.toolDecisionAudit,
       get getAutoReviewInstructions() {
         return self2.getAutoReviewInstructions;
       },
@@ -798,6 +819,8 @@ var SandAgentRunner = class _SandAgentRunner {
       getAutoReviewInstructions: this.getAutoReviewInstructions,
       actionAuditor: this.actionAuditor,
       actionAuditSequencer: this.actionAuditSequencer,
+      toolDecisionAudit: this.toolDecisionAudit,
+      toolTargets: this.toolTargets,
       attachBoxServers: this.attachBoxServers,
       createCloudAgentTool: this.createCloudAgentTool,
       detachedSubagents: this.detachedSubagents,
@@ -815,7 +838,6 @@ var SandAgentRunner = class _SandAgentRunner {
       getBlobStore: () => this.getBlobStore(),
       getAutoReviewConversationState: (ctx) => this.createAutoReviewConversationState(ctx),
       emitUpdate: (update, updateObservers) => this.emitUpdate(update, updateObservers),
-      auditShellCommand: (agentId, shellKind, command, target, attribution) => this.auditShellCommand(agentId, shellKind, command, target, attribution),
       createRemoteBoxResourceAccessor: () => this.createRemoteBoxResourceAccessor(),
       mcp: () => this.mcp,
       mcpConfigJsonForTurn: () => this.mcpConfigJsonForTurn,
@@ -880,8 +902,9 @@ var SandAgentRunner = class _SandAgentRunner {
             memorySnapshots: this.memorySnapshots
           };
         }
-        return new _SandAgentRunner({
+        const runnerOptions = {
           readManagedSkill: options2.readManagedSkill,
+          onManagedSkillRead: options2.onManagedSkillRead,
           summaryTelemetry: options2.summaryTelemetry,
           browserTelemetry: options2.browserTelemetry,
           computerTelemetry: options2.computerTelemetry,
@@ -890,7 +913,8 @@ var SandAgentRunner = class _SandAgentRunner {
           ...childOptions,
           ...inheritedOptions,
           ...options2.resolveSecretRequestTarget === void 0 ? {} : { resolveSecretRequestTarget: refuseNestedSecretRequest }
-        });
+        };
+        return createJevBrowserSubagentRunner(runnerOptions) ?? new _SandAgentRunner(runnerOptions);
       }
     });
     this.runShell = (options2.createTurnRunShell ?? createTurnRunShell)({
@@ -910,6 +934,8 @@ var SandAgentRunner = class _SandAgentRunner {
       metricsTurnKind: this.metricsTurnKind,
       metricsActivityStartedAt: options2.metricsActivityStartedAt,
       metricsUserMessageSentAt: options2.metricsUserMessageSentAt,
+      metricsTurnStartedAt: options2.metricsTurnStartedAt,
+      metricsUserMessagesAccepted: options2.metricsUserMessagesAccepted,
       metricsClock: this.metricsClock,
       steerReach: this.steerReach,
       diskPressureReminder: this.diskPressureReminder,
@@ -924,14 +950,16 @@ var SandAgentRunner = class _SandAgentRunner {
       observation: this.observation,
       backgroundWatches: this.backgroundWatches,
       turnAgentComposition: this.turnAgentComposition,
-      armedTurnEndSummaryHold: () => this.gates.summaryTurnEndHold() ? options2.turnEndSummaryHold : void 0,
       subagents: this.subagents,
       resolveUserFormVaultKeysForRun: async () => this.userForm?.listVaultKeys != null && this.gates.userForm() && this.gates.formVault() ? await this.userForm.listVaultKeys() : void 0,
       getConversationId: () => this.getConversationId(),
       getTranscriptId: () => this.getTranscriptId(),
       resolveBoxId: () => this.resolveBoxId(),
+      actionAuditor: () => this.actionAuditor,
       getConversationState: () => this.getConversationState(),
-      onPersistedCheckpoint: () => void this.persistedCheckpointHandler?.(),
+      onPersistedCheckpoint: () => {
+        this.persistedCheckpointHandler?.();
+      },
       noteParentTurnPrompt: (prompt) => void (this.lastParentTurnPrompt = prompt),
       getBlobStore: () => this.getBlobStore(),
       shellWatchHost: () => this.shellWatchHost(),
@@ -968,9 +996,7 @@ var SandAgentRunner = class _SandAgentRunner {
       setActiveRunInterrupted: (value) => {
         this.activeRunInterrupted = value;
       },
-      setActiveTurnRequestSource: (source) => {
-        this.activeTurnRequestSource = source;
-      },
+      setActiveTurnRequestSource: (source) => void (this.activeTurnRequestSource = source),
       setActiveTurnInitiatedBy: (initiatedBy) => void (this.activeTurnInitiatedBy = initiatedBy),
       resolveTurnLoopDetection: this.loopDetection.resolveTurn,
       setActiveTurnAutomationId: (automationId) => {
@@ -1220,6 +1246,9 @@ var SandAgentRunner = class _SandAgentRunner {
   getObservedToolCallCount() {
     return this.observation.getObservedToolCallCount();
   }
+  getObservedToolCallNames() {
+    return this.observation.getObservedToolCallNames();
+  }
   emitRunLifecycle(event) {
     this.onRunLifecycle?.(event);
   }
@@ -1296,7 +1325,7 @@ var SandAgentRunner = class _SandAgentRunner {
   }
   get browserOperationHarness() {
     if (this.metricsHarness === void 0) return "unavailable";
-    return BROWSER_OPERATION_HARNESS[this.metricsHarness];
+    return BROWSER_OPERATION_HARNESS2[this.metricsHarness];
   }
   resolveBoxTerminalsFolder() {
     return boxTerminalsFolder(this.remoteBox) ?? this.remoteBoxTerminalsFolder;
@@ -1318,12 +1347,13 @@ var SandAgentRunner = class _SandAgentRunner {
       preparedRemoteBoxConnection: this.preparedRemoteBoxConnection,
       remoteBoxHasDesktop: this.remoteBoxHasDesktop,
       readManagedSkill: this.readManagedSkill,
+      onManagedSkillRead: this.onManagedSkillRead,
       setRemoteBoxTerminalsFolder: (folder) => {
         this.remoteBoxTerminalsFolder = folder;
       },
       resolveBoxId: () => this.resolveBoxId(),
       getConversationId: () => this.getConversationId(),
-      auditShellCommand: (agentId, shellKind, command, target, attribution) => this.auditShellCommand(agentId, shellKind, command, target, attribution),
+      actionAuditor: this.actionAuditor,
       probeNavigationAfterComputerUse: (turnCtx, connection) => this.probeNavigationAfterComputerUse(turnCtx, connection)
     };
   }
@@ -1343,19 +1373,6 @@ var SandAgentRunner = class _SandAgentRunner {
   }
   createRemoteBoxResourceAccessor() {
     return createRemoteBoxResourceAccessor(this.remoteBoxResourceHost());
-  }
-  auditShellCommand(agentId, shellKind, command, target, attribution) {
-    this.actionAuditor?.record({
-      agentId,
-      ...attribution,
-      occurredAtMs: Date.now(),
-      action: {
-        kind: "shellCommand",
-        command,
-        shellKind,
-        target
-      }
-    });
   }
   getComputerUseAuditActionCounts() {
     return this.computerUse.auditActionCounts();
@@ -1386,8 +1403,8 @@ var SandAgentRunner = class _SandAgentRunner {
       this.computerUse.recordTurnEnded(update.usage);
     }
     this.transport?.onUpdate(update);
-    if (update.type === "send-message" && this.transport !== void 0) {
-      updateObservers?.noteMessageDispatched();
+    if (this.transport !== void 0) {
+      updateObservers?.noteDelivered(update);
     }
     if (update.type === "react-to-message" && this.transport?.lastReactionApplied?.() === true) {
       updateObservers?.noteReactionApplied();

@@ -1,7 +1,7 @@
 var import_node_child_process7 = require("node:child_process");
-var import_node_util6 = require("node:util");
+var import_node_util7 = require("node:util");
 init_dist3();
-var execFileAsync2 = (0, import_node_util6.promisify)(import_node_child_process7.execFile);
+var execFileAsync2 = (0, import_node_util7.promisify)(import_node_child_process7.execFile);
 var execFileUtf8Async = execFileAsync2;
 var execFileSyncUtf8 = import_node_child_process7.execFileSync;
 function parseDisplayNum(display) {
@@ -11,11 +11,11 @@ function parseDisplayNum(display) {
   }
   const afterColon = display.slice(colonIndex + 1);
   const numStr = afterColon.split(".")[0];
-  const num = parseInt(numStr, 10);
-  if (!Number.isFinite(num) || num < 0) {
+  const num2 = parseInt(numStr, 10);
+  if (!Number.isFinite(num2) || num2 < 0) {
     throw new Error(`Invalid X11 display number in: ${display} (parsed: ${numStr})`);
   }
-  return num;
+  return num2;
 }
 function parseXrandrOutput(output) {
   let width;

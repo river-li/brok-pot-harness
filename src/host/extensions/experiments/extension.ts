@@ -15,7 +15,6 @@ var experimentsExtension = defineHostExtension({
       isDevBuild: !environment.packaged || environment.hostDevErrorDetail,
       dynamicConfigOverrides: environment.dynamicConfigOverrides,
       lessSubagentFanoutExperimentOverride: environment.lessSubagentFanoutExperimentOverride,
-      updateCommunicationExperimentOverride: environment.updateCommunicationExperimentOverride,
       browserUsePlaywrightExperimentOverride: environment.browserUsePlaywrightExperimentOverride
     });
     service.start();
@@ -56,9 +55,9 @@ var experimentsExtension = defineHostExtension({
       getSandModelExperimentState: () => service.getSandModelExperimentState(),
       logSandModelExperimentExposure: () => service.logSandModelExperimentExposure(),
       offerLessSubagentFanout: () => service.offerLessSubagentFanout(),
-      offerUpdateCommunication: () => service.offerUpdateCommunication(),
       offerBrowserUsePlaywright: () => service.offerBrowserUsePlaywright(),
       peekBrowserUsePlaywright: () => service.peekBrowserUsePlaywright(),
+      memoryFactsInUserInfo: (options2) => service.memoryFactsInUserInfo(options2),
       getConfiguredDefaultModel: () => service.getConfiguredDefaultModel(),
       getConfiguredAutomationsModel: () => service.getConfiguredAutomationsModel(),
       getComputerUseModelOverride: () => service.getComputerUseModelOverride(),

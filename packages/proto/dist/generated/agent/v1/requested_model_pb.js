@@ -1,16 +1,16 @@
-var __protoPackage11, __protoMessage38, ApiKeyCredentials, AzureCredentials, BedrockCredentials, RequestedModel, RequestedModel_ModelParameterValue;
+var __protoPackage12, __protoMessage38, ApiKeyCredentials, AzureCredentials, BedrockCredentials, RequestedModel, RequestedModel_ModelParameterValue;
 var init_requested_model_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/requested_model_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage11 = "agent.v1.";
+    __protoPackage12 = "agent.v1.";
     __protoMessage38 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage11;
+        return __protoPackage12;
       }
     };
     ApiKeyCredentials = class _ApiKeyCredentials extends __protoMessage38 {

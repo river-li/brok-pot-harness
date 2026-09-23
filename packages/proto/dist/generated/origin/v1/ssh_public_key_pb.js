@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage160 = "origin.v1.";
-var __protoMessage3152 = class extends CompactMessage {
+var __protoPackage161 = "origin.v1.";
+var __protoMessage3153 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage160;
+    return __protoPackage161;
   }
 };
-var SshPublicKey = class _SshPublicKey extends __protoMessage3152 {
+var SshPublicKey = class _SshPublicKey extends __protoMessage3153 {
   constructor(data) {
     super();
     this.id = "";
@@ -34,7 +34,7 @@ var SshPublicKey = class _SshPublicKey extends __protoMessage3152 {
     return ["SshPublicKey|1 id 9|2 name 9|3 algo 9|4 fingerprint 9|5 created_at #0|6 last_used_at #0", Timestamp];
   }
 };
-var AddSshPublicKeyRequest = class _AddSshPublicKeyRequest extends __protoMessage3152 {
+var AddSshPublicKeyRequest = class _AddSshPublicKeyRequest extends __protoMessage3153 {
   constructor(data) {
     super();
     this.publicKey = "";
@@ -57,7 +57,7 @@ var AddSshPublicKeyRequest = class _AddSshPublicKeyRequest extends __protoMessag
     return ["AddSshPublicKeyRequest|1 public_key 9|2 name 9"];
   }
 };
-var AddSshPublicKeyResponse = class _AddSshPublicKeyResponse extends __protoMessage3152 {
+var AddSshPublicKeyResponse = class _AddSshPublicKeyResponse extends __protoMessage3153 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -78,7 +78,7 @@ var AddSshPublicKeyResponse = class _AddSshPublicKeyResponse extends __protoMess
     return ["AddSshPublicKeyResponse|1 ssh_public_key #0", SshPublicKey];
   }
 };
-var ListSshPublicKeysRequest = class _ListSshPublicKeysRequest extends __protoMessage3152 {
+var ListSshPublicKeysRequest = class _ListSshPublicKeysRequest extends __protoMessage3153 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -99,7 +99,7 @@ var ListSshPublicKeysRequest = class _ListSshPublicKeysRequest extends __protoMe
     return ["ListSshPublicKeysRequest"];
   }
 };
-var ListSshPublicKeysResponse = class _ListSshPublicKeysResponse extends __protoMessage3152 {
+var ListSshPublicKeysResponse = class _ListSshPublicKeysResponse extends __protoMessage3153 {
   constructor(data) {
     super();
     this.sshPublicKeys = [];
@@ -121,7 +121,7 @@ var ListSshPublicKeysResponse = class _ListSshPublicKeysResponse extends __proto
     return ["ListSshPublicKeysResponse|1 ssh_public_keys #0*", SshPublicKey];
   }
 };
-var DeleteSshPublicKeyRequest = class _DeleteSshPublicKeyRequest extends __protoMessage3152 {
+var DeleteSshPublicKeyRequest = class _DeleteSshPublicKeyRequest extends __protoMessage3153 {
   constructor(data) {
     super();
     this.id = "";
@@ -143,7 +143,7 @@ var DeleteSshPublicKeyRequest = class _DeleteSshPublicKeyRequest extends __proto
     return ["DeleteSshPublicKeyRequest|1 id 9"];
   }
 };
-var DeleteSshPublicKeyResponse = class _DeleteSshPublicKeyResponse extends __protoMessage3152 {
+var DeleteSshPublicKeyResponse = class _DeleteSshPublicKeyResponse extends __protoMessage3153 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);

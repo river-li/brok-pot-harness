@@ -1,20 +1,20 @@
-var __protoPackage29, __protoMessage326, DiagnosticSeverity, DiagnosticsArgs, DiagnosticsResult, DiagnosticsSuccess, Diagnostic2, DiagnosticsError, DiagnosticsRejected, DiagnosticsFileNotFound, DiagnosticsPermissionDenied;
+var __protoPackage30, __protoMessage326, DiagnosticSeverity, DiagnosticsArgs, DiagnosticsResult, DiagnosticsSuccess, Diagnostic2, DiagnosticsError, DiagnosticsRejected, DiagnosticsFileNotFound, DiagnosticsPermissionDenied;
 var init_diagnostics_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/diagnostics_exec_pb.js"() {
     "use strict";
     init_esm();
     init_utils_pb2();
     init_compact();
-    __protoPackage29 = "agent.v1.";
+    __protoPackage30 = "agent.v1.";
     __protoMessage326 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage29;
+        return __protoPackage30;
       }
     };
-    DiagnosticSeverity = /* @__PURE__ */ enumType(proto3, __protoPackage29, "DiagnosticSeverity", [[0, "UNSPECIFIED"], [1, "ERROR"], [2, "WARNING"], [3, "INFORMATION"], [4, "HINT"]], 1);
+    DiagnosticSeverity = /* @__PURE__ */ enumType(proto3, __protoPackage30, "DiagnosticSeverity", [[0, "UNSPECIFIED"], [1, "ERROR"], [2, "WARNING"], [3, "INFORMATION"], [4, "HINT"]], 1);
     DiagnosticsArgs = class _DiagnosticsArgs extends __protoMessage326 {
       constructor(data) {
         super();

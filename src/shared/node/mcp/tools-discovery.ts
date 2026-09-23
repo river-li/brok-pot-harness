@@ -564,6 +564,7 @@ function createMcpToolsDiscovery(core2, deps = {}) {
     getServerStatuses: _getServerStatuses,
     listBoxServers: _listBoxServers,
     resolveProviderTransport: _resolveProviderTransport,
+    providerDisplayName: (providerIdentifier) => _displayRowForIdentifier(providerIdentifier)?.name,
     executeTool: _executeTool,
     executeToolCall: _executeToolCall,
     setBoxMcpExec: _setBoxMcpExec,

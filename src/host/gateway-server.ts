@@ -1,4 +1,5 @@
 var DOMAIN_REFUSALS = [
+  AttachmentOutsideRootError,
   BotTemplateImportAccessDeniedError,
   BotTemplateStoreNotFound,
   SandAgentStoreUnreadableError,

@@ -1,9 +1,9 @@
-var import_node_path81 = require("node:path");
+var import_node_path72 = require("node:path");
 init_cursor_rules_pb();
 init_dist3();
 var SEP2 = "/";
 var normalizePath2 = (value) => {
-  const normalized = import_node_path81.posix.normalize(normalizeToUnixPath(value));
+  const normalized = import_node_path72.posix.normalize(normalizeToUnixPath(value));
   if (normalized === SEP2) {
     return SEP2;
   }
@@ -11,7 +11,7 @@ var normalizePath2 = (value) => {
 };
 function getRuleDir(mdcPath) {
   const normalizedPath = normalizeToUnixPath(mdcPath);
-  const literalRuleDir = import_node_path81.posix.normalize(import_node_path81.posix.dirname(normalizedPath));
+  const literalRuleDir = import_node_path72.posix.normalize(import_node_path72.posix.dirname(normalizedPath));
   const segments = literalRuleDir.split(SEP2);
   for (let i = segments.length - 2; i >= 0; i--) {
     if (segments[i] === ".cursor" && segments[i + 1] === "rules") {
@@ -140,7 +140,7 @@ var SKILL_DIR_SEGMENTS = [
 ];
 function getSkillScopeRoot(skillPath) {
   const normalizedPath = normalizeToUnixPath(skillPath);
-  const segments = import_node_path81.posix.normalize(import_node_path81.posix.dirname(normalizedPath)).split(SEP2);
+  const segments = import_node_path72.posix.normalize(import_node_path72.posix.dirname(normalizedPath)).split(SEP2);
   for (let i = segments.length - 2; i >= 0; i--) {
     for (const [configDir, subDir] of SKILL_DIR_SEGMENTS) {
       if (segments[i] === configDir && segments[i + 1] === subDir) {
@@ -152,7 +152,7 @@ function getSkillScopeRoot(skillPath) {
       }
     }
   }
-  return import_node_path81.posix.normalize(import_node_path81.posix.dirname(normalizedPath));
+  return import_node_path72.posix.normalize(import_node_path72.posix.dirname(normalizedPath));
 }
 function isFileScopedSkill(skill, workspacePaths) {
   const globs = skill.globs ?? [];

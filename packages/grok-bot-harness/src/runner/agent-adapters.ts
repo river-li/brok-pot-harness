@@ -44,7 +44,7 @@ var SandRequestContextExecutor = class {
   }
 };
 var SandSubagentHostAdapter = class {
-  constructor(sessions, createRunner, dispatcher, launchReviewRequired, detached, quietOrigin, fallbackLineage, executorProfileNames, actionAuditSequencer) {
+  constructor(sessions, createRunner, dispatcher, launchReviewRequired, detached, quietOrigin, fallbackLineage, executorProfileNames, actionAuditSequencer, subagentTypeAliases) {
     this.sessions = sessions;
     this.createRunner = createRunner;
     this.dispatcher = dispatcher;
@@ -54,6 +54,7 @@ var SandSubagentHostAdapter = class {
     this.fallbackLineage = fallbackLineage;
     this.executorProfileNames = executorProfileNames;
     this.actionAuditSequencer = actionAuditSequencer;
+    this.subagentTypeAliases = subagentTypeAliases;
   }
   sessions;
   createRunner;
@@ -64,14 +65,23 @@ var SandSubagentHostAdapter = class {
   fallbackLineage;
   executorProfileNames;
   actionAuditSequencer;
+  subagentTypeAliases;
   reviewLaunch;
+  normalize(args) {
+    const alias = this.subagentTypeAliases?.get(args.subagentType);
+    if (alias === void 0) return args;
+    const aliased = args.clone();
+    aliased.subagentType = alias;
+    return aliased;
+  }
   sessionEventSequence(subagentType, lineage) {
     return isComputerUseSubagentType(subagentType) && lineage !== void 0 ? this.actionAuditSequencer?.next(lineage.parentRequestId) : void 0;
   }
   setLaunchReviewer(reviewLaunch) {
     this.reviewLaunch = reviewLaunch;
   }
-  async createOrResumeSession(ctx, args) {
+  async createOrResumeSession(ctx, rawArgs) {
+    const args = this.normalize(rawArgs);
     if (ctx.get(pendingSubagentReplayKey)?.reattachOnly === true && this.detached?.supportsTaskReattachment !== true) {
       throw new SandSubagentDispatchError(
         "Retired Task reattachment requires a durable subagent host."
@@ -99,7 +109,7 @@ var SandSubagentHostAdapter = class {
       if (this.sessions.has(args.resumeAgentId)) return args.resumeAgentId;
     }
     const agentId = args.resumeAgentId ?? `${SAND_SUBAGENT_ID_PREFIX}${crypto.randomUUID()}`;
-    const isComputerUse = isComputerUseSubagentType(args.subagentType);
+    const isComputerUse = isComputerUseSubagentType(args.subagentType) || isBrowserUseJevSubagentType(args.subagentType);
     if (isComputerUse && this.dispatcher.allocateComputerUseWindow(agentId) == null) {
       throw new SandSubagentDispatchError(SAND_COMPUTER_USE_DESKTOP_BUSY_MESSAGE);
     }
@@ -113,7 +123,8 @@ var SandSubagentHostAdapter = class {
     }
     return agentId;
   }
-  async runSession(ctx, agentId, args) {
+  async runSession(ctx, agentId, rawArgs) {
+    const args = this.normalize(rawArgs);
     if (this.detached !== void 0) {
       return await this.runDetachedSession(ctx, agentId, args, this.detached);
     }
@@ -162,6 +173,11 @@ var SandSubagentHostAdapter = class {
         ...parentTraceCtx !== void 0 ? { traceCtx: parentTraceCtx } : {}
       })
     });
+    recordDelegationDispatched(ctx, {
+      delegationKind: "subagent_spawn",
+      targetId: agentId,
+      toolCallId: args.toolCallId
+    });
     return {
       status: "background",
       backgroundReason: SubagentBackgroundReason.AGENT_REQUEST,
@@ -198,6 +214,8 @@ var SandSubagentHostAdapter = class {
       filename: video.filename,
       fps: video.fps ?? 0
     }));
+    const reattachOnly = ctx.get(pendingSubagentReplayKey)?.reattachOnly === true && ctx.get(pendingSubagentReplayKey)?.toolCallId === args.toolCallId;
+    let handedOver = !reattachOnly;
     try {
       const decision = this.dispatcher.getCombinedComputerUseDecision?.();
       const modelId = resolveSandSubagentModelId({
@@ -207,7 +225,7 @@ var SandSubagentHostAdapter = class {
         executorProfileNames: this.executorProfileNames?.() ?? /* @__PURE__ */ new Set()
       });
       const eventSequence = this.sessionEventSequence(args.subagentType, lineage);
-      await detached.dispatch({
+      const outcome = await detached.dispatch({
         ...decision === void 0 ? {} : { combinedComputerUseDecision: decision },
         subagentAgentId: agentId,
         subagentType: args.subagentType || "generalPurpose",
@@ -215,7 +233,7 @@ var SandSubagentHostAdapter = class {
         prompt: args.prompt,
         ...eventSequence === void 0 ? {} : { eventSequence },
         readonly: args.readonly ?? false,
-        ...ctx.get(pendingSubagentReplayKey)?.reattachOnly === true && ctx.get(pendingSubagentReplayKey)?.toolCallId === args.toolCallId ? { reattachOnly: true } : {},
+        ...reattachOnly ? { reattachOnly: true } : {},
         ...modelId === void 0 ? {} : { modelId },
         resume: args.resumeAgentId != null && args.resumeAgentId.length > 0,
         ...videoAttachments.length > 0 ? { videoAttachments } : {},
@@ -227,8 +245,16 @@ var SandSubagentHostAdapter = class {
         } : {},
         ...this.quietOrigin != null ? { quietOrigin: this.quietOrigin } : {}
       });
+      if (outcome?.alreadyDispatched === true) handedOver = false;
     } catch (error42) {
       return { status: "error", error: error42 instanceof Error ? error42.message : String(error42) };
+    }
+    if (handedOver) {
+      recordDelegationDispatched(ctx, {
+        delegationKind: "subagent_spawn",
+        targetId: agentId,
+        toolCallId: args.toolCallId
+      });
     }
     return {
       status: "background",

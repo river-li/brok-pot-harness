@@ -50,7 +50,7 @@ var CredentialCoordinator = class {
       approvalMode: "allow-once"
     });
   }
-  async resolveBrowserTarget(item, siteHint) {
+  async resolveBrowserTarget(item, siteHint, windowIndex) {
     if (this.options.resolveBrowserTarget == null) {
       this.auditAgentAccess({
         outcome: "failed",
@@ -65,7 +65,7 @@ var CredentialCoordinator = class {
     }
     let result;
     try {
-      result = await this.options.resolveBrowserTarget(item, siteHint);
+      result = await this.options.resolveBrowserTarget(item, siteHint, windowIndex);
     } catch (error42) {
       this.auditAgentAccess({
         outcome: "failed",
@@ -77,14 +77,16 @@ var CredentialCoordinator = class {
     }
     this.auditAgentAccess({
       outcome: result.ok ? "success" : "refused",
-      reason: result.ok ? "target-resolved" : "target-unavailable",
+      reason: result.ok ? "target-resolved" : result.reason,
       targetUrl: result.ok ? result.targetSite : siteHint,
       credentialId: item.credentialId
     });
-    this.log(`credentials: browser target ${result.ok ? "resolved" : "unavailable"}`);
-    return result;
+    this.log(
+      `credentials: browser target ${result.ok ? "resolved" : `unavailable (${result.reason})`}`
+    );
+    return result.ok ? result : { ok: false, detail: result.detail };
   }
-  createAccess() {
+  createAccess(resolveWindow) {
     return {
       isConnected: async () => {
         await this.refresh();
@@ -151,7 +153,7 @@ var CredentialCoordinator = class {
             detail: "That credential is not an allowed 1Password browser login."
           };
         }
-        const binding = await this.resolveBrowserTarget(item, siteHint);
+        const binding = await this.resolveBrowserTarget(item, siteHint, await resolveWindow());
         if (!binding.ok) return binding;
         return {
           ...binding,

@@ -1,19 +1,19 @@
-var __protoPackage131, __protoMessage3126, BlobType, ImageBlobData, BlobData, BlobDataPerMessage;
+var __protoPackage132, __protoMessage3126, BlobType, ImageBlobData, BlobData, BlobDataPerMessage;
 var init_blob_pb = __esm({
   "../packages/proto/dist/generated/internapi/v1/blob_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage131 = "internapi.v1.";
+    __protoPackage132 = "internapi.v1.";
     __protoMessage3126 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage131;
+        return __protoPackage132;
       }
     };
-    BlobType = /* @__PURE__ */ enumType(proto3, __protoPackage131, "BlobType", [[0, "UNSPECIFIED"], [1, "IMAGE"], [2, "INVOCATION_CONTEXT"], [3, "EXTRA_CONTEXT"], [4, "GIT_PR_DIFF_SELECTION"], [5, "SELECTED_PULL_REQUEST"], [6, "TEXT"], [7, "RICH_TEXT"], [8, "EXTERNAL_LINK_PDF"], [9, "DOCUMENT"], [10, "VIDEO"]], 1);
+    BlobType = /* @__PURE__ */ enumType(proto3, __protoPackage132, "BlobType", [[0, "UNSPECIFIED"], [1, "IMAGE"], [2, "INVOCATION_CONTEXT"], [3, "EXTRA_CONTEXT"], [4, "GIT_PR_DIFF_SELECTION"], [5, "SELECTED_PULL_REQUEST"], [6, "TEXT"], [7, "RICH_TEXT"], [8, "EXTERNAL_LINK_PDF"], [9, "DOCUMENT"], [10, "VIDEO"]], 1);
     ImageBlobData = class _ImageBlobData extends __protoMessage3126 {
       constructor(data) {
         super();

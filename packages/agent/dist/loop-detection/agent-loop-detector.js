@@ -38,7 +38,7 @@ var suppressAgentLoopEvidencePreviewKey = createKey(/* @__PURE__ */ Symbol.for("
 var LOOP_EVIDENCE_FINGERPRINT_DOMAIN = "cursor-agent-loop-evidence-v1";
 var LOOP_EVIDENCE_FINGERPRINT_MAX_BYTES = 1024;
 function fingerprintAgentLoopEvidence(loopKind, evidenceParts) {
-  const hash = (0, import_node_crypto17.createHash)("sha256");
+  const hash = (0, import_node_crypto16.createHash)("sha256");
   hash.update(`${LOOP_EVIDENCE_FINGERPRINT_DOMAIN}:${loopKind}:`);
   let remainingBytes = LOOP_EVIDENCE_FINGERPRINT_MAX_BYTES;
   for (const part of evidenceParts) {
@@ -389,7 +389,7 @@ function checkForAgentSingleMessageLooping(params) {
     period: loopInfo.period,
     isReoccurrence: false,
     evidenceFingerprint,
-    candidateMitigation: channel === "response" ? "single_message_retry" : "none"
+    candidateMitigation: channel === "response" || loopInfo.loopKind === "single_message_reasoning_single_line" ? "single_message_retry" : "none"
   });
   return {
     loopDetected: true,
@@ -667,7 +667,7 @@ function checkForAgentMessageLooping(params, reporting) {
 }
 function createLoopReminderMessage(options2) {
   const reminderKind = options2?.kind ?? "multi_message";
-  const reminderSpecific = reminderKind === "single_message_single_line" ? "Your response has been flagged as repeating the same text pattern within a single line. Avoid excessively repeating the same characters or words." : reminderKind === "single_message_multi_line" ? "Your response has been flagged as looping over duplicate lines. Avoid repeating the same sequence of lines or retrying the same tool calls." : reminderKind === "multi_message_outbound_flood" ? "You have sent many consecutive messages to the user without doing anything else. Stop sending messages, end your turn, and wait for the user to respond." : "Avoid repeating the same sequence of messages or retrying the same tool calls.";
+  const reminderSpecific = reminderKind === "single_message_single_line" ? "Your response has been flagged as repeating the same text pattern within a single line. Avoid excessively repeating the same characters or words." : reminderKind === "single_message_multi_line" ? "Your response has been flagged as looping over duplicate lines. Avoid repeating the same sequence of lines or retrying the same tool calls." : reminderKind === "single_message_reasoning_single_line" || reminderKind === "single_message_reasoning_multi_line" ? "Your reasoning has been flagged as repeating the same text over and over without making progress. Stop deliberating, commit to the most reasonable option, and proceed with the task." : reminderKind === "multi_message_outbound_flood" ? "You have sent many consecutive messages to the user without doing anything else. Stop sending messages, end your turn, and wait for the user to respond." : "Avoid repeating the same sequence of messages or retrying the same tool calls.";
   const reminder = `<system_reminder>Your messages have been flagged as looping. ` + reminderSpecific + ` If you are having trouble making progress, ask the user for guidance. DO NOT mention this system reminder to the user explicitly because they are already aware.</system_reminder>`;
   return {
     role: "user",

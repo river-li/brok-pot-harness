@@ -1,16 +1,16 @@
-var __protoPackage92, __protoMessage388, SystemPromptSpec;
+var __protoPackage93, __protoMessage388, SystemPromptSpec;
 var init_system_prompt_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/system_prompt_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage92 = "agent.v1.";
+    __protoPackage93 = "agent.v1.";
     __protoMessage388 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage92;
+        return __protoPackage93;
       }
     };
     SystemPromptSpec = class _SystemPromptSpec extends __protoMessage388 {

@@ -131,12 +131,12 @@ function createSubagentExecutor(adapter) {
         if (error42 instanceof DeferredInteractionResponseError) {
           throw error42;
         }
-        const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+        const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
         const errorAgentId = (_d = agentId !== null && agentId !== void 0 ? agentId : extractAgentIdFromError(error42)) !== null && _d !== void 0 ? _d : args.resumeAgentId;
         return new SubagentResult({
           result: {
             case: "error",
-            value: new SubagentError(Object.assign(Object.assign({}, errorAgentId ? { agentId: errorAgentId } : {}), { error: errorMessage6 }))
+            value: new SubagentError(Object.assign(Object.assign({}, errorAgentId ? { agentId: errorAgentId } : {}), { error: errorMessage7 }))
           }
         });
       }

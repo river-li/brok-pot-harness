@@ -1,16 +1,16 @@
-var __protoPackage61, __protoMessage358, BlameByFilePathArgs, BlameByFilePathSuccess, BlameByFilePathError, BlameByFilePathResult, BlameByFilePathToolCall;
+var __protoPackage62, __protoMessage358, BlameByFilePathArgs, BlameByFilePathSuccess, BlameByFilePathError, BlameByFilePathResult, BlameByFilePathToolCall;
 var init_blame_by_file_path_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/blame_by_file_path_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage61 = "agent.v1.";
+    __protoPackage62 = "agent.v1.";
     __protoMessage358 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage61;
+        return __protoPackage62;
       }
     };
     BlameByFilePathArgs = class _BlameByFilePathArgs extends __protoMessage358 {

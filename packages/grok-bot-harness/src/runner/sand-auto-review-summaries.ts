@@ -235,6 +235,7 @@ function summarizeSandEmailSendAction(args) {
 }
 function summarizeSandCloudAgentAction(args) {
   const instruction = compactHeadAndTail(redactSandAutoReviewInlineSecrets(args.prompt), 240);
+  const customMode = args.customMode !== void 0 && args.customMode.trim().length > 0 ? ` in the \u201C${compact(args.customMode.trim(), 40)}\u201D custom mode (its skill kept every turn)` : "";
   const imageCount = args.imageCount ?? 0;
   const fileCount = args.fileCount ?? 0;
   const attachedImages = imageCount > 0 ? `${imageCount} attached image${imageCount === 1 ? "" : "s"} it can see` : "";
@@ -257,7 +258,7 @@ function summarizeSandCloudAgentAction(args) {
   if (args.action === "reply") {
     const target = compact(args.agentId ?? "", 40) || "a cloud agent";
     const delivery = describeReplyDelivery(args.mode, args.interrupt);
-    return `Send a follow-up to cloud agent ${target}${delivery}${images}: \u201C${instruction}\u201D`;
+    return `Send a follow-up to cloud agent ${target}${delivery}${customMode}${images}: \u201C${instruction}\u201D`;
   }
   const repo = compact(args.repoUrl ?? "", 120);
   const titled = args.title !== void 0 && args.title.trim().length > 0 ? ` \u201C${compact(args.title, 80)}\u201D` : "";
@@ -270,7 +271,7 @@ function summarizeSandCloudAgentAction(args) {
     where = ` on ${repo}`;
   }
   const what = args.project === true ? "Launch a Project" : "Launch a cloud agent";
-  return `${what}${titled}${where}${images}: \u201C${instruction}\u201D`;
+  return `${what}${titled}${where}${customMode}${images}: \u201C${instruction}\u201D`;
 }
 function summarizeSandSubagentAction(args) {
   const instruction = compactHeadAndTail(redactSandAutoReviewInlineSecrets(args.prompt), 240);
@@ -293,7 +294,10 @@ function summarizeSandBrowserAutoReviewAction(args) {
     case "click":
     case "mouse_click_xy":
       return summarize(`Click ${target}`);
+    case "hover":
+      return summarize(`Hover over ${target}`);
     case "type":
+    case "type_focused":
       return summarize(summarizeTypedText(args.text ?? ""));
     case "fill":
       return summarize(summarizeTypedText(args.value ?? ""));

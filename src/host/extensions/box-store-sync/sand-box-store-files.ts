@@ -40,6 +40,7 @@ var SAND_BOX_STORE_MULTIPART_THRESHOLD_BYTES = 64 * 1024 * 1024;
 var SAND_BOX_STORE_MULTIPART_PART_SIZE_BYTES = 128 * 1024 * 1024;
 var S3_MAX_SINGLE_PUT_BYTES = 5 * 1024 * 1024 * 1024;
 var MULTIPART_COMPLETE_MAX_ATTEMPTS = 3;
+var SAND_BOX_STORE_RPC_TIMEOUT_MS = AGENT_STORE_SYNC_CLIENT_CONFIG_DEFAULTS.rpcTimeoutMs;
 var WORKING_STATE_NAMESPACE_PREFIX = "working-state/";
 var WORKING_STATE_BLOB_KEY = /^working-state\/blobs\/([0-9a-f]{64})$/;
 function assertWorkingStateContentAddressedKeyMatchesSha(key, sha2563) {
@@ -171,9 +172,10 @@ var SandBoxStoreServiceObjectStore = class {
   async prefetchReads(keys) {
     for (let i = 0; i < keys.length; i += READ_PRESIGN_BATCH_MAX) {
       const chunk = keys.slice(i, i + READ_PRESIGN_BATCH_MAX);
-      const response = await this.client.presignSandBoxStoreReads({
-        relPaths: [...chunk]
-      });
+      const response = await this.client.presignSandBoxStoreReads(
+        { relPaths: [...chunk] },
+        { timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
+      );
       for (const instruction of response.instructions) {
         this.prefetchedReads.set(instruction.relPath, {
           url: instruction.url,
@@ -189,9 +191,10 @@ var SandBoxStoreServiceObjectStore = class {
     return cached2.expiresAtMs - Date.now() > PREFETCHED_READ_FRESHNESS_MARGIN_MS ? cached2 : void 0;
   }
   async presignRead(key) {
-    const response = await this.client.presignSandBoxStoreReads({
-      relPaths: [key]
-    });
+    const response = await this.client.presignSandBoxStoreReads(
+      { relPaths: [key] },
+      { timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
+    );
     return response.instructions[0]?.url ?? null;
   }
   async get(key) {
@@ -245,7 +248,7 @@ var SandBoxStoreServiceObjectStore = class {
     const { baseEtag, baselineSource } = await this.resolveMutableBaseline(key);
     const response = await this.client.commitSandBoxStoreManifest(
       { manifest: new Uint8Array(bytes), baseEtag: baseEtag ?? "" },
-      { signal }
+      { signal, timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
     );
     switch (response.status) {
       case SandBoxStoreManifestCommitStatus.COMMITTED: {
@@ -307,7 +310,10 @@ var SandBoxStoreServiceObjectStore = class {
     if (known !== void 0) {
       return { baseEtag: known, baselineSource: "session" };
     }
-    const stat28 = await this.client.statSandBoxStoreObject({ relPath: key });
+    const stat28 = await this.client.statSandBoxStoreObject(
+      { relPath: key },
+      { timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
+    );
     if (stat28.exists) {
       if (stat28.etag.length === 0) {
         throw new SandBoxStoreSyncError(
@@ -454,9 +460,10 @@ var SandBoxStoreServiceObjectStore = class {
       for (let attempt = 1; attempt <= MULTIPART_COMPLETE_MAX_ATTEMPTS; attempt++) {
         let result;
         try {
-          const response = await this.client.completeSandBoxStoreMultipartWrites({
-            completions: [{ context: context2, parts: uploaded }]
-          });
+          const response = await this.client.completeSandBoxStoreMultipartWrites(
+            { completions: [{ context: context2, parts: uploaded }] },
+            { timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
+          );
           result = response.results[0];
         } catch (error42) {
           lastFailure = error42 instanceof Error ? error42.message : String(error42);
@@ -484,19 +491,23 @@ var SandBoxStoreServiceObjectStore = class {
   }
   async bestEffortAbortMultipart(context2) {
     try {
-      await this.client.abortSandBoxStoreMultipartWrites({
-        uploads: [{ context: context2 }]
-      });
+      await this.client.abortSandBoxStoreMultipartWrites(
+        { uploads: [{ context: context2 }] },
+        { timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
+      );
     } catch {
     }
   }
   async presignWriteBatch(files) {
-    const response = await this.client.presignSandBoxStoreWrites({
-      files: files.map(({ multipartParts, ...file2 }) => ({
-        ...file2,
-        ...multipartParts !== void 0 ? { multipartParts: multipartParts.map((part) => ({ ...part })) } : {}
-      }))
-    });
+    const response = await this.client.presignSandBoxStoreWrites(
+      {
+        files: files.map(({ multipartParts, ...file2 }) => ({
+          ...file2,
+          ...multipartParts !== void 0 ? { multipartParts: multipartParts.map((part) => ({ ...part })) } : {}
+        }))
+      },
+      { timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
+    );
     return files.map((file2, index) => {
       const instruction = response.instructions[index];
       if (instruction?.relPath !== file2.relPath) {
@@ -522,7 +533,7 @@ var SandBoxStoreServiceObjectStore = class {
           cursor,
           maxEntries: 0
         },
-        { signal: opts?.signal }
+        { signal: opts?.signal, timeoutMs: SAND_BOX_STORE_RPC_TIMEOUT_MS }
       );
       const pageKeys = page.entries.map((entry) => entry.relPath);
       keys.push(...pageKeys);

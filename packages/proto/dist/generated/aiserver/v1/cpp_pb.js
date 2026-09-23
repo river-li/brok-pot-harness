@@ -1,4 +1,4 @@
-var __protoPackage121, __protoMessage3117, CppSource, CppIntentInfo, LspSuggestion, LspSuggestedItems, ShouldTurnOnCppOnboardingRequest, ShouldTurnOnCppOnboardingResponse, StreamCppRequest, StreamCppRequest_ControlToken, StreamCppResponse, StreamCppResponse_CursorPredictionTarget, StreamCppResponse_ModelInfo, CppConfigRequest, CppConfigResponse, CppConfigResponse_Heuristic, CppConfigResponse_ImportPredictionConfig, CppConfigResponse_MergeBehavior, CppConfigResponse_RecentlyRejectedEditThresholds, CppConfigResponse_SuggestionHintConfig, SuggestedEdit, GetCppEditClassificationRequest, GetCppEditClassificationResponse, GetCppEditClassificationResponse_LogProbs, GetCppEditClassificationResponse_ScoredEdit, AdditionalFile, CppFileDiffHistory, RefreshTabContextRequest, RefreshTabContextResponse, CppContextItem, CppParameterHint, IRange, OneIndexedPosition, CursorSelection, ModelChange, CurrentlyShownCppSuggestion, CppAcceptEventNew, RecoverableCppData, CppSuggestEvent, CppTriggerEvent, FinishedCppGenerationEvent, CppRejectEventNew, Edit, CppPartialAcceptEvent, CursorPrediction, CursorPrediction_CursorPredictionSource, SuggestCursorPredictionEvent, AcceptCursorPredictionEvent, RejectCursorPredictionEvent, MaybeDefinedPointInTimeModel, PointInTimeModel, CppManualTriggerEventNew, CppStoppedTrackingModelEvent, CppStoppedTrackingModelEvent_StoppedTrackingModelReason, CppLinterErrorEvent, CppDebouncedCursorMovementEvent, CppEditorChangedEvent, CppCopyEvent, CppQuickActionCommand, CppQuickAction, CppQuickAction_Edit, CppChangeQuickActionEvent, CppQuickActionFireEvent, CmdKEvent, CmdKEvent_SubmitPrompt, CmdKEvent_EndOfGeneration, CmdKEvent_InterruptGeneration, CmdKEvent_AcceptDiffs, CmdKEvent_RejectDiffs, CmdKEvent_AcceptPartialDiff, CmdKEvent_RejectPartialDiff, CmdKEvent_AfterReject, ChatEvent, ChatEvent_SubmitPrompt, ChatEvent_EndOfAnyGeneration, ChatEvent_EndOfUninterruptedGeneration, BugBotLinterEvent, BugBotLinterEvent_Started, BugBotLinterEvent_LintGenerated, BugBotLinterEvent_LintDismissed, BugBotLinterEvent_UserFeedback, BugBotLinterEvent_ViewedReport, BugBotLinterEvent_UnviewedReport, BugBotLinterEvent_NotShownBecauseHeuristic, BugBotLinterEvent_NotShownBecauseHeuristic_Heuristic, BugBotEvent, BugBotEvent_BackgroundIntervalInterruptedReason, BugBotEvent_Started, BugBotEvent_ReportsGenerated, BugBotEvent_PressedFixInComposer, BugBotEvent_PressedAddToChat, BugBotEvent_PressedOpenInEditor, BugBotEvent_ViewedReport, BugBotEvent_ViewedReport_ReportView, BugBotEvent_UserFeedback, BugBotEvent_BackgroundIntervalStarted, BugBotEvent_BackgroundIntervalEnded, BugBotEvent_BackgroundIntervalInterrupted, BugBotEvent_BackgroundIntervalErrored, AiRequestEvent, AiRequestEvent_RequestType, AiRequestEvent_Source, ModelOpenedEvent, BackgroundFilesEvent, BackgroundFilesEvent_BackgroundFile, ScrollEvent, EditorCloseEvent, TabCloseEvent, ModelAddedEvent, AnythingQuickAccessItem, AnythingQuickAccessItem_Resource, AnythingQuickAccessSelectionEvent, LspSuggestionEvent, CppSessionEvent, BeforeAiEditEvent, CppAppendRequest, CppAppendResponse, EditHistoryAppendChangesRequest, EditHistoryAppendChangesRequest_PrivacyModeStatus, EditHistoryAppendChangesResponse, CppEditHistoryStatusRequest, CppEditHistoryStatusResponse, BlockDiffPatch, BlockDiffPatch_Change, BlockDiffPatch_ModelWindow, CppHistoryAppendEvent, CppManualTriggerEvent, CppAcceptEvent, CppRejectEvent, CppSuggestion, TerminalEvent, TerminalEvent_Create, TerminalEvent_Exit, TerminalEvent_CommandStart, TerminalEvent_CommandFinish, BrowserEvent, BrowserEvent_TabCreated, BrowserEvent_TabClosed, BrowserEvent_Navigation, BrowserEvent_ToolAction, BrowserEvent_ToolAction_Source, NtpEvent, RepoEvent, RepoEvent_Type, GitEvent, GitEvent_OperationType, WorktreeEvent, WorktreeEvent_EventType, WorktreeEvent_WorktreeComposerMapping, WorktreeEvent_BackgroundAgentComposerMapping, ReviewChangesOpenedEvent, ToolCallEvent, SearchMatch, SearchResultFile, SearchEvent;
+var __protoPackage122, __protoMessage3117, CppSource, CppIntentInfo, LspSuggestion, LspSuggestedItems, ShouldTurnOnCppOnboardingRequest, ShouldTurnOnCppOnboardingResponse, StreamCppRequest, StreamCppRequest_ControlToken, StreamCppResponse, StreamCppResponse_CursorPredictionTarget, StreamCppResponse_ModelInfo, CppConfigRequest, CppConfigResponse, CppConfigResponse_Heuristic, CppConfigResponse_ImportPredictionConfig, CppConfigResponse_MergeBehavior, CppConfigResponse_RecentlyRejectedEditThresholds, CppConfigResponse_SuggestionHintConfig, SuggestedEdit, GetCppEditClassificationRequest, GetCppEditClassificationResponse, GetCppEditClassificationResponse_LogProbs, GetCppEditClassificationResponse_ScoredEdit, AdditionalFile, CppFileDiffHistory, RefreshTabContextRequest, RefreshTabContextResponse, CppContextItem, CppParameterHint, IRange, OneIndexedPosition, CursorSelection, ModelChange, CurrentlyShownCppSuggestion, CppAcceptEventNew, RecoverableCppData, CppSuggestEvent, CppTriggerEvent, FinishedCppGenerationEvent, CppRejectEventNew, Edit, CppPartialAcceptEvent, CursorPrediction, CursorPrediction_CursorPredictionSource, SuggestCursorPredictionEvent, AcceptCursorPredictionEvent, RejectCursorPredictionEvent, MaybeDefinedPointInTimeModel, PointInTimeModel, CppManualTriggerEventNew, CppStoppedTrackingModelEvent, CppStoppedTrackingModelEvent_StoppedTrackingModelReason, CppLinterErrorEvent, CppDebouncedCursorMovementEvent, CppEditorChangedEvent, CppCopyEvent, CppQuickActionCommand, CppQuickAction, CppQuickAction_Edit, CppChangeQuickActionEvent, CppQuickActionFireEvent, CmdKEvent, CmdKEvent_SubmitPrompt, CmdKEvent_EndOfGeneration, CmdKEvent_InterruptGeneration, CmdKEvent_AcceptDiffs, CmdKEvent_RejectDiffs, CmdKEvent_AcceptPartialDiff, CmdKEvent_RejectPartialDiff, CmdKEvent_AfterReject, ChatEvent, ChatEvent_SubmitPrompt, ChatEvent_EndOfAnyGeneration, ChatEvent_EndOfUninterruptedGeneration, BugBotLinterEvent, BugBotLinterEvent_Started, BugBotLinterEvent_LintGenerated, BugBotLinterEvent_LintDismissed, BugBotLinterEvent_UserFeedback, BugBotLinterEvent_ViewedReport, BugBotLinterEvent_UnviewedReport, BugBotLinterEvent_NotShownBecauseHeuristic, BugBotLinterEvent_NotShownBecauseHeuristic_Heuristic, BugBotEvent, BugBotEvent_BackgroundIntervalInterruptedReason, BugBotEvent_Started, BugBotEvent_ReportsGenerated, BugBotEvent_PressedFixInComposer, BugBotEvent_PressedAddToChat, BugBotEvent_PressedOpenInEditor, BugBotEvent_ViewedReport, BugBotEvent_ViewedReport_ReportView, BugBotEvent_UserFeedback, BugBotEvent_BackgroundIntervalStarted, BugBotEvent_BackgroundIntervalEnded, BugBotEvent_BackgroundIntervalInterrupted, BugBotEvent_BackgroundIntervalErrored, AiRequestEvent, AiRequestEvent_RequestType, AiRequestEvent_Source, ModelOpenedEvent, BackgroundFilesEvent, BackgroundFilesEvent_BackgroundFile, ScrollEvent, EditorCloseEvent, TabCloseEvent, ModelAddedEvent, AnythingQuickAccessItem, AnythingQuickAccessItem_Resource, AnythingQuickAccessSelectionEvent, LspSuggestionEvent, CppSessionEvent, BeforeAiEditEvent, CppAppendRequest, CppAppendResponse, EditHistoryAppendChangesRequest, EditHistoryAppendChangesRequest_PrivacyModeStatus, EditHistoryAppendChangesResponse, CppEditHistoryStatusRequest, CppEditHistoryStatusResponse, BlockDiffPatch, BlockDiffPatch_Change, BlockDiffPatch_ModelWindow, CppHistoryAppendEvent, CppManualTriggerEvent, CppAcceptEvent, CppRejectEvent, CppSuggestion, TerminalEvent, TerminalEvent_Create, TerminalEvent_Exit, TerminalEvent_CommandStart, TerminalEvent_CommandFinish, BrowserEvent, BrowserEvent_TabCreated, BrowserEvent_TabClosed, BrowserEvent_Navigation, BrowserEvent_ToolAction, BrowserEvent_ToolAction_Source, NtpEvent, RepoEvent, RepoEvent_Type, GitEvent, GitEvent_OperationType, WorktreeEvent, WorktreeEvent_EventType, WorktreeEvent_WorktreeComposerMapping, WorktreeEvent_BackgroundAgentComposerMapping, ReviewChangesOpenedEvent, ToolCallEvent, SearchMatch, SearchResultFile, SearchEvent;
 var init_cpp_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/cpp_pb.js"() {
     "use strict";
@@ -9,16 +9,16 @@ var init_cpp_pb = __esm({
     init_repository_pb();
     init_bugbot_pb();
     init_compact();
-    __protoPackage121 = "aiserver.v1.";
+    __protoPackage122 = "aiserver.v1.";
     __protoMessage3117 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage121;
+        return __protoPackage122;
       }
     };
-    CppSource = /* @__PURE__ */ enumType(proto3, __protoPackage121, "CppSource", [[0, "UNSPECIFIED"], [1, "LINE_CHANGE"], [2, "TYPING"], [3, "OPTION_HOLD"], [4, "LINTER_ERRORS"], [5, "PARAMETER_HINTS"], [6, "CURSOR_PREDICTION"], [7, "MANUAL_TRIGGER"], [8, "EDITOR_CHANGE"], [9, "LSP_SUGGESTIONS"]], 1);
+    CppSource = /* @__PURE__ */ enumType(proto3, __protoPackage122, "CppSource", [[0, "UNSPECIFIED"], [1, "LINE_CHANGE"], [2, "TYPING"], [3, "OPTION_HOLD"], [4, "LINTER_ERRORS"], [5, "PARAMETER_HINTS"], [6, "CURSOR_PREDICTION"], [7, "MANUAL_TRIGGER"], [8, "EDITOR_CHANGE"], [9, "LSP_SUGGESTIONS"]], 1);
     CppIntentInfo = class _CppIntentInfo extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -162,7 +162,7 @@ var init_cpp_pb = __esm({
         return ["StreamCppRequest|1 current_file #0|2 diff_history 9*|3 model_name 9?|4 linter_errors #1?|13 context_items #2*|5 diff_history_keys 9*|6 give_debug_output 8?|7 file_diff_histories #3*|8 merged_diff_histories #3*|9 block_diff_patches #4*|10 is_nightly 8?|11 is_debug 8?|12 immediately_ack 8?|17 enable_more_context 8?|14 parameter_hints #5*|15 lsp_contexts #6*|16 cpp_intent_info #7?|18 workspace_id 9?|19 additional_files #8*|20 control_token #9?|21 client_time 1?|22 filesync_updates #10*|23 time_since_request_start 1|24 time_at_request_send 1|25 client_timezone_offset 1?|26 lsp_suggested_items #11?|27 supports_cpt 8?|28 supports_crlf_cpt 8?|29 code_results #12*", CurrentFileInfo, LinterErrors, CppContextItem, CppFileDiffHistory, BlockDiffPatch, CppParameterHint, LspSubgraphFullContext, CppIntentInfo, AdditionalFile, StreamCppRequest_ControlToken, FilesyncUpdateWithModelVersion, LspSuggestedItems, CodeResult];
       }
     };
-    StreamCppRequest_ControlToken = /* @__PURE__ */ enumType(proto3, __protoPackage121, "StreamCppRequest.ControlToken", [[0, "UNSPECIFIED"], [1, "QUIET"], [2, "LOUD"], [3, "OP"]], 1);
+    StreamCppRequest_ControlToken = /* @__PURE__ */ enumType(proto3, __protoPackage122, "StreamCppRequest.ControlToken", [[0, "UNSPECIFIED"], [1, "QUIET"], [2, "LOUD"], [3, "OP"]], 1);
     StreamCppResponse = class _StreamCppResponse extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -290,7 +290,7 @@ var init_cpp_pb = __esm({
         return ["CppConfigResponse|1 above_radius 5?|2 below_radius 5?|4 merge_behavior #0?|5 is_on 8?|6 is_ghost_text 8?|7 should_let_user_enable_cpp_even_if_not_pro 8?|8 heuristics #1*|9 exclude_recently_viewed_files_patterns 9*|10 enable_rvf_tracking 8|11 global_debounce_duration_millis 5|12 client_debounce_duration_millis 5|13 cpp_url 9|14 use_whitespace_diff_history 8|15 import_prediction_config #2|16 enable_filesync_debounce_skipping 8|17 check_filesync_hash_percent 2|18 geo_cpp_backend_url 9|19 recently_rejected_edit_thresholds #3?|20 is_fused_cursor_prediction_model 8|21 include_unchanged_lines 8|22 should_fetch_rvf_text 8|23 max_number_of_cleared_suggestions_since_last_accept 5?|24 suggestion_hint_config #4?|25 allows_tab_chunks 8|26 tab_context_refresh_debounce_ms 5?|27 tab_context_refresh_editor_change_debounce_ms 5?", CppConfigResponse_MergeBehavior, CppConfigResponse_Heuristic, CppConfigResponse_ImportPredictionConfig, CppConfigResponse_RecentlyRejectedEditThresholds, CppConfigResponse_SuggestionHintConfig];
       }
     };
-    CppConfigResponse_Heuristic = /* @__PURE__ */ enumType(proto3, __protoPackage121, "CppConfigResponse.Heuristic", [[0, "UNSPECIFIED"], [1, "LOTS_OF_ADDED_TEXT"], [2, "DUPLICATING_LINE_AFTER_SUGGESTION"], [3, "DUPLICATING_MULTIPLE_LINES_AFTER_SUGGESTION"], [4, "REVERTING_USER_CHANGE"], [5, "OUTPUT_EXTENDS_BEYOND_RANGE_AND_IS_REPEATED"], [6, "SUGGESTING_RECENTLY_REJECTED_EDIT"]], 1);
+    CppConfigResponse_Heuristic = /* @__PURE__ */ enumType(proto3, __protoPackage122, "CppConfigResponse.Heuristic", [[0, "UNSPECIFIED"], [1, "LOTS_OF_ADDED_TEXT"], [2, "DUPLICATING_LINE_AFTER_SUGGESTION"], [3, "DUPLICATING_MULTIPLE_LINES_AFTER_SUGGESTION"], [4, "REVERTING_USER_CHANGE"], [5, "OUTPUT_EXTENDS_BEYOND_RANGE_AND_IS_REPEATED"], [6, "SUGGESTING_RECENTLY_REJECTED_EDIT"]], 1);
     CppConfigResponse_ImportPredictionConfig = class _CppConfigResponse_ImportPredictionConfig extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -961,7 +961,7 @@ var init_cpp_pb = __esm({
         return ["CursorPrediction|1 request_id 9|2 prediction_id 5|3 line_number 5|4 source #0|5 binding_id 9?", CursorPrediction_CursorPredictionSource];
       }
     };
-    CursorPrediction_CursorPredictionSource = /* @__PURE__ */ enumType(proto3, __protoPackage121, "CursorPrediction.CursorPredictionSource", [[0, "UNSPECIFIED"], [1, "ALWAYS_ON"], [2, "ACCEPT"], [3, "UNDO"], [4, "EDITOR_CHANGE"]], 1);
+    CursorPrediction_CursorPredictionSource = /* @__PURE__ */ enumType(proto3, __protoPackage122, "CursorPrediction.CursorPredictionSource", [[0, "UNSPECIFIED"], [1, "ALWAYS_ON"], [2, "ACCEPT"], [3, "UNDO"], [4, "EDITOR_CHANGE"]], 1);
     SuggestCursorPredictionEvent = class _SuggestCursorPredictionEvent extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -1121,7 +1121,7 @@ var init_cpp_pb = __esm({
         return ["CppStoppedTrackingModelEvent|1 model_uuid 9|2 relative_path 9|3 reason #0", CppStoppedTrackingModelEvent_StoppedTrackingModelReason];
       }
     };
-    CppStoppedTrackingModelEvent_StoppedTrackingModelReason = /* @__PURE__ */ enumType(proto3, __protoPackage121, "CppStoppedTrackingModelEvent.StoppedTrackingModelReason", [[0, "UNSPECIFIED"], [1, "FILE_TOO_BIG"], [2, "FILE_DISPOSED"], [3, "CHANGE_TOO_BIG"]], 1);
+    CppStoppedTrackingModelEvent_StoppedTrackingModelReason = /* @__PURE__ */ enumType(proto3, __protoPackage122, "CppStoppedTrackingModelEvent.StoppedTrackingModelReason", [[0, "UNSPECIFIED"], [1, "FILE_TOO_BIG"], [2, "FILE_DISPOSED"], [3, "CHANGE_TOO_BIG"]], 1);
     CppLinterErrorEvent = class _CppLinterErrorEvent extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -1787,7 +1787,7 @@ var init_cpp_pb = __esm({
         return ["BugBotLinterEvent.NotShownBecauseHeuristic|1 heuristic #0", BugBotLinterEvent_NotShownBecauseHeuristic_Heuristic];
       }
     };
-    BugBotLinterEvent_NotShownBecauseHeuristic_Heuristic = /* @__PURE__ */ enumType(proto3, __protoPackage121, "BugBotLinterEvent.NotShownBecauseHeuristic.Heuristic", [[0, "UNSPECIFIED"], [1, "LINT_OVERLAP"], [2, "LINES_MISMATCH"]], 1);
+    BugBotLinterEvent_NotShownBecauseHeuristic_Heuristic = /* @__PURE__ */ enumType(proto3, __protoPackage122, "BugBotLinterEvent.NotShownBecauseHeuristic.Heuristic", [[0, "UNSPECIFIED"], [1, "LINT_OVERLAP"], [2, "LINES_MISMATCH"]], 1);
     BugBotEvent = class _BugBotEvent extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -1811,7 +1811,7 @@ var init_cpp_pb = __esm({
         return ["BugBotEvent|1 request_id 9|2 started #0 event_type|3 reports_generated #1 event_type|4 pressed_fix_in_composer #2 event_type|5 pressed_open_in_editor #3 event_type|6 viewed_report #4 event_type|7 user_feedback #5 event_type|8 pressed_add_to_chat #6 event_type|9 background_interval_started #7 event_type|10 background_interval_ended #8 event_type|11 background_interval_interrupted #9 event_type|12 background_interval_errored #10 event_type", BugBotEvent_Started, BugBotEvent_ReportsGenerated, BugBotEvent_PressedFixInComposer, BugBotEvent_PressedOpenInEditor, BugBotEvent_ViewedReport, BugBotEvent_UserFeedback, BugBotEvent_PressedAddToChat, BugBotEvent_BackgroundIntervalStarted, BugBotEvent_BackgroundIntervalEnded, BugBotEvent_BackgroundIntervalInterrupted, BugBotEvent_BackgroundIntervalErrored];
       }
     };
-    BugBotEvent_BackgroundIntervalInterruptedReason = /* @__PURE__ */ enumType(proto3, __protoPackage121, "BugBotEvent.BackgroundIntervalInterruptedReason", [[0, "UNSPECIFIED"], [1, "DISABLED"], [2, "TOO_RECENT"], [3, "UNVIEWED_BUG_REPORTS"], [4, "NOT_IN_GIT_REPO"], [5, "DEFAULT_BRANCH_IS_NOT_CURRENT_BRANCH"], [6, "NO_GIT_USER"], [7, "NO_LAST_COMMIT"], [8, "LAST_COMMIT_NOT_MADE_BY_USER"], [9, "LAST_COMMIT_TOO_OLD"], [10, "DIFF_TOO_LONG"], [11, "DIFF_TOO_SHORT"], [12, "TELEMETRY_UNHEALTHY"]], 1);
+    BugBotEvent_BackgroundIntervalInterruptedReason = /* @__PURE__ */ enumType(proto3, __protoPackage122, "BugBotEvent.BackgroundIntervalInterruptedReason", [[0, "UNSPECIFIED"], [1, "DISABLED"], [2, "TOO_RECENT"], [3, "UNVIEWED_BUG_REPORTS"], [4, "NOT_IN_GIT_REPO"], [5, "DEFAULT_BRANCH_IS_NOT_CURRENT_BRANCH"], [6, "NO_GIT_USER"], [7, "NO_LAST_COMMIT"], [8, "LAST_COMMIT_NOT_MADE_BY_USER"], [9, "LAST_COMMIT_TOO_OLD"], [10, "DIFF_TOO_LONG"], [11, "DIFF_TOO_SHORT"], [12, "TELEMETRY_UNHEALTHY"]], 1);
     BugBotEvent_Started = class _BugBotEvent_Started extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -2101,8 +2101,8 @@ var init_cpp_pb = __esm({
         return ["AiRequestEvent|1 request_type #0|2 request_id 9|3 source #1", AiRequestEvent_RequestType, AiRequestEvent_Source];
       }
     };
-    AiRequestEvent_RequestType = /* @__PURE__ */ enumType(proto3, __protoPackage121, "AiRequestEvent.RequestType", [[0, "UNSPECIFIED"], [1, "START"], [2, "END"]], 1);
-    AiRequestEvent_Source = /* @__PURE__ */ enumType(proto3, __protoPackage121, "AiRequestEvent.Source", [[0, "UNSPECIFIED"], [1, "CHAT"], [2, "CMDK"], [3, "APPLY"], [4, "COMPOSER"], [5, "TASK"], [6, "CODE_INTERPRETER"], [7, "INTERPRETER_EXECUTION"], [8, "BUGBOT"]], 1);
+    AiRequestEvent_RequestType = /* @__PURE__ */ enumType(proto3, __protoPackage122, "AiRequestEvent.RequestType", [[0, "UNSPECIFIED"], [1, "START"], [2, "END"]], 1);
+    AiRequestEvent_Source = /* @__PURE__ */ enumType(proto3, __protoPackage122, "AiRequestEvent.Source", [[0, "UNSPECIFIED"], [1, "CHAT"], [2, "CMDK"], [3, "APPLY"], [4, "COMPOSER"], [5, "TASK"], [6, "CODE_INTERPRETER"], [7, "INTERPRETER_EXECUTION"], [8, "BUGBOT"]], 1);
     ModelOpenedEvent = class _ModelOpenedEvent extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -2475,7 +2475,7 @@ var init_cpp_pb = __esm({
         return ["EditHistoryAppendChangesRequest|1 session_id 9|2 model_uuid 9|3 starting_model_value 9?|10 starting_model_version 5?|5 relative_path 9|14 uri 9|6 client_version 9|8 client_commit 9?|4 changes #0*|9 session_events #1*|11 model_changes_may_be_out_of_order 8|12 privacy_mode_status #2|7 events #3*|13 time_origin 2", ModelChange, CppSessionEvent, EditHistoryAppendChangesRequest_PrivacyModeStatus, CppHistoryAppendEvent];
       }
     };
-    EditHistoryAppendChangesRequest_PrivacyModeStatus = /* @__PURE__ */ enumType(proto3, __protoPackage121, "EditHistoryAppendChangesRequest.PrivacyModeStatus", [[0, "UNSPECIFIED"], [1, "PRIVACY_ENABLED"], [2, "IMPLICIT_NO_PRIVACY"], [3, "EXPLICIT_NO_PRIVACY"]], 1);
+    EditHistoryAppendChangesRequest_PrivacyModeStatus = /* @__PURE__ */ enumType(proto3, __protoPackage122, "EditHistoryAppendChangesRequest.PrivacyModeStatus", [[0, "UNSPECIFIED"], [1, "PRIVACY_ENABLED"], [2, "IMPLICIT_NO_PRIVACY"], [3, "EXPLICIT_NO_PRIVACY"]], 1);
     EditHistoryAppendChangesResponse = class _EditHistoryAppendChangesResponse extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -2940,7 +2940,7 @@ var init_cpp_pb = __esm({
         return ["BrowserEvent.ToolAction|1 tool_name 9|2 args_json 9|3 success 8?|4 post_snapshot_yaml 9?|5 post_url 9?|6 post_title 9?|7 source #0", BrowserEvent_ToolAction_Source];
       }
     };
-    BrowserEvent_ToolAction_Source = /* @__PURE__ */ enumType(proto3, __protoPackage121, "BrowserEvent.ToolAction.Source", [[0, "UNSPECIFIED"], [1, "MCP_TOOL"], [2, "MANUAL_USER"]], 1);
+    BrowserEvent_ToolAction_Source = /* @__PURE__ */ enumType(proto3, __protoPackage122, "BrowserEvent.ToolAction.Source", [[0, "UNSPECIFIED"], [1, "MCP_TOOL"], [2, "MANUAL_USER"]], 1);
     NtpEvent = class _NtpEvent extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -2990,7 +2990,7 @@ var init_cpp_pb = __esm({
         return ["RepoEvent|1 repo_owner 9|2 repo_name 9|3 event_type #0", RepoEvent_Type];
       }
     };
-    RepoEvent_Type = /* @__PURE__ */ enumType(proto3, __protoPackage121, "RepoEvent.Type", [[0, "UNSPECIFIED"], [1, "SYNCED"], [2, "LOADING"], [3, "INDEXING_SETUP"], [4, "INDEXING_INIT_FROM_SIMILAR_CODEBASE"], [5, "PAUSED"], [6, "INDEXING"], [7, "ERROR"], [8, "NOT_AUTO_INDEXING"], [9, "NOT_INDEXED"]], 1);
+    RepoEvent_Type = /* @__PURE__ */ enumType(proto3, __protoPackage122, "RepoEvent.Type", [[0, "UNSPECIFIED"], [1, "SYNCED"], [2, "LOADING"], [3, "INDEXING_SETUP"], [4, "INDEXING_INIT_FROM_SIMILAR_CODEBASE"], [5, "PAUSED"], [6, "INDEXING"], [7, "ERROR"], [8, "NOT_AUTO_INDEXING"], [9, "NOT_INDEXED"]], 1);
     GitEvent = class _GitEvent extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -3015,7 +3015,7 @@ var init_cpp_pb = __esm({
         return ["GitEvent|1 operation_type #0|2 repository_path 9|3 operation_success 8|4 branch_name 9?|5 error_message 9?|6 is_default_branch 8?|7 default_branch_name 9?|8 commit_hash 9?|9 previous_commit_hash 9?|10 remote_url 9?", GitEvent_OperationType];
       }
     };
-    GitEvent_OperationType = /* @__PURE__ */ enumType(proto3, __protoPackage121, "GitEvent.OperationType", [[0, "UNSPECIFIED"], [1, "COMMIT"], [2, "CHECKOUT"], [3, "PULL"], [4, "FETCH"], [5, "MERGE"], [6, "REBASE"], [7, "STASH"], [8, "BRANCH"], [9, "TAG"]], 1);
+    GitEvent_OperationType = /* @__PURE__ */ enumType(proto3, __protoPackage122, "GitEvent.OperationType", [[0, "UNSPECIFIED"], [1, "COMMIT"], [2, "CHECKOUT"], [3, "PULL"], [4, "FETCH"], [5, "MERGE"], [6, "REBASE"], [7, "STASH"], [8, "BRANCH"], [9, "TAG"]], 1);
     WorktreeEvent = class _WorktreeEvent extends __protoMessage3117 {
       constructor(data) {
         super();
@@ -3041,7 +3041,7 @@ var init_cpp_pb = __esm({
         return ["WorktreeEvent|1 event_type #0|2 model_name 9?|3 best_of_n_group_id 9?|4 all_worktree_paths 9*|5 applied_worktree_path 9?|6 worktree_composer_mappings #1*|7 background_agent_composer_mappings #2*|8 applied_composer_id 9?|9 viewed_composer_id 9?", WorktreeEvent_EventType, WorktreeEvent_WorktreeComposerMapping, WorktreeEvent_BackgroundAgentComposerMapping];
       }
     };
-    WorktreeEvent_EventType = /* @__PURE__ */ enumType(proto3, __protoPackage121, "WorktreeEvent.EventType", [[0, "UNSPECIFIED"], [1, "APPLY_TO_MAIN"], [2, "UNDO_APPLY"], [3, "VIEW_SUBCOMPOSER"]], 1);
+    WorktreeEvent_EventType = /* @__PURE__ */ enumType(proto3, __protoPackage122, "WorktreeEvent.EventType", [[0, "UNSPECIFIED"], [1, "APPLY_TO_MAIN"], [2, "UNDO_APPLY"], [3, "VIEW_SUBCOMPOSER"]], 1);
     WorktreeEvent_WorktreeComposerMapping = class _WorktreeEvent_WorktreeComposerMapping extends __protoMessage3117 {
       constructor(data) {
         super();

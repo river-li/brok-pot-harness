@@ -1,7 +1,7 @@
 async function setAgentAvatarBytes(host, db, dbPath, agentId, pngBytes, activeAgentId) {
-  const agentDir = (0, import_node_path140.dirname)(dbPath);
+  const agentDir = (0, import_node_path141.dirname)(dbPath);
   for (const name17 of listConventionalAvatarFilenames(agentDir)) {
-    await (0, import_promises67.rm)((0, import_node_path140.join)(agentDir, name17), { force: true });
+    await (0, import_promises67.rm)((0, import_node_path141.join)(agentDir, name17), { force: true });
   }
   if (pngBytes == null) {
     const existing = db.getSandProfile();
@@ -16,7 +16,7 @@ async function setAgentAvatarBytes(host, db, dbPath, agentId, pngBytes, activeAg
   } else {
     const { writeFile: writeFile19, mkdir: mkdir25 } = await import("node:fs/promises");
     await mkdir25(agentDir, { recursive: true });
-    await writeFile19((0, import_node_path140.join)(agentDir, CANONICAL_AVATAR_FILENAME), Buffer.from(pngBytes));
+    await writeFile19((0, import_node_path141.join)(agentDir, CANONICAL_AVATAR_FILENAME), Buffer.from(pngBytes));
   }
   invalidateAvatarDataUrlCache(agentDir);
   const dbStats = await statIfExists(dbPath);
@@ -33,8 +33,8 @@ async function setAgentAvatarBytes(host, db, dbPath, agentId, pngBytes, activeAg
 async function recoverAgentWithMissingDb(host, args) {
   const { dbPath, dirName, activeAgentId } = args;
   if (host.isAgentBeingDeleted(dirName)) return null;
-  const agentDir = (0, import_node_path140.dirname)(dbPath);
-  const dirIntact = (0, import_node_fs85.existsSync)(getSandProfilePath(agentDir)) || await agentHasDurableFootprint(
+  const agentDir = (0, import_node_path141.dirname)(dbPath);
+  const dirIntact = (0, import_node_fs87.existsSync)(getSandProfilePath(agentDir)) || await agentHasDurableFootprint(
     agentDir,
     (candidate) => host.memory.agentHasContent(candidate)
   );

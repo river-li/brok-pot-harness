@@ -4,7 +4,7 @@ function createMarkerStore() {
   return {
     readRaw: async () => {
       try {
-        if (!(0, import_node_fs63.existsSync)(markerPath)) return null;
+        if (!(0, import_node_fs65.existsSync)(markerPath)) return null;
         return await (0, import_promises56.readFile)(markerPath, "utf8");
       } catch (error42) {
         reportFallbackUnlessAbsent("host_upgrade_extension", error42);
@@ -29,7 +29,7 @@ var hostUpgradeExtension = defineHostExtension({
   ],
   start: (context2) => {
     const environment = context2.host.environment;
-    const log4 = (level, message) => context2.deps.telemetry.logs.reportHostLog(level, `[sand-host] ${message}`);
+    const log5 = (level, message) => context2.deps.telemetry.logs.reportHostLog(level, `[sand-host] ${message}`);
     const readLiveReleaseConfig = () => context2.deps.experiments.getDynamicConfig("sand_host_bundle_channel", {
       disableExposureLog: true
     });
@@ -38,7 +38,7 @@ var hostUpgradeExtension = defineHostExtension({
       const channel = resolveHostBundleChannel(readLiveReleaseConfig().channel);
       if (channel !== loggedChannel) {
         const from2 = loggedChannel === void 0 ? "" : ` (was ${loggedChannel})`;
-        log4("info", `host bundle release channel: ${channel}${from2}`);
+        log5("info", `host bundle release channel: ${channel}${from2}`);
         loggedChannel = channel;
       }
       return channel;
@@ -74,7 +74,7 @@ var hostUpgradeExtension = defineHostExtension({
       readLocalVersion: readLocalHostVersion,
       isVersionSwapVetoed: isHostVersionSwapVetoed,
       stageUpgrade: stageHostBundleUpgrade,
-      log: log4
+      log: log5
     });
     context2.onStop(() => service.dispose());
     service.startMarkerForwardWake();

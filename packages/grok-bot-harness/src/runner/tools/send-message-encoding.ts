@@ -80,6 +80,15 @@ function encodeSendMessage(message) {
           })
         }
       });
+    case "connector-grant":
+      return new SendMessageArgs({
+        message: {
+          case: "text",
+          value: new SendMessageText({
+            content: `Asked the user to allow the ${message.ask.serverName} connector for this turn. Status: ${message.ask.status}.`
+          })
+        }
+      });
     case "cookie-origin-approval":
       return new SendMessageArgs({
         message: {
@@ -266,7 +275,7 @@ async function resolveBoxMediaAttachment(request5) {
   }
   if (request5.persistMediaBytes == null) return null;
   try {
-    return await request5.persistMediaBytes((0, import_node_path170.basename)(boxPath), data);
+    return await request5.persistMediaBytes((0, import_node_path172.basename)(boxPath), data);
   } catch {
     return null;
   }

@@ -1,4 +1,4 @@
-var import_node_crypto85 = require("node:crypto");
+var import_node_crypto88 = require("node:crypto");
 init_scheduling();
 function failure(name17, message) {
   return { ok: false, error: { name: name17, message } };
@@ -35,7 +35,7 @@ var SandWebAuthnBridge = class {
   registerProvider(send) {
     const registeredAt = this.deps.clock.now();
     const provider = {
-      id: (0, import_node_crypto85.randomUUID)(),
+      id: (0, import_node_crypto88.randomUUID)(),
       send,
       registeredAt,
       lastSeenAt: registeredAt,
@@ -136,7 +136,7 @@ var SandWebAuthnBridge = class {
   }
   async requestCeremony(ceremony) {
     const funnel = {
-      requestId: (0, import_node_crypto85.randomUUID)(),
+      requestId: (0, import_node_crypto88.randomUUID)(),
       originClass: sandWebAuthnOriginClass(ceremony.origin),
       ceremonyKind: ceremony.kind === "create" ? "create" : "get",
       startedAt: this.deps.clock.monotonicNow()

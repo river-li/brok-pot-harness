@@ -50,13 +50,13 @@ function createToolCallProto(computerUseTool) {
   });
 }
 function serializeComputerUseError(error42) {
-  const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+  const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
   return createToolCallProto(new ComputerUseToolCall({
     result: new ComputerUseResult({
       result: {
         case: "error",
         value: new ComputerUseError({
-          error: errorMessage6,
+          error: errorMessage7,
           actionCount: 0,
           durationMs: 0
         })
@@ -68,9 +68,9 @@ async function renderComputerUseResult(_ctx, output, includeCursorPosition = fal
   const content = [];
   const { result } = output;
   if (result.case === "success") {
-    const { log: log4, screenshot, screenshotPath, cursorPosition } = result.value;
-    if (log4) {
-      content.push({ type: "text", text: log4 });
+    const { log: log5, screenshot, screenshotPath, cursorPosition } = result.value;
+    if (log5) {
+      content.push({ type: "text", text: log5 });
     }
     if (includeCursorPosition && cursorPosition) {
       content.push({
@@ -93,9 +93,9 @@ async function renderComputerUseResult(_ctx, output, includeCursorPosition = fal
     }
     return { content, isError: false };
   } else if (result.case === "error") {
-    const { error: error42, log: log4 } = result.value;
-    if (log4) {
-      content.push({ type: "text", text: log4 });
+    const { error: error42, log: log5 } = result.value;
+    if (log5) {
+      content.push({ type: "text", text: log5 });
     }
     content.push({ type: "text", text: `Error: ${error42}` });
     return { content, isError: true };

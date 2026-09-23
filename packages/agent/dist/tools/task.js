@@ -176,7 +176,7 @@ async function executeSubagentStartHook(params) {
 async function executeSubagentStopHook(params) {
   const env_2 = { stack: [], error: void 0, hasError: false };
   try {
-    const { resourceAccessor, toolCallId, subagentId, subagentType, overriddenModelId, status, durationMs, messageCount, toolCallCount: toolCallCount2, summary, errorMessage: errorMessage6, loopCount, task, description: description9, parentCtx, enableExecuteHookExec, configuredSteps } = params;
+    const { resourceAccessor, toolCallId, subagentId, subagentType, overriddenModelId, status, durationMs, messageCount, toolCallCount: toolCallCount2, summary, errorMessage: errorMessage7, loopCount, task, description: description9, parentCtx, enableExecuteHookExec, configuredSteps } = params;
     const span = __addDisposableResource28(env_2, createSpan(parentCtx.withName("agent.lifecycleHook.subagentStop")), false);
     const hookCtx = span.ctx;
     const result = await executeRemoteSubagentStopHook({
@@ -188,7 +188,7 @@ async function executeSubagentStopHook(params) {
       summary,
       messageCount,
       toolCallCount: toolCallCount2,
-      errorMessage: errorMessage6,
+      errorMessage: errorMessage7,
       loopCount,
       task,
       description: description9,
@@ -465,6 +465,7 @@ function createSubagentAgentConfig({ baseAgentConfig, subagentConfig, overridden
     // Subagents are not the Named Agent: never embed (or refresh) the
     // parent's self document in their user_info.
     getNamedAgentSelfDocument: void 0,
+    getUserInfoMemoryContext: void 0,
     // Wrap toolsGenerator to apply toolsOverride from subagent config
     toolsGenerator: (props) => {
       const propsWithSubagentId = {
@@ -684,21 +685,21 @@ function readNumericStatus(value) {
   }
   return void 0;
 }
-function parseProviderErrorFromMessage(errorMessage6) {
+function parseProviderErrorFromMessage(errorMessage7) {
   const payloadCandidates = [];
   const knownPrefixes = [PROVIDER_ERROR_PREFIX, NOT_FOUND_ERROR_PREFIX];
   for (const prefix of knownPrefixes) {
-    const prefixIndex = errorMessage6.indexOf(prefix);
+    const prefixIndex = errorMessage7.indexOf(prefix);
     if (prefixIndex >= 0) {
-      const rawPayload = errorMessage6.slice(prefixIndex + prefix.length).trim();
+      const rawPayload = errorMessage7.slice(prefixIndex + prefix.length).trim();
       if (rawPayload.length > 0) {
         payloadCandidates.push(rawPayload);
       }
     }
   }
-  const apiErrorIndex = errorMessage6.indexOf(API_ERROR_PREFIX);
+  const apiErrorIndex = errorMessage7.indexOf(API_ERROR_PREFIX);
   if (apiErrorIndex >= 0) {
-    const apiErrorSection = errorMessage6.slice(apiErrorIndex + API_ERROR_PREFIX.length).trim();
+    const apiErrorSection = errorMessage7.slice(apiErrorIndex + API_ERROR_PREFIX.length).trim();
     const fencedJsonMatch = /```(?:json)?\s*([\s\S]*?)\s*```/i.exec(apiErrorSection);
     if (fencedJsonMatch !== null && fencedJsonMatch[1].trim().length > 0) {
       payloadCandidates.push(fencedJsonMatch[1].trim());
@@ -2068,7 +2069,7 @@ ${errorMessages.join("\n")}`);
             }
             const durationMs = Date.now() - executionStartTime;
             const isStreamClosed = isWritableIterableClosedError(error42);
-            const errorMessage6 = isStreamClosed ? SUBAGENT_STREAM_CLOSED_ERROR : error42 instanceof Error ? error42.message : String(error42);
+            const errorMessage7 = isStreamClosed ? SUBAGENT_STREAM_CLOSED_ERROR : error42 instanceof Error ? error42.message : String(error42);
             if (isStreamClosed) {
               logger73.info(ctx, "Client-side subagent execution interrupted by stream teardown", {
                 toolCallId: meta.toolCallId,
@@ -2102,7 +2103,7 @@ ${errorMessages.join("\n")}`);
               result: {
                 case: "error",
                 value: new TaskError({
-                  error: errorMessage6
+                  error: errorMessage7
                 })
               }
             });
@@ -2287,13 +2288,13 @@ ${errorMessages.join("\n")}`);
     execute: (ctx, handler, argsStream, meta) => withSafeParsedArgs(isPendingReplay(ctx, meta) ? replaySchema : schemaForParsing, execute, createTaskToolCall(new TaskToolCall()))(ctx, handler, argsStream, meta),
     render: render2,
     serializeError: (error42) => {
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
       return createTaskToolCall(new TaskToolCall({
         result: new TaskResult({
           result: {
             case: "error",
             value: new TaskError({
-              error: errorMessage6
+              error: errorMessage7
             })
           }
         })

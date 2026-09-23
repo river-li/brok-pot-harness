@@ -1,5 +1,5 @@
 var import_promises71 = require("node:fs/promises");
-var import_node_path146 = require("node:path");
+var import_node_path147 = require("node:path");
 init_zod();
 init_errors();
 init_system_errno();
@@ -169,7 +169,7 @@ var BoxLogShipper = class {
     this.maxLinesPerPoll = deps.maxLinesPerPoll ?? DEFAULT_MAX_LINES_PER_POLL;
     this.maxLagBytes = deps.maxLagBytes ?? DEFAULT_MAX_LAG_BYTES;
     this.maxLineBytes = deps.maxLineBytes ?? DEFAULT_MAX_LINE_BYTES;
-    this.offsetsPath = deps.offsetsPath ?? (0, import_node_path146.join)(this.logDir, OFFSETS_FILE_NAME);
+    this.offsetsPath = deps.offsetsPath ?? (0, import_node_path147.join)(this.logDir, OFFSETS_FILE_NAME);
     this.writeOffsets = deps.writeOffsets ?? writeFileAtomic;
     this.openFile = deps.openFile ?? import_promises71.open;
     this.statFile = deps.statFile ?? import_promises71.stat;
@@ -261,13 +261,13 @@ var BoxLogShipper = class {
     }
     for (const entry of entries) {
       if (entry.isFile() && entry.name.endsWith(LOG_SUFFIX)) {
-        const path31 = (0, import_node_path146.join)(this.logDir, entry.name);
+        const path31 = (0, import_node_path147.join)(this.logDir, entry.name);
         const source = toSourceName(entry.name);
         if (!this.skip.has(path31) && !this.isExcludedSource(source)) {
           files.push({ path: path31, source });
         }
       } else if (entry.isDirectory() && this.subdirPattern.test(entry.name)) {
-        const subdir = (0, import_node_path146.join)(this.logDir, entry.name);
+        const subdir = (0, import_node_path147.join)(this.logDir, entry.name);
         let subEntries;
         try {
           subEntries = await (0, import_promises71.readdir)(subdir, { withFileTypes: true });
@@ -277,7 +277,7 @@ var BoxLogShipper = class {
         }
         for (const sub of subEntries) {
           if (!sub.isFile() || !sub.name.endsWith(LOG_SUFFIX)) continue;
-          const path31 = (0, import_node_path146.join)(subdir, sub.name);
+          const path31 = (0, import_node_path147.join)(subdir, sub.name);
           const leaf = toSourceName(sub.name);
           if (this.skip.has(path31) || this.isExcludedSource(leaf)) continue;
           files.push({ path: path31, source: `${entry.name}/${leaf}` });

@@ -1,19 +1,19 @@
-var __protoPackage86, __protoMessage383, CreateAgentPlacementApprovalState, GetAgentStatusArgs, GetAgentStatusWorker, GetAgentStatusSuccess, GetAgentStatusError, GetAgentStatusResult, GetAgentStatusToolCall, SendToAgentArgs, SendToAgentSuccess, SendToAgentError, SendToAgentResult, SendToAgentToolCall, ReadAgentTranscriptArgs, ReadAgentTranscriptSuccess, ReadAgentTranscriptError, ReadAgentTranscriptResult, ReadAgentTranscriptToolCall, CreateAgentArgs, CreateAgentSuccess, CreateAgentError, CreateAgentResult, CreateAgentToolCall, StopAgentArgs, StopAgentSuccess, StopAgentError, StopAgentResult, StopAgentToolCall;
+var __protoPackage87, __protoMessage383, CreateAgentPlacementApprovalState, GetAgentStatusArgs, GetAgentStatusWorker, GetAgentStatusSuccess, GetAgentStatusError, GetAgentStatusResult, GetAgentStatusToolCall, SendToAgentArgs, SendToAgentSuccess, SendToAgentError, SendToAgentResult, SendToAgentToolCall, ReadAgentTranscriptArgs, ReadAgentTranscriptSuccess, ReadAgentTranscriptError, ReadAgentTranscriptResult, ReadAgentTranscriptToolCall, CreateAgentArgs, CreateAgentSuccess, CreateAgentError, CreateAgentResult, CreateAgentToolCall, StopAgentArgs, StopAgentSuccess, StopAgentError, StopAgentResult, StopAgentToolCall;
 var init_coordinator_tools_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/coordinator_tools_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage86 = "agent.v1.";
+    __protoPackage87 = "agent.v1.";
     __protoMessage383 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage86;
+        return __protoPackage87;
       }
     };
-    CreateAgentPlacementApprovalState = /* @__PURE__ */ enumType(proto3, __protoPackage86, "CreateAgentPlacementApprovalState", [[0, "UNSPECIFIED"], [1, "REQUIRED"], [2, "DENIED"]], 1);
+    CreateAgentPlacementApprovalState = /* @__PURE__ */ enumType(proto3, __protoPackage87, "CreateAgentPlacementApprovalState", [[0, "UNSPECIFIED"], [1, "REQUIRED"], [2, "DENIED"]], 1);
     GetAgentStatusArgs = class _GetAgentStatusArgs extends __protoMessage383 {
       constructor(data) {
         super();

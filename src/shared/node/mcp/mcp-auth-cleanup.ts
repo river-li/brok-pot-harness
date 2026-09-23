@@ -1,5 +1,5 @@
 var import_promises58 = require("node:fs/promises");
-var import_node_path114 = require("node:path");
+var import_node_path115 = require("node:path");
 init_system_errno();
 init_mcp_diagnostics();
 var LEGACY_MCP_AUTH_FILENAME = "mcp-auth.json";
@@ -21,7 +21,7 @@ async function cleanupLegacyMcpAuthCredentials(rootDir) {
   let sawError = false;
   for (const name17 of legacyFiles) {
     try {
-      await (0, import_promises58.rm)((0, import_node_path114.join)(rootDir, name17), { force: true });
+      await (0, import_promises58.rm)((0, import_node_path115.join)(rootDir, name17), { force: true });
       removedCount += 1;
     } catch (error42) {
       reportMcpHostEdgeFailure("auth-cleanup-remove", error42);

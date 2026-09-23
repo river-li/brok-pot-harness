@@ -1,16 +1,16 @@
-var __protoPackage126, __protoMessage3121, ContextAST, ContainerTree, ContainerTreeNode, ContainerTreeNode_Symbol, ContainerTreeNode_Container, ContainerTreeNode_Blob, ContainerTreeNode_Reference;
+var __protoPackage127, __protoMessage3121, ContextAST, ContainerTree, ContainerTreeNode, ContainerTreeNode_Symbol, ContainerTreeNode_Container, ContainerTreeNode_Blob, ContainerTreeNode_Reference;
 var init_context_ast_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/context_ast_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage126 = "aiserver.v1.";
+    __protoPackage127 = "aiserver.v1.";
     __protoMessage3121 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage126;
+        return __protoPackage127;
       }
     };
     ContextAST = class _ContextAST extends __protoMessage3121 {

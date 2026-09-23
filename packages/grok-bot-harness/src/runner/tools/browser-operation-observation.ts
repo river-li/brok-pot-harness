@@ -108,7 +108,7 @@ var BrowserOperationObservation = class {
         subagent_id: getConversationId(this.options.ctx) ?? "unavailable",
         tool_call_id: this.options.toolCallId,
         invocation_id: this.options.invocationId ?? "unavailable",
-        attempt_id: (0, import_node_crypto65.randomUUID)(),
+        attempt_id: (0, import_node_crypto66.randomUUID)(),
         harness: this.options.harness,
         served_model: "unavailable",
         model_attribution: "inference_invocation_join",

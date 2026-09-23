@@ -1,17 +1,17 @@
-var __protoPackage39, __protoMessage336, ListMcpResourcesToolCall, ReadMcpResourceToolCall;
+var __protoPackage40, __protoMessage336, ListMcpResourcesToolCall, ReadMcpResourceToolCall;
 var init_mcp_resource_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_resource_tool_pb.js"() {
     "use strict";
     init_esm();
     init_mcp_exec_pb();
     init_compact();
-    __protoPackage39 = "agent.v1.";
+    __protoPackage40 = "agent.v1.";
     __protoMessage336 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage39;
+        return __protoPackage40;
       }
     };
     ListMcpResourcesToolCall = class _ListMcpResourcesToolCall extends __protoMessage336 {

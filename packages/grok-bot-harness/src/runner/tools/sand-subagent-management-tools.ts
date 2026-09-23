@@ -245,17 +245,24 @@ function createSubagentManagementTools(controller) {
       name: "StopSubagent",
       description: "Abort background subagents you dispatched (via Task). Pass one subagent's Agent ID (from the Task result) to kill a subagent that is wedged, looping with no progress, or no longer needed \u2014 for example a computerUse subagent stuck on the box desktop. Pass all: true instead to stop everything at once: every running subagent, plus, where this host can reach them, the other agents you handed work to (peers you messaged with priority and cloud agents you launched); the result says when it could not reach them. This is the call to make when the user asks you to stop, halt, cancel, or quit the current work, and it must be your first action for that request rather than checking or stopping children one by one. Stopping tears the subagent down and frees its box desktop window; it does not come back, and you are not separately revived for it (this tool's result is the confirmation, and with all: true it lists exactly which ids were stopped, which had already finished, which could not be stopped, and what happened to each peer and cloud agent). If you instead want a subagent to change course and keep going, use MessageSubagent.",
       parameters: stopSubagentParameters,
-      execute: async (_ctx, args, deps) => {
+      execute: async (ctx, args, deps) => {
+        const recordStopped = (subagentId2) => recordDelegationCompleted(ctx, {
+          delegationKind: "subagent_stop",
+          targetId: subagentId2,
+          toolCallId: deps.toolCallId,
+          outcome: "stopped"
+        });
         if (args.all === true || !hasSubagentId(args.subagent_id)) {
-          return formatStopAllSubagentsReport(
-            await stopAllRunningSubagents(deps, { toolCallId: deps.toolCallId })
-          );
+          const report = await stopAllRunningSubagents(deps, { toolCallId: deps.toolCallId });
+          for (const subagent of report.stopped) recordStopped(subagent.subagentId);
+          return formatStopAllSubagentsReport(report);
         }
         const subagentId = args.subagent_id;
         const result = await deps.abortSubagent(subagentId);
         if (result === "not-running") {
           return notRunningMessage(subagentId, await deps.listRunningSubagents());
         }
+        recordStopped(subagentId);
         return `Stopping subagent ${subagentId}. It will be torn down and won't report back.`;
       }
     })

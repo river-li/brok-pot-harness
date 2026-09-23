@@ -1,16 +1,16 @@
-var __protoPackage31, __protoMessage328, McpToolDefinition, McpTools, McpInstructions, McpDescriptor, McpToolDescriptor, McpFileSystemOptions, McpMetaToolOptions;
+var __protoPackage32, __protoMessage328, McpToolDefinition, McpTools, McpInstructions, McpDescriptor, McpToolDescriptor, McpFileSystemOptions, McpMetaToolOptions;
 var init_mcp_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage31 = "agent.v1.";
+    __protoPackage32 = "agent.v1.";
     __protoMessage328 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage31;
+        return __protoPackage32;
       }
     };
     McpToolDefinition = class _McpToolDefinition extends __protoMessage328 {

@@ -1,7 +1,7 @@
-var import_node_fs43 = require("node:fs");
+var import_node_fs41 = require("node:fs");
 var NodeModuleNs = __toESM(require("node:module"), 1);
-var import_node_path70 = require("node:path");
-var import_node_url8 = require("node:url");
+var import_node_path61 = require("node:path");
+var import_node_url7 = require("node:url");
 var MAC_WEBP_RUNTIME_HELPER = "mac-webp-runtime.cjs";
 function getCreateRequire() {
   const ns2 = NodeModuleNs;
@@ -17,7 +17,7 @@ var createCurrentModuleRequire = () => {
     Error.prepareStackTrace = (_2, callSites) => callSites;
     const stack = new Error().stack;
     const currentModuleUrl = Array.isArray(stack) ? stack[0]?.getFileName() : void 0;
-    return getCreateRequire()(typeof currentModuleUrl === "string" && currentModuleUrl.length > 0 ? currentModuleUrl : (0, import_node_path70.join)(process.cwd(), "package.json"));
+    return getCreateRequire()(typeof currentModuleUrl === "string" && currentModuleUrl.length > 0 ? currentModuleUrl : (0, import_node_path61.join)(process.cwd(), "package.json"));
   } finally {
     Error.prepareStackTrace = originalPrepareStackTrace;
   }
@@ -52,7 +52,7 @@ function stackFileNames() {
   }
 }
 function fileNameToPath(fileName) {
-  return fileName.startsWith("file:") ? (0, import_node_url8.fileURLToPath)(fileName) : fileName;
+  return fileName.startsWith("file:") ? (0, import_node_url7.fileURLToPath)(fileName) : fileName;
 }
 function loadRuntimeImporter() {
   const candidates = [];
@@ -64,19 +64,19 @@ function loadRuntimeImporter() {
     }
   };
   for (const moduleFile of stackFileNames()) {
-    const dir = (0, import_node_path70.dirname)(fileNameToPath(moduleFile));
-    add2((0, import_node_path70.join)(dir, MAC_WEBP_RUNTIME_HELPER));
-    add2((0, import_node_path70.join)(dir, "..", "..", "src", "computer-use", MAC_WEBP_RUNTIME_HELPER));
+    const dir = (0, import_node_path61.dirname)(fileNameToPath(moduleFile));
+    add2((0, import_node_path61.join)(dir, MAC_WEBP_RUNTIME_HELPER));
+    add2((0, import_node_path61.join)(dir, "..", "..", "src", "computer-use", MAC_WEBP_RUNTIME_HELPER));
   }
   if (typeof process.argv[1] === "string" && process.argv[1].length > 0) {
-    add2((0, import_node_path70.join)((0, import_node_path70.dirname)(process.argv[1]), MAC_WEBP_RUNTIME_HELPER));
+    add2((0, import_node_path61.join)((0, import_node_path61.dirname)(process.argv[1]), MAC_WEBP_RUNTIME_HELPER));
   }
-  add2((0, import_node_path70.join)(process.cwd(), "src", "computer-use", MAC_WEBP_RUNTIME_HELPER));
-  add2((0, import_node_path70.join)(process.cwd(), "computer-use", MAC_WEBP_RUNTIME_HELPER));
+  add2((0, import_node_path61.join)(process.cwd(), "src", "computer-use", MAC_WEBP_RUNTIME_HELPER));
+  add2((0, import_node_path61.join)(process.cwd(), "computer-use", MAC_WEBP_RUNTIME_HELPER));
   try {
-    const packageRoot = (0, import_node_path70.dirname)(getNodeRequire().resolve("@anysphere/local-exec/package.json"));
-    add2((0, import_node_path70.join)(packageRoot, "src", "computer-use", MAC_WEBP_RUNTIME_HELPER));
-    add2((0, import_node_path70.join)(packageRoot, "dist", "computer-use", MAC_WEBP_RUNTIME_HELPER));
+    const packageRoot = (0, import_node_path61.dirname)(getNodeRequire().resolve("@anysphere/local-exec/package.json"));
+    add2((0, import_node_path61.join)(packageRoot, "src", "computer-use", MAC_WEBP_RUNTIME_HELPER));
+    add2((0, import_node_path61.join)(packageRoot, "dist", "computer-use", MAC_WEBP_RUNTIME_HELPER));
   } catch {
   }
   for (const helperPath of candidates) {
@@ -91,19 +91,22 @@ function loadRuntimeImporter() {
   throw new Error("mac-webp runtime importer was not found next to the bundle");
 }
 var runtimeImporter;
-function importSpecifier(specifier) {
+function resolveRuntimeImporter() {
   const injected = globalThis[MAC_WEBP_IMPORT_HOOK];
   if (typeof injected === "function") {
-    return injected(specifier);
+    return injected;
   }
   runtimeImporter ??= loadRuntimeImporter();
-  return runtimeImporter(specifier);
+  return runtimeImporter;
+}
+function importSpecifier(specifier) {
+  return resolveRuntimeImporter()(specifier);
 }
 function resolveJsquashFile(...parts) {
   return resolveFilename(["@jsquash", "webp", ...parts].join("/"));
 }
 async function importJsquash(...parts) {
-  return await importSpecifier((0, import_node_url8.pathToFileURL)(resolveJsquashFile(...parts)).href);
+  return await importSpecifier((0, import_node_url7.pathToFileURL)(resolveJsquashFile(...parts)).href);
 }
 var memoizedAsync = (factory) => {
   let pending;
@@ -123,7 +126,7 @@ var memoizedAsync = (factory) => {
 var loadDecoder = memoizedAsync(async () => {
   const mod = await importJsquash("decode.js");
   await mod.init({
-    wasmBinary: await import_node_fs43.promises.readFile(resolveJsquashFile("codec", "dec", "webp_dec.wasm"))
+    wasmBinary: await import_node_fs41.promises.readFile(resolveJsquashFile("codec", "dec", "webp_dec.wasm"))
   });
   return mod;
 });
@@ -134,16 +137,13 @@ var loadEncoder = memoizedAsync(async () => {
     importJsquash("codec", "enc", "webp_enc.js")
   ]);
   const module2 = await utils2.initEmscriptenModule(enc.default, void 0, {
-    wasmBinary: await import_node_fs43.promises.readFile(resolveJsquashFile("codec", "enc", "webp_enc.wasm"))
+    wasmBinary: await import_node_fs41.promises.readFile(resolveJsquashFile("codec", "enc", "webp_enc.wasm"))
   });
   return { module: module2, defaultOptions: meta.defaultOptions };
 });
-var encodeMacLosslessWebp = async (bitmap) => {
+var encodeJsquashWebp = async (bitmap, options2) => {
   const { module: module2, defaultOptions: defaultOptions2 } = await loadEncoder();
   const rgba = new Uint8ClampedArray(bitmap.data.buffer, bitmap.data.byteOffset, bitmap.data.byteLength);
-  return Buffer.from(module2.encode(rgba, bitmap.width, bitmap.height, {
-    ...defaultOptions2,
-    lossless: 1,
-    exact: 1
-  }));
+  return Buffer.from(module2.encode(rgba, bitmap.width, bitmap.height, { ...defaultOptions2, ...options2 }));
 };
+var encodeMacLosslessWebp = (bitmap) => encodeJsquashWebp(bitmap, { lossless: 1, exact: 1 });

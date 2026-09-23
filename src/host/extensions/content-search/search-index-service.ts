@@ -1,4 +1,4 @@
-var import_node_fs58 = require("node:fs");
+var import_node_fs60 = require("node:fs");
 var import_node_path101 = require("node:path");
 var import_node_url13 = require("node:url");
 var import_node_worker_threads2 = require("node:worker_threads");
@@ -269,7 +269,7 @@ var SandSearchIndexService = class {
     }
   }
   openAndMigrate() {
-    (0, import_node_fs58.mkdirSync)((0, import_node_path101.dirname)(this.indexDbPath), { recursive: true });
+    (0, import_node_fs60.mkdirSync)((0, import_node_path101.dirname)(this.indexDbPath), { recursive: true });
     let db;
     try {
       db = openSearchIndexDb(this.indexDbPath);
@@ -306,7 +306,7 @@ var SandSearchIndexService = class {
   }
   removeIndexFiles() {
     for (const suffix of ["", ...SQLITE_DB_SIDECAR_SUFFIXES]) {
-      (0, import_node_fs58.rmSync)(`${this.indexDbPath}${suffix}`, { force: true });
+      (0, import_node_fs60.rmSync)(`${this.indexDbPath}${suffix}`, { force: true });
     }
   }
   handleQueryFailure(stage, failure2) {

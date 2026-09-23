@@ -397,18 +397,6 @@ var SandExperimentServiceCore = class {
       enabled: this.getExperiment(SAND_MODEL_EXPERIMENT_NAME, PEEK_OPTIONS).enabled
     });
   }
-  getSandOnboardingBotExperimentEnabled() {
-    if (!this.hasHydratedStatsigUserId()) {
-      return void 0;
-    }
-    if (!Object.hasOwn(this.registry.EXPERIMENTS, SAND_ONBOARDING_BOT_EXPERIMENT_NAME)) {
-      return void 0;
-    }
-    return resolveSandOnboardingBotExperimentEnabled({
-      groupName: this.getExperimentGroupName(SAND_ONBOARDING_BOT_EXPERIMENT_NAME, PEEK_OPTIONS),
-      enabled: this.getExperiment(SAND_ONBOARDING_BOT_EXPERIMENT_NAME, PEEK_OPTIONS).enabled
-    });
-  }
   getComposerTriggerExperimentEnabled() {
     if (!this.hasHydratedStatsigUserId()) return {};
     const enabledByTrigger = {};
@@ -439,12 +427,6 @@ var SandExperimentServiceCore = class {
       this.options.lessSubagentFanoutExperimentOverride
     );
   }
-  offerUpdateCommunication() {
-    return this.offerEnabledArm(
-      GROK_BOT_UPDATE_COMMUNICATION_EXPERIMENT_NAME,
-      this.options.updateCommunicationExperimentOverride
-    );
-  }
   offerBrowserUsePlaywright() {
     return this.offerEnabledArm(
       GROK_BOT_BROWSER_USE_PLAYWRIGHT_EXPERIMENT_NAME,
@@ -456,6 +438,13 @@ var SandExperimentServiceCore = class {
       GROK_BOT_BROWSER_USE_PLAYWRIGHT_EXPERIMENT_NAME,
       this.options.browserUsePlaywrightExperimentOverride
     );
+  }
+  memoryFactsInUserInfo(options2) {
+    const groupName = this.getExperimentGroupName(
+      SAND_MEMORY_FACTS_IN_USER_INFO_EXPERIMENT_NAME,
+      PEEK_OPTIONS
+    );
+    return groupName != null && groupName !== "" && this.getExperiment(SAND_MEMORY_FACTS_IN_USER_INFO_EXPERIMENT_NAME, options2).enabled;
   }
   allocateEnabledArm(name17, devOverride) {
     if (this.options.isDevBuild === true) {
@@ -487,9 +476,6 @@ var SandExperimentServiceCore = class {
   }
   logSandModelExperimentExposure() {
     return this.logExperimentExposure(SAND_MODEL_EXPERIMENT_NAME);
-  }
-  logSandOnboardingBotExperimentExposure() {
-    return this.logExperimentExposure(SAND_ONBOARDING_BOT_EXPERIMENT_NAME);
   }
   logComposerTriggerExperimentExposure(trigger2) {
     return this.logExperimentExposure(SAND_COMPOSER_TRIGGER_EXPERIMENTS[trigger2].experiment);
@@ -807,8 +793,8 @@ var SandExperimentServiceCore = class {
     const featureGates = {};
     for (const name17 of Object.keys(this.registry.FLAGS)) {
       if (!this.overrideStore.isFlagName(name17)) continue;
-      const flag = this.registry.FLAGS[name17];
-      featureGates[name17] = this.authenticatedBootstrapPending && flag?.requiresAuthenticatedBootstrap === true ? false : this.checkFeatureGate(name17, PEEK_OPTIONS);
+      const flag2 = this.registry.FLAGS[name17];
+      featureGates[name17] = this.authenticatedBootstrapPending && flag2?.requiresAuthenticatedBootstrap === true ? false : this.checkFeatureGate(name17, PEEK_OPTIONS);
     }
     const experiments = {};
     for (const name17 of Object.keys(this.registry.EXPERIMENTS)) {
@@ -821,7 +807,6 @@ var SandExperimentServiceCore = class {
       dynamicConfigs[name17] = this.getDynamicConfig(name17, PEEK_OPTIONS);
     }
     const sandModelExperiment = this.getSandModelExperimentState();
-    const sandOnboardingBotExperimentEnabled = this.getSandOnboardingBotExperimentEnabled();
     const composerTriggerExperimentEnabled = this.getComposerTriggerExperimentEnabled();
     const groupChatDiscouragementPolicy = this.getGroupChatDiscouragementPolicy();
     const rawAllowedModelIds = this.hasAuthenticatedNetworkBootstrap && sandModelExperiment == null && Object.hasOwn(this.registry.DYNAMIC_CONFIGS, SAND_MODEL_FILTER_CONFIG_NAME) ? this.getDynamicConfig(SAND_MODEL_FILTER_CONFIG_NAME, PEEK_OPTIONS).allowedModelIds : void 0;
@@ -834,7 +819,6 @@ var SandExperimentServiceCore = class {
       experiments,
       dynamicConfigs,
       sandModelExperiment,
-      sandOnboardingBotExperimentEnabled,
       composerTriggerExperimentEnabled,
       groupChatDiscouragementPolicy,
       sandModelFilterAllowedIds,

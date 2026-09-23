@@ -1,16 +1,16 @@
-var __protoPackage18, __protoMessage315, DeleteArgs, DeleteResult, DeleteSuccess, DeleteFileNotFound, DeleteNotFile, DeletePermissionDenied, DeleteFileBusy, DeleteRejected, DeleteError;
+var __protoPackage19, __protoMessage315, DeleteArgs, DeleteResult, DeleteSuccess, DeleteFileNotFound, DeleteNotFile, DeletePermissionDenied, DeleteFileBusy, DeleteRejected, DeleteError;
 var init_delete_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/delete_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage18 = "agent.v1.";
+    __protoPackage19 = "agent.v1.";
     __protoMessage315 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage18;
+        return __protoPackage19;
       }
     };
     DeleteArgs = class _DeleteArgs extends __protoMessage315 {

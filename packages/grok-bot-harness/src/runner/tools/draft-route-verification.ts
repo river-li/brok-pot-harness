@@ -40,9 +40,9 @@ function parseThreadParent(resultText) {
   const messages2 = slackReadMessages(resultText);
   const author = /^From:\s*([^<(\n]+)/m.exec(messages2)?.[1]?.trim();
   const afterTs = /^Message TS:[^\n]*\n([\s\S]*)/m.exec(messages2)?.[1];
-  const firstLine = afterTs?.split("\n").map((line) => line.trim()).find((line) => line.length > 0);
-  if (author == null || author.length === 0 || firstLine == null) return null;
-  const summary = `${author}: ${firstLine}`;
+  const firstLine2 = afterTs?.split("\n").map((line) => line.trim()).find((line) => line.length > 0);
+  if (author == null || author.length === 0 || firstLine2 == null) return null;
+  const summary = `${author}: ${firstLine2}`;
   return summary.length > 80 ? `${summary.slice(0, 79)}\u2026` : summary;
 }
 function parseChannelDisplayName(resultText) {

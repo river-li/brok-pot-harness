@@ -94,6 +94,9 @@ var HostBox = class {
   getAssignedWindowIndexes() {
     return boxAssignedWindowIndexes(this.inner);
   }
+  async refreshAssignedWindows(ctx) {
+    await boxRefreshAssignedWindows(this.inner, ctx);
+  }
   getTerminalsFolder() {
     return boxTerminalsFolder(this.inner);
   }

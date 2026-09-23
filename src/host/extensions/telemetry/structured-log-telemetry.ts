@@ -1,5 +1,5 @@
 function getHostBuiltAtMs() {
-  return true ? "1790001078000" : void 0;
+  return true ? "1790120245000" : void 0;
 }
 var TELEMETRY_FLUSH_TICK_MS = 3e3;
 var HOST_IDENTITY_HOLD_BACKSTOP_MS = 9e4;
@@ -35,6 +35,7 @@ function botBlockHitFromReport(report) {
     confidence: report.confidence,
     blockedHost: report.blockedHost,
     blockedUrl: report.blockedUrl,
+    siteSection: URL.canParse(report.blockedUrl) ? siteSectionForUrl(new URL(report.blockedUrl)) : "other",
     webBotAuthSigned: report.webBotAuthSigned,
     webBotAuthSignatureSource: report.webBotAuthSignatureSource
   };
@@ -53,7 +54,7 @@ var SandStructuredLogTelemetry = class {
         client: SAND_CLIENT_TYPE,
         "client.type": SAND_CLIENT_TYPE,
         client_version: options2.backend.clientVersion,
-        app_version: options2.appVersion ?? (true ? "0.58.0-pre.19" : "unknown"),
+        app_version: options2.appVersion ?? (true ? "0.59.0-pre.2" : "unknown"),
         arch: process.arch,
         platform: process.platform,
         ...options2.identityTags ?? resolveSandBoxIdentityTags()
@@ -92,6 +93,9 @@ var SandStructuredLogTelemetry = class {
     this.egressIpHash = ipHash;
     const identityHoldStillArmed = this.hostBundleIdentity === void 0;
     if (!identityHoldStillArmed) this.applyIdentityTags();
+  }
+  getEgressIpHash() {
+    return this.egressIpHash;
   }
   setHttpProxyName(name17) {
     this.httpProxyName = name17;
@@ -314,6 +318,7 @@ var SandStructuredLogTelemetry = class {
       approval_mode: report.approvalMode === void 0 ? void 0 : brandLiteralEnum(report.approvalMode),
       submit_requested: report.submitRequested === void 0 ? void 0 : booleanTag(report.submitRequested),
       in_form: report.inForm === void 0 ? void 0 : booleanTag(report.inForm),
+      target_domain: brandedId(report.targetDomain),
       harness: "box",
       ...reason === "submit-failed" ? sandErrorTags(SandError.credentialSubmitFailed()) : {}
     });
@@ -789,7 +794,8 @@ var SandStructuredLogTelemetry = class {
       web_bot_auth_signed: report.webBotAuthSigned === void 0 ? void 0 : String(report.webBotAuthSigned),
       web_bot_auth_signature_source: report.webBotAuthSignatureSource,
       wall_episode_id: brandedId(report.wallEpisodeId),
-      http_proxy_name: brandedId(this.httpProxyName)
+      http_proxy_name: brandedId(this.httpProxyName),
+      ip_hash: brandedId(this.egressIpHash)
     });
   }
   reportBotBlockResolved(report) {
@@ -802,7 +808,8 @@ var SandStructuredLogTelemetry = class {
       wall_episode_id: brandedId(report.wallEpisodeId),
       resolution_kind: brandLiteralEnum(report.resolutionKind),
       resolved_same_turn: report.resolvedSameTurn === void 0 ? void 0 : String(report.resolvedSameTurn),
-      http_proxy_name: brandedId(this.httpProxyName)
+      http_proxy_name: brandedId(this.httpProxyName),
+      ip_hash: brandedId(this.egressIpHash)
     });
   }
   reportSiteVisited(report) {
@@ -821,7 +828,8 @@ var SandStructuredLogTelemetry = class {
       visited_host: report.siteBucket,
       web_bot_auth_signed: report.webBotAuthSigned === void 0 ? void 0 : String(report.webBotAuthSigned),
       wall_episode_id: brandedId(report.wallEpisodeId),
-      http_proxy_name: brandedId(this.httpProxyName)
+      http_proxy_name: brandedId(this.httpProxyName),
+      ip_hash: brandedId(this.egressIpHash)
     });
   }
   reportHostLog(level, line, metadata) {

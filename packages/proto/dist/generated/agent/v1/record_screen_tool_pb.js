@@ -1,17 +1,17 @@
-var __protoPackage47, __protoMessage344, RecordScreenToolCall;
+var __protoPackage48, __protoMessage344, RecordScreenToolCall;
 var init_record_screen_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/record_screen_tool_pb.js"() {
     "use strict";
     init_esm();
     init_record_screen_exec_pb();
     init_compact();
-    __protoPackage47 = "agent.v1.";
+    __protoPackage48 = "agent.v1.";
     __protoMessage344 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage47;
+        return __protoPackage48;
       }
     };
     RecordScreenToolCall = class _RecordScreenToolCall extends __protoMessage344 {

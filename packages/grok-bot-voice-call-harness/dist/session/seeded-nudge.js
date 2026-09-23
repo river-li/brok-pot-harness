@@ -16,8 +16,8 @@ var VoiceCallItemSeeding = class _VoiceCallItemSeeding {
     return SEEDED_TOOL_BY_KIND[kind];
   }
   static progressNote({ kind, texts, atMs }) {
-    const at2 = new Date(atMs).toISOString().replace(/\.\d{3}Z$/, "Z");
-    return kind === "overheard" ? { status: "in progress", steps: texts, at: at2 } : { status: "landed", updates: texts, at: at2 };
+    const at3 = new Date(atMs).toISOString().replace(/\.\d{3}Z$/, "Z");
+    return kind === "overheard" ? { status: "in progress", steps: texts, at: at3 } : { status: "landed", updates: texts, at: at3 };
   }
   static isNudgeKind(value) {
     return value === "ack" || value === "progress" || value === "outcome" || value === "overheard";

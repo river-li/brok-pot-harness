@@ -159,7 +159,7 @@ async function getSmartModeWebFetchPreflightDecision(ctx, args) {
         projectPermissions
       }),
       conversationContext
-    }), "enforce", args.workspacePaths);
+    }), "enforce", args.workspacePaths, { maxAttempts: args.classifierMaxAttempts });
     if (result.result.case === "success" && result.result.value.decision === SmartModeClassifierDecision.BLOCK) {
       return {
         kind: "block",
@@ -328,7 +328,7 @@ var createWebFetchTool = (webFetchService, promptVersion, options2) => {
           if (args.requestSmartModeApproval === true && smartModeClassifierEnabled) {
             const parentBlockReason = getSmartModeBlockReasonFromArgs2(args) ?? SMART_MODE_WEB_FETCH_PARENT_REQUESTED_APPROVAL_FALLBACK_REASON;
             return new SmartModeApproval({
-              requestId: (0, import_node_crypto37.randomUUID)(),
+              requestId: (0, import_node_crypto36.randomUUID)(),
               reason: parentBlockReason
             });
           }
@@ -363,6 +363,7 @@ var createWebFetchTool = (webFetchService, promptVersion, options2) => {
             stateHandler: meta.stateHandler,
             devSmartModeClassifierBlockState,
             devSmartModeClassifierDelayState,
+            classifierMaxAttempts: options2?.smartModeClassifierMaxAttempts,
             workspacePaths: meta.workspacePaths,
             userAutoRunInstructions: meta.userAutoRunInstructions,
             projectAutoRunInstructions: meta.projectAutoRunInstructions
@@ -574,7 +575,7 @@ ${options2.descriptionSuffix}` : base;
           })
         }));
       }
-      const errorMessage6 = (() => {
+      const errorMessage7 = (() => {
         if (error42 instanceof ToolCallError) {
           return error42.clientVisibleErrorMessage;
         }
@@ -592,7 +593,7 @@ ${options2.descriptionSuffix}` : base;
           result: {
             case: "error",
             value: new WebFetchError({
-              error: errorMessage6
+              error: errorMessage7
             })
           }
         })

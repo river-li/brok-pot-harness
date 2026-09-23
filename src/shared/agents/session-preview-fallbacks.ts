@@ -80,6 +80,8 @@ function sessionPreviewForSendMessage(message) {
       return { kind: "cookie_origin_approval" };
     case "local-tool-permission":
       return { kind: "local_tool_permission", target: message.ask.target };
+    case "connector-grant":
+      return { kind: "message" };
     case "virtual-card-approval":
       return { kind: "virtual_card_approval", merchantName: message.approval.merchantName };
     case "connector":
@@ -184,7 +186,7 @@ function hostSessionPreview(preview) {
     case "listener_connect":
       return `Connect ${connectCardManifest(preview.platform)?.displayName ?? preview.platform}`;
     case "bot_template_share":
-      return `Shared bot template: ${preview.name}`;
+      return `Shared Bot template: ${preview.name}`;
     case "message":
       return "Message";
   }

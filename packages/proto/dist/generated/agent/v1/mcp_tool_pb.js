@@ -1,17 +1,17 @@
-var __protoPackage33, __protoMessage330, McpToolError, McpToolResult, McpToolCall;
+var __protoPackage34, __protoMessage330, McpToolError, McpToolResult, McpToolCall;
 var init_mcp_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_tool_pb.js"() {
     "use strict";
     init_esm();
     init_mcp_exec_pb();
     init_compact();
-    __protoPackage33 = "agent.v1.";
+    __protoPackage34 = "agent.v1.";
     __protoMessage330 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage33;
+        return __protoPackage34;
       }
     };
     McpToolError = class _McpToolError extends __protoMessage330 {

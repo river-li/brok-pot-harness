@@ -106,10 +106,10 @@ function bootstrapCachePath(cacheDir) {
 function loadCachedBootstrap(cacheDir) {
   const path31 = bootstrapCachePath(cacheDir);
   try {
-    if (!(0, import_node_fs60.existsSync)(path31)) {
+    if (!(0, import_node_fs62.existsSync)(path31)) {
       return null;
     }
-    const parsed2 = JSON.parse((0, import_node_fs60.readFileSync)(path31, "utf-8"));
+    const parsed2 = JSON.parse((0, import_node_fs62.readFileSync)(path31, "utf-8"));
     if (parsed2 == null || typeof parsed2 !== "object" || !("config" in parsed2)) {
       return null;
     }

@@ -32,7 +32,7 @@ function createLocalBrainDocsFs(io2 = nodeLocalBrainDocsIo) {
       throw error42;
     }
     for (const entry of entries) {
-      const path31 = (0, import_node_path173.join)(dir, entry.name);
+      const path31 = (0, import_node_path175.join)(dir, entry.name);
       if (entry.isFile()) await collectFile(path31, out);
       else if (entry.isDirectory()) await collectDirectory(path31, out);
     }

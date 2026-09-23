@@ -1,16 +1,16 @@
-var __protoPackage90, __protoMessage386, RepositoryIndexingInfo;
+var __protoPackage91, __protoMessage386, RepositoryIndexingInfo;
 var init_repo_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/repo_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage90 = "agent.v1.";
+    __protoPackage91 = "agent.v1.";
     __protoMessage386 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage90;
+        return __protoPackage91;
       }
     };
     RepositoryIndexingInfo = class _RepositoryIndexingInfo extends __protoMessage386 {

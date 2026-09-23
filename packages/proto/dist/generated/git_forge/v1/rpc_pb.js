@@ -1,24 +1,24 @@
 init_esm();
 init_compact();
-var __protoPackage155 = "git_forge.v1.";
-var __protoMessage3147 = class extends CompactMessage {
+var __protoPackage157 = "git_forge.v1.";
+var __protoMessage3149 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage155;
+    return __protoPackage157;
   }
 };
-var CompareCommitsStatus = /* @__PURE__ */ enumType(proto3, __protoPackage155, "CompareCommitsStatus", [[0, "UNSPECIFIED"], [1, "IDENTICAL"], [2, "AHEAD"], [3, "BEHIND"], [4, "DIVERGED"], [5, "NO_MERGE_BASE"]], 1);
-var MergeMode = /* @__PURE__ */ enumType(proto3, __protoPackage155, "MergeMode", [[0, "UNSPECIFIED"], [1, "MERGE_COMMIT"], [2, "SQUASH"]], 1);
-var CommitFileMode = /* @__PURE__ */ enumType(proto3, __protoPackage155, "CommitFileMode", [[0, "UNSPECIFIED"], [1, "REGULAR"], [2, "EXECUTABLE"], [3, "SYMLINK"]], 1);
-var GrepPriority = /* @__PURE__ */ enumType(proto3, __protoPackage155, "GrepPriority", [[0, "UNSPECIFIED"], [1, "INTERACTIVE"], [2, "BACKGROUND"]], 1);
-var GrepLineKind = /* @__PURE__ */ enumType(proto3, __protoPackage155, "GrepLineKind", [[0, "UNSPECIFIED"], [1, "MATCH"], [2, "CONTEXT"]], 1);
-var GeneratedAttributesRevision = /* @__PURE__ */ enumType(proto3, __protoPackage155, "GeneratedAttributesRevision", [[0, "UNSPECIFIED"], [3, "OFF"], [1, "MERGE_BASE"], [2, "HEAD"]], 1);
-var FileMode = /* @__PURE__ */ enumType(proto3, __protoPackage155, "FileMode", [[0, "UNSPECIFIED"], [1, "REGULAR"], [2, "EXECUTABLE"], [3, "SYMLINK"], [4, "GITLINK"]], 1);
-var ChangeKind = /* @__PURE__ */ enumType(proto3, __protoPackage155, "ChangeKind", [[0, "UNSPECIFIED"], [1, "ADDED"], [2, "DELETED"], [3, "MODIFIED"], [4, "RENAMED"], [5, "COPIED"]], 1);
-var ListRefsFilter = /* @__PURE__ */ enumType(proto3, __protoPackage155, "ListRefsFilter", [[0, "UNSPECIFIED"], [1, "ALL"], [2, "BRANCHES"], [3, "TAGS"]], 1);
-var GetCommitResponse = class _GetCommitResponse extends __protoMessage3147 {
+var CompareCommitsStatus = /* @__PURE__ */ enumType(proto3, __protoPackage157, "CompareCommitsStatus", [[0, "UNSPECIFIED"], [1, "IDENTICAL"], [2, "AHEAD"], [3, "BEHIND"], [4, "DIVERGED"], [5, "NO_MERGE_BASE"]], 1);
+var MergeMode = /* @__PURE__ */ enumType(proto3, __protoPackage157, "MergeMode", [[0, "UNSPECIFIED"], [1, "MERGE_COMMIT"], [2, "SQUASH"]], 1);
+var CommitFileMode = /* @__PURE__ */ enumType(proto3, __protoPackage157, "CommitFileMode", [[0, "UNSPECIFIED"], [1, "REGULAR"], [2, "EXECUTABLE"], [3, "SYMLINK"]], 1);
+var GrepPriority = /* @__PURE__ */ enumType(proto3, __protoPackage157, "GrepPriority", [[0, "UNSPECIFIED"], [1, "INTERACTIVE"], [2, "BACKGROUND"]], 1);
+var GrepLineKind = /* @__PURE__ */ enumType(proto3, __protoPackage157, "GrepLineKind", [[0, "UNSPECIFIED"], [1, "MATCH"], [2, "CONTEXT"]], 1);
+var GeneratedAttributesRevision = /* @__PURE__ */ enumType(proto3, __protoPackage157, "GeneratedAttributesRevision", [[0, "UNSPECIFIED"], [3, "OFF"], [1, "MERGE_BASE"], [2, "HEAD"]], 1);
+var FileMode = /* @__PURE__ */ enumType(proto3, __protoPackage157, "FileMode", [[0, "UNSPECIFIED"], [1, "REGULAR"], [2, "EXECUTABLE"], [3, "SYMLINK"], [4, "GITLINK"]], 1);
+var ChangeKind = /* @__PURE__ */ enumType(proto3, __protoPackage157, "ChangeKind", [[0, "UNSPECIFIED"], [1, "ADDED"], [2, "DELETED"], [3, "MODIFIED"], [4, "RENAMED"], [5, "COPIED"]], 1);
+var ListRefsFilter = /* @__PURE__ */ enumType(proto3, __protoPackage157, "ListRefsFilter", [[0, "UNSPECIFIED"], [1, "ALL"], [2, "BRANCHES"], [3, "TAGS"]], 1);
+var GetCommitResponse = class _GetCommitResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -39,7 +39,7 @@ var GetCommitResponse = class _GetCommitResponse extends __protoMessage3147 {
     return ["GetCommitResponse|1 commit #0", Commit2];
   }
 };
-var GetBlobResponse = class _GetBlobResponse extends __protoMessage3147 {
+var GetBlobResponse = class _GetBlobResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -60,7 +60,7 @@ var GetBlobResponse = class _GetBlobResponse extends __protoMessage3147 {
     return ["GetBlobResponse|1 blob #0", FileContent];
   }
 };
-var GetTagResponse = class _GetTagResponse extends __protoMessage3147 {
+var GetTagResponse = class _GetTagResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -81,7 +81,7 @@ var GetTagResponse = class _GetTagResponse extends __protoMessage3147 {
     return ["GetTagResponse|1 tag #0", Tag];
   }
 };
-var GetTreeResponse = class _GetTreeResponse extends __protoMessage3147 {
+var GetTreeResponse = class _GetTreeResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -102,7 +102,7 @@ var GetTreeResponse = class _GetTreeResponse extends __protoMessage3147 {
     return ["GetTreeResponse|1 tree #0", Tree];
   }
 };
-var Tree = class _Tree extends __protoMessage3147 {
+var Tree = class _Tree extends __protoMessage3149 {
   constructor(data) {
     super();
     this.sha = "";
@@ -126,7 +126,7 @@ var Tree = class _Tree extends __protoMessage3147 {
     return ["Tree|1 sha 9|2 tree #0*|3 truncated 8", TreeEntry];
   }
 };
-var TreeEntry = class _TreeEntry extends __protoMessage3147 {
+var TreeEntry = class _TreeEntry extends __protoMessage3149 {
   constructor(data) {
     super();
     this.path = "";
@@ -151,7 +151,7 @@ var TreeEntry = class _TreeEntry extends __protoMessage3147 {
     return ["TreeEntry|1 path 9|2 mode 9|3 type 9|4 sha 9|5 size 4?"];
   }
 };
-var Tag = class _Tag extends __protoMessage3147 {
+var Tag = class _Tag extends __protoMessage3149 {
   constructor(data) {
     super();
     this.sha = "";
@@ -177,7 +177,7 @@ var Tag = class _Tag extends __protoMessage3147 {
     return ["Tag|1 sha 9|2 name 9|3 message 9|4 tagger #0|5 object_sha 9|6 object_type 9", Signature];
   }
 };
-var LookupCommitsResponse = class _LookupCommitsResponse extends __protoMessage3147 {
+var LookupCommitsResponse = class _LookupCommitsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.commits = [];
@@ -200,7 +200,7 @@ var LookupCommitsResponse = class _LookupCommitsResponse extends __protoMessage3
     return ["LookupCommitsResponse|1 commits #0*|2 truncated 8", Commit2];
   }
 };
-var ListCommitsInRangeResponse = class _ListCommitsInRangeResponse extends __protoMessage3147 {
+var ListCommitsInRangeResponse = class _ListCommitsInRangeResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.commits = [];
@@ -226,7 +226,7 @@ var ListCommitsInRangeResponse = class _ListCommitsInRangeResponse extends __pro
     return ["ListCommitsInRangeResponse|1 commits #0*|2 base_commit_sha 9|3 head_commit_sha 9|4 merge_base_commit_sha 9|5 truncated 8", Commit2];
   }
 };
-var CompareCommitsResponse = class _CompareCommitsResponse extends __protoMessage3147 {
+var CompareCommitsResponse = class _CompareCommitsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.status = CompareCommitsStatus.UNSPECIFIED;
@@ -253,7 +253,7 @@ var CompareCommitsResponse = class _CompareCommitsResponse extends __protoMessag
     return ["CompareCommitsResponse|1 status #0|2 ahead_by 5|3 behind_by 5|4 base_commit_sha 9|5 head_commit_sha 9|6 merge_base_commit_sha 9", CompareCommitsStatus];
   }
 };
-var CanMergeResponse = class _CanMergeResponse extends __protoMessage3147 {
+var CanMergeResponse = class _CanMergeResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.canMergeWithoutConflicts = false;
@@ -276,7 +276,7 @@ var CanMergeResponse = class _CanMergeResponse extends __protoMessage3147 {
     return ["CanMergeResponse|1 can_merge_without_conflicts 8|2 merged_tree_sha 12?|3 conflicted_paths 9*"];
   }
 };
-var CommitFileUpsert = class _CommitFileUpsert extends __protoMessage3147 {
+var CommitFileUpsert = class _CommitFileUpsert extends __protoMessage3149 {
   constructor(data) {
     super();
     this.content = new Uint8Array(0);
@@ -299,7 +299,7 @@ var CommitFileUpsert = class _CommitFileUpsert extends __protoMessage3147 {
     return ["CommitFileUpsert|1 content 12|2 mode #0", CommitFileMode];
   }
 };
-var CommitFileDelete = class _CommitFileDelete extends __protoMessage3147 {
+var CommitFileDelete = class _CommitFileDelete extends __protoMessage3149 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -320,7 +320,7 @@ var CommitFileDelete = class _CommitFileDelete extends __protoMessage3147 {
     return ["CommitFileDelete"];
   }
 };
-var CommitFileOperation = class _CommitFileOperation extends __protoMessage3147 {
+var CommitFileOperation = class _CommitFileOperation extends __protoMessage3149 {
   constructor(data) {
     super();
     this.path = "";
@@ -343,7 +343,7 @@ var CommitFileOperation = class _CommitFileOperation extends __protoMessage3147 
     return ["CommitFileOperation|1 path 9|2 upsert #0 operation|3 delete #1 operation", CommitFileUpsert, CommitFileDelete];
   }
 };
-var Commit2 = class _Commit extends __protoMessage3147 {
+var Commit2 = class _Commit extends __protoMessage3149 {
   constructor(data) {
     super();
     this.sha = "";
@@ -368,7 +368,7 @@ var Commit2 = class _Commit extends __protoMessage3147 {
     return ["Commit|1 sha 9|2 message 9|3 author #0|4 committer #0|5 parent_shas 9*|7 tree_sha 9|8 change_id 9?", Signature];
   }
 };
-var Signature = class _Signature extends __protoMessage3147 {
+var Signature = class _Signature extends __protoMessage3149 {
   constructor(data) {
     super();
     this.name = "";
@@ -393,7 +393,7 @@ var Signature = class _Signature extends __protoMessage3147 {
     return ["Signature|1 name 9|2 email 9|3 timestamp 3|4 timezone_offset 5"];
   }
 };
-var PathIdentifier = class _PathIdentifier extends __protoMessage3147 {
+var PathIdentifier = class _PathIdentifier extends __protoMessage3149 {
   constructor(data) {
     super();
     this.revision = "";
@@ -416,7 +416,7 @@ var PathIdentifier = class _PathIdentifier extends __protoMessage3147 {
     return ["PathIdentifier|1 revision 9|2 path 9"];
   }
 };
-var FileContent = class _FileContent extends __protoMessage3147 {
+var FileContent = class _FileContent extends __protoMessage3149 {
   constructor(data) {
     super();
     this.size = "";
@@ -441,7 +441,7 @@ var FileContent = class _FileContent extends __protoMessage3147 {
     return ["FileContent|1 size 9|2 encoding 9|3 content 9|4 sha 9"];
   }
 };
-var DirectoryContent = class _DirectoryContent extends __protoMessage3147 {
+var DirectoryContent = class _DirectoryContent extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -464,7 +464,7 @@ var DirectoryContent = class _DirectoryContent extends __protoMessage3147 {
     return ["DirectoryContent|1 entries #0*|2 sha 9", RepoContentEntry];
   }
 };
-var ResolveRefPathResponse = class _ResolveRefPathResponse extends __protoMessage3147 {
+var ResolveRefPathResponse = class _ResolveRefPathResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.resolvedCommitSha = "";
@@ -486,7 +486,7 @@ var ResolveRefPathResponse = class _ResolveRefPathResponse extends __protoMessag
     return ["ResolveRefPathResponse|1 path_identifier #0|2 resolved_commit_sha 9", PathIdentifier];
   }
 };
-var GetRepoContentResponse = class _GetRepoContentResponse extends __protoMessage3147 {
+var GetRepoContentResponse = class _GetRepoContentResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.content = { case: void 0 };
@@ -509,7 +509,7 @@ var GetRepoContentResponse = class _GetRepoContentResponse extends __protoMessag
     return ["GetRepoContentResponse|1 file_content #0 content|2 directory_content #1 content|3 path_identifier #2|4 resolved_commit_sha 9", FileContent, DirectoryContent, PathIdentifier];
   }
 };
-var BatchRepoContentResult = class _BatchRepoContentResult extends __protoMessage3147 {
+var BatchRepoContentResult = class _BatchRepoContentResult extends __protoMessage3149 {
   constructor(data) {
     super();
     this.path = "";
@@ -533,7 +533,7 @@ var BatchRepoContentResult = class _BatchRepoContentResult extends __protoMessag
     return ["BatchRepoContentResult|1 path 9|2 found 8|3 file_content #0 content|4 directory_content #1 content", FileContent, DirectoryContent];
   }
 };
-var BatchGetRepoContentResponse = class _BatchGetRepoContentResponse extends __protoMessage3147 {
+var BatchGetRepoContentResponse = class _BatchGetRepoContentResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.results = [];
@@ -556,7 +556,7 @@ var BatchGetRepoContentResponse = class _BatchGetRepoContentResponse extends __p
     return ["BatchGetRepoContentResponse|1 results #0*|2 resolved_commit_sha 9", BatchRepoContentResult];
   }
 };
-var RepoContentDetails = class _RepoContentDetails extends __protoMessage3147 {
+var RepoContentDetails = class _RepoContentDetails extends __protoMessage3149 {
   constructor(data) {
     super();
     this.type = "";
@@ -581,7 +581,7 @@ var RepoContentDetails = class _RepoContentDetails extends __protoMessage3147 {
     return ["RepoContentDetails|1 type 9|2 size 4?|3 is_binary 8|4 too_large_to_introspect 8|5 sha 9"];
   }
 };
-var GetRepoContentDetailsResponse = class _GetRepoContentDetailsResponse extends __protoMessage3147 {
+var GetRepoContentDetailsResponse = class _GetRepoContentDetailsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.resolvedCommitSha = "";
@@ -603,7 +603,7 @@ var GetRepoContentDetailsResponse = class _GetRepoContentDetailsResponse extends
     return ["GetRepoContentDetailsResponse|1 details #0?|2 path_identifier #1|3 resolved_commit_sha 9", RepoContentDetails, PathIdentifier];
   }
 };
-var GetFileHistoryResponse = class _GetFileHistoryResponse extends __protoMessage3147 {
+var GetFileHistoryResponse = class _GetFileHistoryResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.commits = [];
@@ -625,7 +625,7 @@ var GetFileHistoryResponse = class _GetFileHistoryResponse extends __protoMessag
     return ["GetFileHistoryResponse|1 commits #0*", ShortCommit];
   }
 };
-var FileHistoryCommitEntry = class _FileHistoryCommitEntry extends __protoMessage3147 {
+var FileHistoryCommitEntry = class _FileHistoryCommitEntry extends __protoMessage3149 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -646,7 +646,7 @@ var FileHistoryCommitEntry = class _FileHistoryCommitEntry extends __protoMessag
     return ["FileHistoryCommitEntry|1 commit #0|2 diff_base_commit_sha 9?|8 path_stats #1?", ShortCommit, FileStats];
   }
 };
-var GetFileHistoryPageWithDiffStatsResponse = class _GetFileHistoryPageWithDiffStatsResponse extends __protoMessage3147 {
+var GetFileHistoryPageWithDiffStatsResponse = class _GetFileHistoryPageWithDiffStatsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -669,7 +669,7 @@ var GetFileHistoryPageWithDiffStatsResponse = class _GetFileHistoryPageWithDiffS
     return ["GetFileHistoryPageWithDiffStatsResponse|1 entries #0*|2 has_more 8|3 next_cursor 9?", FileHistoryCommitEntry];
   }
 };
-var BlameLineRange = class _BlameLineRange extends __protoMessage3147 {
+var BlameLineRange = class _BlameLineRange extends __protoMessage3149 {
   constructor(data) {
     super();
     this.commitSha = new Uint8Array(0);
@@ -693,7 +693,7 @@ var BlameLineRange = class _BlameLineRange extends __protoMessage3147 {
     return ["BlameLineRange|1 commit_sha 12|2 start_in_blamed_file 13|3 len 13"];
   }
 };
-var BlameChunk = class _BlameChunk extends __protoMessage3147 {
+var BlameChunk = class _BlameChunk extends __protoMessage3149 {
   constructor(data) {
     super();
     this.commits = [];
@@ -716,7 +716,7 @@ var BlameChunk = class _BlameChunk extends __protoMessage3147 {
     return ["BlameChunk|1 commits #0*|2 line_ranges #1*", ShortCommit, BlameLineRange];
   }
 };
-var TreeEntryBlame = class _TreeEntryBlame extends __protoMessage3147 {
+var TreeEntryBlame = class _TreeEntryBlame extends __protoMessage3149 {
   constructor(data) {
     super();
     this.name = "";
@@ -738,7 +738,7 @@ var TreeEntryBlame = class _TreeEntryBlame extends __protoMessage3147 {
     return ["TreeEntryBlame|1 name 9|2 last_commit #0", ShortCommit];
   }
 };
-var GetTreeBlameResponse = class _GetTreeBlameResponse extends __protoMessage3147 {
+var GetTreeBlameResponse = class _GetTreeBlameResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -760,7 +760,7 @@ var GetTreeBlameResponse = class _GetTreeBlameResponse extends __protoMessage314
     return ["GetTreeBlameResponse|1 entries #0*", TreeEntryBlame];
   }
 };
-var GetFuzzyPathsResponse = class _GetFuzzyPathsResponse extends __protoMessage3147 {
+var GetFuzzyPathsResponse = class _GetFuzzyPathsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.paths = [];
@@ -783,7 +783,7 @@ var GetFuzzyPathsResponse = class _GetFuzzyPathsResponse extends __protoMessage3
     return ["GetFuzzyPathsResponse|1 paths 9*|2 has_more 8"];
   }
 };
-var ListTreePathsResponse = class _ListTreePathsResponse extends __protoMessage3147 {
+var ListTreePathsResponse = class _ListTreePathsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.paths = [];
@@ -806,7 +806,7 @@ var ListTreePathsResponse = class _ListTreePathsResponse extends __protoMessage3
     return ["ListTreePathsResponse|1 paths 9*|2 has_more 8"];
   }
 };
-var GrepSearchOptions = class _GrepSearchOptions extends __protoMessage3147 {
+var GrepSearchOptions = class _GrepSearchOptions extends __protoMessage3149 {
   constructor(data) {
     super();
     this.literal = false;
@@ -834,7 +834,7 @@ var GrepSearchOptions = class _GrepSearchOptions extends __protoMessage3147 {
     return ["GrepSearchOptions|1 literal 8|2 case_insensitive 8|3 whole_word 8|4 context_before 13|5 context_after 13|6 max_lines 4?|7 filter_path 9?|8 includes 9*|9 excludes 9*"];
   }
 };
-var GrepSubmatch = class _GrepSubmatch extends __protoMessage3147 {
+var GrepSubmatch = class _GrepSubmatch extends __protoMessage3149 {
   constructor(data) {
     super();
     this.start = 0;
@@ -857,7 +857,7 @@ var GrepSubmatch = class _GrepSubmatch extends __protoMessage3147 {
     return ["GrepSubmatch|1 start 13|2 end 13"];
   }
 };
-var GrepMatch = class _GrepMatch extends __protoMessage3147 {
+var GrepMatch = class _GrepMatch extends __protoMessage3149 {
   constructor(data) {
     super();
     this.path = "";
@@ -884,7 +884,7 @@ var GrepMatch = class _GrepMatch extends __protoMessage3147 {
     return ["GrepMatch|1 path 9|2 lines 9|3 line_number 13|4 absolute_offset 4|5 submatches #0*|6 kind #1", GrepSubmatch, GrepLineKind];
   }
 };
-var GrepRepoChunk = class _GrepRepoChunk extends __protoMessage3147 {
+var GrepRepoChunk = class _GrepRepoChunk extends __protoMessage3149 {
   constructor(data) {
     super();
     this.matches = [];
@@ -907,7 +907,7 @@ var GrepRepoChunk = class _GrepRepoChunk extends __protoMessage3147 {
     return ["GrepRepoChunk|1 matches #0*|2 limit_hit 8", GrepMatch];
   }
 };
-var ShortCommit = class _ShortCommit extends __protoMessage3147 {
+var ShortCommit = class _ShortCommit extends __protoMessage3149 {
   constructor(data) {
     super();
     this.sha = new Uint8Array(0);
@@ -933,7 +933,7 @@ var ShortCommit = class _ShortCommit extends __protoMessage3147 {
     return ["ShortCommit|1 sha 12|2 summary 9|3 author_name 9|4 author_email 9|5 timestamp 3"];
   }
 };
-var RepoContentEntry = class _RepoContentEntry extends __protoMessage3147 {
+var RepoContentEntry = class _RepoContentEntry extends __protoMessage3149 {
   constructor(data) {
     super();
     this.type = "";
@@ -958,7 +958,7 @@ var RepoContentEntry = class _RepoContentEntry extends __protoMessage3147 {
     return ["RepoContentEntry|1 type 9|2 name 9|3 path 9|4 sha 9|5 size 4?"];
   }
 };
-var PullRequestDiffChunk = class _PullRequestDiffChunk extends __protoMessage3147 {
+var PullRequestDiffChunk = class _PullRequestDiffChunk extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -980,7 +980,7 @@ var PullRequestDiffChunk = class _PullRequestDiffChunk extends __protoMessage314
     return ["PullRequestDiffChunk|1 header #0?|3 entries #1*", DiffHeader, DiffEntry];
   }
 };
-var CommitDiffHeader = class _CommitDiffHeader extends __protoMessage3147 {
+var CommitDiffHeader = class _CommitDiffHeader extends __protoMessage3149 {
   constructor(data) {
     super();
     this.hasMore = false;
@@ -1003,7 +1003,7 @@ var CommitDiffHeader = class _CommitDiffHeader extends __protoMessage3147 {
     return ["CommitDiffHeader|1 commit #0|2 base_commit_sha 9?|3 stats #1|5 has_more 8|6 next_page_cursor 9?|7 entries #2*", Commit2, CommitDiffStats, DiffEntry];
   }
 };
-var CommitDiffChunk = class _CommitDiffChunk extends __protoMessage3147 {
+var CommitDiffChunk = class _CommitDiffChunk extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -1025,7 +1025,7 @@ var CommitDiffChunk = class _CommitDiffChunk extends __protoMessage3147 {
     return ["CommitDiffChunk|1 header #0?|3 entries #1*", CommitDiffHeader, DiffEntry];
   }
 };
-var CommitDiff2Header = class _CommitDiff2Header extends __protoMessage3147 {
+var CommitDiff2Header = class _CommitDiff2Header extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -1047,7 +1047,7 @@ var CommitDiff2Header = class _CommitDiff2Header extends __protoMessage3147 {
     return ["CommitDiff2Header|1 commit #0|2 base_commit_sha 9?|3 entries #1*", Commit2, DiffEntry];
   }
 };
-var CommitDiff2Entry = class _CommitDiff2Entry extends __protoMessage3147 {
+var CommitDiff2Entry = class _CommitDiff2Entry extends __protoMessage3149 {
   constructor(data) {
     super();
     this.headerIndex = 0;
@@ -1069,7 +1069,7 @@ var CommitDiff2Entry = class _CommitDiff2Entry extends __protoMessage3147 {
     return ["CommitDiff2Entry|1 header_index 13|2 stats #0|3 patch 9?", FileStats];
   }
 };
-var CommitDiff2Chunk = class _CommitDiff2Chunk extends __protoMessage3147 {
+var CommitDiff2Chunk = class _CommitDiff2Chunk extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -1091,7 +1091,7 @@ var CommitDiff2Chunk = class _CommitDiff2Chunk extends __protoMessage3147 {
     return ["CommitDiff2Chunk|1 header #0?|2 entries #1*|3 trailer #2?", CommitDiff2Header, CommitDiff2Entry, CommitDiffStats];
   }
 };
-var GetCommitChangedPathsResponse = class _GetCommitChangedPathsResponse extends __protoMessage3147 {
+var GetCommitChangedPathsResponse = class _GetCommitChangedPathsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.entries = [];
@@ -1113,7 +1113,7 @@ var GetCommitChangedPathsResponse = class _GetCommitChangedPathsResponse extends
     return ["GetCommitChangedPathsResponse|1 base_commit_sha 9?|2 entries #0*", DiffEntry];
   }
 };
-var GetCommitDiffStatsResponse = class _GetCommitDiffStatsResponse extends __protoMessage3147 {
+var GetCommitDiffStatsResponse = class _GetCommitDiffStatsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -1134,7 +1134,7 @@ var GetCommitDiffStatsResponse = class _GetCommitDiffStatsResponse extends __pro
     return ["GetCommitDiffStatsResponse|1 base_commit_sha 9?|2 stats #0", CommitDiffStats];
   }
 };
-var DiffHeader = class _DiffHeader extends __protoMessage3147 {
+var DiffHeader = class _DiffHeader extends __protoMessage3149 {
   constructor(data) {
     super();
     this.mergeBaseCommitSha = "";
@@ -1158,7 +1158,7 @@ var DiffHeader = class _DiffHeader extends __protoMessage3147 {
     return ["DiffHeader|1 merge_base_commit_sha 9|4 has_more 8|5 next_page_cursor 9?|6 entries #0*", DiffEntry];
   }
 };
-var FileStats = class _FileStats extends __protoMessage3147 {
+var FileStats = class _FileStats extends __protoMessage3149 {
   constructor(data) {
     super();
     this.additions = 0;
@@ -1182,7 +1182,7 @@ var FileStats = class _FileStats extends __protoMessage3147 {
     return ["FileStats|1 additions 5|2 deletions 5|3 is_binary 8"];
   }
 };
-var DiffEntry = class _DiffEntry extends __protoMessage3147 {
+var DiffEntry = class _DiffEntry extends __protoMessage3149 {
   constructor(data) {
     super();
     this.path = "";
@@ -1205,7 +1205,7 @@ var DiffEntry = class _DiffEntry extends __protoMessage3147 {
     return ["DiffEntry|1 path 9|2 old_path 9?|3 change_kind #0|4 old_mode #1?|5 new_mode #1?|6 old_sha 9?|7 new_sha 9?|8 stats #2?|9 patch 9?|10 is_generated 8?", ChangeKind, FileMode, FileStats];
   }
 };
-var CommitDiffStats = class _CommitDiffStats extends __protoMessage3147 {
+var CommitDiffStats = class _CommitDiffStats extends __protoMessage3149 {
   constructor(data) {
     super();
     this.filesChanged = 0;
@@ -1229,7 +1229,7 @@ var CommitDiffStats = class _CommitDiffStats extends __protoMessage3147 {
     return ["CommitDiffStats|1 files_changed 13|2 additions 5|3 deletions 5"];
   }
 };
-var RefInfo = class _RefInfo extends __protoMessage3147 {
+var RefInfo = class _RefInfo extends __protoMessage3149 {
   constructor(data) {
     super();
     this.name = "";
@@ -1254,7 +1254,7 @@ var RefInfo = class _RefInfo extends __protoMessage3147 {
     return ["RefInfo|1 name 9|2 target_sha 9|3 object_sha 9|4 object_type 9"];
   }
 };
-var ListRefsResponse = class _ListRefsResponse extends __protoMessage3147 {
+var ListRefsResponse = class _ListRefsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.refs = [];
@@ -1277,7 +1277,7 @@ var ListRefsResponse = class _ListRefsResponse extends __protoMessage3147 {
     return ["ListRefsResponse|1 refs 9*|2 ref_infos #0*|5 next_page_token 9?", RefInfo];
   }
 };
-var SearchRefsResponse = class _SearchRefsResponse extends __protoMessage3147 {
+var SearchRefsResponse = class _SearchRefsResponse extends __protoMessage3149 {
   constructor(data) {
     super();
     this.refInfos = [];

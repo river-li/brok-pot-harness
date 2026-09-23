@@ -1,18 +1,18 @@
 init_esm();
 init_compact();
-var __protoPackage163 = "origin.v1.";
-var __protoMessage3155 = class extends CompactMessage {
+var __protoPackage165 = "origin.v1.";
+var __protoMessage3157 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage163;
+    return __protoPackage165;
   }
 };
-var DiffRelayOwnerPrivacyClass = /* @__PURE__ */ enumType(proto3, __protoPackage163, "DiffRelayOwnerPrivacyClass", [[0, "UNSPECIFIED"], [1, "NO_DURABLE"], [2, "NO_TRAINING"], [3, "TRAINING_ALLOWED"]], 1);
-var DiffRelayContentEncoding = /* @__PURE__ */ enumType(proto3, __protoPackage163, "DiffRelayContentEncoding", [[0, "UNSPECIFIED"], [1, "IDENTITY"]], 1);
-var DiffRelayNotServedReason = /* @__PURE__ */ enumType(proto3, __protoPackage163, "DiffRelayNotServedReason", [[0, "UNSPECIFIED"], [1, "RELAY_DISABLED"], [2, "VIEWER_GATE_OFF"], [3, "REPO_KILL_SWITCH"], [4, "GITHUB_FACT_MISSING"], [5, "GITHUB_FACT_STALE"], [6, "MIRROR_INCOMPLETE"]], 1);
-var DiffRelayTarget = class _DiffRelayTarget extends __protoMessage3155 {
+var DiffRelayOwnerPrivacyClass = /* @__PURE__ */ enumType(proto3, __protoPackage165, "DiffRelayOwnerPrivacyClass", [[0, "UNSPECIFIED"], [1, "NO_DURABLE"], [2, "NO_TRAINING"], [3, "TRAINING_ALLOWED"]], 1);
+var DiffRelayContentEncoding = /* @__PURE__ */ enumType(proto3, __protoPackage165, "DiffRelayContentEncoding", [[0, "UNSPECIFIED"], [1, "IDENTITY"]], 1);
+var DiffRelayNotServedReason = /* @__PURE__ */ enumType(proto3, __protoPackage165, "DiffRelayNotServedReason", [[0, "UNSPECIFIED"], [1, "RELAY_DISABLED"], [2, "VIEWER_GATE_OFF"], [3, "REPO_KILL_SWITCH"], [4, "GITHUB_FACT_MISSING"], [5, "GITHUB_FACT_STALE"], [6, "MIRROR_INCOMPLETE"]], 1);
+var DiffRelayTarget = class _DiffRelayTarget extends __protoMessage3157 {
   constructor(data) {
     super();
     this.headCommitSha = "";
@@ -36,7 +36,7 @@ var DiffRelayTarget = class _DiffRelayTarget extends __protoMessage3155 {
     return ["DiffRelayTarget|1 identifier #0|2 change_number 4?|3 version_number 4?|4 head_commit_sha 9|5 base_commit_sha 9|6 base_is_merge_base 8|7 from #1?", ClientRepoIdentifier, DiffRelayCommitPair];
   }
 };
-var DiffRelayCommitPair = class _DiffRelayCommitPair extends __protoMessage3155 {
+var DiffRelayCommitPair = class _DiffRelayCommitPair extends __protoMessage3157 {
   constructor(data) {
     super();
     this.headCommitSha = "";
@@ -60,10 +60,11 @@ var DiffRelayCommitPair = class _DiffRelayCommitPair extends __protoMessage3155 
     return ["DiffRelayCommitPair|1 head_commit_sha 9|2 base_commit_sha 9|3 base_is_merge_base 8"];
   }
 };
-var GetDiffListingClientRequest = class _GetDiffListingClientRequest extends __protoMessage3155 {
+var GetDiffListingClientRequest = class _GetDiffListingClientRequest extends __protoMessage3157 {
   constructor(data) {
     super();
     this.serviceRequest = new Uint8Array(0);
+    this.shadow = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -79,10 +80,10 @@ var GetDiffListingClientRequest = class _GetDiffListingClientRequest extends __p
     return proto3.util.equals(_GetDiffListingClientRequest, a, b2);
   }
   static $() {
-    return ["GetDiffListingClientRequest|1 target #0|2 service_request 12", DiffRelayTarget];
+    return ["GetDiffListingClientRequest|1 target #0|2 service_request 12|3 shadow 8", DiffRelayTarget];
   }
 };
-var StreamDiffFilesClientRequest = class _StreamDiffFilesClientRequest extends __protoMessage3155 {
+var StreamDiffFilesClientRequest = class _StreamDiffFilesClientRequest extends __protoMessage3157 {
   constructor(data) {
     super();
     this.serviceRequest = new Uint8Array(0);
@@ -104,7 +105,7 @@ var StreamDiffFilesClientRequest = class _StreamDiffFilesClientRequest extends _
     return ["StreamDiffFilesClientRequest|1 target #0|2 service_request 12", DiffRelayTarget];
   }
 };
-var GetDiffFileClientRequest = class _GetDiffFileClientRequest extends __protoMessage3155 {
+var GetDiffFileClientRequest = class _GetDiffFileClientRequest extends __protoMessage3157 {
   constructor(data) {
     super();
     this.serviceRequest = new Uint8Array(0);
@@ -127,7 +128,7 @@ var GetDiffFileClientRequest = class _GetDiffFileClientRequest extends __protoMe
     return ["GetDiffFileClientRequest|1 target #0|2 service_request 12|3 shadow 8", DiffRelayTarget];
   }
 };
-var GetDiffEngineInfoClientRequest = class _GetDiffEngineInfoClientRequest extends __protoMessage3155 {
+var GetDiffEngineInfoClientRequest = class _GetDiffEngineInfoClientRequest extends __protoMessage3157 {
   constructor(data) {
     super();
     this.serviceRequest = new Uint8Array(0);
@@ -149,7 +150,7 @@ var GetDiffEngineInfoClientRequest = class _GetDiffEngineInfoClientRequest exten
     return ["GetDiffEngineInfoClientRequest|1 service_request 12"];
   }
 };
-var PortAnchorsClientRequest = class _PortAnchorsClientRequest extends __protoMessage3155 {
+var PortAnchorsClientRequest = class _PortAnchorsClientRequest extends __protoMessage3157 {
   constructor(data) {
     super();
     this.serviceRequest = new Uint8Array(0);
@@ -171,7 +172,7 @@ var PortAnchorsClientRequest = class _PortAnchorsClientRequest extends __protoMe
     return ["PortAnchorsClientRequest|1 target #0|2 source #0|3 service_request 12", DiffRelayTarget];
   }
 };
-var OriginDiffEnvelope = class _OriginDiffEnvelope extends __protoMessage3155 {
+var OriginDiffEnvelope = class _OriginDiffEnvelope extends __protoMessage3157 {
   constructor(data) {
     super();
     this.body = { case: void 0 };
@@ -197,7 +198,7 @@ var OriginDiffEnvelope = class _OriginDiffEnvelope extends __protoMessage3155 {
     return ["OriginDiffEnvelope|1 payload 12 body|2 oversized #0 body|3 not_served #1 body|4 content_encoding #2|5 chunk_index 13|6 done 8|7 owner_privacy_class #3", DiffRelayOversized, DiffRelayNotServed, DiffRelayContentEncoding, DiffRelayOwnerPrivacyClass];
   }
 };
-var DiffRelayOversized = class _DiffRelayOversized extends __protoMessage3155 {
+var DiffRelayOversized = class _DiffRelayOversized extends __protoMessage3157 {
   constructor(data) {
     super();
     this.sizeBytes = protoInt64.zero;
@@ -220,7 +221,7 @@ var DiffRelayOversized = class _DiffRelayOversized extends __protoMessage3155 {
     return ["DiffRelayOversized|1 size_bytes 4|2 max_bytes 4"];
   }
 };
-var DiffRelayNotServed = class _DiffRelayNotServed extends __protoMessage3155 {
+var DiffRelayNotServed = class _DiffRelayNotServed extends __protoMessage3157 {
   constructor(data) {
     super();
     this.reason = DiffRelayNotServedReason.UNSPECIFIED;

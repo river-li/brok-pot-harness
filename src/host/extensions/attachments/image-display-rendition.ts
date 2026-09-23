@@ -109,13 +109,6 @@ function parseImageProbe(json3) {
   const stream3 = primaryStreamOf(streams);
   return stream3 === null ? null : { kind: "stream", stream: stream3 };
 }
-function evenFit(dimensions, maxEdge) {
-  const longEdge = Math.max(dimensions.width, dimensions.height);
-  if (longEdge <= maxEdge) return null;
-  const ratio = maxEdge / longEdge;
-  const even = (value) => Math.max(2, Math.round(value * ratio / 2) * 2);
-  return { width: even(dimensions.width), height: even(dimensions.height) };
-}
 function transformFilters(transform2) {
   if (transform2 === null) return [];
   const filters = [];
@@ -153,7 +146,7 @@ function displayFilterGraph(layout, transform2) {
     inputs = `[0:${layout.stream.streamIndex}]`;
     presented = layout.stream;
   }
-  const fitted = evenFit(presented, DISPLAY_RENDITION_MAX_EDGE);
+  const fitted = fitLongEdge(presented, DISPLAY_RENDITION_MAX_EDGE);
   if (fitted !== null) filters.push(`scale=${fitted.width}:${fitted.height}`);
   filters.push(...transformFilters(transform2));
   if (filters.length === 0) filters.push("null");
@@ -193,7 +186,7 @@ function needsDisplayRendition(sourcePath) {
   return imageMimeFromPath(sourcePath) == null && servableImageMimeFromPath(sourcePath) != null;
 }
 async function readContainerHead(sourcePath) {
-  const handle = await import_node_fs50.promises.open(sourcePath, "r");
+  const handle = await import_node_fs51.promises.open(sourcePath, "r");
   try {
     const buffer = new Uint8Array(CONTAINER_HEAD_BYTES);
     const { bytesRead } = await handle.read(buffer, 0, buffer.byteLength, 0);

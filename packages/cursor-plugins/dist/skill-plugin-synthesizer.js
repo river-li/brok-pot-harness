@@ -1,5 +1,5 @@
-var import_promises37 = require("node:fs/promises");
-var import_node_path68 = require("node:path");
+var import_promises35 = require("node:fs/promises");
+var import_node_path59 = require("node:path");
 var __awaiter63 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -28,7 +28,7 @@ var __awaiter63 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function skillPathSegments(relativePath) {
-  if ((0, import_node_path68.isAbsolute)(relativePath)) {
+  if ((0, import_node_path59.isAbsolute)(relativePath)) {
     throw new Error(`Skill path "${relativePath}" must be relative to the skills root`);
   }
   const segments = relativePath.split(/[/\\]/).filter((segment) => segment.length > 0);
@@ -56,13 +56,13 @@ function synthesizeSkillPluginDir(options2) {
     if (duplicates.length > 0) {
       throw new Error(`Multiple skill folders would pack to the same path: ${duplicates.join(", ")}`);
     }
-    const pluginDir = (0, import_node_path68.join)(targetDir, safeName);
-    const skillsRoot = (0, import_node_path68.join)(pluginDir, "skills");
-    yield (0, import_promises37.mkdir)(skillsRoot, { recursive: true });
+    const pluginDir = (0, import_node_path59.join)(targetDir, safeName);
+    const skillsRoot = (0, import_node_path59.join)(pluginDir, "skills");
+    yield (0, import_promises35.mkdir)(skillsRoot, { recursive: true });
     for (const { dir, segments } of placements) {
-      const destination = (0, import_node_path68.join)(skillsRoot, ...segments);
-      yield (0, import_promises37.mkdir)((0, import_node_path68.dirname)(destination), { recursive: true });
-      yield (0, import_promises37.cp)(dir, destination, {
+      const destination = (0, import_node_path59.join)(skillsRoot, ...segments);
+      yield (0, import_promises35.mkdir)((0, import_node_path59.dirname)(destination), { recursive: true });
+      yield (0, import_promises35.cp)(dir, destination, {
         recursive: true,
         // Follow symlinks and copy their physical contents into the plugin tree.
         dereference: true
@@ -77,7 +77,7 @@ function synthesizeSkillPluginDir(options2) {
       // on Windows and break discovery.
       skills: placements.map(({ manifestPath: manifestPath2 }) => manifestPath2)
     };
-    yield (0, import_promises37.writeFile)((0, import_node_path68.join)(pluginDir, "plugin.json"), JSON.stringify(manifest, null, 2), "utf-8");
+    yield (0, import_promises35.writeFile)((0, import_node_path59.join)(pluginDir, "plugin.json"), JSON.stringify(manifest, null, 2), "utf-8");
     return pluginDir;
   });
 }

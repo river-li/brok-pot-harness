@@ -14,8 +14,8 @@ var userSkillsCacheExtension = defineHostExtension({
       isInBox: environment.inBox,
       libraryDir: getGlobalSkillsDir(getSandRootDir()),
       fingerprintLibrary: fingerprintUserSkillsLibrary,
-      publish: async ({ fingerprint, signal }) => {
-        await client.publishGrokBotUserSkillsSnapshot({ fingerprint }, { signal });
+      publish: async ({ fingerprint: fingerprint2, signal }) => {
+        await client.publishGrokBotUserSkillsSnapshot({ fingerprint: fingerprint2 }, { signal });
       },
       debounce: createUserSkillsCacheDebounce(),
       publishDeadline: createDeadlinePolicy({

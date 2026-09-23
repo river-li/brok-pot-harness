@@ -1,4 +1,4 @@
-var import_node_crypto73 = require("node:crypto");
+var import_node_crypto74 = require("node:crypto");
 function partitionAgentInbound(messages2) {
   const priority = [];
   const rest = [];
@@ -23,7 +23,7 @@ function cloudAgentExchangeRound(entries, bcId) {
   ).length;
 }
 function cloudAgentInboundEntryId(entries, bcId, report) {
-  const digest = (0, import_node_crypto73.createHash)("sha256").update(`${bcId}
+  const digest = (0, import_node_crypto74.createHash)("sha256").update(`${bcId}
 ${cloudAgentExchangeRound(entries, bcId)}
 ${report}`).digest("hex").slice(0, 16);
   return `agent-inbound-${digest}`;
@@ -267,7 +267,7 @@ var AgentToAgentMessaging = class {
           ...messages2.map((message) => message.queuedAtMs ?? batchStartedAtMs)
         );
         const batchTelemetry = {
-          batchId: (0, import_node_crypto73.randomUUID)(),
+          batchId: (0, import_node_crypto74.randomUUID)(),
           queueBatchSize: messages2.length,
           queueWaitMs: Math.max(0, batchStartedAtMs - oldestQueuedAtMs),
           messagesArrivedWhileRunning: messages2.filter(

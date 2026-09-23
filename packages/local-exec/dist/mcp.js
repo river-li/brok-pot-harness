@@ -149,8 +149,8 @@ async function runMcpPermissionGate(ctx, args, deps) {
         }
       });
     },
-    onPermissionDenied: (errorMessage4, metadata) => {
-      const formattedError = `MCP tool execution blocked: ${args.name} - ${errorMessage4}`;
+    onPermissionDenied: (errorMessage5, metadata) => {
+      const formattedError = `MCP tool execution blocked: ${args.name} - ${errorMessage5}`;
       return new McpResult({
         result: {
           case: "permissionDenied",

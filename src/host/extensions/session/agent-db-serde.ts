@@ -182,12 +182,12 @@ function parseRequestRecords(raw) {
     if (entry == null || typeof entry !== "object") continue;
     const id = typeof entry.id === "string" ? entry.id.trim() : "";
     if (id.length === 0) continue;
-    const at2 = typeof entry.at === "number" && Number.isFinite(entry.at) && entry.at > 0 ? entry.at : 0;
+    const at3 = typeof entry.at === "number" && Number.isFinite(entry.at) && entry.at > 0 ? entry.at : 0;
     const prompt = typeof entry.prompt === "string" && entry.prompt.length > 0 ? entry.prompt : void 0;
     const source = entry.source != null && REQUEST_SOURCES2.has(entry.source) ? entry.source : void 0;
     records2.push({
       id,
-      at: at2,
+      at: at3,
       ...prompt != null ? { prompt } : {},
       ...source != null ? { source } : {}
     });

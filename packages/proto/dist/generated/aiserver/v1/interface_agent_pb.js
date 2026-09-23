@@ -1,16 +1,16 @@
-var __protoPackage128, __protoMessage3123, InterfaceAgentClientState, InterfaceAgentStatus, InterfaceAgentStatus_Status;
+var __protoPackage129, __protoMessage3123, InterfaceAgentClientState, InterfaceAgentStatus, InterfaceAgentStatus_Status;
 var init_interface_agent_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/interface_agent_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage128 = "aiserver.v1.";
+    __protoPackage129 = "aiserver.v1.";
     __protoMessage3123 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage128;
+        return __protoPackage129;
       }
     };
     InterfaceAgentClientState = class _InterfaceAgentClientState extends __protoMessage3123 {
@@ -77,6 +77,6 @@ var init_interface_agent_pb = __esm({
         return ["InterfaceAgentStatus|1 validate_configuration #0|2 stub_new_function #0|3 verify_spec #0|15 write_test_plan #0|4 write_tests #0|5 write_implementation #0|6 implement_new_function #0|7 run_tests #0|8 validate_configuration_message 9|9 stub_new_function_message 9|10 verify_spec_message 9|16 write_test_plan_message 9|11 write_tests_message 9|12 write_implementation_message 9|13 implement_new_function_message 9|14 run_tests_message 9", InterfaceAgentStatus_Status];
       }
     };
-    InterfaceAgentStatus_Status = /* @__PURE__ */ enumType(proto3, __protoPackage128, "InterfaceAgentStatus.Status", [[0, "UNSPECIFIED"], [1, "WAITING"], [2, "RUNNING"], [3, "SUCCESS"], [4, "FAILURE"]], 1);
+    InterfaceAgentStatus_Status = /* @__PURE__ */ enumType(proto3, __protoPackage129, "InterfaceAgentStatus.Status", [[0, "UNSPECIFIED"], [1, "WAITING"], [2, "RUNNING"], [3, "SUCCESS"], [4, "FAILURE"]], 1);
   }
 });

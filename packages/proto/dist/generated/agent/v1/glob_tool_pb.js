@@ -1,16 +1,16 @@
-var __protoPackage20, __protoMessage317, GlobToolArgs, GlobToolResult, GlobToolError, GlobToolSuccess, GlobToolCall;
+var __protoPackage21, __protoMessage317, GlobToolArgs, GlobToolResult, GlobToolError, GlobToolSuccess, GlobToolCall;
 var init_glob_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/glob_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage20 = "agent.v1.";
+    __protoPackage21 = "agent.v1.";
     __protoMessage317 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage20;
+        return __protoPackage21;
       }
     };
     GlobToolArgs = class _GlobToolArgs extends __protoMessage317 {

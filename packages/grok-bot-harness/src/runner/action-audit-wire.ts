@@ -1,6 +1,10 @@
-init_dashboard_pb();
 function nonNegativeBigInt(value) {
   return BigInt(Math.max(0, Math.round(value)));
+}
+function settledDelegationFields(action) {
+  if (action.direction !== "completed") return {};
+  if (action.durationMs === void 0) return { outcome: action.outcome };
+  return { outcome: action.outcome, durationMs: nonNegativeBigInt(action.durationMs) };
 }
 function toSandAuditEventProto(record2, eventId) {
   const base = {
@@ -44,7 +48,10 @@ function toSandAuditEventProto(record2, eventId) {
             target: action.target,
             allowed,
             blockedReason: allowed ? "" : action.blockedReason ?? "",
-            classificationReasons: [...action.classificationReasons ?? []]
+            classificationReasons: [...action.classificationReasons ?? []],
+            machineId: action.machineId,
+            exitCode: action.exitCode,
+            durationMs: action.durationMs === void 0 ? void 0 : nonNegativeBigInt(action.durationMs)
           })
         }
       });
@@ -88,7 +95,111 @@ function toSandAuditEventProto(record2, eventId) {
             toolName: action.toolName,
             outcome: action.outcome,
             durationMs: nonNegativeBigInt(action.durationMs),
-            errorCategory: action.errorCategory ?? ""
+            errorCategory: action.errorCategory ?? "",
+            targetHost: action.targetHost ?? ""
+          })
+        }
+      });
+    case "messageDelivery":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "messageDelivery",
+          value: new SandAuditEvent_MessageDelivery({
+            destinationType: action.destinationType,
+            destinationId: action.destinationId ?? "",
+            result: action.result,
+            failureCategory: action.failureCategory ?? "",
+            messageId: action.messageId ?? ""
+          })
+        }
+      });
+    case "fileTransfer":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "fileTransfer",
+          value: new SandAuditEvent_FileTransfer({
+            direction: action.direction,
+            target: action.target,
+            byteCount: action.byteCount === void 0 ? void 0 : nonNegativeBigInt(action.byteCount),
+            outcome: action.outcome,
+            errorCategory: action.errorCategory ?? "",
+            machineId: action.machineId ?? ""
+          })
+        }
+      });
+    case "guardrail":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "guardrail",
+          value: new SandAuditEvent_Guardrail({
+            kind: action.guardrailKind,
+            detector: action.detector,
+            action: action.action,
+            count: nonNegativeBigInt(action.count ?? 0),
+            targetHost: action.targetHost ?? "",
+            source: action.source,
+            toolName: action.toolName ?? "",
+            resolution: action.resolution ?? "",
+            durationMs: action.durationMs === void 0 ? void 0 : nonNegativeBigInt(action.durationMs),
+            decisionId: action.decisionId ?? ""
+          })
+        }
+      });
+    case "automationRun":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "automationRun",
+          value: new SandAuditEvent_AutomationRun({
+            automationId: action.automationId,
+            runId: action.runId,
+            trigger: action.trigger,
+            outcome: action.outcome,
+            durationMs: nonNegativeBigInt(action.durationMs)
+          })
+        }
+      });
+    case "skillActivated":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "skillActivated",
+          value: new SandAuditEvent_SkillActivated({
+            skillName: action.skillName,
+            trigger: action.trigger,
+            source: action.source
+          })
+        }
+      });
+    case "toolDecision":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "toolDecision",
+          value: new SandAuditEvent_ToolDecision({
+            decisionId: action.decisionId,
+            toolName: action.toolName,
+            source: action.source,
+            approvalMode: action.approvalMode,
+            outcome: action.outcome,
+            ruleId: action.ruleId ?? ""
+          })
+        }
+      });
+    case "delegation":
+      return new SandAuditEvent({
+        ...base,
+        action: {
+          case: "delegation",
+          value: new SandAuditEvent_Delegation({
+            direction: action.direction,
+            kind: action.delegationKind,
+            target: delegationTargetOf(action.delegationKind),
+            targetId: action.targetId,
+            ...settledDelegationFields(action)
           })
         }
       });

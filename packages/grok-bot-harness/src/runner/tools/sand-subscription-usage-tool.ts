@@ -2,7 +2,7 @@ init_dist4();
 init_dist3();
 init_errors();
 init_zod();
-var logger107 = createLogger("sand:check-subscription-usage-tool");
+var logger108 = createLogger("sand:check-subscription-usage-tool");
 var SAND_CHECK_SUBSCRIPTION_USAGE_TOOL_NAME = "CheckSubscriptionUsage";
 var USAGE_UNAVAILABLE = "Usage information is unavailable right now.";
 function formatUtcTimestamp(ms2) {
@@ -78,7 +78,7 @@ function createCheckSubscriptionUsageTool(deps) {
       try {
         usage = await d.getCycleUsage();
       } catch (error42) {
-        logger107.warn(ctx, `CheckSubscriptionUsage lookup failed (${errorLogTag(error42)})`);
+        logger108.warn(ctx, `CheckSubscriptionUsage lookup failed (${errorLogTag(error42)})`);
         return USAGE_UNAVAILABLE;
       }
       return formatCycleUsage(usage, Date.now());

@@ -72,21 +72,21 @@ function isMaxTokensExceededMessage(lowerMessage) {
 function isObservedInputTokenLimitMessage(lowerMessage) {
   return isConfiguredInputTokensLimitMessage(lowerMessage) || isInputTokenCountExceededMessage(lowerMessage) || isInputTokenCountExceedsMaximumContextLengthMessage(lowerMessage) || isMaximumPromptLengthMessage(lowerMessage) || isPromptTooLongMessage(lowerMessage) || isInputLongerThanContextMessage(lowerMessage) || isInputPlusOutputExceedsContextLengthMessage(lowerMessage) || isContextWindowOverflowMessage(lowerMessage) || isInputTooLongForRequestedModelMessage(lowerMessage) || isInputLengthExceededMessage(lowerMessage) || isRequestSizeLimitMessage(lowerMessage) || isInputAndMaxTokensExceedContextLimitMessage(lowerMessage) || isGenericInputTooLongMessage(lowerMessage) || isRequestSizeExceedsContextWindowMessage(lowerMessage) || isMessageSizeExceedsMbLimitMessage(lowerMessage) || isContextLengthExceededCodeMessage(lowerMessage) || isPayloadTooLargeMessage(lowerMessage) || isMaxTokensExceededMessage(lowerMessage);
 }
-function isInputTokenLimitErrorMessage(errorMessage6) {
-  const lowerMessage = errorMessage6.toLowerCase();
+function isInputTokenLimitErrorMessage(errorMessage7) {
+  const lowerMessage = errorMessage7.toLowerCase();
   return isObservedInputTokenLimitMessage(lowerMessage);
 }
 var OUTPUT_TOKEN_LIMIT_ERROR_SUBSTRING = "exceeded max output tokens";
-function isOutputTokenLimitErrorMessage(errorMessage6) {
-  return errorMessage6.toLowerCase().includes(OUTPUT_TOKEN_LIMIT_ERROR_SUBSTRING);
+function isOutputTokenLimitErrorMessage(errorMessage7) {
+  return errorMessage7.toLowerCase().includes(OUTPUT_TOKEN_LIMIT_ERROR_SUBSTRING);
 }
 var CANONICAL_INPUT_TOKEN_LIMIT_MESSAGE = "input token limit exceeded";
-function classifyTokenLimitErrorFromMessage(errorMessage6) {
-  if (isOutputTokenLimitErrorMessage(errorMessage6)) {
-    return new OutputTokensLimitExceededError(errorMessage6);
+function classifyTokenLimitErrorFromMessage(errorMessage7) {
+  if (isOutputTokenLimitErrorMessage(errorMessage7)) {
+    return new OutputTokensLimitExceededError(errorMessage7);
   }
-  if (isInputTokenLimitErrorMessage(errorMessage6) || errorMessage6.toLowerCase().includes(CANONICAL_INPUT_TOKEN_LIMIT_MESSAGE)) {
-    return new InputTokenLimitError(errorMessage6);
+  if (isInputTokenLimitErrorMessage(errorMessage7) || errorMessage7.toLowerCase().includes(CANONICAL_INPUT_TOKEN_LIMIT_MESSAGE)) {
+    return new InputTokenLimitError(errorMessage7);
   }
   return void 0;
 }

@@ -48,11 +48,10 @@ function createRemoteBoxResourceAccessor(host) {
       return rethrowOnFreshConnection(error42);
     }
   };
-  const audit = (ctx, kind, command) => {
-    host.auditShellCommand(agentId, kind, command, "box", {
-      ...turnAttributionFromContext(ctx, agentId),
-      boxId
-    });
+  const shellAudit = {
+    auditor: host.actionAuditor,
+    agentId,
+    target: () => ({ target: "box", boxId })
   };
   const guardAutoReviewBarrier = () => host.autoReviewGate.assertNoPendingApproval();
   const ownsMonitorForShellNavigationAudit = (connection) => {
@@ -74,10 +73,8 @@ function createRemoteBoxResourceAccessor(host) {
     host.probeNavigationAfterComputerUse(ctx, connection);
   };
   const accessor = new RegistryResourceAccessor();
-  accessor.register(shellStreamExecutorResource, {
+  const boxShellStream = {
     execute: (ctx, args, options2) => (async function* () {
-      guardAutoReviewBarrier();
-      audit(ctx, "foreground", args.command);
       const connection = await connect5(ctx);
       guardAutoReviewBarrier();
       try {
@@ -94,11 +91,9 @@ function createRemoteBoxResourceAccessor(host) {
         probeNavigationAfterShell(ctx, connection);
       }
     })()
-  });
-  accessor.register(backgroundShellExecutorResource, {
+  };
+  const boxBackgroundShell = {
     execute: async (ctx, args, options2) => {
-      guardAutoReviewBarrier();
-      audit(ctx, "background", args.command);
       const connection = await connect5(ctx);
       guardAutoReviewBarrier();
       try {
@@ -111,15 +106,47 @@ function createRemoteBoxResourceAccessor(host) {
         probeNavigationAfterShell(ctx, connection);
       }
     }
+  };
+  const auditedBoxShellStream = wrapShellStreamExecutorForAudit(boxShellStream, shellAudit);
+  const auditedBoxBackgroundShell = wrapBackgroundShellExecutorForAudit(
+    boxBackgroundShell,
+    shellAudit
+  );
+  accessor.register(shellStreamExecutorResource, {
+    execute: (ctx, args, options2) => (async function* () {
+      guardAutoReviewBarrier();
+      yield* auditedBoxShellStream.execute(ctx, args, options2);
+    })()
+  });
+  accessor.register(backgroundShellExecutorResource, {
+    execute: async (ctx, args, options2) => {
+      guardAutoReviewBarrier();
+      return await auditedBoxBackgroundShell.execute(ctx, args, options2);
+    }
   });
   accessor.register(readExecutorResource, {
     execute: async (ctx, args, options2) => {
-      const managedSkill = host.readManagedSkill?.(args);
-      if (managedSkill !== void 0) return await managedSkill;
-      const connection = await connect5(ctx);
-      return await onFreshConnection(
-        () => connection.remoteAccessor.get(readExecutorResource).execute(ctx, args, options2)
-      );
+      const readBox = async () => {
+        const connection = await connect5(ctx);
+        return await onFreshConnection(
+          () => connection.remoteAccessor.get(readExecutorResource).execute(ctx, args, options2)
+        );
+      };
+      const result = await (host.readManagedSkill?.(args) ?? readBox());
+      if (host.onManagedSkillRead !== void 0 && result.result.case === "success") {
+        const skillId = managedSkillIdFromPath(args.path);
+        if (skillId !== void 0) {
+          const { turnId, rootTurnId, subagentId } = turnAttributionFromContext(ctx, agentId);
+          host.onManagedSkillRead({
+            skillId,
+            agentId,
+            ...turnId === void 0 ? {} : { turnId },
+            ...rootTurnId === void 0 ? {} : { rootTurnId },
+            ...subagentId === void 0 ? {} : { subagentId }
+          });
+        }
+      }
+      return result;
     }
   });
   accessor.register(shellExecutorResource, {

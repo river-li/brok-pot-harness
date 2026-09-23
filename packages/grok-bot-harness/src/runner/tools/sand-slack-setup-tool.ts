@@ -1,7 +1,7 @@
 init_zod();
 var SAND_SLACK_SETUP_TOOL_NAME = "slack_setup";
 var SLACK_SETUP_NOT_OWNER_LINE = "Only my owner can add me to Slack";
-var SLACK_SETUP_TEAM_SETUP_UNDERWAY_LINE = "Nothing was started. This turn is the bot's own setup pass, not an owner asking to be added to Slack, so the most it can do is offer. When the owner asks, run slack_setup start then; status still answers now.";
+var SLACK_SETUP_TEAM_SETUP_UNDERWAY_LINE = "Nothing was started. This turn is your own setup, not the owner asking to be added to Slack, so the most you can do now is offer. When the owner asks, run slack_setup start then; status still answers now.";
 var slackSetupParameters = external_exports.object({
   action: external_exports.enum(["start", "status"]).describe(
     "start: create and install your Slack app, or put the owner's next step in the chat. status: report where the install stands without changing anything."
@@ -21,7 +21,7 @@ function ownerStepMessage(outcome) {
     case "authorize":
       return outcome.reason === "reconnect" ? `Grok Bot no longer has access to that Slack workspace. [Reconnect it](${outcome.url}), then tell me and I'll finish adding myself.` : `To add me to Slack, [connect a Slack workspace](${outcome.url}) you can install apps in and click Allow. Then tell me and I'll create my Slack app there.`;
     case "awaiting_admin":
-      return `Slack needs a workspace admin to approve my app. [Submit the request to your Slack admins](${outcome.url}) \u2014 setup finishes on its own once they approve.`;
+      return `Slack needs a workspace admin to approve my app. [Submit the request to your Slack admins](${outcome.url}). Setup finishes on its own once they approve.`;
   }
 }
 function describeState(state) {

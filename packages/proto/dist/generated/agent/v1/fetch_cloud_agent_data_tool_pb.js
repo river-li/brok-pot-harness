@@ -1,16 +1,16 @@
-var __protoPackage71, __protoMessage368, FetchCloudAgentDataArgs, FetchCloudAgentDataResult, FetchCloudAgentDataSuccess, FetchCloudAgentDataError, FetchCloudAgentDataToolCall;
+var __protoPackage72, __protoMessage368, FetchCloudAgentDataArgs, FetchCloudAgentDataResult, FetchCloudAgentDataSuccess, FetchCloudAgentDataError, FetchCloudAgentDataToolCall;
 var init_fetch_cloud_agent_data_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/fetch_cloud_agent_data_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage71 = "agent.v1.";
+    __protoPackage72 = "agent.v1.";
     __protoMessage368 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage71;
+        return __protoPackage72;
       }
     };
     FetchCloudAgentDataArgs = class _FetchCloudAgentDataArgs extends __protoMessage368 {

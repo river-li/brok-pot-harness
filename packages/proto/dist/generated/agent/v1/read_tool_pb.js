@@ -1,17 +1,17 @@
-var __protoPackage24, __protoMessage321, ReadToolCall, ReadToolArgs, ReadToolResult, ReadRange, ReadToolSuccess, ReadToolError;
+var __protoPackage25, __protoMessage321, ReadToolCall, ReadToolArgs, ReadToolResult, ReadRange, ReadToolSuccess, ReadToolError;
 var init_read_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/read_tool_pb.js"() {
     "use strict";
     init_esm();
     init_cursor_rules_pb();
     init_compact();
-    __protoPackage24 = "agent.v1.";
+    __protoPackage25 = "agent.v1.";
     __protoMessage321 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage24;
+        return __protoPackage25;
       }
     };
     ReadToolCall = class _ReadToolCall extends __protoMessage321 {

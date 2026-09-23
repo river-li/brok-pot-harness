@@ -1,4 +1,5 @@
 init_esm();
+init_cursor_rules_pb();
 init_compact();
 var __protoPackage153 = "aiserver.v1.";
 var __protoMessage3145 = class extends CompactMessage {
@@ -13,6 +14,7 @@ var InferenceReason = /* @__PURE__ */ enumType(proto3, __protoPackage153, "Infer
 var InferenceMessageRole = /* @__PURE__ */ enumType(proto3, __protoPackage153, "InferenceMessageRole", [[0, "UNSPECIFIED"], [1, "USER"], [2, "ASSISTANT"], [3, "TOOL"], [4, "SYSTEM"]], 1);
 var InferenceStreamErrorType = /* @__PURE__ */ enumType(proto3, __protoPackage153, "InferenceStreamErrorType", [[0, "UNSPECIFIED"], [1, "UNKNOWN"], [2, "INPUT_TOKEN_LIMIT"], [3, "OUTPUT_TOKEN_LIMIT"], [4, "RATE_LIMIT"], [5, "AUTHENTICATION"], [6, "PERMISSION"], [7, "OVERLOADED"], [8, "CONTENT_FILTER"]], 1);
 var RunInferenceRoutingRole = /* @__PURE__ */ enumType(proto3, __protoPackage153, "RunInferenceRoutingRole", [[0, "UNSPECIFIED"], [1, "USER"], [2, "ASSISTANT"]], 1);
+var RunInferenceInvocationPurpose = /* @__PURE__ */ enumType(proto3, __protoPackage153, "RunInferenceInvocationPurpose", [[0, "UNSPECIFIED"], [1, "CONTEXT_SUMMARIZATION"]], 1);
 var InferenceStreamRequest = class _InferenceStreamRequest extends __protoMessage3145 {
   constructor(data) {
     super();
@@ -35,7 +37,7 @@ var InferenceStreamRequest = class _InferenceStreamRequest extends __protoMessag
     return proto3.util.equals(_InferenceStreamRequest, a, b2);
   }
   static $() {
-    return ["InferenceStreamRequest|1 messages #0*|2 tools #1*|3 provider_defined_tools #2*|4 model_config #3?|5 model_id 9?|6 invocation_id 9?|7 requested_model #4?|8 conversation_id 9?|9 accepted_unadvertised_tool_names 9*|10 automation_id 9?|11 inference_reason #5?|12 conversation_group_id 9?|13 parent_request_id 9?|14 root_parent_request_id 9?|15 parent_agent_tool_call_id 9?|16 subagent_type 9?|17 compaction_epoch 5?", InferenceCoreMessage, InferenceAgentTool, InferenceNamedProviderDefinedTool, InferenceModelConfig, InferenceRequestedModel, InferenceReason];
+    return ["InferenceStreamRequest|1 messages #0*|2 tools #1*|3 provider_defined_tools #2*|4 model_config #3?|5 model_id 9?|6 invocation_id 9?|7 requested_model #4?|8 conversation_id 9?|9 accepted_unadvertised_tool_names 9*|10 automation_id 9?|11 inference_reason #5?|12 conversation_group_id 9?|13 parent_request_id 9?|14 root_parent_request_id 9?|15 parent_agent_tool_call_id 9?|16 subagent_type 9?|17 compaction_epoch 5?|18 turn_unit_id 9?|19 turn_unit_type 9?", InferenceCoreMessage, InferenceAgentTool, InferenceNamedProviderDefinedTool, InferenceModelConfig, InferenceRequestedModel, InferenceReason];
   }
 };
 var InferenceRequestedModel = class _InferenceRequestedModel extends __protoMessage3145 {
@@ -969,6 +971,8 @@ var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessag
     super();
     this.conversationId = "";
     this.routingConversation = [];
+    this.selectedSubagentModels = [];
+    this.subagentModelOverrides = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -984,7 +988,30 @@ var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessag
     return proto3.util.equals(_RunInferenceRunRequest, a, b2);
   }
   static $() {
-    return ["RunInferenceRunRequest|1 conversation_id 9|2 conversation_group_id 9?|3 requested_model #0|4 routing_conversation #1*|5 agent_mode 9?|6 subagent_type_name 9?", InferenceRequestedModel, RunInferenceRoutingMessage];
+    return ["RunInferenceRunRequest|1 conversation_id 9|2 conversation_group_id 9?|3 requested_model #0|4 routing_conversation #1*|5 agent_mode 9?|6 subagent_type_name 9?|7 selected_subagent_models #0*|8 subagent_model_overrides #2*|9 is_summarize_action 8?", InferenceRequestedModel, RunInferenceRoutingMessage, RunInferenceSubagentModelOverride];
+  }
+};
+var RunInferenceSubagentModelOverride = class _RunInferenceSubagentModelOverride extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.subagentType = "";
+    this.selection = { case: void 0 };
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceSubagentModelOverride().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceSubagentModelOverride().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceSubagentModelOverride().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceSubagentModelOverride, a, b2);
+  }
+  static $() {
+    return ["RunInferenceSubagentModelOverride|1 subagent_type 9|2 model #0 selection|3 inherit 8 selection|4 disabled 8 selection", InferenceRequestedModel];
   }
 };
 var RunInferenceRoutingMessage = class _RunInferenceRoutingMessage extends __protoMessage3145 {
@@ -1014,6 +1041,7 @@ var RunInferenceInvokeModel = class _RunInferenceInvokeModel extends __protoMess
   constructor(data) {
     super();
     this.invocationId = "";
+    this.purpose = RunInferenceInvocationPurpose.UNSPECIFIED;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1029,7 +1057,7 @@ var RunInferenceInvokeModel = class _RunInferenceInvokeModel extends __protoMess
     return proto3.util.equals(_RunInferenceInvokeModel, a, b2);
   }
   static $() {
-    return ["RunInferenceInvokeModel|1 invocation_id 9|2 request #0", InferenceStreamRequest];
+    return ["RunInferenceInvokeModel|1 invocation_id 9|2 request #0|3 purpose #1", InferenceStreamRequest, RunInferenceInvocationPurpose];
   }
 };
 var RunInferenceCancelInvocation = class _RunInferenceCancelInvocation extends __protoMessage3145 {
@@ -1122,6 +1150,7 @@ var RunInferenceRunReady = class _RunInferenceRunReady extends __protoMessage314
   constructor(data) {
     super();
     this.supportsSelfSummary = false;
+    this.nonFileRules = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1137,7 +1166,53 @@ var RunInferenceRunReady = class _RunInferenceRunReady extends __protoMessage314
     return proto3.util.equals(_RunInferenceRunReady, a, b2);
   }
   static $() {
-    return ["RunInferenceRunReady|1 resolved_model #0|2 supports_self_summary 8|3 routed_model_display_name 9?|4 prompt_model_metadata #1", InferenceRequestedModel, RunInferencePromptModelMetadata];
+    return ["RunInferenceRunReady|1 resolved_model #0|2 supports_self_summary 8|3 routed_model_display_name 9?|4 prompt_model_metadata #1|5 summarization #2|6 non_file_rules #3*", InferenceRequestedModel, RunInferencePromptModelMetadata, RunInferenceSummarizationConfig, CursorRule2];
+  }
+};
+var RunInferenceSummarizationConfig = class _RunInferenceSummarizationConfig extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.isFallbackToMainModel = false;
+    this.maxPromptChars = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceSummarizationConfig().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceSummarizationConfig().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceSummarizationConfig().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceSummarizationConfig, a, b2);
+  }
+  static $() {
+    return ["RunInferenceSummarizationConfig|1 model #0|2 is_fallback_to_main_model 8|3 max_prompt_chars 5|4 background #1", InferenceRequestedModel, RunInferenceBackgroundSummarizationConfig];
+  }
+};
+var RunInferenceBackgroundSummarizationConfig = class _RunInferenceBackgroundSummarizationConfig extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.requireTriggerThresholdForMidLoopPersist = false;
+    this.discardOnError = false;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceBackgroundSummarizationConfig().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceBackgroundSummarizationConfig().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceBackgroundSummarizationConfig().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceBackgroundSummarizationConfig, a, b2);
+  }
+  static $() {
+    return ["RunInferenceBackgroundSummarizationConfig|1 unused_tokens_threshold_to_start 5?|2 unused_percent_tokens_threshold_to_start 1?|3 unused_tokens_threshold_to_persist 5?|4 unused_percent_tokens_threshold_to_persist 1?|5 require_trigger_threshold_for_mid_loop_persist 8|6 discard_on_error 8"];
   }
 };
 var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata extends __protoMessage3145 {
@@ -1163,6 +1238,7 @@ var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata ext
     this.isOpus46 = false;
     this.isOpus48 = false;
     this.isOpus5 = false;
+    this.isOpus55 = false;
     this.isFable5 = false;
     this.isFable51 = false;
     this.isFruitcake = false;
@@ -1182,6 +1258,7 @@ var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata ext
     this.useSparseReadLineNumbers = false;
     this.selfIdentityName = "";
     this.agentModeConfigs = [];
+    this.postToolReminders = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -1197,7 +1274,107 @@ var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata ext
     return proto3.util.equals(_RunInferencePromptModelMetadata, a, b2);
   }
   static $() {
-    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?|46 agent_mode_configs #2*|47 use_new_plan_mode_prompts 8?|48 ask_question_config #3?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig, RunInferenceAgentModeConfig, RunInferenceAskQuestionConfig];
+    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|50 is_opus55 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?|46 agent_mode_configs #2*|47 use_new_plan_mode_prompts 8?|48 ask_question_config #3?|49 subagent_model_config #4?|51 post_tool_reminders #5*|52 enable_semantic_search 8?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig, RunInferenceAgentModeConfig, RunInferenceAskQuestionConfig, RunInferenceSubagentModelConfig, RunInferencePostToolReminder];
+  }
+};
+var RunInferencePostToolReminder = class _RunInferencePostToolReminder extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.id = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferencePostToolReminder().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferencePostToolReminder().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferencePostToolReminder().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferencePostToolReminder, a, b2);
+  }
+  static $() {
+    return ["RunInferencePostToolReminder|1 id 9|2 interval_tool_calls 13?"];
+  }
+};
+var RunInferenceSubagentModelConfig = class _RunInferenceSubagentModelConfig extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.forcePolicy = "";
+    this.parentMaxMode = false;
+    this.models = [];
+    this.overrides = [];
+    this.taskToolOmitted = false;
+    this.parentRequestedModelName = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceSubagentModelConfig().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceSubagentModelConfig().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceSubagentModelConfig().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceSubagentModelConfig, a, b2);
+  }
+  static $() {
+    return ["RunInferenceSubagentModelConfig|1 force_policy 9|2 force_model_id 9?|3 parent_max_mode 8|4 models #0*|5 overrides #1*|6 task_tool_omitted 8|7 parent_requested_model_name 9", RunInferenceSubagentModelPolicy, RunInferenceResolvedSubagentModelOverride];
+  }
+};
+var RunInferenceSubagentModelPolicy = class _RunInferenceSubagentModelPolicy extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.slug = "";
+    this.advertised = false;
+    this.valid = false;
+    this.blocked = false;
+    this.requiresMaxMode = false;
+    this.representativeCostDollars = 0;
+    this.legacyAliases = [];
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceSubagentModelPolicy().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceSubagentModelPolicy().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceSubagentModelPolicy().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceSubagentModelPolicy, a, b2);
+  }
+  static $() {
+    return ["RunInferenceSubagentModelPolicy|1 slug 9|2 advertised 8|3 valid 8|4 blocked 8|5 requires_max_mode 8|6 representative_cost_dollars 1|7 legacy_aliases 9*"];
+  }
+};
+var RunInferenceResolvedSubagentModelOverride = class _RunInferenceResolvedSubagentModelOverride extends __protoMessage3145 {
+  constructor(data) {
+    super();
+    this.subagentType = "";
+    this.kind = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceResolvedSubagentModelOverride().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceResolvedSubagentModelOverride().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceResolvedSubagentModelOverride().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceResolvedSubagentModelOverride, a, b2);
+  }
+  static $() {
+    return ["RunInferenceResolvedSubagentModelOverride|1 subagent_type 9|2 kind 9|3 model_id 9?"];
   }
 };
 var RunInferenceAskQuestionConfig = class _RunInferenceAskQuestionConfig extends __protoMessage3145 {

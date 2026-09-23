@@ -273,7 +273,7 @@ function toAction(args) {
         action: {
           case: "drag",
           value: new DragAction({
-            path: path31.map((point) => new Coordinate(point)),
+            path: path31.map((point2) => new Coordinate(point2)),
             button: MOUSE_BUTTONS[args.button ?? "left"],
             modifierKeys: args.modifiers
           })
@@ -386,7 +386,7 @@ function serializeComputerError(error42, args) {
 }
 var COMBINED_GUIDANCE = {
   driver: " For web-page interaction, use browser_* tools first. Use Computer only for clearly native UI (desktop applications, OS dialogs, or browser chrome) or after a concrete browser-tool limitation blocks the required step. Do not use Computer screenshot or wait solely to inspect or wait for normal web-page state; use browser_snapshot, browser_take_screenshot, and returned browser state unless the visible desktop, native UI, or browser chrome itself is required.",
-  playwright: " For web-page interaction, use the Playwright browser_* tools first: browser_navigate, browser_snapshot, browser_find, browser_click, browser_type, browser_fill_form, browser_select_option, browser_press_key, browser_tabs, and browser_take_screenshot. Use Computer only for clearly native UI (desktop applications, OS dialogs, or browser chrome), for a press-and-hold widget (click with holdDurationMs, since browser_click has no hold), or after a concrete browser-tool limitation blocks the required step. Do not use Computer screenshot or wait solely to inspect or wait for normal web-page state; use browser_snapshot, browser_find, browser_take_screenshot, and the ### Page block of each browser result unless the visible desktop, native UI, or browser chrome itself is required."
+  playwright: " For web-page interaction, use the Playwright browser_* tools first: browser_navigate, browser_click, browser_type, browser_fill_form, browser_select_option, browser_press_key, browser_tabs, browser_find, browser_snapshot, and browser_take_screenshot. The ### Page block of an action result confirms the page you are on; act on the refs you already hold, call browser_find to locate one control, and call browser_snapshot only when you need the whole page or a ref you do not have, not after every action. Use Computer only for clearly native UI (desktop applications, OS dialogs, or browser chrome), for a press-and-hold widget (click with holdDurationMs, since browser_click has no hold), or after a concrete browser-tool limitation blocks the required step. Do not use Computer screenshot or wait solely to inspect or wait for normal web-page state."
 };
 async function executeAndPersistComputerUse(ctx, resourceAccessor, deps, args) {
   const observation = ctx.get(computerOperationObservationKey);

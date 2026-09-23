@@ -15,8 +15,8 @@ function parseClassification(raw) {
     value: raw.value ? stringToClassification(raw.value) : DataClassification.SAFE
   };
 }
-function stringToClassification(str3) {
-  switch (str3.toUpperCase()) {
+function stringToClassification(str4) {
+  switch (str4.toUpperCase()) {
     case "SAFE":
       return DataClassification.SAFE;
     case "CODE":

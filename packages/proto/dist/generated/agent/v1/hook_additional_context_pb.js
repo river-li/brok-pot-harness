@@ -1,16 +1,16 @@
-var __protoPackage15, __protoMessage312, HookAdditionalContext;
+var __protoPackage16, __protoMessage312, HookAdditionalContext;
 var init_hook_additional_context_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/hook_additional_context_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage15 = "agent.v1.";
+    __protoPackage16 = "agent.v1.";
     __protoMessage312 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage15;
+        return __protoPackage16;
       }
     };
     HookAdditionalContext = class _HookAdditionalContext extends __protoMessage312 {

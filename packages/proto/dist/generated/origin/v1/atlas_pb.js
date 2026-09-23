@@ -1,16 +1,16 @@
 init_esm();
 init_compact();
-var __protoPackage177 = "origin.v1.";
-var __protoMessage3168 = class extends CompactMessage {
+var __protoPackage179 = "origin.v1.";
+var __protoMessage3170 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage177;
+    return __protoPackage179;
   }
 };
-var AtlasFreshness = /* @__PURE__ */ enumType(proto3, __protoPackage177, "AtlasFreshness", [[0, "UNSPECIFIED"], [1, "EAGER"], [2, "BALANCED"], [3, "RELAXED"], [4, "MANUAL"]], 1);
-var GetAtlasNodeRequest = class _GetAtlasNodeRequest extends __protoMessage3168 {
+var AtlasFreshness = /* @__PURE__ */ enumType(proto3, __protoPackage179, "AtlasFreshness", [[0, "UNSPECIFIED"], [1, "EAGER"], [2, "BALANCED"], [3, "RELAXED"], [4, "MANUAL"]], 1);
+var GetAtlasNodeRequest = class _GetAtlasNodeRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.path = "";
@@ -32,7 +32,7 @@ var GetAtlasNodeRequest = class _GetAtlasNodeRequest extends __protoMessage3168 
     return ["GetAtlasNodeRequest|1 repo #0|2 path 9", ClientRepoIdentifier];
   }
 };
-var AtlasNodeLayerContent = class _AtlasNodeLayerContent extends __protoMessage3168 {
+var AtlasNodeLayerContent = class _AtlasNodeLayerContent extends __protoMessage3170 {
   constructor(data) {
     super();
     this.layer = "";
@@ -59,7 +59,7 @@ var AtlasNodeLayerContent = class _AtlasNodeLayerContent extends __protoMessage3
     return ["AtlasNodeLayerContent|1 layer 9|2 label 9|3 content_markdown 9|4 digest_json 9|5 status 9|6 last_gen_at 9"];
   }
 };
-var GetAtlasNodeResponse = class _GetAtlasNodeResponse extends __protoMessage3168 {
+var GetAtlasNodeResponse = class _GetAtlasNodeResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     this.lastCommit = "";
@@ -82,7 +82,7 @@ var GetAtlasNodeResponse = class _GetAtlasNodeResponse extends __protoMessage316
     return ["GetAtlasNodeResponse|1 last_commit 9|2 layers #0*", AtlasNodeLayerContent];
   }
 };
-var AtlasLayerStatus = class _AtlasLayerStatus extends __protoMessage3168 {
+var AtlasLayerStatus = class _AtlasLayerStatus extends __protoMessage3170 {
   constructor(data) {
     super();
     this.layer = "";
@@ -109,7 +109,7 @@ var AtlasLayerStatus = class _AtlasLayerStatus extends __protoMessage3168 {
     return ["AtlasLayerStatus|1 layer 9|2 label 9|3 enabled 8|4 generated_nodes 5|5 pending_nodes 5|6 last_gen_at 9"];
   }
 };
-var GetAtlasRepoStatusRequest = class _GetAtlasRepoStatusRequest extends __protoMessage3168 {
+var GetAtlasRepoStatusRequest = class _GetAtlasRepoStatusRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -130,7 +130,7 @@ var GetAtlasRepoStatusRequest = class _GetAtlasRepoStatusRequest extends __proto
     return ["GetAtlasRepoStatusRequest|1 repo #0", ClientRepoIdentifier];
   }
 };
-var GetAtlasRepoStatusResponse = class _GetAtlasRepoStatusResponse extends __protoMessage3168 {
+var GetAtlasRepoStatusResponse = class _GetAtlasRepoStatusResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     this.configured = false;
@@ -158,7 +158,7 @@ var GetAtlasRepoStatusResponse = class _GetAtlasRepoStatusResponse extends __pro
     return ["GetAtlasRepoStatusResponse|1 configured 8|2 enabled 8|3 model 9|4 node_count 5|5 layers #0*|6 refreshing 8|7 freshness #1", AtlasLayerStatus, AtlasFreshness];
   }
 };
-var SetAtlasRepoConfigRequest = class _SetAtlasRepoConfigRequest extends __protoMessage3168 {
+var SetAtlasRepoConfigRequest = class _SetAtlasRepoConfigRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.enabled = false;
@@ -182,7 +182,7 @@ var SetAtlasRepoConfigRequest = class _SetAtlasRepoConfigRequest extends __proto
     return ["SetAtlasRepoConfigRequest|1 repo #0|2 enabled 8|3 enabled_layers 9*|4 freshness #1", ClientRepoIdentifier, AtlasFreshness];
   }
 };
-var SetAtlasRepoConfigResponse = class _SetAtlasRepoConfigResponse extends __protoMessage3168 {
+var SetAtlasRepoConfigResponse = class _SetAtlasRepoConfigResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -203,7 +203,7 @@ var SetAtlasRepoConfigResponse = class _SetAtlasRepoConfigResponse extends __pro
     return ["SetAtlasRepoConfigResponse|1 status #0", GetAtlasRepoStatusResponse];
   }
 };
-var RefreshAtlasRepoRequest = class _RefreshAtlasRepoRequest extends __protoMessage3168 {
+var RefreshAtlasRepoRequest = class _RefreshAtlasRepoRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -224,7 +224,7 @@ var RefreshAtlasRepoRequest = class _RefreshAtlasRepoRequest extends __protoMess
     return ["RefreshAtlasRepoRequest|1 repo #0", ClientRepoIdentifier];
   }
 };
-var RefreshAtlasRepoResponse = class _RefreshAtlasRepoResponse extends __protoMessage3168 {
+var RefreshAtlasRepoResponse = class _RefreshAtlasRepoResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     this.headSha = "";
@@ -246,7 +246,7 @@ var RefreshAtlasRepoResponse = class _RefreshAtlasRepoResponse extends __protoMe
     return ["RefreshAtlasRepoResponse|1 head_sha 9"];
   }
 };
-var ListAtlasNodePathsRequest = class _ListAtlasNodePathsRequest extends __protoMessage3168 {
+var ListAtlasNodePathsRequest = class _ListAtlasNodePathsRequest extends __protoMessage3170 {
   constructor(data) {
     super();
     this.pageSize = 0;
@@ -269,7 +269,7 @@ var ListAtlasNodePathsRequest = class _ListAtlasNodePathsRequest extends __proto
     return ["ListAtlasNodePathsRequest|1 repo #0|2 page_size 13|3 page_token 9", ClientRepoIdentifier];
   }
 };
-var ListAtlasNodePathsResponse = class _ListAtlasNodePathsResponse extends __protoMessage3168 {
+var ListAtlasNodePathsResponse = class _ListAtlasNodePathsResponse extends __protoMessage3170 {
   constructor(data) {
     super();
     this.paths = [];

@@ -1,6 +1,6 @@
-var import_node_fs32 = require("node:fs");
-var import_node_path37 = require("node:path");
-var import_node_url6 = require("node:url");
+var import_node_fs48 = require("node:fs");
+var import_node_path89 = require("node:path");
+var import_node_url11 = require("node:url");
 var CHANNEL_ATTACHMENT_MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
 var GENERIC_BINARY_MIME = "application/octet-stream";
 function tryParseUrl(raw) {
@@ -17,7 +17,7 @@ function toLocalPath(raw) {
   }
   if (parsed2.protocol === "file:") {
     try {
-      return (0, import_node_url6.fileURLToPath)(parsed2);
+      return (0, import_node_url11.fileURLToPath)(parsed2);
     } catch {
       return null;
     }
@@ -40,7 +40,7 @@ async function resolveChannelAttachment(rawUrl) {
   const resolved = reanchorSandPath(localPath, { acceptBoxModelVisibleAlias: true });
   let size;
   try {
-    const stat28 = await import_node_fs32.promises.stat(resolved);
+    const stat28 = await import_node_fs48.promises.stat(resolved);
     if (!stat28.isFile()) return null;
     size = stat28.size;
   } catch (error42) {
@@ -50,7 +50,7 @@ async function resolveChannelAttachment(rawUrl) {
   if (size === 0 || size > CHANNEL_ATTACHMENT_MAX_UPLOAD_BYTES) return null;
   let data;
   try {
-    data = await import_node_fs32.promises.readFile(resolved);
+    data = await import_node_fs48.promises.readFile(resolved);
   } catch (error42) {
     reportFallbackUnlessAbsent("channel_attachment", error42);
     return null;
@@ -61,7 +61,7 @@ async function resolveChannelAttachment(rawUrl) {
     transport: "upload",
     isImage: imageMime != null,
     bytes: new Uint8Array(data),
-    filename: (0, import_node_path37.basename)(resolved),
+    filename: (0, import_node_path89.basename)(resolved),
     mime: mime2
   };
 }

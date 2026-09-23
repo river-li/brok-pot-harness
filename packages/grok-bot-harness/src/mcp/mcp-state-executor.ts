@@ -1,7 +1,7 @@
 init_mcp_exec_pb();
 init_mcp_pb();
 init_esm();
-var UNUSABLE_SERVER_STATUSES = /* @__PURE__ */ new Set(["needsAuth", "error"]);
+var UNUSABLE_SERVER_STATUSES = /* @__PURE__ */ new Set(["needsAuth", "needsGrant", "error"]);
 function createSandMcpStateExecutor(provider) {
   return {
     async execute(ctx, _args) {

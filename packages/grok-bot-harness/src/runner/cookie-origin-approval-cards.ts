@@ -28,11 +28,42 @@ function grantedItems(items, grants) {
   const grantKeys = new Set(grants.map(cookieOriginGrantKey));
   return (items ?? []).filter((item) => grantKeys.has(cookieOriginGrantKey(item)));
 }
+var EXPIRED_CARD_ANSWERS = { expired: "timed_out", aborted: "held" };
+function cookieOriginApprovalAnswer(outcome) {
+  if (outcome.kind !== "listed" && outcome.kind !== "refused" && outcome.auto === true) {
+    return void 0;
+  }
+  switch (cookieOriginApprovalCardSettlement(outcome)?.status) {
+    case void 0:
+    case "allowed":
+      return void 0;
+    case "approved":
+    case "always":
+    case "failed":
+      return "allowed";
+    case "denied":
+      return "denied";
+    case "expired": {
+      const reason = outcome.kind === "refused" ? outcome.reason : void 0;
+      return (reason === void 0 ? void 0 : EXPIRED_CARD_ANSWERS[reason]) ?? "unaskable";
+    }
+  }
+}
+function recordCookieOriginApprovalAnswer(audit, toolCallId, cardId, answer) {
+  if (audit === void 0 || toolCallId === void 0 || answer === void 0) return;
+  if (answer === "unaskable") humanOnlyReviewLedger(audit, toolCallId).ruleRefused();
+  else
+    audit.recordHumanAnswer(toolCallId, {
+      decisionId: cardId,
+      outcome: answer,
+      approvalMode: "ask_human"
+    });
+}
 function withCookieOriginApprovalCards(port, host) {
   return {
     request: async (request5) => {
       if (request5.origins.length === 0) return await port.request(request5);
-      const requestId2 = (0, import_node_crypto77.randomUUID)();
+      const requestId2 = (0, import_node_crypto79.randomUUID)();
       host.transport?.onUpdate({
         type: "send-message",
         message: {
@@ -54,6 +85,12 @@ function withCookieOriginApprovalCards(port, host) {
           approvedItems: settlement.approvedItems
         });
       };
+      const record2 = (answer) => recordCookieOriginApprovalAnswer(
+        host.toolDecisionAudit,
+        request5.toolCallId,
+        requestId2,
+        answer
+      );
       let outcome;
       try {
         outcome = await port.request({
@@ -63,11 +100,13 @@ function withCookieOriginApprovalCards(port, host) {
         });
       } catch (error42) {
         settleCard({ status: "expired", approvedItems: [] });
+        record2("unaskable");
         throw error42;
       }
       settleCard(
         cookieOriginApprovalCardSettlement(outcome) ?? { status: "expired", approvedItems: [] }
       );
+      record2(cookieOriginApprovalAnswer(outcome));
       return outcome;
     }
   };

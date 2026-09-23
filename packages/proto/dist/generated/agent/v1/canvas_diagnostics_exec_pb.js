@@ -1,17 +1,17 @@
-var __protoPackage105, __protoMessage3101, CanvasDiagnosticsArgs, CanvasDiagnosticsResult, CanvasDiagnosticsSuccess, CanvasDiagnosticsError;
+var __protoPackage106, __protoMessage3101, CanvasDiagnosticsArgs, CanvasDiagnosticsResult, CanvasDiagnosticsSuccess, CanvasDiagnosticsError;
 var init_canvas_diagnostics_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/canvas_diagnostics_exec_pb.js"() {
     "use strict";
     init_esm();
     init_diagnostics_exec_pb();
     init_compact();
-    __protoPackage105 = "agent.v1.";
+    __protoPackage106 = "agent.v1.";
     __protoMessage3101 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage105;
+        return __protoPackage106;
       }
     };
     CanvasDiagnosticsArgs = class _CanvasDiagnosticsArgs extends __protoMessage3101 {

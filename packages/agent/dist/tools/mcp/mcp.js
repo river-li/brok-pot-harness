@@ -99,11 +99,11 @@ var McpToolDoesNotExistError = class extends CustomToolCallError {
   }
 };
 var McpExecToolNotFoundError = class extends CustomToolCallError {
-  constructor(errorMessage6) {
+  constructor(errorMessage7) {
     super(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
-      error: errorMessage6,
-      clientVisibleErrorMessage: errorMessage6,
-      modelVisibleErrorMessage: errorMessage6
+      error: errorMessage7,
+      clientVisibleErrorMessage: errorMessage7,
+      modelVisibleErrorMessage: errorMessage7
     });
   }
 };
@@ -144,11 +144,11 @@ function getMcpToolOrigin(serverIdentifier) {
 }
 var McpWithoutReadToolDefinitionError = class extends CustomToolCallError {
   constructor(error42, readToolDefReminder, classification = ToolErrorClassification.OTHER_ERROR) {
-    const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+    const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
     super(classification, {
-      error: `Error in call_mcp_tool: ${errorMessage6} without reading the tool definition`,
+      error: `Error in call_mcp_tool: ${errorMessage7} without reading the tool definition`,
       clientVisibleErrorMessage: "Tool execution error",
-      modelVisibleErrorMessage: `${errorMessage6}. ${readToolDefReminder}`
+      modelVisibleErrorMessage: `${errorMessage7}. ${readToolDefReminder}`
     });
     this.error = error42;
     this.readToolDefReminder = readToolDefReminder;
@@ -172,16 +172,16 @@ function getWrappedMcpErrorClassification(error42) {
 function isInvalidMcpArgumentsError(error42) {
   return getWrappedMcpErrorClassification(error42) === ToolErrorClassification.INVALID_ARGS;
 }
-function createMcpTransportError(errorMessage6, cause) {
-  const classification = classifyMcpErrorMessage(errorMessage6);
+function createMcpTransportError(errorMessage7, cause) {
+  const classification = classifyMcpErrorMessage(errorMessage7);
   if (classification !== void 0 && classification !== ToolErrorClassification.OTHER_ERROR) {
     return new CustomToolCallError(classification, {
-      error: errorMessage6,
-      clientVisibleErrorMessage: errorMessage6,
-      modelVisibleErrorMessage: errorMessage6
+      error: errorMessage7,
+      clientVisibleErrorMessage: errorMessage7,
+      modelVisibleErrorMessage: errorMessage7
     });
   }
-  return new Error(errorMessage6, { cause });
+  return new Error(errorMessage7, { cause });
 }
 function createMcpToolCall(mcpToolCall) {
   return new ToolCall({
@@ -270,7 +270,7 @@ function truncateMcpToolName(name17) {
   if (name17.length <= MAX_TOOL_NAME_LENGTH) {
     return name17;
   }
-  const hash = (0, import_node_crypto28.createHash)("sha256").update(name17).digest("hex").substring(0, HASH_SUFFIX_LENGTH);
+  const hash = (0, import_node_crypto27.createHash)("sha256").update(name17).digest("hex").substring(0, HASH_SUFFIX_LENGTH);
   return name17.substring(0, MAX_TOOL_NAME_LENGTH - HASH_SUFFIX_LENGTH) + hash;
 }
 function normalizeMcpInputSchema(inputSchema, options2 = {}) {
@@ -818,14 +818,14 @@ The MCP server rejected these arguments as invalid. Before retrying, inspect thi
           })
         }));
       }
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
       return createMcpToolCall(new McpToolCall({
         result: new McpToolResult({
           result: {
             case: "error",
             value: new McpToolError({
               error: "Tool execution error",
-              readToolDefReminder: errorMessage6
+              readToolDefReminder: errorMessage7
             })
           }
         })
@@ -1404,7 +1404,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
         });
         const toolDefinitionBinding = smartModeApprovalProvider === void 0 ? void 0 : {
           identity: toolDefinitionPath ?? `${args.server}:${args.toolName}`,
-          hash: toolDescriptor === void 0 ? void 0 : (0, import_node_crypto28.createHash)("sha256").update(toolDefinitionText).digest("hex")
+          hash: toolDescriptor === void 0 ? void 0 : (0, import_node_crypto27.createHash)("sha256").update(toolDefinitionText).digest("hex")
         };
         const toolDefinitionMetadata = smartModeApprovalProvider === void 0 ? void 0 : {
           description: toolDefinitionDescription.slice(0, 4e3),
@@ -1795,14 +1795,14 @@ Example:
           })
         }));
       }
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
       return createMcpToolCall(new McpToolCall({
         result: new McpToolResult({
           result: {
             case: "error",
             value: new McpToolError({
               error: "Tool execution error",
-              readToolDefReminder: errorMessage6
+              readToolDefReminder: errorMessage7
             })
           }
         })

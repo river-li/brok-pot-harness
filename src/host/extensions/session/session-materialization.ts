@@ -18,11 +18,11 @@ var SandSessionMaterialization = class {
     return this.workerPool;
   }
   blobStoreFor(dbPath) {
-    const agentDir = (0, import_node_path137.dirname)(dbPath);
+    const agentDir = (0, import_node_path138.dirname)(dbPath);
     return new WorkerBlobStore(
       this.requireWorkerPool(),
-      (0, import_node_path137.basename)(agentDir),
-      (0, import_node_path137.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
+      (0, import_node_path138.basename)(agentDir),
+      (0, import_node_path138.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
       dbPath
     );
   }
@@ -116,7 +116,7 @@ var SandSessionMaterialization = class {
       avatarColor: profile?.avatarColor?.trim() ?? "",
       ...namedBy === null ? {} : { namedBy }
     };
-    const profilePath = getSandProfilePath((0, import_node_path137.dirname)(dbPath));
+    const profilePath = getSandProfilePath((0, import_node_path138.dirname)(dbPath));
     if (options2.serverId !== void 0) {
       writeServerBackedProfileFile(profilePath, identity, {
         serverId: options2.serverId,
@@ -125,7 +125,7 @@ var SandSessionMaterialization = class {
     } else {
       writeSandProfileFile(profilePath, identity);
     }
-    writeSandSettingsFile(getSandSettingsPath((0, import_node_path137.dirname)(dbPath)), {
+    writeSandSettingsFile(getSandSettingsPath((0, import_node_path138.dirname)(dbPath)), {
       notifyOnAgentUpdates: true
     });
     const automations = automationStoreForDbPath(
@@ -144,7 +144,7 @@ var SandSessionMaterialization = class {
       agentStore: new AgentStore2(this.blobStoreFor(dbPath), db, {
         fixedRootBlobId: SAND_CONVERSATION_ROOT_SLOT_ID
       }),
-      memory: this.host.memory().createAgentStore((0, import_node_path137.dirname)(dbPath)),
+      memory: this.host.memory().createAgentStore((0, import_node_path138.dirname)(dbPath)),
       automations,
       skills: skillStoreForDbPath(
         dbPath,
@@ -199,7 +199,7 @@ var SandSessionMaterialization = class {
       dbPath,
       db,
       agentStore,
-      memory: this.host.memory().createAgentStore((0, import_node_path137.dirname)(dbPath)),
+      memory: this.host.memory().createAgentStore((0, import_node_path138.dirname)(dbPath)),
       automations: automationStoreForDbPath(
         dbPath,
         this.host.resolveUserTimeZone,

@@ -1,16 +1,16 @@
-var __protoPackage9, __protoMessage37, CloudAgentRequestScope, CloudAgentPersonalScope;
+var __protoPackage10, __protoMessage37, CloudAgentRequestScope, CloudAgentPersonalScope;
 var init_cloud_agent_scope_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/cloud_agent_scope_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage9 = "aiserver.v1.";
+    __protoPackage10 = "aiserver.v1.";
     __protoMessage37 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage9;
+        return __protoPackage10;
       }
     };
     CloudAgentRequestScope = class _CloudAgentRequestScope extends __protoMessage37 {

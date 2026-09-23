@@ -296,18 +296,18 @@ function buildMcpHttpExchangeFailureMetadata(args) {
 }
 function logMcpHttpExchangeSuccess(args) {
   var _a20, _b2;
-  const { logger: logger108, response } = args;
+  const { logger: logger110, response } = args;
   const logMetadata = buildMcpHttpExchangeSuccessMetadata(args);
   if (response.ok) {
-    (_a20 = logger108.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger108, "MCP HTTP exchange completed", logMetadata);
+    (_a20 = logger110.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger110, "MCP HTTP exchange completed", logMetadata);
   } else {
-    (_b2 = logger108.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger108, "MCP HTTP exchange completed", logMetadata);
+    (_b2 = logger110.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger110, "MCP HTTP exchange completed", logMetadata);
   }
 }
 function logMcpHttpExchangeFailure(args) {
   var _a20;
-  const { logger: logger108 } = args;
-  (_a20 = logger108.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger108, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
+  const { logger: logger110 } = args;
+  (_a20 = logger110.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger110, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
 }
 function isMcpEndpointPath(path30) {
   return path30 === "/mcp" || (path30 === null || path30 === void 0 ? void 0 : path30.endsWith("/mcp")) === true;
@@ -355,19 +355,19 @@ function readErrorResponseSummaryForLog(input, response) {
     }
   });
 }
-function safelyLogExchange(action, logger108, phase) {
+function safelyLogExchange(action, logger110, phase) {
   var _a20;
   try {
     action();
   } catch (_b2) {
-    (_a20 = logger108.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger108, "MCP HTTP exchange logging failed", {
+    (_a20 = logger110.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger110, "MCP HTTP exchange logging failed", {
       event: "mcp_http_exchange_logging_failure",
       phase
     });
   }
 }
 function createLoggedMcpHttpFetch(options2) {
-  const { fetch: fetch2, logger: logger108, metadata, logSuccessfulExchanges = true } = options2;
+  const { fetch: fetch2, logger: logger110, metadata, logSuccessfulExchanges = true } = options2;
   return (input, init) => __awaiter27(this, void 0, void 0, function* () {
     const startedAtMs = Date.now();
     try {
@@ -380,7 +380,7 @@ function createLoggedMcpHttpFetch(options2) {
       if (logSuccessfulExchanges || !response.ok) {
         safelyLogExchange(() => {
           logMcpHttpExchangeSuccess({
-            logger: logger108,
+            logger: logger110,
             input,
             init,
             response,
@@ -389,7 +389,7 @@ function createLoggedMcpHttpFetch(options2) {
             responseErrorSummary,
             oauthTokenErrorBodySummary
           });
-        }, logger108, "success");
+        }, logger110, "success");
       }
       return response;
     } catch (error3) {
@@ -401,7 +401,7 @@ function createLoggedMcpHttpFetch(options2) {
       }) : {};
       safelyLogExchange(() => {
         logMcpHttpExchangeFailure({
-          logger: logger108,
+          logger: logger110,
           input,
           init,
           error: error3,
@@ -411,7 +411,7 @@ function createLoggedMcpHttpFetch(options2) {
           responseErrorSummary,
           oauthTokenErrorBodySummary
         });
-      }, logger108, "failure");
+      }, logger110, "failure");
       throw error3;
     }
   });

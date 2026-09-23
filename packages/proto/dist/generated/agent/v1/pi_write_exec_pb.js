@@ -1,16 +1,16 @@
-var __protoPackage112, __protoMessage3108, PiWriteExecArgs, PiWriteExecResult, PiWriteExecSuccess, PiWriteExecError, PiWriteExecRejected;
+var __protoPackage113, __protoMessage3108, PiWriteExecArgs, PiWriteExecResult, PiWriteExecSuccess, PiWriteExecError, PiWriteExecRejected;
 var init_pi_write_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_write_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage112 = "agent.v1.";
+    __protoPackage113 = "agent.v1.";
     __protoMessage3108 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage112;
+        return __protoPackage113;
       }
     };
     PiWriteExecArgs = class _PiWriteExecArgs extends __protoMessage3108 {

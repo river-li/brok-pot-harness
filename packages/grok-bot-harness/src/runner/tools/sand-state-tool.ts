@@ -333,7 +333,7 @@ function sandMemoryWriteReport(args, deps, outcome) {
   };
 }
 var TEAM_SETUP_CARD_ROUTES = /* @__PURE__ */ new Set(["routine.create", "skill.write"]);
-var SAND_TEAM_SETUP_UNDERWAY_STATE_REASON = "this bot's setup is already running from the owner's message, and the owner is choosing its plugins and skills from the cards in this chat. Routines and skills come after they have been through the cards and ask.";
+var SAND_TEAM_SETUP_UNDERWAY_STATE_REASON = "your setup is already running from the owner's message, and the owner is picking your plugins and skills on the cards in this chat. A routine, or a skill beyond the cards, comes once they have been through the cards and ask for it.";
 function resolveTrigger(args, need, fallback2) {
   if (args.schedule != null && args.trigger != null) {
     throw new SandToolInputError(

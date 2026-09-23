@@ -1,16 +1,16 @@
-var __protoPackage108, __protoMessage3104, WebFetchAllowlistPrecheckArgs, WebFetchAllowlistPrecheckResult;
+var __protoPackage109, __protoMessage3104, WebFetchAllowlistPrecheckArgs, WebFetchAllowlistPrecheckResult;
 var init_web_fetch_allowlist_precheck_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/web_fetch_allowlist_precheck_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage108 = "agent.v1.";
+    __protoPackage109 = "agent.v1.";
     __protoMessage3104 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage108;
+        return __protoPackage109;
       }
     };
     WebFetchAllowlistPrecheckArgs = class _WebFetchAllowlistPrecheckArgs extends __protoMessage3104 {

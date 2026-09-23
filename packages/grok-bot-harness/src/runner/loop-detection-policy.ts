@@ -146,11 +146,14 @@ function createRunnerLoopDetection(options2) {
     mode,
     onDetected: options2.onLoopDetected,
     onMitigation: options2.onLoopMitigation,
-    resolveTurn: (requestId2) => createSandLoopDetectionPolicy({
+    resolveTurn: (requestId2, attribution) => createSandLoopDetectionPolicy({
       mode: mode(),
       conversationId: options2.getConversationId(),
       requestId: requestId2,
-      report: (report) => options2.onLoopDetected?.(report),
+      report: (report) => {
+        options2.onLoopDetected?.(report);
+        options2.auditDetection?.(report, attribution);
+      },
       ...options2.onLoopMitigation === void 0 ? {} : { reportMitigation: options2.onLoopMitigation }
     })
   };

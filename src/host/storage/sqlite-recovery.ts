@@ -1,10 +1,10 @@
-var import_node_fs78 = require("node:fs");
+var import_node_fs80 = require("node:fs");
 var import_node_sqlite4 = require("node:sqlite");
 init_unknown_record();
 function removeSqliteSidecars(dbPath) {
   for (const suffix of SQLITE_DB_SIDECAR_SUFFIXES) {
     try {
-      (0, import_node_fs78.rmSync)(`${dbPath}${suffix}`, { force: true, recursive: true });
+      (0, import_node_fs80.rmSync)(`${dbPath}${suffix}`, { force: true, recursive: true });
     } catch {
     }
   }
@@ -14,7 +14,7 @@ function removePathWithRetries(options2) {
   let removeError;
   for (let attempt = 0; attempt < attempts2; attempt += 1) {
     try {
-      (0, import_node_fs78.rmSync)(options2.path, {
+      (0, import_node_fs80.rmSync)(options2.path, {
         force: true,
         recursive: options2.recursive === true
       });
@@ -49,23 +49,23 @@ function quarantineCorruptSqliteDb(options2) {
   const stamp = (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
   const quarantinePath = options2.quarantinePath ?? `${dbPath}.corrupt-${stamp}`;
   try {
-    (0, import_node_fs78.rmSync)(quarantinePath, { force: true });
+    (0, import_node_fs80.rmSync)(quarantinePath, { force: true });
     removeSqliteSidecars(quarantinePath);
   } catch {
   }
   try {
-    (0, import_node_fs78.renameSync)(dbPath, quarantinePath);
+    (0, import_node_fs80.renameSync)(dbPath, quarantinePath);
   } catch (error42) {
     const renameErrorCode = error42.code ?? "error";
     let copied = false;
     try {
-      (0, import_node_fs78.copyFileSync)(dbPath, quarantinePath);
+      (0, import_node_fs80.copyFileSync)(dbPath, quarantinePath);
       copied = true;
       for (const suffix of SQLITE_DB_SIDECAR_SUFFIXES) {
         const sidecar = `${dbPath}${suffix}`;
-        if ((0, import_node_fs78.existsSync)(sidecar)) {
+        if ((0, import_node_fs80.existsSync)(sidecar)) {
           try {
-            (0, import_node_fs78.copyFileSync)(sidecar, `${quarantinePath}${suffix}`);
+            (0, import_node_fs80.copyFileSync)(sidecar, `${quarantinePath}${suffix}`);
           } catch {
           }
         }
@@ -94,18 +94,18 @@ function quarantineCorruptSqliteDb(options2) {
   for (const suffix of SQLITE_DB_SIDECAR_SUFFIXES) {
     try {
       const sidecar = `${dbPath}${suffix}`;
-      if ((0, import_node_fs78.existsSync)(sidecar)) {
-        (0, import_node_fs78.renameSync)(sidecar, `${quarantinePath}${suffix}`);
+      if ((0, import_node_fs80.existsSync)(sidecar)) {
+        (0, import_node_fs80.renameSync)(sidecar, `${quarantinePath}${suffix}`);
       }
     } catch {
-      (0, import_node_fs78.rmSync)(`${dbPath}${suffix}`, { force: true });
+      (0, import_node_fs80.rmSync)(`${dbPath}${suffix}`, { force: true });
     }
   }
   return { quarantinePath, copied: false, renameErrorCode: null };
 }
 function openSqliteForSalvage(options2) {
   const { dbPath } = options2;
-  if (!(0, import_node_fs78.existsSync)(dbPath)) return void 0;
+  if (!(0, import_node_fs80.existsSync)(dbPath)) return void 0;
   const open9 = () => {
     const db = new import_node_sqlite4.DatabaseSync(dbPath);
     try {

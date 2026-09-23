@@ -1,4 +1,4 @@
-var import_node_crypto27 = require("node:crypto");
+var import_node_crypto26 = require("node:crypto");
 var SMART_MODE_MCP_APPROVAL_MISSING_CONVERSATION_REASON = "Auto-review MCP approvals require a conversation id";
 function normalizeForFingerprint(value) {
   if (Array.isArray(value)) {
@@ -10,7 +10,7 @@ function normalizeForFingerprint(value) {
   return value;
 }
 function computeSmartModeMcpApprovalTargetFingerprint(target) {
-  return (0, import_node_crypto27.createHash)("sha256").update(JSON.stringify({
+  return (0, import_node_crypto26.createHash)("sha256").update(JSON.stringify({
     serverIdentifier: target.serverIdentifier,
     serverName: target.serverName ?? null,
     serverDisplayName: target.serverDisplayName,
@@ -26,18 +26,18 @@ async function createSmartModeMcpApprovalRequest(ctx, store, target) {
   if (conversationId === void 0) {
     throw new Error(SMART_MODE_MCP_APPROVAL_MISSING_CONVERSATION_REASON);
   }
-  const fingerprint = computeSmartModeMcpApprovalTargetFingerprint(target);
+  const fingerprint2 = computeSmartModeMcpApprovalTargetFingerprint(target);
   const request5 = {
-    id: (0, import_node_crypto27.randomUUID)(),
+    id: (0, import_node_crypto26.randomUUID)(),
     conversationId,
     createdAtMs: Date.now(),
-    fingerprint,
+    fingerprint: fingerprint2,
     blockReason: target.blockReason
   };
   await store.createPendingRequest(ctx, request5);
   return {
     requestId: request5.id,
-    fingerprint,
+    fingerprint: fingerprint2,
     conversationId,
     blockReason: target.blockReason
   };

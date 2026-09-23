@@ -428,12 +428,12 @@ ${options2.descriptionSuffix}` : base;
           })
         }));
       }
-      const errorMessage6 = error42 instanceof ToolCallError ? error42.clientVisibleErrorMessage : "An error occurred while searching the web";
+      const errorMessage7 = error42 instanceof ToolCallError ? error42.clientVisibleErrorMessage : "An error occurred while searching the web";
       return createWebSearchToolCall(new WebSearchToolCall({
         result: new WebSearchResult({
           result: {
             case: "error",
-            value: new WebSearchError({ error: errorMessage6 })
+            value: new WebSearchError({ error: errorMessage7 })
           }
         })
       }));

@@ -1,6 +1,6 @@
 function defaultWorkerEntryPath2() {
-  const here = (0, import_node_path126.dirname)((0, import_node_url14.fileURLToPath)(__import_meta_url));
-  return (0, import_node_path126.join)(here, "agent-isolation", "agent-store-worker.cjs");
+  const here = (0, import_node_path127.dirname)((0, import_node_url14.fileURLToPath)(__import_meta_url));
+  return (0, import_node_path127.join)(here, "agent-isolation", "agent-store-worker.cjs");
 }
 function rebuildWorkerError(response) {
   const error42 = new Error(response.message);

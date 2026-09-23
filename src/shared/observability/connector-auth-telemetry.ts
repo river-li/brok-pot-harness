@@ -1,5 +1,6 @@
 init_bounded();
 var KNOWN_CONNECTOR_TAGS = /* @__PURE__ */ new Set([
+  "1password",
   "asana",
   "atlassian",
   "buildkite",

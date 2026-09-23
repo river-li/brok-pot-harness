@@ -5,12 +5,12 @@ function createSandCodebaseTelemetryHost({
   experiments,
   privacyMode,
   createAdapter,
-  logger: logger108
+  logger: logger110
 }) {
   const disposables = new DisposableStore();
-  const authSource = disposables.add(createAuthSource({ auth: auth2, logger: logger108 }));
+  const authSource = disposables.add(createAuthSource({ auth: auth2, logger: logger110 }));
   const privacyModeSource = createPrivacyModeSource(authSource.receiver, privacyMode);
-  const featureGates = disposables.add(createFeatureGateSource({ experiments, logger: logger108 }));
+  const featureGates = disposables.add(createFeatureGateSource({ experiments, logger: logger110 }));
   const desiredCodebases = {
     changes: {
       subscribe: () => ({ dispose: () => {
@@ -22,7 +22,7 @@ function createSandCodebaseTelemetryHost({
     ]
   };
   return {
-    logger: logger108,
+    logger: logger110,
     auth: authSource.receiver,
     privacyMode: privacyModeSource,
     featureGates: featureGates.receiver,
@@ -35,11 +35,11 @@ function createSandCodebaseTelemetryHost({
 }
 function createAuthSource({
   auth: auth2,
-  logger: logger108
+  logger: logger110
 }) {
   const [sender, receiver] = createWatchChannel({
     initialValue: void 0,
-    onSubscriberError: (error42) => logger108.error("Authentication subscriber failed", error42)
+    onSubscriberError: (error42) => logger110.error("Authentication subscriber failed", error42)
   });
   const clearCredential = () => {
     if (receiver.get() === void 0) {
@@ -56,7 +56,7 @@ function createAuthSource({
     }
     const authId = parseJwtPayload(accessToken)?.sub;
     if (authId === void 0 || authId.length === 0) {
-      logger108.warn("Credential has no usable subject claim");
+      logger110.warn("Credential has no usable subject claim");
       clearCredential();
       return;
     }
@@ -115,10 +115,10 @@ function createPrivacyModeSource(auth2, privacyModeApi) {
 }
 function createFeatureGateSource({
   experiments,
-  logger: logger108
+  logger: logger110
 }) {
   const [sender, changes] = createEventChannel({
-    onSubscriberError: (error42) => logger108.error("Feature gate subscriber failed", error42)
+    onSubscriberError: (error42) => logger110.error("Feature gate subscriber failed", error42)
   });
   let lastMainGateValue = readMainGate(experiments);
   const unsubscribe = experiments.subscribe(() => {

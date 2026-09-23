@@ -1,4 +1,4 @@
-var __protoPackage122, __protoMessage3118, ContextItem, ContextItem_FileChunk, ContextItem_SparseFileChunk, ContextItem_SparseFileChunk_Line, ContextItem_OutlineChunk, ContextItem_CmdKSelection, ContextItem_FileDiffHistory, ContextItem_CmdKImmediateContext, ContextItem_CmdKImmediateContext_Line, ContextItem_CmdKQuery, ContextItem_TerminalCmdKQuery, ContextItem_TerminalCmdKQueryHistory, ContextItem_CmdKQueryHistory, ContextItem_CmdKQueryHistoryInDiffSession, ContextItem_CmdKQueryHistoryInDiffSession_PastCmdKQueryInDiffSession, ContextItem_ChatHistory, ContextItem_TerminalHistory, ContextItem_CustomInstructions, ContextItem_GoToDefinitionResult, ContextItem_DocumentationChunk, ContextItem_Lints, ContextItem_Lints_Line, ContextItem_NotebookCellOutput, ContextItem_LspSubgraphChunk, ContextItem_CommitNoteChunk, ContextIntent, ContextIntent_Type, ContextIntent_Documentation, ContextIntent_File, ContextIntent_File_Mode, ContextIntent_CodeSelection, ContextIntent_CommitNotes, ContextIntent_Lints, ContextIntent_Lints_CmdKScope, ContextIntent_Lints_FileScope, ContextIntent_RecentLocations, ContextIntent_PastCmdkConversationsInDiffSessions, ContextIntent_VisibleTabs, ContextIntent_CmdKCurrentFile, ContextIntent_CmdKQueryEtc, ContextIntent_CustomInstructions, ContextIntent_CmdKDefinitions, ContextIntent_ChatHistory, ContextIntent_DiffHistory, ContextIntent_TerminalCmdKDefaults, ContextIntent_TerminalHistory, ContextIntent_LspSubgraph;
+var __protoPackage123, __protoMessage3118, ContextItem, ContextItem_FileChunk, ContextItem_SparseFileChunk, ContextItem_SparseFileChunk_Line, ContextItem_OutlineChunk, ContextItem_CmdKSelection, ContextItem_FileDiffHistory, ContextItem_CmdKImmediateContext, ContextItem_CmdKImmediateContext_Line, ContextItem_CmdKQuery, ContextItem_TerminalCmdKQuery, ContextItem_TerminalCmdKQueryHistory, ContextItem_CmdKQueryHistory, ContextItem_CmdKQueryHistoryInDiffSession, ContextItem_CmdKQueryHistoryInDiffSession_PastCmdKQueryInDiffSession, ContextItem_ChatHistory, ContextItem_TerminalHistory, ContextItem_CustomInstructions, ContextItem_GoToDefinitionResult, ContextItem_DocumentationChunk, ContextItem_Lints, ContextItem_Lints_Line, ContextItem_NotebookCellOutput, ContextItem_LspSubgraphChunk, ContextItem_CommitNoteChunk, ContextIntent, ContextIntent_Type, ContextIntent_Documentation, ContextIntent_File, ContextIntent_File_Mode, ContextIntent_CodeSelection, ContextIntent_CommitNotes, ContextIntent_Lints, ContextIntent_Lints_CmdKScope, ContextIntent_Lints_FileScope, ContextIntent_RecentLocations, ContextIntent_PastCmdkConversationsInDiffSessions, ContextIntent_VisibleTabs, ContextIntent_CmdKCurrentFile, ContextIntent_CmdKQueryEtc, ContextIntent_CustomInstructions, ContextIntent_CmdKDefinitions, ContextIntent_ChatHistory, ContextIntent_DiffHistory, ContextIntent_TerminalCmdKDefaults, ContextIntent_TerminalHistory, ContextIntent_LspSubgraph;
 var init_context_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/context_pb.js"() {
     "use strict";
@@ -7,13 +7,13 @@ var init_context_pb = __esm({
     init_cpp_pb();
     init_lsp_subgraph_pb();
     init_compact();
-    __protoPackage122 = "aiserver.v1.";
+    __protoPackage123 = "aiserver.v1.";
     __protoMessage3118 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage122;
+        return __protoPackage123;
       }
     };
     ContextItem = class _ContextItem extends __protoMessage3118 {
@@ -619,7 +619,7 @@ var init_context_pb = __esm({
         return ["ContextIntent|1 type #0|15 uuid 9|2 file #1 intent|3 code_selection #2 intent|5 lints #3 intent|6 recent_locations #4 intent|8 cmd_k_current_file #5 intent|9 cmd_k_query_etc #6 intent|14 terminal_cmd_k_defaults #7 intent|10 cmd_k_definitions #8 intent|11 documentation #9 intent|12 custom_instructions #10 intent|13 chat_history #11 intent|16 terminal_history #12 intent|17 visible_tabs #13 intent|18 lsp_subgraph #14 intent|19 commit_notes #15 intent|20 diff_history #16 intent|21 past_cmdk_messages_in_diff_sessions #17 intent", ContextIntent_Type, ContextIntent_File, ContextIntent_CodeSelection, ContextIntent_Lints, ContextIntent_RecentLocations, ContextIntent_CmdKCurrentFile, ContextIntent_CmdKQueryEtc, ContextIntent_TerminalCmdKDefaults, ContextIntent_CmdKDefinitions, ContextIntent_Documentation, ContextIntent_CustomInstructions, ContextIntent_ChatHistory, ContextIntent_TerminalHistory, ContextIntent_VisibleTabs, ContextIntent_LspSubgraph, ContextIntent_CommitNotes, ContextIntent_DiffHistory, ContextIntent_PastCmdkConversationsInDiffSessions];
       }
     };
-    ContextIntent_Type = /* @__PURE__ */ enumType(proto3, __protoPackage122, "ContextIntent.Type", [[0, "UNSPECIFIED"], [1, "USER_ADDED"], [2, "AUTOMATIC"]], 1);
+    ContextIntent_Type = /* @__PURE__ */ enumType(proto3, __protoPackage123, "ContextIntent.Type", [[0, "UNSPECIFIED"], [1, "USER_ADDED"], [2, "AUTOMATIC"]], 1);
     ContextIntent_Documentation = class _ContextIntent_Documentation extends __protoMessage3118 {
       constructor(data) {
         super();
@@ -665,7 +665,7 @@ var init_context_pb = __esm({
         return ["ContextIntent.File|1 relative_workspace_path 9|2 mode #0", ContextIntent_File_Mode];
       }
     };
-    ContextIntent_File_Mode = /* @__PURE__ */ enumType(proto3, __protoPackage122, "ContextIntent.File.Mode", [[0, "UNSPECIFIED"], [1, "FULL"], [2, "OUTLINE"], [3, "CHUNKS"]], 1);
+    ContextIntent_File_Mode = /* @__PURE__ */ enumType(proto3, __protoPackage123, "ContextIntent.File.Mode", [[0, "UNSPECIFIED"], [1, "FULL"], [2, "OUTLINE"], [3, "CHUNKS"]], 1);
     ContextIntent_CodeSelection = class _ContextIntent_CodeSelection extends __protoMessage3118 {
       constructor(data) {
         super();

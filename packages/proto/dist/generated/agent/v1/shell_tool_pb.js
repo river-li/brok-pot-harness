@@ -1,17 +1,17 @@
-var __protoPackage17, __protoMessage314, ShellToolCall, ShellToolCallStdoutDelta, ShellToolCallStderrDelta, ShellToolCallDelta;
+var __protoPackage18, __protoMessage314, ShellToolCall, ShellToolCallStdoutDelta, ShellToolCallStderrDelta, ShellToolCallDelta;
 var init_shell_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/shell_tool_pb.js"() {
     "use strict";
     init_esm();
     init_shell_exec_pb();
     init_compact();
-    __protoPackage17 = "agent.v1.";
+    __protoPackage18 = "agent.v1.";
     __protoMessage314 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage17;
+        return __protoPackage18;
       }
     };
     ShellToolCall = class _ShellToolCall extends __protoMessage314 {

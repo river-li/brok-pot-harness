@@ -1,16 +1,16 @@
-var __protoPackage77, __protoMessage374, PiWriteToolCall, PiWriteToolArgs, PiWriteToolResult, PiWriteToolSuccess, PiWriteToolError, PiWriteToolRejected;
+var __protoPackage78, __protoMessage374, PiWriteToolCall, PiWriteToolArgs, PiWriteToolResult, PiWriteToolSuccess, PiWriteToolError, PiWriteToolRejected;
 var init_pi_write_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_write_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage77 = "agent.v1.";
+    __protoPackage78 = "agent.v1.";
     __protoMessage374 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage77;
+        return __protoPackage78;
       }
     };
     PiWriteToolCall = class _PiWriteToolCall extends __protoMessage374 {

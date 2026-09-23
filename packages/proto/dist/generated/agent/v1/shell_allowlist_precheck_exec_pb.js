@@ -1,17 +1,17 @@
-var __protoPackage106, __protoMessage3102, ShellAllowlistPrecheckArgs, ShellAllowlistPrecheckResult;
+var __protoPackage107, __protoMessage3102, ShellAllowlistPrecheckArgs, ShellAllowlistPrecheckResult;
 var init_shell_allowlist_precheck_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/shell_allowlist_precheck_exec_pb.js"() {
     "use strict";
     init_esm();
     init_shell_exec_pb();
     init_compact();
-    __protoPackage106 = "agent.v1.";
+    __protoPackage107 = "agent.v1.";
     __protoMessage3102 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage106;
+        return __protoPackage107;
       }
     };
     ShellAllowlistPrecheckArgs = class _ShellAllowlistPrecheckArgs extends __protoMessage3102 {

@@ -200,8 +200,8 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
   }
   createStagingDir() {
     return __awaiter57(this, void 0, void 0, function* () {
-      const stagingDir = (0, import_node_path61.join)(this.cacheRoot, "_staging", (0, import_node_crypto23.randomUUID)());
-      yield (0, import_promises32.mkdir)(stagingDir, { recursive: true });
+      const stagingDir = (0, import_node_path52.join)(this.cacheRoot, "_staging", (0, import_node_crypto22.randomUUID)());
+      yield (0, import_promises30.mkdir)(stagingDir, { recursive: true });
       return stagingDir;
     });
   }
@@ -211,24 +211,24 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    */
   moveToCanonicalDir(stagingDir, cloneDir) {
     return __awaiter57(this, void 0, void 0, function* () {
-      yield (0, import_promises32.mkdir)((0, import_node_path61.dirname)(cloneDir), { recursive: true });
-      yield (0, import_promises32.rm)(cloneDir, RECURSIVE_RM_OPTIONS);
-      yield (0, import_promises32.rename)(stagingDir, cloneDir);
+      yield (0, import_promises30.mkdir)((0, import_node_path52.dirname)(cloneDir), { recursive: true });
+      yield (0, import_promises30.rm)(cloneDir, RECURSIVE_RM_OPTIONS);
+      yield (0, import_promises30.rename)(stagingDir, cloneDir);
       return cloneDir;
     });
   }
   cleanStaleStagingDirs() {
     return __awaiter57(this, void 0, void 0, function* () {
-      const stagingRoot = (0, import_node_path61.join)(this.cacheRoot, "_staging");
+      const stagingRoot = (0, import_node_path52.join)(this.cacheRoot, "_staging");
       try {
-        const entries = yield (0, import_promises32.readdir)(stagingRoot, { withFileTypes: true });
+        const entries = yield (0, import_promises30.readdir)(stagingRoot, { withFileTypes: true });
         const now = Date.now();
         yield Promise.all(entries.filter((entry) => entry.isDirectory()).map((entry) => __awaiter57(this, void 0, void 0, function* () {
           try {
-            const entryPath = (0, import_node_path61.join)(stagingRoot, entry.name);
-            const stats = yield (0, import_promises32.stat)(entryPath);
+            const entryPath = (0, import_node_path52.join)(stagingRoot, entry.name);
+            const stats = yield (0, import_promises30.stat)(entryPath);
             if (now - stats.mtimeMs > _MarketplaceCacheManager.STALE_STAGING_THRESHOLD_MS) {
-              yield (0, import_promises32.rm)(entryPath, RECURSIVE_RM_OPTIONS);
+              yield (0, import_promises30.rm)(entryPath, RECURSIVE_RM_OPTIONS);
             }
           } catch (_a19) {
           }
@@ -238,28 +238,28 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
     });
   }
   getLegacyCloneDir(marketplaceId, ref) {
-    return (0, import_node_path61.join)(this.cacheRoot, sanitize(marketplaceId), sanitize(ref));
+    return (0, import_node_path52.join)(this.cacheRoot, sanitize(marketplaceId), sanitize(ref));
   }
   getCanonicalCloneDir(gitUrl, ref) {
     const { host, pathSegments } = getCanonicalMarketplacePathSegments(gitUrl);
-    return (0, import_node_path61.join)(this.cacheRoot, sanitize(host), ...pathSegments.map(sanitize), sanitize(ref));
+    return (0, import_node_path52.join)(this.cacheRoot, sanitize(host), ...pathSegments.map(sanitize), sanitize(ref));
   }
   getCanonicalRepoRootDir(gitUrl) {
     const { host, pathSegments } = getCanonicalMarketplacePathSegments(gitUrl);
-    return (0, import_node_path61.join)(this.cacheRoot, sanitize(host), ...pathSegments.map(sanitize));
+    return (0, import_node_path52.join)(this.cacheRoot, sanitize(host), ...pathSegments.map(sanitize));
   }
   pruneSiblingCloneDirs(gitUrl, keepRef, legacyCloneDir) {
     return __awaiter57(this, void 0, void 0, function* () {
       const repoRootDir = this.getCanonicalRepoRootDir(gitUrl);
       const keepDirName = sanitize(keepRef);
       try {
-        const entries = yield (0, import_promises32.readdir)(repoRootDir, { withFileTypes: true });
-        yield Promise.all(entries.filter((entry) => entry.isDirectory() && entry.name !== keepDirName).map((entry) => (0, import_promises32.rm)((0, import_node_path61.join)(repoRootDir, entry.name), RECURSIVE_RM_OPTIONS)));
+        const entries = yield (0, import_promises30.readdir)(repoRootDir, { withFileTypes: true });
+        yield Promise.all(entries.filter((entry) => entry.isDirectory() && entry.name !== keepDirName).map((entry) => (0, import_promises30.rm)((0, import_node_path52.join)(repoRootDir, entry.name), RECURSIVE_RM_OPTIONS)));
       } catch (_a19) {
       }
       if (legacyCloneDir !== void 0) {
         try {
-          yield (0, import_promises32.rm)(legacyCloneDir, RECURSIVE_RM_OPTIONS);
+          yield (0, import_promises30.rm)(legacyCloneDir, RECURSIVE_RM_OPTIONS);
         } catch (_b2) {
         }
       }
@@ -317,7 +317,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    */
   ensureMaterialized(clonePath_1, spec_1) {
     return __awaiter57(this, arguments, void 0, function* (clonePath, spec, pluginLogger = noopPluginMetricsLogger) {
-      const inner = this.serializedOnRepo((0, import_node_path61.dirname)(clonePath), () => __awaiter57(this, void 0, void 0, function* () {
+      const inner = this.serializedOnRepo((0, import_node_path52.dirname)(clonePath), () => __awaiter57(this, void 0, void 0, function* () {
         var _a19;
         const start = performance.now();
         try {
@@ -455,7 +455,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
       });
       const heartbeat = this.sparsePluginClones ? setInterval(() => {
         const now = /* @__PURE__ */ new Date();
-        void (0, import_promises32.utimes)(stagingDir, now, now).catch(() => {
+        void (0, import_promises30.utimes)(stagingDir, now, now).catch(() => {
         });
       }, _MarketplaceCacheManager.STAGING_HEARTBEAT_INTERVAL_MS) : void 0;
       (_a19 = heartbeat === null || heartbeat === void 0 ? void 0 : heartbeat.unref) === null || _a19 === void 0 ? void 0 : _a19.call(heartbeat);
@@ -477,8 +477,8 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
               error: String(error42),
               errorCategory: cloneErrorTag(error42)
             });
-            yield (0, import_promises32.rm)(stagingDir, RECURSIVE_RM_OPTIONS);
-            yield (0, import_promises32.mkdir)(stagingDir, { recursive: true });
+            yield (0, import_promises30.rm)(stagingDir, RECURSIVE_RM_OPTIONS);
+            yield (0, import_promises30.mkdir)(stagingDir, { recursive: true });
             outcome = yield this.cloneResolvedRef(stagingDir, gitUrl, resolvedRef, {
               materialize: materialize3
             });
@@ -515,7 +515,7 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
           clearInterval(heartbeat);
         }
         try {
-          yield (0, import_promises32.rm)(stagingDir, RECURSIVE_RM_OPTIONS);
+          yield (0, import_promises30.rm)(stagingDir, RECURSIVE_RM_OPTIONS);
         } catch (_b2) {
         }
       }
@@ -528,16 +528,16 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
   isCloneComplete(cloneDir) {
     return __awaiter57(this, void 0, void 0, function* () {
       try {
-        const stats = yield (0, import_promises32.stat)(cloneDir);
+        const stats = yield (0, import_promises30.stat)(cloneDir);
         if (!stats.isDirectory())
           return false;
-        const entries = yield (0, import_promises32.readdir)(cloneDir);
+        const entries = yield (0, import_promises30.readdir)(cloneDir);
         if (!entries.includes(".git"))
           return false;
         if (entries.length > 1)
           return true;
         try {
-          const sparseMarker = yield (0, import_promises32.stat)((0, import_node_path61.join)(cloneDir, ".git", "info", "sparse-checkout"));
+          const sparseMarker = yield (0, import_promises30.stat)((0, import_node_path52.join)(cloneDir, ".git", "info", "sparse-checkout"));
           return sparseMarker.isFile();
         } catch (_a19) {
           return false;
@@ -568,8 +568,8 @@ var MarketplaceCacheManager = class _MarketplaceCacheManager {
    */
   copyPluginToDir(sourcePath, targetDir) {
     return __awaiter57(this, void 0, void 0, function* () {
-      yield (0, import_promises32.mkdir)(targetDir, { recursive: true });
-      yield (0, import_promises32.cp)(sourcePath, targetDir, {
+      yield (0, import_promises30.mkdir)(targetDir, { recursive: true });
+      yield (0, import_promises30.cp)(sourcePath, targetDir, {
         recursive: true,
         verbatimSymlinks: true
       });
@@ -646,10 +646,10 @@ MarketplaceCacheManager.STAGING_HEARTBEAT_INTERVAL_MS = 60 * 1e3;
 function readMarketplaceManifestFromDir(dir_1) {
   return __awaiter57(this, arguments, void 0, function* (dir, options2 = {}) {
     for (const manifestRelPath of MARKETPLACE_MANIFEST_PATHS) {
-      const manifestPath2 = (0, import_node_path61.join)(dir, manifestRelPath);
+      const manifestPath2 = (0, import_node_path52.join)(dir, manifestRelPath);
       let content;
       try {
-        content = yield (0, import_promises32.readFile)(manifestPath2, "utf-8");
+        content = yield (0, import_promises30.readFile)(manifestPath2, "utf-8");
       } catch (_a19) {
         continue;
       }

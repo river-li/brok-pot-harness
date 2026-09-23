@@ -1,11 +1,11 @@
-var import_promises41 = require("node:fs/promises");
-var import_node_path73 = require("node:path");
+var import_promises39 = require("node:fs/promises");
+var import_node_path64 = require("node:path");
 async function readMcpDiskCatalogToolNamesForProjectDir(projectDir, serverIdentifier) {
   const sanitized = sanitizeServerName(serverIdentifier);
-  const toolsDir = (0, import_node_path73.join)(projectDir, MCP_DISK_CATALOG_MCPS_DIR, sanitized, MCP_DISK_CATALOG_TOOLS_DIR);
+  const toolsDir = (0, import_node_path64.join)(projectDir, MCP_DISK_CATALOG_MCPS_DIR, sanitized, MCP_DISK_CATALOG_TOOLS_DIR);
   let entries;
   try {
-    entries = await (0, import_promises41.readdir)(toolsDir);
+    entries = await (0, import_promises39.readdir)(toolsDir);
   } catch (err) {
     if (err?.code === "ENOENT") {
       return { toolNames: [], toolsDirExists: false };
@@ -17,7 +17,7 @@ async function readMcpDiskCatalogToolNamesForProjectDir(projectDir, serverIdenti
       return void 0;
     }
     try {
-      const content = await (0, import_promises41.readFile)((0, import_node_path73.join)(toolsDir, entryName), "utf8");
+      const content = await (0, import_promises39.readFile)((0, import_node_path64.join)(toolsDir, entryName), "utf8");
       return parseMcpToolNameFromDiskDefinitionJson(content);
     } catch {
       return void 0;

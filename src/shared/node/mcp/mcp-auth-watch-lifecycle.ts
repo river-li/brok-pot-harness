@@ -6,6 +6,7 @@ function httpUrlOfMcpConfig(config2) {
 var CONNECTOR_AUTH_START_REFUSAL_REASONS = [
   "not_configured",
   "admin_blocked",
+  "grant_required",
   "stdio_unsupported",
   "invalid_auth_url",
   "no_auth_link",
@@ -83,6 +84,9 @@ var SandMcpAuthWatchLifecycle = class {
       this.reportFlowStartRefused({ reason: "not_configured", serverId });
       return { status: "not-configured", serverName: serverId };
     }
+    const { name: name17, config: config2 } = server;
+    const serverUrl = config2 != null && "url" in config2 ? config2.url : void 0;
+    let withheld;
     if (server.disabledByTeamAdminPolicy) {
       let confirmedBlocked = false;
       try {
@@ -104,28 +108,16 @@ var SandMcpAuthWatchLifecycle = class {
         for (const watch4 of clearedWatches) {
           this.notifyWatchCancelled(watch4);
         }
-        this.reportFlowStartRefused({
-          reason: "admin_blocked",
-          serverId,
-          serverName: server.name,
-          serverUrl: httpUrlOfMcpConfig(server.config)
-        });
-        return {
-          status: "not-supported",
-          serverName: server.name,
-          reason: { kind: "admin_blocked" }
-        };
+        withheld = "admin_blocked";
       }
     }
-    const { name: name17, config: config2 } = server;
-    const serverUrl = config2 != null && "url" in config2 ? config2.url : void 0;
-    if (config2 != null && "command" in config2) {
-      this.reportFlowStartRefused({ reason: "stdio_unsupported", serverId, serverName: name17 });
-      return {
-        status: "not-supported",
-        serverName: name17,
-        reason: { kind: "stdio_unsupported" }
-      };
+    if (withheld == null) {
+      if (server.needsGrant === true) withheld = "grant_required";
+      else if (config2 != null && "command" in config2) withheld = "stdio_unsupported";
+    }
+    if (withheld != null) {
+      this.reportFlowStartRefused({ reason: withheld, serverId, serverName: name17, serverUrl });
+      return { status: "not-supported", serverName: name17, reason: { kind: withheld } };
     }
     const grokIdentifier = server.servedBy === "grok" && server.serverIdentifier != null && server.serverIdentifier.length > 0 ? server.serverIdentifier : void 0;
     if (server.servedBy === "grok" ? grokIdentifier == null : serverUrl == null) {

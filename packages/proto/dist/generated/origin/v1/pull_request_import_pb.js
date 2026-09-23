@@ -1,18 +1,18 @@
 init_esm();
 init_compact();
-var __protoPackage166 = "origin.v1.";
-var __protoMessage3158 = class extends CompactMessage {
+var __protoPackage168 = "origin.v1.";
+var __protoMessage3160 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage166;
+    return __protoPackage168;
   }
 };
-var ImportedGithubPullRequestState = /* @__PURE__ */ enumType(proto3, __protoPackage166, "ImportedGithubPullRequestState", [[0, "UNSPECIFIED"], [1, "OPEN"], [2, "CLOSED"], [3, "MERGED"]], 1);
-var ImportedGithubReviewVerdict = /* @__PURE__ */ enumType(proto3, __protoPackage166, "ImportedGithubReviewVerdict", [[0, "UNSPECIFIED"], [1, "APPROVE"], [2, "REQUEST_CHANGES"], [3, "COMMENT"]], 1);
-var ImportedGithubCommentSide = /* @__PURE__ */ enumType(proto3, __protoPackage166, "ImportedGithubCommentSide", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"]], 1);
-var ImportGithubPullRequestRequest = class _ImportGithubPullRequestRequest extends __protoMessage3158 {
+var ImportedGithubPullRequestState = /* @__PURE__ */ enumType(proto3, __protoPackage168, "ImportedGithubPullRequestState", [[0, "UNSPECIFIED"], [1, "OPEN"], [2, "CLOSED"], [3, "MERGED"]], 1);
+var ImportedGithubReviewVerdict = /* @__PURE__ */ enumType(proto3, __protoPackage168, "ImportedGithubReviewVerdict", [[0, "UNSPECIFIED"], [1, "APPROVE"], [2, "REQUEST_CHANGES"], [3, "COMMENT"]], 1);
+var ImportedGithubCommentSide = /* @__PURE__ */ enumType(proto3, __protoPackage168, "ImportedGithubCommentSide", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"]], 1);
+var ImportGithubPullRequestRequest = class _ImportGithubPullRequestRequest extends __protoMessage3160 {
   constructor(data) {
     super();
     this.allowDefaultActorFallback = false;
@@ -34,7 +34,7 @@ var ImportGithubPullRequestRequest = class _ImportGithubPullRequestRequest exten
     return ["ImportGithubPullRequestRequest|1 identifier #0|2 pull_request #1|3 allow_default_actor_fallback 8", ClientRepoIdentifier, ImportedGithubPullRequest];
   }
 };
-var ImportGithubPullRequestResponse = class _ImportGithubPullRequestResponse extends __protoMessage3158 {
+var ImportGithubPullRequestResponse = class _ImportGithubPullRequestResponse extends __protoMessage3160 {
   constructor(data) {
     super();
     this.changeId = "";
@@ -63,7 +63,7 @@ var ImportGithubPullRequestResponse = class _ImportGithubPullRequestResponse ext
     return ["ImportGithubPullRequestResponse|1 change_id 9|2 number 5|3 versions_created 5|4 reviews_created 5|5 threads_created 5|6 comments_created 5|7 timeline_events_created 5|8 warnings 9*"];
   }
 };
-var ImportedGithubPullRequest = class _ImportedGithubPullRequest extends __protoMessage3158 {
+var ImportedGithubPullRequest = class _ImportedGithubPullRequest extends __protoMessage3160 {
   constructor(data) {
     super();
     this.number = 0;
@@ -102,7 +102,7 @@ var ImportedGithubPullRequest = class _ImportedGithubPullRequest extends __proto
     return ["ImportedGithubPullRequest|1 number 5|2 github_node_id 9|3 title 9|4 description 9|5 state #0|6 draft 8|7 author_login 9|8 head_ref 9|9 head_sha 9|10 base_ref 9|11 base_sha 9|12 created_at #1|13 merged_at #1?|14 closed_at #1?|15 merge_commit_sha 9|16 merged_by_login 9|17 reviews #2*|18 review_comments #3*|19 issue_comments #4*|20 timeline_events #5*|21 actors #6*", ImportedGithubPullRequestState, Timestamp, ImportedGithubReview, ImportedGithubReviewComment, ImportedGithubIssueComment, ImportedGithubTimelineEvent, ImportedGithubActor];
   }
 };
-var ImportedGithubActor = class _ImportedGithubActor extends __protoMessage3158 {
+var ImportedGithubActor = class _ImportedGithubActor extends __protoMessage3160 {
   constructor(data) {
     super();
     this.login = "";
@@ -126,7 +126,7 @@ var ImportedGithubActor = class _ImportedGithubActor extends __protoMessage3158 
     return ["ImportedGithubActor|1 login 9|2 github_user_node_id 9|3 github_user_database_id 3"];
   }
 };
-var ImportedGithubReview = class _ImportedGithubReview extends __protoMessage3158 {
+var ImportedGithubReview = class _ImportedGithubReview extends __protoMessage3160 {
   constructor(data) {
     super();
     this.githubNodeId = "";
@@ -154,7 +154,7 @@ var ImportedGithubReview = class _ImportedGithubReview extends __protoMessage315
     return ["ImportedGithubReview|1 github_node_id 9|2 author_login 9|3 verdict #0|4 body 9|5 commit_sha 9|6 submitted_at #1|7 dismissed_at #1?|8 dismissed_by_login 9|9 dismissal_message 9", ImportedGithubReviewVerdict, Timestamp];
   }
 };
-var ImportedGithubReviewComment = class _ImportedGithubReviewComment extends __protoMessage3158 {
+var ImportedGithubReviewComment = class _ImportedGithubReviewComment extends __protoMessage3160 {
   constructor(data) {
     super();
     this.githubNodeId = "";
@@ -185,7 +185,7 @@ var ImportedGithubReviewComment = class _ImportedGithubReviewComment extends __p
     return ["ImportedGithubReviewComment|1 github_node_id 9|2 review_github_node_id 9|3 in_reply_to_github_node_id 9|4 author_login 9|5 body 9|6 path 9|7 commit_sha 9|8 side #0|9 start_line 5|10 end_line 5|11 created_at #1", ImportedGithubCommentSide, Timestamp];
   }
 };
-var ImportedGithubIssueComment = class _ImportedGithubIssueComment extends __protoMessage3158 {
+var ImportedGithubIssueComment = class _ImportedGithubIssueComment extends __protoMessage3160 {
   constructor(data) {
     super();
     this.githubNodeId = "";
@@ -209,7 +209,7 @@ var ImportedGithubIssueComment = class _ImportedGithubIssueComment extends __pro
     return ["ImportedGithubIssueComment|1 github_node_id 9|2 author_login 9|3 body 9|4 created_at #0", Timestamp];
   }
 };
-var ImportedGithubTimelineEvent = class _ImportedGithubTimelineEvent extends __protoMessage3158 {
+var ImportedGithubTimelineEvent = class _ImportedGithubTimelineEvent extends __protoMessage3160 {
   constructor(data) {
     super();
     this.githubEvent = "";

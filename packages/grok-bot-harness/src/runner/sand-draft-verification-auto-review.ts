@@ -64,9 +64,10 @@ async function reviewSandDraftRouteVerification(args) {
   if (decision.kind !== "block" || controller === void 0) {
     return { allowed: false, reason: decision.reason };
   }
-  const approval = await withToolExecutionTimeoutSuspended(
+  const approval = await requestReviewedApproval(
     ctx,
-    () => controller.requestApproval({
+    controller,
+    {
       agentId: options2.agentId,
       surface: "mcp",
       fingerprint: fingerprintSandAutoReviewTarget({
@@ -77,7 +78,8 @@ async function reviewSandDraftRouteVerification(args) {
       }),
       reason: decision.reason,
       summary: summarizeVerificationReads(route)
-    })
+    },
+    { toolCallId, approvalMode: "auto_review" }
   );
   return approval.approved ? { allowed: true } : { allowed: false, reason: approval.reason ?? decision.reason };
 }

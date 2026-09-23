@@ -1,21 +1,21 @@
-var __protoPackage6, __protoMessage35, PodCreatingPhase, GitCloneFailureCategory, ImagePullFailureCategory, PodStatus, PodCreatingStatus, PodRunningStatus, PodFailedStatus, PodTerminatedStatus, PodFailureDetails, ContainerWaitFailure, InstallCommandFailure, DockerBuildFailure, GitCloneFailure, GitCheckoutFailure, ImagePullFailure;
+var __protoPackage7, __protoMessage35, PodCreatingPhase, GitCloneFailureCategory, ImagePullFailureCategory, PodStatus, PodCreatingStatus, PodRunningStatus, PodFailedStatus, PodTerminatedStatus, PodFailureDetails, ContainerWaitFailure, InstallCommandFailure, DockerBuildFailure, GitCloneFailure, GitCheckoutFailure, ImagePullFailure;
 var init_pod_pb = __esm({
   "../packages/proto/dist/generated/anyrun/v1/pod_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage6 = "anyrun.v1.";
+    __protoPackage7 = "anyrun.v1.";
     __protoMessage35 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage6;
+        return __protoPackage7;
       }
     };
-    PodCreatingPhase = /* @__PURE__ */ enumType(proto3, __protoPackage6, "PodCreatingPhase", [[0, "UNSPECIFIED"], [1, "CLONE"], [2, "BUILD"], [3, "POST_CREATE"], [4, "UPDATE_CONTENT"], [5, "POST_START"], [6, "QUEUED"]], 1);
-    GitCloneFailureCategory = /* @__PURE__ */ enumType(proto3, __protoPackage6, "GitCloneFailureCategory", [[0, "UNSPECIFIED"], [1, "IP_ALLOW_LIST"], [2, "INVALID_CREDENTIALS"], [3, "SSO_REDIRECT"], [4, "PROXY_CONNECT"], [5, "CONNECTION_RESET"], [6, "TRANSPORT_INTERRUPTED"], [7, "REMOTE_FORBIDDEN"], [8, "UPSTREAM_BAD_GATEWAY"]], 1);
-    ImagePullFailureCategory = /* @__PURE__ */ enumType(proto3, __protoPackage6, "ImagePullFailureCategory", [[0, "UNSPECIFIED"], [1, "DENIED"], [2, "UNAUTHORIZED"], [3, "NOT_FOUND"], [4, "RATE_LIMITED"], [5, "UPSTREAM"]], 1);
+    PodCreatingPhase = /* @__PURE__ */ enumType(proto3, __protoPackage7, "PodCreatingPhase", [[0, "UNSPECIFIED"], [1, "CLONE"], [2, "BUILD"], [3, "POST_CREATE"], [4, "UPDATE_CONTENT"], [5, "POST_START"], [6, "QUEUED"]], 1);
+    GitCloneFailureCategory = /* @__PURE__ */ enumType(proto3, __protoPackage7, "GitCloneFailureCategory", [[0, "UNSPECIFIED"], [1, "IP_ALLOW_LIST"], [2, "INVALID_CREDENTIALS"], [3, "SSO_REDIRECT"], [4, "PROXY_CONNECT"], [5, "CONNECTION_RESET"], [6, "TRANSPORT_INTERRUPTED"], [7, "REMOTE_FORBIDDEN"], [8, "UPSTREAM_BAD_GATEWAY"]], 1);
+    ImagePullFailureCategory = /* @__PURE__ */ enumType(proto3, __protoPackage7, "ImagePullFailureCategory", [[0, "UNSPECIFIED"], [1, "DENIED"], [2, "UNAUTHORIZED"], [3, "NOT_FOUND"], [4, "RATE_LIMITED"], [5, "UPSTREAM"]], 1);
     PodStatus = class _PodStatus extends __protoMessage35 {
       constructor(data) {
         super();

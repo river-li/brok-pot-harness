@@ -1,4 +1,4 @@
-var import_node_crypto78 = require("node:crypto");
+var import_node_crypto80 = require("node:crypto");
 init_smart_mode_classifier_exec_pb();
 var SAND_CLOUD_AGENT_CLASSIFIER_TARGET_ACTION = "sand_cloud_agent";
 var SAND_CLOUD_AGENT_CLASSIFIER_ERROR_REASON = "An error occurred while reviewing this cloud agent action. Please review manually.";
@@ -18,7 +18,7 @@ function describeSandCloudAgentReviewImages(urls, images) {
     url: image2.path ?? urls[index] ?? `image-${index}`,
     ...image2.mimeType !== void 0 ? { mimeType: image2.mimeType } : {},
     byteLength: image2.data.byteLength,
-    sha256: (0, import_node_crypto78.createHash)("sha256").update(image2.data).digest("hex")
+    sha256: (0, import_node_crypto80.createHash)("sha256").update(image2.data).digest("hex")
   }));
 }
 function describeSandCloudAgentReviewFiles(files) {
@@ -28,7 +28,7 @@ function describeSandCloudAgentReviewFiles(files) {
     filename: file2.filename,
     mimeType: file2.mimeType,
     byteLength: file2.data.byteLength,
-    sha256: (0, import_node_crypto78.createHash)("sha256").update(file2.data).digest("hex")
+    sha256: (0, import_node_crypto80.createHash)("sha256").update(file2.data).digest("hex")
   }));
 }
 function buildSandCloudAgentReviewTarget(args, attachments = {}) {
@@ -57,6 +57,7 @@ function buildSandCloudAgentReviewTarget(args, attachments = {}) {
   }
   if (prompt.length === 0) return void 0;
   const repoUrl = args.repo?.trim() || args.repo_url?.trim() || void 0;
+  const customMode = args.custom_mode?.trim() || void 0;
   const isCanvas = args.is_canvas === true;
   return {
     action: args.action,
@@ -73,6 +74,7 @@ function buildSandCloudAgentReviewTarget(args, attachments = {}) {
     ...args.agent_id !== void 0 ? { agentId: args.agent_id } : {},
     ...args.interrupt !== void 0 ? { interrupt: args.interrupt } : {},
     ...args.mode !== void 0 ? { mode: args.mode } : {},
+    ...customMode !== void 0 ? { customMode } : {},
     ...managed,
     images,
     ...attachedFiles
@@ -98,6 +100,7 @@ function buildSandCloudAgentRiskTarget(args) {
       agent_id: target.agentId,
       interrupt: target.interrupt,
       mode: target.mode,
+      custom_mode: target.customMode,
       session_managed: target.sessionManaged,
       image_count: target.images.length,
       images: target.images.map((image2) => ({
@@ -142,6 +145,7 @@ var SAND_CLOUD_AGENT_REVIEW_SPEC = {
     agentId: target.agentId,
     interrupt: target.interrupt,
     mode: target.mode,
+    customMode: target.customMode,
     images: target.images,
     files: target.files
   }),

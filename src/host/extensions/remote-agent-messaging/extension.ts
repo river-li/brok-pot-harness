@@ -62,12 +62,12 @@ function startRemoteAgentMessaging({
   return createRemoteAgentMessagingService({
     client,
     isEnabled,
-    mintMessageId: () => (0, import_node_crypto60.randomUUID)(),
+    mintMessageId: () => (0, import_node_crypto61.randomUUID)(),
     reportFailure,
     temporalMemberTurns: createTemporalMemberTurns({
       client,
       isEnabled,
-      mintNonce: () => (0, import_node_crypto60.randomUUID)(),
+      mintNonce: () => (0, import_node_crypto61.randomUUID)(),
       clock: realClock,
       turnDeadline: createDeadlinePolicy({
         name: "remote-agent-messaging-temporal-member-turn",

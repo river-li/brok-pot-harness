@@ -1,16 +1,15 @@
-init_esm();
 init_compact();
-var __protoPackage172 = "origin.v1.";
-var __protoMessage3164 = class extends CompactMessage {
+var __protoPackage176 = "origin.v1.";
+var __protoMessage3167 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage172;
+    return __protoPackage176;
   }
 };
-var MergeQueueConfigOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage172, "MergeQueueConfigOutcome", [[0, "UNSPECIFIED"], [1, "CREATED"], [2, "RE_ENABLED"], [3, "ALREADY_ENABLED"], [4, "DISABLED"], [5, "ALREADY_DISABLED"], [6, "UPDATED"], [7, "UNCHANGED"]], 1);
-var EnqueueForMergeRequest = class _EnqueueForMergeRequest extends __protoMessage3164 {
+var MergeQueueConfigOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage176, "MergeQueueConfigOutcome", [[0, "UNSPECIFIED"], [1, "CREATED"], [2, "RE_ENABLED"], [3, "ALREADY_ENABLED"], [4, "DISABLED"], [5, "ALREADY_DISABLED"], [6, "UPDATED"], [7, "UNCHANGED"]], 1);
+var EnqueueForMergeRequest = class _EnqueueForMergeRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.expectedHeadSha = "";
@@ -32,7 +31,7 @@ var EnqueueForMergeRequest = class _EnqueueForMergeRequest extends __protoMessag
     return ["EnqueueForMergeRequest|1 change #0|2 expected_head_sha 9", ChangeIdentifier];
   }
 };
-var EnqueueForMergeResponse = class _EnqueueForMergeResponse extends __protoMessage3164 {
+var EnqueueForMergeResponse = class _EnqueueForMergeResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -53,7 +52,7 @@ var EnqueueForMergeResponse = class _EnqueueForMergeResponse extends __protoMess
     return ["EnqueueForMergeResponse|1 entry #0", MergeQueueEntry];
   }
 };
-var CancelMergeQueueEntryRequest = class _CancelMergeQueueEntryRequest extends __protoMessage3164 {
+var CancelMergeQueueEntryRequest = class _CancelMergeQueueEntryRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -74,7 +73,7 @@ var CancelMergeQueueEntryRequest = class _CancelMergeQueueEntryRequest extends _
     return ["CancelMergeQueueEntryRequest|1 change #0", ChangeIdentifier];
   }
 };
-var CancelMergeQueueEntryResponse = class _CancelMergeQueueEntryResponse extends __protoMessage3164 {
+var CancelMergeQueueEntryResponse = class _CancelMergeQueueEntryResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -95,7 +94,7 @@ var CancelMergeQueueEntryResponse = class _CancelMergeQueueEntryResponse extends
     return ["CancelMergeQueueEntryResponse|1 entry #0", MergeQueueEntry];
   }
 };
-var GetMergeQueueStatusRequest = class _GetMergeQueueStatusRequest extends __protoMessage3164 {
+var GetMergeQueueStatusRequest = class _GetMergeQueueStatusRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -116,7 +115,7 @@ var GetMergeQueueStatusRequest = class _GetMergeQueueStatusRequest extends __pro
     return ["GetMergeQueueStatusRequest|1 change #0", ChangeIdentifier];
   }
 };
-var GetMergeQueueStatusResponse = class _GetMergeQueueStatusResponse extends __protoMessage3164 {
+var GetMergeQueueStatusResponse = class _GetMergeQueueStatusResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -137,7 +136,7 @@ var GetMergeQueueStatusResponse = class _GetMergeQueueStatusResponse extends __p
     return ["GetMergeQueueStatusResponse|1 entry #0", MergeQueueEntry];
   }
 };
-var GetMergeQueueRequest = class _GetMergeQueueRequest extends __protoMessage3164 {
+var GetMergeQueueRequest = class _GetMergeQueueRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.targetRef = "";
@@ -159,7 +158,7 @@ var GetMergeQueueRequest = class _GetMergeQueueRequest extends __protoMessage316
     return ["GetMergeQueueRequest|1 identifier #0|2 target_ref 9", ClientRepoIdentifier];
   }
 };
-var GetMergeQueueResponse = class _GetMergeQueueResponse extends __protoMessage3164 {
+var GetMergeQueueResponse = class _GetMergeQueueResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -180,7 +179,7 @@ var GetMergeQueueResponse = class _GetMergeQueueResponse extends __protoMessage3
     return ["GetMergeQueueResponse|1 queue #0", MergeQueueView];
   }
 };
-var MergeQueueConfig = class _MergeQueueConfig extends __protoMessage3164 {
+var MergeQueueConfig = class _MergeQueueConfig extends __protoMessage3167 {
   constructor(data) {
     super();
     this.queueId = "";
@@ -207,7 +206,7 @@ var MergeQueueConfig = class _MergeQueueConfig extends __protoMessage3164 {
     return ["MergeQueueConfig|1 queue_id 9|2 target_ref 9|3 enabled 8|4 speculation_depth 13|5 max_concurrent_validations 13|6 validation_timeout_ms 4"];
   }
 };
-var GetMergeQueueConfigRequest = class _GetMergeQueueConfigRequest extends __protoMessage3164 {
+var GetMergeQueueConfigRequest = class _GetMergeQueueConfigRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.targetRef = "";
@@ -229,7 +228,7 @@ var GetMergeQueueConfigRequest = class _GetMergeQueueConfigRequest extends __pro
     return ["GetMergeQueueConfigRequest|1 identifier #0|2 target_ref 9", ClientRepoIdentifier];
   }
 };
-var GetMergeQueueConfigResponse = class _GetMergeQueueConfigResponse extends __protoMessage3164 {
+var GetMergeQueueConfigResponse = class _GetMergeQueueConfigResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -250,7 +249,7 @@ var GetMergeQueueConfigResponse = class _GetMergeQueueConfigResponse extends __p
     return ["GetMergeQueueConfigResponse|1 config #0", MergeQueueConfig];
   }
 };
-var EnableMergeQueueRequest = class _EnableMergeQueueRequest extends __protoMessage3164 {
+var EnableMergeQueueRequest = class _EnableMergeQueueRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.targetRef = "";
@@ -272,7 +271,7 @@ var EnableMergeQueueRequest = class _EnableMergeQueueRequest extends __protoMess
     return ["EnableMergeQueueRequest|1 identifier #0|2 target_ref 9|3 speculation_depth 13?|4 max_concurrent_validations 13?|5 validation_timeout_ms 4?", ClientRepoIdentifier];
   }
 };
-var EnableMergeQueueResponse = class _EnableMergeQueueResponse extends __protoMessage3164 {
+var EnableMergeQueueResponse = class _EnableMergeQueueResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.outcome = MergeQueueConfigOutcome.UNSPECIFIED;
@@ -294,7 +293,7 @@ var EnableMergeQueueResponse = class _EnableMergeQueueResponse extends __protoMe
     return ["EnableMergeQueueResponse|1 config #0|2 outcome #1", MergeQueueConfig, MergeQueueConfigOutcome];
   }
 };
-var DisableMergeQueueRequest = class _DisableMergeQueueRequest extends __protoMessage3164 {
+var DisableMergeQueueRequest = class _DisableMergeQueueRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.targetRef = "";
@@ -316,7 +315,7 @@ var DisableMergeQueueRequest = class _DisableMergeQueueRequest extends __protoMe
     return ["DisableMergeQueueRequest|1 identifier #0|2 target_ref 9", ClientRepoIdentifier];
   }
 };
-var DisableMergeQueueResponse = class _DisableMergeQueueResponse extends __protoMessage3164 {
+var DisableMergeQueueResponse = class _DisableMergeQueueResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.outcome = MergeQueueConfigOutcome.UNSPECIFIED;
@@ -338,7 +337,7 @@ var DisableMergeQueueResponse = class _DisableMergeQueueResponse extends __proto
     return ["DisableMergeQueueResponse|1 config #0|2 outcome #1", MergeQueueConfig, MergeQueueConfigOutcome];
   }
 };
-var UpdateMergeQueueConfigRequest = class _UpdateMergeQueueConfigRequest extends __protoMessage3164 {
+var UpdateMergeQueueConfigRequest = class _UpdateMergeQueueConfigRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.targetRef = "";
@@ -360,7 +359,7 @@ var UpdateMergeQueueConfigRequest = class _UpdateMergeQueueConfigRequest extends
     return ["UpdateMergeQueueConfigRequest|1 identifier #0|2 target_ref 9|3 speculation_depth 13?|4 max_concurrent_validations 13?|5 validation_timeout_ms 4?", ClientRepoIdentifier];
   }
 };
-var UpdateMergeQueueConfigResponse = class _UpdateMergeQueueConfigResponse extends __protoMessage3164 {
+var UpdateMergeQueueConfigResponse = class _UpdateMergeQueueConfigResponse extends __protoMessage3167 {
   constructor(data) {
     super();
     this.outcome = MergeQueueConfigOutcome.UNSPECIFIED;
@@ -382,7 +381,7 @@ var UpdateMergeQueueConfigResponse = class _UpdateMergeQueueConfigResponse exten
     return ["UpdateMergeQueueConfigResponse|1 config #0|2 outcome #1", MergeQueueConfig, MergeQueueConfigOutcome];
   }
 };
-var MergeQueueView = class _MergeQueueView extends __protoMessage3164 {
+var MergeQueueView = class _MergeQueueView extends __protoMessage3167 {
   constructor(data) {
     super();
     this.targetRef = "";
@@ -408,12 +407,13 @@ var MergeQueueView = class _MergeQueueView extends __protoMessage3164 {
     return ["MergeQueueView|1 identifier #0|2 target_ref 9|3 epoch 4|4 entries #1*|5 nodes #2*|6 lands #3*", ClientRepoIdentifier, MergeQueueViewEntry, MergeQueueViewNode, MergeQueueViewLand];
   }
 };
-var MergeQueueViewEntry = class _MergeQueueViewEntry extends __protoMessage3164 {
+var MergeQueueViewEntry = class _MergeQueueViewEntry extends __protoMessage3167 {
   constructor(data) {
     super();
     this.entryId = "";
     this.pullRequests = [];
     this.position = 0;
+    this.ciCancelCount = 0;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -429,10 +429,10 @@ var MergeQueueViewEntry = class _MergeQueueViewEntry extends __protoMessage3164 
     return proto3.util.equals(_MergeQueueViewEntry, a, b2);
   }
   static $() {
-    return ["MergeQueueViewEntry|1 entry_id 9|2 pull_requests #0*|3 position 13|4 status #1", MergeQueueViewPullRequest, MergeQueueEntryStatus];
+    return ["MergeQueueViewEntry|1 entry_id 9|2 pull_requests #0*|3 position 13|4 status #1|5 enqueued_at #2|6 ci_cancel_count 13", MergeQueueViewPullRequest, MergeQueueEntryStatus, Timestamp];
   }
 };
-var MergeQueueViewPullRequest = class _MergeQueueViewPullRequest extends __protoMessage3164 {
+var MergeQueueViewPullRequest = class _MergeQueueViewPullRequest extends __protoMessage3167 {
   constructor(data) {
     super();
     this.number = protoInt64.zero;
@@ -455,13 +455,14 @@ var MergeQueueViewPullRequest = class _MergeQueueViewPullRequest extends __proto
     return ["MergeQueueViewPullRequest|1 number 4|2 head_sha 9"];
   }
 };
-var MergeQueueViewNode = class _MergeQueueViewNode extends __protoMessage3164 {
+var MergeQueueViewNode = class _MergeQueueViewNode extends __protoMessage3167 {
   constructor(data) {
     super();
     this.nodeId = "";
     this.state = MergeQueueViewNode_State.UNSPECIFIED;
     this.changeNumbers = [];
     this.assumedChangeNumbers = [];
+    this.checkRunGroups = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -477,17 +478,18 @@ var MergeQueueViewNode = class _MergeQueueViewNode extends __protoMessage3164 {
     return proto3.util.equals(_MergeQueueViewNode, a, b2);
   }
   static $() {
-    return ["MergeQueueViewNode|1 node_id 9|2 state #0|3 tested_sha 9?|4 chain_ref 9?|5 started_at #1|6 change_numbers 4*|7 assumed_change_numbers 4*", MergeQueueViewNode_State, Timestamp];
+    return ["MergeQueueViewNode|1 node_id 9|2 state #0|3 tested_sha 9?|4 chain_ref 9?|5 started_at #1|6 change_numbers 4*|7 assumed_change_numbers 4*|8 check_run_groups #2*", MergeQueueViewNode_State, Timestamp, CheckRunGroup];
   }
 };
-var MergeQueueViewNode_State = /* @__PURE__ */ enumType(proto3, __protoPackage172, "MergeQueueViewNode.State", [[0, "UNSPECIFIED"], [1, "PREPARING"], [2, "CONFLICT"], [3, "RUNNING"], [4, "GREEN"], [5, "RED"], [6, "CANCELLING"], [7, "CANCELLED"]], 1);
-var MergeQueueViewLand = class _MergeQueueViewLand extends __protoMessage3164 {
+var MergeQueueViewNode_State = /* @__PURE__ */ enumType(proto3, __protoPackage176, "MergeQueueViewNode.State", [[0, "UNSPECIFIED"], [1, "PREPARING"], [2, "CONFLICT"], [3, "RUNNING"], [4, "GREEN"], [5, "RED"], [6, "CANCELLING"], [7, "CANCELLED"]], 1);
+var MergeQueueViewLand = class _MergeQueueViewLand extends __protoMessage3167 {
   constructor(data) {
     super();
     this.moveId = "";
     this.expectedTrunkSha = "";
     this.landedSha = "";
     this.changeNumbers = [];
+    this.bookedQueueEpoch = protoInt64.zero;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -503,10 +505,10 @@ var MergeQueueViewLand = class _MergeQueueViewLand extends __protoMessage3164 {
     return proto3.util.equals(_MergeQueueViewLand, a, b2);
   }
   static $() {
-    return ["MergeQueueViewLand|1 move_id 9|2 expected_trunk_sha 9|3 landed_sha 9|4 change_numbers 4*"];
+    return ["MergeQueueViewLand|1 move_id 9|2 expected_trunk_sha 9|3 landed_sha 9|4 change_numbers 4*|5 decided_at #0|6 landed_at #0|7 booked_queue_epoch 4", Timestamp];
   }
 };
-var MergeQueueEntry = class _MergeQueueEntry extends __protoMessage3164 {
+var MergeQueueEntry = class _MergeQueueEntry extends __protoMessage3167 {
   constructor(data) {
     super();
     this.entryId = "";
@@ -529,7 +531,7 @@ var MergeQueueEntry = class _MergeQueueEntry extends __protoMessage3164 {
     return ["MergeQueueEntry|1 entry_id 9|2 change #0|3 target_ref 9|4 status #1", ChangeIdentifier, MergeQueueEntryStatus];
   }
 };
-var MergeQueueEntryStatus = class _MergeQueueEntryStatus extends __protoMessage3164 {
+var MergeQueueEntryStatus = class _MergeQueueEntryStatus extends __protoMessage3167 {
   constructor(data) {
     super();
     this.kind = MergeQueueEntryStatus_Kind.UNSPECIFIED;
@@ -551,4 +553,4 @@ var MergeQueueEntryStatus = class _MergeQueueEntryStatus extends __protoMessage3
     return ["MergeQueueEntryStatus|1 kind #0|2 position 13?|3 blocked_on 9?|4 tested_sha 9?|5 failure 9?", MergeQueueEntryStatus_Kind];
   }
 };
-var MergeQueueEntryStatus_Kind = /* @__PURE__ */ enumType(proto3, __protoPackage172, "MergeQueueEntryStatus.Kind", [[0, "UNSPECIFIED"], [1, "QUEUED"], [2, "VALIDATING"], [3, "MERGING"], [4, "MERGED"], [5, "EVICTED"]], 1);
+var MergeQueueEntryStatus_Kind = /* @__PURE__ */ enumType(proto3, __protoPackage176, "MergeQueueEntryStatus.Kind", [[0, "UNSPECIFIED"], [1, "QUEUED"], [2, "VALIDATING"], [3, "MERGING"], [4, "MERGED"], [5, "EVICTED"]], 1);

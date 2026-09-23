@@ -144,16 +144,16 @@ function prepareCredentialFillInPage(policy) {
   const autocompleteTokens = (input) => (input.getAttribute("autocomplete") ?? "").toLowerCase().split(/\s+/).filter((token) => token.length > 0);
   const usernameScore = (input, positions) => {
     const tokens = autocompleteTokens(input);
-    let score = 0;
-    if (tokens.includes("username")) score += 1e3;
-    else if (tokens.includes("email")) score += 800;
-    if (input.type.toLowerCase() === "email") score += 500;
-    if (input.type.toLowerCase() === "tel") score += 250;
+    let score2 = 0;
+    if (tokens.includes("username")) score2 += 1e3;
+    else if (tokens.includes("email")) score2 += 800;
+    if (input.type.toLowerCase() === "email") score2 += 500;
+    if (input.type.toLowerCase() === "tel") score2 += 250;
     if (/(?:^|\W)(?:user(?:name|[\s_-]*id)?|e[\s_-]*mail|login)(?:\W|$)/i.test(descriptorFor(input))) {
-      score += 400;
+      score2 += 400;
     }
-    if (positions.inputIndex < positions.passwordIndex) score += 100;
-    return score;
+    if (positions.inputIndex < positions.passwordIndex) score2 += 100;
+    return score2;
   };
   const resolveUsername = (inputs, password2, form2, isEligible) => {
     const passwordIndex = password2 === null ? inputs.length : inputs.indexOf(password2);

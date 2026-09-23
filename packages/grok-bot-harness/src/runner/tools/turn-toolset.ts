@@ -252,6 +252,10 @@ function buildTurnTools(host, turn, props) {
   if (hasParentToolParity && !host.isSystemPromptOverridden) {
     tools.push(createSandMultitaskTodoTool(props.resourceAccessor, props.stateHandler));
   }
+  const recordDelivery = createMessageDeliveryRecorder(host.actionAuditor, {
+    getAgentId: () => host.getConversationId(),
+    resolveBoxId: () => host.resolveBoxId()
+  });
   const hasUserFacingChat = !host.isSubagentRunner || host.isAutomationSubagent && !host.isParentMediatedAutomationSubagent;
   if (hasUserFacingChat) {
     tools.push(
@@ -286,18 +290,24 @@ function buildTurnTools(host, turn, props) {
         }),
         chromeCookieImport: host.gates.chromeCookieImport,
         boxEgressTunnel: host.gates.boxEgressTunnel,
-        updateCommunication: host.gates.updateCommunication,
         leanDescription: () => !host.isSystemPromptOverridden && host.gates.leanSendToUserDescription(),
         resolveCredentialBrowserTarget: host.credentialAccess?.resolveBrowserTarget,
         resolveSecretRequestTarget: host.resolveSecretRequestTarget,
-        toolNotesInSystemPrompt: host.toolNotesInSystemPrompt
+        toolNotesInSystemPrompt: host.toolNotesInSystemPrompt,
+        recordDelivery,
+        metricsHarness: host.metricsHarness
       })
     );
   }
-  const draftTool = createDraftToolForTurn(host, turn, {
-    stateHandler: props.stateHandler,
-    extractConversationContext: extractAutoReviewConversationContext
-  });
+  const draftTool = createDraftToolForTurn(
+    host,
+    turn,
+    {
+      stateHandler: props.stateHandler,
+      extractConversationContext: extractAutoReviewConversationContext
+    },
+    recordDelivery
+  );
   if (draftTool != null) tools.push(draftTool);
   if (hasParentToolParity && !host.isParentMediatedAutomationSubagent && host.sendToAgentImpl != null) {
     const sendToAgent = host.sendToAgentImpl;
@@ -318,9 +328,11 @@ function buildTurnTools(host, turn, props) {
         getSelfAgentId: () => host.getConversationId(),
         sendToAgent: (toAgentId, text2, images, priority) => sendToAgent(toAgentId, text2, images, priority),
         resolveImageSource: async (ctx, url2) => (await resolveAttachmentSource(ctx, url2, attachmentSourceDeps)).url,
+        readMediaDimensions: host.readMediaDimensions,
         acceptArgumentAliases: host.gates.reducePeerChatter,
         priorityRequired: host.gates.reducePeerChatter,
-        onArgsRejected: host.observeToolCallArgsRejected
+        onArgsRejected: host.observeToolCallArgsRejected,
+        recordDelivery
       })
     );
   }
@@ -341,6 +353,7 @@ function buildTurnTools(host, turn, props) {
         submitProductFeedback: host.submitProductFeedback,
         getConversationId: () => host.getConversationId(),
         autoReviewController: host.autoReviewController,
+        toolDecisions: host.toolDecisionAudit,
         getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
         privacyMode
       })
@@ -352,13 +365,17 @@ function buildTurnTools(host, turn, props) {
   maybeAddCommunicationTools({ tools, host, hasParentToolParity });
   if (hasParentToolParity) {
     tools.push(
-      ...emailTurnTools(host, {
-        mode: autoReviewModes.mcp,
-        resourceAccessor,
-        stateHandler: props.stateHandler,
-        getUserInstructions: getAutoReviewUserInstructions,
-        extractConversationContext: extractAutoReviewConversationContext
-      })
+      ...emailTurnTools(
+        host,
+        {
+          mode: autoReviewModes.mcp,
+          resourceAccessor,
+          stateHandler: props.stateHandler,
+          getUserInstructions: getAutoReviewUserInstructions,
+          extractConversationContext: extractAutoReviewConversationContext
+        },
+        recordDelivery
+      )
     );
   }
   if (hasParentToolParity && host.slackReadTools != null && host.isMcpDiscoveryUnavailableForTurn?.() !== true && !hasSlackReadMcpTools(props.mcpTools)) {
@@ -486,6 +503,7 @@ function buildTurnTools(host, turn, props) {
             resourceAccessor,
             stateHandler: props.stateHandler,
             autoReviewController: host.autoReviewController,
+            toolDecisions: host.toolDecisionAudit,
             getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
             userAutoRunInstructions: getAutoReviewUserInstructions(),
             extractConversationContext: extractAutoReviewConversationContext
@@ -506,7 +524,11 @@ function buildTurnTools(host, turn, props) {
     machineIds,
     machineIdParameterSchema: "open"
   };
-  const fileTransferController = host.createFileTransferController();
+  const auditTransfer = createFileTransferAudit(host.actionAuditor, {
+    agentId: host.getConversationId(),
+    resolveBoxId: () => host.resolveBoxId()
+  });
+  const fileTransferController = { ...host.createFileTransferController(), auditTransfer };
   const userComputers = fileTransferController.userComputers;
   const resolveMachineTerminalsFolder = (machineId) => {
     if (machineId === void 0) return boxConnection.terminalsFolder;
@@ -545,9 +567,19 @@ function buildTurnTools(host, turn, props) {
       ),
       "run-command"
     );
+    const auditedMachineReadAccessor = new CombinedResourceAccessor(props.resourceAccessor, [
+      resourceEntry(
+        readExecutorResource,
+        wrapReadExecutorForFileTransferAudit(
+          props.resourceAccessor.get(readExecutorResource),
+          auditTransfer,
+          (options2) => auditedUserMachineId(machineIds, options2)
+        )
+      )
+    ]);
     machineReadTool = scopeLocalTool(
       withRecordedToolCallNames(
-        createReadTool(props.resourceAccessor, SAND_READ_FORMATTING_OPTIONS, "latest", {
+        createReadTool(auditedMachineReadAccessor, SAND_READ_FORMATTING_OPTIONS, "latest", {
           enableNegativeOffset: true,
           ...machineIdOptions
         }),
@@ -576,6 +608,7 @@ function buildTurnTools(host, turn, props) {
         messages: messages2,
         agentBox: host.remoteBox,
         getBoxId: () => host.resolveBoxId(),
+        recordDelivery,
         ...host.messagesGrants !== void 0 ? { messagesGrants: host.messagesGrants } : {},
         ...host.onMessagesToolUse !== void 0 ? { reportToolUse: host.onMessagesToolUse } : {},
         ...host.onMessagesGrantsAsk !== void 0 ? { reportGrantsAsk: host.onMessagesGrantsAsk } : {}
@@ -592,7 +625,8 @@ function buildTurnTools(host, turn, props) {
       }),
       createWebFetchTool(webFetchService, "latest", {
         resourceAccessor: props.resourceAccessor,
-        descriptionSuffix: SAND_WEB_FETCH_DESCRIPTION_SUFFIX
+        descriptionSuffix: SAND_WEB_FETCH_DESCRIPTION_SUFFIX,
+        smartModeClassifierMaxAttempts: SAND_AUTO_REVIEW_CLASSIFIER_MAX_ATTEMPTS
       })
     );
   }
@@ -616,7 +650,7 @@ function buildTurnTools(host, turn, props) {
       )
     );
   }
-  if (!host.isBoxScopedSubagent && !host.gates.cloudAgentsDisabledByTeam()) {
+  if (!host.isBoxScopedSubagent && !host.gates.cloudAgentsDisabledByTeam() && !host.gates.cloudAgentsUnavailableOnPlan()) {
     const reviewAction2 = autoReviewModes.cloudAgent === "off" ? void 0 : async ({ args, toolCallId, images, files, sessionManaged, signal }) => {
       host.assertNoPendingAutoReviewApproval();
       const target = buildSandCloudAgentReviewTarget(args, {
@@ -639,6 +673,7 @@ function buildTurnTools(host, turn, props) {
           resourceAccessor,
           stateHandler: props.stateHandler,
           autoReviewController: host.autoReviewController,
+          toolDecisions: host.toolDecisionAudit,
           getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
           userAutoRunInstructions: getAutoReviewUserInstructions(),
           extractConversationContext: extractAutoReviewConversationContext
@@ -964,6 +999,19 @@ function buildTurnTools(host, turn, props) {
       })
     );
   }
+  if (!host.isSubagentRunner && host.teamPublish != null) {
+    tools.push(
+      createTeamPublishTool({
+        teamPublish: host.teamPublish,
+        activeTurnRequestSource: () => host.activeTurnRequestSource(),
+        autoReviewController: host.autoReviewController,
+        toolDecisions: host.toolDecisionAudit,
+        getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
+        getConversationId: () => host.getConversationId(),
+        isTeamSetupUnderway
+      })
+    );
+  }
   if (!host.isSubagentRunner && host.memoryStore?.memoryScopes?.privateMain === true) {
     tools.push(
       createSortMemoriesTool({
@@ -996,7 +1044,8 @@ function buildTurnTools(host, turn, props) {
           },
           updateObservers
         ),
-        endTurn: () => endThisRunAwaitingUser("awaiting virtual card approval")
+        endTurn: () => endThisRunAwaitingUser("awaiting virtual card approval"),
+        toolDecisions: host.toolDecisionAudit
       })
     );
   }
@@ -1012,6 +1061,7 @@ function buildTurnTools(host, turn, props) {
       resourceAccessor,
       stateHandler: props.stateHandler,
       autoReviewController: host.autoReviewController,
+      toolDecisions: host.toolDecisionAudit,
       getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
       personalInstructions: host.getAutoReviewInstructions?.(),
       userAutoRunInstructions: getAutoReviewUserInstructions(),
@@ -1043,14 +1093,16 @@ function buildTurnTools(host, turn, props) {
         stage: (request5) => connectorFiles.stage(request5),
         getAgentId: () => host.getConversationId(),
         ...reviewUpload !== void 0 ? { reviewUpload } : {},
-        onArgsRejected: host.observeToolCallArgsRejected
+        onArgsRejected: host.observeToolCallArgsRejected,
+        auditTransfer
       }),
       createDownloadFileTool({
         listConnections: () => connectorFiles.listConnections(),
         prepareDownload: (request5) => connectorFiles.prepareDownload(request5),
         getAgentId: () => host.getConversationId(),
         ...reviewDownload !== void 0 ? { reviewDownload } : {},
-        onArgsRejected: host.observeToolCallArgsRejected
+        onArgsRejected: host.observeToolCallArgsRejected,
+        auditTransfer
       })
     );
   }
@@ -1061,7 +1113,7 @@ function buildTurnTools(host, turn, props) {
         resourceAccessor: props.resourceAccessor,
         ...dynamicToolRegistry !== void 0 ? {
           dynamicToolRegistry,
-          omitBuiltinToolNamesFromDescription: host.gates.stableDynamicToolCatalog()
+          omitBuiltinToolNamesFromDescription: true
         } : {},
         toolName: mcpMetaToolNames.discovery,
         callMcpToolName: mcpMetaToolNames.invocation
@@ -1142,6 +1194,7 @@ function buildTurnTools(host, turn, props) {
                 resourceAccessor,
                 stateHandler: props.stateHandler,
                 autoReviewController: host.autoReviewController,
+                toolDecisions: host.toolDecisionAudit,
                 getApprovalExpiryPolicy: () => sandAutoReviewApprovalExpiryPolicy(host.activeTurnRequestSource()),
                 userAutoRunInstructions: getAutoReviewUserInstructions(),
                 extractConversationContext: extractAutoReviewConversationContext

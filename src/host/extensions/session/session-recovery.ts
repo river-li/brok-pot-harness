@@ -1,6 +1,6 @@
-var import_node_fs81 = require("node:fs");
-var import_node_path132 = require("node:path");
-var import_node_util12 = require("node:util");
+var import_node_fs83 = require("node:fs");
+var import_node_path133 = require("node:path");
+var import_node_util13 = require("node:util");
 init_errors();
 var ConversationRecoveryScanError = class extends SandDomainError {
   constructor(detail) {
@@ -16,7 +16,7 @@ function transcriptEntryMatchesRecovered(persisted, recovered) {
     return persisted.role === recovered.role && persisted.content === recovered.content;
   }
   if (persisted.kind === "send-message" && recovered.kind === "send-message") {
-    return (0, import_node_util12.isDeepStrictEqual)(persisted.message, recovered.message);
+    return (0, import_node_util13.isDeepStrictEqual)(persisted.message, recovered.message);
   }
   if (persisted.kind === "tool-call" && recovered.kind === "tool-call") {
     return persisted.name === recovered.name && persisted.status === recovered.status && persisted.summary === recovered.summary;
@@ -48,7 +48,7 @@ function cacheBlobReads(blobStore) {
   };
 }
 function ensureProfileFile(dbPath, db) {
-  const path31 = getSandProfilePath((0, import_node_path132.dirname)(dbPath));
+  const path31 = getSandProfilePath((0, import_node_path133.dirname)(dbPath));
   if (readSandProfileFile(path31) != null) return;
   const legacyName = db.get("name");
   writeSandProfileFile(path31, {
@@ -58,8 +58,8 @@ function ensureProfileFile(dbPath, db) {
   });
 }
 function ensureSettingsFile(dbPath) {
-  const path31 = getSandSettingsPath((0, import_node_path132.dirname)(dbPath));
-  if ((0, import_node_fs81.existsSync)(path31)) return;
+  const path31 = getSandSettingsPath((0, import_node_path133.dirname)(dbPath));
+  if ((0, import_node_fs83.existsSync)(path31)) return;
   writeSandSettingsFile(path31, {
     notifyOnAgentUpdates: true
   });

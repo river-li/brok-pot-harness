@@ -1,7 +1,7 @@
 init_dist4();
 init_scheduling();
 init_errors();
-var logger104 = createLogger("sand:turn-performance");
+var logger105 = createLogger("sand:turn-performance");
 var turnToolCallAttributionStartKey = createKey(
   /* @__PURE__ */ Symbol("turnToolCallAttributionStart"),
   void 0
@@ -11,6 +11,9 @@ var turnTtfi = createHistogram("grok_bot.turn.ttfi_ms", {
 });
 var turnActivityTtfi = createHistogram("grok_bot.turn.activity_ttfi_ms", {
   labelNames: ["harness"]
+});
+var turnTtir = createHistogram("grok_bot.turn.ttir_ms", {
+  labelNames: ["harness", "session_kind", "model", "turn_kind"]
 });
 var PROMPT_SIZE_BUCKET_UPPER_BOUNDS = [
   [25e3, "0_25k"],
@@ -127,7 +130,7 @@ function safelyObserve(ctx, callback) {
   try {
     callback();
   } catch (error42) {
-    logger104.warn(ctx, `Turn performance observation failed (${errorLogTag(error42)})`);
+    logger105.warn(ctx, `Turn performance observation failed (${errorLogTag(error42)})`);
   }
 }
 function createTurnPerformanceObservation({
@@ -140,6 +143,7 @@ function createTurnPerformanceObservation({
   activityStartedAt,
   runRole = "other",
   userMessageSentAt,
+  turnStartedAt,
   clock = realClock
 }) {
   let active = true;
@@ -208,6 +212,15 @@ function createTurnPerformanceObservation({
           turnActivityTtfi.histogram(requestCtx, requestStartedAt - activityStartedAt, {
             harness
           });
+        }
+        const turnAt = turnStartedAt;
+        if (turnAt !== void 0) {
+          onceModelKnown(
+            () => turnTtir.histogram(requestCtx, Math.max(0, requestStartedAt - turnAt), {
+              harness,
+              ...sessionTags()
+            })
+          );
         }
       }
       if (previousRequestEndedAt !== void 0) {

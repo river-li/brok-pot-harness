@@ -1,4 +1,4 @@
-var import_node_fs27 = require("node:fs");
+var import_node_fs28 = require("node:fs");
 init_zod();
 var discoverySchema = external_exports.object({
   port: external_exports.number().int().positive(),
@@ -12,5 +12,5 @@ async function writeGatewayDiscovery(info2, path31 = getGatewayDiscoveryPath()) 
   await writeFileAtomic(path31, JSON.stringify(info2, null, 2));
 }
 async function clearGatewayDiscovery(path31 = getGatewayDiscoveryPath()) {
-  await import_node_fs27.promises.rm(path31, { force: true });
+  await import_node_fs28.promises.rm(path31, { force: true });
 }

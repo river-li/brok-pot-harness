@@ -184,13 +184,13 @@ var CredentialFillLease = class {
     }
   }
   describeWindow(key) {
-    const describe3 = (name17) => {
+    const describe4 = (name17) => {
       const state = this.windows.get(name17);
       if (state === void 0) return `${name17}: idle`;
       const holds = [...state.agentHolds.entries()].map(([tool, count]) => `${tool}x${count}`);
       return `${name17}: autofill=${state.autofill}, autofillWaiting=${state.autofillWaiting}, agentWaiting=${state.agentWaiting}, agentHolds=[${holds.join(", ")}]`;
     };
-    return key === BOX_WIDE_KEY ? [...this.windows.keys()].map(describe3).join("; ") : [describe3(key), describe3(BOX_WIDE_KEY)].join("; ");
+    return key === BOX_WIDE_KEY ? [...this.windows.keys()].map(describe4).join("; ") : [describe4(key), describe4(BOX_WIDE_KEY)].join("; ");
   }
   async waitUntil(deadline, tryTake, signal) {
     if (signal?.aborted === true) return { kind: "aborted", cause: signal.reason };

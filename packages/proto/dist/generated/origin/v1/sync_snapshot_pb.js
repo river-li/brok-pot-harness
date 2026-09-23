@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage181 = "origin.v1.";
-var __protoMessage3172 = class extends CompactMessage {
+var __protoPackage183 = "origin.v1.";
+var __protoMessage3174 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage181;
+    return __protoPackage183;
   }
 };
-var GetChangeSyncSnapshotRequest = class _GetChangeSyncSnapshotRequest extends __protoMessage3172 {
+var GetChangeSyncSnapshotRequest = class _GetChangeSyncSnapshotRequest extends __protoMessage3174 {
   constructor(data) {
     super();
     this.changeNumber = protoInt64.zero;
@@ -31,7 +31,7 @@ var GetChangeSyncSnapshotRequest = class _GetChangeSyncSnapshotRequest extends _
     return ["GetChangeSyncSnapshotRequest|1 identifier #0|2 change_number 4", ClientRepoIdentifier];
   }
 };
-var GetChangeSyncSnapshotResponse = class _GetChangeSyncSnapshotResponse extends __protoMessage3172 {
+var GetChangeSyncSnapshotResponse = class _GetChangeSyncSnapshotResponse extends __protoMessage3174 {
   constructor(data) {
     super();
     this.snapshotJson = "";
@@ -53,7 +53,7 @@ var GetChangeSyncSnapshotResponse = class _GetChangeSyncSnapshotResponse extends
     return ["GetChangeSyncSnapshotResponse|1 snapshot_json 9|2 viewer_state #0", ChangeSyncViewerState];
   }
 };
-var ChangeSyncViewerState = class _ChangeSyncViewerState extends __protoMessage3172 {
+var ChangeSyncViewerState = class _ChangeSyncViewerState extends __protoMessage3174 {
   constructor(data) {
     super();
     this.pendingReviews = [];

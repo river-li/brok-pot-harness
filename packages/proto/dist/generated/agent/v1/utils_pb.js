@@ -1,16 +1,16 @@
-var __protoPackage14, __protoMessage311, Range2, Position, OutputLocation, SmartModeApproval;
+var __protoPackage15, __protoMessage311, Range2, Position, OutputLocation, SmartModeApproval;
 var init_utils_pb2 = __esm({
   "../packages/proto/dist/generated/agent/v1/utils_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage14 = "agent.v1.";
+    __protoPackage15 = "agent.v1.";
     __protoMessage311 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage14;
+        return __protoPackage15;
       }
     };
     Range2 = class _Range extends __protoMessage311 {

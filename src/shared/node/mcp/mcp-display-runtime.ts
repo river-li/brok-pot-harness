@@ -10,7 +10,7 @@ function runtimeConfigFromDisplay(display) {
   return {
     mcpServers: Object.fromEntries(
       display.servers.flatMap(
-        (server) => server.serverIdentifier != null && server.config != null && !server.disabledByTeamAdminPolicy ? [[server.serverIdentifier, server.config]] : []
+        (server) => server.serverIdentifier != null && server.config != null && !isWithheldMcpDisplayServer(server) ? [[server.serverIdentifier, server.config]] : []
       )
     )
   };
@@ -19,7 +19,7 @@ function accountCredentialFingerprint(display) {
   const byIdentifier = /* @__PURE__ */ new Map();
   for (const server of display.servers) {
     byIdentifier.set(server.serverIdentifier ?? `mcp-row-${server.id}`, [
-      server.disabledByTeamAdminPolicy,
+      isWithheldMcpDisplayServer(server),
       server.hasDefaultSlotToken,
       server.hasStaticCredentialHeaders,
       [...server.accounts ?? []].map((slot) => [slot.accountKey, slot.hasToken]).sort(([left], [right]) => left.localeCompare(right))

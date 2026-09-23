@@ -1,16 +1,16 @@
-var __protoPackage81, __protoMessage378, ConnectScmArgs, ConnectScmGithub, ConnectScmGithubRepository, ConnectScmResult, ConnectScmSuccess, ConnectScmError, ConnectScmRejected, ConnectScmToolCall, ConnectScmRequestQuery, ConnectScmRequestResponse, ConnectScmRequestResponse_Approved, ConnectScmRequestResponse_Rejected, ConnectScmRequestResponse_Failed;
+var __protoPackage82, __protoMessage378, ConnectScmArgs, ConnectScmGithub, ConnectScmGithubRepository, ConnectScmResult, ConnectScmSuccess, ConnectScmError, ConnectScmRejected, ConnectScmToolCall, ConnectScmRequestQuery, ConnectScmRequestResponse, ConnectScmRequestResponse_Approved, ConnectScmRequestResponse_Rejected, ConnectScmRequestResponse_Failed;
 var init_connect_scm_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/connect_scm_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage81 = "agent.v1.";
+    __protoPackage82 = "agent.v1.";
     __protoMessage378 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage81;
+        return __protoPackage82;
       }
     };
     ConnectScmArgs = class _ConnectScmArgs extends __protoMessage378 {

@@ -1,16 +1,16 @@
 init_esm();
 init_compact();
-var __protoPackage161 = "origin.v1.";
-var __protoMessage3153 = class extends CompactMessage {
+var __protoPackage162 = "origin.v1.";
+var __protoMessage3154 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage161;
+    return __protoPackage162;
   }
 };
-var EventType = /* @__PURE__ */ enumType(proto3, __protoPackage161, "EventType", [[0, "UNSPECIFIED"], [1, "REVIEW_REQUESTED"], [2, "PULL_OPENED"], [3, "PULL_READY"], [4, "PULL_MERGED"], [5, "REVIEW_SUBMITTED"], [6, "COMMENT_CREATED"], [7, "MENTION"]], 1);
-var OriginSlackNotification = class _OriginSlackNotification extends __protoMessage3153 {
+var EventType = /* @__PURE__ */ enumType(proto3, __protoPackage162, "EventType", [[0, "UNSPECIFIED"], [1, "REVIEW_REQUESTED"], [2, "PULL_OPENED"], [3, "PULL_READY"], [4, "PULL_MERGED"], [5, "REVIEW_SUBMITTED"], [6, "COMMENT_CREATED"], [7, "MENTION"]], 1);
+var OriginSlackNotification = class _OriginSlackNotification extends __protoMessage3154 {
   constructor(data) {
     super();
     this.id = "";
@@ -36,7 +36,7 @@ var OriginSlackNotification = class _OriginSlackNotification extends __protoMess
     return ["OriginSlackNotification|1 id 9|2 origin_namespace_id 9|3 slack_team_id 9|4 ignore_drafts 8|5 events #0*|8 notify_app_bots 8?|6 created_at #1|7 updated_at #1", EventType, Timestamp];
   }
 };
-var UpsertOriginUserSlackNotificationRequest = class _UpsertOriginUserSlackNotificationRequest extends __protoMessage3153 {
+var UpsertOriginUserSlackNotificationRequest = class _UpsertOriginUserSlackNotificationRequest extends __protoMessage3154 {
   constructor(data) {
     super();
     this.originNamespaceId = "";
@@ -60,7 +60,7 @@ var UpsertOriginUserSlackNotificationRequest = class _UpsertOriginUserSlackNotif
     return ["UpsertOriginUserSlackNotificationRequest|1 origin_namespace_id 9|2 slack_team_id 9?|3 ignore_drafts 8|4 events #0*|5 notify_app_bots 8?", EventType];
   }
 };
-var UpsertOriginUserSlackNotificationResponse = class _UpsertOriginUserSlackNotificationResponse extends __protoMessage3153 {
+var UpsertOriginUserSlackNotificationResponse = class _UpsertOriginUserSlackNotificationResponse extends __protoMessage3154 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -81,7 +81,7 @@ var UpsertOriginUserSlackNotificationResponse = class _UpsertOriginUserSlackNoti
     return ["UpsertOriginUserSlackNotificationResponse|1 notification #0", OriginSlackNotification];
   }
 };
-var DeleteOriginUserSlackNotificationRequest = class _DeleteOriginUserSlackNotificationRequest extends __protoMessage3153 {
+var DeleteOriginUserSlackNotificationRequest = class _DeleteOriginUserSlackNotificationRequest extends __protoMessage3154 {
   constructor(data) {
     super();
     this.id = "";
@@ -103,7 +103,7 @@ var DeleteOriginUserSlackNotificationRequest = class _DeleteOriginUserSlackNotif
     return ["DeleteOriginUserSlackNotificationRequest|1 id 9"];
   }
 };
-var DeleteOriginUserSlackNotificationResponse = class _DeleteOriginUserSlackNotificationResponse extends __protoMessage3153 {
+var DeleteOriginUserSlackNotificationResponse = class _DeleteOriginUserSlackNotificationResponse extends __protoMessage3154 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);
@@ -124,7 +124,7 @@ var DeleteOriginUserSlackNotificationResponse = class _DeleteOriginUserSlackNoti
     return ["DeleteOriginUserSlackNotificationResponse"];
   }
 };
-var GetOriginUserSlackNotificationRequest = class _GetOriginUserSlackNotificationRequest extends __protoMessage3153 {
+var GetOriginUserSlackNotificationRequest = class _GetOriginUserSlackNotificationRequest extends __protoMessage3154 {
   constructor(data) {
     super();
     this.originNamespaceId = "";
@@ -146,7 +146,7 @@ var GetOriginUserSlackNotificationRequest = class _GetOriginUserSlackNotificatio
     return ["GetOriginUserSlackNotificationRequest|1 slack_team_id 9?|2 origin_namespace_id 9"];
   }
 };
-var GetOriginUserSlackNotificationResponse = class _GetOriginUserSlackNotificationResponse extends __protoMessage3153 {
+var GetOriginUserSlackNotificationResponse = class _GetOriginUserSlackNotificationResponse extends __protoMessage3154 {
   constructor(data) {
     super();
     proto3.util.initPartial(data, this);

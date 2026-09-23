@@ -655,6 +655,49 @@ var OriginService = {
       kind: MethodKind.Unary
     },
     /**
+     * @generated from rpc origin.v1.OriginService.GetNamespaceSshCertificateAuthorities
+     */
+    getNamespaceSshCertificateAuthorities: {
+      name: "GetNamespaceSshCertificateAuthorities",
+      I: GetNamespaceSshCertificateAuthoritiesRequest,
+      O: GetNamespaceSshCertificateAuthoritiesResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * `ALREADY_EXISTS` when this namespace already lists the key (fingerprint unique per namespace); other namespaces' listings are not disclosed.
+     *
+     * @generated from rpc origin.v1.OriginService.AddNamespaceSshCertificateAuthority
+     */
+    addNamespaceSshCertificateAuthority: {
+      name: "AddNamespaceSshCertificateAuthority",
+      I: AddNamespaceSshCertificateAuthorityRequest,
+      O: AddNamespaceSshCertificateAuthorityResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * Every certificate the CA signed stops working. `NOT_FOUND` for an id the
+     * namespace does not list.
+     *
+     * @generated from rpc origin.v1.OriginService.RemoveNamespaceSshCertificateAuthority
+     */
+    removeNamespaceSshCertificateAuthority: {
+      name: "RemoveNamespaceSshCertificateAuthority",
+      I: RemoveNamespaceSshCertificateAuthorityRequest,
+      O: RemoveNamespaceSshCertificateAuthorityResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * Requiring certificates needs at least one listed CA (`FAILED_PRECONDITION`).
+     *
+     * @generated from rpc origin.v1.OriginService.SetNamespaceSshRequireCertificates
+     */
+    setNamespaceSshRequireCertificates: {
+      name: "SetNamespaceSshRequireCertificates",
+      I: SetNamespaceSshRequireCertificatesRequest,
+      O: SetNamespaceSshRequireCertificatesResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * `ALREADY_EXISTS` on a known fingerprint, without saying whose it is.
      *
      * @generated from rpc origin.v1.OriginService.AddSshPublicKey
@@ -712,6 +755,59 @@ var OriginService = {
       name: "GetOriginUserSlackNotification",
       I: GetOriginUserSlackNotificationRequest,
       O: GetOriginUserSlackNotificationResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * `FAILED_PRECONDITION` without a linked Slack account or past the per-namespace cap.
+     *
+     * @generated from rpc origin.v1.OriginService.CreateOriginUserSlackReviewReminder
+     */
+    createOriginUserSlackReviewReminder: {
+      name: "CreateOriginUserSlackReviewReminder",
+      I: CreateOriginUserSlackReviewReminderRequest,
+      O: CreateOriginUserSlackReviewReminderResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * `NOT_FOUND` for an id the caller does not own, whether or not it exists.
+     *
+     * @generated from rpc origin.v1.OriginService.UpdateOriginUserSlackReviewReminder
+     */
+    updateOriginUserSlackReviewReminder: {
+      name: "UpdateOriginUserSlackReviewReminder",
+      I: UpdateOriginUserSlackReviewReminderRequest,
+      O: UpdateOriginUserSlackReviewReminderResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.ListOriginUserSlackReviewReminders
+     */
+    listOriginUserSlackReviewReminders: {
+      name: "ListOriginUserSlackReviewReminders",
+      I: ListOriginUserSlackReviewRemindersRequest,
+      O: ListOriginUserSlackReviewRemindersResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * `NOT_FOUND` for an id the caller does not own in that namespace, whether or not it exists.
+     *
+     * @generated from rpc origin.v1.OriginService.GetOriginUserSlackReviewReminder
+     */
+    getOriginUserSlackReviewReminder: {
+      name: "GetOriginUserSlackReviewReminder",
+      I: GetOriginUserSlackReviewReminderRequest,
+      O: GetOriginUserSlackReviewReminderResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * Sets `enabled = false`; reminders are never deleted. `NOT_FOUND` as for Get.
+     *
+     * @generated from rpc origin.v1.OriginService.DisableOriginUserSlackReviewReminder
+     */
+    disableOriginUserSlackReviewReminder: {
+      name: "DisableOriginUserSlackReviewReminder",
+      I: DisableOriginUserSlackReviewReminderRequest,
+      O: DisableOriginUserSlackReviewReminderResponse,
       kind: MethodKind.Unary
     },
     /**
@@ -1236,6 +1332,15 @@ var OriginService = {
       name: "FoldChange",
       I: FoldChangeRequest,
       O: FoldChangeResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc origin.v1.OriginService.LandChangeTreePath
+     */
+    landChangeTreePath: {
+      name: "LandChangeTreePath",
+      I: LandChangeTreePathRequest,
+      O: LandChangeTreePathResponse,
       kind: MethodKind.Unary
     },
     /**

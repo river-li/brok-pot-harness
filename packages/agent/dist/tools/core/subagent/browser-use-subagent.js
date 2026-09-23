@@ -10,8 +10,8 @@ var BROWSER_USE_SUBAGENT_PROMPT = `Enter BROWSER USE mode. Use the provided curs
 
 Important: Every browser tool call automatically returns a screenshot of the current page state. You do NOT need to use the browser_take_screenshot tool explicitly - it would be redundant since you already receive screenshots after each action.
 `;
-async function* singleStringIterable(str3) {
-  yield str3;
+async function* singleStringIterable(str4) {
+  yield str4;
 }
 function createWrappedBrowserTool(resourceAccessor, mcpToolDefinition, subagentInstanceId, convertTupleSchemaToDraft2020_122) {
   const baseTool = createMcpTool(resourceAccessor, mcpToolDefinition, {

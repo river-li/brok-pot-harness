@@ -1,17 +1,17 @@
-var __protoPackage79, __protoMessage376, PiFindToolCall, PiFindToolArgs, PiFindToolResult, PiFindToolSuccess, PiFindToolError;
+var __protoPackage80, __protoMessage376, PiFindToolCall, PiFindToolArgs, PiFindToolResult, PiFindToolSuccess, PiFindToolError;
 var init_pi_find_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_find_tool_pb.js"() {
     "use strict";
     init_esm();
     init_pi_common_pb();
     init_compact();
-    __protoPackage79 = "agent.v1.";
+    __protoPackage80 = "agent.v1.";
     __protoMessage376 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage79;
+        return __protoPackage80;
       }
     };
     PiFindToolCall = class _PiFindToolCall extends __protoMessage376 {

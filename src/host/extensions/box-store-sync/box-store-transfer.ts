@@ -571,11 +571,11 @@ var BoxStoreTransfer = class {
     return removed;
   }
 };
-async function* walkNodes(root, fs33, shouldSkipDir) {
+async function* walkNodes(root, fs34, shouldSkipDir) {
   async function* walk(dir) {
     let entries;
     try {
-      entries = await fs33.readdir(dir, { withFileTypes: true });
+      entries = await fs34.readdir(dir, { withFileTypes: true });
     } catch (error42) {
       yield { kind: "readdir-error", error: error42 };
       return;

@@ -1,11 +1,19 @@
 init_errors();
 init_unknown_record();
 var SAND_AUTO_REVIEW_RESOLUTIONS = ["approved", "denied", "always"];
+var SAND_CONNECTOR_GRANT_RESOLUTIONS = [
+  "allowed",
+  "skipped",
+  "always_this_bot",
+  "always_all_team_bots"
+];
 var SAND_FEEDBACK_ACTIONS = ["up", "down", "submit", "revert"];
 var SAND_WIDGET_ACTION_STYLES = ["default", "primary", "danger"];
 var SAND_CONNECTOR_CARD_VARIANTS = ["connected", "connect"];
 var SAND_AUTO_REVIEW_STALE = "auto-review/stale";
 var SAND_AUTO_REVIEW_STALE_MESSAGE = "The Auto-review request is stale, expired, or not authorized.";
+var SAND_CONNECTOR_GRANT_STALE = "connector-grant/stale";
+var SAND_CONNECTOR_GRANT_STALE_MESSAGE = "The connector grant request is stale, expired, or not authorized.";
 var SAND_VIRTUAL_CARD_STALE = "virtual-card/stale";
 var SAND_USER_FORM_STALE = "user-form/stale";
 var SAND_SECRET_SAVE_REFUSED = "secret-request/save-refused";

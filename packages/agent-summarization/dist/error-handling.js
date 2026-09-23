@@ -5,6 +5,15 @@ var NoSummaryResponseError = class _NoSummaryResponseError extends Error {
     Object.setPrototypeOf(this, _NoSummaryResponseError.prototype);
   }
 };
+var SummaryPlaceholderRejectedError = class extends Error {
+  constructor(details) {
+    super(`Context summarization on ${details.summarizerModelId} failed (${details.errorKind}); the previous context was kept`);
+    this.name = "SummaryPlaceholderRejectedError";
+    Object.setPrototypeOf(this, new.target.prototype);
+    this.errorKind = details.errorKind;
+    this.summarizerModelId = details.summarizerModelId;
+  }
+};
 var CONNECT_ERROR_CODES = {
   InvalidArgument: 3,
   NotFound: 5,

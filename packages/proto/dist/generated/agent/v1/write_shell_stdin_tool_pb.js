@@ -1,17 +1,17 @@
-var __protoPackage50, __protoMessage347, WriteShellStdinToolCall;
+var __protoPackage51, __protoMessage347, WriteShellStdinToolCall;
 var init_write_shell_stdin_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/write_shell_stdin_tool_pb.js"() {
     "use strict";
     init_esm();
     init_background_shell_exec_pb();
     init_compact();
-    __protoPackage50 = "agent.v1.";
+    __protoPackage51 = "agent.v1.";
     __protoMessage347 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage50;
+        return __protoPackage51;
       }
     };
     WriteShellStdinToolCall = class _WriteShellStdinToolCall extends __protoMessage347 {

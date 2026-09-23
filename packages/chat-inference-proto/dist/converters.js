@@ -1,6 +1,6 @@
 function applyToolCallArgs(tc, args, explicitRawToolCallArgs) {
-  const isJsonObject2 = typeof args === "object" && args !== null && !Array.isArray(args);
-  if (isJsonObject2) {
+  const isJsonObject3 = typeof args === "object" && args !== null && !Array.isArray(args);
+  if (isJsonObject3) {
     tc.args = Struct.fromJson(args);
     if (explicitRawToolCallArgs !== void 0) {
       tc.rawToolCallArgs = explicitRawToolCallArgs;
@@ -302,7 +302,7 @@ function protoStreamErrorToError(protoError) {
 }
 function buildStreamRequest(options2) {
   var _a19;
-  const { messages: messages2, requestedModel, tools, providerDefinedTools, modelConfig, invocationId, conversationId, conversationGroupId, automationId, parentRequestId, rootParentRequestId, parentAgentToolCallId, subagentType, compactionEpoch, inferenceReason, acceptedUnadvertisedToolNames } = options2;
+  const { messages: messages2, requestedModel, tools, providerDefinedTools, modelConfig, invocationId, conversationId, conversationGroupId, automationId, parentRequestId, rootParentRequestId, parentAgentToolCallId, subagentType, turnUnitId, turnUnitType, compactionEpoch, inferenceReason, acceptedUnadvertisedToolNames } = options2;
   const request5 = new InferenceStreamRequest();
   request5.messages = messages2.map(coreMessageToProto);
   request5.tools = (tools !== null && tools !== void 0 ? tools : []).map(agentToolToProto);
@@ -341,6 +341,12 @@ function buildStreamRequest(options2) {
   }
   if (subagentType) {
     request5.subagentType = subagentType;
+  }
+  if (turnUnitId) {
+    request5.turnUnitId = turnUnitId;
+  }
+  if (turnUnitType) {
+    request5.turnUnitType = turnUnitType;
   }
   if (compactionEpoch !== void 0) {
     request5.compactionEpoch = compactionEpoch;

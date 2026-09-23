@@ -1,19 +1,19 @@
-var __protoPackage84, __protoMessage381, GoalStatus, CreateGoalArgs, CreateGoalSuccess, GoalError, CreateGoalResult, CreateGoalToolCall, UpdateGoalArgs, UpdateGoalSuccess, UpdateGoalResult, UpdateGoalToolCall;
+var __protoPackage85, __protoMessage381, GoalStatus, CreateGoalArgs, CreateGoalSuccess, GoalError, CreateGoalResult, CreateGoalToolCall, UpdateGoalArgs, UpdateGoalSuccess, UpdateGoalResult, UpdateGoalToolCall;
 var init_goal_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/goal_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage84 = "agent.v1.";
+    __protoPackage85 = "agent.v1.";
     __protoMessage381 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage84;
+        return __protoPackage85;
       }
     };
-    GoalStatus = /* @__PURE__ */ enumType(proto3, __protoPackage84, "GoalStatus", [[0, "UNSPECIFIED"], [1, "ACTIVE"], [2, "PAUSED"], [3, "COMPLETE"], [4, "CLEARED"]], 1);
+    GoalStatus = /* @__PURE__ */ enumType(proto3, __protoPackage85, "GoalStatus", [[0, "UNSPECIFIED"], [1, "ACTIVE"], [2, "PAUSED"], [3, "COMPLETE"], [4, "CLEARED"]], 1);
     CreateGoalArgs = class _CreateGoalArgs extends __protoMessage381 {
       constructor(data) {
         super();

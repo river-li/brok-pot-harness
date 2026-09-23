@@ -75,7 +75,7 @@ var sessionExtension = defineHostExtension({
     return {
       store,
       transcriptsDir: () => getSandTranscriptsDir(),
-      conversationBlobsPath: (dbPath) => (0, import_node_path142.join)((0, import_node_path142.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
+      conversationBlobsPath: (dbPath) => (0, import_node_path143.join)((0, import_node_path143.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME),
       pendingHandoff: (agentId) => handoff.get(agentId),
       startHandoff: (request5) => handoff.start(request5),
       endHandoff: (agentId, trigger2) => handoff.end(agentId, trigger2),

@@ -1,17 +1,17 @@
-var __protoPackage28, __protoMessage325, LsToolCall;
+var __protoPackage29, __protoMessage325, LsToolCall;
 var init_ls_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/ls_tool_pb.js"() {
     "use strict";
     init_esm();
     init_ls_exec_pb();
     init_compact();
-    __protoPackage28 = "agent.v1.";
+    __protoPackage29 = "agent.v1.";
     __protoMessage325 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage28;
+        return __protoPackage29;
       }
     };
     LsToolCall = class _LsToolCall extends __protoMessage325 {

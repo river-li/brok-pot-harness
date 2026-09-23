@@ -1397,7 +1397,8 @@ function toRedactedUserMessageAction(msg, privacyMode) {
     sendToInteractionListener: msg.sendToInteractionListener,
     prependUserMessages: msg.prependUserMessages.map((v2) => toRedactedUserMessage2(v2, privacyMode)),
     interruptedPendingToolCallResolutions: msg.interruptedPendingToolCallResolutions !== void 0 ? toRedactedInterruptedPendingToolCallResolutions(msg.interruptedPendingToolCallResolutions, privacyMode) : void 0,
-    conversationHistory: msg.conversationHistory !== void 0 ? toRedactedConversationHistory(msg.conversationHistory, privacyMode) : void 0
+    conversationHistory: msg.conversationHistory !== void 0 ? toRedactedConversationHistory(msg.conversationHistory, privacyMode) : void 0,
+    trailingConversationHistory: msg.trailingConversationHistory !== void 0 ? toRedactedConversationHistory(msg.trailingConversationHistory, privacyMode) : void 0
   };
 }
 function createRedactedUserMessageAction(privacyMode, partial2) {
@@ -1408,6 +1409,7 @@ function createRedactedUserMessageAction(privacyMode, partial2) {
     prependUserMessages: [],
     interruptedPendingToolCallResolutions: void 0,
     conversationHistory: void 0,
+    trailingConversationHistory: void 0,
     ...partial2,
     _privacyMode: privacyMode
   };
@@ -1762,7 +1764,8 @@ function toRedactedProjectDetails(msg, privacyMode) {
     _privacyMode: privacyMode,
     name: msg.name !== void 0 ? createRedactedString(msg.name, DataClassification.CODE, "name", privacyMode) : void 0,
     subagent: msg.subagent !== void 0 ? toRedactedProjectSubagentDetails(msg.subagent, privacyMode) : void 0,
-    sideChat: msg.sideChat !== void 0 ? toRedactedProjectSideChatDetails(msg.sideChat, privacyMode) : void 0
+    sideChat: msg.sideChat !== void 0 ? toRedactedProjectSideChatDetails(msg.sideChat, privacyMode) : void 0,
+    initDescription: msg.initDescription !== void 0 ? createRedactedString(msg.initDescription, DataClassification.CODE, "init_description", privacyMode) : void 0
   };
 }
 function fromRedactedProjectDetails(msg, purpose, opts) {
@@ -1771,7 +1774,8 @@ function fromRedactedProjectDetails(msg, purpose, opts) {
   return new ProjectDetails({
     name: msg.name?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing }),
     subagent: msg.subagent !== void 0 ? fromRedactedProjectSubagentDetails(msg.subagent, purpose, opts) : void 0,
-    sideChat: msg.sideChat !== void 0 ? fromRedactedProjectSideChatDetails(msg.sideChat, purpose, opts) : void 0
+    sideChat: msg.sideChat !== void 0 ? fromRedactedProjectSideChatDetails(msg.sideChat, purpose, opts) : void 0,
+    initDescription: msg.initDescription?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
   });
 }
 function toRedactedProjectSubagentDetails(msg, privacyMode) {
@@ -2693,6 +2697,19 @@ function fromRedactedStepStartedUpdate(msg, purpose, opts) {
     stepId: msg.stepId
   });
 }
+function toRedactedToolRequestsListedUpdate(msg, privacyMode) {
+  return {
+    _privacyMode: privacyMode,
+    callCount: msg.callCount
+  };
+}
+function fromRedactedToolRequestsListedUpdate(msg, purpose, opts) {
+  const redactUnallowedFieldsInsteadOfThrowing = opts?.redactUnallowedFieldsInsteadOfThrowing ?? false;
+  const enforcing = opts?.enforcing;
+  return new ToolRequestsListedUpdate({
+    callCount: msg.callCount
+  });
+}
 function toRedactedStepCompletedUpdate(msg, privacyMode) {
   return {
     _privacyMode: privacyMode,
@@ -2951,6 +2968,8 @@ function toRedactedInteractionUpdate_message(oneof, privacyMode) {
       return { case: "stepStarted", value: toRedactedStepStartedUpdate(oneof.value, privacyMode) };
     case "stepCompleted":
       return { case: "stepCompleted", value: toRedactedStepCompletedUpdate(oneof.value, privacyMode) };
+    case "toolRequestsListed":
+      return { case: "toolRequestsListed", value: toRedactedToolRequestsListedUpdate(oneof.value, privacyMode) };
     case "promptSuggestion":
       return { case: "promptSuggestion", value: toRedactedPromptSuggestionUpdate(oneof.value, privacyMode) };
     case "postRequestPrompt":
@@ -3020,6 +3039,8 @@ function fromRedactedInteractionUpdate_message(oneof, purpose, opts) {
       return { case: "stepStarted", value: fromRedactedStepStartedUpdate(oneof.value, purpose, opts) };
     case "stepCompleted":
       return { case: "stepCompleted", value: fromRedactedStepCompletedUpdate(oneof.value, purpose, opts) };
+    case "toolRequestsListed":
+      return { case: "toolRequestsListed", value: fromRedactedToolRequestsListedUpdate(oneof.value, purpose, opts) };
     case "promptSuggestion":
       return { case: "promptSuggestion", value: fromRedactedPromptSuggestionUpdate(oneof.value, purpose, opts) };
     case "postRequestPrompt":

@@ -702,8 +702,8 @@ var createGetMcpToolsTool = (mcpMetaToolOptions, options2) => {
     render: renderResult,
     execute: withSafeParsedArgs(parsingParametersSchema, execute, createToolCallProto2(createCallArgs("unknown-tool-call-id", {}), createErrorResult("Invalid arguments"))),
     serializeError: (error42) => {
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
-      return createToolCallProto2(createCallArgs("unknown-tool-call-id", {}), createErrorResult(errorMessage6));
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
+      return createToolCallProto2(createCallArgs("unknown-tool-call-id", {}), createErrorResult(errorMessage7));
     }
   });
 };

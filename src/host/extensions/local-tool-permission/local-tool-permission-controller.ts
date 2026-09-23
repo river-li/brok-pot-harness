@@ -232,7 +232,15 @@ var SandLocalToolPermissionController = class {
     const settled = this.settle(
       pending,
       SETTLED_STATUS_OF_RESOLUTION[resolution],
-      allowed ? { allowed: true, approvalId: requestId2 } : { allowed: false, reason: deniedReason }
+      allowed ? {
+        allowed: true,
+        approvalId: requestId2,
+        settledAsk: { id: requestId2, outcome: "allowed" }
+      } : {
+        allowed: false,
+        reason: deniedReason,
+        settledAsk: { id: requestId2, outcome: "denied" }
+      }
     );
     if (settingMove !== void 0) {
       this.notePermissionChanged(pending.request.machineId);
@@ -426,7 +434,8 @@ var SandLocalToolPermissionController = class {
       if (pending.expiryAbort.signal.aborted) return;
       this.settle(pending, "expired", {
         allowed: false,
-        reason: SAND_LOCAL_TOOLS_ASK_EXPIRED_MESSAGE
+        reason: SAND_LOCAL_TOOLS_ASK_EXPIRED_MESSAGE,
+        settledAsk: { id: pending.request.id, outcome: "expired" }
       });
     });
     this.emit({ type: "created", request: pending.request });

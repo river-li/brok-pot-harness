@@ -2,6 +2,7 @@ function createRunnerPendingSummaryStore() {
   let pendingGeneration;
   let pendingSummary;
   let pendingWrite;
+  const settledGenerations = /* @__PURE__ */ new WeakSet();
   return {
     store: async (_ctx, record2) => {
       if (pendingSummary === void 0 || record2.createdAtMs >= pendingSummary.createdAtMs) {
@@ -14,18 +15,13 @@ function createRunnerPendingSummaryStore() {
     },
     trackPendingGeneration: (generation) => {
       pendingGeneration = generation;
-      void generation.promiseInfo.promise.then(
-        (result) => {
-          if (result.hadError === true && pendingGeneration === generation) {
-            pendingGeneration = void 0;
-          }
-        },
-        () => {
-          if (pendingGeneration === generation) {
-            pendingGeneration = void 0;
-          }
+      const settle = () => {
+        settledGenerations.add(generation.promiseInfo);
+        if (pendingGeneration?.promiseInfo === generation.promiseInfo) {
+          pendingGeneration = void 0;
         }
-      );
+      };
+      void generation.promiseInfo.promise.then(settle, settle);
     },
     claimPendingGeneration: (conversationId) => {
       if (pendingGeneration?.conversationId !== conversationId) return void 0;
@@ -34,7 +30,7 @@ function createRunnerPendingSummaryStore() {
       return generation;
     },
     reparkPendingGeneration: (generation) => {
-      if (pendingGeneration === void 0 && pendingSummary === void 0) {
+      if (pendingGeneration === void 0 && pendingSummary === void 0 && !settledGenerations.has(generation.promiseInfo)) {
         pendingGeneration = generation;
       }
     },

@@ -467,8 +467,8 @@ var McpSdkClient = class _McpSdkClient {
                 yield exchangeAuthorizationCode(code);
                 mcpClient.updateState({ kind: "ready" });
               } catch (authError) {
-                const errorMessage4 = authError instanceof Error ? authError.message : "Authentication failed";
-                throw new Error(`Authentication callback failed: ${errorMessage4}`);
+                const errorMessage5 = authError instanceof Error ? authError.message : "Authentication failed";
+                throw new Error(`Authentication callback failed: ${errorMessage5}`);
               }
             })
           },
@@ -926,8 +926,8 @@ var McpSdkClient = class _McpSdkClient {
       try {
         yield this._authCodeExchange(code);
       } catch (authError) {
-        const errorMessage4 = authError instanceof Error ? authError.message : "Authentication failed";
-        throw new Error(`Authentication callback failed: ${errorMessage4}`);
+        const errorMessage5 = authError instanceof Error ? authError.message : "Authentication failed";
+        throw new Error(`Authentication callback failed: ${errorMessage5}`);
       }
       this.updateState({ kind: "ready" }, "runtime_authorization_completed");
     });

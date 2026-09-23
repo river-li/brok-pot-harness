@@ -1,11 +1,11 @@
-var import_node_fs82 = require("node:fs");
+var import_node_fs84 = require("node:fs");
 var import_promises64 = require("node:fs/promises");
-var import_node_path133 = require("node:path");
+var import_node_path134 = require("node:path");
 init_agent_pb();
 init_errors();
 async function clearStaleCheckpointRootsOnce(host, dbPath, db, agentStore) {
   if (db.getStaleRootCleanupVersion() >= STALE_ROOT_CLEANUP_VERSION) return;
-  const agentId = (0, import_node_path133.basename)((0, import_node_path133.dirname)(dbPath));
+  const agentId = (0, import_node_path134.basename)((0, import_node_path134.dirname)(dbPath));
   const defer2 = (reason) => host.reportHostLog(
     "info",
     `[sand-agent-session] stale checkpoint-root cleanup deferred for ${agentId}: ${reason} (retries next open)`
@@ -19,19 +19,19 @@ async function clearStaleCheckpointRootsOnce(host, dbPath, db, agentStore) {
       defer2("live conversation did not resolve");
       return;
     }
-    if (liveDbHandleCount((0, import_node_path133.resolve)(dbPath)) > 1) {
+    if (liveDbHandleCount((0, import_node_path134.resolve)(dbPath)) > 1) {
       defer2("another live store handle");
       return;
     }
     const generation = getSandAgentDbWriteGeneration(dbPath);
-    const agentDir = (0, import_node_path133.dirname)(dbPath);
+    const agentDir = (0, import_node_path134.dirname)(dbPath);
     const deleted = await host.requireWorkerPool().clearStaleCheckpointRoots(
-      (0, import_node_path133.basename)(agentDir),
-      (0, import_node_path133.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
+      (0, import_node_path134.basename)(agentDir),
+      (0, import_node_path134.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
       toHex3(liveRootBlobId),
       dbPath
     );
-    if (getSandAgentDbWriteGeneration(dbPath) !== generation || toHex3(db.get("latestRootBlobId")) !== toHex3(liveRootBlobId) || liveDbHandleCount((0, import_node_path133.resolve)(dbPath)) > 1) {
+    if (getSandAgentDbWriteGeneration(dbPath) !== generation || toHex3(db.get("latestRootBlobId")) !== toHex3(liveRootBlobId) || liveDbHandleCount((0, import_node_path134.resolve)(dbPath)) > 1) {
       defer2(`store changed during the sweep (deleted=${deleted})`);
       return;
     }
@@ -41,7 +41,7 @@ async function clearStaleCheckpointRootsOnce(host, dbPath, db, agentStore) {
     }
     host.reportHostLog(
       "info",
-      `[sand-agent-session] stale checkpoint-root cleanup for ${(0, import_node_path133.basename)(
+      `[sand-agent-session] stale checkpoint-root cleanup for ${(0, import_node_path134.basename)(
         agentDir
       )}: deleted=${deleted}`
     );
@@ -106,11 +106,11 @@ function stampRestoredRows(entries, predecessorStampMs) {
 async function recoverConversationIfRootMissing(host, dbPath, db, agentStore) {
   const existingRoot = db.get("latestRootBlobId");
   if (existingRoot.length > 0) return;
-  const blobsPath = (0, import_node_path133.join)((0, import_node_path133.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME);
+  const blobsPath = (0, import_node_path134.join)((0, import_node_path134.dirname)(dbPath), CONVERSATION_BLOBS_FILENAME);
   const blobStore = agentStore.getBlobStore();
   const recoveryGeneration = getSandAgentDbWriteGeneration(dbPath);
   try {
-    if (!(0, import_node_fs82.existsSync)(blobsPath) && !db.hasLegacyConversationBlobs()) return;
+    if (!(0, import_node_fs84.existsSync)(blobsPath) && !db.hasLegacyConversationBlobs()) return;
     const rootId = await findLatestDurableRootBlobId(host, {
       dbPath,
       blobsPath
@@ -131,7 +131,7 @@ async function recoverConversationIfRootMissing(host, dbPath, db, agentStore) {
     }
     await agentStore.resetFromDb(host.ctx);
     if (toHex3(db.get("latestRootBlobId")) !== toHex3(rootId)) return;
-    const profileName = readSandProfileFile(getSandProfilePath((0, import_node_path133.dirname)(dbPath)))?.name.trim();
+    const profileName = readSandProfileFile(getSandProfilePath((0, import_node_path134.dirname)(dbPath)))?.name.trim();
     if (profileName != null && profileName.length > 0 && db.get("name") !== profileName) {
       db.set("name", profileName);
     }
@@ -141,7 +141,7 @@ async function recoverConversationIfRootMissing(host, dbPath, db, agentStore) {
       reportSessionDiagnostic({
         family: "maintenance",
         kind: "recovery_scan_failed",
-        agentId: (0, import_node_path133.basename)((0, import_node_path133.dirname)(dbPath)),
+        agentId: (0, import_node_path134.basename)((0, import_node_path134.dirname)(dbPath)),
         errorClass: error42.detail
       });
       throw error42;
@@ -149,7 +149,7 @@ async function recoverConversationIfRootMissing(host, dbPath, db, agentStore) {
     reportSessionDiagnostic({
       family: "maintenance",
       kind: "recovery_failed",
-      agentId: (0, import_node_path133.basename)((0, import_node_path133.dirname)(dbPath)),
+      agentId: (0, import_node_path134.basename)((0, import_node_path134.dirname)(dbPath)),
       errorClass: errorLogTag(error42)
     });
   }
@@ -180,8 +180,8 @@ async function repairHiddenTranscriptEntriesOnce(host, dbPath, db, agentStore) {
     if (artifactIds.length > 0) {
       host.reportHostLog(
         "info",
-        `[sand-agent-session] hidden-entry repair removed ${artifactIds.length} artifact(s) for ${(0, import_node_path133.basename)(
-          (0, import_node_path133.dirname)(dbPath)
+        `[sand-agent-session] hidden-entry repair removed ${artifactIds.length} artifact(s) for ${(0, import_node_path134.basename)(
+          (0, import_node_path134.dirname)(dbPath)
         )}`
       );
     }
@@ -190,7 +190,7 @@ async function repairHiddenTranscriptEntriesOnce(host, dbPath, db, agentStore) {
     reportSessionDiagnostic({
       family: "maintenance",
       kind: "hidden_repair_failed",
-      agentId: (0, import_node_path133.basename)((0, import_node_path133.dirname)(dbPath)),
+      agentId: (0, import_node_path134.basename)((0, import_node_path134.dirname)(dbPath)),
       errorClass: errorLogTag(error42)
     });
   }
@@ -208,7 +208,7 @@ async function retireLegacyStoreBlobsOnce(host, dbPath, db, agentStore) {
   if (db.getLegacyBlobRetirementVersion() >= LEGACY_BLOB_RETIREMENT_VERSION) {
     return;
   }
-  const agentId = (0, import_node_path133.basename)((0, import_node_path133.dirname)(dbPath));
+  const agentId = (0, import_node_path134.basename)((0, import_node_path134.dirname)(dbPath));
   const defer2 = (reason) => host.reportHostLog(
     "info",
     `[sand-agent-session] legacy store blob retirement deferred for ${agentId}: reason=${reason} (retries next open)`
@@ -230,15 +230,15 @@ async function retireLegacyStoreBlobsOnce(host, dbPath, db, agentStore) {
       defer2("live-conversation-unresolved");
       return;
     }
-    if (liveDbHandleCount((0, import_node_path133.resolve)(dbPath)) > 1) {
+    if (liveDbHandleCount((0, import_node_path134.resolve)(dbPath)) > 1) {
       defer2("another-live-store-handle");
       return;
     }
     const generation = getSandAgentDbWriteGeneration(dbPath);
-    const agentDir = (0, import_node_path133.dirname)(dbPath);
+    const agentDir = (0, import_node_path134.dirname)(dbPath);
     const verdict = await host.requireWorkerPool().verifyLegacyBlobRetirement({
-      agentId: (0, import_node_path133.basename)(agentDir),
-      blobDbPath: (0, import_node_path133.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
+      agentId: (0, import_node_path134.basename)(agentDir),
+      blobDbPath: (0, import_node_path134.join)(agentDir, CONVERSATION_BLOBS_FILENAME),
       legacyBlobDbPath: dbPath,
       retainedRootIdHex: toHex3(liveRootBlobId)
     });
@@ -246,7 +246,7 @@ async function retireLegacyStoreBlobsOnce(host, dbPath, db, agentStore) {
       defer2(verdict.reason ?? "unproven");
       return;
     }
-    if (getSandAgentDbWriteGeneration(dbPath) !== generation || toHex3(db.get("latestRootBlobId")) !== toHex3(liveRootBlobId) || liveDbHandleCount((0, import_node_path133.resolve)(dbPath)) > 1) {
+    if (getSandAgentDbWriteGeneration(dbPath) !== generation || toHex3(db.get("latestRootBlobId")) !== toHex3(liveRootBlobId) || liveDbHandleCount((0, import_node_path134.resolve)(dbPath)) > 1) {
       defer2("store-changed-during-proof");
       return;
     }
@@ -277,7 +277,7 @@ async function cleanupLegacyGroupMemberDirs(host) {
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     try {
-      await (0, import_promises64.rm)((0, import_node_path133.join)(host.rootDir, entry.name, LEGACY_GROUP_MEMBERS_DIRNAME), {
+      await (0, import_promises64.rm)((0, import_node_path134.join)(host.rootDir, entry.name, LEGACY_GROUP_MEMBERS_DIRNAME), {
         recursive: true,
         force: true
       });
@@ -297,7 +297,7 @@ async function findLatestDurableRootBlobId(host, {
 }) {
   try {
     return await host.requireWorkerPool().findLatestRootBlobId({
-      agentId: (0, import_node_path133.basename)((0, import_node_path133.dirname)(dbPath)),
+      agentId: (0, import_node_path134.basename)((0, import_node_path134.dirname)(dbPath)),
       blobDbPath: blobsPath,
       legacyBlobDbPath: dbPath
     }) ?? null;

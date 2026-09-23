@@ -8,7 +8,7 @@ function getSandboxPolicyDirectory() {
 function pruneStaleSandboxPolicyFiles(dir) {
   let entries;
   try {
-    entries = fs15.readdirSync(dir);
+    entries = fs14.readdirSync(dir);
   } catch {
     return;
   }
@@ -19,12 +19,12 @@ function pruneStaleSandboxPolicyFiles(dir) {
     }
     const fullPath = path15.join(dir, name17);
     try {
-      const st2 = fs15.statSync(fullPath);
+      const st2 = fs14.statSync(fullPath);
       if (!st2.isFile()) {
         continue;
       }
       if (now - st2.mtimeMs > STALE_POLICY_MAX_AGE_MS) {
-        fs15.unlinkSync(fullPath);
+        fs14.unlinkSync(fullPath);
       }
     } catch {
     }
@@ -32,9 +32,9 @@ function pruneStaleSandboxPolicyFiles(dir) {
 }
 function ensureSandboxPolicyDirectory() {
   const dir = getSandboxPolicyDirectory();
-  fs15.mkdirSync(dir, { recursive: true, mode: 448 });
+  fs14.mkdirSync(dir, { recursive: true, mode: 448 });
   try {
-    fs15.chmodSync(dir, 448);
+    fs14.chmodSync(dir, 448);
   } catch {
   }
   const now = Date.now();
@@ -48,15 +48,15 @@ function writeSandboxPolicyFile(policyJson) {
   const dir = ensureSandboxPolicyDirectory();
   const suffix = crypto2.randomBytes(8).toString("hex");
   const filePath = path15.join(dir, `sandbox-policy-${suffix}`);
-  fs15.writeFileSync(filePath, policyJson, { encoding: "utf-8", mode: 384 });
+  fs14.writeFileSync(filePath, policyJson, { encoding: "utf-8", mode: 384 });
   return filePath;
 }
-var crypto2, fs15, os5, path15, SANDBOX_POLICY_DIR_NAME, SANDBOX_POLICY_DIR_ENV, STALE_POLICY_MAX_AGE_MS, PRUNE_INTERVAL_MS, lastPruneAtMs;
+var crypto2, fs14, os5, path15, SANDBOX_POLICY_DIR_NAME, SANDBOX_POLICY_DIR_ENV, STALE_POLICY_MAX_AGE_MS, PRUNE_INTERVAL_MS, lastPruneAtMs;
 var init_policy_file = __esm({
   "../packages/shell-exec/dist/sandbox/policy-file.js"() {
     "use strict";
     crypto2 = __toESM(require("node:crypto"), 1);
-    fs15 = __toESM(require("node:fs"), 1);
+    fs14 = __toESM(require("node:fs"), 1);
     os5 = __toESM(require("node:os"), 1);
     path15 = __toESM(require("node:path"), 1);
     SANDBOX_POLICY_DIR_NAME = "sandbox-policies";

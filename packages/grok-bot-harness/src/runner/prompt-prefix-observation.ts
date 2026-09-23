@@ -207,7 +207,7 @@ function createPromptPrefixObservation(deps) {
     return latestMain === void 0 ? void 0 : { prefix: latestMain, fromPreviousTurn: false };
   }
   let settlePending;
-  function observe(request5) {
+  function observe2(request5) {
     settlePending?.();
     loadPersisted();
     const sections = deps.sectionShas();
@@ -344,7 +344,7 @@ function createPromptPrefixObservation(deps) {
   }
   return {
     streamObserver: {
-      onRequestStart: (_ctx, request5) => observe(request5)
+      onRequestStart: (_ctx, request5) => observe2(request5)
     },
     finalize: () => {
       settlePending?.();

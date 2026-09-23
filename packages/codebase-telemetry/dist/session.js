@@ -33,7 +33,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * acquired resources before rejecting.
    */
   static open(_a19) {
-    return __awaiter69(this, arguments, void 0, function* ({ credentials, host, logger: logger108, signal }) {
+    return __awaiter69(this, arguments, void 0, function* ({ credentials, host, logger: logger110, signal }) {
       signal.throwIfAborted();
       const adapter = yield host.createAdapter({ credentials, signal });
       let session;
@@ -42,7 +42,7 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
           authId: credentials.authId,
           host,
           adapter,
-          logger: logger108
+          logger: logger110
         });
       } catch (err) {
         let closeResult;
@@ -78,14 +78,14 @@ var CodebaseTelemetrySession = class _CodebaseTelemetrySession {
    * {@link CodebaseTelemetrySession.open} completes initialization and
    * handles cleanup if it fails.
    */
-  constructor({ authId, host, adapter, logger: logger108 }) {
+  constructor({ authId, host, adapter, logger: logger110 }) {
     this.disposables = new DisposableStore();
     this.coalescer = new Coalescer();
     this.featureGates = INITIAL_FEATURE_GATE_STATE;
     this.authId = authId;
     this.host = host;
     this.adapter = adapter;
-    this.logger = logger108;
+    this.logger = logger110;
     this.terminalFailure = adapter.terminalFailure;
     const [stateSender, stateReceiver] = createWatchChannel({
       initialValue: this.readState(),

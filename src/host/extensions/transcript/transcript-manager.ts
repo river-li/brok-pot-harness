@@ -13,10 +13,10 @@ var UNWIRED_TURN_EXECUTION = {
 var NOOP_TRANSCRIPT_ATTACHMENTS = {
   ingest: async (_agentDir, sourcePath) => ({ absolutePath: sourcePath }),
   ingestBytes: async (agentDir, filename) => ({
-    absolutePath: (0, import_node_path172.join)(getAgentAttachmentsDir(agentDir), filename)
+    absolutePath: (0, import_node_path174.join)(getAgentAttachmentsDir(agentDir), filename)
   }),
   persistImageBytes: async (targetDir, data) => {
-    const absolutePath = (0, import_node_path172.join)(targetDir, "unwired-image");
+    const absolutePath = (0, import_node_path174.join)(targetDir, "unwired-image");
     return {
       absolutePath,
       fileUrl: (0, import_node_url18.pathToFileURL)(absolutePath).href,
@@ -208,8 +208,8 @@ var TranscriptManager = class {
   setTraceFlusher(flush) {
     this.traceFlusher = flush;
   }
-  setHostLog(log4) {
-    this.hostLog = log4;
+  setHostLog(log5) {
+    this.hostLog = log5;
   }
   reportTurnEmptyDelivery(report) {
     this.telemetry.reportTurnEmptyDelivery(report);
@@ -287,14 +287,14 @@ var TranscriptManager = class {
   }
   createAttachmentIngestor(session) {
     return async (sourcePath) => {
-      const agentDir = (0, import_node_path172.dirname)(session.dbPath);
+      const agentDir = (0, import_node_path174.dirname)(session.dbPath);
       const result = await this.attachments.ingest(agentDir, sourcePath);
       return result.absolutePath;
     };
   }
   createAssetImagePersister(session) {
     return async (data, mimeType) => {
-      const assetsDir = getAgentAssetsDir((0, import_node_path172.dirname)(session.dbPath));
+      const assetsDir = getAgentAssetsDir((0, import_node_path174.dirname)(session.dbPath));
       try {
         return await this.attachments.persistImageBytes(assetsDir, data, mimeType);
       } catch (error42) {
@@ -305,7 +305,7 @@ var TranscriptManager = class {
   }
   createMediaBytesPersister(session) {
     return async (filename, data) => {
-      const agentDir = (0, import_node_path172.dirname)(session.dbPath);
+      const agentDir = (0, import_node_path174.dirname)(session.dbPath);
       try {
         const result = await this.attachments.ingestBytes(agentDir, filename, data);
         return (0, import_node_url18.pathToFileURL)(result.absolutePath).href;

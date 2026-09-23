@@ -278,6 +278,16 @@ function getEffectiveToolCallName(descriptor2) {
 function getEffectiveToolCallArgs(descriptor2) {
   return descriptor2.effectiveNativeToolCall?.args ?? descriptor2.args;
 }
+function countStartingToolRequests(descriptors, tools) {
+  const startingNames = new Set(getExecutableTools(normalizeToolExecutionInput(tools)).map((tool) => tool.name));
+  let listedCount = 0;
+  for (const descriptor2 of descriptors) {
+    if (startingNames.has(getEffectiveToolCallName(descriptor2))) {
+      listedCount += 1;
+    }
+  }
+  return listedCount;
+}
 async function drainArgsStream(argsStream) {
   for await (const _2 of argsStream) {
   }
@@ -539,7 +549,7 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
     const settledAtMs = Date.now();
     const durationMs = settledAtMs - startTimeMs;
     const errorName = err instanceof Error ? err.name : typeof err;
-    const errorMessage6 = err instanceof Error ? err.message : void 0;
+    const errorMessage7 = err instanceof Error ? err.message : void 0;
     const errorClassification = isMcpToolNotFoundError(err) ? "tool_not_found" : err instanceof RetryableToolOrchestrationError ? err.classification : void 0;
     let outcome = errorClassification !== void 0 ? errorClassification : "error";
     const abortReason3 = ctx.reason;
@@ -552,7 +562,7 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
         toolName: telemetry.loggedToolName,
         durationMs,
         errorName,
-        errorMessage: errorMessage6,
+        errorMessage: errorMessage7,
         errorClassification,
         intentionalAbort: isIntentionalAbort,
         abortReason: abortReason3?.reason,
@@ -567,7 +577,7 @@ async function executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHan
         toolName: telemetry.loggedToolName,
         durationMs,
         errorName,
-        errorMessage: errorMessage6,
+        errorMessage: errorMessage7,
         errorClassification,
         team: getToolOwnerTeam(telemetry.toolIdentifier),
         mcp_version: getMcpVersionLabel(telemetry.loggedToolName),
@@ -1086,6 +1096,7 @@ function executeToolStream(ctx, executor, interactionHandler, tools, extraT, rec
       await recordToolCallResult(resultCtx, result, loggedToolName, errorClassification);
     };
     const consumeToolCalls = (async () => {
+      let listedCount = 0;
       for await (const event of streamResult.toolCallEvents) {
         if (execBackendDown) {
           void (async () => {
@@ -1126,6 +1137,7 @@ function executeToolStream(ctx, executor, interactionHandler, tools, extraT, rec
           continue;
         }
         if (dynamicInvocationToolNames.has(event.toolName)) {
+          listedCount += 1;
           const drainOuterArgs = drainArgsStream(event.argsStream).catch(() => {
           });
           const [outerArgs, outerArgsText] = await Promise.all([
@@ -1144,12 +1156,18 @@ function executeToolStream(ctx, executor, interactionHandler, tools, extraT, rec
           trackToolPromise(executeDeferredToolCall(ctx, descriptor3, toolMap, interactionHandler, extraT, circuitBreakerRecordToolCallResult, renderProps, argsIterable, void 0, directDynamicToolNames));
           continue;
         }
+        if (toolMap[event.toolName] !== void 0) {
+          listedCount += 1;
+        }
         const descriptor2 = {
           toolCallId: event.toolCallId,
           toolName: event.toolName,
           args: {}
         };
         trackToolPromise(executeDeferredToolCall(ctx, descriptor2, toolMap, interactionHandler, extraT, circuitBreakerRecordToolCallResult, renderProps, event.argsStream, event.completedArgs, directDynamicToolNames));
+      }
+      if (listedCount > 0) {
+        await interactionHandler.sendToolRequestsListed(ctx, listedCount);
       }
     })();
     const [response] = await Promise.all([streamResult.response, consumeToolCalls]);

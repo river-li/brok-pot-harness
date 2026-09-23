@@ -179,7 +179,7 @@ var SandHost = class {
     });
     const hostUpgrade = this.hostUpgrade;
     const hostBundleVersion = await hostUpgrade.resolveHostBundleIdentityVersion(
-      (true ? "bfe1879" : null) ?? "unknown"
+      (true ? "408f207" : null) ?? "unknown"
     );
     let resolvedBoxStoreId;
     try {

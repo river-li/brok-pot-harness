@@ -19,9 +19,9 @@ function describeClaimEmailInboxTool(multipleInboxesEnabled) {
 }
 function parseClaimEmailUsername(raw) {
   const trimmed = raw.trim().toLowerCase();
-  const at2 = trimmed.lastIndexOf("@");
-  const username = at2 === -1 ? trimmed : trimmed.slice(0, at2);
-  const domain2 = at2 === -1 ? "" : trimmed.slice(at2 + 1);
+  const at3 = trimmed.lastIndexOf("@");
+  const username = at3 === -1 ? trimmed : trimmed.slice(0, at3);
+  const domain2 = at3 === -1 ? "" : trimmed.slice(at3 + 1);
   if (domain2.length > 0 && !domain2.endsWith("grokbot.com")) {
     throw new SandToolInputError(
       `This tool claims a Grok Bot inbox, not a third-party address. Ask the user which local part they want on the Grok Bot domain, then pass only that (for example "roman"), not ${trimmed}.`

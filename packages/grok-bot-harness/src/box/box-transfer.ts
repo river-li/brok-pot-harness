@@ -12,10 +12,12 @@ function resolveBoxWorkspacePath(boxPath) {
   return import_node_path10.posix.isAbsolute(boxPath) ? import_node_path10.posix.normalize(boxPath) : import_node_path10.posix.join(SAND_BOX_WORKSPACE_ROOT, boxPath);
 }
 var BoxTransferError = class extends Error {
-  constructor(message, options2) {
+  constructor(code, message, options2) {
     super(message, options2);
+    this.code = code;
     this.name = "BoxTransferError";
   }
+  code;
 };
 var BoxFileUnreadableError = class extends Error {
 };
@@ -36,17 +38,21 @@ async function transferFileBetweenBoxes(ctx, args) {
     data = await source.box.downloadFile(ctx, source.agentId, source.path);
   } catch (error42) {
     if (isSourceMissingError(error42)) {
-      throw new BoxTransferError(`source file not found on ${source.label}: ${source.path}`, {
-        cause: error42
-      });
+      throw new BoxTransferError(
+        "source_missing",
+        `source file not found on ${source.label}: ${source.path}`,
+        { cause: error42 }
+      );
     }
     throw new BoxTransferError(
+      "read_failed",
       `failed to read ${source.path} from ${source.label}: ${errorMessage(error42)}`,
       { cause: error42 }
     );
   }
   if (data.byteLength > maxBytes) {
     throw new BoxTransferError(
+      "too_large",
       `file is too large to transfer: ${source.path} on ${source.label} is ${data.byteLength} bytes, over the ${maxBytes}-byte limit`
     );
   }
@@ -54,6 +60,7 @@ async function transferFileBetweenBoxes(ctx, args) {
     await dest.box.uploadFile(ctx, dest.agentId, dest.path, data);
   } catch (error42) {
     throw new BoxTransferError(
+      "write_failed",
       `failed to write ${dest.path} on ${dest.label}: ${errorMessage(error42)}`,
       { cause: error42 }
     );

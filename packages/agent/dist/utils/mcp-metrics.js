@@ -190,7 +190,7 @@ var CALL_MCP_TOOL_FAILURE_REASONS = {
   OTHER: "other"
 };
 function reportMcpMetaToolFailure(ctx, error42, data) {
-  const errorMessage6 = error42 instanceof Error ? error42.message : typeof error42 === "string" ? error42 : String(error42);
+  const errorMessage7 = error42 instanceof Error ? error42.message : typeof error42 === "string" ? error42 : String(error42);
   const logData = {
     tool: data.tool,
     failure_reason: data.failureReason,
@@ -200,7 +200,7 @@ function reportMcpMetaToolFailure(ctx, error42, data) {
     mode: data.mode,
     mcp_mode: data.mcpMode,
     duration_ms: data.durationMs,
-    error_message: data.errorMessage ?? errorMessage6
+    error_message: data.errorMessage ?? errorMessage7
   };
   logger51.warn(ctx, "MCP meta tool failure", logData);
 }

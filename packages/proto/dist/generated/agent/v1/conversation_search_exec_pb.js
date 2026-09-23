@@ -1,19 +1,19 @@
-var __protoPackage82, __protoMessage379, ConversationSearchSource, ConversationSearchArgs, ConversationSearchResult, ConversationSearchSuccess, ConversationSearchHit, ConversationSearchError;
+var __protoPackage83, __protoMessage379, ConversationSearchSource, ConversationSearchArgs, ConversationSearchResult, ConversationSearchSuccess, ConversationSearchHit, ConversationSearchError;
 var init_conversation_search_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/conversation_search_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage82 = "agent.v1.";
+    __protoPackage83 = "agent.v1.";
     __protoMessage379 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage82;
+        return __protoPackage83;
       }
     };
-    ConversationSearchSource = /* @__PURE__ */ enumType(proto3, __protoPackage82, "ConversationSearchSource", [[0, "UNSPECIFIED"], [1, "LOCAL"], [2, "CLOUD_CACHE"]], 1);
+    ConversationSearchSource = /* @__PURE__ */ enumType(proto3, __protoPackage83, "ConversationSearchSource", [[0, "UNSPECIFIED"], [1, "LOCAL"], [2, "CLOUD_CACHE"]], 1);
     ConversationSearchArgs = class _ConversationSearchArgs extends __protoMessage379 {
       constructor(data) {
         super();

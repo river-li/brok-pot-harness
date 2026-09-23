@@ -19,7 +19,7 @@ function formatTranscriptLocationMarkdownSection(agentTranscriptsFolder, convers
       ext: "jsonl",
       kind: "primary"
     });
-    const transcriptPath = (0, import_node_path38.join)(agentTranscriptsFolder, stripTranscriptsDirPrefix(transcriptRelativePath));
+    const transcriptPath = (0, import_node_path29.join)(agentTranscriptsFolder, stripTranscriptsDirPrefix(transcriptRelativePath));
     return `
 
 ### Transcript location:

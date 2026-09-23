@@ -1,16 +1,16 @@
-var __protoPackage54, __protoMessage351, StartGrindPlanningArgs, StartGrindPlanningResult, StartGrindPlanningSuccess, StartGrindPlanningError, StartGrindPlanningToolCall;
+var __protoPackage55, __protoMessage351, StartGrindPlanningArgs, StartGrindPlanningResult, StartGrindPlanningSuccess, StartGrindPlanningError, StartGrindPlanningToolCall;
 var init_start_grind_planning_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/start_grind_planning_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage54 = "agent.v1.";
+    __protoPackage55 = "agent.v1.";
     __protoMessage351 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage54;
+        return __protoPackage55;
       }
     };
     StartGrindPlanningArgs = class _StartGrindPlanningArgs extends __protoMessage351 {

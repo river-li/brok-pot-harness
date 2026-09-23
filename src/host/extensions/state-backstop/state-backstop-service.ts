@@ -1,13 +1,13 @@
-var import_node_fs87 = require("node:fs");
-var import_node_path144 = require("node:path");
+var import_node_fs89 = require("node:fs");
+var import_node_path145 = require("node:path");
 init_errors();
 var SAND_STATE_BACKSTOP_REL_PATH = "state/store.db";
 var DEFAULT_MAX_SNAPSHOT_BYTES = 64 * 1024 * 1024;
 var STATE_BACKSTOP_DEBOUNCE_MS = 5e3;
 function readStoreDbBytes(dbPath) {
-  if (!(0, import_node_fs87.existsSync)(dbPath)) return null;
+  if (!(0, import_node_fs89.existsSync)(dbPath)) return null;
   checkpointSandAgentDb(dbPath);
-  return (0, import_node_fs87.readFileSync)(dbPath);
+  return (0, import_node_fs89.readFileSync)(dbPath);
 }
 var SandStateBackstop = class {
   constructor(deps) {
@@ -25,7 +25,7 @@ var SandStateBackstop = class {
   pending = /* @__PURE__ */ new Map();
   disposed = false;
   dbPathFor(agentId) {
-    return (0, import_node_path144.join)(this.agentsRootDir, agentId, "store.db");
+    return (0, import_node_path145.join)(this.agentsRootDir, agentId, "store.db");
   }
   scheduleSnapshot(agentId) {
     if (this.disposed) return;

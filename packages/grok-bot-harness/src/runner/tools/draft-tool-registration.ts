@@ -1,8 +1,9 @@
-function createDraftToolForTurn(host, turn, review) {
+function createDraftToolForTurn(host, turn, review, recordDelivery) {
   if (!host.gates.draftExternalMessage()) return null;
   if (host.isSubagentRunner) return null;
   const mcp = host.mcp;
   return createDraftExternalMessageTool({
+    recordDelivery,
     onDraftMessage: (emission, timestampMs2) => {
       host.emitUpdate(
         {

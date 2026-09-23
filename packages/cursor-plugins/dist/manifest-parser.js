@@ -255,7 +255,7 @@ function fallbackMarketplaceName(options2) {
   if (repoName.length > 0) {
     return repoName;
   }
-  return `cursor-marketplace-${(_a19 = options2.fallbackId) !== null && _a19 !== void 0 ? _a19 : (0, import_node_crypto21.randomUUID)()}`;
+  return `cursor-marketplace-${(_a19 = options2.fallbackId) !== null && _a19 !== void 0 ? _a19 : (0, import_node_crypto20.randomUUID)()}`;
 }
 function readMarketplaceName(json3, options2) {
   if (isRecord2(json3) && typeof json3.name === "string") {
@@ -380,7 +380,7 @@ function readPluginSource(value) {
 function derivePluginNameFromSource(source) {
   var _a19;
   if (typeof source === "string") {
-    const name18 = normalizeMarketplaceName((0, import_node_path47.basename)(source));
+    const name18 = normalizeMarketplaceName((0, import_node_path38.basename)(source));
     return name18.length > 0 ? name18 : void 0;
   }
   if (source.source === "github") {
@@ -388,7 +388,7 @@ function derivePluginNameFromSource(source) {
     return name18.length > 0 ? name18 : void 0;
   }
   if (source.source === "git-subdir") {
-    const name18 = normalizeMarketplaceName((0, import_node_path47.basename)(source.path));
+    const name18 = normalizeMarketplaceName((0, import_node_path38.basename)(source.path));
     return name18.length > 0 ? name18 : void 0;
   }
   let urlPath = source.url;
@@ -402,7 +402,7 @@ function derivePluginNameFromSource(source) {
   if (urlPath.toLowerCase().endsWith(".git")) {
     urlPath = urlPath.slice(0, -4);
   }
-  const name17 = normalizeMarketplaceName((0, import_node_path47.basename)(urlPath));
+  const name17 = normalizeMarketplaceName((0, import_node_path38.basename)(urlPath));
   return name17.length > 0 ? name17 : void 0;
 }
 function readMarketplacePluginEntry(rawEntry, index) {
@@ -610,7 +610,7 @@ function isPathSafe(path31) {
   if (path31.includes("..")) {
     return false;
   }
-  if ((0, import_node_path47.isAbsolute)(path31)) {
+  if ((0, import_node_path38.isAbsolute)(path31)) {
     return false;
   }
   if (path31.includes("://")) {

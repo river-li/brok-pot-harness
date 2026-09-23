@@ -185,7 +185,7 @@ async function pruneRestoredOriginCliStoredLogins(targetDir) {
   }
 }
 async function runBoxCopyIn(deps) {
-  const log4 = deps.log ?? (() => {
+  const log5 = deps.log ?? (() => {
   });
   let manifestPresent;
   let manifest;
@@ -221,7 +221,7 @@ async function runBoxCopyIn(deps) {
       legacyManifest = await deps.legacySync.readManifestStrict();
     } catch (error42) {
       if (!manifestPresent && error42 instanceof ConnectError && error42.code === Code.NotFound) {
-        log4("legacy store is unavailable (not_found); booting the fresh V2 store");
+        log5("legacy store is unavailable (not_found); booting the fresh V2 store");
         return empty("legacy-source-not-found", "legacy source unavailable: not_found; first boot");
       }
       return {
@@ -282,11 +282,11 @@ async function runBoxCopyIn(deps) {
             hydrateSource
           };
         }
-        log4(
+        log5(
           `primary V2 manifest is not sealed but covers all ${authoritativeStoreDbEntries} legacy store.db entries; hydrating the newer V2 store`
         );
       } else {
-        log4(
+        log5(
           `own store never seeded; hydrating ${legacyManifest.size} entries from the legacy store (v2 migration)`
         );
         manifest = legacyManifest;
@@ -311,7 +311,7 @@ async function runBoxCopyIn(deps) {
       return empty("legacy-source-empty", "legacy source empty; first boot");
     }
   }
-  manifest = withoutForeignMountEntries(manifest, log4);
+  manifest = withoutForeignMountEntries(manifest, log5);
   if (manifest.size === 0) {
     return empty("store-empty", "store empty; first boot");
   }
@@ -352,7 +352,7 @@ async function runBoxCopyIn(deps) {
     try {
       await pruneRestoredOriginCliStoredLogins(deps.targetDir);
     } catch (pruneError) {
-      log4(`origin-cli stored-login prune failed: ${errorMessage(pruneError)}`);
+      log5(`origin-cli stored-login prune failed: ${errorMessage(pruneError)}`);
     }
     return {
       outcome: "failed",
@@ -403,7 +403,7 @@ async function runBoxCopyIn(deps) {
     restoredStoreDbEntries
   }) && (hydrateSource !== "legacy" || legacyStoreDbsComplete);
   if (!fullyHydrated) {
-    log4(
+    log5(
       `partial hydrate: ${summary.files}/${manifest.size} files, ${summary.failures.length} failures`
     );
     const reason = hydrateSource === "legacy" && !legacyStoreDbsComplete ? `${INCOMPLETE_LEGACY_HYDRATE_REASON} advertised_store_db=${advertisedStoreDbEntries} restored_store_db=${restoredStoreDbEntries} advisory_advertised_files=${manifest.size} advisory_restored_files=${summary.files}` : `partial hydrate (${summary.files}/${manifest.size} files, ${summary.failures.length} failures)`;
@@ -429,7 +429,7 @@ async function runBoxCopyIn(deps) {
       }
       await deps.sync.markLegacyHydrationCompleteForHandoff();
     } catch (error42) {
-      log4(
+      log5(
         `failed to persist legacy hydrate handoff after complete restore: ${errorMessage(error42)}`
       );
     }
@@ -486,25 +486,25 @@ async function runBoxCopyInWithRetry(deps, options2) {
 }
 async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
   const startedAt = Date.now();
-  const log4 = (message) => {
+  const log5 = (message) => {
     process.stdout.write(`[box-copy-in] ${message}
 `);
   };
   if (!isBoxStoreCopyInEnabled(env)) {
-    log4("disabled (SAND_BOX_STORE_COPY_IN not truthy); no-op");
+    log5("disabled (SAND_BOX_STORE_COPY_IN not truthy); no-op");
     return BOX_COPY_IN_EXIT_NOOP;
   }
   const sandRoot = getSandRootDir();
   const storeId = await resolveCopyInStoreId(env, new SandSourceMap());
   if (storeId == null) {
-    log4(
+    log5(
       "no per-box store id (SAND_BOX_STORE_ID unset and no source-map entry); boot fresh \u2014 no-op"
     );
     return BOX_COPY_IN_EXIT_NOOP;
   }
   const backendPolicy = getBoxStoreBackendPolicy(env);
   const { backend } = readSandProcessEnvironment(env);
-  const accessToken = backendPolicy.localDir != null ? null : makeCopyInAccessTokenGetter(env, backend, log4);
+  const accessToken = backendPolicy.localDir != null ? null : makeCopyInAccessTokenGetter(env, backend, log5);
   const sync = new BoxStoreSync({
     objectStoreProvider: resolveBoxObjectStoreProvider({
       policy: backendPolicy,
@@ -523,10 +523,10 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
     manifestRetry: COPY_IN_MANIFEST_RETRY,
     hydrationHandoffMarkerPath: (0, import_node_path24.join)(sandRoot, BOX_STORE_HYDRATION_HANDOFF_FILE_NAME),
     downloadConcurrency: resolveCopyInConcurrency(env),
-    log: log4
+    log: log5
   });
   if (backendPolicy.kind === "sand-box-store-v2" && isLegacyBoxStoreHydrateSkipped(env)) {
-    log4("broker stamped the legacy store absent; skipping the legacy-hydrate fallback");
+    log5("broker stamped the legacy store absent; skipping the legacy-hydrate fallback");
   }
   const legacySync = shouldHydrateFromLegacyStore(backendPolicy.kind, env) ? new BoxStoreSync({
     objectStoreProvider: new AgentStoreObjectStoreProvider({
@@ -542,7 +542,7 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
     storeDbDebounce: COPY_IN_STORE_DB_DEBOUNCE,
     manifestRetry: COPY_IN_MANIFEST_RETRY,
     downloadConcurrency: resolveCopyInConcurrency(env),
-    log: (message) => log4(`[legacy] ${message}`)
+    log: (message) => log5(`[legacy] ${message}`)
   }) : void 0;
   const reportedTokenClasses = /* @__PURE__ */ new Set();
   const telemetry = new SandStructuredLogTelemetry({
@@ -625,7 +625,7 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
       trace: lastTraceStatus
     });
     progressEventsAtLastTick = progressEvents;
-    log4(
+    log5(
       `STILL copying after ${elapsedMs3}ms (files=${lastProgress.files}/${lastProgress.total} bytes=${lastProgress.bytes} active_symlink_steps=${tick.metadata.active_symlink_steps ?? "none"}); emitting ${tick.metadata.outcome} event`
     );
     telemetry.reportBoxCopyIn(tick.level, tick.metadata);
@@ -633,9 +633,9 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
   });
   try {
     const lockPath = (0, import_node_path24.join)(sandRoot, "box-store-sync.lock");
-    const lock = await acquireCopyInLock(lockPath, log4);
+    const lock = await acquireCopyInLock(lockPath, log5);
     if (lock == null) {
-      log4("could not acquire box-store lock (live writer?); failing closed");
+      log5("could not acquire box-store lock (live writer?); failing closed");
       const lockResult = {
         outcome: "failed",
         reasonCode: "lock-held",
@@ -671,7 +671,7 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
           legacySync,
           targetDir: "/",
           downloadOwner: await resolveCopyInDownloadOwner(),
-          log: log4,
+          log: log5,
           onProgress: (progress) => {
             progressEvents += 1;
             lastProgress = {
@@ -706,11 +706,11 @@ async function executeBoxCopyInFromEnv(env, createTelemetryClient) {
         }
       );
       writeStatus(buildCopyInStatusFromResult(result), { force: true });
-      log4(
+      log5(
         `result outcome=${result.outcome} store_entries=${result.manifestEntries} files=${result.files} bytes=${result.bytes} verified=${result.verified} failures=${result.failures.length} duration_ms=${Date.now() - startedAt} reason="${result.reason}"`
       );
       for (const failure2 of result.failures.slice(0, 20)) {
-        log4(`  failure: ${failure2}`);
+        log5(`  failure: ${failure2}`);
       }
       reportCopyIn(result);
       return outcomeToExitCode(result.outcome);
@@ -800,7 +800,7 @@ async function resolveCopyInStoreId(env, sourceMap) {
   }
   return (await sourceMap.getBoxStore())?.sourceId ?? null;
 }
-function makeCopyInAccessTokenGetter(env, backend, log4) {
+function makeCopyInAccessTokenGetter(env, backend, log5) {
   let cached2;
   return async () => {
     if (cached2 != null && cached2.expiresAtMs - Date.now() > TOKEN_REFRESH_LEEWAY_MS2) {
@@ -809,7 +809,7 @@ function makeCopyInAccessTokenGetter(env, backend, log4) {
     const renewed = await withRetry(
       "inference credential",
       () => fetchCopyInCredential(env, backend),
-      log4
+      log5
     );
     cached2 = { token: renewed.accessToken, expiresAtMs: renewed.expiresAtMs };
     return renewed.accessToken;
@@ -841,15 +841,15 @@ var BOOT_COPY_IN_HEARTBEAT_POLL = createRetryPolicy({
 });
 var LockHeartbeatUndecided = class extends Error {
 };
-async function acquireCopyInLock(lockPath, log4) {
+async function acquireCopyInLock(lockPath, log5) {
   try {
     const existing = await judgeExistingLockByHeartbeat(lockPath);
     if (existing.kind === "live") {
-      log4(`box-store lock held by ${existing.windowId} with a live heartbeat`);
+      log5(`box-store lock held by ${existing.windowId} with a live heartbeat`);
       return null;
     }
     if (existing.kind === "stale") {
-      log4(
+      log5(
         `box-store lock left by ${existing.windowId} stopped beating ${Math.round(existing.ageMs / 1e3)}s ago; taking it`
       );
       await (0, import_promises23.rm)(lockPath, { force: true });
@@ -864,12 +864,12 @@ async function acquireCopyInLock(lockPath, log4) {
     if (result.kind === "acquired") {
       return { release: () => result.lock.dispose() };
     }
-    log4(
+    log5(
       `box-store lock held by ${result.owner?.windowId ?? "an unknown holder"} with a live heartbeat`
     );
     return null;
   } catch (error42) {
-    log4(`store lock error: ${errorMessage(error42)}`);
+    log5(`store lock error: ${errorMessage(error42)}`);
     return null;
   }
 }
@@ -922,13 +922,13 @@ function parseLockOwnerFields(raw) {
     fields2.windowId = parsed2.windowId;
   return fields2;
 }
-async function withRetry(label, fn, log4) {
+async function withRetry(label, fn, log5) {
   return COPY_IN_CREDENTIAL_RETRY.runWithRetry(async (attempt) => {
     try {
       return await fn();
     } catch (error42) {
       if (attempt < COPY_IN_RETRY_ATTEMPTS) {
-        log4(
+        log5(
           `${label} failed (attempt ${attempt}/${COPY_IN_RETRY_ATTEMPTS}): ${errorMessage(error42)}; retrying`
         );
       }

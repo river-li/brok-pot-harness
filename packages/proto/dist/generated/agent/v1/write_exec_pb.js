@@ -1,16 +1,16 @@
-var __protoPackage101, __protoMessage397, WriteArgs, WriteResult, WriteSuccess, WritePermissionDenied, WriteNoSpace, WriteError, WriteRejected;
+var __protoPackage102, __protoMessage397, WriteArgs, WriteResult, WriteSuccess, WritePermissionDenied, WriteNoSpace, WriteError, WriteRejected;
 var init_write_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/write_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage101 = "agent.v1.";
+    __protoPackage102 = "agent.v1.";
     __protoMessage397 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage101;
+        return __protoPackage102;
       }
     };
     WriteArgs = class _WriteArgs extends __protoMessage397 {

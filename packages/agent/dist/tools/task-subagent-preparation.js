@@ -1,4 +1,4 @@
-var import_node_path84 = __toESM(require("node:path"), 1);
+var import_node_path75 = __toESM(require("node:path"), 1);
 init_dist4();
 init_agent_pb();
 init_read_exec_pb();
@@ -112,7 +112,7 @@ async function buildClientSubagentAttachmentsContext(ctx, attachmentPaths, resou
       uuid: generateSeededUuid(`video-${toolCallId}-${filePath}`),
       path: filePath,
       mimeType,
-      filename: import_node_path84.default.basename(filePath),
+      filename: import_node_path75.default.basename(filePath),
       fps: 4
     }));
   }
@@ -122,15 +122,15 @@ async function buildClientSubagentAttachmentsContext(ctx, attachmentPaths, resou
   });
 }
 function isPathWithinPrefix2(args) {
-  const resolvedTarget = import_node_path84.default.resolve(args.targetPath);
-  const resolvedPrefix = import_node_path84.default.resolve(args.prefix);
-  return resolvedTarget === resolvedPrefix || resolvedTarget.startsWith(resolvedPrefix + import_node_path84.default.sep);
+  const resolvedTarget = import_node_path75.default.resolve(args.targetPath);
+  const resolvedPrefix = import_node_path75.default.resolve(args.prefix);
+  return resolvedTarget === resolvedPrefix || resolvedTarget.startsWith(resolvedPrefix + import_node_path75.default.sep);
 }
 function untrustedAttachmentPathError(attachmentPath) {
   return new Error(`Attachment path is not trusted: ${attachmentPath}. Only videos the user attached to this conversation, or files under this agent's own uploads/artifacts roots, can be passed in file_attachments \u2014 copying the file somewhere else, onto the user's computer especially, cannot make it trusted.`);
 }
 function resolveTrustedAttachmentPath(args) {
-  const posixPath = import_node_path84.default.posix.normalize(args.attachmentPath);
+  const posixPath = import_node_path75.default.posix.normalize(args.attachmentPath);
   if ((args.trustedVideoAttachmentRoots ?? []).some(
     // A root that isn't an absolute directory is dropped rather than matched:
     // `""` or `"/"` would make the prefix `/` and trust every absolute path,
@@ -139,20 +139,20 @@ function resolveTrustedAttachmentPath(args) {
   )) {
     return posixPath;
   }
-  const canonicalPath = import_node_path84.default.resolve(args.attachmentPath);
+  const canonicalPath = import_node_path75.default.resolve(args.attachmentPath);
   const env = args.requestContext.env;
   const allowedPrefixes = [
-    ...env?.projectFolder ? [import_node_path84.default.join(env.projectFolder, "uploads"), import_node_path84.default.join(env.projectFolder, "attachments")] : [],
+    ...env?.projectFolder ? [import_node_path75.default.join(env.projectFolder, "uploads"), import_node_path75.default.join(env.projectFolder, "attachments")] : [],
     ...env?.workspacePaths.flatMap((workspacePath) => [
-      import_node_path84.default.join(workspacePath, "uploads"),
-      import_node_path84.default.join(workspacePath, "attachments")
+      import_node_path75.default.join(workspacePath, "uploads"),
+      import_node_path75.default.join(workspacePath, "attachments")
     ]) ?? [],
     env?.artifactsFolder
   ].filter((prefix) => prefix !== void 0);
   if (allowedPrefixes.some((prefix) => isPathWithinPrefix2({ targetPath: canonicalPath, prefix }))) {
     return canonicalPath;
   }
-  const userAttachedPaths = (args.userAttachedVideoPaths ?? []).map((attachedPath) => import_node_path84.default.resolve(attachedPath));
+  const userAttachedPaths = (args.userAttachedVideoPaths ?? []).map((attachedPath) => import_node_path75.default.resolve(attachedPath));
   if (userAttachedPaths.includes(canonicalPath)) {
     return canonicalPath;
   }

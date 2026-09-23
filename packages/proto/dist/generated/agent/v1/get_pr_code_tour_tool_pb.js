@@ -1,16 +1,16 @@
-var __protoPackage87, __protoMessage384, GetPrCodeTourArgs, PrCodeTourRevisionSnapshot, GetPrCodeTourSuccess, GetPrCodeTourError, GetPrCodeTourResult, GetPrCodeTourToolCall;
+var __protoPackage88, __protoMessage384, GetPrCodeTourArgs, PrCodeTourRevisionSnapshot, GetPrCodeTourSuccess, GetPrCodeTourError, GetPrCodeTourResult, GetPrCodeTourToolCall;
 var init_get_pr_code_tour_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/get_pr_code_tour_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage87 = "agent.v1.";
+    __protoPackage88 = "agent.v1.";
     __protoMessage384 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage87;
+        return __protoPackage88;
       }
     };
     GetPrCodeTourArgs = class _GetPrCodeTourArgs extends __protoMessage384 {

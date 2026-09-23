@@ -16,6 +16,7 @@ var resumeOwnershipExtension = defineHostExtension({
     "agent-identity",
     "auth",
     "automations",
+    "experiments",
     "host-upgrade",
     "session",
     "telemetry",
@@ -26,6 +27,7 @@ var resumeOwnershipExtension = defineHostExtension({
     const identity = context2.deps["agent-identity"];
     const auth2 = context2.deps.auth;
     const automations = context2.deps.automations;
+    const experiments = context2.deps.experiments;
     const hostUpgrade = context2.deps["host-upgrade"];
     const sessionStore = context2.deps.session.store;
     const transcript = context2.deps.transcript;
@@ -35,10 +37,6 @@ var resumeOwnershipExtension = defineHostExtension({
       getAccessToken: auth2.getAccessToken,
       getTeamId: auth2.getTeamId,
       getMachineId: auth2.getMachineId
-    });
-    const migrationWindowDeadline = createDeadlinePolicy({
-      name: "sand-harness-migration-window",
-      timeoutMs: HARNESS_MIGRATION_WINDOW_MS
     });
     const migrationRetry = createRetryPolicy({
       name: "sand-harness-migration-notify",
@@ -57,7 +55,12 @@ var resumeOwnershipExtension = defineHostExtension({
       readOperation: () => hostUpgrade.readAppliedUpgradeOperation(),
       retainOperation: (operation) => hostUpgrade.retainAppliedUpgradeOperation(operation),
       releaseOperation: (operationId) => hostUpgrade.releaseAppliedUpgradeOperation(operationId),
-      runWindow: (operation, signal) => migrationWindowDeadline.run(async (deadlineSignal) => {
+      runWindow: (operation, signal) => createDeadlinePolicy({
+        name: "sand-harness-migration-window",
+        timeoutMs: experiments.getDynamicConfig("sand_working_state_warming_config", {
+          disableExposureLog: true
+        }).migrationHostWindowMs ?? HARNESS_MIGRATION_WINDOW_MS
+      }).run(async (deadlineSignal) => {
         let attempt = 1;
         let cutoverMayHaveStarted = false;
         const inventory = await summarizeBoxRooms({

@@ -7,10 +7,18 @@ function workingStateBlobHexIds(keys) {
 }
 var workingStateExportExtension = defineHostExtension({
   id: "working-state-export",
-  dependencies: ["box-store-sync", "experiments", "session", "telemetry", "transcript"],
+  dependencies: [
+    "agent-identity",
+    "box-store-sync",
+    "experiments",
+    "session",
+    "telemetry",
+    "transcript"
+  ],
   start: (context2) => startWorkingStateExport(context2)
 });
 function startWorkingStateExport(context2) {
+  const agentIdentity = context2.deps["agent-identity"];
   const boxStoreSync = context2.deps["box-store-sync"];
   const sessionStore = context2.deps.session.store;
   const metricsContext = createContext().with(metricsKey, context2.deps.telemetry.metrics);
@@ -106,7 +114,15 @@ function startWorkingStateExport(context2) {
     await warmer.dispose();
   });
   return {
-    exportAgent: (agentId, limits) => exporter.exportAgent(agentId, limits),
+    exportAgent: async (agentId, limits) => {
+      if (limits?.expectedServerId !== void 0 && agentHarness(agentId) !== "temporal") {
+        const profilePath = getSandProfilePath(sessionStore.getAgentDir(agentId));
+        if (readSandProfileServerId(profilePath) === null && readSandProfileFile(profilePath) !== null) {
+          await agentIdentity.adoptServerAgentById(agentId);
+        }
+      }
+      return await exporter.exportAgent(agentId, limits);
+    },
     readClientStateSeed,
     scheduleWarm: (agentId) => warmer.schedule(agentId)
   };

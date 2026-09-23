@@ -1,9 +1,10 @@
 var SAND_RUNNER_GATE_DEFAULTS = {
   sendMessageDeliveryOwed: true,
   dynamicTools: false,
-  stableDynamicToolCatalog: false,
+  memoryFactsInUserInfo: false,
   browserNavigationRecovery: false,
   browserUsePlaywright: false,
+  browserUseJev: false,
   userForm: false,
   formVault: false,
   draftExternalMessage: false,
@@ -13,6 +14,7 @@ var SAND_RUNNER_GATE_DEFAULTS = {
   mcpMultiAccount: false,
   unicodeTyping: false,
   cloudAgentsDisabledByTeam: false,
+  cloudAgentsUnavailableOnPlan: false,
   cloudAgentArtifacts: false,
   /**
    * Statsig `grok_bot_cloud_agent_durable_watch`, read per turn on both hosts.
@@ -41,7 +43,6 @@ var SAND_RUNNER_GATE_DEFAULTS = {
    * control so exposures come from the harness the inbox delivery runs on.
    */
   reducePeerChatter: false,
-  updateCommunication: false,
   /**
    * grok_bot_lean_send_to_user_description treatment: the SendToUser tool
    * description carries only the message shapes and parameters, and the
@@ -89,7 +90,6 @@ var SAND_RUNNER_GATE_DEFAULTS = {
    */
   agentEmail: false,
   agentEmailMultipleInboxes: false,
-  summaryTurnEndHold: false,
   generalizedSelfSummaryPrompt: false
 };
 var SAND_RUNNER_GATE_NAMES = Object.keys(SAND_RUNNER_GATE_DEFAULTS).filter(
@@ -117,9 +117,10 @@ function composeSandRunnerGates(wirings) {
 var SUBAGENT_GATE_POLICY = {
   sendMessageDeliveryOwed: "default",
   dynamicTools: "inherited",
-  stableDynamicToolCatalog: "inherited",
+  memoryFactsInUserInfo: "inherited",
   browserNavigationRecovery: "inherited",
   browserUsePlaywright: "inherited",
+  browserUseJev: "inherited",
   userForm: "default",
   formVault: "default",
   draftExternalMessage: "default",
@@ -129,6 +130,7 @@ var SUBAGENT_GATE_POLICY = {
   mcpMultiAccount: "default",
   unicodeTyping: "inherited",
   cloudAgentsDisabledByTeam: "inherited",
+  cloudAgentsUnavailableOnPlan: "inherited",
   cloudAgentArtifacts: "inherited",
   cloudAgentDurableWatch: "inherited",
   cloudAgentReplyModes: "inherited",
@@ -136,7 +138,6 @@ var SUBAGENT_GATE_POLICY = {
   cloudCanvasTools: "default",
   lessSubagentFanout: "default",
   reducePeerChatter: "inherited",
-  updateCommunication: "default",
   leanSendToUserDescription: "default",
   activeReactions: "default",
   frozenToolDescriptions: "default",
@@ -156,7 +157,6 @@ var SUBAGENT_GATE_POLICY = {
   connectedActivity: "default",
   agentEmail: "inherited",
   agentEmailMultipleInboxes: "inherited",
-  summaryTurnEndHold: "default",
   generalizedSelfSummaryPrompt: "inherited"
 };
 function pickSubagentGates(parent) {

@@ -231,6 +231,18 @@ var RedactedUpdates = {
       }
     };
   },
+  toolRequestsListed(privacyMode, callCount) {
+    return {
+      _privacyMode: privacyMode,
+      message: {
+        case: "toolRequestsListed",
+        value: {
+          _privacyMode: privacyMode,
+          callCount: Math.max(0, callCount)
+        }
+      }
+    };
+  },
   stepCompleted(privacyMode, stepId, stepDurationMs) {
     return {
       _privacyMode: privacyMode,

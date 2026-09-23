@@ -869,9 +869,15 @@ var init_background_composer_connect = __esm({
         },
         /**
          * Seed one to three server-proposed Projects for the calling user from
-         * fourteen days of cloud-agent header metadata. Current user only.
+         * fourteen days of cloud-agent header metadata, merged with any redacted
+         * local chat headers the request carries. Current user only. The server
+         * does not gate callers. The client decides who seeds and who sees staged
+         * Projects (its staged_project_seeding gate). The server's only switches
+         * are the generation kill switch and its shared per-minute cap.
          * Idempotent per campaign: a second call returns the first call's rows. A
          * run that proposes nothing writes nothing, so a later call may seed.
+         * Developers and Anysphere employees may set allow_existing_projects to
+         * seed despite already having Projects; the same generation and insert run.
          *
          * @generated from rpc aiserver.v1.BackgroundComposerService.SeedStagedProjects
          */
@@ -895,11 +901,28 @@ var init_background_composer_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * Retire one of the calling user's staged Projects: the row leaves
+         * ListStagedProjects for good and can no longer be promoted. Idempotent: a
+         * row that is already dismissed or already promoted is left as it is and
+         * the call succeeds. Another user's row or an unknown id is NotFound. The
+         * seed stays, so the campaign does not propose the row again.
+         *
+         * @generated from rpc aiserver.v1.BackgroundComposerService.DismissStagedProject
+         */
+        dismissStagedProject: {
+          name: "DismissStagedProject",
+          I: DismissStagedProjectRequest,
+          O: DismissStagedProjectResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * Dry run of SeedStagedProjects for the calling user. Runs the same
          * evidence-to-candidates generation and returns the parsed candidates with
          * diagnostics. Writes nothing, so it can be repeated to iterate on the
-         * prompt guidance. Developers and Anysphere employees only, behind the
-         * seeding gate. Never carries chat ids, prompt text, or raw model output.
+         * prompt guidance. Developers and Anysphere employees only. Unlike
+         * seeding, a caller who already has a Project or a seed row is not turned
+         * away; both are reported in the diagnostics.
+         * Never carries chat ids, prompt text, or raw model output.
          *
          * @generated from rpc aiserver.v1.BackgroundComposerService.PreviewStagedProjects
          */
@@ -1663,6 +1686,20 @@ var init_background_composer_connect = __esm({
           name: "GetRepositoryBranches",
           I: GetRepositoryBranchesRequest,
           O: GetRepositoryBranchesResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Get only a repository's default (base) branch. This is a lightweight
+         * single-forge lookup (one provider `getDefaultBranch` call) so callers such
+         * as the branch picker can show the base branch immediately, without waiting
+         * for the potentially very large paginated branch list.
+         *
+         * @generated from rpc aiserver.v1.BackgroundComposerService.GetRepositoryDefaultBranch
+         */
+        getRepositoryDefaultBranch: {
+          name: "GetRepositoryDefaultBranch",
+          I: GetRepositoryDefaultBranchRequest,
+          O: GetRepositoryDefaultBranchResponse,
           kind: MethodKind.Unary
         },
         /**

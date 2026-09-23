@@ -1,16 +1,16 @@
-var __protoPackage119, __protoMessage3115, LspSubgraphPosition, LspSubgraphRange, LspSubgraphContextItem, LspSubgraphFullContext;
+var __protoPackage120, __protoMessage3115, LspSubgraphPosition, LspSubgraphRange, LspSubgraphContextItem, LspSubgraphFullContext;
 var init_lsp_subgraph_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/lsp_subgraph_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage119 = "aiserver.v1.";
+    __protoPackage120 = "aiserver.v1.";
     __protoMessage3115 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage119;
+        return __protoPackage120;
       }
     };
     LspSubgraphPosition = class _LspSubgraphPosition extends __protoMessage3115 {

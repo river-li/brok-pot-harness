@@ -7,6 +7,17 @@ var reply = createCounter("grok_bot.cloud_agent.reply", {
   description: "CloudAgent reply action per requested mode (queue, steer, interrupt): accepted by the backend, queued_fallback when a steer landed as the agent's next run instead, or rejected by the backend",
   labelNames: ["harness", "mode", "outcome"]
 });
+var artifactAttached = createCounter("grok_bot.cloud_agent.artifact_attached", {
+  description: "A copied cloud agent artifact (a file under the bot's /workspace/cloud-agent-artifacts/<run>/ dir) went out as an image or attachment on a message the bot sent; one increment per attached file, the reply-side twin of artifacts_cited",
+  labelNames: ["harness", "kind"]
+});
+var artifactCompletionAttached = createCounter(
+  "grok_bot.cloud_agent.artifact_completion_attached",
+  {
+    description: "First message in a turn that attached at least one copied artifact of a given cloud agent run; one increment per run per turn, the reply-side twin of artifact_completion_copied",
+    labelNames: ["harness"]
+  }
+);
 function recordCloudAgentMetric(metrics2, record2) {
   if (metrics2 === void 0) return;
   try {
@@ -31,6 +42,19 @@ function recordCloudAgentWakeTurns(metrics2, wakes, outcome) {
         status: wake.status,
         wake_origin: wake.wakeOrigin
       });
+    }
+  });
+}
+function recordCloudAgentArtifactAttachments(metrics2, sources, attachedRunIds) {
+  recordCloudAgentMetric(metrics2, (scope) => {
+    for (const source of sources) {
+      const citation = cloudAgentArtifactCitation(source);
+      if (citation === null) continue;
+      artifactAttached.increment(scope.ctx, 1, { harness: scope.harness, kind: citation.kind });
+      if (!attachedRunIds.has(citation.bcId)) {
+        attachedRunIds.add(citation.bcId);
+        artifactCompletionAttached.increment(scope.ctx, 1, { harness: scope.harness });
+      }
     }
   });
 }

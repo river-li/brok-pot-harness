@@ -1,21 +1,21 @@
-var __protoPackage125, __protoMessage3120, LintDiscriminator, LintGenerator, LintDiscriminatorResult, AiLintBug, LogprobsLintPayload, AiLintRule;
+var __protoPackage126, __protoMessage3120, LintDiscriminator, LintGenerator, LintDiscriminatorResult, AiLintBug, LogprobsLintPayload, AiLintRule;
 var init_lint_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/lint_pb.js"() {
     "use strict";
     init_esm();
     init_utils_pb();
     init_compact();
-    __protoPackage125 = "aiserver.v1.";
+    __protoPackage126 = "aiserver.v1.";
     __protoMessage3120 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage125;
+        return __protoPackage126;
       }
     };
-    LintDiscriminator = /* @__PURE__ */ enumType(proto3, __protoPackage125, "LintDiscriminator", [[0, "UNSPECIFIED"], [1, "SPECIFIC_RULES"], [2, "COMPILE_ERRORS"], [3, "CHANGE_BEHAVIOR"], [5, "RELEVANCE"], [6, "USER_AWARENESS"], [7, "CORRECTNESS"], [8, "CHUNKING"], [9, "TYPO"], [10, "CONFIDENCE"], [11, "DISMISSED_BUGS"]], 1);
-    LintGenerator = /* @__PURE__ */ enumType(proto3, __protoPackage125, "LintGenerator", [[0, "UNSPECIFIED"], [1, "NAIVE"], [2, "COMMENT_PIPELINE"], [3, "SIMPLE_BUG"], [4, "SIMPLE_LINT_RULES"]], 1);
+    LintDiscriminator = /* @__PURE__ */ enumType(proto3, __protoPackage126, "LintDiscriminator", [[0, "UNSPECIFIED"], [1, "SPECIFIC_RULES"], [2, "COMPILE_ERRORS"], [3, "CHANGE_BEHAVIOR"], [5, "RELEVANCE"], [6, "USER_AWARENESS"], [7, "CORRECTNESS"], [8, "CHUNKING"], [9, "TYPO"], [10, "CONFIDENCE"], [11, "DISMISSED_BUGS"]], 1);
+    LintGenerator = /* @__PURE__ */ enumType(proto3, __protoPackage126, "LintGenerator", [[0, "UNSPECIFIED"], [1, "NAIVE"], [2, "COMMENT_PIPELINE"], [3, "SIMPLE_BUG"], [4, "SIMPLE_LINT_RULES"]], 1);
     LintDiscriminatorResult = class _LintDiscriminatorResult extends __protoMessage3120 {
       constructor(data) {
         super();

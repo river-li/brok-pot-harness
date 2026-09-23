@@ -13,8 +13,14 @@ function composeBoxRunnerGates(deps) {
     reducePeerChatter: temporalOnlyExperimentControlArm,
     leanSendToUserDescription: temporalOnlyExperimentControlArm,
     dynamicTools: gate("grok_bot_dynamic_tools"),
-    stableDynamicToolCatalog: gate("grok_bot_stable_dynamic_tool_catalog"),
+    memoryFactsInUserInfo: (options2) => experiments.memoryFactsInUserInfo({
+      disableExposureLog: options2?.logExposure !== true
+    }),
     browserNavigationRecovery: gate("sand_browser_navigation_recovery"),
+    browserUseJev: fixedGate(
+      false,
+      "the box host has no TypeSafe client, so the jev browser subagent runs only on the server harness"
+    ),
     browserUsePlaywright: (options2) => browserUsePlaywrightGate() || (options2?.logExposure === true ? experiments.offerBrowserUsePlaywright() : experiments.peekBrowserUsePlaywright()),
     userForm,
     formVault: gate("grok_bot_form_vault"),
@@ -25,6 +31,10 @@ function composeBoxRunnerGates(deps) {
     mcpMultiAccount: gate("mcp_multi_account"),
     unicodeTyping: gate("sand_computer_use_unicode_typing"),
     cloudAgentsDisabledByTeam: deps.isCloudAgentsDisabledByTeamAdmin,
+    cloudAgentsUnavailableOnPlan: fixedGate(
+      false,
+      "the box host has no membership read; the plan signal is Temporal-only and the server still refuses the launch"
+    ),
     cloudAgentArtifacts: gate("sand_cloud_agent_artifacts"),
     cloudAgentDurableWatch: gate("grok_bot_cloud_agent_durable_watch"),
     cloudAgentReplyModes: fixedGate(
@@ -34,10 +44,6 @@ function composeBoxRunnerGates(deps) {
     frozenToolDescriptions: fixedGate(
       false,
       "the box host has no tool-description snapshot store; frozen tool descriptions are Temporal-only"
-    ),
-    summaryTurnEndHold: fixedGate(
-      false,
-      "the box host keeps one runner across turns and never tears down an in-flight summary; the turn-end hold is Temporal-only"
     ),
     cloudAgentExchange: gate("sand_enable_bot2bot_cloud_agent_ui"),
     cloudCanvasTools: () => false,
@@ -58,7 +64,6 @@ function composeBoxRunnerGates(deps) {
     ),
     checkSubscriptionUsage: gate("grok_bot_check_subscription_usage"),
     connectedActivity: gate("sand_connected_activity_tool"),
-    updateCommunication: () => experiments.offerUpdateCommunication(),
     activeReactions: gate("grok_bot_active_reactions"),
     internalDetailsBoundary: gate("grok_bot_hide_internal_details"),
     agentDescription: () => !simplifiedRightPane(),

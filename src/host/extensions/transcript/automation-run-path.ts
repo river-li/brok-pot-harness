@@ -81,7 +81,7 @@ var AutomationRunPath = class {
     }
   }
   async runGroupAutomation(session, automation, events) {
-    const config2 = this.tm.groupChat.localGroupConfig((0, import_node_path157.dirname)(session.dbPath));
+    const config2 = this.tm.groupChat.localGroupConfig((0, import_node_path158.dirname)(session.dbPath));
     if (config2 == null) return;
     const isActive = this.tm.sessions.activeSession?.id === session.id;
     const entries = isActive ? getTranscript() : session.db.getTranscriptEntries();
@@ -317,6 +317,7 @@ ${spendGuardReminder}`);
                     automationId: automation.id,
                     automationName: automation.name,
                     ...untrustedWhenCarryingEventContent,
+                    ...execution == null ? {} : { turnUnitId: execution.id },
                     onRequestId: captureRequestId
                   });
                 }
@@ -330,6 +331,7 @@ ${spendGuardReminder}`);
                     ...wakeEmail === void 0 ? {} : { email: wakeEmail }
                   },
                   requestSource: "automation",
+                  ...execution == null ? {} : { turnUnitId: execution.id, turnUnitType: "wake" },
                   onRequestId: captureRequestId,
                   onPersistableRunStarted,
                   transientStreamRetry: {

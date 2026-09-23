@@ -17,7 +17,7 @@ function isManagedSkill(value) {
 function readManagedSkillsCache(cacheDir) {
   try {
     const parsed2 = JSON.parse(
-      (0, import_node_fs64.readFileSync)(getManagedSkillsCachePath(cacheDir), "utf8")
+      (0, import_node_fs66.readFileSync)(getManagedSkillsCachePath(cacheDir), "utf8")
     );
     if (typeof parsed2.fetchedAt !== "number" || !Number.isFinite(parsed2.fetchedAt) || !Array.isArray(parsed2.skills) || !parsed2.skills.every(isManagedSkill)) {
       return null;
@@ -35,8 +35,8 @@ function writeManagedSkillsCache(cacheDir, skills) {
     2
   )}
 `;
-  (0, import_node_fs64.mkdirSync)(cacheDir, { recursive: true, mode: AGENT_READABLE_SKILL_DIR_MODE });
-  (0, import_node_fs64.chmodSync)(cacheDir, AGENT_READABLE_SKILL_DIR_MODE);
+  (0, import_node_fs66.mkdirSync)(cacheDir, { recursive: true, mode: AGENT_READABLE_SKILL_DIR_MODE });
+  (0, import_node_fs66.chmodSync)(cacheDir, AGENT_READABLE_SKILL_DIR_MODE);
   writeFileAtomicSync(getManagedSkillsCachePath(cacheDir), body, {
     mode: AGENT_READABLE_SKILL_FILE_MODE
   });
@@ -44,18 +44,18 @@ function writeManagedSkillsCache(cacheDir, skills) {
 }
 function materializeManagedSkillFiles(cacheDir, skills) {
   const filesDir = (0, import_node_path112.join)(cacheDir, MANAGED_SKILL_FILES_DIRNAME);
-  (0, import_node_fs64.mkdirSync)(filesDir, { recursive: true, mode: AGENT_READABLE_SKILL_DIR_MODE });
-  (0, import_node_fs64.chmodSync)(filesDir, AGENT_READABLE_SKILL_DIR_MODE);
+  (0, import_node_fs66.mkdirSync)(filesDir, { recursive: true, mode: AGENT_READABLE_SKILL_DIR_MODE });
+  (0, import_node_fs66.chmodSync)(filesDir, AGENT_READABLE_SKILL_DIR_MODE);
   const keep = new Set(skills.map((skill) => skill.id));
-  for (const entry of (0, import_node_fs64.readdirSync)(filesDir, { withFileTypes: true })) {
+  for (const entry of (0, import_node_fs66.readdirSync)(filesDir, { withFileTypes: true })) {
     if (!keep.has(entry.name)) {
-      (0, import_node_fs64.rmSync)((0, import_node_path112.join)(filesDir, entry.name), { recursive: true, force: true });
+      (0, import_node_fs66.rmSync)((0, import_node_path112.join)(filesDir, entry.name), { recursive: true, force: true });
     }
   }
   for (const skill of skills) {
     const skillDir2 = (0, import_node_path112.join)(filesDir, skill.id);
-    (0, import_node_fs64.mkdirSync)(skillDir2, { recursive: true, mode: AGENT_READABLE_SKILL_DIR_MODE });
-    (0, import_node_fs64.chmodSync)(skillDir2, AGENT_READABLE_SKILL_DIR_MODE);
+    (0, import_node_fs66.mkdirSync)(skillDir2, { recursive: true, mode: AGENT_READABLE_SKILL_DIR_MODE });
+    (0, import_node_fs66.chmodSync)(skillDir2, AGENT_READABLE_SKILL_DIR_MODE);
     const content = serializeSkillFile({
       name: skill.name,
       description: skill.description,

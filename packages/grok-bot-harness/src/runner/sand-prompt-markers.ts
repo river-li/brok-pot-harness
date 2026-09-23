@@ -84,12 +84,12 @@ var SINGLE_LINE_NOTE_RES = [
 var MENTIONED_AGENTS_BLOCK_OPEN = "[Agents mentioned in this message";
 function stripOneLeadingNote(body) {
   const newlineIndex = body.indexOf("\n");
-  const firstLine = (newlineIndex === -1 ? body : body.slice(0, newlineIndex)).trimEnd();
-  if (SINGLE_LINE_NOTE_RES.some((re3) => re3.test(firstLine))) {
+  const firstLine2 = (newlineIndex === -1 ? body : body.slice(0, newlineIndex)).trimEnd();
+  if (SINGLE_LINE_NOTE_RES.some((re3) => re3.test(firstLine2))) {
     return newlineIndex === -1 ? "" : body.slice(newlineIndex + 1).trimStart();
   }
   if (newlineIndex === -1) return void 0;
-  if (firstLine.startsWith(MENTIONED_AGENTS_BLOCK_OPEN)) {
+  if (firstLine2.startsWith(MENTIONED_AGENTS_BLOCK_OPEN)) {
     const blockClose = body.match(/\n\][ \t]*(?:\n|$)/);
     if (blockClose?.index === void 0) return void 0;
     return body.slice(blockClose.index + blockClose[0].length).trimStart();

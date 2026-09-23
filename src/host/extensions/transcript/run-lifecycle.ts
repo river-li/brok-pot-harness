@@ -258,7 +258,7 @@ var RunLifecycle = class {
       const existing = this.syntheticTurnIdentities.get(session.id);
       if (existing == null) {
         this.syntheticTurnIdentities.set(session.id, {
-          requestId: (0, import_node_crypto74.randomUUID)(),
+          requestId: (0, import_node_crypto75.randomUUID)(),
           messageIds: /* @__PURE__ */ new Set([options2.initiationMessageId]),
           initiatedAtMs: options2.initiatedAtMs ?? Date.now()
         });

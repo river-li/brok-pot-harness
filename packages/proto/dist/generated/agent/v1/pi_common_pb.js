@@ -1,16 +1,16 @@
-var __protoPackage73, __protoMessage370, PiTruncation;
+var __protoPackage74, __protoMessage370, PiTruncation;
 var init_pi_common_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_common_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage73 = "agent.v1.";
+    __protoPackage74 = "agent.v1.";
     __protoMessage370 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage73;
+        return __protoPackage74;
       }
     };
     PiTruncation = class _PiTruncation extends __protoMessage370 {

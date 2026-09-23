@@ -166,3 +166,14 @@ var SummarizeActionHandler = class {
     return await stateHandler.computeNewStructure(ctx);
   }
 };
+function settledUnlessAborted(promise2, signal) {
+  if (signal.aborted)
+    return Promise.resolve(void 0);
+  return new Promise((resolve29) => {
+    const onAbort = () => resolve29(void 0);
+    signal.addEventListener("abort", onAbort, { once: true });
+    promise2.then(resolve29, () => resolve29(void 0)).finally(() => {
+      signal.removeEventListener("abort", onAbort);
+    });
+  });
+}

@@ -1,16 +1,16 @@
-var __protoPackage60, __protoMessage357, AwaitArgs, AwaitTaskComplete, AwaitTaskStillRunning, AwaitError, AwaitSuccess, AwaitResult, AwaitToolCall;
+var __protoPackage61, __protoMessage357, AwaitArgs, AwaitTaskComplete, AwaitTaskStillRunning, AwaitError, AwaitSuccess, AwaitResult, AwaitToolCall;
 var init_await_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/await_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage60 = "agent.v1.";
+    __protoPackage61 = "agent.v1.";
     __protoMessage357 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage60;
+        return __protoPackage61;
       }
     };
     AwaitArgs = class _AwaitArgs extends __protoMessage357 {

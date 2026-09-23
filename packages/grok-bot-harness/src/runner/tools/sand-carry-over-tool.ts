@@ -33,9 +33,9 @@ var carryOverParameters = external_exports.object({
     `Up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} more plugins from the inventory the team bot would likely need next, each with its reason; they come unticked under the picks, and none is fine.`
   )
 });
-function firstPickOfEachName(picks) {
+function firstPickOfEachName(picks2) {
   const seen = /* @__PURE__ */ new Set();
-  return picks.filter((pick2) => {
+  return picks2.filter((pick2) => {
     const key = pick2.name.toLowerCase();
     if (seen.has(key)) return false;
     seen.add(key);

@@ -1,16 +1,16 @@
-var __protoPackage52, __protoMessage349, SetupVmEnvironmentArgs, SetupVmEnvironmentResult, SetupVmEnvironmentSuccess, SetupVmEnvironmentToolCall;
+var __protoPackage53, __protoMessage349, SetupVmEnvironmentArgs, SetupVmEnvironmentResult, SetupVmEnvironmentSuccess, SetupVmEnvironmentToolCall;
 var init_setup_vm_environment_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/setup_vm_environment_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage52 = "agent.v1.";
+    __protoPackage53 = "agent.v1.";
     __protoMessage349 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage52;
+        return __protoPackage53;
       }
     };
     SetupVmEnvironmentArgs = class _SetupVmEnvironmentArgs extends __protoMessage349 {

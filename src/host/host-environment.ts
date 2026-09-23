@@ -80,7 +80,6 @@ function readSandHostEnvironment(env) {
     egressTunnelEnabled: env.SAND_EGRESS_TUNNEL_ENABLED === "1",
     hostDevErrorDetail: env.SAND_HOST_DEV_ERROR_DETAIL === "1",
     lessSubagentFanoutExperimentOverride: env.SAND_LESS_SUBAGENT_FANOUT_EXPERIMENT_OVERRIDE,
-    updateCommunicationExperimentOverride: env.SAND_UPDATE_COMMUNICATION_EXPERIMENT_OVERRIDE,
     browserUsePlaywrightExperimentOverride: env.SAND_BROWSER_USE_PLAYWRIGHT_EXPERIMENT_OVERRIDE,
     hostLogFile: trimmedNonEmpty(env.SAND_HOST_LOG_FILE),
     hostBundleS3BaseUrl: hostBundleBaseUrlOverride(env.SAND_HOST_BUNDLE_S3_BASE_URL),

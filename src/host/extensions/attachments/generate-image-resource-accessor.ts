@@ -1,4 +1,4 @@
-var import_node_fs48 = require("node:fs");
+var import_node_fs49 = require("node:fs");
 var import_node_path90 = require("node:path");
 init_read_exec_pb();
 init_write_exec_pb();
@@ -20,8 +20,8 @@ function createSandGenerateImageResourceAccessor(agentDir) {
         });
       }
       const bytes = Buffer.from(args.fileBytes);
-      await import_node_fs48.promises.mkdir((0, import_node_path90.dirname)(target), { recursive: true });
-      await import_node_fs48.promises.writeFile(target, bytes);
+      await import_node_fs49.promises.mkdir((0, import_node_path90.dirname)(target), { recursive: true });
+      await import_node_fs49.promises.writeFile(target, bytes);
       return new WriteResult({
         result: {
           case: "success",
@@ -45,7 +45,7 @@ function createSandGenerateImageResourceAccessor(agentDir) {
         });
       }
       try {
-        const data = await import_node_fs48.promises.readFile(resolved);
+        const data = await import_node_fs49.promises.readFile(resolved);
         return new ReadResult({
           result: {
             case: "success",

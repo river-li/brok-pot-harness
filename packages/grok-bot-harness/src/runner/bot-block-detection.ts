@@ -206,7 +206,8 @@ function classifyBotBlockPage(page) {
         family: signature.family,
         confidence: signature.confidence,
         blockedHost: hostname3.slice(0, MAX_BLOCKED_HOST_LENGTH),
-        blockedUrl: telemetrySafePageUrl(url2)
+        blockedUrl: telemetrySafePageUrl(url2),
+        siteSection: siteSectionForUrl(url2)
       };
     }
   }
@@ -295,7 +296,11 @@ function withBotBlockDetection(auditor, onHit, lookupSigned = () => void 0, onRe
       };
       episode.url = record2.action.url;
       episodesByPageId.set(pageId, episode);
-      const stamped = { ...signed, wallEpisodeId: episode.episodeId };
+      const stamped = {
+        ...signed,
+        wallEpisodeId: episode.episodeId,
+        wallEpisodeStarted: episode !== existing
+      };
       noteTurnBotBlock({
         conversationId: record2.agentId,
         hit: stamped,

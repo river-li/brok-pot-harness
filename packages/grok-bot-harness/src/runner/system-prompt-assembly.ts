@@ -1,6 +1,7 @@
 function createSystemPromptAssembly(deps) {
   let inMemoryProfilePromptSnapshot = null;
   let lastRenderedSectionShas = [];
+  let lastRenderedMemoryContext;
   const hasParentPromptParity = !deps.isSubagentRunner || deps.isParentMediatedAutomationSubagent;
   function resolveProfileForPrompt() {
     const provider = deps.agentProfileProvider();
@@ -105,69 +106,175 @@ function createSystemPromptAssembly(deps) {
   function renderMemoryLive() {
     const store = deps.memoryStore();
     if (store == null) return null;
-    const renderLive = () => {
-      const agentRecall = store.recall(MEMORY_RECENT_PROMPT_LIMIT);
-      const agentRender = renderMemorySystemPrompt(agentRecall, store.getLocation(), {
-        conversationMemory: store.memoryScopes
+    const agentRecall = store.recall(MEMORY_RECENT_PROMPT_LIMIT);
+    const controlParts = [];
+    const policyParts = [];
+    const factParts = [];
+    const userMemory = deps.userMemory();
+    let hasFacts = agentRecall.profile.length > 0 || agentRecall.recent.length > 0;
+    let otherAgentMemoryRender = "";
+    let otherAgentMemoryFingerprint;
+    if (userMemory != null) {
+      const userRecall = userMemory.recall({
+        profileLimit: MEMORY_USER_PROFILE_PROMPT_LIMIT,
+        recentLimit: MEMORY_USER_RECENT_PROMPT_LIMIT
       });
-      let hasFacts = agentRecall.profile.length > 0 || agentRecall.recent.length > 0;
-      const parts = [];
-      const userMemory = deps.userMemory();
-      if (userMemory != null) {
-        const userRecall = userMemory.recall({
-          profileLimit: MEMORY_USER_PROFILE_PROMPT_LIMIT,
-          recentLimit: MEMORY_USER_RECENT_PROMPT_LIMIT
-        });
-        const userRender = renderUserMemorySystemPrompt(userRecall, {
-          userMemoryDir: userMemory.getLocation(),
-          ownShardDir: userMemory.getOwnShardLocation()
-        });
-        if (userRender.length > 0) parts.push(userRender);
-        if (userRecall.profile.length > 0 || userRecall.recent.length > 0) {
-          hasFacts = true;
-        }
+      const userContext = {
+        userMemoryDir: userMemory.getLocation(),
+        ownShardDir: userMemory.getOwnShardLocation()
+      };
+      controlParts.push(renderUserMemorySystemPrompt(userRecall, userContext));
+      policyParts.push(renderUserMemorySystemPolicyPrompt(userContext));
+      factParts.push(renderUserMemoryFactSnapshot(userRecall, userContext));
+      otherAgentMemoryFingerprint = userRecall.otherAgentsFingerprint;
+      if (userRecall.otherAgents !== void 0 && (userRecall.otherAgents.profile.length > 0 || userRecall.otherAgents.recent.length > 0)) {
+        otherAgentMemoryRender = renderUserMemoryFactSnapshot(userRecall.otherAgents, userContext);
       }
-      if (agentRender.length > 0) parts.push(agentRender);
-      return { render: parts.join("\n\n"), hasFacts };
+      if (userRecall.profile.length > 0 || userRecall.recent.length > 0) {
+        hasFacts = true;
+      }
+    }
+    const agentContext = { conversationMemory: store.memoryScopes };
+    controlParts.push(renderMemorySystemPrompt(agentRecall, store.getLocation(), agentContext));
+    policyParts.push(renderMemorySystemPolicyPrompt(store.getLocation(), agentContext));
+    factParts.push(renderMemoryFactSnapshot(agentRecall, store.getLocation(), agentContext));
+    return {
+      control: controlParts.join("\n\n"),
+      policy: policyParts.join("\n\n"),
+      facts: factParts.join("\n\n"),
+      hasFacts,
+      otherAgentMemoryRender,
+      otherAgentMemoryFingerprint
     };
-    return renderLive();
   }
-  function memoryLiveOrNull() {
+  function memoryFactsLiveOrNull() {
     const live = renderMemoryLive();
-    return live != null && live.render.length > 0 ? live.render : null;
+    return live != null && live.facts.length > 0 ? live.facts : null;
   }
-  function memoryPinUnlessUserTierLost(pin) {
-    if (pin === null || deps.userMemory() != null) return pin;
-    return pin.render.includes(USER_MEMORY_PROMPT_HEADER) ? null : pin;
+  function memoryControlLiveOrNull() {
+    const live = renderMemoryLive();
+    return live != null && live.control.length > 0 ? live.control : null;
+  }
+  function memoryFactsPin(pin) {
+    if (pin === null) return null;
+    const legacyCombinedRender = pin.render.startsWith(USER_MEMORY_PROMPT_HEADER) || pin.render.startsWith("Memory: durable facts");
+    if (legacyCombinedRender) return null;
+    if (deps.userMemory() != null) return pin;
+    const containsUserTier = pin.render.includes("About the user (shared):") || pin.render.includes("Recently (shared):") || pin.render.includes("No shared facts recorded yet.");
+    return containsUserTier ? null : pin;
+  }
+  function memoryControlPin(pin) {
+    if (pin === null) return null;
+    const combinedRender = pin.render.startsWith(USER_MEMORY_PROMPT_HEADER) || pin.render.startsWith("Memory: durable facts");
+    if (!combinedRender) return null;
+    if (deps.userMemory() != null) return pin;
+    return pin.render.startsWith(USER_MEMORY_PROMPT_HEADER) ? null : pin;
+  }
+  function memoryFactsInUserInfo(logExposure = false) {
+    if (deps.isBoxScopedSubagent()) return false;
+    return deps.gates.memoryFactsInUserInfo(logExposure ? { logExposure: true } : void 0);
   }
   function pinnedSection(store, name17) {
     const pin = store.getPromptSectionSnapshot(name17);
-    if (name17 === "memory") return memoryPinUnlessUserTierLost(pin);
+    if (name17 === "memory") {
+      return memoryFactsInUserInfo() ? memoryFactsPin(pin) : memoryControlPin(pin);
+    }
     if (name17 === "tool_notes" && pin?.render === "") return null;
     return pin;
   }
-  function getMemorySection() {
-    if (deps.memoryStore() == null) return null;
-    if (deps.promptSectionSnapshots() !== void 0) return frozen("memory", memoryLiveOrNull);
+  function withOtherAgentMemorySnapshot(snapshot, live) {
+    if (live.otherAgentMemoryFingerprint === void 0) return snapshot;
+    return {
+      ...snapshot,
+      otherAgentMemoryRender: live.otherAgentMemoryRender,
+      otherAgentMemoryFingerprint: live.otherAgentMemoryFingerprint
+    };
+  }
+  function resolveMemoryFacts(live) {
+    const promptSnapshots = deps.promptSectionSnapshots();
+    if (promptSnapshots !== void 0) {
+      const stored2 = promptSnapshots.getPromptSectionSnapshot("memory");
+      const snapshot2 = memoryFactsPin(stored2);
+      const resolved2 = resolveFrozenPromptSection({
+        snapshot: snapshot2,
+        compactionEpoch: deps.compactionEpoch(),
+        renderLive: () => live.facts
+      });
+      if (resolved2.snapshotToPersist !== void 0) {
+        promptSnapshots.setPromptSectionSnapshot(
+          "memory",
+          withOtherAgentMemorySnapshot(resolved2.snapshotToPersist, live)
+        );
+      } else if (snapshot2 !== stored2 && snapshot2 !== null) {
+        promptSnapshots.setPromptSectionSnapshot("memory", snapshot2);
+      }
+      return resolved2.render ?? "";
+    }
     const snapshots = deps.memorySnapshots();
-    const renderLive = () => renderMemoryLive() ?? { render: "", hasFacts: false };
     if (snapshots == null || !isMemoryFreezeEnabled()) {
-      const { render: render2 } = renderLive();
-      return render2.length > 0 ? render2 : null;
+      return live.facts;
     }
     const stored = snapshots.getMemoryPromptSnapshot();
-    const snapshot = memoryPinUnlessUserTierLost(stored);
+    const snapshot = memoryFactsPin(stored);
     const resolved = resolveFrozenMemoryPrompt({
       snapshot,
       compactionEpoch: deps.compactionEpoch(),
-      renderLive
+      renderLive: () => ({ render: live.facts, hasFacts: live.hasFacts })
     });
     if (resolved.snapshotToPersist != null) {
       snapshots.setMemoryPromptSnapshot(resolved.snapshotToPersist);
     } else if (snapshot !== stored) {
       snapshots.clearMemoryPromptSnapshot();
     }
-    return resolved.render.length > 0 ? resolved.render : null;
+    return resolved.render;
+  }
+  function resolveMemoryControl(live) {
+    const promptSnapshots = deps.promptSectionSnapshots();
+    if (promptSnapshots !== void 0) {
+      const stored2 = promptSnapshots.getPromptSectionSnapshot("memory");
+      const snapshot2 = memoryControlPin(stored2);
+      const resolved2 = resolveFrozenPromptSection({
+        snapshot: snapshot2,
+        compactionEpoch: deps.compactionEpoch(),
+        renderLive: () => live.control
+      });
+      if (resolved2.snapshotToPersist !== void 0) {
+        promptSnapshots.setPromptSectionSnapshot(
+          "memory",
+          withOtherAgentMemorySnapshot(resolved2.snapshotToPersist, live)
+        );
+      }
+      return resolved2.render ?? "";
+    }
+    const snapshots = deps.memorySnapshots();
+    if (snapshots == null || !isMemoryFreezeEnabled()) {
+      return live.control;
+    }
+    const stored = snapshots.getMemoryPromptSnapshot();
+    const snapshot = memoryControlPin(stored);
+    const resolved = resolveFrozenMemoryPrompt({
+      snapshot,
+      compactionEpoch: deps.compactionEpoch(),
+      renderLive: () => ({ render: live.control, hasFacts: live.hasFacts })
+    });
+    if (resolved.snapshotToPersist != null) {
+      snapshots.setMemoryPromptSnapshot(resolved.snapshotToPersist);
+    } else if (snapshot !== stored) {
+      snapshots.clearMemoryPromptSnapshot();
+    }
+    return resolved.render;
+  }
+  function getMemorySections() {
+    const live = renderMemoryLive();
+    if (live === null) return null;
+    if (!memoryFactsInUserInfo(true)) {
+      return { system: resolveMemoryControl(live) };
+    }
+    const facts = resolveMemoryFacts(live);
+    return {
+      system: live.policy,
+      ...facts.length > 0 ? { userInfo: renderMemoryContextBlock(facts) } : {}
+    };
   }
   function frozen(name17, renderLive) {
     const store = deps.promptSectionSnapshots();
@@ -188,7 +295,8 @@ function createSystemPromptAssembly(deps) {
       case "timezone":
         return renderTimeZoneSectionLive();
       case "memory":
-        return deps.memoryStore() == null ? null : memoryLiveOrNull();
+        if (deps.memoryStore() == null) return null;
+        return memoryFactsInUserInfo() ? memoryFactsLiveOrNull() : memoryControlLiveOrNull();
       case "automations":
         return renderAutomationsLive(skillifyEnabled());
       case "agent_directory":
@@ -197,6 +305,8 @@ function createSystemPromptAssembly(deps) {
         return deps.mcpCustomInstructionsSection();
       case "tool_notes":
         return renderToolNotesLive();
+      case "related_conversations":
+        return null;
     }
   }
   function renderToolNotesLive() {
@@ -213,7 +323,7 @@ function createSystemPromptAssembly(deps) {
     const updates = [];
     for (const name17 of SAND_FROZEN_PROMPT_SECTIONS_WITH_TURN_NOTES) {
       if (name17 === "tool_notes" && renderToolNotesLive() === null) continue;
-      const update = resolveFrozenPromptSectionUpdate({
+      const update = name17 === "related_conversations" ? resolveRelatedConversationsSection(store)?.update ?? null : resolveFrozenPromptSectionUpdate({
         name: name17,
         snapshot: pinnedSection(store, name17),
         compactionEpoch,
@@ -221,13 +331,40 @@ function createSystemPromptAssembly(deps) {
       });
       if (update !== null) updates.push(update);
     }
-    const text2 = renderFrozenPromptSectionUpdates(updates);
-    if (text2 === null) return null;
+    const memorySnapshot = pinnedSection(store, "memory");
+    const memoryLive = renderMemoryLive();
+    let peerMemoryUpdateText = null;
+    let memorySnapshotToPersist;
+    if (memoryFactsInUserInfo()) {
+      const memoryUpdate = resolveOtherAgentMemoryPromptUpdate({
+        snapshot: memorySnapshot,
+        compactionEpoch,
+        liveRender: memoryLive?.otherAgentMemoryRender ?? "",
+        liveFingerprint: memoryLive?.otherAgentMemoryFingerprint
+      });
+      memorySnapshotToPersist = memoryUpdate.snapshotToPersist;
+      if (memoryUpdate.changed && memoryLive !== null) {
+        peerMemoryUpdateText = renderOtherAssistantMemoryUpdate(memoryLive.otherAgentMemoryRender);
+      }
+    } else {
+      const memoryUpdate = resolveFrozenPromptSectionUpdate({
+        name: "memory",
+        snapshot: memorySnapshot,
+        compactionEpoch,
+        live: memoryLive?.control ?? null
+      });
+      if (memoryUpdate !== null) updates.push(memoryUpdate);
+    }
+    const text2 = [renderFrozenPromptSectionUpdates(updates), peerMemoryUpdateText].filter((part) => part !== null).join("\n\n");
+    if (text2.length === 0 && memorySnapshotToPersist === void 0) return null;
     return {
       text: text2,
       commit: () => {
         for (const update of updates) {
           store.setPromptSectionSnapshot(update.name, update.snapshotToPersist);
+        }
+        if (memorySnapshotToPersist !== void 0) {
+          store.setPromptSectionSnapshot("memory", memorySnapshotToPersist);
         }
       }
     };
@@ -355,13 +492,15 @@ function createSystemPromptAssembly(deps) {
   function getBaseSystemPrompt(sendToUserEndTurnEnabled, useSkillify, baseOverride) {
     if (deps.isSystemPromptOverridden) return deps.basePrompt;
     if (baseOverride !== void 0) return baseOverride;
-    const cloudAgentsEnabled = !deps.gates.cloudAgentsDisabledByTeam();
+    const cloudAgentsDisabledByTeam = deps.gates.cloudAgentsDisabledByTeam();
+    const cloudAgentsUnavailableOnPlan = !cloudAgentsDisabledByTeam && deps.gates.cloudAgentsUnavailableOnPlan();
+    const cloudAgentsEnabled = !cloudAgentsDisabledByTeam && !cloudAgentsUnavailableOnPlan;
+    const cloudAgentsUnavailableReason = cloudAgentsUnavailableOnPlan ? "plan" : "team";
     const dynamicToolsEnabled = usesDynamicToolNamespaces();
     const voiceCallEnabled = deps.gates.voiceCall();
     const cloudAgentArtifactsEnabled = deps.gates.cloudAgentArtifacts();
     const cloudAgentDurableWatchEnabled = deps.gates.cloudAgentDurableWatch();
     const cloudAgentReplyModesEnabled = deps.gates.cloudAgentReplyModes();
-    const updateCommunication = deps.gates.updateCommunication();
     const hostSurfaces = {
       userComputer: deps.hasUserComputer?.() !== false,
       generateImage: deps.hasGenerateImage?.() !== false
@@ -371,6 +510,7 @@ function createSystemPromptAssembly(deps) {
     if (deps.isParentMediatedAutomationSubagent) {
       return sandAutomationSubagentSystemPromptVariant({
         cloudAgentsEnabled,
+        cloudAgentsUnavailableReason,
         dynamicToolsEnabled,
         credentialFillEnabled: deps.credentialFillEnabled === true,
         voiceCallEnabled,
@@ -378,7 +518,6 @@ function createSystemPromptAssembly(deps) {
         cloudAgentDurableWatchEnabled,
         cloudAgentReplyModesEnabled,
         hostSurfaces,
-        updateCommunication,
         agentEmailEnabled,
         agentEmailMultipleInboxesEnabled
       });
@@ -386,6 +525,7 @@ function createSystemPromptAssembly(deps) {
     return sandBaseSystemPromptVariant({
       sendToUserEndTurnEnabled,
       cloudAgentsEnabled,
+      cloudAgentsUnavailableReason,
       dynamicToolsEnabled,
       credentialFillEnabled: deps.credentialFillEnabled === true,
       voiceCallEnabled,
@@ -394,8 +534,8 @@ function createSystemPromptAssembly(deps) {
       cloudAgentReplyModesEnabled,
       hostSurfaces,
       skillifyEnabled: useSkillify,
-      updateCommunication,
       activeReactions: deps.gates.activeReactions(),
+      jevBrowserUseEnabled: deps.gates.browserUseJev() && !deps.isSubagentRunner,
       agentEmailEnabled,
       agentEmailMultipleInboxesEnabled
     });
@@ -414,6 +554,24 @@ function createSystemPromptAssembly(deps) {
     if (sessions == null || sessions.length === 0) return null;
     const rendered = renderActiveSessionsDigest(sessions);
     return rendered.length > 0 ? rendered : null;
+  }
+  function resolveRelatedConversationsSection(store) {
+    if (!hasParentPromptParity || deps.isSystemPromptOverridden) return void 0;
+    if (deps.relatedConversations === void 0) return void 0;
+    return resolveRelatedConversationsPromptSection({
+      snapshot: store === void 0 ? null : pinnedSection(store, "related_conversations"),
+      compactionEpoch: deps.compactionEpoch(),
+      live: deps.relatedConversations()
+    });
+  }
+  function getRelatedConversationsSection() {
+    const store = deps.promptSectionSnapshots();
+    const resolved = resolveRelatedConversationsSection(store);
+    if (resolved === void 0) return null;
+    if (store !== void 0 && resolved.snapshotToPersist !== void 0) {
+      store.setPromptSectionSnapshot("related_conversations", resolved.snapshotToPersist);
+    }
+    return resolved.render;
   }
   function renderSystemPrompt(profileSnapshot, sendToUserEndTurnEnabled = false, conservativeExecutorReuse = !deps.isSystemPromptOverridden && deps.gates.lessSubagentFanout(), useSkillify = skillifyEnabled(), baseOverride = readBaseSystemPromptOverride()) {
     const basePrompt = getBaseSystemPrompt(
@@ -452,16 +610,18 @@ function createSystemPromptAssembly(deps) {
     push("internal_details_boundary", getInternalDetailsBoundaryLine());
     push("mcp_multi_account", getMcpMultiAccountSection());
     push("timezone", getTimeZoneSection());
-    push("memory", getMemorySection());
+    const memory = getMemorySections();
+    lastRenderedMemoryContext = memory?.userInfo;
+    push("memory", memory?.system ?? null);
     push("current_session", getCurrentSessionSection());
     push("active_sessions", getActiveSessionsSection());
+    push("related_conversations", getRelatedConversationsSection());
     push("automations", getAutomationsSection(useSkillify));
     push("skills", getSkillsSection(useSkillify));
     push("channels", getChannelsSection(useSkillify));
     push("agent_directory", getAgentDirectorySection());
     push("mcp_instructions", frozen("mcp_instructions", deps.mcpCustomInstructionsSection));
     push("tool_notes", getToolNotesSection());
-    push("mcp_status", deps.mcpDiscoveryStatusSection());
     push("remote_box", deps.remoteBoxSection());
     push("bot_secrets", renderBotSecretsSection(deps.botSecrets()));
     push("computer", deps.computerSection(useSkillify));
@@ -487,6 +647,7 @@ function createSystemPromptAssembly(deps) {
   return {
     getSystemPrompt: (profileSnapshot) => renderSystemPrompt(profileSnapshot),
     getLastRenderedSectionShas: () => lastRenderedSectionShas,
+    getMemoryContextForUserInfo: () => lastRenderedMemoryContext,
     getFrozenSectionUpdatesForTurn,
     createSystemPromptGeneratorForRun,
     prepareAgentProfilePromptSnapshot,

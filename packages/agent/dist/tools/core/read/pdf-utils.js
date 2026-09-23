@@ -1,5 +1,5 @@
-var import_node_os21 = __toESM(require("node:os"), 1);
-var import_node_path89 = __toESM(require("node:path"), 1);
+var import_node_os20 = __toESM(require("node:os"), 1);
+var import_node_path80 = __toESM(require("node:path"), 1);
 var import_piscina2 = require("piscina");
 var PDF_HEADER = [37, 80, 68, 70];
 var PDF_EXTENSION_REGEX = /\.pdf$/i;
@@ -31,7 +31,7 @@ function getPdfWorkerPool() {
   if (_pdfWorkerPool === void 0) {
     _pdfWorkerPool = new import_piscina2.Piscina({
       minThreads: 1,
-      maxThreads: Math.max(1, Math.floor(import_node_os21.default.availableParallelism() / 4)),
+      maxThreads: Math.max(1, Math.floor(import_node_os20.default.availableParallelism() / 4)),
       execArgv: extension2 === "ts" ? ["--experimental-strip-types"] : void 0,
       env: sanitizedEnvForWorkers2
     });
@@ -46,7 +46,7 @@ async function extractPdfText(bytes) {
     return result2.text;
   }
   const result = await getPdfWorkerPool().run(params, {
-    filename: import_node_path89.default.join(workerDir2, `./pdf-worker.${extension2}`)
+    filename: import_node_path80.default.join(workerDir2, `./pdf-worker.${extension2}`)
   });
   return result.text;
 }

@@ -45,11 +45,11 @@ async function readTeachQueueKeyFile(keyPath) {
   }
 }
 async function loadTeachQueueKey() {
-  const keyPath = (0, import_node_path145.join)(getSandRootDir(), TEACH_QUEUE_KEY_FILENAME);
+  const keyPath = (0, import_node_path146.join)(getSandRootDir(), TEACH_QUEUE_KEY_FILENAME);
   const raw = await readTeachQueueKeyFile(keyPath);
   const existing = raw == null ? null : parseTeachQueueKey(raw);
   if (existing != null) return existing;
-  const key = (0, import_node_crypto67.randomBytes)(32);
+  const key = (0, import_node_crypto68.randomBytes)(32);
   await (0, import_promises70.mkdir)(getSandRootDir(), { recursive: true });
   await (0, import_promises70.writeFile)(keyPath, JSON.stringify({ version: 1, keyHex: key.toString("hex") }), {
     mode: 384
@@ -116,7 +116,7 @@ function schedulePendingRecovery({
   whenReady,
   subscribeToRenewal,
   signal,
-  log: log4
+  log: log5
 }) {
   let recovered = false;
   let inFlight;
@@ -135,7 +135,7 @@ function schedulePendingRecovery({
         recovered = true;
       } catch (error42) {
         if (!signal.aborted) {
-          log4(
+          log5(
             `teach-recording: pending delivery recovery failed (${errorLogTag(error42)}); retrying after credential renewal`
           );
         }

@@ -106,7 +106,7 @@ function toPluginSummary(view, effectivePlugins, servers) {
   };
 }
 function createHostMcp(deps) {
-  const log4 = deps.log ?? ((message) => console.log(`[sand:mcp] ${message}`));
+  const log5 = deps.log ?? ((message) => console.log(`[sand:mcp] ${message}`));
   const manager = new SandMcpManager({
     includeBuiltins: false,
     getMachineId: deps.getMachineId,
@@ -248,6 +248,7 @@ function createHostMcp(deps) {
     }),
     getCustomInstructions: async () => manager.getMcpCustomInstructions(),
     resolveToolTransport: (providerIdentifier) => discovery.resolveProviderTransport(providerIdentifier),
+    resolveServerDisplayName: (providerIdentifier) => discovery.providerDisplayName(providerIdentifier),
     resolveNeedsAuthSlot: async (providerIdentifier) => {
       const state = await manager.listServers();
       const summary = state.servers.find(
@@ -265,7 +266,7 @@ function createHostMcp(deps) {
         manager.getCatalog(getAccessToken),
         manager.listServers(),
         manager.listEffectivePlugins().catch((error42) => {
-          log4(`effective-plugins read degraded to attributed rows: ${errorLogTag(error42)}`);
+          log5(`effective-plugins read degraded to attributed rows: ${errorLogTag(error42)}`);
           return null;
         })
       ]);
@@ -284,7 +285,7 @@ function createHostMcp(deps) {
       const [state, effectivePlugins] = await Promise.all([
         manager.listServers(),
         manager.listEffectivePlugins().catch((error42) => {
-          log4(`effective-plugins read degraded to attributed rows: ${errorLogTag(error42)}`);
+          log5(`effective-plugins read degraded to attributed rows: ${errorLogTag(error42)}`);
           return null;
         })
       ]);
@@ -389,9 +390,13 @@ function createHostMcp(deps) {
       try {
         await manager.getCatalog(getAccessToken);
       } catch (error42) {
-        log4(`member-publish settings unavailable, publish gate stays open: ${errorLogTag(error42)}`);
+        log5(`member-publish settings unavailable, publish gate stays open: ${errorLogTag(error42)}`);
       }
       return manager.peekMemberPublishMarketplaces();
+    },
+    readAccountServers: async () => {
+      await manager.definitionSourceView().getUserServerConfigs();
+      return manager.lastAccountDisplayConfigView();
     },
     dispose: () => manager.dispose()
   };

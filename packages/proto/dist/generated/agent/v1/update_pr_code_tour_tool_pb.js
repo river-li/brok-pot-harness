@@ -1,19 +1,19 @@
-var __protoPackage66, __protoMessage363, UpdatePrCodeTourExecutionMode, UpdatePrCodeTourArgs, UpdatePrCodeTourResult, UpdatePrCodeTourSuccess, UpdatePrCodeTourError, UpdatePrCodeTourToolCall;
+var __protoPackage67, __protoMessage363, UpdatePrCodeTourExecutionMode, UpdatePrCodeTourArgs, UpdatePrCodeTourResult, UpdatePrCodeTourSuccess, UpdatePrCodeTourError, UpdatePrCodeTourToolCall;
 var init_update_pr_code_tour_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/update_pr_code_tour_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage66 = "agent.v1.";
+    __protoPackage67 = "agent.v1.";
     __protoMessage363 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage66;
+        return __protoPackage67;
       }
     };
-    UpdatePrCodeTourExecutionMode = /* @__PURE__ */ enumType(proto3, __protoPackage66, "UpdatePrCodeTourExecutionMode", [[0, "UNSPECIFIED"], [1, "SERVER_SCHEDULED"], [2, "CLIENT_REQUIRED"], [3, "SKIPPED"], [4, "EDITED"]], 1);
+    UpdatePrCodeTourExecutionMode = /* @__PURE__ */ enumType(proto3, __protoPackage67, "UpdatePrCodeTourExecutionMode", [[0, "UNSPECIFIED"], [1, "SERVER_SCHEDULED"], [2, "CLIENT_REQUIRED"], [3, "SKIPPED"], [4, "EDITED"]], 1);
     UpdatePrCodeTourArgs = class _UpdatePrCodeTourArgs extends __protoMessage363 {
       constructor(data) {
         super();

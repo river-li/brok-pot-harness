@@ -5,7 +5,7 @@ function createCodebaseTelemetryService({
   createAdapter,
   privacyMode,
   policies: policies2,
-  logger: logger108
+  logger: logger110
 }) {
   let currentAdapter;
   let controller;
@@ -22,21 +22,19 @@ function createCodebaseTelemetryService({
       void adapter.terminalFailure?.then(() => scheduleRestart(adapter));
       return adapter;
     },
-    logger: logger108
+    logger: logger110
   });
   controller = new CodebaseTelemetryController({ host });
   const snapshotTrigger = new CodebaseSnapshotTrigger({
     getSession: () => controller.session,
-    logger: logger108
+    logger: logger110
   });
-  const unsubscribeFromRunStarted = events.on(
-    "transcript.run-started",
-    ({ requestId: requestId2 }) => snapshotTrigger.handle({ type: "AGENT_REQUEST_START", requestId: requestId2 })
-  );
-  const unsubscribeFromRunEnded = events.on(
-    "transcript.run-ended",
-    ({ requestId: requestId2 }) => snapshotTrigger.handle({ type: "AGENT_REQUEST_END", requestId: requestId2 })
-  );
+  const unsubscribeFromRunStarted = events.on("transcript.run-started", ({ requestId: requestId2 }) => {
+    snapshotTrigger.handle({ type: "AGENT_REQUEST_START", requestId: requestId2 });
+  });
+  const unsubscribeFromRunEnded = events.on("transcript.run-ended", ({ requestId: requestId2 }) => {
+    snapshotTrigger.handle({ type: "AGENT_REQUEST_END", requestId: requestId2 });
+  });
   function scheduleRestart(failedAdapter) {
     if (stopping || currentAdapter !== failedAdapter || restartPromise !== void 0) {
       return;
@@ -69,7 +67,7 @@ function createCodebaseTelemetryService({
       restartPromise = void 0;
     });
     void restartPromise.catch((error42) => {
-      logger108.error("Failed to restart Codebase Telemetry after adapter failure", error42);
+      logger110.error("Failed to restart Codebase Telemetry after adapter failure", error42);
     });
   }
   let disposePromise;
@@ -80,6 +78,16 @@ function createCodebaseTelemetryService({
           return;
         }
         await currentAdapter?.flushPendingUploads();
+      },
+      markAgentRequestStarted(requestId2) {
+        return {
+          outcome: snapshotTrigger.handle({ type: "AGENT_REQUEST_START", requestId: requestId2 })
+        };
+      },
+      markAgentRequestEnded(requestId2) {
+        return {
+          outcome: snapshotTrigger.handle({ type: "AGENT_REQUEST_END", requestId: requestId2 })
+        };
       }
     },
     dispose() {
@@ -94,7 +102,7 @@ function createCodebaseTelemetryService({
           if (!(error42 instanceof DeadlineExceededError)) {
             throw error42;
           }
-          logger108.warn("Controller shutdown exceeded its deadline", error42);
+          logger110.warn("Controller shutdown exceeded its deadline", error42);
         } finally {
           host.dispose();
         }
@@ -103,9 +111,9 @@ function createCodebaseTelemetryService({
     }
   };
 }
-function createSandCodebaseTelemetryLogger(log4) {
+function createSandCodebaseTelemetryLogger(log5) {
   const write2 = (level, message, error42) => {
-    log4(`[codebase-telemetry] ${level}: ${formatLogMessage(message, error42)}`);
+    log5(`[codebase-telemetry] ${level}: ${formatLogMessage(message, error42)}`);
   };
   return {
     error: (message, error42) => write2("error", message, error42),

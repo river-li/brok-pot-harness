@@ -28,8 +28,8 @@ function transformSudoCommand(command) {
           while (flagEnd < command.length && /[^\s]/.test(command[flagEnd])) {
             flagEnd++;
           }
-          const flag = command.slice(j2, flagEnd);
-          hasAFlag = /^-[a-zA-Z]*A[a-zA-Z]*$/.test(flag);
+          const flag2 = command.slice(j2, flagEnd);
+          hasAFlag = /^-[a-zA-Z]*A[a-zA-Z]*$/.test(flag2);
         }
         if (hasAFlag) {
           result.push("sudo");

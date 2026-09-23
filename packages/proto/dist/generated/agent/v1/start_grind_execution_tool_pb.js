@@ -1,16 +1,16 @@
-var __protoPackage53, __protoMessage350, StartGrindExecutionArgs, StartGrindExecutionResult, StartGrindExecutionSuccess, StartGrindExecutionError, StartGrindExecutionToolCall;
+var __protoPackage54, __protoMessage350, StartGrindExecutionArgs, StartGrindExecutionResult, StartGrindExecutionSuccess, StartGrindExecutionError, StartGrindExecutionToolCall;
 var init_start_grind_execution_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/start_grind_execution_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage53 = "agent.v1.";
+    __protoPackage54 = "agent.v1.";
     __protoMessage350 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage53;
+        return __protoPackage54;
       }
     };
     StartGrindExecutionArgs = class _StartGrindExecutionArgs extends __protoMessage350 {

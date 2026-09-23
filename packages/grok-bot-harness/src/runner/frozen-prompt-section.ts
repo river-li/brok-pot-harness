@@ -5,14 +5,15 @@ var SAND_FROZEN_PROMPT_SECTIONS = [
   "automations",
   "agent_directory",
   "mcp_instructions",
-  "tool_notes"
+  "tool_notes",
+  "related_conversations"
 ];
 var SAND_FROZEN_PROMPT_SECTIONS_WITH_TURN_NOTES = [
   "timezone",
-  "memory",
   "automations",
   "agent_directory",
-  "tool_notes"
+  "tool_notes",
+  "related_conversations"
 ];
 var SAND_FROZEN_PROMPT_SECTIONS_ABSENT_IS_UNRESOLVED = [
   "timezone"
@@ -28,10 +29,24 @@ function isFiniteNumber(value) {
 }
 function parsePromptSectionSnapshot(raw) {
   if (!isUnknownRecord(raw)) return null;
-  const { render: render2, compactionEpoch, announcedRender } = raw;
+  const {
+    render: render2,
+    compactionEpoch,
+    announcedRender,
+    otherAgentMemoryRender,
+    otherAgentMemoryFingerprint
+  } = raw;
   if (typeof render2 !== "string" || !isFiniteNumber(compactionEpoch)) return null;
   if (announcedRender !== void 0 && typeof announcedRender !== "string") return null;
-  return announcedRender === void 0 ? { render: render2, compactionEpoch } : { render: render2, compactionEpoch, announcedRender };
+  const base = announcedRender === void 0 ? { render: render2, compactionEpoch } : { render: render2, compactionEpoch, announcedRender };
+  if (typeof otherAgentMemoryRender !== "string" || typeof otherAgentMemoryFingerprint !== "string" || !/^[0-9a-f]{64}$/u.test(otherAgentMemoryFingerprint)) {
+    return base;
+  }
+  return {
+    ...base,
+    otherAgentMemoryRender,
+    otherAgentMemoryFingerprint
+  };
 }
 function parsePromptSectionSnapshots(raw) {
   const snapshots = {};
@@ -71,6 +86,27 @@ function resolveFrozenPromptSection(args) {
     snapshotToPersist: { render: live, compactionEpoch }
   };
 }
+function resolveOtherAgentMemoryPromptUpdate(args) {
+  const { snapshot, compactionEpoch, liveRender, liveFingerprint } = args;
+  if (snapshot === null || snapshot.compactionEpoch !== compactionEpoch || liveFingerprint === void 0) {
+    return { changed: false };
+  }
+  const snapshotToPersist = {
+    ...snapshot,
+    otherAgentMemoryRender: liveRender,
+    otherAgentMemoryFingerprint: liveFingerprint
+  };
+  if (snapshot.otherAgentMemoryRender === void 0 || snapshot.otherAgentMemoryFingerprint === void 0) {
+    return { changed: false, snapshotToPersist };
+  }
+  if (snapshot.otherAgentMemoryRender === liveRender && snapshot.otherAgentMemoryFingerprint === liveFingerprint) {
+    return { changed: false };
+  }
+  return {
+    changed: snapshot.otherAgentMemoryFingerprint !== liveFingerprint && snapshot.otherAgentMemoryRender !== liveRender,
+    snapshotToPersist
+  };
+}
 function resolveFrozenPromptSectionUpdate(args) {
   const { name: name17, snapshot, compactionEpoch } = args;
   if (snapshot === null || snapshot.compactionEpoch !== compactionEpoch) return null;
@@ -91,7 +127,8 @@ var SECTION_LABELS = {
   automations: "Routines",
   agent_directory: "Teammates and groups",
   mcp_instructions: "Connector instructions",
-  tool_notes: "Tool notes"
+  tool_notes: "Tool notes",
+  related_conversations: "Related conversations"
 };
 var MAX_LINE_DIFF_CELLS = 25e4;
 function lineEdits(before, after) {

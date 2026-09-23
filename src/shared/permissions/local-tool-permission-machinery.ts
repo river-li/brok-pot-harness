@@ -41,13 +41,6 @@ var SandLocalToolPermissionDeniedError = class extends Error {
   code;
   toolCallAuditOutcome = "denied";
 };
-async function authorizeLocalToolAction(gate, scope, request5) {
-  const decision = await gate.authorize(scope, request5);
-  if (!decision.allowed) {
-    throw new SandLocalToolPermissionDeniedError(decision.reason);
-  }
-  return decision.approvalId;
-}
 function describeLocalExec(serverMessage, terminalsFolder) {
   const message = serverMessage.message;
   switch (message.case) {

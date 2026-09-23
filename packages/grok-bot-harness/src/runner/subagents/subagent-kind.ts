@@ -1,5 +1,5 @@
 var MEDIA_REVIEW_SUBAGENT_NAMES = ["videoReview", "watchVideo"];
-var BOX_DRIVER_SUBAGENT_NAMES = ["computerUse", "browserUse"];
+var BOX_DRIVER_SUBAGENT_NAMES = ["computerUse", "browserUse", "browserUseJev"];
 function subagentKind(raw) {
   const mediaReview = MEDIA_REVIEW_SUBAGENT_NAMES.find((name17) => name17 === raw);
   if (mediaReview !== void 0) return { kind: "builtin", name: mediaReview };

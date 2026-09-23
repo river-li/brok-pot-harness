@@ -1,8 +1,8 @@
-var import_node_fs52 = require("node:fs");
+var import_node_fs54 = require("node:fs");
 var import_node_path95 = require("node:path");
 init_errors();
 init_system_errno();
-var watchDirectoryWithNodeFs = (directory, onEvent) => (0, import_node_fs52.watch)(directory, { recursive: false }, (_eventType, filename) => {
+var watchDirectoryWithNodeFs = (directory, onEvent) => (0, import_node_fs54.watch)(directory, { recursive: false }, (_eventType, filename) => {
   onEvent(filename);
 });
 function isSameDirectory(armed, onDisk) {
@@ -37,7 +37,7 @@ var WatchedDirectory = class {
   startWatching() {
     if (this.watchers.size > 0) return;
     try {
-      (0, import_node_fs52.mkdirSync)(this.root, { recursive: true });
+      (0, import_node_fs54.mkdirSync)(this.root, { recursive: true });
     } catch (error42) {
       this.reportWatchUnavailable(error42);
       return;
@@ -90,7 +90,7 @@ var WatchedDirectory = class {
   }
   readDirectoryEntry(path31) {
     try {
-      const stats = (0, import_node_fs52.lstatSync)(path31);
+      const stats = (0, import_node_fs54.lstatSync)(path31);
       if (!stats.isDirectory()) return { kind: "other" };
       return {
         kind: "directory",
@@ -104,7 +104,7 @@ var WatchedDirectory = class {
   listSubdirectoryNamesOf(directory) {
     let entries;
     try {
-      entries = (0, import_node_fs52.readdirSync)(directory, { withFileTypes: true });
+      entries = (0, import_node_fs54.readdirSync)(directory, { withFileTypes: true });
     } catch (error42) {
       reportFallbackUnlessAbsent("watched_directory", error42);
       return [];

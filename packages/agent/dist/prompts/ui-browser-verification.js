@@ -1,5 +1,5 @@
 function shouldInjectUiBrowserVerificationPrompt(modelInfo) {
-  return modelInfo?.isGrok46ProductPrompt === true && modelInfo?.promptVersion === "cursor-0226" && modelInfo?.isRawTrainingSlug !== true && modelInfo?.suppressUiBrowserVerificationPrompt !== true;
+  return (modelInfo?.isGrok46ProductPrompt === true || modelInfo?.forceUiBrowserVerificationPrompt === true) && modelInfo?.promptVersion === "cursor-0226" && modelInfo?.isRawTrainingSlug !== true && modelInfo?.suppressUiBrowserVerificationPrompt !== true;
 }
 var UI_BROWSER_VERIFICATION_USER_RULE = `When implementing or fixing anything in a web application (UI, layout, styling, routing, client state, or rendered data), verify your work in the browser before declaring the task complete.
 

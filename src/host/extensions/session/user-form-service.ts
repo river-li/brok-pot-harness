@@ -1,4 +1,3 @@
-init_privacy_mode_pb();
 var USER_FORM_DOMAIN_TAG_MAX_LENGTH = 64;
 var userFormRequest = createCounter("grok_bot.user_form.request", {
   labelNames: [
@@ -499,21 +498,9 @@ function optionalBooleanMetricTag(value) {
   return value === void 0 ? "none" : String(value);
 }
 function userFormDomainMetricTag(domain2, privacyMode) {
-  if (domain2 == null || !userFormDomainTagAllowed(privacyMode)) return void 0;
+  if (domain2 == null || privacyMode.kind !== "resolved" || !siteDomainTelemetryAllowed(privacyMode.privacyMode)) {
+    return void 0;
+  }
   const bucket = boundedSiteBucket(domain2);
   return bucket.length > USER_FORM_DOMAIN_TAG_MAX_LENGTH ? void 0 : bucket;
-}
-function userFormDomainTagAllowed(state) {
-  if (state.kind !== "resolved") return false;
-  switch (state.privacyMode) {
-    case PrivacyMode.USAGE_DATA_TRAINING_ALLOWED:
-    case PrivacyMode.USAGE_CODEBASE_TRAINING_ALLOWED:
-      return true;
-    case PrivacyMode.NO_STORAGE:
-    case PrivacyMode.NO_TRAINING:
-    case PrivacyMode.UNSPECIFIED:
-      return false;
-    default:
-      return false;
-  }
 }

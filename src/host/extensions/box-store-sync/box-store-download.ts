@@ -1,5 +1,6 @@
 var COPY_IN_LARGE_BLOB_CONCURRENCY = 4;
 var COPY_IN_WAVE_SIZE = 500;
+var PREFETCH_READS_MAX_ATTEMPTS = 3;
 var BOX_STORE_RESTORE_TMP_SUFFIX = ".box-store-part-";
 function boxStoreRestoreTempPath(destPath) {
   return (0, import_node_path12.join)(
@@ -7,7 +8,7 @@ function boxStoreRestoreTempPath(destPath) {
     `${BOX_STORE_RESTORE_TMP_SUFFIX}${(0, import_node_crypto8.randomBytes)(8).toString("hex")}`
   );
 }
-function withoutForeignMountEntries(manifest, log4) {
+function withoutForeignMountEntries(manifest, log5) {
   const kept = /* @__PURE__ */ new Map();
   let skipped2 = 0;
   for (const [relPath, entry] of manifest) {
@@ -15,7 +16,7 @@ function withoutForeignMountEntries(manifest, log4) {
     else kept.set(relPath, entry);
   }
   if (skipped2 > 0) {
-    log4(`skipping ${skipped2.toString()} manifest entries under the box's foreign mounts`);
+    log5(`skipping ${skipped2.toString()} manifest entries under the box's foreign mounts`);
   }
   return kept;
 }
@@ -67,7 +68,7 @@ var BoxStoreDownload = class {
     manifest = withoutForeignMountEntries(manifest, this.log);
     const failures = [];
     let firstFailure;
-    const recordFailure = (detail, failure2) => {
+    const recordFailure2 = (detail, failure2) => {
       failures.push(detail);
       firstFailure ??= failure2;
     };
@@ -82,7 +83,7 @@ var BoxStoreDownload = class {
     for (const [relPath, entry] of manifest) {
       const destPath = resolveRestoreDestination({ targetRoot, relPath });
       if (destPath == null || claimedDestinations.has(destPath)) {
-        recordFailure(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
+        recordFailure2(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
         continue;
       }
       claimedDestinations.add(destPath);
@@ -309,7 +310,7 @@ var BoxStoreDownload = class {
         destPath,
         target: entry.target
       })) {
-        recordFailure(`${relPath}: unsafe symlink target`, { code: "unsafe-symlink-target" });
+        recordFailure2(`${relPath}: unsafe symlink target`, { code: "unsafe-symlink-target" });
         return false;
       }
       try {
@@ -350,7 +351,7 @@ var BoxStoreDownload = class {
           }
         }
       } catch (error42) {
-        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+        recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       verified += 1;
@@ -370,19 +371,19 @@ var BoxStoreDownload = class {
           blob = await store.get(`${BOX_STORE_BLOBS_PREFIX}/${group.sha}`);
         } catch (error42) {
           for (const relPath of pending) {
-            recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+            recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
           }
           return;
         }
         if (blob == null) {
           for (const relPath of pending) {
-            recordFailure(`${relPath}: blob ${group.sha} missing`, { code: "missing-blob" });
+            recordFailure2(`${relPath}: blob ${group.sha} missing`, { code: "missing-blob" });
           }
           return;
         }
         if (blob.byteLength !== group.size || sha256Hex(blob) !== group.sha) {
           for (const relPath of pending) {
-            recordFailure(`${relPath}: sha/size mismatch`, { code: "hash-size-mismatch" });
+            recordFailure2(`${relPath}: sha/size mismatch`, { code: "hash-size-mismatch" });
           }
           return;
         }
@@ -390,14 +391,14 @@ var BoxStoreDownload = class {
           verified += 1;
           const destPath = destinationPaths.get(relPath);
           if (destPath == null) {
-            recordFailure(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
+            recordFailure2(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
             continue;
           }
           try {
             await mkdirOwned((0, import_node_path12.dirname)(destPath));
             await writeVerifiedBytes(destPath, relPath, blob);
           } catch (error42) {
-            recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+            recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
             continue;
           }
           files += 1;
@@ -411,17 +412,17 @@ var BoxStoreDownload = class {
     const restoreLargeToPath = async (group, relPath) => {
       const destPath = destinationPaths.get(relPath);
       if (destPath == null) {
-        recordFailure(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
+        recordFailure2(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
         return false;
       }
       try {
         await mkdirOwned((0, import_node_path12.dirname)(destPath));
       } catch (error42) {
-        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+        recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       if (!await this.hasDiskSpaceForLargeObject(destPath, group.size)) {
-        recordFailure(
+        recordFailure2(
           `${relPath}: insufficient disk space for ${group.size}B restore (x${LARGE_OBJECT_FREE_SPACE_FACTOR} required)`,
           { code: "insufficient-disk-space" }
         );
@@ -435,12 +436,12 @@ var BoxStoreDownload = class {
         });
       } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+        recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       if (written == null) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: blob ${group.sha} missing`, { code: "missing-blob" });
+        recordFailure2(`${relPath}: blob ${group.sha} missing`, { code: "missing-blob" });
         return false;
       }
       let actualSha;
@@ -448,12 +449,12 @@ var BoxStoreDownload = class {
         actualSha = await sha256File(tmpPath);
       } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+        recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       if (written !== group.size || actualSha !== group.sha) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: sha/size mismatch`, { code: "hash-size-mismatch" });
+        recordFailure2(`${relPath}: sha/size mismatch`, { code: "hash-size-mismatch" });
         return false;
       }
       verified += 1;
@@ -461,7 +462,7 @@ var BoxStoreDownload = class {
         await installVerifiedTemp(tmpPath, destPath, relPath);
       } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+        recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return false;
       }
       files += 1;
@@ -472,17 +473,17 @@ var BoxStoreDownload = class {
     const copyLargeToPath = async (sourcePath, group, relPath) => {
       const destPath = destinationPaths.get(relPath);
       if (destPath == null) {
-        recordFailure(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
+        recordFailure2(`${relPath}: unsafe manifest path`, { code: "unsafe-manifest-path" });
         return;
       }
       try {
         await mkdirOwned((0, import_node_path12.dirname)(destPath));
       } catch (error42) {
-        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+        recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return;
       }
       if (!await this.hasDiskSpaceForLargeObject(destPath, group.size)) {
-        recordFailure(
+        recordFailure2(
           `${relPath}: insufficient disk space for ${group.size}B restore (x${LARGE_OBJECT_FREE_SPACE_FACTOR} required)`,
           { code: "insufficient-disk-space" }
         );
@@ -493,14 +494,14 @@ var BoxStoreDownload = class {
         const copied = await copyFileHashing(sourcePath, tmpPath);
         if (copied.size !== group.size || copied.sha !== group.sha) {
           await this.discardTemp({ tmpPath, label: relPath });
-          recordFailure(`${relPath}: sha/size mismatch`, { code: "hash-size-mismatch" });
+          recordFailure2(`${relPath}: sha/size mismatch`, { code: "hash-size-mismatch" });
           return;
         }
         verified += 1;
         await installVerifiedTemp(tmpPath, destPath, relPath);
       } catch (error42) {
         await this.discardTemp({ tmpPath, label: relPath });
-        recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+        recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
         return;
       }
       files += 1;
@@ -548,7 +549,7 @@ var BoxStoreDownload = class {
               try {
                 await mkdirOwned((0, import_node_path12.dirname)(destPath));
               } catch (error42) {
-                recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+                recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
                 continue;
               }
               if (await localFileMatches(destPath, group)) {
@@ -556,7 +557,7 @@ var BoxStoreDownload = class {
                 try {
                   await applyExistingFileMetadata(destPath, relPath);
                 } catch (error42) {
-                  recordFailure(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
+                  recordFailure2(`${relPath}: ${errorMessage(error42)}`, copyInFailureOf(error42));
                   continue;
                 }
                 files += 1;
@@ -569,14 +570,17 @@ var BoxStoreDownload = class {
             if (pending.length > 0) remote.push({ group, pending });
           });
           if (remote.length > 0 && store.prefetchReads != null) {
-            try {
-              await store.prefetchReads(
-                remote.map((r) => `${BOX_STORE_BLOBS_PREFIX}/${r.group.sha}`)
-              );
-            } catch (error42) {
-              this.log(
-                `read prefetch failed (falling back to per-blob presign): ${errorMessage(error42)}`
-              );
+            for (let attempt = 1; attempt <= PREFETCH_READS_MAX_ATTEMPTS; attempt += 1) {
+              try {
+                await store.prefetchReads(
+                  remote.map((r) => `${BOX_STORE_BLOBS_PREFIX}/${r.group.sha}`)
+                );
+                break;
+              } catch (error42) {
+                this.log(
+                  attempt < PREFETCH_READS_MAX_ATTEMPTS ? `read prefetch failed (attempt ${attempt}/${PREFETCH_READS_MAX_ATTEMPTS}; retrying): ${errorMessage(error42)}` : `read prefetch failed (falling back to per-blob presign): ${errorMessage(error42)}`
+                );
+              }
             }
           }
           return remote;

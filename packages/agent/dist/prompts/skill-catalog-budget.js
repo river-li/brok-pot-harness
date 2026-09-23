@@ -5,7 +5,22 @@ var MIN_TRUNCATED_DESCRIPTION_LENGTH = 24;
 var MAX_TRUNCATED_DESCRIPTION_LENGTH = 480;
 var SHORT_DESCRIPTION_PATH_ONLY_THRESHOLD = 80;
 var MAX_OMITTED_DIRECTORY_COUNT = 5;
-var PROTECTED_SKILL_NAMES = /* @__PURE__ */ new Set(["canvas", "env-setup", "visualize"]);
+var SAND_JTBD_GUIDANCE_SKILL_IDS = [
+  "flight-booking",
+  "food-ordering",
+  "restaurant-booking",
+  "restaurant-recommendations",
+  "rideshare",
+  "scheduling",
+  "shopping"
+];
+var PROTECTED_SKILL_NAMES = /* @__PURE__ */ new Set([
+  "canvas",
+  "env-setup",
+  "visualize",
+  ...SAND_JTBD_GUIDANCE_SKILL_IDS
+]);
+var PROTECTED_SKILL_NAME_PREFIXES = ["site-playbooks-"];
 var LOOP_PROTECTED_SKILL_NAMES = /* @__PURE__ */ new Set(["loop"]);
 function applySkillCatalogBudget({ skills, agentTokenLimit, renderSection: renderSection2, renderOmittedNotice, protectLoopSkill }) {
   const uncappedSection = renderSection2(skills);
@@ -145,7 +160,8 @@ function getSkillName(fullPath) {
   return last;
 }
 function isProtectedSkill(skill) {
-  return PROTECTED_SKILL_NAMES.has(getSkillName(skill.fullPath));
+  const name17 = getSkillName(skill.fullPath);
+  return PROTECTED_SKILL_NAMES.has(name17) || PROTECTED_SKILL_NAME_PREFIXES.some((prefix) => name17.startsWith(prefix));
 }
 function truncateDescription(description9, maxLength) {
   if (description9 === void 0 || description9.length <= maxLength) {

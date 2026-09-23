@@ -89,7 +89,7 @@ var GoalContinuationActionHandler = class {
         goalState,
         ...liveToolNames
       }),
-      messageId: (0, import_node_crypto35.randomUUID)(),
+      messageId: (0, import_node_crypto34.randomUUID)(),
       // Continue in whatever mode the conversation is in; goals are not
       // Agent-mode-only.
       mode: stateHandler.mode,

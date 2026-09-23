@@ -57,6 +57,7 @@ var __disposeResources12 = /* @__PURE__ */ (function(SuppressedError2) {
   return e.name = "SuppressedError", e.error = error42, e.suppressed = suppressed, e;
 });
 var rulesLogger = createLogger("local-exec:cursor-rules");
+var skillsLog = (0, import_node_util5.debuglog)("cursor-rules-service");
 var MergedCursorRulesService = class _MergedCursorRulesService {
   /**
    * `getAgentStoreSkillsContext` is required, not defaulted: always-apply
@@ -75,7 +76,7 @@ var MergedCursorRulesService = class _MergedCursorRulesService {
     try {
       const span = __addDisposableResource12(env_1, createSpan(ctx.withName("MergedCursorRulesService.getAllCursorRules")), false);
       const allRulesPromises = this.cursorRulesServices.map((service) => service.getAllCursorRules(span.ctx).catch((err) => {
-        (0, import_node_util4.debuglog)("Failed to load cursor rules from service:", err);
+        (0, import_node_util5.debuglog)("Failed to load cursor rules from service:", err);
         return [];
       }));
       const allRulesArrays = await Promise.all(allRulesPromises);

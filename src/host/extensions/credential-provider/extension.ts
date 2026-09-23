@@ -18,6 +18,12 @@ function usernameFirstFillDetail(args) {
 function auditEventOf(approvalMode) {
   return approvalMode === "always-allow" ? "auto-fill" : "allow-once";
 }
+function credentialTargetDomain(targetUrl, privacyMode) {
+  if (targetUrl === void 0 || privacyMode.kind !== "resolved" || !siteDomainTelemetryAllowed(privacyMode.privacyMode)) {
+    return void 0;
+  }
+  return visitedSiteBucket(targetUrl.includes("://") ? targetUrl : `https://${targetUrl}`);
+}
 async function startCredentialProvider(context2) {
   const auditLine = createCredentialAuditLogger((message) => context2.host.log(message));
   const audit = (entry, sensitiveValues) => {
@@ -30,7 +36,8 @@ async function startCredentialProvider(context2) {
       fillRefusalReason: entry.fillRefusalReason,
       submitRequested: entry.submitRequested,
       inForm: entry.inForm,
-      approvalMode: entry.approvalMode
+      approvalMode: entry.approvalMode,
+      targetDomain: credentialTargetDomain(entry.targetUrl, context2.deps["privacy-mode"].get())
     });
   };
   const enabled = await context2.deps.experiments.checkGate(SAND_1PASS_INTEGRATION_GATE, {
@@ -38,7 +45,7 @@ async function startCredentialProvider(context2) {
   });
   if (!enabled) {
     return {
-      access: void 0,
+      accessForAgentWindow: () => void 0,
       status: void 0,
       agentToolLease: void 0,
       remoteAgentHolds: void 0,
@@ -132,9 +139,22 @@ async function startCredentialProvider(context2) {
     log: (message) => context2.host.log(message)
   });
   context2.onStop(() => leasedFill.dispose());
+  const box = context2.deps[HostExtensions.ForeverBox].box;
+  const windowCtx = createContext().withName("credential-provider");
+  const resolveAgentWindow = async (agentId) => {
+    if (agentId === void 0) return void 0;
+    const seated = boxAgentWindowIndex(box, agentId);
+    if (seated !== void 0) return seated;
+    try {
+      await boxRefreshAssignedWindows(box, windowCtx);
+    } catch (error42) {
+      context2.host.log(`credentials: window seat refresh failed (${errorLogTag(error42)})`);
+    }
+    return boxAgentWindowIndex(box, agentId);
+  };
   const coordinator = new CredentialCoordinator({
     loadDirectory,
-    resolveBrowserTarget: (item, siteHint) => filler.resolveTarget(item, siteHint),
+    resolveBrowserTarget: (item, siteHint, windowIndex) => filler.resolveTarget(item, siteHint, windowIndex),
     log: (message) => context2.host.log(message),
     audit
   });
@@ -186,7 +206,7 @@ async function startCredentialProvider(context2) {
     }
   };
   return {
-    access: coordinator.createAccess(),
+    accessForAgentWindow: (agentId) => coordinator.createAccess(() => resolveAgentWindow(agentId)),
     status: createCredentialProviderStatusReader({
       getAccessToken: auth2.getAccessToken,
       getBackendUrl
@@ -194,7 +214,7 @@ async function startCredentialProvider(context2) {
     agentToolLease: lease,
     remoteAgentHolds,
     getFreshDirectory: () => coordinator.getFreshDirectory(),
-    resolveBrowserCredentialTarget: (item, siteHint) => coordinator.resolveBrowserTarget(item, siteHint),
+    resolveBrowserCredentialTarget: async ({ agentId, item, siteHint }) => coordinator.resolveBrowserTarget(item, siteHint, await resolveAgentWindow(agentId)),
     requestAutoFill: async (args) => {
       const auditRequest = (outcome, reason) => audit({
         event: "auto-fill",
@@ -237,7 +257,11 @@ async function startCredentialProvider(context2) {
       const event = auditEventOf(args.approvalMode);
       let outcome;
       if (args.targetWebSocketDebuggerUrl === void 0) {
-        const picked = await filler.pickFillTarget(args, event);
+        const picked = await filler.pickFillTarget(
+          args,
+          await resolveAgentWindow(args.agentId),
+          event
+        );
         if (!picked.ok) return fillOutcome(picked.result);
         outcome = await leasedFill.run(
           browserWindowIndexOfCdpPort(picked.target.browserCdpPort),
@@ -411,6 +435,8 @@ var credentialProviderExtension = defineHostExtension({
     HostExtensions.Auth,
     HostExtensions.CredentialFill,
     HostExtensions.Experiments,
+    HostExtensions.ForeverBox,
+    HostExtensions.PrivacyMode,
     HostExtensions.Telemetry
   ],
   start: startCredentialProvider

@@ -3,7 +3,7 @@ var teamAdminPolicyExtension = defineHostExtension({
   dependencies: [HostExtensions.Auth, HostExtensions.Settings],
   start: (context2) => {
     const auth2 = context2.deps.auth;
-    const log4 = (message) => context2.host.log(message);
+    const log5 = (message) => context2.host.log(message);
     let dashboardClient;
     const service = createTeamAdminPolicyService({
       getDashboardClient: () => dashboardClient ??= createSandCursorBackendClient(DashboardService, {
@@ -14,7 +14,7 @@ var teamAdminPolicyExtension = defineHostExtension({
       }),
       getTeamId: () => context2.deps.settings.getSelectedTeamId(),
       clock: realClock,
-      log: log4
+      log: log5
     });
     context2.onStop(() => service.dispose());
     context2.onStop(

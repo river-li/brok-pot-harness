@@ -185,7 +185,7 @@ var LocalShellStreamExecutor = class {
       const _span = __addDisposableResource21(env_1, createSpan(ctx.withName("LocalShellStreamExecutor.execute")), false);
       const command = args.command;
       let requestedPolicy = args.requestedSandboxPolicy ? convertProtoToInternalPolicy(args.requestedSandboxPolicy) : void 0;
-      const workingDirectory = args.workingDirectory || await this.coreExecutor.getCwd();
+      const workingDirectory = args.workingDirectory || await this.coreExecutor.getCwd(args.conversationId);
       const timeout2 = resolveShellTimeoutMs(args);
       const resolvedWorkingDir = resolvePath(workingDirectory);
       const startTime = Date.now();
@@ -449,9 +449,11 @@ var LocalShellStreamExecutor = class {
                 case: "exit",
                 value: new ShellStreamExit({
                   // Convert to unsigned for uint32 proto field. Negative values
-                  // (e.g. libuv errors like -4048) are invalid for uint32.
-                  code: (event.code ?? 0) >>> 0,
-                  cwd: await this.coreExecutor.getCwd(),
+                  // (e.g. libuv errors like -4048) are invalid for uint32. A
+                  // signal-killed process has no code; the in-process emitter's
+                  // -1 sentinel is used so readers doing `code | 0` see -1, not 0.
+                  code: (event.code ?? -1) >>> 0,
+                  cwd: await this.coreExecutor.getCwd(args.conversationId),
                   outputLocation: event.outputLocation,
                   aborted: event.aborted,
                   abortReason: abortReason2,
@@ -466,7 +468,7 @@ var LocalShellStreamExecutor = class {
           throw error3;
         }
         const policyType = requestedPolicy?.type ?? "unknown";
-        logger22.warn(ctx, "Shell stream: sandbox policy unsupported on this host", {
+        logger22.debug(ctx, "Shell stream: sandbox policy unsupported on this host", {
           toolCallId: args.toolCallId,
           policyType,
           reason: error3.reason
@@ -536,7 +538,7 @@ var LocalShellStreamExecutor = class {
             value: new ShellStreamExit({
               // Use unsigned representation of -1 for uint32 proto field
               code: 4294967295,
-              cwd: await this.coreExecutor.getCwd(),
+              cwd: await this.coreExecutor.getCwd(args.conversationId),
               aborted: true,
               abortReason: ShellAbortReason.USER_ABORT
             })

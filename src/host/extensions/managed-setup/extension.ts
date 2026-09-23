@@ -37,7 +37,8 @@ function startManagedSetup(context2, createTeamRulesResolver = createSandTeamRul
       getAccessToken: auth2.getAccessToken,
       getTeamId: auth2.getTeamId,
       getMachineId: auth2.getMachineId
-    })
+    }),
+    context2.host.environment.auth.boxIdentityCredential.length > 0
   );
   const service = new ManagedSetupService({
     client,

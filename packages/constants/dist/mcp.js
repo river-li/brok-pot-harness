@@ -117,7 +117,7 @@ function getCanonicalMcpOAuthRedirectUris(currentRedirectUri) {
   }
   return Array.from(redirectUris);
 }
-var GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
+var GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, GROK_CONNECTORS_POLICY_BASE, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
 var init_mcp = __esm({
   "../packages/constants/dist/mcp.js"() {
     "use strict";
@@ -163,6 +163,13 @@ var init_mcp = __esm({
     CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX = "cursor-";
     CURSOR_SCM_MCP_PROVIDERS = ["github"];
     REST_MCP_SCM_ERROR_CODE_SET = new Set(Object.values(REST_MCP_SCM_ERROR_CODES));
+    GROK_CONNECTORS_POLICY_BASE = {
+      provider: "grok-connectors",
+      clientRegistration: "static",
+      rejectsCustomSchemeRedirects: true,
+      unauthenticatedConnect: false,
+      scopes: ["grok-plugins:access", "offline_access"]
+    };
     MCP_OAUTH_PROVIDER_POLICIES = /* @__PURE__ */ new Map([
       [
         "gmailmcp.googleapis.com",
@@ -247,7 +254,9 @@ var init_mcp = __esm({
       // backend-held signing keys and cannot be exchanged client-side.
       ["mcp.money-dev.x.com", X_MONEY_POLICY_BASE],
       ["mcp.money-staging.x.com", X_MONEY_POLICY_BASE],
-      ["mcp.money.x.com", X_MONEY_POLICY_BASE]
+      ["mcp.money.x.com", X_MONEY_POLICY_BASE],
+      ["connectors-gateway.grok.gcp.mouseion.dev", GROK_CONNECTORS_POLICY_BASE],
+      ["connectors-gateway.grok.com", GROK_CONNECTORS_POLICY_BASE]
     ]);
     GOOGLE_WORKSPACE_MCP_HOSTS = new Set([...MCP_OAUTH_PROVIDER_POLICIES].filter(([, policy]) => policy.provider === "google-workspace").map(([hostname2]) => hostname2));
     MCP_OAUTH_CLIENT_LOGO_URI = "https://ptht05hbb1ssoooe.public.blob.vercel-storage.com/assets/uploads/cursorlogomcpv3.svg";

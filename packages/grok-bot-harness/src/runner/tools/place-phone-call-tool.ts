@@ -10,15 +10,24 @@ var description = [
   "Place a live outbound phone call to an external number through Grok Bot telephony.",
   skillifyPointer("Before placing a call", SKILLIFY_SKILL_IDS.outboundCalls)
 ].join("\n");
+function whatToTellTheUser(watched) {
+  return watched ? " Tell the user the call has been placed and that you will report back once it is over." : " Tell the user the call has been placed and that you will not be able to report how it went.";
+}
 async function placePhoneCall(deps, args) {
-  const decision = await deps.reviewCall({ target: args, signal: deps.signal });
+  const decision = await deps.reviewCall({
+    toolCallId: deps.toolCallId ?? "",
+    target: args,
+    signal: deps.signal
+  });
   if (!decision.allowed) {
     return `The phone call was not approved: ${decision.reason} Nothing was placed. Do not retry unless the user asks again.`;
   }
   const result = await deps.outboundCall.placeCall(args);
   const part = (label, value) => value === void 0 || value.length === 0 ? "" : ` ${label} ${value}.`;
+  const whatIsNotKnownYet = " Handing the number to the phone provider is all that has happened so far. Nothing here reports what the far end does, or whether anyone is there at all.";
   const outcome = result.watched === true ? " You will be told how it went when it ends." : " Nothing is watching this call, so its outcome will not be reported to you.";
-  return `Placed outbound phone call to ${args.to} from ${result.from}.${part("Status", result.status)}${part("Call id", result.callId)}${outcome}`;
+  const doNotClaim = " Do not say it has connected, is ringing, or that anyone has answered or will answer.";
+  return `Placed outbound phone call to ${args.to} from ${result.from}.${part("Status", result.status)}${part("Call id", result.callId)}${whatIsNotKnownYet}${outcome}${whatToTellTheUser(result.watched === true)}${doNotClaim}`;
 }
 function createPlacePhoneCallTool(deps) {
   return defineCommunicateTool(deps, {

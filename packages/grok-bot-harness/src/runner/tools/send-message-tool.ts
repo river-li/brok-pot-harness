@@ -1,4 +1,8 @@
 var SAND_AWAITING_USER_SEND_MESSAGE_BLOCKED = "This turn is already waiting on the user (you sent a question widget or handed the box back to them), so this message was not delivered. Wait for the user \u2014 their response arrives as the next message \u2014 then say this on your next turn.";
+function attachmentSourcesOf(rawArgs) {
+  if (rawArgs.type === "text") return (rawArgs.images ?? []).map((image2) => image2.url);
+  return rawArgs.type === "attachment" && rawArgs.url != null ? [rawArgs.url] : [];
+}
 async function resolveCloudAgentTitleBestEffort(ctx, bcId, deps) {
   if (deps.resolveCloudAgentTitle == null) return void 0;
   try {
@@ -11,7 +15,7 @@ async function resolveCloudAgentTitleBestEffort(ctx, bcId, deps) {
 }
 async function resolveAttachmentSource(ctx, sourceUrl, deps) {
   const sourcePath = filePathFromFileUrl(sourceUrl);
-  const fileName = sourcePath != null ? (0, import_node_path171.basename)(sourcePath) : void 0;
+  const fileName = sourcePath != null ? (0, import_node_path173.basename)(sourcePath) : void 0;
   const resolved = (url2) => ({
     url: url2,
     ...fileName != null && fileName.length > 0 ? { fileName } : {}
@@ -206,7 +210,7 @@ var LEAN_SEND_TO_USER_POLICY_HEADINGS = {
   askingForDecisions: "Asking for decisions"
 };
 var OPENING_LEAN = `Send a message to the user in the Grok Bot chat. It is your only user-visible voice: reply here first on a turn a person opened, post a brief update for a real result, decision, blocker, or change of plan along the way (never a play-by-play), and deliver the result itself here before you yield; the full rules are in your instructions under ${LEAN_SEND_TO_USER_POLICY_HEADINGS.onlyVoice}. `;
-var UPDATE_COMMUNICATION_DELIVERY_CHECK = 'Say "done" only when the requested end state is verified; otherwise name the exact state (drafted, sent, waiting, blocked). Before the final send, check that it delivers everything the user explicitly asked for, in the form they asked for it, and nothing they would have to strip out; include the result itself, or say plainly that it is unavailable, rather than "done", a pointer to an earlier message, or process notes. If you ran something for the user, send the actual result before you yield. ';
+var DELIVERY_CHECK = 'Say "done" only when the requested end state is verified; otherwise name the exact state (drafted, sent, waiting, blocked). Before the final send, check that it delivers everything the user explicitly asked for, in the form they asked for it, and nothing they would have to strip out; include the result itself, or say plainly that it is unavailable, rather than "done", a pointer to an earlier message, or process notes. If you ran something for the user, send the actual result before you yield. ';
 var TEXT_SHAPE = 'Use {"type":"text","content":"..."} for normal messages; use actual newline characters for paragraph or list breaks, not literal backslash-n text. ';
 var VOICE_MEMO_FULL = `${VOICE_MEMO_SEND_GUIDANCE} Set voice_memo: true only on those spoken words (the answer). After that memo, later SendToUser calls stay ordinary text unless they ask for another memo. `;
 var VOICE_MEMO_LEAN = "A requested voice memo is type:text with voice_memo: true on the spoken words themselves; the memo rules are on that field and in your instructions. ";
@@ -227,7 +231,6 @@ var WIDGET_EXAMPLE = 'Example: {"type":"widget","widget":{"prompt":"Deploy to pr
 var WIDGET_ENDS_TURN_FULL = "When you do genuinely need a decision or confirmation, this widget is how you ask, not plain text. Sending a widget ends your turn; make it your last action and stop, and the user's selection arrives as the next message. ";
 var WIDGET_ENDS_TURN_LEAN = "Sending a widget ends your turn; the user's selection arrives as the next message. ";
 function sendToUserDescription(deps, options2) {
-  const updateCommunication = deps.updateCommunication?.() === true;
   const toolNotesInSystemPrompt = deps.toolNotesInSystemPrompt?.() === true;
   const toolNotes = toolNotesInSystemPrompt ? SEND_TO_USER_TOOL_NOTES_POINTER : secretRequestToolGuidance(deps.resolveSecretRequestTarget);
   const credentialRequest = deps.resolveCredentialBrowserTarget == null ? "" : CREDENTIAL_REQUEST_HINT;
@@ -240,9 +243,20 @@ function sendToUserDescription(deps, options2) {
     endTurnGuidance = inAppLinks.length === 0 ? SEND_TO_USER_END_TURN_GUIDANCE : ` ${SEND_TO_USER_END_TURN_GUIDANCE}`;
   }
   if (options2.lean) {
-    return OPENING_LEAN + (updateCommunication ? UPDATE_COMMUNICATION_DELIVERY_CHECK : "") + TEXT_SHAPE + VOICE_MEMO_LEAN + REFERENCE_LINKS + GROUP_CHAT_DELIVERY + ATTACHMENT_SHAPE + IMAGES_RULE + CURSOR_AGENT_CARD + WIDGET_INTRO_LEAN + toolNotes + credentialRequest + OS_CONSENT_DIALOGS + WIDGET_FIELDS + WIDGET_ANSWER_LEAN + WIDGET_EXAMPLE + WIDGET_ENDS_TURN_LEAN + inAppLinks;
+    return OPENING_LEAN + DELIVERY_CHECK + TEXT_SHAPE + VOICE_MEMO_LEAN + REFERENCE_LINKS + GROUP_CHAT_DELIVERY + ATTACHMENT_SHAPE + IMAGES_RULE + CURSOR_AGENT_CARD + WIDGET_INTRO_LEAN + toolNotes + credentialRequest + OS_CONSENT_DIALOGS + WIDGET_FIELDS + WIDGET_ANSWER_LEAN + WIDGET_EXAMPLE + WIDGET_ENDS_TURN_LEAN + inAppLinks;
   }
-  return OPENING_POLICY + (updateCommunication ? `. ${UPDATE_COMMUNICATION_DELIVERY_CHECK}` : ", and if you ran something for them you send the actual result before you yield. ") + TEXT_SHAPE + VOICE_MEMO_FULL + REFERENCE_LINKS + GROUP_CHAT_DELIVERY + ATTACHMENT_SHAPE + ATTACHMENT_NOT_A_MEMO + IMAGES_RULE + CURSOR_AGENT_CARD + WIDGET_INTRO_FULL + toolNotes + credentialRequest + OS_CONSENT_DIALOGS + WIDGET_FIELDS + WIDGET_ANSWER_FULL + WIDGET_EXAMPLE + WIDGET_ENDS_TURN_FULL + inAppLinks + endTurnGuidance;
+  return OPENING_POLICY + `. ${DELIVERY_CHECK}` + TEXT_SHAPE + VOICE_MEMO_FULL + REFERENCE_LINKS + GROUP_CHAT_DELIVERY + ATTACHMENT_SHAPE + ATTACHMENT_NOT_A_MEMO + IMAGES_RULE + CURSOR_AGENT_CARD + WIDGET_INTRO_FULL + toolNotes + credentialRequest + OS_CONSENT_DIALOGS + WIDGET_FIELDS + WIDGET_ANSWER_FULL + WIDGET_EXAMPLE + WIDGET_ENDS_TURN_FULL + inAppLinks + endTurnGuidance;
+}
+function messageDeliveryDestination(message) {
+  if (message.type !== "text" && message.type !== "attachment") {
+    return { destinationType: "user" };
+  }
+  const address = message.channel;
+  if (address === void 0 || VoiceCallChannel.callIdOf(address) !== null) {
+    return { destinationType: "user" };
+  }
+  const destinationId = hashMessageChannelAddress(address);
+  return { destinationType: "channel", ...destinationId === void 0 ? {} : { destinationId } };
 }
 function createSendMessageTool2(deps) {
   const parametersByTurnBehavior = deps.resolveCredentialBrowserTarget == null ? {
@@ -254,6 +268,7 @@ function createSendMessageTool2(deps) {
   };
   const parameters2 = deps.completeTurnAfterSend == null ? parametersByTurnBehavior.continueTurn : parametersByTurnBehavior.completeTurn;
   let userSelectionSendStarted = false;
+  const artifactRunIdsAttached = /* @__PURE__ */ new Set();
   return createZodAgentTool("SEND_MESSAGE", {
     name: SAND_SEND_TO_USER_TOOL_NAME,
     executionAliases: [SAND_LEGACY_SEND_MESSAGE_TOOL_NAME],
@@ -262,7 +277,8 @@ function createSendMessageTool2(deps) {
     execute: withSafeParsedArgs(
       () => parameters2,
       async (ctx, interactionHandler, rawArgs, meta) => {
-        const awaitsUserSelection = rawArgs.type === "widget" || rawArgs.type === "secret-request" || rawArgs.type === "credential-request";
+        const asksAPersonToDecide = rawArgs.type === "secret-request" || rawArgs.type === "credential-request";
+        const awaitsUserSelection = rawArgs.type === "widget" || asksAPersonToDecide;
         const message = await buildSandSendMessage(ctx, rawArgs, deps);
         const deliverTo = rawArgs.to;
         const args = encodeSendMessage(message);
@@ -272,7 +288,14 @@ function createSendMessageTool2(deps) {
           createSendMessageToolCall(baseToolCall),
           meta.toolCallId,
           async () => {
+            const recordDelivery = bindMessageDeliveryReport(
+              deps.recordDelivery,
+              ctx,
+              meta.toolCallId,
+              messageDeliveryDestination(message)
+            );
             if (userSelectionSendStarted || deps.isAwaitingUserSelection?.() === true) {
+              recordDelivery.settled({ result: "failed", failureCategory: "awaiting_user" });
               return new SendMessageResult({
                 result: {
                   case: "error",
@@ -286,6 +309,7 @@ function createSendMessageTool2(deps) {
             const blockReason = deps.getSendBlockReason?.(message, deliverTo);
             if (blockReason != null) {
               if (awaitsUserSelection) userSelectionSendStarted = false;
+              recordDelivery.settled({ result: "failed", failureCategory: "blocked" });
               return new SendMessageResult({
                 result: {
                   case: "error",
@@ -294,9 +318,29 @@ function createSendMessageTool2(deps) {
               });
             }
             const isSuppressedCard = message.type === "cursor-agent" && deps.isSuppressedCursorAgentCard?.(message.bcId) === true;
+            let deliveryRecorded = false;
             try {
               const timestampMs2 = Date.now();
               const sentMessageId = isSuppressedCard ? void 0 : deps.onSendMessage(message, timestampMs2, deliverTo);
+              deliveryRecorded = true;
+              if (isSuppressedCard) {
+                recordDelivery.settled({ result: "failed", failureCategory: "suppressed_card" });
+              } else {
+                recordDelivery.settled({
+                  result: "sent",
+                  ...sentMessageId != null && sentMessageId.length > 0 ? { messageId: sentMessageId } : {}
+                });
+                if (asksAPersonToDecide) {
+                  ctx.get(toolDecisionAuditKey)?.askAPerson(meta.toolCallId);
+                }
+                if (deps.metricsHarness !== void 0) {
+                  recordCloudAgentArtifactAttachments(
+                    { ctx, harness: deps.metricsHarness },
+                    attachmentSourcesOf(rawArgs),
+                    artifactRunIdsAttached
+                  );
+                }
+              }
               if ("end_turn" in rawArgs && rawArgs.end_turn === true) {
                 deps.completeTurnAfterSend?.();
               }
@@ -311,6 +355,7 @@ function createSendMessageTool2(deps) {
               });
             } catch (error42) {
               if (awaitsUserSelection) userSelectionSendStarted = false;
+              if (!deliveryRecorded) recordDelivery.failed(error42);
               throw error42;
             }
           },

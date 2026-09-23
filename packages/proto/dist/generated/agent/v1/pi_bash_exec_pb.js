@@ -1,17 +1,17 @@
-var __protoPackage110, __protoMessage3106, PiBashExecArgs, PiBashExecResult, PiBashExecSuccess, PiBashExecError;
+var __protoPackage111, __protoMessage3106, PiBashExecArgs, PiBashExecResult, PiBashExecSuccess, PiBashExecError;
 var init_pi_bash_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_bash_exec_pb.js"() {
     "use strict";
     init_esm();
     init_pi_common_pb();
     init_compact();
-    __protoPackage110 = "agent.v1.";
+    __protoPackage111 = "agent.v1.";
     __protoMessage3106 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage110;
+        return __protoPackage111;
       }
     };
     PiBashExecArgs = class _PiBashExecArgs extends __protoMessage3106 {

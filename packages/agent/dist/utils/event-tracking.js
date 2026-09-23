@@ -91,7 +91,8 @@ function recordSkillApplied(ctx, input) {
     plugin: input.plugin,
     marketplace: input.marketplace,
     pluginId: input.pluginId,
-    marketplaceId: input.marketplaceId
+    marketplaceId: input.marketplaceId,
+    ...input.entrypoint === "agent_read" ? { toolCallId: input.toolCallId, skillPath: input.skillPath } : {}
   });
   skillApplied.increment(ctx, 1, {
     truncation,

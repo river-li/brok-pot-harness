@@ -290,9 +290,26 @@ function conversationHistoryToCoreMessages(history) {
   }
   return messages2;
 }
-function deserializeConversationHistoryMessages(action, privacyMode) {
-  const history = action.conversationHistory === void 0 ? void 0 : fromRedactedConversationHistory(action.conversationHistory, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
-  return toRedactedCoreMessages(conversationHistoryToCoreMessages(history), privacyMode);
+function deserializeConversationHistoryMessages(history, privacyMode, knownToolCallIds = /* @__PURE__ */ new Set()) {
+  const messages2 = conversationHistoryToCoreMessages(history === void 0 ? void 0 : fromRedactedConversationHistory(history, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED)).filter((message) => !mentionsToolCallId(message, knownToolCallIds));
+  return toRedactedCoreMessages(messages2, privacyMode);
+}
+function mentionsToolCallId(message, toolCallIds) {
+  if (toolCallIds.size === 0 || typeof message.content === "string")
+    return false;
+  return message.content.some((part) => (part.type === "tool-call" || part.type === "tool-result") && toolCallIds.has(part.toolCallId));
+}
+function toolCallIdsOf(messages2) {
+  const ids = /* @__PURE__ */ new Set();
+  for (const message of messages2) {
+    if (message.role !== "assistant" || !Array.isArray(message.content))
+      continue;
+    for (const part of message.content) {
+      if (part.type === "tool-call")
+        ids.add(part.toolCallId);
+    }
+  }
+  return ids;
 }
 function shouldMigrateMultitaskEnterReminderToUserInfo(params) {
   return params.hasExistingNonSystemMessages && params.previousTurnMode === AgentMode.MULTITASK && params.resolvedTurnMode === AgentMode.MULTITASK && params.firstUserInfoContent !== void 0 && !params.userInfoAlreadyHasMultitaskEnterReminder && hasSummaryCarrierMessage(params.priorMessages);
@@ -806,6 +823,7 @@ var UserMessageActionHandler = class extends AbstractUserMessageActionHandler {
         isCloudMetaAgentParent: this.config.isCloudMetaAgentParent,
         isSlackV1_5: this.config.isSlackV1_5,
         namedAgentSessionKind: this.config.namedAgentSessionKind,
+        memoryContextBlock: this.config.getUserInfoMemoryContext?.(),
         namedAgentSelfDocumentBlock,
         enableCloudTesting: this.config.enableCloudTesting,
         useLocalAgentPrompting: this.config.useLocalAgentPrompting,
@@ -851,14 +869,16 @@ ${renderMultitaskModeEnterUserReminder(subagentToolName, multitaskModeEnterRemin
       });
     }
     const effectivePriorMessages = didReplaceUserInfo ? priorMessages.slice(1) : priorMessages;
-    const conversationHistoryMessages = deserializeConversationHistoryMessages(action, stateHandler.getPrivacyMode());
+    const conversationHistoryMessages = deserializeConversationHistoryMessages(action.conversationHistory, stateHandler.getPrivacyMode());
+    const trailingConversationHistoryMessages = action.trailingConversationHistory === void 0 ? [] : deserializeConversationHistoryMessages(action.trailingConversationHistory, stateHandler.getPrivacyMode(), toolCallIdsOf([...conversationHistoryMessages, ...effectivePriorMessages]));
     const interruptedPendingToolCallMessages = buildInterruptedPendingToolCallMessages(stateHandler, getExecutableTools(toolSetHandle.getToolExecutionSet()), action.interruptedPendingToolCallResolutions, requestContext.env?.terminalsFolder);
     rootPromptExecutor.clearMessages();
     rootPromptExecutor.appendMessages(toRedactedCoreMessages(newMessages, stateHandler.getPrivacyMode()));
     rootPromptExecutor.appendMessages([
       ...conversationHistoryMessages,
       ...effectivePriorMessages,
-      ...interruptedPendingToolCallMessages
+      ...interruptedPendingToolCallMessages,
+      ...trailingConversationHistoryMessages
     ]);
     systemPromptGenerationDuration.histogram(ctx, performance.now() - systemPromptStart);
     ensureUserMessageTiming(userMessage2);

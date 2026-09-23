@@ -1,4 +1,4 @@
-var import_node_crypto86 = require("node:crypto");
+var import_node_crypto89 = require("node:crypto");
 init_zod();
 init_errors();
 init_unknown_record();
@@ -15,7 +15,7 @@ var TranscriptJournalWriteError = class extends TranscriptJournalFailure {
   name = "TranscriptJournalWriteError";
 };
 function sha2562(value) {
-  return (0, import_node_crypto86.createHash)("sha256").update(value).digest("hex");
+  return (0, import_node_crypto89.createHash)("sha256").update(value).digest("hex");
 }
 function bytesEqual(left, right) {
   return Buffer.from(left).equals(Buffer.from(right));

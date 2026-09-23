@@ -369,9 +369,9 @@ var DefinitionMcpLoader = class {
       if (!service) {
         return;
       }
-      let fingerprint;
+      let fingerprint2;
       try {
-        fingerprint = JSON.stringify(yield Promise.all([...definitions].sort((a, b2) => a.identifier.localeCompare(b2.identifier)).map((definition2) => __awaiter36(this, void 0, void 0, function* () {
+        fingerprint2 = JSON.stringify(yield Promise.all([...definitions].sort((a, b2) => a.identifier.localeCompare(b2.identifier)).map((definition2) => __awaiter36(this, void 0, void 0, function* () {
           var _a20;
           var _b2;
           const config2 = (_b2 = yield (_a20 = service.getMcpNetworkControlsConfig) === null || _a20 === void 0 ? void 0 : _a20.call(service, getMcpNetworkControlsServerIdentity(definition2.serverConfig))) !== null && _b2 !== void 0 ? _b2 : {};
@@ -381,8 +381,8 @@ var DefinitionMcpLoader = class {
         return;
       }
       const previous = this.sandboxPolicyFingerprint;
-      this.sandboxPolicyFingerprint = fingerprint;
-      if (previous !== void 0 && previous !== fingerprint) {
+      this.sandboxPolicyFingerprint = fingerprint2;
+      if (previous !== void 0 && previous !== fingerprint2) {
         logger12.info(ctx, "MCP network-controls policy changed; reloading MCP clients to apply the new egress policy");
         yield this.closeAllCachedClients();
       }

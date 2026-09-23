@@ -3,7 +3,7 @@ function stampedVersionBaseOf(stamped) {
 }
 function sandClientBaseVersionOf(clientAppVersion) {
   return stampedVersionBaseOf(clientAppVersion) ?? stampedVersionBaseOf(
-    true ? "0.58.0-pre.19" : void 0
+    true ? "0.59.0-pre.2" : void 0
   ) ?? SAND_CLIENT_FALLBACK_BASE_VERSION;
 }
 function sandBoxNamespaceOf(boxOwnerNamespace, variant) {

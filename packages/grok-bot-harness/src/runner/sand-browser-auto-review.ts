@@ -6,6 +6,7 @@ var SAND_BROWSER_AUTO_REVIEW_MAX_CDP_PARAMS_CHARS = 2e3;
 var BYPASS_BROWSER_OPS = /* @__PURE__ */ new Set([
   "snapshot",
   "screenshot",
+  "inspect_control",
   "get_bounding_box",
   "highlight",
   "scroll"
@@ -105,6 +106,7 @@ function buildSandBrowserClassifierRiskTarget(args) {
       tab_index: exactAction.tabIndex,
       coordinates: exactAction.x !== void 0 && exactAction.y !== void 0 ? { x: exactAction.x, y: exactAction.y } : void 0,
       drag_source_ref: exactAction.sourceRef,
+      drag_source_coordinates: exactAction.sourceX !== void 0 && exactAction.sourceY !== void 0 ? { x: exactAction.sourceX, y: exactAction.sourceY } : void 0,
       drag_target_ref: exactAction.targetRef,
       drag_target_coordinates: exactAction.targetX !== void 0 && exactAction.targetY !== void 0 ? { x: exactAction.targetX, y: exactAction.targetY } : void 0,
       new_tab: exactAction.newTab,
@@ -170,7 +172,7 @@ async function runSandBrowserAutoReviewPreflight(args) {
     boxIdentity: options2.boxIdentity,
     reviewState: await options2.captureReviewState(args.ctx, args.toolCallId)
   });
-  const fingerprint = fingerprintSandBrowserAutoReviewTarget(canonicalTarget);
+  const fingerprint2 = fingerprintSandBrowserAutoReviewTarget(canonicalTarget);
   const assertDisplayStateUnchanged = async () => {
     const currentDisplayStateIdentity = (await options2.captureReviewState(args.ctx, args.toolCallId)).displayStateIdentity;
     if (currentDisplayStateIdentity !== canonicalTarget.displayStateIdentity) {
@@ -197,12 +199,13 @@ async function runSandBrowserAutoReviewPreflight(args) {
   const blockReason = decision.reason;
   const controller = options2.autoReviewController;
   if (decision.kind === "block" && controller !== void 0) {
-    const approval = await withToolExecutionTimeoutSuspended(
+    const approval = await requestReviewedApproval(
       args.ctx,
-      () => controller.requestApproval({
+      controller,
+      {
         agentId: options2.agentId,
         surface: "computer",
-        fingerprint,
+        fingerprint: fingerprint2,
         reason: blockReason,
         summary: summarizeSandBrowserAutoReviewAction({
           ...canonicalTarget.exactAction,
@@ -211,7 +214,8 @@ async function runSandBrowserAutoReviewPreflight(args) {
         ...decision.proposedRule === void 0 ? {} : { proposedRule: decision.proposedRule },
         signal: args.signal,
         ...options2.getApprovalExpiryPolicy !== void 0 ? { expiryPolicy: options2.getApprovalExpiryPolicy() } : {}
-      })
+      },
+      { toolCallId: args.toolCallId, approvalMode: "auto_review" }
     );
     if (args.signal?.aborted === true) {
       throw new SandBrowserAutoReviewBlockedError("The browser action was cancelled.", "cancelled");

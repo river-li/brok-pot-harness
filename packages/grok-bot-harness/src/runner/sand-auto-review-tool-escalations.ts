@@ -10,6 +10,7 @@ function createSandShellApprovalProvider(args) {
           ...description9 !== void 0 && description9.length > 0 ? { description: description9 } : {},
           ...request5.machineId !== void 0 ? { machineId: request5.machineId } : {}
         });
+        args.toolDecisionAudit?.recordLocalToolAuthorization(request5.toolCallId, prior);
         if (!prior.allowed) {
           return { approved: false, reason: prior.reason };
         }
@@ -20,7 +21,7 @@ function createSandShellApprovalProvider(args) {
         workingDirectory: request5.target.workingDirectory,
         ...description9 !== void 0 && description9.length > 0 ? { description: description9 } : {}
       });
-      return args.controller.requestApproval({
+      const decision = await args.controller.requestApproval({
         agentId: args.agentId,
         surface: args.surface,
         fingerprint: request5.fingerprint,
@@ -32,12 +33,14 @@ function createSandShellApprovalProvider(args) {
         signal: request5.signal,
         expiryPolicy: args.getExpiryPolicy()
       });
+      args.toolDecisionAudit?.recordApproval(request5.toolCallId, decision, "auto_review");
+      return decision;
     }
   };
 }
 function createSandMcpApprovalProvider(args) {
   return {
-    requestApproval: (request5) => {
+    requestApproval: async (request5) => {
       const description9 = request5.target.description?.trim();
       const summary = describeSandMcpAutoReviewActionSource({
         serverDisplayName: request5.target.serverDisplayName,
@@ -45,7 +48,7 @@ function createSandMcpApprovalProvider(args) {
         ...request5.target.mcpArguments === void 0 ? {} : { mcpArguments: request5.target.mcpArguments },
         ...description9 !== void 0 && description9.length > 0 ? { description: description9 } : {}
       });
-      return args.controller.requestApproval({
+      const decision = await args.controller.requestApproval({
         agentId: args.agentId,
         surface: "mcp",
         fingerprint: request5.fingerprint,
@@ -61,6 +64,8 @@ function createSandMcpApprovalProvider(args) {
         signal: request5.signal,
         expiryPolicy: args.getExpiryPolicy()
       });
+      args.toolDecisionAudit?.recordApproval(request5.toolCallId, decision, "auto_review");
+      return decision;
     }
   };
 }

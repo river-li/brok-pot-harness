@@ -1,4 +1,4 @@
-var import_node_path88 = __toESM(require("node:path"), 1);
+var import_node_path79 = __toESM(require("node:path"), 1);
 init_dist4();
 init_agent_pb();
 init_generate_image_tool_pb();
@@ -206,7 +206,7 @@ var parametersSchema16 = external_exports.object({
   aspect_ratio: external_exports.enum(supportedAspectRatios).optional().describe('Optional aspect ratio for the generated image. Supported values are "1:1", "4:3", "3:4", "16:9", and "9:16".')
 });
 function getImageMimeTypeFromPath(imagePath) {
-  const extension3 = import_node_path88.default.extname(imagePath).toLowerCase();
+  const extension3 = import_node_path79.default.extname(imagePath).toLowerCase();
   switch (extension3) {
     case ".jpg":
     case ".jpeg":
@@ -422,14 +422,14 @@ function stripDataUriPrefix(imageData) {
   return imageData.includes(",") ? imageData.split(",")[1] : imageData;
 }
 function crossPlatformBasename(filePath) {
-  return import_node_path88.default.basename(normalizeToUnixPath(filePath));
+  return import_node_path79.default.basename(normalizeToUnixPath(filePath));
 }
 function getImageOutputPath(options2) {
   const { projectFolder, filename, artifactsFolder } = options2;
   if (artifactsFolder) {
-    return import_node_path88.default.join(artifactsFolder, "assets", filename);
+    return import_node_path79.default.join(artifactsFolder, "assets", filename);
   }
-  return import_node_path88.default.join(projectFolder, "assets", filename);
+  return import_node_path79.default.join(projectFolder, "assets", filename);
 }
 async function writeGeneratedImage(ctx, writeExecutor, options2) {
   const { projectFolder, filePath, imageData, artifactsFolder } = options2;
@@ -837,13 +837,13 @@ Always use this absolute path when referring to the image. Do not repeat this im
     execute: withSafeParsedArgs(parametersSchema16, execute, createGenerateImageToolCall(new GenerateImageToolCall())),
     render: render2,
     serializeError: (error42) => {
-      const errorMessage6 = error42 instanceof ToolCallError ? error42.clientVisibleErrorMessage : getGenerateImageBaseErrorMessage(error42);
+      const errorMessage7 = error42 instanceof ToolCallError ? error42.clientVisibleErrorMessage : getGenerateImageBaseErrorMessage(error42);
       return createGenerateImageToolCall(new GenerateImageToolCall({
         result: new GenerateImageResult({
           result: {
             case: "error",
             value: new GenerateImageError({
-              error: errorMessage6
+              error: errorMessage7
             })
           }
         })

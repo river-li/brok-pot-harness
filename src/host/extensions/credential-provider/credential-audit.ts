@@ -64,7 +64,7 @@ function sanitizeElement(element, sensitiveValues) {
     ...formMethod !== void 0 ? { formMethod } : {}
   };
 }
-function createCredentialAuditLogger(log4) {
+function createCredentialAuditLogger(log5) {
   return (entry, sensitiveValues = []) => {
     let dom;
     if (entry.elements !== void 0 || entry.submitRequested !== void 0) {
@@ -75,7 +75,7 @@ function createCredentialAuditLogger(log4) {
         dom = { elements };
       }
     }
-    log4(
+    log5(
       `credentials: audit ${JSON.stringify({
         event: entry.event,
         operation: entry.operation,

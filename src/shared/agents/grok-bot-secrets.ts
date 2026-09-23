@@ -17,7 +17,7 @@ var RESERVED_EXACT_NAMES = /* @__PURE__ */ new Set([
   "NO_PROXY"
 ]);
 var RESERVED_NAME_PREFIXES = ["LD_", "CURSOR_", "CLOUD_AGENT_", "SAND_"];
-var CURSOR_SANDBOX_ENV_NAME_PATTERN = /CURSOR_SANDBOX/i;
+var CURSOR_SANDBOX_ENV_NAME_PATTERN2 = /CURSOR_SANDBOX/i;
 function validateGrokBotSecretName(name17) {
   if (name17.length === 0) return { kind: "empty" };
   if (name17.length > GROK_BOT_SECRET_NAME_MAX_LENGTH) return { kind: "long" };
@@ -31,7 +31,7 @@ function validateGrokBotSecretName(name17) {
   if (reservedPrefix !== void 0) {
     return { kind: "reserved-prefix", prefix: reservedPrefix };
   }
-  if (CURSOR_SANDBOX_ENV_NAME_PATTERN.test(name17)) return { kind: "reserved-sandbox" };
+  if (CURSOR_SANDBOX_ENV_NAME_PATTERN2.test(name17)) return { kind: "reserved-sandbox" };
   return null;
 }
 function validateGrokBotSecretValue(value) {

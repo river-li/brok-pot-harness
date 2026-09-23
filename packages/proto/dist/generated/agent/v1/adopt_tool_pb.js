@@ -1,19 +1,19 @@
-var __protoPackage85, __protoMessage382, AdoptOutcome, AdoptArgs, AdoptResult, AdoptToolCall;
+var __protoPackage86, __protoMessage382, AdoptOutcome, AdoptArgs, AdoptResult, AdoptToolCall;
 var init_adopt_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/adopt_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage85 = "agent.v1.";
+    __protoPackage86 = "agent.v1.";
     __protoMessage382 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage85;
+        return __protoPackage86;
       }
     };
-    AdoptOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage85, "AdoptOutcome", [[0, "UNSPECIFIED"], [1, "ALREADY_PARENTED"], [2, "EDGE_ONLY"], [3, "STORE_IMPORT_COMPLETED"]], 1);
+    AdoptOutcome = /* @__PURE__ */ enumType(proto3, __protoPackage86, "AdoptOutcome", [[0, "UNSPECIFIED"], [1, "ALREADY_PARENTED"], [2, "EDGE_ONLY"], [3, "STORE_IMPORT_COMPLETED"]], 1);
     AdoptArgs = class _AdoptArgs extends __protoMessage382 {
       constructor(data) {
         super();

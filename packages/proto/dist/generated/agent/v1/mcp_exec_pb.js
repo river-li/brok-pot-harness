@@ -1,4 +1,4 @@
-var __protoPackage32, __protoMessage329, McpArgs, McpResult, McpApproved, McpToolNotFound, McpServerNotFound, McpTextContent, McpImageContent, McpToolResultContentItem, McpSuccess, McpError, McpRejected, McpPermissionDenied, McpStateExecArgs, McpStateExecResult, McpStateServer, McpStateSuccess, McpStateError, McpStateRejected, ListMcpResourcesExecArgs, ListMcpResourcesExecResult, ListMcpResourcesExecResult_McpResource, ListMcpResourcesSuccess, ListMcpResourcesError, ListMcpResourcesRejected, ReadMcpResourceExecArgs, ReadMcpResourceExecResult, ReadMcpResourceSuccess, ReadMcpResourceError, ReadMcpResourceRejected, ReadMcpResourceNotFound;
+var __protoPackage33, __protoMessage329, McpArgs, McpResult, McpApproved, McpToolNotFound, McpServerNotFound, McpTextContent, McpImageContent, McpToolResultContentItem, McpSuccess, McpError, McpRejected, McpPermissionDenied, McpStateExecArgs, McpStateExecResult, McpStateServer, McpStateSuccess, McpStateError, McpStateRejected, ListMcpResourcesExecArgs, ListMcpResourcesExecResult, ListMcpResourcesExecResult_McpResource, ListMcpResourcesSuccess, ListMcpResourcesError, ListMcpResourcesRejected, ReadMcpResourceExecArgs, ReadMcpResourceExecResult, ReadMcpResourceSuccess, ReadMcpResourceError, ReadMcpResourceRejected, ReadMcpResourceNotFound;
 var init_mcp_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_exec_pb.js"() {
     "use strict";
@@ -6,13 +6,13 @@ var init_mcp_exec_pb = __esm({
     init_utils_pb2();
     init_mcp_pb();
     init_compact();
-    __protoPackage32 = "agent.v1.";
+    __protoPackage33 = "agent.v1.";
     __protoMessage329 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage32;
+        return __protoPackage33;
       }
     };
     McpArgs = class _McpArgs extends __protoMessage329 {

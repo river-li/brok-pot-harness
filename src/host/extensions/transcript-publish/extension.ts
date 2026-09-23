@@ -19,8 +19,8 @@ var transcriptPublishExtension = defineHostExtension({
     const agentsRootDir = getSandAgentsRootDir();
     const publisher = new TranscriptEntryPublisher({
       agentsRootDir,
-      ledgerDir: (0, import_node_path149.join)(getSandRootDir(), "transcript-publish"),
-      isTemporalAgent: (agentId) => readSandProfileHarness(getSandProfilePath((0, import_node_path149.join)(agentsRootDir, agentId))) === "temporal",
+      ledgerDir: (0, import_node_path150.join)(getSandRootDir(), "transcript-publish"),
+      isTemporalAgent: (agentId) => readSandProfileHarness(getSandProfilePath((0, import_node_path150.join)(agentsRootDir, agentId))) === "temporal",
       putBlob: async (blobHash, bytes) => {
         const storeId = await boxStoreSync.getStoreId();
         await boxStoreSync.objectStoreProvider.forStore(storeId).put(`${BLOB_KEY_PREFIX2}${blobHash}`, bytes, { contentAddressed: true });

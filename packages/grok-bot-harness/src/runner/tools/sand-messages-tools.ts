@@ -1,8 +1,8 @@
-var logger106 = createLogger("sand:messages-tools");
+var logger107 = createLogger("sand:messages-tools");
 function messagesToolAction(toolIdentifier) {
   return toolIdentifier === "SEND_IMESSAGE" ? "send-imessage" : "read-messages";
 }
-var MESSAGES_ATTACHMENT_BOX_DIR = import_node_path169.posix.join(SAND_BOX_UPLOADS_DIR, "messages");
+var MESSAGES_ATTACHMENT_BOX_DIR = import_node_path171.posix.join(SAND_BOX_UPLOADS_DIR, "messages");
 var INLINE_IMAGE_MIMES = /* @__PURE__ */ new Set([
   "image/jpeg",
   "image/png",
@@ -42,7 +42,7 @@ function renderAttachment(output, inflightImages) {
   return createImageResult(image2.base64, image2.mime, envelope.text);
 }
 function boxFileName(filename) {
-  const cleaned = import_node_path169.posix.basename(filename).replace(/[^a-zA-Z0-9._-]/g, "_");
+  const cleaned = import_node_path171.posix.basename(filename).replace(/[^a-zA-Z0-9._-]/g, "_");
   return cleaned.length > 0 && cleaned !== "." && cleaned !== ".." ? cleaned : `attachment-${Date.now()}`;
 }
 function sendOp(args) {
@@ -83,7 +83,7 @@ async function fetchAttachment(ctx, args, deps, inflightImages) {
       imageKey: deps.toolCallId
     });
   }
-  const boxPath = import_node_path169.posix.join(MESSAGES_ATTACHMENT_BOX_DIR, boxFileName(filename));
+  const boxPath = import_node_path171.posix.join(MESSAGES_ATTACHMENT_BOX_DIR, boxFileName(filename));
   await deps.agentBox.uploadFile(ctx, deps.getBoxId(), boxPath, import_node_buffer10.Buffer.from(bytesBase64, "base64"));
   return JSON.stringify({
     text: `${filename} (${mime2}) is on your box at ${boxPath}. Open it with Read.`
@@ -215,6 +215,25 @@ function boundErrorClass(error42) {
   const name17 = errorClassOf(error42);
   return MESSAGES_ERROR_CLASSES.find((known) => known === name17) ?? "other";
 }
+function sendFailureCategory(error42) {
+  if (isMessagesDecline(error42)) return "declined";
+  const code = sandMessagesErrorCode(error42);
+  return code === "other" ? errorClassOf(error42) : code;
+}
+async function sendIMessage(ctx, args, tools) {
+  const reportDelivery = bindMessageDeliveryReport(tools.recordDelivery, ctx, tools.toolCallId, {
+    destinationType: "apple_messages"
+  });
+  let result;
+  try {
+    result = await tools.messages.run(ctx, sendOp(args), displayOf(args));
+  } catch (error42) {
+    reportDelivery.failed(error42, sendFailureCategory(error42));
+    throw error42;
+  }
+  reportDelivery.settled({ result: "sent" });
+  return JSON.stringify(result);
+}
 function okToolUse(result, durationMs) {
   if (result.kind === "send") {
     return {
@@ -251,7 +270,7 @@ function reportMessagesToolUse(ctx, report, makeUse) {
   try {
     report(makeUse());
   } catch (error42) {
-    logger106.warn(ctx, `Messages tool-use report failed (${errorLogTag(error42)})`);
+    logger107.warn(ctx, `Messages tool-use report failed (${errorLogTag(error42)})`);
   }
 }
 function instrumentMessages(messages2, report) {
@@ -357,7 +376,7 @@ function createMessagesTools(deps) {
       name: "SendIMessage",
       description: "Send a message from the user's Mac, as the user. Address it with `to` (one handle) or `chatId` (a chat guid). Every call raises an approval card the user must accept, unless the user has allowed that recipient, or every send, on their computer; send once and report the result. `via` echoes how it was addressed, and `verified` is whether the text has already appeared in the local chat log, so `false` means not seen yet, not failed. Never resend on `verified: false`.",
       parameters: sendParameters,
-      execute: (ctx, args, tools) => tools.messages.run(ctx, sendOp(args), displayOf(args)).then((result) => JSON.stringify(result))
+      execute: sendIMessage
     }),
     defineCommunicateTool(toolDeps, {
       id: "CHECK_IMESSAGE_PERMISSIONS",

@@ -1,19 +1,19 @@
-var __protoPackage23, __protoMessage320, CursorRuleSource, CursorRuleTypeGlobal, CursorRuleTypeFileGlobs, CursorRuleTypeAgentFetched, CursorRuleTypeManuallyAttached, CursorRuleType, CursorRule2;
+var __protoPackage24, __protoMessage320, CursorRuleSource, CursorRuleTypeGlobal, CursorRuleTypeFileGlobs, CursorRuleTypeAgentFetched, CursorRuleTypeManuallyAttached, CursorRuleType, CursorRule2;
 var init_cursor_rules_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/cursor_rules_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage23 = "agent.v1.";
+    __protoPackage24 = "agent.v1.";
     __protoMessage320 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage23;
+        return __protoPackage24;
       }
     };
-    CursorRuleSource = /* @__PURE__ */ enumType(proto3, __protoPackage23, "CursorRuleSource", [[0, "UNSPECIFIED"], [1, "TEAM"], [2, "USER"]], 1);
+    CursorRuleSource = /* @__PURE__ */ enumType(proto3, __protoPackage24, "CursorRuleSource", [[0, "UNSPECIFIED"], [1, "TEAM"], [2, "USER"]], 1);
     CursorRuleTypeGlobal = class _CursorRuleTypeGlobal extends __protoMessage320 {
       constructor(data) {
         super();

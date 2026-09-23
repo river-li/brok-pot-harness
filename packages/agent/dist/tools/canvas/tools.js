@@ -4,7 +4,7 @@ init_dist3();
 init_zod();
 var WRITE_CANVAS_TOOL_NAME = "WriteCanvas";
 var READ_CANVAS_TOOL_NAME = "ReadCanvas";
-function errorMessage4(error42) {
+function errorMessage3(error42) {
   return error42 instanceof Error ? error42.message : String(error42);
 }
 var writeCanvasParametersSchema = external_exports.object({
@@ -284,7 +284,7 @@ function serializeWriteToolError(error42) {
 ${error42.message}`;
     return writeFailureResult(WriteCanvasFailReason.REFUSED, detail);
   }
-  return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage4(error42));
+  return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage3(error42));
 }
 function buildWriteCanvasTool(port) {
   const render2 = async (_ctx, result, _props) => createStringResult(renderWriteResult(result));
@@ -310,7 +310,7 @@ function buildWriteCanvasTool(port) {
           if (error42 instanceof DeferredInteractionResponseError) {
             throw error42;
           }
-          return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage4(error42));
+          return writeFailureResult(WriteCanvasFailReason.UNAVAILABLE, errorMessage3(error42));
         }
       }, (result) => wrapWriteToolCall(new WriteCanvasToolCall({ args: argsProto, result })));
     }, wrapWriteToolCall(new WriteCanvasToolCall()), { emitInitialPartialToolCall: false }),
@@ -346,13 +346,13 @@ function buildReadCanvasTool(port) {
           if (error42 instanceof DeferredInteractionResponseError) {
             throw error42;
           }
-          return readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage4(error42));
+          return readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage3(error42));
         }
       }, (result) => wrapReadToolCall(new ReadCanvasToolCall({ args: argsProto, result })));
     }, wrapReadToolCall(new ReadCanvasToolCall()), { emitInitialPartialToolCall: false }),
     render: render2,
     serializeError: (error42) => wrapReadToolCall(new ReadCanvasToolCall({
-      result: readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage4(error42))
+      result: readFailureResult(ReadCanvasFailReason.UNAVAILABLE, errorMessage3(error42))
     }))
   });
 }

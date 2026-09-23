@@ -420,17 +420,18 @@ var TurnRuntime = class {
       const turnMessageIds = [...recoveredMessageIds ?? [], options2.messageId];
       this.activeTurnUserMessageIds.set(session.id, turnMessageIds);
       let spendRequestId;
-      const onPersistableRunStarted = spendInitiationRecorder(
+      const initiation = messageSpendInitiation(
         session,
-        messageSpendInitiation(session, turnMessageIds, options2.queueStartEpochMs ?? turnStartedAtMs),
-        (requestId2) => {
-          spendRequestId = requestId2;
-          this.tm.runLifecycle.persistedSpendRequestIds.set(session.id, requestId2);
-        }
+        turnMessageIds,
+        options2.queueStartEpochMs ?? turnStartedAtMs
       );
       const carriedWakeEntryIds = turnMessageIds.flatMap((messageId) => {
         const entryId = wakeOutcomeEntryIdOf(messageId);
         return entryId == null ? [] : [entryId];
+      });
+      const onPersistableRunStarted = spendInitiationRecorder(session, initiation, (requestId2) => {
+        spendRequestId = requestId2;
+        this.tm.runLifecycle.persistedSpendRequestIds.set(session.id, requestId2);
       });
       try {
         const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(session, {
@@ -442,6 +443,7 @@ var TurnRuntime = class {
           traceCtx: turnCtx,
           appendReplyReminder: true,
           requestSource: "turn",
+          ...initiation === void 0 ? {} : { turnUnitId: initiation.id, turnUnitType: initiation.type },
           onModelResolved: (modelId) => turn.setModel(modelId),
           onPersistableRunStarted
         });
@@ -455,7 +457,8 @@ var TurnRuntime = class {
             traceCtx: turnCtx,
             turnTrace,
             turn,
-            onPersistableRunStarted
+            onPersistableRunStarted,
+            ...initiation === void 0 ? {} : { turnUnitId: initiation.id, turnUnitType: initiation.type }
           });
           settledResult = settled.result;
           if (settledResult.pausedForUpgrade) {
@@ -556,6 +559,8 @@ var TurnRuntime = class {
       advanceChainOnDelivery: options2.advanceChainOnDelivery,
       ackToken: options2.ackToken,
       traceCtx: options2.traceCtx,
+      ...options2.turnUnitId === void 0 ? {} : { turnUnitId: options2.turnUnitId },
+      ...options2.turnUnitType === void 0 ? {} : { turnUnitType: options2.turnUnitType },
       onModelResolved: (modelId) => options2.turn?.setModel(modelId),
       onPersistableRunStarted: options2.onPersistableRunStarted
     };

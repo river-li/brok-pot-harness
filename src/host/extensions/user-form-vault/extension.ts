@@ -31,7 +31,7 @@ function startUserFormVault(context2, createClient2 = createSandCursorBackendCli
     getMachineId: context2.deps.auth.getMachineId
   });
   const service = createUserFormVaultService({
-    newEntryId: () => (0, import_node_crypto83.randomUUID)(),
+    newEntryId: () => (0, import_node_crypto86.randomUUID)(),
     isVaultEnabled: () => context2.deps.experiments.checkFeatureGate("grok_bot_form_vault", {
       disableExposureLog: true
     }),

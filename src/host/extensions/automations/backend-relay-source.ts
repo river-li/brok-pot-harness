@@ -221,7 +221,7 @@ function createBackendRelaySources(deps) {
       healthy: 2
     };
     const bestByScope = /* @__PURE__ */ new Map();
-    const observe = (scope, outcome) => {
+    const observe2 = (scope, outcome) => {
       const current = bestByScope.get(scope);
       if (current == null || OUTCOME_RANK[outcome] > OUTCOME_RANK[current]) {
         bestByScope.set(scope, outcome);
@@ -229,10 +229,10 @@ function createBackendRelaySources(deps) {
     };
     for (const team of teams) {
       for (const channel of team.channels ?? []) {
-        observe(channel.input, channel.isBotMember === false ? "missing-bot" : "healthy");
+        observe2(channel.input, channel.isBotMember === false ? "missing-bot" : "healthy");
       }
       for (const scope of team.unresolvedChannels) {
-        observe(scope, "not-found");
+        observe2(scope, "not-found");
       }
     }
     const issues = [];

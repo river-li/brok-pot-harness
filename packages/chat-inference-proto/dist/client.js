@@ -195,6 +195,8 @@ var ProtoPromptExecutor = class extends BasePromptExecutor {
       rootParentRequestId: ctx.get(rootParentRequestIdKey),
       parentAgentToolCallId: ctx.get(parentAgentToolCallIdKey),
       subagentType: ctx.get(subagentTypeKey),
+      turnUnitId: ctx.get(turnUnitIdKey),
+      turnUnitType: ctx.get(turnUnitTypeKey),
       compactionEpoch: (_a19 = ctx.get(compactionEpochKey)) === null || _a19 === void 0 ? void 0 : _a19(),
       inferenceReason: this.inferenceReason,
       acceptedUnadvertisedToolNames: options2.acceptedUnadvertisedToolNames

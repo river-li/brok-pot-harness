@@ -1,6 +1,8 @@
 function projectSandAutoReviewUserText(text2) {
   const body = stripLeadingSandTurnAssemblyNotes(
-    stripSystemReminderBlocks(stripInstructionsUpdates(stripAgentProfileUpdates(text2)))
+    stripSystemReminderBlocks(
+      stripMemoryContextBlocks(stripInstructionsUpdates(stripAgentProfileUpdates(text2)))
+    )
   );
   const own = stripGroupTurnClosing(stripAutomationWakeDeliveryGuidance(body));
   return own.length > 0 ? own : void 0;

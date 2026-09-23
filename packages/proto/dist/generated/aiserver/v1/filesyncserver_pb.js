@@ -1,17 +1,17 @@
-var __protoPackage120, __protoMessage3116, FilesyncUpdateWithModelVersion, SingleUpdateRequest;
+var __protoPackage121, __protoMessage3116, FilesyncUpdateWithModelVersion, SingleUpdateRequest;
 var init_filesyncserver_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/filesyncserver_pb.js"() {
     "use strict";
     init_esm();
     init_utils_pb();
     init_compact();
-    __protoPackage120 = "aiserver.v1.";
+    __protoPackage121 = "aiserver.v1.";
     __protoMessage3116 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage120;
+        return __protoPackage121;
       }
     };
     FilesyncUpdateWithModelVersion = class _FilesyncUpdateWithModelVersion extends __protoMessage3116 {

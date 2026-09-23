@@ -1,4 +1,5 @@
 init_agent_pb();
+init_mcp_exec_pb();
 init_mcp_tool_pb();
 init_unknown_record();
 init_zod();
@@ -49,7 +50,12 @@ var DRIVER_ARG_NAMES = {
 };
 var PLAYWRIGHT_ROW_ARGS = external_exports.record(external_exports.unknown());
 var PLAYWRIGHT_WAIT_FOR_MAX_SECONDS = 5;
+var SCREENSHOT_ATTACHED_SENTENCE = "The image comes back attached to this result.";
 function normalizeRowArgs(name17, args) {
+  if (name17 === "browser_take_screenshot") {
+    const { filename: _filename, ...withoutFilename } = args;
+    return withoutFilename;
+  }
   const { time: time4 } = args;
   const overCap = name17 === "browser_wait_for" && typeof time4 === "number" && time4 > PLAYWRIGHT_WAIT_FOR_MAX_SECONDS;
   return overCap ? { ...args, time: PLAYWRIGHT_WAIT_FOR_MAX_SECONDS } : args;
@@ -78,12 +84,16 @@ function definition(row, server) {
     time4.maximum = PLAYWRIGHT_WAIT_FOR_MAX_SECONDS;
     time4.description = `${time4.description}. The harness caps it at ${PLAYWRIGHT_WAIT_FOR_MAX_SECONDS} seconds.`;
   }
+  const screenshot = row.name === "browser_take_screenshot";
+  if (screenshot && isUnknownRecord(inputSchema) && isUnknownRecord(inputSchema.properties)) {
+    delete inputSchema.properties.filename;
+  }
   return {
     name: `${server}-${row.name}`,
     toolName: row.name,
     providerIdentifier: server,
     clientKey: server,
-    description: row.description,
+    description: screenshot ? `${row.description} ${SCREENSHOT_ATTACHED_SENTENCE}` : row.description,
     inputSchema
   };
 }
@@ -106,6 +116,50 @@ function toolCallResultOf(result) {
   const success2 = successOf(result);
   if (success2 === void 0 || !success2.isError) return { kind: "ok" };
   return { kind: "tool_error", reason: playwrightToolErrorReason(textOf(success2)) };
+}
+var PLAYWRIGHT_SILENT_SUCCESS_TEXT = "Done. The page URL and title are unchanged.";
+var SCREENSHOT_FILE_LINK = /^- \[(Screenshot of [^\]]*)\]\([^)]*\)$/m;
+async function withInlineScreenshot(ctx, result) {
+  const success2 = successOf(result);
+  if (success2 === void 0 || success2.isError) return result;
+  if (!success2.content.some((item) => item.content.case === "image")) return result;
+  const attached = success2.clone();
+  const link = attached.content.find((item) => item.content.case === "text");
+  if (link?.content.case === "text") {
+    link.content.value.text = link.content.value.text.replace(
+      SCREENSHOT_FILE_LINK,
+      "$1 is attached to this result."
+    );
+  }
+  for (const item of attached.content) {
+    if (item.content.case !== "image") continue;
+    const bounded = await boundInlineImageForModel(ctx, item.content.value.data, {
+      mimeType: item.content.value.mimeType,
+      source: "sand_playwright_screenshot"
+    });
+    item.content.value.data = new Uint8Array(bounded.data);
+    item.content.value.mimeType = bounded.mimeType;
+  }
+  return new McpToolResult({ result: { case: "success", value: attached } });
+}
+function withSilentSuccessText(result) {
+  const success2 = successOf(result);
+  if (success2 === void 0 || success2.isError) return result;
+  if (success2.content.some(
+    (item) => item.content.case !== "text" || item.content.value.outputLocation !== void 0 || item.content.value.text.trim() !== ""
+  )) {
+    return result;
+  }
+  const spoken = success2.clone();
+  spoken.content = [
+    new McpToolResultContentItem({
+      content: {
+        case: "text",
+        value: new McpTextContent({ text: PLAYWRIGHT_SILENT_SUCCESS_TEXT })
+      }
+    })
+  ];
+  return new McpToolResult({ result: { case: "success", value: spoken } });
 }
 function rowTool(deps, row, lastPageUrl) {
   const toolFor = (server) => createMcpTool(deps.resourceAccessor, definition(row, server), { name: row.name });
@@ -154,12 +208,13 @@ function rowTool(deps, row, lastPageUrl) {
             });
           }
           stage = "exec";
-          const result = await toolFor(server).execute(
+          const executed = await toolFor(server).execute(
             ctx,
             interactionHandler,
             once(JSON.stringify(args)),
             meta
           );
+          const result = row.name === "browser_take_screenshot" ? await withInlineScreenshot(ctx, executed) : withSilentSuccessText(executed);
           const pageUrl = pageUrlOf(result);
           if (pageUrl !== void 0) lastPageUrl.set(windowIndex, pageUrl);
           record2(toolCallResultOf(result));

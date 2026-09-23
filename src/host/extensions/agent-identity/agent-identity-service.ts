@@ -115,7 +115,7 @@ var SandAgentIdentityService = class {
       await this.deps.publishAgentRoster();
       return true;
     }).catch((error42) => {
-      this.deps.log(`[sand:agent-identity] adopt failed: ${errorMessage2(error42)}`);
+      this.deps.log(`[sand:agent-identity] adopt failed: ${errorMessage4(error42)}`);
       return false;
     });
   }
@@ -130,7 +130,7 @@ var SandAgentIdentityService = class {
       try {
         rows = await this.deps.listRemoteAgents();
       } catch (error42) {
-        this.deps.log(`[sand:agent-identity] adopt ${agentId} failed: ${errorMessage2(error42)}`);
+        this.deps.log(`[sand:agent-identity] adopt ${agentId} failed: ${errorMessage4(error42)}`);
         return local === null ? "unavailable" : "local";
       }
       const agent = rows.map(toRemoteGrokBotAgent).find((row) => row?.handle === agentId);
@@ -165,7 +165,7 @@ var SandAgentIdentityService = class {
       } catch (error42) {
         signal?.throwIfAborted();
         this.deps.log(
-          `[sand:agent-identity] roster publication failed after ownership reconcile: ${errorMessage2(error42)}`
+          `[sand:agent-identity] roster publication failed after ownership reconcile: ${errorMessage4(error42)}`
         );
         this.deps.report("warn", {
           op: "reconcile",
@@ -179,11 +179,11 @@ var SandAgentIdentityService = class {
       return this.reportReconcileFailure(error42);
     });
   }
-  noteAgentMinted(agentId) {
-    return this.runSerialized(() => this.mint(agentId, "mint"));
+  noteAgentMinted(agentId, createIntent = "register-existing-local") {
+    return this.runSerialized(() => this.mint(agentId, "mint", createIntent));
   }
   backfillAgent(agentId) {
-    return this.runSerialized(() => this.mint(agentId, "backfill"));
+    return this.runSerialized(() => this.mint(agentId, "backfill", "register-existing-local"));
   }
   async createRemoteAgentFirst(fields2, options2) {
     const policy = await this.deps.getCreationPolicy();
@@ -231,7 +231,7 @@ var SandAgentIdentityService = class {
         }
         const profilePath = this.profilePathFor(agentId);
         const identity = readSandProfileFile(profilePath);
-        if (identity == null || readSandGroupConfig((0, import_node_path32.join)(this.deps.getAgentsRootDir(), agentId)) !== null) {
+        if (identity == null || readSandGroupConfig((0, import_node_path84.join)(this.deps.getAgentsRootDir(), agentId)) !== null) {
           throw new ConnectError(
             `Member agent ${agentId} has no local Bot profile.`,
             Code.InvalidArgument
@@ -241,6 +241,7 @@ var SandAgentIdentityService = class {
         const result = await this.requestMint(create, {
           agentId,
           ...withGeneratedMark(agentId, identityInput(identity)),
+          createIntent: "register-existing-local",
           harness: "box",
           introductionSuppressed: true,
           ...avatarDataUrl === void 0 ? {} : { avatarDataUrl }
@@ -301,6 +302,7 @@ var SandAgentIdentityService = class {
       const result = await this.requestMint(create, {
         agentId,
         ...dealt,
+        createIntent: "register-existing-local",
         ...avatarDataUrl === void 0 ? {} : { avatarDataUrl }
       });
       invariant(result.outcome !== "tombstoned", "ensureServerBacked: agent_id tombstoned");
@@ -359,7 +361,12 @@ var SandAgentIdentityService = class {
     wantsTemporal,
     allowBoxFallback
   }) {
-    const base = { agentId, ...fields2, name: defaultedName(fields2.name) };
+    const base = {
+      agentId,
+      ...fields2,
+      name: defaultedName(fields2.name),
+      createIntent: "fresh"
+    };
     let result = await this.requestMint(
       create,
       wantsTemporal ? { ...base, harness: "temporal" } : base
@@ -459,7 +466,7 @@ var SandAgentIdentityService = class {
     return this.queue;
   }
   profilePathFor(agentId) {
-    return getSandProfilePath((0, import_node_path32.join)(this.deps.getAgentsRootDir(), agentId));
+    return getSandProfilePath((0, import_node_path84.join)(this.deps.getAgentsRootDir(), agentId));
   }
   enqueue(run) {
     void this.runSerialized(run);
@@ -470,13 +477,13 @@ var SandAgentIdentityService = class {
     this.queue = next.then(
       () => void 0,
       (error42) => {
-        this.deps.log(`[sand:agent-identity] operation failed: ${errorMessage2(error42)}`);
+        this.deps.log(`[sand:agent-identity] operation failed: ${errorMessage4(error42)}`);
       }
     );
     return next;
   }
   reportReconcileFailure(error42) {
-    this.deps.log(`[sand:agent-identity] reconcile failed: ${errorMessage2(error42)}`);
+    this.deps.log(`[sand:agent-identity] reconcile failed: ${errorMessage4(error42)}`);
     this.deps.report("warn", {
       op: "reconcile",
       outcome: "error",
@@ -497,7 +504,7 @@ var SandAgentIdentityService = class {
     } catch (error42) {
       signal?.throwIfAborted();
       this.deps.log(
-        `[sand:agent-identity] ListGrokBotAgents failed after retries: ${errorMessage2(error42)}`
+        `[sand:agent-identity] ListGrokBotAgents failed after retries: ${errorMessage4(error42)}`
       );
       this.deps.report("warn", {
         op: "reconcile",
@@ -564,7 +571,7 @@ var SandAgentIdentityService = class {
       signal?.throwIfAborted();
       this.unresolvedAvatarBaselines.set(agent.handle, local.version);
       this.deps.log(
-        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage2(error42)}`
+        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage4(error42)}`
       );
       return "failed";
     }
@@ -589,20 +596,20 @@ var SandAgentIdentityService = class {
       signal?.throwIfAborted();
       this.unresolvedAvatarBaselines.set(agent.handle, expectedVersion);
       this.deps.log(
-        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage2(error42)}`
+        `[sand:agent-identity] avatar restore ${agent.handle} failed: ${errorMessage4(error42)}`
       );
       return "failed";
     }
   }
   isAwaitingLocalMaterialization(root, handle) {
     if (!this.pendingLocalMaterializationIds.has(handle)) return false;
-    if (!(0, import_node_fs30.existsSync)(getSandProfilePath((0, import_node_path32.join)(root, handle)))) return true;
+    if (!(0, import_node_fs46.existsSync)(getSandProfilePath((0, import_node_path84.join)(root, handle)))) return true;
     this.pendingLocalMaterializationIds.delete(handle);
     return false;
   }
   async syncDownAgent(root, agent) {
-    const profilePath = getSandProfilePath((0, import_node_path32.join)(root, agent.handle));
-    const isUnboundLocalDir = (0, import_node_fs30.existsSync)(profilePath) && readSandProfileServerId(profilePath) === null;
+    const profilePath = getSandProfilePath((0, import_node_path84.join)(root, agent.handle));
+    const isUnboundLocalDir = (0, import_node_fs46.existsSync)(profilePath) && readSandProfileServerId(profilePath) === null;
     if (isUnboundLocalDir) return this.adoptPromotedRoomDir(root, agent);
     const local = readSandProfileFile(profilePath);
     this.rememberServerIdentity(agent.handle, agent);
@@ -621,7 +628,7 @@ var SandAgentIdentityService = class {
     return true;
   }
   adoptPromotedRoomDir(root, agent) {
-    const agentDir = (0, import_node_path32.join)(root, agent.handle);
+    const agentDir = (0, import_node_path84.join)(root, agent.handle);
     if (agent.roomMemberIds === null || readSandGroupConfig(agentDir) === null) return false;
     const local = readSandProfileFile(getSandProfilePath(agentDir));
     this.rememberServerIdentity(agent.handle, agent);
@@ -634,11 +641,11 @@ var SandAgentIdentityService = class {
     return true;
   }
   bindDirToRow(root, agent, identity) {
-    const agentDir = (0, import_node_path32.join)(root, agent.handle);
+    const agentDir = (0, import_node_path84.join)(root, agent.handle);
     writeServerBackedProfileFile(getSandProfilePath(agentDir), identity, serverBindingOf(agent));
     if (agent.roomMemberIds !== null) mirrorRoomMembers(agentDir, agent.roomMemberIds);
   }
-  async mint(agentId, op) {
+  async mint(agentId, op, createIntent) {
     const create = this.deps.createRemoteAgent;
     if (!(await this.deps.getCreationPolicy()).durableIdentityWritesEnabled || create == null) {
       this.deps.report("info", { op, outcome: "writes_off", agent_id: agentId });
@@ -651,11 +658,11 @@ var SandAgentIdentityService = class {
     }
     const identity = readSandProfileFile(profilePath);
     if (identity == null) {
-      if ((0, import_node_fs30.existsSync)(profilePath)) {
+      if ((0, import_node_fs46.existsSync)(profilePath)) {
         this.deps.report("warn", { op, outcome: "unparseable", agent_id: agentId });
         return "unparseable";
       }
-      this.deps.report((0, import_node_fs30.existsSync)((0, import_node_path32.dirname)(profilePath)) ? "warn" : "info", {
+      this.deps.report((0, import_node_fs46.existsSync)((0, import_node_path84.dirname)(profilePath)) ? "warn" : "info", {
         op,
         outcome: "no_profile",
         agent_id: agentId
@@ -670,6 +677,7 @@ var SandAgentIdentityService = class {
       () => create({
         agentId,
         ...dealt,
+        createIntent,
         ...avatarDataUrl === void 0 ? {} : { avatarDataUrl }
       })
     );
@@ -704,7 +712,7 @@ var SandAgentIdentityService = class {
     try {
       dataUrl = (await this.deps.getLocalAvatar(agentId)).dataUrl;
     } catch (error42) {
-      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage2(error42)}`);
+      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage4(error42)}`);
       return void 0;
     }
     return createAvatarDataUrl(dataUrl);
@@ -803,7 +811,7 @@ var SandAgentIdentityService = class {
     try {
       localVersion = (await this.deps.getLocalAvatar(agentId)).version;
     } catch (error42) {
-      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage2(error42)}`);
+      this.deps.log(`[sand:agent-identity] avatar read ${agentId} failed: ${errorMessage4(error42)}`);
       return;
     }
     this.serverAvatarVersions.set(agentId, rowAvatarVersion);
@@ -816,7 +824,7 @@ var SandAgentIdentityService = class {
       return { ok: true, value: await this.deps.retry.runWithRetry(work) };
     } catch (error42) {
       this.deps.log(
-        `[sand:agent-identity] ${op} ${agentId} failed after retries: ${errorMessage2(error42)}`
+        `[sand:agent-identity] ${op} ${agentId} failed after retries: ${errorMessage4(error42)}`
       );
       this.deps.report("warn", {
         op,
@@ -828,7 +836,7 @@ var SandAgentIdentityService = class {
     }
   }
 };
-function errorMessage2(error42) {
+function errorMessage4(error42) {
   return error42 instanceof Error ? error42.message : String(error42);
 }
 function defaultedName(raw) {

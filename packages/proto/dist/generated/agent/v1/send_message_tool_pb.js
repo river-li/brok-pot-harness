@@ -1,16 +1,16 @@
-var __protoPackage70, __protoMessage367, SendMessageText, SendMessageAttachment, SendMessageArgs, SendMessageSuccess, SendMessageError, SendMessageResult, SendMessageToolCall;
+var __protoPackage71, __protoMessage367, SendMessageText, SendMessageAttachment, SendMessageArgs, SendMessageSuccess, SendMessageError, SendMessageResult, SendMessageToolCall;
 var init_send_message_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/send_message_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage70 = "agent.v1.";
+    __protoPackage71 = "agent.v1.";
     __protoMessage367 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage70;
+        return __protoPackage71;
       }
     };
     SendMessageText = class _SendMessageText extends __protoMessage367 {

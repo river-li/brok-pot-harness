@@ -1,17 +1,17 @@
-var __protoPackage75, __protoMessage372, PiBashToolCall, PiBashToolArgs, PiBashToolResult, PiBashToolSuccess, PiBashToolError;
+var __protoPackage76, __protoMessage372, PiBashToolCall, PiBashToolArgs, PiBashToolResult, PiBashToolSuccess, PiBashToolError;
 var init_pi_bash_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_bash_tool_pb.js"() {
     "use strict";
     init_esm();
     init_pi_common_pb();
     init_compact();
-    __protoPackage75 = "agent.v1.";
+    __protoPackage76 = "agent.v1.";
     __protoMessage372 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage75;
+        return __protoPackage76;
       }
     };
     PiBashToolCall = class _PiBashToolCall extends __protoMessage372 {

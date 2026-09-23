@@ -8,7 +8,7 @@ var clampCoalescedRunIds = clampAutomationCoalescedRunIds;
 var AUTOMATION_CHANGE_DEBOUNCE_MS = 50;
 function inspectAgentAutomationDefinitions(agentDir) {
   try {
-    if (!(0, import_node_fs53.statSync)(agentDir).isDirectory()) {
+    if (!(0, import_node_fs55.statSync)(agentDir).isDirectory()) {
       return { state: "agent_missing", validDefinitionCount: 0 };
     }
   } catch (error42) {
@@ -18,7 +18,7 @@ function inspectAgentAutomationDefinitions(agentDir) {
   const automationsDir = getAgentAutomationsDir(agentDir);
   let entries;
   try {
-    entries = (0, import_node_fs53.readdirSync)(automationsDir, { withFileTypes: true });
+    entries = (0, import_node_fs55.readdirSync)(automationsDir, { withFileTypes: true });
   } catch (error42) {
     reportFallbackUnlessAbsent("automation_store", error42);
     return { state: "dir_missing", validDefinitionCount: 0 };
@@ -31,13 +31,13 @@ function inspectAgentAutomationDefinitions(agentDir) {
     const configPath = (0, import_node_path96.join)(automationsDir, entry.name, CONFIG_FILENAME);
     let raw;
     try {
-      raw = (0, import_node_fs53.readFileSync)(configPath, "utf8");
+      raw = (0, import_node_fs55.readFileSync)(configPath, "utf8");
     } catch {
       continue;
     }
     let fallbackCreatedAt = Date.now();
     try {
-      const stats = (0, import_node_fs53.statSync)(configPath);
+      const stats = (0, import_node_fs55.statSync)(configPath);
       fallbackCreatedAt = Math.floor(stats.birthtimeMs || stats.mtimeMs);
     } catch {
     }
@@ -102,7 +102,7 @@ var FileAutomationStore = class {
   readRuns(id) {
     let raw;
     try {
-      raw = (0, import_node_fs53.readFileSync)(this.runsPath(id), "utf8");
+      raw = (0, import_node_fs55.readFileSync)(this.runsPath(id), "utf8");
     } catch (error42) {
       reportFallbackUnlessAbsent("automation_store", error42);
       return [];
@@ -116,14 +116,14 @@ var FileAutomationStore = class {
     const path31 = this.configPath(id);
     let raw;
     try {
-      raw = (0, import_node_fs53.readFileSync)(path31, "utf8");
+      raw = (0, import_node_fs55.readFileSync)(path31, "utf8");
     } catch (error42) {
       reportFallbackUnlessAbsent("automation_store", error42);
       return null;
     }
     let fallbackCreatedAt = Date.now();
     try {
-      fallbackCreatedAt = Math.floor((0, import_node_fs53.statSync)(path31).birthtimeMs || (0, import_node_fs53.statSync)(path31).mtimeMs);
+      fallbackCreatedAt = Math.floor((0, import_node_fs55.statSync)(path31).birthtimeMs || (0, import_node_fs55.statSync)(path31).mtimeMs);
     } catch {
     }
     const parsed2 = parseStoredConfig(raw, fallbackCreatedAt);
@@ -229,28 +229,28 @@ var FileAutomationStore = class {
     this.writeConfig(id, next);
     return this.toRecord({ id, config: next, deriveNextRunAt: true });
   }
-  recordRun(id, at2 = Date.now()) {
-    return this.recordRunWith({ id, at: at2, deriveNextRunAt: true });
+  recordRun(id, at3 = Date.now()) {
+    return this.recordRunWith({ id, at: at3, deriveNextRunAt: true });
   }
-  recordRunDefinition(id, at2 = Date.now()) {
-    return this.recordRunWith({ id, at: at2, deriveNextRunAt: false });
+  recordRunDefinition(id, at3 = Date.now()) {
+    return this.recordRunWith({ id, at: at3, deriveNextRunAt: false });
   }
   recordRunWith({
     id,
-    at: at2,
+    at: at3,
     deriveNextRunAt
   }) {
     if (!isSafeFolderId(id)) return null;
     const config2 = this.readConfig(id);
     if (config2 == null) return null;
-    const next = { ...config2, lastRunAt: at2 };
+    const next = { ...config2, lastRunAt: at3 };
     this.writeConfig(id, next);
     return this.toRecord({ id, config: next, deriveNextRunAt });
   }
   beginRun({
     id,
     trigger: trigger2,
-    at: at2 = Date.now(),
+    at: at3 = Date.now(),
     event,
     runId = (0, import_node_crypto41.randomUUID)(),
     coalescedRunIds
@@ -265,7 +265,7 @@ var FileAutomationStore = class {
     const run = {
       id: runId,
       trigger: trigger2,
-      startedAt: at2,
+      startedAt: at3,
       finishedAt: null,
       status: "running",
       ...eventSummary != null ? { event: eventSummary } : {},
@@ -290,12 +290,12 @@ var FileAutomationStore = class {
     nextRuns[index] = { ...existing, requestId: normalizedRequestId };
     this.writeRuns(id, nextRuns);
   }
-  finishRun(id, runId, status, at2 = Date.now(), detail) {
+  finishRun(id, runId, status, at3 = Date.now(), detail) {
     return this.finishRunWith({
       id,
       runId,
       status,
-      at: at2,
+      at: at3,
       ...detail !== void 0 ? { detail } : {},
       deriveNextRunAt: true
     });
@@ -304,7 +304,7 @@ var FileAutomationStore = class {
     id,
     runId,
     status,
-    at: at2 = Date.now(),
+    at: at3 = Date.now(),
     detail,
     errorKind,
     requestId: requestId2
@@ -313,7 +313,7 @@ var FileAutomationStore = class {
       id,
       runId,
       status,
-      at: at2,
+      at: at3,
       ...detail !== void 0 ? { detail } : {},
       ...errorKind !== void 0 ? { errorKind } : {},
       ...requestId2 !== void 0 ? { requestId: requestId2 } : {},
@@ -324,7 +324,7 @@ var FileAutomationStore = class {
     id,
     runId,
     status,
-    at: at2,
+    at: at3,
     detail,
     errorKind,
     requestId: requestId2,
@@ -343,7 +343,7 @@ var FileAutomationStore = class {
     const normalizedRequestId = requestId2?.trim();
     const updated = {
       ...existing,
-      finishedAt: at2,
+      finishedAt: at3,
       status,
       ...clampedDetail != null ? { detail: clampedDetail } : {},
       ...errorKind != null ? { errorKind } : {},
@@ -359,13 +359,13 @@ var FileAutomationStore = class {
     const automationDir = (0, import_node_path96.join)(this.automationsDir, id);
     let existed = false;
     try {
-      existed = (0, import_node_fs53.statSync)(automationDir).isDirectory();
+      existed = (0, import_node_fs55.statSync)(automationDir).isDirectory();
     } catch (error42) {
       reportFallbackUnlessAbsent("automation_store", error42);
       return false;
     }
     if (!existed) return false;
-    (0, import_node_fs53.rmSync)(automationDir, { recursive: true, force: true });
+    (0, import_node_fs55.rmSync)(automationDir, { recursive: true, force: true });
     this.dir.scheduleNotify();
     return true;
   }

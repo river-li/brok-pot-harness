@@ -1,17 +1,17 @@
-var __protoPackage78, __protoMessage375, PiGrepToolCall, PiGrepToolArgs, PiGrepToolResult, PiGrepToolSuccess, PiGrepToolError;
+var __protoPackage79, __protoMessage375, PiGrepToolCall, PiGrepToolArgs, PiGrepToolResult, PiGrepToolSuccess, PiGrepToolError;
 var init_pi_grep_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_grep_tool_pb.js"() {
     "use strict";
     init_esm();
     init_pi_common_pb();
     init_compact();
-    __protoPackage78 = "agent.v1.";
+    __protoPackage79 = "agent.v1.";
     __protoMessage375 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage78;
+        return __protoPackage79;
       }
     };
     PiGrepToolCall = class _PiGrepToolCall extends __protoMessage375 {

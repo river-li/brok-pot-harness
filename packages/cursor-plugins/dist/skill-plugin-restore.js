@@ -1,5 +1,5 @@
-var import_promises36 = require("node:fs/promises");
-var import_node_path67 = require("node:path");
+var import_promises34 = require("node:fs/promises");
+var import_node_path58 = require("node:path");
 var __awaiter62 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -34,11 +34,11 @@ function restoreSkillsFromPluginDir(options2) {
       throw new Error("At least one skill directory is required");
     }
     const restores = skillDirs.map((skillDir2) => {
-      const relativePath = (0, import_node_path67.relative)((0, import_node_path67.resolve)(pluginSkillsRoot), (0, import_node_path67.resolve)(skillDir2));
-      if (relativePath === "" || (0, import_node_path67.isAbsolute)(relativePath) || relativePath.split(import_node_path67.sep)[0] === "..") {
+      const relativePath = (0, import_node_path58.relative)((0, import_node_path58.resolve)(pluginSkillsRoot), (0, import_node_path58.resolve)(skillDir2));
+      if (relativePath === "" || (0, import_node_path58.isAbsolute)(relativePath) || relativePath.split(import_node_path58.sep)[0] === "..") {
         throw new Error(`Skill folder "${skillDir2}" is not inside the plugin's skills directory`);
       }
-      return { skillDir: skillDir2, target: (0, import_node_path67.join)(skillsRoot, relativePath) };
+      return { skillDir: skillDir2, target: (0, import_node_path58.join)(skillsRoot, relativePath) };
     });
     const duplicates = restores.map(({ target }) => target).filter((target, index, targets) => targets.indexOf(target) !== index);
     if (duplicates.length > 0) {
@@ -52,10 +52,10 @@ function restoreSkillsFromPluginDir(options2) {
         throw new Error(`Cannot restore skill to "${target}": that path already exists`);
       }
     }
-    yield (0, import_promises36.mkdir)(skillsRoot, { recursive: true });
+    yield (0, import_promises34.mkdir)(skillsRoot, { recursive: true });
     for (const { skillDir: skillDir2, target } of restores) {
-      yield (0, import_promises36.mkdir)((0, import_node_path67.dirname)(target), { recursive: true });
-      yield (0, import_promises36.cp)(skillDir2, target, {
+      yield (0, import_promises34.mkdir)((0, import_node_path58.dirname)(target), { recursive: true });
+      yield (0, import_promises34.cp)(skillDir2, target, {
         recursive: true,
         force: false,
         errorOnExist: true
@@ -67,7 +67,7 @@ function restoreSkillsFromPluginDir(options2) {
 function isDirectory(path31) {
   return __awaiter62(this, void 0, void 0, function* () {
     try {
-      return (yield (0, import_promises36.stat)(path31)).isDirectory();
+      return (yield (0, import_promises34.stat)(path31)).isDirectory();
     } catch (_a19) {
       return false;
     }
@@ -76,7 +76,7 @@ function isDirectory(path31) {
 function pathEntryExists(path31) {
   return __awaiter62(this, void 0, void 0, function* () {
     try {
-      yield (0, import_promises36.lstat)(path31);
+      yield (0, import_promises34.lstat)(path31);
       return true;
     } catch (_a19) {
       return false;

@@ -70,58 +70,58 @@ var __asyncGenerator11 = function(thisArg, _arguments, generator) {
   }
 };
 var READONLY_WRITE_ERROR_MESSAGE = "This operation is not allowed in readonly mode. The subagent was launched with readonly: true, which restricts write operations.";
-function createReadonlyShellPermissionDenied(errorMessage6, args) {
+function createReadonlyShellPermissionDenied(errorMessage7, args) {
   var _a19, _b2;
   return new ShellPermissionDenied({
     command: (_a19 = args.command) !== null && _a19 !== void 0 ? _a19 : "",
     workingDirectory: (_b2 = args.workingDirectory) !== null && _b2 !== void 0 ? _b2 : "",
-    error: errorMessage6,
+    error: errorMessage7,
     isReadonly: true
   });
 }
-function createReadonlyShellExecutor(errorMessage6) {
+function createReadonlyShellExecutor(errorMessage7) {
   return {
     execute(_ctx, args) {
       return __awaiter33(this, void 0, void 0, function* () {
         return new ShellResult({
           result: {
             case: "permissionDenied",
-            value: createReadonlyShellPermissionDenied(errorMessage6, args)
+            value: createReadonlyShellPermissionDenied(errorMessage7, args)
           }
         });
       });
     }
   };
 }
-function createReadonlyShellStreamExecutor(errorMessage6) {
+function createReadonlyShellStreamExecutor(errorMessage7) {
   return {
     execute(_ctx, args) {
       return __asyncGenerator11(this, arguments, function* execute_1() {
         yield yield __await11(new ShellStream({
           event: {
             case: "permissionDenied",
-            value: createReadonlyShellPermissionDenied(errorMessage6, args)
+            value: createReadonlyShellPermissionDenied(errorMessage7, args)
           }
         }));
       });
     }
   };
 }
-function createReadonlyBackgroundShellExecutor(errorMessage6) {
+function createReadonlyBackgroundShellExecutor(errorMessage7) {
   return {
     execute(_ctx, args) {
       return __awaiter33(this, void 0, void 0, function* () {
         return new BackgroundShellSpawnResult({
           result: {
             case: "permissionDenied",
-            value: createReadonlyShellPermissionDenied(errorMessage6, args)
+            value: createReadonlyShellPermissionDenied(errorMessage7, args)
           }
         });
       });
     }
   };
 }
-function createReadonlyWriteExecutor(errorMessage6) {
+function createReadonlyWriteExecutor(errorMessage7) {
   return {
     execute(_ctx, args) {
       return __awaiter33(this, void 0, void 0, function* () {
@@ -130,7 +130,7 @@ function createReadonlyWriteExecutor(errorMessage6) {
             case: "permissionDenied",
             value: new WritePermissionDenied({
               path: args.path,
-              error: errorMessage6,
+              error: errorMessage7,
               isReadonly: true
             })
           }
@@ -139,7 +139,7 @@ function createReadonlyWriteExecutor(errorMessage6) {
     }
   };
 }
-function createReadonlyDeleteExecutor(errorMessage6) {
+function createReadonlyDeleteExecutor(errorMessage7) {
   return {
     execute(_ctx, args) {
       return __awaiter33(this, void 0, void 0, function* () {
@@ -148,7 +148,7 @@ function createReadonlyDeleteExecutor(errorMessage6) {
             case: "permissionDenied",
             value: new DeletePermissionDenied({
               path: args.path,
-              clientVisibleError: errorMessage6,
+              clientVisibleError: errorMessage7,
               isReadonly: true
             })
           }
@@ -157,7 +157,7 @@ function createReadonlyDeleteExecutor(errorMessage6) {
     }
   };
 }
-function createReadonlyMcpExecutor(errorMessage6) {
+function createReadonlyMcpExecutor(errorMessage7) {
   return {
     execute(_ctx, args) {
       return __awaiter33(this, void 0, void 0, function* () {
@@ -165,7 +165,7 @@ function createReadonlyMcpExecutor(errorMessage6) {
           result: {
             case: "permissionDenied",
             value: new McpPermissionDenied({
-              error: `${errorMessage6} Tool: ${args.name}`,
+              error: `${errorMessage7} Tool: ${args.name}`,
               isReadonly: true
             })
           }
@@ -174,7 +174,7 @@ function createReadonlyMcpExecutor(errorMessage6) {
     }
   };
 }
-function createReadonlyWriteBackgroundShellStdinExecutor(errorMessage6) {
+function createReadonlyWriteBackgroundShellStdinExecutor(errorMessage7) {
   return {
     execute(_ctx, _args) {
       return __awaiter33(this, void 0, void 0, function* () {
@@ -182,7 +182,7 @@ function createReadonlyWriteBackgroundShellStdinExecutor(errorMessage6) {
           result: {
             case: "error",
             value: new WriteShellStdinError({
-              error: errorMessage6
+              error: errorMessage7
             })
           }
         });

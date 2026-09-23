@@ -51,8 +51,8 @@ function getPiscinaWorkerPool() {
   return _piscinaWorkerPool;
 }
 var DIFF_SIZE_THRESHOLD = 256 * 1024;
-function isNotebookViewTypeResolutionError(errorMessage4) {
-  return errorMessage4.includes("Missing viewType for");
+function isNotebookViewTypeResolutionError(errorMessage5) {
+  return errorMessage5.includes("Missing viewType for");
 }
 var NOTEBOOK_VIEW_TYPE_MODEL_ERROR = "This notebook could not be opened for editing because the editor environment has no notebook provider for it (for example, Jupyter/notebook support is unavailable). This is an environment limitation, not a problem with the edit itself \u2014 retrying will not help.";
 var WritePermissionDeniedError = class extends CustomToolCallError {

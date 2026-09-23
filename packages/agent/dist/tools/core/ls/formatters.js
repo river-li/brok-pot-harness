@@ -1,4 +1,4 @@
-var import_node_path41 = __toESM(require("node:path"), 1);
+var import_node_path32 = __toESM(require("node:path"), 1);
 var LS_CHARACTER_BUDGET = 1e4;
 function renderDirectoryTreeWithinBudget(rootDirectory, characterBudget) {
   characterBudget = characterBudget ?? LS_CHARACTER_BUDGET;
@@ -22,8 +22,8 @@ function renderDirectoryTree(rootDirectory, renderExtensionCounts = true, render
       result2 = `${dir.absPath}${trailingSep}
 `;
     } else {
-      const normalizedPath = dir.absPath.replaceAll(import_node_path41.default.win32.sep, import_node_path41.default.posix.sep);
-      result2 = `${indent}- ${import_node_path41.default.posix.basename(normalizedPath)}${pathSep}
+      const normalizedPath = dir.absPath.replaceAll(import_node_path32.default.win32.sep, import_node_path32.default.posix.sep);
+      result2 = `${indent}- ${import_node_path32.default.posix.basename(normalizedPath)}${pathSep}
 `;
     }
     const allChildren = [
@@ -33,10 +33,10 @@ function renderDirectoryTree(rootDirectory, renderExtensionCounts = true, render
         terminalMetadata: file2.terminalMetadata
       })),
       ...dir.childrenDirs.map((childDir) => {
-        const normalizedPath = childDir.absPath.replaceAll(import_node_path41.default.win32.sep, import_node_path41.default.posix.sep);
+        const normalizedPath = childDir.absPath.replaceAll(import_node_path32.default.win32.sep, import_node_path32.default.posix.sep);
         return {
           type: "dir",
-          name: import_node_path41.default.posix.basename(normalizedPath),
+          name: import_node_path32.default.posix.basename(normalizedPath),
           dir: childDir
         };
       })

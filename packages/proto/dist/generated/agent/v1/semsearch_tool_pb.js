@@ -1,17 +1,17 @@
-var __protoPackage36, __protoMessage333, SemSearchToolCall, SemSearchToolArgs, SemSearchToolResult, SemSearchToolSuccess, SemSearchToolError;
+var __protoPackage37, __protoMessage333, SemSearchToolCall, SemSearchToolArgs, SemSearchToolResult, SemSearchToolSuccess, SemSearchToolError;
 var init_semsearch_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/semsearch_tool_pb.js"() {
     "use strict";
     init_esm();
     init_repository_pb();
     init_compact();
-    __protoPackage36 = "agent.v1.";
+    __protoPackage37 = "agent.v1.";
     __protoMessage333 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage36;
+        return __protoPackage37;
       }
     };
     SemSearchToolCall = class _SemSearchToolCall extends __protoMessage333 {

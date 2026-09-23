@@ -7,6 +7,9 @@ function originUrlsOf(backend) {
 var NO_BOX = {
   uploadFile: () => Promise.reject(new Error("cloud agent artifacts: no box attached"))
 };
+function originTeamCallOptions(teamId) {
+  return teamId == null ? void 0 : { headers: { "x-cursor-team-id": teamId } };
+}
 var SandCloudAgentManager = class {
   constructor(options2) {
     this.options = options2;
@@ -14,7 +17,8 @@ var SandCloudAgentManager = class {
     this.backend = createCloudAgentsClient({
       getClient: () => this.getClient(),
       getDashboardClient: () => this.getDashboardClient(),
-      prepareNewRepo: () => this.prepareNewRepo()
+      prepareNewRepo: () => this.prepareNewRepo(),
+      ...options2.isCustomModeEnabled === void 0 ? {} : { isCustomModeEnabled: options2.isCustomModeEnabled }
     });
     this.completionPoller = new CloudAgentCompletionPoller(options2, () => this.getClient());
     this.modelCatalog = new CloudAgentModelCatalogCache(options2);
@@ -144,64 +148,20 @@ var SandCloudAgentManager = class {
     let project2 = this.pendingNewProject;
     if (project2 == null) {
       const teamId = (await this.getDashboardClient().getMe(new GetMeRequest())).teamId;
-      const teamHeaders = teamId == null || teamId <= 0 ? void 0 : { "x-cursor-team-id": teamId.toString() };
-      const namespaces = await originClient.getAuthorizedNamespaces(
-        new GetAuthorizedNamespacesRequest(),
-        teamHeaders == null ? void 0 : { headers: teamHeaders }
-      );
-      if (namespaces.originDisabledForTeam) {
-        throw new SandCloudAgentLaunchError(
-          "New Origin projects are not enabled for this account."
-        );
-      }
-      const namespaceEntry = namespaces.namespaces.find(
-        (entry) => entry.namespace?.ownerType === OriginNamespaceOwnerType.TEAM && entry.namespace.namespace.trim().length > 0 && entry.accessReason === AuthorizedNamespaceAccessReason.TEAM_OWNERSHIP
-      ) ?? namespaces.namespaces.find(
-        (entry) => entry.namespace?.ownerType === OriginNamespaceOwnerType.USER && entry.namespace.namespace.trim().length > 0 && entry.accessReason === AuthorizedNamespaceAccessReason.USER_OWNERSHIP
-      );
-      const namespace = namespaceEntry?.namespace?.namespace.trim() ?? "";
-      if (namespace.length === 0) {
-        throw new SandCloudAgentLaunchError(
-          "Create an Origin namespace before starting a new project: https://cursor.com/codebase/get-started"
-        );
-      }
-      const namespaceTeamId = namespaceEntry?.namespace?.ownerType === OriginNamespaceOwnerType.TEAM && namespaceEntry.namespace.ownerEntityId > BigInt(0) ? namespaceEntry.namespace.ownerEntityId.toString() : void 0;
-      const originCallOptions2 = namespaceTeamId == null ? void 0 : { headers: { "x-cursor-team-id": namespaceTeamId } };
-      const response = await originClient.createRepoAndEnsureUserNamespace(
-        new CreateRepoRequest({
-          identifier: { org: namespace, name: "new-project" },
-          repoKind: RepoKind.AGENT_TEMP,
-          visibility: RepoVisibility.PRIVATE,
-          defaultBranch: "main"
-        }),
-        originCallOptions2
-      ).catch((error42) => {
-        if (error42 instanceof ConnectError && error42.code === Code.FailedPrecondition) {
-          throw new SandCloudAgentLaunchError(
-            "Origin can't create a new project for this account. Check your plan, Privacy Mode, and team Origin settings, then try again: https://cursor.com/codebase/get-started",
-            { cause: error42 }
-          );
-        }
-        throw error42;
+      const created = await createOriginNewRepo({
+        client: originClient,
+        callOptions: originTeamCallOptions,
+        canProvisionUserNamespace: () => this.options.isJitNamespaceEnabled?.() === true,
+        name: "new-project",
+        repoKind: RepoKind.AGENT_TEMP,
+        visibility: RepoVisibility.PRIVATE,
+        defaultBranch: "main",
+        ...teamId == null || teamId <= 0 ? {} : { selectedTeamId: teamId.toString() }
       });
-      const defaultBranch = response.repository?.defaultBranch.trim() || "main";
-      const org = response.repository?.identifier?.org.trim() ?? "";
-      const name17 = response.repository?.identifier?.name.trim() ?? "";
-      if (org.length === 0 || name17.length === 0) {
-        throw new SandCloudAgentLaunchError(
-          "Origin created the project but did not return its repository."
-        );
-      }
-      project2 = {
-        org,
-        name: name17,
-        defaultBranch,
-        teamId: namespaceTeamId,
-        seeded: false
-      };
+      project2 = { ...created, seeded: false };
       this.pendingNewProject = project2;
     }
-    const originCallOptions = project2.teamId == null ? void 0 : { headers: { "x-cursor-team-id": project2.teamId } };
+    const originCallOptions = originTeamCallOptions(project2.teamId);
     if (!project2.seeded) {
       await originClient.createCommitFromFiles(
         new CreateCommitFromFilesClientRequest({
@@ -259,11 +219,17 @@ var SandCloudAgentManager = class {
   async list(args) {
     return await this.backend.list(args);
   }
+  async findByPr(prUrl) {
+    return await this.backend.findByPr(prUrl);
+  }
   async listRecentActivity(limit) {
     return await this.backend.listRecentActivity(limit);
   }
   async listRepositories(args) {
     return await this.backend.listRepositories(args);
+  }
+  async listWorkers() {
+    return await this.backend.listWorkers();
   }
   async get(bcId) {
     return await this.backend.get(bcId);

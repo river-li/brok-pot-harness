@@ -1,4 +1,4 @@
-var __protoPackage93, __protoMessage389, MountedAgentStoreKind, RequestContextArgs, RequestContextResult, RequestContextSuccess, RequestContextError, RequestContextRejected, GitRepoInfo, RequestContextEnv, MountedAgentStore, UserAgentStoreWebContext, DebugModeConfig, SkillDescriptor, SkillOptions, HooksConfigInfo, PermissionsAutoRunInstructions, PrecomputedHumanChangeRenderedDiff, PrecomputedHumanChange, RequestContext, RequestContextPartReferences, RecentlyAddedPlugin, RecentlyAddedPlugin_CapabilityDescriptor, MatchedInstalledPlugin;
+var __protoPackage94, __protoMessage389, MountedAgentStoreKind, RequestContextArgs, RequestContextResult, RequestContextSuccess, RequestContextError, RequestContextRejected, GitRepoInfo, RequestContextEnv, MountedAgentStore, UserAgentStoreWebContext, DebugModeConfig, SkillDescriptor, SkillOptions, HooksConfigInfo, PermissionsAutoRunInstructions, PrecomputedHumanChangeRenderedDiff, PrecomputedHumanChange, RequestContext, RequestContextPartReferences, RecentlyAddedPlugin, RecentlyAddedPlugin_CapabilityDescriptor, MatchedInstalledPlugin;
 var init_request_context_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/request_context_exec_pb.js"() {
     "use strict";
@@ -12,16 +12,16 @@ var init_request_context_exec_pb = __esm({
     init_agent_skills_pb();
     init_system_prompt_pb();
     init_compact();
-    __protoPackage93 = "agent.v1.";
+    __protoPackage94 = "agent.v1.";
     __protoMessage389 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage93;
+        return __protoPackage94;
       }
     };
-    MountedAgentStoreKind = /* @__PURE__ */ enumType(proto3, __protoPackage93, "MountedAgentStoreKind", [[0, "UNSPECIFIED"], [1, "SELF"], [2, "PEER"], [3, "SHARE"], [4, "PRINCIPAL"]], 1);
+    MountedAgentStoreKind = /* @__PURE__ */ enumType(proto3, __protoPackage94, "MountedAgentStoreKind", [[0, "UNSPECIFIED"], [1, "SELF"], [2, "PEER"], [3, "SHARE"], [4, "PRINCIPAL"]], 1);
     RequestContextArgs = class _RequestContextArgs extends __protoMessage389 {
       constructor(data) {
         super();

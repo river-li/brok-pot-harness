@@ -63,6 +63,7 @@ var SAND_TOOL_NAMES = [
   "send_email",
   "slack_setup",
   "sort_memories",
+  "team_publish",
   "update_app_home",
   "update_state",
   "upload_file",

@@ -69,17 +69,17 @@ function findOwningWorkspaceRoot(targetPath, workspaceRoots) {
   return owner;
 }
 function fileBelongsToCurrentWorkspace(currentRoot, filePath, workspaceRoots) {
-  const absoluteFilePath = (0, import_node_path74.resolve)(currentRoot, filePath);
+  const absoluteFilePath = (0, import_node_path65.resolve)(currentRoot, filePath);
   const owner = findOwningWorkspaceRoot(absoluteFilePath, workspaceRoots);
   return owner === void 0 || owner === currentRoot;
 }
 function deduplicateCrossWorkspaceResults(workspaceResults, workspacePaths) {
   if (workspacePaths.length <= 1)
     return workspaceResults;
-  const resolvedRoots = [...new Set(workspacePaths.map((root) => (0, import_node_path74.resolve)(root)))];
+  const resolvedRoots = [...new Set(workspacePaths.map((root) => (0, import_node_path65.resolve)(root)))];
   const deduped = {};
   for (const [root, unionResult] of Object.entries(workspaceResults)) {
-    const resolvedRoot = (0, import_node_path74.resolve)(root);
+    const resolvedRoot = (0, import_node_path65.resolve)(root);
     const belongsToCurrentWorkspace = (filePath) => fileBelongsToCurrentWorkspace(resolvedRoot, filePath, resolvedRoots);
     const result = unionResult.result;
     switch (result.case) {
@@ -180,7 +180,7 @@ function isEnoentSpawnError(e) {
 }
 function safeExists(path31) {
   try {
-    return (0, import_node_fs44.existsSync)(path31);
+    return (0, import_node_fs42.existsSync)(path31);
   } catch {
     return "check_failed";
   }
@@ -211,13 +211,13 @@ function probeRipgrepPath(rgPath) {
     execPath: process.execPath
   };
   try {
-    probe.rgPathExists = (0, import_node_fs44.existsSync)(rgPath);
+    probe.rgPathExists = (0, import_node_fs42.existsSync)(rgPath);
   } catch (e) {
     probe.rgPathExists = false;
     probe.rgPathExistsError = e instanceof Error ? e.message : String(e);
   }
   try {
-    const lst = (0, import_node_fs44.lstatSync)(rgPath);
+    const lst = (0, import_node_fs42.lstatSync)(rgPath);
     probe.rgIsSymlink = lst.isSymbolicLink();
     if (lst.isSymbolicLink() && !probe.rgPathExists) {
       probe.rgBrokenSymlink = true;
@@ -226,27 +226,27 @@ function probeRipgrepPath(rgPath) {
     probe.rgLstatFailed = true;
   }
   const MAX_DIR_ENTRIES = 50;
-  const parentDir = (0, import_node_path74.dirname)(rgPath);
+  const parentDir = (0, import_node_path65.dirname)(rgPath);
   try {
-    probe.parentDirExists = (0, import_node_fs44.existsSync)(parentDir);
+    probe.parentDirExists = (0, import_node_fs42.existsSync)(parentDir);
     if (probe.parentDirExists) {
-      probe.parentDirContents = (0, import_node_fs44.readdirSync)(parentDir).slice(0, MAX_DIR_ENTRIES);
+      probe.parentDirContents = (0, import_node_fs42.readdirSync)(parentDir).slice(0, MAX_DIR_ENTRIES);
     }
   } catch (e) {
     probe.parentDirError = e instanceof Error ? e.message : String(e);
   }
-  const grandparentDir = (0, import_node_path74.dirname)(parentDir);
+  const grandparentDir = (0, import_node_path65.dirname)(parentDir);
   try {
-    probe.grandparentDirExists = (0, import_node_fs44.existsSync)(grandparentDir);
+    probe.grandparentDirExists = (0, import_node_fs42.existsSync)(grandparentDir);
     if (probe.grandparentDirExists) {
-      probe.grandparentDirContents = (0, import_node_fs44.readdirSync)(grandparentDir).slice(0, MAX_DIR_ENTRIES);
+      probe.grandparentDirContents = (0, import_node_fs42.readdirSync)(grandparentDir).slice(0, MAX_DIR_ENTRIES);
     }
   } catch (e) {
     probe.grandparentDirError = e instanceof Error ? e.message : String(e);
   }
   if (probe.rgPathExists) {
     try {
-      const st2 = (0, import_node_fs44.statSync)(rgPath);
+      const st2 = (0, import_node_fs42.statSync)(rgPath);
       probe.rgFileSize = st2.size;
       probe.rgFileMode = st2.mode.toString(8);
       probe.rgIsFile = st2.isFile();
@@ -261,16 +261,16 @@ function probeRipgrepPath(rgPath) {
     if (prefix) {
       const asarPath = prefix.concat("node_modules.asar");
       try {
-        probe.asarExists = (0, import_node_fs44.existsSync)(asarPath);
+        probe.asarExists = (0, import_node_fs42.existsSync)(asarPath);
       } catch {
         probe.asarExists = "check_failed";
       }
       const asarUnpackedDir = prefix.concat(asarUnpackedSegment);
       try {
-        probe.asarUnpackedDirExists = (0, import_node_fs44.existsSync)(asarUnpackedDir);
+        probe.asarUnpackedDirExists = (0, import_node_fs42.existsSync)(asarUnpackedDir);
         if (probe.asarUnpackedDirExists) {
-          const ripgrepPkgDir = (0, import_node_path74.join)(asarUnpackedDir, "@vscode", "ripgrep");
-          probe.ripgrepPkgDirExists = (0, import_node_fs44.existsSync)(ripgrepPkgDir);
+          const ripgrepPkgDir = (0, import_node_path65.join)(asarUnpackedDir, "@vscode", "ripgrep");
+          probe.ripgrepPkgDirExists = (0, import_node_fs42.existsSync)(ripgrepPkgDir);
         }
       } catch {
         probe.asarUnpackedDirExists = "check_failed";
@@ -290,12 +290,42 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
     this.permissionsService = options2?.permissionsService;
   }
   computeRelativeTarget(path31, root) {
-    const resolvedPath = resolvePath(path31, this.singleWorkspacePath);
+    const resolvedPath = resolvePath(path31, this.singleWorkspacePath ?? root);
     if (resolvedPath === root) {
       return ".";
     }
-    const result = (0, import_node_path74.relative)(root, resolvedPath);
-    return result;
+    return (0, import_node_path65.relative)(root, resolvedPath);
+  }
+  isRootIndependentSearchPath(path31) {
+    return (0, import_node_path65.isAbsolute)(path31) || /^~(?=$|[/\\])/.test(path31) || path31.startsWith("file://");
+  }
+  resolveSearchTargets(path31, workspacePaths) {
+    const rootIndependent = this.isRootIndependentSearchPath(path31);
+    return workspacePaths.map((root) => {
+      const resolvedRoot = (0, import_node_path65.resolve)(root);
+      return {
+        root,
+        resolvedRoot,
+        target: resolvePath(path31, rootIndependent ? void 0 : resolvedRoot)
+      };
+    });
+  }
+  /**
+   * Drop Grep/Glob targets outside the opened folders so indexed grep and
+   * ripgrep search the workspace instead of escaping.
+   */
+  clampGrepArgsToWorkspace(args, workspacePaths) {
+    if (args.path === void 0 || args.path === "") {
+      return args;
+    }
+    const resolvedTargets = this.resolveSearchTargets(args.path, workspacePaths);
+    const isInsideWorkspace = this.isRootIndependentSearchPath(args.path) ? resolvedTargets.some(({ resolvedRoot, target }) => isPathInsideWorkspaceRoot(target, resolvedRoot)) : resolvedTargets.every(({ resolvedRoot, target }) => isPathInsideWorkspaceRoot(target, resolvedRoot));
+    if (isInsideWorkspace) {
+      return args;
+    }
+    const clamped = args.clone();
+    clamped.path = void 0;
+    return clamped;
   }
   async buildArgs(root, params, mode) {
     const args = [];
@@ -339,8 +369,8 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
     }
     const sortMode = params.sort ?? "modified";
     if (sortMode !== "none") {
-      const flag = params.sortAscending === true ? "--sort" : "--sortr";
-      args.push(flag, sortMode);
+      const flag2 = params.sortAscending === true ? "--sort" : "--sortr";
+      args.push(flag2, sortMode);
     }
     args.push("--no-config", "--color=never");
     args.push("--hidden");
@@ -642,49 +672,58 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
         workspacePaths
       };
       const sandboxPolicy = convertProtoToInternalPolicy(args.sandboxPolicy);
-      try {
-        const guardInfo = this.grepProvider.getWorktreeGuardInfo?.(workspacePaths);
-        const shouldBlock = shouldBlockWorktreePath({
-          targetPath: args.path,
-          workspacePaths,
-          mainWorktreePath: guardInfo?.mainWorktreePath
+      const guardInfo = this.grepProvider.getWorktreeGuardInfo?.(workspacePaths);
+      const shouldBlock = shouldBlockWorktreePath({
+        targetPath: args.path,
+        workspacePaths,
+        mainWorktreePath: guardInfo?.mainWorktreePath
+      });
+      if (shouldBlock) {
+        return new GrepResult({
+          result: {
+            case: "error",
+            value: new GrepError({ error: WORKTREE_GUARD_ERROR })
+          }
         });
-        if (shouldBlock) {
-          return new GrepResult({
-            result: {
-              case: "error",
-              value: new GrepError({ error: WORKTREE_GUARD_ERROR })
+      }
+      const searchArgs = this.clampGrepArgsToWorkspace(args, workspacePaths);
+      let searchWorkspacePaths = workspacePaths;
+      try {
+        if (searchArgs.path) {
+          const allowedWorkspacePaths = [];
+          let hasIgnoredTarget = false;
+          let hasUnresolvedTarget = false;
+          for (const { root, resolvedRoot, target } of this.resolveSearchTargets(searchArgs.path, workspacePaths)) {
+            if (!isPathInsideWorkspaceRoot(target, resolvedRoot)) {
+              continue;
             }
-          });
-        }
-        if (args.path) {
-          const resolvedTargetPath = await resolvePathForIgnoreService(resolvePath(args.path, this.singleWorkspacePath));
-          if (resolvedTargetPath === null) {
+            const resolvedTargetPath = await resolvePathForIgnoreService(target);
+            if (resolvedTargetPath === null) {
+              hasUnresolvedTarget = true;
+              continue;
+            }
+            if (await this.ignoreService.isCursorIgnored(resolvedTargetPath)) {
+              hasIgnoredTarget = true;
+              continue;
+            }
+            allowedWorkspacePaths.push(root);
+            if (this.mcpStateAccessor !== void 0) {
+              scheduleDiskMcpDiscoveryFreshnessOnMcpsPathAccess(ctx, this.mcpStateAccessor, resolvedTargetPath);
+            }
+          }
+          if (allowedWorkspacePaths.length === 0) {
+            const error42 = hasIgnoredTarget ? `Path '${searchArgs.path}' is filtered out by .cursorignore` : hasUnresolvedTarget ? unresolvedTargetPathError(searchArgs.path) : `Path '${searchArgs.path}' is outside the workspace`;
             return new GrepResult({
               result: {
                 case: "error",
-                value: new GrepError({
-                  error: unresolvedTargetPathError(args.path)
-                })
+                value: new GrepError({ error: error42 })
               }
             });
           }
-          if (await this.ignoreService.isCursorIgnored(resolvedTargetPath)) {
-            return new GrepResult({
-              result: {
-                case: "error",
-                value: new GrepError({
-                  error: `Path '${args.path}' is filtered out by .cursorignore`
-                })
-              }
-            });
-          }
-          if (this.mcpStateAccessor !== void 0) {
-            scheduleDiskMcpDiscoveryFreshnessOnMcpsPathAccess(ctx, this.mcpStateAccessor, resolvedTargetPath);
-          }
+          searchWorkspacePaths = allowedWorkspacePaths;
         }
         let workspaceResults = {};
-        const indexedResults = await this.executeIndexedGrepWithTimeout(_span.ctx, workspacePaths, args, logContext);
+        const indexedResults = await this.executeIndexedGrepWithTimeout(_span.ctx, searchWorkspacePaths, searchArgs, logContext);
         if (indexedResults !== void 0) {
           workspaceResults = indexedResults;
           for (const [root, unionResult] of Object.entries(workspaceResults)) {
@@ -702,7 +741,7 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
             }
           }
         } else {
-          for (const root of workspacePaths) {
+          for (const root of searchWorkspacePaths) {
             if (safeExists(root) === false) {
               return new GrepResult({
                 result: {
@@ -715,11 +754,11 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
             }
             let results;
             if (mode === "content") {
-              results = await this.runContentMode(_span.ctx, root, args, sandboxPolicy, logContext);
+              results = await this.runContentMode(_span.ctx, root, searchArgs, sandboxPolicy, logContext);
             } else if (mode === "files_with_matches") {
-              results = await this.runFilesMode(_span.ctx, root, args, sandboxPolicy, logContext);
+              results = await this.runFilesMode(_span.ctx, root, searchArgs, sandboxPolicy, logContext);
             } else if (mode === "count") {
-              results = await this.runCountMode(_span.ctx, root, args, sandboxPolicy, logContext);
+              results = await this.runCountMode(_span.ctx, root, searchArgs, sandboxPolicy, logContext);
             } else {
               const _exhaustive = mode;
               throw new Error(`Unknown output mode: ${mode}`);
@@ -727,10 +766,10 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
             workspaceResults[root] = results;
           }
         }
-        const dedupedResults = deduplicateCrossWorkspaceResults(workspaceResults, workspacePaths);
+        const dedupedResults = deduplicateCrossWorkspaceResults(workspaceResults, searchWorkspacePaths);
         const success2 = new GrepSuccess({
-          pattern: args.pattern,
-          path: args.path,
+          pattern: searchArgs.pattern,
+          path: searchArgs.path,
           outputMode: mode,
           workspaceResults: dedupedResults
         });
@@ -738,10 +777,10 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
           result: { case: "success", value: success2 }
         });
       } catch (e) {
-        if (args.path) {
-          const resolvedPath = resolvePath(args.path, this.singleWorkspacePath);
+        if (searchArgs.path) {
+          const resolvedPath = resolvePath(searchArgs.path, this.singleWorkspacePath);
           try {
-            await (0, import_promises42.stat)(resolvedPath);
+            await (0, import_promises40.stat)(resolvedPath);
           } catch (_e2) {
             return new GrepResult({
               result: {

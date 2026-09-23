@@ -1,4 +1,4 @@
-var import_node_fs59 = require("node:fs");
+var import_node_fs61 = require("node:fs");
 var import_node_path103 = require("node:path");
 init_scheduling();
 init_errors();
@@ -26,8 +26,8 @@ var SandFeatureFlagOverrideStore = class {
   hydrateFromDisk() {
     try {
       const path31 = this.getOverridesPath();
-      if (!(0, import_node_fs59.existsSync)(path31)) return;
-      const parsed2 = JSON.parse((0, import_node_fs59.readFileSync)(path31, "utf-8"));
+      if (!(0, import_node_fs61.existsSync)(path31)) return;
+      const parsed2 = JSON.parse((0, import_node_fs61.readFileSync)(path31, "utf-8"));
       if (parsed2 == null || typeof parsed2 !== "object" || !("overrides" in parsed2)) return;
       const overrides = parsed2.overrides;
       if (overrides == null || typeof overrides !== "object") return;

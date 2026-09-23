@@ -139,8 +139,8 @@ var SandMcpListingSummaries = class {
       ...status
     };
   }
-  createAdminDisabledServerSummary(server) {
-    const { id, name: name17, isTeamServer } = server;
+  createWithheldServerSummary(server) {
+    const { id, name: name17, isTeamServer, disabledByTeamAdminPolicy } = server;
     const serverIdentifier = server.serverIdentifier ?? `mcp-row-${id}`;
     return {
       id,
@@ -155,8 +155,10 @@ var SandMcpListingSummaries = class {
       customInstructions: this.resolveServerCustomInstruction(server),
       isTeamServer,
       ...pluginAttributionFromDisplayServer(server),
-      status: "disabledByTeamAdminPolicy",
-      statusDetail: { kind: "disabled_by_team_admin" }
+      status: disabledByTeamAdminPolicy ? "disabledByTeamAdminPolicy" : "needsGrant",
+      statusDetail: {
+        kind: disabledByTeamAdminPolicy ? "disabled_by_team_admin" : "grant_required"
+      }
     };
   }
   resolveServerCustomInstruction(server) {

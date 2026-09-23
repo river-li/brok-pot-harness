@@ -3,16 +3,11 @@ init_dist5();
 init_unknown_record();
 init_proto();
 var SERVER_AGENT_ACTION_TIMEOUT_MS = 2e4;
-function approvalResolutionProto(resolution) {
-  switch (resolution) {
-    case "approved":
-      return GrokBotAutoReviewApprovalResolution.APPROVED;
-    case "denied":
-      return GrokBotAutoReviewApprovalResolution.DENIED;
-    case "always":
-      return GrokBotAutoReviewApprovalResolution.ALWAYS;
-  }
-}
+var approvalResolutionProto = (resolution) => ({
+  approved: GrokBotAutoReviewApprovalResolution.APPROVED,
+  denied: GrokBotAutoReviewApprovalResolution.DENIED,
+  always: GrokBotAutoReviewApprovalResolution.ALWAYS
+})[resolution];
 function handBackTriggerProto(trigger2) {
   switch (trigger2) {
     case "viewer-closed":
@@ -34,18 +29,12 @@ function clientSurfaceProto(source) {
       return GrokBotClientSurface.UNSPECIFIED;
   }
 }
-function feedbackActionProto(action) {
-  switch (action) {
-    case "up":
-      return GrokBotFeedbackAction.UP;
-    case "down":
-      return GrokBotFeedbackAction.DOWN;
-    case "submit":
-      return GrokBotFeedbackAction.SUBMIT;
-    case "revert":
-      return GrokBotFeedbackAction.REVERT;
-  }
-}
+var feedbackActionProto = (action) => ({
+  up: GrokBotFeedbackAction.UP,
+  down: GrokBotFeedbackAction.DOWN,
+  submit: GrokBotFeedbackAction.SUBMIT,
+  revert: GrokBotFeedbackAction.REVERT
+})[action];
 function acceptanceLookupOf(args) {
   const {
     response
@@ -108,6 +97,11 @@ function staleUserForm(method) {
     message: method
   };
 }
+var NOT_FOUND_STALE_CODES = {
+  resolveAutoReviewApproval: SAND_AUTO_REVIEW_STALE,
+  resolveConnectorGrant: SAND_CONNECTOR_GRANT_STALE,
+  resolveVirtualCardApproval: SAND_VIRTUAL_CARD_STALE
+};
 function secretSaveRefused(refusal) {
   return {
     status: "refused",
@@ -133,18 +127,23 @@ function isNonceDedupedSendReplayable(error42) {
   if (!(error42 instanceof ConnectError)) return true;
   return error42.code === Code.Unavailable && !error42.metadata.has("retry-after");
 }
-function localToolPermissionResolutionProto(resolution) {
-  switch (resolution) {
-    case "allow-once":
-      return GrokBotLocalToolPermissionCardResolution.ALLOW_ONCE;
-    case "deny":
-      return GrokBotLocalToolPermissionCardResolution.DENY;
-    case "always":
-      return GrokBotLocalToolPermissionCardResolution.ALWAYS;
-    case "never":
-      return GrokBotLocalToolPermissionCardResolution.NEVER;
-  }
+var connectorGrantResolutionProto = (resolution) => ({
+  allowed: GrokBotConnectorGrantResolution.ALLOWED,
+  skipped: GrokBotConnectorGrantResolution.SKIPPED,
+  always_this_bot: GrokBotConnectorGrantResolution.ALWAYS_THIS_BOT,
+  always_all_team_bots: GrokBotConnectorGrantResolution.ALWAYS_ALL_TEAM_BOTS
+})[resolution];
+function sessionIdField(sessionId) {
+  return sessionId != null && sessionId.length > 0 ? {
+    sessionId
+  } : {};
 }
+var localToolPermissionResolutionProto = (resolution) => ({
+  "allow-once": GrokBotLocalToolPermissionCardResolution.ALLOW_ONCE,
+  deny: GrokBotLocalToolPermissionCardResolution.DENY,
+  always: GrokBotLocalToolPermissionCardResolution.ALWAYS,
+  never: GrokBotLocalToolPermissionCardResolution.NEVER
+})[resolution];
 function userFormClientPlatformProto(platform2) {
   switch (platform2) {
     case "desktop":
@@ -158,12 +157,7 @@ function userFormClientPlatformProto(platform2) {
   }
 }
 function userFormDismissModeProto(mode) {
-  switch (mode) {
-    case "dismissed":
-      return GrokBotUserFormDismissMode.DISMISSED;
-    case "escalated":
-      return GrokBotUserFormDismissMode.ESCALATED;
-  }
+  return mode === "dismissed" ? GrokBotUserFormDismissMode.DISMISSED : GrokBotUserFormDismissMode.ESCALATED;
 }
 function virtualCardResolutionProto(resolution) {
   return resolution === "approved" ? GrokBotVirtualCardResolution.APPROVED : GrokBotVirtualCardResolution.DENIED;
@@ -196,6 +190,7 @@ function virtualCardResultOf(response) {
       return {
         status: "needs_auth"
       };
+    case GrokBotVirtualCardOutcome.NEEDS_ENROLLMENT:
     case GrokBotVirtualCardOutcome.FAILED:
     case GrokBotVirtualCardOutcome.UNSPECIFIED:
       return {
@@ -304,17 +299,11 @@ function classifyServerAgentActionError(error42, method) {
       scope: "agent"
     };
   }
-  if (method === "resolveAutoReviewApproval" && error42 instanceof ConnectError && error42.code === Code.NotFound) {
+  const staleCode = method === void 0 ? void 0 : NOT_FOUND_STALE_CODES[method];
+  if (staleCode !== void 0 && error42 instanceof ConnectError && error42.code === Code.NotFound) {
     return {
       status: "refused",
-      failureCode: SAND_AUTO_REVIEW_STALE,
-      message: describeConnectFailure(error42)
-    };
-  }
-  if (method === "resolveVirtualCardApproval" && error42 instanceof ConnectError && error42.code === Code.NotFound) {
-    return {
-      status: "refused",
-      failureCode: SAND_VIRTUAL_CARD_STALE,
+      failureCode: staleCode,
       message: describeConnectFailure(error42)
     };
   }
@@ -396,9 +385,7 @@ async function perform(client, request5) {
         enterEpochMs: args.enterEpochMs === void 0 ? void 0 : BigInt(args.enterEpochMs),
         composedAtMs: args.composedAtMs === void 0 ? void 0 : BigInt(args.composedAtMs),
         source: clientSurfaceProto(args.source),
-        ...args.sessionId != null && args.sessionId.length > 0 ? {
-          sessionId: args.sessionId
-        } : {},
+        ...sessionIdField(args.sessionId),
         ...args.machineId != null && args.machineId.length > 0 ? {
           machineId: args.machineId
         } : {}
@@ -430,9 +417,7 @@ async function perform(client, request5) {
       const response = await client.getGrokBotSendStatus({
         agentId: args.agentId,
         messageId: args.clientNonce,
-        ...args.sessionId != null && args.sessionId.length > 0 ? {
-          sessionId: args.sessionId
-        } : {}
+        ...sessionIdField(args.sessionId)
       }, callOptions);
       return {
         status: "ok",
@@ -478,9 +463,7 @@ async function perform(client, request5) {
         agentId: request5.args.agentId,
         entryId: request5.args.entryId,
         value: request5.args.value,
-        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
-          sessionId: request5.args.sessionId
-        } : {}
+        ...sessionIdField(request5.args.sessionId)
       }, callOptions);
       if (response.refusal != null) {
         return secretSaveRefused(response.refusal);
@@ -498,9 +481,7 @@ async function perform(client, request5) {
         agentId: request5.args.agentId,
         entryId: request5.args.entryId,
         resolution: credentialRequestResolutionProto(request5.args.resolution),
-        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
-          sessionId: request5.args.sessionId
-        } : {}
+        ...sessionIdField(request5.args.sessionId)
       }, callOptions);
       if (response.refusal != null) {
         return refused(response.refusal, request5.method);
@@ -589,9 +570,26 @@ async function perform(client, request5) {
         entryId: args.entryId,
         requestId: args.requestId,
         resolution: localToolPermissionResolutionProto(args.resolution),
-        ...args.sessionId != null && args.sessionId.length > 0 ? {
-          sessionId: args.sessionId
-        } : {}
+        ...sessionIdField(args.sessionId)
+      }, callOptions);
+      if (response.refusal != null) {
+        return refused(response.refusal, request5.method);
+      }
+      return {
+        status: "ok",
+        value: null
+      };
+    }
+    case "resolveConnectorGrant": {
+      const {
+        args
+      } = request5;
+      const response = await client.resolveGrokBotConnectorGrant({
+        agentId: args.agentId,
+        requestId: args.requestId,
+        resolution: connectorGrantResolutionProto(args.resolution),
+        entryId: args.entryId,
+        ...sessionIdField(args.sessionId)
       }, callOptions);
       if (response.refusal != null) {
         return refused(response.refusal, request5.method);
@@ -639,9 +637,7 @@ async function perform(client, request5) {
         resolution: approvalResolutionProto(args.resolution),
         approvalPlatform: args.approvalPlatform ?? SAND_APPROVAL_PLATFORM_DESKTOP,
         approvedCommand: args.approvedCommand,
-        ...args.sessionId != null && args.sessionId.length > 0 ? {
-          sessionId: args.sessionId
-        } : {}
+        ...sessionIdField(args.sessionId)
       }, callOptions);
       return {
         status: "ok",
@@ -717,9 +713,7 @@ async function perform(client, request5) {
         agentId: request5.args.agentId,
         entryId: request5.args.entryId,
         ...draftProto(request5.args.draft),
-        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
-          sessionId: request5.args.sessionId
-        } : {}
+        ...sessionIdField(request5.args.sessionId)
       }, callOptions);
       if (response.refusal != null) {
         return refused(response.refusal, request5.method);
@@ -735,9 +729,7 @@ async function perform(client, request5) {
       const response = await client.discardGrokBotDraft({
         agentId: request5.args.agentId,
         entryId: request5.args.entryId,
-        ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
-          sessionId: request5.args.sessionId
-        } : {}
+        ...sessionIdField(request5.args.sessionId)
       }, callOptions);
       if (response.refusal != null) {
         return refused(response.refusal, request5.method);
@@ -799,9 +791,7 @@ function createServerAgentActionCore(client) {
         const probe = await client.getGrokBotSendStatus({
           agentId,
           messageId: clientNonce,
-          ...request5.args.sessionId != null && request5.args.sessionId.length > 0 ? {
-            sessionId: request5.args.sessionId
-          } : {}
+          ...sessionIdField(request5.args.sessionId)
         }, {
           timeoutMs: SERVER_AGENT_ACTION_TIMEOUT_MS
         });

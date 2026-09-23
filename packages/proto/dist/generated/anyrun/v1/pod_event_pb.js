@@ -1,21 +1,21 @@
-var __protoPackage4, __protoMessage33, PrivateWorkerWaitReason, ClonePurpose, PodIdentity, PodEvent, LifecycleProcessRestarted, LifecycleProcessExited, SpanStarted, SpanEnded, WaitingForWorkerStatus, HydrationProgress, PodErrorEvent, FeatureOutput, FeatureExitCode, BuildStepStarted, BuildStatusLine, InternalBuildMessage, ImagePullStarted, ImagePullLayerUpdate, ProgressDetail, ImagePullStatusUpdate, ImagePullCompleted, InstallCommand, CloneStarted, CloneCompleted;
+var __protoPackage5, __protoMessage33, PrivateWorkerWaitReason, ClonePurpose, PodIdentity, PodEvent, LifecycleProcessRestarted, LifecycleProcessExited, SpanStarted, SpanEnded, WaitingForWorkerStatus, HydrationProgress, PodErrorEvent, FeatureOutput, FeatureExitCode, BuildStepStarted, BuildStatusLine, InternalBuildMessage, ImagePullStarted, ImagePullLayerUpdate, ProgressDetail, ImagePullStatusUpdate, ImagePullCompleted, InstallCommand, CloneStarted, CloneCompleted;
 var init_pod_event_pb = __esm({
   "../packages/proto/dist/generated/anyrun/v1/pod_event_pb.js"() {
     "use strict";
     init_esm();
     init_pod_daemon_pb();
     init_compact();
-    __protoPackage4 = "anyrun.v1.";
+    __protoPackage5 = "anyrun.v1.";
     __protoMessage33 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage4;
+        return __protoPackage5;
       }
     };
-    PrivateWorkerWaitReason = /* @__PURE__ */ enumType(proto3, __protoPackage4, "PrivateWorkerWaitReason", [[0, "UNSPECIFIED"], [1, "NO_CONNECTED_WORKERS"], [2, "LABEL_MISMATCH"], [3, "OWNER_FILTERED"], [4, "SHARED_ASSIGNMENT_FILTERED"], [5, "ALL_BUSY"]], 1);
-    ClonePurpose = /* @__PURE__ */ enumType(proto3, __protoPackage4, "ClonePurpose", [[0, "UNSPECIFIED"], [1, "DOCKER_BUILD"], [2, "WORKSPACE_SETUP"]], 1);
+    PrivateWorkerWaitReason = /* @__PURE__ */ enumType(proto3, __protoPackage5, "PrivateWorkerWaitReason", [[0, "UNSPECIFIED"], [1, "NO_CONNECTED_WORKERS"], [2, "LABEL_MISMATCH"], [3, "OWNER_FILTERED"], [4, "SHARED_ASSIGNMENT_FILTERED"], [5, "ALL_BUSY"]], 1);
+    ClonePurpose = /* @__PURE__ */ enumType(proto3, __protoPackage5, "ClonePurpose", [[0, "UNSPECIFIED"], [1, "DOCKER_BUILD"], [2, "WORKSPACE_SETUP"]], 1);
     PodIdentity = class _PodIdentity extends __protoMessage33 {
       constructor(data) {
         super();

@@ -1,5 +1,19 @@
-var import_node_path168 = require("node:path");
+var import_node_path170 = require("node:path");
 init_zod();
+async function auditedBoxTransfer(ctx, controller, call, transfer) {
+  const record2 = bindFileTransferAudit(controller.auditTransfer, ctx, {
+    ...call,
+    target: "user_machine"
+  });
+  try {
+    const byteCount = await transferFileBetweenBoxes(ctx, transfer);
+    record2({ outcome: "success", byteCount });
+    return byteCount;
+  } catch (error42) {
+    record2(failedFileTransferResult(error42));
+    throw error42;
+  }
+}
 function formatBytes3(bytes) {
   if (bytes < 1024) return `${bytes} bytes`;
   const units = ["KB", "MB", "GB"];
@@ -17,21 +31,29 @@ function resolveComputerOrThrow(controller, machineId) {
       agentId: controller.getComputerAgentId()
     });
   } catch (error42) {
-    throw new BoxTransferError(error42 instanceof Error ? error42.message : String(error42));
+    throw new BoxTransferError(
+      "machine_unavailable",
+      error42 instanceof Error ? error42.message : String(error42)
+    );
   }
 }
 function assertBoxReady(controller) {
   if (controller.isBoxPreparing()) {
-    throw new BoxTransferError(SAND_BOX_NOT_READY_MESSAGE);
+    throw new BoxTransferError("box_not_ready", SAND_BOX_NOT_READY_MESSAGE);
   }
 }
 async function copyFileToBox(ctx, args, controller) {
   assertBoxReady(controller);
   const computer = resolveComputerOrThrow(controller, args.machineId);
   const boxPath = resolveBoxWorkspacePath(
-    args.box_path ?? import_node_path168.posix.join(SAND_BOX_UPLOADS_DIR, import_node_path168.posix.basename(args.computer_path))
+    args.box_path ?? import_node_path170.posix.join(SAND_BOX_UPLOADS_DIR, import_node_path170.posix.basename(args.computer_path))
   );
-  const bytes = await transferFileBetweenBoxes(ctx, {
+  const call = {
+    toolCallId: args.toolCallId,
+    direction: "download",
+    machineId: computer.id
+  };
+  const bytes = await auditedBoxTransfer(ctx, controller, call, {
     source: {
       box: computer.box,
       agentId: controller.getComputerAgentId(),
@@ -51,8 +73,13 @@ async function copyFileFromBox(ctx, args, controller) {
   assertBoxReady(controller);
   const computer = resolveComputerOrThrow(controller, args.machineId);
   const boxPath = resolveBoxWorkspacePath(args.box_path);
-  const computerPath = args.computer_path ?? import_node_path168.posix.basename(boxPath);
-  const bytes = await transferFileBetweenBoxes(ctx, {
+  const computerPath = args.computer_path ?? import_node_path170.posix.basename(boxPath);
+  const call = {
+    toolCallId: args.toolCallId,
+    direction: "upload",
+    machineId: computer.id
+  };
+  const bytes = await auditedBoxTransfer(ctx, controller, call, {
     source: {
       box: controller.agentBox,
       agentId: controller.getBoxId(),
@@ -110,7 +137,11 @@ function createFileTransferTools(controller, machineIds) {
       }),
       execute: (ctx, args, deps) => copyFileToBox(
         ctx,
-        { ...args, machineId: resolveMachineIdArgument(machineIds, args) },
+        {
+          ...args,
+          machineId: resolveMachineIdArgument(machineIds, args),
+          toolCallId: deps.toolCallId
+        },
         deps
       )
     }),
@@ -122,7 +153,11 @@ function createFileTransferTools(controller, machineIds) {
       describeActivity: (args) => ({ detail: fileBasename(args.box_path) }),
       execute: (ctx, args, deps) => copyFileFromBox(
         ctx,
-        { ...args, machineId: resolveMachineIdArgument(machineIds, args) },
+        {
+          ...args,
+          machineId: resolveMachineIdArgument(machineIds, args),
+          toolCallId: deps.toolCallId
+        },
         deps
       )
     })

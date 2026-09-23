@@ -44,7 +44,7 @@ function computeSandComputerPageStateIdentity(stdout) {
     lines2.push(`${pageId}	${rawUrl.trim()}`);
   }
   lines2.sort();
-  return (0, import_node_crypto28.createHash)("sha256").update(lines2.join("\n")).digest("hex");
+  return (0, import_node_crypto29.createHash)("sha256").update(lines2.join("\n")).digest("hex");
 }
 function isSandComputerAutoReviewBypassAction(action) {
   return BYPASS_COMPUTER_ACTIONS.has(action);
@@ -187,7 +187,7 @@ function describeHeldGesture(base, modifiers) {
   const gesture = modifiers === void 0 ? base : `${modifiers}-${base}`;
   return `${gesture.charAt(0).toUpperCase()}${gesture.slice(1)}`;
 }
-function summarizeBlockedAction(target, fingerprint, reason) {
+function summarizeBlockedAction(target, fingerprint2, reason) {
   const { exactAction, description: description9 } = target;
   const summary = (() => {
     if (exactAction.action === "click") {
@@ -203,7 +203,7 @@ function summarizeBlockedAction(target, fingerprint, reason) {
   })();
   return {
     surface: "computer",
-    fingerprint,
+    fingerprint: fingerprint2,
     reason,
     summary
   };
@@ -278,7 +278,7 @@ async function runSandComputerAutoReviewPreflight(args) {
     boxIdentity: options2.boxIdentity,
     displayStateIdentity: await options2.captureDisplayStateIdentity(args.ctx, args.toolCallId)
   });
-  const fingerprint = fingerprintSandComputerAutoReviewTarget(canonicalTarget);
+  const fingerprint2 = fingerprintSandComputerAutoReviewTarget(canonicalTarget);
   const assertDisplayStateUnchanged = async () => {
     const currentDisplayStateIdentity = await options2.captureDisplayStateIdentity(
       args.ctx,
@@ -304,19 +304,21 @@ async function runSandComputerAutoReviewPreflight(args) {
   const blockReason = decision.reason;
   const controller = options2.autoReviewController;
   if (decision.kind === "block" && controller !== void 0) {
-    const blockedAction = summarizeBlockedAction(canonicalTarget, fingerprint, blockReason);
-    const approval = await withToolExecutionTimeoutSuspended(
+    const blockedAction = summarizeBlockedAction(canonicalTarget, fingerprint2, blockReason);
+    const approval = await requestReviewedApproval(
       args.ctx,
-      () => controller.requestApproval({
+      controller,
+      {
         agentId: options2.agentId,
         surface: "computer",
-        fingerprint,
+        fingerprint: fingerprint2,
         reason: blockReason,
         summary: blockedAction.summary,
         ...decision.proposedRule === void 0 ? {} : { proposedRule: decision.proposedRule },
         signal: args.signal,
         ...options2.getApprovalExpiryPolicy !== void 0 ? { expiryPolicy: options2.getApprovalExpiryPolicy() } : {}
-      })
+      },
+      { toolCallId: args.toolCallId, approvalMode: "auto_review" }
     );
     if (args.signal?.aborted === true) {
       throw new SandComputerAutoReviewBlockedError(

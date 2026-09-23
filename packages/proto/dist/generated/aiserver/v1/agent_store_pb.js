@@ -1263,6 +1263,7 @@ var init_agent_store_pb = __esm({
         super();
         this.relPath = "";
         this.baseEtag = "";
+        this.deleteCurrent = false;
         proto3.util.initPartial(data, this);
       }
       static fromBinary(bytes, options2) {
@@ -1278,7 +1279,7 @@ var init_agent_store_pb = __esm({
         return proto3.util.equals(_AgentStoreDeleteFileEntry, a, b2);
       }
       static $() {
-        return ["AgentStoreDeleteFileEntry|1 rel_path 9|2 base_etag 9|3 mutation_id 9?"];
+        return ["AgentStoreDeleteFileEntry|1 rel_path 9|2 base_etag 9|3 mutation_id 9?|4 delete_current 8"];
       }
     };
     AgentStoreDeleteFileResult = class _AgentStoreDeleteFileResult extends __protoMessage3 {

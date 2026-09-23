@@ -47,10 +47,10 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
    * a socket — either is enough to register the Mac executor.
    */
   static isInstalled() {
-    if ((0, import_node_fs42.existsSync)(_MacComputerUseRPCClient.serviceExecutablePath())) {
+    if ((0, import_node_fs40.existsSync)(_MacComputerUseRPCClient.serviceExecutablePath())) {
       return true;
     }
-    return (0, import_node_fs42.existsSync)(_MacComputerUseRPCClient.serviceStatePath());
+    return (0, import_node_fs40.existsSync)(_MacComputerUseRPCClient.serviceStatePath());
   }
   screenshot(ctx) {
     return this.callTool(ctx, "computer_use_screenshot", {});
@@ -120,7 +120,7 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
       return;
     }
     _MacComputerUseRPCClient.throwIfAborted(ctx.signal);
-    const requestID = (0, import_node_crypto25.randomUUID)();
+    const requestID = (0, import_node_crypto24.randomUUID)();
     const response = await this.sendWithRelaunchRetry(ctx, () => ({
       id: _MacComputerUseRPCClient.requestID,
       method: "control/start",
@@ -154,7 +154,7 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
       const response = await _MacComputerUseRPCClient.sendOnce(_MacComputerUseRPCClient.socketPathFrom(state), {
         id: _MacComputerUseRPCClient.requestID,
         method: "control/release",
-        requestID: (0, import_node_crypto25.randomUUID)(),
+        requestID: (0, import_node_crypto24.randomUUID)(),
         mode: this.mode,
         sessionId
       }, _MacComputerUseRPCClient.defaultCallTimeoutMs);
@@ -176,7 +176,7 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
       return {
         id: _MacComputerUseRPCClient.requestID,
         method: "tools/call",
-        requestID: (0, import_node_crypto25.randomUUID)(),
+        requestID: (0, import_node_crypto24.randomUUID)(),
         name: name17,
         arguments: args,
         timeoutSeconds: timeoutMs / 1e3,
@@ -308,7 +308,7 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
     const expectedName = `${_MacComputerUseRPCClient.serviceAppBundleName}.app`;
     return {
       appName: path18.basename(appPath) === expectedName ? expectedName : "custom",
-      appPathHash: (0, import_node_crypto25.createHash)("sha256").update(appPath).digest("hex"),
+      appPathHash: (0, import_node_crypto24.createHash)("sha256").update(appPath).digest("hex"),
       usingOverride: Boolean(process.env[_MacComputerUseRPCClient.serviceAppOverrideEnv])
     };
   }
@@ -351,7 +351,7 @@ var MacComputerUseRPCClient = class _MacComputerUseRPCClient {
   }
   static async readServiceState() {
     try {
-      const raw = await (0, import_promises38.readFile)(_MacComputerUseRPCClient.serviceStatePath(), "utf8");
+      const raw = await (0, import_promises36.readFile)(_MacComputerUseRPCClient.serviceStatePath(), "utf8");
       return MacRPCProtocol.parseServiceState(raw);
     } catch (error42) {
       if (error42 instanceof Error && "code" in error42 && error42.code === "ENOENT") {

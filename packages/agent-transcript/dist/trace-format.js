@@ -5,13 +5,13 @@ var HistoryVisibilityMode;
   HistoryVisibilityMode2["EXTERNAL"] = "EXTERNAL";
   HistoryVisibilityMode2["NO_PREAMBLE"] = "NO_PREAMBLE";
 })(HistoryVisibilityMode || (HistoryVisibilityMode = {}));
-function tryParseJson(str3) {
-  if (!str3)
+function tryParseJson(str4) {
+  if (!str4)
     return void 0;
   try {
-    return JSON.parse(str3);
+    return JSON.parse(str4);
   } catch (_a19) {
-    return str3;
+    return str4;
   }
 }
 function applyToolCallTimestamps(target, toolResult) {

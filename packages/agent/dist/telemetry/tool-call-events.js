@@ -101,6 +101,16 @@ var ToolCallStepTracker = class {
     }
   }
 };
+function createOutOfStepToolCallEventRecorder(options2) {
+  return {
+    recordToolCall(ctx, observation) {
+      if (observation.errorClass === TOOL_CALL_EVENT_DEFERRED_ERROR_CLASS) {
+        return;
+      }
+      options2.onEvents([toToolCallEvent(ctx, observation, { modelId: options2.getModelId?.() })]);
+    }
+  };
+}
 function createToolCallEventMiddleware(options2) {
   return (executor) => ({
     appendMessages(messages2) {

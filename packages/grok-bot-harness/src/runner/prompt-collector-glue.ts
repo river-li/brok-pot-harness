@@ -65,13 +65,6 @@ function createPromptCollectorGlue(host) {
       host.mcpCustomInstructionsForTurn()
     );
   }
-  function getMcpDiscoveryStatusSection() {
-    if (host.isSubagentRunner && !host.isParentMediatedAutomationSubagent || host.mcp == null) {
-      return null;
-    }
-    if (!host.isMcpDiscoveryUnavailableForTurn()) return null;
-    return "<mcp_status>\nYour MCP tools are temporarily unavailable: discovering the user's MCP connectors from the backend failed this turn. This does NOT mean the user has no MCP connectors. Do not claim they have none or that a connector is missing; if the user needs an MCP tool, tell them MCP is temporarily unavailable and to retry shortly.\n</mcp_status>";
-  }
   async function resolveMcpCustomInstructions() {
     if (host.isSubagentRunner && !host.isParentMediatedAutomationSubagent || host.mcp == null) {
       return /* @__PURE__ */ new Map();
@@ -245,7 +238,7 @@ function createPromptCollectorGlue(host) {
     });
   }
   async function readBoxVideoBytes(videoPath) {
-    const boxPath = import_node_path164.posix.normalize(videoPath);
+    const boxPath = import_node_path165.posix.normalize(videoPath);
     if (!host.remoteBoxHasDesktop || !boxPath.startsWith(`${SAND_BOX_WORKSPACE_ROOT}/`)) {
       return null;
     }
@@ -323,7 +316,7 @@ function createPromptCollectorGlue(host) {
     });
     const replyContextNote = buildReplyContextNote(options2.replyContext);
     const senderMachineNote = buildSenderMachineNote(options2.senderMachineId);
-    const messageId = options2.messageId?.trim() || `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto76.randomUUID)()}`;
+    const messageId = options2.messageId?.trim() || `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto77.randomUUID)()}`;
     const addressNote = buildUserMessageAddressNote(messageId);
     const leadingNotes = [addressNote, senderMachineNote, replyContextNote].filter((note) => note.length > 0).join("\n");
     const bodyWithReplyContext = joinNonEmpty(leadingNotes, promptBody, "\n");
@@ -375,13 +368,14 @@ function createPromptCollectorGlue(host) {
       dismissed: options2.dismissedQuestionPrompts ?? [],
       discardedDrafts: options2.discardedDraftPrompts ?? [],
       unconfirmedDrafts: options2.unconfirmedDraftPrompts ?? [],
-      unseenWakeOutcomes: options2.unseenWakeOutcomes ?? []
+      unseenWakeOutcomes: options2.unseenWakeOutcomes ?? [],
+      unseenCloudAgentReports: options2.unseenCloudAgentReports ?? []
     });
     if (unansweredQuestionsNote.length > 0) {
       prependUserMessages.push(
         new UserMessage({
           text: unansweredQuestionsNote,
-          messageId: `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto76.randomUUID)()}`
+          messageId: `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto77.randomUUID)()}`
         })
       );
     }
@@ -391,7 +385,8 @@ function createPromptCollectorGlue(host) {
         value: new UserMessageAction({
           userMessage: userMessage2,
           prependUserMessages,
-          conversationHistory: options2.conversationHistory
+          conversationHistory: options2.conversationHistory,
+          trailingConversationHistory: options2.trailingConversationHistory
         })
       }
     });
@@ -406,7 +401,6 @@ function createPromptCollectorGlue(host) {
     getLatestAgentProfileUpdate,
     getAutomationStatusReminderForTurn,
     getMcpCustomInstructionsSection,
-    getMcpDiscoveryStatusSection,
     resolveMcpCustomInstructions,
     appendProfileUpdateToHistory,
     getRemoteBoxSection,

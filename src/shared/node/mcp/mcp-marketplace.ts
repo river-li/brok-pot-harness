@@ -32,7 +32,7 @@ function toCategoryLabel(key) {
   const locale = i18n.locale || DEFAULT_LOCALE;
   return key.toLowerCase().split("_").map((word) => word.length > 0 ? word[0].toLocaleUpperCase(locale) + word.slice(1) : word).join(" ");
 }
-function nonEmpty3(value) {
+function nonEmpty4(value) {
   return value != null && value.length > 0 ? value : void 0;
 }
 function isPrivateMarketplace(marketplace) {
@@ -87,8 +87,8 @@ function toSandMarketplacePlugin(plugin) {
     category: toCategoryLabel(categoryKey),
     categoryKeys: plugin.curatedCategoryKeys,
     logoUrl,
-    repositoryUrl: nonEmpty3(plugin.repositoryUrl),
-    websiteUrl: nonEmpty3(publisher?.websiteUrl),
+    repositoryUrl: nonEmpty4(plugin.repositoryUrl),
+    websiteUrl: nonEmpty4(publisher?.websiteUrl),
     sourceUrls: plugin.mcpServers.flatMap((server) => {
       const url2 = server.sourceUrl ?? "";
       return url2.length > 0 ? [url2] : [];

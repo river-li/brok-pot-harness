@@ -1,4 +1,4 @@
-var import_node_crypto34 = require("node:crypto");
+var import_node_crypto33 = require("node:crypto");
 init_dist4();
 init_agent_pb();
 var __addDisposableResource25 = function(env, value, async) {
@@ -110,7 +110,7 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
         const lastUserMessage = await lastTurn.userMessage.get(ctx);
         const syntheticUserMessage = new UserMessage({
           text: "Continue with the questionnaire results.",
-          messageId: (0, import_node_crypto34.randomUUID)(),
+          messageId: (0, import_node_crypto33.randomUUID)(),
           selectedContext: lastUserMessage.selectedContext ? fromRedactedSelectedContext(lastUserMessage.selectedContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED) : void 0,
           mode: lastUserMessage.mode,
           isSimulatedMsg: true,

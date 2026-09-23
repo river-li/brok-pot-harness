@@ -147,6 +147,17 @@ function sanitizeForBoxPath(value) {
 }
 var SandBrowserDriverError = class extends SandBrowserOperationError {
 };
+var NAVIGATING_OPS = /* @__PURE__ */ new Set([
+  "navigate",
+  "click",
+  "mouse_click_xy",
+  "type",
+  "type_focused",
+  "press_key",
+  "cdp",
+  "tabs"
+]);
+var JAVASCRIPT_URL_ERROR = "javascript: URLs are not allowed; open an http(s) page instead.";
 var SandBrowserDriver = class {
   constructor(deps) {
     this.deps = deps;
@@ -287,6 +298,140 @@ var SandBrowserDriver = class {
     }
     return { text: parts.join("\n\n"), imageKey };
   }
+  async call(ctx, op, args, options2) {
+    const observation = new BrowserOperationObservation({
+      ctx,
+      signal: options2.signal,
+      operation: op,
+      toolCallId: options2.toolCallId,
+      invocationId: void 0,
+      harness: this.deps.harness ?? "unavailable",
+      report: this.deps.reportBrowserOperation
+    });
+    const onAbort = () => {
+      observation.fail("cancelled");
+      observation.finish();
+    };
+    options2.signal.addEventListener("abort", onAbort, { once: true });
+    if (options2.signal.aborted) onAbort();
+    try {
+      return await this.perform(ctx, op, args, options2, observation);
+    } catch (error42) {
+      observation.caught(error42);
+      throw error42;
+    } finally {
+      options2.signal.removeEventListener("abort", onAbort);
+      observation.finish();
+    }
+  }
+  async perform(ctx, op, args, options2, observation) {
+    try {
+      const url2 = stringArg(args, "url");
+      if (url2 !== void 0 && isJavascriptUrl(url2)) {
+        observation.fail("invalid_arguments");
+        return { ok: false, error: JAVASCRIPT_URL_ERROR };
+      }
+      if (op === "cdp") observation.admittedCdpMethod(stringArg(args, "method") ?? "");
+      if (this.deps.autoReview !== void 0 && options2.readOnlyProbe !== true) {
+        observation.stage = "auto_review";
+        const { resolveDisplayNumber, ...autoReviewOptions } = this.deps.autoReview;
+        const exactAction = toBrowserReviewAction(op, args, this.deps.getDefaultViewId());
+        await runSandBrowserAutoReviewPreflight({
+          ctx,
+          resourceAccessor: this.deps.resourceAccessor,
+          options: {
+            ...autoReviewOptions,
+            captureReviewState: async (stateCtx, stateToolCallId) => await captureBrowserReviewState({
+              ctx: stateCtx,
+              resourceAccessor: this.deps.resourceAccessor,
+              toolCallId: stateToolCallId,
+              resolveDisplayNumber,
+              ...op !== "tabs" && exactAction.viewId !== void 0 ? { viewId: exactAction.viewId } : {}
+            })
+          },
+          exactAction,
+          toolCallId: options2.toolCallId,
+          stateHandler: options2.stateHandler,
+          workspacePaths: options2.workspacePaths,
+          signal: options2.signal
+        });
+      }
+      observation.stage = "setup";
+      const [windowIndex] = await Promise.all([
+        this.resolveWindowIndex(ctx),
+        this.ensureUploaded(ctx)
+      ]);
+      const wantScreenshot = options2.screenshot === true || op === "screenshot";
+      const screenshotPath = wantScreenshot ? `${SAND_BROWSER_DRIVER_BOX_DIR}/shot-${sanitizeForBoxPath(options2.toolCallId)}.png` : void 0;
+      const request5 = {
+        ...args,
+        op,
+        display: windowIndex,
+        cdpPort: BOX_CDP_PORT_BASE + windowIndex,
+        viewId: typeof args["viewId"] === "string" && args["viewId"].length > 0 ? args["viewId"] : this.deps.getDefaultViewId(),
+        navigationRecovery: this.deps.isNavigationRecoveryEnabled?.() === true,
+        ...screenshotPath !== void 0 ? { screenshotPath } : {}
+      };
+      const encoded = import_node_buffer6.Buffer.from(JSON.stringify(request5), "utf8").toString("base64");
+      const shell = this.deps.resourceAccessor.get(shellExecutorResource);
+      observation.stage = "shell";
+      const result = await observation.shellResult(
+        shell.execute(
+          ctx,
+          buildHostShellArgs({
+            command: `node ${SAND_BROWSER_DRIVER_BOX_PATH} ${encoded}`,
+            name: "node",
+            workingDirectory: "/workspace",
+            toolCallId: options2.toolCallId,
+            timeoutMs: SAND_BROWSER_DRIVER_SHELL_TIMEOUT_MS
+          })
+        )
+      );
+      if (result.result.case !== "success") {
+        throw new SandBrowserDriverError(describeSandBrowserShellError(result));
+      }
+      const response = parseDriverResponse(result.result.value.stdout);
+      if (response === void 0) {
+        throw new SandBrowserDriverError(describeSandBrowserShellError(result));
+      }
+      observation.driverResponded(response.opDurationMs, {
+        connectMs: response.connectMs,
+        screenshotMs: response.screenshotMs
+      });
+      observation.stage = "action";
+      if (NAVIGATING_OPS.has(op)) this.deps.onPossibleNavigation?.(ctx);
+      if (!response.ok) {
+        if (response.protocolInvalid === true) {
+          observation.stage = "protocol";
+          observation.fail("protocol_invalid");
+        } else {
+          observation.fail(response.infra === true ? "driver_infra_error" : "driver_error");
+        }
+        return { ok: false, error: response.error ?? "The browser action failed." };
+      }
+      if (wantScreenshot && (response.screenshot !== true || screenshotPath === void 0)) {
+        observation.fail("screenshot_missing");
+        return { ok: false, error: "Failed to capture the screenshot." };
+      }
+      const screenshot = screenshotPath === void 0 ? void 0 : await observation.download(
+        this.deps.agentBox.downloadFile(ctx, this.deps.getBoxId(), screenshotPath)
+      );
+      observation.stage = "result";
+      return {
+        ok: true,
+        summary: response.summary,
+        data: response.data,
+        url: response.url,
+        title: response.title,
+        screenshot
+      };
+    } catch (error42) {
+      if (error42 instanceof DeferredInteractionResponseError || error42 instanceof SandBrowserAutoReviewBlockedError) {
+        observation.fail("auto_review_blocked");
+      }
+      throw error42;
+    }
+  }
   async fetchScreenshot(ctx, boxPath, observation) {
     try {
       const bytes = await observation.download(
@@ -405,6 +550,8 @@ function toBrowserReviewAction(op, args, defaultViewId) {
     x: numberArg(args, "x"),
     y: numberArg(args, "y"),
     sourceRef: stringArg(args, "sourceRef"),
+    sourceX: numberArg(args, "sourceX"),
+    sourceY: numberArg(args, "sourceY"),
     targetRef: stringArg(args, "targetRef"),
     targetX: numberArg(args, "targetX"),
     targetY: numberArg(args, "targetY"),

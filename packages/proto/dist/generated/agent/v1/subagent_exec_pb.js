@@ -1,4 +1,4 @@
-var __protoPackage103, __protoMessage399, ForceBackgroundSubagentStatus, SubagentArgs, ClientContinuationConfig, SubagentResult, SubagentAwaitArgs, SubagentAwaitResult, SubagentAwaitComplete, SubagentAwaitStillRunning, SubagentAwaitNotFound, SubagentAwaitError, SubagentSuccess, SubagentError, ForceBackgroundSubagentArgs, ForceBackgroundSubagentResult;
+var __protoPackage104, __protoMessage399, ForceBackgroundSubagentStatus, SubagentArgs, ClientContinuationConfig, SubagentResult, SubagentAwaitArgs, SubagentAwaitResult, SubagentAwaitComplete, SubagentAwaitStillRunning, SubagentAwaitNotFound, SubagentAwaitError, SubagentSuccess, SubagentError, ForceBackgroundSubagentArgs, ForceBackgroundSubagentResult;
 var init_subagent_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/subagent_exec_pb.js"() {
     "use strict";
@@ -7,16 +7,16 @@ var init_subagent_exec_pb = __esm({
     init_subagents_pb();
     init_selected_context_pb();
     init_compact();
-    __protoPackage103 = "agent.v1.";
+    __protoPackage104 = "agent.v1.";
     __protoMessage399 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage103;
+        return __protoPackage104;
       }
     };
-    ForceBackgroundSubagentStatus = /* @__PURE__ */ enumType(proto3, __protoPackage103, "ForceBackgroundSubagentStatus", [[0, "UNSPECIFIED"], [1, "ACCEPTED"], [2, "NOT_FOUND"]], 1);
+    ForceBackgroundSubagentStatus = /* @__PURE__ */ enumType(proto3, __protoPackage104, "ForceBackgroundSubagentStatus", [[0, "UNSPECIFIED"], [1, "ACCEPTED"], [2, "NOT_FOUND"]], 1);
     SubagentArgs = class _SubagentArgs extends __protoMessage399 {
       constructor(data) {
         super();

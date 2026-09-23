@@ -36,9 +36,9 @@ var SandVoiceCallReceipt = class _SandVoiceCallReceipt {
     return { system: CARD_COPY_SYSTEM_PROMPT, user: JSON.stringify(payload) };
   }
   static parse(raw) {
-    const firstLine = raw.split(/\r?\n/u).map((line2) => line2.trim()).find((line2) => line2.length > 0);
-    if (firstLine === void 0) return void 0;
-    const line = firstLine.replace(WRAPPING_QUOTES, "").replace(/\s+/gu, " ").trim();
+    const firstLine2 = raw.split(/\r?\n/u).map((line2) => line2.trim()).find((line2) => line2.length > 0);
+    if (firstLine2 === void 0) return void 0;
+    const line = firstLine2.replace(WRAPPING_QUOTES, "").replace(/\s+/gu, " ").trim();
     if (line.length === 0 || line === OMIT_TOKEN) return void 0;
     if (!_SandVoiceCallReceipt.isScannableDescription(line)) return void 0;
     return clampLine2(line);

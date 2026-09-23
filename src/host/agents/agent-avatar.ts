@@ -1,11 +1,11 @@
-var import_node_crypto56 = require("node:crypto");
-var import_node_fs72 = require("node:fs");
+var import_node_crypto57 = require("node:crypto");
+var import_node_fs74 = require("node:fs");
 var import_promises60 = require("node:fs/promises");
-var import_node_path120 = require("node:path");
+var import_node_path121 = require("node:path");
 function listConventionalAvatarFilenames(agentDir) {
   let entries;
   try {
-    entries = (0, import_node_fs72.readdirSync)(agentDir);
+    entries = (0, import_node_fs74.readdirSync)(agentDir);
   } catch (error42) {
     reportFallbackUnlessAbsent("agent_avatar", error42);
     return [];
@@ -19,12 +19,12 @@ function resolveDerivedAvatarFilename(agentDir, legacyFieldValue) {
   const resolved = resolveAvatarPathWithinDir(agentDir, legacyFieldValue);
   if (resolved == null) return null;
   try {
-    if (!(0, import_node_fs72.statSync)(resolved).isFile()) return null;
-    const sourceExt = (0, import_node_path120.extname)(resolved).slice(1).toLowerCase();
-    const ext2 = CONVENTIONAL_AVATAR_EXTENSIONS.includes(sourceExt) ? sourceExt : extensionForMime(sniffAvatarMimeType((0, import_node_fs72.readFileSync)(resolved)) ?? "");
+    if (!(0, import_node_fs74.statSync)(resolved).isFile()) return null;
+    const sourceExt = (0, import_node_path121.extname)(resolved).slice(1).toLowerCase();
+    const ext2 = CONVENTIONAL_AVATAR_EXTENSIONS.includes(sourceExt) ? sourceExt : extensionForMime(sniffAvatarMimeType((0, import_node_fs74.readFileSync)(resolved)) ?? "");
     if (ext2 == null) return legacyFieldValue;
     const migratedName = `avatar.${ext2}`;
-    (0, import_node_fs72.copyFileSync)(resolved, (0, import_node_path120.join)(agentDir, migratedName), import_node_fs72.constants.COPYFILE_EXCL);
+    (0, import_node_fs74.copyFileSync)(resolved, (0, import_node_path121.join)(agentDir, migratedName), import_node_fs74.constants.COPYFILE_EXCL);
     return migratedName;
   } catch (error42) {
     reportFallbackUnlessAbsent("agent_avatar", error42);
@@ -35,14 +35,14 @@ function resolveAvatarPathWithinDir(agentDir, candidate) {
   if (candidate == null) return null;
   const trimmed = candidate.trim();
   if (trimmed.length === 0) return null;
-  const reanchored = (0, import_node_path120.isAbsolute)(trimmed) ? reanchorSandPath(trimmed, { acceptBoxModelVisibleAlias: true }) : trimmed;
-  const absolute = (0, import_node_path120.isAbsolute)(reanchored) ? reanchored : (0, import_node_path120.resolve)(agentDir, reanchored);
+  const reanchored = (0, import_node_path121.isAbsolute)(trimmed) ? reanchorSandPath(trimmed, { acceptBoxModelVisibleAlias: true }) : trimmed;
+  const absolute = (0, import_node_path121.isAbsolute)(reanchored) ? reanchored : (0, import_node_path121.resolve)(agentDir, reanchored);
   if (!isPathWithin4(agentDir, absolute)) return null;
   let realFile;
   let realDir;
   try {
-    realFile = (0, import_node_fs72.realpathSync)(absolute);
-    realDir = (0, import_node_fs72.realpathSync)(agentDir);
+    realFile = (0, import_node_fs74.realpathSync)(absolute);
+    realDir = (0, import_node_fs74.realpathSync)(agentDir);
   } catch (error42) {
     reportFallbackUnlessAbsent("agent_avatar", error42);
     return null;
@@ -51,8 +51,8 @@ function resolveAvatarPathWithinDir(agentDir, candidate) {
   return realFile;
 }
 function isPathWithin4(dir, target) {
-  const rel = (0, import_node_path120.relative)(dir, target);
-  return rel.length > 0 && rel !== ".." && !rel.startsWith(`..${import_node_path120.sep}`) && !(0, import_node_path120.isAbsolute)(rel);
+  const rel = (0, import_node_path121.relative)(dir, target);
+  return rel.length > 0 && rel !== ".." && !rel.startsWith(`..${import_node_path121.sep}`) && !(0, import_node_path121.isAbsolute)(rel);
 }
 async function resolveAndStatAvatar(agentDir, candidate) {
   const path31 = resolveAvatarPathWithinDir(agentDir, candidate);
@@ -85,7 +85,7 @@ async function readAvatarBytesWithinDir(agentDir, candidate) {
   return (await readValidatedAvatar(agentDir, candidate))?.bytes ?? null;
 }
 function avatarVersionForBytes(bytes) {
-  return (0, import_node_crypto56.createHash)("sha256").update(bytes).digest("hex").slice(0, 16);
+  return (0, import_node_crypto57.createHash)("sha256").update(bytes).digest("hex").slice(0, 16);
 }
 var avatarDataUrlCache = /* @__PURE__ */ new Map();
 var AVATAR_DATA_URL_CACHE_MAX = 128;
@@ -94,9 +94,9 @@ async function readAvatarWithinDir(agentDir, candidate) {
   const meta = await resolveAndStatAvatar(agentDir, candidate);
   if (meta == null) return null;
   const cacheKey3 = `${agentDir}${AVATAR_CACHE_KEY_SEP}${meta.path}`;
-  const fingerprint = `${meta.mtimeMs}:${meta.size}`;
+  const fingerprint2 = `${meta.mtimeMs}:${meta.size}`;
   const cached2 = avatarDataUrlCache.get(cacheKey3);
-  if (cached2 != null && cached2.fingerprint === fingerprint) {
+  if (cached2 != null && cached2.fingerprint === fingerprint2) {
     avatarDataUrlCache.delete(cacheKey3);
     avatarDataUrlCache.set(cacheKey3, cached2);
     return { dataUrl: cached2.dataUrl, version: cached2.version };
@@ -115,7 +115,7 @@ async function readAvatarWithinDir(agentDir, candidate) {
   }
   const dataUrl = `data:${mime2};base64,${bytes.toString("base64")}`;
   const version3 = avatarVersionForBytes(bytes);
-  avatarDataUrlCache.set(cacheKey3, { fingerprint, dataUrl, version: version3 });
+  avatarDataUrlCache.set(cacheKey3, { fingerprint: fingerprint2, dataUrl, version: version3 });
   if (avatarDataUrlCache.size > AVATAR_DATA_URL_CACHE_MAX) {
     const oldest = avatarDataUrlCache.keys().next().value;
     if (oldest != null && oldest !== cacheKey3) avatarDataUrlCache.delete(oldest);

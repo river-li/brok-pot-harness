@@ -58,7 +58,7 @@ var __disposeResources4 = /* @__PURE__ */ (function(SuppressedError2) {
 });
 var logger16 = createLogger("tools/common");
 function generateSeededUuid(seed) {
-  const hash = (0, import_node_crypto19.createHash)("sha256").update(seed).digest();
+  const hash = (0, import_node_crypto18.createHash)("sha256").update(seed).digest();
   hash[6] = hash[6] & 15 | 64;
   hash[8] = hash[8] & 63 | 128;
   const hex = hash.toString("hex");
@@ -337,8 +337,8 @@ var withSafeParsedArgs = (parametersSchema29, execute, initialToolCall, options2
         if (error42 instanceof ToolCallArgParseError) {
           throw error42;
         }
-        const errorMessage6 = error42 instanceof Error ? error42.message : "Invalid arguments";
-        throw new ToolCallArgParseError(errorMessage6);
+        const errorMessage7 = error42 instanceof Error ? error42.message : "Invalid arguments";
+        throw new ToolCallArgParseError(errorMessage7);
       }
       const rawArgs = parsedArgs;
       const toolName = initialToolCall.tool?.case ?? "unknown";

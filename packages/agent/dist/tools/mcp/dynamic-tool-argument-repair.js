@@ -143,9 +143,9 @@ var faithfulReadings = (blob) => {
   const byFingerprint = /* @__PURE__ */ new Map();
   const add2 = (value) => {
     if (value !== void 0) {
-      const fingerprint = JSON.stringify(value);
-      if (!byFingerprint.has(fingerprint)) {
-        byFingerprint.set(fingerprint, value);
+      const fingerprint2 = JSON.stringify(value);
+      if (!byFingerprint.has(fingerprint2)) {
+        byFingerprint.set(fingerprint2, value);
       }
     }
   };

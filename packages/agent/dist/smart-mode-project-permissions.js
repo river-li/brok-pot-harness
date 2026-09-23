@@ -56,7 +56,7 @@ async function loadSmartModeProjectPermissionsContext(_ctx, workspacePaths, user
       if (trimmed.length === 0) {
         continue;
       }
-      candidatePathSet.add((0, import_node_path79.join)(trimmed, PROJECT_PERMISSIONS_FILE_NAME));
+      candidatePathSet.add((0, import_node_path70.join)(trimmed, PROJECT_PERMISSIONS_FILE_NAME));
     }
   }
   const projectAllowInstructionsAggregate = [];
@@ -67,11 +67,11 @@ async function loadSmartModeProjectPermissionsContext(_ctx, workspacePaths, user
     appendUniqueInstructions(projectBlockInstructionsAggregate, projectAutoRunInstructions.blockInstructions);
   } else {
     for (const filePath of candidatePathSet) {
-      if (!(0, import_node_fs46.existsSync)(filePath)) {
+      if (!(0, import_node_fs44.existsSync)(filePath)) {
         continue;
       }
       try {
-        const raw = await (0, import_promises44.readFile)(filePath, "utf8");
+        const raw = await (0, import_promises42.readFile)(filePath, "utf8");
         const config2 = parseProjectPermissionsFileConfig(raw);
         if (config2 === void 0) {
           continue;

@@ -1,22 +1,22 @@
-var __protoPackage130, __protoMessage3125, WaterfallLogLevel, WaterfallSpanStatusType, WaterfallSpanEndStatus, WaterfallPhaseType, WaterfallUpdate, SetupWaterfallSentinel, SpanStart, SpanUpdate, SpanEnd, SpanLog, SpanStatusUpdate, CallToAction, OpenUrlCallToAction, GitReposSetupSpanDetails, GitRepoSetupSpanDetails, GenericLogSpanUpdate;
+var __protoPackage131, __protoMessage3125, WaterfallLogLevel, WaterfallSpanStatusType, WaterfallSpanEndStatus, WaterfallPhaseType, WaterfallUpdate, SetupWaterfallSentinel, SpanStart, SpanUpdate, SpanEnd, SpanLog, SpanStatusUpdate, CallToAction, OpenUrlCallToAction, GitReposSetupSpanDetails, GitRepoSetupSpanDetails, GenericLogSpanUpdate;
 var init_waterfall_update_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/waterfall_update_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage130 = "aiserver.v1.";
+    __protoPackage131 = "aiserver.v1.";
     __protoMessage3125 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage130;
+        return __protoPackage131;
       }
     };
-    WaterfallLogLevel = /* @__PURE__ */ enumType(proto3, __protoPackage130, "WaterfallLogLevel", [[0, "UNSPECIFIED"], [1, "DEBUG"], [2, "INFO"], [3, "WARN"], [4, "ERROR"]], 1);
-    WaterfallSpanStatusType = /* @__PURE__ */ enumType(proto3, __protoPackage130, "WaterfallSpanStatusType", [[0, "UNSPECIFIED"], [1, "MESSAGE"], [2, "WARN"], [3, "ERROR"]], 1);
-    WaterfallSpanEndStatus = /* @__PURE__ */ enumType(proto3, __protoPackage130, "WaterfallSpanEndStatus", [[0, "UNSPECIFIED"], [1, "SUCCESS"], [2, "FAILURE"], [3, "SKIPPED"]], 1);
-    WaterfallPhaseType = /* @__PURE__ */ enumType(proto3, __protoPackage130, "WaterfallPhaseType", [[0, "UNSPECIFIED"], [1, "ENVIRONMENT"], [2, "CREATE_CLOUD_WORKSPACE"], [3, "PROVISION_SANDBOX"], [4, "RESTORE_WORKSPACE_FILES"], [5, "DOCKER_BUILD"], [6, "SETUP_REPOSITORY"], [7, "INSTALL_DEPENDENCIES"], [8, "RUN_WORKSPACE_SETUP"], [9, "START_AGENT_SERVICES"], [10, "INSTALL_EXTENSIONS"], [11, "COMPLETE"], [12, "ACQUIRE_POD"], [13, "HYDRATE"]], 1);
+    WaterfallLogLevel = /* @__PURE__ */ enumType(proto3, __protoPackage131, "WaterfallLogLevel", [[0, "UNSPECIFIED"], [1, "DEBUG"], [2, "INFO"], [3, "WARN"], [4, "ERROR"]], 1);
+    WaterfallSpanStatusType = /* @__PURE__ */ enumType(proto3, __protoPackage131, "WaterfallSpanStatusType", [[0, "UNSPECIFIED"], [1, "MESSAGE"], [2, "WARN"], [3, "ERROR"]], 1);
+    WaterfallSpanEndStatus = /* @__PURE__ */ enumType(proto3, __protoPackage131, "WaterfallSpanEndStatus", [[0, "UNSPECIFIED"], [1, "SUCCESS"], [2, "FAILURE"], [3, "SKIPPED"]], 1);
+    WaterfallPhaseType = /* @__PURE__ */ enumType(proto3, __protoPackage131, "WaterfallPhaseType", [[0, "UNSPECIFIED"], [1, "ENVIRONMENT"], [2, "CREATE_CLOUD_WORKSPACE"], [3, "PROVISION_SANDBOX"], [4, "RESTORE_WORKSPACE_FILES"], [5, "DOCKER_BUILD"], [6, "SETUP_REPOSITORY"], [7, "INSTALL_DEPENDENCIES"], [8, "RUN_WORKSPACE_SETUP"], [9, "START_AGENT_SERVICES"], [10, "INSTALL_EXTENSIONS"], [11, "COMPLETE"], [12, "ACQUIRE_POD"], [13, "HYDRATE"]], 1);
     WaterfallUpdate = class _WaterfallUpdate extends __protoMessage3125 {
       constructor(data) {
         super();

@@ -63,6 +63,15 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * @generated from rpc aiserver.v1.GrokBotService.AdminBreakGlassDeleteSandBoxPod
+         */
+        adminBreakGlassDeleteSandBoxPod: {
+          name: "AdminBreakGlassDeleteSandBoxPod",
+          I: AdminBreakGlassDeleteSandBoxPodRequest,
+          O: AdminBreakGlassDeleteSandBoxPodResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * @generated from rpc aiserver.v1.GrokBotService.PresignSandBoxStoreWrites
          */
         presignSandBoxStoreWrites: {
@@ -806,6 +815,23 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * The primary bot chooser's "Add now": makes the default main bot ("Grok
+         * Bot") the caller's main bot, creating it when the caller never had one, or
+         * reports the main bot the caller already has. Idempotent: the bot's id is
+         * fixed per user, so a retry or a concurrent call converges on one row.
+         * Behind sand_grok_main_agent; fails invalid_argument when it is off and
+         * failed_precondition when the caller is outside the Temporal harness the
+         * bot runs on.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.EnsureGrokBotDefaultMainAgent
+         */
+        ensureGrokBotDefaultMainAgent: {
+          name: "EnsureGrokBotDefaultMainAgent",
+          I: EnsureGrokBotDefaultMainAgentRequest,
+          O: EnsureGrokBotDefaultMainAgentResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * Records that a client showed the caller the Grok Bot terms notice. A
          * server-stamped latch: the first call sets the moment, later calls return
          * it unchanged. Admitted for any signed-in user, entitled or not, so the
@@ -900,6 +926,33 @@ var init_grok_bot_connect = __esm({
           name: "SetGrokBotAgentVisibility",
           I: SetGrokBotAgentVisibilityRequest,
           O: SetGrokBotAgentVisibilityResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * The owner's Publish to team on a TEAM bot created under the publish step:
+         * until this, only the owner can see or message it. Owner-only; idempotent
+         * (a second call answers already_published and changes nothing).
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.PublishGrokBotAgent
+         */
+        publishGrokBotAgent: {
+          name: "PublishGrokBotAgent",
+          I: PublishGrokBotAgentRequest,
+          O: PublishGrokBotAgentResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * The owner's Unpublish on a published TEAM bot: clears the publish stamp so
+         * the bot is the owner's alone again (Draft) until a later Publish to team.
+         * The row stays TEAM. Owner-only; idempotent (a second call answers
+         * not_published and changes nothing).
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.UnpublishGrokBotAgent
+         */
+        unpublishGrokBotAgent: {
+          name: "UnpublishGrokBotAgent",
+          I: UnpublishGrokBotAgentRequest,
+          O: UnpublishGrokBotAgentResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -1610,6 +1663,23 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * Answers a per-turn connector-grant card ("Allow / Skip for this turn",
+         * or an "Always allow") raised on the Temporal harness when the acting
+         * user is in the Sand app (main or an app DM). Signals the parked
+         * grokBotTurnWorkflow. NotFound when the card is not the pending ask or
+         * the caller is not the acting user. Slack clicks stay on the Slack
+         * interaction path. Skip covers this turn only; an Always allow is stored
+         * for the acting user and then allows this turn.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.ResolveGrokBotConnectorGrant
+         */
+        resolveGrokBotConnectorGrant: {
+          name: "ResolveGrokBotConnectorGrant",
+          I: ResolveGrokBotConnectorGrantRequest,
+          O: ResolveGrokBotConnectorGrantResponse,
+          kind: MethodKind.Unary
+        },
+        /**
          * Answers a virtual-card approval card. On approve the backend creates the
          * Stripe Link spend request itself and returns Link's approval URL for the
          * desktop to open; the agent never has a tool that can create one.
@@ -1772,6 +1842,35 @@ var init_grok_bot_connect = __esm({
           name: "RevokePasskey",
           I: RevokePasskeyRequest,
           O: RevokePasskeyResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Opens a spend-approval ceremony for the agent's pending virtual card:
+         * mints a single-use challenge (5 min) bound to that request_id and the
+         * amount, currency and merchant on the server-side pending card, and returns
+         * the WebAuthn request options built on it. NEEDS_ENROLLMENT flows never
+         * reach here: the caller enrolls first, then begins again.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.BeginGrokBotSpendApproval
+         */
+        beginGrokBotSpendApproval: {
+          name: "BeginGrokBotSpendApproval",
+          I: BeginGrokBotSpendApprovalRequest,
+          O: BeginGrokBotSpendApprovalResponse,
+          kind: MethodKind.Unary
+        },
+        /**
+         * Verifies the assertion for the challenge and marks it asserted, so a
+         * following ResolveGrokBotVirtualCardApproval carrying the challenge_id as
+         * its attestation passes. Callable with a session or with only the ceremony
+         * token (route-level). Consumes the token.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.FinishGrokBotSpendApprovalAssertion
+         */
+        finishGrokBotSpendApprovalAssertion: {
+          name: "FinishGrokBotSpendApprovalAssertion",
+          I: FinishGrokBotSpendApprovalAssertionRequest,
+          O: FinishGrokBotSpendApprovalAssertionResponse,
           kind: MethodKind.Unary
         },
         /**
@@ -2239,6 +2338,26 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
+         * Any template, listed or not. Anytool internal service + acting employee.
+         *
+         * @generated from rpc aiserver.v1.GrokBotService.GetGrokBotTemplateForOperatorInternal
+         */
+        getGrokBotTemplateForOperatorInternal: {
+          name: "GetGrokBotTemplateForOperatorInternal",
+          I: GetGrokBotTemplateForOperatorInternalRequest,
+          O: GrokBotTemplateOperatorView,
+          kind: MethodKind.Unary
+        },
+        /**
+         * @generated from rpc aiserver.v1.GrokBotService.SetGrokBotTemplateCreatorAttributionInternal
+         */
+        setGrokBotTemplateCreatorAttributionInternal: {
+          name: "SetGrokBotTemplateCreatorAttributionInternal",
+          I: SetGrokBotTemplateCreatorAttributionInternalRequest,
+          O: GrokBotTemplateOperatorView,
+          kind: MethodKind.Unary
+        },
+        /**
          * BOX → Temporal harness migration operator surface (Anytool internal
          * service + acting employee), read for one owner: rollout eligibility, the
          * owner's migration hold, every live agent's harness, and recent passes.
@@ -2265,10 +2384,10 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
-         * Preview a bounded internal Primary Bot migration cohort for Anytool.
-         * Team IDs and allowlisted email suffixes use OR semantics; only owners
-         * with a non-null grok_bot_user_settings.main_agent_id are returned.
-         * Read-only; returns a signed preview proof for a later execute.
+         * Preview one page of an internal Primary Bot migration cohort for Anytool.
+         * Team IDs and allowlisted email suffixes use OR semantics. Read-only:
+         * previewing never writes. Pages are keyset slices ordered by user id.
+         * The signed preview proof covers only the migratable owners returned.
          *
          * @generated from rpc aiserver.v1.GrokBotService.PreviewInternalPrimaryBotMigration
          */
@@ -2279,9 +2398,10 @@ var init_grok_bot_connect = __esm({
           kind: MethodKind.Unary
         },
         /**
-         * Execute Primary Bot migration for selected owners from a prior preview.
+         * Execute Primary Bot migration for one confirmed batch from a preview page.
          * Revalidates filters, primary state, and live SYSTEM bot per owner;
-         * catches per-user failures without aborting the batch.
+         * catches per-user failures without aborting the batch. Does not scan or
+         * write owners outside selected_user_ids.
          *
          * @generated from rpc aiserver.v1.GrokBotService.ExecuteInternalPrimaryBotMigration
          */

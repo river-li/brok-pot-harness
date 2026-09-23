@@ -1,5 +1,5 @@
 var import_promises81 = require("node:fs/promises");
-var import_node_path177 = require("node:path");
+var import_node_path179 = require("node:path");
 init_errors();
 var UnexpectedIncrementalFullWriteError = class extends SandDomainError {
   name = "UnexpectedIncrementalFullWriteError";
@@ -29,20 +29,20 @@ var LegacyFileTranscriptMirror = class {
   transcriptsDir;
   jsonlPathFor(conversationId) {
     const safeId = getSafeConversationId2(conversationId);
-    return (0, import_node_path177.join)(this.transcriptsDir, safeId, `${safeId}.jsonl`);
+    return (0, import_node_path179.join)(this.transcriptsDir, safeId, `${safeId}.jsonl`);
   }
   transcriptStore(blobStore, writeTranscript) {
     return new TranscriptStore(this.transcriptsDir, blobStore, writeTranscript, {
       writeText: false,
       writeJsonl: true,
       appendFile: async (filePath, content) => {
-        await (0, import_promises81.mkdir)((0, import_node_path177.dirname)(filePath), { recursive: true });
+        await (0, import_promises81.mkdir)((0, import_node_path179.dirname)(filePath), { recursive: true });
         await (0, import_promises81.appendFile)(filePath, content, "utf8");
       },
       fallbackToFullWriteOnIncrementalFailure: false,
       pathResolver: (id, ext2) => {
         const safeId = getSafeConversationId2(id);
-        return (0, import_node_path177.join)(this.transcriptsDir, safeId, `${safeId}.${ext2}`);
+        return (0, import_node_path179.join)(this.transcriptsDir, safeId, `${safeId}.${ext2}`);
       }
     });
   }
@@ -67,7 +67,7 @@ var LegacyFileTranscriptMirror = class {
   async writeFull(ctx, conversationId, state, blobStore) {
     let wroteFile = false;
     const store = this.transcriptStore(blobStore, async (filePath, content) => {
-      await (0, import_promises81.mkdir)((0, import_node_path177.dirname)(filePath), { recursive: true });
+      await (0, import_promises81.mkdir)((0, import_node_path179.dirname)(filePath), { recursive: true });
       if (filePath === this.jsonlPathFor(conversationId)) {
         let existing;
         try {

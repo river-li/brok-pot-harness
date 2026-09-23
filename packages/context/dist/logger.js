@@ -337,23 +337,23 @@ function getLoggerBackend(ctx) {
   return ctx.get(loggerKey);
 }
 function createLogger(name17) {
-  function log4(ctx, entry) {
+  function log5(ctx, entry) {
     const timestamp3 = /* @__PURE__ */ new Date();
-    const logger108 = getLoggerBackend(ctx);
-    logger108.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp3, logger: name17 }));
+    const logger110 = getLoggerBackend(ctx);
+    logger110.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp3, logger: name17 }));
   }
   return {
     debug: (ctx, message, metadata) => {
-      log4(ctx, { level: "debug", message, context: ctx, metadata });
+      log5(ctx, { level: "debug", message, context: ctx, metadata });
     },
     info: (ctx, message, metadata) => {
-      log4(ctx, { level: "info", message, context: ctx, metadata });
+      log5(ctx, { level: "info", message, context: ctx, metadata });
     },
     warn: (ctx, message, metadata) => {
-      log4(ctx, { level: "warn", message, context: ctx, metadata });
+      log5(ctx, { level: "warn", message, context: ctx, metadata });
     },
     error: (ctx, message, error42, metadata) => {
-      log4(ctx, { level: "error", message, context: ctx, error: error42, metadata });
+      log5(ctx, { level: "error", message, context: ctx, error: error42, metadata });
     }
   };
 }

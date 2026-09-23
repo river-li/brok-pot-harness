@@ -211,6 +211,18 @@ function unwrapPossiblyRedactedCodeString(value) {
   }
   return typeof value === "string" ? value : value.unwrap(PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
 }
+function retainRenderedProjectDetails(projectDetails, rendered) {
+  if (rendered.name === void 0) {
+    delete projectDetails.name;
+  } else {
+    projectDetails.name = rendered.name;
+  }
+  if (rendered.initDescription === void 0) {
+    delete projectDetails.initDescription;
+  } else {
+    projectDetails.initDescription = rendered.initDescription;
+  }
+}
 function toCommunicateUpdateTurnState(state) {
   return {
     history: (state.history ?? []).map((entry) => new CommunicateUpdateHistoryEntry({
@@ -577,7 +589,7 @@ function extractWorkspaceUris(_ctx, requestContext) {
       continue;
     }
     try {
-      uris.push((0, import_node_url10.pathToFileURL)(trimmedPath).toString());
+      uris.push((0, import_node_url9.pathToFileURL)(trimmedPath).toString());
     } catch {
     }
   }
@@ -2259,6 +2271,7 @@ _ConversationStateHandle_instances = /* @__PURE__ */ new WeakSet(), _Conversatio
     const isProject = isRootProjectMessage;
     const isProjectKickoff = isProject && (options2?.isProjectKickoff ?? this.turns.length === 0);
     const projectName = isProjectKickoff ? normalizeProjectName(unwrapPossiblyRedactedCodeString(userMessage2.projectDetails?.name)) : void 0;
+    const projectInitDescription = isProjectKickoff ? unwrapPossiblyRedactedCodeString(userMessage2.projectDetails?.initDescription) : void 0;
     const projectChildName = projectSubagentDetails !== void 0 || projectSideChatDetails !== void 0 ? normalizeProjectName(unwrapPossiblyRedactedCodeString(userMessage2.projectDetails?.name)) : void 0;
     const skipPreTurnStateSnapshot = config2.featureFlags?.skipPreTurnStateSnapshot === true;
     const overlapPreTurnStateSnapshot = !skipPreTurnStateSnapshot && config2.featureFlags?.overlapPreTurnStateSnapshot === true;
@@ -2299,12 +2312,10 @@ _ConversationStateHandle_instances = /* @__PURE__ */ new WeakSet(), _Conversatio
       userMessage2.conversationStateBlobId = new Uint8Array(stateBeforeMessageBlobId);
     }
     if (!overlapPreTurnStateSnapshot && userMessage2.projectDetails !== void 0) {
-      const nameToKeep = projectName ?? projectChildName;
-      if (nameToKeep !== void 0) {
-        userMessage2.projectDetails.name = nameToKeep;
-      } else {
-        delete userMessage2.projectDetails.name;
-      }
+      retainRenderedProjectDetails(userMessage2.projectDetails, {
+        name: projectName ?? projectChildName,
+        initDescription: projectInitDescription
+      });
     }
     await this.hydrateUserMessageBlobText(ctx, userMessage2);
     const modeForContextProcessing = this.resolveTurnMode(userMessage2);
@@ -2318,12 +2329,10 @@ _ConversationStateHandle_instances = /* @__PURE__ */ new WeakSet(), _Conversatio
         userMessage2.conversationStateBlobId = new Uint8Array(stateBeforeMessageBlobId);
       }
       if (userMessage2.projectDetails !== void 0) {
-        const nameToKeep = projectName ?? projectChildName;
-        if (nameToKeep !== void 0) {
-          userMessage2.projectDetails.name = nameToKeep;
-        } else {
-          delete userMessage2.projectDetails.name;
-        }
+        retainRenderedProjectDetails(userMessage2.projectDetails, {
+          name: projectName ?? projectChildName,
+          initDescription: projectInitDescription
+        });
       }
     }
     if (isProject && config2.featureFlags?.cloudCoordinatorToolsEnabled === true) {
@@ -2418,6 +2427,7 @@ ${formatProjectPrompt(isProjectKickoff ? "initial" : resolveProjectCadenceKind({
       interval: config2.projectReminderCadenceIntervalGenerator?.() ?? config2.projectReminderCadenceInterval
     }), {
       projectName,
+      initDescription: projectInitDescription,
       promptText: config2.projectPromptTextGenerator?.(),
       guidanceText: config2.projectPromptGuidanceGenerator?.(),
       sendMessageToolName,
@@ -2425,6 +2435,7 @@ ${formatProjectPrompt(isProjectKickoff ? "initial" : resolveProjectCadenceKind({
       coordinatorProgressEnabled: config2.featureFlags?.cloudCoordinatorProgressEnabled === true,
       coordinatorSteerFollowupsEnabled: config2.featureFlags?.cloudCoordinatorSteerFollowupsEnabled === true,
       coordinatorPlacementConsentEnabled: config2.featureFlags?.cloudCoordinatorPlacementConsentEnabled === true,
+      coordinatorAskQuestionEnabled: config2.featureFlags?.cloudCoordinatorAskQuestionEnabled !== false,
       // Turn budget applied here, where the exact prior-turn count is
       // known on every path.
       firstProjectOnboarding: clampFirstProjectOnboardingForTurn(config2.firstProjectOnboarding, this.turns.length)

@@ -37,6 +37,8 @@ var ReadFileRequest = class _ReadFileRequest extends __protoMessage3144 {
     super();
     this.path = "";
     this.maxBytes = protoInt64.zero;
+    this.offset = protoInt64.zero;
+    this.length = protoInt64.zero;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -52,13 +54,14 @@ var ReadFileRequest = class _ReadFileRequest extends __protoMessage3144 {
     return proto3.util.equals(_ReadFileRequest, a, b2);
   }
   static $() {
-    return ["ReadFileRequest|1 path 9|2 max_bytes 4"];
+    return ["ReadFileRequest|1 path 9|2 max_bytes 4|3 offset 4|4 length 4"];
   }
 };
 var ReadFileHeader = class _ReadFileHeader extends __protoMessage3144 {
   constructor(data) {
     super();
     this.size = protoInt64.zero;
+    this.realPath = "";
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -74,7 +77,7 @@ var ReadFileHeader = class _ReadFileHeader extends __protoMessage3144 {
     return proto3.util.equals(_ReadFileHeader, a, b2);
   }
   static $() {
-    return ["ReadFileHeader|1 size 4"];
+    return ["ReadFileHeader|1 size 4|2 real_path 9"];
   }
 };
 var ReadFileComplete = class _ReadFileComplete extends __protoMessage3144 {

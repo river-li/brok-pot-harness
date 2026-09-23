@@ -27,8 +27,8 @@ var X11ComputerUseExecutor = class {
    * Set the InputEventLogger on the underlying X11Executor.
    * Used for recording polished video preprocessing data.
    */
-  setInputEventLogger(logger108) {
-    this.executor.setInputEventLogger(logger108);
+  setInputEventLogger(logger110) {
+    this.executor.setInputEventLogger(logger110);
   }
   generateScreenshotFilename() {
     const randomBytes4 = crypto3.randomBytes(3);
@@ -49,9 +49,9 @@ var X11ComputerUseExecutor = class {
       });
       return filepath;
     } catch (error3) {
-      const errorMessage4 = error3 instanceof Error ? error3.message : String(error3);
+      const errorMessage5 = error3 instanceof Error ? error3.message : String(error3);
       logger10.error(ctx, "Failed to save screenshot to temp", error3, {
-        error: errorMessage4
+        error: errorMessage5
       });
       return void 0;
     }
@@ -121,7 +121,7 @@ var X11ComputerUseExecutor = class {
       });
     } catch (error3) {
       const durationMs = Date.now() - startTime;
-      const errorMessage4 = error3 instanceof Error ? error3.message : String(error3);
+      const errorMessage5 = error3 instanceof Error ? error3.message : String(error3);
       logger10.error(ctx, "Computer use execution failed", error3, {
         toolCallId: args.toolCallId,
         durationMs
@@ -160,7 +160,7 @@ var X11ComputerUseExecutor = class {
         result: {
           case: "error",
           value: new ComputerUseError({
-            error: errorMessage4,
+            error: errorMessage5,
             actionCount: args.actions.length,
             durationMs,
             log: errorScreenshotPath ? `Error screenshot saved to ${errorScreenshotPath}` : void 0,

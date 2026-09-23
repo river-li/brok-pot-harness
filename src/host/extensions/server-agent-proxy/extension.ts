@@ -10,7 +10,7 @@ var serverAgentProxyExtension = defineHostExtension({
     const { auth: auth2, transcript } = context2.deps;
     const proxy = createServerAgentProxy({
       backend: context2.host.environment.backend,
-      bootId: (0, import_node_crypto63.randomUUID)(),
+      bootId: (0, import_node_crypto64.randomUUID)(),
       auth: {
         getAccessToken: auth2.getAccessToken,
         getTeamId: auth2.getTeamId,

@@ -1,16 +1,16 @@
-var __protoPackage62, __protoMessage359, GetMcpToolsArgs, GetMcpToolsAgentResult, GetMcpToolsSuccess, GetMcpToolsError, GetMcpToolsToolCall;
+var __protoPackage63, __protoMessage359, GetMcpToolsArgs, GetMcpToolsAgentResult, GetMcpToolsSuccess, GetMcpToolsError, GetMcpToolsToolCall;
 var init_get_mcp_tools_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/get_mcp_tools_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage62 = "agent.v1.";
+    __protoPackage63 = "agent.v1.";
     __protoMessage359 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage62;
+        return __protoPackage63;
       }
     };
     GetMcpToolsArgs = class _GetMcpToolsArgs extends __protoMessage359 {

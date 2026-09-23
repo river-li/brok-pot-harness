@@ -313,14 +313,14 @@ function createOffsetSchema(options2 = {}) {
   const baseNumberSchema = options2.requireInt ? external_exports.number().int() : external_exports.number();
   const allowNegative = options2.includeNegativeOffset ?? false;
   const description9 = allowNegative ? "The line number to start reading from. Positive values are 1-indexed from the start of the file. Negative values count backwards from the end (e.g. -1 is the last line). Only provide if the file is too large to read at once." : "The line number to start reading from. Only provide if the file is too large to read at once.";
-  const errorMessage6 = allowNegative ? "Offset must be >= 1 or <= -1." : "Offset must be >= 1.";
+  const errorMessage7 = allowNegative ? "Offset must be >= 1 or <= -1." : "Offset must be >= 1.";
   return lenientNumber(baseNumberSchema).optional().refine((val) => {
     if (val === void 0 || val === 0 || val >= 1)
       return true;
     if (allowNegative && val <= -1)
       return true;
     return false;
-  }, errorMessage6).transform((val) => {
+  }, errorMessage7).transform((val) => {
     if (val === void 0)
       return void 0;
     if (val === 0)
@@ -754,7 +754,9 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
             plugin,
             marketplace,
             pluginId,
-            marketplaceId
+            marketplaceId,
+            toolCallId: meta.toolCallId,
+            skillPath: resolvedPath
           });
         }
       }
@@ -1080,13 +1082,13 @@ PDF Support:
     execute: withSafeParsedArgs(parametersSchema29, execute, createReadToolCall(new ReadToolCall())),
     render: render2,
     serializeError: (error42) => {
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
       return createReadToolCall(new ReadToolCall({
         result: new ReadToolResult({
           result: {
             case: "error",
             value: new ReadToolError({
-              errorMessage: errorMessage6
+              errorMessage: errorMessage7
             })
           }
         })

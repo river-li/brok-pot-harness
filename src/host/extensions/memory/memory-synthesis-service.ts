@@ -134,7 +134,7 @@ async function streamText({
   signal,
   isDisposed
 }) {
-  const [ctx, cancel] = createContext().with(conversationIdKey, (0, import_node_crypto57.randomUUID)()).with(requestIdKey, (0, import_node_crypto57.randomUUID)()).withCancel();
+  const [ctx, cancel] = createContext().with(conversationIdKey, (0, import_node_crypto58.randomUUID)()).with(requestIdKey, (0, import_node_crypto58.randomUUID)()).withCancel();
   const abort = () => {
     const disposed = isDisposed();
     cancel(
@@ -233,7 +233,7 @@ var MemorySynthesisService = class {
       this.report("dropped", 1, 0, 0, this.now());
     }
     pending.evidence.push({
-      id: (0, import_node_crypto57.randomUUID)(),
+      id: (0, import_node_crypto58.randomUUID)(),
       occurredAt: exchange.occurredAt,
       user,
       assistant

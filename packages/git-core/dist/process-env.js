@@ -1,10 +1,16 @@
-var import_node_os12 = require("node:os");
-var PINNED_GIT_CONFIG_ENTRIES = [
-  ["safe.bareRepository", "explicit"],
-  ["core.fsmonitor", "false"],
-  ["core.hooksPath", import_node_os12.devNull],
-  ["core.attributesFile", import_node_os12.devNull]
+var import_node_os11 = require("node:os");
+var BARE_REPO_GUARD_ENTRIES = [
+  ["safe.bareRepository", "explicit"]
 ];
+var REPO_CONFIG_EXECUTION_GUARD_ENTRIES = [
+  ["core.fsmonitor", "false"],
+  ["core.hooksPath", import_node_os11.devNull],
+  ["core.attributesFile", import_node_os11.devNull]
+];
+function pinnedEntriesFor(policy) {
+  const repoConfigEntries = policy === "allow-hooks" ? REPO_CONFIG_EXECUTION_GUARD_ENTRIES.filter(([key]) => key !== "core.hooksPath") : REPO_CONFIG_EXECUTION_GUARD_ENTRIES;
+  return [...BARE_REPO_GUARD_ENTRIES, ...repoConfigEntries];
+}
 function readGitConfigCount(env) {
   const raw = env.GIT_CONFIG_COUNT;
   if (raw === void 0 || raw === "") {
@@ -16,13 +22,13 @@ function readGitConfigCount(env) {
   }
   return parsed2;
 }
-function applyPinnedGitConfig(env) {
+function applyPinnedGitConfig(env, pinnedEntries) {
   const count = readGitConfigCount(env);
   const result = Object.assign({}, env);
   const foundKeys = /* @__PURE__ */ new Set();
   for (let index = 0; index < count; index++) {
     const existingKey = result[`GIT_CONFIG_KEY_${index}`];
-    for (const [pinnedKey, pinnedValue] of PINNED_GIT_CONFIG_ENTRIES) {
+    for (const [pinnedKey, pinnedValue] of pinnedEntries) {
       if (existingKey === pinnedKey) {
         result[`GIT_CONFIG_VALUE_${index}`] = pinnedValue;
         foundKeys.add(pinnedKey);
@@ -30,7 +36,7 @@ function applyPinnedGitConfig(env) {
     }
   }
   let nextIndex = count;
-  for (const [pinnedKey, pinnedValue] of PINNED_GIT_CONFIG_ENTRIES) {
+  for (const [pinnedKey, pinnedValue] of pinnedEntries) {
     if (foundKeys.has(pinnedKey)) {
       continue;
     }
@@ -44,11 +50,12 @@ function applyPinnedGitConfig(env) {
   return result;
 }
 function createGitProcessEnv(options2) {
+  var _a19;
   const merged = Object.assign(Object.assign(Object.assign(Object.assign({}, process.env), options2.spawnerEnv), { LC_ALL: "en_US.UTF-8", LANG: "en_US.UTF-8", GIT_PAGER: "cat" }), options2.optionsEnv);
   if (options2.command !== void 0) {
     merged.VSCODE_GIT_COMMAND = options2.command;
   } else {
     delete merged.VSCODE_GIT_COMMAND;
   }
-  return applyPinnedGitConfig(merged);
+  return applyPinnedGitConfig(merged, pinnedEntriesFor((_a19 = options2.repoConfigExecution) !== null && _a19 !== void 0 ? _a19 : "block"));
 }

@@ -10,14 +10,14 @@ function onDemandFromSettings(settings) {
     dashboardUrl: settings.dashboardUrl.length > 0 ? settings.dashboardUrl : null
   };
 }
-function nonEmpty2(value) {
+function nonEmpty3(value) {
   return value !== void 0 && value.length > 0 ? value : null;
 }
 function cycleUsageFromStatusResponse(response) {
   const usagePercent = response.usagePercent;
-  const grokPlanLabel = nonEmpty2(response.grokPlanLabel);
+  const grokPlanLabel = nonEmpty3(response.grokPlanLabel);
   return {
-    cursorPlan: nonEmpty2(response.cursorPlanName),
+    cursorPlan: nonEmpty3(response.cursorPlanName),
     superGrokPlan: grokPlanLabel === GROK_BOT_PLAN_LABEL ? null : grokPlanLabel,
     usagePercent: usagePercent !== void 0 && Number.isFinite(usagePercent) ? usagePercent : null,
     nextResetMs: timestampMs(response.nextResetTimestampUtc),

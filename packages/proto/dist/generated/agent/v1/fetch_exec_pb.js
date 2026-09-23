@@ -1,16 +1,16 @@
-var __protoPackage42, __protoMessage339, FetchArgs, FetchResult, FetchSuccess, FetchError;
+var __protoPackage43, __protoMessage339, FetchArgs, FetchResult, FetchSuccess, FetchError;
 var init_fetch_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/fetch_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage42 = "agent.v1.";
+    __protoPackage43 = "agent.v1.";
     __protoMessage339 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage42;
+        return __protoPackage43;
       }
     };
     FetchArgs = class _FetchArgs extends __protoMessage339 {

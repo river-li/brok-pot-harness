@@ -1,19 +1,19 @@
-var __protoPackage127, __protoMessage3122, UsageEventKind, ModelSelectionSnapshot, ModelSelectionSnapshot_ModelParameterValue, UsageEventDetails, UsageEventDetails_PromptHook, UsageEventDetails_BugFinderTriggerV1, UsageEventDetails_BugBot, UsageEventDetails_Chat, UsageEventDetails_FastApply, UsageEventDetails_Composer, UsageEventDetails_ToolCallComposer, UsageEventDetails_WarmComposer, UsageEventDetails_ContextChat, UsageEventDetails_CmdK, UsageEventDetails_TerminalCmdK, UsageEventDetails_AiReviewAcceptedComment, UsageEventDetails_InterpreterChat, UsageEventDetails_SlashEdit, UsageEventDetails_AgentSdkManagedProduct, UsageEvent, UsageEventDisplay, TokenUsage;
+var __protoPackage128, __protoMessage3122, UsageEventKind, ModelSelectionSnapshot, ModelSelectionSnapshot_ModelParameterValue, UsageEventDetails, UsageEventDetails_PromptHook, UsageEventDetails_BugFinderTriggerV1, UsageEventDetails_BugBot, UsageEventDetails_Chat, UsageEventDetails_FastApply, UsageEventDetails_Composer, UsageEventDetails_ToolCallComposer, UsageEventDetails_WarmComposer, UsageEventDetails_ContextChat, UsageEventDetails_CmdK, UsageEventDetails_TerminalCmdK, UsageEventDetails_AiReviewAcceptedComment, UsageEventDetails_InterpreterChat, UsageEventDetails_SlashEdit, UsageEventDetails_AgentSdkManagedProduct, UsageEvent, UsageEventDisplay, TokenUsage;
 var init_usage_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/usage_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage127 = "aiserver.v1.";
+    __protoPackage128 = "aiserver.v1.";
     __protoMessage3122 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage127;
+        return __protoPackage128;
       }
     };
-    UsageEventKind = /* @__PURE__ */ enumType(proto3, __protoPackage127, "UsageEventKind", [[0, "UNSPECIFIED"], [1, "USAGE_BASED"], [2, "USER_API_KEY"], [3, "INCLUDED_IN_PRO"], [4, "INCLUDED_IN_BUSINESS"], [5, "ERRORED_NOT_CHARGED"], [6, "ABORTED_NOT_CHARGED"], [7, "CUSTOM_SUBSCRIPTION"], [8, "INCLUDED_IN_PRO_PLUS"], [9, "INCLUDED_IN_ULTRA"], [10, "FREE_CREDIT"]], 1);
+    UsageEventKind = /* @__PURE__ */ enumType(proto3, __protoPackage128, "UsageEventKind", [[0, "UNSPECIFIED"], [1, "USAGE_BASED"], [2, "USER_API_KEY"], [3, "INCLUDED_IN_PRO"], [4, "INCLUDED_IN_BUSINESS"], [5, "ERRORED_NOT_CHARGED"], [6, "ABORTED_NOT_CHARGED"], [7, "CUSTOM_SUBSCRIPTION"], [8, "INCLUDED_IN_PRO_PLUS"], [9, "INCLUDED_IN_ULTRA"], [10, "FREE_CREDIT"]], 1);
     ModelSelectionSnapshot = class _ModelSelectionSnapshot extends __protoMessage3122 {
       constructor(data) {
         super();

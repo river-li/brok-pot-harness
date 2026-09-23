@@ -1,5 +1,5 @@
-var import_node_fs70 = require("node:fs");
-var import_node_path117 = require("node:path");
+var import_node_fs72 = require("node:fs");
+var import_node_path118 = require("node:path");
 init_dashboard_connect();
 init_dashboard_pb();
 init_errors();
@@ -49,7 +49,7 @@ function pluginContentsToSkillRecords(plugins, publisherFacts = /* @__PURE__ */ 
         pluginName,
         name: name17,
         description: clampSkillDescription(skill.description ?? ""),
-        filePath: (0, import_node_path117.resolve)(plugin.installPath, skill.path),
+        filePath: (0, import_node_path118.resolve)(plugin.installPath, skill.path),
         pluginVersion: pluginVersionOf(plugin.identifier),
         installPath: plugin.installPath,
         skillRelativePath: skill.path,
@@ -134,7 +134,7 @@ function createSharedInstalledPluginsLoader(deps) {
         return normalizeEffectiveUserPluginsResponse(response);
       },
       {
-        marketplaceCacheRoot: (0, import_node_path117.join)(pluginsRoot, "marketplaces"),
+        marketplaceCacheRoot: (0, import_node_path118.join)(pluginsRoot, "marketplaces"),
         listOptions: { enableInlinePlugins: true },
         sparsePluginClones: deps.isSparsePluginClonesEnabled(),
         extraGitConfig: () => buildOriginTokenGitConfig(deps.auth.peekAccessToken() ?? void 0)
@@ -144,7 +144,7 @@ function createSharedInstalledPluginsLoader(deps) {
       client,
       userId: "sand",
       cacheManager: new DefaultPluginCacheManager(void 0, {
-        cacheRoot: (0, import_node_path117.join)(pluginsRoot, "cache")
+        cacheRoot: (0, import_node_path118.join)(pluginsRoot, "cache")
       }),
       pruneOldVersions: true,
       onPluginsListed: async (entries) => {
@@ -187,29 +187,29 @@ function pruneUninstalledPluginDirs(cacheRoot, listedCacheKeys, indexedFilePaths
   const keep = new Set(listedCacheKeys.map((key) => getPluginInstallCachePath(cacheRoot, key)));
   let slugEntries;
   try {
-    slugEntries = (0, import_node_fs70.readdirSync)(cacheRoot, { withFileTypes: true });
+    slugEntries = (0, import_node_fs72.readdirSync)(cacheRoot, { withFileTypes: true });
   } catch {
     return;
   }
   for (const slugEntry of slugEntries) {
     if (!slugEntry.isDirectory()) continue;
-    const slugDir = (0, import_node_path117.join)(cacheRoot, slugEntry.name);
+    const slugDir = (0, import_node_path118.join)(cacheRoot, slugEntry.name);
     let pluginEntries;
     try {
-      pluginEntries = (0, import_node_fs70.readdirSync)(slugDir, { withFileTypes: true });
+      pluginEntries = (0, import_node_fs72.readdirSync)(slugDir, { withFileTypes: true });
     } catch {
       continue;
     }
     for (const pluginEntry of pluginEntries) {
       if (!pluginEntry.isDirectory()) continue;
-      const pluginDir = (0, import_node_path117.join)(slugDir, pluginEntry.name);
+      const pluginDir = (0, import_node_path118.join)(slugDir, pluginEntry.name);
       if (keep.has(pluginDir)) continue;
-      const pluginDirPrefix = pluginDir + import_node_path117.sep;
+      const pluginDirPrefix = pluginDir + import_node_path118.sep;
       if (indexedFilePaths.some((path31) => path31.startsWith(pluginDirPrefix))) {
         continue;
       }
       try {
-        (0, import_node_fs70.rmSync)(pluginDir, { recursive: true, force: true });
+        (0, import_node_fs72.rmSync)(pluginDir, { recursive: true, force: true });
       } catch {
       }
     }
@@ -309,7 +309,7 @@ var SandPluginSkillsService = class {
         authBlocked: loaded.authBlocked
       });
       pruneUninstalledPluginDirs(
-        (0, import_node_path117.join)(getPluginsRootDir(this.options.sandRootDir), "cache"),
+        (0, import_node_path118.join)(getPluginsRootDir(this.options.sandRootDir), "cache"),
         loaded.listedCacheKeys,
         records2.map((record2) => record2.filePath)
       );

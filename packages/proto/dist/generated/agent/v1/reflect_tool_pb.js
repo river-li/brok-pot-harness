@@ -1,16 +1,16 @@
-var __protoPackage51, __protoMessage348, ReflectArgs, ReflectResult, ReflectSuccess, ReflectError, ReflectToolCall;
+var __protoPackage52, __protoMessage348, ReflectArgs, ReflectResult, ReflectSuccess, ReflectError, ReflectToolCall;
 var init_reflect_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/reflect_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage51 = "agent.v1.";
+    __protoPackage52 = "agent.v1.";
     __protoMessage348 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage51;
+        return __protoPackage52;
       }
     };
     ReflectArgs = class _ReflectArgs extends __protoMessage348 {

@@ -1,16 +1,16 @@
-var __protoPackage98, __protoMessage394, GetLintsForChangeResponse, GetLintsForChangeResponse_Lint, GetLintsForChangeResponse_Lint_QuickFix, GetLintsForChangeResponse_Lint_QuickFix_Edit;
+var __protoPackage99, __protoMessage394, GetLintsForChangeResponse, GetLintsForChangeResponse_Lint, GetLintsForChangeResponse_Lint_QuickFix, GetLintsForChangeResponse_Lint_QuickFix_Edit;
 var init_shadow_workspace_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/shadow_workspace_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage98 = "aiserver.v1.";
+    __protoPackage99 = "aiserver.v1.";
     __protoMessage394 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage98;
+        return __protoPackage99;
       }
     };
     GetLintsForChangeResponse = class _GetLintsForChangeResponse extends __protoMessage394 {

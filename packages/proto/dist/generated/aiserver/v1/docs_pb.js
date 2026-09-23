@@ -1,16 +1,16 @@
-var __protoPackage97, __protoMessage393, DocumentationMetadata, DocumentationChunk, DocumentationQueryRequest, DocumentationQueryResponse, DocumentationQueryResponse_Status;
+var __protoPackage98, __protoMessage393, DocumentationMetadata, DocumentationChunk, DocumentationQueryRequest, DocumentationQueryResponse, DocumentationQueryResponse_Status;
 var init_docs_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/docs_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage97 = "aiserver.v1.";
+    __protoPackage98 = "aiserver.v1.";
     __protoMessage393 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage97;
+        return __protoPackage98;
       }
     };
     DocumentationMetadata = class _DocumentationMetadata extends __protoMessage393 {
@@ -115,6 +115,6 @@ var init_docs_pb = __esm({
         return ["DocumentationQueryResponse|1 doc_identifier 9|2 doc_name 9|3 doc_chunks #0*|4 status #1", DocumentationChunk, DocumentationQueryResponse_Status];
       }
     };
-    DocumentationQueryResponse_Status = /* @__PURE__ */ enumType(proto3, __protoPackage97, "DocumentationQueryResponse.Status", [[0, "UNSPECIFIED"], [1, "NOT_FOUND"], [2, "SUCCESS"], [3, "FAILURE"]], 1);
+    DocumentationQueryResponse_Status = /* @__PURE__ */ enumType(proto3, __protoPackage98, "DocumentationQueryResponse.Status", [[0, "UNSPECIFIED"], [1, "NOT_FOUND"], [2, "SUCCESS"], [3, "FAILURE"]], 1);
   }
 });

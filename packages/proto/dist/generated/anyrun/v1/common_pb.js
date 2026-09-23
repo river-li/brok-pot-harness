@@ -1,21 +1,21 @@
-var __protoPackage5, __protoMessage34, WorkspaceGitSetupMode, WarmForkMode, EnvironmentBuildResolution, EnvironmentBuildBootInfo;
+var __protoPackage6, __protoMessage34, WorkspaceGitSetupMode, WarmForkMode, EnvironmentBuildResolution, EnvironmentBuildBootInfo;
 var init_common_pb = __esm({
   "../packages/proto/dist/generated/anyrun/v1/common_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage5 = "anyrun.v1.";
+    __protoPackage6 = "anyrun.v1.";
     __protoMessage34 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage5;
+        return __protoPackage6;
       }
     };
-    WorkspaceGitSetupMode = /* @__PURE__ */ enumType(proto3, __protoPackage5, "WorkspaceGitSetupMode", [[0, "UNSPECIFIED"], [1, "REUSE"], [2, "REUSE_THEN_CHECKOUT"], [3, "NO_REPO"]], 1);
-    WarmForkMode = /* @__PURE__ */ enumType(proto3, __protoPackage5, "WarmForkMode", [[0, "UNSPECIFIED"], [1, "NONE"], [2, "FORKED"], [3, "COLD_FALLBACK"], [4, "LAZY_LOAD"], [5, "COLD_FALLBACK_LAZY_LOAD"]], 1);
-    EnvironmentBuildResolution = /* @__PURE__ */ enumType(proto3, __protoPackage5, "EnvironmentBuildResolution", [[0, "UNSPECIFIED"], [1, "RESOLVED"], [2, "NO_FINISHED_BUILDS"], [3, "NO_HEALTHY_BUILDS"]], 1);
+    WorkspaceGitSetupMode = /* @__PURE__ */ enumType(proto3, __protoPackage6, "WorkspaceGitSetupMode", [[0, "UNSPECIFIED"], [1, "REUSE"], [2, "REUSE_THEN_CHECKOUT"], [3, "NO_REPO"]], 1);
+    WarmForkMode = /* @__PURE__ */ enumType(proto3, __protoPackage6, "WarmForkMode", [[0, "UNSPECIFIED"], [1, "NONE"], [2, "FORKED"], [3, "COLD_FALLBACK"], [4, "LAZY_LOAD"], [5, "COLD_FALLBACK_LAZY_LOAD"]], 1);
+    EnvironmentBuildResolution = /* @__PURE__ */ enumType(proto3, __protoPackage6, "EnvironmentBuildResolution", [[0, "UNSPECIFIED"], [1, "RESOLVED"], [2, "NO_FINISHED_BUILDS"], [3, "NO_HEALTHY_BUILDS"]], 1);
     EnvironmentBuildBootInfo = class _EnvironmentBuildBootInfo extends __protoMessage34 {
       constructor(data) {
         super();

@@ -1,3 +1,6 @@
+function delegationTargetOf(kind) {
+  return kind === "cloud_agent_launch" || kind === "cloud_agent_followup" ? "cloud_agent" : "subagent";
+}
 function sandAuditInitiatedByOf(options2) {
   if (options2.isConnectorWake === true) return void 0;
   if (options2.isTopLevelAutomationSubagent === true && options2.requestSource === "automation") {

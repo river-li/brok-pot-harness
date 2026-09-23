@@ -74,8 +74,8 @@ function extractSuggestionWithReason(response, maxWords = PROMPT_SUGGESTION_MAX_
   if (SILENCE_TAG_REGEX.test(trimmed)) {
     return { type: "empty" };
   }
-  const firstLine = trimmed.split(/\r?\n/)[0].trim();
-  const unquoted = firstLine.replace(/^"(.*)"$/, "$1").trim();
+  const firstLine2 = trimmed.split(/\r?\n/)[0].trim();
+  const unquoted = firstLine2.replace(/^"(.*)"$/, "$1").trim();
   if (unquoted.length === 0) {
     return { type: "empty" };
   }

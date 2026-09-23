@@ -17,12 +17,12 @@ var MCP_AUTH_ERROR_FRAGMENTS = [
   "token is expired",
   "token was revoked"
 ];
-function isMcpAuthErrorMessage(errorMessage6) {
-  const message = errorMessage6.toLowerCase();
+function isMcpAuthErrorMessage(errorMessage7) {
+  const message = errorMessage7.toLowerCase();
   return MCP_AUTH_ERROR_FRAGMENTS.some((fragment) => message.includes(fragment)) || /\b401\b/.test(message);
 }
-function parseMcpJsonRpcErrorCode(errorMessage6) {
-  const match2 = errorMessage6.match(MCP_JSON_RPC_ERROR_CODE_REGEX);
+function parseMcpJsonRpcErrorCode(errorMessage7) {
+  const match2 = errorMessage7.match(MCP_JSON_RPC_ERROR_CODE_REGEX);
   if (!match2) {
     return void 0;
   }
@@ -52,19 +52,19 @@ var MCP_ENVIRONMENT_ERROR_FRAGMENTS = [
   "not available through this gateway"
 ];
 var MCP_TIMEOUT_ERROR_FRAGMENTS = ["connection timed out after", "etimedout"];
-function isMcpEnvironmentErrorMessage(errorMessage6) {
-  const message = errorMessage6.toLowerCase();
+function isMcpEnvironmentErrorMessage(errorMessage7) {
+  const message = errorMessage7.toLowerCase();
   return MCP_ENVIRONMENT_ERROR_FRAGMENTS.some((fragment) => message.includes(fragment));
 }
-function isMcpTimeoutErrorMessage(errorMessage6) {
-  const message = errorMessage6.toLowerCase();
+function isMcpTimeoutErrorMessage(errorMessage7) {
+  const message = errorMessage7.toLowerCase();
   return MCP_TIMEOUT_ERROR_FRAGMENTS.some((fragment) => message.includes(fragment));
 }
-function classifyMcpErrorMessage(errorMessage6) {
-  if (isMcpAuthErrorMessage(errorMessage6)) {
+function classifyMcpErrorMessage(errorMessage7) {
+  if (isMcpAuthErrorMessage(errorMessage7)) {
     return ToolErrorClassification.MCP_AUTH_ERROR;
   }
-  const code = parseMcpJsonRpcErrorCode(errorMessage6);
+  const code = parseMcpJsonRpcErrorCode(errorMessage7);
   switch (code) {
     case -32700:
     case -32600:
@@ -75,10 +75,10 @@ function classifyMcpErrorMessage(errorMessage6) {
     case -32001:
       return ToolErrorClassification.TIMEOUT;
   }
-  if (isMcpTimeoutErrorMessage(errorMessage6)) {
+  if (isMcpTimeoutErrorMessage(errorMessage7)) {
     return ToolErrorClassification.TIMEOUT;
   }
-  if (isMcpEnvironmentErrorMessage(errorMessage6)) {
+  if (isMcpEnvironmentErrorMessage(errorMessage7)) {
     return ToolErrorClassification.UNEXPECTED_ENVIRONMENT;
   }
   if (code === void 0) {

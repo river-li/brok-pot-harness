@@ -1,5 +1,5 @@
-var import_node_crypto18 = require("node:crypto");
-var import_node_path40 = __toESM(require("node:path"), 1);
+var import_node_crypto17 = require("node:crypto");
+var import_node_path31 = __toESM(require("node:path"), 1);
 init_mcp_exec_pb();
 init_utils_pb2();
 init_write_exec_pb();
@@ -80,8 +80,8 @@ function writeToAgentToolsFile(ctx_1, writeExecutor_1, _a19) {
   return __awaiter37(this, arguments, void 0, function* (ctx, writeExecutor, { content, projectDir, osPlatform, toolCallId, maxSize }) {
     const maxBytes = Math.min(maxSize !== null && maxSize !== void 0 ? maxSize : MAX_OUTPUT_FILE_SIZE, MAX_OUTPUT_FILE_SIZE);
     const contentToWrite = truncateUtf8(content, maxBytes);
-    const joinFn = osPlatform === "win32" ? import_node_path40.default.win32.join : import_node_path40.default.posix.join;
-    const filePath = joinFn(projectDir, AGENT_TOOLS_DIR, `${(0, import_node_crypto18.randomUUID)()}.txt`);
+    const joinFn = osPlatform === "win32" ? import_node_path31.default.win32.join : import_node_path31.default.posix.join;
+    const filePath = joinFn(projectDir, AGENT_TOOLS_DIR, `${(0, import_node_crypto17.randomUUID)()}.txt`);
     const lineCount = contentToWrite.split("\n").length;
     const sizeBytes = Buffer.byteLength(contentToWrite, "utf8");
     const result = yield writeExecutor.execute(ctx, new WriteArgs({

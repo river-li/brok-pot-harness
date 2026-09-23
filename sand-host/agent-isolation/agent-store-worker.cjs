@@ -17489,7 +17489,7 @@ var ProjectDetails = class _ProjectDetails extends __protoMessage380 {
     return proto3.util.equals(_ProjectDetails, a, b);
   }
   static $() {
-    return ["ProjectDetails|1 name 9?|2 subagent #0?|3 side_chat #1?", ProjectSubagentDetails, ProjectSideChatDetails];
+    return ["ProjectDetails|1 name 9?|2 subagent #0?|3 side_chat #1?|4 init_description 9?", ProjectSubagentDetails, ProjectSideChatDetails];
   }
 };
 var ProjectSubagentDetails = class _ProjectSubagentDetails extends __protoMessage380 {

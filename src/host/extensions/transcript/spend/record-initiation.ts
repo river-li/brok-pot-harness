@@ -1,4 +1,4 @@
-var import_node_crypto71 = require("node:crypto");
+var import_node_crypto72 = require("node:crypto");
 init_dist3();
 init_errors();
 function spendInitiationForRequest(session, requestId2) {
@@ -39,7 +39,7 @@ function messageSpendInitiation(session, messageIds, now = Date.now()) {
   );
   const initiation = {
     type: "message",
-    id: ids.length === 1 ? firstId : `batch-${(0, import_node_crypto71.createHash)("sha256").update(JSON.stringify(ids)).digest("hex")}`,
+    id: ids.length === 1 ? firstId : `batch-${(0, import_node_crypto72.createHash)("sha256").update(JSON.stringify(ids)).digest("hex")}`,
     timestampMs: timestamps.length > 0 ? Math.min(...timestamps) : now,
     initiatingMessageCount: ids.length
   };

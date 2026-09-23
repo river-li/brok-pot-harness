@@ -108,18 +108,26 @@ function buildSandAutoReviewPendingApproval(args) {
   };
 }
 function decideResolvedSandAutoReviewApproval(args) {
+  const hold = args.hold === void 0 ? {} : { hold: args.hold };
   if (args.resolution === "denied") {
     return {
       approved: false,
-      reason: formatSandAutoReviewDeniedReason(args.approval.reason)
+      reason: formatSandAutoReviewDeniedReason(args.approval.reason),
+      approvalId: args.approval.id,
+      ...hold
     };
   }
   const command = args.approvedCommand?.trim();
   return {
     approved: true,
+    approvalId: args.approval.id,
     ...args.approvalPlatform === void 0 ? {} : { approvalPlatform: args.approvalPlatform },
-    ...command == null || command.length === 0 ? {} : { command }
+    ...command == null || command.length === 0 ? {} : { command },
+    ...hold
   };
+}
+function sandAutoReviewHoldOf(approval, resolvedAtMs) {
+  return { surface: approval.surface, createdAtMs: approval.createdAtMs, resolvedAtMs };
 }
 var SandAutoReviewController = class {
   constructor(options2) {
@@ -227,6 +235,7 @@ var SandAutoReviewController = class {
       }
       this.pending.set(approval.id, record2);
       this.emit({ type: "created", approval });
+      request5.onCardShown?.();
     });
   }
   resolveApproval(approvalId, resolution, options2) {
@@ -242,7 +251,8 @@ var SandAutoReviewController = class {
         approval: record2.approval,
         resolution,
         ...options2?.approvalPlatform === void 0 ? {} : { approvalPlatform: options2.approvalPlatform },
-        ...options2?.approvedCommand === void 0 ? {} : { approvedCommand: options2.approvedCommand }
+        ...options2?.approvedCommand === void 0 ? {} : { approvedCommand: options2.approvedCommand },
+        hold: sandAutoReviewHoldOf(record2.approval, this.now())
       })
     );
     return resolved;
@@ -301,7 +311,12 @@ var SandAutoReviewController = class {
     const expired = { ...record2.approval, status: "expired" };
     this.deletePending(approvalId, record2);
     this.emit({ type: "expired", approval: expired, cause });
-    record2.resolve(decision);
+    record2.resolve({
+      ...decision,
+      approvalId,
+      retired: cause,
+      hold: sandAutoReviewHoldOf(record2.approval, this.now())
+    });
   }
   deletePending(approvalId, record2) {
     record2.expiryAbort.abort();

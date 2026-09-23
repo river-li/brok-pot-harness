@@ -1,5 +1,5 @@
-var import_promises30 = require("node:fs/promises");
-var import_node_path58 = require("node:path");
+var import_promises28 = require("node:fs/promises");
+var import_node_path49 = require("node:path");
 var __awaiter55 = function(thisArg, _arguments, P2, generator) {
   function adopt(value) {
     return value instanceof P2 ? value : new P2(function(resolve29) {
@@ -110,7 +110,7 @@ function setSparseCheckoutDirs(repoDir, dirs, execOpts) {
 function isSparseCheckoutRepo(repoDir) {
   return __awaiter55(this, void 0, void 0, function* () {
     try {
-      yield (0, import_promises30.access)((0, import_node_path58.join)(repoDir, ".git", "info", "sparse-checkout"));
+      yield (0, import_promises28.access)((0, import_node_path49.join)(repoDir, ".git", "info", "sparse-checkout"));
     } catch (_a19) {
       return false;
     }

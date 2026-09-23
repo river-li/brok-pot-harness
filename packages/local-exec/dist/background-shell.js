@@ -1181,7 +1181,7 @@ var LocalBackgroundShellExecutor = class {
       const _span = __addDisposableResource9(env_1, createSpan(ctx.withName("LocalBackgroundShellExecutor.execute")), false);
       const command = args.command;
       const policy = args.sandboxPolicy ? convertProtoToInternalPolicy(args.sandboxPolicy) : void 0;
-      const workingDirectory = args.workingDirectory || await this.coreExecutor.getCwd();
+      const workingDirectory = args.workingDirectory || await this.coreExecutor.getCwd(args.conversationId);
       const resolvedWorkingDir = resolvePath(workingDirectory);
       const parsingResult = new ShellCommandParsingResult(analyzeShellCommand(command).structured);
       const modelShellBlockReason = getModelShellAdminCommandDenylistBlockReason({
@@ -1304,7 +1304,7 @@ var LocalBackgroundShellExecutor = class {
       } catch (error3) {
         if (error3 instanceof SandboxUnsupportedError) {
           const policyType = effectivePolicy?.type ?? "unknown";
-          logger9.warn(ctx, "Background shell: sandbox policy unsupported on this host", {
+          logger9.debug(ctx, "Background shell: sandbox policy unsupported on this host", {
             toolCallId: args.toolCallId,
             policyType,
             reason: error3.reason

@@ -37,12 +37,12 @@ function explainWrongToolCall(value, ctx) {
   return value;
 }
 var downloadFileParameters = external_exports.preprocess(explainWrongToolCall, downloadFileObjectSchema);
-function nonEmpty4(value) {
+function nonEmpty5(value) {
   return value === void 0 || value.length === 0 ? void 0 : value;
 }
 function normalizeSource(source) {
-  const fileId = nonEmpty4(source.fileId);
-  const path31 = nonEmpty4(source.path);
+  const fileId = nonEmpty5(source.fileId);
+  const path31 = nonEmpty5(source.path);
   if (fileId !== void 0 && path31 !== void 0) {
     throw new SandToolInputError(
       "source.fileId and source.path are alternatives; pass exactly one."
@@ -55,14 +55,14 @@ function normalizeSource(source) {
   return { path: path31 };
 }
 function normalizeDestinationPath(raw) {
-  const path31 = nonEmpty4(raw);
+  const path31 = nonEmpty5(raw);
   if (path31 === void 0) return void 0;
-  if (!import_node_path165.posix.isAbsolute(path31)) {
+  if (!import_node_path167.posix.isAbsolute(path31)) {
     throw new SandToolInputError(
       `destination.path ${JSON.stringify(path31)} is not absolute. Pass the full path on your computer, e.g. "/home/box/agent-data/agents/<id>/downloads/report.pdf", or omit it.`
     );
   }
-  const normalized = import_node_path165.posix.normalize(path31);
+  const normalized = import_node_path167.posix.normalize(path31);
   if (normalized.endsWith("/")) {
     throw new SandToolInputError(
       "destination.path must name a file (folder plus file name), not a directory."
@@ -130,26 +130,39 @@ async function runDownloadFile(args, deps) {
   }
   const connection = resolution.connection;
   const request5 = { connection, source };
-  const prepared = await deps.prepareDownload({
-    agentId,
-    connection,
-    source,
-    destination
+  const record2 = deps.recordTransfer ?? (() => {
   });
-  if (prepared.kind !== "ready") {
-    return describeDownloadFileOutcome(prepared, request5);
-  }
-  if (deps.reviewDownload !== void 0) {
-    const decision = await deps.reviewDownload({
-      toolCallId: deps.toolCallId ?? "",
-      target: { connection, source, destination },
-      ...deps.signal === void 0 ? {} : { signal: deps.signal }
+  try {
+    const prepared = await deps.prepareDownload({
+      agentId,
+      connection,
+      source,
+      destination
     });
-    if (!decision.allowed) {
-      return `The download from ${connection} was not approved: ${decision.reason} Nothing was downloaded. Do not retry the same download unless the user asks for it.`;
+    if (prepared.kind !== "ready") {
+      record2({ outcome: "error", errorCategory: prepared.kind });
+      return describeDownloadFileOutcome(prepared, request5);
     }
+    if (deps.reviewDownload !== void 0) {
+      const decision = await deps.reviewDownload({
+        toolCallId: deps.toolCallId ?? "",
+        target: { connection, source, destination },
+        ...deps.signal === void 0 ? {} : { signal: deps.signal }
+      });
+      if (!decision.allowed) {
+        record2({ outcome: "denied" });
+        return `The download from ${connection} was not approved: ${decision.reason} Nothing was downloaded. Do not retry the same download unless the user asks for it.`;
+      }
+    }
+    const outcome = await prepared.download();
+    record2(
+      outcome.kind === "downloaded" ? { outcome: "success", byteCount: outcome.sizeBytes } : { outcome: "error", errorCategory: outcome.kind }
+    );
+    return describeDownloadFileOutcome(outcome, request5);
+  } catch (error42) {
+    record2(failedFileTransferResult(error42));
+    throw error42;
   }
-  return describeDownloadFileOutcome(await prepared.download(), request5);
 }
 function createDownloadFileTool(deps) {
   return defineCommunicateTool(deps, {
@@ -159,9 +172,17 @@ function createDownloadFileTool(deps) {
     parameters: downloadFileParameters,
     onArgsRejected: deps.onArgsRejected,
     describeActivity: (args) => ({
-      detail: args.source.path === void 0 ? args.source.fileId ?? "" : import_node_path165.posix.basename(args.source.path),
+      detail: args.source.path === void 0 ? args.source.fileId ?? "" : import_node_path167.posix.basename(args.source.path),
       target: args.connection
     }),
-    execute: async (ctx, args, d) => runDownloadFile(args, { ...d, signal: ctx.signal })
+    execute: async (ctx, args, d) => runDownloadFile(args, {
+      ...d,
+      signal: ctx.signal,
+      recordTransfer: bindFileTransferAudit(deps.auditTransfer, ctx, {
+        toolCallId: d.toolCallId,
+        direction: "download",
+        target: "cloud"
+      })
+    })
   });
 }

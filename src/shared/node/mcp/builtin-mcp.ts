@@ -6,8 +6,8 @@ var BUILTIN_MCP_SERVER_NAMES = /* @__PURE__ */ new Set([BOX_COMPUTER_SERVER_NAME
 var DEFAULT_BOX_CONTAINER_NAME = "cursor-box-shared";
 var LOCAL_DOCKER_HOST_SENTINEL = "local";
 function isTruthyFlag(value) {
-  const flag = value?.trim().toLowerCase();
-  return flag === "1" || flag === "true";
+  const flag2 = value?.trim().toLowerCase();
+  return flag2 === "1" || flag2 === "true";
 }
 function resolveBoxComputerRuntime(opts, env) {
   const explicitShared = isTruthyFlag(env.SAND_BOX_COMPUTER_SHARED_DOCKER);

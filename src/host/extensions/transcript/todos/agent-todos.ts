@@ -60,11 +60,11 @@ var AgentTodosRuntime = class {
     this.emitIfChanged(session.id, todos);
   }
   emitIfChanged(agentId, todos) {
-    const fingerprint = JSON.stringify(
+    const fingerprint2 = JSON.stringify(
       todos.map((todo) => [todo.id, todo.status, todo.updatedAt, todo.content])
     );
-    if (this.published.get(agentId) === fingerprint) return;
-    this.published.set(agentId, fingerprint);
+    if (this.published.get(agentId) === fingerprint2) return;
+    this.published.set(agentId, fingerprint2);
     const event = { agentId, todos };
     this.host.roster.emitter.emit("todos", event);
   }

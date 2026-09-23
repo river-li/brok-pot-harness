@@ -1,15 +1,15 @@
 init_esm();
 init_compact();
-var __protoPackage156 = "origin.v1.";
-var __protoMessage3148 = class extends CompactMessage {
+var __protoPackage155 = "origin.v1.";
+var __protoMessage3147 = class extends CompactMessage {
   static get runtime() {
     return defineOwn(this, "runtime", proto3);
   }
   static $p() {
-    return __protoPackage156;
+    return __protoPackage155;
   }
 };
-var ClientRepoIdentifier = class _ClientRepoIdentifier extends __protoMessage3148 {
+var ClientRepoIdentifier = class _ClientRepoIdentifier extends __protoMessage3147 {
   constructor(data) {
     super();
     this.org = "";
@@ -32,7 +32,7 @@ var ClientRepoIdentifier = class _ClientRepoIdentifier extends __protoMessage314
     return ["ClientRepoIdentifier|1 org 9|2 name 9"];
   }
 };
-var GithubRepoIdentifier = class _GithubRepoIdentifier extends __protoMessage3148 {
+var GithubRepoIdentifier = class _GithubRepoIdentifier extends __protoMessage3147 {
   constructor(data) {
     super();
     this.owner = "";

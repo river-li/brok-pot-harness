@@ -1,19 +1,19 @@
-var __protoPackage58, __protoMessage355, PullRequestStatus, PrManagementArgs, CreatePrAction, UpdatePrAction, PostCommentAction, ResolveCommentAction, GetCiStatusAction, SetPrStatusAction, PrManagementResult, PrManagementSuccess, PrManagementError, PrManagementRejected, PrManagementRegistered, PrManagementNeedsConfirmation, PrManagementToolCall, PrManagementRequestQuery;
+var __protoPackage59, __protoMessage355, PullRequestStatus, PrManagementArgs, CreatePrAction, UpdatePrAction, PostCommentAction, ResolveCommentAction, GetCiStatusAction, SetPrStatusAction, PrManagementResult, PrManagementSuccess, PrManagementError, PrManagementRejected, PrManagementRegistered, PrManagementNeedsConfirmation, PrManagementToolCall, PrManagementRequestQuery;
 var init_pr_management_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pr_management_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage58 = "agent.v1.";
+    __protoPackage59 = "agent.v1.";
     __protoMessage355 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage58;
+        return __protoPackage59;
       }
     };
-    PullRequestStatus = /* @__PURE__ */ enumType(proto3, __protoPackage58, "PullRequestStatus", [[0, "UNSPECIFIED"], [1, "OPEN"], [2, "CLOSED"]], 1);
+    PullRequestStatus = /* @__PURE__ */ enumType(proto3, __protoPackage59, "PullRequestStatus", [[0, "UNSPECIFIED"], [1, "OPEN"], [2, "CLOSED"]], 1);
     PrManagementArgs = class _PrManagementArgs extends __protoMessage355 {
       constructor(data) {
         super();

@@ -1,16 +1,16 @@
-var __protoPackage72, __protoMessage369, SendToUserArgs, SendToUserSuccess, SendToUserError, SendToUserResult, SendToUserToolCall;
+var __protoPackage73, __protoMessage369, SendToUserArgs, SendToUserSuccess, SendToUserError, SendToUserResult, SendToUserToolCall;
 var init_send_to_user_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/send_to_user_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage72 = "agent.v1.";
+    __protoPackage73 = "agent.v1.";
     __protoMessage369 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage72;
+        return __protoPackage73;
       }
     };
     SendToUserArgs = class _SendToUserArgs extends __protoMessage369 {

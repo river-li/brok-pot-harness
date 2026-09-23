@@ -209,15 +209,21 @@ var UpgradeRecreateResume = class {
               name: resumedAutomation.name
             };
           }
+          const resumedInitiation = spendInitiationForRequest(session, marker17.spendRequestId);
+          const resumedTurnUnit = resumedInitiation === void 0 ? {} : {
+            turnUnitId: resumedInitiation.id,
+            turnUnitType: resumedInitiation.type
+          };
           const result = await runner.run(buildUpgradeResumePrompt(resumedSource), {
             hidden: true,
             ackToken,
             isSilenceAllowed: resumedSource === "automation" || resumedSource === "background-revival",
             ...resumedAutomationWake,
             requestSource: resumedSource,
+            ...resumedTurnUnit,
             onPersistableRunStarted: spendInitiationRecorder(
               session,
-              spendInitiationForRequest(session, marker17.spendRequestId),
+              resumedInitiation,
               (requestId2) => {
                 spendRequestId = requestId2;
                 this.tm.runLifecycle.persistedSpendRequestIds.set(session.id, requestId2);

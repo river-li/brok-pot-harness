@@ -77,6 +77,9 @@ var CANCELLED_CODES = /* @__PURE__ */ new Set([
   ErrorDetails_Error.DEBOUNCED
 ]);
 var TERMINAL_MESSAGE_CODES = /* @__PURE__ */ new Set([ErrorDetails_Error.CUSTOM_MESSAGE]);
+var TERMINAL_CONNECT_CODE_TITLES = /* @__PURE__ */ new Map([
+  [Code.PermissionDenied, "Permission Denied"]
+]);
 var TRANSPORT_PATTERNS = [
   "NGHTTP2",
   "ECONNRESET",
@@ -133,6 +136,18 @@ function classifyError2(error42, options2 = {}) {
       }
     });
   }
+  const placeholderRejected = findSummaryPlaceholderRejectedError(error42);
+  if (placeholderRejected !== void 0) {
+    return new NonRetriableError(placeholderRejected.message, {
+      cause: error42 instanceof Error ? error42 : void 0,
+      requestId: requestId2,
+      displayInfo: {
+        title: "Context summarization failed",
+        detail: placeholderRejected.message,
+        isRetryable: false
+      }
+    });
+  }
   if (error42 instanceof Error) {
     if (error42.name === "AbortError") {
       return new CancelledError(error42.message, { cause: error42, requestId: requestId2 });
@@ -158,70 +173,104 @@ function isConnectError(error42) {
   return error42 !== null && typeof error42 === "object" && "code" in error42 && "name" in error42 && error42.name === "ConnectError";
 }
 function classifyConnectError(error42, requestId2) {
-  var _a19, _b2, _c2, _d, _e2, _f, _g;
-  var _h;
+  var _a19, _b2, _c2, _d, _e2, _f, _g, _h;
+  var _j;
+  const underlying = resolveUnderlyingConnectError(error42);
+  const code = underlying.code;
   const details = getErrorDetails(error42);
   const displayInfo = {
     title: (_a19 = details === null || details === void 0 ? void 0 : details.details) === null || _a19 === void 0 ? void 0 : _a19.title,
     detail: (_b2 = details === null || details === void 0 ? void 0 : details.details) === null || _b2 === void 0 ? void 0 : _b2.detail,
     isRetryable: (_c2 = details === null || details === void 0 ? void 0 : details.details) === null || _c2 === void 0 ? void 0 : _c2.isRetryable,
-    connectCode: error42.code,
+    connectCode: code,
     errorCode: details === null || details === void 0 ? void 0 : details.error,
-    inferenceRequestErrorType: (_h = error42.metadata.get(INFERENCE_REQUEST_ERROR_TYPE_HEADER)) !== null && _h !== void 0 ? _h : void 0,
+    inferenceRequestErrorType: (_j = getConnectMetadata(underlying, INFERENCE_REQUEST_ERROR_TYPE_HEADER)) !== null && _j !== void 0 ? _j : getConnectMetadata(error42, INFERENCE_REQUEST_ERROR_TYPE_HEADER),
     errorDetails: details
   };
   const opts = { cause: error42, requestId: requestId2, displayInfo };
-  if (error42.code === Code.Canceled || error42.code === Code.Aborted) {
+  if (code === Code.Canceled || code === Code.Aborted) {
     if (matchesTransportPattern(error42)) {
       return new RetriableError(error42.message, opts);
     }
     return new CancelledError(error42.message, opts);
   }
   if ((details === null || details === void 0 ? void 0 : details.error) !== void 0) {
-    const code = details.error;
-    if (CANCELLED_CODES.has(code)) {
+    const errorCode = details.error;
+    if (CANCELLED_CODES.has(errorCode)) {
       return new CancelledError(extractMessage(error42, details), opts);
     }
     const backendAction = (_e2 = (_d = details.details) === null || _d === void 0 ? void 0 : _d.analyticsMetadata) === null || _e2 === void 0 ? void 0 : _e2.actionRequired;
     if (backendAction !== void 0 && backendAction !== "") {
       return new ActionRequiredError(extractMessage(error42, details), backendAction, opts);
     }
-    if (AUTH_CODES.has(code)) {
+    if (AUTH_CODES.has(errorCode)) {
       return new ActionRequiredError(extractMessage(error42, details), "login", opts);
     }
-    if (UPGRADE_CODES.has(code)) {
+    if (UPGRADE_CODES.has(errorCode)) {
       return new ActionRequiredError(extractMessage(error42, details), "upgrade", opts);
     }
-    if (PAYMENT_CODES.has(code)) {
+    if (PAYMENT_CODES.has(errorCode)) {
       return new ActionRequiredError(extractMessage(error42, details), "payment", opts);
     }
-    if (CONFIG_CODES.has(code)) {
+    if (CONFIG_CODES.has(errorCode)) {
       return new ActionRequiredError(extractMessage(error42, details), "config", opts);
     }
-    if (TERMINAL_MESSAGE_CODES.has(code) && ((_f = details.details) === null || _f === void 0 ? void 0 : _f.isRetryable) !== true) {
+    if (TERMINAL_MESSAGE_CODES.has(errorCode) && ((_f = details.details) === null || _f === void 0 ? void 0 : _f.isRetryable) !== true) {
       return new NonRetriableError(extractMessage(error42, details), opts);
     }
     if (((_g = details.details) === null || _g === void 0 ? void 0 : _g.isRetryable) === false) {
       return new NonRetriableError(extractMessage(error42, details), opts);
     }
   }
-  if (error42.code === Code.Unauthenticated) {
+  if (code === Code.Unauthenticated) {
     return new ActionRequiredError(error42.message, "login", opts);
+  }
+  const terminalTitle = TERMINAL_CONNECT_CODE_TITLES.get(code);
+  if (terminalTitle !== void 0 && ((_h = details === null || details === void 0 ? void 0 : details.details) === null || _h === void 0 ? void 0 : _h.isRetryable) !== true && !matchesTransportPattern(error42)) {
+    return new NonRetriableError(extractMessage(error42, details), Object.assign(Object.assign({}, opts), { displayInfo: Object.assign(Object.assign({}, displayInfo), { title: displayInfo.title || terminalTitle, detail: displayInfo.detail || getConnectRawMessage(underlying), isRetryable: false }) }));
   }
   return new RetriableError(error42.message, opts);
 }
-function getErrorDetails(error42) {
-  var _a19, _b2;
-  const details = error42.findDetails(ErrorDetails);
-  if (details.length > 0) {
-    return details[0];
+function resolveUnderlyingConnectError(error42) {
+  let current = error42;
+  for (let depth = 0; depth < 10 && current.code === Code.Unknown; depth++) {
+    const cause = current.cause;
+    if (!isConnectError(cause)) {
+      break;
+    }
+    current = cause;
   }
-  try {
-    const causeDetails = (_b2 = (_a19 = error42.cause) === null || _a19 === void 0 ? void 0 : _a19.findDetails) === null || _b2 === void 0 ? void 0 : _b2.call(_a19, ErrorDetails);
-    return causeDetails === null || causeDetails === void 0 ? void 0 : causeDetails[0];
-  } catch (_c2) {
+  return current;
+}
+function getErrorDetails(error42) {
+  var _a19;
+  let current = error42;
+  for (let depth = 0; depth < 10 && isConnectError(current); depth++) {
+    try {
+      const details = (_a19 = current.findDetails) === null || _a19 === void 0 ? void 0 : _a19.call(current, ErrorDetails);
+      if (details !== void 0 && details.length > 0) {
+        return details[0];
+      }
+    } catch (_b2) {
+    }
+    current = current.cause;
+  }
+  return void 0;
+}
+function getConnectMetadata(error42, name17) {
+  var _a19;
+  const metadata = error42.metadata;
+  if (metadata === null || typeof metadata !== "object" || typeof metadata.get !== "function") {
     return void 0;
   }
+  return (_a19 = metadata.get(name17)) !== null && _a19 !== void 0 ? _a19 : void 0;
+}
+function getConnectRawMessage(error42) {
+  const rawMessage = error42.rawMessage;
+  if (typeof rawMessage === "string") {
+    return rawMessage;
+  }
+  return error42.message.replace(/^\[[a-z_]+\] /, "");
 }
 function extractMessage(error42, details) {
   if (details === null || details === void 0 ? void 0 : details.details) {
@@ -231,6 +280,19 @@ function extractMessage(error42, details) {
     return title || detail || error42.message;
   }
   return error42.message;
+}
+var SUMMARY_PLACEHOLDER_REJECTED_ERROR_NAME = "SummaryPlaceholderRejectedError";
+function findSummaryPlaceholderRejectedError(error42) {
+  const seen = /* @__PURE__ */ new Set();
+  let current = error42;
+  while (current instanceof Error && !seen.has(current)) {
+    if (current.name === SUMMARY_PLACEHOLDER_REJECTED_ERROR_NAME) {
+      return current;
+    }
+    seen.add(current);
+    current = current.cause;
+  }
+  return void 0;
 }
 function matchesTransportPattern(error42) {
   const seen = /* @__PURE__ */ new Set();

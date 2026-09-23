@@ -1,5 +1,5 @@
-var import_promises25 = require("node:fs/promises");
-var import_node_path34 = require("node:path");
+var import_promises44 = require("node:fs/promises");
+var import_node_path86 = require("node:path");
 init_dist3();
 init_system_errno();
 init_unknown_record();
@@ -10,7 +10,7 @@ function parseRefusalReason(value) {
 async function readIdentityBackfillState(path31) {
   let raw;
   try {
-    raw = (await (0, import_promises25.readFile)(path31)).toString();
+    raw = (await (0, import_promises44.readFile)(path31)).toString();
   } catch (error42) {
     if (findSystemErrno(error42) === "ENOENT") return void 0;
     throw error42;
@@ -66,7 +66,7 @@ function countUnstampedCandidates(root, candidates, refused2) {
   let mintable = 0;
   let refusedCount = 0;
   for (const agentId of candidates) {
-    const profilePath = getSandProfilePath((0, import_node_path34.join)(root, agentId));
+    const profilePath = getSandProfilePath((0, import_node_path86.join)(root, agentId));
     if (readSandProfileServerId(profilePath) !== null) continue;
     if (refused2.has(agentId)) refusedCount += 1;
     else if (readSandProfileFile(profilePath) !== null) mintable += 1;
@@ -127,7 +127,7 @@ async function runIdentityBackfill(deps) {
         stopped2 = "host_stopping";
         break;
       }
-      if (readSandProfileServerId(getSandProfilePath((0, import_node_path34.join)(root, agentId))) !== null) {
+      if (readSandProfileServerId(getSandProfilePath((0, import_node_path86.join)(root, agentId))) !== null) {
         if (refusedAgents.delete(agentId)) refusalStateChanged = true;
         skipped2 += 1;
         continue;
@@ -144,7 +144,7 @@ async function runIdentityBackfill(deps) {
       if (outcome === "error" || outcome === "unparseable") failed2 += 1;
       else if (outcome === "minted") minted += 1;
       else if (outcome === "tombstoned" || outcome === "already_taken") {
-        if (deps.isMintPending?.(agentId) === true || readSandProfileServerId(getSandProfilePath((0, import_node_path34.join)(root, agentId))) !== null) {
+        if (deps.isMintPending?.(agentId) === true || readSandProfileServerId(getSandProfilePath((0, import_node_path86.join)(root, agentId))) !== null) {
           skipped2 += 1;
         } else {
           refused2 += 1;

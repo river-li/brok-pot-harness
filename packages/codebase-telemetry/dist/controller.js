@@ -571,7 +571,7 @@ var CodebaseTelemetryController = class {
     });
   }
 };
-function createNonThrowingMetrics(metrics2, logger108) {
+function createNonThrowingMetrics(metrics2, logger110) {
   if (metrics2 === void 0) {
     return void 0;
   }
@@ -580,15 +580,15 @@ function createNonThrowingMetrics(metrics2, logger108) {
       try {
         metrics2.increment(stat28, value, tags);
       } catch (error42) {
-        logger108.debug("Failed to emit codebase telemetry counter", error42);
+        logger110.debug("Failed to emit codebase telemetry counter", error42);
       }
     }
   };
 }
 var SessionSubgateController = class {
-  constructor(host, logger108, session) {
+  constructor(host, logger110, session) {
     this.host = host;
-    this.logger = logger108;
+    this.logger = logger110;
     this.session = session;
     this.coalescer = new Coalescer();
     this.isDisposed = false;
@@ -654,12 +654,12 @@ var SessionSubgateController = class {
 function areAuthStatesEqual(left, right) {
   return (left === null || left === void 0 ? void 0 : left.authId) === (right === null || right === void 0 ? void 0 : right.authId) && (left === null || left === void 0 ? void 0 : left.authToken) === (right === null || right === void 0 ? void 0 : right.authToken);
 }
-function tryCheckFeatureGate(host, logger108, gate) {
+function tryCheckFeatureGate(host, logger110, gate) {
   return __awaiter71(this, void 0, void 0, function* () {
     try {
       return yield host.featureGates.check(gate);
     } catch (err) {
-      logger108.warn(`Failed to evaluate feature gate ${gate}`, err);
+      logger110.warn(`Failed to evaluate feature gate ${gate}`, err);
       return void 0;
     }
   });

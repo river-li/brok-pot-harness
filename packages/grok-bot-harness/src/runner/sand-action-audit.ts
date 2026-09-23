@@ -7,6 +7,46 @@ function turnAttributionFromContext(ctx, agentId) {
     subagentId: subagentIdFromTurnContext(ctx, agentId)
   };
 }
+function delegationRecord(ctx, identity, toolCallId, action) {
+  const agentId = identity.getConversationId();
+  return {
+    agentId,
+    ...turnAttributionFromContext(ctx, agentId),
+    boxId: identity.resolveBoxId(),
+    ...toolCallId.length > 0 ? { toolCallId } : {},
+    occurredAtMs: Date.now(),
+    action
+  };
+}
+function createDelegationAuditor(auditor, identity) {
+  if (auditor === void 0) return void 0;
+  const stopped2 = /* @__PURE__ */ new Set();
+  return {
+    dispatched(ctx, { toolCallId, ...dispatch }) {
+      stopped2.delete(dispatch.targetId);
+      auditor.record(
+        delegationRecord(ctx, identity, toolCallId, {
+          kind: "delegation",
+          direction: "dispatched",
+          ...dispatch
+        })
+      );
+    },
+    completed(ctx, { toolCallId, ...settled }) {
+      if (settled.delegationKind === "subagent_stop") {
+        if (stopped2.has(settled.targetId)) return;
+        stopped2.add(settled.targetId);
+      }
+      auditor.record(
+        delegationRecord(ctx, identity, toolCallId, {
+          kind: "delegation",
+          direction: "completed",
+          ...settled
+        })
+      );
+    }
+  };
+}
 function mcpAuditStatus(result) {
   if (result.result.case === "success") {
     return result.result.value.isError ? "error" : "ok";
@@ -33,7 +73,7 @@ function wrapMcpExecutorForAudit(inner, deps) {
               kind: "mcpToolCall",
               toolCallId: args.toolCallId ?? "",
               serverIdentifier: args.providerIdentifier,
-              serverName: args.providerIdentifier,
+              serverName: deps.resolveDisplayName?.(args.providerIdentifier)?.trim() || args.providerIdentifier,
               toolName: args.name,
               transport,
               status,
@@ -212,8 +252,8 @@ function createSandNavigationProbe(deps) {
       queuedDuringBaseline = { ctx, remoteAccessor, displayNumber, generation };
       return;
     }
-    const at2 = now();
-    if (inFlight || at2 - lastProbeAtMs < NAVIGATION_PROBE_MIN_INTERVAL_MS) {
+    const at3 = now();
+    if (inFlight || at3 - lastProbeAtMs < NAVIGATION_PROBE_MIN_INTERVAL_MS) {
       if (!trailingScheduled) {
         trailingScheduled = true;
         void delay3(NAVIGATION_PROBE_MIN_INTERVAL_MS).then(() => {
@@ -223,7 +263,7 @@ function createSandNavigationProbe(deps) {
       }
       return;
     }
-    lastProbeAtMs = at2;
+    lastProbeAtMs = at3;
     inFlight = true;
     inFlightPromise = runProbe(ctx, remoteAccessor, displayNumber, "report", generation).catch((error42) => {
       process.stderr.write(
@@ -290,6 +330,76 @@ function createSandNavigationProbe(deps) {
     return baselinePromise;
   };
   return { probe, captureBaseline, flush, abandonPendingReports };
+}
+function auditedUserMachineId(machineIds, options2) {
+  const requested = options2?.machineId;
+  if (requested !== void 0) return machineIds.includes(requested) ? requested : void 0;
+  return machineIds.length === 1 ? machineIds[0] : void 0;
+}
+function recordShellAudit(auditor, record2) {
+  try {
+    auditor.record(record2);
+  } catch (error42) {
+    process.stderr.write(
+      `sand.action_audit.shell_record_failed error_class=${errorLogTag(error42)}
+`
+    );
+  }
+}
+function wrapShellStreamExecutorForAudit(inner, deps) {
+  const auditor = deps.auditor;
+  if (auditor === void 0) return inner;
+  return {
+    execute: (ctx, args, options2) => (async function* () {
+      const startedAtMs = Date.now();
+      let ran = false;
+      let exitCode;
+      try {
+        for await (const chunk of inner.execute(ctx, args, options2)) {
+          ran = true;
+          if (chunk.event.case === "exit") exitCode = chunk.event.value.code | 0;
+          yield chunk;
+        }
+        ran = true;
+      } finally {
+        if (ran) {
+          recordShellAudit(auditor, {
+            agentId: deps.agentId,
+            ...turnAttributionFromContext(ctx, deps.agentId),
+            boxId: deps.target(options2).boxId,
+            occurredAtMs: startedAtMs,
+            action: {
+              ...shellAuditAction(deps, "foreground", args.command, options2),
+              ...exitCode === void 0 ? {} : { exitCode },
+              durationMs: Date.now() - startedAtMs
+            }
+          });
+        }
+      }
+    })()
+  };
+}
+function wrapBackgroundShellExecutorForAudit(inner, deps) {
+  const auditor = deps.auditor;
+  if (auditor === void 0) return inner;
+  return {
+    execute: async (ctx, args, options2) => {
+      const startedAtMs = Date.now();
+      const result = await inner.execute(ctx, args, options2);
+      recordShellAudit(auditor, {
+        agentId: deps.agentId,
+        ...turnAttributionFromContext(ctx, deps.agentId),
+        boxId: deps.target(options2).boxId,
+        occurredAtMs: startedAtMs,
+        action: shellAuditAction(deps, "background", args.command, options2)
+      });
+      return result;
+    }
+  };
+}
+function shellAuditAction(deps, shellKind, command, options2) {
+  const { target, machineId } = deps.target(options2);
+  return { kind: "shellCommand", command, shellKind, target, machineId };
 }
 function computerUseAuditKind(actionCase) {
   switch (actionCase) {

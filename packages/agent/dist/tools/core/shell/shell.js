@@ -1407,13 +1407,13 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
           })
         }));
       }
-      const errorMessage6 = error42 instanceof Error ? error42.message : String(error42);
+      const errorMessage7 = error42 instanceof Error ? error42.message : String(error42);
       return createShellToolCall(new ShellToolCall({
         result: new ShellResult({
           result: {
             case: "spawnError",
             value: new ShellSpawnError({
-              error: errorMessage6
+              error: errorMessage7
             })
           }
         })

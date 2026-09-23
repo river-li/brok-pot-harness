@@ -88,6 +88,14 @@ var InteractionHandler = class {
     this.leftoverTokenCharCount = 0;
     this.singleMessageLoopPolicy = normalizeAgentSingleMessageLoopDetection(singleMessageLoopDetection);
   }
+  /**
+   * The current `runStep` finished listing `callCount` tools. Agent Serve
+   * maps this onto one `actions.requested` batch once that many starts
+   * have arrived. Does not wait for tools to finish.
+   */
+  async sendToolRequestsListed(ctx, callCount) {
+    await this.interactionProvider.sendUpdate(ctx, Updates.toolRequestsListed(callCount));
+  }
   getOrCreateToolCallStartedAtMs(callId, candidate) {
     const existing = this.toolCallStartedAtMsByCallId.get(callId);
     if (existing !== void 0) {
@@ -329,8 +337,9 @@ var InteractionHandler = class {
             delta = chunk.textDelta;
           }
           thinkingAccumulator += delta;
-          if (reasoningLoopDetector !== null && delta.length > 0) {
-            checkForAgentSingleMessageLooping({
+          const isDerivedSummaryChunk = chunk.type === "reasoning" && chunk.providerOptions?.cursor?.isAlreadySummarizedThinking === true;
+          if (reasoningLoopDetector !== null && delta.length > 0 && !isDerivedSummaryChunk) {
+            const reasoningLoopResult = checkForAgentSingleMessageLooping({
               ctx,
               newText: delta,
               detector: reasoningLoopDetector,
@@ -338,6 +347,15 @@ var InteractionHandler = class {
               channel: "reasoning",
               reporting: loopPolicy?.reporting
             });
+            if (reasoningLoopResult.loopDetected && reasoningLoopResult.loopKind === "single_message_reasoning_single_line" && loopPolicy?.responseAction === "retry_once") {
+              throw new AgentLoopError({
+                loopType: "singleMessage",
+                loopKind: reasoningLoopResult.loopKind,
+                repetitions: reasoningLoopResult.repetitions ?? 0,
+                period: reasoningLoopResult.period,
+                evidenceFingerprint: reasoningLoopResult.evidenceFingerprint
+              });
+            }
           }
           await this.interactionProvider.sendUpdate(ctx, Updates.thinkingDelta(delta, this.thinkingStyle, startedAtMs));
           await this.emitTokenDeltaFromChars(ctx, delta);

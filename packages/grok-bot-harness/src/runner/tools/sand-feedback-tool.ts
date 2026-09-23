@@ -27,17 +27,21 @@ function createSendFeedbackTool(deps) {
     description: "Send product feedback to the SpaceXAI team on the user's behalf. Use this ONLY when the user explicitly asks to file, send, or pass along feedback about Grok Bot. Summarize their feedback faithfully in their own words; never invent feedback and never send it unprompted. Never include code, credentials, file contents, or content drawn from connectors unless the user dictated it as part of their feedback. Feedback filed with this tool is read as product feedback but never receives a support response. Do not ask whether the user wants a reply and do not promise one. If they need a support response, tell them to use Help > Send Feedback and select the reply checkbox. The user reviews the exact message on an approval card and nothing is sent unless they approve. If the result says you were rate-limited, tell the user when to retry instead of retrying yourself.",
     parameters: sendFeedbackParameters,
     execute: async (ctx, args, d) => {
+      const ledger = humanOnlyReviewLedger(d.toolDecisions, d.toolCallId);
       if (isAgentFeedbackBlockedByPrivacyMode(d.privacyMode)) {
+        ledger.ruleRefused();
         return FEEDBACK_PRIVACY_MODE_MESSAGE;
       }
       const controller = d.autoReviewController;
       if (controller === void 0) {
+        ledger.ruleRefused();
         return FEEDBACK_APPROVAL_UNAVAILABLE_MESSAGE;
       }
       const conversationId = d.getConversationId();
-      const approval = await withToolExecutionTimeoutSuspended(
+      const approval = await requestReviewedApproval(
         ctx,
-        () => controller.requestApproval({
+        controller,
+        {
           surface: "feedback",
           fingerprint: fingerprintSandAutoReviewTarget({
             surface: "feedback",
@@ -47,10 +51,13 @@ function createSendFeedbackTool(deps) {
           reason: "This exact text will be sent to the SpaceXAI team from your account as product feedback. Nothing is sent unless you approve.",
           summary: "Send product feedback to the SpaceXAI team",
           command: args.message,
+          onCardShown: ledger.cardShown,
           signal: ctx.signal,
           expiryPolicy: d.getApprovalExpiryPolicy()
-        })
+        },
+        { toolCallId: d.toolCallId, approvalMode: "ask_human" }
       );
+      ledger.answered(approval);
       if (!approval.approved) {
         return FEEDBACK_NOT_APPROVED_MESSAGE;
       }

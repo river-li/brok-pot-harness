@@ -60,10 +60,10 @@ function createServerTranscriptClient(deps) {
   let promiseClient = null;
   let lastBaseUrl = null;
   const resolveAccess = async () => {
-    const at2 = now();
-    if (cachedAccess != null && at2 - cachedAccess.at < accessCacheMs) return cachedAccess.access;
+    const at3 = now();
+    if (cachedAccess != null && at3 - cachedAccess.at < accessCacheMs) return cachedAccess.access;
     const access5 = await deps.resolveAccess();
-    cachedAccess = { access: access5, at: at2 };
+    cachedAccess = { access: access5, at: at3 };
     if (access5.enabled) lastBaseUrl = access5.baseUrl;
     return access5;
   };
@@ -85,7 +85,7 @@ function createServerTranscriptClient(deps) {
   const headerInterceptor = (next) => async (req) => {
     const access5 = await requireAccess();
     for (const [name17, value] of Object.entries(access5.headers)) req.header.set(name17, value);
-    if (req.header.get("x-request-id") == null) req.header.set("x-request-id", (0, import_node_crypto61.randomUUID)());
+    if (req.header.get("x-request-id") == null) req.header.set("x-request-id", (0, import_node_crypto62.randomUUID)());
     return await next(req);
   };
   const clientFor = (access5) => {

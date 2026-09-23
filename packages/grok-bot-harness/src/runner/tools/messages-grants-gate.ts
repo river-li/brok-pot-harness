@@ -1,10 +1,10 @@
-var import_node_crypto80 = require("node:crypto");
+var import_node_crypto82 = require("node:crypto");
 init_dist4();
 init_errors();
-var logger105 = createLogger("sand:messages-grants-gate");
+var logger106 = createLogger("sand:messages-grants-gate");
 function messagesGrantsAskKey(ctx) {
   const toolCallId = ctx.get(sandLocalToolScopeKey)?.toolCallId;
-  if (toolCallId === void 0) return (0, import_node_crypto80.randomUUID)();
+  if (toolCallId === void 0) return (0, import_node_crypto82.randomUUID)();
   return `messages-grants:${toolCallId}`;
 }
 async function refusingAbortedTransport(ctx, run) {
@@ -22,7 +22,7 @@ function gateMessagesOnGrants(messages2, grants, report) {
     try {
       report?.(row);
     } catch (error42) {
-      logger105.warn(ctx, `Messages grants report failed (${errorLogTag(error42)})`);
+      logger106.warn(ctx, `Messages grants report failed (${errorLogTag(error42)})`);
     }
   };
   const probe = async (ctx, needed) => missingMessagesGrants(await messages2.run(ctx, { kind: "check-permissions" }), needed);

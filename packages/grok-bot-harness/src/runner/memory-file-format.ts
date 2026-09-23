@@ -4,16 +4,16 @@ var MEMORY_LOG_DIRNAME = "log";
 var USER_MEMORY_DIRNAME = "user-memory";
 var USER_MEMORY_SHARD_PARENT_DIRNAME = "by-agent";
 function getAgentMemoryDir(agentDir) {
-  return (0, import_node_path119.join)(agentDir, MEMORY_DIRNAME);
+  return (0, import_node_path120.join)(agentDir, MEMORY_DIRNAME);
 }
 function getUserMemoryDir(sandRoot) {
-  return (0, import_node_path119.join)(sandRoot, USER_MEMORY_DIRNAME);
+  return (0, import_node_path120.join)(sandRoot, USER_MEMORY_DIRNAME);
 }
 function getUserMemoryShardsDir(sandRoot) {
-  return (0, import_node_path119.join)(getUserMemoryDir(sandRoot), USER_MEMORY_SHARD_PARENT_DIRNAME);
+  return (0, import_node_path120.join)(getUserMemoryDir(sandRoot), USER_MEMORY_SHARD_PARENT_DIRNAME);
 }
 function getUserMemoryShardDir(sandRoot, agentId) {
-  return (0, import_node_path119.join)(getUserMemoryShardsDir(sandRoot), agentId);
+  return (0, import_node_path120.join)(getUserMemoryShardsDir(sandRoot), agentId);
 }
 var MEMORY_PROFILE_HEADER = [
   "# About the user",
@@ -31,7 +31,7 @@ var MEMORY_LOG_HEADER = [
 ].join("\n");
 var MEMORY_FACT_LINE = /^-\s+\((\d{4}-\d{2}-\d{2})\)\s+(.+?)\s*$/;
 function memoryIdFor(content) {
-  return (0, import_node_crypto55.createHash)("sha1").update(memoryDedupeKey(content)).digest("hex").slice(0, 16);
+  return (0, import_node_crypto56.createHash)("sha1").update(memoryDedupeKey(content)).digest("hex").slice(0, 16);
 }
 function serializeMemoryFactLine(content, createdAt) {
   return `- (${formatMemoryDate(createdAt)}) ${content}`;
@@ -40,7 +40,7 @@ var MEMORY_DREAMING_DIRNAME = ".dreaming";
 var MEMORY_EVIDENCE_DIRNAME = "evidence";
 var MEMORY_EVIDENCE_FILE = /^([0-9a-f-]{36})\.json$/;
 function getMemoryEvidenceDir(memoryDir) {
-  return (0, import_node_path119.join)(memoryDir, MEMORY_DREAMING_DIRNAME, MEMORY_EVIDENCE_DIRNAME);
+  return (0, import_node_path120.join)(memoryDir, MEMORY_DREAMING_DIRNAME, MEMORY_EVIDENCE_DIRNAME);
 }
 function memoryEvidenceFileName(id) {
   return `${id}.json`;

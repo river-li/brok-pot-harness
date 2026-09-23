@@ -156,16 +156,6 @@ var FLAGS = {
   // both deployed. Unit: teamID. Default OFF fails toward retaining VMs.
   grok_bot_hibernated_owner_vm_termination: {
     client: true,
-    default: false
-  },
-  // Holds the Grok Bot cards on the last step of dashboard onboarding
-  // (`/start-download`). Create via scripts/create-statsig-gate.sh
-  // show_dashboard_onboarding_download_grok_bot, then ramp on userID. Off (the
-  // default) means nobody is assigned to
-  // `dashboard_onboarding_download_grok_bot` or its nested
-  // `_primary` experiment, and the page renders exactly as it does today.
-  show_dashboard_onboarding_download_grok_bot: {
-    client: true,
     default: true
   },
   // Audience gate for the Glass top-bar Grok Bot CTA, read non-exposing and
@@ -400,20 +390,6 @@ var FLAGS = {
     client: true,
     default: true
   },
-  // With grok_bot_dynamic_tools on, the built-in tool set offloaded into the
-  // cursor namespace follows live box, device, and gate state, and its names
-  // are rendered in two places at the front of the cached prompt prefix: the
-  // GetDynamicTools description and the <user_info> catalogs. This gate pins
-  // both for the life of a compaction epoch: the description points at the
-  // <user_info> namespace entry instead of listing names, and a drifted
-  // <user_info> catalog (dynamic tools, subagent types, subagent models) is
-  // announced on the new user turn instead of re-rendering the first message.
-  // Read per turn by both harnesses. OFF (the default) leaves prompt bytes
-  // unchanged.
-  grok_bot_stable_dynamic_tool_catalog: {
-    client: true,
-    default: true
-  },
   grok_bot_browser_use_playwright: {
     client: true,
     default: false
@@ -527,6 +503,14 @@ var FLAGS = {
     client: true,
     default: true
   },
+  // Approving a Grok Bot virtual card requires a WebAuthn passkey assertion
+  // bound to that card; a user with no passkey is told to enroll. Off keeps
+  // today's click-to-approve flow. Read by the resolve RPC and by the Sand
+  // client, which decides whether to run the ceremony before resolving.
+  grok_bot_spend_approval_passkey: {
+    client: true,
+    default: false
+  },
   // Clean default-off rollout for Sand's replacement memory pipeline. The host
   // pins the first authenticated evaluation for its lifetime: control users
   // keep legacy extraction and treatment users get background synthesis.
@@ -540,6 +524,18 @@ var FLAGS = {
   sand_1pass_integration: {
     client: true,
     default: true
+  },
+  // Default-off rollout for connecting Sand 1Password from a pasted service
+  // account token (the path that works off macOS, where the CLI mint cannot
+  // run): the wizard's token form, the renew-with-token route, and the
+  // backend's service_account_token Begin mode all read this gate. Off leaves
+  // the CLI-only flow exactly as it shipped.
+  // NOTE: the gate does not exist in Statsig yet, so it reads false everywhere.
+  // Create it before trying to enable this
+  // (scripts/create-statsig-gate.sh --client sand_1pass_manual_service_acct).
+  sand_1pass_manual_service_acct: {
+    client: true,
+    default: false
   },
   // Default-off visibility for Sand 1Password's Auto fill toggle. Off hides
   // the per-account opt-out and leaves Auto fill on for new connections. On
@@ -576,7 +572,7 @@ var FLAGS = {
   // gates that exist in Statsig.
   sand_cloud_agent_artifacts: {
     client: true,
-    default: false
+    default: true
   },
   // Sand host: keep one StreamBackgroundComposerUpdates connection open per
   // running host and forward each update as a `cloud-agent-update` gateway
@@ -686,12 +682,6 @@ var FLAGS = {
   store_billed_web_on_demand: {
     client: true,
     default: true
-  },
-  // Replaces the create-your-first-bot step with Cursor's server-driven
-  // onboarding bot. Default OFF; the user is the assignment unit.
-  sand_onboarding_bot: {
-    client: true,
-    default: false
   },
   sand_notification_sounds: {
     client: true,
@@ -882,7 +872,7 @@ var FLAGS = {
   // own AgentTitle helper. Default OFF for the internal unship of roles.
   sand_agent_titles: {
     client: true,
-    default: false
+    default: true
   },
   // Rollout gate for Sand's rolling stream-idle deadline. ON re-arms the turn
   // stream's deadline on every streamed event — and suspends it while a tool
@@ -1140,12 +1130,6 @@ var FLAGS = {
     client: true,
     default: true
   },
-  // Sand's role-selection onboarding screen between jobs and tools. OFF keeps
-  // the existing walk and does not add role context to the created teammate.
-  sand_onboarding_role_selection: {
-    client: true,
-    default: true
-  },
   // Bot template sharing in Sand: the export/import managed skills and the
   // create_bot_share_json tool all key off this one gate, so a bad rollout is
   // a single kill switch. When OFF (the default) nothing is reachable — the
@@ -1154,12 +1138,23 @@ var FLAGS = {
     client: true,
     default: true
   },
-  // The user's main bot: SetGrokBotMainAgent (server-side admission) and the
-  // Sand desktop's main-bot roster treatment, the replace-main-bot menu item
-  // and picker. When OFF (the default) the RPC is refused and the desktop
-  // shows every bot the same way; main_agent_id still rides
-  // GetGrokBotUserRuntimeSettings so a client can read it without the gate.
+  // The user's main bot: SetGrokBotMainAgent and EnsureGrokBotDefaultMainAgent
+  // (server-side admission) and the Sand desktop's main-bot roster treatment,
+  // the replace-main-bot menu item and picker. The only main bot the server
+  // sets on its own is a new user's onboarding bot (sand_grok_onboarding_main_agent);
+  // an existing user with none picks one, or adds Grok Bot, in the client's
+  // chooser. When OFF (the
+  // default) both RPCs are refused and the desktop shows every bot the same
+  // way; main_agent_id still rides GetGrokBotUserRuntimeSettings so a client
+  // can read it without the gate.
   sand_grok_main_agent: {
+    client: true,
+    default: false
+  },
+  // Sand transcript cards on the V0 widget anatomy (elevated card surface,
+  // flat option rows with keycap selection, right-aligned Skip/Submit
+  // footers). Renderer-only; the gate-off path keeps today's cards. Default OFF.
+  sand_widget_v0: {
     client: true,
     default: false
   },
@@ -1235,7 +1230,7 @@ var FLAGS = {
   // import flow. Default OFF.
   grok_bot_template_onboarding: {
     client: true,
-    default: false
+    default: true
   },
   // Shows the Links tab (links mentioned in the chat) in the Sand info pane.
   // Default OFF.
@@ -1350,6 +1345,13 @@ var FLAGS = {
   sand_voice_async_update: {
     client: true,
     default: true
+  },
+  // Reconnect a dropped Sand voice realtime socket without ending the call.
+  // OFF keeps the pre-reconnect finish-on-drop behavior. ON holds the line,
+  // remints, and returns to live. Default OFF; flip in Statsig to dogfood.
+  sand_voice_reconnect: {
+    client: true,
+    default: false
   },
   // Start-or-steer for voice requests: while a turn is running, a relayed
   // request is drained into the live turn at its next step boundary instead
@@ -1472,7 +1474,7 @@ var FLAGS = {
   // every read; concurrent callers still coalesce.
   cloud_catalog_cache: {
     client: true,
-    default: false
+    default: true
   },
   // ON: closing a Glass agent workspace disposes its InstantiationService
   // after a 30s grace period. OFF keeps today's behavior: released containers
@@ -1670,8 +1672,10 @@ var FLAGS = {
     default: false
   },
   // API & SSH Keys IP allow list for Origin git over SSH and HTTPS.
-  // Portal only. Default off. Target one user (User ID or cursorUserID).
-  // Do not enable globally. Email rules do not match the portal.
+  // Portal team-settings panel and GET/PUT /settings/inbound-ip-allowlist.
+  // Default off. Target one user (User ID or cursorUserID); teamID custom
+  // IDs also match the Admin API. Do not enable globally. Email rules do
+  // not match the portal.
   origin_inbound_ip_allowlist: {
     client: true,
     default: false
@@ -1688,7 +1692,7 @@ var FLAGS = {
   },
   origin_inbox_osp_watch: {
     client: true,
-    default: false
+    default: true
   },
   // Sand Auto-review enforce rollout (Shell/MCP/Computer).
   // Settings-on default is shadow for every reviewed surface. When this gate
@@ -1728,6 +1732,13 @@ var FLAGS = {
   sand_local_egress_admin_control: {
     client: true,
     default: true
+  },
+  // Shows the "Allow sudo on bot computers" row on the portal's Grok Bot
+  // capabilities (v2 page and legacy Sand dashboard). Display only: the stored
+  // policy and box enforcement are unaffected. Recommended unit: teamID.
+  allow_disable_sudo_grok_bot: {
+    client: true,
+    default: false
   },
   // Master switch for Sand spotlighting: wrapping every tool result in the
   // <cursor_untrusted_data_1337> fence and teaching the agent, in its system
@@ -2287,6 +2298,14 @@ var FLAGS = {
     client: true,
     default: false
   },
+  // Portal half of the publish prototype: the Publish banner / modal,
+  // progress, "Your apps" and Publish Settings on the cloud agent page
+  // (Cursor Deploy designs). Calls AppPublishService, so it needs
+  // cloud_agent_publish_app on the same account to do anything.
+  cloud_agent_publish_ui: {
+    client: true,
+    default: false
+  },
   // Hard-cutover: default buildsEnabled to true and hide opt-out; fail closed.
   cloud_agent_env_builds_default_enabled: {
     client: true,
@@ -2441,6 +2460,13 @@ var FLAGS = {
     default: false
   },
   glass_assistant_message_selection_feedback: {
+    client: true,
+    default: false
+  },
+  // Glass transcript turn-feedback row: one `thumbs-up-down` button that opens
+  // a "Good response" / "Bad response" menu instead of the two thumb toggles.
+  // Off by default for a staged rollout.
+  glass_turn_feedback_menu: {
     client: true,
     default: false
   },
@@ -2752,6 +2778,26 @@ var FLAGS = {
     default: false
   },
   /**
+   * Staged Projects (server-proposed Projects the user creates with one
+   * click): whether the client calls `ListStagedProjects` at all, on startup
+   * and on every scope change, and whether staged rows render anywhere in
+   * Glass. The backend never reads it.
+   */
+  staged_project_listing: {
+    client: true,
+    default: false
+  },
+  /**
+   * Staged Projects: whether Glass seeds staged Projects for a new user on
+   * boot. Listing and display are `staged_project_listing`. The backend never
+   * reads it; the backend's only switch is the
+   * `staged_projects_generation_prompt_text_config` dynamic config.
+   */
+  staged_project_seeding: {
+    client: true,
+    default: false
+  },
+  /**
    * Moves the leading notes.md TLDR from Project Overview into a headerless
    * card at the top of Project Notes. Off preserves the existing Overview
    * placement.
@@ -2798,6 +2844,22 @@ var FLAGS = {
   },
   /** Unread divider and jump pill in Glass Project parent conversations. */
   glass_projects_unread_divider: {
+    client: true,
+    default: true
+  },
+  /**
+   * Unread divider and jump pill in regular Glass cloud agent transcripts,
+   * anchored on the agent's text replies. Off keeps the divider Project-only.
+   */
+  glass_cloud_agents_unread_divider: {
+    client: true,
+    default: true
+  },
+  /**
+   * Unread divider and jump pill in Glass local agent transcripts, anchored on
+   * the agent's text replies. Off leaves those transcripts without the divider.
+   */
+  glass_local_agents_unread_divider: {
     client: true,
     default: true
   },
@@ -3174,6 +3236,14 @@ var FLAGS = {
     default: false
   },
   portal_pr_code_tour: {
+    client: true,
+    default: false
+  },
+  // Ramp for the PR page Changes SSR's inline diff-body prefetch: the server
+  // names the first screens of per-file reads and the browser starts them
+  // during HTML parse instead of after the engine mounts. Off is today's
+  // page, where those reads wait for hydration and the load scheduler.
+  portal_files_engine_ssr_body_prefetch: {
     client: true,
     default: false
   },
@@ -4406,13 +4476,6 @@ var FLAGS = {
     client: true,
     default: false
   },
-  // Forward AI stream chunks across the extension-host boundary as raw
-  // protobuf envelope bytes (encode once, decode once) instead of the legacy
-  // parse -> re-encode -> re-parse double codec. Resolved once per stream.
-  ai_connect_stream_raw_bytes: {
-    client: true,
-    default: false
-  },
   // Slim MCP meta-tool descriptors in request context: send only server
   // metadata plus tool names (no per-tool descriptions or input schemas).
   // Prompt construction and CallMcpTool routing only need names; GetMcpTools
@@ -4597,12 +4660,6 @@ var FLAGS = {
     client: true,
     default: true
   },
-  // Route side-chat workspace and machine operations through the machine owner.
-  // Off preserves per-chat workspace identity.
-  cloud_guest_chats_no_workspace: {
-    client: true,
-    default: false
-  },
   glass_subagent_followups: {
     client: true,
     default: false
@@ -4783,6 +4840,15 @@ var FLAGS = {
     client: true,
     default: false
   },
+  /**
+   * Serve the previous session's skills catalog from disk while the IDE
+   * extension host walks skills on a cold start. Off leaves the first
+   * request waiting on that walk.
+   */
+  skill_catalog_ide_cache: {
+    client: true,
+    default: false
+  },
   opt_devs_into_experimental_model_toggle: {
     client: true,
     default: false
@@ -4917,6 +4983,13 @@ var FLAGS = {
   plugin_aware_mcp_edit_modal: {
     client: true,
     default: true
+  },
+  // Opens the Plugins & MCPs dashboard Add flow in place instead of sending
+  // the user to the standalone marketplace. Unit: userID. Default OFF keeps
+  // the existing marketplace redirect.
+  dashboard_plugin_add_modal: {
+    client: true,
+    default: false
   },
   plugin_marketplace_allowlisted_publisher: {
     client: true,
@@ -5113,7 +5186,7 @@ var FLAGS = {
    */
   glass_disable_eager_indexing_for_local_sessions: {
     client: true,
-    default: false
+    default: true
   },
   /**
    * Kill-switch for allowlisting mechatroner.rainbow-csv in Glass root and
@@ -5128,6 +5201,27 @@ var FLAGS = {
     default: false
   },
   full_self_driving: {
+    client: true,
+    default: false
+  },
+  /**
+   * FSD on GitHub / GHE PRs through the Origin Review surface only (the
+   * cursor.com PR pages): an alternative to `full_self_driving` that the
+   * FullSelfDrivingService RPCs accept solely for GitHub PR URLs on calls
+   * made by the Origin Review app, and that the GitHub webhook lanes honor
+   * for the owner of a GitHub FSD config. Lets a customer whose repos stay
+   * GitHub-SoT (mirrored into Origin) evaluate FSD on the GitHub PRs they
+   * view in the Origin UI without unlocking Glass, `@cursor fsd` comments,
+   * the dashboard, or Slack, which stay behind `full_self_driving`. Origin
+   * PRs still need `full_self_driving` + `full_self_driving_origin`. The
+   * Origin Review PR page reads it too (`client: true`; needs the `client`
+   * and `graphite-client` target apps plus the portal bootstrap-filter
+   * entry). Off ≡ pre-gate behavior byte-for-byte. Default-off; registered
+   * in code only — create the gate in Statsig before flagging teams in
+   * (scripts/create-statsig-gate.sh --client
+   * full_self_driving_github_origin_review), rules by `teamID`.
+   */
+  full_self_driving_github_origin_review: {
     client: true,
     default: false
   },
@@ -5327,20 +5421,6 @@ var EXPERIMENTS = {
       enabled: parseBoolean
     }
   },
-  // Grok Bot plain-sentence tone A/B. Control keeps the shipped tone section;
-  // treatment uses the complete-sentence rewrite in
-  // packages/grok-bot-harness/src/runner/system-prompt.ts and the matching
-  // SendToUser delivery check. Fallback is control so unallocated users see
-  // no prompt change.
-  grok_bot_update_communication: {
-    client: true,
-    fallbackValues: {
-      enabled: false
-    },
-    parseValue: {
-      enabled: parseBoolean
-    }
-  },
   // Grok Bot lean SendToUser tool description A/B. Control keeps the shipped
   // description; treatment drops the paragraphs that restate the "## SendToUser
   // is your only voice" system prompt section and keeps the message shapes
@@ -5380,12 +5460,7 @@ var EXPERIMENTS = {
       enabled: parseBoolean
     }
   },
-  // Sand desktop single-bot onboarding A/B. Control keeps the old
-  // create-your-own-bot onboarding walk; treatment uses the onboarding-bot
-  // hand-off. Fallback (not started / unallocated) is `enabled: false`; both
-  // client and server fall back to the `sand_onboarding_bot` gate until the
-  // experiment is started, so nothing changes for users until then.
-  sand_onboarding_bot_ab: {
+  sand_memory_facts_in_user_info_ab: {
     client: true,
     fallbackValues: {
       enabled: false
@@ -6295,15 +6370,6 @@ var EXPERIMENTS = {
       group: parseEnum(["control", "popup", "inline_banner"])
     }
   },
-  new_teams_pricing_cancellation_flow: {
-    client: true,
-    fallbackValues: {
-      enabled: false
-    },
-    parseValue: {
-      enabled: parseBoolean
-    }
-  },
   team_pending_cancellation_cancel_now: {
     client: true,
     fallbackValues: {
@@ -6408,24 +6474,6 @@ var EXPERIMENTS = {
     }
   },
   download_bottom_dashboard: {
-    client: true,
-    fallbackValues: {
-      enabled: false
-    },
-    parseValue: {
-      enabled: parseBoolean
-    }
-  },
-  dashboard_onboarding_download_grok_bot: {
-    client: true,
-    fallbackValues: {
-      enabled: false
-    },
-    parseValue: {
-      enabled: parseBoolean
-    }
-  },
-  dashboard_onboarding_download_grok_bot_primary: {
     client: true,
     fallbackValues: {
       enabled: false
@@ -6823,7 +6871,13 @@ var DYNAMIC_CONFIG_SCHEMAS = {
     migrationAgentConcurrency: external_exports.number().int().min(1).max(32),
     migrationReadBatchBlobs: external_exports.number().int().min(1).max(64),
     migrationPutConcurrency: external_exports.number().int().min(1).max(32),
-    migrationCopyConcurrency: external_exports.number().int().min(1).max(32)
+    migrationCopyConcurrency: external_exports.number().int().min(1).max(64),
+    // Gateway deadline for each host working-state export command attempt.
+    migrationExportCommandTimeoutMs: external_exports.number().int().min(6e4).max(10 * 6e4),
+    // Wall-clock window in which the updated host keeps local work fenced for migration.
+    migrationHostWindowMs: external_exports.number().int().min(6e4).max(45 * 6e4),
+    // Temporal start-to-close and schedule-to-close timeout for export plus copy.
+    migrationExportActivityTimeoutMs: external_exports.number().int().min(6e4).max(30 * 6e4)
   }),
   grok_bot_temporal_harness_rollout: external_exports.object({
     control: external_exports.enum(["legacy_gates", "config"]),
@@ -7600,6 +7654,17 @@ var DYNAMIC_CONFIG_SCHEMAS = {
       }).strict()
     ).default({})
   }).strict(),
+  /**
+   * Workbench LOCAL mint existence-cache knobs. Slack skips reminting while
+   * remaining TTL is above the threshold.
+   */
+  local_subscription_mint_cache_config: external_exports.object({
+    mint_refresh_slack_ms: external_exports.number().int().min(0).max(10 * 6e4),
+    mint_failure_base_ms: external_exports.number().int().min(100).max(6e4),
+    mint_failure_max_ms: external_exports.number().int().min(1e3).max(10 * 6e4),
+    mint_failure_jitter: external_exports.number().min(0).max(0.5),
+    mint_cache_max_conversations: external_exports.number().int().min(16).max(4096)
+  }),
   gemini_video_attachment_config: external_exports.object({
     maxBytes: external_exports.number().int().positive(),
     inlineMaxBytes: external_exports.number().int().positive(),
@@ -7766,6 +7831,16 @@ var DYNAMIC_CONFIG_SCHEMAS = {
     enabled: external_exports.boolean(),
     /** Reconnect gap past which the client re-attaches fresh and hydrates the snapshot atomically instead of replaying the missed backlog through the live lane. */
     rehydrateAfterMs: external_exports.number().int().nonnegative()
+  }),
+  /**
+   * Newest-N turn window for the Glass cloud transcript, sent to the server
+   * as `max_turns_to_prefetch` and used as the client-side hydrate and
+   * page-older size. Unset clients keep today's full-history walk and send no
+   * request field, so N is changed in Statsig without a Glass deploy.
+   */
+  cloud_agent_stream_conversation_turn_window: external_exports.object({
+    /** Nullish because `StatsigFallbackValues` strips optionality; null means "unset", not zero. */
+    maxTurns: external_exports.number().int().positive().nullish()
   }),
   tool_limits_config: external_exports.object({
     /** Maximum file size in bytes for deep search (default: 2MB) */
@@ -8342,7 +8417,10 @@ var DYNAMIC_CONFIGS = {
       migrationAgentConcurrency: 8,
       migrationReadBatchBlobs: 32,
       migrationPutConcurrency: 8,
-      migrationCopyConcurrency: 8
+      migrationCopyConcurrency: 8,
+      migrationExportCommandTimeoutMs: 15e4,
+      migrationHostWindowMs: 10 * 6e4,
+      migrationExportActivityTimeoutMs: 15 * 6e4
     }
   },
   grok_bot_temporal_harness_rollout: {
@@ -8927,6 +9005,16 @@ var DYNAMIC_CONFIGS = {
       surfaces: {}
     }
   },
+  local_subscription_mint_cache_config: {
+    client: true,
+    fallbackValues: {
+      mint_refresh_slack_ms: 6e4,
+      mint_failure_base_ms: 5e3,
+      mint_failure_max_ms: 12e4,
+      mint_failure_jitter: 0.2,
+      mint_cache_max_conversations: 256
+    }
+  },
   gemini_video_attachment_config: {
     client: true,
     fallbackValues: {
@@ -9319,6 +9407,12 @@ Requirements:
     fallbackValues: {
       enabled: true,
       rehydrateAfterMs: 12e4
+    }
+  },
+  cloud_agent_stream_conversation_turn_window: {
+    client: true,
+    fallbackValues: {
+      maxTurns: null
     }
   },
   tool_limits_config: {

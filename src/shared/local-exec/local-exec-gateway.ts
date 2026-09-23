@@ -68,6 +68,12 @@ var sandLocalExecRequestFrameSchema = union([
     requestId: string2(),
     op: messagesOpSchema,
     approvalId: string2().optional()
+  }),
+  object({
+    kind: literal("discover-ai-tool"),
+    requestId: string2(),
+    source: _enum2(SAND_AI_TOOL_SOURCES),
+    approvalId: string2().optional()
   })
 ]);
 var sandLocalExecResponseFrameSchema = union([

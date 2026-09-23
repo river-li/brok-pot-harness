@@ -210,7 +210,7 @@ var ServerUserComputerExecManager = class {
     if (described === void 0 && this.deps.gate.requiresApproval(machine.machineId)) {
       throw new SandLocalToolPermissionDeniedError(SAND_LOCAL_TOOLS_UNDESCRIBABLE_MESSAGE);
     }
-    const approvalId = described === void 0 ? void 0 : await authorizeLocalToolAction(this.deps.gate, scope, {
+    const approvalId = described === void 0 ? void 0 : await authorizeLocalToolAction(ctx, this.deps.gate, scope, {
       ...described,
       machineId: machine.machineId,
       signal: ctx.signal
@@ -314,6 +314,7 @@ var ServerUserComputerSandBox = class {
     const blocked = this.deps.gate.blockedReason(machine.machineId);
     if (blocked !== void 0) throw new SandLocalToolPermissionDeniedError(blocked);
     const approvalId = await authorizeLocalToolAction(
+      ctx,
       this.deps.gate,
       ctx.get(sandLocalToolScopeKey),
       {
@@ -388,6 +389,7 @@ var ServerUserComputerSandBox = class {
       if (blocked !== void 0) throw new SandLocalToolPermissionDeniedError(blocked);
     }
     const approvalId = await authorizeLocalToolAction(
+      ctx,
       this.deps.gate,
       ctx.get(sandLocalToolScopeKey),
       {

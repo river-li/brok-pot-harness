@@ -1,5 +1,5 @@
-var import_node_fs94 = require("node:fs");
-var import_node_path153 = require("node:path");
+var import_node_fs96 = require("node:fs");
+var import_node_path154 = require("node:path");
 init_unknown_record();
 var PENDING_WAKE_KINDS = SAND_ASYNC_TASK_KINDS;
 function parsePendingWakeFile(raw) {
@@ -57,7 +57,8 @@ function coerceMarker(entry) {
     ...typeof entry.subagentType === "string" && entry.subagentType.length > 0 ? { subagentType: entry.subagentType } : {},
     ...typeof entry.automationRunUuid === "string" && entry.automationRunUuid.length > 0 ? { automationRunUuid: entry.automationRunUuid } : {},
     ...entry.interruptedByRecreate === true ? { interruptedByRecreate: true } : {},
-    ...entry.hiddenCard === true ? { hiddenCard: true } : {}
+    ...entry.hiddenCard === true ? { hiddenCard: true } : {},
+    ...entry.startedBy === "launch" || entry.startedBy === "reply" ? { startedBy: entry.startedBy } : {}
   };
 }
 function coerceQuietOrigin(value) {
@@ -83,7 +84,7 @@ function upsertPendingWakeMarker(existing, marker17) {
 var SandPendingWakeStore = class {
   filePath;
   constructor(rootDir) {
-    this.filePath = (0, import_node_path153.join)(rootDir, SAND_PENDING_WAKE_FILE_NAME);
+    this.filePath = (0, import_node_path154.join)(rootDir, SAND_PENDING_WAKE_FILE_NAME);
   }
   markPending(marker17) {
     this.write(upsertPendingWakeMarker(this.readPending(), marker17));
@@ -144,7 +145,7 @@ var SandPendingWakeStore = class {
   readPending() {
     let raw;
     try {
-      raw = (0, import_node_fs94.readFileSync)(this.filePath, "utf8");
+      raw = (0, import_node_fs96.readFileSync)(this.filePath, "utf8");
     } catch (error42) {
       reportFallbackUnlessAbsent("sand_pending_wake_store", error42);
       raw = null;
@@ -157,7 +158,7 @@ var SandPendingWakeStore = class {
   }
   deleteFile() {
     try {
-      (0, import_node_fs94.rmSync)(this.filePath, { force: true });
+      (0, import_node_fs96.rmSync)(this.filePath, { force: true });
     } catch {
     }
   }

@@ -49,6 +49,13 @@ function isAllQuietOrigin(completions) {
 function isCanvasProductionCompletion(completion, canvasCursorAgentIds) {
   return completion.status === "completed" && completion.subagentType === "cursor-agent" && canvasCursorAgentIds.has(completion.subagentAgentId) && hasUserStoreCanvasSourcePath(completion.result);
 }
+var BROWSER_USE_JEV_REVIVAL_INSTRUCTION = "These are browser reports for what the user asked. Send one SendToUser that relays each report's findings (the key numbers, names, dates, or quoted text, with the page they came from), and names anything a report could not determine. Do not re-verify through shell or connector APIs; if something is missing and worth another look, dispatch the browser subagent again.";
+function buildSubagentRevival(completions, context2) {
+  return {
+    prompt: buildSubagentRevivalPrompt(completions, context2),
+    settledDelegations: settledDelegationsOf(completions)
+  };
+}
 function buildSubagentRevivalPrompt(completions, context2) {
   const blocks = completions.map((completion) => {
     const heading = completion.status === "error" ? `Background task "${completion.title}" (${completion.subagentType}) failed:` : `Background task "${completion.title}" (${completion.subagentType}) finished:`;
@@ -67,6 +74,10 @@ ${completion.result}${origin}${roomOrigin}`;
     instruction = QUIET_REVIVAL_INSTRUCTION;
   } else if (completions.length === 1 && isCanvasProductionCompletion(completions[0], context2.canvasCursorAgentIds)) {
     instruction = CANVAS_REVIVAL_INSTRUCTION;
+  } else if (completions.length > 0 && completions.every(
+    (completion) => completion.subagentType === "browserUseJev" && completion.status === "completed"
+  )) {
+    instruction = BROWSER_USE_JEV_REVIVAL_INSTRUCTION;
   }
   return [
     `[A background task just completed] ${intro}`,

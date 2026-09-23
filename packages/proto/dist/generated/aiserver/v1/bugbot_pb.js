@@ -1,17 +1,17 @@
-var __protoPackage100, __protoMessage396, BugLocation, BugReport, BugReports, StreamBugBotRequest, StreamBugBotRequest_Range;
+var __protoPackage101, __protoMessage396, BugLocation, BugReport, BugReports, StreamBugBotRequest, StreamBugBotRequest_Range;
 var init_bugbot_pb = __esm({
   "../packages/proto/dist/generated/aiserver/v1/bugbot_pb.js"() {
     "use strict";
     init_esm();
     init_utils_pb();
     init_compact();
-    __protoPackage100 = "aiserver.v1.";
+    __protoPackage101 = "aiserver.v1.";
     __protoMessage396 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage100;
+        return __protoPackage101;
       }
     };
     BugLocation = class _BugLocation extends __protoMessage396 {

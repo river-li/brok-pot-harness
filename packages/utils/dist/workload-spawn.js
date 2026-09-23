@@ -32,9 +32,9 @@ function resetReturnedChildPid(value, resetChildPid) {
     resetChildPid(value.child.pid);
   }
 }
-function createSpawnWorkload(placement, resetChildPid = resetChildOomScoreAdj) {
+function createSpawnWorkload(placement2, resetChildPid = resetChildOomScoreAdj) {
   return function spawnWithPlacement(createProcess, command, args, ...rest) {
-    const result = placement.kind === "direct" ? createProcess(command, [...args], ...rest) : createProcess(placement.executable, [...placement.argumentPrefix, command, ...args], ...rest);
+    const result = placement2.kind === "direct" ? createProcess(command, [...args], ...rest) : createProcess(placement2.executable, [...placement2.argumentPrefix, command, ...args], ...rest);
     resetReturnedChildPid(result, resetChildPid);
     return result;
   };

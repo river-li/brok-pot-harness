@@ -2,7 +2,7 @@ var codebaseTelemetryExtension = defineHostExtension({
   id: "codebase-telemetry",
   dependencies: [HostExtensions.Auth, HostExtensions.Experiments, HostExtensions.PrivacyMode],
   start: (context2) => {
-    const logger108 = createSandCodebaseTelemetryLogger(context2.host.log);
+    const logger110 = createSandCodebaseTelemetryLogger(context2.host.log);
     const service = createCodebaseTelemetryService({
       auth: context2.deps.auth,
       experiments: context2.deps.experiments,
@@ -30,7 +30,7 @@ var codebaseTelemetryExtension = defineHostExtension({
               "x-ghost-mode": "false"
             }
           }),
-          logger: logger108,
+          logger: logger110,
           signal
         });
       },
@@ -47,7 +47,7 @@ var codebaseTelemetryExtension = defineHostExtension({
           timeoutMs: 3e3
         })
       },
-      logger: logger108
+      logger: logger110
     });
     context2.onStop(() => service.dispose());
     return service.api;

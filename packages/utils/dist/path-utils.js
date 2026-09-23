@@ -59,6 +59,16 @@ function isPathWithinAnyRoot(targetPath, roots) {
   }
   return false;
 }
+function isPathInsideWorkspaceRoot(realAbsolutePath, realRootDirectory) {
+  const isCaseInsensitiveFs = process.platform === "win32" || process.platform === "darwin";
+  const target = isCaseInsensitiveFs ? realAbsolutePath.toLowerCase() : realAbsolutePath;
+  const root = isCaseInsensitiveFs ? realRootDirectory.toLowerCase() : realRootDirectory;
+  if (target === root) {
+    return true;
+  }
+  const rootPrefix = root.endsWith(import_node_path3.sep) ? root : root + import_node_path3.sep;
+  return target.startsWith(rootPrefix);
+}
 function normalizeToUnixPath(path31) {
   return path31.replace(/\\/g, SEP);
 }

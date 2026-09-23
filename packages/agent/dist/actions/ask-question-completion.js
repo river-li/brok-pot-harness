@@ -31,8 +31,8 @@ async function applyAskQuestionCompletion(ctx, args) {
     args: syntheticArgs,
     result: action.result
   });
-  const recordedToolCallId = originalToolCallId.length > 0 ? originalToolCallId : (0, import_node_crypto31.randomUUID)();
-  const promptToolCallId = (0, import_node_crypto31.randomUUID)();
+  const recordedToolCallId = originalToolCallId.length > 0 ? originalToolCallId : (0, import_node_crypto30.randomUUID)();
+  const promptToolCallId = (0, import_node_crypto30.randomUUID)();
   const toolCall = createRedactedToolCall(action._privacyMode, {
     toolCallId: recordedToolCallId,
     tool: {

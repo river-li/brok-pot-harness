@@ -196,10 +196,10 @@ function deriveGitPathFromMarketplaceManifest(cloneDir, pluginName) {
   return __awaiter58(this, void 0, void 0, function* () {
     var _a19;
     for (const manifestRelPath of MARKETPLACE_MANIFEST_PATHS) {
-      const manifestPath2 = (0, import_node_path62.join)(cloneDir, manifestRelPath);
+      const manifestPath2 = (0, import_node_path53.join)(cloneDir, manifestRelPath);
       let content;
       try {
-        content = yield (0, import_promises33.readFile)(manifestPath2, "utf-8");
+        content = yield (0, import_promises31.readFile)(manifestPath2, "utf-8");
       } catch (_b2) {
         continue;
       }
@@ -311,8 +311,8 @@ function shallowClone(gitUrl_1, ref_1, targetDir_1) {
         if (sparsePluginClones && isKilledSubprocessError(error42)) {
           throw error42;
         }
-        yield (0, import_promises33.rm)(targetDir, { recursive: true, force: true });
-        yield (0, import_promises33.mkdir)(targetDir, { recursive: true });
+        yield (0, import_promises31.rm)(targetDir, { recursive: true, force: true });
+        yield (0, import_promises31.mkdir)(targetDir, { recursive: true });
         cloneStderr = yield attemptClone(gitUrl, sparseSshBatchMode);
       }
     } else {
@@ -341,13 +341,13 @@ function downloadReleaseToDir(repo, asset, tag, targetDir, expectedSha256, githu
       githubToken
     });
     const compressedSize = buffer.byteLength;
-    yield (0, import_promises33.mkdir)(targetDir, { recursive: true });
-    const tempDir = yield (0, import_promises33.mkdtemp)((0, import_node_path62.join)((0, import_node_os14.tmpdir)(), "release-asset-"));
-    const tempTarPath = (0, import_node_path62.join)(tempDir, "asset.tar.gz");
-    const extractDir = (0, import_node_path62.join)(tempDir, "extracted");
+    yield (0, import_promises31.mkdir)(targetDir, { recursive: true });
+    const tempDir = yield (0, import_promises31.mkdtemp)((0, import_node_path53.join)((0, import_node_os13.tmpdir)(), "release-asset-"));
+    const tempTarPath = (0, import_node_path53.join)(tempDir, "asset.tar.gz");
+    const extractDir = (0, import_node_path53.join)(tempDir, "extracted");
     try {
-      yield (0, import_promises33.writeFile)(tempTarPath, buffer);
-      yield (0, import_promises33.mkdir)(extractDir, { recursive: true });
+      yield (0, import_promises31.writeFile)(tempTarPath, buffer);
+      yield (0, import_promises31.mkdir)(extractDir, { recursive: true });
       let totalUncompressedSize = 0;
       let entryCount = 0;
       yield So({
@@ -367,24 +367,24 @@ function downloadReleaseToDir(repo, asset, tag, targetDir, expectedSha256, githu
           }
         }
       });
-      const topEntries = yield (0, import_promises33.readdir)(extractDir, { withFileTypes: true });
+      const topEntries = yield (0, import_promises31.readdir)(extractDir, { withFileTypes: true });
       const topDirs = topEntries.filter((e) => e.isDirectory());
       const topFiles = topEntries.filter((e) => e.isFile());
       let sourceDir = extractDir;
       if (topDirs.length === 1 && topFiles.length === 0) {
-        const wrapperDir = (0, import_node_path62.join)(extractDir, topDirs[0].name);
-        const wrapperContents = yield (0, import_promises33.readdir)(wrapperDir);
+        const wrapperDir = (0, import_node_path53.join)(extractDir, topDirs[0].name);
+        const wrapperContents = yield (0, import_promises31.readdir)(wrapperDir);
         if (containsPluginRootDir(wrapperContents)) {
           sourceDir = wrapperDir;
         }
       }
-      const sourceEntries = yield (0, import_promises33.readdir)(sourceDir);
-      yield Promise.all(sourceEntries.map((name17) => (0, import_promises33.cp)((0, import_node_path62.join)(sourceDir, name17), (0, import_node_path62.join)(targetDir, name17), {
+      const sourceEntries = yield (0, import_promises31.readdir)(sourceDir);
+      yield Promise.all(sourceEntries.map((name17) => (0, import_promises31.cp)((0, import_node_path53.join)(sourceDir, name17), (0, import_node_path53.join)(targetDir, name17), {
         recursive: true,
         verbatimSymlinks: true
       })));
     } finally {
-      yield (0, import_promises33.rm)(tempDir, { recursive: true, force: true }).catch(() => {
+      yield (0, import_promises31.rm)(tempDir, { recursive: true, force: true }).catch(() => {
       });
     }
   });
@@ -459,7 +459,7 @@ function downloadReleaseAssetBuffer(opts) {
       throw new Error(`Release asset "${asset}" actual download size exceeds maximum of ${MAX_RELEASE_ASSET_BYTES} bytes (actual: ${buf.byteLength})`);
     }
     if (opts.expectedSha256) {
-      const actualSha256 = (0, import_node_crypto24.createHash)("sha256").update(buf).digest("hex");
+      const actualSha256 = (0, import_node_crypto23.createHash)("sha256").update(buf).digest("hex");
       if (actualSha256 !== opts.expectedSha256) {
         throw new Error(`Release asset "${asset}" integrity check failed: expected SHA-256 ${opts.expectedSha256}, got ${actualSha256}`);
       }
@@ -475,17 +475,17 @@ function clonePluginToDir(entry_1, targetDir_1) {
     const releaseSource = decodeBackendReleaseSource(entry.downloadUrl);
     if (releaseSource) {
       if (entry.gitPath) {
-        const tempDir2 = yield (0, import_promises33.mkdtemp)((0, import_node_path62.join)((0, import_node_os14.tmpdir)(), "release-plugin-"));
+        const tempDir2 = yield (0, import_promises31.mkdtemp)((0, import_node_path53.join)((0, import_node_os13.tmpdir)(), "release-plugin-"));
         try {
           yield downloadReleaseToDir(releaseSource.repo, releaseSource.asset, releaseSource.tag, tempDir2, options2 === null || options2 === void 0 ? void 0 : options2.expectedReleaseAssetSha256, options2 === null || options2 === void 0 ? void 0 : options2.githubToken);
           const sourceDir = validateAndResolveSubpath(tempDir2, entry.gitPath);
-          yield (0, import_promises33.mkdir)(targetDir, { recursive: true });
-          yield (0, import_promises33.cp)(sourceDir, targetDir, {
+          yield (0, import_promises31.mkdir)(targetDir, { recursive: true });
+          yield (0, import_promises31.cp)(sourceDir, targetDir, {
             recursive: true,
             verbatimSymlinks: true
           });
         } finally {
-          yield (0, import_promises33.rm)(tempDir2, { recursive: true, force: true }).catch(() => {
+          yield (0, import_promises31.rm)(tempDir2, { recursive: true, force: true }).catch(() => {
           });
         }
       } else {
@@ -497,7 +497,7 @@ function clonePluginToDir(entry_1, targetDir_1) {
     if (!source) {
       throw new Error(`Invalid download URL format for plugin ${entry.pluginId}: ${entry.downloadUrl}`);
     }
-    const tempDir = yield (0, import_promises33.mkdtemp)((0, import_node_path62.join)((0, import_node_os14.tmpdir)(), "backend-plugin-"));
+    const tempDir = yield (0, import_promises31.mkdtemp)((0, import_node_path53.join)((0, import_node_os13.tmpdir)(), "backend-plugin-"));
     try {
       yield shallowClone(source.gitUrl, source.ref, tempDir, pluginLogger, extraGitConfig, source.gitPath ? materializeSpecForGitPaths([source.gitPath]) : [], sparsePluginClones);
       let sourceDir;
@@ -521,13 +521,13 @@ function clonePluginToDir(entry_1, targetDir_1) {
           sourceDir = tempDir;
         }
       }
-      yield (0, import_promises33.mkdir)(targetDir, { recursive: true });
-      yield (0, import_promises33.cp)(sourceDir, targetDir, {
+      yield (0, import_promises31.mkdir)(targetDir, { recursive: true });
+      yield (0, import_promises31.cp)(sourceDir, targetDir, {
         recursive: true,
         verbatimSymlinks: true
       });
     } finally {
-      yield (0, import_promises33.rm)(tempDir, { recursive: true, force: true }).catch(() => {
+      yield (0, import_promises31.rm)(tempDir, { recursive: true, force: true }).catch(() => {
       });
     }
   });
@@ -683,7 +683,7 @@ var BackendMarketplaceClient = class {
             this.pluginLogger.log("info", `Skipping DB-inline plugin ${name17}: no inline content provided`, { pluginId });
             continue;
           }
-          const version4 = (0, import_node_crypto24.createHash)("sha256").update(`${(_f = p2.id) !== null && _f !== void 0 ? _f : "0"}:${(_g = p2.updatedAt) !== null && _g !== void 0 ? _g : "0"}`).digest("hex").slice(0, 40);
+          const version4 = (0, import_node_crypto23.createHash)("sha256").update(`${(_f = p2.id) !== null && _f !== void 0 ? _f : "0"}:${(_g = p2.updatedAt) !== null && _g !== void 0 ? _g : "0"}`).digest("hex").slice(0, 40);
           const marketplace2 = (mkt === null || mkt === void 0 ? void 0 : mkt.name) ? {
             id: mkt.id !== void 0 ? `${mkt.name}-${mkt.id}` : `${mkt.name}-inline`,
             name: mkt.name
@@ -885,7 +885,7 @@ var BackendMarketplaceClient = class {
           error: String(err)
         });
         this.pluginLogger.increment("marketplace.origin_distribution.install.source_fallback", 1);
-        yield (0, import_promises33.rm)(targetDir, { recursive: true, force: true });
+        yield (0, import_promises31.rm)(targetDir, { recursive: true, force: true });
         try {
           yield this.installFromEntryUrls(sourceEntry, targetDir);
         } catch (sourceErr) {

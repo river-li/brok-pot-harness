@@ -29,9 +29,9 @@ var Mp4Dimensions = class _Mp4Dimensions {
     const t1 = tag.charCodeAt(1);
     const t2 = tag.charCodeAt(2);
     const t3 = tag.charCodeAt(3);
-    for (let at2 = Math.max(from2, 4); at2 + 4 <= view.byteLength; at2++) {
-      if (view.getUint8(at2) === t0 && view.getUint8(at2 + 1) === t1 && view.getUint8(at2 + 2) === t2 && view.getUint8(at2 + 3) === t3) {
-        return at2;
+    for (let at3 = Math.max(from2, 4); at3 + 4 <= view.byteLength; at3++) {
+      if (view.getUint8(at3) === t0 && view.getUint8(at3 + 1) === t1 && view.getUint8(at3 + 2) === t2 && view.getUint8(at3 + 3) === t3) {
+        return at3;
       }
     }
     return -1;
@@ -47,21 +47,21 @@ var Mp4Dimensions = class _Mp4Dimensions {
     }
     return null;
   }
-  static clampedBoxAt(view, { at: at2, end }) {
-    if (at2 < 0 || at2 + 8 > end) return null;
-    let size = view.getUint32(at2);
+  static clampedBoxAt(view, { at: at3, end }) {
+    if (at3 < 0 || at3 + 8 > end) return null;
+    let size = view.getUint32(at3);
     let header = 8;
     if (size === 1) {
-      if (at2 + 16 > end) return null;
-      size = view.getUint32(at2 + 12);
+      if (at3 + 16 > end) return null;
+      size = view.getUint32(at3 + 12);
       header = 16;
     } else if (size === 0) {
-      size = end - at2;
+      size = end - at3;
     }
     if (size < header) return null;
     return {
-      body: { start: at2 + header, end: Math.min(at2 + size, end) },
-      next: at2 + size
+      body: { start: at3 + header, end: Math.min(at3 + size, end) },
+      next: at3 + size
     };
   }
   static childBoxes(view, range2, type2) {

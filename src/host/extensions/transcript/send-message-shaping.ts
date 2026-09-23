@@ -67,6 +67,7 @@ function stripReplyTo(message) {
     case "auto-review-approval":
     case "cookie-origin-approval":
     case "local-tool-permission":
+    case "connector-grant":
     case "virtual-card-approval":
       return message;
     case "email-draft":
@@ -169,6 +170,7 @@ function withReplyTo(message, replyTo) {
     case "auto-review-approval":
     case "cookie-origin-approval":
     case "local-tool-permission":
+    case "connector-grant":
     case "virtual-card-approval":
       return message;
     case "email-draft":
@@ -306,7 +308,7 @@ function buildSelectedVideos(videoAttachmentPaths) {
     (videoPath) => new SelectedVideo({
       path: videoPath,
       mimeType: videoMimeFromPath(videoPath) ?? "video/mp4",
-      filename: (0, import_node_path155.basename)(videoPath),
+      filename: (0, import_node_path156.basename)(videoPath),
       fps: 4
     })
   );

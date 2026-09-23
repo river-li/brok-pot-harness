@@ -1,38 +1,38 @@
-function createNonThrowingLogger(logger108) {
+function createNonThrowingLogger(logger110) {
   return {
     error: (message, error42) => {
       try {
-        logger108.error(message, error42);
+        logger110.error(message, error42);
       } catch (_a19) {
       }
     },
     warn: (message, error42) => {
       try {
-        logger108.warn(message, error42);
+        logger110.warn(message, error42);
       } catch (_a19) {
       }
     },
     info: (message, error42) => {
       try {
-        logger108.info(message, error42);
+        logger110.info(message, error42);
       } catch (_a19) {
       }
     },
     debug: (message, error42) => {
       try {
-        logger108.debug(message, error42);
+        logger110.debug(message, error42);
       } catch (_a19) {
       }
     }
   };
 }
-function scopeLogger(logger108, component) {
+function scopeLogger(logger110, component) {
   const prefix = `[${component}]`;
   return {
-    error: (message, error42) => logger108.error(`${prefix} ${message}`, error42),
-    warn: (message, error42) => logger108.warn(`${prefix} ${message}`, error42),
-    info: (message, error42) => logger108.info(`${prefix} ${message}`, error42),
-    debug: (message, error42) => logger108.debug(`${prefix} ${message}`, error42)
+    error: (message, error42) => logger110.error(`${prefix} ${message}`, error42),
+    warn: (message, error42) => logger110.warn(`${prefix} ${message}`, error42),
+    info: (message, error42) => logger110.info(`${prefix} ${message}`, error42),
+    debug: (message, error42) => logger110.debug(`${prefix} ${message}`, error42)
   };
 }
 function formatLogMessage(message, error42) {

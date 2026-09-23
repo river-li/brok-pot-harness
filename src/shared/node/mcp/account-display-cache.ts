@@ -1,3 +1,6 @@
+function isWithheldMcpDisplayServer(server) {
+  return server.disabledByTeamAdminPolicy || server.needsGrant === true;
+}
 function mergeUnresolvedAccountServers(display, cached2) {
   if (cached2 == null || !display.unresolvedServerIds?.length) return display;
   const unresolvedIds = new Set(display.unresolvedServerIds);

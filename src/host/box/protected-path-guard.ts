@@ -3,7 +3,7 @@ init_errors();
 var SandProtectedPathError = class extends SandDomainError {
   name = "SandProtectedPathError";
 };
-function refusalMessage(path31) {
+function refusalMessage2(path31) {
   return `Path is inside a protected host-only store and was refused: ${path31}`;
 }
 var MODEL_READABLE_STORE_TREES = /* @__PURE__ */ new Set([
@@ -26,14 +26,14 @@ async function assertPathOutsideProtectedRoots(protectedRoots, candidatePath, ba
   const resolved = (0, import_node_path108.isAbsolute)(candidatePath) ? (0, import_node_path108.resolve)(candidatePath) : (0, import_node_path108.resolve)(baseDir, candidatePath);
   for (const root of protectedRoots) {
     if (isPathWithin(root, resolved, { isInclusive: true }) && !isModelReadableStorePath(root, resolved)) {
-      throw new SandProtectedPathError(refusalMessage(candidatePath));
+      throw new SandProtectedPathError(refusalMessage2(candidatePath));
     }
   }
   const realResolved = await realpathNearestExisting(resolved);
   for (const root of protectedRoots) {
     const realRoot = await realpathNearestExisting(root);
     if (isPathWithin(realRoot, realResolved, { isInclusive: true }) && !isModelReadableStorePath(realRoot, realResolved)) {
-      throw new SandProtectedPathError(refusalMessage(candidatePath));
+      throw new SandProtectedPathError(refusalMessage2(candidatePath));
     }
   }
 }

@@ -11,11 +11,11 @@ function preprocessLenientNumber(val) {
     if (trimmed === "") {
       return val;
     }
-    const num = Number(trimmed);
-    if (Number.isNaN(num)) {
+    const num2 = Number(trimmed);
+    if (Number.isNaN(num2)) {
       return val;
     }
-    return num;
+    return num2;
   }
   return val;
 }

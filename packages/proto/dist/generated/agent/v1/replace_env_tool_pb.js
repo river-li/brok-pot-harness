@@ -1,19 +1,19 @@
-var __protoPackage67, __protoMessage364, ReplaceEnvMode, RepoCheckoutRefOverride, ReplaceEnvConfig, ReplaceEnvArgs, ReplaceEnvSuccess, ReplaceEnvFailure, ReplaceEnvResult, ReplaceEnvToolCall, ReplaceEnvToolCallDelta;
+var __protoPackage68, __protoMessage364, ReplaceEnvMode, RepoCheckoutRefOverride, ReplaceEnvConfig, ReplaceEnvArgs, ReplaceEnvSuccess, ReplaceEnvFailure, ReplaceEnvResult, ReplaceEnvToolCall, ReplaceEnvToolCallDelta;
 var init_replace_env_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/replace_env_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage67 = "agent.v1.";
+    __protoPackage68 = "agent.v1.";
     __protoMessage364 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage67;
+        return __protoPackage68;
       }
     };
-    ReplaceEnvMode = /* @__PURE__ */ enumType(proto3, __protoPackage67, "ReplaceEnvMode", [[0, "UNSPECIFIED"], [1, "CUSTOM"], [2, "CLEAN_SLATE"], [3, "DEFAULT"]], 1);
+    ReplaceEnvMode = /* @__PURE__ */ enumType(proto3, __protoPackage68, "ReplaceEnvMode", [[0, "UNSPECIFIED"], [1, "CUSTOM"], [2, "CLEAN_SLATE"], [3, "DEFAULT"]], 1);
     RepoCheckoutRefOverride = class _RepoCheckoutRefOverride extends __protoMessage364 {
       constructor(data) {
         super();

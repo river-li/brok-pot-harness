@@ -77,12 +77,14 @@ var SEND_TO_AGENT_DESCRIPTION_TAIL = `Get agent ids from your teammates list or 
 function describeSendToAgentTool(priorityRequired) {
   return (priorityRequired ? SEND_TO_AGENT_DESCRIPTION_PRIORITY_REQUIRED_HEAD : SEND_TO_AGENT_DESCRIPTION_CONTROL_HEAD) + SEND_TO_AGENT_DESCRIPTION_TAIL;
 }
-async function resolveSendToAgentImages(ctx, images, resolveImageSource) {
+async function resolveSendToAgentImages(ctx, images, deps) {
   const resolved = [];
   for (const image2 of images) {
-    const url2 = resolveImageSource != null ? await resolveImageSource(ctx, image2.url) : image2.url;
+    const url2 = deps.resolveImageSource != null ? await deps.resolveImageSource(ctx, image2.url) : image2.url;
     const alt = image2.alt != null && image2.alt.length > 0 ? image2.alt : void 0;
-    resolved.push({ url: url2, ...alt != null ? { alt } : {} });
+    const filePath = filePathFromFileUrl(url2);
+    const dimensions = deps.readMediaDimensions != null && filePath != null ? await deps.readMediaDimensions(filePath) : null;
+    resolved.push({ url: url2, ...alt != null ? { alt } : {}, ...dimensions });
   }
   return resolved;
 }
@@ -112,13 +114,29 @@ function createSendToAgentTool(deps) {
       if (self2 != null && args.target_id === self2) {
         return "You can't message yourself with SendToAgent. Use SendToUser to talk to the user, or pick a different target id.";
       }
-      const images = await resolveSendToAgentImages(ctx, args.images ?? [], d.resolveImageSource);
-      return d.sendToAgent(
-        args.target_id,
-        args.message,
-        images.length > 0 ? images : void 0,
-        args.priority
-      );
+      const images = await resolveSendToAgentImages(ctx, args.images ?? [], d);
+      const reportDelivery = bindMessageDeliveryReport(d.recordDelivery, ctx, d.toolCallId, {
+        destinationType: "agent"
+      });
+      let sent;
+      try {
+        sent = await d.sendToAgent(
+          args.target_id,
+          args.message,
+          images.length > 0 ? images : void 0,
+          args.priority
+        );
+      } catch (error42) {
+        reportDelivery.failed(error42);
+        throw error42;
+      }
+      if (typeof sent === "string") return sent;
+      reportDelivery.settled({
+        ...sent.destinationId === void 0 ? {} : { destinationId: sent.destinationId },
+        result: sent.delivery,
+        ...sent.failureCategory === void 0 ? {} : { failureCategory: sent.failureCategory }
+      });
+      return sent.ack;
     }
   });
 }
@@ -158,8 +176,8 @@ function createCreateAgentTool(management) {
         description: args.description,
         ...args.section_id === void 0 ? {} : { sectionId: args.section_id }
       });
-      const placement = args.section_id === void 0 ? "" : ` in sidebar section ${args.section_id}`;
-      return `Created agent "${created.name}" (id: ${created.id})${placement}.`;
+      const placement2 = args.section_id === void 0 ? "" : ` in sidebar section ${args.section_id}`;
+      return `Created agent "${created.name}" (id: ${created.id})${placement2}.`;
     }
   });
 }

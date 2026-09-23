@@ -1,4 +1,4 @@
-var import_node_path42 = __toESM(require("node:path"), 1);
+var import_node_path33 = __toESM(require("node:path"), 1);
 init_dist2();
 init_request_context_exec_pb();
 function automationToolNameToSnakeCase(name17) {
@@ -9,7 +9,7 @@ var AUTOMATION_MEMORY_DEFAULT_FILE = "MEMORIES.md";
 var AUTOMATION_MEMORY_INSTRUCTION_MARKER = "__CURSOR_AUTOMATION_MEMORY_INSTRUCTIONS__";
 var AUTOMATION_MEMORY_UNAVAILABLE_INSTRUCTION = "Automation memory is unavailable for this run. Do not attempt to read or write memory; continue with the available context and tools.";
 function getMountedPathModule(mountPath) {
-  return import_node_path42.default.win32.isAbsolute(mountPath) && !import_node_path42.default.posix.isAbsolute(mountPath) ? import_node_path42.default.win32 : import_node_path42.default.posix;
+  return import_node_path33.default.win32.isAbsolute(mountPath) && !import_node_path33.default.posix.isAbsolute(mountPath) ? import_node_path33.default.win32 : import_node_path33.default.posix;
 }
 function resolveAutomationMemoryDirectory(stores) {
   const automationStore = stores.find((store) => store.kind === MountedAgentStoreKind.PRINCIPAL && store.alias === AGENT_STORE_AUTOMATION_MOUNT_NAME);

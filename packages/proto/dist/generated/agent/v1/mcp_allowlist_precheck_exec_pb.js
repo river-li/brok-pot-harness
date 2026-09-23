@@ -1,16 +1,16 @@
-var __protoPackage107, __protoMessage3103, McpAllowlistPrecheckArgs, McpAllowlistPrecheckResult;
+var __protoPackage108, __protoMessage3103, McpAllowlistPrecheckArgs, McpAllowlistPrecheckResult;
 var init_mcp_allowlist_precheck_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/mcp_allowlist_precheck_exec_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage107 = "agent.v1.";
+    __protoPackage108 = "agent.v1.";
     __protoMessage3103 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage107;
+        return __protoPackage108;
       }
     };
     McpAllowlistPrecheckArgs = class _McpAllowlistPrecheckArgs extends __protoMessage3103 {

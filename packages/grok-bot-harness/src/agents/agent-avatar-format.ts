@@ -1,4 +1,4 @@
-var import_node_path31 = require("node:path");
+var import_node_path83 = require("node:path");
 var CANONICAL_AVATAR_FILENAME = "avatar.png";
 var CONVENTIONAL_AVATAR_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "gif", "svg"];
 var CONVENTIONAL_AVATAR_RE = new RegExp(
@@ -10,7 +10,7 @@ function isConventionalAvatarFilename(name17) {
 }
 function conventionalAvatarRank(name17) {
   if (name17 === CANONICAL_AVATAR_FILENAME) return -1;
-  const ext2 = (0, import_node_path31.extname)(name17).slice(1).toLowerCase();
+  const ext2 = (0, import_node_path83.extname)(name17).slice(1).toLowerCase();
   const index = CONVENTIONAL_AVATAR_EXTENSIONS.findIndex((extension3) => extension3 === ext2);
   return index === -1 ? CONVENTIONAL_AVATAR_EXTENSIONS.length : index;
 }

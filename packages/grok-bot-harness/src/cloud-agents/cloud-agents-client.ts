@@ -1,4 +1,6 @@
 var MAX_CLOUD_AGENT_FILES = 300;
+var PR_LOOKUP_PAGE_SIZE = 20;
+var PR_LOOKUP_MAX_TEAM_SCOPE_ATTEMPTS = 3;
 var SAVED_ENVIRONMENT_LIST_LIMIT = 500;
 var MAX_LISTED_SAVED_ENVIRONMENTS = 25;
 var REPOSITORIES_PAGE_LIMIT = 100;
@@ -64,6 +66,11 @@ function decodeRepositoriesCursor(args) {
     accessDenied: wire.d
   };
 }
+var CUSTOM_MODE_LISTING_TIMEOUT_MS = 1500;
+var customModeListingDeadline = createDeadlinePolicy({
+  name: "cloud-agent-custom-mode-listing",
+  timeoutMs: CUSTOM_MODE_LISTING_TIMEOUT_MS
+});
 function mapRunStatus(status) {
   switch (status) {
     case BackgroundComposerStatus.CREATING:
@@ -80,19 +87,38 @@ function mapRunStatus(status) {
       return "unknown";
   }
 }
-function resolvePrUrl(detailed) {
-  const composerPrUrl = detailed?.composer?.prUrl;
-  if (composerPrUrl && composerPrUrl.length > 0) {
-    return composerPrUrl;
+function hasPrUrl(pr2) {
+  return pr2.prUrl != null && pr2.prUrl.length > 0;
+}
+function groupPrs(detailed) {
+  const own = [];
+  const threadsInMembershipOrder = /* @__PURE__ */ new Map();
+  for (const pr2 of detailed?.prs ?? []) {
+    if (pr2.workerBcId) {
+      const thread = threadsInMembershipOrder.get(pr2.workerBcId) ?? [];
+      threadsInMembershipOrder.set(pr2.workerBcId, [...thread, pr2]);
+    } else {
+      own.push(pr2);
+    }
   }
-  return detailed?.prs?.find((pr2) => pr2.prUrl && pr2.prUrl.length > 0)?.prUrl ?? "";
+  const composerPrUrl = detailed?.composer?.prUrl;
+  return {
+    ownPrUrl: composerPrUrl && composerPrUrl.length > 0 ? composerPrUrl : own.find(hasPrUrl)?.prUrl,
+    own,
+    threadsNewestFirst: [...threadsInMembershipOrder.values()].reverse().flat()
+  };
+}
+function resolvePrUrl(detailed) {
+  const { ownPrUrl, threadsNewestFirst } = groupPrs(detailed);
+  return ownPrUrl ?? threadsNewestFirst.find(hasPrUrl)?.prUrl ?? "";
 }
 function resolveBranchName(detailed) {
   const composerBranch = detailed?.composer?.branchName;
   if (composerBranch && composerBranch.length > 0) {
     return composerBranch;
   }
-  return detailed?.prs?.find((pr2) => pr2.branchName && pr2.branchName.length > 0)?.branchName ?? "";
+  const { own, threadsNewestFirst } = groupPrs(detailed);
+  return [...own, ...threadsNewestFirst].find((pr2) => pr2.branchName.length > 0)?.branchName ?? "";
 }
 function resolveProjectMembership(composer) {
   return composer?.projectMetadata == null ? void 0 : { role: "root" };
@@ -119,6 +145,9 @@ function exchangeConversationReads(bcId) {
 }
 function refusesExchangeProjection(error42) {
   return error42 instanceof ConnectError && (error42.code === Code.Unimplemented || error42.code === Code.InvalidArgument);
+}
+function isRequestScopeMismatch(error42) {
+  return error42 instanceof ConnectError && error42.code === Code.PermissionDenied && /request scope/i.test(error42.rawMessage);
 }
 function classifyReadFailure(error42) {
   if (!(error42 instanceof ConnectError)) {
@@ -360,7 +389,7 @@ function buildWatchResult(bcId, status, detailed, report) {
   const composer = detailed?.composer;
   const summary = report?.trim();
   const name17 = composer?.name && composer.name.length > 0 ? { name: composer.name } : {};
-  const prUrl = (composer?.prUrl && composer.prUrl.length > 0 ? composer.prUrl : void 0) ?? detailed?.prs?.find((pr2) => pr2.prUrl && pr2.prUrl.length > 0)?.prUrl;
+  const { ownPrUrl: prUrl, threadsNewestFirst } = groupPrs(detailed);
   if (status === BackgroundComposerStatus.ERROR || status === BackgroundComposerStatus.EXPIRED) {
     const reason = status === BackgroundComposerStatus.EXPIRED ? "expired" : "errored";
     const lines3 = [`The Cursor agent (${bcId}) ${reason} before finishing.`];
@@ -378,8 +407,14 @@ function buildWatchResult(bcId, status, detailed, report) {
   if (branch) {
     lines2.push(`Branch: ${branch}`);
   }
+  const threadPrs = threadsNewestFirst.filter(hasPrUrl);
   if (prUrl) {
     lines2.push(`Pull request: ${prUrl}`);
+  } else if (threadPrs.length > 0) {
+    lines2.push(
+      "Pull requests (opened by this Project's threads, newest first; the coordinator has none of its own, so these are the run's pull requests):",
+      ...threadPrs.map((pr2) => `- ${pr2.prUrl} (thread ${pr2.workerBcId})`)
+    );
   } else {
     lines2.push(
       "No pull request link is available yet (the agent may have made no changes, or the PR is still being created)."
@@ -474,6 +509,80 @@ async function listSavedEnvironments(client) {
   );
   return response.environments;
 }
+var PRIVATE_WORKER_LIST_PAGE_SIZE = 100;
+var PRIVATE_WORKER_LIST_MAX_PAGES = 5;
+function nonEmpty2(value) {
+  const trimmed = value?.trim();
+  return trimmed !== void 0 && trimmed.length > 0 ? trimmed : void 0;
+}
+function toCloudAgentWorker(worker) {
+  const displayName2 = nonEmpty2(worker.displayName);
+  const nameLabel = nonEmpty2(
+    worker.labels.find((label) => label.key === "name" && label.value.trim().length > 0)?.value
+  );
+  const repos = worker.repos.map((repo) => `${repo.owner}/${repo.name}`);
+  if (repos.length === 0 && worker.repoOwner.length > 0 && worker.repoName.length > 0) {
+    repos.push(`${worker.repoOwner}/${worker.repoName}`);
+  }
+  return {
+    workerId: worker.workerId,
+    name: nameLabel ?? displayName2,
+    displayName: displayName2,
+    machine: nonEmpty2(worker.machineDisplayName),
+    inUse: worker.isInUse,
+    workspacePath: nonEmpty2(worker.workspaceRootPath),
+    repos
+  };
+}
+async function listConnectedPrivateWorkers(client) {
+  const workers = [];
+  let pageToken;
+  for (let page = 0; page < PRIVATE_WORKER_LIST_MAX_PAGES; page += 1) {
+    const response = await client.listPrivateWorkers(
+      new ListPrivateWorkersRequest({
+        statusFilter: PrivateWorkerStatusFilter.ALL,
+        listScope: PrivateWorkerListScope.PERSONAL,
+        pageSize: PRIVATE_WORKER_LIST_PAGE_SIZE,
+        pageToken
+      })
+    );
+    workers.push(...response.workers);
+    if (response.nextPageToken.length === 0) {
+      break;
+    }
+    pageToken = response.nextPageToken;
+  }
+  return workers.map(toCloudAgentWorker);
+}
+async function resolvePrivateWorkerMachine(client, environment) {
+  const requestedName = environment.name.trim();
+  if (requestedName.length === 0) {
+    throw new SandCloudAgentLaunchError(
+      "A private-worker machine environment requires a registered name."
+    );
+  }
+  const workers = await listConnectedPrivateWorkers(client);
+  const outcome = resolveCloudAgentMachineTarget(requestedName, workers);
+  switch (outcome.kind) {
+    case "matched":
+      return {
+        environment: { ...environment, name: cloudAgentWorkerNameLabel(outcome.worker) },
+        workerId: outcome.worker.workerId
+      };
+    case "not_found":
+      throw new SandCloudAgentLaunchError(
+        `No private worker of yours named '${requestedName}' is connected.${connectedWorkersNote(workers)}`
+      );
+    case "ambiguous":
+      throw new SandCloudAgentLaunchError(
+        `'${requestedName}' does not name one private worker.${ambiguousWorkersNote(outcome.matches)}`
+      );
+    default: {
+      const exhaustiveCheck = outcome;
+      return exhaustiveCheck;
+    }
+  }
+}
 async function resolvePrivateWorkerTeamId(deps, environment) {
   if (environment == null || environment.type === "cloud" || environment.type === "environment") {
     return void 0;
@@ -560,6 +669,76 @@ function infoRequest(bcId) {
     doNotThrowIfSetupNotFinished: true
   });
 }
+function passThroughCustomMode(requested) {
+  const name17 = customModeSlashName(requested);
+  if (name17 === void 0) {
+    throw new SandCloudAgentCustomModeError(
+      `Custom mode '${requested}' is not a skill's slash name (letters, digits, '-' and '_' only).`
+    );
+  }
+  return buildCloudAgentCustomModeMessageFields(name17);
+}
+function requireCustomModesEnabled(deps) {
+  if (deps.isCustomModeEnabled?.() === false) {
+    throw new SandCloudAgentCustomModeError(
+      "Custom modes are not enabled for this account yet. Omit custom_mode."
+    );
+  }
+}
+function defaultBranchListingSettlesUnknownMode(args) {
+  const listedSkills = args.candidates.length > 0;
+  const startsAtDefaultBranch = (args.gitRef?.trim().length ?? 0) === 0;
+  const hostedCheckout = args.environment?.type !== "machine";
+  return listedSkills && startsAtDefaultBranch && hostedCheckout;
+}
+async function listRepoSkillsBounded(dashboard, repoUrl, signal) {
+  const startedAt = Date.now();
+  try {
+    const listing = await customModeListingDeadline.run(
+      (deadlineSignal) => dashboard.getRepoSlashCommands(new GetRepoSlashCommandsRequest({ repoUrl }), {
+        timeoutMs: CUSTOM_MODE_LISTING_TIMEOUT_MS,
+        signal: deadlineSignal
+      }),
+      signal
+    );
+    return { kind: "listed", listing };
+  } catch (error42) {
+    const reason = error42 instanceof DeadlineExceededError ? "timeout" : "error";
+    process.stderr.write(
+      `sand.cloud_agent.custom_mode_listing_unavailable reason=${reason} elapsed_ms=${Date.now() - startedAt}
+`
+    );
+    return { kind: "unavailable", reason };
+  }
+}
+async function resolveLaunchCustomMode(dashboard, args) {
+  if (!canListRepoSkillsForCustomMode(args.repoUrl)) {
+    return passThroughCustomMode(args.requested);
+  }
+  const outcome = await listRepoSkillsBounded(dashboard, args.repoUrl, args.signal);
+  if (outcome.kind === "unavailable") {
+    return passThroughCustomMode(args.requested);
+  }
+  const candidates = cloudAgentCustomModeCandidates(outcome.listing);
+  const candidate = resolveCloudAgentCustomMode(args.requested, candidates);
+  if (candidate !== void 0) {
+    return buildCloudAgentCustomModeMessageFields(candidate);
+  }
+  if (defaultBranchListingSettlesUnknownMode({
+    candidates,
+    gitRef: args.gitRef,
+    environment: args.environment
+  })) {
+    throw new SandCloudAgentCustomModeError(
+      describeUnknownCloudAgentCustomMode({
+        requested: args.requested,
+        candidates,
+        scope: args.repoUrl
+      })
+    );
+  }
+  return passThroughCustomMode(args.requested);
+}
 function createCloudAgentsClient(deps) {
   const client = () => deps.getClient();
   async function launch(args) {
@@ -583,6 +762,8 @@ function createCloudAgentsClient(deps) {
       );
     }
     const savedEnvironment = args.environment?.type === "environment" ? await resolveSavedEnvironment(client(), args.environment) : void 0;
+    const machine = args.environment?.type === "machine" ? await resolvePrivateWorkerMachine(client(), args.environment) : void 0;
+    const environment = machine?.environment ?? args.environment;
     const newRepo = startFromScratch && deps.prepareNewRepo != null ? await deps.prepareNewRepo() : void 0;
     if (startFromScratch && newRepo == null) {
       throw new SandCloudAgentLaunchError("New Origin projects are not available in this client.");
@@ -591,18 +772,31 @@ function createCloudAgentsClient(deps) {
       resolveLaunchRepoReference(newRepo?.repoUrl ?? args.repoUrl, savedEnvironment),
       newRepo?.startingRef ?? args.startingRef
     );
-    const environmentFields = resolveCloudAgentEnvironmentFields(
-      repo.httpRepoUrl,
-      args.environment
-    );
-    const teamId = await resolvePrivateWorkerTeamId(deps, args.environment);
+    const environmentFields = resolveCloudAgentEnvironmentFields(repo.httpRepoUrl, environment);
+    const teamId = await resolvePrivateWorkerTeamId(deps, environment);
     const requestedModel = buildCloudAgentRequestedModel(args.modelId, args.modelParams);
+    const requestedCustomMode = args.customMode?.trim();
+    if (requestedCustomMode !== void 0 && requestedCustomMode.length > 0 && startFromScratch) {
+      throw new SandCloudAgentCustomModeError(
+        "custom_mode needs an existing repo with skills; a new repo has none. Omit custom_mode or launch on an existing repo."
+      );
+    }
+    if (requestedCustomMode !== void 0 && requestedCustomMode.length > 0) {
+      requireCustomModesEnabled(deps);
+    }
+    const customModeFields = requestedCustomMode !== void 0 && requestedCustomMode.length > 0 ? await resolveLaunchCustomMode(deps.getDashboardClient(), {
+      requested: requestedCustomMode,
+      repoUrl: repo.httpRepoUrl,
+      gitRef: repo.baseBranch,
+      environment
+    }) : void 0;
     const bcId = args.identity?.bcId ?? `bc-${crypto.randomUUID()}`;
     const title = args.title?.trim() || void 0;
     const conversationAction = buildCloudAgentConversationAction(
       buildCloudAgentUserMessage({
         prompt: args.prompt,
         mode: AgentMode.AGENT,
+        ...customModeFields,
         images: args.images,
         files: args.files,
         messageId: args.identity?.messageId
@@ -632,6 +826,7 @@ function createCloudAgentsClient(deps) {
       addInitialMessageToResponses: true,
       repositoryInfo: { pathEncryptionKey: "", shouldSyncIndex: false },
       ...environmentFields,
+      ...machine != null ? { selectedPrivateWorkerId: machine.workerId } : {},
       requestedModels: requestedModel != null ? [requestedModel] : [],
       skills: [],
       teamId,
@@ -657,6 +852,55 @@ function createCloudAgentsClient(deps) {
     );
     const includeArchived = args?.includeArchived ?? false;
     return response.composers.filter((composer) => includeArchived || !composer.isArchived).map(toCloudAgentSummary);
+  }
+  async function listPrComposersInCallerScope(prUrl) {
+    const request5 = (expectedScope) => new ListPrBackgroundComposersRequest({
+      prUrl,
+      expectedScope,
+      pageSize: PR_LOOKUP_PAGE_SIZE,
+      includeAgentKinds: true
+    });
+    let lastScopeMismatch;
+    try {
+      return await client().listPrBackgroundComposers(
+        request5(
+          new CloudAgentRequestScope({
+            scope: { case: "personal", value: new CloudAgentPersonalScope() }
+          })
+        )
+      );
+    } catch (error42) {
+      if (!isRequestScopeMismatch(error42)) throw error42;
+      lastScopeMismatch = error42;
+    }
+    const teams = await deps.getDashboardClient().getTeams(new GetTeamsRequest({ activeOnly: true }));
+    const teamIds = teams.teams.filter((team) => team.id > 0 && team.isDirectMember).map((team) => team.id).slice(0, PR_LOOKUP_MAX_TEAM_SCOPE_ATTEMPTS);
+    for (const teamId of teamIds) {
+      try {
+        return await client().listPrBackgroundComposers(
+          request5(new CloudAgentRequestScope({ scope: { case: "teamId", value: teamId } }))
+        );
+      } catch (error42) {
+        if (!isRequestScopeMismatch(error42)) throw error42;
+        lastScopeMismatch = error42;
+      }
+    }
+    throw lastScopeMismatch;
+  }
+  async function findByPr(prUrl) {
+    const trimmed = prUrl.trim();
+    const response = await listPrComposersInCallerScope(trimmed);
+    const coordinatorIds = new Set(response.coordinatorComposers.map((c) => c.bcId));
+    const toPrAgent = (composer) => ({
+      ...toCloudAgentSummary(composer),
+      ...composer.managerAgentId != null && composer.managerAgentId.length > 0 && coordinatorIds.has(composer.managerAgentId) ? { managerBcId: composer.managerAgentId } : {}
+    });
+    return {
+      prUrl: trimmed,
+      involved: response.involvedComposers.map(toPrAgent),
+      other: response.otherComposers.map(toPrAgent),
+      coordinators: response.coordinatorComposers.map(toCloudAgentSummary)
+    };
   }
   async function listRecentActivity(limit) {
     const requestedLimit = Number.isFinite(limit) ? Math.trunc(limit) : 1;
@@ -704,9 +948,15 @@ function createCloudAgentsClient(deps) {
     };
   }
   async function reply2(args) {
+    const requestedCustomMode = args.customMode?.trim();
+    if (requestedCustomMode !== void 0 && requestedCustomMode.length > 0) {
+      requireCustomModesEnabled(deps);
+    }
+    const customModeFields = requestedCustomMode !== void 0 && requestedCustomMode.length > 0 ? passThroughCustomMode(requestedCustomMode) : void 0;
     const followupConversationAction = buildCloudAgentConversationAction(
       buildCloudAgentUserMessage({
         prompt: args.prompt,
+        ...customModeFields,
         images: args.images,
         files: args.files,
         messageId: args.identity?.messageId
@@ -1083,6 +1333,7 @@ function createCloudAgentsClient(deps) {
   return {
     launch,
     list,
+    findByPr,
     listRecentActivity,
     get,
     reply: reply2,
@@ -1093,6 +1344,7 @@ function createCloudAgentsClient(deps) {
     listArtifacts,
     getArtifactBytes,
     listRepositories,
+    listWorkers: () => listConnectedPrivateWorkers(client()),
     getTranscriptDump,
     getConversation,
     getInfo,

@@ -88,10 +88,12 @@ var gatewayHostOnlyRpcEdge = declareRpcEdge("gateway-host-only", {
   methods: {
     readVoiceCallAgentContext: rpcMethod().args({ id: rpcString() }),
     resolveCredentialBrowserTarget: rpcMethod().args({
+      agentId: rpcOptional(rpcString()),
       item: credentialDirectoryItem,
       siteHint: rpcString()
     }),
     fillBrowserCredentialDirect: rpcMethod().args({
+      agentId: rpcOptional(rpcString()),
       item: credentialDirectoryItem,
       targetSite: rpcString(),
       targetWebSocketDebuggerUrl: rpcOptional(rpcString()),
@@ -163,7 +165,13 @@ var gatewayHostOnlyRpcEdge = declareRpcEdge("gateway-host-only", {
     setHttpProxyName: rpcMethod().args({
       name: rpcNullable(rpcString())
     }),
-    getHttpProxyName: rpcMethod().noArgs,
+    getNavigationTelemetryIdentity: rpcMethod().noArgs,
+    markAgentRequestStarted: rpcMethod().args({
+      requestId: rpcString()
+    }),
+    markAgentRequestEnded: rpcMethod().args({
+      requestId: rpcString()
+    }),
     syncUserSecrets: rpcMethod().args({
       revision: rpcString(),
       generation: rpcOptional(rpcNumber()),

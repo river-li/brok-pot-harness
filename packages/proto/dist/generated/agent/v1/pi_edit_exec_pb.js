@@ -1,17 +1,17 @@
-var __protoPackage111, __protoMessage3107, PiEditExecArgs, PiEditExecResult, PiEditExecSuccess, PiEditExecError, PiEditExecRejected;
+var __protoPackage112, __protoMessage3107, PiEditExecArgs, PiEditExecResult, PiEditExecSuccess, PiEditExecError, PiEditExecRejected;
 var init_pi_edit_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_edit_exec_pb.js"() {
     "use strict";
     init_esm();
     init_pi_edit_tool_pb();
     init_compact();
-    __protoPackage111 = "agent.v1.";
+    __protoPackage112 = "agent.v1.";
     __protoMessage3107 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage111;
+        return __protoPackage112;
       }
     };
     PiEditExecArgs = class _PiEditExecArgs extends __protoMessage3107 {

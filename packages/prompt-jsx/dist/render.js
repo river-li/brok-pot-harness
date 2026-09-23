@@ -380,9 +380,9 @@ ${content}
               if (firstNewline === -1) {
                 items.push(`${indentStr}${itemNumber}. ${combinedNested.trimStart()}`);
               } else {
-                const firstLine = combinedNested.substring(0, firstNewline);
+                const firstLine2 = combinedNested.substring(0, firstNewline);
                 const rest = combinedNested.substring(firstNewline + 1);
-                items.push(`${indentStr}${itemNumber}. ${firstLine.trimStart()}`);
+                items.push(`${indentStr}${itemNumber}. ${firstLine2.trimStart()}`);
                 const reindented = rest.split("\n").map((line) => {
                   const trimmed = line.trimStart();
                   return " ".repeat(totalIndent) + trimmed;

@@ -79,9 +79,9 @@ function getEffectiveShellEnvValue(env, key) {
   return env[key] ?? process.env[key];
 }
 var SHELL_ENV_NAME_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
-var CURSOR_SANDBOX_ENV_NAME_PATTERN = /CURSOR_SANDBOX/i;
+var CURSOR_SANDBOX_ENV_NAME_PATTERN2 = /CURSOR_SANDBOX/i;
 function isRequestScopedEnvKey(key) {
-  return SHELL_ENV_NAME_PATTERN.test(key) && !CURSOR_SANDBOX_ENV_NAME_PATTERN.test(key);
+  return SHELL_ENV_NAME_PATTERN.test(key) && !CURSOR_SANDBOX_ENV_NAME_PATTERN2.test(key);
 }
 function appendRequestScopedEnvRestore(env, requestScopedEnv) {
   const scopedKeys = Object.keys(requestScopedEnv).filter((key) => isRequestScopedEnvKey(key) && !REQUEST_SCOPED_SHELL_ENV_KEYS.includes(key));
@@ -168,6 +168,18 @@ var BaseShellCoreExecutor = class {
     this.projectDir = projectDir;
     this.shellOutputBackpressureOptions = shellOutputBackpressureOptions;
     this.extraEnvProvider = extraEnvProvider;
+    this.conversationExecutors = /* @__PURE__ */ new Map();
+  }
+  executorFor(conversationId) {
+    if (!conversationId) {
+      return this.executor;
+    }
+    let executor = this.conversationExecutors.get(conversationId);
+    if (executor === void 0) {
+      executor = this.executor.clone(this.workspacePath);
+      this.conversationExecutors.set(conversationId, executor);
+    }
+    return executor;
   }
   /**
    * Execute a shell command and yield events for stdout, stderr, trimming, and exit
@@ -177,7 +189,8 @@ var BaseShellCoreExecutor = class {
     try {
       const _span = __addDisposableResource20(env_1, createSpan(ctx.withName("ShellCoreExecutor.execute")), false);
       const startMonotonicMs = performance.now();
-      const workingDirectory = args.workingDirectory || await this.executor.getCwd();
+      const executor = this.executorFor(args.conversationId);
+      const workingDirectory = args.workingDirectory || await executor.getCwd();
       const resolvedWorkingDir = resolvePath(workingDirectory, this.workspacePath);
       let stdoutSize = 0;
       let stderrSize = 0;
@@ -232,7 +245,7 @@ var BaseShellCoreExecutor = class {
       }
       let dataSize = 0;
       let outputData = "";
-      for await (const event of this.executor.execute(ctx, args.command, {
+      for await (const event of executor.execute(ctx, args.command, {
         signal,
         workingDirectory: resolvedWorkingDir,
         env,
@@ -341,8 +354,8 @@ var BaseShellCoreExecutor = class {
   /**
    * Get the current working directory from the underlying executor
    */
-  async getCwd() {
-    return this.executor.getCwd();
+  async getCwd(conversationId) {
+    return this.executorFor(conversationId).getCwd();
   }
   /**
    * Get the workspace root path

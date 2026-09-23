@@ -7,7 +7,7 @@ var SettingsService = class {
   featureFlagOverrideListeners = /* @__PURE__ */ new Set();
   userTimeZoneListeners = /* @__PURE__ */ new Set();
   changeListeners = /* @__PURE__ */ new Set();
-  constructor(settingsPath = (0, import_node_path143.join)(getSandRootDir(), "settings.json")) {
+  constructor(settingsPath = (0, import_node_path144.join)(getSandRootDir(), "settings.json")) {
     this.store = new SandSettingsStore(settingsPath);
     this.settingsPath = settingsPath;
   }

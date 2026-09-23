@@ -1,19 +1,19 @@
-var __protoPackage25, __protoMessage322, TodoStatus, TodoItem, UpdateTodosToolCall, UpdateTodosArgs, UpdateTodosResult, UpdateTodosSuccess, UpdateTodosError, ReadTodosToolCall, ReadTodosArgs, ReadTodosResult, ReadTodosSuccess, ReadTodosError;
+var __protoPackage26, __protoMessage322, TodoStatus, TodoItem, UpdateTodosToolCall, UpdateTodosArgs, UpdateTodosResult, UpdateTodosSuccess, UpdateTodosError, ReadTodosToolCall, ReadTodosArgs, ReadTodosResult, ReadTodosSuccess, ReadTodosError;
 var init_todo_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/todo_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage25 = "agent.v1.";
+    __protoPackage26 = "agent.v1.";
     __protoMessage322 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage25;
+        return __protoPackage26;
       }
     };
-    TodoStatus = /* @__PURE__ */ enumType(proto3, __protoPackage25, "TodoStatus", [[0, "UNSPECIFIED"], [1, "PENDING"], [2, "IN_PROGRESS"], [3, "COMPLETED"], [4, "CANCELLED"]], 1);
+    TodoStatus = /* @__PURE__ */ enumType(proto3, __protoPackage26, "TodoStatus", [[0, "UNSPECIFIED"], [1, "PENDING"], [2, "IN_PROGRESS"], [3, "COMPLETED"], [4, "CANCELLED"]], 1);
     TodoItem = class _TodoItem extends __protoMessage322 {
       constructor(data) {
         super();

@@ -147,11 +147,18 @@ async function listTargetsOnPort(port, item, fetchImpl) {
     )
   } : result;
 }
-async function discoverMatchingTargets(item, reportFailure) {
+async function discoverMatchingTargets(item, windowIndex, reportFailure) {
+  const ownPort = CDP_PORT_BASE + windowIndex;
+  const own = await listTargetsOnPort(ownPort, item, fetch);
+  if (!own.ok) {
+    reportFailure("list-targets", own.error);
+    return [];
+  }
+  if (own.targets.length > 0) return own.targets;
   const monitorPorts = await discoverMonitorPorts(reportFailure);
   if (!monitorPorts.ok) return [];
   const targetGroups = await asyncMapValues(
-    [...monitorPorts.ports],
+    monitorPorts.ports.filter((port) => port !== ownPort),
     (port) => listTargetsOnPort(port, item, fetch),
     { max: 8 }
   );
@@ -160,6 +167,12 @@ async function discoverMatchingTargets(item, reportFailure) {
     reportFailure("list-targets", result.error);
     return [];
   });
+}
+function partitionTargetsByWindow(targets, windowIndex) {
+  const own = targets.filter(
+    (target) => browserWindowIndexOfCdpPort(target.browserCdpPort) === windowIndex
+  );
+  return { own, elsewhere: own.length < targets.length };
 }
 async function discoverPageTargets(reportFailure) {
   const monitorPorts = await discoverMonitorPorts(reportFailure);
@@ -345,16 +358,16 @@ function inspectBrowserDocument() {
   };
   const usernameScore = (input, positions) => {
     const tokens = autocompleteTokens(input);
-    let score = 0;
-    if (tokens.includes("username")) score += 1e3;
-    else if (tokens.includes("email")) score += 800;
-    if (input.type.toLowerCase() === "email") score += 500;
-    if (input.type.toLowerCase() === "tel") score += 250;
+    let score2 = 0;
+    if (tokens.includes("username")) score2 += 1e3;
+    else if (tokens.includes("email")) score2 += 800;
+    if (input.type.toLowerCase() === "email") score2 += 500;
+    if (input.type.toLowerCase() === "tel") score2 += 250;
     if (/(?:^|\W)(?:user(?:name|[\s_-]*id)?|e[\s_-]*mail|login)(?:\W|$)/i.test(descriptorFor(input))) {
-      score += 400;
+      score2 += 400;
     }
-    if (positions.inputIndex < positions.passwordIndex) score += 100;
-    return score;
+    if (positions.inputIndex < positions.passwordIndex) score2 += 100;
+    return score2;
   };
   const resolveUsername = (password, form, isEligible) => {
     const passwordIndex = password === null ? inputs.length : inputs.indexOf(password);
@@ -733,7 +746,7 @@ var BrowserCredentialFiller = class {
   constructor(options2) {
     const reportFailure = options2.reportFailure ?? (() => void 0);
     this.discoverPages = options2.discoverPages ?? (() => discoverPageTargets(reportFailure));
-    this.discoverTargets = options2.discoverTargets ?? ((item) => discoverMatchingTargets(item, reportFailure));
+    this.discoverTargets = options2.discoverTargets ?? ((item, windowIndex) => discoverMatchingTargets(item, windowIndex, reportFailure));
     const runInspection = options2.inspectTarget ?? ((target) => inspectTarget(target, reportFailure));
     this.inspectTarget = (target) => this.enqueueCdpOperation(target, () => runInspection(target));
     this.executeFill = (request5) => this.enqueueCdpOperation(request5, () => options2.executeFill(request5));
@@ -956,12 +969,27 @@ var BrowserCredentialFiller = class {
       detail: result.submitted ? `Filled the one-time code in ${host ?? "the verification page"}.` : `Filled the one-time code in ${host ?? "the verification page"} but did not submit it because the form does not POST. Submit the verification form to continue.`
     };
   }
-  async resolveTarget(item, siteHint) {
-    const targets = await this.discoverTargets(item);
-    if (targets.length === 0) {
+  async resolveTarget(item, siteHint, windowIndex) {
+    if (windowIndex === void 0) {
       return {
         ok: false,
-        detail: "No open HTTPS browser page matches this credential's 1Password hostname rules. Open the sign-in page and try again."
+        reason: "target-window-unknown",
+        detail: "This agent's own browser window could not be determined, so no browser page was matched. Open the sign-in page with computerUse in this agent's window and try again."
+      };
+    }
+    const { own: targets, elsewhere } = partitionTargetsByWindow(
+      await this.discoverTargets(item, windowIndex),
+      windowIndex
+    );
+    if (targets.length === 0) {
+      return elsewhere ? {
+        ok: false,
+        reason: "target-page-in-other-window",
+        detail: "No open HTTPS browser page in this agent's own browser window matches this credential's 1Password hostname rules. A matching page is open in another browser window, which this agent cannot use. Open the sign-in page in this agent's own window and try again."
+      } : {
+        ok: false,
+        reason: "target-no-matching-page",
+        detail: "No open HTTPS browser page in this agent's browser window matches this credential's 1Password hostname rules. Open the sign-in page and try again."
       };
     }
     const inspected = await asyncMapValues(
@@ -982,17 +1010,29 @@ var BrowserCredentialFiller = class {
       const unsubmittable = inspected.some(
         (candidate) => candidate.state?.formKind === "unsubmittable-login"
       );
-      let detail = "The matching page does not have a complete sign-in form with an eligible password field. Open the password step and try again.";
       if (onlySignupOrReset) {
-        detail = "The matching page is a sign-up or password-reset form, not a sign-in form. Open the sign-in page and try again.";
-      } else if (unsubmittable) {
-        detail = credentialFillFailureDetail({
-          kind: "refused",
-          reason: "form-not-submittable",
-          cleared: true
-        });
+        return {
+          ok: false,
+          reason: "signup-or-reset-page",
+          detail: "The matching page is a sign-up or password-reset form, not a sign-in form. Open the sign-in page and try again."
+        };
       }
-      return { ok: false, detail };
+      if (unsubmittable) {
+        return {
+          ok: false,
+          reason: "form-not-submittable",
+          detail: credentialFillFailureDetail({
+            kind: "refused",
+            reason: "form-not-submittable",
+            cleared: true
+          })
+        };
+      }
+      return {
+        ok: false,
+        reason: "target-no-login-form",
+        detail: "The matching page does not have a complete sign-in form with an eligible password field. Open the password step and try again."
+      };
     }
     const states = new Map(inspected.map((candidate) => [candidate.target, candidate.state]));
     const target = await chooseBrowserCredentialTarget(
@@ -1003,12 +1043,14 @@ var BrowserCredentialFiller = class {
     if (target == null) {
       return {
         ok: false,
-        detail: "More than one matching browser page is open. Focus the intended sign-in page and try again."
+        reason: "target-ambiguous",
+        detail: "More than one matching browser page is open in this agent's browser window. Focus the intended sign-in page and try again."
       };
     }
     const targetOrigin = trustedBrowserOrigin(target.url);
     return targetOrigin == null ? {
       ok: false,
+      reason: "target-invalid-origin",
       detail: "The matching browser page has an invalid address. Reopen the sign-in page and try again."
     } : {
       ok: true,
@@ -1016,45 +1058,45 @@ var BrowserCredentialFiller = class {
       targetWebSocketDebuggerUrl: target.webSocketDebuggerUrl
     };
   }
-  async fill(request5, event = "allow-once") {
-    const picked = await this.pickFillTarget(request5, event);
+  async fill(request5, windowIndex, event = "allow-once") {
+    const picked = await this.pickFillTarget(request5, windowIndex, event);
     return picked.ok ? await this.fillPickedTarget(picked.target, request5, event) : picked.result;
   }
-  async pickFillTarget(request5, event = "allow-once") {
+  async pickFillTarget(request5, windowIndex, event = "allow-once") {
+    const refuse2 = (reason, detail) => {
+      this.auditFill({
+        event,
+        request: request5,
+        outcome: "refused",
+        reason,
+        targetUrl: request5.targetSite
+      });
+      return { ok: false, result: { filled: false, detail, cleared: true } };
+    };
     const requestedOrigin = trustedBrowserOrigin(request5.targetSite);
     const requestedHost = hostFromSite(request5.targetSite);
     if (requestedOrigin == null || requestedHost == null) {
-      this.auditFill({
-        event,
-        request: request5,
-        outcome: "refused",
-        reason: "invalid-target-url",
-        targetUrl: request5.targetSite
-      });
-      return {
-        ok: false,
-        result: { filled: false, detail: "the requested login URL is invalid", cleared: true }
-      };
+      return refuse2("invalid-target-url", "the requested login URL is invalid");
     }
-    const targets = (await this.discoverTargets(request5.item)).filter(
-      (target2) => trustedBrowserOrigin(target2.url) === requestedOrigin && hostFromSite(target2.url) === requestedHost
+    if (windowIndex === void 0) {
+      return refuse2(
+        "window-unknown",
+        "this agent's own browser window could not be determined, so nothing was filled"
+      );
+    }
+    const atRequestedSite = (target2) => trustedBrowserOrigin(target2.url) === requestedOrigin && hostFromSite(target2.url) === requestedHost;
+    const { own: targets, elsewhere } = partitionTargetsByWindow(
+      (await this.discoverTargets(request5.item, windowIndex)).filter(atRequestedSite),
+      windowIndex
     );
     if (targets.length === 0) {
-      this.auditFill({
-        event,
-        request: request5,
-        outcome: "refused",
-        reason: "no-matching-page",
-        targetUrl: request5.targetSite
-      });
-      return {
-        ok: false,
-        result: {
-          filled: false,
-          detail: "no open HTTPS browser page at the requested host matches this item's 1Password website rules",
-          cleared: true
-        }
-      };
+      return elsewhere ? refuse2(
+        "page-in-other-window",
+        "the matching browser page is open in another browser window, not in this agent's own window; open the login page in this agent's window and try again"
+      ) : refuse2(
+        "no-matching-page",
+        "no open HTTPS browser page in this agent's browser window at the requested host matches this item's 1Password website rules"
+      );
     }
     const target = await chooseBrowserCredentialTarget(
       targets,
@@ -1062,21 +1104,10 @@ var BrowserCredentialFiller = class {
       this.inspectTarget
     );
     if (target == null) {
-      this.auditFill({
-        event,
-        request: request5,
-        outcome: "refused",
-        reason: "ambiguous-page",
-        targetUrl: request5.targetSite
-      });
-      return {
-        ok: false,
-        result: {
-          filled: false,
-          detail: "more than one matching browser page is open; focus the intended login page and try again",
-          cleared: true
-        }
-      };
+      return refuse2(
+        "ambiguous-page",
+        "more than one matching browser page is open in this agent's browser window; focus the intended login page and try again"
+      );
     }
     return { ok: true, target };
   }

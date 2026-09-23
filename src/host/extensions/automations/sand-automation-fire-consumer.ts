@@ -659,7 +659,7 @@ var SandAutomationFireConsumer = class {
   rejectFire({
     event,
     reason,
-    errorMessage: errorMessage6,
+    errorMessage: errorMessage7,
     trigger: trigger2
   }) {
     this.reportRejectedFire({
@@ -667,7 +667,7 @@ var SandAutomationFireConsumer = class {
       reason,
       ...trigger2 !== void 0 ? { trigger: trigger2 } : {}
     });
-    return { phase: "completed", status: "failed", errorMessage: errorMessage6 };
+    return { phase: "completed", status: "failed", errorMessage: errorMessage7 };
   }
   reportRejectedFire({
     event,

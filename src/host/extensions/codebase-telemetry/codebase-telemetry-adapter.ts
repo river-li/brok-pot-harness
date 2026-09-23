@@ -13,7 +13,7 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
     spawnCsnaps: spawnCsnaps2,
     uploadPolling,
     createUploadCredentials,
-    logger: logger108,
+    logger: logger110,
     signal
   }) {
     const { handle: csnaps, initialState } = await spawnCsnaps2({
@@ -72,7 +72,7 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
         initialState,
         uploadPolling,
         createUploadCredentials,
-        logger: logger108
+        logger: logger110
       });
     } catch (error42) {
       try {
@@ -93,16 +93,16 @@ var CsnapsCodebaseTelemetryAdapter = class _CsnapsCodebaseTelemetryAdapter {
     initialState,
     uploadPolling,
     createUploadCredentials,
-    logger: logger108
+    logger: logger110
   }) {
     this.csnaps = csnaps;
     this.authId = authId;
-    this.logger = logger108;
+    this.logger = logger110;
     this.uploadPollingPolicy = uploadPolling;
     this.createUploadCredentials = createUploadCredentials;
     [this.stateSender, this.state] = createWatchChannel({
       initialValue: toAdapterState(authId, initialState),
-      onSubscriberError: (error42) => logger108.error("Adapter state subscriber failed", error42)
+      onSubscriberError: (error42) => logger110.error("Adapter state subscriber failed", error42)
     });
     const terminalFailure = Promise.withResolvers();
     this.terminalFailure = terminalFailure.promise;

@@ -22,9 +22,9 @@ function indexOfFourCharTag(view, tag) {
   const t1 = tag.charCodeAt(1);
   const t2 = tag.charCodeAt(2);
   const t3 = tag.charCodeAt(3);
-  for (let at2 = 0; at2 + 4 <= view.byteLength; at2++) {
-    if (view.getUint8(at2) === t0 && view.getUint8(at2 + 1) === t1 && view.getUint8(at2 + 2) === t2 && view.getUint8(at2 + 3) === t3) {
-      return at2;
+  for (let at3 = 0; at3 + 4 <= view.byteLength; at3++) {
+    if (view.getUint8(at3) === t0 && view.getUint8(at3 + 1) === t1 && view.getUint8(at3 + 2) === t2 && view.getUint8(at3 + 3) === t3) {
+      return at3;
     }
   }
   return -1;
@@ -87,10 +87,10 @@ var HeicDimensions = class _HeicDimensions {
   static primaryItemId(view, pitm) {
     if (pitm.body + 6 > pitm.end) return null;
     const version3 = view.getUint8(pitm.body);
-    const at2 = pitm.body + 4;
-    if (version3 === 0) return view.getUint16(at2);
-    if (at2 + 4 > pitm.end) return null;
-    return view.getUint32(at2);
+    const at3 = pitm.body + 4;
+    if (version3 === 0) return view.getUint16(at3);
+    if (at3 + 4 > pitm.end) return null;
+    return view.getUint32(at3);
   }
   static itemPropertyIndices(view, ipma, itemId) {
     let offset = ipma.body;
@@ -203,7 +203,7 @@ function readWebpDimensions2(buffer) {
 function readWebpOrHeicDimensions(buffer) {
   return readWebpDimensions2(buffer) ?? HeicDimensions.read(buffer);
 }
-var PNG_SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
+var PNG_SIGNATURE2 = [137, 80, 78, 71, 13, 10, 26, 10];
 var JPEG_SEGMENTLESS_MARKERS = /* @__PURE__ */ new Set([
   1,
   208,
@@ -218,8 +218,8 @@ var JPEG_SEGMENTLESS_MARKERS = /* @__PURE__ */ new Set([
   217
 ]);
 var JPEG_NON_FRAME_MARKERS = /* @__PURE__ */ new Set([196, 200, 204]);
-function readPngDimensions(buffer) {
-  if (!PNG_SIGNATURE.every((byte, index) => buffer[index] === byte)) {
+function readPngDimensions2(buffer) {
+  if (!PNG_SIGNATURE2.every((byte, index) => buffer[index] === byte)) {
     return null;
   }
   const view = dataViewOf(buffer);
@@ -238,7 +238,7 @@ function readGifDimensions(buffer) {
     height: view.getUint16(8, true)
   });
 }
-function readJpegDimensions(buffer) {
+function readJpegDimensions2(buffer) {
   if (buffer.length < 2 || buffer[0] !== 255 || buffer[1] !== 216) return null;
   const view = dataViewOf(buffer);
   let offset = 2;
@@ -270,6 +270,82 @@ function readJpegDimensions(buffer) {
   }
   return null;
 }
+var EXIF_ORIENTATION_TAG = 274;
+var EXIF_SHORT = 3;
+function exifOrientationOf(view, tiffStart, tiffEnd) {
+  if (tiffStart + 8 > tiffEnd) return null;
+  const byteOrder = view.getUint16(tiffStart);
+  if (byteOrder !== 18761 && byteOrder !== 19789) return null;
+  const littleEndian = byteOrder === 18761;
+  const ifdOffset = view.getUint32(tiffStart + 4, littleEndian);
+  const ifd = tiffStart + ifdOffset;
+  if (ifd + 2 > tiffEnd) return null;
+  const entryCount = view.getUint16(ifd, littleEndian);
+  for (let index = 0; index < entryCount; index++) {
+    const entry = ifd + 2 + index * 12;
+    if (entry + 12 > tiffEnd) return null;
+    if (view.getUint16(entry, littleEndian) !== EXIF_ORIENTATION_TAG) continue;
+    if (view.getUint16(entry + 2, littleEndian) !== EXIF_SHORT) return null;
+    const orientation = view.getUint16(entry + 8, littleEndian);
+    return orientation >= 1 && orientation <= 8 ? orientation : null;
+  }
+  return null;
+}
+function readJpegOrientation(buffer) {
+  if (buffer.length < 2 || buffer[0] !== 255 || buffer[1] !== 216) return null;
+  const view = dataViewOf(buffer);
+  let offset = 2;
+  while (offset + 3 < buffer.length) {
+    if (view.getUint8(offset) !== 255) {
+      offset += 1;
+      continue;
+    }
+    const marker17 = view.getUint8(offset + 1);
+    if (marker17 === 255) {
+      offset += 1;
+      continue;
+    }
+    if (JPEG_SEGMENTLESS_MARKERS.has(marker17)) {
+      offset += 2;
+      continue;
+    }
+    if (marker17 === 218) return null;
+    const segmentLength = view.getUint16(offset + 2);
+    if (segmentLength < 2) return null;
+    const segmentEnd = Math.min(offset + 2 + segmentLength, buffer.length);
+    if (marker17 === 225 && segmentEnd - offset >= 10 && fourCharTag(view, offset + 4) === "Exif") {
+      return exifOrientationOf(view, offset + 10, segmentEnd);
+    }
+    offset += 2 + segmentLength;
+  }
+  return null;
+}
+function exifOrientationTransform(orientation) {
+  switch (orientation) {
+    case 2:
+      return { quarterTurns: 0, mirrorAxis: "vertical" };
+    case 3:
+      return { quarterTurns: 2, mirrorAxis: null };
+    case 4:
+      return { quarterTurns: 0, mirrorAxis: "horizontal" };
+    case 5:
+      return { quarterTurns: 1, mirrorAxis: "horizontal" };
+    case 6:
+      return { quarterTurns: 3, mirrorAxis: null };
+    case 7:
+      return { quarterTurns: 3, mirrorAxis: "horizontal" };
+    case 8:
+      return { quarterTurns: 1, mirrorAxis: null };
+    default:
+      return null;
+  }
+}
 function readImageFileDimensions(buffer) {
-  return readWebpOrHeicDimensions(buffer) ?? readPngDimensions(buffer) ?? readGifDimensions(buffer) ?? readJpegDimensions(buffer);
+  return readWebpOrHeicDimensions(buffer) ?? readPngDimensions2(buffer) ?? readGifDimensions(buffer) ?? readJpegDimensions2(buffer);
+}
+function readDisplayedImageDimensions(buffer) {
+  const stored = readImageFileDimensions(buffer);
+  if (stored == null) return null;
+  const orientation = readJpegOrientation(buffer);
+  return orientation != null && orientation >= 5 ? { width: stored.height, height: stored.width } : stored;
 }

@@ -1,16 +1,16 @@
-var __protoPackage64, __protoMessage361, CommunicateUpdateArgs, CommunicateUpdateSuccess, CommunicateUpdateError, CommunicateUpdateResult, CommunicateUpdateToolCall;
+var __protoPackage65, __protoMessage361, CommunicateUpdateArgs, CommunicateUpdateSuccess, CommunicateUpdateError, CommunicateUpdateResult, CommunicateUpdateToolCall;
 var init_communicate_update_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/communicate_update_tool_pb.js"() {
     "use strict";
     init_esm();
     init_compact();
-    __protoPackage64 = "agent.v1.";
+    __protoPackage65 = "agent.v1.";
     __protoMessage361 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage64;
+        return __protoPackage65;
       }
     };
     CommunicateUpdateArgs = class _CommunicateUpdateArgs extends __protoMessage361 {

@@ -1,17 +1,17 @@
-var __protoPackage115, __protoMessage3111, PiLsExecArgs, PiLsExecResult, PiLsExecSuccess, PiLsExecError;
+var __protoPackage116, __protoMessage3111, PiLsExecArgs, PiLsExecResult, PiLsExecSuccess, PiLsExecError;
 var init_pi_ls_exec_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/pi_ls_exec_pb.js"() {
     "use strict";
     init_esm();
     init_pi_common_pb();
     init_compact();
-    __protoPackage115 = "agent.v1.";
+    __protoPackage116 = "agent.v1.";
     __protoMessage3111 = class extends CompactMessage {
       static get runtime() {
         return defineOwn(this, "runtime", proto3);
       }
       static $p() {
-        return __protoPackage115;
+        return __protoPackage116;
       }
     };
     PiLsExecArgs = class _PiLsExecArgs extends __protoMessage3111 {

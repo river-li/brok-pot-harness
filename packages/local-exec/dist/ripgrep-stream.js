@@ -66,7 +66,7 @@ function getRipwalkThreadCount(env = process.env) {
       return override === 0 ? void 0 : override;
     }
   }
-  return Math.min(DEFAULT_MAX_RIPWALK_THREADS, (0, import_node_os10.availableParallelism)());
+  return Math.min(DEFAULT_MAX_RIPWALK_THREADS, (0, import_node_os9.availableParallelism)());
 }
 function spawnRipgrep(ctx, args, cwd, sandboxPolicy) {
   const proc = spawnInSandbox(getRipgrepBinaryPath(), args, { cwd }, sandboxPolicy);

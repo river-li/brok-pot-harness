@@ -387,7 +387,7 @@ function getStreamingDecoderConfig(file, format2, encodingHint) {
 }
 async function* decodeFileChunks(ctx, file, decoderConfig) {
   if (decoderConfig.kind === "strictUtf8") {
-    const decoder2 = new import_node_util7.TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
+    const decoder2 = new import_node_util8.TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
     const stream3 = (0, import_node_fs16.createReadStream)(file, {
       highWaterMark: STREAMING_READ_CHUNK_BYTES,
       signal: ctx.signal
@@ -559,13 +559,13 @@ async function readTextStreamingWithDecoder(ctx, file, args, decoderConfig) {
   for await (const rawChunk of decodeFileChunks(ctx, file, decoderConfig)) {
     const chunk = normalizeChunk(rawChunk);
     let start = 0;
-    let at2 = chunk.indexOf("\n", start);
-    while (at2 !== -1) {
-      pendingLine = appendToCappedLine(pendingLine, chunk.slice(start, at2));
+    let at3 = chunk.indexOf("\n", start);
+    while (at3 !== -1) {
+      pendingLine = appendToCappedLine(pendingLine, chunk.slice(start, at3));
       finishLine(pendingLine, true);
       pendingLine = { text: "", truncated: false };
-      start = at2 + 1;
-      at2 = chunk.indexOf("\n", start);
+      start = at3 + 1;
+      at3 = chunk.indexOf("\n", start);
     }
     if (start < chunk.length) {
       pendingLine = appendToCappedLine(pendingLine, chunk.slice(start));
