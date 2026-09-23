@@ -65,6 +65,84 @@ After triage, assign one `area:*` and one `priority:*` label. Choose priority fr
 separately. Apply `status:resolved` only after a fix or correction is verified. Closing any report requires task authorization that covers
 closure and a satisfied closure rule; explain the evidence, linked issue, or documented support boundary in the closing comment.
 
+## Read-only agent audit
+
+Run `npm run triage:dry-run` from the repository root. The routine reads at most 100 open issues and the 50 most recent
+workflow runs with `gh`; it fetches failed-job names for at most 10 runs and reads state for at most 10 linked fix PRs.
+It reads the support table in this page's
+companion [Features](Features.md) reference and the `Coverage still needed` section of [Verification](Verification.md).
+The review report is written to ignored `.runtime/triage/report.md`; `--output -` prints it instead. The routine has
+no issue creation, comment, label, close, or other GitHub write path.
+
+If a failed run needs a diagnostic signature, a maintainer may place already-sanitized excerpts in
+`.runtime/triage/sanitized-input` as `<run-id>.txt` files. Each file is read up to 64 KiB. The CLI accepts
+diagnostic inputs only from this dedicated ignored directory; do not place raw logs, application data,
+profiles, `.env`, or user workspaces. Only recognized exception classes and machine error codes enter a signature;
+the report never emits excerpts, issue titles or bodies, reporter identities, branch names, or raw URLs from input.
+It does show issue numbers and approved taxonomy labels. The issue and run counts are capped and the report says
+when a cap was reached.
+
+### Signatures and issue proposals
+
+A v1 failure signature is a SHA-256 digest of the normalized workflow name, failed job names, and any allow-listed
+diagnostic classes or codes. It omits run IDs, branches, and revisions so repeated occurrences can group together.
+Without a supplied diagnostic excerpt, the signature is only at workflow/job level and may group different errors in
+the same job; inspect the CI run before treating it as one bug. The report combines repeats into one candidate.
+
+An existing open issue is an exact duplicate only when its body contains the same
+`Triage failure signature: v1:sha256:<64 lowercase hex>` marker. Exact matches are linked by issue number in the
+report and suppress a new proposal. A likely text match against an unmarked report is withheld for a maintainer to
+compare. Similar symptoms alone do not establish a duplicate. The report never resolves conflicts between several
+issues with the same marker.
+
+New proposals are suggestions only, capped at 10 per report. Review the safe issue index and the original CI runs
+before filing through the bug form. Preserve the signature marker and add this neutral metadata to the issue body:
+
+```text
+Triage failure signature: v1:sha256:<64 lowercase hex>
+Reproduction status: Failed in CI; not checked outside CI
+Affected release/revision: <first failing commit>
+Last known good release/revision: <prior successful commit or Unknown>
+First known bad release/revision: <first failing commit>
+Fix PR: None
+Verification evidence: Pending
+```
+
+The package version shown by the report comes from the audited checkout and must be confirmed at the failing revision
+before it is treated as that build's version. For user reports, preserve their
+current body and labels; add a signature only after a maintainer establishes that it matches a specific failure.
+Never copy diagnostic excerpts or reporter prose into generated proposals. To link the regression through its
+lifecycle, keep the CI run URL and signature on the issue, fill `Fix PR` after a fix exists, and replace Pending with
+the exact passing check/run and verification layer only after that check succeeds. Mark reproduction as reproduced
+only after an authorized maintainer has reproduced or independently verified the behavior. A previous green CI run
+is a regression signal, not proof; compare the build profile, Host baseline, and environment.
+
+### Feature gaps and user reports
+
+The report includes the support statements from Features and every bullet under Verification's coverage-gap heading.
+During the weekly review, compare each statement with the linked open-issue index. Open the relevant issues to check
+their component, affected release, reproduction evidence, and verification layer; the generated report itself never
+copies user titles or bodies. Keep user reports unchanged while gathering this context.
+
+If a documented gap has no matching issue, prepare a feature or documentation proposal from the relevant source
+heading and statement. State the user-visible limitation, supported workflow affected (if any), and the smallest
+verification needed to establish progress. Use the issue #4 component map for its area label and select priority
+from dependency order after review. Do not mark an unverified support gap as a regression or infer priority from
+severity. Leave build profile, release, and reproduction as not applicable when they do not apply.
+
+### Cadence and ownership
+
+The rotating repository maintainer assigned to triage owns the report and each unassigned follow-up. Run the audit
+after a default-branch CI failure and once each week. Review stale open issues at 30 days without an update, and
+again every two weeks while they remain open. Ask the assignee or reporter for the next useful step; do not close or
+relabel reports automatically.
+
+Review merged-fix issues with pending verification at the next post-merge check and each weekly pass. Keep them open
+until the relevant verification layer passes and the evidence is recorded. For a suspected regression that breaks
+the documented default workflow, compare the last known good and first known bad revisions promptly, ideally within
+one business day. The maintainer records the reproduction outcome and affected release. These checks do not change
+issue labels or close issues; status changes remain an explicit maintainer action under the taxonomy above.
+
 ## Pre-merge review checklist
 
 - Parse all three form files as YAML and confirm each has a unique name, title prefix, valid `body`, unique field IDs, and only supported

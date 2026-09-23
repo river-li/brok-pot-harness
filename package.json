@@ -43,7 +43,9 @@
     "test:desktop-keychain": "node --test runtime/tests/local-keychain-contract.cjs",
     "test:desktop-keychain-live": "node runtime/tests/local-keychain-live.cjs",
     "docs:check": "python3 tools/export-wiki.py --check",
-    "docs:wiki": "python3 tools/export-wiki.py"
+    "docs:wiki": "python3 tools/export-wiki.py",
+    "triage:dry-run": "python3 tools/triage.py --dry-run",
+    "test:triage": "python3 -m unittest tools.test_triage"
   },
   "devDependencies": {
     "@types/node": "^26.6.1",
