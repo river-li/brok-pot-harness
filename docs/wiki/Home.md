@@ -28,6 +28,7 @@ Build your desktop agent workspace, connect a model, and turn a task into files 
 | [Package map](../../packages/README.md) | Find packages by responsibility and distinguish execution layers |
 | [Host extension map](../../src/host/extensions/README.md) | Registration, dependencies, and service boundaries |
 | [Development](Development.md) | Find the right files, rebuild, and choose tests |
+| [Agent maintainer playbook](Agent-Maintainer-Playbook.md) | Take an issue through investigation, verification, and review handoff |
 | [Source recovery](Source-Recovery.md) | Fragments, bundles, manifests, and strict TypeScript |
 | [Verification](Verification.md) | Existing evidence and workflows that need broader coverage |
 | [Publish this Wiki](Publishing.md) | Export and host the documentation on GitHub |

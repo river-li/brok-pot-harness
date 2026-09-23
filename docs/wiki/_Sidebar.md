@@ -20,6 +20,7 @@
 - [Package map](../../packages/README.md)
 - [Host extensions](../../src/host/extensions/README.md)
 - [Development](Development.md)
+- [Agent maintainer playbook](Agent-Maintainer-Playbook.md)
 - [Source recovery](Source-Recovery.md)
 - [Verification](Verification.md)
 - [Publish this Wiki](Publishing.md)

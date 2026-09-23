@@ -9,6 +9,8 @@ Contributions to tool adapters, setup, documentation, and tests are welcome.
 3. Read the root and scoped AGENTS.md files for recovery and maintenance constraints.
 4. Follow [Development](docs/wiki/Development.md) to edit, rebuild, and verify.
 
+For an issue from intake through a reviewable PR, use the [agent maintainer playbook](docs/wiki/Agent-Maintainer-Playbook.md).
+
 Recovered files depend on bundle scope and fragment markers. Local adapters are standalone strict TypeScript.
 Preserve package layout and original service paths, selecting local behavior through build configuration.
 See [Source recovery](docs/wiki/Source-Recovery.md).
