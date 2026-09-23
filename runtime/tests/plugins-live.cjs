@@ -9,6 +9,8 @@ const { randomUUID } = require("node:crypto");
 const { setTimeout: delay } = require("node:timers/promises");
 const { importLocalPlugin } = require("../../dist/local/plugin-files.js");
 const { desktopFixture } = require("./desktop-fixture.cjs");
+const BOX_IMAGE =
+  "public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8";
 
 (async () => {
   const run = process.env.GBH_TEST_RUN_ID || randomUUID();
@@ -90,6 +92,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
     started = false,
     startAttempted = false,
     failure,
+    cleanupFailure,
     skill,
     step = 0,
     reviews = 0,
@@ -340,7 +343,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
     ])
       args.push("-v", `${from}:${to}`);
     args.push(
-      "public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8",
+      BOX_IMAGE,
       "/opt/grokbot/box-entrypoint.sh",
     );
     startAttempted = true;
@@ -596,16 +599,22 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
         ? "PASS original desktop catalog, install form, persistent tool toggles, restart and uninstall."
         : "PASS local plugin catalog/install, secrets, real MCP and Skill execution, explicit target Bot, pinned updates, restart persistence, rollback/uninstall; original desktop install, tool toggles and uninstall.",
     );
+  } catch (error) {
+    failure ??= error;
   } finally {
     if (app) {
       await app
         .screenshot(path.join(temp, "plugins-final.png"))
         .catch(() => {});
-      fs.writeFileSync(
-        path.join(temp, "ui.txt"),
-        await app.evaluate("document.body.innerText").catch(() => ""),
-      );
-      await app.close();
+      try {
+        fs.writeFileSync(
+          path.join(temp, "ui.txt"),
+          await app.evaluate("document.body.innerText").catch(() => ""),
+        );
+        await app.close();
+      } catch (error) {
+        cleanupFailure ??= error;
+      }
     }
     if (startAttempted) {
       if (started) {
@@ -616,20 +625,50 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       try {
         docker("rm", "-f", container);
       } catch {}
+      if (process.env.GBH_TEST_CI_CLEANUP === "1") {
+        try {
+          docker(
+            "run",
+            "--rm",
+            "--pull=never",
+            "--platform",
+            "linux/amd64",
+            "-v",
+            `${temp}:/cleanup`,
+            "--entrypoint",
+            "/bin/bash",
+            BOX_IMAGE,
+            "-c",
+            "shopt -s dotglob nullglob; rm -rf /cleanup/*",
+          );
+        } catch (error) {
+          cleanupFailure ??= error;
+        }
+      }
     }
-    fs.writeFileSync(
-      path.join(temp, "observations.json"),
-      JSON.stringify(observations, null, 2),
-    );
+    try {
+      fs.writeFileSync(
+        path.join(temp, "observations.json"),
+        JSON.stringify(observations, null, 2),
+      );
+    } catch (error) {
+      cleanupFailure ??= error;
+    }
     server.closeAllConnections();
     await new Promise((r) => server.close(r));
     if (process.env.GBH_TEST_CI_CLEANUP === "1") {
-      fs.rmSync(temp, { recursive: true, force: true });
-      console.log("Removed this CI run's private plugin test data and diagnostics.");
+      try {
+        fs.rmSync(temp, { recursive: true, force: true });
+        console.log("Removed this CI run's private plugin test data and diagnostics.");
+      } catch (error) {
+        cleanupFailure ??= error;
+      }
     } else {
       console.log("Plugin diagnostics:", temp);
     }
   }
+  if (failure) throw failure;
+  if (cleanupFailure) throw cleanupFailure;
 })().catch((error) => {
   console.error(error.stack);
   process.exitCode = 1;

@@ -58,7 +58,9 @@ jobs:
         run: docker info
 
       - name: Pull the pinned private-test Box image
-        run: docker pull --platform linux/amd64 public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8
+        env:
+          GBH_TEST_IMAGE: public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8
+        run: docker pull --platform linux/amd64 "$GBH_TEST_IMAGE"
 
       - name: Validate Compose without starting services
         env:
@@ -78,8 +80,15 @@ jobs:
         if: always()
         env:
           GBH_TEST_RUN_ID: docker-${{ github.run_id }}-${{ github.run_attempt }}
+          GBH_TEST_IMAGE: public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8
         run: |
           docker rm -f "grokbot-plugin-test-${GBH_TEST_RUN_ID}" >/dev/null 2>&1 || true
+          test_dir=".runtime/tests/plugins-${GBH_TEST_RUN_ID}"
+          if [[ -d "$test_dir" ]]; then
+            docker run --rm --pull=never --platform linux/amd64 \
+              --volume "$PWD/$test_dir:/cleanup" --entrypoint /bin/bash \
+              "$GBH_TEST_IMAGE" -c 'shopt -s dotglob nullglob; rm -rf /cleanup/*'
+          fi
           rm -rf -- ".runtime/tests/plugins-${GBH_TEST_RUN_ID}"
 
       - name: Write concise fixture integration evidence
