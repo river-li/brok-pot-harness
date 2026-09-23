@@ -28,6 +28,8 @@ Build your desktop agent workspace, connect a model, and turn a task into files 
 | [Package map](../../packages/README.md) | Find packages by responsibility and distinguish execution layers |
 | [Host extension map](../../src/host/extensions/README.md) | Registration, dependencies, and service boundaries |
 | [Development](Development.md) | Find the right files, rebuild, and choose tests |
+| [Maintainer workflow](Agent-Maintainer-Playbook.md) | Take one useful issue through implementation, independent review, and merge |
+| [CI](CI.md) | See the required offline checks and what they establish |
 | [Source recovery](Source-Recovery.md) | Fragments, bundles, manifests, and strict TypeScript |
 | [Verification](Verification.md) | Existing evidence and workflows that need broader coverage |
 | [Issue triage](Issue-Triage.md) | Reproducible issue reports, label meanings, and triage rules |

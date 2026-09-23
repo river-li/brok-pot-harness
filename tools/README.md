@@ -11,6 +11,7 @@ Release recovery and documentation publishing utilities. Daily runtime builds us
 | [export-wiki.py](export-wiki.py) | Validate English documentation and export native GitHub Wiki pages |
 | [test_wiki.py](test_wiki.py) | Wiki navigation, media, source links, and validation tests |
 | [check-guidance.py](check-guidance.py) | Ensure README-declared maintained source components have scoped AGENTS.md guidance |
+| [tools/ci](ci/) | Run required offline PR gates and syntax checks; covered by test_ci_gates.py |
 
 ## Clean source recovery
 

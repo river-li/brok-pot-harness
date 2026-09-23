@@ -2,6 +2,8 @@
 
 Read [Architecture](Architecture.md), then the target directory's README and AGENTS.md.
 Build from the repository root. Do not initialize new npm packages inside recovered directories or rearrange their layout.
+For issue ownership, main-based worktrees, PR review, and merge, follow the
+[maintainer workflow](Agent-Maintainer-Playbook.md).
 
 ## Find the code for your change
 
@@ -19,6 +21,7 @@ Build from the repository root. Do not initialize new npm packages inside recove
 | Recognition or synthesis | [speech](../../runtime/speech/README.md) | Matching `npm run test:transcription` / `npm run test:tts`, offline models, desktop audio |
 | Bundle reconstruction and mappings | [Source recovery](Source-Recovery.md) | Recovery and runtime-build tests |
 | Documentation and Wiki export | [Publishing](Publishing.md), [exporter](../../tools/export-wiki.py) | `docs:check`, exporter tests, preview |
+| Project maintenance and PR checks | [Maintainer workflow](Agent-Maintainer-Playbook.md), [CI](CI.md) | npm run ci:pre-pr locally; CI runs the same selected offline gates |
 
 ## Edit and rebuild
 
@@ -76,7 +79,7 @@ see [Publishing](Publishing.md).
 
 ## Commits and resources
 
-Group changes by feature, keeping documentation, branding, and runtime logic reviewable separately.
+Group changes by outcome. Include the documentation and tests that explain or protect an implementation in its PR; leave unrelated cleanup out.
 Preserve upstream metadata, licenses, and provenance hashes. Do not reformat third-party resources.
 Do not commit `.env`, `.runtime`, `dist`, `node_modules`, model keys, Gateway tokens, or user sessions.
 
