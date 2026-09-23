@@ -24,8 +24,9 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 
 The [CI tiers guide](../../docs/wiki/CI.md) defines the check required on every pull request and which extra lane applies
 by changed area. The required job runs offline contracts on every PR. It does not need Docker, secrets, provider requests,
-or a desktop. Optional Docker integration uses a private fixture-model Box and desktop profile; optional real-provider
-verification makes an external request; optional macOS desktop verification runs natively on a dedicated Mac runner.
+or a desktop. Optional Docker integration uses a private fixture-model Box for local plugin/MCP/Agent paths without
+launching Electron; optional real-provider verification makes an external request; optional macOS desktop verification
+runs the desktop UI natively on a dedicated Mac runner.
 
 CI artifacts contain only check outcomes, commit, build profile, and verification layer. They exclude test logs,
 credentials, prompts, transcripts, responses, and screenshots. Fixture/model checks are not reported as live-provider

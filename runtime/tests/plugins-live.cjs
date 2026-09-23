@@ -506,141 +506,147 @@ const BOX_IMAGE =
         "Uninstall keeps imported resources",
       );
     }
-    app = await desktopFixture({
-      root,
-      profile: path.join(temp, "profile"),
-      base,
-      token,
-    });
-    await app.waitFor(() => app.click("Plugins"), 20000, "Plugins navigation");
-    await app.waitFor(
-      () =>
-        app.evaluate(
-          `document.body.innerText.includes('Local recovery proof')`,
-        ),
-      15000,
-      "local plugin catalog",
-    );
-    await app.screenshot(path.join(temp, "plugins-catalog.png"));
-    await app.waitFor(() => app.click("Add"), 10000, "plugin Add button");
-    await app.waitFor(
-      () => app.evaluate(`!!document.querySelector('input[type="password"]')`),
-      10000,
-      "plugin variable form",
-    );
-    await app.evaluate(
-      `(() => {const input=document.querySelector('input[type="password"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'configured-two');input.dispatchEvent(new Event('input',{bubbles:true}));})()`,
-    );
-    await app.waitFor(
-      () => app.click("Add Local recovery proof"),
-      10000,
-      "submit plugin variables",
-    );
-    await waitFor(
-      async () =>
-        (await call("getEffectiveMcpPlugins")).some(
-          (x) => x.pluginId === pluginId && x.isEnabled,
-        ),
-      "desktop installation",
-    );
-    await app.waitFor(
-      () => app.evaluate(`!document.querySelector('input[type="password"]')`),
-      10000,
-      "completed install form",
-    );
-    await delay(1000);
-    await app.waitFor(
-      () => app.click("Your plugins"),
-      10000,
-      "installed plugins",
-    );
-    await app.waitFor(
-      () => app.click("Open Local recovery proof"),
-      10000,
-      "plugin details",
-    );
-    await app.waitFor(
-      () => app.click("1 of 1 enabled"),
-      10000,
-      "MCP tool controls",
-    );
-    assert.equal(
+    if (process.env.GBH_TEST_SKIP_DESKTOP_UI !== "1") {
+      app = await desktopFixture({
+        root,
+        profile: path.join(temp, "profile"),
+        base,
+        token,
+      });
+      await app.waitFor(() => app.click("Plugins"), 20000, "Plugins navigation");
+      await app.waitFor(
+        () =>
+          app.evaluate(
+            `document.body.innerText.includes('Local recovery proof')`,
+          ),
+        15000,
+        "local plugin catalog",
+      );
+      await app.screenshot(path.join(temp, "plugins-catalog.png"));
+      await app.waitFor(() => app.click("Add"), 10000, "plugin Add button");
+      await app.waitFor(
+        () => app.evaluate(`!!document.querySelector('input[type="password"]')`),
+        10000,
+        "plugin variable form",
+      );
       await app.evaluate(
-        `!!document.querySelector('button[aria-label="Copy link to this plugin"]')`,
-      ),
-      false,
-    );
-    const uiServerId = (await call("getMcpState")).servers[0].id;
-    await app.waitFor(
-      () => app.click("Disable Echo"),
-      10000,
-      "disable MCP tool",
-    );
-    await waitFor(
-      async () =>
+        `(() => {const input=document.querySelector('input[type="password"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,'configured-two');input.dispatchEvent(new Event('input',{bubbles:true}));})()`,
+      );
+      await app.waitFor(
+        () => app.click("Add Local recovery proof"),
+        10000,
+        "submit plugin variables",
+      );
+      await waitFor(
+        async () =>
+          (await call("getEffectiveMcpPlugins")).some(
+            (x) => x.pluginId === pluginId && x.isEnabled,
+          ),
+        "desktop installation",
+      );
+      await app.waitFor(
+        () => app.evaluate(`!document.querySelector('input[type="password"]')`),
+        10000,
+        "completed install form",
+      );
+      await delay(1000);
+      await app.waitFor(
+        () => app.click("Your plugins"),
+        10000,
+        "installed plugins",
+      );
+      await app.waitFor(
+        () => app.click("Open Local recovery proof"),
+        10000,
+        "plugin details",
+      );
+      await app.waitFor(
+        () => app.click("1 of 1 enabled"),
+        10000,
+        "MCP tool controls",
+      );
+      assert.equal(
+        await app.evaluate(
+          `!!document.querySelector('button[aria-label="Copy link to this plugin"]')`,
+        ),
+        false,
+      );
+      const uiServerId = (await call("getMcpState")).servers[0].id;
+      await app.waitFor(
+        () => app.click("Disable Echo"),
+        10000,
+        "disable MCP tool",
+      );
+      await waitFor(
+        async () =>
+          (await call("listMcpServerTools", { serverId: uiServerId })).find(
+            (t) => t.name === "echo",
+          )?.isDisabled === true,
+        "stored tool preference",
+      );
+      await app.close();
+      app = undefined;
+      app = await desktopFixture({
+        root,
+        profile: path.join(temp, "profile"),
+        base,
+        token,
+      });
+      await app.waitFor(
+        () => app.click("Plugins"),
+        20000,
+        "restarted Plugins navigation",
+      );
+      await app.waitFor(
+        () => app.click("Your plugins"),
+        10000,
+        "restarted installed plugins",
+      );
+      await app.waitFor(
+        () => app.click("Open Local recovery proof"),
+        10000,
+        "restarted plugin details",
+      );
+      await app.waitFor(
+        () => app.click("0 of 1 enabled"),
+        10000,
+        "persisted tool controls",
+      );
+      await delay(2000);
+      assert.equal(
         (await call("listMcpServerTools", { serverId: uiServerId })).find(
           (t) => t.name === "echo",
-        )?.isDisabled === true,
-      "stored tool preference",
-    );
-    await app.close();
-    app = undefined;
-    app = await desktopFixture({
-      root,
-      profile: path.join(temp, "profile"),
-      base,
-      token,
-    });
-    await app.waitFor(
-      () => app.click("Plugins"),
-      20000,
-      "restarted Plugins navigation",
-    );
-    await app.waitFor(
-      () => app.click("Your plugins"),
-      10000,
-      "restarted installed plugins",
-    );
-    await app.waitFor(
-      () => app.click("Open Local recovery proof"),
-      10000,
-      "restarted plugin details",
-    );
-    await app.waitFor(
-      () => app.click("0 of 1 enabled"),
-      10000,
-      "persisted tool controls",
-    );
-    await delay(2000);
-    assert.equal(
-      (await call("listMcpServerTools", { serverId: uiServerId })).find(
-        (t) => t.name === "echo",
-      )?.isDisabled,
-      true,
-    );
-    await app.waitFor(() => app.click("Enable Echo"), 10000, "enable MCP tool");
-    await app.waitFor(() => app.click("Uninstall"), 10000, "uninstall plugin");
-    await waitFor(
-      async () =>
-        !(await call("getEffectiveMcpPlugins")).some(
-          (x) => x.pluginId === pluginId,
-        ),
-      "desktop uninstall",
-    );
-    assert.equal((await call("getMcpState")).servers.length, 0);
-    await app.waitFor(
-      () =>
-        app.evaluate(
-          `document.body.innerText.includes('Removed Local recovery proof')`,
-        ),
-      10000,
-      "uninstall confirmation",
-    );
-    console.log(
-      process.env.GROKBOT_TEST_PLUGINS_UI_ONLY === "1"
-        ? "PASS original desktop catalog, install form, persistent tool toggles, restart and uninstall."
-        : "PASS local plugin catalog/install, secrets, real MCP and Skill execution, explicit target Bot, pinned updates, restart persistence, rollback/uninstall; original desktop install, tool toggles and uninstall.",
-    );
+        )?.isDisabled,
+        true,
+      );
+      await app.waitFor(() => app.click("Enable Echo"), 10000, "enable MCP tool");
+      await app.waitFor(() => app.click("Uninstall"), 10000, "uninstall plugin");
+      await waitFor(
+        async () =>
+          !(await call("getEffectiveMcpPlugins")).some(
+            (x) => x.pluginId === pluginId,
+          ),
+        "desktop uninstall",
+      );
+      assert.equal((await call("getMcpState")).servers.length, 0);
+      await app.waitFor(
+        () =>
+          app.evaluate(
+            `document.body.innerText.includes('Removed Local recovery proof')`,
+          ),
+        10000,
+        "uninstall confirmation",
+      );
+      console.log(
+        process.env.GROKBOT_TEST_PLUGINS_UI_ONLY === "1"
+          ? "PASS original desktop catalog, install form, persistent tool toggles, restart and uninstall."
+          : "PASS local plugin catalog/install, secrets, real MCP and Skill execution, explicit target Bot, pinned updates, restart persistence, rollback/uninstall; original desktop install, tool toggles and uninstall.",
+      );
+    } else {
+      console.log(
+        "PASS private Box plugin/MCP/fixture-Agent integration; native desktop UI is assigned to the macOS lane.",
+      );
+    }
   } catch (error) {
     failure ??= error;
   } finally {

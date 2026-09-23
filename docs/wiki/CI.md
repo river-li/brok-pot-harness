@@ -55,14 +55,15 @@ self-hosted desktop capacity or make billable/network requests on every pull req
 ## Optional isolated Docker integration
 
 The path-triggered Docker workflow validates Compose with non-secret sentinel values without starting its services,
-builds the `local` profile, prepares the desktop, and runs `runtime/tests/plugins-live.cjs` with a fixture Responses
-server. That test creates a run-specific Box container, data directory, and desktop profile. CI gives the run a unique
-ID; cleanup targets only that run's container and test directory. Its diagnostics are removed in CI and are never
-uploaded. The Ubuntu runner is discarded after the job.
+builds the `local` profile, and runs `runtime/tests/plugins-live.cjs` with a fixture Responses server and
+`GBH_TEST_SKIP_DESKTOP_UI=1`. That test creates a run-specific Box container and data directory, then exercises the
+local plugin, MCP, and Agent paths without launching Electron. CI gives the run a unique ID; cleanup targets only that
+run's container and test directory. Its diagnostics are removed in CI and are never uploaded. The Ubuntu runner is
+discarded after the job. Native desktop UI verification is kept in the separate optional macOS lane.
 
-This exercises plugin installation, a real local MCP process, fixture-driven Agent behavior, and desktop interactions in
-an isolated integration environment. It does not validate a live model provider. Its status is optional and does not
-replace the required offline gate.
+This exercises plugin catalog and install/update/uninstall APIs, a real local MCP process, and fixture-driven Agent
+behavior in an isolated integration environment. It does not launch Electron or validate a live model provider. Its
+status is optional and does not replace the required offline gate.
 
 ## Optional real-provider verification
 

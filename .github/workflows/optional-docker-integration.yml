@@ -45,14 +45,8 @@ jobs:
       - name: Install root dependencies from lockfile
         run: npm ci --no-audit --no-fund
 
-      - name: Install desktop dependencies from lockfile
-        run: npm ci --prefix runtime --no-audit --no-fund
-
       - name: Build the local profile
         run: npm run build -- --profile local
-
-      - name: Prepare desktop test artifact
-        run: npm run prepare:desktop -- --profile local
 
       - name: Confirm isolated Docker runtime is available
         run: docker info
@@ -68,13 +62,14 @@ jobs:
           GROKBOT_GATEWAY_TOKEN: ci-local-gateway-sentinel
         run: docker compose -f runtime/compose.yaml config --quiet
 
-      - name: Run private Box and desktop plugin integration
+      - name: Run private Box plugin and fixture-model integration
         env:
           GBH_TEST_RUN_ID: docker-${{ github.run_id }}-${{ github.run_attempt }}
           GBH_TEST_CI_CLEANUP: "1"
+          GBH_TEST_SKIP_DESKTOP_UI: "1"
         run: |
           echo "DOCKER_INTEGRATION_STARTED=true" >> "$GITHUB_ENV"
-          xvfb-run -a --server-args="-screen 0 1440x1000x24" node runtime/tests/plugins-live.cjs
+          node runtime/tests/plugins-live.cjs
 
       - name: Clean up only this run's Box container and test directory
         if: always()
@@ -106,14 +101,15 @@ jobs:
 
           - Result: **${JOB_RESULT}**
           - Build profile: \`local\`
-          - Verification layer: **fixture-model + private Box container + private desktop profile**
+          - Verification layer: **fixture-model + private Box container + local MCP/Agent integration**
           - Checked-out commit: \`${checked_out_sha}\`
           - Pull request base commit: \`${PR_BASE_SHA:-not applicable}\`
           - Pull request head commit: \`${PR_HEAD_SHA:-not applicable}\`
           - Fixture integration script: **${INTEGRATION_STARTED:-not started}**
           - External inference: **not attempted**. This pass does not establish provider availability or quality.
           - Contents: gate metadata only; no prompts, transcripts, screenshots, logs, credentials, or environment values.
-          - Cleanup: the test owns and removes its Box container; the GitHub-hosted runner is discarded after the job.
+          - Native desktop UI: **not run**; the optional macOS lane covers it.
+          - Cleanup: the test owns and removes its Box container and private data; the GitHub-hosted runner is discarded after the job.
           EOF
 
       - name: Upload concise Docker integration evidence
