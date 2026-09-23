@@ -8,9 +8,11 @@ maintained Electron assets, and runtime tests. See the
 ## Edit boundaries and invariants
 
 - `manage.cjs` manages only this repository's `gbh-local` Compose project. It
-  requires a local Host build and creates state under `.runtime`; do not change
-  the pinned default sandbox image, read-only Host mounts, service ports, or
-  test-owned cleanup while changing launch behavior.
+  requires a local Host build and creates state under `.runtime`. Preserve the
+  current pinned sandbox image, read-only Host mounts, and service ports for
+  unrelated changes. A scoped launcher/config task may intentionally revise a
+  default or add opt-in behavior; document the intended behavior and verify
+  the affected Compose path.
 - `desktop.cjs` validates the prepared desktop profile, keeps local/original
   data directories separate, injects local Gateway settings only for local,
   and removes `LITELLM_API_KEY` from the Electron environment. Preserve these

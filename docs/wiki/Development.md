@@ -55,10 +55,12 @@ README and direct implementation files under `src/`, `packages/`, `dune/`,
 `AGENTS.md`; nested helper folders without a component README inherit the
 nearest component's rules. `npm run docs:check` checks every README-declared
 source component for a direct guide, so a new component README without scoped
-maintenance instructions fails the check. Update the checker's source suffix
-list if a new implementation language is introduced. Vendor/release baselines,
-generated output, and documentation/asset-only directories are intentionally
-outside this source-component audit.
+maintenance instructions fails the check. The walk prunes installed
+`node_modules`, `.runtime`, and language/tool caches before entering them.
+Maintained `dist/` source is still checked; the build's generated outputs live
+outside the audited source roots. Update the checker's source suffix list if a
+new implementation language is introduced. Vendor/release baselines and
+documentation/asset-only directories are outside this source-component audit.
 
 ## Documentation conventions
 

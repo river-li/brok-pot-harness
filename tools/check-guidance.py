@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Require scoped maintenance guidance for declared source components."""
 
-from pathlib import Path
+import os
 import sys
+from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,37 +19,58 @@ SOURCE_SUFFIXES = {
     ".html",
     ".css",
 }
+PRUNED_DIR_NAMES = {
+    "node_modules",
+    ".runtime",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".cache",
+    "coverage",
+}
 
 
-def has_direct_source(directory: Path) -> bool:
-    return any(
-        path.is_file() and path.suffix in SOURCE_SUFFIXES
-        for path in directory.iterdir()
-    )
+def audit(root: Path):
+    """Return README-declared source components and those missing a guide.
 
-
-def main() -> int:
+    Prune installed dependencies and generated runtime/cache directories in
+    os.walk's top-down directory list, before the walker descends into them.
+    Do not prune ``dist``: retained emitted JavaScript there is maintained
+    source in this repository.
+    """
+    root = root.resolve()
     components = []
     missing = []
     for root_name in SOURCE_ROOTS:
-        root = ROOT / root_name
-        if not root.is_dir():
+        source_root = root / root_name
+        if not source_root.is_dir():
             continue
-        for readme in sorted(root.rglob("README.md")):
-            directory = readme.parent
-            if not has_direct_source(directory):
+        for current, directories, filenames in os.walk(source_root, topdown=True):
+            directories[:] = sorted(
+                name for name in directories if name not in PRUNED_DIR_NAMES
+            )
+            if "README.md" not in filenames:
                 continue
-            components.append(directory.relative_to(ROOT))
+            if not any(Path(name).suffix in SOURCE_SUFFIXES for name in filenames):
+                continue
+            directory = Path(current)
+            relative = directory.relative_to(root)
+            components.append(relative)
             if not (directory / "AGENTS.md").is_file():
-                missing.append(directory.relative_to(ROOT))
+                missing.append(relative)
+    return components, missing
 
+
+def main(root: Path = ROOT) -> int:
+    components, missing = audit(root)
     if missing:
         print("Maintained source component README(s) without direct AGENTS.md:")
         for directory in missing:
             print(f"  {directory}")
         print(
-            "Add component-specific maintenance guidance or remove the README "
-            "if this is not an owned source boundary."
+            "Add component-specific maintenance guidance for each owned "
+            "source component."
         )
         return 1
 

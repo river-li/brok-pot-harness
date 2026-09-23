@@ -15,7 +15,9 @@ inputs before changing the exporter.
 
 `check-guidance.py` defines source components as directories under its listed
 maintained-source roots that have both a README and direct implementation
-files. Keep the current source suffix list accurate when this repository adds a
-language, and add direct `AGENTS.md` guidance when a component README is added.
-Do not expand the check to generated outputs, release baselines, vendor assets,
-or documentation-only folders.
+files. It prunes `node_modules`, `.runtime`, and known language/tool caches
+before descending. Do not blanket-ignore `dist`: recovered emitted files in
+package `dist/` directories are maintained source here. Keep the source suffix
+list accurate when this repository adds a language, and add direct `AGENTS.md`
+guidance when a component README is added. Do not expand the check to release
+baselines, vendor assets, or documentation-only folders.

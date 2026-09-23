@@ -32,6 +32,8 @@ npm run docs:wiki
 
 `docs:check` validates Wiki links and checks source component guidance under
 `src/`, `packages/`, `dune/`, `reconstruction/`, `runtime/`, and `tools/`.
+It prunes installed dependencies and generated/cache directories before
+walking; maintained package `dist/` source remains in scope.
 The [Development guide](../docs/wiki/Development.md#scoped-guidance-coverage)
 defines which directories the check treats as components.
 
