@@ -40,7 +40,7 @@ A source package is a maintenance boundary, not necessarily a separate process.
 | [dune](../../dune/README.md) | Extension lifecycle, RPC, stores, scheduling | `src/host-extensions/` |
 | [runtime](../../runtime/README.md) | Build, launchers, desktop resources, services, tests | `manage.cjs`, `desktop.cjs`, `tools/` |
 | [reconstruction](../../reconstruction/README.md) | Bundle-specific variants and standalone resources | Mappings in the root manifest |
-| [tools](../../tools/README.md) | Release bundle recovery and documentation export | `recover-native.py`, `export-wiki.py` |
+| [tools](../../tools/README.md) | Release bundle recovery, source navigation, change impact, and documentation export | `recovery-impact.py`, `recover-native.py`, `export-wiki.py` |
 | [vendor](../../vendor/README.md) / `sand-host` | Dependencies, desktop assets, immutable release baseline | Resource provenance manifests |
 
 ## Similar names, different layers

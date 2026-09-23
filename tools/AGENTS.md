@@ -1,6 +1,8 @@
 # tools maintenance
 
-Source extraction and clean native-layout export. Recovery does not overwrite maintained sources.
+Source extraction, clean native-layout export, and read-only navigation. Recovery does not overwrite maintained sources.
+
+`recovery-impact.py` is read-only: it maps manifest paths, symbols, and release-byte offsets; reports Git diff impact; and checks fragment/baseline integrity. Do not make it rewrite recovered files or generated output. Keep static-import detection advisory and non-failing because it is lexical, not a parser.
 
 Follow the repository AGENTS.md. Keep generated output under .runtime and preserve local/original profiles.
 Use only this repository’s gbh-local services and test-owned processes. Never
