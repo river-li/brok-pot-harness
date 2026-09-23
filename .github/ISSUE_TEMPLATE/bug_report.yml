@@ -1,0 +1,130 @@
+name: Bug report
+description: Report broken behavior with the context needed to reproduce and verify it.
+title: "[Bug]: "
+labels:
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share only the minimum sanitized details needed to explain the problem. Never include API keys,
+        access/session/gateway tokens, raw environment dumps (including `.env`), private conversation data,
+        private files, or unredacted personal paths. Do not attach raw logs or environment files.
+
+  - type: dropdown
+    id: build-profile
+    attributes:
+      label: Build profile
+      description: Select the profile used when the problem occurred.
+      options:
+        - local
+        - original
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: project-release
+    attributes:
+      label: Project release or revision
+      description: Give the release tag, branch/commit, or package version. Enter Unknown if unavailable.
+      placeholder: "Example: 0.0.0-reconstructed, release tag, or commit"
+    validations:
+      required: true
+
+  - type: input
+    id: host-baseline
+    attributes:
+      label: Host baseline in the affected build
+      description: The current source snapshot is bfe1879. Verify the baseline used by the affected build and enter it, or enter Unknown; the snapshot value alone is not evidence.
+      placeholder: "bfe1879 if verified, another baseline, or Unknown"
+    validations:
+      required: true
+
+  - type: input
+    id: desktop-version
+    attributes:
+      label: Desktop version
+      description: If known, include the app version and/or Electron version.
+      placeholder: "Example: app version, Electron version, or Unknown"
+    validations:
+      required: false
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform and architecture
+      description: Include operating system/version and CPU architecture; enter Unknown if unavailable.
+      placeholder: "Example: Intel macOS 14.x"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Desktop
+        - Host / Gateway
+        - Harness / Agent
+        - Box / runtime / build profile
+        - Integrations (MCP, plugins, speech, or search)
+        - Source recovery
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Reproduction steps
+      description: List the shortest steps that reproduce the problem. Say if it happens every time.
+      placeholder: |
+        1.
+        2.
+        3.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What should happen after those steps?
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual behavior
+      description: What happened instead? Include the first visible error and when it occurs.
+      render: text
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verification-layer
+    attributes:
+      label: Verification layer
+      description: Choose the strongest check already completed. The [verification reference](https://github.com/river-li/brok-pot-harness/blob/main/docs/wiki/Verification.md) describes these layers.
+      options:
+        - Not run / not sure
+        - Static or contract check
+        - Runtime service integration
+        - Real model request
+        - Desktop flow
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: sanitized-diagnostics
+    attributes:
+      label: Sanitized diagnostics (optional)
+      description: Paste only the few redacted error or log lines that help. Do not paste keys, tokens, raw environments, private conversation content, or attach raw logs.
+      render: text
+    validations:
+      required: false

@@ -1,0 +1,121 @@
+name: Documentation report
+description: Report incorrect, missing, or unclear project documentation.
+title: "[Docs]: "
+labels:
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share only the minimum sanitized details needed to identify the documentation issue. Never include API keys,
+        access/session/gateway tokens, raw environment dumps (including `.env`), private conversation data,
+        private files, or unredacted personal paths. Do not attach raw logs or environment files.
+
+  - type: dropdown
+    id: build-profile
+    attributes:
+      label: Build profile
+      description: Select the profile related to the documentation, or choose Not applicable / Not sure.
+      options:
+        - local
+        - original
+        - Not applicable
+        - Not sure
+    validations:
+      required: false
+
+  - type: input
+    id: project-release
+    attributes:
+      label: Project release or revision
+      description: If relevant, give the release tag, branch/commit, or package version.
+      placeholder: "Example: 0.0.0-reconstructed, release tag, or commit"
+    validations:
+      required: false
+
+  - type: input
+    id: host-baseline
+    attributes:
+      label: Host baseline (if relevant)
+      description: Optional. The current source snapshot is bfe1879; report a baseline only if it applies to the documentation issue.
+      placeholder: "Baseline, or Not applicable"
+    validations:
+      required: false
+
+  - type: input
+    id: desktop-version
+    attributes:
+      label: Desktop version
+      description: If relevant and known, include the app version and/or Electron version.
+      placeholder: "Example: app version, Electron version, or Not applicable"
+    validations:
+      required: false
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform and architecture
+      description: If relevant, include operating system/version and CPU architecture.
+      placeholder: "Example: Intel macOS 14.x, or Not applicable"
+    validations:
+      required: false
+
+  - type: input
+    id: component
+    attributes:
+      label: Documentation component or page
+      description: Give the page path and section heading, if known.
+      placeholder: "Example: docs/wiki/Build-Guide.md — Install dependencies"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to find the problem
+      description: Say how to reach the page or follow the documented steps that expose the issue.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Current text or behavior
+      description: Quote only the short, relevant text or state what is missing or unclear.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected correction
+      description: Explain what accurate, useful information should be provided.
+      render: text
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verification-layer
+    attributes:
+      label: Verification layer
+      description: Choose the check that applies to the documentation change.
+      options:
+        - Not run / not sure
+        - Documentation link review
+        - npm run docs:check
+        - Wiki export review
+        - Runtime behavior check
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: sanitized-evidence
+    attributes:
+      label: Sanitized evidence (optional)
+      description: Include only a minimal redacted error or excerpt if it helps. Never include keys, tokens, raw environments, private conversation content, or attach raw logs.
+      render: text
+    validations:
+      required: false

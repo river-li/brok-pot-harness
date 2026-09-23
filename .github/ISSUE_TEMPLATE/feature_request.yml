@@ -1,0 +1,128 @@
+name: Feature request
+description: Propose a concrete improvement with its use case and acceptance evidence.
+title: "[Feature]: "
+labels:
+  - status:needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share only the minimum sanitized details needed to explain the use case. Never include API keys,
+        access/session/gateway tokens, raw environment dumps (including `.env`), private conversation data,
+        private files, or unredacted personal paths. Do not attach raw logs or environment files.
+
+  - type: dropdown
+    id: build-profile
+    attributes:
+      label: Build profile
+      description: Select the profile where this would be useful, or choose Not applicable / Not sure.
+      options:
+        - local
+        - original
+        - Not applicable
+        - Not sure
+    validations:
+      required: false
+
+  - type: input
+    id: project-release
+    attributes:
+      label: Project release or revision
+      description: If relevant, give the release tag, branch/commit, or package version.
+      placeholder: "Example: 0.0.0-reconstructed, release tag, or commit"
+    validations:
+      required: false
+
+  - type: input
+    id: host-baseline
+    attributes:
+      label: Host baseline (if relevant)
+      description: Optional. The current source snapshot is bfe1879; report a baseline only if it applies to this request.
+      placeholder: "Baseline, or Not applicable"
+    validations:
+      required: false
+
+  - type: input
+    id: desktop-version
+    attributes:
+      label: Desktop version
+      description: If relevant and known, include the app version and/or Electron version.
+      placeholder: "Example: app version, Electron version, or Not applicable"
+    validations:
+      required: false
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform and architecture
+      description: If relevant, include operating system/version and CPU architecture.
+      placeholder: "Example: Intel macOS 14.x, or Not applicable"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Desktop
+        - Host / Gateway
+        - Harness / Agent
+        - Box / runtime / build profile
+        - Integrations (MCP, plugins, speech, or search)
+        - Source recovery
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Use case and current workflow
+      description: Describe who needs this and the steps or situation where it would help.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current behavior or limitation
+      description: Explain what happens today or the workaround you use.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: requested-outcome
+    attributes:
+      label: Expected outcome
+      description: State the concrete behavior that would meet this request.
+      render: text
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verification-layer
+    attributes:
+      label: Verification layer
+      description: What evidence should show the change works?
+      options:
+        - Not sure; ask maintainers
+        - Static or contract check
+        - Runtime service integration
+        - Real model request
+        - Desktop flow
+        - Documentation and link check
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: sanitized-evidence
+    attributes:
+      label: Sanitized evidence (optional)
+      description: Share only redacted details that clarify the use case. Never include keys, tokens, raw environments, private conversation content, or attach raw logs.
+      render: text
+    validations:
+      required: false

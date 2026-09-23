@@ -1,0 +1,62 @@
+# Source of truth for the issue labels documented in docs/wiki/Issue-Triage.md.
+# GitHub issue forms do not create labels; keep repository label settings in sync.
+labels:
+  - name: area:desktop
+    color: "1D76DB"
+    description: Desktop UI and packaging
+  - name: area:host
+    color: "0052CC"
+    description: Host, Gateway, and extensions
+  - name: area:harness
+    color: "5319E7"
+    description: Harness, Agent, and tool orchestration
+  - name: area:runtime
+    color: "006B75"
+    description: Box, services, builds, and profiles
+  - name: area:integrations
+    color: "0E8A16"
+    description: MCP, plugins, speech, and search
+  - name: area:documentation
+    color: "0075CA"
+    description: README, Wiki, and module documentation
+  - name: area:source-recovery
+    color: "D4C5F9"
+    description: Recovered fragments, bundles, and manifests
+  - name: area:other
+    color: "C5DEF5"
+    description: Other or not yet classified component
+
+  - name: priority:high
+    color: "B60205"
+    description: "Do early: enables maintenance/CI prerequisites or unblocks dependent work; order, not severity"
+  - name: priority:normal
+    color: "FBCA04"
+    description: "Routine order: actionable work without a dependency or time-sensitive reason to go first"
+  - name: priority:low
+    color: "C2E0C6"
+    description: Defer safely while enabling or normal work takes precedence; useful but non-blocking
+
+  - name: status:needs-triage
+    color: "EDEDED"
+    description: New issue awaiting maintainer review
+  - name: status:needs-info
+    color: "D4C5F9"
+    description: Reporter information is needed before assessment
+  - name: status:confirmed
+    color: "0E8A16"
+    description: Authorized maintainer reproduced or verified the reported behavior
+  - name: status:in-progress
+    color: "1D76DB"
+    description: An authorized maintainer or agent is actively working on the issue
+  - name: status:blocked
+    color: "BFDADC"
+    description: Progress depends on an identified external change or decision
+  - name: status:duplicate
+    color: "CFD3D7"
+    description: Same issue is tracked in a linked canonical issue
+  - name: status:unsupported
+    color: "F9D0C4"
+    description: Affected environment or workflow is outside documented support
+  - name: status:resolved
+    color: "2DA44E"
+    description: Authorized maintainer verified the requested fix or documentation correction
