@@ -226,6 +226,33 @@ const BOX_IMAGE =
       timeout: 300000,
       stdio: ["ignore", "pipe", "pipe"],
     }).trim();
+  const importPlugin = () => {
+    if (!started) return importLocalPlugin(data, source, "local-proof");
+    const importedInBox = JSON.parse(
+      docker(
+        "exec",
+        "--user",
+        "0",
+        container,
+        "/exec-daemon/node",
+        "-e",
+        [
+          'const { importLocalPlugin } = require("/workspace/plugin-files.js");',
+          'const imported = importLocalPlugin("/home/box/sand-data", "/workspace/plugin-source", "local-proof");',
+          "process.stdout.write(JSON.stringify(imported));",
+        ].join("\n"),
+      ),
+    );
+    return {
+      ...importedInBox,
+      path: path.join(
+        data,
+        "plugins/local",
+        importedInBox.slug,
+        importedInBox.digest,
+      ),
+    };
+  };
   const call = async (method, args = {}, status = 200) => {
     const r = await fetch(`${base}/api/${method}`, {
       method: "POST",
@@ -336,6 +363,11 @@ const BOX_IMAGE =
       [path.join(root, ".runtime/build/deps"), "/home/box/deps:ro"],
       [data, "/home/box/sand-data"],
       [path.join(temp, "workspace"), "/workspace"],
+      [source, "/workspace/plugin-source:ro"],
+      [
+        path.join(root, "dist/local/plugin-files.js"),
+        "/workspace/plugin-files.js:ro",
+      ],
       [
         path.join(root, "runtime/box-entrypoint.sh"),
         "/opt/grokbot/box-entrypoint.sh:ro",
@@ -407,7 +439,7 @@ const BOX_IMAGE =
       await runAgent();
       assert.ok(reviews > 0);
       fs.writeFileSync(path.join(source, "resource.txt"), "resource-two");
-      const newer = importLocalPlugin(data, source, "local-proof");
+      const newer = importPlugin();
       assert.notEqual(newer.digest, imported.digest);
       assert.equal(
         JSON.parse(fs.readFileSync(statePath)).plugins[pluginId].digest,
@@ -438,7 +470,7 @@ const BOX_IMAGE =
         path.join(source, ".cursor-plugin/plugin.json"),
         "{ invalid",
       );
-      importLocalPlugin(data, source, "local-proof");
+      importPlugin();
       await call(
         "updateMcpPluginInstall",
         { pluginId, values: { PLUGIN_TOKEN: "configured-one" } },
@@ -453,7 +485,7 @@ const BOX_IMAGE =
         path.join(source, ".cursor-plugin/plugin.json"),
         JSON.stringify(manifest),
       );
-      importLocalPlugin(data, source, "local-proof");
+      importPlugin();
       await call("uninstallMcpPlugin", { pluginId });
       await sync();
       assert.equal((await call("getMcpState")).servers.length, 0);
