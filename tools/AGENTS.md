@@ -13,6 +13,12 @@ include credentials or user data, and reject unowned output directories. Export
 commands must not push or alter remotes. Test page/asset/source links and invalid
 inputs before changing the exporter.
 
+CI helpers and their regression tests live under tools/ci and tools/test_ci_gates.py.
+Keep the required runner offline, preserve its source/base checkout reporting, and
+include the scoped-guide audit through npm run docs:check. Follow the
+[maintainer workflow](../docs/wiki/Agent-Maintainer-Playbook.md) for issue ownership,
+main-based PRs, and independent review.
+
 `check-guidance.py` defines source components as directories under its listed
 maintained-source roots that have both a README and direct implementation
 files. It prunes `node_modules`, `.runtime`, and known language/tool caches

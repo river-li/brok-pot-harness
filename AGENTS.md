@@ -47,4 +47,6 @@ README files describe module responsibilities and operational use. Scoped
 AGENTS files add maintenance constraints at component boundaries. Update both
 when their directory's build, ownership or interfaces change. Prefer focused
 patches, matching nearby naming/style. Run git diff --check before handing off.
-Do not commit or publish unless requested. Existing user changes must be preserved.
+For issue triage through independent review and merge, follow the
+[maintainer workflow](docs/wiki/Agent-Maintainer-Playbook.md). Preserve
+existing user changes. Do not commit or publish unless requested.

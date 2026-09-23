@@ -5,6 +5,10 @@ the build profile, project release or revision, Host baseline, desktop version, 
 steps, expected and actual behavior, and verification layer. Bug reports require the fields needed to reproduce and assess the behavior;
 fields that may not apply to feature and documentation requests are optional or allow “Not applicable.”
 
+Once a report is actionable, follow the [maintainer workflow](Agent-Maintainer-Playbook.md) to group related work into one delivery,
+assign an owner, start from current main, and carry the change through independent review. This page remains the reference for forms,
+labels, privacy, and triage decisions.
+
 The current source snapshot uses Host baseline **bfe1879**. For a bug report, verify and enter the baseline used by the affected build;
 this repository value is not evidence about another build. Feature and documentation reports may leave contextual fields blank when they
 do not apply. The project package version is `0.0.0-reconstructed`; report the actual release tag, branch, or commit when it differs. The
