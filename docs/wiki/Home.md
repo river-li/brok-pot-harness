@@ -30,6 +30,7 @@ Build your desktop agent workspace, connect a model, and turn a task into files 
 | [Development](Development.md) | Find the right files, rebuild, and choose tests |
 | [Source recovery](Source-Recovery.md) | Fragments, bundles, manifests, and strict TypeScript |
 | [Verification](Verification.md) | Existing evidence and workflows that need broader coverage |
+| [Issue triage](Issue-Triage.md) | Reproducible issue reports, label meanings, and triage rules |
 | [Publish this Wiki](Publishing.md) | Export and host the documentation on GitHub |
 
 New users: start with **Installation → Configuration → Sandbox → Permissions**.

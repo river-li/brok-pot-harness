@@ -33,5 +33,7 @@ such as `README.zh.md`. Use generic domains, model placeholders, and paths inste
 Add new pages to the [documentation navigation](docs/wiki/Home.md), then run `npm run docs:check`.
 See [Wiki publishing](docs/wiki/Publishing.md) for hosted documentation.
 
-Issue reports should include platform, profile, reproduction steps, and errors with secrets removed.
-Retain upstream licensing/provenance notices. Do not submit credentials, user sessions, `.env`, or runtime data.
+Use the [bug, feature, and documentation issue forms](.github/ISSUE_TEMPLATE) so reports include the context
+maintainers need. Follow the [issue triage and label rules](docs/wiki/Issue-Triage.md). Submit only sanitized diagnostics:
+never include keys, tokens, raw environment dumps, private conversation data, credentials, user sessions, `.env`, or runtime data.
+Retain upstream licensing/provenance notices.
