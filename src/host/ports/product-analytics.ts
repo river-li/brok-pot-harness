@@ -1,4 +1,0 @@
-function createNoopSandProductAnalytics() {
-  return { trackEvent: () => {
-  } };
-}

@@ -1,8 +1,0 @@
-var FOCUS_RETRY_MINIMUM_COOLDOWN_MS;
-var init_mcp_focus_retry_cooldown = __esm({
-  "../packages/mcp-core/dist/config/mcp-focus-retry-cooldown.js"() {
-    "use strict";
-    init_mcp_reconnect_config();
-    FOCUS_RETRY_MINIMUM_COOLDOWN_MS = 5 * 6e4;
-  }
-});
