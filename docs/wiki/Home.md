@@ -31,7 +31,7 @@ Build your desktop agent workspace, connect a model, and turn a task into files 
 | [Source recovery](Source-Recovery.md) | Fragments, bundles, manifests, and strict TypeScript |
 | [Verification](Verification.md) | Existing evidence and workflows that need broader coverage |
 | [Issue triage](Issue-Triage.md) | Reproducible issue reports, label meanings, and triage rules |
-| [Publish this Wiki](Publishing.md) | Export and host the documentation on GitHub |
+| [Publish docs website and Wiki](Publishing.md) | Build/deploy the GitHub Pages website and optionally export the native Wiki |
 
 New users: start with **Installation → Configuration → Sandbox → Permissions**.
 Developers: start with **Architecture → Package map → Development**.

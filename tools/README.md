@@ -27,6 +27,7 @@ Recovery does not overwrite maintained source and is not an application upgrade/
 
 ```sh
 npm run docs:check
+npm run docs:site:build
 npm run docs:wiki
 ```
 
@@ -37,7 +38,8 @@ walking; maintained package `dist/` source remains in scope.
 The [Development guide](../docs/wiki/Development.md#scoped-guidance-coverage)
 defines which directories the check treats as components.
 
+`docs:site:build` renders the GitHub Pages website into `site/` with MkDocs.
 The Wiki exporter writes `.runtime/wiki` and performs no network writes.
-See [Publishing](../docs/wiki/Publishing.md) for prerequisites and the separate GitHub Wiki repository workflow.
+See [Publishing](../docs/wiki/Publishing.md) for local preview, Pages deployment, rollback, and the separate Wiki workflow.
 
 [Source recovery](../docs/wiki/Source-Recovery.md) · [Maintenance rules](AGENTS.md)

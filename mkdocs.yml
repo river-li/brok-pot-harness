@@ -1,0 +1,57 @@
+site_name: Grokbot Harness Documentation
+site_description: Build, operate, and maintain Grokbot Harness.
+site_url: !ENV [GBH_DOCS_SITE_URL, ""]
+repo_url: https://github.com/river-li/brok-pot-harness
+repo_name: river-li/brok-pot-harness
+edit_uri: edit/main/
+docs_dir: site-src
+
+theme:
+  name: mkdocs
+
+exclude_docs: |
+  .runtime/**
+  node_modules/**
+  dist/**
+  .env
+  .env.*
+  !.env.example
+
+markdown_extensions:
+  - tables
+  - attr_list
+  - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - https://unpkg.com/mermaid@11/dist/mermaid.min.js
+  - docs/assets/javascripts/mermaid-init.js
+
+nav:
+  - Overview:
+      - Project README: README.md
+      - Documentation Home: docs/wiki/Home.md
+      - Features: docs/wiki/Features.md
+      - Build Guide: docs/wiki/Build-Guide.md
+      - Configuration: docs/wiki/Configuration.md
+      - Troubleshooting: docs/wiki/Troubleshooting.md
+  - Workspace Setup:
+      - Sandbox and Data: docs/wiki/Sandbox.md
+      - Permissions: docs/wiki/Permissions.md
+      - MCP, Plugins, and Skills: docs/wiki/Extensions.md
+      - Packaging: docs/wiki/Packaging.md
+  - Engineering:
+      - Architecture: docs/wiki/Architecture.md
+      - Development: docs/wiki/Development.md
+      - Source Recovery: docs/wiki/Source-Recovery.md
+      - Verification: docs/wiki/Verification.md
+      - Issue Triage: docs/wiki/Issue-Triage.md
+      - Package Map (component guide): packages/README.md
+      - Host Extension Map (component guide): src/host/extensions/README.md
+  - Publishing:
+      - Docs Publishing: docs/wiki/Publishing.md
+      - Contributor Guide: CONTRIBUTING.md
