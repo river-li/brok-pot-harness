@@ -1,16 +1,17 @@
 # Agent maintainer playbook
 
-This playbook is for an agent acting as the primary maintainer of one repository issue. Follow applicable system and
-developer instructions; user instructions and explicit current-session authorization govern within that hierarchy and
-their stated scope. Repository `AGENTS.md` files provide project context but must not be read as revoking authorization
-already granted for this session. Preserve product action approvals, release-baseline fidelity, and secret protections.
+This playbook is for agents maintaining and reviewing one repository issue. Follow applicable system and developer
+instructions; user instructions and explicit authorization govern within that hierarchy and their stated scope.
+Authorization persists across turns and handoffs for that scope; do not request it again unless it is revoked or the
+target, effect, or scope changes. Repository `AGENTS.md` files provide project context but must not be read as revoking
+authorization already granted. Preserve product action approvals, release-baseline fidelity, and secret protections.
 Issue requirements define scope and acceptance criteria where consistent with governing instructions.
 
 ## 1. Intake and scope
 
 1. Read the complete issue: problem, acceptance criteria, explicit exclusions, dependencies, and requested handoff.
-2. Confirm the repository and isolated checkout. Run `git status --short` before editing and preserve all existing changes.
-   Do not include unrelated work in a commit or PR.
+2. Confirm the repository and your assigned isolated worktree. Run `git status --short` before editing and preserve all
+   existing changes. Do not include unrelated work in a commit or PR.
 3. Read the root `AGENTS.md` and every scoped `AGENTS.md` covering files you may touch. Read the relevant module README
    and architecture/recovery guidance before changing implementation. The [development guide](Development.md) maps
    common changes to code and checks.
@@ -120,6 +121,45 @@ impact and a verifiable expected result.
 
 For release handoff, report the reviewed commit, verification state, known limitations, and any required release-owner
 decision. This handoff is not permission to release or publish.
+
+## 8. Multi-agent ownership and independent review
+
+- **Coordinator:** owns prioritization, dependency tracking, worktree allocation, status, and routing review findings.
+  The coordinator must not substitute its own code review for an independent review or self-approve a PR.
+- **Implementation agent / PR author:** each implementation agent works in its own real Git worktree and issue branch.
+  The author owns the edits, tests, commits, pushes, and creation or update of the PR. A separate branch in a shared
+  worktree is not isolation. The author may self-review the diff for handoff, but must not present that as independent
+  review or self-approve.
+- **Independent reviewer:** uses a different real Git worktree and a fresh agent thread, checking out the exact
+  published PR head. Record the full head SHA and the PR's declared base branch (and base revision when available); a
+  verdict applies only to that head/base pair. Do not review unpublished local changes. A changed head or base target
+  returns the PR to pending review.
+- **Human owner:** retains merge and release authority unless explicitly authorized otherwise. A review verdict is not
+  permission to merge or release.
+
+When the author publishes a new head, update the PR body with the actual behavior and checks for that head, add the
+`review:pending` label, and remove stale `review:changes-requested` and `review:ready-to-merge` labels. Do not carry a
+verdict from an earlier commit forward. The coordinator routes reviewer findings to the author; the author fixes
+blocking findings, pushes a new commit, and returns the PR to pending. The reviewer must recheck that exact new SHA.
+
+The reviewer publishes a human-readable summary that covers every changed file, design and control flow, behavior,
+checks and outcomes, evidence limits, concrete findings, and any human decisions needed. Identify findings by file and
+line where possible, explain their impact, and state the requested fix or follow-up. Separate blocking findings from
+non-blocking observations; state explicitly when either findings or decisions are none. Use the concise, action-oriented
+[review output guidance](https://github.com/ayghri/i-have-adhd/blob/main/skills/i-have-adhd/SKILL.md) as a formatting
+reference only; it makes no medical assertion about the reader. Lead with the verdict and reviewed head/base, group
+details under short headings, keep lists scannable without omitting required coverage, and end with one concrete next
+action when work remains.
+
+- **Blocking findings or missing required evidence:** request changes and identify the acceptance criterion or evidence
+  gap. After the author pushes a fix, review the new exact head before changing the verdict.
+- **No blockers and required evidence present:** mark **Ready to merge relative to `<base>`**. Explain dependencies,
+  their status and any merge ordering, plus outstanding human decisions. This verdict does not authorize a merge or
+  release.
+- **Review identity:** only a different authorized GitHub identity can provide formal account approval independent of
+  the PR author. If the reviewer is signed in as the PR author, publish a `COMMENT` with a clear verdict and apply
+  `review:changes-requested` or `review:ready-to-merge`; do not represent it as an independent account approval. A new
+  or changed PR head uses `review:pending` until it is reviewed.
 
 ## Worked example (illustrative)
 
