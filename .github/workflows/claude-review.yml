@@ -1,0 +1,81 @@
+name: Claude PR Review
+
+# Runs only when the `review:pending` label is added to a PR.
+# To re-run, remove the label and add it again.
+on:
+  pull_request:
+    types: [labeled]
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event.label.name == 'review:pending'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: true
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            You are reviewing this pull request. Read AGENTS.md, README.md and
+            any scoped AGENTS.md/README.md files for the directories the PR
+            touches, then review the diff (`gh pr diff`) against them.
+
+            Focus on correctness bugs, security issues, and violations of the
+            repository constraints in AGENTS.md. Do not report style nitpicks.
+
+            Decide whether the PR can be merged, then submit exactly one review
+            with `gh pr review ${{ github.event.pull_request.number }}`.
+            Write everything in English.
+
+            If the PR is mergeable, use `--approve` with a short, easy-to-read
+            body in this format:
+
+              ## Summary
+              One or two sentences on what the PR does and why.
+
+              ## Changes
+              - Bullet list of the main changes, grouped by component.
+
+              ## Design choices
+              - Notable decisions the PR introduces (new interfaces, patterns,
+                trade-offs, dependencies). Write "None" if there are none.
+
+              ## Notes
+              - Minor, non-blocking observations or follow-ups. Omit this
+                section if there is nothing worth mentioning.
+
+            If the PR is not mergeable, first post each blocking issue as an
+            inline comment on the relevant line with
+            mcp__github_inline_comment__create_inline_comment, then use
+            `--request-changes` with a body in this format:
+
+              ## Summary
+              One or two sentences on what the PR does.
+
+              ## Blocking issues
+              - Each issue that must be fixed before merging, with file:line
+                and why it matters.
+
+              ## Non-blocking
+              - Optional suggestions. Omit if none.
+
+            Keep both formats concise. Do not pad them.
+          claude_args: |
+            --model claude-sonnet-5
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr review:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
