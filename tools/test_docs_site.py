@@ -16,7 +16,7 @@ class DocumentationSiteTest(unittest.TestCase):
         self.root = Path(self.temp.name).resolve()
         files = {
             'README.md': (
-                '<a href="docs/wiki/Home.md">Docs</a><img src="assets/branding/icon.png">\n'
+                '<a href="docs/wiki/Home.md">Docs</a>\n'
                 '<details>\n<summary>Animation</summary>\n\n'
                 '![Demo](docs/media/diagram.png)\n\n[Notes](docs/media/README.md)\n\n</details>\n'
             ),
@@ -39,6 +39,7 @@ class DocumentationSiteTest(unittest.TestCase):
             'docs/media/diagram.png': 'public media\n',
             'assets/branding/icon.png': 'public icon\n',
             'docs/assets/javascripts/mermaid-init.js': 'window.mermaid = true;\n',
+            'docs/assets/stylesheets/site.css': '.docs { color: #222; }\n',
         }
         for name, contents in files.items():
             path = self.root / name
@@ -63,6 +64,7 @@ class DocumentationSiteTest(unittest.TestCase):
         self.assertTrue((stage / 'docs/media/diagram.png').is_file())
         self.assertTrue((stage / 'assets/branding/icon.png').is_file())
         self.assertTrue((stage / 'docs/assets/javascripts/mermaid-init.js').is_file())
+        self.assertTrue((stage / 'docs/assets/stylesheets/site.css').is_file())
         for excluded in ('.env.example', 'AGENTS.md', 'runtime/data/session.json', 'runtime/renderer-src/index.html'):
             self.assertFalse((stage / excluded).exists(), excluded)
         self.assertFalse(any(path.is_symlink() for path in stage.rglob('*')))
@@ -126,6 +128,39 @@ class DocumentationSiteTest(unittest.TestCase):
         self.assertIn("docs_site_markdown_regression.py", workflow)
         self.assertEqual(site.default_site_url('example-owner/renamed-repo'), 'https://example-owner.github.io/renamed-repo/')
         self.assertEqual(site.default_site_url('example-owner/example-owner.github.io'), 'https://example-owner.github.io/')
+
+    def test_material_assets_are_limited_to_theme_outputs(self):
+        for path in (
+            'assets/stylesheets/main.0123abcd.min.css',
+            'assets/stylesheets/palette.0123abcd.min.css.map',
+            'assets/javascripts/bundle.0123abcd.min.js',
+            'assets/javascripts/workers/search.0123abcd.min.js.map',
+            'assets/javascripts/lunr/min/zh.min.js',
+            'assets/javascripts/lunr/tinyseg.js',
+            'assets/javascripts/lunr/wordcut.js',
+            'assets/images/favicon.png',
+        ):
+            self.assertTrue(site._artifact_file_allowed(Path(path)), path)
+        for path in (
+            'assets/javascripts/private.js',
+            'assets/javascripts/lunr/secret.js',
+            'assets/stylesheets/custom.css',
+            'assets/images/private.png',
+        ):
+            self.assertFalse(site._artifact_file_allowed(Path(path)), path)
+
+    def test_explicit_site_assets_reject_symlinked_parent_directories(self):
+        with tempfile.TemporaryDirectory() as external_directory:
+            external = Path(external_directory)
+            (external / 'branding').mkdir()
+            (external / 'branding/icon.png').write_bytes(b'private asset')
+            (self.root / 'assets').mkdir(exist_ok=True)
+            (self.root / 'assets/branding/icon.png').unlink()
+            (self.root / 'assets/branding').rmdir()
+            (self.root / 'assets/branding').symlink_to(external / 'branding')
+
+            with self.assertRaisesRegex(ValueError, 'symbolic links are not site inputs'):
+                site.prepare_site(self.root, 'fork-owner/renamed-repo', 'd' * 40)
 
 
 if __name__ == '__main__':

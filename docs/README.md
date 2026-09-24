@@ -1,6 +1,6 @@
 # Documentation
 
-**[Open the documentation →](wiki/Home.md)**
+**[Open the website overview →](../README.md)** · **[Open the documentation source →](wiki/Home.md)**
 
 | Reading path | Start here |
 | --- | --- |
@@ -15,10 +15,13 @@ English is the canonical language. Translations use separate language-suffixed f
 
 ## Documentation website and GitHub Wiki
 
-`wiki/` contains the version-controlled documentation source. Export it with `npm run docs:wiki`
+`wiki/` contains the version-controlled documentation source. The root README is also the Pages landing page,
+with direct entry points for installation, configuration, architecture, and extensions. The website uses a
+pinned Material for MkDocs theme with GBH-owned styles in `assets/stylesheets/site.css`. Export the source with `npm run docs:wiki`
 to create native GitHub Wiki pages, sidebar, footer, package guides, and extension guides.
 The exporter rewrites navigation, source links, and media paths for the Wiki's separate repository.
-The GitHub Pages website is built from the same authored Markdown via `npm run docs:site:build`.
+The GitHub Pages website is built from the same authored Markdown via `npm run docs:site:build`. The site generator
+stages the theme stylesheet, logo, and Mermaid initializer from explicit source paths in addition to referenced public media.
 See [Publishing](wiki/Publishing.md) for local preview, validation, deployment, rollback, and Wiki export.
 
 `media/` contains real application screenshots and recordings with reproduction notes.

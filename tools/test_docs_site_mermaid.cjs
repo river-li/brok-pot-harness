@@ -10,14 +10,19 @@ const initializer = readFileSync(
 );
 const decodedDiagram = 'flowchart LR\n  A["decoded & expanded"]';
 
-function makeHarness(render) {
+function makeHarness(render, text = decodedDiagram) {
   let onReady;
   const errors = [];
   const options = [];
   const diagram = {
-    textContent: decodedDiagram,
+    textContent: text,
     dataset: {},
     attributes: {},
+    graphic: { viewBox: { baseVal: { width: 1540 } }, style: {} },
+    querySelector(selector) {
+      assert.equal(selector, 'svg');
+      return this.graphic;
+    },
     setAttribute(name, value) {
       this.attributes[name] = value;
     },
@@ -26,7 +31,7 @@ function makeHarness(render) {
     readyState: 'loading',
     documentElement: { dataset: {} },
     querySelectorAll(selector) {
-      assert.equal(selector, '.mermaid');
+      assert.equal(selector, '.gbh-diagram');
       return [diagram];
     },
     addEventListener(name, callback) {
@@ -82,6 +87,11 @@ test('renders decoded diagram text and marks a successful SVG ready', async () =
   assert.equal(harness.diagram.innerHTML, '<svg class="rendered-diagram"></svg>');
   assert.equal(bindTarget, harness.diagram);
   assert.equal(harness.diagram.dataset.gbhRendered, 'true');
+  assert.equal(harness.diagram.graphic.style.width, '1540px');
+  assert.equal(harness.diagram.graphic.style.maxWidth, 'none');
+  assert.equal(harness.diagram.attributes.tabindex, '0');
+  assert.equal(harness.diagram.attributes.role, 'region');
+  assert.equal(harness.diagram.attributes['aria-label'], 'Diagram; scroll horizontally to view the full graphic');
   assert.equal(harness.document.documentElement.dataset.gbhMermaidReady, 'true');
   assert.equal(harness.errors.length, 0);
 });
@@ -99,4 +109,20 @@ test('reports render errors and does not mark a failed diagram ready', async () 
   assert.equal(harness.document.documentElement.dataset.gbhMermaidError, 'invalid graph syntax');
   assert.equal(harness.document.documentElement.dataset.gbhMermaidReady, undefined);
   assert.equal(harness.errors.length, 1);
+});
+
+test('skips empty diagram blocks without adding an error', async () => {
+  let renderCalled = false;
+  const harness = makeHarness(async () => {
+    renderCalled = true;
+    return { svg: '<svg></svg>' };
+  }, '  \n ');
+
+  await harness.onReady();
+
+  assert.equal(renderCalled, false);
+  assert.equal(harness.diagram.dataset.gbhError, undefined);
+  assert.equal(harness.document.documentElement.dataset.gbhMermaidError, undefined);
+  assert.equal(harness.document.documentElement.dataset.gbhMermaidReady, 'true');
+  assert.equal(harness.errors.length, 0);
 });

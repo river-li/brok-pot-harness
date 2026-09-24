@@ -13,10 +13,12 @@ include credentials or user data, and reject unowned output directories. Export
 commands must not push or alter remotes. Test page/asset/source links and invalid
 inputs before changing the exporter.
 
-The Pages generator stages canonical Markdown and explicitly linked public media
-under ignored `.runtime/docs-site/`; do not publish symlink trees, runtime data,
-profiles, private diagnostics, or implementation bundles. Pin non-documentation
-source links to the built source commit and keep generated files out of Git. See
+The Pages generator stages canonical Markdown, explicitly linked public media,
+and the exact theme assets allowlisted in `tools/docs-site.py` under ignored
+`.runtime/docs-site/`; do not publish symlink trees, runtime data, profiles,
+private diagnostics, or implementation bundles. Validate that explicit inputs
+have no symlinked path components, and keep the Material theme output allowlist
+narrow. Pin non-documentation source links to the built source commit and keep generated files out of Git. See
 [Publishing](../docs/wiki/Publishing.md) for site setup, preview, artifact
 validation, rollback, and the distinct PR-validation/main-publication paths.
 Cover source rewrites and output exclusions in `test_docs_site.py`, renderer

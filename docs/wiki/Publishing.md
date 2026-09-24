@@ -24,9 +24,11 @@ npm run docs:site:serve
 
 Then open <http://127.0.0.1:8000/>.
 
-`docs:check` validates source links, component guidance, and the site generator's safety/link regressions.
+`docs:check` validates source links, component guidance, and the site generator's safety/link regressions. The site uses a pinned Material for MkDocs theme with project-owned presentation rules in `docs/assets/stylesheets/site.css`.
 `docs:site:build` stages authored Markdown and linked media under ignored `.runtime/docs-site/`, builds with
-MkDocs, then checks generated links, anchors, and allowed output files. `docs:site:serve` prepares the same
+MkDocs, then checks generated links, anchors, and allowed output files. The stage also includes only the explicit
+GBH logo, theme stylesheet, and Mermaid initializer; generated theme files are checked against a narrow output allowlist.
+`docs:site:serve` prepares the same
 staging tree before starting the preview server. Source-code links in the site point to the exact source commit.
 Mermaid diagrams use a pinned browser renderer and are checked in the local browser preview.
 
