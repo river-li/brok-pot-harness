@@ -21,7 +21,7 @@ These are independent GBH-curated entries. The [Grok Build plugin marketplace](h
 
 Remote pinned imports are limited to the starters listed here; GBH does not accept an arbitrary plugin repository URL or import the Grok Build marketplace index as a general plugin catalog. The existing [manual local plugin-directory import](Extensions.md#import-a-local-plugin) remains available for bundles in GBH's retained plugin, Skill, and MCP formats.
 
-The Chrome import contains 25 pinned files: one Skill, 23 reference files, and `LICENSE`. Current Host evidence confirms the Skill instructions reach the Bot workflow; access to the nested reference files from a Bot has not yet been verified. See [Verification](Verification.md).
+The Chrome import contains 25 pinned files: one Skill, 23 reference files, and `LICENSE`. A private Host/Box runtime review verified that a recipe Bot read the public Skill and the nested `references/extensions/api-calling.md` file. See [Verification](Verification.md).
 
 ## Add and configure a starter
 
@@ -51,22 +51,22 @@ GBH ships two locally curated recipes:
 
 | Recipe | Profile | Dependency and setup |
 | --- | --- | --- |
-| **Chrome Extension Builder** | A Bot focused on building, debugging, and reviewing Chrome extensions. | Install **Chrome Extension Builder** so the pinned Skill is included in the Bot workflow. Reference files are bundled, but Bot access to them has not yet been verified. |
+| **Chrome Extension Builder** | A Bot focused on building, debugging, and reviewing Chrome extensions. | Install **Chrome Extension Builder** so the pinned Skill and references are included in the Bot workflow. A private runtime turn verified access to `references/extensions/api-calling.md`. |
 | **Web Research Assistant** | A Bot for sourced research using Firecrawl search, scraping, and crawl capabilities. | Install **Firecrawl Web Research** and configure its API key on the Host before relying on its MCP tools. |
 
 These recipes are GBH-authored templates mapped to the pinned plugins above. They are not downloaded xAI Bot marketplace listings. A recipe can create a Bot profile and its memory, Skills, routines, and plugin dependencies, and can retain optional `gettingStarted` Skill metadata. Creating a recipe-based Bot does not provide missing plugins or credentials; resolve each dependency in **Settings → Plugins**. Imported routines remain inactive until you intentionally enable them.
 
-### Create a Bot from a recipe
+### Create a pot from a recipe
 
-1. Open **Marketplace → Bots** and find **Local Bot recipes**. The built-in Chrome Extension Builder and Web Research Assistant cards show their Plugin dependency setup status and any setup notes.
-2. Install or configure any required Plugin from **Settings → Plugins** before relying on that capability. The recipe card does not install its dependencies or configure credentials.
-3. Select **Create Bot** on the recipe card and complete the Bot creation flow. GBH copies the recipe's supported profile, memory, Skills, routines, and Plugin references into the new Bot. Imported routines remain inactive until you enable them intentionally.
+1. Open **Marketplace → Pots**. Search the catalog or select a card under **Featured pots** or **Your pots**. The detail page shows instructions and the recipe's available Memories, Skills, Routines, and Integrations sections; select a Skill to read its content.
+2. Check the integration requirements. Use a plugin row on the overview to open its detail, or **View all** to browse Plugins. Install and configure required plugins before relying on their capabilities.
+3. Select **Import pot** on the recipe detail page. Brokpot creates the pot and applies the recipe through the existing setup flow. Imported routines remain inactive until you enable them intentionally. Importing a pot does not install missing plugins or supply credentials.
 
 ### Import or edit a local recipe
 
-In **Marketplace → Bots → Local Bot recipes**, choose a `.json` file with **Choose recipe JSON** or paste its contents into **Recipe JSON**. Select **Preview JSON** and check the profile name, included Skills and routines, Plugin dependencies, and setup requirements. Correct any validation errors, preview again, and select **Import recipe** to add it to the local catalog. **Refresh recipes** reloads the Host's recipe list.
+Open **Marketplace → Pots → Manage pots → Import recipe JSON**. Choose a `.json` file with **Choose recipe JSON** or paste its contents into **Recipe JSON**. Select **Preview JSON** and check the profile name, included Skills and routines, Plugin dependencies, and setup requirements. Correct any validation errors, preview again, and select **Import recipe** to add it to the local catalog. **Refresh** reloads the Host's recipe list. Close the manager to browse the imported card under **Your pots**.
 
-For a user-imported recipe, select **Edit JSON**, change the JSON, then select **Preview JSON** and **Save recipe**. **Remove recipe** asks you to confirm with **Confirm removal**; removal deletes the reusable recipe only, and existing Bots keep their profiles. GBH's two built-in recipes cannot be edited or removed from this screen. Importing the same recipe content again is idempotent and reuses the existing local recipe.
+For a user-imported recipe, select **Edit JSON**, change the JSON, then select **Preview JSON** and **Save recipe**. **Remove** asks you to confirm with **Confirm removal**; removal deletes the reusable recipe only, and existing Bots keep their profiles. GBH's two built-in recipes cannot be edited or removed from this screen. Importing the same recipe content again is idempotent and reuses the existing local recipe.
 
 ### User-provided recipe JSON
 
@@ -132,7 +132,7 @@ Recipe import is idempotent: importing equivalent JSON again returns the existin
 
 ## What has been verified
 
-Current evidence covers pinned-source downloads and plugin/recipe store contracts. A private Host/Box review also verified starter discovery, installation of the public Chrome Skill through the Gateway, effective plugin listing, local recipe Bot creation and setup metadata, and synchronization of the Skill instructions into the Bot workflow. It did not establish that a Bot can read the nested Chrome reference files. The review sent **zero model requests**, so it does not establish a Bot turn, tool call, external inference, or Firecrawl service success. See [Verification](Verification.md) for the current evidence and limits.
+Private Host/Box runtime evidence verified starter discovery, pinned public-source imports, Chrome Skill installation through the Gateway, local recipe Bot creation and setup metadata, and Skill synchronization into the Bot workflow. A deterministic fixture-model turn read both the Chrome Skill and nested `references/extensions/api-calling.md`. A second fixture-model turn connected the Firecrawl recipe through its configured endpoint and bearer key to an HTTP MCP fixture, discovered and called its tool, passed the retained auto-review, and completed. The review made no external model or Firecrawl service calls; it validates the integration against the configured fixture only. An isolated desktop run also verified overview/detail navigation, recipe JSON import and editing, pot creation with the actual Skill persisted, recipe removal without deleting that pot's Skill, and plugin installation, tool toggles, restart persistence and uninstall. See [Verification](Verification.md) for evidence and limits.
 
 ---
 [Documentation](Home.md) · [MCP, plugins, and Skills](Extensions.md) · [Project](../../README.md)

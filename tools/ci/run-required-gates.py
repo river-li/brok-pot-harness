@@ -21,6 +21,7 @@ CONTRACTS = [
     ("MCP store contract", ["npm", "run", "test:mcp-store"]),
     ("MCP scope contract", ["npm", "run", "test:mcp-scopes"]),
     ("Plugin file contract", ["npm", "run", "test:plugin-files"]),
+    ("Curated marketplace and Bot recipe contract", ["npm", "run", "test:marketplace-contract"]),
     ("Desktop keychain policy contract", ["npm", "run", "test:desktop-keychain"]),
     ("Remote client, server, and recovery contracts", ["npm", "run", "test:remote-contracts"]),
 ]

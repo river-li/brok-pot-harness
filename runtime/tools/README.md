@@ -7,6 +7,7 @@ Use root npm scripts for normal operation. Release extraction is separate under 
 | [build-bundles.py](build-bundles.py) | Reconstruct artifacts and insert local adapters | `npm run build` |
 | [build_profile.py](build_profile.py) | Parse and generate profile policy | Called by build and prepare |
 | [prepare-desktop.py](prepare-desktop.py) | Combine vendor desktop, maintained assets, adapters | `npm run prepare:desktop` |
+| [patch_local_coordinator.py](patch_local_coordinator.py) | Add checked local marketplace RPC contracts to the staged retained coordinator | Called only by local desktop preparation |
 | [import-desktop.py](import-desktop.py) | Import desktop release resources | Resource maintenance |
 | [build-icons.py](build-icons.py) | Convert selected rounded artwork to PNG/ICNS | `npm run build:icons` |
 | [package-macos.py](package-macos.py) | Produce the ad-hoc local or independent remote app | `npm run package:mac`; `npm run package:mac:remote` |

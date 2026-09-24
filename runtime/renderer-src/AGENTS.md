@@ -21,12 +21,20 @@ copy credentials or infer successful execution from syntax checks alone.
 - Make local presentation changes conditional on the built profile; do not
   delete retained service UI or change the original profile to implement the
   local default.
+- Keep new Marketplace styles scoped in `local-marketplace.css`. Reuse retained
+  cards, search, icons and dialog behavior; local content must come from the
+  selected Host rather than public template endpoints.
 
 ## Verify renderer changes
 
 ```sh
 npm run prepare:desktop -- --profile local
+npm run check:syntax
 ```
+
+Use the repository syntax command: it parses renderer scripts as ES modules.
+Plain `node --check path.js` under the source tree's CommonJS package is not
+equivalent to browser module parsing.
 
 For a UI flow, run `npm run test:desktop-live` with a ready local runtime and
 the prepared desktop. `test:desktop-keychain` checks main-process storage

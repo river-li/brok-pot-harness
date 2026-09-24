@@ -10,8 +10,9 @@ This page explains how policy reaches Host, desktop, and renderer.
 Feature fields in generated `build-profile.json` describe the resulting policy, not independent editable switches.
 
 [build_profile.py](tools/build_profile.py) is shared by Host reconstruction and desktop assembly.
-The generated entry sets `GROKBOT_LOCAL_MODE` before application code loads, and the renderer receives the same policy.
-An inherited shell value cannot switch an already-built local artifact to original.
+The generated local entry sets `GROKBOT_LOCAL_MODE` before application code loads, points backend fallbacks at a loopback sentinel, defaults the Gateway to `127.0.0.1:1540`, and disables the development control plane, production Box attachment, telemetry, and analytics. An explicit `SAND_HOST_GATEWAY_URL` is kept for a self-hosted Gateway. The renderer receives the same profile policy and replaces the vendor connectivity hint with a configured-Host message. An inherited shell value cannot switch an already-built local artifact to original.
+
+The original profile only sets `GROKBOT_LOCAL_MODE=0`; it retains its existing vendor backend defaults and does not receive local Gateway or cloud-switch overrides.
 
 ## Output isolation
 

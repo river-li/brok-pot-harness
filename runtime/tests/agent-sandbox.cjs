@@ -890,13 +890,13 @@ const { readSSE } = require(join(root, "sand-host/local/responses.js"));
         (await fsp.stat(join(temp, "data/mcp-servers.json"))).mode & 0o777,
         0o600,
       );
-      assert.deepEqual(
-        await call("getMcpCatalog"),
-        [],
-        "Local custom MCP use must not fetch the vendor marketplace",
-      );
       const stdio = state.servers.find(
         (s) => s.serverIdentifier === "fixture_stdio",
+      );
+      const publicCatalog = await call("getMcpCatalog");
+      assert.ok(
+        !publicCatalog.some((entry) => entry.id === stdio.id || entry.name === "fixture_stdio"),
+        "Local custom MCP use must not add its server to the curated starter catalog",
       );
       const instructions =
         "Use this server only for the local integration fixture.";

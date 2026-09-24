@@ -58,6 +58,7 @@ var sendPromptFields = {
       rpcLiteral(SAND_AUTOMATION_WRITE_PROVENANCE_TEMPLATE_IMPORT)
     )
   ),
+  recipeSetupOperationId: rpcOptional(rpcString()),
   isFork: rpcOptional(rpcBoolean()),
   traceparent: rpcOptional(rpcString()),
   enterEpochMs: rpcOptional(rpcNumber()),
@@ -84,6 +85,12 @@ var botTemplateVersionArgs = rpcObject({
   shareId: rpcString(),
   version: rpcNumber()
 });
+var localBotRecipeJsonArgs = rpcObject({ recipeJson: rpcString() });
+var localBotRecipeUpdateArgs = rpcObject({
+  shareId: rpcString(),
+  recipeJson: rpcString()
+});
+var localBotRecipeIdArgs = rpcObject({ shareId: rpcString() });
 var botTemplateForSourceAgentArgs = rpcObject({
   sourceAgentId: rpcString()
 });
@@ -139,7 +146,8 @@ var createAgentFromTemplateArgs = rpcObject({
   avatarColor: rpcString(),
   expectedActiveVersion: rpcNumber(),
   creatorContext: rpcOptional(rpcString()),
-  language: rpcOptional(rpcString())
+  language: rpcOptional(rpcString()),
+  resumeSetupAfterReview: rpcOptional(rpcBoolean())
 });
 var uploadAttachmentArgs = rpcObject({
   agentId: rpcOptional(rpcString()),
@@ -614,6 +622,10 @@ var gatewayRpcEdge = declareRpcEdge("gateway", {
     publishBotTemplate: rpcMethod().args(botTemplatePublishArgs),
     listBotTemplates: rpcMethod().noArgs,
     getBotTemplateVersion: rpcMethod().args(botTemplateVersionArgs),
+    previewLocalBotRecipe: rpcMethod().args(localBotRecipeJsonArgs),
+    importLocalBotRecipe: rpcMethod().args(localBotRecipeJsonArgs),
+    updateLocalBotRecipe: rpcMethod().args(localBotRecipeUpdateArgs),
+    removeLocalBotRecipe: rpcMethod().args(localBotRecipeIdArgs),
     getBotTemplateForSourceAgent: rpcMethod().args(
       botTemplateForSourceAgentArgs
     ),
@@ -789,6 +801,7 @@ var gatewayRpcEdge = declareRpcEdge("gateway", {
     getMcpPluginLogo: rpcMethod().args({ url: rpcString() }),
     installMcpEntry: rpcMethod().args(mcpInstallEntryRequest),
     updateMcpPluginInstall: rpcMethod().args(mcpUpdatePluginInstallRequest),
+    refreshLocalMarketplacePlugin: rpcMethod().args({ pluginId: rpcString() }),
     removeMcpServer: rpcMethod().args(mcpServerIdArgs),
     uninstallMcpPlugin: rpcMethod().args({ pluginId: rpcString() }),
     authenticateMcpServer: rpcMethod().args(mcpAuthenticateRequest),

@@ -14,6 +14,7 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 | Web contracts | `npm run test:web-fetch`, `npm run test:web-search` | Local test services; boundaries and failures |
 | Speech contracts | `npm run test:transcription`, `npm run test:tts`, `npm run test:voice` | Adapters, tickets, call protocols |
 | MCP/plugin contracts | `npm run test:mcp-store`, `npm run test:mcp-scopes`, `npm run test:plugin-files` | Configuration, scope, filesystem handling |
+| Marketplace contract | `npm run test:marketplace-contract` | Pinned-source import and provenance, local plugin edits/configuration, and recipe preview/import/update/remove contracts; source fetches use an in-process fixture |
 | Keychain policy | `npm run test:desktop-keychain` | Conditional storage and machine identity |
 | Remote Host/client contracts | `npm run test:remote-contracts` | Loopback-only Gateway connection, encrypted server-scoped credentials, bounded isolated OS-storage helper, server lifecycle config, interruption journal, and redacted provider smoke behavior |
 | Release manager and archive | `node --test runtime/tests/release-manager-contract.cjs`; `python3 -m unittest runtime/tests/test_release_extract.py` | Package inventory, update failure/rollback checkpoints, startup retry, stale-lock policy, actual updater process interruption plus manual recovery, and safe tar extraction. |
@@ -23,7 +24,7 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 | External provider smoke | `npm run server:provider-smoke` | One fixed request using the configured server URL/model/key; may incur a charge and never prints the response or key |
 | Real model | `npm run test:responses` | Current endpoint/key; may incur API charges |
 | Real desktop | `npm run test:desktop-live`, `npm run test:desktop-keychain-live` | Prepared Electron and local runtime |
-| MCP/plugin integration | `npm run test:plugins-live`; `node runtime/tests/mcp-inline-live.cjs` | Running Box and test services |
+| MCP/plugin integration | `npm run test:plugins-live`; `node runtime/tests/mcp-inline-live.cjs` | Running Box and test services. `plugins-live.cjs` also drives the desktop's local recipe import, edit, Bot setup, and removal flow when running in its normal UI mode. `GROKBOT_TEST_PLUGINS_UI_ONLY=1 npm run test:plugins-live` skips the separate plugin Agent turns while retaining the desktop recipe/Skill-persistence and plugin installation/restart/removal checks. Both modes use a private Box and deterministic model fixture; they do not establish external inference. |
 | Mac execution | `npm run test:mac-exec-live` | Desktop bridge and relevant system capabilities |
 | Audio integration | `npm run test:desktop-transcription`, `npm run test:desktop-tts` | Speech service, desktop, synthetic audio fixture |
 | Call integration | `npm run test:desktop-voice`, `npm run test:voice-real-api` | See [voice bridge](../VOICE.md); the latter calls a real model |

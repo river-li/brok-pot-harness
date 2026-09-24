@@ -25,6 +25,8 @@ async function desktopFixture({
   fs.mkdirSync(profile, { recursive: true });
   const port = await freePort();
   const log = fs.openSync(path.join(profile, "desktop.log"), "a", 0o600);
+  const rendererErrors = [];
+  const rendererErrorReads = [];
   const env = {
     ...process.env,
     GROKBOT_LOCAL_MODE: "1",
@@ -151,6 +153,60 @@ async function desktopFixture({
     socket.addEventListener("message", (event) => {
       const message = JSON.parse(event.data),
         item = pending.get(message.id);
+      if (message.method === "Runtime.exceptionThrown") {
+        rendererErrors.push({
+          type: "exception",
+          details: message.params.exceptionDetails,
+        });
+      } else if (
+        message.method === "Runtime.consoleAPICalled" &&
+        message.params.type === "error"
+      ) {
+        const entry = {
+          type: "console.error",
+          text: (message.params.args ?? [])
+            .map((arg) => arg.value ?? arg.description ?? "")
+            .join(" "),
+          stack: message.params.stackTrace,
+          arguments: (message.params.args ?? []).map((arg) => ({
+            type: arg.type,
+            subtype: arg.subtype,
+            description: arg.description,
+            preview: arg.preview,
+          })),
+        };
+        rendererErrors.push(entry);
+        for (const arg of message.params.args ?? []) {
+          if (arg.objectId == null) continue;
+          rendererErrorReads.push(
+            command("Runtime.getProperties", {
+              objectId: arg.objectId,
+              ownProperties: true,
+              generatePreview: true,
+            }).then((result) => {
+              entry.properties = (result.result ?? [])
+                .filter((property) =>
+                  ["message", "stack", "name", "cause"].includes(property.name),
+                )
+                .map((property) => ({
+                  name: property.name,
+                  value: property.value?.value ?? property.value?.description,
+                }));
+            }),
+          );
+        }
+      } else if (
+        message.method === "Log.entryAdded" &&
+        message.params.entry.level === "error"
+      ) {
+        rendererErrors.push({
+          type: "log.error",
+          text: message.params.entry.text,
+          url: message.params.entry.url,
+          lineNumber: message.params.entry.lineNumber,
+        });
+      }
+      if (message.id == null) return;
       if (!item) return;
       pending.delete(message.id);
       clearTimeout(item.timer);
@@ -167,6 +223,8 @@ async function desktopFixture({
         pending.set(id, { resolve, reject, timer });
         socket.send(JSON.stringify({ id, method, params }));
       });
+    await command("Runtime.enable");
+    await command("Log.enable");
     const evaluate = async (expression) => {
       const result = await command("Runtime.evaluate", {
         expression,
@@ -224,7 +282,17 @@ async function desktopFixture({
       for (const type of ["keyDown", "keyUp"])
         await command("Input.dispatchKeyEvent", {type, key:"Escape", code:"Escape", windowsVirtualKeyCode:27, nativeVirtualKeyCode:27});
     };
-    return { evaluate, click, clickElement, screenshot, waitFor, close, pressEscape };
+    return {
+      evaluate,
+      click,
+      clickElement,
+      screenshot,
+      waitFor,
+      close,
+      pressEscape,
+      rendererErrors,
+      flushRendererErrors: () => Promise.allSettled(rendererErrorReads),
+    };
   } catch (error) {
     await close();
     throw error;

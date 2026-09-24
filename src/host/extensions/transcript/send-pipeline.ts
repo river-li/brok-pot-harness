@@ -43,6 +43,7 @@ var SendPipeline = class {
       replyToId: options2.replyToId,
       isFork: options2.isFork,
       automationWriteProvenance: options2.automationWriteProvenance,
+      recipeSetupOperationId: options2.recipeSetupOperationId,
       attachmentPaths: options2.attachmentPaths,
       attachmentNames: options2.attachmentNames
     });
@@ -424,4 +425,3 @@ var SendPipeline = class {
     this.appendSendMessageEntry(entry);
   }
 };
-

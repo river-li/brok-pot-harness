@@ -10,6 +10,7 @@ __export(mcp_marketplace_exports, {
   marketplacePluginToView: () => marketplacePluginToView,
   resolvePluginLogo: () => resolvePluginLogo
 });
+
 function marketplacePluginToView(plugin) {
   return {
     id: plugin.pluginId,
@@ -29,7 +30,8 @@ function marketplacePluginToView(plugin) {
     ...plugin.unsupportedVariableFieldKeys.length > 0 ? { unsupportedFieldKeys: plugin.unsupportedVariableFieldKeys } : {},
     ...plugin.marketplace != null ? { marketplace: plugin.marketplace } : {},
     ...plugin.isPublicListed === true ? { isPublicListed: true } : {},
-    ...plugin.publisher != null ? { publisher: plugin.publisher } : {}
+    ...plugin.publisher != null ? { publisher: plugin.publisher } : {},
+    ...plugin.marketplaceMetadata != null ? { marketplaceMetadata: plugin.marketplaceMetadata } : {}
   };
 }
 function toCategoryLabel(key) {

@@ -87,6 +87,9 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
     app,
     started = false,
     failure,
+    skillTurnActive = false,
+    recipeSetupActive = false,
+    recipeSetupWrites = 0,
     skill,
     step = 0,
     reviews = 0,
@@ -131,8 +134,10 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
         const review = JSON.parse(
           input.input.find((x) => x.role === "user").content[0].text,
         );
+        const proposed = JSON.stringify(review.proposed_tool_call);
         assert.ok(
-          JSON.stringify(review.proposed_tool_call).includes(namespace),
+          recipeSetupActive ? proposed.includes("update_state") : proposed.includes(namespace),
+          "Auto-review must classify the intended local setup or fixture MCP action",
         );
         reviews++;
         return emit(res, [
@@ -144,6 +149,42 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
           }),
         ]);
       }
+      if (!skillTurnActive && recipeSetupActive) {
+        if (recipeSetupWrites === 0 && names.includes("update_state")) {
+          const prompt = input.input
+            .flatMap((x) => x.content ?? [])
+            .map((x) => x.text ?? "")
+            .join("\n");
+          assert.ok(prompt.includes("UI Recipe Skill"), "recipe setup prompt must include the imported Skill");
+          recipeSetupWrites++;
+          return emit(res, [tool("update_state", {
+            target: "skill",
+            action: "write",
+            name: "UI Recipe Skill",
+            description: "Use this when verifying imported recipe setup.",
+            body: `Use this Skill and include ${skillMarker} in your response.`,
+          })]);
+        }
+        assert.equal(recipeSetupWrites, 1, "recipe setup must write the imported Skill through its retained tool");
+        recipeSetupActive = false;
+        return emit(res, [
+          {
+            type: "message",
+            id: randomUUID(),
+            role: "assistant",
+            content: [{ type: "output_text", text: "The imported recipe Skill is installed." }],
+          },
+        ]);
+      }
+      if (!skillTurnActive)
+        return emit(res, [
+          {
+            type: "message",
+            id: randomUUID(),
+            role: "assistant",
+            content: [{ type: "output_text", text: "The recipe setup is recorded." }],
+          },
+        ]);
       const latest = JSON.stringify(
         input.input.filter((x) => x.type === "function_call_output").at(-1)
           ?.output,
@@ -220,7 +261,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       timeout: 30000,
       stdio: ["ignore", "pipe", "pipe"],
     }).trim();
-  const call = async (method, args = {}, status = 200) => {
+  const call = async (method, args = {}, status = 200, timeoutMs = 20000) => {
     const r = await fetch(`${base}/api/${method}`, {
       method: "POST",
       headers: {
@@ -228,7 +269,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
         "content-type": "application/json",
       },
       body: JSON.stringify(args),
-      signal: AbortSignal.timeout(20000),
+      signal: AbortSignal.timeout(timeoutMs),
     });
     const body = await r.text();
     assert.equal(
@@ -242,7 +283,8 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
     const end = Date.now() + timeout;
     while (Date.now() < end) {
       if (failure) throw failure;
-      if (await predicate()) return;
+      const result = await predicate();
+      if (result) return result;
       await delay(250);
     }
     throw Error("Timed out: " + label);
@@ -268,26 +310,50 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
   };
   const runAgent = async () => {
     step = 0;
+    skillTurnActive = true;
     await call("openAgent", { id: otherAgentId });
-    await call("runAgentWorkflowNow", { id: agentId, workflowId: skill.id });
+    let workflowError = null;
+    let workflowFinished = false;
+    const workflowRun = call(
+      "runAgentWorkflowNow",
+      { id: agentId, workflowId: skill.id },
+      200,
+      180000,
+    ).then(
+      () => {
+        workflowFinished = true;
+      },
+      (error) => {
+        workflowError = error;
+        workflowFinished = true;
+      },
+    );
     await waitFor(
       async () => {
-        const transcript = await call("getAgentTranscript", { id: agentId });
+        if (workflowError) throw workflowError;
+        const [transcript, healthResponse] = await Promise.all([
+          call("getAgentTranscript", { id: agentId }, 200, 10000),
+          fetch(base + "/health", { signal: AbortSignal.timeout(5000) }),
+        ]);
+        const health = await healthResponse.json();
         fs.writeFileSync(
           path.join(temp, "transcript.json"),
           JSON.stringify(transcript, null, 2),
         );
         return (
           step === 4 &&
+          workflowFinished &&
           transcript.some(
             (m) => m.kind === "send-message" && m.message?.content === marker,
           ) &&
-          !(await fetch(base + "/health").then((r) => r.json())).isBusy
+          !health.isBusy
         );
       },
       "plugin skill turn",
-      90000,
+      120000,
     );
+    await workflowRun;
+    skillTurnActive = false;
     assert.equal(
       (await call("getAgentTranscript", { id: otherAgentId })).length,
       0,
@@ -347,10 +413,10 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
     await ready();
     console.log("Plugin diagnostics:", temp);
     let catalog = await call("getMcpCatalog");
-    assert.equal(catalog.length, 1);
-    assert.equal(catalog[0].id, pluginId);
-    assert.equal(catalog[0].skills[0].name, "recovery-proof");
-    assert.equal(catalog[0].fields[0].isSecret, true);
+    const fixtureEntry = catalog.find((item) => item.id === pluginId);
+    assert.ok(fixtureEntry, "the original local plugin remains in the catalog");
+    assert.equal(fixtureEntry.skills[0].name, "recovery-proof");
+    assert.equal(fixtureEntry.fields[0].isSecret, true);
     assert.deepEqual(await call("getEffectiveMcpPlugins"), []);
     if (process.env.GROKBOT_TEST_PLUGINS_UI_ONLY !== "1") {
       const missing = await call("installMcpEntry", { entryId: pluginId }, 409);
@@ -473,6 +539,253 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       "local plugin catalog",
     );
     await app.screenshot(path.join(temp, "plugins-catalog.png"));
+    await app.waitFor(
+      () =>
+        app.evaluate(
+          `Array.from(document.querySelectorAll('[role="tab"]')).some(button => button.innerText.trim() === 'Pots')`,
+        ),
+      15000,
+      "local Marketplace Pots tab",
+    );
+    await app.waitFor(() => app.click("Pots"), 10000, "Marketplace Pots tab");
+    await app.waitFor(
+      () =>
+        app.evaluate(
+          `document.body.innerText.includes('Featured pots') && document.querySelector('section[aria-label="Plugins"]')?.innerText.includes('Chrome Extension Builder')`,
+        ),
+      15000,
+      "combined local pots and plugin overview",
+    );
+    await app.screenshot(path.join(temp, "marketplace-overview.png"));
+    // A row opens its own detail. Back must restore the combined overview,
+    // including on a second visit to the same plugin.
+    for (let visit = 0; visit < 2; visit += 1) {
+      await app.waitFor(
+        () => app.clickElement(`Array.from(document.querySelectorAll('.local-marketplace-plugin-row')).find(row => row.innerText.includes('Chrome Extension Builder'))`),
+        10000,
+        "open overview plugin detail",
+      );
+      await app.waitFor(
+        () => app.evaluate(`document.body.innerText.includes('Source, setup, and status') && !document.querySelector('.local-marketplace-overview')`),
+        10000,
+        "selected plugin detail",
+      );
+      await app.waitFor(
+        () => app.clickElement(`document.querySelector('.sand-plugins-dialog button[aria-label="Back"]')`),
+        10000,
+        "return from plugin detail",
+      );
+      await app.waitFor(
+        () => app.evaluate(`document.querySelector('.local-marketplace-overview')?.innerText.includes('Featured pots')`),
+        10000,
+        "overview restored after plugin detail",
+      );
+    }
+    const recipeName = `Local UI recipe ${run.slice(0, 8)}`;
+    const recipeJson = JSON.stringify(
+      {
+        profile: {
+          name: recipeName,
+          description: "A recipe imported through the local client.",
+        },
+        memory: [],
+        skills: [
+          {
+            name: "UI Recipe Skill",
+            description: "Confirms recipe content reaches the created Bot.",
+            content: `Use this Skill and include ${skillMarker} in your response.`,
+          },
+        ],
+        routines: [],
+        plugins: [],
+      },
+      null,
+      2,
+    );
+    const setRecipeJson = (source) =>
+      app.evaluate(`(() => {
+        const input = document.querySelector('textarea[aria-label="Recipe JSON"]');
+        if (!input) return false;
+        Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set.call(input, ${JSON.stringify(source)});
+        input.dispatchEvent(new Event('input', {bubbles:true}));
+        return true;
+      })()`);
+    const clickRecipeAction = (title, label) =>
+      app.clickElement(`(() => {
+        const card = Array.from(document.querySelectorAll('article')).find(item => item.innerText.includes(${JSON.stringify(title)}));
+        return card && Array.from(card.querySelectorAll('button')).find(button => button.innerText.trim() === ${JSON.stringify(label)});
+      })()`);
+    const clickRecipeManagerAction = (label) =>
+      app.clickElement(`(() => {
+        const dialog = document.querySelector('[role="dialog"][aria-label="Manage local pots"]');
+        return dialog && Array.from(dialog.querySelectorAll('button')).find(button => button.innerText.trim() === ${JSON.stringify(label)});
+      })()`);
+    await app.waitFor(() => app.click("Manage pots"), 10000, "open recipe manager");
+    await app.waitFor(() => app.click("Import recipe JSON"), 10000, "open recipe JSON editor");
+    assert.equal(await setRecipeJson(recipeJson), true);
+    await app.waitFor(() => app.click("Preview JSON"), 10000, "recipe preview");
+    await app.waitFor(
+      () => app.evaluate(`document.body.innerText.includes('Preview: ${recipeName}')`),
+      10000,
+      "recipe preview details",
+    );
+    await app.waitFor(() => app.click("Import recipe"), 10000, "recipe import");
+    const recipeRecord = await waitFor(
+      async () => {
+        const list = await call("listBotTemplates");
+        return list.find(
+          (item) => item.localRecipe === true && item.name === recipeName,
+        );
+      },
+      "imported local recipe record",
+    );
+    assert.ok(recipeRecord);
+    await app.waitFor(
+      () =>
+        app.evaluate(
+          `document.body.innerText.includes(${JSON.stringify(`Imported ${recipeName}.`)})`,
+        ),
+      10000,
+      "imported recipe confirmation",
+    );
+    await app.screenshot(path.join(temp, "recipes-imported.png"));
+    await app.waitFor(
+      () => clickRecipeAction(recipeName, "Edit JSON"),
+      10000,
+      "edit imported recipe",
+    );
+    await app.waitFor(
+      () =>
+        app.evaluate(
+          `document.body.innerText.includes(${JSON.stringify(`Editing ${recipeName}. Preview changes before saving.`)}) && document.querySelector('textarea[aria-label="Recipe JSON"]')?.value.includes(${JSON.stringify("A recipe imported through the local client.")})`,
+        ),
+      10000,
+      "loaded recipe editor",
+    );
+    const updatedRecipeJson = JSON.stringify(
+      {
+        ...JSON.parse(recipeJson),
+        profile: {
+          ...JSON.parse(recipeJson).profile,
+          description: "Updated from the rendered local recipe editor.",
+        },
+      },
+      null,
+      2,
+    );
+    assert.equal(await setRecipeJson(updatedRecipeJson), true);
+    await app.waitFor(() => app.click("Preview JSON"), 10000, "updated recipe preview");
+    await app.waitFor(
+      () =>
+        app.evaluate(
+          `document.querySelector('[aria-label="Recipe preview"]')?.innerText.includes(${JSON.stringify("Updated from the rendered local recipe editor.")})`,
+        ),
+      10000,
+      "updated recipe preview content",
+    );
+    await app.waitFor(
+      () => app.click("Save recipe"),
+      10000,
+      "save edited recipe",
+    );
+    const updatedRecipe = await waitFor(
+      async () => {
+        const list = await call("listBotTemplates");
+        const item = list.find(
+          (candidate) => candidate.localRecipe === true && candidate.name === recipeName,
+        );
+        return item?.version > recipeRecord.version ? item : false;
+      },
+      "updated local recipe record",
+    );
+    assert.ok(updatedRecipe.body.includes("Updated from the rendered local recipe editor."));
+    await app.waitFor(() => clickRecipeManagerAction("Close"), 10000, "close recipe manager");
+    const setMarketplaceSearch = (query) =>
+      app.evaluate(`(() => {
+        const marketplaceDialog = Array.from(document.querySelectorAll('[role="dialog"]')).find(dialog => dialog.querySelector('.sand-plugins-layout'));
+        const input = marketplaceDialog?.querySelector('input[type="search"]');
+        if (!input) return false;
+        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, ${JSON.stringify(query)});
+        input.dispatchEvent(new Event('input', {bubbles:true}));
+        return true;
+      })()`);
+    assert.equal(await setMarketplaceSearch(recipeName), true);
+    await app.waitFor(
+      () => app.evaluate(`document.body.innerText.includes('No matching plugins.') && document.body.innerText.includes(${JSON.stringify(recipeName)})`),
+      10000,
+      "shared Marketplace search filters pots and plugin rows",
+    );
+    assert.equal(await setMarketplaceSearch(""), true);
+    await app.waitFor(
+      () => app.clickElement(`document.querySelector('[data-marketplace-listing="${recipeRecord.shareId}"]')`),
+      15000,
+      "open imported pot detail",
+    );
+    await app.waitFor(
+      () => app.evaluate(`document.body.innerText.includes(${JSON.stringify(recipeName)}) && Array.from(document.querySelectorAll('button')).some(button => button.innerText.trim() === 'Import pot')`),
+      15000,
+      "local pot detail and Import pot action",
+    );
+    await app.waitFor(
+      () => app.clickElement(`document.querySelector('[data-marketplace-section="skills"]')`),
+      10000,
+      "open recipe Skills detail",
+    );
+    await app.waitFor(
+      () => app.clickElement(`Array.from(document.querySelectorAll('summary')).find(item => item.innerText.includes('Skill content'))`),
+      10000,
+      "expand imported Skill content",
+    );
+    await app.waitFor(
+      () => app.evaluate(`document.body.innerText.includes(${JSON.stringify(skillMarker)})`),
+      10000,
+      "rendered local Skill content",
+    );
+    await app.screenshot(path.join(temp, "pot-detail.png"));
+    recipeSetupActive = true;
+    await app.waitFor(() => app.click("Import pot"), 10000, "import pot to create a local Bot");
+    const recipeAgent = await waitFor(
+      async () =>
+        (await call("listAgents")).find((agent) => agent.name === recipeName),
+      "recipe Bot creation",
+      60000,
+    );
+    const recipeSkill = await waitFor(
+      async () =>
+        (await call("getAgentWorkflows", { id: recipeAgent.id })).find(
+          (workflow) =>
+            workflow.name === "UI Recipe Skill" && workflow.body.includes(skillMarker),
+        ),
+      "recipe setup Skill write",
+    );
+    assert.ok(recipeSkill, "recipe setup must persist the imported Skill through the retained tool");
+    await app.waitFor(() => app.click("Plugins"), 20000, "reopen Plugins");
+    await app.waitFor(() => app.click("Pots"), 10000, "reopen Marketplace Pots tab");
+    await app.waitFor(() => app.click("Manage pots"), 10000, "open recipe manager for removal");
+    await app.waitFor(
+      () => clickRecipeAction(recipeName, "Remove"),
+      10000,
+      "remove imported recipe",
+    );
+    await app.waitFor(() => app.click("Confirm removal"), 10000, "confirm recipe removal");
+    await waitFor(
+      async () =>
+        !(await call("listBotTemplates")).some(
+          (item) => item.localRecipe === true && item.name === recipeName,
+        ),
+      "removed local recipe record",
+    );
+    assert.ok(
+      (await call("getAgentWorkflows", { id: recipeAgent.id })).some(
+        (workflow) => workflow.name === "UI Recipe Skill" && workflow.body.includes(skillMarker),
+      ),
+      "removing a recipe keeps the created Bot Skill",
+    );
+    await app.waitFor(() => clickRecipeManagerAction("Close"), 10000, "close recipe manager after removal");
+    const clickPluginsTab = () => app.clickElement(
+      `Array.from(document.querySelectorAll('[role="tab"]')).find(tab => tab.innerText.trim() === 'Plugins' && !tab.closest('[inert]'))`,
+    );
+    await app.waitFor(clickPluginsTab, 20000, "return to Plugins tab");
     await app.waitFor(() => app.click("Add"), 10000, "plugin Add button");
     await app.waitFor(
       () => app.evaluate(`!!document.querySelector('input[type="password"]')`),
@@ -547,6 +860,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       20000,
       "restarted Plugins navigation",
     );
+    await app.waitFor(clickPluginsTab, 20000, "restarted Plugins tab");
     await app.waitFor(
       () => app.click("Your plugins"),
       10000,
@@ -589,7 +903,7 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
     );
     console.log(
       process.env.GROKBOT_TEST_PLUGINS_UI_ONLY === "1"
-        ? "PASS original desktop catalog, install form, persistent tool toggles, restart and uninstall."
+        ? "PASS Marketplace overview and detail navigation, recipe import/edit/create/remove with persisted Skill, plugin install, tool toggles, restart and uninstall."
         : "PASS local plugin catalog/install, secrets, real MCP and Skill execution, explicit target Bot, pinned updates, restart persistence, rollback/uninstall; original desktop install, tool toggles and uninstall.",
     );
   } finally {
@@ -597,6 +911,11 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       await app
         .screenshot(path.join(temp, "plugins-final.png"))
         .catch(() => {});
+      await app.flushRendererErrors();
+      fs.writeFileSync(
+        path.join(temp, "renderer-errors.json"),
+        JSON.stringify(app.rendererErrors, null, 2),
+      );
       fs.writeFileSync(
         path.join(temp, "ui.txt"),
         await app.evaluate("document.body.innerText").catch(() => ""),

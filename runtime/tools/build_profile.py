@@ -33,6 +33,17 @@ def write_bootstrap(directory, config):
         f'const config = {literal};\n'
         'Object.freeze(config.features);\nObject.freeze(config);\n'
         'process.env.GROKBOT_LOCAL_MODE = config.features.localWorkspace ? "1" : "0";\n'
+        'if (config.features.localWorkspace) {\n'
+        '  const localBackend = "http://127.0.0.1:9";\n'
+        '  process.env.SAND_BACKEND_URL = localBackend;\n'
+        '  process.env.CURSOR_API_BASE_URL = localBackend;\n'
+        '  process.env.SAND_HOST_GATEWAY_URL ||= "http://127.0.0.1:1540";\n'
+        '  process.env.SAND_DEV_BOX_CONTROL_PLANE = "0";\n'
+        '  process.env.SAND_ATTACH_PROD_BOX = "0";\n'
+        '  process.env.SAND_DEV_CONTROL_PORT = "0";\n'
+        '  process.env.SAND_DISABLE_TELEMETRY = "1";\n'
+        '  process.env.SAND_DISABLE_ANALYTICS = "1";\n'
+        '}\n'
         'module.exports = config;\n')
 
 

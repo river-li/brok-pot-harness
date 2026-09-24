@@ -5,6 +5,7 @@ import shutil
 import argparse
 import json
 from build_profile import configuration, write_bootstrap, bootstrap_bundle
+from patch_local_coordinator import patch_local_coordinator
 
 ROOT = Path(__file__).resolve().parents[2]
 source = ROOT / 'vendor/desktop'
@@ -17,6 +18,8 @@ target = args.output or ROOT / ('.runtime/desktop' if args.profile == 'local' el
 if not (source / 'package.json').exists():
     raise SystemExit('Desktop resources missing. Run runtime/tools/import-desktop.py first.')
 shutil.copytree(source, target, dirs_exist_ok=True)
+if args.profile == 'local':
+    patch_local_coordinator(target / 'dist/node-agent-coordinator/main.cjs')
 shutil.copytree(ROOT / 'runtime/desktop-src', target / 'dist/electron-main', dirs_exist_ok=True)
 shutil.copytree(ROOT / 'runtime/renderer-src', target / 'dist/renderer', dirs_exist_ok=True)
 if args.profile == 'local':
