@@ -1,8 +1,6 @@
 name: Preview release candidate
 
 on:
-  pull_request:
-    branches: [main]
   push:
     branches: [agent/preview-release]
 
@@ -165,7 +163,6 @@ jobs:
           assert not manifest["sourceAvailableAtRuntime"]
           PY
           test -f "$resources/GBH-Resource-Notices.md"
-          test -f "$resources/GBH-Release-Notes.md"
           test -f "$resources/GBH-Release-Notes.md"
           test -f "$resources/Electron-LICENSE"
           test -f "$resources/Chromium-LICENSES.html"

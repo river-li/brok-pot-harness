@@ -83,6 +83,8 @@ Verify the new archive and attestation, then pass the archive directly to the ma
 
 The manager verifies the package before stopping the current server. It checkpoints `data/`, `workspace/`, `server.env`, and the two generated secrets; writes an update journal; activates the candidate; and starts it. A failed candidate startup is stopped before the previous release is selected, the checkpoint is restored, and the previous release is restarted. Updates with a different `stateFormat` are rejected until a tested migration exists. The model cache is retained outside the checkpoint. Symlinks inside `data/` and `workspace/` are preserved as links; their external target contents are not checkpointed. The top-level checkpointed entries cannot be symlinks.
 
+On native Linux, Box may own files in `data/` and `workspace/` as its container user. Before a release checkpoint, the manager verifies that every service in this server project is stopped, then uses a one-shot root process from the pinned app image to return ownership of only those two mounts to the release operator. Starting the server gives those files back to Box as needed. Model caches and other server projects are not changed.
+
 Rollback keeps user state created after the update. It takes a fresh checkpoint before switching versions, and restores that checkpoint if the old release fails to start:
 
 ```sh

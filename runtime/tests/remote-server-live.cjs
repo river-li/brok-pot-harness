@@ -25,6 +25,101 @@ function privateFile(file, value) {
   fs.chmodSync(file, 0o600);
 }
 
+function inspectBoxVncRoute(value) {
+  try {
+    const url = new URL(value);
+    const pathValue = url.searchParams.get("path");
+    const forkWindow = /^websockify\?token=(\d+)$/.exec(pathValue || "");
+    return {
+      protocol: url.protocol,
+      hostname: url.hostname,
+      port: url.port ? Number(url.port) : url.protocol === "https:" ? 443 : 80,
+      pathname: url.pathname,
+      hasQuery: url.search.length > 0,
+      queryParameterCount: [...url.searchParams.keys()].length,
+      hasFragment: url.hash.length > 0,
+      forkWindowIndex: forkWindow ? Number(forkWindow[1]) : null,
+    };
+  } catch {
+    return { invalidUrl: true };
+  }
+}
+
+function verifyBoxVncRoute(value, { primaryPort, forkPort }) {
+  const route = inspectBoxVncRoute(value);
+  assert.equal(route.invalidUrl, undefined, "running Box must report an absolute display URL");
+  assert.equal(route.protocol, "http:", "server Box display URL must use the tunneled HTTP endpoint");
+  assert.equal(route.hostname, "127.0.0.1", "server Box display URL must stay on the loopback tunnel");
+  assert.equal(route.pathname, "/vnc.html", "server Box display URL must use the noVNC page");
+  if (route.port === primaryPort) {
+    assert.equal(route.hasQuery, false, "primary display URL must not carry a fork-window token");
+    assert.equal(route.hasFragment, false, "primary display URL must not carry a fragment");
+    return { kind: "primary", port: route.port, pathname: route.pathname };
+  }
+  assert.equal(route.port, forkPort, "fork display URL must use the configured control tunnel port");
+  assert.equal(route.queryParameterCount, 1, "fork display URL must have only its window route parameter");
+  assert.equal(route.hasFragment, false, "fork display URL must not carry a fragment");
+  assert.ok(Number.isInteger(route.forkWindowIndex) && route.forkWindowIndex >= 2,
+    "fork display URL must preserve the assigned non-primary window token");
+  return { kind: "fork", port: route.port, pathname: route.pathname, windowIndex: route.forkWindowIndex };
+}
+
+function sanitizeCommandLog(file, stateDir) {
+  if (!fs.existsSync(file)) return null;
+  let contents = fs.readFileSync(file, "utf8");
+  const secrets = [providerKey];
+  for (const name of ["gateway-token", "search-secret"]) {
+    const secretPath = path.join(stateDir, name);
+    if (fs.existsSync(secretPath)) secrets.push(fs.readFileSync(secretPath, "utf8").trim());
+  }
+  for (const secret of secrets) {
+    if (secret) contents = contents.split(secret).join("[redacted]");
+  }
+  contents = contents
+    .replace(/\bBearer\s+[^\s"']+/gi, "Bearer [redacted]")
+    .replace(/\b(LITELLM_API_KEY|GROKBOT_GATEWAY_TOKEN|GROKBOT_SEARCH_SECRET)=\S+/gi, "$1=[redacted]")
+    .replace(/https?:\/\/[^\s"'<>]+/gi, "[URL redacted]");
+  return contents.split(/\r?\n/).slice(-60).join("\n").slice(-4096);
+}
+
+function failureReport({ diagnosticsDir, stateDir, stage, error, cleanupError, displayRoute, fixture, releaseManager }) {
+  const cleanupCommands = fs.readdirSync(diagnosticsDir)
+    .filter((name) => /-(?:stop|compose-down|prepare-release-state|update|rollback)\.log$/.test(name))
+    .sort()
+    .map((name) => ({ name, outputTail: sanitizeCommandLog(path.join(diagnosticsDir, name), stateDir) }));
+  const safeError = (value) => value == null ? null : {
+    name: String(value.name || "Error").slice(0, 120),
+    message: String(value.message || value)
+      .replaceAll(providerKey, "[redacted]")
+      .replace(/\bBearer\s+[^\s"']+/gi, "Bearer [redacted]")
+      .replace(/https?:\/\/[^\s"'<>]+/gi, "[URL redacted]")
+      .slice(0, 1200),
+  };
+  let dockerEnginePlatform = "unavailable";
+  try {
+    dockerEnginePlatform = require("node:child_process")
+      .execFileSync("docker", ["info", "--format", "{{.OSType}}/{{.Architecture}}"], { encoding: "utf8", timeout: 3000 }).trim();
+  } catch {}
+  return {
+    result: "failed",
+    fixture: "deterministic Responses API fixture; no external inference",
+    testRunnerPlatform: process.platform + "/" + os.arch(),
+    dockerEnginePlatform,
+    stage,
+    releaseManager,
+    failure: safeError(error),
+    cleanupFailure: safeError(cleanupError),
+    displayRoute,
+    cleanupCommands,
+    observationCounts: {
+      modelRequests: fixture.observations.modelRequests,
+      classifierRequests: fixture.observations.classifierRequests,
+      authorizedRequests: fixture.observations.authorizedRequests,
+      fixtureErrors: fixture.observations.fixtureErrors,
+    },
+  };
+}
+
 function runProcess(command, args, env, logFile) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, { cwd: repository, env, stdio: ["ignore", "pipe", "pipe"] });
@@ -554,8 +649,12 @@ async function main() {
   }
   const fixture = createResponsesFixture();
   let serverStarted = false;
+  let serverStartAttempted = false;
   let currentToken = "";
   let mainFailure = null;
+  let testStage = "fixture setup";
+  let displayRoute = null;
+  let releaseUpdate = null;
   let eventStream = null;
   let commandNumber = 0;
   const observedDesktopReview = [];
@@ -570,6 +669,35 @@ async function main() {
     return result.output;
   };
   const readToken = () => fs.readFileSync(path.join(stateDir, "gateway-token"), "utf8").trim();
+  const testComposeEnv = () => ({
+    ...cliEnv,
+    GROKBOT_GATEWAY_TOKEN: readToken(),
+    GROKBOT_SEARCH_SECRET: fs.readFileSync(path.join(stateDir, "search-secret"), "utf8").trim(),
+  });
+  const readBoxStateJson = async (name) => {
+    const allowed = new Set(["host-interrupted-user-turns.json", "ack-obligations.json"]);
+    assert.ok(allowed.has(name), "test may inspect only the two recovery journals");
+    const script = "const fs=require('node:fs');try{process.stdout.write(fs.readFileSync(process.argv[1],'utf8'))}catch(e){if(e.code==='ENOENT')process.stdout.write('null');else{console.error(e.message);process.exitCode=1}}";
+    const args = [
+      "compose", "--env-file", envFile, "--project-name", projectName,
+      "-f", path.join(repository, "runtime/compose.yaml"),
+      "exec", "-T", "--user", "0:0", "app", "/exec-daemon/node", "-e", script, "--",
+      "/home/box/sand-data/" + name,
+    ];
+    const result = await runProcess("docker", args, testComposeEnv(), commandLog("inspect-" + name));
+    assert.equal(result.code, 0, "bounded Box container journal inspection must succeed");
+    return JSON.parse(result.output.trim() || "null");
+  };
+  const readReclaimedStateJson = (name) => {
+    assert.ok(new Set(["host-interrupted-user-turns.json", "ack-obligations.json"]).has(name),
+      "test may inspect only the two recovery journals");
+    try {
+      return JSON.parse(fs.readFileSync(path.join(stateDir, "data", name), "utf8"));
+    } catch (error) {
+      if (error.code === "ENOENT") return null;
+      throw error;
+    }
+  };
   const waitReady = async () => waitFor(async () => {
     const response = await fetch(gatewayUrl + "/health", { signal: AbortSignal.timeout(1500) });
     return response.ok;
@@ -580,7 +708,12 @@ async function main() {
       fixture.server.once("error", reject);
       fixture.server.listen(fixturePort, "0.0.0.0", resolve);
     });
+    if (process.argv.includes("--test-failure-report")) {
+      testStage = "intentional failure-report contract";
+      throw new Error("Intentional diagnostic failure fixture.");
+    }
     if (releaseManagerMode) {
+      testStage = "release archive installation";
       const installEnv = { ...cliEnv, NODE: node };
       const install = await runProcess(path.join(repository, "install.sh"), [], installEnv, commandLog("archive-install"));
       assert.equal(install.code, 0, "actual release archive install script must succeed");
@@ -602,8 +735,10 @@ async function main() {
       "",
     ].join("\n"));
 
-    await invoke("start");
+    testStage = "server start and readiness";
     serverStarted = true;
+    serverStartAttempted = true;
+    await invoke("start");
     await waitReady();
     currentToken = readToken();
 
@@ -634,6 +769,7 @@ async function main() {
     })).agent;
     const markerA = "remote-box-a-" + id;
     const markerB = "remote-box-b-" + id;
+    testStage = "concurrent Box tasks and display route";
     fixture.addTask(markerA);
     fixture.addTask(markerB);
     const nonceA = randomUUID();
@@ -663,9 +799,16 @@ async function main() {
     const downloadedA = await downloadAttachment(gatewayUrl, currentToken, agentA.id, attachmentA, markerA);
     const downloadedB = await downloadAttachment(gatewayUrl, currentToken, agentB.id, attachmentB, markerB);
     assert.notEqual(downloadedA, downloadedB, "each Bot attachment must stay scoped to its own data");
-    const boxStatus = await gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentA.id });
-    assert.equal(boxStatus.vncUrl, `http://127.0.0.1:${vncPort}/vnc.html`,
-      "server Box display URLs must resolve through the configured loopback SSH tunnel port");
+    const [boxStatusA, boxStatusB] = await Promise.all([
+      gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentA.id }),
+      gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentB.id }),
+    ]);
+    const routeA = verifyBoxVncRoute(boxStatusA.vncUrl, { primaryPort: vncPort, forkPort: vncControlPort });
+    const routeB = verifyBoxVncRoute(boxStatusB.vncUrl, { primaryPort: vncPort, forkPort: vncControlPort });
+    assert.notEqual(routeA.kind, routeB.kind,
+      "concurrent independent Bots must retain one primary and one fork display route");
+    displayRoute = { primaryPort: vncPort, forkPort: vncControlPort, agentA: routeA, agentB: routeB };
+    testStage = "authenticated server and state contracts";
     const hasTaskEvent = (agentId, marker) => authorizedEvents.observed.some((event) => {
       const encoded = JSON.stringify(event);
       return encoded.includes(agentId) && encoded.includes(marker);
@@ -858,16 +1001,10 @@ async function main() {
       return host.isBusy === false ? host : null;
     }, "explicitly stopped Host turn to settle");
     assert.equal(explicitlyStoppedTask.modelCalls, 1, "explicit Stop must not restart the cancelled provider request");
-    const interruptedJournalPath = path.join(stateDir, "data", "host-interrupted-user-turns.json");
-    const stoppedJournal = fs.existsSync(interruptedJournalPath)
-      ? JSON.parse(fs.readFileSync(interruptedJournalPath, "utf8")).pending
-      : [];
+    const stoppedJournal = (await readBoxStateJson("host-interrupted-user-turns.json"))?.pending || [];
     assert.ok(!stoppedJournal.some((entry) => entry.agentId === agentExplicitStop.id),
       "explicit Stop must retire that Bot's accepted-turn recovery record before interruption");
-    const ackJournalPath = path.join(stateDir, "data", "ack-obligations.json");
-    const stoppedAckJournal = fs.existsSync(ackJournalPath)
-      ? JSON.parse(fs.readFileSync(ackJournalPath, "utf8")).pending
-      : [];
+    const stoppedAckJournal = (await readBoxStateJson("ack-obligations.json"))?.pending || [];
     assert.ok(!stoppedAckJournal.some((entry) => entry.agentId === agentExplicitStop.id),
       "explicit Stop before visible acknowledgment must also retire the independent ack-redrive obligation");
 
@@ -936,10 +1073,7 @@ async function main() {
       const host = await gatewayCall(gatewayUrl, currentToken, "getHostStatus", { includeManagedCapabilities: false });
       return host.isBusy === false ? host : null;
     }, "the covering same-Bot turn to settle");
-    const recoveryJournalPath = path.join(stateDir, "data", "host-interrupted-user-turns.json");
-    const pendingBeforeRestart = fs.existsSync(recoveryJournalPath)
-      ? JSON.parse(fs.readFileSync(recoveryJournalPath, "utf8")).pending
-      : [];
+    const pendingBeforeRestart = (await readBoxStateJson("host-interrupted-user-turns.json"))?.pending || [];
     const coalescedPending = pendingBeforeRestart.filter((entry) => entry.agentId === agentCoalesced.id);
     const coalescedTargetIds = [acceptedCoalescedMessageIds.a, acceptedCoalescedMessageIds.b];
     assert.ok(!coalescedPending.some((entry) => coalescedTargetIds.includes(entry.userMessageId)),
@@ -951,9 +1085,8 @@ async function main() {
       "the settled covering turn must leave only the still-running predecessor blocker before server shutdown");
     await invoke("stop");
     serverStarted = false;
-    const stoppedRecoveryJournal = fs.existsSync(recoveryJournalPath)
-      ? JSON.parse(fs.readFileSync(recoveryJournalPath, "utf8")).pending
-      : [];
+    await invoke("prepare-release-state");
+    const stoppedRecoveryJournal = readReclaimedStateJson("host-interrupted-user-turns.json")?.pending || [];
     const blockerAfterStop = stoppedRecoveryJournal.find((entry) =>
       entry.agentId === agentCoalesced.id && entry.userMessageId === acceptedCoalescedMessageIds.blocker);
     assert.equal(blockerAfterStop?.state, "interrupted",
@@ -961,8 +1094,8 @@ async function main() {
     assert.ok(!stoppedRecoveryJournal.some((entry) =>
       entry.agentId === agentCoalesced.id && coalescedTargetIds.includes(entry.userMessageId)),
     "graceful stop must keep the completed coalesced A/B IDs retired");
-    await invoke("start");
     serverStarted = true;
+    await invoke("start");
     currentToken = readToken();
     await waitReady();
     const hasInterruptionNotice = (entries, userMessageId) => entries.some((entry) =>
@@ -1009,8 +1142,8 @@ async function main() {
     await gatewayCall(gatewayUrl, currentToken, "sendPrompt", { agentId: agentRecovery.id, clientNonce: recoveryNonce, prompt: recoveryPrompt });
     await invoke("stop");
     serverStarted = false;
-    await invoke("start");
     serverStarted = true;
+    await invoke("start");
     currentToken = readToken();
     await waitReady();
     await waitFor(async () => {
@@ -1048,8 +1181,8 @@ async function main() {
     await acknowledgedTask.blocked;
     await invoke("stop");
     serverStarted = false;
-    await invoke("start");
     serverStarted = true;
+    await invoke("start");
     currentToken = readToken();
     await waitReady();
     await delay(7000);
@@ -1100,7 +1233,6 @@ async function main() {
       ) ? transcript : null;
     }, "same-task recovery to become idle with its durable notice updated", 60_000);
 
-    let releaseUpdate = null;
     if (releaseManagerMode) {
       const synthetic = makeSyntheticReleaseVersion(repository, path.join(runRoot, "synthetic-update-package"));
       const update = await invoke("update", [synthetic.root]);
@@ -1181,6 +1313,7 @@ async function main() {
       ],
       observations: fixture.observations,
       releaseManager: releaseUpdate,
+      displayRoute,
       diagnosticPath: diagnosticsDir,
     };
     privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(report, null, 2) + "\n");
@@ -1195,18 +1328,20 @@ async function main() {
     await new Promise((resolve) => fixture.server.close(() => resolve())).catch(() => {});
     let cleanupFailure = null;
     if (serverStarted) {
-      try { await invoke("stop"); } catch (error) { cleanupFailure = error; }
+      try {
+        await invoke("stop");
+        serverStarted = false;
+      } catch (error) { cleanupFailure = error; }
     }
     if (fs.existsSync(envFile)) {
       const composeArgs = [
         "compose", "--env-file", envFile, "--project-name", projectName,
         "-f", path.join(repository, "runtime/compose.yaml"), "down", "--remove-orphans",
       ];
-      const cleanupEnv = {
-        ...cliEnv,
-        GROKBOT_GATEWAY_TOKEN: readToken(),
-        GROKBOT_SEARCH_SECRET: fs.readFileSync(path.join(stateDir, "search-secret"), "utf8").trim(),
-      };
+      const cleanupEnv = testComposeEnv();
+      if (serverStartAttempted && (releaseManagerMode || process.platform === "linux")) {
+        try { await invoke("prepare-release-state"); } catch (error) { cleanupFailure = cleanupFailure || error; }
+      }
       try {
         const down = await runProcess("docker", composeArgs, cleanupEnv, commandLog("compose-down"));
         assert.equal(down.code, 0, "isolated Compose project cleanup must succeed; see private diagnostics");
@@ -1220,6 +1355,18 @@ async function main() {
         privateFile(path.join(diagnosticsDir, "cleanup-failure.txt"), String(error.stack || error));
       }
     }
+    if (mainFailure || cleanupFailure) {
+      privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(failureReport({
+        diagnosticsDir,
+        stateDir,
+        stage: testStage,
+        error: mainFailure,
+        cleanupError: cleanupFailure,
+        displayRoute,
+        fixture,
+        releaseManager: releaseUpdate,
+      }), null, 2) + "\n");
+    }
     if (mainFailure) {
       privateFile(path.join(diagnosticsDir, "failure.txt"), String(mainFailure.stack || mainFailure));
       privateFile(path.join(diagnosticsDir, "fixture-summary.json"), JSON.stringify(fixture.observations, null, 2) + "\n");
@@ -1231,7 +1378,11 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error.message);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { inspectBoxVncRoute, verifyBoxVncRoute };

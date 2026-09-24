@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
-const { containerApiUrl, runtimeEnv, serverConfig } = require("../server.cjs");
+const { assertComposeProjectStopped, containerApiUrl, runtimeEnv, serverConfig } = require("../server.cjs");
 
 test("server profile creates private persistent data and Box-writable workspace", (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-server-profile-"));
@@ -43,6 +43,30 @@ test("server profile rejects invalid project and host port values", () => {
   assert.throws(() => serverConfig({ GBH_SERVER_PROJECT: "UPPER CASE" }));
   assert.throws(() => serverConfig({ GBH_SERVER_GATEWAY_PORT: "80" }));
   assert.throws(() => serverConfig({ GBH_SERVER_VNC_PORT: "70000" }));
+});
+
+test("release state ownership preparation requires a verified stopped Compose project", () => {
+  const config = serverConfig({ GBH_SERVER_STATE_DIR: "/tmp/gbh-release-state-contract", GBH_SERVER_PROJECT: "gbh-release-contract" });
+  const composeEnv = { GROKBOT_GATEWAY_TOKEN: "fixture-gateway-secret", GROKBOT_SEARCH_SECRET: "fixture-search-secret" };
+  const ids = ["a".repeat(64), "b".repeat(64)];
+  const calls = [];
+  assert.doesNotThrow(() => assertComposeProjectStopped(config, composeEnv, (_command, args, options) => {
+    calls.push(args);
+    assert.equal(options.env, composeEnv, "Compose inspection must receive the same generated secrets as the release helper");
+    return { status: 0, stdout: calls.length === 1 ? ids.join("\n") : "false\nfalse\n" };
+  }));
+  assert.match(calls[0].join(" "), /ps --all --quiet/);
+  assert.deepEqual(calls[1].slice(-2), ids);
+
+  assert.throws(() => assertComposeProjectStopped(config, composeEnv, (_command, args) => ({
+    status: 0,
+    stdout: args.includes("--quiet") ? ids[0] : "true\n",
+  })), /Stop every server service/);
+  assert.throws(() => assertComposeProjectStopped(config, composeEnv, () => ({ status: 1, stdout: "" })), /Could not verify/);
+  assert.throws(() => assertComposeProjectStopped(config, composeEnv, (_command, args) => ({
+    status: 0,
+    stdout: args.includes("--quiet") ? "not-a-container-id" : "false\n",
+  })), /unverifiable server container ID/);
 });
 
 test("nonempty shell settings override server.env while blank shell values keep configured values", (t) => {

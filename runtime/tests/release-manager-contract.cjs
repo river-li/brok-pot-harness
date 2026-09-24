@@ -14,6 +14,7 @@ const {
   rollbackRelease,
   restoreState,
   snapshotState,
+  stopAndSnapshot,
   updateRelease,
   verifyPackage,
   withLock,
@@ -129,6 +130,59 @@ test("retrying install after state initialization failure reuses the active pack
   const launcher = spawnSync(path.join(home, "bin", "gbh-server"), ["status"], { encoding: "utf8", env: launcherEnv });
   assert.equal(launcher.status, 0, launcher.stderr);
   assert.match(fs.readFileSync(path.join(state, "server-commands.log"), "utf8"), /0\.1\.0-preview\.1:status/);
+});
+
+test("failed state ownership preparation restarts the current release before aborting an update", (t) => {
+  const { first, second, home, state } = fixture(t);
+  installRelease(first, home, state, () => 0);
+  const calls = [];
+  assert.throws(() => updateRelease(second, home, state, (release, command) => {
+    calls.push([path.basename(release), command]);
+    return command === "prepare-release-state" ? 1 : 0;
+  }), /current server was restarted and state was unchanged/);
+
+  assert.deepEqual(calls, [
+    ["0.1.0-preview.1", "stop"],
+    ["0.1.0-preview.1", "prepare-release-state"],
+    ["0.1.0-preview.1", "start"],
+  ]);
+  assert.equal(path.basename(currentRelease(home)), "0.1.0-preview.1");
+  assert.equal(fs.readFileSync(path.join(state, "data", "before-update.txt"), "utf8"), "keep me\n");
+  assert.equal(fs.existsSync(path.join(home, "backups")), false);
+  assert.equal(fs.existsSync(path.join(home, "update-in-progress.json")), false);
+});
+
+test("partial Compose stop failure restarts the current release without preparing a checkpoint", (t) => {
+  const { first, second, home, state } = fixture(t);
+  installRelease(first, home, state, () => 0);
+  const calls = [];
+  assert.throws(() => updateRelease(second, home, state, (release, command) => {
+    calls.push([path.basename(release), command]);
+    return command === "stop" ? 1 : 0;
+  }), /current server was restarted and state was unchanged: Could not stop the current server cleanly/);
+  assert.deepEqual(calls, [
+    ["0.1.0-preview.1", "stop"],
+    ["0.1.0-preview.1", "start"],
+  ]);
+  assert.equal(path.basename(currentRelease(home)), "0.1.0-preview.1");
+  assert.equal(fs.readFileSync(path.join(state, "data", "before-update.txt"), "utf8"), "keep me\n");
+  assert.equal(fs.existsSync(path.join(home, "backups")), false);
+});
+
+test("partial checkpoint cleanup cannot prevent restarting the stopped release", (t) => {
+  const { first, state } = fixture(t);
+  const calls = [];
+  assert.throws(() => stopAndSnapshot(first, state, path.join(state, "partial-backup"), (_release, command) => {
+    calls.push(command);
+    return 0;
+  }, {
+    snapshot() { throw new Error("injected checkpoint failure"); },
+    removeBackup() {
+      calls.push("cleanup");
+      throw new Error("injected cleanup failure");
+    },
+  }), /current server was restarted and state was unchanged: injected checkpoint failure.*cleanup also failed: injected cleanup failure/);
+  assert.deepEqual(calls, ["stop", "prepare-release-state", "start", "cleanup"]);
 });
 
 test("same-format rollback keeps user writes made after the successful update", (t) => {
@@ -286,6 +340,6 @@ test("a killed updater is manually unlocked and the recovery command restores st
   assert.equal(fs.existsSync(lockFile), false);
   assert.deepEqual(
     fs.readFileSync(path.join(state, "server-commands.log"), "utf8").trim().split("\n"),
-    ["0.1.0-preview.2:stop", "0.1.0-preview.1:start"],
+    ["0.1.0-preview.2:stop", "0.1.0-preview.2:prepare-release-state", "0.1.0-preview.1:start"],
   );
 });

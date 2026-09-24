@@ -432,8 +432,12 @@ function recoverInterruptedUpdate(home, stateDir, runServer) {
   if (!fs.existsSync(journalFile)) return false;
   const journal = readJournal(journalFile, home, stateDir);
   const active = currentRelease(home);
-  if (active && runServer(active, "stop") !== 0) {
+  const controlDir = active || journal.newDir;
+  if (runServer(controlDir, "stop") !== 0) {
     throw new Error("Cannot stop the active server for interrupted-update recovery; state was left untouched.");
+  }
+  if (runServer(controlDir, "prepare-release-state") !== 0) {
+    throw new Error("Cannot return stopped Box state to the release operator for recovery; the journal and state were left untouched.");
   }
   restoreState(stateDir, journal.backupDir, journal.snapshotDigest);
   activate(home, journal.oldDir);
@@ -444,16 +448,41 @@ function recoverInterruptedUpdate(home, stateDir, runServer) {
   return true;
 }
 
-function stopAndSnapshot(activeDir, stateDir, backupDir, runServer) {
+function stopAndSnapshot(activeDir, stateDir, backupDir, runServer, operations = {}) {
   validateStatePaths(stateDir);
-  if (runServer(activeDir, "stop") !== 0) throw new Error("Could not stop the current server; no release or state was changed.");
+  let backupAttempted = false;
   try {
-    return snapshotState(stateDir, backupDir);
-  } catch (error) {
-    if (runServer(activeDir, "start") !== 0) {
-      throw new Error(`Could not checkpoint state and the current server could not restart: ${error.message}`);
+    if (runServer(activeDir, "stop") !== 0) {
+      throw new Error("Could not stop the current server cleanly.");
     }
-    throw new Error(`Could not checkpoint state; the current server was restarted and state was unchanged: ${error.message}`);
+    if (runServer(activeDir, "prepare-release-state") !== 0) {
+      throw new Error("Could not return stopped Box state to the release operator.");
+    }
+    backupAttempted = true;
+    return (operations.snapshot || snapshotState)(stateDir, backupDir);
+  } catch (error) {
+    let restartStatus = 1;
+    let restartError = null;
+    try {
+      restartStatus = runServer(activeDir, "start");
+    } catch (restartFailure) {
+      restartError = restartFailure;
+    }
+    let cleanupError = null;
+    try {
+      if (backupAttempted) {
+        if (operations.removeBackup) operations.removeBackup(backupDir);
+        else fs.rmSync(backupDir, { recursive: true, force: true });
+      }
+    } catch (cleanupFailure) {
+      cleanupError = cleanupFailure;
+    }
+    const cleanupNote = cleanupError ? ` Partial backup cleanup also failed: ${cleanupError.message}` : "";
+    if (restartStatus !== 0 || restartError) {
+      const restartNote = restartError ? restartError.message : `exit ${restartStatus}`;
+      throw new Error(`Could not checkpoint state and the current server could not restart (${restartNote}): ${error.message}${cleanupNote}`);
+    }
+    throw new Error(`Could not checkpoint state; the current server was restarted and state was unchanged: ${error.message}${cleanupNote}`);
   }
 }
 
@@ -629,7 +658,7 @@ function main(argv = process.argv, env = process.env) {
       console.log(`${verifyPackage(current).manifest.releaseVersion} (${verifyPackage(current).manifest.sourceCommit})`);
       return;
     }
-    if (["start", "stop", "status", "logs"].includes(command)) {
+    if (["start", "stop", "status", "logs", "prepare-release-state"].includes(command)) {
       const code = serverCommand(current, command);
       if (code !== 0) process.exitCode = code;
       return;

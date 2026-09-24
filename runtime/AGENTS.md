@@ -17,6 +17,10 @@ maintained Electron assets, and runtime tests. See the
   state profile. Keep generated state under its selected state directory,
   restrict token/env-file permissions, bind Gateway and display ports to
   loopback, and clean up only the project selected by its private config.
+  Box startup may change data/workspace ownership to its in-container user on
+  native Linux. Release checkpoints may reclaim only those two mounts through
+  the pinned app image after verifying every project container is stopped;
+  keep model caches outside the checkpoint and avoid changing unrelated owners.
   Server model keys are read from that server env or the invoking shell; do not
   place them in the remote desktop environment or logs.
 - `release.cjs` manages only the versioned self-hosted preview under its chosen
