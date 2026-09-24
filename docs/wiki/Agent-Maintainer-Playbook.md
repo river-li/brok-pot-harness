@@ -2,6 +2,8 @@
 
 Use this page to take a useful issue through implementation, independent review, merge, and follow-up. The issue forms and [issue triage guide](Issue-Triage.md) collect and assess reports; this page explains how maintainers turn selected work into one reviewable delivery. Repository AGENTS.md files remain authoritative for source and component constraints.
 
+The repository-owned [maintenance CLI](../../tools/README.md#agent-maintenance-workflow) prepares registered task worktrees and prints read-only triage and PR readiness evidence. This page remains the policy source; the CLI does not replace review judgment or merge authority.
+
 ```mermaid
 flowchart LR
   Intake --> Triage --> Batch --> Worktree[isolated worktree from current main]
@@ -22,6 +24,8 @@ For a feature, identify the user task and an observable result. For documentatio
 
 After triage, assign one area label, one priority label, and the appropriate status label as authorized. Priority describes execution order: high work unblocks a prerequisite or dependent delivery, normal work is actionable without a reason to go first, and low work can wait. Record impact separately; severity alone does not set priority. The [triage guide](Issue-Triage.md) owns label definitions, status rules, privacy, and form maintenance.
 
+For a bounded read-only report, run `npm run maintenance -- triage --limit 100`. It queries up to 100 current-repository issues and workflow runs, groups exact normalized issue-title matches and repeated workflow/event/branch failures, and links the evidence. Grouping proposes where to inspect; it does not confirm duplicates or a shared failure cause. Issue bodies and run logs are not included. The command does not post, label, or create issues, and it is not scheduled for unattended writes.
+
 ## Choose a delivery and schedule it
 
 Group work by outcome, not by issue count. One PR can resolve several related issues when they share a cause or deliverable. Include the code, tests, and documentation needed to understand and protect that outcome. A small documentation correction normally travels with the feature or fix it explains. A standalone documentation PR is appropriate when it forms a useful, coherent guide on its own.
@@ -32,17 +36,27 @@ The coordinator handles priority, scheduling, ownership, and routing. Assign one
 
 ## Investigate and implement
 
-Fetch current main, then create an isolated worktree from it. Confirm the starting commit and clean status:
+Run setup from the primary checkout, which may be on another branch and may contain uncommitted user changes. The CLI fetches the current base, checks issue/dependency state, reserves ownership, and creates a separate linked worktree without switching or resetting the primary checkout:
 
 ```sh
-git fetch origin main
-git worktree add -b agent/<slug> .runtime/worktrees/<slug> origin/main
+npm run maintenance -- task start --issue 123 --slug focused-change \
+  --owner implementation-agent --reviewer coordinator-agent \
+  --reviewer-account github-reviewer-login \
+  --path tools/maintenance.py --path tools/test_maintenance.py \
+  --accept "observable behavior is delivered" \
+  --check "npm run test:recovery" \
+  --rollout "verify the published page after merge" \
+  --depends-on-pr 120
 cd .runtime/worktrees/<slug>
 git status --short --branch
 git rev-parse HEAD
 ```
 
+Repeat `--path`, `--accept`, and `--check` for each owned path, acceptance outcome, and pre-merge check. Omit `--depends-on-pr` when there is no unmerged-branch dependency and use `--rollout` only for evidence expected after merge. Paths are repository-relative and a directory reserves all descendants. The task bundle records the implementation owner, separately designated reviewer agent, trusted GitHub account for process verdicts, acceptance, checks, rollout, dependency evidence, exact starting main SHA, and handoff steps.
+
 Keep one implementation owner for an overlapping set of files. The coordinator assigns and schedules work; when two deliveries need the same files or behavior, finish and merge the prerequisite first, then create the next worktree from updated main. Independent work can proceed at the same time when ownership and test resources do not overlap.
+
+The ownership registry lives in shared Git metadata and coordinates only tasks started from this checkout. Overlapping registered scopes fail and identify the current owner; ask the coordinator to compare work in other clones or unregistered tasks. Setup refuses an existing branch, bundle, or worktree path and never overwrites them. Git verifies the fetched starting commit and current ancestry, but cannot prove historical branch creation or detect commits copied from unmerged work. Run `npm run maintenance -- task list` to inspect reservations and `npm run maintenance -- task release --slug <slug> --reason "..."` to release ownership after handoff; release leaves files, branches, and worktrees intact.
 
 Read the root and applicable scoped AGENTS.md, the relevant module README, and the architecture or recovery guide for the source being changed. Trace the maintained source, existing behavior, and relevant tests before editing. For bugs, record what you observed separately from what you inferred. If the symptom does not reproduce, say what you tried and what remains unknown.
 
@@ -70,17 +84,29 @@ CI and pre-PR use the same gate runner. Markdown-only changes run recovery and d
 
 Automated gates do not decide whether work is usefully scoped, technically sound, clearly explained, or independently reviewed. Those require a maintainer and a separate reviewer to read the actual change. The workflow cannot infer those judgments from issue counts, labels, or a text pattern.
 
+Keep the visible PR description concise and human-readable: explain the problem, concrete behavior change, and design choices. Put exhaustive commands, file lists, full SHAs, and evidence in a collapsed section using the [PR template](../../.github/PULL_REQUEST_TEMPLATE.md). A checklist or generated report supports review; it does not replace it.
+
 Use Refs #123 while any required issue criteria remain open or deferred. Use Fixes #123 only when this delivery satisfies the full issue and automatic closure on merge is intended. Related issues can be listed together; issue count does not determine PR count.
 
 ## Review and merge
 
 After the PR is published, a separate reviewer in a fresh worktree checks the exact head SHA against its declared main base. The reviewer reads every changed file, checks the design and behavior, reruns relevant checks, and reports concrete findings and evidence limits. The coordinator routes findings; the PR author does not approve their own work. A same-account review is a comment, not independent GitHub approval. The current branch rule requires zero GitHub approvals because this publishing account cannot supply an independent approval; the process still requires a separate agent's published-head comment and verdict.
 
+The coordinator may also serve as reviewer when explicitly designated for the task and distinct from the implementation owner/PR author. This keeps the reviewer role separate while allowing the coordinator to perform the technical review. GitHub records the posting account but does not identify which agent used it. Use the prior task designation and the actual reviewer's role as process evidence; never accept an identity asserted only in a comment body.
+
 Write the human review summary in Chinese. Name the reviewed head and base. Separate blocking findings from non-blocking observations and point to files and lines where possible. A verdict applies only to that head/base pair. Any changed head or base invalidates the old verdict; the author fixes findings and the reviewer checks the new published head.
 
-On this repository, adding the `review:pending` label starts `.github/workflows/claude-review.yml`. That workflow invokes the Claude Code action with its configured OAuth token and asks it to submit an `APPROVE` or `REQUEST_CHANGES` review. The label is therefore an action trigger, not a neutral pending marker. For the Luna or same-account review path, leave all `review:*` labels off while a fresh review is pending. The separate reviewer posts a GitHub `COMMENT` with a clear `READY_TO_MERGE` or `NEEDS_CHANGES` verdict, the exact head and base SHAs, and the Chinese summary. The coordinator records that result and applies the existing `review:ready-to-merge` or `review:changes-requested` label. A same-account `COMMENT` is process evidence, not a GitHub approval. When the head or base changes, remove any old final verdict label and route a fresh review; the earlier verdict no longer applies. Do not add `review:pending` unless the Claude workflow is intentionally being started.
+For a current machine-readable evidence report, run `npm run maintenance -- pr readiness <number>`. If no task assignment is registered, pass `--reviewer-account github-reviewer-login`; without an explicit or registered account binding, it reports evidence but never says ready. The command reads current PR metadata, current `main` SHA, required checks, every paginated GitHub review record, and the exact PR head commit. GitHub's compare response does not include a `head_commit` field: readiness verifies the requested head with the separate commit lookup, then requires the compare response's base and merge base to equal current main, `status: ahead`, `ahead_by > 0`, and `behind_by = 0`. It re-reads PR and main refs after collection; a head, base, or main movement makes the report unstable.
+
+A process verdict is a `COMMENTED` review with a natural-language summary first and a `GBH review evidence` details block containing `verdict: READY_TO_MERGE` or `verdict: NEEDS_CHANGES`, `head-sha: <full-sha>`, and `base-sha: <full-sha>`. The review API's `commit_id` must also equal the current head. Only the explicitly designated GitHub account is accepted; an outsider comment is evidence but cannot qualify. `NEEDS_CHANGES`, a current formal `CHANGES_REQUESTED` review, or GitHub's `reviewDecision: CHANGES_REQUESTED` blocks readiness. A later plain comment cannot erase an outstanding formal request-changes review. A stale verdict, failed or pending current required check, old main ancestry, or active `review:pending` label cannot produce a ready report. This report is read-only; it does not submit reviews, approve, merge, execute PR code, or decide review quality.
+
+On this repository, adding the `review:pending` label starts `.github/workflows/claude-review.yml`. That workflow invokes the Claude Code action with its configured OAuth token and asks it to submit an `APPROVE` or `REQUEST_CHANGES` review. The label is an action trigger, not a neutral pending marker; this maintenance workflow never adds it. The separate reviewer posts a GitHub `COMMENT` with a clear verdict, exact head and base SHAs, and a Chinese summary. A same-account `COMMENT` is process evidence, not a GitHub approval. The account must have been designated in the task policy or readiness command. A coordinator may review when explicitly designated and distinct from the implementation owner. The coordinator can use the same GitHub account as the author when that distinct-agent role was assigned; GitHub account metadata cannot prove which agent used that account.
+
+The trusted `.github/workflows/invalidate-review-readiness.yml` removes stale `review:ready-to-merge`, `review:changes-requested`, and `review:pending` labels on head synchronization, base edits, and pushes to main. It checks out code from the trusted main branch and uses only API calls with narrow `contents:read`, `pull-requests:read`, and `issues:write` permissions; it never checks out or runs PR code with a privileged token. Readiness also rejects stale comment SHAs, so the label cleanup is an operational signal rather than the sole protection.
 
 Merge only when required checks pass, the independent review has no blockers, and a human or explicitly authorized coordinator has merge authority. Squash merge the PR into main. A ready verdict is not itself permission to merge or release.
+
+Separate merge checks from post-merge rollout. An initial Pages or release-infrastructure PR can merge when its code/configuration and required CI are ready; it does not need a production site or release that can only be created after merge. Record expected rollout checks explicitly and verify them after merge. Do not change `Fixes` to `Refs` only because a deployment runs after merge; use `Fixes` when issue acceptance is satisfied and automatic closure is intended. If live rollout is itself an unsatisfied issue criterion, keep that issue open with `Refs` until rollout evidence is recorded.
 
 ## Close the issue or carry the follow-up
 

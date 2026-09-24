@@ -6,7 +6,8 @@ steps, expected and actual behavior, and verification layer. Bug reports require
 fields that may not apply to feature and documentation requests are optional or allow “Not applicable.”
 
 Once a report is actionable, follow the [maintainer workflow](Agent-Maintainer-Playbook.md) to group related work into one delivery,
-assign an owner, start from current main, and carry the change through independent review. This page remains the reference for forms,
+assign an owner, start from current main, and carry the change through independent review. The repository [maintenance CLI](../../tools/README.md#agent-maintenance-workflow)
+can produce a bounded, read-only issue/CI candidate report; inspect linked evidence before making a triage decision. This page remains the reference for forms,
 labels, privacy, and triage decisions.
 
 The current source snapshot uses Host baseline **bfe1879**. For a bug report, verify and enter the baseline used by the affected build;

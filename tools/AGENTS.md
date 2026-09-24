@@ -19,6 +19,18 @@ include the scoped-guide audit through npm run docs:check. Follow the
 [maintainer workflow](../docs/wiki/Agent-Maintainer-Playbook.md) for issue ownership,
 main-based PRs, and independent review.
 
+The repository-owned maintenance CLI lives in maintenance.py and
+maintenance_workflow/. Keep task setup based on fetched origin/main without
+switching or resetting the primary checkout. Triage and PR readiness stay
+read-only, pin GitHub queries to the canonical repository for origin, and emit
+sanitized evidence only. The stale-label action may remove only the review labels
+documented in the maintainer workflow; it must execute trusted main-branch code
+with narrow API permissions and never run PR code with its token. Bind process
+verdicts to a designated GitHub account while keeping the reviewer agent role
+distinct from the implementation author. An explicitly designated coordinator
+may review when distinct from the author; GitHub account metadata cannot prove
+agent identity.
+
 `check-guidance.py` defines source components as directories under its listed
 maintained-source roots that have both a README and direct implementation
 files. It prunes `node_modules`, `.runtime`, and known language/tool caches
