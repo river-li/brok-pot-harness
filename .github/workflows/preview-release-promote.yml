@@ -158,13 +158,37 @@ jobs:
             -f "sha=$SOURCE_SHA" > .runtime/promotion/created-tag.json
           notes="$(mktemp)"
           trap 'rm -f "$notes"' EXIT
-          cat release/RELEASE-NOTES.md > "$notes"
-          cat >> "$notes" <<EOF
+          python3 - "$GH_REPO" "$SOURCE_SHA" "$CANDIDATE_RUN_ID" "$CANDIDATE_ATTEMPT" release/RELEASE-NOTES.md "$notes" <<'PY'
+          from pathlib import Path
+          import re
+          import sys
 
-          Promoted source commit: https://github.com/$GH_REPO/commit/$SOURCE_SHA
-          Candidate workflow run $CANDIDATE_RUN_ID, attempt $CANDIDATE_ATTEMPT: https://github.com/$GH_REPO/actions/runs/$CANDIDATE_RUN_ID/attempts/$CANDIDATE_ATTEMPT
-          Install and rollback instructions for this source: https://github.com/$GH_REPO/blob/$SOURCE_SHA/release/SERVER-INSTALL.md
-          EOF
+          repo, source_sha, run_id, attempt, source_path, output_path = sys.argv[1:]
+          notes = Path(source_path).read_text()
+          for filename in ("SERVER-INSTALL.md", "RESOURCE-NOTICES.md"):
+              relative = f"]({filename})"
+              pinned_url = f"https://github.com/{repo}/blob/{source_sha}/release/{filename}"
+              if notes.count(relative) != 1:
+                  raise SystemExit(f"Expected one release-note link to {filename}.")
+              notes = notes.replace(relative, f"]({pinned_url})")
+
+          notes += (
+              f"\n\nPromoted source commit: https://github.com/{repo}/commit/{source_sha}\n"
+              f"Candidate workflow run {run_id}, attempt {attempt}: "
+              f"https://github.com/{repo}/actions/runs/{run_id}/attempts/{attempt}\n"
+          )
+          for filename in ("SERVER-INSTALL.md", "RESOURCE-NOTICES.md"):
+              pinned_url = f"https://github.com/{repo}/blob/{source_sha}/release/{filename}"
+              if notes.count(f"]({pinned_url})") != 1 or f"]({filename})" in notes:
+                  raise SystemExit(f"Release-note link was not pinned to {source_sha}: {filename}.")
+          relative_targets = [
+              target for target in re.findall(r"\]\(([^)]+)\)", notes)
+              if not target.startswith(("https://", "http://", "#", "mailto:"))
+          ]
+          if relative_targets:
+              raise SystemExit("Release body contains an unpinned relative Markdown link.")
+          Path(output_path).write_text(notes)
+          PY
           gh release create "$tag" \
             ".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz" \
             ".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz.sha256" \
