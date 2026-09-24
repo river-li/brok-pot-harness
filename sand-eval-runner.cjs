@@ -4444,12 +4444,12 @@ var init_global_utils = __esm({
 
 // ../node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/ComponentLogger.js
 function logProxy(funcName, namespace, args) {
-  var logger111 = getGlobal("diag");
-  if (!logger111) {
+  var logger112 = getGlobal("diag");
+  if (!logger112) {
     return;
   }
   args.unshift(namespace);
-  return logger111[funcName].apply(logger111, __spreadArray([], __read(args), false));
+  return logger112[funcName].apply(logger112, __spreadArray([], __read(args), false));
 }
 var __read, __spreadArray, DiagComponentLogger;
 var init_ComponentLogger = __esm({
@@ -4543,17 +4543,17 @@ var init_types2 = __esm({
 });
 
 // ../node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/internal/logLevelLogger.js
-function createLogLevelDiagLogger(maxLevel, logger111) {
+function createLogLevelDiagLogger(maxLevel, logger112) {
   if (maxLevel < DiagLogLevel.NONE) {
     maxLevel = DiagLogLevel.NONE;
   } else if (maxLevel > DiagLogLevel.ALL) {
     maxLevel = DiagLogLevel.ALL;
   }
-  logger111 = logger111 || {};
+  logger112 = logger112 || {};
   function _filterFunc(funcName, theLevel) {
-    var theFunc = logger111[funcName];
+    var theFunc = logger112[funcName];
     if (typeof theFunc === "function" && maxLevel >= theLevel) {
-      return theFunc.bind(logger111);
+      return theFunc.bind(logger112);
     }
     return function() {
     };
@@ -4616,19 +4616,19 @@ var init_diag = __esm({
             for (var _i2 = 0; _i2 < arguments.length; _i2++) {
               args[_i2] = arguments[_i2];
             }
-            var logger111 = getGlobal("diag");
-            if (!logger111)
+            var logger112 = getGlobal("diag");
+            if (!logger112)
               return;
-            return logger111[funcName].apply(logger111, __spreadArray2([], __read2(args), false));
+            return logger112[funcName].apply(logger112, __spreadArray2([], __read2(args), false));
           };
         }
         var self2 = this;
-        var setLogger = function(logger111, optionsOrLogLevel) {
+        var setLogger = function(logger112, optionsOrLogLevel) {
           var _a20, _b2, _c2;
           if (optionsOrLogLevel === void 0) {
             optionsOrLogLevel = { logLevel: DiagLogLevel.INFO };
           }
-          if (logger111 === self2) {
+          if (logger112 === self2) {
             var err = new Error("Cannot use diag as the logger for itself. Please use a DiagLogger implementation like ConsoleDiagLogger or a custom implementation");
             self2.error((_a20 = err.stack) !== null && _a20 !== void 0 ? _a20 : err.message);
             return false;
@@ -4639,7 +4639,7 @@ var init_diag = __esm({
             };
           }
           var oldLogger = getGlobal("diag");
-          var newLogger = createLogLevelDiagLogger((_b2 = optionsOrLogLevel.logLevel) !== null && _b2 !== void 0 ? _b2 : DiagLogLevel.INFO, logger111);
+          var newLogger = createLogLevelDiagLogger((_b2 = optionsOrLogLevel.logLevel) !== null && _b2 !== void 0 ? _b2 : DiagLogLevel.INFO, logger112);
           if (oldLogger && !optionsOrLogLevel.suppressOverrideMessage) {
             var stack = (_c2 = new Error().stack) !== null && _c2 !== void 0 ? _c2 : "<failed to generate stacktrace>";
             oldLogger.warn("Current logger will be overwritten from " + stack);
@@ -6272,10 +6272,10 @@ function formatInlineArray(value, options2, colors, depth, seen, path30) {
     seen.delete(value);
     return empty;
   }
-  const limit = Math.min(value.length, options2.maxArrayLength);
-  const items = value.slice(0, limit).map((entry, index) => formatInlineValue(entry, options2, colors, depth + 1, seen, path30.concat(index)));
-  if (value.length > limit) {
-    items.push(colors.dim(`... ${value.length - limit} more`));
+  const limit2 = Math.min(value.length, options2.maxArrayLength);
+  const items = value.slice(0, limit2).map((entry, index) => formatInlineValue(entry, options2, colors, depth + 1, seen, path30.concat(index)));
+  if (value.length > limit2) {
+    items.push(colors.dim(`... ${value.length - limit2} more`));
   }
   const separator = colors.dim(", ");
   const result = `${colors.dim("[")}${items.join(separator)}${colors.dim("]")}`;
@@ -6291,14 +6291,14 @@ function formatInlineMap(value, options2, colors, depth, seen, path30) {
   }
   seen.add(value);
   const entries = Array.from(value.entries());
-  const limit = Math.min(entries.length, options2.maxEntries);
-  const items = entries.slice(0, limit).map(([key, entryValue]) => {
+  const limit2 = Math.min(entries.length, options2.maxEntries);
+  const items = entries.slice(0, limit2).map(([key, entryValue]) => {
     const keyValue = formatInlineValue(key, options2, colors, depth + 1, seen, path30.concat("<key>"));
     const renderedValue = formatInlineValue(entryValue, options2, colors, depth + 1, seen, path30.concat(String(key)));
     return `${keyValue} ${colors.dim("=>")} ${renderedValue}`;
   });
-  if (entries.length > limit) {
-    items.push(colors.dim(`... ${entries.length - limit} more`));
+  if (entries.length > limit2) {
+    items.push(colors.dim(`... ${entries.length - limit2} more`));
   }
   const separator = colors.dim(", ");
   const result = `${colors.dim("Map{")}${items.join(separator)}${colors.dim("}")}`;
@@ -6322,13 +6322,13 @@ function formatInlineObject(value, options2, colors, depth, seen, path30) {
     seen.delete(value);
     return empty;
   }
-  const limit = Math.min(entries.length, options2.maxEntries);
-  const items = entries.slice(0, limit).map(([key, entryValue]) => {
+  const limit2 = Math.min(entries.length, options2.maxEntries);
+  const items = entries.slice(0, limit2).map(([key, entryValue]) => {
     const renderedValue = formatInlineValue(entryValue, options2, colors, depth + 1, seen, path30.concat(key));
     return `${colors.cyan(key)}: ${renderedValue}`;
   });
-  if (entries.length > limit) {
-    items.push(colors.dim(`... ${entries.length - limit} more`));
+  if (entries.length > limit2) {
+    items.push(colors.dim(`... ${entries.length - limit2} more`));
   }
   const separator = colors.dim(", ");
   const result = `${colors.dim("{")}${items.join(separator)}${colors.dim("}")}`;
@@ -6409,8 +6409,8 @@ function getLoggerBackend(ctx) {
 function createLogger(name17) {
   function log5(ctx, entry) {
     const timestamp2 = /* @__PURE__ */ new Date();
-    const logger111 = getLoggerBackend(ctx);
-    logger111.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp2, logger: name17 }));
+    const logger112 = getLoggerBackend(ctx);
+    logger112.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp2, logger: name17 }));
   }
   return {
     debug: (ctx, message, metadata) => {
@@ -6966,11 +6966,12 @@ function hasCursorCommitAttribution(text2) {
   const lower = text2.toLowerCase();
   return lower.includes(`co-authored-by: ${CURSOR_COAUTHOR_NAME.toLowerCase()}`) || lower.includes(LEGACY_MADE_WITH_TRAILER.toLowerCase());
 }
-var CURSOR_AGENT_EMAIL, CURSOR_COAUTHOR_NAME, CURSOR_COAUTHORED_BY_TRAILER, LEGACY_MADE_WITH_TRAILER;
+var CURSOR_AGENT_EMAIL, CURSOR_GIT_AUTHOR_NAME, CURSOR_COAUTHOR_NAME, CURSOR_COAUTHORED_BY_TRAILER, LEGACY_MADE_WITH_TRAILER;
 var init_commit_identity = __esm({
   "../packages/constants/dist/commit-identity.js"() {
     "use strict";
     CURSOR_AGENT_EMAIL = "cursoragent@cursor.com";
+    CURSOR_GIT_AUTHOR_NAME = "Cursor Agent";
     CURSOR_COAUTHOR_NAME = "Cursor";
     CURSOR_COAUTHORED_BY_TRAILER = `Co-authored-by: ${CURSOR_COAUTHOR_NAME} <${CURSOR_AGENT_EMAIL}>`;
     LEGACY_MADE_WITH_TRAILER = "Made-with: Cursor";
@@ -7065,10 +7066,11 @@ function parseRestMcpScmToolError(args) {
     return void 0;
   }
   const code = body.error;
-  const provider = body.provider;
+  const provider = boundProvider;
   const repo = typeof body.repo === "string" ? { repo: body.repo } : {};
   if (code !== REST_MCP_SCM_ERROR_CODES.orgBlocked) {
-    return Object.assign({ code, provider }, repo);
+    const reason = code === REST_MCP_SCM_ERROR_CODES.notConnected && typeof body.reason === "string" && REST_MCP_SCM_NOT_CONNECTED_REASON_SET.has(body.reason) ? body.reason : void 0;
+    return Object.assign(Object.assign({ code, provider }, repo), reason === void 0 ? {} : { reason });
   }
   const org = typeof body.org === "string" && body.org.length > 0 ? { org: body.org } : {};
   switch (body.reason) {
@@ -7096,7 +7098,7 @@ function parseScmSsoAuthorizationUrl(provider, value) {
     return void 0;
   }
   const page = CURSOR_SCM_SSO_AUTHORIZATION_PAGES[provider];
-  if (url2.protocol !== "https:" || url2.hostname.toLowerCase() !== page.hostname || !page.pathname.test(url2.pathname) || url2.username.length > 0 || url2.password.length > 0) {
+  if (page === void 0 || url2.protocol !== "https:" || url2.hostname.toLowerCase() !== page.hostname || !page.pathname.test(url2.pathname) || url2.username.length > 0 || url2.password.length > 0) {
     return void 0;
   }
   return url2.toString();
@@ -7197,7 +7199,7 @@ function getCanonicalMcpOAuthRedirectUris(currentRedirectUri) {
   }
   return Array.from(redirectUris);
 }
-var MCP_OAUTH_GROK_WEB_CALLBACK_URL, GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, CURSOR_SCM_SSO_AUTHORIZATION_PAGES, GROK_CONNECTORS_POLICY_BASE, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
+var MCP_OAUTH_GROK_WEB_CALLBACK_URL, GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, REST_MCP_SCM_NOT_CONNECTED_REASONS, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, REST_MCP_SCM_NOT_CONNECTED_REASON_SET, CURSOR_SCM_SSO_AUTHORIZATION_PAGES, GROK_CONNECTORS_POLICY_BASE, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
 var init_mcp = __esm({
   "../packages/constants/dist/mcp.js"() {
     "use strict";
@@ -7246,9 +7248,15 @@ var init_mcp = __esm({
        */
       orgBlocked: "scm_org_blocked"
     };
+    REST_MCP_SCM_NOT_CONNECTED_REASONS = {
+      originNotEnabled: "origin_not_enabled",
+      teamDisabled: "team_disabled",
+      admissionRejected: "admission_rejected"
+    };
     CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX = "cursor-";
-    CURSOR_SCM_MCP_PROVIDERS = ["github"];
+    CURSOR_SCM_MCP_PROVIDERS = ["github", "origin"];
     REST_MCP_SCM_ERROR_CODE_SET = new Set(Object.values(REST_MCP_SCM_ERROR_CODES));
+    REST_MCP_SCM_NOT_CONNECTED_REASON_SET = new Set(Object.values(REST_MCP_SCM_NOT_CONNECTED_REASONS));
     CURSOR_SCM_SSO_AUTHORIZATION_PAGES = {
       github: { hostname: "github.com", pathname: /^\/orgs\/[^/]+\/sso$/ }
     };
@@ -11409,7 +11417,7 @@ var require_charsetgroupprober = __commonJS({
   "../node_modules/.pnpm/jschardet@3.1.4/node_modules/jschardet/src/charsetgroupprober.js"(exports2, module2) {
     var constants5 = require_constants();
     var CharSetProber = require_charsetprober();
-    var logger111 = require_logger();
+    var logger112 = require_logger();
     function CharSetGroupProber() {
       CharSetProber.apply(this);
       var self2 = this;
@@ -11471,11 +11479,11 @@ var require_charsetgroupprober = __commonJS({
         for (var i = 0, prober; prober = this._mProbers[i]; i++) {
           if (!prober) continue;
           if (!prober.active) {
-            logger111.log(prober.getCharsetName() + " not active\n");
+            logger112.log(prober.getCharsetName() + " not active\n");
             continue;
           }
           var cf = prober.getConfidence();
-          logger111.log(prober.getCharsetName() + " confidence = " + cf + "\n");
+          logger112.log(prober.getCharsetName() + " confidence = " + cf + "\n");
           if (bestConf < cf) {
             bestConf = cf;
             this._mBestGuessProber = prober;
@@ -11533,7 +11541,7 @@ var require_mbcharsetprober = __commonJS({
   "../node_modules/.pnpm/jschardet@3.1.4/node_modules/jschardet/src/mbcharsetprober.js"(exports2, module2) {
     var CharSetProber = require_charsetprober();
     var constants5 = require_constants();
-    var logger111 = require_logger();
+    var logger112 = require_logger();
     function MultiByteCharSetProber() {
       CharSetProber.apply(this);
       var self2 = this;
@@ -11559,7 +11567,7 @@ var require_mbcharsetprober = __commonJS({
         for (var i = 0; i < aLen; i++) {
           var codingState = this._mCodingSM.nextState(aBuf[i]);
           if (codingState == constants5.error) {
-            logger111.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
+            logger112.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
             this._mState = constants5.notMe;
             break;
           } else if (codingState == constants5.itsMe) {
@@ -58880,7 +58888,7 @@ var require_sjisprober = __commonJS({
     var SJISDistributionAnalysis = require_chardistribution().SJISDistributionAnalysis;
     var SJISContextAnalysis = require_jpcntx().SJISContextAnalysis;
     var constants5 = require_constants();
-    var logger111 = require_logger();
+    var logger112 = require_logger();
     function SJISProber() {
       MultiByteCharSetProber.apply(this);
       var self2 = this;
@@ -58902,7 +58910,7 @@ var require_sjisprober = __commonJS({
         for (var i = 0; i < aLen; i++) {
           var codingState = this._mCodingSM.nextState(aBuf[i]);
           if (codingState == constants5.error) {
-            logger111.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
+            logger112.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
             this._mState = constants5.notMe;
             break;
           } else if (codingState == constants5.itsMe) {
@@ -59301,7 +59309,7 @@ var require_eucjpprober = __commonJS({
     var EUCJPContextAnalysis = require_jpcntx().EUCJPContextAnalysis;
     var EUCJPSMModel = require_eucjp2();
     var constants5 = require_constants();
-    var logger111 = require_logger();
+    var logger112 = require_logger();
     function EUCJPProber() {
       MultiByteCharSetProber.apply(this);
       var self2 = this;
@@ -59323,7 +59331,7 @@ var require_eucjpprober = __commonJS({
         for (var i = 0; i < aLen; i++) {
           var codingState = this._mCodingSM.nextState(aBuf[i]);
           if (codingState == constants5.error) {
-            logger111.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
+            logger112.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
             this._mState = constants5.notMe;
             break;
           } else if (codingState == constants5.itsMe) {
@@ -60522,7 +60530,7 @@ var require_sbcharsetprober = __commonJS({
   "../node_modules/.pnpm/jschardet@3.1.4/node_modules/jschardet/src/sbcharsetprober.js"(exports2, module2) {
     var CharSetProber = require_charsetprober();
     var constants5 = require_constants();
-    var logger111 = require_logger();
+    var logger112 = require_logger();
     function SingleByteCharSetProber(model, reversed, nameProber) {
       CharSetProber.apply(this);
       var SAMPLE_SIZE = 64;
@@ -60586,9 +60594,9 @@ var require_sbcharsetprober = __commonJS({
           if (self2._mTotalSeqs > SB_ENOUGH_REL_THRESHOLD) {
             var cf = this.getConfidence();
             if (cf > POSITIVE_SHORTCUT_THRESHOLD) {
-              logger111.log(this._mModel.charsetName + " confidence = " + cf + ", we have a winner\n");
+              logger112.log(this._mModel.charsetName + " confidence = " + cf + ", we have a winner\n");
             } else if (cf < NEGATIVE_SHORTCUT_THRESHOLD) {
-              logger111.log(this._mModel.charsetName + " confidence = " + cf + ", below negative shortcut threshhold " + NEGATIVE_SHORTCUT_THRESHOLD + "\n");
+              logger112.log(this._mModel.charsetName + " confidence = " + cf + ", below negative shortcut threshhold " + NEGATIVE_SHORTCUT_THRESHOLD + "\n");
               this._mState = constants5.notMe;
             }
           }
@@ -91242,7 +91250,7 @@ var require_universaldetector = __commonJS({
     var SBCSGroupProber = require_sbcsgroupprober();
     var Latin1Prober = require_latin1prober();
     var EscCharSetProber = require_escprober();
-    var logger111 = require_logger();
+    var logger112 = require_logger();
     var supportedEncodings = (function() {
       const BOM_UTF = [
         "UTF-8",
@@ -91404,12 +91412,12 @@ var require_universaldetector = __commonJS({
       this.close = function() {
         if (this.done) return;
         if (this._mBOM.length === 0) {
-          logger111.log("no data received!\n");
+          logger112.log("no data received!\n");
           return;
         }
         this.done = true;
         if (this._mInputState == _state.pureAscii && canDetectEncoding("ascii")) {
-          logger111.log("pure ascii");
+          logger112.log("pure ascii");
           this.result = { "encoding": "ascii", "confidence": 1 };
           this.results.push(this.result);
           return this.result;
@@ -91432,7 +91440,7 @@ var require_universaldetector = __commonJS({
             if (prober.getCharsetName() === "windows-1250") {
               windows_1250_detected = true;
             }
-            logger111.log(prober.getCharsetName() + " confidence " + confidence);
+            logger112.log(prober.getCharsetName() + " confidence " + confidence);
           }
           if (windows_1252_confidence && !windows_1250_detected && canDetectEncoding("windows-1250")) {
             this.results.push({
@@ -91452,11 +91460,11 @@ var require_universaldetector = __commonJS({
             }
           }
         }
-        if (logger111.enabled) {
-          logger111.log("no probers hit minimum threshhold\n");
+        if (logger112.enabled) {
+          logger112.log("no probers hit minimum threshhold\n");
           for (var i = 0, prober; prober = this._mCharsetProbers[i]; i++) {
             if (!prober || !canDetectEncoding(prober.getCharsetName())) continue;
-            logger111.log(prober.getCharsetName() + " confidence = " + prober.getConfidence() + "\n");
+            logger112.log(prober.getCharsetName() + " confidence = " + prober.getConfidence() + "\n");
           }
         }
       };
@@ -93860,6 +93868,17 @@ var init_git_provider_url = __esm({
 });
 
 // ../packages/utils/dist/repo-url.js
+function trimRemotePath(pathname) {
+  let end = pathname.length;
+  while (end > 0 && pathname.charCodeAt(end - 1) === 47) {
+    end--;
+  }
+  const normalizedPath = pathname.slice(0, end).replace(/\.git$/i, "");
+  if (!normalizedPath || normalizedPath === "/") {
+    return "";
+  }
+  return normalizedPath.startsWith("/") ? normalizedPath : `/${normalizedPath}`;
+}
 function isOriginGitHost(host) {
   return /^origin(-[a-z0-9]+)?\.cursor\.com$/i.test(host);
 }
@@ -93880,10 +93899,65 @@ function parseOriginPortalRepoPage(url2) {
   }
   return { gitHost, owner, name: name17, pagePath };
 }
+function parseRemoteUrlForOriginCheck(rawUrl) {
+  let url2 = rawUrl.trim();
+  if (url2 === "") {
+    return void 0;
+  }
+  if (url2.startsWith("git@")) {
+    url2 = `https://${url2.slice("git@".length).replace(":", "/")}`;
+  } else if (/^[a-z][a-z0-9+.-]*:\/\//i.test(url2) && !/^https?:\/\//i.test(url2)) {
+    url2 = url2.replace(/^[a-z][a-z0-9+.-]*:\/\//i, "https://");
+  } else if (!/^https?:\/\//i.test(url2)) {
+    url2 = `https://${url2}`;
+  }
+  try {
+    return new URL(url2);
+  } catch (_a20) {
+    return void 0;
+  }
+}
+function parseOriginRepoCloneUrlParts(remoteUrl) {
+  if (remoteUrl === void 0) {
+    return void 0;
+  }
+  if (originRepoClonePartsCache.has(remoteUrl)) {
+    return originRepoClonePartsCache.get(remoteUrl);
+  }
+  const parts = computeOriginRepoCloneUrlParts(remoteUrl);
+  if (originRepoClonePartsCache.size >= ORIGIN_REPO_CLONE_PARTS_CACHE_MAX_SIZE) {
+    originRepoClonePartsCache.clear();
+  }
+  originRepoClonePartsCache.set(remoteUrl, parts);
+  return parts;
+}
+function computeOriginRepoCloneUrlParts(remoteUrl) {
+  var _a20, _b2;
+  const parsed = remoteUrl ? parseRemoteUrlForOriginCheck(remoteUrl) : void 0;
+  if (parsed === void 0 || !isOriginGitHost(parsed.hostname)) {
+    return void 0;
+  }
+  const segments = trimRemotePath(parsed.pathname).split("/").filter(Boolean);
+  const isLegacyShape = segments.length === 3 && ((_a20 = segments[0]) === null || _a20 === void 0 ? void 0 : _a20.toLowerCase()) === "git";
+  const isRootShape = segments.length === 2 && ((_b2 = segments[0]) === null || _b2 === void 0 ? void 0 : _b2.toLowerCase()) !== "git";
+  if (!isLegacyShape && !isRootShape) {
+    return void 0;
+  }
+  const owner = isLegacyShape ? segments[1] : segments[0];
+  const name17 = isLegacyShape ? segments[2] : segments[1];
+  if (!owner || !name17) {
+    return void 0;
+  }
+  return Object.freeze({ hostname: parsed.hostname, owner, name: name17 });
+}
+function parseOriginRepoCloneUrl(remoteUrl) {
+  const parts = parseOriginRepoCloneUrlParts(remoteUrl);
+  return parts === void 0 ? void 0 : { owner: parts.owner, name: parts.name };
+}
 function originRepoClonePath({ owner, name: name17 }) {
   return `/git/${owner}/${name17}`;
 }
-var ORIGIN_GIT_HOST_BY_PORTAL_HOSTNAME, AGENT_TEMP_DRAFT_REPO_NAME_PREFIX, AGENT_TEMP_DRAFT_REPO_NAME_HEX_LENGTH, AGENT_TEMP_DRAFT_REPO_NAME_PATTERN;
+var ORIGIN_GIT_HOST_BY_PORTAL_HOSTNAME, originRepoClonePartsCache, ORIGIN_REPO_CLONE_PARTS_CACHE_MAX_SIZE, AGENT_TEMP_DRAFT_REPO_NAME_PREFIX, AGENT_TEMP_DRAFT_REPO_NAME_HEX_LENGTH, AGENT_TEMP_DRAFT_REPO_NAME_PATTERN;
 var init_repo_url = __esm({
   "../packages/utils/dist/repo-url.js"() {
     "use strict";
@@ -93892,6 +93966,8 @@ var init_repo_url = __esm({
       ["www.cursor.com", "origin.cursor.com"],
       ["staging.cursor.com", "origin-staging.cursor.com"]
     ]);
+    originRepoClonePartsCache = /* @__PURE__ */ new Map();
+    ORIGIN_REPO_CLONE_PARTS_CACHE_MAX_SIZE = 2048;
     AGENT_TEMP_DRAFT_REPO_NAME_PREFIX = "tmp-";
     AGENT_TEMP_DRAFT_REPO_NAME_HEX_LENGTH = 16;
     AGENT_TEMP_DRAFT_REPO_NAME_PATTERN = new RegExp(`^${AGENT_TEMP_DRAFT_REPO_NAME_PREFIX}[0-9a-f]{${AGENT_TEMP_DRAFT_REPO_NAME_HEX_LENGTH}}$`);
@@ -118117,7 +118193,7 @@ var require_deflate = __commonJS({
       var len;
       var best_len = s3.prev_length;
       var nice_match = s3.nice_match;
-      var limit = s3.strstart > s3.w_size - MIN_LOOKAHEAD ? s3.strstart - (s3.w_size - MIN_LOOKAHEAD) : 0;
+      var limit2 = s3.strstart > s3.w_size - MIN_LOOKAHEAD ? s3.strstart - (s3.w_size - MIN_LOOKAHEAD) : 0;
       var _win = s3.window;
       var wmask = s3.w_mask;
       var prev = s3.prev;
@@ -118150,7 +118226,7 @@ var require_deflate = __commonJS({
           scan_end1 = _win[scan2 + best_len - 1];
           scan_end = _win[scan2 + best_len];
         }
-      } while ((cur_match = prev[cur_match & wmask]) > limit && --chain_length !== 0);
+      } while ((cur_match = prev[cur_match & wmask]) > limit2 && --chain_length !== 0);
       if (best_len <= s3.lookahead) {
         return best_len;
       }
@@ -149165,11 +149241,11 @@ var require_Span = __commonJS({
       // Utility function to truncate given value within size
       // for value type of string, will truncate to given limit
       // for type of non-string, will return same value
-      _truncateToLimitUtil(value, limit) {
-        if (value.length <= limit) {
+      _truncateToLimitUtil(value, limit2) {
+        if (value.length <= limit2) {
           return value;
         }
-        return value.substring(0, limit);
+        return value.substring(0, limit2);
       }
       /**
        * If the given attribute value is of type string and has more characters than given {@code attributeValueLengthLimit} then
@@ -149184,16 +149260,16 @@ var require_Span = __commonJS({
        * @returns truncated attribute value if required, otherwise same value
        */
       _truncateToSize(value) {
-        const limit = this._attributeValueLengthLimit;
-        if (limit <= 0) {
-          api_1.diag.warn(`Attribute value limit must be positive, got ${limit}`);
+        const limit2 = this._attributeValueLengthLimit;
+        if (limit2 <= 0) {
+          api_1.diag.warn(`Attribute value limit must be positive, got ${limit2}`);
           return value;
         }
         if (typeof value === "string") {
-          return this._truncateToLimitUtil(value, limit);
+          return this._truncateToLimitUtil(value, limit2);
         }
         if (Array.isArray(value)) {
-          return value.map((val) => typeof val === "string" ? this._truncateToLimitUtil(val, limit) : val);
+          return value.map((val) => typeof val === "string" ? this._truncateToLimitUtil(val, limit2) : val);
         }
         return value;
       }
@@ -163316,14 +163392,14 @@ var require_resolve = __commonJS({
       "enum",
       "const"
     ]);
-    function inlineRef(schema2, limit = true) {
+    function inlineRef(schema2, limit2 = true) {
       if (typeof schema2 == "boolean")
         return true;
-      if (limit === true)
+      if (limit2 === true)
         return !hasRef(schema2);
-      if (!limit)
+      if (!limit2)
         return false;
-      return countKeys(schema2) <= limit;
+      return countKeys(schema2) <= limit2;
     }
     exports2.inlineRef = inlineRef;
     var REF_KEYWORDS = /* @__PURE__ */ new Set([
@@ -164535,9 +164611,9 @@ var require_schemes = __commonJS({
         wsComponents.secure = void 0;
       }
       if (wsComponents.resourceName) {
-        const [path30, query] = wsComponents.resourceName.split("?");
+        const [path30, query2] = wsComponents.resourceName.split("?");
         wsComponents.path = path30 && path30 !== "/" ? path30 : void 0;
-        wsComponents.query = query;
+        wsComponents.query = query2;
         wsComponents.resourceName = void 0;
       }
       wsComponents.fragment = void 0;
@@ -165440,13 +165516,13 @@ var require_core4 = __commonJS({
     }, warn() {
     }, error() {
     } };
-    function getLogger(logger111) {
-      if (logger111 === false)
+    function getLogger(logger112) {
+      if (logger112 === false)
         return noLogs;
-      if (logger111 === void 0)
+      if (logger112 === void 0)
         return console;
-      if (logger111.log && logger111.warn && logger111.error)
-        return logger111;
+      if (logger112.log && logger112.warn && logger112.error)
+        return logger112;
       throw new Error("logger must implement log, warn and error methods");
     }
     var KEYWORD_NAME = /^[a-z_$][a-z0-9_$:-]*$/i;
@@ -168787,18 +168863,18 @@ function buildMcpHttpExchangeFailureMetadata(args) {
 }
 function logMcpHttpExchangeSuccess(args) {
   var _a20, _b2;
-  const { logger: logger111, response } = args;
+  const { logger: logger112, response } = args;
   const logMetadata = buildMcpHttpExchangeSuccessMetadata(args);
   if (response.ok) {
-    (_a20 = logger111.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger111, "MCP HTTP exchange completed", logMetadata);
+    (_a20 = logger112.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger112, "MCP HTTP exchange completed", logMetadata);
   } else {
-    (_b2 = logger111.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger111, "MCP HTTP exchange completed", logMetadata);
+    (_b2 = logger112.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger112, "MCP HTTP exchange completed", logMetadata);
   }
 }
 function logMcpHttpExchangeFailure(args) {
   var _a20;
-  const { logger: logger111 } = args;
-  (_a20 = logger111.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger111, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
+  const { logger: logger112 } = args;
+  (_a20 = logger112.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger112, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
 }
 function isMcpEndpointPath(path30) {
   return path30 === "/mcp" || (path30 === null || path30 === void 0 ? void 0 : path30.endsWith("/mcp")) === true;
@@ -168846,19 +168922,19 @@ function readErrorResponseSummaryForLog(input, response) {
     }
   });
 }
-function safelyLogExchange(action, logger111, phase) {
+function safelyLogExchange(action, logger112, phase) {
   var _a20;
   try {
     action();
   } catch (_b2) {
-    (_a20 = logger111.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger111, "MCP HTTP exchange logging failed", {
+    (_a20 = logger112.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger112, "MCP HTTP exchange logging failed", {
       event: "mcp_http_exchange_logging_failure",
       phase
     });
   }
 }
 function createLoggedMcpHttpFetch(options2) {
-  const { fetch: fetch2, logger: logger111, metadata, logSuccessfulExchanges = true } = options2;
+  const { fetch: fetch2, logger: logger112, metadata, logSuccessfulExchanges = true } = options2;
   return (input, init) => __awaiter27(this, void 0, void 0, function* () {
     const startedAtMs = Date.now();
     try {
@@ -168871,7 +168947,7 @@ function createLoggedMcpHttpFetch(options2) {
       if (logSuccessfulExchanges || !response.ok) {
         safelyLogExchange(() => {
           logMcpHttpExchangeSuccess({
-            logger: logger111,
+            logger: logger112,
             input,
             init,
             response,
@@ -168880,7 +168956,7 @@ function createLoggedMcpHttpFetch(options2) {
             responseErrorSummary,
             oauthTokenErrorBodySummary
           });
-        }, logger111, "success");
+        }, logger112, "success");
       }
       return response;
     } catch (error3) {
@@ -168892,7 +168968,7 @@ function createLoggedMcpHttpFetch(options2) {
       }) : {};
       safelyLogExchange(() => {
         logMcpHttpExchangeFailure({
-          logger: logger111,
+          logger: logger112,
           input,
           init,
           error: error3,
@@ -168902,7 +168978,7 @@ function createLoggedMcpHttpFetch(options2) {
           responseErrorSummary,
           oauthTokenErrorBodySummary
         });
-      }, logger111, "failure");
+      }, logger112, "failure");
       throw error3;
     }
   });
@@ -191203,11 +191279,11 @@ var init_pdf = __esm({
             if (!done) return result.value;
           });
           $2({ target: "Iterator", proto: true, real: true, forced: IS_PURE || takeWithoutClosingOnEarlyError }, {
-            take: function take2(limit) {
+            take: function take2(limit2) {
               anObject(this);
               var remaining;
               try {
-                remaining = toPositiveInteger(notANaN(+limit));
+                remaining = toPositiveInteger(notANaN(+limit2));
               } catch (error3) {
                 iteratorClose(this, "throw", error3);
               }
@@ -193215,11 +193291,11 @@ var init_pdf = __esm({
             if (!done) return result.value;
           });
           $2({ target: "Iterator", proto: true, real: true, forced: FORCED }, {
-            drop: function drop(limit) {
+            drop: function drop(limit2) {
               anObject(this);
               var remaining;
               try {
-                remaining = toPositiveInteger(notANaN(+limit));
+                remaining = toPositiveInteger(notANaN(+limit2));
               } catch (error3) {
                 iteratorClose(this, "throw", error3);
               }
@@ -202297,9 +202373,9 @@ var init_pdf = __esm({
         this.dependencyTracker?.recordSimpleData("lineJoin", opIdx);
         this.ctx.lineJoin = LINE_JOIN_STYLES[style];
       }
-      setMiterLimit(opIdx, limit) {
+      setMiterLimit(opIdx, limit2) {
         this.dependencyTracker?.recordSimpleData("miterLimit", opIdx);
-        this.ctx.miterLimit = limit;
+        this.ctx.miterLimit = limit2;
       }
       setDash(opIdx, dashArray, dashPhase) {
         this.dependencyTracker?.recordSimpleData("dash", opIdx);
@@ -221474,7 +221550,7 @@ function stampedVersionBaseOf(stamped) {
 }
 function sandClientBaseVersionOf(clientAppVersion) {
   return stampedVersionBaseOf(clientAppVersion) ?? stampedVersionBaseOf(
-    true ? "0.59.0-pre.9" : void 0
+    true ? "0.59.0-pre.13" : void 0
   ) ?? SAND_CLIENT_FALLBACK_BASE_VERSION;
 }
 var SAND_BOX_NAMESPACE_HEADER = "x-sand-box-namespace";
@@ -226786,7 +226862,7 @@ var InferenceExtendedUsageInfo = class _InferenceExtendedUsageInfo extends __pro
     return proto3.util.equals(_InferenceExtendedUsageInfo, a, b2);
   }
   static $() {
-    return ["InferenceExtendedUsageInfo|1 input_tokens 5|2 output_tokens 5|3 cache_read_tokens 5|4 cache_write_tokens 5|5 max_tokens 5"];
+    return ["InferenceExtendedUsageInfo|1 input_tokens 5|2 output_tokens 5|3 cache_read_tokens 5|4 cache_write_tokens 5|5 max_tokens 5|6 reasoning_tokens 5?"];
   }
 };
 var InferenceResponseInfo = class _InferenceResponseInfo extends __protoMessage33 {
@@ -227231,6 +227307,7 @@ var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessag
     this.routingConversation = [];
     this.selectedSubagentModels = [];
     this.subagentModelOverrides = [];
+    this.supportsLongReasoningReminder = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -227246,7 +227323,7 @@ var RunInferenceRunRequest = class _RunInferenceRunRequest extends __protoMessag
     return proto3.util.equals(_RunInferenceRunRequest, a, b2);
   }
   static $() {
-    return ["RunInferenceRunRequest|1 conversation_id 9|2 conversation_group_id 9?|3 requested_model #0|4 routing_conversation #1*|5 agent_mode 9?|6 subagent_type_name 9?|7 selected_subagent_models #0*|8 subagent_model_overrides #2*|9 is_summarize_action 8?", InferenceRequestedModel, RunInferenceRoutingMessage, RunInferenceSubagentModelOverride];
+    return ["RunInferenceRunRequest|1 conversation_id 9|2 conversation_group_id 9?|3 requested_model #0|4 routing_conversation #1*|5 agent_mode 9?|6 subagent_type_name 9?|7 selected_subagent_models #0*|8 subagent_model_overrides #2*|9 is_summarize_action 8?|10 supports_long_reasoning_reminder 8", InferenceRequestedModel, RunInferenceRoutingMessage, RunInferenceSubagentModelOverride];
   }
 };
 var RunInferenceSubagentModelOverride = class _RunInferenceSubagentModelOverride extends __protoMessage33 {
@@ -227533,7 +227610,7 @@ var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata ext
     return proto3.util.equals(_RunInferencePromptModelMetadata, a, b2);
   }
   static $() {
-    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|50 is_opus55 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?|46 agent_mode_configs #2*|47 use_new_plan_mode_prompts 8?|48 ask_question_config #3?|49 subagent_model_config #4?|51 post_tool_reminders #5*|52 enable_semantic_search 8?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig, RunInferenceAgentModeConfig, RunInferenceAskQuestionConfig, RunInferenceSubagentModelConfig, RunInferencePostToolReminder];
+    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|50 is_opus55 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?|46 agent_mode_configs #2*|47 use_new_plan_mode_prompts 8?|48 ask_question_config #3?|49 subagent_model_config #4?|51 post_tool_reminders #5*|52 enable_semantic_search 8?|53 long_reasoning_reminder #6?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig, RunInferenceAgentModeConfig, RunInferenceAskQuestionConfig, RunInferenceSubagentModelConfig, RunInferencePostToolReminder, RunInferenceLongReasoningReminderConfig];
   }
 };
 var RunInferencePostToolReminder = class _RunInferencePostToolReminder extends __protoMessage33 {
@@ -227556,6 +227633,32 @@ var RunInferencePostToolReminder = class _RunInferencePostToolReminder extends _
   }
   static $() {
     return ["RunInferencePostToolReminder|1 id 9|2 interval_tool_calls 13?"];
+  }
+};
+var RunInferenceLongReasoningReminderConfig = class _RunInferenceLongReasoningReminderConfig extends __protoMessage33 {
+  constructor(data) {
+    super();
+    this.arm = "";
+    this.enabled = false;
+    this.thresholdTokens = 0;
+    this.delayCalls = 0;
+    this.reminderText = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _RunInferenceLongReasoningReminderConfig().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _RunInferenceLongReasoningReminderConfig().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _RunInferenceLongReasoningReminderConfig().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_RunInferenceLongReasoningReminderConfig, a, b2);
+  }
+  static $() {
+    return ["RunInferenceLongReasoningReminderConfig|1 arm 9|2 enabled 8|3 threshold_tokens 13|4 delay_calls 13|5 reminder_text 9"];
   }
 };
 var RunInferenceSubagentModelConfig = class _RunInferenceSubagentModelConfig extends __protoMessage33 {
@@ -228738,6 +228841,7 @@ var ProtoPromptExecutor = class extends BasePromptExecutor {
                 outputTokens: extUsage.outputTokens,
                 cacheReadTokens: extUsage.cacheReadTokens,
                 cacheWriteTokens: extUsage.cacheWriteTokens,
+                reasoningTokens: extUsage.reasoningTokens,
                 maxTokens: extUsage.maxTokens
               });
               extendedUsageResolved = true;
@@ -241659,7 +241763,7 @@ var BackgroundTaskCompletionAction = class _BackgroundTaskCompletionAction exten
     return proto3.util.equals(_BackgroundTaskCompletionAction, a, b2);
   }
   static $() {
-    return ["BackgroundTaskCompletionAction|1 completions #0*|2 system_reminder 9?", BackgroundTaskCompletion];
+    return ["BackgroundTaskCompletionAction|1 completions #0*|2 system_reminder 9?|3 request_context #1", BackgroundTaskCompletion, RequestContext];
   }
 };
 var BackgroundTaskCompletion = class _BackgroundTaskCompletion extends __protoMessage387 {
@@ -242582,7 +242686,7 @@ var AsyncAskQuestionCompletionAction = class _AsyncAskQuestionCompletionAction e
     return proto3.util.equals(_AsyncAskQuestionCompletionAction, a, b2);
   }
   static $() {
-    return ["AsyncAskQuestionCompletionAction|1 original_tool_call_id 9|2 original_args #0|3 result #1", AskQuestionArgs, AskQuestionResult];
+    return ["AsyncAskQuestionCompletionAction|1 original_tool_call_id 9|2 original_args #0|3 result #1|4 request_context #2", AskQuestionArgs, AskQuestionResult, RequestContext];
   }
 };
 var SummarizeAction = class _SummarizeAction extends __protoMessage387 {
@@ -243086,6 +243190,7 @@ var AgentConversationTurnStructure = class _AgentConversationTurnStructure exten
     this.sendMessageStepIndices = [];
     this.subagentDispatchSteps = [];
     this.dynamicToolNames = [];
+    this.longReasoningReminderExposureLogged = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -243101,7 +243206,29 @@ var AgentConversationTurnStructure = class _AgentConversationTurnStructure exten
     return proto3.util.equals(_AgentConversationTurnStructure, a, b2);
   }
   static $() {
-    return ["AgentConversationTurnStructure|1 user_message 12|2 steps 12*|3 request_id 9?|4 encrypted_model 9?|5 dynamic_tool_count 13?|6 send_message_step_indices 13*|7 routed_model_display_name 9?|8 subagent_dispatch_steps #0*|9 dynamic_tool_names 9*|10 user_message_id 9?", SubagentDispatchStep];
+    return ["AgentConversationTurnStructure|1 user_message 12|2 steps 12*|3 request_id 9?|4 encrypted_model 9?|5 dynamic_tool_count 13?|6 send_message_step_indices 13*|7 routed_model_display_name 9?|8 subagent_dispatch_steps #0*|9 dynamic_tool_names 9*|10 user_message_id 9?|11 long_reasoning_reminder #1?|12 long_reasoning_reminder_exposure_logged 8", SubagentDispatchStep, LongReasoningReminderState];
+  }
+};
+var LongReasoningReminderState = class _LongReasoningReminderState extends __protoMessage387 {
+  constructor(data) {
+    super();
+    this.remainingDelayCalls = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _LongReasoningReminderState().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _LongReasoningReminderState().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _LongReasoningReminderState().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_LongReasoningReminderState, a, b2);
+  }
+  static $() {
+    return ["LongReasoningReminderState|1 remaining_delay_calls 13"];
   }
 };
 var ShellConversationTurn = class _ShellConversationTurn extends __protoMessage387 {
@@ -250669,21 +250796,21 @@ function encodeMessageForUrl(message, useBase64) {
   }
 }
 function transformConnectPostToGetRequest(request3, message, useBase64) {
-  let query = `?connect=v${protocolVersion}`;
+  let query2 = `?connect=v${protocolVersion}`;
   const contentType = request3.header.get(headerContentType);
   if ((contentType === null || contentType === void 0 ? void 0 : contentType.indexOf(contentTypePrefix)) === 0) {
-    query += "&encoding=" + encodeURIComponent(contentType.slice(contentTypePrefix.length));
+    query2 += "&encoding=" + encodeURIComponent(contentType.slice(contentTypePrefix.length));
   }
   const compression = request3.header.get(headerUnaryEncoding);
   if (compression !== null && compression !== "identity") {
-    query += "&compression=" + encodeURIComponent(compression);
+    query2 += "&compression=" + encodeURIComponent(compression);
     useBase64 = true;
   }
   if (useBase64) {
-    query += "&base64=1";
+    query2 += "&base64=1";
   }
-  query += "&message=" + encodeMessageForUrl(message, useBase64);
-  const url2 = request3.url + query;
+  query2 += "&message=" + encodeMessageForUrl(message, useBase64);
+  const url2 = request3.url + query2;
   const header = new Headers(request3.header);
   [
     headerProtocolVersion,
@@ -274706,7 +274833,6 @@ var __protoMessage3130 = class extends CompactMessage {
   }
 };
 var PodCreatingPhase = /* @__PURE__ */ enumType2(proto3, __protoPackage134, "PodCreatingPhase", [[0, "UNSPECIFIED"], [1, "CLONE"], [2, "BUILD"], [3, "POST_CREATE"], [4, "UPDATE_CONTENT"], [5, "POST_START"], [6, "QUEUED"]], 1);
-var GitCloneFailureCategory = /* @__PURE__ */ enumType2(proto3, __protoPackage134, "GitCloneFailureCategory", [[0, "UNSPECIFIED"], [1, "IP_ALLOW_LIST"], [2, "INVALID_CREDENTIALS"], [3, "SSO_REDIRECT"], [4, "PROXY_CONNECT"], [5, "CONNECTION_RESET"], [6, "TRANSPORT_INTERRUPTED"], [7, "REMOTE_FORBIDDEN"], [8, "UPSTREAM_BAD_GATEWAY"]], 1);
 var ImagePullFailureCategory = /* @__PURE__ */ enumType2(proto3, __protoPackage134, "ImagePullFailureCategory", [[0, "UNSPECIFIED"], [1, "DENIED"], [2, "UNAUTHORIZED"], [3, "NOT_FOUND"], [4, "RATE_LIMITED"], [5, "UPSTREAM"]], 1);
 var PodStatus = class _PodStatus extends __protoMessage3130 {
   constructor(data) {
@@ -274836,7 +274962,7 @@ var PodFailureDetails = class _PodFailureDetails extends __protoMessage3130 {
     return proto3.util.equals(_PodFailureDetails, a, b2);
   }
   static $() {
-    return ["PodFailureDetails|1 install_command_failure #0 details|2 docker_build_failure #1 details|3 git_clone_failure #2 details|4 git_checkout_failure #3 details|5 container_wait_failure #4 details|6 image_pull_failure #5 details", InstallCommandFailure, DockerBuildFailure, GitCloneFailure, GitCheckoutFailure, ContainerWaitFailure, ImagePullFailure];
+    return ["PodFailureDetails|1 install_command_failure #0 details|2 docker_build_failure #1 details|5 container_wait_failure #2 details|6 image_pull_failure #3 details", InstallCommandFailure, DockerBuildFailure, ContainerWaitFailure, ImagePullFailure];
   }
 };
 var ContainerWaitFailure = class _ContainerWaitFailure extends __protoMessage3130 {
@@ -274904,52 +275030,6 @@ var DockerBuildFailure = class _DockerBuildFailure extends __protoMessage3130 {
   }
   static $() {
     return ["DockerBuildFailure|1 exit_code 3"];
-  }
-};
-var GitCloneFailure = class _GitCloneFailure extends __protoMessage3130 {
-  constructor(data) {
-    super();
-    this.exitCode = protoInt64.zero;
-    this.category = GitCloneFailureCategory.UNSPECIFIED;
-    this.retryable = false;
-    proto3.util.initPartial(data, this);
-  }
-  static fromBinary(bytes, options2) {
-    return new _GitCloneFailure().fromBinary(bytes, options2);
-  }
-  static fromJson(jsonValue, options2) {
-    return new _GitCloneFailure().fromJson(jsonValue, options2);
-  }
-  static fromJsonString(jsonString, options2) {
-    return new _GitCloneFailure().fromJsonString(jsonString, options2);
-  }
-  static equals(a, b2) {
-    return proto3.util.equals(_GitCloneFailure, a, b2);
-  }
-  static $() {
-    return ["GitCloneFailure|1 exit_code 3|2 category #0|3 retryable 8|4 remote_host 9?|5 http_status 5?", GitCloneFailureCategory];
-  }
-};
-var GitCheckoutFailure = class _GitCheckoutFailure extends __protoMessage3130 {
-  constructor(data) {
-    super();
-    this.exitCode = protoInt64.zero;
-    proto3.util.initPartial(data, this);
-  }
-  static fromBinary(bytes, options2) {
-    return new _GitCheckoutFailure().fromBinary(bytes, options2);
-  }
-  static fromJson(jsonValue, options2) {
-    return new _GitCheckoutFailure().fromJson(jsonValue, options2);
-  }
-  static fromJsonString(jsonString, options2) {
-    return new _GitCheckoutFailure().fromJsonString(jsonString, options2);
-  }
-  static equals(a, b2) {
-    return proto3.util.equals(_GitCheckoutFailure, a, b2);
-  }
-  static $() {
-    return ["GitCheckoutFailure|1 exit_code 3"];
   }
 };
 var ImagePullFailure = class _ImagePullFailure extends __protoMessage3130 {
@@ -277270,6 +277350,7 @@ var SandSetupChecklistItemState = /* @__PURE__ */ enumType2(proto3, __protoPacka
 var SandOnboardingCompletionSource = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SandOnboardingCompletionSource", [[0, "UNSPECIFIED"], [1, "DASHBOARD_SETTINGS"], [2, "PORTAL_ONBOARDING"]], 1);
 var TrialType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "TrialType", [[0, "UNSPECIFIED"], [1, "REQUEST"], [2, "TOKEN"]], 1);
 var FreeTrialCodePurpose = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "FreeTrialCodePurpose", [[0, "UNSPECIFIED"], [1, "FREE_TRIAL"], [2, "ORG_INVITE"]], 1);
+var CreditGrantOwnership = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "CreditGrantOwnership", [[0, "UNSPECIFIED"], [1, "TEAM"], [2, "ORGANIZATION"]], 1);
 var SandBillingBrand = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SandBillingBrand", [[0, "UNSPECIFIED"], [1, "CURSOR"], [2, "GROK"]], 1);
 var UserAccessRequestKind = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "UserAccessRequestKind", [[0, "UNSPECIFIED"], [1, "SAND_TEAM_ACCESS"]], 1);
 var IapVerificationProvenance = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "IapVerificationProvenance", [[0, "UNSPECIFIED"], [1, "PURCHASE_RETURN"], [2, "PURCHASE_LISTENER"], [3, "COLD_START"], [4, "FOREGROUND"], [5, "MANUAL_RESTORE"], [6, "AUTH_CHANGE"]], 1);
@@ -277690,7 +277771,7 @@ var ListGithubEnterpriseAppsResponse_GithubEnterpriseApp = class _ListGithubEnte
     return proto3.util.equals(_ListGithubEnterpriseAppsResponse_GithubEnterpriseApp, a, b2);
   }
   static $() {
-    return ["ListGithubEnterpriseAppsResponse.GithubEnterpriseApp|1 uuid 9|2 slug 9|3 hostname 9|4 can_delete 8"];
+    return ["ListGithubEnterpriseAppsResponse.GithubEnterpriseApp|1 uuid 9|2 slug 9|3 hostname 9|4 can_delete 8|5 html_url 9?"];
   }
 };
 var DeleteGithubEnterpriseAppRequest = class _DeleteGithubEnterpriseAppRequest extends __protoMessage3136 {
@@ -278406,7 +278487,7 @@ var RegisterGithubCursorCodeResponse = class _RegisterGithubCursorCodeResponse e
     return proto3.util.equals(_RegisterGithubCursorCodeResponse, a, b2);
   }
   static $() {
-    return ["RegisterGithubCursorCodeResponse|1 cursor_code 9|2 should_install 8|3 ghe_hostname 9?|4 ghe_app_slug 9?|5 ghe_client_id 9?|6 github_oauth_client_id 9?|7 github_app_slug 9?"];
+    return ["RegisterGithubCursorCodeResponse|1 cursor_code 9|2 should_install 8|3 ghe_hostname 9?|4 ghe_app_slug 9?|5 ghe_client_id 9?|6 github_oauth_client_id 9?|7 github_app_slug 9?|8 ghe_app_html_url 9?"];
   }
 };
 var DisconnectGithubRequest = class _DisconnectGithubRequest extends __protoMessage3136 {
@@ -296970,6 +297051,7 @@ var CreateTeamCreditGrantInternalRequest = class _CreateTeamCreditGrantInternalR
     this.subscriptionProductId = "";
     this.applicableProducts = [];
     this.entitlements = [];
+    this.ownership = CreditGrantOwnership.UNSPECIFIED;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -296985,7 +297067,7 @@ var CreateTeamCreditGrantInternalRequest = class _CreateTeamCreditGrantInternalR
     return proto3.util.equals(_CreateTeamCreditGrantInternalRequest, a, b2);
   }
   static $() {
-    return ["CreateTeamCreditGrantInternalRequest|1 team_id 5|2 amount_cents 3|3 expires_at_ms 3|4 starts_at_ms 3?|5 allowed_model_ids 9*|6 subscription_product_id 9|7 applicable_products 9*|8 show_in_client 8?|9 created_by 9?|10 entitlements 9*"];
+    return ["CreateTeamCreditGrantInternalRequest|1 team_id 5|2 amount_cents 3|3 expires_at_ms 3|4 starts_at_ms 3?|5 allowed_model_ids 9*|6 subscription_product_id 9|7 applicable_products 9*|8 show_in_client 8?|9 created_by 9?|10 entitlements 9*|11 ownership #0", CreditGrantOwnership];
   }
 };
 var TeamCreditGrantInternal = class _TeamCreditGrantInternal extends __protoMessage3136 {
@@ -298330,7 +298412,29 @@ var GetSandUsageStatusResponse = class _GetSandUsageStatusResponse extends __pro
     return proto3.util.equals(_GetSandUsageStatusResponse, a, b2);
   }
   static $() {
-    return ["GetSandUsageStatusResponse|1 current_period_start #0|2 next_reset_timestamp_utc #0|3 usage_percent 1?|4 included_limit_zero 8|5 available_banked_reset_count 3|6 uses_pooled_enterprise_allowance 8|7 has_available_usage 8|8 has_non_zero_included_limit 8|9 upgrade_recommendation #1?|10 sand_trial_expires_at #0?|11 sand_trial_cancelable 8|12 upgrade_recommendations #1*|13 on_demand_settings #2?|14 included_usage_super_grok_plan 9?|15 grok_plan_label 9?|16 is_team_seat 8|17 cursor_plan_name 9|18 is_unified 8|19 billing_brand #3", Timestamp, SandUpgradeRecommendation, SandOnDemandSettings, SandBillingBrand];
+    return ["GetSandUsageStatusResponse|1 current_period_start #0|2 next_reset_timestamp_utc #0|3 usage_percent 1?|4 included_limit_zero 8|5 available_banked_reset_count 3|6 uses_pooled_enterprise_allowance 8|7 has_available_usage 8|8 has_non_zero_included_limit 8|9 upgrade_recommendation #1?|10 sand_trial_expires_at #0?|11 sand_trial_cancelable 8|12 upgrade_recommendations #1*|13 on_demand_settings #2?|14 included_usage_super_grok_plan 9?|15 grok_plan_label 9?|16 is_team_seat 8|17 cursor_plan_name 9|18 is_unified 8|19 billing_brand #3|20 unified_plan_migration #4?", Timestamp, SandUpgradeRecommendation, SandOnDemandSettings, SandBillingBrand, SandUnifiedPlanMigrationOffer];
+  }
+};
+var SandUnifiedPlanMigrationOffer = class _SandUnifiedPlanMigrationOffer extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.href = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _SandUnifiedPlanMigrationOffer().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _SandUnifiedPlanMigrationOffer().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _SandUnifiedPlanMigrationOffer().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_SandUnifiedPlanMigrationOffer, a, b2);
+  }
+  static $() {
+    return ["SandUnifiedPlanMigrationOffer|1 href 9"];
   }
 };
 var SandOnDemandSettings = class _SandOnDemandSettings extends __protoMessage3136 {
@@ -300706,7 +300810,7 @@ var GetGithubInstallationsResponse = class _GetGithubInstallationsResponse exten
     return proto3.util.equals(_GetGithubInstallationsResponse, a, b2);
   }
   static $() {
-    return ["GetGithubInstallationsResponse|1 installations #0*|2 github_connected 8|3 team_has_bugbot_repos 8|4 github_usernames 9*|5 ghe_hostname 9?|6 ghe_app_slug 9?|7 sso_required_orgs 3*|8 sso_required_org_display_names 9*|9 github_app_slug 9?|10 repo_picker_search_debounce_ms 5?|11 reconnect_reason 9?", GetGithubInstallationsResponse_Installation];
+    return ["GetGithubInstallationsResponse|1 installations #0*|2 github_connected 8|3 team_has_bugbot_repos 8|4 github_usernames 9*|5 ghe_hostname 9?|6 ghe_app_slug 9?|7 sso_required_orgs 3*|8 sso_required_org_display_names 9*|9 github_app_slug 9?|10 repo_picker_search_debounce_ms 5?|11 reconnect_reason 9?|12 ghe_app_html_url 9?", GetGithubInstallationsResponse_Installation];
   }
 };
 var GetGithubInstallationsResponse_Repository = class _GetGithubInstallationsResponse_Repository extends __protoMessage3136 {
@@ -327944,6 +328048,52 @@ var MigrateEnvironmentToOriginResponse = class _MigrateEnvironmentToOriginRespon
     return ["MigrateEnvironmentToOriginResponse|1 new_environment_public_id 9|2 repo_urls 9*|3 copied_secret_count 5"];
   }
 };
+var DuplicateEnvironmentRequest = class _DuplicateEnvironmentRequest extends __protoMessage3139 {
+  constructor(data) {
+    super();
+    this.publicId = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DuplicateEnvironmentRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DuplicateEnvironmentRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DuplicateEnvironmentRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DuplicateEnvironmentRequest, a, b2);
+  }
+  static $() {
+    return ["DuplicateEnvironmentRequest|1 public_id 9|2 name 9?"];
+  }
+};
+var DuplicateEnvironmentResponse = class _DuplicateEnvironmentResponse extends __protoMessage3139 {
+  constructor(data) {
+    super();
+    this.newEnvironmentPublicId = "";
+    this.name = "";
+    this.copiedSecretCount = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DuplicateEnvironmentResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DuplicateEnvironmentResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DuplicateEnvironmentResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DuplicateEnvironmentResponse, a, b2);
+  }
+  static $() {
+    return ["DuplicateEnvironmentResponse|1 new_environment_public_id 9|2 name 9|3 copied_secret_count 5"];
+  }
+};
 var EnvironmentBuildRepoCommit = class _EnvironmentBuildRepoCommit extends __protoMessage3139 {
   constructor(data) {
     super();
@@ -336370,6 +336520,19 @@ var BackgroundComposerService = {
       kind: MethodKind.Unary
     },
     /**
+     * Duplicate a visible environment, with its config and environment
+     * secrets, into a new environment with the same owner. The source
+     * environment remains unchanged.
+     *
+     * @generated from rpc aiserver.v1.BackgroundComposerService.DuplicateEnvironment
+     */
+    duplicateEnvironment: {
+      name: "DuplicateEnvironment",
+      I: DuplicateEnvironmentRequest,
+      O: DuplicateEnvironmentResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * List builds for a logical environment (read-only builds dashboard).
      * Keyset-paginated newest-first; page size is fixed server-side. Callers
      * without read access to the environment get an empty response
@@ -341690,11 +341853,13 @@ var DashboardService = {
     /**
      * Service-to-service endpoint for the accountingsphere credit-grant queue to
      * create a manual team credit grant — the same credit_grant row Anytool's
-     * creditGrant.create writes (manual: no policy condition, not global). Like
-     * Anytool's prefill flow, the grant is promoted to the team's linked Cursor
-     * organization (org-owned row) when exactly one link exists, so it pools
-     * across the org's teams; otherwise it stays team-owned. Authenticated with
-     * the same shared service token as CreateTeamFreeTrialCodeInternal; no human
+     * creditGrant.create writes (manual: no policy condition, not global).
+     * `ownership` chooses team vs company. UNSPECIFIED keeps the historical
+     * default: when the team is linked to exactly one Cursor organization, the
+     * grant is organization-owned and pools across that company's teams;
+     * otherwise it stays team-owned. TEAM keeps the grant on team_id.
+     * ORGANIZATION requires exactly one company link. Authenticated with the
+     * same shared service token as CreateTeamFreeTrialCodeInternal; no human
      * session is involved, so the request's `created_by` is recorded for
      * attribution but never used for authorization.
      *
@@ -348704,10 +348869,10 @@ var __awaiter16 = function(thisArg, _arguments, P2, generator) {
   });
 };
 var DeferredInteractionResponseError = class extends Error {
-  constructor(query) {
+  constructor(query2) {
     var _a20;
-    super(`Deferred interaction response requested for query ${query.id} (${(_a20 = query.query.case) !== null && _a20 !== void 0 ? _a20 : "unknown"})`);
-    this.query = query;
+    super(`Deferred interaction response requested for query ${query2.id} (${(_a20 = query2.query.case) !== null && _a20 !== void 0 ? _a20 : "unknown"})`);
+    this.query = query2;
     this.name = "DeferredInteractionResponseError";
     Object.setPrototypeOf(this, new.target.prototype);
   }
@@ -349091,16 +349256,16 @@ var NoopInteractionListener = class {
       })));
     });
   }
-  query(_ctx, query) {
+  query(_ctx, query2) {
     return __awaiter17(this, void 0, void 0, function* () {
       var _a20;
-      switch (query.query.case) {
+      switch (query2.query.case) {
         case "webSearchRequestQuery":
-          return Responses.webSearchApproved(query.id);
+          return Responses.webSearchApproved(query2.id);
         case "webFetchRequestQuery":
-          return Responses.webFetchApproved(query.id);
+          return Responses.webFetchApproved(query2.id);
         case "askQuestionInteractionQuery":
-          return Responses.askQuestion(query.id, new AskQuestionResult({
+          return Responses.askQuestion(query2.id, new AskQuestionResult({
             result: {
               case: "rejected",
               value: new AskQuestionRejected({
@@ -349109,23 +349274,23 @@ var NoopInteractionListener = class {
             }
           }));
         case "switchModeRequestQuery":
-          return Responses.switchModeRejected(query.id, "Mode switching not supported in CLI");
+          return Responses.switchModeRejected(query2.id, "Mode switching not supported in CLI");
         case "createPlanRequestQuery":
-          return Responses.createPlan(query.id, new CreatePlanResult({
+          return Responses.createPlan(query2.id, new CreatePlanResult({
             result: {
               case: "success",
               value: new CreatePlanSuccess()
             }
           }));
         case "setupVmEnvironmentArgs":
-          return Responses.setupVmEnvironment(query.id, new SetupVmEnvironmentResult({
+          return Responses.setupVmEnvironment(query2.id, new SetupVmEnvironmentResult({
             result: {
               case: "success",
               value: new SetupVmEnvironmentSuccess({})
             }
           }));
         case "replaceEnvArgs":
-          return Responses.replaceEnv(query.id, new ReplaceEnvResult({
+          return Responses.replaceEnv(query2.id, new ReplaceEnvResult({
             result: {
               case: "failure",
               value: new ReplaceEnvFailure({
@@ -349135,16 +349300,16 @@ var NoopInteractionListener = class {
             }
           }));
         case "prManagementRequestQuery":
-          return Responses.prManagement(query.id, createPrManagementNotAvailableResult());
+          return Responses.prManagement(query2.id, createPrManagementNotAvailableResult());
         case "mcpAuthRequestQuery":
-          return Responses.mcpAuthRejected(query.id, "MCP authentication is not supported in this environment");
+          return Responses.mcpAuthRejected(query2.id, "MCP authentication is not supported in this environment");
         case "connectScmRequestQuery":
-          return Responses.connectScmRejected(query.id, "Connecting GitHub is not supported in this environment");
+          return Responses.connectScmRejected(query2.id, "Connecting GitHub is not supported in this environment");
         case "generateImageRequestQuery":
-          return Responses.generateImageApproved(query.id, (_a20 = query.query.value.args) === null || _a20 === void 0 ? void 0 : _a20.description);
+          return Responses.generateImageApproved(query2.id, (_a20 = query2.query.value.args) === null || _a20 === void 0 ? void 0 : _a20.description);
         default: {
-          if (query.query.case !== void 0) {
-            const _exhaustiveCheck = query.query;
+          if (query2.query.case !== void 0) {
+            const _exhaustiveCheck = query2.query;
           }
           throw new Error(`Unhandled interaction query type`);
         }
@@ -355329,7 +355494,7 @@ var RE2JS = class _RE2JS {
    * @param {number} [limit=0] the limit
    * @returns {string[]} the split strings
    */
-  split(input, limit = 0) {
+  split(input, limit2 = 0) {
     const m2 = this.matcher(input);
     const result = [];
     let emptiesSkipped = 0;
@@ -355339,11 +355504,11 @@ var RE2JS = class _RE2JS {
         last = m2.end();
         continue;
       }
-      if (limit > 0 && result.length === limit - 1) {
+      if (limit2 > 0 && result.length === limit2 - 1) {
         break;
       }
       if (last === m2.start()) {
-        if (limit === 0) {
+        if (limit2 === 0) {
           emptiesSkipped += 1;
           last = m2.end();
           continue;
@@ -355357,14 +355522,14 @@ var RE2JS = class _RE2JS {
       result.push(m2.substring(last, m2.start()));
       last = m2.end();
     }
-    if (limit === 0 && last !== m2.inputLength()) {
+    if (limit2 === 0 && last !== m2.inputLength()) {
       while (emptiesSkipped > 0) {
         result.push("");
         emptiesSkipped -= 1;
       }
       result.push(m2.substring(last, m2.inputLength()));
     }
-    if (limit !== 0 || result.length === 0) {
+    if (limit2 !== 0 || result.length === 0) {
       result.push(m2.substring(last, m2.inputLength()));
     }
     return result;
@@ -370230,8 +370395,8 @@ var X11Executor = class {
    * Set the InputEventLogger to use for recording.
    * Pass undefined to disable event logging.
    */
-  setInputEventLogger(logger111) {
-    this.inputEventLogger = logger111;
+  setInputEventLogger(logger112) {
+    this.inputEventLogger = logger112;
   }
   /**
    * Get the current InputEventLogger (if any).
@@ -370596,8 +370761,8 @@ var X11ComputerUseExecutor = class {
    * Set the InputEventLogger on the underlying X11Executor.
    * Used for recording polished video preprocessing data.
    */
-  setInputEventLogger(logger111) {
-    this.executor.setInputEventLogger(logger111);
+  setInputEventLogger(logger112) {
+    this.executor.setInputEventLogger(logger112);
   }
   generateScreenshotFilename() {
     const randomBytes4 = crypto3.randomBytes(3);
@@ -376493,6 +376658,9 @@ function wrapDefaultStdioSpawnAsWorkload(base) {
   }
   return (command, args, opts) => spawnWorkload(import_node_child_process10.spawn, command, args, opts);
 }
+function structuredContentOf(isError, value) {
+  return isError === true && typeof value === "object" && value !== null && !Array.isArray(value) ? value : void 0;
+}
 var McpSdkClient = class _McpSdkClient {
   constructor(serverName, client, options2) {
     this._callToolLock = Promise.resolve();
@@ -376721,6 +376889,27 @@ var McpSdkClient = class _McpSdkClient {
     });
   }
   /**
+   * Connects a streamable-HTTP server whose credential never comes from MCP
+   * OAuth, so no OAuth provider is built: no token-storage reads, no
+   * translator PRM prefetch, and a 401 surfaces as a connect error instead of
+   * a needs-auth state with an authorization URL.
+   */
+  static fromStreamableHttpWithoutOAuth(serverName, config2, fetch2) {
+    return __awaiter34(this, void 0, void 0, function* () {
+      const client = _McpSdkClient.createClient();
+      const transport = new StreamableHTTPClientTransport(new URL(config2.url), {
+        requestInit: { headers: Object.assign({ "User-Agent": "Cursor/1.0.0" }, config2.headers) },
+        fetch: fetch2
+      });
+      yield client.connect(transport);
+      return new _McpSdkClient(serverName, client, {
+        initialState: { kind: "ready" },
+        sessionId: transport.sessionId,
+        config: config2
+      });
+    });
+  }
+  /**
    * Resume a cached MCP session while keeping the normal OAuth provider wired.
    * On 404 (session expired), caller should fall back to fromStreamableHttp.
    */
@@ -376888,7 +377077,8 @@ var McpSdkClient = class _McpSdkClient {
             });
             return {
               content: response.content,
-              isError: response.isError === true
+              isError: response.isError === true,
+              structuredContent: structuredContentOf(response.isError, response.structuredContent)
             };
           } catch (error3) {
             if (error3 instanceof UnauthorizedError && this.stateValue.kind === "ready") {
@@ -377395,16 +377585,16 @@ var __awaiter35 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function structuredLoggerToMcpOAuthLifecycleLogger(args) {
-  const { logger: logger111, ctx } = args;
+  const { logger: logger112, ctx } = args;
   return {
-    debug: (message, metadata) => logger111.debug(ctx, message, metadata),
-    info: (message, metadata) => logger111.info(ctx, message, metadata),
-    warn: (message, metadata) => logger111.warn(ctx, message, metadata),
-    error: (message, error3, metadata) => logger111.error(ctx, message, error3, metadata)
+    debug: (message, metadata) => logger112.debug(ctx, message, metadata),
+    info: (message, metadata) => logger112.info(ctx, message, metadata),
+    warn: (message, metadata) => logger112.warn(ctx, message, metadata),
+    error: (message, error3, metadata) => logger112.error(ctx, message, error3, metadata)
   };
 }
-function createContextStructuredLifecycleLogger(ctx, logger111) {
-  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger111 });
+function createContextStructuredLifecycleLogger(ctx, logger112) {
+  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger112 });
 }
 var LoggedScopedMcpTokenStorage = class {
   constructor(options2) {
@@ -380796,7 +380986,7 @@ var LocalGrepExecutor = class _LocalGrepExecutor {
       return await withTimeout(this.grepProvider.executeIndexedGrep(indexedCtx, workspacePaths, args, diagnostics), _LocalGrepExecutor.INDEXED_GREP_TIMEOUT_MS, `Indexed grep timed out after ${_LocalGrepExecutor.INDEXED_GREP_TIMEOUT_MS / 1e3}s`);
     } catch (error3) {
       if (error3 instanceof TimeoutError) {
-        logger16.warn(ctx, "indexed_grep.timeout_fallback", {
+        logger16.debug(ctx, "indexed_grep.timeout_fallback", {
           ...logContext,
           totalMs: Math.round(performance.now() - startedAt),
           ...diagnostics
@@ -386036,8 +386226,8 @@ var RedactedString = class {
   // Array-returning methods (return RedactedString<C>[], preserve classification)
   // ============================================
   /** Split string into array */
-  split(separator, limit) {
-    return __classPrivateFieldGet2(this, _RedactedString_value, "f").split(separator, limit).map((s3) => __classPrivateFieldGet2(this, _RedactedString_instances, "m", _RedactedString_rewrap).call(this, s3));
+  split(separator, limit2) {
+    return __classPrivateFieldGet2(this, _RedactedString_value, "f").split(separator, limit2).map((s3) => __classPrivateFieldGet2(this, _RedactedString_instances, "m", _RedactedString_rewrap).call(this, s3));
   }
   // ============================================
   // Number-returning methods
@@ -386687,7 +386877,8 @@ var REDACTION_SCHEMA = {
   },
   "agent.v1.SendAgentHostActionRequest": {
     "session_id": "SAFE",
-    "model_id": "SAFE"
+    "model_id": "SAFE",
+    "replace_queued_turn_id": "SAFE"
   },
   "agent.v1.SendAgentHostMessageResponse": {
     "turn_id": "SAFE"
@@ -408611,7 +408802,8 @@ function toRedactedBackgroundTaskCompletionAction(msg, privacyMode) {
   return {
     _privacyMode: privacyMode,
     completions: msg.completions.map((v2) => toRedactedBackgroundTaskCompletion(v2, privacyMode)),
-    systemReminder: msg.systemReminder !== void 0 ? createRedactedString(msg.systemReminder, DataClassification.CODE, "system_reminder", privacyMode) : void 0
+    systemReminder: msg.systemReminder !== void 0 ? createRedactedString(msg.systemReminder, DataClassification.CODE, "system_reminder", privacyMode) : void 0,
+    requestContext: msg.requestContext !== void 0 ? toRedactedRequestContext(msg.requestContext, privacyMode) : void 0
   };
 }
 function fromRedactedBackgroundTaskCompletionAction(msg, purpose, opts) {
@@ -408619,7 +408811,8 @@ function fromRedactedBackgroundTaskCompletionAction(msg, purpose, opts) {
   const enforcing = opts?.enforcing;
   return new BackgroundTaskCompletionAction({
     completions: msg.completions.map((v2) => fromRedactedBackgroundTaskCompletion(v2, purpose, opts)),
-    systemReminder: msg.systemReminder?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing })
+    systemReminder: msg.systemReminder?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing }),
+    requestContext: msg.requestContext !== void 0 ? fromRedactedRequestContext(msg.requestContext, purpose, opts) : void 0
   });
 }
 function toRedactedBackgroundTaskCompletion(msg, privacyMode) {
@@ -409370,7 +409563,8 @@ function toRedactedAsyncAskQuestionCompletionAction(msg, privacyMode) {
     _privacyMode: privacyMode,
     originalToolCallId: msg.originalToolCallId,
     originalArgs: msg.originalArgs !== void 0 ? toRedactedAskQuestionArgs(msg.originalArgs, privacyMode) : void 0,
-    result: msg.result !== void 0 ? toRedactedAskQuestionResult(msg.result, privacyMode) : void 0
+    result: msg.result !== void 0 ? toRedactedAskQuestionResult(msg.result, privacyMode) : void 0,
+    requestContext: msg.requestContext !== void 0 ? toRedactedRequestContext(msg.requestContext, privacyMode) : void 0
   };
 }
 function toRedactedSummarizeAction(msg, privacyMode) {
@@ -411013,9 +411207,9 @@ function toUnredactedInteractionListener(delegate, privacyMode) {
         yield delegate.sendUpdate(ctx, toRedactedInteractionUpdate(update, privacyMode));
       });
     },
-    query(ctx, query) {
+    query(ctx, query2) {
       return __awaiter41(this, void 0, void 0, function* () {
-        const redactedResponse = yield delegate.query(ctx, toRedactedInteractionQuery(query, privacyMode));
+        const redactedResponse = yield delegate.query(ctx, toRedactedInteractionQuery(query2, privacyMode));
         return fromRedactedInteractionResponse(redactedResponse, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
       });
     },
@@ -411030,9 +411224,9 @@ function toRedactedInteractionListener(delegate, privacyMode) {
         yield delegate.sendUpdate(ctx, fromRedactedInteractionUpdate(update, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
       });
     },
-    query(ctx, query) {
+    query(ctx, query2) {
       return __awaiter41(this, void 0, void 0, function* () {
-        const response = yield delegate.query(ctx, fromRedactedInteractionQuery(query, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
+        const response = yield delegate.query(ctx, fromRedactedInteractionQuery(query2, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
         return toRedactedInteractionResponse(response, privacyMode);
       });
     },
@@ -415942,8 +416136,8 @@ var InteractionHandler = class {
       __disposeResources25(env_1);
     }
   }
-  async query(ctx, query) {
-    return this.interactionProvider.query(ctx, query);
+  async query(ctx, query2) {
+    return this.interactionProvider.query(ctx, query2);
   }
 };
 
@@ -427048,12 +427242,12 @@ function NoRepositoryAccessInstructions({ repolessPromptVariant }) {
 function GitOrNoRepositoryInstructions({ isRepoless, repolessPromptVariant, gitInstructionsProps }) {
   return isRepoless === true ? NoRepositoryAccessInstructions({ repolessPromptVariant }) : GitInstructions(gitInstructionsProps);
 }
-function GitInstructions({ toolInfo, shouldShowTestingInstructions, suppressCreatedPrMention = false, startedAsNewProject = false }) {
+function GitInstructions({ toolInfo, shouldShowTestingInstructions, suppressCreatedPrMention = false, startedAsNewProject = false, isSelfHostedMachine = false }) {
   const prToolName = toolInfo.allTools.PR_MANAGEMENT?.name;
   const hasPrTool = prToolName !== void 0;
   return [
     jsxs("li", { children: ["You are responsible for managing all git operations", !hasPrTool && " outside of PRs/MRs", ". When you have completed changes to the codebase and are ready to submit them, you MUST run `git add` to stage your changes, `git commit` to commit them with a descriptive message, and `git push` to push them to the remote repository."] }, "manage-git-operations"),
-    jsx("li", { children: "The git client on this repository path already has `user.name` and `user.email` configured. Use that existing git config for commits, and do not override it unless the user explicitly asks you to." }, "git-config"),
+    isSelfHostedMachine ? jsxs("li", { children: ["This is a self-hosted machine, so `user.name` and `user.email` come from the machine's own git config. Before your first commit, check them with `git config user.name` and `git config user.email`. If both are set, use them and do not override them unless the user explicitly asks you to. If either is unset, set it for this repository only (never with `--global`) to `", CURSOR_GIT_AUTHOR_NAME, "` / `", CURSOR_AGENT_EMAIL, "`, and mention that in your final message."] }, "git-config") : jsx("li", { children: "The git client on this repository path already has `user.name` and `user.email` configured. Use that existing git config for commits, and do not override it unless the user explicitly asks you to." }, "git-config"),
     jsx("li", { children: "When commiting, create a new commit for each logical change. Do not batch commits unless explictly instructed to do so." }, "commit-per-logical-change"),
     jsx("li", { children: NO_FORCE_PUSH_OR_AMEND_COMMITS_NOTE }, "no-force-push"),
     jsx("li", { children: "Do not leave the current git branch unless the user explicitly asks you to do so." }, "no-leave-branch"),
@@ -430036,7 +430230,8 @@ function getComposer2CloudTestingSectionElements(props, options2) {
         toolInfo: props.toolInfo,
         shouldShowTestingInstructions: true,
         suppressCreatedPrMention: isSlackV1_5ThreadBoundSession(props),
-        startedAsNewProject: props.startedAsNewProject
+        startedAsNewProject: props.startedAsNewProject,
+        isSelfHostedMachine: props.featureFlags?.cloudAgentSelfHostedMachine === true
       }
     }) })] }),
     testing: jsx(TestingInstructions2, { props: context2.testingPromptProps, browserMcpProviderName: getBrowserMcpProviderName(context2.browserTools), screenshotToolName: context2.browserTools?.find((tool) => tool.includes("browser_take_screenshot")), enableComputerUse: context2.enableComputerUse, enableManualReproduction: context2.enableComputerUse, computerUseSubagentName: "computerUse", omitTestingWorkflow: options2?.omitTestingWorkflow === true }),
@@ -430936,10 +431131,6 @@ async function getRequestContext(parentCtx, maybeRequestContext, resources, opti
     resources,
     options: options2
   })).requestContext;
-}
-async function getRedactedRequestContext(parentCtx, maybeRequestContext, resources, options2) {
-  const unrededacted = await getRequestContext(parentCtx, maybeRequestContext ? fromRedactedRequestContext(maybeRequestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED) : void 0, resources, options2);
-  return toRedactedRequestContext(unrededacted, maybeRequestContext?._privacyMode ?? PrivacyMode.UNSPECIFIED);
 }
 
 // ../packages/agent/dist/utils/token-estimate.js
@@ -432678,13 +432869,13 @@ function formatProjectSubagentPrompt(options2) {
 
 // ../packages/agent/dist/recent-user-message-ids.js
 var RECENT_USER_MESSAGE_ID_INDEX_LIMIT = 64;
-function appendRecentUserMessageId(index, messageId, limit = RECENT_USER_MESSAGE_ID_INDEX_LIMIT) {
+function appendRecentUserMessageId(index, messageId, limit2 = RECENT_USER_MESSAGE_ID_INDEX_LIMIT) {
   const id = messageId?.trim() ?? "";
   if (id.length === 0) {
     return 0;
   }
   index.push(id);
-  const overflow = index.length - limit;
+  const overflow = index.length - limit2;
   if (overflow > 0) {
     index.splice(0, overflow);
     return overflow;
@@ -433712,6 +433903,26 @@ var AgentConversationTurnHandle = class extends Writeable {
   hasSendMessageCall() {
     return this.sendMessageStepIndices.length > 0;
   }
+  getPendingLongReasoningReminder() {
+    const pending = this.turnStructure.longReasoningReminder;
+    return pending === void 0 ? void 0 : { remainingDelayCalls: pending.remainingDelayCalls };
+  }
+  setPendingLongReasoningReminder(pending) {
+    this.turnStructure.longReasoningReminder = pending === void 0 ? void 0 : new LongReasoningReminderState({
+      remainingDelayCalls: pending.remainingDelayCalls
+    });
+    this.markDirty();
+  }
+  hasLoggedLongReasoningReminderExposure() {
+    return this.turnStructure.longReasoningReminderExposureLogged;
+  }
+  markLongReasoningReminderExposureLogged() {
+    if (this.turnStructure.longReasoningReminderExposureLogged) {
+      return;
+    }
+    this.turnStructure.longReasoningReminderExposureLogged = true;
+    this.markDirty();
+  }
   setUserMessage(userMessage) {
     this.userMessage.set(userMessage);
     this.markDirty();
@@ -433964,7 +434175,13 @@ var AgentConversationTurnHandle = class extends Writeable {
         dynamicToolNames: [...this.turnStructure.dynamicToolNames]
       } : {},
       ...this.turnStructure.routedModelDisplayName !== void 0 && this.turnStructure.routedModelDisplayName.length > 0 ? { routedModelDisplayName: this.turnStructure.routedModelDisplayName } : {},
-      ...this.turnStructure.userMessageId !== void 0 && this.turnStructure.userMessageId.trim().length > 0 ? { userMessageId: this.turnStructure.userMessageId.trim() } : {}
+      ...this.turnStructure.userMessageId !== void 0 && this.turnStructure.userMessageId.trim().length > 0 ? { userMessageId: this.turnStructure.userMessageId.trim() } : {},
+      ...this.turnStructure.longReasoningReminder === void 0 ? {} : {
+        longReasoningReminder: new LongReasoningReminderState({
+          remainingDelayCalls: this.turnStructure.longReasoningReminder.remainingDelayCalls
+        })
+      },
+      longReasoningReminderExposureLogged: this.turnStructure.longReasoningReminderExposureLogged
     });
     const serializedWrapper = conversationTurnStructureSerde2.serialize(new ConversationTurnStructure({
       turn: { case: "agentConversationTurn", value: newInnerStructure }
@@ -436041,6 +436258,60 @@ async function reactivatePausedGoalForTurn(ctx, stateHandler, onStateUpdate) {
 var import_node_crypto21 = require("node:crypto");
 init_dist();
 
+// ../packages/agent/dist/long-reasoning-reminder.js
+var lifecycle = createCounter("agent.long_reasoning_reminder.lifecycle", {
+  description: "Lifecycle transitions for the delayed long-reasoning reminder experiment",
+  labelNames: ["event", "arm", "threshold_tokens", "delay_calls"]
+});
+var observedReasoningTokens = createHistogram("agent.long_reasoning_reminder.reasoning_tokens", {
+  description: "Per-call hidden reasoning tokens at eligible experiment opportunities",
+  labelNames: ["arm"]
+});
+function metricTags(config2) {
+  return {
+    arm: config2.arm,
+    threshold_tokens: String(config2.thresholdTokens),
+    delay_calls: String(config2.delayCalls)
+  };
+}
+function recordLongReasoningReminderLifecycle(ctx, config2, event) {
+  lifecycle.increment(ctx, 1, { event, ...metricTags(config2) });
+}
+function advanceLongReasoningReminder(config2, pending, reasoningTokens) {
+  const opportunity = reasoningTokens !== void 0;
+  const crossedThreshold = opportunity && Number.isFinite(reasoningTokens) && reasoningTokens >= config2.thresholdTokens;
+  if (pending !== void 0) {
+    return {
+      nextPending: {
+        remainingDelayCalls: Math.max(0, pending.remainingDelayCalls - 1)
+      },
+      opportunity,
+      scheduled: false,
+      coalesced: crossedThreshold && config2.enabled
+    };
+  }
+  if (!config2.enabled || !crossedThreshold) {
+    return {
+      nextPending: void 0,
+      opportunity,
+      scheduled: false,
+      coalesced: false
+    };
+  }
+  return {
+    nextPending: { remainingDelayCalls: config2.delayCalls },
+    opportunity,
+    scheduled: true,
+    coalesced: false
+  };
+}
+function recordLongReasoningReminderOpportunity(ctx, config2, reasoningTokens) {
+  recordLongReasoningReminderLifecycle(ctx, config2, "opportunity");
+  observedReasoningTokens.histogram(ctx, reasoningTokens, {
+    arm: config2.arm
+  });
+}
+
 // ../packages/agent/dist/tool-stream-executor.js
 init_dist();
 init_dist3();
@@ -436434,6 +436705,7 @@ var TOOL_OWNER_TEAM_MAP = {
   OFFER_SLACK_CONNECT: "async",
   REQUEST_SCM_CONNECT: "async",
   REQUEST_ONEPASSWORD_CONNECT: "async",
+  SET_ONEPASSWORD_PREFERENCE: "async",
   SET_STATUS: "async",
   CLEAR_STATUS: "async",
   SEARCH_MCP_SERVERS: "connectors-manager",
@@ -438636,12 +438908,12 @@ async function applyRemindersToToolResults(responseMessages, reminders, currentT
 }
 
 // ../packages/agent/dist/summarization-lifecycle.js
-function eventBase(lifecycle) {
+function eventBase(lifecycle2) {
   return {
-    summaryLifecycleId: lifecycle.summaryLifecycleId,
-    summarizationModelId: lifecycle.summarizationModelId,
-    mainModelId: lifecycle.mainModelId,
-    summarizerType: lifecycle.summarizerType
+    summaryLifecycleId: lifecycle2.summaryLifecycleId,
+    summarizationModelId: lifecycle2.summarizationModelId,
+    mainModelId: lifecycle2.mainModelId,
+    summarizerType: lifecycle2.summarizerType
   };
 }
 function liveLifecycle(source) {
@@ -438661,48 +438933,48 @@ function resumeSummaryLifecycle(options2) {
   return { ...options2, emittedDeferrals: /* @__PURE__ */ new Set(), status: "completed" };
 }
 function emitSummaryLifecycleStarted(ctx, source) {
-  const lifecycle = liveLifecycle(source);
-  if (lifecycle === void 0 || lifecycle.status !== "created") {
+  const lifecycle2 = liveLifecycle(source);
+  if (lifecycle2 === void 0 || lifecycle2.status !== "created") {
     return;
   }
-  lifecycle.status = "started";
+  lifecycle2.status = "started";
   getAgentEventTracker(ctx).trackSummaryLifecycle(ctx, {
-    ...eventBase(lifecycle),
+    ...eventBase(lifecycle2),
     phase: "started"
   });
 }
 function emitSummaryLifecycleCompleted(ctx, source, outcome) {
-  const lifecycle = liveLifecycle(source);
-  if (lifecycle === void 0 || lifecycle.status !== "started") {
+  const lifecycle2 = liveLifecycle(source);
+  if (lifecycle2 === void 0 || lifecycle2.status !== "started") {
     return;
   }
-  lifecycle.status = "completed";
+  lifecycle2.status = "completed";
   getAgentEventTracker(ctx).trackSummaryLifecycle(ctx, {
-    ...eventBase(lifecycle),
+    ...eventBase(lifecycle2),
     phase: "completed",
     outcome
   });
 }
 function emitSummaryLifecycleDeferred(ctx, source, reason) {
-  const lifecycle = liveLifecycle(source);
-  if (lifecycle === void 0 || lifecycle.status === "terminal" || lifecycle.emittedDeferrals.has(reason)) {
+  const lifecycle2 = liveLifecycle(source);
+  if (lifecycle2 === void 0 || lifecycle2.status === "terminal" || lifecycle2.emittedDeferrals.has(reason)) {
     return;
   }
-  lifecycle.emittedDeferrals.add(reason);
+  lifecycle2.emittedDeferrals.add(reason);
   getAgentEventTracker(ctx).trackSummaryLifecycle(ctx, {
-    ...eventBase(lifecycle),
+    ...eventBase(lifecycle2),
     phase: "deferred",
     reason
   });
 }
 function emitSummaryLifecycleTerminal(ctx, source, event) {
-  const lifecycle = liveLifecycle(source);
-  if (lifecycle === void 0 || lifecycle.status === "terminal") {
+  const lifecycle2 = liveLifecycle(source);
+  if (lifecycle2 === void 0 || lifecycle2.status === "terminal") {
     return;
   }
-  lifecycle.status = "terminal";
+  lifecycle2.status = "terminal";
   getAgentEventTracker(ctx).trackSummaryLifecycle(ctx, {
-    ...eventBase(lifecycle),
+    ...eventBase(lifecycle2),
     ...event
   });
 }
@@ -440763,12 +441035,12 @@ ${formatProjectCompactionPrompt({
         if (ctx.canceled) {
           onRunCancelled();
         }
-        const lifecycle = createLiveSummaryLifecycle({
+        const lifecycle2 = createLiveSummaryLifecycle({
           summarizationModelId: summarizerModelId,
           mainModelId: config2.modelId,
           summarizerType
         });
-        emitSummaryLifecycleStarted(ctx, lifecycle);
+        emitSummaryLifecycleStarted(ctx, lifecycle2);
         const detachedGenerationTimeoutMs = options2.backgroundSummarizationMode === BackgroundSummarizationMode.Background ? config2.pendingSummaryStore?.detachedGenerationTimeoutMs : void 0;
         const [generationCtx, releaseGenerationCtx] = detachedGenerationTimeoutMs === void 0 ? [ctx, void 0] : ctx.withDetached().withTimeoutAndCancel(detachedGenerationTimeoutMs);
         const summarizationPromise = (async () => {
@@ -440816,7 +441088,7 @@ ${formatProjectCompactionPrompt({
               summarizerType,
               outcome: "success"
             });
-            emitSummaryLifecycleCompleted(ctx, lifecycle, result.hadError === true ? "fallback" : "generated");
+            emitSummaryLifecycleCompleted(ctx, lifecycle2, result.hadError === true ? "fallback" : "generated");
             stateHandler.setBackgroundSummarizationHasCompleted(generationDuration);
             logger60.info(ctx, "Background summarization completed", {
               summarization: {
@@ -440845,7 +441117,7 @@ ${formatProjectCompactionPrompt({
             if (summarizerType === "self" && (errorKind === "InputTokenLimitError" || errorKind === "InputTooLargeError" || errorKind === "OutputTokensLimitExceededError")) {
               stateHandler.setSelfSummaryInputLimitFailureTokenCount(getTokenDetails().usedTokens);
             }
-            emitSummaryLifecycleAbandoned(ctx, lifecycle, "generation_failed");
+            emitSummaryLifecycleAbandoned(ctx, lifecycle2, "generation_failed");
             stateHandler.clearBackgroundSummarizationState();
             throw e;
           } finally {
@@ -440862,7 +441134,7 @@ ${formatProjectCompactionPrompt({
           startUsedTokens: getTokenDetails().usedTokens,
           startMaxTokens: getTokenDetails().maxTokens,
           triggerReason: options2.triggerReason,
-          lifecycle
+          lifecycle: lifecycle2
         };
         stateHandler.setBackgroundSummarizationState(promiseInfo, settledMessages, cancellationToken);
         if (config2.pendingSummaryStore !== void 0 && config2.conversationId !== void 0) {
@@ -440882,7 +441154,7 @@ ${formatProjectCompactionPrompt({
             usedTokensThresholdToStartBackgroundSummarization: config2.backgroundSummarizationProps.usedTokensThresholdToStartBackgroundSummarization,
             usedTokensThresholdToPersistBackgroundSummarization: config2.backgroundSummarizationProps.usedTokensThresholdToPersistBackgroundSummarization,
             triggerReason: options2.triggerReason,
-            summaryLifecycleId: lifecycle.summaryLifecycleId,
+            summaryLifecycleId: lifecycle2.summaryLifecycleId,
             logFields: summarizationLogFields
           });
           config2.pendingSummaryStore.trackPendingGeneration?.({
@@ -443863,6 +444135,57 @@ var AbstractUserMessageActionHandler = class {
   getProjectPermissionsFileAutoRunInstructions(requestContext) {
     return getProjectPermissionsFileAutoRunInstructions(requestContext);
   }
+  observeLongReasoningReminderCall(ctx, turn, reasoningTokens) {
+    const config2 = this.config.longReasoningReminder;
+    if (config2 === void 0) {
+      return;
+    }
+    const previousPending = turn.getPendingLongReasoningReminder();
+    const transition = advanceLongReasoningReminder(config2, previousPending, reasoningTokens);
+    if (transition.opportunity && reasoningTokens !== void 0) {
+      recordLongReasoningReminderOpportunity(ctx, config2, reasoningTokens);
+      if (!turn.hasLoggedLongReasoningReminderExposure()) {
+        turn.markLongReasoningReminderExposureLogged();
+        try {
+          config2.onFirstEligibleOpportunity?.();
+        } catch (error3) {
+          logger65.warn(ctx, "Long-reasoning reminder exposure hook failed open", { error: error3 });
+        }
+      }
+    }
+    if (transition.scheduled) {
+      recordLongReasoningReminderLifecycle(ctx, config2, "scheduled");
+    }
+    if (transition.coalesced) {
+      recordLongReasoningReminderLifecycle(ctx, config2, "coalesced");
+    }
+    if (previousPending?.remainingDelayCalls !== transition.nextPending?.remainingDelayCalls) {
+      turn.setPendingLongReasoningReminder(transition.nextPending);
+    }
+  }
+  applyLongReasoningReminderAfterStep(ctx, turn, rootPromptExecutor, privacyMode, hasToolCall) {
+    const config2 = this.config.longReasoningReminder;
+    const pending = turn.getPendingLongReasoningReminder();
+    if (config2 === void 0 || pending === void 0) {
+      return;
+    }
+    if (!hasToolCall) {
+      turn.setPendingLongReasoningReminder(void 0);
+      recordLongReasoningReminderLifecycle(ctx, config2, "expired");
+      return;
+    }
+    if (pending.remainingDelayCalls > 0) {
+      return;
+    }
+    rootPromptExecutor.appendMessages(toRedactedCoreMessages([
+      {
+        role: "user",
+        content: `<system_reminder>${sanitizeSystemReminderContent(config2.reminderText)}</system_reminder>`
+      }
+    ], privacyMode));
+    turn.setPendingLongReasoningReminder(void 0);
+    recordLongReasoningReminderLifecycle(ctx, config2, "injected");
+  }
   /**
    * Wraps a model stream so the first text delta of a step triggers a
    * prefix-cache warmup for the pending response comparison alternate. Text
@@ -444667,6 +444990,7 @@ var AbstractUserMessageActionHandler = class {
         cacheWriteTokens: extendedUsage.cacheWriteTokens,
         reasoningTokens: extendedUsage.reasoningTokens
       });
+      this.longReasoningStepAttemptUsage = { reasoningTokens: extendedUsage.reasoningTokens };
       const hasToolCall = containsToolCall(response.messages);
       const hasSendMessageCapability = toolSetHandle.getTool("SEND_MESSAGE") !== void 0;
       const visibilityReminderAlreadyInjected = hasSendMessageCapability && hasProjectSendMessageReminderForCurrentRequest(initialMessages);
@@ -444778,10 +445102,8 @@ var AbstractUserMessageActionHandler = class {
         }
         logger65.warn(ctx, "nal.empty_response", emptyResponseAttrs);
         let retryAction;
-        if (this.constructor.name === "ResumeActionHandler") {
-          retryAction = "ok_resume_action";
-        } else if (this.constructor.name === "BackgroundTaskCompletionActionHandler") {
-          retryAction = "ok_background_task_completion_action";
+        if (this.emptyResponseRetryAction !== void 0) {
+          retryAction = this.emptyResponseRetryAction;
         } else if (lastExecutorMsgRole === "tool") {
           retryAction = "retry_tool_result";
         } else if (lastExecutorMsgRole === "user") {
@@ -444803,7 +445125,7 @@ var AbstractUserMessageActionHandler = class {
         const isLastRetryLoopIteration = (maxOutputTokenRetryDebug?.retryLoopIteration ?? 0) >= MAX_RETRY_ITERATIONS - 1;
         const turnRetriesUsed = turnBudget?.retriesUsed ?? 0;
         const turnBudgetExhausted = turnBudget !== void 0 && turnRetriesUsed >= MAX_EMPTY_RESPONSE_RETRIES_PER_TURN;
-        const shouldRetry = isRetryEnabled && !isMetaParentAgent && !isMultitaskMode && !alreadyRetried && !isLastRetryLoopIteration && !turnBudgetExhausted && !isTrailingNotificationUserMsg && !sendMessageCallRequirementSatisfied && retryAction !== "ok_resume_action" && retryAction !== "ok_background_task_completion_action" && retryAction !== "fallthrough";
+        const shouldRetry = isRetryEnabled && !isMetaParentAgent && !isMultitaskMode && !alreadyRetried && !isLastRetryLoopIteration && !turnBudgetExhausted && !isTrailingNotificationUserMsg && !sendMessageCallRequirementSatisfied && this.emptyResponseRetryAction === void 0 && retryAction !== "fallthrough";
         const needsContinuationMessage2 = retryAction !== "retry_user_msg" && !isTrailingTaskToolCall;
         const retryInfo = {
           retryAction,
@@ -446154,7 +446476,15 @@ ${sanitizedReminder}
     const stepToolCountingMiddleware = createToolCountingMiddleware(stepToolCountingState);
     const stepWrappedExecutor = stepToolCountingMiddleware(executors.wrappedPromptExecutor);
     const { tools, extraT, descriptionProps, toolCallIdentityResolver } = await this.buildStepSummarizationContext(ctx, turn, stateHandler, toolsGenerator, mcpTools, repositoryInfo, requestContext, fileOperationLockManager);
-    const result = await this.runWithSummarizationRetry(ctx, stateHandler, executors.rootPromptExecutor, requestContext, tools, extraT, descriptionProps, (innerCtx) => this.runWithMaxTokensRetry(innerCtx, executors.rootPromptExecutor, (retryCtx, maxOutputTokenRetryDebug) => runStep(retryCtx, stepWrappedExecutor, maxOutputTokenRetryDebug), emptyResponseRetryTurnBudget));
+    const result = await this.runWithSummarizationRetry(ctx, stateHandler, executors.rootPromptExecutor, requestContext, tools, extraT, descriptionProps, (innerCtx) => this.runWithMaxTokensRetry(innerCtx, executors.rootPromptExecutor, (retryCtx, maxOutputTokenRetryDebug) => {
+      this.longReasoningStepAttemptUsage = void 0;
+      return runStep(retryCtx, stepWrappedExecutor, maxOutputTokenRetryDebug);
+    }, emptyResponseRetryTurnBudget));
+    const acceptedAttemptUsage = this.longReasoningStepAttemptUsage;
+    this.longReasoningStepAttemptUsage = void 0;
+    if (acceptedAttemptUsage !== void 0) {
+      this.observeLongReasoningReminderCall(ctx, turn, acceptedAttemptUsage.reasoningTokens);
+    }
     this.recordStepToolCallMetrics(ctx, stepToolCountingState);
     return {
       result,
@@ -446174,6 +446504,7 @@ ${sanitizedReminder}
       appendToolCallIdTagsToToolResults(responseMessages);
     }
     turn.appendPromptMessages(toRedactedCoreMessages(responseMessages, stateHandler.getPrivacyMode()));
+    this.applyLongReasoningReminderAfterStep(ctx, turn, rootPromptExecutor, stateHandler.getPrivacyMode(), hasToolCall);
     if (this.config.messageHistoryModifier) {
       stateHandler.assertRootPromptBlobsLoadedForFullPromptRead();
       const currentMessages = fromRedactedCoreMessages(rootPromptExecutor.getMessages(), PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
@@ -446630,6 +446961,7 @@ ${sanitizedReminder}
         cacheWriteTokens: extendedUsage.cacheWriteTokens,
         reasoningTokens: extendedUsage.reasoningTokens
       });
+      this.longReasoningStepAttemptUsage = { reasoningTokens: extendedUsage.reasoningTokens };
       const hasSendMessageCapability = toolSetHandle.getTool("SEND_MESSAGE") !== void 0;
       await this.maybeRetryProjectCoordinatorWithoutSendMessage({
         ctx,
@@ -447034,6 +447366,10 @@ function getBackgroundTaskCompletionThreadId(completions, stateHandler) {
   return resolvedThreadId;
 }
 var BackgroundTaskCompletionActionHandler = class extends AbstractUserMessageActionHandler {
+  constructor() {
+    super(...arguments);
+    this.emptyResponseRetryAction = "ok_background_task_completion_action";
+  }
   async prepareFollowupTurn(ctx, action, rootPromptExecutor, stateHandler, mcpTools, onStateUpdate) {
     const completionAction = fromRedactedBackgroundTaskCompletionAction(action, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
     for (const completion of completionAction.completions) {
@@ -447086,10 +447422,14 @@ var BackgroundTaskCompletionActionHandler = class extends AbstractUserMessageAct
         sourceUserMessage = await lastTurn.userMessage.get(ctx);
       }
     }
-    const requestContext = await getRedactedRequestContext(ctx, void 0, this.resourceAccessor, buildRequestContextOptions(this.config));
-    const unredactedRequestContext = fromRedactedRequestContext(requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED);
-    const mergedMcpTools = this.mergeRequestContextTools(mcpTools, requestContext.tools);
-    const repositoryInfos = requestContext.repositoryInfo.map((ri2) => fromRedactedRepositoryIndexingInfo(ri2, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED));
+    const { requestContext: unredactedRequestContext, provenance: requestContextProvenance } = await resolveRequestContext({
+      parentCtx: ctx,
+      maybeRequestContext: action.requestContext ? fromRedactedRequestContext(action.requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED) : void 0,
+      resources: this.resourceAccessor,
+      options: buildRequestContextOptions(this.config)
+    });
+    const mergedMcpTools = this.mergeRequestContextTools(mcpTools, unredactedRequestContext.tools);
+    const repositoryInfos = unredactedRequestContext.repositoryInfo;
     const followUpMode = stateHandler.mode ?? sourceUserMessage?.mode ?? AgentMode.AGENT;
     const enableAgentChatLinks = this.config.featureFlags?.enableAgentChatLinks !== false;
     const hideAsyncSubagentTaskNotifications = this.config.featureFlags?.hideAsyncSubagentTaskNotifications === true;
@@ -447200,7 +447540,8 @@ ${systemReminder}
       latestTurn,
       mergedMcpTools,
       repositoryInfos,
-      requestContext: unredactedRequestContext
+      requestContext: unredactedRequestContext,
+      requestContextProvenance
     };
   }
   async handle(parentCtx, action, rootPromptExecutor, stateHandler, mcpTools, onStateUpdate) {
@@ -447253,7 +447594,10 @@ ${systemReminder}
       return {
         state: await stateHandler.computeNewStructure(followup.ctx),
         toolCallDescriptors,
-        splitStepData
+        splitStepData: {
+          ...splitStepData,
+          requestContextProvenance: followup.requestContextProvenance
+        }
       };
     } catch (e_2) {
       env_2.error = e_2;
@@ -447479,7 +447823,7 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
         const lastStep = await lastStepRef.get(ctx);
         return lastStep.message.case !== "toolCall";
       })();
-      const requestContext = await getRedactedRequestContext(ctx, void 0, this.resourceAccessor, buildRequestContextOptions(this.config));
+      const requestContext = await getRequestContext(ctx, action.requestContext ? fromRedactedRequestContext(action.requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED) : void 0, this.resourceAccessor, buildRequestContextOptions(this.config));
       const mergedMcpTools = this.mergeRequestContextTools(mcpTools, requestContext.tools);
       if (isTurnFinished) {
         logger67.info(ctx, "Current turn is finished, creating new turn", {
@@ -447497,7 +447841,7 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
         });
         ensureUserMessageTiming(syntheticUserMessage);
         await this.interactionListener.sendUpdate(ctx, toRedactedInteractionUpdate(Updates.userMessageAppended(syntheticUserMessage), stateHandler.getPrivacyMode()));
-        const newTurn = await stateHandler.createAgentTurn(ctx, syntheticUserMessage, fromRedactedRequestContext(requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED), this.config, this.resourceAccessor);
+        const newTurn = await stateHandler.createAgentTurn(ctx, syntheticUserMessage, requestContext, this.config, this.resourceAccessor);
         const application = await applyAskQuestionCompletion(ctx, {
           action,
           stateHandler,
@@ -447512,7 +447856,7 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
           messageId: syntheticUserMessage.messageId,
           toolCallId: application.recordedToolCallId
         });
-        await this.runTurnLoop(ctx, rootPromptExecutor, stateHandler, newTurn, this.config.toolsGenerator, mergedMcpTools, requestContext.repositoryInfo.map((ri2) => fromRedactedRepositoryIndexingInfo(ri2, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED)), fromRedactedRequestContext(requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED), onStateUpdate);
+        await this.runTurnLoop(ctx, rootPromptExecutor, stateHandler, newTurn, this.config.toolsGenerator, mergedMcpTools, requestContext.repositoryInfo, requestContext, onStateUpdate);
       } else {
         logger67.info(ctx, "Current turn is active, appending to existing turn");
         const application = await applyAskQuestionCompletion(ctx, {
@@ -447526,7 +447870,7 @@ var AsyncAskQuestionCompletionActionHandler = class extends AbstractUserMessageA
           return await stateHandler.computeNewStructure(ctx);
         }
         logger67.info(ctx, "Appended tool call and result to existing turn");
-        await this.runTurnLoop(ctx, rootPromptExecutor, stateHandler, lastTurn, this.config.toolsGenerator, mergedMcpTools, requestContext.repositoryInfo.map((ri2) => fromRedactedRepositoryIndexingInfo(ri2, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED)), fromRedactedRequestContext(requestContext, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED), onStateUpdate);
+        await this.runTurnLoop(ctx, rootPromptExecutor, stateHandler, lastTurn, this.config.toolsGenerator, mergedMcpTools, requestContext.repositoryInfo, requestContext, onStateUpdate);
       }
       logger67.info(ctx, "Async ask-question completion action handled successfully");
       return await stateHandler.computeNewStructure(ctx);
@@ -449209,6 +449553,10 @@ var __disposeResources41 = /* @__PURE__ */ (function(SuppressedError2) {
   return e.name = "SuppressedError", e.error = error3, e.suppressed = suppressed, e;
 });
 var ResumeActionHandler = class extends AbstractUserMessageActionHandler {
+  constructor() {
+    super(...arguments);
+    this.emptyResponseRetryAction = "ok_resume_action";
+  }
   async executePendingToolCalls(ctx, rootPromptExecutor, stateHandler, mergedMcpTools, requestContext, invocationId) {
     const pendingMessages = stateHandler.getRawPendingMessages();
     if (pendingMessages.length === 0) {
@@ -451604,16 +451952,16 @@ var StreamingTaskInteractionListener = class {
       }
     }));
   }
-  async query(_ctx, query) {
-    switch (query.query.case) {
+  async query(_ctx, query2) {
+    switch (query2.query.case) {
       case "webSearchRequestQuery":
-        return Responses.webSearchApproved(query.id);
+        return Responses.webSearchApproved(query2.id);
       case "webFetchRequestQuery":
-        return Responses.webFetchApproved(query.id);
+        return Responses.webFetchApproved(query2.id);
       case "generateImageRequestQuery":
-        return Responses.generateImageApproved(query.id);
+        return Responses.generateImageApproved(query2.id);
       default: {
-        throw new Error(`Unhandled interaction query type: ${query.query.case}`);
+        throw new Error(`Unhandled interaction query type: ${query2.query.case}`);
       }
     }
   }
@@ -453087,7 +453435,7 @@ ${errorMessages.join("\n")}`);
     name: toolName,
     contextType: {
       type: "dynamic",
-      conciseStaticContext: "Spawn local and cloud agents natively."
+      conciseStaticContext: "Spawn local and cloud subagents natively."
     },
     descriptionGenerator: buildTaskDescription,
     descriptionTokenPartsGenerator: (props, options3) => {
@@ -456850,15 +457198,15 @@ function redactPathForLog(value, privacyMode, fieldName) {
 }
 var MAX_CONCURRENT_IMAGE_GENERATIONS = 2;
 function createImageGenerationConcurrencyLimiter(maxConcurrent = MAX_CONCURRENT_IMAGE_GENERATIONS) {
-  const limit = Math.trunc(Number(maxConcurrent));
-  if (!Number.isFinite(limit) || limit < 1) {
+  const limit2 = Math.trunc(Number(maxConcurrent));
+  if (!Number.isFinite(limit2) || limit2 < 1) {
     throw new RangeError(`createImageGenerationConcurrencyLimiter: maxConcurrent must be a finite number >= 1, got ${maxConcurrent}`);
   }
   let current = 0;
   const waitQueue = [];
   return {
     async acquire() {
-      if (current < limit) {
+      if (current < limit2) {
         current++;
         return;
       }
@@ -458080,8 +458428,8 @@ function appliesExplicitOffsetLimitDescription(args) {
     }
   }
 }
-function getReadScope(offset, limit) {
-  if (limit !== void 0) {
+function getReadScope(offset, limit2) {
+  if (limit2 !== void 0) {
     return "limited";
   }
   if (offset !== void 0) {
@@ -458188,12 +458536,12 @@ function createSuccessResult(content, totalLines, fileSize, filePath, readRange,
     }
   });
 }
-function computeReadSlice(totalLines, offset, limit) {
-  if (offset === void 0 && limit === void 0) {
+function computeReadSlice(totalLines, offset, limit2) {
+  if (offset === void 0 && limit2 === void 0) {
     return void 0;
   }
   const effectiveOffset = offset ?? 1;
-  const effectiveLimit = limit ?? (effectiveOffset < 0 ? Math.abs(effectiveOffset) : totalLines);
+  const effectiveLimit = limit2 ?? (effectiveOffset < 0 ? Math.abs(effectiveOffset) : totalLines);
   const startIndex = effectiveOffset < 0 ? Math.max(0, totalLines + effectiveOffset) : Math.max(0, effectiveOffset - 1);
   const endIndex = Math.min(totalLines, startIndex + effectiveLimit);
   if (startIndex >= totalLines) {
@@ -458354,14 +458702,14 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
         });
       }
       let offset;
-      let limit;
+      let limit2;
       if ("line_range" in rawArgs && rawArgs.line_range !== void 0) {
         const [startLine, endLine] = rawArgs.line_range;
         offset = startLine;
-        limit = endLine - startLine + 1;
+        limit2 = endLine - startLine + 1;
       } else if ("offset" in rawArgs || "limit" in rawArgs) {
         offset = "offset" in rawArgs ? rawArgs.offset : void 0;
-        limit = "limit" in rawArgs ? rawArgs.limit : void 0;
+        limit2 = "limit" in rawArgs ? rawArgs.limit : void 0;
       }
       const includeLineNumbers = rawArgs.include_line_numbers;
       if (enableLineNumbersArg) {
@@ -458372,10 +458720,10 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
           toolCallId: meta.toolCallId
         });
       }
-      if (offset !== void 0 || limit !== void 0) {
+      if (offset !== void 0 || limit2 !== void 0) {
         logger86.info(spanCtxt.ctx, "Read called with offset or limit", {
           offset,
-          limit,
+          limit: limit2,
           path: path30,
           toolCallId: meta.toolCallId
         });
@@ -458383,7 +458731,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
       const toolArgs = new ReadToolArgs({
         path: path30,
         offset,
-        limit,
+        limit: limit2,
         includeLineNumbers
       });
       const baseToolCall = new ReadToolCall({
@@ -458397,7 +458745,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
           path: path30,
           toolCallId: meta.toolCallId,
           offset,
-          limit
+          limit: limit2
         });
         const execId = generateSeededUuid(meta.toolCallId);
         const execResult = await readExecutor.execute(ctx, execArgs, {
@@ -458500,7 +458848,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
             return createSuccessResult("", 0, fileSize, resolvedPath, void 0, includeLineNumbers);
           }
           if (executorAppliedRange) {
-            const readSlice2 = computeReadSlice(executorTotalLines, offset, limit);
+            const readSlice2 = computeReadSlice(executorTotalLines, offset, limit2);
             const readRange2 = readSlice2?.readRange ?? new ReadRange({
               startLine: 1,
               endLine: executorTotalLines
@@ -458509,7 +458857,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
           }
           const lines2 = content.split("\n");
           const totalLines = lines2.length;
-          const readSlice = computeReadSlice(totalLines, offset, limit);
+          const readSlice = computeReadSlice(totalLines, offset, limit2);
           if (readSlice !== void 0) {
             const selectedLines = lines2.slice(readSlice.startIndex, readSlice.endIndex);
             const selectedContent = selectedLines.join("\n");
@@ -458577,7 +458925,7 @@ var createReadTool = (resourceAccessor, formattingOptions, promptVersion, option
           meta.stepReadPathDedup?.add(path31);
         };
         const isNewPath = !hasSeenReadPath(resolvedPath);
-        recordReadSuccessMetrics(spanCtxt.ctx, readToolResult.result.value, getReadScope(offset, limit), isNewPath ? "first" : "repeat", blobBackedReturnedByteCount, appliedExplicitDescLabel);
+        recordReadSuccessMetrics(spanCtxt.ctx, readToolResult.result.value, getReadScope(offset, limit2), isNewPath ? "first" : "repeat", blobBackedReturnedByteCount, appliedExplicitDescLabel);
         if (isNewPath && meta.cursorRules && meta.cursorRules.length > 0) {
           const matches = matchFileScopedRulesToReadPaths({
             readPaths: [resolvedPath],
@@ -462763,7 +463111,7 @@ var exaParametersSchema = external_exports.preprocess((raw) => {
   if (input.search_term === void 0) {
     const alias = typeof input.query === "string" ? input.query : typeof input.searchTerm === "string" ? input.searchTerm : void 0;
     if (alias !== void 0) {
-      const { query, searchTerm, ...rest } = input;
+      const { query: query2, searchTerm, ...rest } = input;
       return { ...rest, search_term: alias };
     }
   }
@@ -466824,8 +467172,8 @@ function buildDeepLinkUrl(grammar, routeName, params) {
 function canonicalize(grammar, route, entries) {
   const base = `${grammar.canonicalScheme}://${grammar.authority}${route.declaration.path}`;
   if (entries.length === 0) return base;
-  const query = entries.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join("&");
-  return `${base}?${query}`;
+  const query2 = entries.map(([key, value]) => `${key}=${encodeURIComponent(value)}`).join("&");
+  return `${base}?${query2}`;
 }
 function startsWithDeclaredScheme(grammar, lower) {
   for (const protocol of grammar.schemeProtocols) {
@@ -469119,7 +469467,6 @@ var SITE_SECTIONS_BY_BUCKET = /* @__PURE__ */ new Map([
     }
   ],
   ["instacart.com", { rest: "instacart" }],
-  ["irs.gov", { rest: "irs" }],
   ["linkedin.com", { rest: "linkedin" }],
   ["luma.com", { rest: "luma" }],
   ["realtor.com", { rest: "realtor" }],
@@ -478351,6 +478698,7 @@ init_subagents_pb();
 // ../packages/grok-bot-harness/src/runner/subagents/subagent-kind.ts
 var MEDIA_REVIEW_SUBAGENT_NAMES = ["videoReview", "watchVideo"];
 var BOX_DRIVER_SUBAGENT_NAMES = ["computerUse", "browserUse", "browserUseJev"];
+var SLIDES_SUBAGENT_NAMES = ["slides"];
 function subagentKind(raw) {
   const mediaReview = MEDIA_REVIEW_SUBAGENT_NAMES.find((name17) => name17 === raw);
   if (mediaReview !== void 0) return { kind: "builtin", name: mediaReview };
@@ -478359,6 +478707,10 @@ function subagentKind(raw) {
     (name17) => normalizeSubagentTypeName(name17) === normalized
   );
   if (boxDriver !== void 0) return { kind: "builtin", name: boxDriver };
+  const slides = SLIDES_SUBAGENT_NAMES.find(
+    (name17) => normalizeSubagentTypeName(name17) === normalized
+  );
+  if (slides !== void 0) return { kind: "builtin", name: slides };
   return { kind: "custom", name: raw };
 }
 function isBuiltinSubagent(subagentType, ...names3) {
@@ -478370,10 +478722,575 @@ function isMediaReviewSubagent(subagentType) {
   return isBuiltinSubagent(subagentType, ...MEDIA_REVIEW_SUBAGENT_NAMES);
 }
 
+// src/shared/credentials.ts
+var CREDENTIAL_MINT_DEFAULT_VAULT_NAME = "Shared with Grok Bot";
+
+// ../packages/grok-bot-harness/src/runner/tools/sand-credential-tools.ts
+init_zod();
+
+// ../packages/grok-bot-harness/src/ports/credentials.ts
+var SAND_CREDENTIAL_TURN_REFUSAL_PHRASE = {
+  room: `this is a group-room turn, and the user's 1Password logins are only available in their own 1:1 chat on the main session. Nothing is wrong with the 1Password connection. If the sign-in is for your user, ask them to continue in your 1:1 chat (pass "to":"dm" on SendToUser to reach it) and use their logins from there; if it is for someone else in the room, they sign in themselves`,
+  side_session: "this is a side session, and the user's 1Password logins are only available from the main session. Nothing is wrong with the 1Password connection. Ask the user to continue in the main session, or hand them the screen with request_box_help",
+  slack_session: "this is a Slack conversation, and the user's 1Password logins are only available from the main session in the Grok Bot app. Nothing is wrong with the 1Password connection. Ask the person to continue this request in the Grok Bot app; the sign-in cannot be finished from Slack"
+};
+
+// ../packages/grok-bot-harness/src/runner/tools/communicate-tool.ts
+init_zod();
+var SAND_TOOL_MARKER2 = "__sand_tool__";
+function encodeSandStep2(payload) {
+  return JSON.stringify({ [SAND_TOOL_MARKER2]: true, ...payload });
+}
+function toolCallWrapper2(payload) {
+  return new ToolCall({
+    tool: {
+      case: "communicateUpdateToolCall",
+      value: new CommunicateUpdateToolCall({
+        args: new CommunicateUpdateArgs({
+          currentStep: encodeSandStep2(payload)
+        })
+      })
+    }
+  });
+}
+function makeRender() {
+  return async (_ctx, output, _props) => {
+    if (output.result.case === "error") {
+      return createStringResult(`Error: ${output.result.value.error}`);
+    }
+    if (output.result.case !== "success") {
+      return createStringResult("Tool completed.");
+    }
+    const raw = output.result.value.currentStep;
+    if (raw.length === 0) {
+      return createStringResult("Tool completed.");
+    }
+    return createStringResult(raw);
+  };
+}
+function encodeError(activity, message) {
+  return new CommunicateUpdateArgs({
+    currentStep: encodeSandStep2({ ...activity, error: message })
+  });
+}
+function encodeSuccess(activity, result) {
+  return new CommunicateUpdateArgs({
+    currentStep: encodeSandStep2({ ...activity, result })
+  });
+}
+function buildSuccessResult(text2) {
+  return new CommunicateUpdateResult({
+    result: {
+      case: "success",
+      value: new CommunicateUpdateSuccess({ currentStep: text2 })
+    }
+  });
+}
+var DEFAULT_INFRASTRUCTURE_ERROR_MESSAGE = "Couldn't finish due to a temporary server issue.";
+var INFRASTRUCTURE_ERROR_NAMES = /* @__PURE__ */ new Set([
+  "PrismaClientKnownRequestError",
+  "PrismaClientUnknownRequestError",
+  "PrismaClientInitializationError",
+  "PrismaClientRustPanicError",
+  "DriverAdapterError",
+  "DbUnavailableError"
+]);
+var VITESS_ERROR_MARKER = "vttablet: ";
+var MAX_CAUSE_DEPTH = 4;
+function isInfrastructureError(error3) {
+  let current = error3;
+  for (let depth = 0; depth <= MAX_CAUSE_DEPTH && current instanceof Error; depth += 1) {
+    if (INFRASTRUCTURE_ERROR_NAMES.has(current.name) || INFRASTRUCTURE_ERROR_NAMES.has(current.constructor.name) || current.message.includes(VITESS_ERROR_MARKER)) {
+      return true;
+    }
+    current = current.cause;
+  }
+  return false;
+}
+function classifyToolError(error3) {
+  if (isInfrastructureError(error3)) return "infrastructure";
+  if (error3 instanceof SandModelVisibleError || error3 instanceof ToolCallError) {
+    return "model_visible";
+  }
+  return "unclassified";
+}
+var toolCallErrors = createCounter("grok_bot.tool_call.error", {
+  description: "A Sand tool call threw, by tool, the thrown error's class, and whether the model sees its message: model_visible (a class written for the model), infrastructure (replaced with a fixed message), or unclassified (still shown today; the classes to convert before tool errors become allow-list only)",
+  labelNames: ["tool", "visibility", "error_class"]
+});
+function errorClassLabel(error3) {
+  if (!(error3 instanceof Error)) return typeof error3;
+  const constructorName = error3.constructor.name;
+  return constructorName.length > 0 && constructorName !== "Error" ? constructorName : error3.name;
+}
+function recordToolCallError(ctx, toolName, visibility, error3) {
+  try {
+    toolCallErrors.increment(ctx, 1, {
+      tool: toolName,
+      visibility,
+      error_class: errorClassLabel(error3)
+    });
+  } catch (metricsError) {
+    process.stderr.write(
+      `sand.tool_call.error_metrics_failed error_class=${errorLogTag(metricsError)}
+`
+    );
+  }
+}
+function modelVisibleErrorMessage(ctx, toolName, error3, infrastructureErrorMessage) {
+  const visibility = classifyToolError(error3);
+  if (ctx !== void 0) recordToolCallError(ctx, toolName, visibility, error3);
+  return visibility === "infrastructure" ? infrastructureErrorMessage : errorMessage(error3);
+}
+function buildErrorResult(message) {
+  return new CommunicateUpdateResult({
+    result: {
+      case: "error",
+      value: new CommunicateUpdateError({ error: message })
+    }
+  });
+}
+var MAX_REPORTED_ARG_ISSUES = 8;
+var ROOT_ISSUE_FIELD = "root";
+var OTHER_ISSUE_TOKEN = "other";
+var brandIssueCode = brandedEnumOf(Object.values(external_exports.ZodIssueCode), OTHER_ISSUE_TOKEN);
+function topLevelArgKeysOf(schema2) {
+  let current = schema2;
+  while (current instanceof external_exports.ZodEffects) current = current.innerType();
+  return current instanceof external_exports.ZodObject ? Object.keys(current.shape) : [];
+}
+function argIssueFolder(knownFields) {
+  const brandField = brandedEnumOf([...knownFields, ROOT_ISSUE_FIELD], OTHER_ISSUE_TOKEN);
+  const other = brandLiteralEnum(OTHER_ISSUE_TOKEN);
+  return (issues) => issues.slice(0, MAX_REPORTED_ARG_ISSUES).map((issue2) => {
+    const head = issue2.path[0];
+    return {
+      field: brandField(typeof head === "string" ? head : ROOT_ISSUE_FIELD) ?? other,
+      code: brandIssueCode(issue2.code) ?? other,
+      missing: issue2.code === external_exports.ZodIssueCode.invalid_type && issue2.received === "undefined"
+    };
+  });
+}
+function defineCommunicateTool(deps, spec) {
+  const render2 = makeRender();
+  const infrastructureErrorMessage = spec.infrastructureErrorMessage ?? DEFAULT_INFRASTRUCTURE_ERROR_MESSAGE;
+  const parseAndExecute = withSafeParsedArgs(
+    spec.parameters,
+    async (ctx, interactionHandler, parsedArgs, meta) => {
+      const activity = spec.describeActivity?.(parsedArgs);
+      const toolActivity = {
+        tool: spec.name,
+        ...activity?.detail != null && activity.detail.length > 0 ? { detail: activity.detail } : {},
+        ...activity?.target != null && activity.target.length > 0 ? { target: activity.target } : {}
+      };
+      const initial = toolCallWrapper2({
+        phase: "executing",
+        ...toolActivity
+      });
+      return await interactionHandler.executeToolCall(
+        ctx,
+        initial,
+        meta.toolCallId,
+        async () => {
+          try {
+            const text2 = await spec.execute(ctx, parsedArgs, {
+              ...deps,
+              toolCallId: meta.toolCallId
+            });
+            return buildSuccessResult(text2);
+          } catch (error3) {
+            if (error3 instanceof DeferredInteractionResponseError) {
+              throw error3;
+            }
+            return buildErrorResult(
+              modelVisibleErrorMessage(ctx, spec.name, error3, infrastructureErrorMessage)
+            );
+          }
+        },
+        (result) => {
+          if (result.result.case === "error") {
+            return new ToolCall({
+              tool: {
+                case: "communicateUpdateToolCall",
+                value: new CommunicateUpdateToolCall({
+                  args: encodeError(toolActivity, result.result.value.error || "Tool failed."),
+                  result
+                })
+              }
+            });
+          }
+          return new ToolCall({
+            tool: {
+              case: "communicateUpdateToolCall",
+              value: new CommunicateUpdateToolCall({
+                args: encodeSuccess(
+                  toolActivity,
+                  result.result.case === "success" ? result.result.value.currentStep : ""
+                ),
+                result
+              })
+            }
+          });
+        }
+      );
+    },
+    toolCallWrapper2({ tool: spec.name }),
+    { emitInitialPartialToolCall: false }
+  );
+  const execute = spec.onArgsRejected === void 0 ? parseAndExecute : observingArgsRejections(spec.onArgsRejected);
+  function observingArgsRejections(onArgsRejected) {
+    const schemaVariant = spec.schemaVariant ?? "default";
+    const foldIssues = argIssueFolder([
+      ...topLevelArgKeysOf(spec.parameters),
+      ...spec.issueFields ?? []
+    ]);
+    return async (ctx, interactionHandler, argsStream, meta) => {
+      try {
+        return await parseAndExecute(ctx, interactionHandler, argsStream, meta);
+      } catch (error3) {
+        if (error3 instanceof ToolCallArgParseError) {
+          const zodIssues = error3.issues ?? [];
+          try {
+            onArgsRejected({
+              kind: "args_rejected",
+              toolCallId: meta.toolCallId,
+              toolName: spec.name,
+              schemaVariant,
+              rejection: error3.issues === void 0 ? "unparsed" : "schema",
+              issueCount: zodIssues.length,
+              issues: foldIssues(zodIssues),
+              requestId: getRequestId(ctx)
+            });
+          } catch (observerError) {
+            process.stderr.write(
+              `sand.tool_call.args_rejected_observer_failed tool=${spec.name} error_class=${errorLogTag(observerError)}
+`
+            );
+          }
+        }
+        throw error3;
+      }
+    };
+  }
+  return createZodAgentTool(spec.id, {
+    name: spec.name,
+    descriptionGenerator: () => typeof spec.description === "function" ? spec.description() : spec.description,
+    parameters: spec.parameters,
+    execute,
+    render: render2,
+    serializeError: (error3) => {
+      const message = modelVisibleErrorMessage(
+        void 0,
+        spec.name,
+        error3,
+        infrastructureErrorMessage
+      );
+      return new ToolCall({
+        tool: {
+          case: "communicateUpdateToolCall",
+          value: new CommunicateUpdateToolCall({
+            args: encodeError({ tool: spec.name }, message),
+            result: buildErrorResult(message)
+          })
+        }
+      });
+    }
+  });
+}
+
+// ../packages/grok-bot-harness/src/runner/tools/request-onepassword-connect-tool.ts
+init_zod();
+var SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME = "request_1password_connect";
+var ONEPASSWORD_CONNECT_CARD_HINT = `Nothing was shown to the user. To ask them to connect one, call ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, and only if the task needs their saved logins; otherwise use request_box_help for the sign-in.`;
+var SAND_SET_ONEPASSWORD_PREFERENCE_TOOL_NAME = "set_1password_preference";
+function createOnePasswordConnectTools(deps) {
+  const connect3 = createRequestOnePasswordConnectTool(deps);
+  return deps.loginFormFirst === true ? [connect3, createSetOnePasswordPreferenceTool(deps)] : [connect3];
+}
+var requestOnePasswordConnectParameters = external_exports.object({}).strict();
+var cardOffered = createCounter("grok_bot.onepassword_connect.card_offered", {
+  description: "request_1password_connect tool calls: the agent asked the user to connect a 1Password vault from the chat",
+  labelNames: ["outcome"]
+});
+var preferenceSet = createCounter("grok_bot.onepassword_connect.preference_set", {
+  description: "set_1password_preference tool calls: the agent saved or cleared the user's decline of 1Password",
+  labelNames: ["outcome"]
+});
+var REQUEST_ONEPASSWORD_CONNECT_DESCRIPTION = "Show an in-chat card asking the user to connect 1Password, so saved logins can fill on Grok Bot's computer with their approval. Call it once when ListCredentials or GetCredentialProviderStatus reports no vault and the task needs a saved login. The card is the whole ask: explain in your own words what connecting unblocks, and never paste a link or a settings path. Connecting happens on the user's Mac; on a phone the card says so. This does not end your turn and you are not woken when they connect: when the user says it is connected, call ListCredentials again.";
+var LOGIN_FORM_FIRST_REQUEST_ONEPASSWORD_CONNECT_DESCRIPTION = `Put a Connect 1Password card below your message: an optional shortcut that lets the user's 1Password logins fill on Grok Bot's computer. Call it only when a ListCredentials or GetCredentialProviderStatus result says you may offer it, or when the user asks to set up 1Password, and offer it once. Tell the user the card below your message is optional and that they can type the login instead, which you ask for with request_user_form; never paste a link or a settings path. Connecting happens on the user's Mac; on a phone the card says so. This does not end your turn and you are not woken when they connect: when the user says it is connected, call ListCredentials again. When the user says they don't use or don't want 1Password, call ${SAND_SET_ONEPASSWORD_PREFERENCE_TOOL_NAME} with declined true instead of this tool.`;
+var LOGIN_FORM_FIRST_CARD_SHOWN = `A Connect 1Password card is now below your message. It's optional: tell the user they can type the login instead, and ask for it with request_user_form when they'd rather. If they say they don't use or don't want 1Password, call ${SAND_SET_ONEPASSWORD_PREFERENCE_TOOL_NAME} with declined true. You are not woken automatically; when the user says 1Password is connected, call ListCredentials again. Confirm with the user before retrying the blocked sign-in.`;
+function createRequestOnePasswordConnectTool(deps) {
+  let cardSent = false;
+  const showCard = (ctx) => {
+    if (cardSent) {
+      cardOffered.increment(ctx, 1, { outcome: "duplicate" });
+      return "That card is already in the chat from earlier this turn; nothing new was shown. Wait for the user instead of sending it again.";
+    }
+    cardSent = true;
+    deps.onSendMessage({ type: "onepassword-connect" }, Date.now());
+    cardOffered.increment(ctx, 1, { outcome: "shown" });
+    return void 0;
+  };
+  if (deps.loginFormFirst === true) {
+    return defineCommunicateTool(deps, {
+      id: "REQUEST_ONEPASSWORD_CONNECT",
+      name: SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME,
+      description: LOGIN_FORM_FIRST_REQUEST_ONEPASSWORD_CONNECT_DESCRIPTION,
+      parameters: requestOnePasswordConnectParameters,
+      describeActivity: () => ({ detail: "Requesting a 1Password connection" }),
+      execute: async (ctx, _args, d) => {
+        if (d.turnRefusal !== void 0) {
+          cardOffered.increment(ctx, 1, { outcome: "refused_turn" });
+          return `No card was shown; don't tell the user there is one. The reason: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[d.turnRefusal]}.`;
+        }
+        return showCard(ctx) ?? LOGIN_FORM_FIRST_CARD_SHOWN;
+      }
+    });
+  }
+  return defineCommunicateTool(deps, {
+    id: "REQUEST_ONEPASSWORD_CONNECT",
+    name: SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME,
+    description: REQUEST_ONEPASSWORD_CONNECT_DESCRIPTION,
+    parameters: requestOnePasswordConnectParameters,
+    describeActivity: () => ({ detail: "Requesting a 1Password connection" }),
+    execute: async (ctx, _args, d) => {
+      if (d.turnRefusal !== void 0) {
+        cardOffered.increment(ctx, 1, { outcome: "refused_turn" });
+        return `The card was NOT shown: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[d.turnRefusal]}.`;
+      }
+      return showCard(ctx) ?? "The card is in the chat. You are not woken automatically; when the user says 1Password is connected, call ListCredentials again. Confirm with the user before retrying the blocked sign-in.";
+    }
+  });
+}
+var setOnePasswordPreferenceParameters = external_exports.object({
+  declined: external_exports.boolean().describe(
+    "true when the user says they don't use or don't want 1Password; false when they later say they want it offered again."
+  )
+}).strict();
+var SET_ONEPASSWORD_PREFERENCE_DESCRIPTION = `Save whether the user wants 1Password offered, the same per-user setting as the card's "Not now" button. Call it with declined true when the user says they don't use or don't want 1Password: logins then go to the in-chat form and the optional Connect 1Password card is no longer suggested. Call it with declined false only when they later say they want it offered again. It shows nothing to the user. An explicit ask to set up 1Password still goes to ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, and connecting 1Password clears the setting.`;
+function createSetOnePasswordPreferenceTool(deps) {
+  const connectOffer = deps.connectOffer;
+  return defineCommunicateTool(deps, {
+    id: "SET_ONEPASSWORD_PREFERENCE",
+    name: SAND_SET_ONEPASSWORD_PREFERENCE_TOOL_NAME,
+    description: SET_ONEPASSWORD_PREFERENCE_DESCRIPTION,
+    parameters: setOnePasswordPreferenceParameters,
+    describeActivity: () => ({ detail: "Saving the 1Password preference" }),
+    execute: async (ctx, args, d) => {
+      if (d.turnRefusal !== void 0) {
+        preferenceSet.increment(ctx, 1, { outcome: "refused_turn" });
+        return `Nothing was saved: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[d.turnRefusal]}.`;
+      }
+      const saved = connectOffer !== void 0 && await connectOffer.setDeclined(args.declined).then(
+        () => true,
+        () => false
+      );
+      if (!saved) {
+        preferenceSet.increment(ctx, 1, { outcome: "failed" });
+        return args.declined ? "Their answer could not be saved. Don't offer 1Password again in this conversation; ask for logins with request_user_form." : "The setting could not be changed. Offer 1Password only if the user asks to set it up.";
+      }
+      preferenceSet.increment(ctx, 1, { outcome: args.declined ? "declined" : "cleared" });
+      return args.declined ? `Saved: the user doesn't want 1Password. Nothing was shown. Don't offer it again; ask for logins with request_user_form. If they later ask to set up 1Password, call ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}.` : "Saved: 1Password may be offered again when a ListCredentials result says so. Nothing was shown.";
+    }
+  });
+}
+
+// ../packages/grok-bot-harness/src/runner/tools/sand-credential-provider-status-tool.ts
+init_zod();
+var SAND_CREDENTIAL_PROVIDER_STATUS_TOOL_NAME = "GetCredentialProviderStatus";
+var credentialProviderStatusParameters = external_exports.object({}).strict();
+function renderCredentialProviderStatus(status) {
+  switch (status.kind) {
+    case "not-connected":
+      return `Credential provider status: not connected. Saved item count: 0. ${ONEPASSWORD_CONNECT_CARD_HINT}`;
+    case "connected":
+      return `Credential provider status: connected. Connections: ${status.connectionCount}. Saved item count: ${status.itemCount}. Connections needing renewal or attention: ${status.connectionsNeedingAttention}. This is metadata only; credential values are never returned.`;
+  }
+}
+async function renderLoginFormFirstNotConnected(offer) {
+  const lead = "Credential provider status: not connected. Saved item count: 0.";
+  const declined = offer === void 0 || !offer.appInstalled || await offer.isDeclined().catch(() => true);
+  return declined ? `${lead} At a login, ask for it with request_user_form. Call ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME} only if the user asks to set up 1Password.` : `${lead} The device the user is on has the 1Password app, so when a task needs a login you may offer the optional Connect 1Password card once with ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, saying they can just type the login instead; otherwise ask for it with request_user_form.`;
+}
+function createCredentialProviderStatusTool(reader, options2 = {}) {
+  return defineCommunicateTool(reader, {
+    id: "READ",
+    name: SAND_CREDENTIAL_PROVIDER_STATUS_TOOL_NAME,
+    description: "Read the user's current saved-credential provider status from Cursor's backend. Call this when the user asks whether their password manager, vault, saved credentials, or 1Password connection is connected, how many saved items exist, or whether renewal needs attention. Never infer status from chat history or the filesystem. The tool returns only provider-neutral counts and health metadata, never secret values, item titles or sites, provider item IDs, vault IDs, tokens, or fill authority.",
+    parameters: credentialProviderStatusParameters,
+    execute: async (_ctx, _args, deps) => {
+      if (deps.turnRefusal !== void 0) {
+        return `Credential provider status: unavailable on this turn: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[deps.turnRefusal]}.`;
+      }
+      try {
+        const status = await deps.getStatus();
+        if (options2.loginFormFirst === true && status.kind === "not-connected") {
+          return await renderLoginFormFirstNotConnected(options2.connectOffer);
+        }
+        return renderCredentialProviderStatus(status);
+      } catch (error3) {
+        return `Credential provider status: unavailable. The backend status check failed; this does not mean the provider is disconnected. Tell the user the status could not be checked and that the 1Password page in the Marketplace on their Mac shows the live state. Diagnostic class: ${errorLogTag(error3)}.`;
+      }
+    }
+  });
+}
+
+// ../packages/grok-bot-harness/src/runner/tools/sand-credential-tools.ts
+var SHARED_VAULT = `the "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" 1Password vault`;
+var siteParameter = external_exports.string().trim().optional().describe(
+  "Current website URL or domain. Always pass this when a browser login is blocked; only credentials allowed for that live site are returned."
+);
+var queryParameter = external_exports.string().trim().optional().describe(
+  "Optional service/name search when no website URL is available, e.g. reform or stripe."
+);
+var listCredentialsParameters = external_exports.object({
+  site: siteParameter,
+  query: queryParameter,
+  forceRefresh: external_exports.boolean().optional().describe(
+    `Set true to refresh the catalog from 1Password before listing, after the user says they just added or moved an item into ${SHARED_VAULT}, or on their next request to log in or retry after a missing result. Leave unset otherwise: the catalog already refreshes on its own and provider refreshes are rate limited.`
+  )
+});
+var loginFormFirstListCredentialsParameters = external_exports.object({
+  site: siteParameter,
+  query: queryParameter,
+  forceRefresh: external_exports.boolean().optional().describe(
+    "Set true only when an earlier ListCredentials result told you to on a retry. Leave unset otherwise."
+  )
+});
+function credentialSiteHost(raw) {
+  try {
+    return new URL(raw.includes("://") ? raw : `https://${raw}`).hostname;
+  } catch {
+    return raw;
+  }
+}
+function describeCredential(view) {
+  const siteHosts = [...new Set(view.sites.map(credentialSiteHost))];
+  const sites = siteHosts.length > 0 ? ` \xB7 ${siteHosts.slice(0, 2).join(", ")}` : "";
+  const browser = ` \xB7 browser login${view.siteMatch != null ? ` ${view.siteMatch} match` : ""}`;
+  const oneTimeCode = view.hasOneTimeCode ? " \xB7 one-time code in 1Password" : "";
+  return `- "${view.title}" (${view.category}${sites}${browser}${oneTimeCode}), credential_id: ${view.credentialId} \xB7 connection_id: ${view.connectionId} \xB7 catalog_revision: ${view.catalogRevision}`;
+}
+var ONE_TIME_CODE_GUIDANCE = "A login marked one-time code in 1Password also has its verification code filled for you when the site asks, so that step is not a handoff; a login without the mark has no code in 1Password, so a verification-code page is a request_box_help step.";
+var ONE_TIME_CODE_SUBAGENT_NOTE = 'When you dispatch a subagent to sign in with such a login, tell it "1Password fills the one-time code for this login".';
+var SUBAGENT_ONE_TIME_CODE_LINE = "It also stops at a 2FA code page unless your task passes on the one-time code note a ListCredentials result gave you for that login; it then waits for the code to be filled for it.";
+var NO_ONE_TIME_CODE_GUIDANCE = "None of these logins carries a one-time code in 1Password, so a verification-code page after the fill is a request_box_help step.";
+var CREDENTIAL_REQUEST_GUIDANCE = 'To fill the 1Password login for the sign-in page you are on, send {"type":"credential-request","credential":{"kind":"browser-login","credential_id":"\u2026","connection_id":"\u2026","catalog_revision":"\u2026","site":"https://current.example/login","purpose":"sign in to continue the requested task"}}. Use the URL computerUse reports, never one of the 1Password item URLs above. Grok Bot treats `site` as a hint, binds the fill to the open page allowed by the item\'s target rules, then fills that same page once the fill is accepted. You learn only the outcome: filled, declined by the user, or failed with a reason. You never receive a username or password, and you never ask the user to type or paste one. One request covers the whole login: on a username-first page the username is submitted and the password step that follows is filled for you as it appears, and when the site asks for a one-time code the login carries, it is filled for you too. After a fill, continue with computerUse and submit only per the user\'s instruction. Use request_box_help only for a remaining SSO, passkey, captcha, or payment step, or a code the login does not carry. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials".';
+var MISSING_LOGIN_GUIDANCE = `Only items in ${SHARED_VAULT} are visible to you, and 1Password items are placed in that vault by hand. Tell the user the login was not found there and that they may need to add or move it into ${SHARED_VAULT}. On their next request to log in or retry, call ListCredentials with forceRefresh true before reporting it missing again; they do not need to mention 1Password. Use request_box_help only if they prefer to sign in themselves.`;
+var FORM_LOGIN_FIELDS = "with username and password fields, plus a code field only if the page shows one. The values are filled straight into the page and you never see them.";
+var FORM_LOGIN_FALLBACK = "Use request_box_help only if the next step is SSO, a passkey, a captcha, or payment, if the user prefers to sign in themselves, or if request_user_form is not among your tools or cannot fill this page.";
+var LOGIN_FORM_ONLY_GUIDANCE = `No password manager is connected. Ask for this login with request_user_form, ${FORM_LOGIN_FIELDS} Don't mention 1Password, vaults, or saved logins. ${FORM_LOGIN_FALLBACK}`;
+var LOGIN_CONNECT_OFFER_GUIDANCE = `No password manager is connected, but the device the user is on has the 1Password app. Offer it once, as an optional shortcut: call ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, which puts a Connect 1Password card below your message, and tell the user it's optional and they can just type this login instead. If you already offered it in this conversation, don't offer it again. When they'd rather type it, or don't connect, ask for the login with request_user_form, ${FORM_LOGIN_FIELDS} If they say they don't use or don't want 1Password, call ${SAND_SET_ONEPASSWORD_PREFERENCE_TOOL_NAME} with declined true and don't bring 1Password up again. ${FORM_LOGIN_FALLBACK}`;
+async function notConnectedLoginGuidance(access4) {
+  const offer = access4.connectOffer;
+  if (offer === void 0 || !offer.appInstalled) return LOGIN_FORM_ONLY_GUIDANCE;
+  const declined = await offer.isDeclined().catch(() => true);
+  return declined ? LOGIN_FORM_ONLY_GUIDANCE : LOGIN_CONNECT_OFFER_GUIDANCE;
+}
+var LOGIN_FORM_FIRST_LIST_CREDENTIALS_DESCRIPTION = "Check how to handle the login on the site you are on. MANDATORY FIRST STEP at a direct username/password login, before any in-chat form, request_box_help, or asking the user to type: pass the current URL/domain in site. The result says how to proceed for this user, whether that is filling a login from their connected password manager or asking for it with an in-chat form; follow it. This is read-only, metadata-only, and never needs permission.";
+function createCredentialTools(access4, options2 = {}) {
+  if (options2.loginFormFirst === true) {
+    return [
+      defineCommunicateTool(access4, {
+        id: "LIST_CREDENTIALS",
+        name: "ListCredentials",
+        description: LOGIN_FORM_FIRST_LIST_CREDENTIALS_DESCRIPTION,
+        parameters: loginFormFirstListCredentialsParameters,
+        execute: async (ctx, args, deps) => {
+          const site = args.site != null && args.site.length > 0 ? args.site : void 0;
+          if (site != null) noteToolTargetHost(ctx, deps.toolCallId, site);
+          if (deps.turnRefusal !== void 0) {
+            return `No 1Password logins were listed: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[deps.turnRefusal]}.`;
+          }
+          if (!await deps.isConnected()) return await notConnectedLoginGuidance(deps);
+          return await listConnectedCredentials(deps, {
+            site,
+            query: args.query != null && args.query.length > 0 ? args.query : void 0,
+            forceRefresh: args.forceRefresh === true,
+            oneTimeCodeSubagentNote: true
+          });
+        }
+      })
+    ];
+  }
+  return [
+    defineCommunicateTool(access4, {
+      id: "LIST_CREDENTIALS",
+      name: "ListCredentials",
+      description: `Search the 1Password logins the user shares with you through the 1Password integration, by website/domain or service name: titles and sites only, never values. Only items in ${SHARED_VAULT} are visible; anything the user keeps elsewhere in 1Password is not. MANDATORY FIRST STEP at a direct username/password login, before any in-chat form, request_box_help, or asking the user to type: pass the current URL/domain in site. Matching follows each item's 1Password hostname behavior; saved URL paths and queries are ignored. Each result says whether the login carries a one-time code in 1Password. Then fill the matching login with SendToUser type credential-request; Grok Bot binds your site hint to the actual open allowed page and fills it there, and a one-time code the login carries is filled for you when the site asks. When a needed login is missing, tell the user it is not in ${SHARED_VAULT} and that they may need to add or move it there in 1Password. On their next request to log in or retry, call again with forceRefresh true before reporting it missing again; they do not need to mention 1Password. Only hand off when there is no usable match and the user prefers to sign in themselves, or the remaining step is SSO, passkey, captcha, payment, or a code the login does not carry. To the user, call these their 1Password logins, never "saved login". This is read-only, metadata-only, and never needs permission.`,
+      parameters: listCredentialsParameters,
+      execute: async (ctx, args, deps) => {
+        const site = args.site != null && args.site.length > 0 ? args.site : void 0;
+        if (site != null) noteToolTargetHost(ctx, deps.toolCallId, site);
+        if (deps.turnRefusal !== void 0) {
+          return `No 1Password logins were listed: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[deps.turnRefusal]}.`;
+        }
+        if (!await deps.isConnected()) {
+          return `No 1Password vault is connected. Connecting one shares ${SHARED_VAULT} with you. ${ONEPASSWORD_CONNECT_CARD_HINT}`;
+        }
+        return await listConnectedCredentials(deps, {
+          site,
+          query: args.query != null && args.query.length > 0 ? args.query : void 0,
+          forceRefresh: args.forceRefresh === true,
+          oneTimeCodeSubagentNote: false
+        });
+      }
+    })
+  ];
+}
+async function listConnectedCredentials(access4, args) {
+  const { site, query: query2 } = args;
+  const views = await access4.list({
+    ...site != null ? { site } : {},
+    ...query2 != null ? { query: query2 } : {},
+    ...args.forceRefresh ? { forceRefresh: true } : {}
+  });
+  if (views.length === 0) {
+    if (site != null) {
+      return `No 1Password login in ${SHARED_VAULT} is allowed to fill ${site}. Do not request an arbitrary item for this page. ${MISSING_LOGIN_GUIDANCE}`;
+    }
+    return query2 != null ? `No 1Password login in ${SHARED_VAULT} matches "${query2}". ${MISSING_LOGIN_GUIDANCE}` : `The "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" 1Password vault has no logins visible to you. ${MISSING_LOGIN_GUIDANCE}`;
+  }
+  const hasOneTimeCode = views.some((view) => view.hasOneTimeCode);
+  const codeGuidance = hasOneTimeCode ? ONE_TIME_CODE_GUIDANCE : NO_ONE_TIME_CODE_GUIDANCE;
+  return [
+    site != null ? `${views.length} 1Password login(s) allowed for ${site}:` : `${views.length} 1Password login(s) available:`,
+    ...views.map(describeCredential),
+    "",
+    hasOneTimeCode && args.oneTimeCodeSubagentNote ? `${codeGuidance} ${ONE_TIME_CODE_SUBAGENT_NOTE}` : codeGuidance,
+    CREDENTIAL_REQUEST_GUIDANCE
+  ].join("\n");
+}
+function createCredentialTurnTools(host) {
+  const { credentialAccess, credentialProviderStatus } = host;
+  if (credentialAccess === void 0 && credentialProviderStatus === void 0) return [];
+  const loginRoute = {
+    loginFormFirst: host.loginFormFirst,
+    connectOffer: credentialAccess?.connectOffer
+  };
+  const turnRefusal = credentialAccess?.turnRefusal ?? credentialProviderStatus?.turnRefusal;
+  return [
+    ...credentialProviderStatus === void 0 ? [] : [createCredentialProviderStatusTool(credentialProviderStatus, loginRoute)],
+    ...credentialAccess === void 0 ? [] : createCredentialTools(credentialAccess, loginRoute),
+    ...createOnePasswordConnectTools({
+      ...turnRefusal === void 0 ? {} : { turnRefusal },
+      ...loginRoute,
+      onSendMessage: host.onSendMessage
+    })
+  ];
+}
+
 // ../packages/grok-bot-harness/src/runner/tools/sand-computer-use-subagent.ts
 var COMPUTER_USE_SUBAGENT_TYPE = "computerUse";
 function isComputerUseSubagentType(subagentType) {
   return isBuiltinSubagent(subagentType, COMPUTER_USE_SUBAGENT_TYPE);
+}
+function computerUseLoginLine(options2) {
+  const combined = options2.combined === true;
+  if (options2.credentialFillEnabled !== true) {
+    return `${combined ? "" : "It cannot act as the user. "}At any login it stops so you can hand the user the box with request_box_help, then dispatch it again to continue. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with Computer click holdDurationMs until the widget completes.`;
+  }
+  return options2.loginFormFirst === true ? `${combined ? "" : "It cannot act as the user. "}At a direct username/password login it stops and reports the exact current URL so you can call ListCredentials, whose result says how to handle that login. For SSO, passkey, a puzzle or image captcha, or payment, hand the user the box and then dispatch it again to continue. ${SUBAGENT_ONE_TIME_CODE_LINE} A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with Computer click holdDurationMs until the widget completes.` : `${combined ? "" : "It cannot act as the user. "}At a direct username/password login it stops and reports the exact current URL so you can call ListCredentials before request_box_help. For SSO, passkey, a puzzle or image captcha, or payment, hand the user the box and then dispatch it again to continue. It also stops at a 2FA code page unless your task says 1Password fills the one-time code for this login; say so when ListCredentials showed one, and it then waits for the code to be filled for it. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with Computer click holdDurationMs until the widget completes.`;
 }
 function computerUseSubagentDescription(options2) {
   const combined = options2.combined === true;
@@ -478387,7 +479304,7 @@ function computerUseSubagentDescription(options2) {
     "It runs in the background like any Task: you are notified when it finishes, so do not poll or await it.",
     `It runs headless and cannot ask follow-ups, so give it a tightly-scoped, self-contained task, the smallest concrete step rather than a sprawling goal, with the specifics it needs (site, account, exact values), explicit success criteria and stopping point, and what to report back; break a big ${combined ? "" : "GUI "}goal into several narrow dispatches, and if one runs long or loops, steer it with MessageSubagent or stop it with StopSubagent.`,
     "Only one computerUse subagent can run at a time, because they share your desktop's single screen. Never dispatch a second while one is still running.",
-    options2.credentialFillEnabled === true ? `${combined ? "" : "It cannot act as the user. "}At a direct username/password login it stops and reports the exact current URL so you can call ListCredentials before request_box_help. For SSO, passkey, a puzzle or image captcha, or payment, hand the user the box and then dispatch it again to continue. It also stops at a 2FA code page unless your task says 1Password fills the one-time code for this login; say so when ListCredentials showed one, and it then waits for the code to be filled for it. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with Computer click holdDurationMs until the widget completes.` : `${combined ? "" : "It cannot act as the user. "}At any login it stops so you can hand the user the box with request_box_help, then dispatch it again to continue. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with Computer click holdDurationMs until the widget completes.`
+    computerUseLoginLine(options2)
   ].join(" ");
 }
 function createSandComputerUseSubagentConfig(options2 = {}) {
@@ -478669,6 +479586,7 @@ var SAND_TOOL_NAMES = [
   "UpdateChannel",
   "WakeParent",
   "create_bot_share_json",
+  "delete_own_slack_message",
   "nudge_voice_agent",
   "offer_slack_connect",
   "offer_team_access",
@@ -478681,6 +479599,7 @@ var SAND_TOOL_NAMES = [
   "remap_user_form_targets",
   "request_box_help",
   "request_1password_connect",
+  "set_1password_preference",
   "request_cookie_origin_approval",
   "request_scm_connect",
   "request_user_form",
@@ -480017,7 +480936,7 @@ function skillifyPointer(when, id) {
 }
 function builtinScmAbsenceGuidance(options2) {
   const fallback2 = options2.cloudAgentsEnabled ? "Fall back to `gh`, the API, or a cloud agent, and treat a CloudAgent result as the only source of truth on a missing connection." : "Fall back to `gh` or the API for the lookup.";
-  return `If \`cursor-github-*\` is not in your tool list, the built-in is not available for this account; that says nothing about whether GitHub is connected, so do not tell the user to connect or reconnect and do not show a connect card for it. ${fallback2}`;
+  return `If \`cursor-github-*\` (or \`cursor-origin-*\`) is not in your tool list, that built-in is not available for this account; each is mounted separately, so one, the other, or neither may be listed, and any that is listed still works. Absence says nothing about whether GitHub is connected, so do not tell the user to connect or reconnect and do not show a connect card for it. ${fallback2}`;
 }
 var BUILTIN_SCM_ABSENCE_GUIDANCE = builtinScmAbsenceGuidance({ cloudAgentsEnabled: true });
 var SKILLIFY_BASE_HEADINGS = /* @__PURE__ */ new Set([
@@ -480041,7 +480960,7 @@ function skillifyBaseSections(sections, options2) {
           ...section,
           body: [
             "Cursor cloud agents are disabled by your team's admin: you cannot launch or manage them, and you do not perform non-trivial repository changes or broad code investigation yourself. Say so plainly and point the user to Cursor.",
-            `Use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views only for a narrow lookup (a file, a diff, a PR or issue, blame, commit history). ${builtinScmAbsenceGuidance({ cloudAgentsEnabled: false })} Repository checkouts stay off every computer you can reach; never clone, fetch, download, or unpack one to work around this.`
+            `Use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub, \`cursor-origin-*\` for Cursor Origin), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views only for a narrow lookup (a file, a diff, a PR or issue, blame, commit history). ${builtinScmAbsenceGuidance({ cloudAgentsEnabled: false })} Repository checkouts stay off every computer you can reach; never clone, fetch, download, or unpack one to work around this.`
           ]
         }
       ];
@@ -480799,8 +481718,8 @@ async function transferFileBetweenBoxes(ctx, args) {
   return data.byteLength;
 }
 var DEFAULT_BOX_TRANSFER_CONCURRENCY = 4;
-async function forEachBounded(items, limit, fn) {
-  const bound = Math.max(1, limit);
+async function forEachBounded(items, limit2, fn) {
+  const bound = Math.max(1, limit2);
   let cursor = 0;
   let isAborted2 = false;
   async function worker() {
@@ -481280,9 +482199,6 @@ function turnRefsEqual(a, b2) {
   return true;
 }
 
-// src/shared/credentials.ts
-var CREDENTIAL_MINT_DEFAULT_VAULT_NAME = "Shared with Grok Bot";
-
 // ../packages/grok-bot-harness/src/groups/group-chat.ts
 var GROUP_MAX_MEMBERS = 6;
 var GROUP_MAX_MESSAGES_PER_TURN = 3;
@@ -481670,10 +482586,18 @@ var SAND_AGENT_EMAIL_MULTIPLE_INBOXES_PROMPT_SECTION = {
 function sandAgentEmailPromptSection(multipleInboxesEnabled) {
   return multipleInboxesEnabled ? SAND_AGENT_EMAIL_MULTIPLE_INBOXES_PROMPT_SECTION : SAND_AGENT_EMAIL_PROMPT_SECTION;
 }
+var CLOUD_AGENT_LINK_GUIDANCE = "When you point the user at a cloud agent (which to open, check, or look at), send a text SendToUser with its URL https://cursor.com/agents/<agent_id> as well as its card; the card or its name alone is not enough.";
 var CLOUD_AGENT_REPLY_MODES_GUIDANCE = 'When reply offers mode: "steer" course-corrects a running agent without losing its work (queued if it is idle), "queue" waits for its current run to finish, and "interrupt" stops it now and its in-flight work is lost; the result says which one happened.';
 var ONEPASSWORD_LOGIN_GUIDANCE = `The user's 1Password logins reach you through the 1Password integration: you can see only the items in their 1Password vault named "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" (titles and sites, never values), and items land in that vault only when the user adds or moves them there by hand. At a direct username/password login, FIRST call ListCredentials with the exact current URL, before any in-chat form, request_box_help, or asking the user to type: a matching 1Password login is the default path, and each result says whether it carries a one-time code in 1Password. Then fill it with SendToUser type credential-request for that item; you learn only whether it was filled, declined, or failed, and one request covers the whole login: a username-first page's password step and any one-time code the login carries are filled for you as the site asks for them, so a verification-code page is not a handoff. When no 1Password login matches, tell the user the login was not found in the "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" vault and that they may need to add or move it into that vault in 1Password. On their next request to log in or retry, call ListCredentials with forceRefresh true before reporting it missing again; they do not need to mention 1Password.`;
+var LOGIN_FORM_FIRST_GUIDANCE = "At a direct username/password login, FIRST call ListCredentials with the exact current URL, before any in-chat form, request_box_help, or asking the user to type: its result says how to handle this login for this user, so follow it. Never ask the user for a password value in plain chat text. Use request_box_help only when the remaining step is SSO, a passkey, a puzzle or image captcha, payment, or a verification code that result does not say is filled for you, or when the user prefers to sign in themselves.";
 function isAgentEmailPromptEnabled(options2) {
   return options2.agentEmailEnabled === true;
+}
+function browserLoginGuidanceFor(options2) {
+  if (options2.credentialFillEnabled !== true) {
+    return "At a login, use request_box_help for the user-only authentication step, including passwords, SSO, passkeys, 2FA, puzzle or image captchas, and payments. A press-and-hold I'm-human button is a mouse hold, not a human step, so dispatch the subagent with holdDurationMs rather than handing the box over.";
+  }
+  return options2.loginFormFirst === true ? `${LOGIN_FORM_FIRST_GUIDANCE} A press-and-hold I'm-human button is a mouse hold, not a human step, so dispatch the subagent with holdDurationMs rather than handing the box over.` : `${ONEPASSWORD_LOGIN_GUIDANCE} Never ask the user for a password value in chat. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, a puzzle or image captcha, or payment. A press-and-hold I'm-human button is a mouse hold, not a human step, so dispatch the subagent with holdDurationMs rather than handing the box over.`;
 }
 function buildSandCorePromptSections(options2) {
   const hasUserComputer = options2.hostSurfaces?.userComputer !== false;
@@ -481683,8 +482607,8 @@ function buildSandCorePromptSections(options2) {
   const userComputerGuidance = [];
   let userVideoGuidance = "";
   let noConnectorComputerQualifier = "";
-  const browserLoginGuidance = options2.credentialFillEnabled === true ? `${ONEPASSWORD_LOGIN_GUIDANCE} Never ask the user for a password value in chat. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, a puzzle or image captcha, or payment. A press-and-hold I'm-human button is a mouse hold, not a human step, so dispatch the subagent with holdDurationMs rather than handing the box over.` : "At a login, use request_box_help for the user-only authentication step, including passwords, SSO, passkeys, 2FA, puzzle or image captchas, and payments. A press-and-hold I'm-human button is a mouse hold, not a human step, so dispatch the subagent with holdDurationMs rather than handing the box over.";
-  let cloudCheckoutGuidance = `Keep repository checkouts off your own computer, whether obtained by git clone, an archive download/unzip, or another fetch, for reading or writing. Shell may inspect a checkout already present but must never pull one down. A narrow lookup may use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views; anything broader belongs to the cloud agent. ${BUILTIN_SCM_ABSENCE_GUIDANCE} Create or download a checkout only when the user explicitly asks or the work truly depends on something available only on this machine, and say which exception applies before acting.`;
+  const browserLoginGuidance = browserLoginGuidanceFor(options2);
+  let cloudCheckoutGuidance = `Keep repository checkouts off your own computer, whether obtained by git clone, an archive download/unzip, or another fetch, for reading or writing. Shell may inspect a checkout already present but must never pull one down. A narrow lookup may use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub, \`cursor-origin-*\` for Cursor Origin), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views; anything broader belongs to the cloud agent. ${BUILTIN_SCM_ABSENCE_GUIDANCE} Create or download a checkout only when the user explicitly asks or the work truly depends on something available only on this machine, and say which exception applies before acting.`;
   let disabledCheckoutGuidance = "Repository checkouts stay off your own computer; never clone, fetch, download, or unpack one to work around this policy.";
   if (hasUserComputer) {
     workspaceIntro = "You have your own computer plus the user\u2019s registered computers. Shell, Read, and AwaitShell use your own computer when machineId is omitted. Call ListMachines to choose one of the user\u2019s computers, then pass its machineId to those tools or to CopyToBox and CopyFromBox.";
@@ -481694,12 +482618,12 @@ function buildSandCorePromptSections(options2) {
     );
     userVideoGuidance = " from the user\u2019s registered computers only chat-attached videos are watchable;";
     noConnectorComputerQualifier = " and is not readable on any of the user\u2019s registered computers";
-    cloudCheckoutGuidance = `Keep repository checkouts off your own computer and every registered user computer, whether obtained by git clone, an archive download/unzip, or another fetch, for reading or writing. Shell may inspect a checkout already present on your computer, and Shell with machineId may inspect one on the selected user computer, but never pull one down. A narrow lookup may use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views; anything broader belongs to the cloud agent. ${BUILTIN_SCM_ABSENCE_GUIDANCE} Create or download a checkout only when the user explicitly asks or the work truly depends on something available only on that machine, and say which exception applies before acting.`;
+    cloudCheckoutGuidance = `Keep repository checkouts off your own computer and every registered user computer, whether obtained by git clone, an archive download/unzip, or another fetch, for reading or writing. Shell may inspect a checkout already present on your computer, and Shell with machineId may inspect one on the selected user computer, but never pull one down. A narrow lookup may use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub, \`cursor-origin-*\` for Cursor Origin), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views; anything broader belongs to the cloud agent. ${BUILTIN_SCM_ABSENCE_GUIDANCE} Create or download a checkout only when the user explicitly asks or the work truly depends on something available only on that machine, and say which exception applies before acting.`;
     disabledCheckoutGuidance = "Repository checkouts stay off your own computer and every registered user computer; never clone, fetch, download, or unpack one to work around this policy.";
   }
   let codeChangesBody = [
     "Cursor cloud agents are disabled by your team's admin. You cannot launch or manage them, and you do not perform non-trivial repository changes or broad code investigation yourself; say this plainly and point the user to Cursor.",
-    `Use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views only for narrow lookups such as a file, diff, issue, pull request, blame, or commit history. ${builtinScmAbsenceGuidance({ cloudAgentsEnabled: false })}`,
+    `Use the built-in source-control tools when they are in your tool list (\`cursor-github-*\` for GitHub, \`cursor-origin-*\` for Cursor Origin), otherwise the provider's remote read-only CLI or API (\`gh\` for GitHub, \`glab\` for GitLab, or the Bitbucket / Azure DevOps API) or web views only for narrow lookups such as a file, diff, issue, pull request, blame, or commit history. ${builtinScmAbsenceGuidance({ cloudAgentsEnabled: false })}`,
     disabledCheckoutGuidance
   ];
   if (!options2.cloudAgentsEnabled && options2.cloudAgentsUnavailableReason === "plan") {
@@ -481717,7 +482641,7 @@ function buildSandCorePromptSections(options2) {
       options2.cloudAgentDurableWatchEnabled === true ? `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), and "reply" sends a follow-up. The launch or reply result says whether you also stay subscribed to later runs; where it does, each revival names who started the run and "unwatch" stops them. "watch" covers an agent you did not launch this session; with confirm: true, only when the user asked, it adopts that agent as yours. Share the pull request when done.` : `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), "watch" covers an agent you did not launch this session, and "reply" sends a follow-up. Share the pull request when done.`,
       "Send routine in-scope follow-ups without asking, using reply on the same agent so it keeps its branch and context. Ask first only if the follow-up would discard substantial work, change the agreed direction, or is genuinely ambiguous. Launch another agent only for genuinely new work.",
       ...options2.cloudAgentReplyModesEnabled === true ? [CLOUD_AGENT_REPLY_MODES_GUIDANCE] : [],
-      "A pull request belongs on the forge that is its repository's source of truth, and the cloud agent's PR tool picks that forge. If the agent reports that its PR tool refused to create or update the PR (for example, it could not read the repository's source of truth), that refusal is the result. Relay it and the reason to the user. Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` tools, or a provider API, and never tell the agent to."
+      "A pull request belongs on the forge that is its repository's source of truth, and the cloud agent's PR tool picks that forge. If the agent reports that its PR tool refused to create or update the PR (for example, it could not read the repository's source of truth), that refusal is the result. Relay it and the reason to the user. Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` or `cursor-origin-*` tools, or a provider API, and never tell the agent to."
     ];
   }
   return {
@@ -481813,7 +482737,7 @@ function buildSandSystemPromptSections(options2) {
       body: [
         "Use a relevant visual when it explains or proves more than text: screenshots at important moments, fetched images, charts, diagrams, generated assets, and file previews. Do not attach noise after every trivial step.",
         attachmentPathGuidance,
-        ...cloudAgentsEnabled ? [cloudAgentArtifactGuidance] : [],
+        ...cloudAgentsEnabled ? [CLOUD_AGENT_LINK_GUIDANCE, cloudAgentArtifactGuidance] : [],
         `For a real web image, fetch it to your box and attach the file instead of making the client load a remote URL.${hasGenerateImage ? " Use GenerateImage only when the user asks you to create a visual asset, never to depict a real person or thing, and attach the returned path." : ""} A requested voice memo is spoken SendToUser text, not a generated audio file.`,
         "When work uses your desktop, delegate interaction to the appropriate box-desktop subagent and use read-only Screenshot at meaningful moments."
       ]
@@ -481977,6 +482901,7 @@ function promptCacheKey(options2) {
     cloudAgentsUnavailableReason: options2.cloudAgentsEnabled ? "team" : options2.cloudAgentsUnavailableReason ?? "team",
     dynamicToolsEnabled: options2.dynamicToolsEnabled === true,
     credentialFillEnabled: options2.credentialFillEnabled === true,
+    loginFormFirst: options2.credentialFillEnabled === true && options2.loginFormFirst === true,
     voiceCallEnabled: options2.voiceCallEnabled === true,
     cloudAgentArtifactsEnabled: options2.cloudAgentArtifactsEnabled === true,
     cloudAgentDurableWatchEnabled: options2.cloudAgentDurableWatchEnabled === true,
@@ -482384,269 +483309,6 @@ var PENDING_VIRTUAL_CARD_TTL_SECONDS = 24 * 60 * 60;
 var VIRTUAL_CARD_POLL_DELAYS_SECONDS = [5, 15, 30, 60];
 var VIRTUAL_CARD_POLL_SCHEDULE = VIRTUAL_CARD_POLL_DELAYS_SECONDS.join(", then ");
 
-// ../packages/grok-bot-harness/src/runner/tools/communicate-tool.ts
-init_zod();
-var SAND_TOOL_MARKER2 = "__sand_tool__";
-function encodeSandStep2(payload) {
-  return JSON.stringify({ [SAND_TOOL_MARKER2]: true, ...payload });
-}
-function toolCallWrapper2(payload) {
-  return new ToolCall({
-    tool: {
-      case: "communicateUpdateToolCall",
-      value: new CommunicateUpdateToolCall({
-        args: new CommunicateUpdateArgs({
-          currentStep: encodeSandStep2(payload)
-        })
-      })
-    }
-  });
-}
-function makeRender() {
-  return async (_ctx, output, _props) => {
-    if (output.result.case === "error") {
-      return createStringResult(`Error: ${output.result.value.error}`);
-    }
-    if (output.result.case !== "success") {
-      return createStringResult("Tool completed.");
-    }
-    const raw = output.result.value.currentStep;
-    if (raw.length === 0) {
-      return createStringResult("Tool completed.");
-    }
-    return createStringResult(raw);
-  };
-}
-function encodeError(activity, message) {
-  return new CommunicateUpdateArgs({
-    currentStep: encodeSandStep2({ ...activity, error: message })
-  });
-}
-function encodeSuccess(activity, result) {
-  return new CommunicateUpdateArgs({
-    currentStep: encodeSandStep2({ ...activity, result })
-  });
-}
-function buildSuccessResult(text2) {
-  return new CommunicateUpdateResult({
-    result: {
-      case: "success",
-      value: new CommunicateUpdateSuccess({ currentStep: text2 })
-    }
-  });
-}
-var DEFAULT_INFRASTRUCTURE_ERROR_MESSAGE = "Couldn't finish due to a temporary server issue.";
-var INFRASTRUCTURE_ERROR_NAMES = /* @__PURE__ */ new Set([
-  "PrismaClientKnownRequestError",
-  "PrismaClientUnknownRequestError",
-  "PrismaClientInitializationError",
-  "PrismaClientRustPanicError",
-  "DriverAdapterError",
-  "DbUnavailableError"
-]);
-var VITESS_ERROR_MARKER = "vttablet: ";
-var MAX_CAUSE_DEPTH = 4;
-function isInfrastructureError(error3) {
-  let current = error3;
-  for (let depth = 0; depth <= MAX_CAUSE_DEPTH && current instanceof Error; depth += 1) {
-    if (INFRASTRUCTURE_ERROR_NAMES.has(current.name) || INFRASTRUCTURE_ERROR_NAMES.has(current.constructor.name) || current.message.includes(VITESS_ERROR_MARKER)) {
-      return true;
-    }
-    current = current.cause;
-  }
-  return false;
-}
-function classifyToolError(error3) {
-  if (isInfrastructureError(error3)) return "infrastructure";
-  if (error3 instanceof SandModelVisibleError || error3 instanceof ToolCallError) {
-    return "model_visible";
-  }
-  return "unclassified";
-}
-var toolCallErrors = createCounter("grok_bot.tool_call.error", {
-  description: "A Sand tool call threw, by tool, the thrown error's class, and whether the model sees its message: model_visible (a class written for the model), infrastructure (replaced with a fixed message), or unclassified (still shown today; the classes to convert before tool errors become allow-list only)",
-  labelNames: ["tool", "visibility", "error_class"]
-});
-function errorClassLabel(error3) {
-  if (!(error3 instanceof Error)) return typeof error3;
-  const constructorName = error3.constructor.name;
-  return constructorName.length > 0 && constructorName !== "Error" ? constructorName : error3.name;
-}
-function recordToolCallError(ctx, toolName, visibility, error3) {
-  try {
-    toolCallErrors.increment(ctx, 1, {
-      tool: toolName,
-      visibility,
-      error_class: errorClassLabel(error3)
-    });
-  } catch (metricsError) {
-    process.stderr.write(
-      `sand.tool_call.error_metrics_failed error_class=${errorLogTag(metricsError)}
-`
-    );
-  }
-}
-function modelVisibleErrorMessage(ctx, toolName, error3, infrastructureErrorMessage) {
-  const visibility = classifyToolError(error3);
-  if (ctx !== void 0) recordToolCallError(ctx, toolName, visibility, error3);
-  return visibility === "infrastructure" ? infrastructureErrorMessage : errorMessage(error3);
-}
-function buildErrorResult(message) {
-  return new CommunicateUpdateResult({
-    result: {
-      case: "error",
-      value: new CommunicateUpdateError({ error: message })
-    }
-  });
-}
-var MAX_REPORTED_ARG_ISSUES = 8;
-var ROOT_ISSUE_FIELD = "root";
-var OTHER_ISSUE_TOKEN = "other";
-var brandIssueCode = brandedEnumOf(Object.values(external_exports.ZodIssueCode), OTHER_ISSUE_TOKEN);
-function topLevelArgKeysOf(schema2) {
-  let current = schema2;
-  while (current instanceof external_exports.ZodEffects) current = current.innerType();
-  return current instanceof external_exports.ZodObject ? Object.keys(current.shape) : [];
-}
-function argIssueFolder(knownFields) {
-  const brandField = brandedEnumOf([...knownFields, ROOT_ISSUE_FIELD], OTHER_ISSUE_TOKEN);
-  const other = brandLiteralEnum(OTHER_ISSUE_TOKEN);
-  return (issues) => issues.slice(0, MAX_REPORTED_ARG_ISSUES).map((issue2) => {
-    const head = issue2.path[0];
-    return {
-      field: brandField(typeof head === "string" ? head : ROOT_ISSUE_FIELD) ?? other,
-      code: brandIssueCode(issue2.code) ?? other,
-      missing: issue2.code === external_exports.ZodIssueCode.invalid_type && issue2.received === "undefined"
-    };
-  });
-}
-function defineCommunicateTool(deps, spec) {
-  const render2 = makeRender();
-  const infrastructureErrorMessage = spec.infrastructureErrorMessage ?? DEFAULT_INFRASTRUCTURE_ERROR_MESSAGE;
-  const parseAndExecute = withSafeParsedArgs(
-    spec.parameters,
-    async (ctx, interactionHandler, parsedArgs, meta) => {
-      const activity = spec.describeActivity?.(parsedArgs);
-      const toolActivity = {
-        tool: spec.name,
-        ...activity?.detail != null && activity.detail.length > 0 ? { detail: activity.detail } : {},
-        ...activity?.target != null && activity.target.length > 0 ? { target: activity.target } : {}
-      };
-      const initial = toolCallWrapper2({
-        phase: "executing",
-        ...toolActivity
-      });
-      return await interactionHandler.executeToolCall(
-        ctx,
-        initial,
-        meta.toolCallId,
-        async () => {
-          try {
-            const text2 = await spec.execute(ctx, parsedArgs, {
-              ...deps,
-              toolCallId: meta.toolCallId
-            });
-            return buildSuccessResult(text2);
-          } catch (error3) {
-            if (error3 instanceof DeferredInteractionResponseError) {
-              throw error3;
-            }
-            return buildErrorResult(
-              modelVisibleErrorMessage(ctx, spec.name, error3, infrastructureErrorMessage)
-            );
-          }
-        },
-        (result) => {
-          if (result.result.case === "error") {
-            return new ToolCall({
-              tool: {
-                case: "communicateUpdateToolCall",
-                value: new CommunicateUpdateToolCall({
-                  args: encodeError(toolActivity, result.result.value.error || "Tool failed."),
-                  result
-                })
-              }
-            });
-          }
-          return new ToolCall({
-            tool: {
-              case: "communicateUpdateToolCall",
-              value: new CommunicateUpdateToolCall({
-                args: encodeSuccess(
-                  toolActivity,
-                  result.result.case === "success" ? result.result.value.currentStep : ""
-                ),
-                result
-              })
-            }
-          });
-        }
-      );
-    },
-    toolCallWrapper2({ tool: spec.name }),
-    { emitInitialPartialToolCall: false }
-  );
-  const execute = spec.onArgsRejected === void 0 ? parseAndExecute : observingArgsRejections(spec.onArgsRejected);
-  function observingArgsRejections(onArgsRejected) {
-    const schemaVariant = spec.schemaVariant ?? "default";
-    const foldIssues = argIssueFolder([
-      ...topLevelArgKeysOf(spec.parameters),
-      ...spec.issueFields ?? []
-    ]);
-    return async (ctx, interactionHandler, argsStream, meta) => {
-      try {
-        return await parseAndExecute(ctx, interactionHandler, argsStream, meta);
-      } catch (error3) {
-        if (error3 instanceof ToolCallArgParseError) {
-          const zodIssues = error3.issues ?? [];
-          try {
-            onArgsRejected({
-              kind: "args_rejected",
-              toolCallId: meta.toolCallId,
-              toolName: spec.name,
-              schemaVariant,
-              rejection: error3.issues === void 0 ? "unparsed" : "schema",
-              issueCount: zodIssues.length,
-              issues: foldIssues(zodIssues),
-              requestId: getRequestId(ctx)
-            });
-          } catch (observerError) {
-            process.stderr.write(
-              `sand.tool_call.args_rejected_observer_failed tool=${spec.name} error_class=${errorLogTag(observerError)}
-`
-            );
-          }
-        }
-        throw error3;
-      }
-    };
-  }
-  return createZodAgentTool(spec.id, {
-    name: spec.name,
-    descriptionGenerator: () => typeof spec.description === "function" ? spec.description() : spec.description,
-    parameters: spec.parameters,
-    execute,
-    render: render2,
-    serializeError: (error3) => {
-      const message = modelVisibleErrorMessage(
-        void 0,
-        spec.name,
-        error3,
-        infrastructureErrorMessage
-      );
-      return new ToolCall({
-        tool: {
-          case: "communicateUpdateToolCall",
-          value: new CommunicateUpdateToolCall({
-            args: encodeError({ tool: spec.name }, message),
-            result: buildErrorResult(message)
-          })
-        }
-      });
-    }
-  });
-}
-
 // ../packages/grok-bot-harness/src/runner/tools/virtual-card-tool.ts
 var VIRTUAL_CARD_MAX_AMOUNT_CENTS = 5e5;
 var VIRTUAL_CARD_MIN_CONTEXT_LENGTH = 100;
@@ -482799,13 +483461,30 @@ var STRIPE_LINK_PURCHASING_SYSTEM_PROMPT_SECTION = [
 ].join("\n");
 
 // ../packages/grok-bot-harness/src/runner/skillify/harness-skills.ts
-function reachingServicesSkillLines(credentialFillEnabled, agentEmailEnabled = false) {
+function signInTroubleLine({ credentialFillEnabled, formFirst }) {
+  if (formFirst) {
+    return `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. ${LOGIN_FORM_FIRST_GUIDANCE}`;
+  }
+  return credentialFillEnabled ? `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. ${ONEPASSWORD_LOGIN_GUIDANCE} To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, captcha, or payment.` : "- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service and use request_box_help for the user-only authentication step.";
+}
+function boxDesktopLine({ credentialFillEnabled, formFirst }) {
+  if (formFirst) {
+    return "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Credential values never enter your context: a login is filled into the page for you, and manual authentication happens on the box desktop. The browser session persists there.";
+  }
+  return credentialFillEnabled ? "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Credential values never enter your context: your credential-request fills a 1Password login into the page, and manual authentication happens on the box desktop. The browser session persists there." : "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Authentication happens on the box desktop, and the browser session persists there.";
+}
+function reachingServicesSkillLines({
+  credentialFillEnabled,
+  agentEmailEnabled = false,
+  loginFormFirst = false
+}) {
+  const loginLine = { credentialFillEnabled, formFirst: credentialFillEnabled && loginFormFirst };
   return [
     "When the user wants something from a service you can't reach, with no connector for it and nothing readable on their computer, the box is your default, not a refusal: reach for it the moment it would help, without first asking permission, proposing it, or offering it as a choice. This covers chat apps (Facebook Messenger, WhatsApp, Instagram), webmail, and SaaS dashboards.",
     `- Don't ask a go-ahead for something they already asked for. When they've requested the thing ("pull my Amazon orders"), a "Want me to pull them using my browser?" confirmation widget is exactly the over-asking to avoid: they already said yes by asking. Just dispatch a subagent to open the service (see "The box desktop" for which type), then follow that skill's typed-login path when it reaches the login. The only thing you surface first is that unavoidable login step (which only they can do), never a yes/no on the task itself.`,
     "- But first confirm there really is no connector, for ANY service the task touches, not just data dashboards. Run SearchPlugins before reaching for the box. If a connector is connected or installable, prefer pulling the data through it (CSV/export or raw query results) over reading charts or tables off the screen, which you are unreliable at. SearchPlugins also surfaces any usage guidance a connector advertises, so check it and follow that guidance. A connector that merely needs authentication is still the right path, so start it with AuthenticateMcpServer instead of working around it; a box browser that is not signed in is gated by the same sign-in, so it is not a fallback for a service whose auth is pending, and if its auth fails or keeps erroring, ask the user for help rather than quietly switching to the browser. Use the box only when GetMcpServerStatus has no row for the service and none is installable; a row reading needsGrant or needsAuth is a connector, so call AuthenticateMcpServer and never open the box for that service.",
-    credentialFillEnabled ? `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. ${ONEPASSWORD_LOGIN_GUIDANCE} To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, captcha, or payment.` : "- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service and use request_box_help for the user-only authentication step.",
-    credentialFillEnabled ? "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Credential values never enter your context: your credential-request fills a 1Password login into the page, and manual authentication happens on the box desktop. The browser session persists there." : "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Authentication happens on the box desktop, and the browser session persists there.",
+    signInTroubleLine(loginLine),
+    boxDesktopLine(loginLine),
     '- Once they are signed in, do the work: hand the interactive steps to the subagent, use Shell for commands, and use Read for files, then report what you found. See "The box desktop" for how delegation and sign-in handoffs work.',
     "- This covers logged-in tools and CLIs on the box, not just websites: when a task is blocked or would go smoother with one that isn't authed (e.g. `gh` for GitHub work, `glab` for GitLab work, a CLI missing credentials), be proactive about setting it up there instead of failing or working around it. Box logins and credentials persist across turns, so it's a one-time setup that unblocks every future run, worth doing or offering early: kick off the flow yourself where you safely can (run `gh auth login` or `glab auth login`), and where it needs the user (a password, OAuth approval, 2FA, a device code) hand the box over with request_box_help proactively rather than waiting to be asked. You never see their credentials. That login is for reads and for provider work the user asks for directly, never for creating a pull request that a Cursor PR tool refused.",
     "- Don't fall back to making the user do it themselves (paste the data, screenshot it) when the box can reach it. Offer that only if the box genuinely cannot.",
@@ -482825,7 +483504,7 @@ var SKILLIFY_SOURCE_SECTIONS = [
   },
   {
     heading: "## Reaching services that have no connector",
-    body: reachingServicesSkillLines(false)
+    body: reachingServicesSkillLines({ credentialFillEnabled: false })
   },
   {
     heading: "## Writing on the user's behalf",
@@ -482842,7 +483521,7 @@ var SKILLIFY_SOURCE_SECTIONS = [
     body: [
       `For ANY non-trivial work in a repository, including implementing a feature, fixing a bug, refactoring, otherwise writing or modifying code, and equally investigating how the code actually behaves, ALWAYS hand it to a Cursor cloud agent with the CloudAgent tool (action "launch") rather than doing it yourself. Cursor's dedicated cloud coding agents are meaningfully better at this than you are, so this is the default, not a fallback. The cloud agent runs remotely (default: a Cursor-managed VM; or a self-hosted pool / private worker when you set environment); existing-repo work uses a new branch and pull request, while a new Origin project starts directly on its main branch. You stay the coordinator: scope the task, launch it, keep the user posted, and report the result.`,
       "- Never clone a repository onto your own computer or any registered user computer. That covers looking as well as writing: a local checkout to poke around, grep, or trace a bug is exactly the move to avoid, because repository investigation belongs to the cloud agent too and it already reads the whole repo. Shell without machineId may inspect what is already on your computer; Shell with a selected machineId may inspect what is already on that user computer. Neither form is for pulling a repo down.",
-      '- For a narrow lookup, use the provider\'s remote read-only surfaces instead of a checkout: the built-in source-control tools first when they are in your tool list (`cursor-github-*` for GitHub, e.g. `cursor-github-get_pull_request_diff`; the `source-control` skill, listed alongside them, covers their use), the `origin` CLI for an Origin repo (`origin pr diff`), and otherwise `gh` for GitHub, `glab` for GitLab, the Bitbucket or Azure DevOps API, or the web UI. They hand you a file\'s contents, a diff, a PR or issue, blame, or commit history over the network without cloning anything. That is how you answer "what does this config say?" or "what changed in that PR?". Anything broader than a narrow lookup is a cloud agent\'s job.',
+      '- For a narrow lookup, use the provider\'s remote read-only surfaces instead of a checkout: the built-in source-control tools first when they are in your tool list (`cursor-github-*` for GitHub, e.g. `cursor-github-get_pull_request_diff`; `cursor-origin-*` for Origin, e.g. `cursor-origin-pull_request_read`; the `source-control` skill, listed alongside them, covers their use), the `origin` CLI for an Origin repo (`origin pr diff`), and otherwise `gh` for GitHub, `glab` for GitLab, the Bitbucket or Azure DevOps API, or the web UI. They hand you a file\'s contents, a diff, a PR or issue, blame, or commit history over the network without cloning anything. That is how you answer "what does this config say?" or "what changed in that PR?". Anything broader than a narrow lookup is a cloud agent\'s job.',
       `- ${BUILTIN_SCM_ABSENCE_GUIDANCE}`,
       '- Cloning is acceptable in exactly two cases, and both are rare and have to be earned rather than reached for out of convenience: the user explicitly asks you to clone or check the repo out locally, or the work genuinely cannot be done remotely or cloud-side because it depends on something that exists only on that specific machine. Say which one applies and why before you act on it. "It would be quicker" and "I just want a quick look" are not reasons.',
       "- Don't root-cause it yourself first. The cloud agent is the stronger coder and does its own investigation, so before handing off you only need enough to name the repo, point at the rough area, and write a clear task. That deep dive is the cloud agent's job, and doing it yourself wastes time and risks locking a wrong guess into the task.",
@@ -482853,7 +483532,7 @@ var SKILLIFY_SOURCE_SECTIONS = [
       '- When a screenshot, mock, chart, or repro image is part of the task, attach it to the launch (or the reply) with images: [{"url":"file:///workspace/shot.png"}], the same way you attach one to SendToAgent. The cloud agent actually sees the image, so this beats describing it. Never paste an image as a markdown ![](...) in the prompt. Absolute file:// URLs to files in your box only (a path under /workspace, or one in your own attachments/assets folder); if you only have an https:// image, download it to a file first. Say what each image shows in the prompt itself.',
       `- When a document, dataset, log, config, archive, or recording is part of the task, hand it over with files: [{"url":"file:///workspace/spec.pdf"}] on the launch (or the reply), with the same file:// URL rules as images. The cloud agent gets each one saved into its workspace under uploads/ with the path listed in its prompt, so it reads them with its own tools; attach the file rather than pasting its contents into the prompt. Documents and any text file up to ${CLOUD_AGENT_DOCUMENT_LIMIT_LABEL} each, videos up to ${CLOUD_AGENT_VIDEO_LIMIT_LABEL} each, and at most ${CLOUD_AGENT_ATTACHMENTS_TOTAL_LIMIT_LABEL} of attachments per call (split larger sets between the launch and a follow-up); .env-style files are refused because they usually hold secrets. An image in files is delivered as a file to keep rather than shown. Say what each file is for in the prompt itself.`,
       `- launch returns immediately with the agent's id and URL; you're revived automatically when the run finishes, with its status, branch and pull request, a short summary, and the path to its full transcript. Tell the user you've kicked it off in a short text SendToUser first, then reference the agent with a cursor-agent attachment. Do that any time you mention, hand off to, or surface a cloud agent (when summarizing one's result too), one attachment per agent; the card never replaces that opening text acknowledgement. Then keep working or end your turn; don't poll "get" in a loop. "get" is a point-in-time status check (e.g. the user asks what an agent is doing now), and "dump" reads its transcript mid-run. Both are read-only and never interrupt the agent. "watch" is for an agent you didn't launch this session. "reply" sends a follow-up and revives you the same way when that run finishes; once it's done, share its pull request link if it opened one.`,
-      "- A pull request belongs on the forge that is its repository's source of truth (`origin repo view <owner>/<repo> --json mirrorStatus`: `no-mirror` or `outbound` means Origin, anything else means GitHub), and the cloud agent's PR tool picks that forge for it. If the agent reports that its PR tool refused to create or update the PR, for example because it could not read the repository's source of truth, that refusal is the result. Relay it and the reason to the user. Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` tools, or a provider API, and never tell the agent to.",
+      "- A pull request belongs on the forge that is its repository's source of truth (`origin repo view <owner>/<repo> --json mirrorStatus`: `no-mirror` or `outbound` means Origin, anything else means GitHub), and the cloud agent's PR tool picks that forge for it. If the agent reports that its PR tool refused to create or update the PR, for example because it could not read the repository's source of truth, that refusal is the result. Relay it and the reason to the user. Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` or `cursor-origin-*` tools, or a provider API, and never tell the agent to.",
       `- A follow-up to a cloud agent is a normal, low-stakes continuation of work already in flight, so by default just send it and tell the user what you sent rather than asking permission first. This is Autonomy applied here, and reflexively ending with "want me to send a follow-up?" for a routine in-scope fix (re-shooting a screenshot, fixing a bug you found, a cleanup) is exactly the over-asking to avoid, since it risks the work falling through the cracks. Only ask first when the follow-up is genuinely consequential or ambiguous: it would throw away substantial work, change an already-agreed direction, or you truly don't know which of several real options the user wants. And when more work lands on something a cloud agent already has in flight or just finished, reply to THAT agent so it keeps its branch and context, instead of launching a second one on the same task; launch is for genuinely new work.`
     ]
   }
@@ -482867,10 +483546,10 @@ function skillifySourceSectionBody(heading) {
   }
   return section.body;
 }
-function noConnectorFallbackSkillBody(credentialFillEnabled, agentEmailEnabled = false) {
+function noConnectorFallbackSkillBody(options2) {
   return skillMarkdown(
     "Reaching services that have no connector",
-    reachingServicesSkillLines(credentialFillEnabled, agentEmailEnabled),
+    reachingServicesSkillLines(options2),
     subsection(
       "Managing plugins and connectors",
       skillifySourceSectionBody("## Managing plugins and connectors")
@@ -482910,33 +483589,41 @@ function combinedBoxDesktopLines(includeHumanSteps = true) {
 var SOURCE_CONTROL_LINES = [
   "Source control is one integration with Cursor, not one per feature: a GitHub (or GitLab, Bitbucket, Azure DevOps) connection the user set up for cloud agents also powers your inline tools, and vice versa. The user connects once and grants Cursor's app access to the orgs and repositories it may touch; you never collect a token, paste a link, or send them to settings.",
   ...subsection("Which provider a reference means", [
-    '- `github.com/owner/repo` (or `git@github.com:owner/repo`) is GitHub; `gitlab.com` GitLab; `bitbucket.org` Bitbucket; `dev.azure.com` or `*.visualstudio.com` Azure DevOps; `cursor.com/codebase/<owner>/<repo>` (or an `origin.cursor.com` clone URL) is Cursor Origin, and either spelling is a valid CloudAgent `launch` repo. Origin needs no connect step, because the signed-in Cursor account is the Origin account. A bare `owner/repo` with no host is ambiguous: if the user has exactly one provider connected assume that one; otherwise call CloudAgent "repositories" with `search` set to the name to see which provider hosts it, and ask only when that lookup still leaves several matches or none.',
+    '- `github.com/owner/repo` (or `git@github.com:owner/repo`) is GitHub; `gitlab.com` GitLab; `bitbucket.org` Bitbucket; `dev.azure.com` or `*.visualstudio.com` Azure DevOps; `cursor.com/codebase/<owner>/<repo>` (or an `origin.cursor.com` clone URL) is Cursor Origin, and either spelling is a valid CloudAgent `launch` repo. Origin needs no connect step because the signed-in Cursor account is the Origin account. A bare `owner/repo` with no host is ambiguous, and Origin counts as a candidate even with no provider connected: when the `cursor-origin` tools are listed, `cursor-origin-get_repository` with that owner and name is the probe (a repository back means Origin hosts it; a refusal here means it is not on Origin or not visible to the user, so drop Origin as a candidate rather than relaying an access remedy); CloudAgent "repositories" with `search` set to the name covers the connected providers. If exactly one candidate answers, use it; ask only when that still leaves several matches or none.',
+    "- A repository mirrored between GitHub and Origin has one forge of record, and its pull requests live only there. `cursor-origin-get_repository` hints at it in `mirror`: `status` `inbound` means GitHub (Origin refuses PR writes there); no `mirror` or `outbound` usually means Origin, but a mirror transition in flight (`transitioning-*` on `origin repo view --json mirrorStatus`) still means GitHub even though `mirror` collapses it. Origin's refusal that pull requests are not available for a GitHub-mirrored repository is final: switch to `cursor-github-*` for that PR. Read files and commits on either side, but review, comment on, and merge PRs only through the forge of record.",
     '- CloudAgent "repositories" lists the repositories the user\'s connected providers can see (with a `search` filter and a cursor for more). Use it to resolve a vague repo name, to check whether a repo is reachable before launching, or when the user asks what you have access to. Do not enumerate it speculatively on every turn.'
   ]),
   ...subsection("Inline tools versus cloud agents", [
-    "- Work that is a few API calls stays in the conversation: checking a pull request, its diff, CI status, or reviews; looking up or filing an issue; commenting, replying, reviewing, or merging; reading a file, a commit, a tag, a release, or the repository tree; labels, sub-issues, discussions, and collaborators; searching code, PRs, issues, users, or orgs. Use the built-in `cursor-github` tools for this (`cursor-github-get_pull_request`, `cursor-github-list_check_runs_for_ref`, `cursor-github-search_issues`, ...). Each one is one GitHub REST endpoint with GitHub's own parameter names, one page per call, and GitHub's response verbatim: read the `Link` item it appends to fetch the next page, and expect large results to arrive as a file you can grep. They act as the user's own GitHub account, so they can never do more than the user can.",
-    "- Writing or modifying code, and investigating how code actually behaves, is a cloud agent's job (see the `code-changes` skill). Never clone a repository onto your computer to look around; the inline tools give you files, diffs, and history without a checkout. There is no inline tool that commits files (no create-or-update-file, delete-file, or push-files): any change to repository contents, however small, goes through a cloud agent. `create_branch` is the one exception, for giving an agent a branch to work on.",
-    "- Prefer the built-in `cursor-github` tools over `gh`, raw GitHub API calls from Shell, or a GitHub plugin/connector when both are present: the built-in needs no setup, is attributed to the user, and its results are already shaped for you. If the user also has the marketplace GitHub plugin installed, its overlapping tools are hidden while the built-in works; mention once that the plugin can be removed, and never uninstall it yourself without an explicit yes."
+    "- Work that is a few API calls stays in the conversation: checking a pull request, its diff, CI status, or reviews; looking up or filing an issue; commenting, replying, reviewing, or merging; reading a file, a commit, a tag, a release, or the repository tree; labels, sub-issues, discussions, and collaborators; searching code, PRs, issues, users, or orgs. Use the built-in `cursor-github` tools for this on GitHub (`cursor-github-get_pull_request`, `cursor-github-list_check_runs_for_ref`, `cursor-github-search_issues`, ...) and the built-in `cursor-origin` tools on Origin (`cursor-origin-pull_request_read`, `cursor-origin-checks_read`, `cursor-origin-get_file_contents`, ...). Each GitHub tool is one GitHub REST endpoint with GitHub's own parameter names, one page per call, and GitHub's response verbatim: read the `Link` item it appends to fetch the next page, and expect large results to arrive as a file you can grep. Both act as the user's own account, so they can never do more than the user can.",
+    "- The Origin tools are shaped differently from GitHub's. Repository calls take `owner` and `name` (the Origin slugs) and page with `pageToken` / `nextPageToken`, resending the same filters. One pull request is read through `pull_request_read` with a `view`: `summary` (metadata, labels, requested reviewers, head/base SHAs, stack membership), `files` (per-file `patch` chunks with line ranges; there is no whole-diff call, so read the files you need), `commits`, `reviews`, `comments`, or `threads` (needs `threadIds`). One commit is `commit_read` with view `metadata`, `files`, or `patch`; `compare_commits` gives ahead/behind between two refs. `get_file_contents` reads one path: a file (capped, with an optional line range), or a directory as `type` `dir` with its immediate `entries`; `get_git_tree` lists a tree at a SHA, branch, or tag (immediate children, or the full walk with `recursive`); `grep_contents` searches file contents across one repository at a ref (regex by default, `literal` for exact text); anything wider is a cloud agent's job. `checks_read` reads CI for a pull request, commit, suite, or run as a status rollup; it does not fetch provider logs. Reviews are `create_pull_request_review` with a required `event` and a body only (no `comments`, no pending-review flow): `COMMENT` always works; `APPROVE` and `REQUEST_CHANGES` are accepted inline only when the bot's service-account identity is on, otherwise Origin refuses them for this session (the refusal can read like a repository-access problem; it is not), so leave the verdict to the user or a cloud agent. `dismiss_pull_request_review` is never available inline. Inline comments are `create_pull_request_inline_comment`, replies go to a thread by `threadId` (`reply_pull_request_review_thread`), never to a comment id, and `update_pull_request_review_thread` resolves or reopens a thread. There is no `cursor-origin-create_branch`; an agent's branch on Origin comes from the launch itself.",
+    "- Origin has no issues, no Actions or workflow runs (CI shows only through `checks_read`), no cross-repository search, and no forks: those requests are GitHub-only. `list_pull_requests` filters one repository by state, head, base, and author; anything broader needs the user to name the repository. Listing or creating Origin repositories is outside what the inline tools and the box `origin` session may do (neither carries namespace scopes): ask the user to name the repository, and mint a new one only through a `new_repo` launch.",
+    "- Writing or modifying code, and investigating how code actually behaves, is a cloud agent's job (see the `code-changes` skill). Never clone a repository onto your computer to look around; the inline tools give you files, diffs, and history without a checkout. There is no inline tool that commits files (no create-or-update-file, delete-file, or push-files): any change to repository contents, however small, goes through a cloud agent. On GitHub, `create_branch` is the one exception, for giving an agent a branch to work on.",
+    "- Prefer the built-in tools over `gh` or the `origin` CLI, raw API calls from Shell, or a provider plugin/connector when both are present: the built-in needs no setup, acts with the user's own Origin or GitHub authorization (never more than they could do), and its results are already shaped for you. In a box with `origin` on PATH, the CLI is an acceptable fallback for Origin reads the tools do not cover, through its first-class repository-scoped commands (`origin pr view`, `origin pr checks`, `origin repo view`); its box session is attenuated to the same ceiling, so namespace listing and `origin api` (raw public REST) are refused there. Keep anything write-gated on the `cursor-origin-*` tools, whose refusals carry the remedy. If the user also has the marketplace GitHub plugin installed, its overlapping tools are hidden while the built-in works; mention once that the plugin can be removed, and never uninstall it yourself without an explicit yes."
   ]),
   ...subsection("When access is missing", [
-    "- A tool answering that the provider is not connected, that the connected account cannot see the repository, or that the saved connection no longer works shows the user nothing by itself: its result names the exact `request_scm_connect` call (intent, provider, repo) that puts the connect or access card in the chat. Make that call once per problem. Several parallel calls that hit the same wall still mean one card. Then tell the user in your own words what unblocks it (connecting the provider, or adding the repository to Cursor's access), never a link or a settings path, and finish unrelated work. The tool's result says whether you are woken automatically once they connect or update access.",
+    "- A GitHub (or GitLab, Bitbucket, Azure DevOps) tool answering that the provider is not connected, that the connected account cannot see the repository, or that the saved connection no longer works shows the user nothing by itself: its result names the exact `request_scm_connect` call (intent, provider, repo) that puts the connect or access card in the chat. Make that call once per problem. Several parallel calls that hit the same wall still mean one card. Then tell the user in your own words what unblocks it (connecting the provider, or adding the repository to Cursor's access), never a link or a settings path, and finish unrelated work. The tool's result says whether you are woken automatically once they connect or update access.",
     "- On that wake, confirm with the owner before retrying the action that was blocked; do not reuse a parked prompt or repo URL unless they ask. A yes/no question widget is the right way to ask, and their answer counts as the reply. Until the owner replies, launches and repo-backed writes are refused and tell you so; reads still work.",
     '- `cursor-github` showing needsAuth in the server status means the user has not connected GitHub in Cursor (or the connection lapsed): its tools are listed but every call will answer not-connected. Do not tell the user GitHub is connected, and do not call AuthenticateMcpServer or mcp_auth for it (there is no sign-in to run); `request_scm_connect` with intent "connect" is the only fix. Connected means the tools work.',
-    "- If the `cursor-github` namespace is missing from your tools or reports unreachable, the built-in is not available for this account right now. Say that plainly and fall back to `gh`, the GitHub API, or a cloud agent. It is not a connection problem: do not tell the user to connect or reconnect GitHub, and do not show them a card; only a CloudAgent result can tell you a connection is missing.",
-    '- Repository not found from an inline tool usually means "not granted to Cursor\'s app", not "does not exist": `request_scm_connect` with intent "access" is the fix, not a different spelling. A missing pull request or file inside a repository you can see is a plain not-found.'
+    "- Origin never has a card, and `request_scm_connect` is never the fix for it: there is nothing to connect. A refused Origin operation names what stood in the way, and you relay that remedy in words: a `new_repo` launch refused because the account has no Origin namespace yet (the user sets up Origin at https://cursor.com/codebase/get-started, then tells you it is done); a `cursor-origin` call refused because Origin is turned off for their team (a team admin turns it back on; until then use another provider or a cloud agent on a non-Origin repository); a repository Origin cannot see (private in a namespace the user is not in, missing an access grant from its owner, or a wrong slug, so say which repository was refused and confirm the slug). Confirm with the user before retrying; there is no automatic wake.",
+    "- If the `cursor-github` or `cursor-origin` namespace is missing from your tools or reports unreachable, or an Origin tool says Origin is not available for this account, that built-in is not available right now. Say that plainly and fall back to `gh`, the authenticated `origin` CLI when present, the provider's API, or a cloud agent. It is not a connection problem: do not tell the user to connect or reconnect anything, and do not show them a card; only a CloudAgent result can tell you a connection is missing.",
+    '- Repository not found from a GitHub inline tool usually means "not granted to Cursor\'s app", not "does not exist": `request_scm_connect` with intent "access" is the fix, not a different spelling. A missing pull request or file inside a repository you can see is a plain not-found, on GitHub and on Origin alike.'
   ]),
   ...subsection("Writes", [
-    "- Comments, reviews, issue edits, and pull request edits are ordinary work: do them when asked, and say what you did. A one-shot review is `create_pull_request_review` with an `event` and its `comments`; for a review you build up over several files, create it with no `event` (it stays pending and invisible), add each comment with `add_comment_to_pending_review`, then `submit_pending_pull_request_review` once (or `delete_pending_pull_request_review` to drop it). Marking a pull request ready for review or converting it back to a draft is `set_pull_request_draft`, not `update_pull_request` (REST has no draft field). Merging is irreversible; check the pull request's `mergeable` state and its check runs (`list_check_runs_for_ref` on the head SHA) first, and confirm with the user when the merge was not explicitly requested. Anything that creates, forks, or deletes a repository always needs an explicit yes first.",
-    "- Prefer Cursor Origin for scratch work and brand-new repositories (a `new_repo` cloud agent launch mints one); create a GitHub repository only when the user names GitHub.",
-    "- Your GitHub calls share the user's API budget with their cloud agents. Batch what you can (one search over many list calls), page instead of fetching everything, and don't poll."
+    "- Comments, reviews, issue edits, and pull request edits are ordinary work: do them when asked, and say what you did. On GitHub, a one-shot review is `create_pull_request_review` with an `event` and its `comments`; for a review you build up over several files, create it with no `event` (it stays pending and invisible), add each comment with `add_comment_to_pending_review`, then `submit_pending_pull_request_review` once (or `delete_pending_pull_request_review` to drop it). Marking a pull request ready for review or converting it back to a draft is `set_pull_request_draft` on GitHub (its REST `update_pull_request` has no draft field) and `update_pull_request` with `draft` on Origin. Merging is irreversible; on GitHub check the pull request's `mergeable` state and its check runs (`list_check_runs_for_ref` on the head SHA) first, and confirm with the user when the merge was not explicitly requested. An Origin merge never happens inline: `cursor-origin-merge_pull_request` is outside what your session may do even when it is listed, so a merge goes through the cloud agent that owns the PR or `origin pr merge` in a box (its own ask flow), after `checks_read` shows the rollup green. Any Origin tool the catalog marks as needing confirmation (destructive or merge-gate-adjacent) is ask-first unless the user asked for exactly that action; among the tools your session can run today that is resolving or reopening a review thread. Anything that creates, forks, or deletes a repository always needs an explicit yes first.",
+    "- Authorization is always the driving user's: Origin checks their grants, so you can never do more than they could. Attribution is the only thing that changes: when the bot's service-account identity is on, its inline Origin writes (comments, reviews, PR edits) and its cloud-agent launches appear as the bot, not the person driving it; reads and listings always ride the user. Say so when the user asks who a review will appear from.",
+    "- Prefer Cursor Origin for scratch work and brand-new repositories: a `new_repo` cloud agent launch mints a private Origin repository in the driver's namespace and starts the work in it. Create a GitHub repository only when the user names GitHub.",
+    "- That minted repository starts as an unnamed draft (`tmp-<hex>`). After a `new_repo` launch, when the user asks to name, save, create, or publish the repo or wants a link to it, first check the CloudAgent tool schema: only when `publish_repository` is listed among its actions (the action is gated and absent for most accounts today) ask with one SendToUser widget that proposes the repository name and offers who can see it, PRIVATE (owner only) or INTERNAL (the owner's whole team), then call CloudAgent `publish_repository` with the launch's `agent_id`, the picked `repo_name` and `visibility`, and `confirm: true`; it is one of the confirmation-marked actions, so never call it before the widget answer, never assume INTERNAL, and never call it a second time for the same agent. When the action is not in the schema, tell the user to turn the draft into a repository from the agent's page in Cursor instead, and never fake it with the `origin` CLI or a mirror.",
+    "- Your GitHub calls share the user's API budget with their cloud agents, and your Origin calls share the user's Origin API quota. Batch what you can (one search over many list calls), page instead of fetching everything, and don't poll."
   ])
 ];
 var OUTBOUND_CALL_LINES = [
   "A call reaches a stranger in real time and cannot be recalled, so it is the last route to reach for rather than the first: a connector, the box browser, or email usually answers the same question, and a task that merely could be settled by phone is not a request for one.",
   "Place one only when the user asked for a call in this conversation, or a standing permission they gave here plainly covers it. Otherwise draft what you would say, in chat, and ask them to confirm.",
+  "Say what the call is for in the purpose parameter before you write the request, and take that from what the user actually wants rather than from what will be accepted: a call to sell, pitch, or promote something to whoever answers is refused outright, and recasting the same call under another purpose is not a way round it, so say it cannot be placed and leave it there.",
   "The phone provider does not place calls to mobile numbers, so a mobile destination is refused before anything is dialled; landlines are callable, business or residential. When the only number the user has for someone is a mobile, including their own, say it cannot be called rather than trying it, and when they name a business, prefer its main published line over a mobile contact number.",
   "Every call raises an approval card first and the user reads the whole script on it before anything is placed, so keep it plain enough for them to judge, but write it as instructions to the voice agent, never as a summary it should read out or report back.",
-  "The script has to carry the actual question you want answered, because the voice agent will not invent one: give it nothing to ask and it reaches a stranger, exchanges a greeting, and hangs up having wasted their time.",
+  "The only people on the call are the voice agent and whoever picks up at the number. The user is not on it and cannot be asked anything: name them only as the person the call is on behalf of, never as someone the voice agent greets, addresses, or puts a question to.",
+  "The script has to carry the actual question you want answered, put to whoever picks up, because the voice agent will not invent one: give it nothing to ask and it reaches a stranger, exchanges a greeting, and hangs up having wasted their time.",
   "The caller id is provisioned for that one call and nothing answers it afterwards, so never write a script that offers it as a callback number or promises the person can reach anyone there.",
   "The voice agent does not say it is an AI unless your script tells it to, so add that instruction when the user asks for it or the call plainly calls for it."
 ];
@@ -482972,7 +483659,7 @@ var SKILLIFY_HARNESS_SKILLS = [
   {
     id: SKILLIFY_SKILL_IDS.noConnectorFallback,
     description: "When a service the user needs has no connector, a connector is missing or needs installing or auth, a box CLI such as `gh` needs a login, or a browser workflow hits a sign-in wall.",
-    body: noConnectorFallbackSkillBody(false)
+    body: noConnectorFallbackSkillBody({ credentialFillEnabled: false })
   },
   {
     id: SKILLIFY_SKILL_IDS.inChatForms,
@@ -483031,7 +483718,7 @@ var SKILLIFY_HARNESS_SKILLS = [
   },
   {
     id: SKILLIFY_SKILL_IDS.sourceControl,
-    description: "When a task touches GitHub or another source-control provider: reading or acting on repos, pull requests, issues, or CI with the built-in tools, choosing between them and a cloud agent, or a tool says the provider isn't connected or a repo isn't accessible.",
+    description: "When a task touches GitHub, Cursor Origin, or another source-control provider: reading or acting on repos, pull requests, issues, or CI with the built-in tools, choosing between them and a cloud agent, or a tool refuses for access or connection reasons.",
     body: skillMarkdown("Source control", SOURCE_CONTROL_LINES)
   },
   {
@@ -483062,13 +483749,13 @@ function sendOnBehalfSkillBody({
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-browser-surface.ts
-function sandBrowserToolSurface(gates) {
-  return gates.browserUsePlaywright() ? "playwright" : "driver";
+function sandBrowserToolSurface(host) {
+  return host.browserToolSurface ?? (host.gates.browserUsePlaywright() ? "playwright" : "driver");
 }
 function resolveSandBrowserSurface(host) {
   if (!host.remoteBoxHasDesktop || !host.getRemoteBoxAvailable()) return "none";
   if (host.isBrowserUseSubagent) return "driver";
-  return host.isComputerUseSubagent && host.isCombinedComputerUseAvailable() ? sandBrowserToolSurface(host.gates) : "none";
+  return host.isComputerUseSubagent && host.isCombinedComputerUseAvailable() ? sandBrowserToolSurface(host) : "none";
 }
 
 // ../packages/grok-bot-harness/src/runner/video-container.ts
@@ -483267,7 +483954,7 @@ function createPromptCollectorGlue(host) {
     const combined = host.isCombinedComputerUseAvailable();
     if (host.isComputerUseSubagent && combined) {
       return combinedComputerPrompt({
-        browser: SAND_BROWSER_TOOL_SETS[sandBrowserToolSurface(host.gates)].promptLines,
+        browser: SAND_BROWSER_TOOL_SETS[sandBrowserToolSurface(host)].promptLines,
         browserNavigationRecovery: host.gates.browserNavigationRecovery(),
         boxBrowser: host.resolveBoxBrowser()
       });
@@ -483913,6 +484600,17 @@ function createSandAgentEventTracker(options2) {
       });
     }
   };
+}
+
+// ../packages/grok-bot-harness/src/runner/session-kinds.ts
+var GROK_BOT_SESSION_KIND_MAIN = "main";
+var GROK_BOT_SESSION_KIND_SLACK_DM = "slack_dm";
+var GROK_BOT_SESSION_KIND_SLACK_GROUP_DM = "slack_group_dm";
+var GROK_BOT_SESSION_KIND_SLACK_THREAD = "slack_thread";
+var GROK_BOT_SESSION_KIND_DM = "dm";
+var GROK_BOT_SESSION_KIND_GROUP = "group";
+function isGrokBotSlackSessionKind(kind) {
+  return kind === GROK_BOT_SESSION_KIND_SLACK_DM || kind === GROK_BOT_SESSION_KIND_SLACK_GROUP_DM || kind === GROK_BOT_SESSION_KIND_SLACK_THREAD;
 }
 
 // ../packages/grok-bot-harness/src/runner/sessions/runner-pending-summary-store.ts
@@ -485183,6 +485881,20 @@ function resolveFrozenPromptSection(args) {
     snapshotToPersist: { render: live, compactionEpoch }
   };
 }
+function resolveUserBotNotesPrompt(args) {
+  const { snapshot, compactionEpoch, speakerKey } = args;
+  if (speakerKey === void 0 || snapshot === null || snapshot.compactionEpoch !== compactionEpoch) {
+    return { render: args.renderLive() };
+  }
+  if (snapshot.userBotSpeakerKey === speakerKey && snapshot.userBotRender !== void 0) {
+    return { render: snapshot.userBotRender };
+  }
+  const render2 = args.renderLive();
+  return {
+    render: render2,
+    snapshotToPersist: { ...snapshot, userBotRender: render2, userBotSpeakerKey: speakerKey }
+  };
+}
 function resolveOtherAgentMemoryPromptUpdate(args) {
   const { snapshot, compactionEpoch, liveRender, liveFingerprint } = args;
   if (snapshot === null || snapshot.compactionEpoch !== compactionEpoch || liveFingerprint === void 0) {
@@ -485298,6 +486010,9 @@ function renderFrozenPromptSectionUpdates(updates) {
 }
 
 // ../packages/grok-bot-harness/src/runner/sand-memory.ts
+function memoryRecallHasFacts(recall) {
+  return recall.profile.length > 0 || recall.recent.length > 0;
+}
 var MEMORY_RECENT_PROMPT_LIMIT = 30;
 var MEMORY_RECENT_PROMPT_CHAR_BUDGET = 4e3;
 var MEMORY_PROFILE_PROMPT_CHAR_BUDGET = 4e3;
@@ -485404,8 +486119,13 @@ var SAND_RECALL_MEMORY_TOOL_NAME = "RecallMemory";
 var MEMORY_UPDATE_STATE_GUIDANCE = 'To CHANGE memory, prefer the update_state tool (target "memory"): action "write" with a fact and a tier (profile | log | note), or action "forget" with the exact text of a recorded fact.';
 var MEMORY_CONVERSATION_SCOPE_DEFAULT_LABEL = {
   conversation: "this conversation's own memory",
-  agent: "your memory in every conversation"
+  agent: "your memory in every conversation",
+  user_bot: "your notes with this person"
 };
+var MEMORY_USER_BOT_WRITE_TARGET_LABEL = MEMORY_CONVERSATION_SCOPE_DEFAULT_LABEL.user_bot;
+var MEMORY_USER_BOT_SCOPE_STORY = 'scope "user_bot" is what you and this person keep between you: their asks, their context, notes for them; it follows them across their app DM, Slack DM and channel threads with you, and no teammate or other assistant reads it.';
+var MEMORY_USER_BOT_PROMPT_HEADING = "Notes with this person:";
+var MEMORY_USER_BOT_PROMPT_CHAR_BUDGET = 2e3;
 var MEMORY_USER_SCOPE_STORY = {
   owner: `scope "user" is durable facts about the agent's owner, shared across everything they run.`,
   refused: `scope "user" is the owner's memory across their agents and cannot be written from this conversation.`,
@@ -485415,27 +486135,43 @@ var MEMORY_USER_SCOPE_STORY = {
 var MEMORY_TEAM_SHARED_SAVE_NOTICE = 'This assistant is shared with the team, so scope "agent" is team-wide memory everyone who talks to it sees: whenever you save or forget a team-wide fact, tell the user you have done so in your reply (one short sentence is enough). Conversation- and user-scoped saves need no announcement.';
 var MEMORY_TEAM_SHARED_WRITE_RUBRIC = 'Team-wide memory (scope "agent") is only for who you are and how you do the job for anyone on the team: processes, tools, conventions, how you should behave. Save there only when you are certain from what the person said that the whole team should have it. Never team-wide: anything about a person (their offers, accounts, contacts, schedule, opinions, anything sensitive) or anything told for themselves or for this thread. It is not your scratch pad either: working notes, drafts, and progress stay in this conversation. When unsure, use scope "conversation" (or scope "user" where it is offered); never guess into "agent".';
 var MEMORY_PRIVATE_MAIN_NOTICE = `This is the owner's own conversation with you, so scope "conversation" here is the owner's private memory, which no teammate's session reads; to move facts between private and team memory, send the share card with sort_memories, which asks the owner before anything moves, and if the owner asked you to sort and then moved on to something else, bring the card back once that is done, and only that once.`;
+var MEMORY_TEAM_SHARED_SAVE_NOTICE_NOTES = MEMORY_TEAM_SHARED_SAVE_NOTICE.replace(
+  "Conversation- and user-scoped saves need no announcement.",
+  "Saves to your notes with this person or to user memory need no announcement."
+);
+var MEMORY_TEAM_SHARED_WRITE_RUBRIC_NOTES = MEMORY_TEAM_SHARED_WRITE_RUBRIC.replace(
+  'working notes, drafts, and progress stay in this conversation. When unsure, use scope "conversation"',
+  'working notes, drafts, and progress stay in your notes with this person. When unsure, use scope "user_bot"'
+);
 function renderMemoryConversationScopeStory({
   defaultScope,
+  conversationScope,
   userScope,
   teamShared,
-  privateMain
+  privateMain,
+  userBotScope
 }) {
   const userStory = MEMORY_USER_SCOPE_STORY[userScope ?? (defaultScope === "agent" || privateMain === true ? "owner" : "refused")];
-  const base = `scope "conversation" is this conversation's own memory: things only this thread cares about (its decisions, its context, the people in it). scope "agent" is what you should know in every conversation: who you are, team-wide facts, how you do your job. ${userStory} A save or forget with no scope goes to ${MEMORY_CONVERSATION_SCOPE_DEFAULT_LABEL[defaultScope]} (scope "${defaultScope}"). Unless a fact clearly applies to every conversation, keep it in this conversation.`;
-  const shared = teamShared === true ? `${base} ${MEMORY_TEAM_SHARED_SAVE_NOTICE} ${MEMORY_TEAM_SHARED_WRITE_RUBRIC}` : base;
+  const scopeStories = userBotScope === void 0 ? userStory : `${MEMORY_USER_BOT_SCOPE_STORY} ${userStory}`;
+  const noSessionMemory = conversationScope === "none";
+  const conversationStory = noSessionMemory ? "" : `scope "conversation" is this conversation's own memory: things only this thread cares about (its decisions, its context, the people in it). `;
+  const keepIt = noSessionMemory ? "keep it in your notes with this person" : "keep it in this conversation";
+  const base = `${conversationStory}scope "agent" is what you should know in every conversation: who you are, team-wide facts, how you do your job. ${scopeStories} A save or forget with no scope goes to ${MEMORY_CONVERSATION_SCOPE_DEFAULT_LABEL[defaultScope]} (scope "${defaultScope}"). Unless a fact clearly applies to every conversation, ${keepIt}.`;
+  const teamTail = noSessionMemory ? `${MEMORY_TEAM_SHARED_SAVE_NOTICE_NOTES} ${MEMORY_TEAM_SHARED_WRITE_RUBRIC_NOTES}` : `${MEMORY_TEAM_SHARED_SAVE_NOTICE} ${MEMORY_TEAM_SHARED_WRITE_RUBRIC}`;
+  const shared = teamShared === true ? `${base} ${teamTail}` : base;
   return privateMain === true ? `${shared} ${MEMORY_PRIVATE_MAIN_NOTICE}` : shared;
 }
 var MEMORY_TEAM_SHARED_PROMPT_OPENING = "Memory: durable facts you have learned about your work, your team, and the people you talk to. You are shared with a team, so untagged facts are team-wide: your owner or a teammate saved them, and they are about the work or the team, not necessarily about the person you are talking with now; facts tagged [this conversation] are about this conversation.";
+var MEMORY_TEAM_SHARED_PROMPT_OPENING_NOTES = MEMORY_TEAM_SHARED_PROMPT_OPENING.replace(
+  "; facts tagged [this conversation] are about this conversation.",
+  '; facts under "Notes with this person:" are what you and this person keep between you.'
+);
+var MEMORY_PERSISTENCE_LINE_NOTES = "Agent-wide facts persist across every conversation with this agent; your notes with this person persist across every conversation you have with them. Rely on them so you stay consistent and avoid re-asking what you already know.";
 var MEMORY_TEAM_SHARED_PROFILE_HEADING = "About your work and the people you talk to:";
 function renderMemoryPolicyPrompt(location, opts, includeSourceTagGuidance = true) {
   const conversationMemory = opts?.conversationMemory;
   const conversationScoped = conversationMemory !== void 0;
-  const teamShared = conversationMemory?.teamShared === true;
-  const lines2 = [
-    teamShared ? MEMORY_TEAM_SHARED_PROMPT_OPENING : "Memory: durable facts you have learned about the user and their world.",
-    conversationScoped ? "Agent-wide facts persist across every conversation with this agent; facts saved to this conversation's memory persist for this conversation and the agent's conversations with the same audience. Rely on them so you stay consistent and avoid re-asking what you already know." : "These persist across every conversation with this agent, even after the chat is cleared. Rely on them so you stay consistent and avoid re-asking what you already know."
-  ];
+  const lines2 = [memoryOpeningLine(conversationMemory), memoryPersistenceLine(conversationMemory)];
   if (location != null) {
     lines2.push(
       `Your memory lives in a folder at ${location}: profile.md holds who the user is (kept in mind every turn) and log/ holds dated history.`,
@@ -485450,8 +486186,51 @@ function renderMemoryPolicyPrompt(location, opts, includeSourceTagGuidance = tru
     lines2.push(`Where to save: ${renderMemoryConversationScopeStory(conversationMemory)}`);
   }
   if (conversationScoped && includeSourceTagGuidance) {
+    lines2.push(memoryLegendLine(conversationMemory));
+  }
+  return lines2.join("\n");
+}
+function memoryOpeningLine(story) {
+  if (story?.teamShared !== true) {
+    return "Memory: durable facts you have learned about the user and their world.";
+  }
+  return story.conversationScope === "none" ? MEMORY_TEAM_SHARED_PROMPT_OPENING_NOTES : MEMORY_TEAM_SHARED_PROMPT_OPENING;
+}
+function memoryPersistenceLine(story) {
+  if (story === void 0) {
+    return "These persist across every conversation with this agent, even after the chat is cleared. Rely on them so you stay consistent and avoid re-asking what you already know.";
+  }
+  return story.conversationScope === "none" ? MEMORY_PERSISTENCE_LINE_NOTES : "Agent-wide facts persist across every conversation with this agent; facts saved to this conversation's memory persist for this conversation and the agent's conversations with the same audience. Rely on them so you stay consistent and avoid re-asking what you already know.";
+}
+function memoryLegendLine(story) {
+  if (story.conversationScope === "none") {
+    return `Untagged facts are agent-wide. ${MEMORY_USER_BOT_LEGEND}`;
+  }
+  return story.userBotScope === void 0 ? MEMORY_SOURCE_TAG_LEGEND : `${MEMORY_SOURCE_TAG_LEGEND} ${MEMORY_USER_BOT_LEGEND}`;
+}
+var MEMORY_SOURCE_TAG_LEGEND = "Facts saved from this conversation are tagged [this conversation] and facts from another conversation with the same audience are tagged [via session <id>]; untagged facts are agent-wide.";
+var MEMORY_USER_BOT_LEGEND = `Facts under "${MEMORY_USER_BOT_PROMPT_HEADING}" are scope "user_bot", kept between you and this person.`;
+function appendBudgetedFacts(lines2, records2, renderFact, charBudget) {
+  let budget = charBudget;
+  let shown = 0;
+  for (const memory of records2) {
+    const line = renderFact(memory);
+    if (shown > 0 && line.length > budget) break;
+    lines2.push(line);
+    budget -= line.length;
+    shown += 1;
+  }
+  return records2.length - shown;
+}
+function renderUserBotNotesPrompt(recall) {
+  if (recall === void 0) return "";
+  const facts = [...recall.profile, ...recall.recent];
+  if (facts.length === 0) return "";
+  const lines2 = [MEMORY_USER_BOT_PROMPT_HEADING];
+  const omitted = appendBudgetedFacts(lines2, facts, factLine, MEMORY_USER_BOT_PROMPT_CHAR_BUDGET);
+  if (omitted > 0) {
     lines2.push(
-      "Facts saved from this conversation are tagged [this conversation] and facts from another conversation with the same audience are tagged [via session <id>]; untagged facts are agent-wide."
+      `(${omitted} more notes not shown. Call ${SAND_RECALL_MEMORY_TOOL_NAME} (scope "user_bot") to search them.)`
     );
   }
   return lines2.join("\n");
@@ -485468,16 +486247,12 @@ function renderMemoryFactSnapshot(recall, location, opts) {
   const lines2 = [];
   if (profile.length > 0) {
     lines2.push(teamShared ? MEMORY_TEAM_SHARED_PROFILE_HEADING : "About the user:");
-    let budget = MEMORY_PROFILE_PROMPT_CHAR_BUDGET;
-    let shown = 0;
-    for (const memory of profile) {
-      const line = renderFact(memory);
-      if (shown > 0 && line.length > budget) break;
-      lines2.push(line);
-      budget -= line.length;
-      shown += 1;
-    }
-    const omitted = profile.length - shown;
+    const omitted = appendBudgetedFacts(
+      lines2,
+      profile,
+      renderFact,
+      MEMORY_PROFILE_PROMPT_CHAR_BUDGET
+    );
     if (omitted > 0) {
       lines2.push(
         location != null ? `(${omitted} more profile facts on disk. Call ${SAND_RECALL_MEMORY_TOOL_NAME} or grep profile.md for them.)` : `(${omitted} more profile facts not shown. Call ${SAND_RECALL_MEMORY_TOOL_NAME} to search them.)`
@@ -485486,31 +486261,26 @@ function renderMemoryFactSnapshot(recall, location, opts) {
   }
   if (recent.length > 0) {
     lines2.push("Recently:");
-    let budget = MEMORY_RECENT_PROMPT_CHAR_BUDGET;
-    let shown = 0;
-    for (const memory of recent) {
-      const line = renderFact(memory);
-      if (shown > 0 && line.length > budget) break;
-      lines2.push(line);
-      budget -= line.length;
-      shown += 1;
-    }
-    const omitted = recent.length - shown;
+    const omitted = appendBudgetedFacts(
+      lines2,
+      recent,
+      renderFact,
+      MEMORY_RECENT_PROMPT_CHAR_BUDGET
+    );
     if (omitted > 0) {
       lines2.push(
         location != null ? `(${omitted} more log facts on disk. Call ${SAND_RECALL_MEMORY_TOOL_NAME} or grep the log/ folder for them.)` : `(${omitted} more log facts not shown. Call ${SAND_RECALL_MEMORY_TOOL_NAME} to search them.)`
       );
     }
   }
-  if (profile.length === 0 && recent.length === 0) {
+  if (lines2.length === 0) {
     lines2.push("No facts recorded yet.");
   }
   return lines2.join("\n");
 }
 function renderMemorySystemPrompt(recall, location, opts) {
-  const hasFacts = recall.profile.length > 0 || recall.recent.length > 0;
   return [
-    renderMemoryPolicyPrompt(location, opts, hasFacts),
+    renderMemoryPolicyPrompt(location, opts, memoryRecallHasFacts(recall)),
     renderMemoryFactSnapshot(recall, location, opts)
   ].join("\n");
 }
@@ -485631,9 +486401,9 @@ function relevanceTokens(text2) {
   }
   return tokens;
 }
-function selectRelevantMemories(query, memories, max) {
+function selectRelevantMemories(query2, memories, max) {
   if (max <= 0 || memories.length === 0) return [];
-  const queryTokens = relevanceTokens(query);
+  const queryTokens = relevanceTokens(query2);
   if (queryTokens.size === 0) return [];
   const scored = [];
   for (const memory of memories) {
@@ -485645,16 +486415,21 @@ function selectRelevantMemories(query, memories, max) {
   }
   return scored.sort((a, b2) => b2.overlap - a.overlap || b2.memory.createdAt - a.memory.createdAt).slice(0, max).map((entry) => entry.memory);
 }
-function searchMemoryRecords(query, memories, max) {
+function searchMemoryRecords(query2, memories, max) {
   if (max <= 0 || memories.length === 0) return [];
-  const byOverlap = selectRelevantMemories(query, memories, max);
+  const byOverlap = selectRelevantMemories(query2, memories, max);
   if (byOverlap.length > 0) return byOverlap;
-  const needle = query.trim().toLowerCase();
+  const needle = query2.trim().toLowerCase();
   if (needle.length === 0) return [];
   return memories.filter((memory) => memory.content.toLowerCase().includes(needle)).sort((a, b2) => b2.createdAt - a.createdAt).slice(0, max);
 }
 function gatherExtractionMemories(recall, archive, exchangeText) {
-  const inPrompt = [...recall.profile, ...recall.recent];
+  const inPrompt = [
+    ...recall.profile,
+    ...recall.recent,
+    ...recall.userBot?.profile ?? [],
+    ...recall.userBot?.recent ?? []
+  ];
   const seen = new Set(inPrompt.map((memory) => memoryDedupeKey(memory.content)));
   const candidates = archive.filter((memory) => !seen.has(memoryDedupeKey(memory.content)));
   const relevant = selectRelevantMemories(
@@ -485885,14 +486660,6 @@ function renderOtherAssistantMemoryUpdate(facts) {
   ].join("\n");
 }
 
-// ../packages/grok-bot-harness/src/runner/session-kinds.ts
-var GROK_BOT_SESSION_KIND_MAIN = "main";
-var GROK_BOT_SESSION_KIND_SLACK_DM = "slack_dm";
-var GROK_BOT_SESSION_KIND_SLACK_GROUP_DM = "slack_group_dm";
-var GROK_BOT_SESSION_KIND_SLACK_THREAD = "slack_thread";
-var GROK_BOT_SESSION_KIND_DM = "dm";
-var GROK_BOT_SESSION_KIND_GROUP = "group";
-
 // ../packages/grok-bot-harness/src/runner/session-context-prompt.ts
 var GROK_BOT_SESSION_PARTICIPANTS_PROMPT_MAX = 8;
 var SLACK_ONE_REPLY_LINE = "In Slack, each SendToUser call is a separate message in this conversation, and people read it as one exchange, so gather your answer and send it once; split only when the parts are genuinely separate, such as a quick acknowledgement before a long task";
@@ -485903,6 +486670,7 @@ var SLACK_READING_MEDIUM_LINES = [
   "In a long analysis, the headline and the two or three points that decide it are what gets read in a thread, and the full detail is something people would rather ask for than scroll past",
   "When naming a Slack channel in a reply, write <#CHANNEL_ID> so it renders as the channel name, and never paste a bare #C\u2026 or #G\u2026 ID"
 ];
+var SLACK_NO_HANDOVER_LINE = 'You still have your own computer and may use it (browser and desktop) for the task, but in Slack you cannot hand that computer over to anyone: do not call request_box_help, do not offer to hand over or open your computer, and do not ask anyone to watch the screen or sign in on your computer from here. Prefer connectors. If a site needs a human sign-in that only a handover can finish, say that plainly and ask the person to continue the same ask in the Grok Bot app, where handover works, or stop; never invent a workaround, and never tell anyone they can take control of your computer in Slack. To teammates call it "my computer"; do not explain boxes, shared sessions, or machine-sharing.';
 var AUTOMATIONS_IN_APP_ONLY_LINE = "Routines cannot be created, changed, or resumed from this conversation, so never offer or promise to set one up here. They are set up in the Grok Bot app, in the person's own chat with you there (your owner from their main conversation), which is also where they see and manage them; when someone asks for one, say that, and note that a routine saved there can still listen to Slack or post to a Slack channel. Pausing or deleting a routine from here works.";
 var SLACK_PLUGIN_AUTH_LINE = "In Slack, cards are not rendered and grokbot:// links are not delivered. Start a sign-in the normal way, AuthenticateMcpServer for a connector that reads needsAuth and request_scm_connect for source control: the tool result hands you the card's sign-in link. Put that exact link in your reply, worded for the person, where it reads naturally; never paste an authorization URL or a grokbot:// link, and never invent a link the result did not give you. Finishing a sign-in does not wake this conversation, so ask the person to reply here when they are done, then wait. When the result says there is no link (a connector without a numeric plugin id), say they need to connect it in the Grok Bot app. A team connector missing setup is not needsAuth: no sign-in and no value prompt. If a later reply still shows needsAuth, including a reply from someone else, start the sign-in again and do not claim it succeeded. Already authenticated: nothing to send.";
 function slackSegments(sessionId) {
@@ -485947,14 +486715,14 @@ function whereLine(session) {
 function renderCurrentSessionPrompt(session) {
   if (session === void 0) return null;
   if (session.sessionId.length === 0 || session.kind === GROK_BOT_SESSION_KIND_MAIN) return null;
-  const inSlack = session.kind === GROK_BOT_SESSION_KIND_SLACK_DM || session.kind === GROK_BOT_SESSION_KIND_SLACK_GROUP_DM || session.kind === GROK_BOT_SESSION_KIND_SLACK_THREAD;
+  const inSlack = isGrokBotSlackSessionKind(session.kind);
   const automationsInAppOnly = inSlack || session.kind === GROK_BOT_SESSION_KIND_GROUP;
   return [
     `Current conversation (session_id: ${session.sessionId}).`,
     whereLine(session),
     "Only the people in this conversation see what you say here; the agent's other conversations have their own history.",
     ...automationsInAppOnly ? [AUTOMATIONS_IN_APP_ONLY_LINE] : [],
-    ...inSlack ? [SLACK_ONE_REPLY_LINE, ...SLACK_READING_MEDIUM_LINES] : [],
+    ...inSlack ? [SLACK_ONE_REPLY_LINE, ...SLACK_READING_MEDIUM_LINES, SLACK_NO_HANDOVER_LINE] : [],
     ...inSlack && session.slackPluginAuthLink === true ? [SLACK_PLUGIN_AUTH_LINE] : []
   ].join("\n");
 }
@@ -486087,8 +486855,8 @@ var ZoomSite = class _ZoomSite extends MeetingSite {
     const id = _ZoomSite.meetingId(parts);
     if (id === null) return null;
     const password = _ZoomSite.password(trimmed);
-    const query = password === null || password.length === 0 ? "" : `?pwd=${encodeURIComponent(password)}`;
-    return { url: `https://${MeetingHosts.zoom}/wc/join/${id}${query}` };
+    const query2 = password === null || password.length === 0 ? "" : `?pwd=${encodeURIComponent(password)}`;
+    return { url: `https://${MeetingHosts.zoom}/wc/join/${id}${query2}` };
   }
   static meetingId(parts) {
     const [head, second, third] = parts;
@@ -486099,9 +486867,9 @@ var ZoomSite = class _ZoomSite extends MeetingSite {
     return null;
   }
   static password(raw) {
-    const query = raw.split("#")[0]?.split("?")[1];
-    if (query === void 0) return null;
-    for (const part of query.split("&")) {
+    const query2 = raw.split("#")[0]?.split("?")[1];
+    if (query2 === void 0) return null;
+    for (const part of query2.split("&")) {
       if (!part.startsWith("pwd=")) continue;
       try {
         const decoded = decodeURIComponent(part.slice(4).replace(/\+/g, "%2B"));
@@ -486156,11 +486924,15 @@ var TEAM_BOT_LINE = "Team bot: your owner shared you with their whole team. Each
 var TEAM_BOT_UNPUBLISHED_LINE = "Team bot, not published yet: only your owner can see you until they publish you, which they can do once setup is done, from the Publish to team card in this chat or by asking you, so this chat is where they try you out. When a teammate opens you later, they start a fresh chat: nothing said here carries over, only what is saved on you for the team (team memory, how-tos, plugins, secrets).";
 var TEAM_BOT_VOICE_LINE = "You talk with your team in chat, so write the way a teammate types: plain, warm words and short sentences, with a comma or a period where a pause goes rather than a dash.";
 var SLACK_APP_MEANING = "You have no Slack app of your own yet. Having one means teammates can DM you or @mention you in Slack and reach you there, which is what adding you to Slack sets up; reading and posting in Slack is the Slack plugin's job when it is among your tools, with or without an app of your own.";
-var SLACK_NOT_INSTALLED_LINE = `${SLACK_APP_MEANING} Your owner can add you from Team access in the app.`;
+var SLACK_NOT_INSTALLED_LINE = `${SLACK_APP_MEANING} Your owner can add you from your Details in the Grok Bot app.`;
 var SLACK_SETUP_LINE = `${SLACK_APP_MEANING} Your own app comes up when the owner wants teammates to reach you from Slack or asks how to talk to you there: slack_setup start creates it in their workspace and puts any step that needs the owner in the chat as a link, and slack_setup status says where the install stands. Only the owner can add you, so a teammate who asks hears that it is the owner's to do.`;
 var SLACK_AWAITS_PUBLISH_SENTENCE = " While you are unpublished, adding you to Slack waits: the owner publishes you first, once setup is done, from the Publish to team card in this chat, and can add you right after.";
-var CONNECTOR_ACCOUNTS_LINE = "Your connectors and MCP tools act as the person you are answering right now, not as your owner or another teammate: a user-login connector reaches only what that person has connected, and one person's connection is never lent to another. When a connector reads needsAuth, that person has not connected it yet, and the sign-in is theirs, since anyone else who signs in connects it only for their own messages: in the app AuthenticateMcpServer shows them the connect card, and in Slack, where cards do not show, they get the plugin sign-in link. When a connector reads needsGrant, that person has already connected it and has not yet let you use it this turn, so nothing needs signing in or installing, and reaching the same service another way would go around their answer. needsGrant and needsAuth are not \"no connector\": the connector is there, so never escalate to the browser or desktop for that service. When the task needs it (a link into that service, or a request only it can answer), that connector's step comes first and is the only one: for needsAuth in a Slack conversation whose instructions give a plugin sign-in link, that link, and otherwise AuthenticateMcpServer with that connector's identifier, which asks them in the thread for a go-ahead that covers this turn only and pauses you until they answer (Allow lists its tools; Skip means leave it unused this reply, and the next message may ask again). Plugins set up with `${VAR}` values are the bot's own credentials and work the same for everyone. When a service someone needs is not among your tools, a teammate can add it for themselves: InstallPlugin from their conversation installs it as a personal plugin for them, so only their turns with you get it, while adding a plugin to you for everyone stays the owner's to do from their own conversation.";
-var TEAM_KNOWLEDGE_LINE = `A team skill is a repeatable how-to. Saved with update_state (skill write), it is published to every teammate and shapes how you work for all of them, so when a file or an explanation reads like a process, offer to save it as a team how-to and say that everyone gets it. Only the owner can save one, and their yes is the save; in a teammate's chat the rule goes to this conversation's memory (scope "conversation") unless the owner or the teammate says the whole team should have it, and the teammate hears that the owner can make it a how-to. A short fact or rule about the team or its tools is memory, team-wide only when the person says everyone should have it. A file dropped in the chat is on your box at the path shown, readable as it is, and most of those are reference material or data rather than a how-to. A key or token you need and do not have arrives through the secret-request card in the owner's chat and is saved on you for the team, so a teammate who needs one hears that the owner adds it.`;
+var CONNECTOR_ACCOUNTS_LINE = "Your connectors and MCP tools act as the person you are answering right now, not as your owner or another teammate: a user-login connector reaches only what that person has connected, and one person's connection is never lent to another. When a connector reads needsAuth, that person has not connected it yet, and the sign-in is theirs, since anyone else who signs in connects it only for their own messages: in the app AuthenticateMcpServer shows them the connect card, and in Slack, where cards do not show, they get the plugin sign-in link. When a connector reads needsGrant, that person has already connected it and has not yet let you use it this turn, so nothing needs signing in or installing, and reaching the same service another way would go around their answer. needsGrant and needsAuth are not \"no connector\": the connector is there, so never escalate to the browser or desktop for that service. When the task needs it (a link into that service, or a request only it can answer), that connector's step comes first and is the only one: for needsAuth in a Slack conversation whose instructions give a plugin sign-in link, that link, and otherwise AuthenticateMcpServer with that connector's identifier, which asks them in the thread for a go-ahead that covers this turn only and pauses you until they answer (Allow lists its tools; Skip means leave it unused this reply, and the next message may ask again). When the tool answers that there is no place to ask, no Allow card was raised here or in the app, so never send them to the app for a waiting card; say what you could not check, and that their connector can be used when they ask you afresh in their own chat with you. Plugins set up with `${VAR}` values are the bot's own credentials and work the same for everyone. When a service someone needs is not among your tools, a teammate can add it for themselves: InstallPlugin from their conversation installs it as a personal plugin for them, so only their turns with you get it, while adding a plugin to you for everyone stays the owner's to do from their own conversation.";
+var teamKnowledgeLine = (teammateRuleHome) => `A team skill is a repeatable how-to. Saved with update_state (skill write), it is published to every teammate and shapes how you work for all of them, so when a file or an explanation reads like a process, offer to save it as a team how-to and say that everyone gets it. Only the owner can save one, and their yes is the save; in a teammate's chat the rule goes to ${teammateRuleHome} unless the owner or the teammate says the whole team should have it, and the teammate hears that the owner can make it a how-to. A short fact or rule about the team or its tools is memory, team-wide only when the person says everyone should have it. A file dropped in the chat is on your box at the path shown, readable as it is, and most of those are reference material or data rather than a how-to. A key or token you need and do not have arrives through the secret-request card in the owner's chat and is saved on you for the team, so a teammate who needs one hears that the owner adds it.`;
+var TEAM_KNOWLEDGE_LINE = teamKnowledgeLine(`this conversation's memory (scope "conversation")`);
+var TEAM_KNOWLEDGE_LINE_NOTES = teamKnowledgeLine(
+  'your notes with that person (scope "user_bot")'
+);
 var AUTOMATIONS_ARE_PERSONAL_LINE = "Routines are personal. Each one belongs to whoever set it up with you, in their own chat with you in the Grok Bot app: it runs as them and reports there, and only they see it or change it, so no routine runs for the whole team at once. Routines are created, edited and resumed only in that app chat, not from Slack or a group chat, so someone who asks there hears where to go. When someone wants a routine the whole team gets, tell them it would be theirs, running as them from their own chat, and that what reaches everyone is a Slack channel listener, which answers in the Slack thread that triggered it, or a routine whose saved instruction posts its result somewhere shared, such as a Slack channel.";
 var AUTO_REVIEW_OFF_LINE = "Auto-review is off in this conversation: nobody here can answer an approval card, so none is raised. Act within the permissions this bot was set up with; when a task needs access you lack, say so and let the people here decide instead of widening your access or routing around a tool's refusal.";
 var SLACK_SESSION_CHANNEL_LINE = "When this conversation is a Slack session (an inbound address shaped slack:\u2026), every SendToUser that Slack teammates should see sets channel to that same Slack address (slack:C\u2026:thread_ts for a thread); omitting channel delivers to the in-app Grok Bot chat, which they never see, and a successful tool result does not mean it landed in Slack.";
@@ -486195,7 +486967,7 @@ function renderTeamBotPrompt(identity) {
     identity.published === false ? TEAM_BOT_UNPUBLISHED_LINE : TEAM_BOT_LINE,
     slackLine(identity),
     CONNECTOR_ACCOUNTS_LINE,
-    TEAM_KNOWLEDGE_LINE,
+    identity.teammateNotes === true ? TEAM_KNOWLEDGE_LINE_NOTES : TEAM_KNOWLEDGE_LINE,
     AUTOMATIONS_ARE_PERSONAL_LINE,
     TEAM_BOT_VOICE_LINE,
     ...identity.autoReviewOff === true ? [AUTO_REVIEW_OFF_LINE] : []
@@ -486313,11 +487085,13 @@ function createSystemPromptAssembly(deps) {
     const store = deps.memoryStore();
     if (store == null) return null;
     const agentRecall = store.recall(MEMORY_RECENT_PROMPT_LIMIT);
+    const userBotNotes = renderUserBotNotesPrompt(agentRecall.userBot);
+    const userBotSpeakerKeyWhenServed = store.memoryScopes?.userBot == null ? void 0 : store.memoryScopes.userBotSpeakerKey;
     const controlParts = [];
     const policyParts = [];
     const factParts = [];
     const userMemory = deps.userMemory();
-    let hasFacts = agentRecall.profile.length > 0 || agentRecall.recent.length > 0;
+    let hasFacts = memoryRecallHasFacts(agentRecall);
     let otherAgentMemoryRender = "";
     let otherAgentMemoryFingerprint;
     if (userMemory != null) {
@@ -486350,7 +487124,9 @@ function createSystemPromptAssembly(deps) {
       facts: factParts.join("\n\n"),
       hasFacts,
       otherAgentMemoryRender,
-      otherAgentMemoryFingerprint
+      otherAgentMemoryFingerprint,
+      userBotNotes,
+      userBotSpeakerKey: userBotSpeakerKeyWhenServed
     };
   }
   function memoryFactsLiveOrNull() {
@@ -486470,15 +487246,42 @@ function createSystemPromptAssembly(deps) {
     }
     return resolved.render;
   }
+  function resolveSpeakerPinnedUserBotNotes(live) {
+    const promptSnapshots = deps.promptSectionSnapshots();
+    if (promptSnapshots === void 0) return live.userBotNotes;
+    const resolved = resolveUserBotNotesPrompt({
+      snapshot: promptSnapshots.getPromptSectionSnapshot("memory"),
+      compactionEpoch: deps.compactionEpoch(),
+      speakerKey: live.userBotSpeakerKey,
+      renderLive: () => live.userBotNotes
+    });
+    if (resolved.snapshotToPersist !== void 0) {
+      promptSnapshots.setPromptSectionSnapshot("memory", resolved.snapshotToPersist);
+    }
+    return resolved.render;
+  }
+  function withUserBotNotes(section) {
+    return section.notes.length === 0 ? section.frozen : `${section.frozen}
+${section.notes}`;
+  }
   function getMemorySections() {
     const live = renderMemoryLive();
     if (live === null) return null;
     if (!memoryFactsInUserInfo(true)) {
-      return { system: resolveMemoryControl(live) };
+      const control = resolveMemoryControl(live);
+      return {
+        system: withUserBotNotes({
+          frozen: control,
+          notes: resolveSpeakerPinnedUserBotNotes(live)
+        })
+      };
     }
     const facts = resolveMemoryFacts(live);
     return {
-      system: live.policy,
+      system: withUserBotNotes({
+        frozen: live.policy,
+        notes: resolveSpeakerPinnedUserBotNotes(live)
+      }),
       ...facts.length > 0 ? { userInfo: renderMemoryContextBlock(facts) } : {}
     };
   }
@@ -486722,6 +487525,7 @@ function createSystemPromptAssembly(deps) {
         cloudAgentsUnavailableReason,
         dynamicToolsEnabled,
         credentialFillEnabled: deps.credentialFillEnabled === true,
+        loginFormFirst: deps.gates.loginFormFirst(),
         voiceCallEnabled,
         cloudAgentArtifactsEnabled,
         cloudAgentDurableWatchEnabled,
@@ -486738,6 +487542,7 @@ function createSystemPromptAssembly(deps) {
       cloudAgentsUnavailableReason,
       dynamicToolsEnabled,
       credentialFillEnabled: deps.credentialFillEnabled === true,
+      loginFormFirst: deps.gates.loginFormFirst(),
       voiceCallEnabled,
       cloudAgentArtifactsEnabled,
       cloudAgentDurableWatchEnabled,
@@ -486981,6 +487786,12 @@ var BROWSER_USE_SUBAGENT_TYPE2 = "browserUse";
 function isBrowserUseSubagentType(subagentType) {
   return isBuiltinSubagent(subagentType, BROWSER_USE_SUBAGENT_TYPE2);
 }
+function browserUseLoginLine(options2) {
+  if (options2?.credentialFillEnabled !== true) {
+    return "It cannot act as the user. At any login it stops so you can hand the user the box with request_box_help, then dispatch it again to continue. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with browser_click holdDurationMs until the widget completes.";
+  }
+  return options2.loginFormFirst === true ? `It cannot act as the user. At a direct username/password login it stops and reports the exact current URL so you can call ListCredentials, whose result says how to handle that login. For SSO, passkey, a puzzle or image captcha, or payment, hand the user the box and dispatch it again to continue. ${SUBAGENT_ONE_TIME_CODE_LINE} A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with browser_click holdDurationMs until the widget completes.` : "It cannot act as the user. At a direct username/password login it stops and reports the exact current URL so you can call ListCredentials before request_box_help. For SSO, passkey, a puzzle or image captcha, or payment, hand the user the box and dispatch it again to continue. It also stops at a 2FA code page unless your task says 1Password fills the one-time code for this login; say so when ListCredentials showed one, and it then waits for the code to be filled for it. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with browser_click holdDurationMs until the widget completes.";
+}
 function createSandBrowserUseSubagentConfig(options2) {
   return {
     subagent_type: new SubagentType({
@@ -486995,7 +487806,7 @@ function createSandBrowserUseSubagentConfig(options2) {
       "Use computerUse instead when the task needs the desktop itself (GUI apps, file dialogs, drag interactions) or a site that defeats DOM automation.",
       "It runs in the background like any Task: you are notified when it finishes, so do not poll or await it.",
       "It runs headless and cannot ask follow-ups, so give it a tightly-scoped, self-contained task with the specifics it needs (site, exact values), explicit success criteria, and what to report back.",
-      options2?.credentialFillEnabled === true ? "It cannot act as the user. At a direct username/password login it stops and reports the exact current URL so you can call ListCredentials before request_box_help. For SSO, passkey, a puzzle or image captcha, or payment, hand the user the box and dispatch it again to continue. It also stops at a 2FA code page unless your task says 1Password fills the one-time code for this login; say so when ListCredentials showed one, and it then waits for the code to be filled for it. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with browser_click holdDurationMs until the widget completes." : "It cannot act as the user. At any login it stops so you can hand the user the box with request_box_help, then dispatch it again to continue. A press-and-hold I'm-human button is a mouse hold, not a human step: it holds it with browser_click holdDurationMs until the widget completes."
+      browserUseLoginLine(options2)
     ].join(" "),
     preserveTaskTool: false,
     subagentSource: "builtin"
@@ -487158,6 +487969,33 @@ function isBotCheckControl(label) {
 var BOT_CHECK_FRAME = /^\s*-\s+i?frame\s+"([^"]*\b(?:re|h)?captcha\b[^"]*|[^"]*security challenge[^"]*)"/imu;
 function pageBotCheckControl(snapshot) {
   return botCheckOf(snapshot) ?? snapshot.elements.find((element) => isBotCheckControl(element.name))?.name ?? BOT_CHECK_FRAME.exec(snapshot.text)?.[1];
+}
+
+// ../packages/sand-browser-use-jev-experimental/dist/report-check.js
+async function checkReport(jev, finished, input) {
+  try {
+    const { claimed, supported: supported2, actionsBacked } = await jev.decide({
+      request: input.request,
+      outcome: input.outcome,
+      report: input.report,
+      notes: [...input.notes],
+      actionsTaken: [...input.actionsTaken],
+      finalPage: input.finalPage
+    }, {
+      claimed: noul("Does the report say the desired outcome was achieved (the requested fact found, the requested action done)? Answer no if it says the task could not be finished, something required is missing, or the user has to take over."),
+      supported: noul("Is every fact the report states (numbers, names, dates, prices, versions, availability) backed by the notes or the final page snapshot? Answer no if the report states a fact that appears in neither. A report that says what it could not find states no fact for that part."),
+      actionsBacked: noul("Does every action the report says was performed (submitted, booked, posted, sent, signed in, added to cart, changed a setting, ...) appear in the actions taken? Answer yes if the report claims no action was performed.")
+    });
+    const verdict = (answer) => answer.noul >= 0.5 ? "pass" : "fail";
+    return {
+      finished,
+      claimed: verdict(claimed),
+      supported: verdict(supported2),
+      actionsBacked: verdict(actionsBacked)
+    };
+  } catch {
+    return { finished, claimed: "error", supported: "error", actionsBacked: "error" };
+  }
 }
 
 // ../packages/sand-browser-use-jev-experimental/dist/snapshot.js
@@ -487480,9 +488318,9 @@ function relevanceTokens2(text2) {
   return tokens;
 }
 var COMMON_TOKEN_SHARE = 0.25;
-function rankCandidates(elements, kind, query, limit) {
+function rankCandidates(elements, kind, query2, limit2) {
   const pool = kind === "any" ? [...elements] : elements.filter((e) => e.kinds.includes(kind));
-  if (pool.length <= limit)
+  if (pool.length <= limit2)
     return { pages: [pool], total: pool.length, matched: 0 };
   const tokenized = pool.map((element) => ({
     name: relevanceTokens2(element.name),
@@ -487494,7 +488332,7 @@ function rankCandidates(elements, kind, query, limit) {
       frequency.set(token, (frequency.get(token) ?? 0) + 1);
     }
   }
-  const withoutHosts = query.replace(/\bhttps?:\/\/[^/\s]+/giu, " ");
+  const withoutHosts = query2.replace(/\bhttps?:\/\/[^/\s]+/giu, " ");
   const wanted = new Set([...relevanceTokens2(withoutHosts)].filter((token) => (frequency.get(token) ?? 0) <= pool.length * COMMON_TOKEN_SHARE));
   const scored = pool.map((element, index) => {
     const { name: name17, url: url2 } = tokenized[index] ?? { name: /* @__PURE__ */ new Set(), url: /* @__PURE__ */ new Set() };
@@ -487513,19 +488351,19 @@ function rankCandidates(elements, kind, query, limit) {
     ...scored.filter((entry) => entry.score === 0)
   ];
   const pages = [];
-  for (let start = 0; start < priority.length; start += limit) {
-    pages.push(priority.slice(start, start + limit).sort((a, b2) => a.index - b2.index).map((entry) => entry.element));
+  for (let start = 0; start < priority.length; start += limit2) {
+    pages.push(priority.slice(start, start + limit2).sort((a, b2) => a.index - b2.index).map((entry) => entry.element));
   }
   return { pages, total: pool.length, matched: matched.length };
 }
-function elementCriteria(elements, kind, limit) {
+function elementCriteria(elements, kind, limit2) {
   const criteria = {};
   let count = 0;
   for (const element of elements) {
     if (kind !== "any" && !element.kinds.includes(kind)) {
       continue;
     }
-    if (count >= limit) {
+    if (count >= limit2) {
       break;
     }
     criteria[element.ref] = describeElement(element);
@@ -487543,11 +488381,11 @@ var DEFAULT_SEARCH_URL_TEMPLATES = [
   "https://www.bing.com/search?q={q}"
 ];
 var MIN_RESULT_LINKS = 3;
-function searchUrl({ template, query }) {
+function searchUrl({ template, query: query2 }) {
   if (!template.includes("{q}")) {
     throw new Error(`search URL template must contain {q}: ${template}`);
   }
-  return template.replace("{q}", encodeURIComponent(query));
+  return template.replace("{q}", encodeURIComponent(query2));
 }
 var PLANNER_SYSTEM = `You prepare a browsing request for a web agent that can only click, type, and scroll in a browser.
 Return JSON with these fields:
@@ -488003,10 +488841,25 @@ async function runAgentLoop(deps, options2) {
   let stalledSteps = 0;
   let stepsSinceNote = 0;
   let emptySteps = 0;
-  const finish = async (step, snapshot2, finished) => {
+  const finish = async (step, snapshot2, finished, stallReason) => {
     const answer = await composeAnswer(deps, options2, snapshot2, memory, finished);
     await options2.onStep?.({ step, snapshot: snapshot2, action: "answer" });
-    observe(options2, { kind: "finish", finished, steps: step });
+    observe(options2, {
+      kind: "finish",
+      finished,
+      steps: step,
+      ...stallReason === void 0 ? {} : { stallReason }
+    });
+    if (options2.checkReport === true) {
+      void checkReport(deps.jev, finished, {
+        request: deps.prompt,
+        outcome: deps.plan.outcome,
+        report: answer,
+        notes: memory.notes,
+        actionsTaken: memory.history.map(shortAction),
+        finalPage: { url: snapshot2.url, title: snapshot2.title, snapshot: snapshot2.text }
+      }).then((result) => observe(options2, { kind: "report_check", ...result })).catch((error3) => log5.info(`  report check not recorded: ${firstLine2(error3)}`));
+    }
     return { answer, steps: step, finished, history };
   };
   const botCheckHandoff = async (step, snapshot2, detail) => {
@@ -488014,7 +488867,12 @@ async function runAgentLoop(deps, options2) {
     history.push(`stopped at a bot check on ${snapshot2.url}`);
     observe(options2, { kind: "guard", guard: "bot_check" });
     await options2.onStep?.({ step, snapshot: snapshot2, action: "handoff" });
-    observe(options2, { kind: "finish", finished: "handoff", steps: step });
+    observe(options2, {
+      kind: "finish",
+      finished: "handoff",
+      steps: step,
+      handoffReason: "bot_check"
+    });
     return { answer: botCheckReport(snapshot2, memory), steps: step, finished: "handoff", history };
   };
   const refusedHandoff = async (step, snapshot2, reason) => {
@@ -488022,7 +488880,12 @@ async function runAgentLoop(deps, options2) {
     history.push(`an action was refused by review: ${reason}`);
     observe(options2, { kind: "guard", guard: "action_refused" });
     await options2.onStep?.({ step, snapshot: snapshot2, action: "handoff" });
-    observe(options2, { kind: "finish", finished: "handoff", steps: step });
+    observe(options2, {
+      kind: "finish",
+      finished: "handoff",
+      steps: step,
+      handoffReason: "action_refused"
+    });
     const notes = memory.notes.length === 0 ? "" : `
 
 Facts collected before stopping:
@@ -488038,7 +488901,12 @@ ${memory.notes.map((note) => `- ${note}`).join("\n")}`;
     log5.info(`  stop ${stop.message}`);
     history.push(stop.message);
     await options2.onStep?.({ step, snapshot: snapshot2, action: "handoff" });
-    observe(options2, { kind: "finish", finished: "handoff", steps: step });
+    observe(options2, {
+      kind: "finish",
+      finished: "handoff",
+      steps: step,
+      handoffReason: "credential_field"
+    });
     return {
       answer: handoffReport(snapshot2, memory, stop),
       steps: step,
@@ -488086,7 +488954,7 @@ ${memory.notes.map((note) => `- ${note}`).join("\n")}`;
       log5.info(`  stop: the browser showed an empty page for ${String(emptySteps)} steps`);
       history.push(`the browser showed an empty page for ${String(emptySteps)} steps in a row (the page did not render or the browser lost it)`);
       observe(options2, { kind: "guard", guard: "empty_page" });
-      return finish(step, snapshot, "stalled");
+      return finish(step, snapshot, "stalled", "empty_page");
     }
     log5.info(`step ${step}  ${snapshot.url}  "${snapshot.title}"  (${snapshot.source}, ${snapshot.elements.length} actionable, ${snapshot.text.length} chars${snapshot.offscreenAbove > 0 ? `, ${snapshot.offscreenAbove} above` : ""}${snapshot.offscreenBelow > 0 ? `, ${snapshot.offscreenBelow} below` : ""}${snapshot.truncated ? ", cut" : ""})`);
     log5.debug(snapshot.text);
@@ -488095,7 +488963,7 @@ ${memory.notes.map((note) => `- ${note}`).join("\n")}`;
       await new Promise((resolve14) => setTimeout(resolve14, options2.clickSettleMs ?? CLICK_SETTLE_MS));
       const settled = await snapshotAfterRetry(browser, memory, options2);
       if (settled === void 0)
-        return finish(step, snapshot, "stalled");
+        return finish(step, snapshot, "stalled", "browser_unresponsive");
       if (fingerprint(settled) !== current) {
         log5.info("  note the click's page change landed late");
         const lateCheck = await readyPage(settled);
@@ -488160,6 +489028,8 @@ ${memory.notes.map((note) => `- ${note}`).join("\n")}`;
       step,
       source: snapshot.source,
       elements: snapshot.elements.length,
+      chars: snapshot.text.length,
+      truncated: snapshot.truncated,
       enough: gates.enough.noul,
       done: gates.done.noul,
       remember: gates.remember.noul
@@ -488198,13 +489068,13 @@ ${memory.notes.map((note) => `- ${note}`).join("\n")}`;
         stepsSinceNote = 0;
         recentFingerprints.length = 0;
         const deep = await snapshotAfterRetry(browser, memory, options2);
-        if (deep !== void 0) {
-          snapshot = deep;
-          continue;
-        }
+        if (deep === void 0)
+          return finish(step, snapshot, "stalled", "browser_unresponsive");
+        snapshot = deep;
+        continue;
       }
       log5.info(`  stop: page unchanged and nothing learned for ${String(STALL_LIMIT)} steps`);
-      return finish(step, snapshot, "stalled");
+      return finish(step, snapshot, "stalled", "no_progress");
     }
     let move2 = gates.move.choice;
     let fallbackReason = "chosen";
@@ -488281,7 +489151,7 @@ ${memory.notes.map((note) => `- ${note}`).join("\n")}`;
     await options2.onStep?.({ step, snapshot, action });
     const next = await snapshotAfterRetry(browser, memory, options2);
     if (next === void 0) {
-      return finish(step, snapshot, "stalled");
+      return finish(step, snapshot, "stalled", "browser_unresponsive");
     }
     snapshot = next;
   }
@@ -488860,9 +489730,11 @@ ${snapshot.text}`
   } catch (error3) {
     const failure = `llm fallback reply unusable: ${firstLine2(error3)}`;
     options2.log.info(`  ${failure}`);
+    observe(options2, { kind: "takeover", tier: "llm", action: "unusable" });
     return failure;
   }
   options2.log.info(`  llm  fallback \u2192 ${loggableMove(move2)}`);
+  observe(options2, { kind: "takeover", tier: "llm", action: move2.action });
   const { browser } = deps;
   try {
     switch (move2.action) {
@@ -488988,9 +489860,11 @@ ${snapshot.text.slice(0, 12e3)}`
   } catch (error3) {
     const failure = `cua reply unusable: ${firstLine2(error3)}`;
     options2.log.info(`  ${failure}`);
+    observe(options2, { kind: "takeover", tier: "cua", action: "unusable" });
     return failure;
   }
   options2.log.info(`  cua  \u2192 ${loggableMove(move2)}`);
+  observe(options2, { kind: "takeover", tier: "cua", action: move2.action });
   if (move2.action === "done") {
     return "done";
   }
@@ -489424,13 +490298,19 @@ var BoxDriverBrowser = class {
 };
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-browser-use-jev/cursor-text-model.ts
+init_dist();
 var TEXT_CALL_DEADLINE_MS = 45e3;
 var MIN_OUTPUT_BUDGET_TOKENS = 4096;
 var OUTPUT_CAP = /max output tokens/i;
+var logger100 = createLogger("sand:browser-use-jev-text-model");
 var JSON_SUFFIX = "\n\nRespond with exactly one JSON object and no other text, no code fences.";
 var TEXT_DEADLINE = createDeadlinePolicy({
   name: "sand-browser-use-jev-text",
   timeoutMs: TEXT_CALL_DEADLINE_MS
+});
+var USAGE_DEADLINE = createDeadlinePolicy({
+  name: "sand-browser-use-jev-text-usage",
+  timeoutMs: 2e3
 });
 function completionMessages(args, content) {
   return [
@@ -489438,12 +490318,25 @@ function completionMessages(args, content) {
     { role: "user", content }
   ];
 }
+function turnUsageOf(usage) {
+  return {
+    inputTokens: usage.inputTokens,
+    outputTokens: usage.outputTokens,
+    cacheReadTokens: usage.cacheReadTokens,
+    cacheWriteTokens: usage.cacheWriteTokens,
+    ...usage.reasoningTokens === void 0 ? {} : { reasoningTokens: usage.reasoningTokens }
+  };
+}
 var CursorTextModel = class {
   label;
   options;
+  usageSoFar;
   constructor(options2) {
     this.options = options2;
     this.label = `cursor/${options2.modelId}`;
+  }
+  get usage() {
+    return this.usageSoFar;
   }
   complete(args) {
     return this.send(args, args.user);
@@ -489464,6 +490357,7 @@ var CursorTextModel = class {
       maxTokens: Math.max(args.maxTokens ?? 0, MIN_OUTPUT_BUDGET_TOKENS)
     });
     let text2 = "";
+    let timedOut;
     try {
       await TEXT_DEADLINE.run(async (signal) => {
         for await (const part of result.fullStream) {
@@ -489479,14 +490373,26 @@ var CursorTextModel = class {
       });
     } catch (error3) {
       if (!(error3 instanceof DeadlineExceededError)) throw error3;
-      if (text2.length === 0) {
-        throw new Error(
-          `text model ${this.label} produced nothing within ${String(TEXT_CALL_DEADLINE_MS / 1e3)}s`,
-          { cause: error3 }
-        );
-      }
+      timedOut = error3;
     }
+    if (timedOut !== void 0) {
+      if (text2.length > 0) return text2;
+      throw new Error(
+        `text model ${this.label} produced nothing within ${String(TEXT_CALL_DEADLINE_MS / 1e3)}s`,
+        { cause: timedOut }
+      );
+    }
+    await this.addUsage(result.extendedUsage);
     return text2;
+  }
+  async addUsage(pending) {
+    const usage = await USAGE_DEADLINE.run(() => pending).catch((failure) => {
+      logger100.warn(this.options.ctx, "text model usage unavailable for a call", {
+        errorClass: errorLogTag(failure)
+      });
+      return void 0;
+    });
+    this.usageSoFar = mergeTurnUsage(this.usageSoFar, usage && turnUsageOf(usage));
   }
 };
 
@@ -489512,6 +490418,30 @@ var guards = createCounter("sand.browser_use_jev.guard", {
   description: "Loop guards that fired: refused guessed URLs, clicks that changed nothing, note failures",
   labelNames: ["guard"]
 });
+var stalls = createCounter("sand.browser_use_jev.stall", {
+  description: "Runs that stopped as stalled, by why: no progress, the browser stopped answering, or the page stayed empty",
+  labelNames: ["reason"]
+});
+var handoffs = createCounter("sand.browser_use_jev.handoff", {
+  description: "Runs that stopped for the user, by why: a credential field, a bot check (CAPTCHA), or an action review refused",
+  labelNames: ["reason"]
+});
+var takeovers = createCounter("sand.browser_use_jev.takeover", {
+  description: "What the text (llm) or vision (cua) model did with a step jev handed it; unusable is a reply that could not be acted on",
+  labelNames: ["tier", "action"]
+});
+var fallbackAgreement = createCounter("sand.browser_use_jev.fallback.agreement", {
+  description: "Steps jev had its own move for but handed to the text model (low confidence, revisiting scroll, unresolved target), by whether the model then made the same kind of move",
+  labelNames: ["reason", "picked", "agreed"]
+});
+var reportChecks = createCounter("sand.browser_use_jev.report_check", {
+  description: "One per checked run: whether the report claims the task was done, whether every fact is in the notes or on the final page (supported), and whether every claimed action is in the action history (actions_backed)",
+  labelNames: ["finished", "claimed", "supported", "actions_backed"]
+});
+var snapshotChars = createHistogram("sand.browser_use_jev.snapshot.chars", {
+  description: "Characters in the page snapshot the loop read on one step; truncated marks a snapshot cut to its size cap",
+  labelNames: ["source", "truncated"]
+});
 var runDuration = createHistogram("sand.browser_use_jev.run.duration_ms", {
   description: "Wall time of one browser subagent run from loop start to its report",
   labelNames: ["finished"]
@@ -489519,6 +490449,10 @@ var runDuration = createHistogram("sand.browser_use_jev.run.duration_ms", {
 var runSteps = createHistogram("sand.browser_use_jev.run.steps", {
   description: "Loop steps taken by one browser subagent run",
   labelNames: ["finished"]
+});
+var runTokens = createHistogram("sand.browser_use_jev.run.tokens", {
+  description: "Text model tokens one browser subagent run spent (planner, fallbacks, notes and report), by token class; classifier calls are not included",
+  labelNames: ["finished", "kind"]
 });
 var runFallbacks = createHistogram("sand.browser_use_jev.run.fallbacks", {
   description: "Model fallbacks taken within one browser subagent run",
@@ -489536,7 +490470,16 @@ var modelDuration = createHistogram("sand.browser_use_jev.model.duration_ms", {
   description: "One text model call, with or without a screenshot attached",
   labelNames: ["call", "outcome", "model"]
 });
-var logger100 = createLogger("sand:browser-use-jev");
+var logger101 = createLogger("sand:browser-use-jev");
+var TAKEOVER_FOR_MOVE = {
+  click: "click",
+  fill: "fill",
+  hover: "hover",
+  drag: "drag",
+  scroll_down: "scroll",
+  scroll_up: "scroll",
+  deeper_a11y: "deeper_a11y"
+};
 async function timed(run, record3) {
   const startedAt = performance.now();
   try {
@@ -489603,10 +490546,13 @@ function createJevTelemetry(ctx, options2) {
   const fallbackCounts = { llm: 0, cua: 0 };
   let step = 0;
   let ended = false;
+  let picked;
+  let handedOver;
   const recordContentFreePathEvent = (fields2) => {
-    logger100.info(ctx, "sand.browser_use_jev", { subagent_id: options2.subagentId, step, ...fields2 });
+    logger101.info(ctx, "sand.browser_use_jev", { subagent_id: options2.subagentId, step, ...fields2 });
   };
-  const end = (finished, steps) => {
+  const end = (finished, steps, reasons = {}) => {
+    const { stallReason, handoffReason } = reasons;
     if (ended) return;
     ended = true;
     const durationMs = performance.now() - startedAt;
@@ -489614,12 +490560,34 @@ function createJevTelemetry(ctx, options2) {
     if (steps !== void 0) runSteps.histogram(ctx, steps, { finished });
     runFallbacks.histogram(ctx, fallbackCounts.llm, { finished, tier: "llm" });
     runFallbacks.histogram(ctx, fallbackCounts.cua, { finished, tier: "cua" });
+    if (stallReason !== void 0) stalls.increment(ctx, 1, { reason: stallReason });
+    if (handoffReason !== void 0) handoffs.increment(ctx, 1, { reason: handoffReason });
+    const usage = options2.usage?.();
+    const tokens = usage === void 0 ? void 0 : {
+      input: usage.inputTokens,
+      output: usage.outputTokens,
+      cache_read: usage.cacheReadTokens,
+      cache_write: usage.cacheWriteTokens
+    };
+    for (const [kind, count] of Object.entries(tokens ?? {})) {
+      runTokens.histogram(ctx, count, { finished, kind });
+    }
     recordContentFreePathEvent({
       event: "finish",
       finished,
+      ...options2.parentAgentId === void 0 ? {} : { parent_agent_id: options2.parentAgentId },
+      ...options2.parentRequestId === void 0 ? {} : { parent_request_id: options2.parentRequestId },
+      ...stallReason === void 0 ? {} : { stall_reason: stallReason },
+      ...handoffReason === void 0 ? {} : { handoff_reason: handoffReason },
       duration_ms: Math.round(durationMs),
       fallbacks_llm: fallbackCounts.llm,
-      fallbacks_cua: fallbackCounts.cua
+      fallbacks_cua: fallbackCounts.cua,
+      ...tokens === void 0 ? {} : {
+        tokens_input: tokens.input,
+        tokens_output: tokens.output,
+        tokens_cache_read: tokens.cache_read,
+        tokens_cache_write: tokens.cache_write
+      }
     });
   };
   const observer = {
@@ -489631,11 +490599,31 @@ function createJevTelemetry(ctx, options2) {
       }
       switch (event.kind) {
         case "step":
+          picked = void 0;
+          handedOver = void 0;
+          snapshotChars.histogram(ctx, event.chars, {
+            source: event.source,
+            truncated: String(event.truncated)
+          });
           return;
+        case "takeover": {
+          takeovers.increment(ctx, 1, { tier: event.tier, action: event.action });
+          const jevAction = picked === void 0 ? void 0 : TAKEOVER_FOR_MOVE[picked];
+          if (event.tier === "llm" && picked !== void 0 && jevAction !== void 0 && handedOver !== void 0 && handedOver !== "chosen" && event.action !== "unusable") {
+            fallbackAgreement.increment(ctx, 1, {
+              reason: handedOver,
+              picked,
+              agreed: String(event.action === jevAction)
+            });
+          }
+          return;
+        }
         case "move":
+          picked = event.picked;
           moves.increment(ctx, 1, { picked: event.picked, executed: event.executed });
           return;
         case "fallback":
+          if (event.tier === "llm") handedOver = event.reason;
           fallbackCounts[event.tier] += 1;
           fallbacks.increment(ctx, 1, { tier: event.tier, reason: event.reason });
           return;
@@ -489648,8 +490636,16 @@ function createJevTelemetry(ctx, options2) {
         case "guard":
           guards.increment(ctx, 1, { guard: event.guard });
           return;
+        case "report_check":
+          reportChecks.increment(ctx, 1, {
+            finished: event.finished,
+            claimed: event.claimed,
+            supported: event.supported,
+            actions_backed: event.actionsBacked
+          });
+          return;
         case "finish":
-          end(event.finished, event.steps);
+          end(event.finished, event.steps, event);
           return;
       }
     }
@@ -489790,6 +490786,8 @@ var JevBrowserSubagentRunner = class {
   activity = [];
   toolCalls = 0;
   turnEnded = 0;
+  textModel;
+  earlierRunsUsage;
   outline = [];
   constructor(options2) {
     this.options = options2;
@@ -489817,7 +490815,7 @@ var JevBrowserSubagentRunner = class {
 ` });
       }
     };
-    const outcome = await this.browse(ctx, prompt, note);
+    const outcome = await this.browse(ctx, prompt, note, options2?.lineage?.parentRequestId);
     this.turnEnded += 1;
     const report = reportText(outcome);
     note(`report (${String(report.length)} chars): ${report.replace(/\s+/g, " ").slice(0, 400)}`);
@@ -489858,19 +490856,23 @@ var JevBrowserSubagentRunner = class {
       aborted: this.abort.signal.aborted
     };
   }
-  async browse(ctx, prompt, note) {
+  async browse(ctx, prompt, note, parentRequestId) {
+    const textModel = new CursorTextModel({
+      ctx,
+      inference: this.options.inference,
+      modelId: this.options.modelId,
+      session: { isSubagent: true, skipLabeling: true }
+    });
+    this.earlierRunsUsage = mergeTurnUsage(this.earlierRunsUsage, this.textModel?.usage);
+    this.textModel = textModel;
     const telemetry = createJevTelemetry(ctx, {
       model: this.options.modelId,
-      subagentId: this.options.subagentAgentId
+      subagentId: this.options.subagentAgentId,
+      ...this.options.conversationGroupId === void 0 ? {} : { parentAgentId: this.options.conversationGroupId },
+      ...parentRequestId === void 0 ? {} : { parentRequestId },
+      usage: () => textModel.usage
     });
-    const model = telemetry.model(
-      new CursorTextModel({
-        ctx,
-        inference: this.options.inference,
-        modelId: this.options.modelId,
-        session: { isSubagent: true, skipLabeling: true }
-      })
-    );
+    const model = telemetry.model(textModel);
     const jev = telemetry.decider(new JevDecider(this.options.typeSafe));
     try {
       const browser = telemetry.browser(
@@ -489898,6 +490900,7 @@ var JevBrowserSubagentRunner = class {
           thresholds: DEFAULT_THRESHOLDS,
           isFatalError: (caught) => caught instanceof DeferredInteractionResponseError,
           observer: telemetry.observer,
+          checkReport: true,
           log: { info: note, debug: () => {
           } },
           onStep: async () => {
@@ -489928,7 +490931,11 @@ var JevBrowserSubagentRunner = class {
     return [...this.outline];
   }
   getComputerUseUsageSnapshot() {
-    return { modelId: this.options.modelId, turnEndedCount: this.turnEnded, usage: void 0 };
+    return {
+      modelId: this.options.modelId,
+      turnEndedCount: this.turnEnded,
+      usage: mergeTurnUsage(this.earlierRunsUsage, this.textModel?.usage)
+    };
   }
   getObservedToolCallCount() {
     return this.toolCalls;
@@ -491586,7 +492593,7 @@ function scopeAttachedMediaToConversation({
 
 // ../packages/grok-bot-harness/src/runner/automation-completion-middleware.ts
 init_dist();
-var logger101 = createLogger("sand:automation-completion-middleware");
+var logger102 = createLogger("sand:automation-completion-middleware");
 var SAND_AUTOMATION_COMPLETION_PROMPT_TAG = "sandAutomationCompletionId";
 function completionIdOf(message) {
   const value = message.providerOptions?.cursor?.[SAND_AUTOMATION_COMPLETION_PROMPT_TAG];
@@ -491619,7 +492626,7 @@ var AutomationCompletionMiddleware = class extends BaseMiddleware {
     try {
       completions = this.source.drain();
     } catch (error3) {
-      logger101.warn(ctx, "Failed to drain automation completion inbox", {
+      logger102.warn(ctx, "Failed to drain automation completion inbox", {
         error: errorLogTag(error3)
       });
       return;
@@ -491700,6 +492707,13 @@ function portalRepoCloneUrl(raw) {
 function isOriginRepoReference(raw) {
   const hostname2 = repoReferenceAsUrl(raw)?.hostname;
   return hostname2 != null && isOriginGitHost(hostname2) || portalRepoCloneUrl(raw) != null;
+}
+function originRepoIdentityFromReference(raw) {
+  const fromClone = parseOriginRepoCloneUrl(raw?.trim());
+  if (fromClone !== void 0) return fromClone;
+  const url2 = repoReferenceAsUrl(raw);
+  const page = url2 == null ? void 0 : parseOriginPortalRepoPage(url2);
+  return page === void 0 ? null : { owner: page.owner, name: page.name };
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/scm-connect-cards.ts
@@ -491810,6 +492824,46 @@ async function armScmConnectWaits(card, registerScmConnectWait) {
     return false;
   }
 }
+var ORIGIN_NO_CARD = "Nothing was shown to the user, and there is no card to request: do not call request_scm_connect for Origin.";
+function describeOriginAccessBlocker(blocker, blockedAction) {
+  const confirm = `Confirm with the owner before retrying the blocked action (${blockedAction}).`;
+  switch (blocker.kind) {
+    case "no_namespace":
+      return `The user's Cursor account has no Origin namespace yet, so nothing can be created on Origin. ${ORIGIN_NO_CARD} Tell the user to set up Origin at https://cursor.com/codebase/get-started (it takes a moment and claims their namespace), then say when it is done. ${confirm}`;
+    case "team_disabled":
+      return `Origin is turned off for the user's team, so Origin tools and repositories are unavailable to this account. ${ORIGIN_NO_CARD} Tell the user that a team admin must turn Origin back on in the team's admin settings before this can work; until then use another provider or a cloud agent on a non-Origin repository. ${confirm}`;
+    case "not_enabled":
+      return `Origin is not available for this account right now (it is not enabled for them, or Origin refused the request). ${ORIGIN_NO_CARD} It is not a connection problem: say plainly that Origin isn't available for this account and fall back to a cloud agent or another provider. ${confirm}`;
+    case "repo": {
+      const which = blocker.repo == null ? "this repository" : `repository ${blocker.repo}`;
+      const grantHint = blocker.repo == null ? "its owner has to grant the user access on Origin" : `its owner has to grant the user access on Origin (the repository's page under https://cursor.com/codebase/${blocker.repo})`;
+      return `Origin can see the user's account but not ${which}: it may be private in a namespace the user is not a member of, need an access grant, or not exist. ${ORIGIN_NO_CARD} Tell the user which repository was refused and that ${grantHint}; if the reference may be wrong, ask them to confirm the owner and name. ${confirm}`;
+    }
+  }
+}
+function describeOriginBlocker({
+  rejection,
+  knownIntent,
+  blockedAction,
+  repoUrl
+}) {
+  if (rejection != null && /create an origin namespace|no origin namespace/i.test(rejection)) {
+    return describeOriginAccessBlocker({ kind: "no_namespace" }, blockedAction);
+  }
+  if (rejection != null && /origin is (turned|switched) off for (this|your|the) team|origin (is )?disabled for (this|your|the) team/i.test(
+    rejection
+  )) {
+    return describeOriginAccessBlocker({ kind: "team_disabled" }, blockedAction);
+  }
+  if (knownIntent === "access" || rejection != null && isRepoAccessShapedRejection(rejection)) {
+    const repo = originRepoIdentityFromReference(repoUrl);
+    return describeOriginAccessBlocker(
+      { kind: "repo", ...repo == null ? {} : { repo: `${repo.owner}/${repo.name}` } },
+      blockedAction
+    );
+  }
+  return null;
+}
 async function describeScmConnectBlocker({
   provider,
   rejection,
@@ -491818,7 +492872,10 @@ async function describeScmConnectBlocker({
   blockedAction,
   repoUrl
 }) {
-  if (provider === "origin" || provider === "github-enterprise") return null;
+  if (provider === "origin") {
+    return describeOriginBlocker({ rejection, knownIntent, blockedAction, repoUrl });
+  }
+  if (provider === "github-enterprise") return null;
   const reconnectShaped = rejection != null && isScmReconnectShapedRejection(rejection);
   if (rejection != null && !reconnectShaped && !isScmNotConnectedShapedRejection(rejection) && !isRepoAccessShapedRejection(rejection)) {
     return null;
@@ -492302,6 +493359,7 @@ var SAND_RUNNER_GATE_DEFAULTS = {
   chromeCookieImport: false,
   boxEgressTunnel: false,
   onePasswordIntegration: false,
+  loginFormFirst: false,
   checkSubscriptionUsage: false,
   connectedActivity: false,
   /**
@@ -492314,6 +493372,7 @@ var SAND_RUNNER_GATE_DEFAULTS = {
   agentEmailMultipleInboxes: false,
   generalizedSelfSummaryPrompt: false,
   widgetV0: false,
+  slides: false,
   turnEndThroughAgent: true
 };
 var SAND_RUNNER_GATE_NAMES = Object.keys(SAND_RUNNER_GATE_DEFAULTS).filter(
@@ -492379,12 +493438,14 @@ var SUBAGENT_GATE_POLICY = {
   chromeCookieImport: "default",
   boxEgressTunnel: "default",
   onePasswordIntegration: "default",
+  loginFormFirst: "default",
   checkSubscriptionUsage: "default",
   connectedActivity: "default",
   agentEmail: "inherited",
   agentEmailMultipleInboxes: "inherited",
   generalizedSelfSummaryPrompt: "inherited",
   widgetV0: "default",
+  slides: "default",
   turnEndThroughAgent: "inherited"
 };
 function pickSubagentGates(parent) {
@@ -492666,7 +493727,7 @@ function createMcpUnavailableReminderMiddleware(args) {
 
 // ../packages/grok-bot-harness/src/runner/start-of-turn-ack-reminder-middleware.ts
 init_dist();
-var logger102 = createLogger("sand:start-of-turn-ack-reminder-middleware");
+var logger103 = createLogger("sand:start-of-turn-ack-reminder-middleware");
 function chatSilenceRemindersCoverThisTurn({
   isSubagentRunner,
   isSilenceAllowed,
@@ -492742,7 +493803,7 @@ var StartOfTurnAckReminderMiddleware = class extends BaseMiddleware {
     }
     const toolCallsSinceLastSend = countToolCallsSinceLastSendMessage(messages);
     if (toolCallsSinceLastSend > this.threshold) {
-      logger102.info(ctx, "[sand-start-of-turn-ack] injecting reminder", {
+      logger103.info(ctx, "[sand-start-of-turn-ack] injecting reminder", {
         toolCallsSinceLastSend,
         threshold: this.threshold,
         messageCount: messages.length
@@ -492920,12 +493981,14 @@ function connectorCardEmissionToMessage(emission) {
     variant: emission.variant
   };
 }
+var BOX_HELP_HANDOFF_MECHANICS = 'Pass one short instruction (no paragraph); the box is surfaced with a "hand back to agent" button and that instruction is shown in chat, then your turn ends. The user does the step on the box and hands it back, and you are resumed automatically, so start by using the read-only Screenshot tool to see what they changed.';
+var BOX_HELP_CLASSIFICATION = "For classification: domain is the destination app being accessed; when the browser has redirected to an SSO/IdP page (Okta, Google accounts, \u2026), still put the destination app in domain and put the IdP host in idp_domain.";
 function createRequestBoxHelpTool(deps) {
   let pendingHandoff = Promise.resolve();
   return defineCommunicateTool(deps, {
     id: "REQUEST_BOX_HELP",
     name: "request_box_help",
-    description: "Hand your box's desktop to the user for a step only they can do: a login, SSO, passkey, 2FA, a puzzle or image captcha, or payment confirmation. " + (deps.credentialFillEnabled === true ? "Not for a verification-code page when the login just filled carries a one-time code in 1Password: that code is filled for the subagent, so hand off only if the page is still asking after about a minute. " : "") + 'Pass one short instruction (no paragraph); the box is surfaced with a "hand back to agent" button and that instruction is shown in chat, then your turn ends. The user does the step on the box and hands it back, and you are resumed automatically, so start by using the read-only Screenshot tool to see what they changed. Use this instead of asking for credentials: the user signs in themselves on the box and you never see their password or 2FA. For classification: domain is the destination app being accessed; when the browser has redirected to an SSO/IdP page (Okta, Google accounts, \u2026), still put the destination app in domain and put the IdP host in idp_domain.',
+    description: () => deps.credentialFillEnabled === true && deps.loginFormFirst?.() === true ? `Hand your box's desktop to the user for a step only they can do: SSO, a passkey, 2FA, a puzzle or image captcha, payment confirmation, or a sign-in the user prefers to do themselves. At a plain username/password login, call ListCredentials first; its result says how to ask for that login. Not for a verification-code page when that result said the login's one-time code is filled for you: hand off only if the page is still asking after about a minute. ${BOX_HELP_HANDOFF_MECHANICS} When the user signs in on the box, you never see their password or 2FA. ${BOX_HELP_CLASSIFICATION}` : "Hand your box's desktop to the user for a step only they can do: a login, SSO, passkey, 2FA, a puzzle or image captcha, or payment confirmation. " + (deps.credentialFillEnabled === true ? "Not for a verification-code page when the login just filled carries a one-time code in 1Password: that code is filled for the subagent, so hand off only if the page is still asking after about a minute. " : "") + `${BOX_HELP_HANDOFF_MECHANICS} Use this instead of asking for credentials: the user signs in themselves on the box and you never see their password or 2FA. ${BOX_HELP_CLASSIFICATION}`,
     parameters: requestBoxHelpParameters,
     execute: async (ctx, args, d) => {
       ctx.signal.throwIfAborted();
@@ -493059,6 +494122,95 @@ function createSandAutoReviewClassifierContextExtractor(getParentConversationSta
   };
 }
 
+// ../packages/grok-bot-harness/src/runner/tools/sand-slides/subagent-config.ts
+init_subagents_pb();
+var SLIDES_SUBAGENT_TYPE = "slides";
+function isSlidesSubagentType(subagentType) {
+  return isBuiltinSubagent(subagentType, SLIDES_SUBAGENT_TYPE);
+}
+function sandSlidesChildSystemPrompt(args = {}) {
+  const stub = buildSandSubagentSystemPrompt({
+    subagentType: SLIDES_SUBAGENT_TYPE,
+    readonly: args.readonly
+  });
+  return `${stub}
+
+${SLIDES_SUBAGENT_PROMPT}`;
+}
+var SLIDES_SUBAGENT_PROMPT = [
+  "You build and edit slide decks on the box. You cannot talk to the user. The parent agent talks to them and shows them your PNGs.",
+  "",
+  "The dispatch prompt is the whole brief: the tool, house style or template path, the outline or that this is a one-shot, and what to return. Do not wait for the user. Do not ask follow-ups.",
+  "",
+  "## Tool",
+  "",
+  "Use the tool named in the brief. Edit locally with python-pptx even when the destination is Google Slides. Install it first:",
+  "",
+  "`pip install python-pptx`",
+  "",
+  "LibreOffice is already on the box.",
+  "",
+  "## Look",
+  "",
+  "After you write or change slides, render with these exact commands (working file is `deck.pptx`; copy or save the local `.pptx` to that name if needed):",
+  "",
+  "```",
+  "soffice --headless --convert-to pdf --outdir /tmp deck.pptx",
+  "pdftoppm -png -r 140 /tmp/deck.pdf renders/slide",
+  "```",
+  "",
+  "PNGs land as `renders/slide-01.png`, `renders/slide-02.png`, \u2026. Read those files. That is how you look. Judge them as if you were about to present \u2014 not a glance, a pass. Fix what you see. Render again until you would stand behind the slide.",
+  "",
+  "Work in passes of two or three slides. After each pass, read the new PNGs and fix them before the next pass.",
+  "",
+  "## Job",
+  "",
+  "- New deck with a house style: copy the template or match the named deck, then build the outline.",
+  "- New deck with no house style: pick one direction from the brief and build it. Do not invent a second sample and wait.",
+  "- Edit an existing deck: open it, look at the target slides, change them, look again.",
+  "",
+  "A one-shot brief skips outline and design stops. You still render and judge every 2\u20133 slides with the same rigor.",
+  "",
+  "## Build",
+  "",
+  "Prefer the deck's layouts and placeholders. Type into existing text. A title-and-body layout is the default for a list or a block of copy. Mix the layouts the house style already has. One idea per slide. Titles that can be read from the back of a room. Do not stamp the same slide five times.",
+  "",
+  "Check when you look:",
+  "",
+  "- Text sits on the slide, with margin",
+  "- Type and color match the house style",
+  "- Bullet glyphs are smaller than the text beside them",
+  "- Alignment and gaps look even. Nearby slides share a scale",
+  "- It still reads as a slide, not a clone of the slide before it",
+  "",
+  "## Return",
+  "",
+  "Your final message lists the box paths the parent should send: the `.pptx` and the `renders/slide-0N.png` files from this pass. Keep those files on the box. Do not upload them. Do not address the user."
+].join("\n");
+function slidesSubagentDescription() {
+  return [
+    "Build or edit a presentation on the box with python-pptx. Use when they want a deck, slides, or a presentation.",
+    "It runs headless and cannot talk to the user; it reports box paths back to you, and you SendToUser the PNGs.",
+    "Give it a self-contained brief: the tool (PowerPoint, Google Slides, Figma, HTML), house style or template path, the outline or that this is a one-shot, and what to return.",
+    "It writes a .pptx, renders PNGs with LibreOffice, and lists those paths. You stay with the user.",
+    "It runs in the background like any Task: you are notified when it finishes, so do not poll or await it."
+  ].join(" ");
+}
+function createSandSlidesSubagentConfig() {
+  return {
+    subagent_type: new SubagentType({
+      type: {
+        case: "custom",
+        value: new SubagentTypeCustom({ name: SLIDES_SUBAGENT_TYPE })
+      }
+    }),
+    description: slidesSubagentDescription(),
+    preserveTaskTool: false,
+    subagentSource: "builtin",
+    systemReminder: () => sandSlidesChildSystemPrompt()
+  };
+}
+
 // ../packages/grok-bot-harness/src/runner/tools/scm-tool-error-cards.ts
 init_dist2();
 function scmToolErrorFromMcpResult(result, emittingServerIdentifier) {
@@ -493087,6 +494239,7 @@ ${note}`;
   );
 }
 function scmProviderOf(provider) {
+  if (provider === "origin") return provider;
   return DASHBOARD_CONNECTABLE_PROVIDERS.find((candidate) => candidate === provider) ?? null;
 }
 function repoUrlFor(provider, repo) {
@@ -493102,10 +494255,29 @@ function repoUrlFor(provider, repo) {
       return void 0;
   }
 }
+function describeOriginToolError(error3, blockedAction) {
+  switch (error3.code) {
+    case REST_MCP_SCM_ERROR_CODES.notConnected:
+      return describeOriginAccessBlocker(
+        error3.reason === REST_MCP_SCM_NOT_CONNECTED_REASONS.teamDisabled ? { kind: "team_disabled" } : { kind: "not_enabled" },
+        blockedAction
+      );
+    case REST_MCP_SCM_ERROR_CODES.repoNotAccessible:
+      return describeOriginAccessBlocker(
+        { kind: "repo", ...error3.repo == null ? {} : { repo: error3.repo } },
+        blockedAction
+      );
+    case REST_MCP_SCM_ERROR_CODES.tokenRejected:
+    case REST_MCP_SCM_ERROR_CODES.tokenUnavailable:
+    case REST_MCP_SCM_ERROR_CODES.orgBlocked:
+      return null;
+  }
+}
 async function describeScmToolError(error3, toolName) {
   const provider = scmProviderOf(error3.provider);
   if (provider == null) return null;
   const blockedAction = `the ${toolName} call`;
+  if (provider === "origin") return describeOriginToolError(error3, blockedAction);
   switch (error3.code) {
     case REST_MCP_SCM_ERROR_CODES.notConnected:
       return describeScmConnectBlocker({ provider, knownIntent: "connect", blockedAction });
@@ -493238,11 +494410,11 @@ function isBelow(key, beforeMs, beforeId) {
 function clampedLimit(requested, limits) {
   return Math.min(Math.max(1, requested !== null && requested !== void 0 ? requested : limits.default), limits.max);
 }
-function take(newestFirst, limit) {
+function take(newestFirst, limit2) {
   const taken = [];
   let chars = 2;
   for (const item of newestFirst) {
-    if (taken.length >= limit)
+    if (taken.length >= limit2)
       return { taken, cause: "limit" };
     const size = JSON.stringify(item).length + (taken.length > 0 ? 1 : 0);
     if (taken.length > 0 && chars + size > MESSAGES_RESULT_CHAR_BUDGET) {
@@ -493748,7 +494920,7 @@ var import_node_path62 = require("node:path");
 init_zod();
 
 // ../packages/grok-bot-harness/src/runner/connector-files/connection-name.ts
-var CONNECTOR_CONNECTION_ARGUMENT_DESCRIPTION = "connection is the connection's identifier: the same one GetMcpServerStatus lists and that connection's own tools are prefixed with (for example user-onedrive, dashboard-team-1-Google-drive or user-Gmail--personal). The service short name (google-drive, onedrive, gmail or slack) is accepted when exactly one account of that service is connected; with several accounts, name the identifier so the right account is used. Supported today:";
+var CONNECTOR_CONNECTION_ARGUMENT_DESCRIPTION = "connection is the connection's identifier: the same one GetMcpServerStatus lists and that connection's own tools are prefixed with (for example user-onedrive, dashboard-team-1-Google-drive or user-Gmail--personal). The service short name (google-drive, onedrive or gmail) is accepted when exactly one account of that service is connected; with several accounts, name the identifier so the right account is used. Supported today:";
 function serviceKey(name17) {
   return name17.trim().toLowerCase().replaceAll(/[^a-z0-9]+/g, "-").replaceAll(/^-+|-+$/g, "");
 }
@@ -493784,11 +494956,11 @@ function describeAmbiguousConnectorConnection(requested, resolution) {
 var SAND_DOWNLOAD_FILE_TOOL_NAME = "download_file";
 var downloadFileObjectSchema = external_exports.object({
   connection: external_exports.string().trim().min(1).describe(
-    "Which connected account holds the file: the connection's identifier as GetMcpServerStatus lists it and as its own tools are prefixed with (e.g. user-onedrive, dashboard-team-1-Google-drive). The service short name (google-drive, onedrive, gmail, slack) also works when exactly one account of that service is connected. A name that matches nothing is answered with the identifiers that can serve files."
+    "Which connected account holds the file: the connection's identifier as GetMcpServerStatus lists it and as its own tools are prefixed with (e.g. user-onedrive, dashboard-team-1-Google-drive). The service short name (google-drive, onedrive, gmail) also works when exactly one account of that service is connected. A name that matches nothing is answered with the identifiers that can serve files."
   ),
   source: external_exports.object({
     fileId: external_exports.string().trim().optional().describe(
-      "Provider file id from that connection's listing or search tools. Google Drive and Slack take ids only."
+      "Provider file id from that connection's listing or search tools. Google Drive takes ids only."
     ),
     path: external_exports.string().trim().optional().describe(
       'OneDrive only: file path from the OneDrive root, e.g. "Documents/notes.txt". Provide exactly one of fileId or path.'
@@ -493895,7 +495067,6 @@ var DOWNLOAD_FILE_DESCRIPTION = [
   "- Google Drive: source.fileId is a Drive file id from the Drive listing or search tools. Google Docs, Sheets, Slides and Drawings have no file of their own and are exported as .docx, .xlsx, .pptx and .png; the returned name carries that extension.",
   '- OneDrive: source.fileId is an item id from list_drive_items or search_drive_items, or source.path is a path from the OneDrive root (e.g. "Documents/notes.txt").',
   `- Gmail: source.fileId is "<message id>/<attachment id>", both from get_thread (each attachment listed on a message carries an id). This is the only way to get an email attachment's bytes; the Gmail tools themselves never return them.`,
-  "- Slack: source.fileId is the file id (F\u2026) a Slack message or search result shows for an attachment. Canvases, posts and files that live in another service have no bytes to fetch this way.",
   "destination.path is the full path on your computer, name included; omit it to land the file in your downloads folder under the service's file name. A connection that cannot serve files answers with the ones that can."
 ].join("\n");
 async function runDownloadFile(args, deps) {
@@ -493977,7 +495148,7 @@ var SAND_UPLOAD_FILE_TOOL_NAME = "upload_file";
 var UPLOAD_FILE_MAX_NAME_LENGTH = 255;
 var uploadFileObjectSchema = external_exports.object({
   connection: external_exports.string().trim().min(1).describe(
-    "Which connected account receives the file: the connection's identifier as GetMcpServerStatus lists it and as its own tools are prefixed with (e.g. user-onedrive, dashboard-team-1-Google-drive). The service short name (google-drive, onedrive, gmail, slack) also works when exactly one account of that service is connected. A name that matches nothing is answered with the identifiers that can receive files."
+    "Which connected account receives the file: the connection's identifier as GetMcpServerStatus lists it and as its own tools are prefixed with (e.g. user-onedrive, dashboard-team-1-Google-drive). The service short name (google-drive, onedrive, gmail) also works when exactly one account of that service is connected. A name that matches nothing is answered with the identifiers that can receive files."
   ),
   sourcePath: external_exports.string().trim().min(1).describe(
     "Absolute path of the file on your computer, e.g. the path a Shell command or CopyToBox produced. Only files under /workspace or your own agent directory (/home/box/agent-data/agents/<your id>) can be sent; directories are not accepted."
@@ -494101,7 +495272,6 @@ var UPLOAD_FILE_DESCRIPTION = [
   '- Google Drive: destination.path is a folder path from My Drive root (e.g. "Reports/2026"; the folders must already exist), or destination.folderId is a Drive folder id from the Drive listing tools. Omit both for My Drive root. A new file is always created; Drive allows several files with one name.',
   '- OneDrive: destination.path is a folder path from the OneDrive root (e.g. "Documents/Reports"; the folders must already exist), or destination.folderId is a folder item id from list_drive_items. Omit both for the root. An existing file with the same name fails the upload unless destination.overwrite is true.',
   "- Gmail: destination.draftId is the draft id create_draft returned (or one from list_drafts); the file is attached to that draft and the draft id stays the same, so send it afterwards with send_message and that draftId. Attach last: Gmail's update_draft removes every attachment it is not handed again, so finish recipients, subject and body before calling upload_file, and never call update_draft on a draft that already has an attachment (make a new draft and attach again instead). Never put a file's contents into create_draft or send_message attachments yourself; that path cannot carry a real file. The draft with its attachments must stay under 25 MB.",
-  "- Slack: the file is uploaded to the user's own Slack files, not posted anywhere; destination.path, folderId and draftId do not apply. The result carries the file's Slack link. To put the file in a channel or thread, send that link with the Slack connection's own message tool: Slack shares the file into the conversation and shows it under the message. Never paste a file's contents into a Slack message tool.",
   "destination.name sets the file name; it defaults to the source file's name. A connection that cannot receive files answers with the ones that can."
 ].join("\n");
 async function runUploadFile(args, deps) {
@@ -494762,14 +495932,99 @@ function cloudCanvasToolsGateEligible(host) {
   return !host.isBoxScopedSubagent && host.gates.cloudCanvasTools();
 }
 
+// ../packages/grok-bot-harness/src/runner/sand-outbound-call-auto-review.ts
+var SAND_OUTBOUND_CALL_UNAVAILABLE_REASON = "Placing a live phone call needs your approval, which is not available in this conversation.";
+var SAND_OUTBOUND_CALL_CANCELLED_REASON = "The phone call was cancelled before it was placed.";
+var requests = createCounter("grok_bot.turn.outbound_call_request", {
+  description: "One increment per place_phone_call the model attempted, by what the approval did with it: approved, declined by the owner, retired unanswered, refused because the conversation has no route to a card, or cancelled before the card went up. Its total is the top of the funnel that grok_bot.turn.outbound_call counts the dials of. Separate from grok_bot.auto_review.approval because a call raises its card on the mcp surface, where a couple of dozen calls a fortnight sit under six figures of MCP tool approvals with no tag to separate them",
+  labelNames: ["result", "cause"]
+});
+var PURPOSE_CLAUSE = {
+  ask_for_information: "ask for information",
+  arrange_or_follow_up: "arrange or follow something up",
+  pass_on_a_message: "pass on a message",
+  sell_or_promote: "sell or promote something"
+};
+async function reviewSandOutboundCall(args) {
+  const ledger = humanOnlyReviewLedger(args.options.toolDecisions, args.toolCallId);
+  const counted = (result, cause = "none") => requests.increment(args.ctx, 1, { result, cause });
+  if (args.signal?.aborted === true) {
+    ledger.ruleRefused();
+    counted("cancelled");
+    return { allowed: false, reason: SAND_OUTBOUND_CALL_CANCELLED_REASON };
+  }
+  const controller = args.options.autoReviewController;
+  if (controller === void 0) {
+    ledger.ruleRefused();
+    counted("no_reviewer");
+    return { allowed: false, reason: SAND_OUTBOUND_CALL_UNAVAILABLE_REASON };
+  }
+  const { to: to3, purpose, instructions } = args.target;
+  const { fixtureNotice } = args.options;
+  const approval = await requestReviewedApproval(
+    args.ctx,
+    controller,
+    {
+      agentId: args.options.agentId,
+      surface: "mcp",
+      fingerprint: fingerprintSandAutoReviewTarget({ to: to3, purpose, instructions }),
+      reason: `A live phone call to ${to3} to ${PURPOSE_CLAUSE[purpose]}. It cannot be recalled once you approve. What you are sending the agent to get done:
+
+${instructions}`,
+      summary: [fixtureNotice, `Place a phone call to ${to3}`].filter((part) => part !== void 0).join(" "),
+      summaryCopy: {
+        kind: "phone_call",
+        params: {
+          destination: to3,
+          request: instructions,
+          ...fixtureNotice === void 0 ? {} : { notice: fixtureNotice }
+        }
+      },
+      command: `Call ${to3}`,
+      onCardShown: ledger.cardShown,
+      signal: args.signal,
+      expiryPolicy: args.options.getApprovalExpiryPolicy?.()
+    },
+    { toolCallId: args.toolCallId, approvalMode: "ask_human" }
+  );
+  ledger.answered(approval);
+  if (approval.approved) {
+    counted("approved");
+    return { allowed: true };
+  }
+  if (approval.retired === void 0) counted("declined");
+  else counted("retired", approval.retired);
+  return { allowed: false, reason: approval.reason ?? "The user declined." };
+}
+
 // ../packages/grok-bot-harness/src/runner/tools/place-phone-call-tool.ts
 init_zod();
+
+// ../packages/grok-bot-harness/src/ports/outbound-call.ts
+var SAND_OUTBOUND_CALL_PURPOSES = [
+  "ask_for_information",
+  "arrange_or_follow_up",
+  "pass_on_a_message",
+  "sell_or_promote"
+];
+
+// ../packages/grok-bot-harness/src/runner/tools/place-phone-call-tool.ts
 var SAND_PLACE_PHONE_CALL_TOOL_NAME = "place_phone_call";
 var E1642 = /^\+[1-9]\d{7,14}$/;
+var declaredPurposes = createCounter("grok_bot.turn.outbound_call_purpose", {
+  description: "One increment per place_phone_call the model attempted, by the purpose it declared, which is the only record of what a call was for that exists before it is dialled. sell_or_promote is refused here, ahead of the eligibility check and of any approval card, so its count is the refusal count and the rest are the calls that go on to be counted by grok_bot.turn.outbound_call_request",
+  labelNames: ["purpose"]
+});
+var SAND_OUTBOUND_CALL_PURPOSE_REFUSED_REASON = "Grok Bot does not place calls whose purpose is to sell, pitch, or promote something to the person who answers. Nothing was dialled and no approval was requested. Do not place this call under a different purpose or a reworded script; tell the user that calls cannot be used for this.";
 var MAX_SPOKEN_INSTRUCTIONS_LENGTH = 320;
 var placePhoneCallParameters = external_exports.object({
   to: external_exports.string().trim().regex(E1642, "must be an E.164 phone number such as +16508228863").describe("The destination phone number to call, in E.164 format (for example +16508228863)."),
-  instructions: external_exports.string().trim().min(1).max(MAX_SPOKEN_INSTRUCTIONS_LENGTH).describe("The script the voice agent follows on the call.")
+  purpose: external_exports.enum(SAND_OUTBOUND_CALL_PURPOSES).describe(
+    "What this call is for. Calls whose purpose is to sell, pitch, promote, or solicit interest in a product, service, investment, or opportunity are not placed, and a message that introduces an offer to the person answering counts as selling however it is framed."
+  ),
+  instructions: external_exports.string().trim().min(1).max(MAX_SPOKEN_INSTRUCTIONS_LENGTH).describe(
+    "The script the voice agent follows on the call, carrying the question it puts to whoever answers at this number. The user who asked for the call is not on it."
+  )
 });
 var description = [
   "Place a live outbound phone call to an external number through Grok Bot telephony.",
@@ -494779,6 +496034,10 @@ function whatToTellTheUser(watched) {
   return watched ? " Tell the user the call has been placed and that you will report back once it is over." : " Tell the user the call has been placed and that you will not be able to report how it went.";
 }
 async function placePhoneCall(deps, args) {
+  declaredPurposes.increment(deps.ctx, 1, { purpose: args.purpose });
+  if (args.purpose === "sell_or_promote") {
+    return SAND_OUTBOUND_CALL_PURPOSE_REFUSED_REASON;
+  }
   const eligibility = await deps.outboundCall.checkEligibility(args.to);
   if (eligibility.kind === "ineligible") {
     return eligibility.reason;
@@ -494808,65 +496067,8 @@ function createPlacePhoneCallTool(deps) {
       detail: `call ${args.to}`,
       target: args.to
     }),
-    execute: async (ctx, args, d) => placePhoneCall({ ...d, signal: ctx.signal }, args)
+    execute: async (ctx, args, d) => placePhoneCall({ ...d, ctx, signal: ctx.signal }, args)
   });
-}
-
-// ../packages/grok-bot-harness/src/runner/sand-outbound-call-auto-review.ts
-var SAND_OUTBOUND_CALL_UNAVAILABLE_REASON = "Placing a live phone call needs your approval, which is not available in this conversation.";
-var SAND_OUTBOUND_CALL_CANCELLED_REASON = "The phone call was cancelled before it was placed.";
-var requests = createCounter("grok_bot.turn.outbound_call_request", {
-  description: "One increment per place_phone_call the model attempted, by what the approval did with it: approved, declined by the owner, retired unanswered, refused because the conversation has no route to a card, or cancelled before the card went up. Its total is the top of the funnel that grok_bot.turn.outbound_call counts the dials of. Separate from grok_bot.auto_review.approval because a call raises its card on the mcp surface, where a couple of dozen calls a fortnight sit under six figures of MCP tool approvals with no tag to separate them",
-  labelNames: ["result", "cause"]
-});
-async function reviewSandOutboundCall(args) {
-  const ledger = humanOnlyReviewLedger(args.options.toolDecisions, args.toolCallId);
-  const counted = (result, cause = "none") => requests.increment(args.ctx, 1, { result, cause });
-  if (args.signal?.aborted === true) {
-    ledger.ruleRefused();
-    counted("cancelled");
-    return { allowed: false, reason: SAND_OUTBOUND_CALL_CANCELLED_REASON };
-  }
-  const controller = args.options.autoReviewController;
-  if (controller === void 0) {
-    ledger.ruleRefused();
-    counted("no_reviewer");
-    return { allowed: false, reason: SAND_OUTBOUND_CALL_UNAVAILABLE_REASON };
-  }
-  const { to: to3, instructions } = args.target;
-  const approval = await requestReviewedApproval(
-    args.ctx,
-    controller,
-    {
-      agentId: args.options.agentId,
-      surface: "mcp",
-      fingerprint: fingerprintSandAutoReviewTarget({ to: to3, instructions }),
-      reason: `This places a live phone call to ${to3} and speaks this script to whoever answers, and it cannot be recalled once you approve:
-
-${instructions}`,
-      summary: [
-        args.options.fixtureNotice,
-        summarizeSandMcpAutoReviewAction({
-          serverDisplayName: "Agent telephony",
-          toolName: SAND_PLACE_PHONE_CALL_TOOL_NAME,
-          mcpArguments: { to: to3, session: { instructions } }
-        })
-      ].filter((part) => part !== void 0).join(" "),
-      command: `Call ${to3}`,
-      onCardShown: ledger.cardShown,
-      signal: args.signal,
-      expiryPolicy: args.options.getApprovalExpiryPolicy?.()
-    },
-    { toolCallId: args.toolCallId, approvalMode: "ask_human" }
-  );
-  ledger.answered(approval);
-  if (approval.approved) {
-    counted("approved");
-    return { allowed: true };
-  }
-  if (approval.retired === void 0) counted("declined");
-  else counted("retired", approval.retired);
-  return { allowed: false, reason: approval.reason ?? "The user declined." };
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-connected-activity-tool.ts
@@ -494968,7 +496170,81 @@ function maybeAddCommunicationTools(args) {
 
 // ../packages/grok-bot-harness/src/runner/turn-performance.ts
 init_dist();
-var logger103 = createLogger("sand:turn-performance");
+
+// ../packages/grok-bot-harness/src/runner/turn-latency/turn-ttfa-trace.ts
+init_dist();
+var TTFA_BUCKET_UPPER_BOUNDS = [
+  [5e3, "lt_5s"],
+  [1e4, "5_10s"],
+  [2e4, "10_20s"],
+  [3e4, "20_30s"],
+  [6e4, "30_60s"]
+];
+function classifyTtfaBucket(ms2) {
+  for (const [upperExclusive, bucket] of TTFA_BUCKET_UPPER_BOUNDS) {
+    if (ms2 < upperExclusive) return bucket;
+  }
+  return "60s_plus";
+}
+function ttfaPhaseSpans(marks) {
+  const points = [
+    [void 0, marks.serverReceivedAt],
+    ["behind_previous_turn", marks.previousTurnSettledAt],
+    ["queue", marks.activityScheduledAt],
+    [marks.activityScheduledAt === void 0 ? "queue" : "schedule", marks.activityStartedAt],
+    ["restore", marks.hostReceivedAt],
+    ["setup", marks.firstRequestAt],
+    ["first_token", marks.firstTokenAt],
+    ["first_token_to_send", marks.firstMessageAt]
+  ];
+  const known = points.filter(
+    (point2) => point2[1] !== void 0 && Number.isFinite(point2[1])
+  );
+  const startAt = known[0]?.[1] ?? marks.firstMessageAt;
+  const phases = [];
+  let previousAt = startAt;
+  for (const [phase, at3] of known.slice(1)) {
+    const endAt = Math.max(previousAt, at3);
+    if (phase !== void 0) phases.push({ phase, startAt: previousAt, endAt });
+    previousAt = endAt;
+  }
+  return { phases, startAt };
+}
+function emitTtfaTrace({
+  trace: trace2,
+  marks,
+  toEpochMs,
+  attributes
+}) {
+  const { phases, startAt } = ttfaPhaseSpans(marks);
+  const totalMs = Math.max(0, marks.firstMessageAt - startAt);
+  const shared = {
+    ...attributes,
+    "grok_bot.ttfa.total_ms": totalMs,
+    "grok_bot.ttfa.bucket": classifyTtfaBucket(totalMs)
+  };
+  const runSpan = getSpan2(trace2.runCtx);
+  runSpan?.setAttributes(shared);
+  for (const { phase, startAt: phaseStart, endAt } of phases) {
+    const phaseMs = endAt - phaseStart;
+    runSpan?.setAttribute(`grok_bot.ttfa.${phase}_ms`, phaseMs);
+    recordCompletedSpanIfParented(
+      trace2.phaseParentCtx.withName(`grok_bot.ttfa.${phase}`),
+      {
+        startTime: toEpochMs(phaseStart),
+        attributes: { ...shared, "grok_bot.ttfa.phase": phase, "grok_bot.ttfa.phase_ms": phaseMs }
+      },
+      toEpochMs(endAt)
+    );
+  }
+}
+
+// ../packages/grok-bot-harness/src/runner/turn-performance.ts
+var logger104 = createLogger("sand:turn-performance");
+var turnSendToUserFailedKey = createKey(
+  /* @__PURE__ */ Symbol("turnSendToUserFailed"),
+  void 0
+);
 var turnToolCallAttributionStartKey = createKey(
   /* @__PURE__ */ Symbol("turnToolCallAttributionStart"),
   void 0
@@ -495055,6 +496331,12 @@ var turnUncachedInputTokens = createHistogram("grok_bot.turn.uncached_input_toke
 var turnPromptCache = createCounter("grok_bot.turn.prompt_cache", {
   labelNames: [...PROMPT_CACHE_LABELS, "result"]
 });
+var turnPromptInputTokens = createCounter("grok_bot.turn.prompt_input_tokens", {
+  labelNames: PROMPT_CACHE_LABELS
+});
+var turnPromptCachedTokens = createCounter("grok_bot.turn.prompt_cached_tokens", {
+  labelNames: PROMPT_CACHE_LABELS
+});
 function classifyPromptCacheResult(inputTokens, cacheReadTokens) {
   if (cacheReadTokens <= 0) return "miss";
   const fraction = cacheReadTokens / inputTokens;
@@ -495097,7 +496379,7 @@ function safelyObserve(ctx, callback) {
   try {
     callback();
   } catch (error3) {
-    logger103.warn(ctx, `Turn performance observation failed (${errorLogTag(error3)})`);
+    logger104.warn(ctx, `Turn performance observation failed (${errorLogTag(error3)})`);
   }
 }
 function createTurnPerformanceObservation({
@@ -495111,6 +496393,8 @@ function createTurnPerformanceObservation({
   runRole = "other",
   userMessageSentAt,
   turnStartedAt,
+  traceMarks,
+  requestSource,
   clock = realClock
 }) {
   let active = true;
@@ -495128,6 +496412,15 @@ function createTurnPerformanceObservation({
   let pendingInferenceTtft;
   let firstToolCallId;
   let firstToolRecorded = false;
+  let firstToolName;
+  let firstRequestAt;
+  let firstCallUsage;
+  let firstMessageAt;
+  let ttfaTrace;
+  let ttfaTraceEmitted = false;
+  let retriesBeforeFirstToken = 0;
+  let retryDelayBeforeFirstTokenMs = 0;
+  let failedSendsBeforeFirstMessage = 0;
   let metricContext = ctx;
   const activeToolCalls = /* @__PURE__ */ new Map();
   let modelId;
@@ -495163,6 +496456,52 @@ function createTurnPerformanceObservation({
       })
     );
   };
+  const maybeEmitTtfaTrace = (force = false) => {
+    const trace2 = ttfaTrace;
+    const messageAt = firstMessageAt;
+    if (ttfaTraceEmitted || trace2 === void 0 || messageAt === void 0) return;
+    if (!force && firstCallUsage === void 0) return;
+    ttfaTraceEmitted = true;
+    const usage = firstCallUsage;
+    safelyObserve(
+      trace2.runCtx,
+      () => emitTtfaTrace({
+        trace: trace2,
+        marks: {
+          serverReceivedAt: traceMarks?.serverReceivedAt,
+          previousTurnSettledAt: traceMarks?.previousTurnSettledAt,
+          activityScheduledAt: traceMarks?.activityScheduledAt,
+          activityStartedAt,
+          hostReceivedAt: startedAt,
+          firstRequestAt,
+          firstTokenAt: firstMeaningfulAt,
+          firstMessageAt: messageAt
+        },
+        toEpochMs: (monotonicMs2) => Date.now() - (clock.monotonicNow() - monotonicMs2),
+        attributes: {
+          "grok_bot.harness": harness ?? "unknown",
+          "grok_bot.session_kind": sessionKind,
+          "grok_bot.turn_kind": turnKind,
+          "grok_bot.initiator": initiator,
+          "grok_bot.request_source": requestSource ?? "unknown",
+          "grok_bot.run_role": runRole,
+          "grok_bot.model": modelId ?? "unknown",
+          "grok_bot.first_tool": firstToolName ?? "none",
+          "grok_bot.steps_before_first_message": stepsStarted,
+          "grok_bot.failed_sends_before_first_message": failedSendsBeforeFirstMessage,
+          "grok_bot.first_token.retries": retriesBeforeFirstToken,
+          "grok_bot.first_token.retry_delay_ms": retryDelayBeforeFirstTokenMs,
+          ...traceMarks === void 0 ? {} : { "grok_bot.activity_attempt": traceMarks.activityAttempt },
+          "grok_bot.first_call.prompt_bucket": classifyPromptSizeBucket(usage?.inputTokens),
+          "grok_bot.first_call.cache_class": usage === void 0 || !(usage.inputTokens > 0) ? "unknown" : classifyPromptCacheResult(usage.inputTokens, usage.cacheReadTokens),
+          ...usage === void 0 ? {} : {
+            "grok_bot.first_call.input_tokens": usage.inputTokens,
+            "grok_bot.first_call.cached_tokens": usage.cacheReadTokens
+          }
+        }
+      })
+    );
+  };
   const streamObserver = {
     onRequestStart(requestCtx) {
       if (!active || harness === void 0) return void 0;
@@ -495174,6 +496513,7 @@ function createTurnPerformanceObservation({
       const requestStep = stepsStarted;
       if (!firstRequestStarted) {
         firstRequestStarted = true;
+        firstRequestAt = requestStartedAt;
         turnTtfi.histogram(requestCtx, requestStartedAt - startedAt, { harness });
         if (harness === "temporal" && activityStartedAt !== void 0) {
           turnActivityTtfi.histogram(requestCtx, requestStartedAt - activityStartedAt, {
@@ -495254,6 +496594,10 @@ function createTurnPerformanceObservation({
           const cacheReadTokens = Math.min(Math.max(0, usage.cacheReadTokens), inputTokens);
           requestUsage = { inputTokens, cacheReadTokens };
           if (ownsInferenceTtft) emitInferenceTtft(requestUsage);
+          if (requestStep === 1) {
+            firstCallUsage = requestUsage;
+            maybeEmitTtfaTrace();
+          }
           if (!(inputTokens > 0)) return;
           const tags = {
             harness,
@@ -495261,6 +496605,8 @@ function createTurnPerformanceObservation({
             call: requestStep === 1 ? "first" : "later"
           };
           turnUncachedInputTokens.histogram(requestCtx, inputTokens - cacheReadTokens, tags);
+          turnPromptInputTokens.increment(requestCtx, inputTokens, tags);
+          turnPromptCachedTokens.increment(requestCtx, cacheReadTokens, tags);
           turnPromptCache.increment(requestCtx, 1, {
             ...tags,
             result: classifyPromptCacheResult(inputTokens, cacheReadTokens)
@@ -495282,6 +496628,7 @@ function createTurnPerformanceObservation({
           firstToolCallId ??= callId;
           if (!firstToolRecorded && toolName !== void 0 && callId === firstToolCallId) {
             firstToolRecorded = true;
+            firstToolName = TOOL_LABEL.test(toolName) ? toolName : "other";
             turnFirstTool.increment(metricContext, 1, {
               harness,
               session_kind: sessionKind,
@@ -495316,6 +496663,10 @@ function createTurnPerformanceObservation({
     },
     retry(observation) {
       if (!active || harness === void 0) return;
+      if (observation.outcome === "retried" && !firstMeaningfulPartSeen) {
+        retriesBeforeFirstToken += 1;
+        retryDelayBeforeFirstTokenMs += observation.delayMs ?? 0;
+      }
       if (observation.outcome === "retried") {
         suppressNextGap = true;
         nextRequestIsRetry = lastRequestState === "open" || lastRequestState === "failed";
@@ -495388,6 +496739,17 @@ function createTurnPerformanceObservation({
           })
         );
       }
+      firstMessageAt = dispatchedAt;
+      maybeEmitTtfaTrace();
+    },
+    attachTrace(trace2) {
+      ttfaTrace = trace2;
+    },
+    flushTrace() {
+      maybeEmitTtfaTrace(true);
+    },
+    sendToUserFailed() {
+      if (!firstMessageDispatched) failedSendsBeforeFirstMessage += 1;
     },
     noteModelResolved(resolvedModelId) {
       modelId = resolvedModelId;
@@ -495401,6 +496763,7 @@ function createTurnPerformanceObservation({
       if (harness === void 0) return;
       flushAwaitingModel();
       emitInferenceTtft();
+      maybeEmitTtfaTrace(true);
       safelyObserve(
         metricContext,
         () => turnDuration.histogram(metricContext, clock.monotonicNow() - startedAt, {
@@ -497253,12 +498616,12 @@ function threadLines(thread, index) {
   }
   return lines2;
 }
-function renderEmailThreadSearch(query, threads) {
+function renderEmailThreadSearch(query2, threads) {
   if (threads.length === 0) {
-    return `No email threads match "${query}". Try different words, a wider time range, or mode "keyword" for an exact address or phrase.`;
+    return `No email threads match "${query2}". Try different words, a wider time range, or mode "keyword" for an exact address or phrase.`;
   }
   const lines2 = [
-    `${threads.length} ${threads.length === 1 ? "thread matches" : "threads match"} "${query}":`
+    `${threads.length} ${threads.length === 1 ? "thread matches" : "threads match"} "${query2}":`
   ];
   threads.forEach((thread, index) => {
     lines2.push(...threadLines(thread, index));
@@ -498062,20 +499425,44 @@ function createReadAgentActivityTool(deps) {
 
 // ../packages/grok-bot-harness/src/runner/tools/recall-memory-tool.ts
 init_zod();
+
+// ../packages/grok-bot-harness/src/runner/agent-state.ts
+var SAND_MEMORY_SCOPES = ["conversation", "agent", "user"];
+var SAND_USER_BOT_MEMORY_SCOPE = "user_bot";
+function stateWriteOk(detail) {
+  return { ok: true, detail };
+}
+
+// ../packages/grok-bot-harness/src/runner/tools/recall-memory-tool.ts
 var RECALL_MEMORY_DEFAULT_LIMIT = 20;
 var RECALL_MEMORY_MAX_LIMIT = 50;
 var RECALL_MEMORY_CHAR_BUDGET = 4e3;
 var RECALL_MEMORY_SCOPES = ["agent", "user", "all"];
+var RECALL_MEMORY_USER_BOT_SCOPES = [
+  "agent",
+  "user",
+  SAND_USER_BOT_MEMORY_SCOPE,
+  "all"
+];
+var query = external_exports.string().trim().min(1).describe(
+  "What to look for. Facts sharing distinctive words with the query rank first; when nothing overlaps (short identifiers like a ticket id or an acronym) a literal case-insensitive substring match is used instead."
+);
+var limit = external_exports.number().int().min(1).max(RECALL_MEMORY_MAX_LIMIT).optional().catch(void 0).describe(
+  `Maximum facts to return (default ${RECALL_MEMORY_DEFAULT_LIMIT}, max ${RECALL_MEMORY_MAX_LIMIT}).`
+);
 var recallMemoryParameters = external_exports.object({
-  query: external_exports.string().trim().min(1).describe(
-    "What to look for. Facts sharing distinctive words with the query rank first; when nothing overlaps (short identifiers like a ticket id or an acronym) a literal case-insensitive substring match is used instead."
-  ),
+  query,
   scope: external_exports.enum(RECALL_MEMORY_SCOPES).optional().catch(void 0).describe(
     'Which memory to search: "agent" is your own memory, "user" is the shared user memory every assistant of this user contributes to, "all" (default) is both.'
   ),
-  limit: external_exports.number().int().min(1).max(RECALL_MEMORY_MAX_LIMIT).optional().catch(void 0).describe(
-    `Maximum facts to return (default ${RECALL_MEMORY_DEFAULT_LIMIT}, max ${RECALL_MEMORY_MAX_LIMIT}).`
-  )
+  limit
+});
+var recallMemoryUserBotParameters = external_exports.object({
+  query,
+  scope: external_exports.enum(RECALL_MEMORY_USER_BOT_SCOPES).optional().catch(void 0).describe(
+    'Which memory to search: "agent" is your own memory, "user" is the shared user memory every assistant of this user contributes to, "user_bot" is your notes with this person, "all" (default) is every one of them.'
+  ),
+  limit
 });
 var description7 = [
   "Search your durable memory for facts that are not in the memory section of your prompt: older log entries, notes that have aged out of the recent slice, and shared user facts recorded by any of this user's assistants.",
@@ -498084,15 +499471,15 @@ var description7 = [
 ].join("\n");
 function collectRecallMemoryCandidates(deps, scope) {
   const candidates = [];
-  if (scope !== "user") {
-    const store = deps.memoryStore();
+  const store = deps.memoryStore();
+  if (scope === "agent" || scope === "all") {
     if (store != null) {
       for (const record3 of store.listMemories(MEMORY_SCAN_ALL)) {
         candidates.push({ ...record3, scope: "agent" });
       }
     }
   }
-  if (scope !== "agent") {
+  if (scope === "user" || scope === "all") {
     const userMemory = deps.userMemory();
     if (userMemory != null) {
       for (const record3 of userMemory.listAll()) {
@@ -498100,16 +499487,26 @@ function collectRecallMemoryCandidates(deps, scope) {
       }
     }
   }
+  if (scope === "user_bot" || scope === "all") {
+    const userBot = store?.memoryScopes?.userBot;
+    if (userBot != null) {
+      for (const record3 of userBot.listMemories(MEMORY_SCAN_ALL)) {
+        candidates.push({ ...record3, scope: "user_bot" });
+      }
+    }
+  }
   return candidates;
 }
-function scopeLabel(scope) {
+function scopeLabel(scope, userBotOffered2) {
   switch (scope) {
     case "agent":
       return "your memory";
     case "user":
       return "the shared user memory";
+    case "user_bot":
+      return "your notes with this person";
     case "all":
-      return "your memory and the shared user memory";
+      return userBotOffered2 ? "your memory, your notes with this person and the shared user memory" : "your memory and the shared user memory";
   }
 }
 function candidateProvenance(candidate) {
@@ -498117,6 +499514,7 @@ function candidateProvenance(candidate) {
     const via = candidate.via?.trim() ?? "";
     return `, shared${via.length > 0 ? ` via ${via}` : ""}`;
   }
+  if (candidate.scope === "user_bot") return ", with this person";
   const tag = candidate.source === void 0 ? null : agentMemorySourceTag(candidate.source);
   return tag === null ? "" : `, ${tag}`;
 }
@@ -498125,12 +499523,13 @@ function candidateLine(candidate) {
   return `- (${formatMemoryDate(candidate.createdAt)}) [${tier}${candidateProvenance(candidate)}] ${candidate.content}`;
 }
 function renderRecallMemoryResult(args) {
-  const { query, scope, matches, searched } = args;
+  const { query: query2, scope, matches, searched } = args;
+  const label = scopeLabel(scope, args.userBotOffered === true);
   if (matches.length === 0) {
-    return `No facts in ${scopeLabel(scope)} match "${query}" (${searched} searched). Try different words, or a shorter literal fragment.`;
+    return `No facts in ${label} match "${query2}" (${searched} searched). Try different words, or a shorter literal fragment.`;
   }
   const lines2 = [
-    `Top ${matches.length} ${matches.length === 1 ? "match" : "matches"} for "${query}" in ${scopeLabel(scope)} (${searched} ${searched === 1 ? "fact" : "facts"} searched):`
+    `Top ${matches.length} ${matches.length === 1 ? "match" : "matches"} for "${query2}" in ${label} (${searched} ${searched === 1 ? "fact" : "facts"} searched):`
   ];
   let budget = RECALL_MEMORY_CHAR_BUDGET;
   let shown = 0;
@@ -498147,16 +499546,23 @@ function renderRecallMemoryResult(args) {
   }
   return lines2.join("\n");
 }
+function userBotOffered(deps) {
+  return deps.memoryStore()?.memoryScopes?.userBotScope !== void 0;
+}
+function recallMemoryParametersFor(deps) {
+  return userBotOffered(deps) ? recallMemoryUserBotParameters : recallMemoryParameters;
+}
 function recallMemory(deps, args) {
   const scope = args.scope ?? "all";
-  const limit = Math.min(args.limit ?? RECALL_MEMORY_DEFAULT_LIMIT, RECALL_MEMORY_MAX_LIMIT);
+  const limit2 = Math.min(args.limit ?? RECALL_MEMORY_DEFAULT_LIMIT, RECALL_MEMORY_MAX_LIMIT);
   const candidates = collectRecallMemoryCandidates(deps, scope);
-  const matches = searchMemoryRecords(args.query, candidates, limit);
+  const matches = searchMemoryRecords(args.query, candidates, limit2);
   return renderRecallMemoryResult({
     query: args.query.trim(),
     scope,
     matches,
-    searched: candidates.length
+    searched: candidates.length,
+    userBotOffered: userBotOffered(deps)
   });
 }
 function createRecallMemoryTool(deps) {
@@ -498164,7 +499570,7 @@ function createRecallMemoryTool(deps) {
     id: "PLATFORM_ACTION",
     name: SAND_RECALL_MEMORY_TOOL_NAME,
     description: description7,
-    parameters: recallMemoryParameters,
+    parameters: recallMemoryParametersFor(deps),
     describeActivity: (args) => ({ detail: args.query }),
     execute: async (_ctx, args, d) => recallMemory(d, args)
   });
@@ -498312,49 +499718,6 @@ function createRequestCookieOriginApprovalTool(deps) {
       return formatCookieOriginApprovalOutcome(
         await withToolExecutionTimeoutSuspended(ctx, request3)
       );
-    }
-  });
-}
-
-// ../packages/grok-bot-harness/src/runner/tools/request-onepassword-connect-tool.ts
-init_zod();
-
-// ../packages/grok-bot-harness/src/ports/credentials.ts
-var SAND_CREDENTIAL_TURN_REFUSAL_PHRASE = {
-  room: `this is a group-room turn, and the user's 1Password logins are only available in their own 1:1 chat on the main session. Nothing is wrong with the 1Password connection. If the sign-in is for your user, ask them to continue in your 1:1 chat (pass "to":"dm" on SendToUser to reach it) and use their logins from there; if it is for someone else in the room, they sign in themselves`,
-  side_session: "this is a side session, and the user's 1Password logins are only available from the main session. Nothing is wrong with the 1Password connection. Ask the user to continue in the main session, or hand them the screen with request_box_help"
-};
-
-// ../packages/grok-bot-harness/src/runner/tools/request-onepassword-connect-tool.ts
-var SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME = "request_1password_connect";
-var ONEPASSWORD_CONNECT_CARD_HINT = `Nothing was shown to the user. To ask them to connect one, call ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, and only if the task needs their saved logins; otherwise use request_box_help for the sign-in.`;
-var requestOnePasswordConnectParameters = external_exports.object({}).strict();
-var cardOffered = createCounter("grok_bot.onepassword_connect.card_offered", {
-  description: "request_1password_connect tool calls: the agent asked the user to connect a 1Password vault from the chat",
-  labelNames: ["outcome"]
-});
-var REQUEST_ONEPASSWORD_CONNECT_DESCRIPTION = "Show an in-chat card asking the user to connect 1Password, so saved logins can fill on Grok Bot's computer with their approval. Call it once when ListCredentials or GetCredentialProviderStatus reports no vault and the task needs a saved login. The card is the whole ask: explain in your own words what connecting unblocks, and never paste a link or a settings path. Connecting happens on the user's Mac; on a phone the card says so. This does not end your turn and you are not woken when they connect: when the user says it is connected, call ListCredentials again.";
-function createRequestOnePasswordConnectTool(deps) {
-  let cardSent = false;
-  return defineCommunicateTool(deps, {
-    id: "REQUEST_ONEPASSWORD_CONNECT",
-    name: SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME,
-    description: REQUEST_ONEPASSWORD_CONNECT_DESCRIPTION,
-    parameters: requestOnePasswordConnectParameters,
-    describeActivity: () => ({ detail: "Requesting a 1Password connection" }),
-    execute: async (ctx, _args, d) => {
-      if (d.turnRefusal !== void 0) {
-        cardOffered.increment(ctx, 1, { outcome: "refused_turn" });
-        return `The card was NOT shown: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[d.turnRefusal]}.`;
-      }
-      if (cardSent) {
-        cardOffered.increment(ctx, 1, { outcome: "duplicate" });
-        return "That card is already in the chat from earlier this turn; nothing new was shown. Wait for the user instead of sending it again.";
-      }
-      cardSent = true;
-      d.onSendMessage({ type: "onepassword-connect" }, Date.now());
-      cardOffered.increment(ctx, 1, { outcome: "shown" });
-      return "The card is in the chat. You are not woken automatically; when the user says 1Password is connected, call ListCredentials again. Confirm with the user before retrying the blocked sign-in.";
     }
   });
 }
@@ -499998,109 +501361,6 @@ function observeComputerTool(tool, name17, deps) {
   };
 }
 
-// ../packages/grok-bot-harness/src/runner/tools/sand-credential-provider-status-tool.ts
-init_zod();
-var SAND_CREDENTIAL_PROVIDER_STATUS_TOOL_NAME = "GetCredentialProviderStatus";
-var credentialProviderStatusParameters = external_exports.object({}).strict();
-function renderCredentialProviderStatus(status) {
-  switch (status.kind) {
-    case "not-connected":
-      return `Credential provider status: not connected. Saved item count: 0. ${ONEPASSWORD_CONNECT_CARD_HINT}`;
-    case "connected":
-      return `Credential provider status: connected. Connections: ${status.connectionCount}. Saved item count: ${status.itemCount}. Connections needing renewal or attention: ${status.connectionsNeedingAttention}. This is metadata only; credential values are never returned.`;
-  }
-}
-function createCredentialProviderStatusTool(reader) {
-  return defineCommunicateTool(reader, {
-    id: "READ",
-    name: SAND_CREDENTIAL_PROVIDER_STATUS_TOOL_NAME,
-    description: "Read the user's current saved-credential provider status from Cursor's backend. Call this when the user asks whether their password manager, vault, saved credentials, or 1Password connection is connected, how many saved items exist, or whether renewal needs attention. Never infer status from chat history or the filesystem. The tool returns only provider-neutral counts and health metadata, never secret values, item titles or sites, provider item IDs, vault IDs, tokens, or fill authority.",
-    parameters: credentialProviderStatusParameters,
-    execute: async (_ctx, _args, deps) => {
-      if (deps.turnRefusal !== void 0) {
-        return `Credential provider status: unavailable on this turn: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[deps.turnRefusal]}.`;
-      }
-      try {
-        return renderCredentialProviderStatus(await deps.getStatus());
-      } catch (error3) {
-        return `Credential provider status: unavailable. The backend status check failed; this does not mean the provider is disconnected. Tell the user the status could not be checked and that the 1Password page in the Marketplace on their Mac shows the live state. Diagnostic class: ${errorLogTag(error3)}.`;
-      }
-    }
-  });
-}
-
-// ../packages/grok-bot-harness/src/runner/tools/sand-credential-tools.ts
-init_zod();
-var SHARED_VAULT = `the "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" 1Password vault`;
-var listCredentialsParameters = external_exports.object({
-  site: external_exports.string().trim().optional().describe(
-    "Current website URL or domain. Always pass this when a browser login is blocked; only credentials allowed for that live site are returned."
-  ),
-  query: external_exports.string().trim().optional().describe(
-    "Optional service/name search when no website URL is available, e.g. reform or stripe."
-  ),
-  forceRefresh: external_exports.boolean().optional().describe(
-    `Set true to refresh the catalog from 1Password before listing, after the user says they just added or moved an item into ${SHARED_VAULT}, or on their next request to log in or retry after a missing result. Leave unset otherwise: the catalog already refreshes on its own and provider refreshes are rate limited.`
-  )
-});
-function credentialSiteHost(raw) {
-  try {
-    return new URL(raw.includes("://") ? raw : `https://${raw}`).hostname;
-  } catch {
-    return raw;
-  }
-}
-function describeCredential(view) {
-  const siteHosts = [...new Set(view.sites.map(credentialSiteHost))];
-  const sites = siteHosts.length > 0 ? ` \xB7 ${siteHosts.slice(0, 2).join(", ")}` : "";
-  const browser = ` \xB7 browser login${view.siteMatch != null ? ` ${view.siteMatch} match` : ""}`;
-  const oneTimeCode = view.hasOneTimeCode ? " \xB7 one-time code in 1Password" : "";
-  return `- "${view.title}" (${view.category}${sites}${browser}${oneTimeCode}), credential_id: ${view.credentialId} \xB7 connection_id: ${view.connectionId} \xB7 catalog_revision: ${view.catalogRevision}`;
-}
-var ONE_TIME_CODE_GUIDANCE = "A login marked one-time code in 1Password also has its verification code filled for you when the site asks, so that step is not a handoff; a login without the mark has no code in 1Password, so a verification-code page is a request_box_help step.";
-var NO_ONE_TIME_CODE_GUIDANCE = "None of these logins carries a one-time code in 1Password, so a verification-code page after the fill is a request_box_help step.";
-var CREDENTIAL_REQUEST_GUIDANCE = 'To fill the 1Password login for the sign-in page you are on, send {"type":"credential-request","credential":{"kind":"browser-login","credential_id":"\u2026","connection_id":"\u2026","catalog_revision":"\u2026","site":"https://current.example/login","purpose":"sign in to continue the requested task"}}. Use the URL computerUse reports, never one of the 1Password item URLs above. Grok Bot treats `site` as a hint, binds the fill to the open page allowed by the item\'s target rules, then fills that same page once the fill is accepted. You learn only the outcome: filled, declined by the user, or failed with a reason. You never receive a username or password, and you never ask the user to type or paste one. One request covers the whole login: on a username-first page the username is submitted and the password step that follows is filled for you as it appears, and when the site asks for a one-time code the login carries, it is filled for you too. After a fill, continue with computerUse and submit only per the user\'s instruction. Use request_box_help only for a remaining SSO, passkey, captcha, or payment step, or a code the login does not carry. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials".';
-var MISSING_LOGIN_GUIDANCE = `Only items in ${SHARED_VAULT} are visible to you, and 1Password items are placed in that vault by hand. Tell the user the login was not found there and that they may need to add or move it into ${SHARED_VAULT}. On their next request to log in or retry, call ListCredentials with forceRefresh true before reporting it missing again; they do not need to mention 1Password. Use request_box_help only if they prefer to sign in themselves.`;
-function createCredentialTools(access4) {
-  return [
-    defineCommunicateTool(access4, {
-      id: "LIST_CREDENTIALS",
-      name: "ListCredentials",
-      description: `Search the 1Password logins the user shares with you through the 1Password integration, by website/domain or service name: titles and sites only, never values. Only items in ${SHARED_VAULT} are visible; anything the user keeps elsewhere in 1Password is not. MANDATORY FIRST STEP at a direct username/password login, before any in-chat form, request_box_help, or asking the user to type: pass the current URL/domain in site. Matching follows each item's 1Password hostname behavior; saved URL paths and queries are ignored. Each result says whether the login carries a one-time code in 1Password. Then fill the matching login with SendToUser type credential-request; Grok Bot binds your site hint to the actual open allowed page and fills it there, and a one-time code the login carries is filled for you when the site asks. When a needed login is missing, tell the user it is not in ${SHARED_VAULT} and that they may need to add or move it there in 1Password. On their next request to log in or retry, call again with forceRefresh true before reporting it missing again; they do not need to mention 1Password. Only hand off when there is no usable match and the user prefers to sign in themselves, or the remaining step is SSO, passkey, captcha, payment, or a code the login does not carry. To the user, call these their 1Password logins, never "saved login". This is read-only, metadata-only, and never needs permission.`,
-      parameters: listCredentialsParameters,
-      execute: async (ctx, args, deps) => {
-        const site = args.site != null && args.site.length > 0 ? args.site : void 0;
-        if (site != null) noteToolTargetHost(ctx, deps.toolCallId, site);
-        if (deps.turnRefusal !== void 0) {
-          return `No 1Password logins were listed: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[deps.turnRefusal]}.`;
-        }
-        if (!await deps.isConnected()) {
-          return `No 1Password vault is connected. Connecting one shares ${SHARED_VAULT} with you. ${ONEPASSWORD_CONNECT_CARD_HINT}`;
-        }
-        const query = args.query != null && args.query.length > 0 ? args.query : void 0;
-        const views = await deps.list({
-          ...site != null ? { site } : {},
-          ...query != null ? { query } : {},
-          ...args.forceRefresh === true ? { forceRefresh: true } : {}
-        });
-        if (views.length === 0) {
-          if (site != null) {
-            return `No 1Password login in ${SHARED_VAULT} is allowed to fill ${site}. Do not request an arbitrary item for this page. ${MISSING_LOGIN_GUIDANCE}`;
-          }
-          return query != null ? `No 1Password login in ${SHARED_VAULT} matches "${query}". ${MISSING_LOGIN_GUIDANCE}` : `The "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" 1Password vault has no logins visible to you. ${MISSING_LOGIN_GUIDANCE}`;
-        }
-        return [
-          site != null ? `${views.length} 1Password login(s) allowed for ${site}:` : `${views.length} 1Password login(s) available:`,
-          ...views.map(describeCredential),
-          "",
-          views.some((view) => view.hasOneTimeCode) ? ONE_TIME_CODE_GUIDANCE : NO_ONE_TIME_CODE_GUIDANCE,
-          CREDENTIAL_REQUEST_GUIDANCE
-        ].join("\n");
-      }
-    })
-  ];
-}
-
 // ../packages/grok-bot-harness/src/runner/tools/sand-feedback-tool.ts
 init_zod();
 var SAND_SEND_FEEDBACK_TOOL_NAME = "SendFeedback";
@@ -500388,10 +501648,10 @@ var installPluginParameters = external_exports.object({
   )
 });
 var PLUGIN_QUERY_MIN_TOKEN_LENGTH = 3;
-function tokenizePluginQuery(query) {
+function tokenizePluginQuery(query2) {
   return [
     ...new Set(
-      query.toLowerCase().split(/[^a-z0-9]+/).filter((token) => token.length >= PLUGIN_QUERY_MIN_TOKEN_LENGTH)
+      query2.toLowerCase().split(/[^a-z0-9]+/).filter((token) => token.length >= PLUGIN_QUERY_MIN_TOKEN_LENGTH)
     )
   ];
 }
@@ -500407,8 +501667,8 @@ function scorePluginForToken(plugin, token) {
   if (plugin.description.toLowerCase().includes(token)) return 1;
   return 0;
 }
-function rankPluginsLexically(plugins, query) {
-  const tokens = tokenizePluginQuery(query);
+function rankPluginsLexically(plugins, query2) {
+  const tokens = tokenizePluginQuery(query2);
   const byName = (a, b2) => a.displayName.localeCompare(b2.displayName);
   if (tokens.length === 0) return [...plugins].sort(byName);
   return plugins.map((plugin) => ({
@@ -500548,10 +501808,14 @@ function noInstalledServerMessage(token) {
 }
 function describeBuiltinScmAuthRefusal(resolution) {
   const identifier = resolution.serverIdentifier;
-  if (identifier === void 0 || cursorScmProviderForMcpServerIdentifier(identifier) == null) {
+  const provider = identifier === void 0 ? void 0 : cursorScmProviderForMcpServerIdentifier(identifier);
+  if (identifier === void 0 || provider == null) {
     return null;
   }
   const name17 = resolution.serverName ?? identifier;
+  if (provider === "origin") {
+    return `"${name17}" is a built-in source-control server: it acts as the user's Cursor account on Origin, so there is no sign-in or connect step and nothing to authenticate here. If its status is needsAuth, Origin is not available to this account yet (it is not in the Origin rollout, or a team admin turned Origin off); say so plainly and do not call ${SAND_REQUEST_SCM_CONNECT_TOOL_NAME} for it.`;
+  }
   return `"${name17}" is a built-in source-control server: it uses the user's ${name17} connection in Cursor, not an MCP sign-in, so there is nothing to authenticate here. If its status is needsAuth, the user has not connected ${name17} in Cursor: call ${SAND_REQUEST_SCM_CONNECT_TOOL_NAME} with intent "connect" when you have that tool; otherwise say plainly that ${name17} is not connected to their Cursor account and that connecting it (the same integration cloud agents use) unblocks these tools, with no link and no settings path.`;
 }
 function describeServerIdResolutionFailure(token, resolution) {
@@ -500715,7 +501979,7 @@ async function emitAndDescribeAuthResult(result, isForceReauth, serverId, emitCo
 }
 var PERSONAL_MCP_MANAGEMENT_COPY = {
   searchDescription: "Search the plugins the user could install (or already has): marketplace plugins bundling connectors and skills. Say what you're looking for in natural language and results come back ranked by relevance, each with its STABLE plugin id, install state, and what it includes. Use this to discover a capability (Linear, Notion, writing Word documents, \u2026) or to check whether a plugin is installed. Inspect one result with GetPlugin; connector runtime statuses (connected/needsAuth) live in GetMcpServerStatus. This is read-only and never needs the user's permission.",
-  searchEmptyWithQuery: (query) => `No plugins match "${query}". Try different words, or search with no query to list everything.`,
+  searchEmptyWithQuery: (query2) => `No plugins match "${query2}". Try different words, or search with no query to list everything.`,
   searchEmpty: "The plugin catalog is empty or unavailable right now. Try again shortly.",
   getDescription: "Full detail for one plugin by its STABLE plugin id (from SearchPlugins): what it includes (connectors, skills), its install state, any setup fields InstallPlugin needs (with required/secret flags), and the installed MCP servers backing it. Read this before installing a plugin with setup fields, and before uninstalling (to know the full scope you must disclose). Read-only.",
   installDescription: "Install a plugin by its STABLE plugin id (from SearchPlugins) into the user's Cursor account. Only call this after the user has agreed. Confirm with a question widget first, since installing changes the user's configuration. Idempotent: re-installing an installed plugin is safe. Pass any setup values GetPlugin lists (ask the user for secrets like API keys, never guess). If an installed connector needs authentication, its connect card is shown to the user automatically. Finish unrelated work, then end your turn; you're resumed when they authorize. New tools and skills become available on your next message.",
@@ -500730,16 +501994,16 @@ var PERSONAL_MCP_MANAGEMENT_COPY = {
 };
 var TEAM_MCP_MANAGEMENT_COPY = {
   searchDescription: "Search the plugins this bot can carry for the whole team, and the ones a teammate can add for themselves: marketplace plugins bundling connectors and skills. Say what you're looking for in natural language and results come back ranked by relevance, each with its STABLE plugin id, its install state, and what it includes. installed=yes (team) means it is on the bot and every teammate's turns get it; installed=yes (user) means the person you are answering has it among their personal plugins, so only their turns with you get it; installed=no means neither, and InstallPlugin adds it (to the bot from the owner's conversation, to the asker's personal plugins from a teammate's). Team-credential plugins list `${VAR}` fields the bot carries for everyone; user-login plugins show each person their own connect card. Use this to discover a capability (Linear, Notion, writing Word documents, \u2026) or to check whether the bot already has a plugin. Inspect one result with GetPlugin; connector runtime statuses (connected/needsAuth/needsGrant) live in GetMcpServerStatus. This is read-only and never needs anyone's permission.",
-  searchEmptyWithQuery: (query) => `No plugins match "${query}". Try different words, or search with no query to list everything this bot could carry.`,
+  searchEmptyWithQuery: (query2) => `No plugins match "${query2}". Try different words, or search with no query to list everything this bot could carry.`,
   searchEmpty: "No plugins match: this bot's catalog is empty from here. A team admin publishes plugins from the dashboard, and the owner adds them from their own conversation with the bot.",
   getDescription: "Full detail for one plugin by its STABLE plugin id (from SearchPlugins): what it includes (connectors, skills), its install state (on this bot for the team, among the asker's personal plugins, or neither), any setup fields InstallPlugin takes (with required/secret flags), its credential shape (team `${VAR}` values the bot carries vs a connect card per person), and the MCP servers backing it. Read this before adding a plugin with setup fields, and before removing one (to know the full scope you must disclose to the team). Read-only.",
-  installDescription: "Add a plugin by its STABLE plugin id (from SearchPlugins). Where it lands depends on who is asking. From the bot owner's own conversation it goes on this bot for everyone on the team: when the owner names the plugin and asks to add it, add it right away, with no confirmation widget; the result already says it is on the bot for the whole team. From a teammate's conversation (a Slack thread, a DM, a room) it is installed as a personal plugin for that teammate, and the result says so: tell them it went to their personal plugins, not the bot, and never call it their Cursor account. A teammate who asks for it on the bot itself hears that the owner adds it from their own conversation, or a team admin from Team access, and gets the personal install meanwhile if they want it. Use a question widget only when the catalog match is ambiguous, you would be adding something they did not name, or you need a non-secret setup value first. Adding a plugin that is already installed changes nothing and the result says so. Pass any non-secret setup values GetPlugin lists (a site, a region, a toolset). Secret setup values (API keys, tokens) must never go through `values` on a shared bot: add the plugin without them, then for the bot's own plugin send one SendToUser secret-request per secret field with the plugin's id as plugin_id and the field key as name, so the owner fills it through the masked card; the result says where a teammate's personal plugin takes its secrets. If a user-login connector needs authentication, its connect card is shown automatically, so finish unrelated work, then end your turn; you're resumed when they authorize. A connector that reads needsGrant in the result is asked for through AuthenticateMcpServer, as the connector rules say. New tools and skills reach you on your next message.",
+  installDescription: "Add a plugin by its STABLE plugin id (from SearchPlugins). Where it lands depends on who is asking. From the bot owner's own conversation it goes on this bot for everyone on the team: when the owner names the plugin and asks to add it, add it right away, with no confirmation widget; the result already says it is on the bot for the whole team. From a teammate's conversation (a Slack thread, a DM, a room) it is installed as a personal plugin for that teammate, and the result says so: tell them it went to their personal plugins, not the bot, and never call it their Cursor account. A teammate who asks for it on the bot itself hears that the owner adds it from their own conversation, or from the bot's Details in the Grok Bot app, and gets the personal install meanwhile if they want it. Use a question widget only when the catalog match is ambiguous, you would be adding something they did not name, or you need a non-secret setup value first. Adding a plugin that is already installed changes nothing and the result says so. Pass any non-secret setup values GetPlugin lists (a site, a region, a toolset). Secret setup values (API keys, tokens) must never go through `values` on a shared bot: add the plugin without them, then for the bot's own plugin send one SendToUser secret-request per secret field with the plugin's id as plugin_id and the field key as name, so the owner fills it through the masked card; the result says where a teammate's personal plugin takes its secrets. If a user-login connector needs authentication, its connect card is shown automatically, so finish unrelated work, then end your turn; you're resumed when they authorize. A connector that reads needsGrant in the result is asked for through AuthenticateMcpServer, as the connector rules say. New tools and skills reach you on your next message.",
   installed: (displayName2, pluginId, installMode) => installMode === "team" ? `Added ${displayName2} (plugin ${pluginId}) to this bot for the whole team.` : `Installed ${displayName2} (plugin ${pluginId}) as a personal plugin for this teammate: only their turns with you get its tools, and nothing changed on the bot. Tell them it was added to their personal plugins, not to the bot.`,
   addDescription: "Add an MCP server that isn't in the catalog to this bot for the whole team. Use this when the owner gives you a link or a launch command for a server that SearchPlugins doesn't know. Only the bot owner can, from their own conversation with the bot. When the owner hands you the server and asks to add it, add it right away, with no confirmation widget; say in your reply that every teammate's turns get it and that it can run commands or reach external services on the bot's behalf. Use a question widget only when the connection details are ambiguous or you would be adding a server they did not name. Provide EITHER a remote `url` OR a local `command` with `args` (and `env` for secrets), not both. For a remote server's credentials, use `headers` for static bearer/API-key auth, or `auth` for an OAuth provider that publishes a pre-registered client ID (its `CLIENT_ID`, optional `CLIENT_SECRET`, and `scopes`) instead of supporting dynamic client registration. A remote server runs on the backend for everyone; a `command` server runs on the owner's box (node, npm, bun, python3, and uv are there, so `npx -y <pkg>` and `uvx <pkg>` both work) and is unavailable in teammates' private conversations, so prefer a remote `url` for a team server and say so when you add it. Ask the owner for the exact endpoint or command and any secrets rather than guessing; if you only have a link, open it first (WebFetch) to find the connection details. Newly added tools reach the bot on your next message.",
   added: (name17) => `Added "${name17}" to this bot for the whole team.`,
   uninstallServerDescription: () => "Remove ONE custom MCP server that was added to this bot with AddMcpServer, by its server identifier. This removes it from the bot for every teammate, so confirm with the owner via a question widget first and disclose that scope. Only the bot owner can, from their own conversation. This bot stores every server as a plugin, so the listing marks each row `plugin=<id>`: remove it with UninstallPlugin and that id, which removes the plugin from the bot for the whole team.",
   uninstallServerPluginRow: (row, pluginId) => `${row.name} is plugin ${pluginId} on this bot, so removing it removes that plugin from the bot for every teammate: every connector and skill it added, not just this server. Use UninstallPlugin with plugin id ${pluginId}, and disclose that full scope to the owner first.`,
-  uninstallPluginDescription: () => "Remove a plugin from this bot by its STABLE plugin id (from SearchPlugins). This removes it for every teammate (its connectors, its skills, and any team `${VAR}` values configured for it), so confirm with the owner via a question widget first, and your confirmation must disclose that full scope (list what goes). Only the bot owner can, from their own conversation with the bot; from anyone else's conversation say the owner or a team admin (Team access) can remove it and do not call this. A teammate's own personal plugin (installed=yes (user)) is not removed here either: they remove it in the Cursor app under Settings \u2192 Plugins.",
+  uninstallPluginDescription: () => "Remove a plugin from this bot by its STABLE plugin id (from SearchPlugins). This removes it for every teammate (its connectors, its skills, and any team `${VAR}` values configured for it), so confirm with the owner via a question widget first, and your confirmation must disclose that full scope (list what goes). Only the bot owner can, from their own conversation with the bot; from anyone else's conversation say the owner can remove it from their own conversation or the bot's Details and do not call this. A teammate's own personal plugin (installed=yes (user)) is not removed here either: they remove it in the Cursor app under Settings \u2192 Plugins.",
   notInstalled: (displayName2, pluginId) => `${displayName2} (plugin ${pluginId}) is not on this bot, so there is nothing to remove.`,
   uninstalled: (displayName2, pluginId) => `Removed ${displayName2} (plugin ${pluginId}) from this bot for every teammate. Its connectors and skills are gone from their turns.`
 };
@@ -500802,12 +502066,12 @@ function createMcpManagementTools(management, getRequestingAgentId, isAwaitingUs
       description: copy.searchDescription,
       parameters: searchPluginsParameters,
       execute: async (_ctx, args, deps) => {
-        const query = (args.query ?? "").trim();
-        const plugins = rankPluginsLexically(await deps.listPlugins(), query);
+        const query2 = (args.query ?? "").trim();
+        const plugins = rankPluginsLexically(await deps.listPlugins(), query2);
         if (plugins.length === 0) {
-          return query.length > 0 ? copy.searchEmptyWithQuery(query) : copy.searchEmpty;
+          return query2.length > 0 ? copy.searchEmptyWithQuery(query2) : copy.searchEmpty;
         }
-        const heading = query.length > 0 ? `${plugins.length} plugin(s) matching "${query}" (best first):` : `${plugins.length} plugin(s) available:`;
+        const heading = query2.length > 0 ? `${plugins.length} plugin(s) matching "${query2}" (best first):` : `${plugins.length} plugin(s) available:`;
         return [heading, ...plugins.map(describePluginSummary)].join("\n");
       }
     }),
@@ -501157,7 +502421,7 @@ function messagesGrantsMissingMessage(grants) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/messages-grants-gate.ts
-var logger104 = createLogger("sand:messages-grants-gate");
+var logger105 = createLogger("sand:messages-grants-gate");
 function messagesGrantsAskKey(ctx) {
   const toolCallId = ctx.get(sandLocalToolScopeKey)?.toolCallId;
   if (toolCallId === void 0) return (0, import_node_crypto40.randomUUID)();
@@ -501178,7 +502442,7 @@ function gateMessagesOnGrants(messages, grants, report) {
     try {
       report?.(row);
     } catch (error3) {
-      logger104.warn(ctx, `Messages grants report failed (${errorLogTag(error3)})`);
+      logger105.warn(ctx, `Messages grants report failed (${errorLogTag(error3)})`);
     }
   };
   const probe = async (ctx, needed) => missingMessagesGrants(await messages.run(ctx, { kind: "check-permissions" }), needed);
@@ -501243,7 +502507,7 @@ function gateMessagesOnGrants(messages, grants, report) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-messages-tools.ts
-var logger105 = createLogger("sand:messages-tools");
+var logger106 = createLogger("sand:messages-tools");
 function messagesToolAction(toolIdentifier) {
   return toolIdentifier === "SEND_IMESSAGE" ? "send-imessage" : "read-messages";
 }
@@ -501515,7 +502779,7 @@ function reportMessagesToolUse(ctx, report, makeUse) {
   try {
     report(makeUse());
   } catch (error3) {
-    logger105.warn(ctx, `Messages tool-use report failed (${errorLogTag(error3)})`);
+    logger106.warn(ctx, `Messages tool-use report failed (${errorLogTag(error3)})`);
   }
 }
 function instrumentMessages(messages, report) {
@@ -501834,8 +503098,8 @@ async function listMessageBlobIds(ctx, blobStore, state) {
   ids.push(...state.rootPromptMessagesJson);
   return ids;
 }
-function clampSandTranscriptMessageLimit(limit) {
-  const safe = limit !== void 0 && Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : SAND_TRANSCRIPT_DEFAULT_MESSAGES;
+function clampSandTranscriptMessageLimit(limit2) {
+  const safe = limit2 !== void 0 && Number.isFinite(limit2) && limit2 > 0 ? Math.floor(limit2) : SAND_TRANSCRIPT_DEFAULT_MESSAGES;
   return Math.min(safe, SAND_TRANSCRIPT_MAX_MESSAGES);
 }
 async function readSandTranscriptWindow(args) {
@@ -501845,14 +503109,14 @@ async function readSandTranscriptWindow(args) {
   const ids = await listMessageBlobIds(args.ctx, args.blobStore, args.state);
   const totalMessages = ids.length;
   const endIndex = args.before === void 0 ? totalMessages : Math.max(0, Math.min(args.before, totalMessages));
-  const limit = clampSandTranscriptMessageLimit(args.limit);
+  const limit2 = clampSandTranscriptMessageLimit(args.limit);
   const lines2 = [];
   let firstIndex = endIndex;
   let bytes = 0;
   let reachedByteCap = false;
-  while (firstIndex > 0 && lines2.length < limit && !reachedByteCap) {
+  while (firstIndex > 0 && lines2.length < limit2 && !reachedByteCap) {
     const chunkEnd = firstIndex;
-    const chunkStart = Math.max(0, chunkEnd - (limit - lines2.length));
+    const chunkStart = Math.max(0, chunkEnd - (limit2 - lines2.length));
     const chunkLines = await asyncMapValues(
       ids.slice(chunkStart, chunkEnd),
       async (blobId) => {
@@ -501964,7 +503228,7 @@ function createReadTranscriptTool(deps) {
   });
 }
 
-// ../packages/grok-bot-harness/src/runner/tools/sand-slack-reaction-tool.ts
+// ../packages/grok-bot-harness/src/runner/tools/slack/sand-slack-message-delete-tool.ts
 init_zod();
 
 // ../packages/grok-bot-harness/src/ports/slack-reaction.ts
@@ -501978,11 +503242,11 @@ function normalizeSlackEmojiName(raw) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-slack-reaction-tool.ts
+init_zod();
 var SAND_REACT_TO_SLACK_MESSAGE_TOOL_NAME = "react_to_slack_message";
+var SLACK_MESSAGE_CHANNEL_ARG_DESCRIPTION = "The Slack conversation id the message is in (C\u2026, G\u2026 or D\u2026), as shown in the slack:<channel>:<ts> address of the thread or in a Slack read tool's output. Not a channel name.";
 var reactToSlackMessageParameters = external_exports.object({
-  channel: external_exports.string().trim().regex(SLACK_CONVERSATION_ID_PATTERN, "a Slack conversation id like C0123ABCD").describe(
-    "The Slack conversation id the message is in (C\u2026, G\u2026 or D\u2026), as shown in the slack:<channel>:<ts> address of the thread or in a Slack read tool's output. Not a channel name."
-  ),
+  channel: external_exports.string().trim().regex(SLACK_CONVERSATION_ID_PATTERN, "a Slack conversation id like C0123ABCD").describe(SLACK_MESSAGE_CHANNEL_ARG_DESCRIPTION),
   message_ts: external_exports.string().trim().regex(SLACK_MESSAGE_TS_PATTERN, "a Slack message ts like 1789569774.220229").describe(
     "The ts of the exact message to react to, e.g. 1789569774.220229. Read the thread first to get the ts of a specific reply; a thread's own address ends in the ts of its root message."
   ),
@@ -502010,6 +503274,31 @@ function createReactToSlackMessageTool(reaction) {
         emoji: emoji2
       });
       return outcome.ok ? outcome.detail : `Not reacted: ${outcome.reason}`;
+    }
+  });
+}
+
+// ../packages/grok-bot-harness/src/runner/tools/slack/sand-slack-message-delete-tool.ts
+var SAND_DELETE_OWN_SLACK_MESSAGE_TOOL_NAME = "delete_own_slack_message";
+var deleteOwnSlackMessageParameters = external_exports.object({
+  channel: external_exports.string().trim().regex(SLACK_CONVERSATION_ID_PATTERN, "a Slack conversation id like C0123ABCD").describe(SLACK_MESSAGE_CHANNEL_ARG_DESCRIPTION),
+  message_ts: external_exports.string().trim().regex(SLACK_MESSAGE_TS_PATTERN, "a Slack message ts like 1789569774.220229").describe(
+    "The ts of the exact message to delete, e.g. 1789569774.220229. When you posted it, the send reported the ts; otherwise read the thread first to find your message. One message per call."
+  )
+});
+function createDeleteOwnSlackMessageTool(messageDelete) {
+  return defineCommunicateTool(messageDelete, {
+    id: "PLATFORM_ACTION",
+    name: SAND_DELETE_OWN_SLACK_MESSAGE_TOOL_NAME,
+    description: "Delete a Slack message you previously posted as your own Slack app's bot user, the same identity your Slack replies carry. You can take down your own prior Slack posts when asked \u2014 say a message shared something it should not have, went to the wrong place, or is now wrong or outdated. It only works on your own messages: Slack refuses to delete anyone else's, and this tool cannot override that. Deleting is permanent and does not remove other people's replies in the message's thread. Pass the conversation id and the message ts exactly as Slack shows them. When someone asked for the deletion, confirm the outcome with SendToUser afterwards.",
+    parameters: deleteOwnSlackMessageParameters,
+    describeActivity: (args) => ({ detail: args.message_ts.trim(), target: args.channel.trim() }),
+    execute: async (_ctx, args, slack) => {
+      const outcome = await slack.deleteOwnMessage({
+        channel: args.channel.trim(),
+        messageTs: args.message_ts.trim()
+      });
+      return outcome.ok ? outcome.detail : `Not deleted: ${outcome.reason}`;
     }
   });
 }
@@ -502054,7 +503343,7 @@ function describeState(state) {
     case "awaiting_admin":
       return `Waiting for a Slack admin to approve your app in ${inWorkspace(state.workspaceName)}. ${state.requestFiled ? "The request is in their queue and nothing is left for the owner to do." : "The owner still has to submit the request; slack_setup start puts the link in the chat."} The install finishes on its own once they approve.`;
     case "installed":
-      return `Installed in ${inWorkspace(state.workspaceName)} as your own Slack app${state.botUserId === void 0 ? "" : ` (Slack user id ${state.botUserId})`}. Teammates DM you or @mention you there.${state.needsUpdate ? " The app predates the current setup; the owner updates it from Team access with Update Slack app." : ""}`;
+      return `Installed in ${inWorkspace(state.workspaceName)} as your own Slack app${state.botUserId === void 0 ? "" : ` (Slack user id ${state.botUserId})`}. Teammates DM you or @mention you there.${state.needsUpdate ? " The app predates the current setup; the owner updates it from your Details with Update Slack app." : ""}`;
   }
 }
 function describeStart(outcome) {
@@ -502426,7 +503715,7 @@ var teamFactList = external_exports.array(
 ).max(500).default([]);
 var sortMemoriesParameters = external_exports.object({
   toTeam: teamFactList.describe(
-    `Private facts (scope conversation) the whole team should know, the most useful for the team first and at most ${SORT_MEMORIES_TEAM_BATCH}, each as its text reads in your memory; they move into team memory (scope agent). Facts not listed stay where they are.`
+    `Private facts (scope user_bot, or conversation where the chat keeps one) the whole team should know, the most useful for the team first and at most ${SORT_MEMORIES_TEAM_BATCH}, each as its text reads in your memory; they move into team memory (scope agent). Facts not listed stay where they are.`
   ),
   moreForTeam: factList.describe(
     `Private facts the team should also know that did not fit in the ${SORT_MEMORIES_TEAM_BATCH} most useful, each as its text reads in your memory; they stay put for now and the card says how many wait for a later review.`
@@ -502540,14 +503829,15 @@ function createSortMemoriesTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_SORT_MEMORIES_TOOL_NAME,
-    description: "Propose which of your memories should move between the owner's private memory (scope conversation, read on this conversation alone) and team memory (scope agent, read by every teammate's session), then apply it once the owner agrees. Name each fact by its text as it reads in your memory or in RecallMemory. Call it first with toTeam and/or toPrivate and no confirmation: it puts a card in the chat with the facts and Share and Keep private buttons, and ends your turn. The card is the whole proposal, so send no message describing it before or after. Their answer arrives as the next message; if it carries a confirmation code, call again with the same lists and that code to move the facts. If they keep things private, leave memory alone and don't re-ask. Nothing moves without the code, so never guess it.",
+    description: "Propose which of your memories should move between the owner's private memory (the owner's notes, scope user_bot, or scope conversation where the chat keeps one; no teammate reads it) and team memory (scope agent, read by every teammate's session), then apply it once the owner agrees. Name each fact by its text as it reads in your memory or in RecallMemory. Call it first with toTeam and/or toPrivate and no confirmation: it puts a card in the chat with the facts and Share and Keep private buttons, and ends your turn. The card is the whole proposal, so send no message describing it before or after. Their answer arrives as the next message; if it carries a confirmation code, call again with the same lists and that code to move the facts. If they keep things private, leave memory alone and don't re-ask. Nothing moves without the code, so never guess it.",
     parameters: sortMemoriesParameters,
     describeActivity: (args) => ({
       detail: args.confirmation === void 0 ? "propose" : "apply"
     }),
     execute: async (_ctx, args, d) => {
       const scopes = d.memoryScopes();
-      if (scopes?.conversation == null || scopes.agentWide == null) {
+      const privateSide = scopes?.conversation ?? scopes?.userBot;
+      if (privateSide == null || scopes?.agentWide == null) {
         return "Memory scopes are not available on this turn, so nothing can be sorted.";
       }
       const sink = d.onProposal;
@@ -502568,18 +503858,18 @@ function createSortMemoriesTool(deps) {
       }
       const promote = resolve11({
         facts: args.toTeam.map((fact) => fact.text),
-        from: scopes.conversation,
+        from: privateSide,
         settledIn: scopes.agentWide
       });
       const later = resolve11({
         facts: args.confirmation === void 0 ? args.moreForTeam : [],
-        from: scopes.conversation,
+        from: privateSide,
         settledIn: scopes.agentWide
       });
       const demote = resolve11({
         facts: sink === void 0 ? args.toPrivate : [],
         from: scopes.agentWide,
-        settledIn: scopes.conversation
+        settledIn: privateSide
       });
       const missing = [...promote.missing, ...later.missing, ...demote.missing];
       if (missing.length > 0) {
@@ -502598,7 +503888,7 @@ function createSortMemoriesTool(deps) {
         return await sink({
           toTeam: annotated(promote.found, args.toTeam),
           moreForTeam,
-          keptPrivate: scopes.conversation.listMemories(LIST_LIMIT).length - promote.found.length - moreForTeam,
+          keptPrivate: privateSide.listMemories(LIST_LIMIT).length - promote.found.length - moreForTeam,
           code
         });
       }
@@ -502632,13 +503922,13 @@ function createSortMemoriesTool(deps) {
       }
       const promoted = await move({
         records: promote.found,
-        from: scopes.conversation,
+        from: privateSide,
         to: scopes.agentWide
       });
       const demoted = await move({
         records: demote.found,
         from: scopes.agentWide,
-        to: scopes.conversation
+        to: privateSide
       });
       const refused = promoted.refused + demoted.refused;
       const duplicated = promoted.duplicated + demoted.duplicated;
@@ -502752,12 +504042,6 @@ var BOT_SKILLS_IDENTITY_PATTERN = new RegExp(
   `/${PLUGIN_SKILLS_DIRNAME}/(bot-skills(?:@[^/]*)?)/`
 );
 
-// ../packages/grok-bot-harness/src/runner/agent-state.ts
-var SAND_MEMORY_SCOPES = ["conversation", "agent", "user"];
-function stateWriteOk(detail) {
-  return { ok: true, detail };
-}
-
 // ../packages/grok-bot-harness/src/runner/memory-telemetry/memory-metrics.ts
 var write = createCounter("grok_bot.memory.write", {
   description: "An update_state memory action settled ok on a harness that wires memory telemetry (Temporal today): one increment per accepted write, forget, promote, or teach, by the scope it landed in (agent, user, conversation)",
@@ -502819,7 +504103,7 @@ var OPERATIONS = {
 var TEAM_BOT_OWNER_MAIN_ONLY = "Only the bot owner can, and only from their own main conversation with you; a teammate (even a team admin), a Slack conversation, a group chat, or any other session is refused and told the owner can change it from main.";
 var TEAM_BOT_OPERATIONS = {
   skill: {
-    write: `save or rewrite one of this bot's team skills, visible to every teammate on your next turn (name, description, body; to rewrite, id = the slug from the skill's catalog path, the folder under skills/, or that path itself). The description is REQUIRED and is what a reader uses to decide whether the skill applies, so write it as "use this when \u2026". A skill has no trigger. A saved task that runs on a schedule is a routine. Only the bot owner can save one; a teammate (even a team admin) is told the owner can add it from main or Team access.`,
+    write: `save or rewrite one of this bot's team skills, visible to every teammate on your next turn (name, description, body; to rewrite, id = the slug from the skill's catalog path, the folder under skills/, or that path itself). The description is REQUIRED and is what a reader uses to decide whether the skill applies, so write it as "use this when \u2026". A skill has no trigger. A saved task that runs on a schedule is a routine. Only the bot owner can save one; a teammate (even a team admin) is told the owner can add it from main or the bot's Details.`,
     delete: "(id = the slug from the skill's catalog path, the folder under skills/, or that path itself). Removes the team skill for everyone; only the bot owner can. Cursor-managed and other plugins' skills can't be edited or deleted; only this bot's own bot-skills entries can."
   },
   profile: {
@@ -503114,9 +504398,20 @@ var sandUpdateStateParameters = external_exports.object({
     "avatar set only. Absolute path to an image you already have (write or download it first, with Shell on your own computer or Shell using the user's computer's machineId, then install it here). A path on your box under /workspace is fine and needs no CopyFromBox. png/jpg/webp/gif/svg under 5 MB."
   )
 });
-function sandConversationUpdateStateParameters(defaultScope) {
+function offeredMemoryScopes({
+  conversationScope,
+  userBotScope
+}) {
+  const [conversation, ...rest] = SAND_MEMORY_SCOPES;
+  return nonEmptyTuple([
+    ...conversationScope === "none" ? [] : [conversation],
+    ...rest,
+    ...userBotScope === void 0 ? [] : [SAND_USER_BOT_MEMORY_SCOPE]
+  ]);
+}
+function sandConversationUpdateStateParameters(defaultScope, offered = {}) {
   return sandUpdateStateParameters.extend({
-    scope: external_exports.enum(SAND_MEMORY_SCOPES).optional().describe(
+    scope: external_exports.enum(offeredMemoryScopes(offered)).optional().describe(
       `memory only. Defaults to ${defaultScope} (${MEMORY_CONVERSATION_SCOPE_DEFAULT_LABEL[defaultScope]}).`
     )
   });
@@ -503511,15 +504806,25 @@ async function applySandStateUpdate(args, deps) {
 }
 var JUST_DO_IT = "Just do it and mention it in passing. Don't narrate a save or ask permission for an ordinary one.";
 var TEAM_SHARED_JUST_DO_IT = `${JUST_DO_IT} A save to this conversation or to user memory is ordinary. A team-wide save (scope "agent") needs more: make one only when you are certain from what the person said that everyone who uses you should have it, use a narrower scope when unsure, and say that you did when you have.`;
+var TEAM_SHARED_JUST_DO_IT_NOTES = TEAM_SHARED_JUST_DO_IT.replace(
+  "A save to this conversation or to user memory is ordinary.",
+  "A save to your notes with this person or to user memory is ordinary."
+);
 var ROUTINE_MAY_CONFIRM = "Creating or changing a ROUTINE may ask the user to confirm, since it's the one change that acts while they're away; if it does, they'll see a card and you'll get their answer back as the tool result.";
-function stateToolDescription(memoryWrite, { teamBot = false, teamShared = false } = {}) {
+function stateToolDescription(memoryWrite, {
+  teamBot = false,
+  teamShared = false,
+  sessionMemory = true
+} = {}) {
+  const teamJustDoIt = sessionMemory ? TEAM_SHARED_JUST_DO_IT : TEAM_SHARED_JUST_DO_IT_NOTES;
+  const justDoIt = teamShared ? teamJustDoIt : JUST_DO_IT;
   return [
     "Change your OWN durable state: what you remember (own or shared user), the routines you run, the skills you save, your profile and settings, which channels you're connected to, and your picture. Prefer this over editing those files with the shell. Read them with RecallMemory, or with Read and grep when they are on your computer.",
     "",
     "target + action:",
     ...operationLines(memoryWrite, teamBot),
     "",
-    `${teamShared ? TEAM_SHARED_JUST_DO_IT : JUST_DO_IT} ${ROUTINE_MAY_CONFIRM}`
+    `${justDoIt} ${ROUTINE_MAY_CONFIRM}`
   ].join("\n");
 }
 var description8 = stateToolDescription(OPERATIONS.memory.write);
@@ -503527,9 +504832,11 @@ var toolVariants = /* @__PURE__ */ new Map();
 function toolVariant(story, teamBot) {
   const key = JSON.stringify([
     story?.defaultScope,
+    story?.conversationScope,
     story?.userScope,
     story?.teamShared,
     story?.privateMain,
+    story?.userBotScope,
     teamBot
   ]);
   let variant = toolVariants.get(key);
@@ -503537,9 +504844,13 @@ function toolVariant(story, teamBot) {
     variant = {
       description: stateToolDescription(
         story === void 0 ? OPERATIONS.memory.write : conversationMemoryWrite(story),
-        { teamBot, teamShared: story?.teamShared === true }
+        {
+          teamBot,
+          teamShared: story?.teamShared === true,
+          sessionMemory: story?.conversationScope !== "none"
+        }
       ),
-      parameters: story === void 0 ? sandUpdateStateParameters : sandConversationUpdateStateParameters(story.defaultScope)
+      parameters: story === void 0 ? sandUpdateStateParameters : sandConversationUpdateStateParameters(story.defaultScope, story)
     };
     toolVariants.set(key, variant);
   }
@@ -503548,6 +504859,7 @@ function toolVariant(story, teamBot) {
 function describeStateUpdate(args) {
   if (args.target === "memory") {
     if (args.scope === "user") return "user memory";
+    if (args.scope === "user_bot") return "your notes";
     return "memory";
   }
   if (args.target === "avatar") return "avatar";
@@ -503848,7 +505160,7 @@ function createSubagentManagementTools(controller) {
 init_dist();
 init_dist3();
 init_zod();
-var logger106 = createLogger("sand:check-subscription-usage-tool");
+var logger107 = createLogger("sand:check-subscription-usage-tool");
 var SAND_CHECK_SUBSCRIPTION_USAGE_TOOL_NAME = "CheckSubscriptionUsage";
 var USAGE_UNAVAILABLE = "Usage information is unavailable right now.";
 function formatUtcTimestamp(ms2) {
@@ -503924,7 +505236,7 @@ function createCheckSubscriptionUsageTool(deps) {
       try {
         usage = await d.getCycleUsage();
       } catch (error3) {
-        logger106.warn(ctx, `CheckSubscriptionUsage lookup failed (${errorLogTag(error3)})`);
+        logger107.warn(ctx, `CheckSubscriptionUsage lookup failed (${errorLogTag(error3)})`);
         return USAGE_UNAVAILABLE;
       }
       return formatCycleUsage(usage, Date.now());
@@ -504893,6 +506205,16 @@ function sendMessageParametersByTurnBehavior(deps) {
     completeTurn: sendMessageEndTurnParameters
   };
 }
+function reportThrownSendFailure(execute) {
+  return async (ctx, ...rest) => {
+    try {
+      return await execute(ctx, ...rest);
+    } catch (error3) {
+      if (!ctx.canceled) ctx.get(turnSendToUserFailedKey)?.();
+      throw error3;
+    }
+  };
+}
 function createSendMessageTool2(deps) {
   const parametersByTurnBehavior = sendMessageParametersByTurnBehavior(deps);
   const parameters2 = deps.completeTurnAfterSend == null ? parametersByTurnBehavior.continueTurn : parametersByTurnBehavior.completeTurn;
@@ -504903,96 +506225,100 @@ function createSendMessageTool2(deps) {
     executionAliases: [SAND_LEGACY_SEND_MESSAGE_TOOL_NAME],
     descriptionGenerator: () => sendToUserDescription(deps),
     parameters: parameters2,
-    execute: withSafeParsedArgs(
-      () => parameters2,
-      async (ctx, interactionHandler, rawArgs, meta) => {
-        const asksAPersonToDecide = rawArgs.type === "secret-request" || rawArgs.type === "credential-request";
-        const awaitsUserSelection = rawArgs.type === "widget" || asksAPersonToDecide;
-        const message = await buildSandSendMessage(ctx, rawArgs, deps);
-        const deliverTo = rawArgs.to;
-        const args = encodeSendMessage(message);
-        const baseToolCall = new SendMessageToolCall({ args });
-        return await interactionHandler.executeToolCall(
-          ctx,
-          createSendMessageToolCall(baseToolCall),
-          meta.toolCallId,
-          async () => {
-            const recordDelivery = bindMessageDeliveryReport(
-              deps.recordDelivery,
-              ctx,
-              meta.toolCallId,
-              messageDeliveryDestination(message)
-            );
-            if (userSelectionSendStarted || deps.isAwaitingUserSelection?.() === true) {
-              recordDelivery.settled({ result: "failed", failureCategory: "awaiting_user" });
-              return new SendMessageResult({
-                result: {
-                  case: "error",
-                  value: new SendMessageError({
-                    error: SAND_AWAITING_USER_SEND_MESSAGE_BLOCKED
-                  })
-                }
-              });
-            }
-            if (awaitsUserSelection) userSelectionSendStarted = true;
-            const blockReason = deps.getSendBlockReason?.(message, deliverTo);
-            if (blockReason != null) {
-              if (awaitsUserSelection) userSelectionSendStarted = false;
-              recordDelivery.settled({ result: "failed", failureCategory: "blocked" });
-              return new SendMessageResult({
-                result: {
-                  case: "error",
-                  value: new SendMessageError({ error: blockReason })
-                }
-              });
-            }
-            const isSuppressedCard = message.type === "cursor-agent" && deps.isSuppressedCursorAgentCard?.(message.bcId) === true;
-            let deliveryRecorded = false;
-            try {
-              const timestampMs = Date.now();
-              const sentMessageId = isSuppressedCard ? void 0 : deps.onSendMessage(message, timestampMs, deliverTo);
-              deliveryRecorded = true;
-              if (isSuppressedCard) {
-                recordDelivery.settled({ result: "failed", failureCategory: "suppressed_card" });
-              } else {
-                recordDelivery.settled({
-                  result: "sent",
-                  ...sentMessageId != null && sentMessageId.length > 0 ? { messageId: sentMessageId } : {}
+    execute: reportThrownSendFailure(
+      withSafeParsedArgs(
+        () => parameters2,
+        async (ctx, interactionHandler, rawArgs, meta) => {
+          const asksAPersonToDecide = rawArgs.type === "secret-request" || rawArgs.type === "credential-request";
+          const awaitsUserSelection = rawArgs.type === "widget" || asksAPersonToDecide;
+          const message = await buildSandSendMessage(ctx, rawArgs, deps);
+          const deliverTo = rawArgs.to;
+          const args = encodeSendMessage(message);
+          const baseToolCall = new SendMessageToolCall({ args });
+          return await interactionHandler.executeToolCall(
+            ctx,
+            createSendMessageToolCall(baseToolCall),
+            meta.toolCallId,
+            async () => {
+              const recordDelivery = bindMessageDeliveryReport(
+                deps.recordDelivery,
+                ctx,
+                meta.toolCallId,
+                messageDeliveryDestination(message)
+              );
+              if (userSelectionSendStarted || deps.isAwaitingUserSelection?.() === true) {
+                recordDelivery.settled({ result: "failed", failureCategory: "awaiting_user" });
+                ctx.get(turnSendToUserFailedKey)?.();
+                return new SendMessageResult({
+                  result: {
+                    case: "error",
+                    value: new SendMessageError({
+                      error: SAND_AWAITING_USER_SEND_MESSAGE_BLOCKED
+                    })
+                  }
                 });
-                if (asksAPersonToDecide) {
-                  ctx.get(toolDecisionAuditKey)?.askAPerson(meta.toolCallId);
-                }
-                if (deps.metricsHarness !== void 0) {
-                  recordCloudAgentArtifactAttachments(
-                    { ctx, harness: deps.metricsHarness },
-                    attachmentSourcesOf(rawArgs),
-                    artifactRunIdsAttached
-                  );
-                }
               }
-              if ("end_turn" in rawArgs && rawArgs.end_turn === true) {
-                deps.completeTurnAfterSend?.();
+              if (awaitsUserSelection) userSelectionSendStarted = true;
+              const blockReason = deps.getSendBlockReason?.(message, deliverTo);
+              if (blockReason != null) {
+                if (awaitsUserSelection) userSelectionSendStarted = false;
+                recordDelivery.settled({ result: "failed", failureCategory: "blocked" });
+                ctx.get(turnSendToUserFailedKey)?.();
+                return new SendMessageResult({
+                  result: {
+                    case: "error",
+                    value: new SendMessageError({ error: blockReason })
+                  }
+                });
               }
-              return new SendMessageResult({
-                result: {
-                  case: "success",
-                  value: new SendMessageSuccess({
-                    timestamp: BigInt(timestampMs),
+              const isSuppressedCard = message.type === "cursor-agent" && deps.isSuppressedCursorAgentCard?.(message.bcId) === true;
+              let deliveryRecorded = false;
+              try {
+                const timestampMs = Date.now();
+                const sentMessageId = isSuppressedCard ? void 0 : deps.onSendMessage(message, timestampMs, deliverTo);
+                deliveryRecorded = true;
+                if (isSuppressedCard) {
+                  recordDelivery.settled({ result: "failed", failureCategory: "suppressed_card" });
+                } else {
+                  recordDelivery.settled({
+                    result: "sent",
                     ...sentMessageId != null && sentMessageId.length > 0 ? { messageId: sentMessageId } : {}
-                  })
+                  });
+                  if (asksAPersonToDecide) {
+                    ctx.get(toolDecisionAuditKey)?.askAPerson(meta.toolCallId);
+                  }
+                  if (deps.metricsHarness !== void 0) {
+                    recordCloudAgentArtifactAttachments(
+                      { ctx, harness: deps.metricsHarness },
+                      attachmentSourcesOf(rawArgs),
+                      artifactRunIdsAttached
+                    );
+                  }
                 }
-              });
-            } catch (error3) {
-              if (awaitsUserSelection) userSelectionSendStarted = false;
-              if (!deliveryRecorded) recordDelivery.failed(error3);
-              throw error3;
-            }
-          },
-          (result) => createSendMessageToolCall(new SendMessageToolCall({ ...baseToolCall, result }))
-        );
-      },
-      createSendMessageToolCall(new SendMessageToolCall()),
-      { emitInitialPartialToolCall: true }
+                if ("end_turn" in rawArgs && rawArgs.end_turn === true) {
+                  deps.completeTurnAfterSend?.();
+                }
+                return new SendMessageResult({
+                  result: {
+                    case: "success",
+                    value: new SendMessageSuccess({
+                      timestamp: BigInt(timestampMs),
+                      ...sentMessageId != null && sentMessageId.length > 0 ? { messageId: sentMessageId } : {}
+                    })
+                  }
+                });
+              } catch (error3) {
+                if (awaitsUserSelection) userSelectionSendStarted = false;
+                if (!deliveryRecorded) recordDelivery.failed(error3);
+                throw error3;
+              }
+            },
+            (result) => createSendMessageToolCall(new SendMessageToolCall({ ...baseToolCall, result }))
+          );
+        },
+        createSendMessageToolCall(new SendMessageToolCall()),
+        { emitInitialPartialToolCall: true }
+      )
     ),
     render: async (_ctx, output) => {
       if (output.result.case === "error") {
@@ -505054,7 +506380,9 @@ function sortMemoriesSubagentTools(host) {
     );
   }
   const onProposal = host.sortMemoriesProposal;
-  if (host.memoryStore?.memoryScopes?.privateMain === true && onProposal !== void 0) {
+  const scopes = host.memoryStore?.memoryScopes;
+  const holdsOwnersPrivateMemory = scopes?.privateMain === true || scopes?.conversationScope === "none" && (scopes.userBot?.listMemories(1).length ?? 0) > 0;
+  if (holdsOwnersPrivateMemory && onProposal !== void 0) {
     tools.push(
       createSortMemoriesTool({
         memoryScopes: () => host.memoryStore?.memoryScopes,
@@ -505661,7 +506989,8 @@ function buildTurnTools(host, turn, props) {
         {
           resumeOnlySubagentConfigs: [
             createSandBrowserUseSubagentConfig({
-              credentialFillEnabled: !host.isSubagentRunner && !host.isSystemPromptOverridden && host.credentialAccess != null
+              credentialFillEnabled: !host.isSubagentRunner && !host.isSystemPromptOverridden && host.credentialAccess != null,
+              loginFormFirst: host.gates.loginFormFirst()
             })
           ],
           supportsRetiredSubagentReattachment: host.detachedSubagents?.supportsTaskReattachment === true,
@@ -505790,6 +507119,9 @@ function buildTurnTools(host, turn, props) {
     if (host.slackReaction != null) {
       tools.push(createReactToSlackMessageTool(host.slackReaction));
     }
+    if (host.slackMessageDelete != null) {
+      tools.push(createDeleteOwnSlackMessageTool(host.slackMessageDelete));
+    }
   }
   if (hasParentToolParity && host.submitProductFeedback != null) {
     tools.push(
@@ -505863,18 +507195,12 @@ function buildTurnTools(host, turn, props) {
   if (hasParentToolParity && host.agentActivity != null) {
     tools.push(createReadAgentActivityTool({ agentActivity: host.agentActivity }));
   }
-  const offersCredentialTools = !host.isSubagentRunner && !host.isSystemPromptOverridden;
-  if (offersCredentialTools && host.credentialProviderStatus != null) {
-    tools.push(createCredentialProviderStatusTool(host.credentialProviderStatus));
-  }
-  if (offersCredentialTools && host.credentialAccess != null) {
-    tools.push(...createCredentialTools(host.credentialAccess));
-  }
-  if (offersCredentialTools && (host.credentialProviderStatus != null || host.credentialAccess != null)) {
-    const credentialTurnRefusal = host.credentialAccess?.turnRefusal ?? host.credentialProviderStatus?.turnRefusal;
+  if (!host.isSubagentRunner && !host.isSystemPromptOverridden) {
     tools.push(
-      createRequestOnePasswordConnectTool({
-        ...credentialTurnRefusal === void 0 ? {} : { turnRefusal: credentialTurnRefusal },
+      ...createCredentialTurnTools({
+        credentialAccess: host.credentialAccess,
+        credentialProviderStatus: host.credentialProviderStatus,
+        loginFormFirst: host.gates.loginFormFirst(),
         onSendMessage: (message, timestampMs) => host.emitUpdate(
           {
             type: "send-message",
@@ -506276,7 +507602,7 @@ function buildTurnTools(host, turn, props) {
           harness: host.browserOperationHarness,
           reportComputerOperation: host.reportComputerOperation,
           getCombinedMode: host.getCombinedComputerUseSelection,
-          getBrowserSurface: () => sandBrowserToolSurface(host.gates),
+          getBrowserSurface: () => sandBrowserToolSurface(host),
           getPersistImage: () => host.persistImage,
           isUnicodeTypingEnabled: host.gates.unicodeTyping,
           ...autoReviewModes.computer !== "off" ? {
@@ -506377,7 +507703,8 @@ function buildTurnTools(host, turn, props) {
           toolHandoff.stopOtherTools({ toolCallId });
           pauseThisRun();
         },
-        credentialFillEnabled: !host.isSubagentRunner && !host.isSystemPromptOverridden && host.credentialAccess != null
+        credentialFillEnabled: !host.isSubagentRunner && !host.isSystemPromptOverridden && host.credentialAccess != null,
+        loginFormFirst: host.gates.loginFormFirst
       })
     );
   }
@@ -506761,10 +508088,16 @@ function createTurnAgentComposition(host) {
     const remoteBoxPrewarm = host.remoteBoxHasDesktop ? remoteBoxPrewarmFor(args.subagentType, host.gates) : void 0;
     const preparedRemoteBoxConnection = remoteBoxPrewarm === void 0 ? void 0 : host.computerUse.prepareRemoteBox({ agentId, boxId, ...remoteBoxPrewarm });
     const isMediaReview = isMediaReviewSubagentType(args.subagentType);
-    const mediaReviewSystemPrompt = isMediaReview ? findSubagentConfigByName(subagentConfigsForRun ?? [], args.subagentType)?.systemReminder?.(
-      void 0
-    ) : void 0;
-    let systemPrompt = mediaReviewSystemPrompt;
+    let reminderPrompt;
+    if (isMediaReview) {
+      reminderPrompt = findSubagentConfigByName(
+        subagentConfigsForRun ?? [],
+        args.subagentType
+      )?.systemReminder?.(void 0);
+    } else if (isSlidesSubagentType(args.subagentType)) {
+      reminderPrompt = sandSlidesChildSystemPrompt({ readonly: args.readonly });
+    }
+    let systemPrompt = reminderPrompt;
     if (systemPrompt == null && inherited?.requestSource !== "automation") {
       systemPrompt = buildSandSubagentSystemPrompt({
         subagentType: args.subagentType,
@@ -507430,7 +508763,11 @@ ${note}`;
         subagentConfigs.push(createSandBrowserUseJevSubagentConfig());
       } else {
         subagentConfigs.push(
-          createSandComputerUseSubagentConfig({ combined, credentialFillEnabled })
+          createSandComputerUseSubagentConfig({
+            combined,
+            credentialFillEnabled,
+            loginFormFirst: host.gates.loginFormFirst()
+          })
         );
       }
     }
@@ -507444,6 +508781,9 @@ ${note}`;
       } else {
         subagentConfigs.push(executorConfig);
       }
+    }
+    if (subagentConfigs != null && !host.isSystemPromptOverridden && host.gates.slides()) {
+      subagentConfigs.push(createSandSlidesSubagentConfig());
     }
     const parentModelInfo = createSandPromptModelInfo(session.getModelId());
     const executorProfiles = subagentConfigs?.some(
@@ -507661,7 +509001,7 @@ function stableAutomationId({
 
 // ../packages/grok-bot-harness/src/runner/error-free-step/error-free-step.ts
 init_dist();
-var logger107 = createLogger("sand:error-free-step");
+var logger108 = createLogger("sand:error-free-step");
 var GROK_BOT_ERROR_FREE_STEP_METRIC = "grok_bot.turn.error_free_step";
 var ERROR_FREE_STEP_DEADLINE_MS = 6e4;
 var ENDED_VERDICT = {
@@ -507702,7 +509042,7 @@ function createErrorFreeStepTracker(host) {
     try {
       errorFreeStep.increment(host.ctx, turn.weight, { ...labels, outcome, reason });
     } catch (error3) {
-      logger107.warn(host.ctx, `Error free step observation failed (${errorLogTag(error3)})`);
+      logger108.warn(host.ctx, `Error free step observation failed (${errorLogTag(error3)})`);
     }
   }
   function settle(turn, verdict) {
@@ -508078,7 +509418,7 @@ function matchesTransportPattern(error3) {
 
 // ../packages/agent-client/dist/interaction-controller.js
 init_dist();
-var logger108 = createLogger("ClientInteractionController");
+var logger109 = createLogger("ClientInteractionController");
 
 // ../packages/agent-client/dist/request-context-blob.js
 var REQUEST_CONTEXT_BLOB_HARD_MAX_BYTES = 15 * 1024 * 1024;
@@ -508096,7 +509436,7 @@ var requestContextBlobPreparationDuration = createHistogram("agent_client.reques
 
 // ../packages/agent-client/dist/stall-detector.js
 init_dist();
-var logger109 = createLogger("@anysphere/agent-client:stall-detector");
+var logger110 = createLogger("@anysphere/agent-client:stall-detector");
 var SERVER_HEARTBEAT_INTERVAL_MS = 1e4;
 var DEFAULT_STALL_DETECTOR_FAIL_TIMEOUT_MS = 3 * SERVER_HEARTBEAT_INTERVAL_MS;
 var MIN_STALL_DETECTOR_FAIL_TIMEOUT_MS = 2 * SERVER_HEARTBEAT_INTERVAL_MS;
@@ -508119,7 +509459,7 @@ var streamTotal = createCounter("agent_client.stream.total", {
 
 // ../packages/agent-client/dist/turn-runner.js
 init_dist();
-var logger110 = createLogger("@anysphere/agent-client:turn-runner");
+var logger111 = createLogger("@anysphere/agent-client:turn-runner");
 var MAX_ENDLESS_RETRY_DELAY_MS = 5 * 60 * 1e3;
 
 // ../packages/agent-client/dist/connect.js
@@ -509211,6 +510551,12 @@ function classifySandTurnInitiator(options2) {
 }
 
 // ../packages/grok-bot-harness/src/runner/turn-memory.ts
+function archiveWithUserBotNotes(memoryStore) {
+  const archive = memoryStore.listMemories(MEMORY_EXTRACTION_ARCHIVE_SCAN_LIMIT);
+  const userBot = memoryStore.memoryScopes?.userBot;
+  if (userBot == null) return archive;
+  return [...archive, ...userBot.listMemories(MEMORY_EXTRACTION_ARCHIVE_SCAN_LIMIT)];
+}
 async function runTurnMemory(memoryStore, episodeProgress, session, ctx, turnTs, exchange) {
   if (memoryStore.recordMemoryEvidence != null) {
     episodeProgress?.clearPendingEpisodeTurns();
@@ -509253,7 +510599,7 @@ async function runMemoryExtraction(memoryStore, session, ctx, exchange) {
   try {
     const existingMemories = gatherExtractionMemories(
       memoryStore.recall(MEMORY_RECENT_PROMPT_LIMIT),
-      memoryStore.listMemories(MEMORY_EXTRACTION_ARCHIVE_SCAN_LIMIT),
+      archiveWithUserBotNotes(memoryStore),
       `${exchange.user}
 ${exchange.agent}`
     );
@@ -509720,7 +511066,7 @@ function createIdleCompactionCollector() {
 }
 var mcpStartupDeadline = createDeadlinePolicy({
   name: "mcp-turn-start-discovery",
-  timeoutMs: 5e3
+  timeoutMs: 1e4
 });
 var nextTurnSeq = 0;
 function getToolDescriptionUpdatesForTurn(host) {
@@ -509839,10 +511185,12 @@ function createTurnRunShell(host) {
         requestSource: options2.requestSource ?? host.inheritedRequestSource
       }),
       startedAt: hostReceiptPerfMs,
+      requestSource: options2.requestSource ?? host.inheritedRequestSource,
       activityStartedAt: host.metricsActivityStartedAt,
       runRole: options2.metricsRunRole ?? "other",
       ...options2.metricsRunRole === "turn_start" && host.metricsUserMessageSentAt !== void 0 ? { userMessageSentAt: host.metricsUserMessageSentAt } : {},
       ...options2.metricsRunRole === "turn_start" && host.metricsTurnStartedAt !== void 0 ? { turnStartedAt: host.metricsTurnStartedAt } : {},
+      ...options2.metricsRunRole === "turn_start" && host.metricsTurnTraceMarks !== void 0 ? { traceMarks: host.metricsTurnTraceMarks } : {},
       clock: host.metricsClock
     });
     let outcome = "error";
@@ -509978,6 +511326,11 @@ function createTurnRunShell(host) {
       const parentSpan = turnTrace?.span ?? propagatedSpan;
       const spanBase = parentSpan !== void 0 ? host.ctx.with(SPAN_KEY2, parentSpan) : host.ctx;
       const runSpan = __using(_stack, createSpan(spanBase.withName("runner.run")));
+      performanceObservation.attachTrace({
+        runCtx: runSpan.ctx,
+        phaseParentCtx: parentSpan !== void 0 ? spanBase : runSpan.ctx
+      });
+      const _flushTtfaTrace = __using(_stack, { [Symbol.dispose]: () => performanceObservation.flushTrace() });
       const runCtx = host.stampInheritableRunAttributes(
         runSpan.ctx,
         inferenceRequestId,
@@ -510240,6 +511593,7 @@ function createTurnRunShell(host) {
           isSubagent: host.isSubagentRunner,
           isComputerUseSubagent: host.isComputerUseSubagent,
           isBrowserUseSubagent: host.isBrowserUseSubagent,
+          isSlidesSubagent: isSlidesSubagentType(host.subagentType),
           requestSource: turnRequestSource,
           skipLabeling,
           ...lineage != null ? { lineage } : {}
@@ -510461,7 +511815,7 @@ function createTurnRunShell(host) {
             return agent.runStream(
               attemptCtx.with(turnToolCallAttributionStartKey, (callId) => {
                 performanceObservation.toolCall({ event: "toolCallStarted", callId });
-              }).with(toolCallEventRecorderKey, outOfStepToolCallRecorder),
+              }).with(turnSendToUserFailedKey, () => performanceObservation.sendToUserFailed()).with(toolCallEventRecorderKey, outOfStepToolCallRecorder),
               toRedactedConversationStateStructure(state, privacyMode),
               toRedactedConversationAction(
                 resumeFrom != null ? RESUME_TURN_ACTION : action,
@@ -510833,6 +512187,7 @@ var SandAgentRunner = class _SandAgentRunner {
   channelManagement;
   appHome;
   slackReaction;
+  slackMessageDelete;
   slackSetup;
   teamPublish;
   backgroundWatches;
@@ -510877,7 +512232,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.userComputers = options2.userComputers ?? createSingleUserComputer({ box: this.box });
     this.remoteBoxHasDesktop = options2.remoteBoxHasDesktop ?? false;
     this.getRemoteBoxAvailable = options2.getRemoteBoxAvailable ?? (() => true);
-    this.boxHandoff = options2.boxHandoff;
+    this.boxHandoff = isGrokBotSlackSessionKind(options2.currentSession?.()?.kind) ? void 0 : options2.boxHandoff;
     this.userForm = options2.userForm;
     this.cookieOriginApproval = options2.cookieOriginApproval;
     this.virtualCard = options2.virtualCard;
@@ -511005,6 +512360,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.channelManagement = options2.channelManagement;
     this.appHome = options2.appHome;
     this.slackReaction = options2.slackReaction;
+    this.slackMessageDelete = options2.slackMessageDelete;
     this.slackSetup = options2.slackSetup;
     this.teamPublish = options2.teamPublish;
     this.systemPromptAssembly = createSystemPromptAssembly({
@@ -511090,7 +512446,7 @@ var SandAgentRunner = class _SandAgentRunner {
         isActiveRunInterrupted: () => this.activeRunInterrupted,
         subagentRegistryEntries: () => this.subagents.registryEntries(),
         isSubagentAborting: (subagentAgentId) => this.subagents.isAborting(subagentAgentId),
-        listBackgroundShellWork: (query) => this.backgroundWatches.listRegisteredShellWork(query),
+        listBackgroundShellWork: (query2) => this.backgroundWatches.listRegisteredShellWork(query2),
         shellRewatchEntries: () => this.backgroundWatches.shellRewatchEntries(),
         cloudAgentWatchEntries: () => this.backgroundWatches.cloudAgentWatchEntries()
       },
@@ -511158,6 +512514,7 @@ var SandAgentRunner = class _SandAgentRunner {
         return runner.readVideoAttachmentBytes;
       },
       gates: this.gates,
+      browserToolSurface: options2.browserToolSurface,
       hasUserComputer: options2.hasUserComputer,
       getRemoteBoxAvailable: () => runner.getRemoteBoxAvailable(),
       get cookieOriginApproval() {
@@ -511205,6 +512562,7 @@ var SandAgentRunner = class _SandAgentRunner {
         return self2.isBoxScopedSubagent;
       },
       gates: this.gates,
+      browserToolSurface: options2.browserToolSurface,
       getOrCreateNavigationProbe: () => this.computerUse.getOrCreateNavigationProbe(),
       get isSystemPromptOverridden() {
         return self2.isSystemPromptOverridden;
@@ -511343,18 +512701,11 @@ var SandAgentRunner = class _SandAgentRunner {
       get channelManagement() {
         return self2.channelManagement;
       },
-      get appHome() {
-        return self2.appHome;
-      },
-      get slackReaction() {
-        return self2.slackReaction;
-      },
-      get slackSetup() {
-        return self2.slackSetup;
-      },
-      get teamPublish() {
-        return self2.teamPublish;
-      },
+      appHome: self2.appHome,
+      slackReaction: self2.slackReaction,
+      slackMessageDelete: self2.slackMessageDelete,
+      slackSetup: self2.slackSetup,
+      teamPublish: self2.teamPublish,
       get createCloudAgentTool() {
         return self2.createCloudAgentTool;
       },
@@ -511554,6 +512905,7 @@ var SandAgentRunner = class _SandAgentRunner {
             ...this.channelManagement === void 0 ? {} : { channelManagement: this.channelManagement },
             ...this.appHome === void 0 ? {} : { appHome: this.appHome },
             ...this.slackReaction === void 0 ? {} : { slackReaction: this.slackReaction },
+            ...this.slackMessageDelete === void 0 ? {} : { slackMessageDelete: this.slackMessageDelete },
             ...this.detachedSubagents === void 0 ? {} : { detachedSubagents: this.detachedSubagents }
           };
         } else if (childOptions.requestSource === "automation") {
@@ -511598,6 +512950,7 @@ var SandAgentRunner = class _SandAgentRunner {
       metricsUserMessageSentAt: options2.metricsUserMessageSentAt,
       metricsTurnStartedAt: options2.metricsTurnStartedAt,
       metricsUserMessagesAccepted: options2.metricsUserMessagesAccepted,
+      metricsTurnTraceMarks: options2.metricsTurnTraceMarks,
       metricsClock: this.metricsClock,
       steerReach: this.steerReach,
       diskPressureReminder: this.diskPressureReminder,
@@ -512562,6 +513915,7 @@ function composeEvalRunnerGates(overrides = {}) {
     sendToUserReminderDelegation: fixedGate(false, EVAL_RUNNER_PIN),
     promptHygiene: fixedGate(false, EVAL_RUNNER_PIN),
     activeReactions: fixedGate(false, EVAL_RUNNER_PIN),
+    loginFormFirst: fixedGate(false, EVAL_RUNNER_PIN),
     internalDetailsBoundary: fixedGate(false, EVAL_RUNNER_PIN),
     agentDescription: fixedGate(true, EVAL_RUNNER_PIN),
     botShare: fixedGate(false, EVAL_RUNNER_PIN),
@@ -512578,6 +513932,7 @@ function composeEvalRunnerGates(overrides = {}) {
     agentEmailMultipleInboxes: fixedGate(false, EVAL_RUNNER_PIN),
     generalizedSelfSummaryPrompt: fixedGate(false, EVAL_RUNNER_PIN),
     widgetV0: fixedGate(false, EVAL_RUNNER_PIN),
+    slides: fixedGate(false, EVAL_RUNNER_PIN),
     turnEndThroughAgent: fixedGate(true, EVAL_RUNNER_PIN)
   });
   const gates = { ...baseline };

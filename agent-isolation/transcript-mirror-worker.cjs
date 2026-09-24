@@ -16574,6 +16574,7 @@ var AgentConversationTurnStructure = class _AgentConversationTurnStructure exten
     this.sendMessageStepIndices = [];
     this.subagentDispatchSteps = [];
     this.dynamicToolNames = [];
+    this.longReasoningReminderExposureLogged = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options) {
@@ -16589,7 +16590,29 @@ var AgentConversationTurnStructure = class _AgentConversationTurnStructure exten
     return proto3.util.equals(_AgentConversationTurnStructure, a, b);
   }
   static $() {
-    return ["AgentConversationTurnStructure|1 user_message 12|2 steps 12*|3 request_id 9?|4 encrypted_model 9?|5 dynamic_tool_count 13?|6 send_message_step_indices 13*|7 routed_model_display_name 9?|8 subagent_dispatch_steps #0*|9 dynamic_tool_names 9*|10 user_message_id 9?", SubagentDispatchStep];
+    return ["AgentConversationTurnStructure|1 user_message 12|2 steps 12*|3 request_id 9?|4 encrypted_model 9?|5 dynamic_tool_count 13?|6 send_message_step_indices 13*|7 routed_model_display_name 9?|8 subagent_dispatch_steps #0*|9 dynamic_tool_names 9*|10 user_message_id 9?|11 long_reasoning_reminder #1?|12 long_reasoning_reminder_exposure_logged 8", SubagentDispatchStep, LongReasoningReminderState];
+  }
+};
+var LongReasoningReminderState = class _LongReasoningReminderState extends __protoMessage378 {
+  constructor(data) {
+    super();
+    this.remainingDelayCalls = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options) {
+    return new _LongReasoningReminderState().fromBinary(bytes, options);
+  }
+  static fromJson(jsonValue, options) {
+    return new _LongReasoningReminderState().fromJson(jsonValue, options);
+  }
+  static fromJsonString(jsonString, options) {
+    return new _LongReasoningReminderState().fromJsonString(jsonString, options);
+  }
+  static equals(a, b) {
+    return proto3.util.equals(_LongReasoningReminderState, a, b);
+  }
+  static $() {
+    return ["LongReasoningReminderState|1 remaining_delay_calls 13"];
   }
 };
 var ShellConversationTurnStructure = class _ShellConversationTurnStructure extends __protoMessage378 {
