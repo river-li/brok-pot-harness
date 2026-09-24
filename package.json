@@ -50,7 +50,9 @@
     "test:desktop-keychain": "node --test runtime/tests/local-keychain-contract.cjs",
     "test:desktop-keychain-live": "node runtime/tests/local-keychain-live.cjs",
     "docs:check": "python3 tools/export-wiki.py --check && python3 tools/check-guidance.py",
-    "docs:wiki": "python3 tools/export-wiki.py"
+    "docs:wiki": "python3 tools/export-wiki.py",
+    "docs:site:build": "python3 -m mkdocs build --clean",
+    "docs:site:serve": "python3 -m mkdocs serve --dev-addr 127.0.0.1:8000"
   },
   "devDependencies": {
     "@types/node": "^26.6.1",

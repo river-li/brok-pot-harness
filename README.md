@@ -6,7 +6,8 @@
 <p align="center">Desktop conversations · Local sandbox · Your model API · MCP &amp; Skills</p>
 <p align="center">
   <a href="#quickstart">Quickstart</a> ·
-  <a href="docs/wiki/Home.md">Documentation</a> ·
+  <a href="https://river-li.github.io/brok-pot-harness/">Documentation website</a> ·
+  <a href="docs/wiki/Home.md">Documentation source</a> ·
   <a href="docs/wiki/Features.md">Features</a> ·
   <a href="docs/wiki/Architecture.md">Architecture</a> ·
   <a href="CONTRIBUTING.md">Contributing</a>
@@ -89,6 +90,9 @@ Use `npm stop` to stop the backend; your files and conversations remain on disk.
 
 [Full installation guide](docs/wiki/Build-Guide.md) · [Mount your project](docs/wiki/Sandbox.md) ·
 [Package the macOS app](docs/wiki/Packaging.md) · [Troubleshooting](docs/wiki/Troubleshooting.md)
+
+Documentation website deployments are published to
+<https://river-li.github.io/brok-pot-harness/> from `main`; see [docs/wiki/Publishing.md](docs/wiki/Publishing.md).
 
 ## Set up your workspace
 

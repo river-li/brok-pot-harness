@@ -25,4 +25,4 @@
 - [Source recovery](Source-Recovery.md)
 - [Verification](Verification.md)
 - [Issue triage](Issue-Triage.md)
-- [Publish this Wiki](Publishing.md)
+- [Publish docs website and Wiki](Publishing.md)
