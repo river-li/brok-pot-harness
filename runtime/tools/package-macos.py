@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Package the staged local or independent remote desktop with project branding."""
 import argparse
+import hashlib
 import json
+import os
 import plistlib
 import platform
 import re
@@ -12,6 +14,45 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 ELECTRON_PATH_MARKER = 'GBH_ELECTRON_PATH='
+LOCAL_RUNTIME_PATHS = (
+    'runtime/server.cjs', 'runtime/compose.yaml', 'runtime/box-entrypoint.sh',
+    'runtime/search/settings.yml', 'runtime/speech',
+    'runtime/tests/provider-smoke.cjs', '.runtime/build/sand-host', '.runtime/build/deps',
+)
+
+
+def copy_local_runtime(root, target):
+    """Bundle only the local server inputs; reject links and any missing build input."""
+    target.mkdir(parents=True, exist_ok=True)
+    inventory = []
+    for relative in LOCAL_RUNTIME_PATHS:
+        source = root / relative
+        if not source.exists() or source.is_symlink():
+            raise RuntimeError(f'Missing or linked local runtime input: {relative}')
+        files = sorted(source.rglob('*')) if source.is_dir() else [source]
+        for file in files:
+            if file.is_symlink():
+                raise RuntimeError(f'Linked local runtime input: {file.relative_to(root)}')
+            if not file.is_file():
+                continue
+            name = file.relative_to(root).as_posix()
+            destination = target / name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(file, destination)
+            inventory.append({
+                'path': name, 'sha256': hashlib.sha256(destination.read_bytes()).hexdigest(),
+                'mode': 0o755 if os.access(file, os.X_OK) else 0o644,
+            })
+    profile = json.loads((target / '.runtime/build/sand-host/build-profile.json').read_text())
+    if profile.get('profile') != 'local':
+        raise RuntimeError('Unified app requires a local Host build.')
+    digest = hashlib.sha256(''.join(
+        f"{entry['path']}:{entry['sha256']}:{entry['mode']}\n" for entry in inventory
+    ).encode()).hexdigest()
+    (target / 'manifest.json').write_text(json.dumps({
+        'schemaVersion': 1, 'digest': digest, 'files': inventory,
+    }, indent=2) + '\n')
+    return digest
 
 
 def resolve_electron_executable(root=ROOT):
@@ -49,7 +90,7 @@ def source_revision(root=ROOT):
 
 
 def write_release_resources(resources, version, source_sha, clean, architecture,
-                            electron_version, electron_dist, root=ROOT):
+                            electron_version, electron_dist, root=ROOT, product='Grokbot Remote Client'):
     notices = root / 'release/RESOURCE-NOTICES.md'
     release_notes = root / 'release/RELEASE-NOTES.md'
     electron_license = electron_dist / 'LICENSE'
@@ -74,7 +115,7 @@ def write_release_resources(resources, version, source_sha, clean, architecture,
     )
     manifest = {
         'schemaVersion': 1,
-        'product': 'Grokbot Remote Client',
+        'product': product,
         'releaseVersion': version,
         'compatibilityId': 'gbh-remote-v1',
         'sourceCommit': source_sha,
@@ -115,8 +156,11 @@ def set_candidate_bundle_version(info, version):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--remote', action='store_true', help='package the independent URL/token connection client')
+    parser.add_argument('--unified', action='store_true', help='package a portable Brokpot app with local Docker and remote server choices')
     parser.add_argument('--release-candidate', action='store_true', help='enforce the supported preview client build matrix and include candidate provenance')
     args = parser.parse_args()
+    if args.remote and args.unified:
+        raise SystemExit('--remote and --unified are mutually exclusive.')
     if sys.platform != 'darwin':
         raise SystemExit('This packager currently supports macOS only.')
     if args.release_candidate and not args.remote:
@@ -142,7 +186,7 @@ def main():
     expected_electron = '42.11.6'
     if release_candidate and electron_package.get('version') != expected_electron:
         raise SystemExit(f'Remote Client candidate requires Electron {expected_electron}.')
-    output_name = 'Grokbot Remote Client.app' if remote else 'Grokbot Harness.app'
+    output_name = 'Brokpot.app' if args.unified else ('Grokbot Remote Client.app' if remote else 'Grokbot Harness.app')
     output = ROOT / '.runtime/packages' / output_name
     if output.exists():
         shutil.rmtree(output)
@@ -156,8 +200,8 @@ def main():
     metadata = output / 'Contents/Info.plist'
     with metadata.open('rb') as f:
         info = plistlib.load(f)
-    product_name = 'Grokbot Remote Client' if remote else 'Grokbot Harness'
-    bundle_id = 'local.gbh.remoteclient' if remote else 'local.gbh.desktop'
+    product_name = 'Brokpot' if args.unified else ('Grokbot Remote Client' if remote else 'Grokbot Harness')
+    bundle_id = 'app.brokpot.desktop' if args.unified else ('local.gbh.remoteclient' if remote else 'local.gbh.desktop')
     info.update(CFBundleName=product_name, CFBundleDisplayName=product_name,
                 CFBundleIdentifier=bundle_id, CFBundleIconFile='AppIcon.icns')
     if release_candidate:
@@ -166,10 +210,21 @@ def main():
     with metadata.open('wb') as f:
         plistlib.dump(info, f)
     package = json.loads((app/'package.json').read_text())
-    package['main'] = 'remote-client-main.cjs' if remote else 'packaged-main.cjs'
+    package['main'] = 'unified-main.cjs' if args.unified else ('remote-client-main.cjs' if remote else 'packaged-main.cjs')
     package['productName'] = product_name
     (app/'package.json').write_text(json.dumps(package, indent=2)+'\n')
-    if remote:
+    if args.unified:
+        for name in ['unified-main.cjs', 'unified-desktop-main.cjs', 'unified-local.cjs', 'unified-preload.cjs',
+                     'unified-welcome.html', 'unified-welcome-ui.js']:
+            shutil.copy2(ROOT / 'runtime' / name, app / name)
+        digest = copy_local_runtime(ROOT, app / 'local-server')
+        (app / 'local-launch.json').unlink(missing_ok=True)
+        project = json.loads((ROOT / 'release/project.json').read_text())
+        source_sha, clean = source_revision()
+        write_release_resources(resources, project['projectVersion'], source_sha, clean,
+                                architecture, electron_package['version'], electron.parents[3],
+                                ROOT, product='Brokpot')
+    elif remote:
         if release_candidate:
             project = json.loads((ROOT / 'release/project.json').read_text())
             source_sha, clean = source_revision()
@@ -188,7 +243,10 @@ def main():
         ).stdout.strip().split()
         if architecture_report != ['arm64']:
             raise RuntimeError(f'Expected an arm64-only Electron app; lipo reported {architecture_report}')
-    if remote:
+    if args.unified:
+        print(f'Packaged portable Brokpot desktop, ad-hoc signed: {output}')
+        print(f'Bundled local runtime inventory: {digest}')
+    elif remote:
         print(f'Packaged independent remote desktop, ad-hoc signed: {output}')
         print('The client starts with a server URL and Gateway token. Host and Box run separately on the server.')
     else:

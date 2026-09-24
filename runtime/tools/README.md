@@ -11,6 +11,14 @@ Use root npm scripts for normal operation. Release extraction is separate under 
 | [import-desktop.py](import-desktop.py) | Import desktop release resources | Resource maintenance |
 | [build-icons.py](build-icons.py) | Convert selected rounded artwork to PNG/ICNS | `npm run build:icons` |
 | [package-macos.py](package-macos.py) | Produce the ad-hoc local or independent remote app | `npm run package:mac`; `npm run package:mac:remote` |
+| [install-macos.py](install-macos.py) | Build, package, and install the portable app in user Applications | `npm run install:mac` |
+| [build-release.py](build-release.py) | Assemble matching Mac app and Linux server artifacts from a clean commit | `npm run release:build` |
+
+`package-macos.py --unified` bundles an allowlisted local server runtime with
+file checksums and no checkout path or credentials. The installed app verifies
+and deploys that runtime under the user's Application Support directory before
+starting its own Compose project. The independent `--remote` client remains
+available for deployments that need only a server connection.
 | [package-release.py](package-release.py) | Fresh-build and archive the local-profile Linux server with checksums and provenance | `python3 runtime/tools/package-release.py` on Linux x86_64 with Node 24.14.0 |
 | [validate-preview-candidate.py](validate-preview-candidate.py) | Fail closed on a wrong, failed, unmerged, or stale Actions candidate before promotion | Called by the main-branch promotion workflow |
 | [release-extract.py](../release-extract.py) | Extract a server archive while rejecting unsafe paths, duplicate members, links, and special files | Used by the installed release manager for `gbh-server update <archive>` |

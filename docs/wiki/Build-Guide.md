@@ -109,6 +109,7 @@ environment. Use `npm start` for configuration changes. See [Sandbox and data](S
 
 ## Next steps
 
+- [Install the portable macOS app](Packaging.md#install-the-portable-brokpot-app) for a desktop with local Docker and remote server choices.
 - [Mount a project](Sandbox.md#mount-a-project) to work with real files.
 - [Configure permissions](Permissions.md) for Mac tools and Auto-review.
 - [Connect MCP and plugins](Extensions.md) to extend the agent.

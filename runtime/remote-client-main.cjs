@@ -129,7 +129,7 @@ function openConnectionWindow(message = "") {
     minWidth: 480,
     minHeight: 610,
     resizable: true,
-    title: "Connect to a Grok Bot server",
+    title: "Connect to a Brokpot server",
     backgroundColor: "#10151d",
     webPreferences: {
       preload: path.join(__dirname, "remote-client-preload.cjs"),

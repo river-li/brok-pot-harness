@@ -1,8 +1,8 @@
-# Grokbot Harness
+# Brokpot
 
 **Give your agent a workspace. Get working files back.**
 
-Grokbot Harness (GBH) is a desktop workspace you build and run yourself. Connect a Responses API
+Brokpot is a desktop workspace you build and run yourself. Connect a Responses API
 and let an agent work with files, run commands, and research the web inside a local Linux sandbox.
 Extend its tools with MCP and Skills, then follow the work from one desktop conversation.
 
@@ -10,6 +10,7 @@ English · [Chinese README](README.zh.md) · [Hosted documentation](https://zich
 
 ## Start here
 
+- **Install the Mac app** — `npm ci && npm ci --prefix runtime && npm run install:mac`; open `~/Applications/Brokpot.app` and choose local Docker or an existing server. [Packaging details](docs/wiki/Packaging.md).
 - **Install** — [Build GBH and run your first task](docs/wiki/Build-Guide.md).
 - **Configure** — [Connect a model and choose runtime options](docs/wiki/Configuration.md).
 - **Run remotely** — [Deploy a persistent server and connect a separate desktop](docs/wiki/Remote-Server.md).
@@ -46,7 +47,7 @@ Waiting time is compressed. [Recording details and reproduction](docs/media/READ
 
 ## Quickstart
 
-The desktop is currently verified on **Intel macOS**. You need **Node.js 22.16+, Python 3.9+,
+The source development desktop is currently verified on **Intel macOS**; the portable app has also been built and launched on Apple silicon. You need **Node.js 22.16+, Python 3.9+,
 npm, Docker Desktop**, and a **Responses API** with streaming and tool-call support.
 The first launch downloads container images and speech models.
 
