@@ -11,6 +11,7 @@
   <a href="https://river-li.github.io/brok-pot-harness/">项目网站</a> ·
   <a href="docs/wiki/Home.md">文档</a> ·
   <a href="docs/wiki/Features.md">功能</a> ·
+  <a href="docs/wiki/Marketplace.md">Starter marketplace（英文）</a> ·
   <a href="docs/wiki/Architecture.md">架构</a> ·
   <a href="CONTRIBUTING.md">参与开发</a>
 </p>
@@ -93,7 +94,7 @@ npm run start:desktop -- --profile local
 - **模型与功能开关** → [API、build profile 和运行选项](docs/wiki/Configuration.md)
 - **执行环境** → [自定义 image、目录挂载与数据备份](docs/wiki/Sandbox.md)
 - **工具权限** → [Auto-review、本机执行与 Keychain](docs/wiki/Permissions.md)
-- **工具扩展** → [MCP、插件与 Skills](docs/wiki/Extensions.md)
+- **工具扩展** → [Starter marketplace 与 Bot recipes（英文）](docs/wiki/Marketplace.md) · [MCP、插件与 Skills](docs/wiki/Extensions.md)
 - **阅读源码** → [架构与请求流程](docs/wiki/Architecture.md) · [Package 地图](packages/README.md)
 
 ## 开发与项目范围

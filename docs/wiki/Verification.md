@@ -15,6 +15,7 @@ Most results below were recorded on **2026-09-21**, with Host bfe1879 and deskto
 | Desktop flow | Composer → real model → sandbox → UI reply; packaged-app demonstration creates and reads back a file |
 | MCP | stdio/HTTP/SSE, restart persistence, three concurrent Agents' inline credential/workspace isolation, temporary-client cleanup |
 | Plugins | Install, secrets, MCP/Skill execution, target Bot, pinned update, restart, rollback/removal, desktop interactions |
+| Starter marketplace and local recipes (2026-09-24) | Compiled plugin/MCP/recipe contracts, pinned public-source downloads, store lifecycle, and Gateway persisted-acceptance recovery with fixture dispatch. A private Host/Box review verified starter discovery, Chrome Skill installation and effective listing, recipe Bot creation/setup metadata, and Skill-body sync. It did not verify Bot access to the 23 nested Chrome reference files and sent zero model requests; this does not establish a Bot turn, MCP tool call, external inference, Firecrawl service success, or desktop UI acceptance. |
 | Speech | English/Chinese Whisper through Gateway; Kokoro preview play/end/stop and saved selection |
 | Native dependencies | Piscina diff workers, tree-sitter/Bash, chunker loading |
 | Runtime settings | Custom image, absolute workspace, explicit overlay, read-only Host mounts, isolation from other stacks |

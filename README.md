@@ -14,7 +14,7 @@ English · [Chinese README](README.zh.md) · [Hosted documentation](https://zich
 - **Configure** — [Connect a model and choose runtime options](docs/wiki/Configuration.md).
 - **Run remotely** — [Deploy a persistent server and connect a separate desktop](docs/wiki/Remote-Server.md).
 - **Understand** — [Explore the architecture and request flow](docs/wiki/Architecture.md).
-- **Extend** — [Add MCP servers, plugins, and Skills](docs/wiki/Extensions.md).
+- **Extend** — [Use the starter marketplace, Bot recipes, MCP, plugins, and Skills](docs/wiki/Marketplace.md).
 
 The default `local` build runs without a vendor account and disables vendor login, billing,
 cloud provisioning, and remote sync. Inference requests go to the API you configure;
@@ -102,7 +102,7 @@ The [published documentation](https://zichuan.li/brok-pot-harness/) is available
 - **Models and feature switches** → [API settings, build profiles, and runtime options](docs/wiki/Configuration.md)
 - **Execution environment** → [Custom images, mounts, and backups](docs/wiki/Sandbox.md)
 - **Tool permissions** → [Auto-review, Mac execution, and Keychain](docs/wiki/Permissions.md)
-- **Integrations** → [MCP, plugins, and Skills](docs/wiki/Extensions.md)
+- **Integrations** → [Starter marketplace and Bot recipes](docs/wiki/Marketplace.md) · [MCP, plugins, and Skills](docs/wiki/Extensions.md)
 - **Codebase** → [Architecture and request flow](docs/wiki/Architecture.md) · [Package map](packages/README.md)
 
 ## Development and project scope
