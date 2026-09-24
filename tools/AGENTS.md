@@ -25,7 +25,9 @@ switching or resetting the primary checkout. Triage and PR readiness stay
 read-only, pin GitHub queries to the canonical repository for origin, and emit
 sanitized evidence only. The stale-label action may remove only the review labels
 documented in the maintainer workflow; it must execute trusted main-branch code
-with narrow API permissions and never run PR code with its token. Bind process
+with `contents:read` and `pull-requests:write` permissions and never run PR code
+with its token. PR label removal uses pull request write permission even though
+the shared REST route is under Issues. Bind process
 verdicts to a designated GitHub account while keeping the reviewer agent role
 distinct from the implementation author. An explicitly designated coordinator
 may review when distinct from the author; GitHub account metadata cannot prove

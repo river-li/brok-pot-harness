@@ -57,7 +57,7 @@ base-sha: <full-main-sha>
 </details>
 ```
 
-The verdict is process evidence, not an approval, code-quality proof, or merge authorization. On head synchronization, base edits, and pushes to main, `.github/workflows/invalidate-review-readiness.yml` removes stale review labels through GitHub API calls. The workflow checks out trusted `main` code, uses narrow permissions, and never executes PR code with its token. It removes `review:pending` if found because that label triggers the Claude workflow; this tooling never adds it. Readiness independently checks exact review SHAs, so stale comments and labels cannot qualify after a revision. Triage and readiness never post, label, approve, trigger Actions, merge, or run PR code. `npm run test:recovery` includes these behavior tests in the existing required CI lane.
+The verdict is process evidence, not an approval, code-quality proof, or merge authorization. On head synchronization, base edits, and pushes to main, `.github/workflows/invalidate-review-readiness.yml` removes stale review labels through GitHub API calls. The workflow checks out trusted `main` code, grants only `contents:read` and `pull-requests:write`, and never executes PR code with its token. PR label removal needs pull request write permission even though the shared REST endpoint is under Issues. It removes `review:pending` if found because that label triggers the Claude workflow; this tooling never adds it. Readiness independently checks exact review SHAs, so stale comments and labels cannot qualify after a revision. Triage and readiness never post, label, approve, trigger Actions, merge, or run PR code. `npm run test:recovery` includes these behavior tests in the existing required CI lane.
 
 ## Clean source recovery
 
