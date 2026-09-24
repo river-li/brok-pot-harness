@@ -1,9 +1,9 @@
 [English](README.md) · 简体中文
 
 <p align="center">
-  <img src="assets/branding/icon.png" width="112" height="112" alt="Grokbot Harness" />
+  <img src="assets/branding/icon.png" width="112" height="112" alt="Brokpot" />
 </p>
-<h1 align="center">Grokbot Harness</h1>
+<h1 align="center">Brokpot</h1>
 <p align="center"><strong>让 Agent 动手做事，把工作留在你的工作区。</strong></p>
 <p align="center">桌面对话 · 本地 Sandbox · 自选模型 · MCP 与 Skills</p>
 <p align="center">
@@ -16,7 +16,7 @@
   <a href="CONTRIBUTING.md">参与开发</a>
 </p>
 
-**Grokbot Harness（GBH）是一个可自行构建的桌面 Agent 工作区。** 连接你选择的 Responses API，
+**Brokpot 是一个可自行构建的桌面 Agent 工作区。** 连接你选择的 Responses API，
 让 Agent 在本地 Linux Sandbox 中读写文件、执行命令、检索网页，并通过 MCP 和 Skills 扩展工具。
 任务、工具过程和结果集中在同一个桌面界面中。
 
