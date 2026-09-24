@@ -8,12 +8,24 @@
   mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
 
   const renderDiagrams = async () => {
-    const diagrams = Array.from(document.querySelectorAll('.mermaid'));
+    const diagrams = Array.from(document.querySelectorAll('.gbh-diagram'));
     for (const [index, diagram] of diagrams.entries()) {
+      const source = diagram.textContent.trim();
+      if (!source) continue;
+
       try {
-        const { svg, bindFunctions } = await mermaid.render(`gbh-mermaid-${index}`, diagram.textContent.trim());
+        const { svg, bindFunctions } = await mermaid.render(`gbh-mermaid-${index}`, source);
         diagram.innerHTML = svg;
         if (bindFunctions) bindFunctions(diagram);
+        const graphic = diagram.querySelector('svg');
+        const graphicWidth = graphic && graphic.viewBox && graphic.viewBox.baseVal.width;
+        if (Number.isFinite(graphicWidth) && graphicWidth > 0) {
+          graphic.style.width = `${graphicWidth}px`;
+          graphic.style.maxWidth = 'none';
+        }
+        diagram.setAttribute('tabindex', '0');
+        diagram.setAttribute('role', 'region');
+        diagram.setAttribute('aria-label', 'Diagram; scroll horizontally to view the full graphic');
         diagram.dataset.gbhRendered = 'true';
       } catch (error) {
         const message = error && typeof error === 'object' && 'message' in error ? error.message : String(error);

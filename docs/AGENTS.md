@@ -32,8 +32,11 @@ export is not a publication; do not claim the remote Wiki is live without a push
 
 The Pages site uses the same authored Markdown and the component READMEs linked
 from it. Keep generated staging and output under ignored `.runtime/docs-site/`;
-the site generator copies only Markdown and explicitly linked public media. Do
-not add symlink trees or runtime/private files to the site inputs. See
+the site generator copies Markdown, referenced public media, and only the
+explicitly allowlisted theme stylesheet, brand icon, and Mermaid initializer.
+Keep GBH theme styles in `assets/stylesheets/site.css` and preserve the pinned
+Material for MkDocs configuration in the repository root. Do not add symlink
+trees or runtime/private files to the site inputs. See
 [Publishing](wiki/Publishing.md) for the build, preview, artifact checks, and
 publication flow. Site PRs validate with read-only credentials; only a
 validated `main` push or manual `main` run publishes to Pages. Check rendered

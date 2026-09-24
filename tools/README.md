@@ -9,6 +9,7 @@ Release recovery and documentation publishing utilities. Daily runtime builds us
 | [recover-native.py](recover-native.py) | Export a clean recovery preserving the native layout |
 | [test_recovery.py](test_recovery.py) | Recovery boundary and mapping tests |
 | [export-wiki.py](export-wiki.py) | Validate English documentation and export native GitHub Wiki pages |
+| [docs-site.py](docs-site.py) | Stage authored Markdown and allowlisted public/theme assets, then build, preview, and verify the GitHub Pages artifact |
 | [test_wiki.py](test_wiki.py) | Wiki navigation, media, source links, and validation tests |
 | [check-guidance.py](check-guidance.py) | Ensure README-declared maintained source components have scoped AGENTS.md guidance |
 | [maintenance.py](maintenance.py) | Create registered main-based task worktrees and print read-only issue, CI, and PR readiness evidence |
@@ -85,8 +86,8 @@ walking; maintained package `dist/` source remains in scope.
 The [Development guide](../docs/wiki/Development.md#scoped-guidance-coverage)
 defines which directories the check treats as components.
 
-`docs:site:setup` installs the pinned MkDocs dependencies into ignored `.runtime/docs-venv/`.
-`docs:site:build` generates an allowlisted source tree and renders the GitHub Pages website into
+`docs:site:setup` installs the pinned MkDocs, Material for MkDocs, and Markdown extension dependencies into ignored `.runtime/docs-venv/`.
+`docs:site:build` stages an allowlisted source tree, including the project-owned theme stylesheet and logo, then renders the GitHub Pages website into
 `.runtime/docs-site/site/` with MkDocs. `docs:site:serve` previews the same generated source tree.
 The docs workflow also runs `docs_site_markdown_regression.py` with the pinned MkDocs dependencies to check Markdown
 inside the README details blocks and its image/link routes.

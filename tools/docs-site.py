@@ -25,6 +25,11 @@ DEFAULT_REPOSITORY = 'river-li/brok-pot-harness'
 SKIP_DIRS = {'.git', '.runtime', 'node_modules', 'sand-host', 'vendor', 'licenses', 'dist', 'site-src', 'site'}
 MEDIA_DIRS = {('docs', 'media'), ('assets', 'branding')}
 MEDIA_SUFFIXES = {'.gif', '.jpeg', '.jpg', '.json', '.mp3', '.mp4', '.ogg', '.pdf', '.png', '.svg', '.wav', '.webm', '.webp'}
+SITE_ASSETS = {
+    Path('assets/branding/icon.png'),
+    Path('docs/assets/javascripts/mermaid-init.js'),
+    Path('docs/assets/stylesheets/site.css'),
+}
 COMMIT_RE = re.compile(r'^[0-9a-fA-F]{7,64}$')
 FENCE_RE = re.compile(
     r'(^[ \t]*```[^\n]*\n.*?^[ \t]*```[^\n]*$|^[ \t]*~~~[^\n]*\n.*?^[ \t]*~~~[^\n]*$)',
@@ -321,9 +326,11 @@ def prepare_site(
         source.relative_to(root): rewrite_document(root, source, pages, assets, repository_name, commit)
         for source in docs
     }
-    js = root / 'docs/assets/javascripts/mermaid-init.js'
-    if not js.is_file() or js.is_symlink():
-        raise ValueError('docs/assets/javascripts/mermaid-init.js must be a regular file')
+    for relative in SITE_ASSETS:
+        path = root / relative
+        assert_no_symlink_components(root, path)
+        if not path.is_file() or path.is_symlink():
+            raise ValueError(f'{relative.as_posix()} must be a regular file')
 
     state.mkdir(parents=True, exist_ok=True)
     source_dir = root / SOURCE_DIR
@@ -338,7 +345,7 @@ def prepare_site(
         destination = source_dir / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_text(content)
-    for asset in sorted(assets | {js}):
+    for asset in sorted(assets | {root / relative for relative in SITE_ASSETS}):
         destination = source_dir / asset.relative_to(root)
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(asset, destination)
@@ -349,7 +356,7 @@ def prepare_site(
         'siteUrl': site_url,
         'sourceCommit': commit,
         'pages': [path.as_posix() for path in sorted(rendered)],
-        'assets': [path.relative_to(root).as_posix() for path in sorted(assets | {js})],
+        'assets': [path.relative_to(root).as_posix() for path in sorted(assets | {root / relative for relative in SITE_ASSETS})],
     }
     marker.write_text(json.dumps(metadata, indent=2) + '\n')
     return metadata
@@ -407,10 +414,18 @@ def _artifact_file_allowed(relative: Path) -> bool:
     suffix = relative.suffix.lower()
     if suffix == '.html' or relative.as_posix() in {'404.html', 'source-commit.txt'}:
         return True
-    if len(parts) > 1 and parts[0] in {'css', 'js'} and suffix in {'.css', '.js'}:
+    if relative.as_posix() == 'assets/images/favicon.png':
         return True
-    if len(parts) > 1 and parts[0] in {'css', 'js'} and suffix == '.map':
-        return True
+    if len(parts) > 2 and parts[:2] == ('assets', 'stylesheets') and suffix in {'.css', '.map'}:
+        return bool(re.fullmatch(r'(?:main|palette)\.[0-9a-f]+\.min\.css(?:\.map)?', parts[-1]))
+    if len(parts) > 2 and parts[:2] == ('assets', 'javascripts') and suffix in {'.js', '.map'}:
+        relative_theme_asset = Path(*parts[2:]).as_posix()
+        return bool(
+            re.fullmatch(r'bundle\.[0-9a-f]+\.min\.js(?:\.map)?', relative_theme_asset)
+            or re.fullmatch(r'workers/search\.[0-9a-f]+\.min\.js(?:\.map)?', relative_theme_asset)
+            or re.fullmatch(r'lunr/min/[a-z.]+\.min\.js', relative_theme_asset)
+            or re.fullmatch(r'lunr/(?:tinyseg|wordcut)\.js', relative_theme_asset)
+        )
     if len(parts) > 1 and parts[0] == 'search' and suffix in {'.js', '.json'}:
         return True
     if len(parts) > 1 and parts[0] in {'fonts', 'webfonts'} and suffix in {'.woff', '.woff2', '.ttf'}:
@@ -419,7 +434,7 @@ def _artifact_file_allowed(relative: Path) -> bool:
         return True
     if relative.as_posix() == 'sitemap.xml' or relative.as_posix() == 'sitemap.xml.gz':
         return True
-    if relative.as_posix() == 'docs/assets/javascripts/mermaid-init.js':
+    if relative.as_posix() in {path.as_posix() for path in SITE_ASSETS}:
         return True
     if parts[:2] in MEDIA_DIRS and suffix in MEDIA_SUFFIXES:
         return True

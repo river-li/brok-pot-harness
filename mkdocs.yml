@@ -1,4 +1,4 @@
-site_name: Grokbot Harness Documentation
+site_name: Grokbot Harness
 site_description: Build, operate, and maintain Grokbot Harness.
 site_url: !ENV [GBH_DOCS_SITE_URL, "https://river-li.github.io/brok-pot-harness/"]
 repo_url: !ENV [GBH_DOCS_REPOSITORY_URL, "https://github.com/river-li/brok-pot-harness"]
@@ -7,8 +7,26 @@ edit_uri: edit/main/
 docs_dir: .runtime/docs-site/src
 site_dir: .runtime/docs-site/site
 
+copyright: Grokbot Harness
+
 theme:
-  name: mkdocs
+  name: material
+  language: en
+  font: false
+  logo: assets/branding/icon.png
+  favicon: assets/branding/icon.png
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+  palette:
+    scheme: default
+    primary: custom
+    accent: custom
 
 markdown_extensions:
   - toc:
@@ -20,33 +38,37 @@ markdown_extensions:
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
-          class: mermaid
+          class: gbh-diagram
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 extra_javascript:
   - https://unpkg.com/mermaid@11.17.2/dist/mermaid.min.js
   - docs/assets/javascripts/mermaid-init.js
 
+extra_css:
+  - docs/assets/stylesheets/site.css
+
+extra:
+  generator: false
+
 nav:
   - Start here:
+      - Overview: README.md
       - Installation and first task: docs/wiki/Build-Guide.md
-      - Architecture: docs/wiki/Architecture.md
-      - Releases and packaging: docs/wiki/Packaging.md
-      - Contributions: CONTRIBUTING.md
-  - Project:
-      - Project README: README.md
-      - Simplified Chinese: README.zh.md
-      - Documentation Home: docs/wiki/Home.md
-      - Features: docs/wiki/Features.md
       - Configuration: docs/wiki/Configuration.md
+      - Features: docs/wiki/Features.md
       - Troubleshooting: docs/wiki/Troubleshooting.md
+  - Project:
+      - Architecture: docs/wiki/Architecture.md
+      - Documentation Home: docs/wiki/Home.md
+      - Simplified Chinese: README.zh.md
+      - Packaging: docs/wiki/Packaging.md
+      - Contributions: CONTRIBUTING.md
   - Workspace Setup:
       - Sandbox and Data: docs/wiki/Sandbox.md
       - Permissions: docs/wiki/Permissions.md
       - MCP, Plugins, and Skills: docs/wiki/Extensions.md
-      - Packaging: docs/wiki/Packaging.md
   - Engineering:
-      - Architecture: docs/wiki/Architecture.md
       - Development: docs/wiki/Development.md
       - Source Recovery: docs/wiki/Source-Recovery.md
       - Verification: docs/wiki/Verification.md
@@ -55,4 +77,3 @@ nav:
       - Package Map (component guide): packages/README.md
       - Renderer Guide: runtime/renderer-src/README.md
       - Host Extension Map (component guide): src/host/extensions/README.md
-  - GitHub Releases: https://github.com/river-li/brok-pot-harness/releases

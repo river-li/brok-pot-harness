@@ -1,23 +1,23 @@
-<p align="center">
-  <img src="assets/branding/icon.png" width="112" height="112" alt="Grokbot Harness" />
-</p>
-<h1 align="center">Grokbot Harness</h1>
-<p align="center"><strong>Give your agent a workspace. Get working files back.</strong></p>
-<p align="center">Desktop conversations · Local sandbox · Your model API · MCP &amp; Skills</p>
-<p align="center">
-  <a href="#quickstart">Quickstart</a> ·
-  <a href="https://river-li.github.io/brok-pot-harness/">Documentation website</a> ·
-  <a href="docs/wiki/Home.md">Documentation source</a> ·
-  <a href="docs/wiki/Features.md">Features</a> ·
-  <a href="docs/wiki/Architecture.md">Architecture</a> ·
-  <a href="CONTRIBUTING.md">Contributing</a>
-</p>
-<p align="center">English · <a href="README.zh.md">Simplified Chinese</a></p>
+# Grokbot Harness
 
-**Grokbot Harness (GBH) is a desktop agent workspace you can build and run yourself.**
-Connect your preferred Responses API, then let an agent read and write files, run commands,
-and research the web inside a local Linux sandbox. Extend its tools with MCP and Skills,
-and follow the work from one desktop conversation.
+**Give your agent a workspace. Get working files back.**
+
+Grokbot Harness (GBH) is a desktop workspace you build and run yourself. Connect a Responses API
+and let an agent work with files, run commands, and research the web inside a local Linux sandbox.
+Extend its tools with MCP and Skills, then follow the work from one desktop conversation.
+
+English · [Chinese README](README.zh.md) · [Hosted documentation](https://zichuan.li/brok-pot-harness/) · [Documentation source](docs/wiki/Home.md)
+
+## Start here
+
+- **Install** — [Build GBH and run your first task](docs/wiki/Build-Guide.md).
+- **Configure** — [Connect a model and choose runtime options](docs/wiki/Configuration.md).
+- **Understand** — [Explore the architecture and request flow](docs/wiki/Architecture.md).
+- **Extend** — [Add MCP servers, plugins, and Skills](docs/wiki/Extensions.md).
+
+The default `local` build runs without a vendor account and disables vendor login, billing,
+cloud provisioning, and remote sync. Inference requests go to the API you configure;
+model providers, search engines, and MCP tools may use the network.
 
 <p align="center">
   <a href="docs/media/agent-demo.mp4"><img src="docs/media/agent-result.png" width="900" alt="The agent created and read back a Markdown checklist in the sandbox, then displayed the result in the desktop app" /></a>
@@ -42,10 +42,6 @@ Waiting time is compressed. [Recording details and reproduction](docs/media/READ
 | **Work with your own files**<br />Mount a project at `/workspace` to read reference material, run scripts, and create deliverables. | **Choose your model**<br />Set a Responses API URL, model ID, and key. Stream replies and tool calls through the same interface. |
 | **Connect your tools**<br />Use stdio, HTTP, or SSE MCP servers, and manage local plugins and Skills. | **Control execution**<br />Protect reference files with read-only mounts. Configure Auto-review and Mac tool permissions independently. |
 | **Go from web to voice**<br />Search with SearXNG, extract web content, dictate with local Whisper, and preview voices with Kokoro. | **Build your desktop**<br />Package a macOS app with the project icon, customize the sandbox image, and choose your runtime settings. |
-
-The default `local` build runs without a vendor account and disables vendor login, billing,
-cloud provisioning, and remote sync. Inference requests go to the API you configure;
-model providers, search engines, and MCP tools may use the network.
 
 ## Quickstart
 
@@ -96,8 +92,8 @@ Use `npm stop` to stop the backend; your files and conversations remain on disk.
 Check [GitHub Releases](https://github.com/river-li/brok-pot-harness/releases) for downloadable builds when available.
 The [packaging guide](docs/wiki/Packaging.md) explains how to build the desktop app from this source tree.
 
-The expected documentation website URL after the first successful deployment is
-<https://river-li.github.io/brok-pot-harness/>; see [docs/wiki/Publishing.md](docs/wiki/Publishing.md) for rollout details.
+The [published documentation](https://zichuan.li/brok-pot-harness/) is available online. See
+[docs/wiki/Publishing.md](docs/wiki/Publishing.md) to configure Pages for a fork.
 
 ## Set up your workspace
 
