@@ -565,7 +565,7 @@ function Da(t, e) {
     case "routines":
       return e.routines?.length ?? 0;
     case "integrations":
-      return e.plugins?.length ?? 0;
+      return (e.plugins?.length ?? 0) + (e.dependencies?.length ?? 0);
   }
 }
 function Ol(t) {
@@ -582,27 +582,18 @@ function Ol(t) {
       (e[0] = u),
       (e[1] = o))
     : ((u = e[0]), (o = e[1]));
-  const m = d == null;
-  let r;
-  e[2] === Symbol.for("react.memo_cache_sentinel")
-    ? ((r = n.jsx(se, { id: "7++OwZ" })), (e[2] = r))
-    : (r = e[2]);
-  let f;
-  e[3] !== d || e[4] !== m
-    ? ((f = n.jsx("span", {
-        ...o,
-        children: n.jsx(We, {
-          disabled: m,
-          onClick: d,
-          shape: "pill",
-          size: "lg",
-          children: r,
-        }),
-      })),
-      (e[3] = d),
-      (e[4] = m),
-      (e[5] = f))
-    : (f = e[5]);
+  const m = d == null,
+    r = s.localRecipe ? "Import pot" : n.jsx(se, { id: "7++OwZ" }),
+    f = n.jsx("span", {
+      ...o,
+      children: n.jsx(We, {
+        disabled: m,
+        onClick: d,
+        shape: "pill",
+        size: "lg",
+        children: r,
+      }),
+    });
   let p, g;
   e[6] === Symbol.for("react.memo_cache_sentinel")
     ? ((p = { className: "sand-1n2onr6 sand-2lah0s sand-29ncy0 sand-y75621" }),
@@ -640,25 +631,16 @@ function Ol(t) {
       })),
       (e[12] = b))
     : (b = e[12]);
-  let j;
-  e[13] !== s.creator.profilePhotoUrl
-    ? ((j = n.jsxs("span", {
-        ...y,
-        children: [
-          b,
-          n.jsx(Ba, { sizePx: 36, src: s.creator.profilePhotoUrl }),
-        ],
-      })),
-      (e[13] = s.creator.profilePhotoUrl),
-      (e[14] = j))
-    : (j = e[14]);
-  let k;
-  e[15] !== j || e[16] !== h
-    ? ((k = n.jsxs("div", { ...p, children: [h, j] })),
-      (e[15] = j),
-      (e[16] = h),
-      (e[17] = k))
-    : (k = e[17]);
+  const j = s.localRecipe
+      ? null
+      : n.jsxs("span", {
+          ...y,
+          children: [
+            b,
+            n.jsx(Ba, { sizePx: 36, src: s.creator.profilePhotoUrl }),
+          ],
+        }),
+    k = n.jsxs("div", { ...p, children: [h, j] });
   let v, S, N;
   e[18] === Symbol.for("react.memo_cache_sentinel")
     ? ((v = {
@@ -725,12 +707,9 @@ function Ol(t) {
   e[34] === Symbol.for("react.memo_cache_sentinel")
     ? (($ = me(he.body2, Ke.byline)), (e[34] = $))
     : ($ = e[34]);
-  let C;
-  e[35] !== s.creator.name
-    ? ((C = n.jsx(se, { id: "aavdrC", values: { 0: s.creator.name } })),
-      (e[35] = s.creator.name),
-      (e[36] = C))
-    : (C = e[36]);
+  const C = s.localRecipe
+    ? n.jsx("span", { children: "Local pot" })
+    : n.jsx(se, { id: "aavdrC", values: { 0: s.creator.name } });
   let M;
   e[37] !== s ? ((M = _s(s)), (e[37] = s), (e[38] = M)) : (M = e[38]);
   let D;
@@ -843,6 +822,100 @@ function Bl(t) {
     u
   );
 }
+function LocalRecipeSetup({ template }) {
+  const { botTemplates } = Sa();
+  const plugins = template.plugins ?? [];
+  const pluginIds = plugins.map((plugin) => plugin.pluginId).filter(Boolean);
+  const pluginKey = pluginIds.join("\u0000");
+  const [states, setStates] = Q.useState(null);
+  Q.useEffect(() => {
+    let active = true;
+    setStates(null);
+    botTemplates.localRecipePluginStates(pluginIds).then(
+      (value) => active && setStates(value),
+      () => active && setStates({ error: true }),
+    );
+    return () => {
+      active = false;
+    };
+  }, [botTemplates, pluginKey]);
+  const dependencies = template.dependencies ?? [];
+  const rows = plugins.map((plugin) => {
+    const id = plugin.pluginId;
+    const state = states?.[id];
+    return n.jsxs(
+      "div",
+      {
+        style: { display: "flex", justifyContent: "space-between", gap: 16, padding: "8px 0", borderBottom: "1px solid rgba(128,128,128,.18)" },
+        children: [
+          n.jsxs("div", {
+            style: { display: "grid", gap: 2 },
+            children: [
+              n.jsx("strong", { children: plugin.name ?? id }),
+              plugin.description ? n.jsx("span", { style: { opacity: .75 }, children: plugin.description }) : null,
+            ],
+          }),
+          n.jsx("span", {
+            role: "status",
+            style: { whiteSpace: "nowrap", opacity: .8 },
+            children: states == null ? "Checking Host…" : state?.status ?? "Starter unavailable",
+          }),
+        ],
+      },
+      id,
+    );
+  });
+  return n.jsxs("section", {
+    "aria-label": "Pot setup",
+    style: { display: "grid", gap: 12 },
+    children: [
+      n.jsx("h3", { style: { margin: 0 }, children: "Setup" }),
+      rows.length > 0
+        ? n.jsxs("div", { children: rows })
+        : n.jsx("p", { style: { margin: 0, opacity: .76 }, children: "No plugin integrations are required." }),
+      dependencies.length > 0
+        ? n.jsxs("div", {
+            style: { display: "grid", gap: 4 },
+            children: [
+              n.jsx("strong", { children: "Before using this pot" }),
+              ...dependencies.map((item, index) => n.jsx("p", { style: { margin: 0, opacity: .8 }, children: item }, index)),
+            ],
+          })
+        : null,
+      template.gettingStartedSkill
+        ? n.jsx("p", {
+            style: { margin: 0, opacity: .76 },
+            children: "Getting-started Skill: " + template.gettingStartedSkill + ". This is recipe metadata; it does not run automatically.",
+          })
+        : null,
+      states?.error
+        ? n.jsx("p", { role: "status", children: "Host setup status could not be loaded. Open Plugins to check these integrations." })
+        : null,
+    ],
+  });
+}
+function localRecipeResource(item, kind) {
+  const content = typeof item.content === "string" ? item.content : "";
+  return n.jsxs(
+    "article",
+    {
+      style: { display: "grid", gap: 6, padding: "12px 0", borderBottom: "1px solid rgba(128,128,128,.18)" },
+      children: [
+        n.jsx("h3", { style: { margin: 0, fontSize: 16 }, children: item.name }),
+        item.description ? n.jsx("p", { style: { margin: 0, opacity: .8 }, children: item.description }) : null,
+        content.length > 0
+          ? n.jsxs("details", {
+              children: [
+                n.jsx("summary", { children: "View " + kind + " content" }),
+                n.jsx("pre", { style: { whiteSpace: "pre-wrap", overflowWrap: "anywhere", font: "inherit", margin: "8px 0 0" }, children: content }),
+              ],
+            })
+          : null,
+      ],
+    },
+    item.name,
+  );
+}
 function Kl(t) {
   const e = J.c(19),
     { section: s, template: a } = t;
@@ -873,6 +946,7 @@ function Kl(t) {
     );
   }
   if (s === "skills") {
+    if (a.localRecipe) return (a.skills ?? []).map((item) => localRecipeResource(item, "Skill"));
     let i;
     e[7] !== a.skills
       ? ((i = a.skills ?? []), (e[7] = a.skills), (e[8] = i))
@@ -884,6 +958,7 @@ function Kl(t) {
     );
   }
   if (s === "routines") {
+    if (a.localRecipe) return (a.routines ?? []).map((item) => localRecipeResource(item, "routine"));
     let i;
     e[11] !== a.routines
       ? ((i = a.routines ?? []), (e[11] = a.routines), (e[12] = i))
@@ -894,6 +969,7 @@ function Kl(t) {
       c
     );
   }
+  if (a.localRecipe) return n.jsx(LocalRecipeSetup, { template: a });
   let l;
   e[15] !== a.plugins
     ? ((l = a.plugins ?? []), (e[15] = a.plugins), (e[16] = l))
@@ -2490,11 +2566,12 @@ function ud(t, e) {
 }
 function md(t) {
   const e = J.c(15),
-    { listings: s, intent: a } = t,
+    { listings: s, intent: a, heading } = t,
     { _: l } = re();
   if (s.length === 0) return null;
-  let d;
-  e[0] !== l ? ((d = l({ id: "FkMol5" })), (e[0] = l), (e[1] = d)) : (d = e[1]);
+  const d = heading ?? (s.every((listing) => listing.localRecipe === true)
+    ? "Featured pots"
+    : l({ id: "FkMol5" }));
   let i;
   e[2] === Symbol.for("react.memo_cache_sentinel")
     ? ((i = { className: "sand-rvj5dj sand-1sipb5g sand-ou54vl" }), (e[2] = i))
@@ -2532,33 +2609,36 @@ function md(t) {
                   className: "sand-1n2onr6 sand-ni59qk sand-14z7g9a",
                   children: [
                     n.jsx(dd, { listing: r }),
-                    n.jsxs("span", {
-                      className:
-                        "sand-10l6tqk sand-18zu7yx sand-qmqy1e sand-78zum5 sand-6s0dn4 sand-l56j7k sand-100vrsf sand-1vqgdyp",
-                      children: [
-                        n.jsx("span", {
-                          "aria-hidden": !0,
+                    r.localRecipe
+                      ? null
+                      : n.jsxs("span", {
                           className:
-                            "sand-10l6tqk sand-10a8y8t sand-149ho13 sand-10e981r sand-47corl",
+                            "sand-10l6tqk sand-18zu7yx sand-qmqy1e sand-78zum5 sand-6s0dn4 sand-l56j7k sand-100vrsf sand-1vqgdyp",
+                          children: [
+                            n.jsx("span", {
+                              "aria-hidden": !0,
+                              className:
+                                "sand-10l6tqk sand-10a8y8t sand-149ho13 sand-10e981r sand-47corl",
+                            }),
+                            n.jsx(Ba, {
+                              sizePx: 36,
+                              src: r.creator.profilePhotoUrl,
+                            }),
+                          ],
                         }),
-                        n.jsx(Ba, {
-                          sizePx: 36,
-                          src: r.creator.profilePhotoUrl,
-                        }),
-                      ],
-                    }),
                   ],
                 }),
                 n.jsxs("div", {
                   className:
                     "sand-78zum5 sand-dt5ytf sand-6s0dn4 sand-195vfkc sand-h8yej3 sand-euugli sand-2b8uid",
                   children: [
-                    n.jsx("span", {
+                    r.localRecipe ? null : n.jsx("span", {
                       ...me(he.body2, Ee.truncatedText, Ee.creatorName),
                       children: l({ id: "qm+BLE", values: { creatorName: f } }),
                     }),
                     n.jsx("span", {
-                      ...me(he.body1, Ee.truncatedText, Ee.botName),
+                      ...me(he.body1, !r.localRecipe && Ee.truncatedText, Ee.botName),
+                      ...(r.localRecipe ? { style: { whiteSpace: "normal", textWrap: "balance" } } : {}),
                       children: r.name,
                     }),
                   ],
@@ -2572,7 +2652,7 @@ function md(t) {
         (e[8] = a),
         (e[9] = m))
       : (m = e[9]),
-      (c = s.slice(0, 4).map(m)),
+      (c = (s.every((listing) => listing.localRecipe) ? s : s.slice(0, 4)).map(m)),
       (e[3] = l),
       (e[4] = a),
       (e[5] = s),
@@ -2794,6 +2874,29 @@ function pd(t) {
     } = t,
     { _: u } = re(),
     { _: o } = re();
+  if (s.localMarketplace === true) {
+    const query = l.trim().toLocaleLowerCase();
+    const listings = id(s).filter((listing) =>
+      `${listing.name} ${listing.description}`.toLocaleLowerCase().includes(query),
+    );
+    return n.jsx("div", {
+      className: "local-marketplace-overview",
+      children: n.jsx(Ua, {
+        categories: [],
+        onQueryChange: i,
+        query: l,
+        searchLabel: "Search plugins and pots",
+        searchPlaceholder: "Search plugins and pots",
+        groups: n.jsxs(n.Fragment, {
+          children: [
+            n.jsx(md, { intent: a, listings: listings.filter((listing) => listing.builtIn), heading: "Featured pots" }),
+            n.jsx(md, { intent: a, listings: listings.filter((listing) => !listing.builtIn), heading: "Your pots" }),
+            listings.length === 0 ? n.jsx("p", { role: "status", children: "No matching pots." }) : null,
+          ],
+        }),
+      }),
+    });
+  }
   let m, r, f, p, g;
   if (e[0] !== u || e[1] !== a || e[2] !== s) {
     ((f = id(s)),
@@ -3033,13 +3136,92 @@ function yd(t) {
     a
   );
 }
+function LocalMarketplacePluginRows({ query, onBrowsePlugins }) {
+  const { catalog, isLoading } = tl();
+  const { botTemplates } = Sa();
+  const { ToolIcon, catalogEntryIcon } = ws();
+  const entries = Array.isArray(catalog) ? catalog : [];
+  const search = query.trim().toLocaleLowerCase();
+  const matches = entries.filter((entry) =>
+    `${entry.displayName ?? ""} ${entry.description ?? ""}`
+      .toLocaleLowerCase().includes(search),
+  ).slice(0, 6);
+  const ids = entries.map((entry) => entry.pluginId ?? entry.id).filter(Boolean);
+  const idKey = ids.join("\u0000");
+  const [states, setStates] = Q.useState(null);
+  Q.useEffect(() => {
+    let active = true;
+    setStates(null);
+    botTemplates.localRecipePluginStates(ids).then(
+      (value) => active && setStates(value),
+      () => active && setStates({ error: true }),
+    );
+    return () => { active = false; };
+  }, [botTemplates, idKey]);
+  return n.jsxs("section", {
+    "aria-label": "Plugins",
+    className: "local-marketplace-plugins",
+    children: [
+      n.jsxs("header", {
+        className: "local-marketplace-section-heading",
+        children: [
+          n.jsx("h2", { children: "Plugins" }),
+          n.jsx(We, {
+            onClick: () => onBrowsePlugins(),
+            size: "sm",
+            variant: "tertiary",
+            children: "View all",
+          }),
+        ],
+      }),
+      isLoading
+        ? n.jsx("p", { role: "status", children: "Loading plugins…" })
+        : matches.length === 0
+          ? n.jsx("p", { role: "status", children: "No matching plugins." })
+          : n.jsx("div", {
+              className: "local-marketplace-plugin-grid",
+              children: matches.map((entry) => {
+                const id = entry.pluginId ?? entry.id;
+                const icon = catalogEntryIcon(entry);
+                const status = states?.error ? "Status unavailable" : states?.[id]?.status;
+                return n.jsxs("button", {
+                  type: "button",
+                  className: "local-marketplace-plugin-row",
+                  "aria-label": "View details for " + entry.displayName,
+                  onClick: () => onBrowsePlugins(id),
+                  children: [
+                    n.jsx(ToolIcon, {
+                      iconId: icon.iconId,
+                      iconUrl: icon.iconUrl,
+                      name: entry.displayName,
+                      size: 40,
+                    }),
+                    n.jsxs("span", {
+                      className: "local-marketplace-plugin-copy",
+                      children: [
+                        n.jsx("strong", { children: entry.displayName }),
+                        n.jsx("span", {
+                          title: entry.description,
+                          children: status && status !== "Not installed" ? status : entry.description,
+                        }),
+                      ],
+                    }),
+                    n.jsx("span", { className: "local-marketplace-view-action", children: "View" }),
+                  ],
+                }, id);
+              }),
+            }),
+    ],
+  });
+}
+
 function gd(t) {
-  const e = J.c(38);
+  const e = J.c(40);
   let s;
   e[0] !== t
     ? ((s = t === void 0 ? {} : t), (e[0] = t), (e[1] = s))
     : (s = e[1]);
-  const { focusBot: a, headerTrailing: l, onAdd: d, title: i } = s,
+  const { focusBot: a, headerTrailing: l, onAdd: d, onBrowsePlugins, showLocalRecipes: localRecipes = false, title: i } = s,
     { _: c } = re(),
     u = $l(),
     o = jt();
@@ -3164,13 +3346,27 @@ function gd(t) {
     : (V = e[15]),
     za(V));
   let F;
-  e[16] !== c || e[17] !== l || e[18] !== r.kind || e[19] !== i
+  const headerTrailing = localRecipes
+    ? n.jsxs("div", {
+        style: { display: "flex", alignItems: "center", gap: 8 },
+        children: [
+          l,
+          n.jsx(LocalBotRecipes, {
+            onChanged: (shareId) => {
+              u.retry();
+              if (typeof shareId === "string") o.retry(shareId);
+            },
+          }),
+        ],
+      })
+    : l;
+  e[16] !== c || e[17] !== headerTrailing || e[18] !== r.kind || e[19] !== i
     ? ((F =
         r.kind === "detail"
           ? n.jsx(yd, { onBack: K })
-          : n.jsx(An, { title: i ?? c({ id: "Zt5PUS" }), trailing: l })),
+          : n.jsx(An, { title: i ?? c({ id: "Zt5PUS" }), trailing: headerTrailing })),
       (e[16] = c),
-      (e[17] = l),
+      (e[17] = headerTrailing),
       (e[18] = r.kind),
       (e[19] = i),
       (e[20] = F))
@@ -3186,7 +3382,9 @@ function gd(t) {
   e[25] !== T ||
   e[26] !== r.kind ||
   e[27] !== r.listing ||
-  e[28] !== p
+  e[28] !== p ||
+  e[38] !== localRecipes ||
+  e[39] !== onBrowsePlugins
     ? ((W =
         r.kind === "detail"
           ? n.jsx(Gl, {
@@ -3215,6 +3413,12 @@ function gd(t) {
                   retry: u.retry,
                   state: u.state,
                 }),
+                localRecipes
+                  ? n.jsx(LocalMarketplacePluginRows, {
+                      query: p,
+                      onBrowsePlugins,
+                    })
+                  : null,
               ],
             })),
       (e[21] = h),
@@ -3225,6 +3429,8 @@ function gd(t) {
       (e[26] = r.kind),
       (e[27] = r.listing),
       (e[28] = p),
+      (e[38] = localRecipes),
+      (e[39] = onBrowsePlugins),
       (e[29] = W))
     : (W = e[29]);
   let H;
@@ -3293,8 +3499,8 @@ function ya(t) {
   );
 }
 function bd(t) {
-  const e = J.c(35),
-    { defaultMode: s, mode: a, onChange: l } = t,
+  const e = J.c(37),
+    { defaultMode: s, mode: a, onChange: l, localPots = false } = t,
     { _: d } = re(),
     i = a === ns;
   let c;
@@ -3353,13 +3559,13 @@ function bd(t) {
       (e[14] = a),
       (e[15] = k))
     : (k = e[15]);
-  let v;
-  e[16] === Symbol.for("react.memo_cache_sentinel")
-    ? ((v = n.jsx(se, { id: "BIDT9R" })), (e[16] = v))
-    : (v = e[16]);
+  const v = localPots ? "Pots" : n.jsx(se, { id: "BIDT9R" });
   let S;
-  e[17] !== k
-    ? ((S = n.jsxs(ya, { children: [k, v] })), (e[17] = k), (e[18] = S))
+  e[17] !== k || e[35] !== localPots
+    ? ((S = n.jsxs(ya, { children: [k, v] })),
+      (e[17] = k),
+      (e[35] = localPots),
+      (e[18] = S))
     : (S = e[18]);
   let N;
   e[19] !== b || e[20] !== j || e[21] !== S || e[22] !== g || e[23] !== h
@@ -3399,6 +3605,7 @@ function bd(t) {
       (e[28] = z),
       (e[29] = s),
       (e[30] = p),
+      (e[36] = localPots),
       (e[31] = T))
     : (T = e[31]);
   let R;
@@ -6084,8 +6291,119 @@ function ei(t) {
 function si(t) {
   return !t.isDisabled;
 }
+function marketplaceSourceDetails(metadata, server, plugin) {
+  if (metadata == null) return null;
+  const installedLabels = {
+    installed: "Installed",
+    not_installed: "Not installed",
+  };
+  const configurationLabels = {
+    configured: "Configured",
+    awaiting_configuration: "Needs configuration",
+    not_configured: "Not configured",
+    not_required: "No configuration needed",
+  };
+  let connection = "Not applicable";
+  if (metadata.kind === "mcp") {
+    switch (server?.status) {
+      case "connected":
+        connection = "Connected";
+        break;
+      case "needsAuth":
+        connection = "Needs authentication";
+        break;
+      case "initializing":
+      case "loading":
+        connection = "Connecting";
+        break;
+      case "error":
+        connection = "Connection error";
+        break;
+      case "disconnected":
+      case void 0:
+        connection = "Not connected";
+        break;
+      default:
+        connection = "Connection status unavailable";
+    }
+  }
+  const rows = [
+    ["Installation", installedLabels[metadata.installationState] ?? "Unknown"],
+    ["Configuration", configurationLabels[metadata.configurationState] ?? "Unknown"],
+    [
+      "Enabled",
+      server?.isDisabled === !0
+        ? "Disabled"
+        : plugin?.isEnabled === !1
+          ? "Disabled"
+        : plugin?.isEnabled === !0
+          ? "Enabled"
+          : metadata.installationState === "installed"
+            ? "State unavailable"
+            : "Not installed",
+    ],
+    ["Connection", connection],
+    ["Pinned revision", metadata.revision],
+    ...(metadata.updateAvailable
+      ? [["Available revision", metadata.availableRevision]]
+      : []),
+    ["Terms", metadata.terms],
+    ["License evidence", metadata.licenseEvidence],
+    [
+      "Included components",
+      `${metadata.skillCount ?? 0} Skills${metadata.connectorCount ? `, ${metadata.connectorCount} MCP connector${metadata.connectorCount === 1 ? "" : "s"}` : ""}`,
+    ],
+    [
+      "Commands",
+      (metadata.commands ?? []).length === 0
+        ? "None"
+        : metadata.commands.map((item) => `${item.name}: ${item.reason}`).join("; "),
+    ],
+    [
+      "Routines",
+      (metadata.routines ?? []).length === 0
+        ? "None"
+        : metadata.routines.map((item) => `${item.name}: ${item.reason}`).join("; "),
+    ],
+    ["Setup dependencies", (metadata.dependencies ?? []).join("; ") || "None"],
+    ...(metadata.modifiedPaths?.length
+      ? [["Local edits", metadata.modifiedPaths.join(", ")]]
+      : []),
+  ];
+  return n.jsxs("details", {
+    className: "sand-plugins-detail__desc",
+    children: [
+      n.jsx("summary", { children: "Source, setup, and status" }),
+      n.jsxs("dl", {
+        className: "sand-plugins-detail__desc",
+        children: [
+          n.jsxs("div", {
+            key: "source",
+            children: [
+              n.jsx("dt", { children: "Source" }),
+              n.jsx("dd", {
+                children: n.jsx("a", {
+                  href: metadata.sourceUrl,
+                  rel: "noopener noreferrer",
+                  target: "_blank",
+                  children: metadata.sourceUrl,
+                }),
+              }),
+            ],
+          }),
+          ...rows.map(([label, value]) =>
+            n.jsxs("div", {
+              key: label,
+              children: [n.jsx("dt", { children: label }), n.jsx("dd", { children: value })],
+            }),
+          ),
+        ],
+      }),
+    ],
+  });
+}
 function ni(t) {
-  const e = J.c(118),
+  const e = J.c(125),
     {
       entry: s,
       installedServer: a,
@@ -6099,6 +6417,7 @@ function ni(t) {
       onUninstall: r,
       onUninstallPlugin: f,
       onEditSetup: p,
+      onRefreshLocalPlugin: refreshLocalPlugin,
     } = t,
     g = i === void 0 ? null : i,
     h = u === void 0 ? !1 : u,
@@ -6332,20 +6651,44 @@ function ni(t) {
           (e[52] = ke))
         : (ke = e[52]);
       let be;
-      (e[53] !== c || e[54] !== K || e[55] !== je || e[56] !== ke
+      (e[53] !== c || e[54] !== K || e[55] !== je || e[56] !== ke ||
+      e[121] !== s.marketplaceMetadata?.updateAvailable ||
+      e[122] !== d || e[123] !== refreshLocalPlugin
         ? ((be = n.jsx(Xa, {
             isBusy: c,
             mode: K,
             shareButton: je,
             onAction: ke,
           })),
+        (e[121] = s.marketplaceMetadata?.updateAvailable),
+        (e[122] = d),
+        (e[123] = refreshLocalPlugin),
           (e[53] = c),
           (e[54] = K),
           (e[55] = je),
           (e[56] = ke),
           (e[57] = be))
         : (be = e[57]),
-        (ue = be));
+        (ue =
+          s.marketplaceMetadata?.updateAvailable === true &&
+          d != null &&
+          typeof refreshLocalPlugin === "function"
+            ? n.jsxs("div", {
+                style: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" },
+                children: [
+                  be,
+                  n.jsx(We, {
+                    disabled: c,
+                    onClick: () => refreshLocalPlugin(s.id),
+                    shape: "pill",
+                    size: "lg",
+                    type: "button",
+                    variant: "secondary",
+                    children: "Update",
+                  }),
+                ],
+              })
+            : be));
       break e;
     }
     if (h) {
@@ -6425,11 +6768,17 @@ function ni(t) {
       (e[82] = ye))
     : (ye = e[82]);
   let ge;
-  e[83] !== le || e[84] !== ye
-    ? ((ge = n.jsxs("div", { className: X, children: [le, ye] })),
+  e[83] !== le || e[84] !== ye || e[118] !== s.marketplaceMetadata || e[119] !== a || e[120] !== d
+    ? ((ge = n.jsxs("div", {
+        className: X,
+        children: [le, ye, marketplaceSourceDetails(s.marketplaceMetadata, a, d)],
+      })),
       (e[83] = le),
       (e[84] = ye),
-      (e[85] = ge))
+      (e[85] = ge),
+      (e[118] = s.marketplaceMetadata),
+      (e[119] = a),
+      (e[120] = d))
     : (ge = e[85]);
   let we;
   e[86] === Symbol.for("react.memo_cache_sentinel")
@@ -8114,6 +8463,7 @@ function Si(t) {
       browseLayout: m,
       onNotice: r,
       onCloseSettings: f,
+      onBackToMarketplace,
     } = t,
     p = i === void 0 ? null : i,
     g = c === void 0 ? null : c,
@@ -8124,7 +8474,9 @@ function Si(t) {
     { _: k } = re(),
     [v, S] = Q.useState(!1),
     [N, z] = Q.useState(""),
-    [_, I] = Q.useState(null);
+    [_, I] = Q.useState(null),
+    [refreshPending, setRefreshPending] = Q.useState(null);
+  const { botTemplates: localTemplates, mcp: marketplaceMcp } = Sa();
   let T;
   e[0] === Symbol.for("react.memo_cache_sentinel")
     ? ((T = []), (e[0] = T))
@@ -8150,14 +8502,13 @@ function Si(t) {
       (e[2] = V))
     : (V = e[2]);
   const F = V;
-  let X;
-  e[3] === Symbol.for("react.memo_cache_sentinel")
-    ? ((X = () => {
+  const E = Q.useCallback(() => {
+      if (R.length === 1 && onBackToMarketplace) {
+        onBackToMarketplace();
+      } else {
         $(qi);
-      }),
-      (e[3] = X))
-    : (X = e[3]);
-  const E = X,
+      }
+    }, [R.length, onBackToMarketplace]),
     q = Q.useRef(null);
   let W;
   e[4] === Symbol.for("react.memo_cache_sentinel")
@@ -8238,7 +8589,7 @@ function Si(t) {
   let ce;
   e[13] !== os ? ((ce = ra(os, ki)), (e[13] = os), (e[14] = ce)) : (ce = e[14]);
   const Is = ce.authBlocked,
-    ms = Le || ke || _e || ts || ys || gs || rs || Ge.isPending,
+    ms = Le || ke || _e || ts || ys || gs || rs || Ge.isPending || refreshPending !== null,
     nt = Te?.servers ?? [],
     bn = new Map();
   for (const x of nt) {
@@ -8514,6 +8865,27 @@ function Si(t) {
           (r(ka(ne, G)), oa(G) && (await Yn(L)));
         }, r));
     };
+  const refreshLocalPlugin = async (pluginId) => {
+    const entry = le.find((item) => item.id === pluginId);
+    setRefreshPending(pluginId);
+    r(null);
+    try {
+      await Ve(async () => {
+        await localTemplates.refreshLocalPlugin(pluginId);
+        await Promise.all([
+          marketplaceMcp.loadCatalog(),
+          marketplaceMcp.loadEffectivePlugins(),
+          Fe(),
+        ]);
+        r({
+          kind: "success",
+          text: `Updated ${entry?.displayName ?? "starter"} from its pinned source.`,
+        });
+      }, r);
+    } finally {
+      setRefreshPending(null);
+    }
+  };
   let Ds;
   e[48] !== K
     ? ((Ds = (x) => {
@@ -8558,6 +8930,7 @@ function Si(t) {
       onUninstallPlugin: (fe) => {
         rt(fe);
       },
+      onRefreshLocalPlugin: refreshLocalPlugin,
       ...(ne != null && (x.fields?.length ?? 0) > 0
         ? { onEditSetup: () => dt(ne) }
         : {}),
@@ -9067,8 +9440,329 @@ function Mi(t) {
       return t.tab === "plugins" ? ns : t.tab === "bots" ? He : null;
   }
 }
+function LocalBotRecipes({ onChanged }) {
+  const { botTemplates } = Sa();
+  const [available, setAvailable] = Q.useState(null);
+  const [recipes, setRecipes] = Q.useState([]);
+  const [dialogOpen, setDialogOpen] = Q.useState(false);
+  const [editorOpen, setEditorOpen] = Q.useState(false);
+  const [recipeJson, setRecipeJson] = Q.useState("");
+  const [preview, setPreview] = Q.useState(null);
+  const [previewedJson, setPreviewedJson] = Q.useState(null);
+  const [editingId, setEditingId] = Q.useState(null);
+  const [removeId, setRemoveId] = Q.useState(null);
+  const [loading, setLoading] = Q.useState(true);
+  const [busy, setBusy] = Q.useState(false);
+  const [error, setError] = Q.useState("");
+  const [notice, setNotice] = Q.useState("");
+  const managerDialogRef = Q.useRef(null);
+  const editorJson = Q.useRef("");
+  const fileReadGeneration = Q.useRef(0);
+  const reload = Q.useCallback(async () => {
+    setLoading(true);
+    try {
+      const enabled = await botTemplates.isLocalMarketplaceAvailable();
+      setAvailable(enabled);
+      if (!enabled) {
+        setRecipes([]);
+        return;
+      }
+      setRecipes(await botTemplates.listLocalRecipes());
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      setLoading(false);
+    }
+  }, [botTemplates]);
+  Q.useEffect(() => {
+    void reload();
+  }, [reload]);
+  const run = async (operation) => {
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      return await operation();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+      return null;
+    } finally {
+      setBusy(false);
+    }
+  };
+  const startImport = () => {
+    fileReadGeneration.current += 1;
+    editorJson.current = "";
+    setRecipeJson("");
+    setPreview(null);
+    setPreviewedJson(null);
+    setEditingId(null);
+    setRemoveId(null);
+    setEditorOpen(true);
+  };
+  const chooseFile = async (event) => {
+    const input = event.currentTarget;
+    const file = input.files?.[0];
+    if (file == null) return;
+    const generation = ++fileReadGeneration.current;
+    try {
+      const source = await file.text();
+      if (fileReadGeneration.current !== generation) return;
+      editorJson.current = source;
+      setRecipeJson(source);
+      setEditingId(null);
+      setPreview(null);
+      setPreviewedJson(null);
+      setError("");
+      setNotice("Loaded " + file.name + ". Preview it before saving.");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      input.value = "";
+    }
+  };
+  const previewRecipe = () =>
+    run(async () => {
+      const source = recipeJson;
+      const result = await botTemplates.previewLocalRecipe(source);
+      if (editorJson.current !== source) return null;
+      setPreview(result);
+      setPreviewedJson(source);
+      setNotice("Review the included content and setup before importing.");
+    });
+  const saveRecipe = () =>
+    run(async () => {
+      const result =
+        editingId == null
+          ? await botTemplates.importLocalRecipe(recipeJson)
+          : await botTemplates.updateLocalRecipe(editingId, recipeJson);
+      setNotice((editingId == null ? "Imported " : "Updated ") + (result.title ?? result.name) + ".");
+      setRecipeJson("");
+      editorJson.current = "";
+      setPreview(null);
+      setPreviewedJson(null);
+      setEditingId(null);
+      setEditorOpen(false);
+      setRemoveId(null);
+      await reload();
+      onChanged?.(result.shareId);
+    });
+  const editRecipe = (recipe) =>
+    run(async () => {
+      const source = await botTemplates.readLocalRecipe(recipe.shareId, recipe.version);
+      setRecipeJson(source);
+      editorJson.current = source;
+      setPreview(null);
+      setPreviewedJson(null);
+      setEditingId(recipe.shareId);
+      setEditorOpen(true);
+      setNotice("Editing " + (recipe.title ?? recipe.name) + ". Preview changes before saving.");
+    });
+  const removeRecipe = (recipe) =>
+    run(async () => {
+      await botTemplates.removeLocalRecipe(recipe.shareId);
+      setRemoveId(null);
+      setNotice("Removed " + (recipe.title ?? recipe.name) + ". Existing pots keep their profile.");
+      await reload();
+      onChanged?.(recipe.shareId);
+    });
+  const action = (label, onClick, disabled = false) =>
+    n.jsx(
+      We,
+      {
+        disabled: disabled || busy,
+        onClick,
+        shape: "pill",
+        size: "sm",
+        type: "button",
+        variant: "secondary",
+        children: label,
+      },
+      label,
+    );
+  if (available !== true) return null;
+  const fieldStyle = {
+    boxSizing: "border-box",
+    width: "100%",
+    padding: 10,
+    border: "1px solid var(--sand-color-border-subtle, rgba(128,128,128,.35))",
+    borderRadius: 8,
+    background: "var(--sand-color-background-primary, #fff)",
+    color: "inherit",
+  };
+  const rowStyle = { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" };
+  const panelStyle = {
+    width: "min(760px, calc(100vw - 48px))",
+    maxHeight: "min(82vh, 760px)",
+    overflow: "auto",
+    boxSizing: "border-box",
+    padding: 24,
+    borderRadius: 16,
+    background: "var(--sand-color-background-primary, #fff)",
+    color: "var(--sand-color-text-primary, #171717)",
+    boxShadow: "0 18px 64px rgba(0,0,0,.28)",
+    display: "grid",
+    gap: 16,
+  };
+  const editor = editorOpen
+    ? n.jsxs("section", {
+        "aria-label": editingId == null ? "Import pot recipe" : "Edit pot recipe",
+        style: { display: "grid", gap: 10, borderTop: "1px solid rgba(128,128,128,.25)", paddingTop: 16 },
+        children: [
+          n.jsx("h3", { style: { margin: 0, fontSize: 16 }, children: editingId == null ? "Import recipe JSON" : "Edit recipe JSON" }),
+          n.jsx("p", { style: { margin: 0, opacity: 0.75 }, children: "Preview the recipe before adding or saving it. Skills and routines stay as recipe content; integrations use the Host Plugins catalog." }),
+          n.jsx("input", { "aria-label": "Choose recipe JSON", accept: ".json,application/json", disabled: busy, onChange: chooseFile, type: "file" }),
+          n.jsx("textarea", {
+            "aria-label": "Recipe JSON",
+            disabled: busy,
+            onChange: (event) => {
+              const source = event.currentTarget.value;
+              fileReadGeneration.current += 1;
+              editorJson.current = source;
+              setRecipeJson(source);
+              setPreview(null);
+              setPreviewedJson(null);
+              setError("");
+            },
+            placeholder: '{\n  "profile": { "name": "", "description": "" },\n  "memory": [],\n  "skills": [],\n  "routines": [],\n  "plugins": []\n}',
+            rows: 9,
+            spellCheck: false,
+            style: { ...fieldStyle, fontFamily: "monospace", resize: "vertical" },
+            value: recipeJson,
+          }),
+          n.jsxs("div", {
+            style: rowStyle,
+            children: [
+              action("Preview JSON", previewRecipe, recipeJson.trim().length === 0),
+              action(editingId == null ? "Import recipe" : "Save recipe", saveRecipe, preview == null || previewedJson !== recipeJson),
+              action("Cancel editing", () => {
+                fileReadGeneration.current += 1;
+                editorJson.current = "";
+                setRecipeJson("");
+                setPreview(null);
+                setPreviewedJson(null);
+                setEditingId(null);
+                setEditorOpen(false);
+                setNotice("");
+              }),
+            ],
+          }),
+          preview == null
+            ? null
+            : n.jsxs("div", {
+                role: "region",
+                "aria-label": "Recipe preview",
+                style: { display: "grid", gap: 6, padding: 12, border: "1px solid rgba(128,128,128,.3)", borderRadius: 10 },
+                children: [
+                  n.jsx("strong", { children: "Preview: " + preview.name }),
+                  n.jsx("p", { style: { margin: 0 }, children: preview.description }),
+                  n.jsx("p", { style: { margin: 0 }, children: "Skills: " + (preview.skills.map((item) => item.name).join(", ") || "None") }),
+                  n.jsx("p", { style: { margin: 0 }, children: "Routines: " + (preview.routines.map((item) => item.name).join(", ") || "None") }),
+                  n.jsx("p", { style: { margin: 0 }, children: "Plugin dependencies: " + (preview.plugins.map((item) => item.name + " (" + item.pluginId + ")").join("; ") || "None") }),
+                  n.jsx("p", { style: { margin: 0 }, children: "Setup: " + (preview.dependencies.join(" ") || "No extra setup.") }),
+                  preview.gettingStartedSkill
+                    ? n.jsx("p", { style: { margin: 0 }, children: "Getting-started Skill: " + preview.gettingStartedSkill + ". This remains metadata and does not start automatically." })
+                    : null,
+                ],
+              }),
+        ],
+      })
+    : null;
+  return n.jsxs(n.Fragment, {
+    children: [
+      action("Manage pots", () => {
+        setDialogOpen(true);
+        void reload();
+      }),
+      dialogOpen
+        ? n.jsx(ql, {
+            "aria-label": "Manage local pots",
+            initialFocus: managerDialogRef,
+            onOpenChange: (open) => {
+              if (!open && !busy) setDialogOpen(false);
+            },
+            open: dialogOpen,
+            ref: managerDialogRef,
+            size: "xxl",
+            children: n.jsxs("section", {
+              style: panelStyle,
+              children: [
+                n.jsxs("header", {
+                  style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 },
+                  children: [
+                    n.jsxs("div", {
+                      style: { display: "grid", gap: 4 },
+                      children: [
+                        n.jsx("h2", { style: { margin: 0, fontSize: 20 }, children: "Manage pots" }),
+                        n.jsx("p", { style: { margin: 0, opacity: 0.72 }, children: "Edit imported recipes or add a supported recipe JSON file." }),
+                      ],
+                    }),
+                    action("Close", () => setDialogOpen(false)),
+                  ],
+                }),
+                loading
+                  ? n.jsx("p", { role: "status", children: "Loading local recipes…" })
+                  : recipes.length === 0
+                    ? n.jsx("p", { children: "No recipes yet. Add a recipe JSON file to create a pot." })
+                    : n.jsx("div", {
+                        style: { display: "grid", gap: 8 },
+                        children: recipes.map((recipe) =>
+                          n.jsxs("article", {
+                            style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, padding: "10px 0", borderBottom: "1px solid rgba(128,128,128,.2)" },
+                            children: [
+                              n.jsxs("div", {
+                                style: { display: "grid", gap: 3, minWidth: 0 },
+                                children: [
+                                  n.jsx("strong", { children: recipe.title ?? recipe.name }),
+                                  n.jsx("span", { style: { opacity: 0.72, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }, children: recipe.body ?? recipe.description }),
+                                ],
+                              }),
+                              n.jsxs("div", {
+                                style: rowStyle,
+                                children: [
+                                  recipe.editable === true
+                                    ? action("Edit JSON", () => editRecipe(recipe))
+                                    : n.jsx("span", { style: { opacity: 0.65 }, children: "Brokpot starter" }),
+                                  recipe.editable === true && removeId !== recipe.shareId
+                                    ? action("Remove", () => setRemoveId(recipe.shareId))
+                                    : null,
+                                  removeId === recipe.shareId
+                                    ? n.jsxs("span", {
+                                        role: "group",
+                                        "aria-label": "Remove " + (recipe.title ?? recipe.name),
+                                        style: rowStyle,
+                                        children: [
+                                          n.jsx("span", { children: "Remove this recipe? Existing pots keep their profile." }),
+                                          action("Confirm removal", () => removeRecipe(recipe)),
+                                          action("Cancel", () => setRemoveId(null)),
+                                        ],
+                                      })
+                                    : null,
+                                ],
+                              }),
+                            ],
+                          }, recipe.shareId),
+                        ),
+                      }),
+                editor,
+                n.jsxs("div", {
+                  style: rowStyle,
+                  children: [
+                    action("Import recipe JSON", startImport),
+                    action("Refresh", reload),
+                  ],
+                }),
+                error ? n.jsx("p", { "aria-live": "assertive", role: "alert", children: error }) : null,
+                notice ? n.jsx("p", { "aria-live": "polite", role: "status", children: notice }) : null,
+              ],
+            }),
+          })
+        : null,
+    ],
+  });
+}
 function Pi(t) {
-  const e = J.c(54),
+  const e = J.c(55),
     {
       agentId: s,
       presentation: a,
@@ -9087,16 +9781,36 @@ function Pi(t) {
     h = u === void 0 ? null : u,
     y = o === void 0 ? null : o,
     { _: b } = re(),
+    { botTemplates: localTemplates } = Sa(),
     j = Q.useRef(null),
     [k, v] = Q.useState(null),
+    [localMarketplaceAvailable, setLocalMarketplaceAvailable] = Q.useState(!1),
+    [localPluginFocus, setLocalPluginFocus] = Q.useState(null),
+    localPluginArrival = Q.useRef(0),
     S = pn("sand_marketplace_bots_v2"),
-    z = pn("sand_marketplace_default_bots_tab") ? He : ns;
+    z = pn("sand_marketplace_default_bots_tab") ? He : ns,
+    showMarketplaceTabs = S || localMarketplaceAvailable;
+  Q.useEffect(() => {
+    let current = !0;
+    localTemplates
+      .isLocalMarketplaceAvailable()
+      .then((enabled) => {
+        if (current) setLocalMarketplaceAvailable(enabled);
+      })
+      .catch(() => {});
+    return () => {
+      current = !1;
+    };
+  }, [localTemplates]);
   let _;
   e[0] !== z || e[1] !== y
     ? ((_ = Mi(y) ?? z), (e[0] = z), (e[1] = y), (e[2] = _))
     : (_ = e[2]);
   const [I, T] = Q.useState(_),
     [R, $] = Q.useState(null);
+  Q.useEffect(() => {
+    if (localMarketplaceAvailable && !S) T(He);
+  }, [localMarketplaceAvailable, S]);
   let C;
   e[3] !== y
     ? ((C =
@@ -9108,26 +9822,28 @@ function Pi(t) {
     : (C = e[4]);
   const M = C,
     D = y?.kind === "bot" && y.arrival !== R ? y : null,
-    U = h ?? M,
+    U = h ?? M ?? localPluginFocus,
     O = f != null || p != null || g != null || U != null,
-    P = S && !O ? I : ns;
+    P = showMarketplaceTabs && !O ? I : ns;
   let Z;
   e[5] !== y
     ? ((Z = (le) => {
-        (T(le), le === ns && y?.kind === "bot" && $(y.arrival));
+        (T(le),
+          le !== ns && setLocalPluginFocus(null),
+          le === ns && y?.kind === "bot" && $(y.arrival));
       }),
       (e[5] = y),
       (e[6] = Z))
     : (Z = e[6]);
   const K = Z;
   let V;
-  e[7] !== z || e[8] !== K || e[9] !== O || e[10] !== S || e[11] !== P
+  e[7] !== z || e[8] !== K || e[9] !== O || e[10] !== showMarketplaceTabs || e[11] !== P
     ? ((V =
-        S && !O ? n.jsx(bd, { defaultMode: z, mode: P, onChange: K }) : null),
+        showMarketplaceTabs && !O ? n.jsx(bd, { defaultMode: z, mode: P, onChange: K, localPots: localMarketplaceAvailable }) : null),
       (e[7] = z),
       (e[8] = K),
       (e[9] = O),
-      (e[10] = S),
+      (e[10] = showMarketplaceTabs),
       (e[11] = P),
       (e[12] = V))
     : (V = e[12]);
@@ -9142,10 +9858,10 @@ function Pi(t) {
     : (X = e[14]);
   const E = X;
   let q;
-  e[15] !== b || e[16] !== S
-    ? ((q = b(S ? { id: "Zt5PUS" } : { id: "ohUJJM" })),
+  e[15] !== b || e[16] !== showMarketplaceTabs
+    ? ((q = b(showMarketplaceTabs ? { id: "Zt5PUS" } : { id: "ohUJJM" })),
       (e[15] = b),
-      (e[16] = S),
+      (e[16] = showMarketplaceTabs),
       (e[17] = q))
     : (q = e[17]);
   let W;
@@ -9189,21 +9905,33 @@ function Pi(t) {
   e[30] !== f ||
   e[31] !== O ||
   e[32] !== D ||
-  e[33] !== S ||
+  e[33] !== showMarketplaceTabs ||
   e[34] !== P ||
   e[35] !== m ||
   e[36] !== r ||
-  e[37] !== F
+  e[37] !== F ||
+  e[54] !== localMarketplaceAvailable
     ? ((A =
         P === He
-          ? n.jsx("div", {
-              className: "sand-78zum5 sand-1iyjqo2 sand-dt5ytf sand-2lwn1j",
-              children: n.jsx(gd, {
-                focusBot: D,
-                headerTrailing: F,
-                onAdd: m,
-                title: b({ id: "Zt5PUS" }),
-              }),
+          ? n.jsx(gd, {
+              focusBot: D,
+              headerTrailing: F,
+              onAdd: m,
+              onBrowsePlugins: (pluginId) => {
+                if (typeof pluginId === "string") {
+                  localPluginArrival.current += 1;
+                  setLocalPluginFocus({
+                    kind: "id",
+                    pluginId,
+                    arrival: localPluginArrival.current,
+                  });
+                } else {
+                  setLocalPluginFocus(null);
+                }
+                K(ns);
+              },
+              showLocalRecipes: localMarketplaceAvailable,
+              title: b({ id: "Zt5PUS" }),
             })
           : n.jsx(Si, {
               agentId: s,
@@ -9215,8 +9943,9 @@ function Pi(t) {
               headerTrailing: F,
               headingId: Ci,
               onCloseSettings: r,
+              onBackToMarketplace: localPluginFocus ? () => K(He) : void 0,
               onNotice: v,
-              title: b(S ? { id: "Zt5PUS" } : { id: "ohUJJM" }),
+              title: b(showMarketplaceTabs ? { id: "Zt5PUS" } : { id: "ohUJJM" }),
             })),
       (e[25] = b),
       (e[26] = s),
@@ -9226,11 +9955,12 @@ function Pi(t) {
       (e[30] = f),
       (e[31] = O),
       (e[32] = D),
-      (e[33] = S),
+      (e[33] = showMarketplaceTabs),
       (e[34] = P),
       (e[35] = m),
       (e[36] = r),
       (e[37] = F),
+      (e[54] = localMarketplaceAvailable),
       (e[38] = A))
     : (A = e[38]);
   let B;

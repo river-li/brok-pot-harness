@@ -5,7 +5,7 @@
 // @recovered-fragment 1/1
 var PROMPT_ACCEPTANCE_STATUSES = ["accepted", "rejected", "pending"];
 function canonicalSendInput(input) {
-  return JSON.stringify([
+  const fields = [
     input.agentId ?? null,
     input.prompt,
     input.richText ?? null,
@@ -14,10 +14,12 @@ function canonicalSendInput(input) {
     input.automationWriteProvenance ?? null,
     [...input.attachmentPaths ?? []],
     [...input.attachmentNames ?? []]
-  ]);
+  ];
+  if (input.recipeSetupOperationId != null)
+    fields.push("recipeSetupOperationId", input.recipeSetupOperationId);
+  return JSON.stringify(fields);
 }
 var NONCE_DIGEST_MISMATCH = "send/nonce-digest-mismatch";
 var SEND_MESSAGE_TOO_LONG = "send/message-too-long";
 var HOST_ACCOUNT_SLOT = "host";
 var DISABLE_SEND_ACCEPT_RETURN_ENV = "SAND_DISABLE_SEND_ACCEPT_RETURN";
-

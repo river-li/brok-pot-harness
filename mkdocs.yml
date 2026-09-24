@@ -68,6 +68,7 @@ nav:
   - Workspace Setup:
       - Sandbox and Data: docs/wiki/Sandbox.md
       - Permissions: docs/wiki/Permissions.md
+      - Starter Marketplace and Bot Recipes: docs/wiki/Marketplace.md
       - MCP, Plugins, and Skills: docs/wiki/Extensions.md
   - Engineering:
       - Development: docs/wiki/Development.md

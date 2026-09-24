@@ -3,6 +3,8 @@
 **MCP** connects callable tool services. **Skills** provide task instructions and resources.
 **Plugins** package related capabilities into units you can install, update, and remove.
 
+For GBH's pinned starter catalog, Host-owned credential setup, and local Bot recipe format, see the [starter marketplace guide](Marketplace.md). The manual local plugin-directory import below remains available.
+
 ## Connect MCP services
 
 Use the desktop's MCP / plugin settings to add a service and supply its command, URL, environment, or credentials.
@@ -31,6 +33,7 @@ npm run plugins -- list
 Importing adds the bundle to the local catalog; it does not install or execute it.
 Open **Plugins** in the desktop to install and configure it, provide required secrets, or select a target Bot.
 Updates and removal use the plugin management flow.
+Manual imports remain separate from the pinned GBH starters and do not receive marketplace source provenance.
 Bundles must follow the retained manifest / Skill / MCP formats; see [cursor-plugins](../../packages/cursor-plugins/README.md).
 
 ## Implementation map

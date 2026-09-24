@@ -1,0 +1,79 @@
+/* Local Marketplace additions. Retained components own typography and cards. */
+.local-marketplace-overview > div > div:first-child:empty {
+  display: none;
+}
+
+.local-marketplace-plugins {
+  display: grid;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.local-marketplace-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.local-marketplace-section-heading h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.local-marketplace-plugin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 32px;
+}
+
+.local-marketplace-plugin-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 8px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.local-marketplace-plugin-row:hover,
+.local-marketplace-plugin-row:focus-visible {
+  background: color-mix(in srgb, currentColor 5%, transparent);
+}
+
+.local-marketplace-plugin-copy {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.local-marketplace-plugin-copy strong {
+  font-weight: 500;
+}
+
+.local-marketplace-plugin-copy > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: .65;
+}
+
+.local-marketplace-view-action {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 5%, transparent);
+  font-size: 13px;
+}
+
+@media (max-width: 760px) {
+  .local-marketplace-plugin-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

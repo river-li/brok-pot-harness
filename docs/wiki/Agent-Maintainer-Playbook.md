@@ -34,6 +34,24 @@ Write acceptance criteria that describe the observable result and the evidence t
 
 The coordinator handles priority, scheduling, ownership, and routing. Assign one implementation owner and one worktree to each PR. Coordinate before two tasks touch the same files or behavior; serialize overlapping edits. Unrelated work can proceed separately when ownership and test resources do not conflict.
 
+### Design before delegation
+
+The coordinator owns the design. Before assigning implementation, trace the relevant
+code and write a bounded task brief with:
+
+- The intended user flow and observable result, including a UI reference when applicable.
+- The existing components to reuse, interfaces and data ownership, and profile/approval invariants.
+- The exact files the worker may change and the concrete changes expected in them.
+- The checks to run, their required modes, and the evidence to return. Build success,
+  syntax checks, screenshots and actual runtime execution establish different things.
+- A review checkpoint before integrating the next component or expanding the task.
+
+Workers read code and implement that design. If the design cannot fit the existing
+interfaces, they report the mismatch to the coordinator before changing architecture
+or scope. A failed live check requires a captured error and a specific diagnosis;
+do not repeatedly relaunch the same flow without learning from the failure. The
+coordinator checks the actual diff and command results, not only the worker's summary.
+
 ## Investigate and implement
 
 Run setup from the primary checkout, which may be on another branch and may contain uncommitted user changes. The CLI fetches the current base, checks issue/dependency state, reserves ownership, and creates a separate linked worktree without switching or resetting the primary checkout:

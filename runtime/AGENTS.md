@@ -46,6 +46,12 @@ maintained Electron assets, and runtime tests. See the
   login, billing, cloud provisioning, and sync while retaining those original
   implementations. Original profile selection does not force runtime gates on
   or prove remote service availability.
+- `prepare-desktop.py` applies `tools/patch_local_coordinator.py` only to the
+  staged local profile. The patcher is SHA-pinned to the retained coordinator,
+  checks every minified-source anchor, and extends the compressed RPC schema
+  and method validators together. Keep the vendor source immutable and the
+  original profile byte-identical; review any retained-source hash change
+  before updating the patcher.
 - The optional Compose override is opt-in. Document its path relative to the
   repository root separately from mount paths relative to `runtime/compose.yaml`.
 - Never print resolved environments, copy credentials, or put runtime user

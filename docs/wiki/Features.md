@@ -16,6 +16,7 @@ The desktop retains conversations, execution events, and replies for ongoing wor
 - **Responses API:** configurable URL, model, key, context budget, and timeout, with streaming tool calls.
 - **MCP:** stdio / HTTP / SSE connections, workspace and inline configurations, scoped clients.
 - **Plugins and Skills:** local import, installation, updates, and removal of reusable capabilities.
+- **Starter marketplace and Bot recipes:** pinned GBH-curated Chrome and Firecrawl starters plus strict local recipe JSON import; see the [operator guide](Marketplace.md) for setup and verification limits.
 - **Web tools:** WebFetch content extraction and a local SearXNG search service.
 
 [Model configuration](Configuration.md) · [Integration guide](Extensions.md)

@@ -11,6 +11,7 @@
 - [Configuration](Configuration.md)
 - [Sandbox and data](Sandbox.md)
 - [Permissions](Permissions.md)
+- [Starter marketplace and Bot recipes](Marketplace.md)
 - [MCP, plugins, and Skills](Extensions.md)
 - [macOS packaging](Packaging.md)
 - [Troubleshooting](Troubleshooting.md)

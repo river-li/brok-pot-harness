@@ -15,6 +15,7 @@ import {
   copyFileSync,
   existsSync,
   lstatSync,
+  mkdtempSync,
   mkdirSync,
   readFileSync,
   readdirSync,
@@ -22,6 +23,7 @@ import {
   renameSync,
   rmSync,
   statSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 
@@ -87,32 +89,82 @@ export function pluginBundlePath(
     throw Error("Local plugin snapshot escapes its directory.");
   return file;
 }
-export function listLocalPluginPointers(
-  dataRoot: string,
-): LocalPluginPointer[] {
-  const root = localPluginRoot(dataRoot);
-  if (!existsSync(root)) return [];
-  const entries: LocalPluginPointer[] = [];
-  const ids = new Set<string>();
-  for (const entry of readdirSync(root, { withFileTypes: true }).sort((a, b) =>
-    a.name.localeCompare(b.name),
-  )) {
-    if (!entry.isDirectory() || !slugPattern.test(entry.name)) continue;
-    const pointer = JSON.parse(
-      readFileSync(join(root, entry.name, "current.json"), "utf8"),
-    ) as LocalPluginPointer;
-    if (pointer.slug !== entry.name)
-      throw Error("Local plugin snapshot name mismatch.");
-    pluginBundlePath(dataRoot, pointer);
-    const id = localPluginId(pointer.slug);
-    if (ids.has(id))
-      throw Error("Local plugin ID collision; import with another name.");
-    ids.add(id);
-    entries.push(pointer);
+
+export type LocalPluginBundleHash = {
+  digest: string;
+  files: Record<string, string>;
+};
+
+/**
+ * Hash the bytes and executable modes in a plugin snapshot. The digest in a
+ * directory name is only a label: callers that make update/removal decisions
+ * must compare it with a fresh walk of the files.
+ */
+export function hashLocalPluginDirectory(directory: string): LocalPluginBundleHash {
+  const root = realpathSync(directory);
+  const hash = createHash("sha256");
+  const files: Record<string, string> = {};
+  const withinRoot = (file: string) => {
+    const part = relative(root, file);
+    return (
+      part === "" ||
+      (!isAbsolute(part) && part !== ".." && !part.startsWith(".." + sep))
+    );
+  };
+
+  function visit(folder: string, logical: string, ancestors: Set<string>) {
+    const real = realpathSync(folder);
+    if (!withinRoot(real)) throw Error("Plugin symlink points outside its snapshot.");
+    if (ancestors.has(real)) throw Error("Plugin symlink cycle.");
+    const next = new Set(ancestors).add(real);
+    for (const entry of readdirSync(real, { withFileTypes: true }).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )) {
+      if (entry.name === ".git") continue;
+      if (entry.isSymbolicLink())
+        throw Error("Plugin snapshots cannot contain symlinks.");
+      const from = join(real, entry.name);
+      if (!withinRoot(realpathSync(from)))
+        throw Error("Plugin snapshot path escapes its directory.");
+      const key = logical + entry.name;
+      const stats = statSync(from);
+      if (stats.isDirectory()) {
+        hash.update("dir\0" + key + "\0");
+        visit(from, key + "/", next);
+      } else if (stats.isFile()) {
+        const mode = stats.mode & 0o111 ? 0o755 : 0o644;
+        const bytes = readFileSync(from);
+        hash.update("file\0" + key + "\0" + mode + "\0");
+        hash.update(bytes);
+        hash.update("\0");
+        files[key] =
+          createHash("sha256").update(bytes).digest("hex") + ":" + mode.toString(8);
+      } else {
+        throw Error("Plugin snapshots may contain only directories and regular files.");
+      }
+    }
   }
-  return entries;
+
+  visit(root, "", new Set());
+  return { digest: hash.digest("hex"), files };
 }
-export function importLocalPlugin(
+
+/** Keep an edited snapshot after uninstall, freeing its digest path for a clean reinstall. */
+export function preserveEditedUninstalledSnapshot(
+  dataRoot: string,
+  pointer: LocalPluginPointer,
+) {
+  const candidate = join(localPluginRoot(dataRoot), pointer.slug, pointer.digest);
+  if (!existsSync(candidate)) return null;
+  const snapshot = pluginBundlePath(dataRoot, pointer);
+  if (hashLocalPluginDirectory(snapshot).digest === pointer.digest) return null;
+  const recovery = mkdtempSync(join(dirname(snapshot), ".uninstalled-edits-"));
+  renameSync(snapshot, join(recovery, "snapshot"));
+  return recovery;
+}
+
+/** Store an immutable snapshot without changing the current catalog pointer. */
+export function snapshotLocalPlugin(
   dataRoot: string,
   source: string,
   name?: string,
@@ -171,25 +223,96 @@ export function importLocalPlugin(
         hash.update("file\0" + key + "\0" + mode + "\0");
         hash.update(readFileSync(to));
         hash.update("\0");
-      } else
+      } else {
         throw Error(
           "Plugin bundles may contain only directories and regular files.",
         );
+      }
     }
   }
   try {
     copy(input, stage, "", new Set());
     const digest = hash.digest("hex");
+    const pointer: LocalPluginPointer = { version: 1, slug, digest };
     const folder = join(root, slug),
       destination = join(folder, digest);
     mkdirSync(folder, { recursive: true, mode: 0o755 });
     if (lstatSync(folder).isSymbolicLink())
       throw Error("Plugin storage directory cannot be a symlink.");
-    if (!existsSync(destination)) renameSync(stage, destination);
-    const pointer: LocalPluginPointer = { version: 1, slug, digest };
-    writeAtomicJson(join(folder, "current.json"), pointer, 0o644);
-    return { pluginId: localPluginId(slug), ...pointer, path: destination };
+    if (existsSync(destination)) {
+      const actual = hashLocalPluginDirectory(destination);
+      if (actual.digest !== digest)
+        throw Error(
+          "An existing plugin snapshot was edited; refusing to reuse its digest path.",
+        );
+      rmSync(stage, { recursive: true, force: true });
+    } else {
+      renameSync(stage, destination);
+    }
+    return { ...pointer, path: destination };
   } finally {
     rmSync(stage, { recursive: true, force: true });
   }
+}
+
+/** Advance the discoverable local snapshot pointer after a validated commit. */
+export function writeLocalPluginPointer(
+  dataRoot: string,
+  pointer: LocalPluginPointer,
+) {
+  pluginBundlePath(dataRoot, pointer);
+  const committed = {
+    version: pointer.version,
+    slug: pointer.slug,
+    digest: pointer.digest,
+  } satisfies LocalPluginPointer;
+  writeAtomicJson(
+    join(localPluginRoot(dataRoot), pointer.slug, "current.json"),
+    committed,
+    0o644,
+  );
+}
+export function removeLocalPluginPointer(dataRoot: string, slug: string) {
+  if (!slugPattern.test(slug)) throw Error("Invalid local plugin snapshot name.");
+  const pointerFile = join(localPluginRoot(dataRoot), slug, "current.json");
+  if (existsSync(pointerFile)) unlinkSync(pointerFile);
+}
+export function listLocalPluginPointers(
+  dataRoot: string,
+): LocalPluginPointer[] {
+  const root = localPluginRoot(dataRoot);
+  if (!existsSync(root)) return [];
+  const entries: LocalPluginPointer[] = [];
+  const ids = new Set<string>();
+  for (const entry of readdirSync(root, { withFileTypes: true }).sort((a, b) =>
+    a.name.localeCompare(b.name),
+  )) {
+    if (!entry.isDirectory() || !slugPattern.test(entry.name)) continue;
+    const pointerFile = join(root, entry.name, "current.json");
+    // A snapshot is staged before the install record commits. Without a
+    // pointer it is deliberately invisible to the retained local plugin
+    // catalog; a crash during preview/validation must not hide other entries.
+    if (!existsSync(pointerFile)) continue;
+    const pointer = JSON.parse(
+      readFileSync(pointerFile, "utf8"),
+    ) as LocalPluginPointer;
+    if (pointer.slug !== entry.name)
+      throw Error("Local plugin snapshot name mismatch.");
+    pluginBundlePath(dataRoot, pointer);
+    const id = localPluginId(pointer.slug);
+    if (ids.has(id))
+      throw Error("Local plugin ID collision; import with another name.");
+    ids.add(id);
+    entries.push(pointer);
+  }
+  return entries;
+}
+export function importLocalPlugin(
+  dataRoot: string,
+  source: string,
+  name?: string,
+) {
+  const pointer = snapshotLocalPlugin(dataRoot, source, name);
+  writeLocalPluginPointer(dataRoot, pointer);
+  return { pluginId: localPluginId(pointer.slug), ...pointer };
 }

@@ -17,39 +17,161 @@ var BASE_HOST_CAPABILITIES = [
   "sendAcceptanceV1",
   VOICE_SETTINGS_V1
 ];
+var LOCAL_MARKETPLACE_CAPABILITY = "localMarketplaceV1";
+function baseHostCapabilities() {
+  return process.env.GROKBOT_LOCAL_MODE === "1"
+    ? [...BASE_HOST_CAPABILITIES, LOCAL_MARKETPLACE_CAPABILITY]
+    : BASE_HOST_CAPABILITIES;
+}
 var CREATE_AGENT_NONCE_LEDGER_CAP = 64;
 function botTemplateGatewayView(view) {
   const { description: description9, ...rest } = view;
-  return { ...rest, body: description9 };
+  return {
+    ...rest,
+    body: description9,
+    ...(view.localRecipe === true ? { shareUrl: null, visibility: null } : {}),
+  };
+}
+function setupResendParent(clientNonce) {
+  const prefix = "sand-resend-v1:";
+  if (typeof clientNonce !== "string" || !clientNonce.startsWith(prefix)) return void 0;
+  const lengthEnd = clientNonce.indexOf(":", prefix.length);
+  if (lengthEnd < 0) return void 0;
+  const lengthText = clientNonce.slice(prefix.length, lengthEnd);
+  if (!/^[1-9][0-9]*$/.test(lengthText)) return void 0;
+  const length = Number(lengthText);
+  if (!Number.isSafeInteger(length)) return void 0;
+  const start = lengthEnd + 1;
+  const end = start + length;
+  if (clientNonce[end] !== ":" || end + 1 >= clientNonce.length) return void 0;
+  return clientNonce.slice(start, end);
 }
 async function hostCapabilities(deps) {
   const experiments = deps.extensions.api("experiments");
   const peek = { disableExposureLog: true };
   if (!experiments.checkFeatureGate("sand_share_bot", peek)) {
-    return BASE_HOST_CAPABILITIES;
+    return baseHostCapabilities();
   }
   if (sandShareBotExportPolicyOf(
     experiments.getDynamicConfig("sand_share_bot_export_policy", peek)
   ) === "none") {
-    return BASE_HOST_CAPABILITIES;
+    return baseHostCapabilities();
   }
   const hasExportSkill = await deps.extensions.api("managed-setup").ensureManagedSkill(EXPORT_BOT_TEMPLATE_MANAGED_SKILL_ID);
-  return hasExportSkill ? [...BASE_HOST_CAPABILITIES, BOT_TEMPLATE_JSON_SHARE_V1, BOT_TEMPLATE_VISIBILITY_V1] : BASE_HOST_CAPABILITIES;
+  return hasExportSkill
+    ? [...baseHostCapabilities(), BOT_TEMPLATE_JSON_SHARE_V1, BOT_TEMPLATE_VISIBILITY_V1]
+    : baseHostCapabilities();
 }
 function createTemplateImportGatewayMethod(deps) {
   const manager = deps.extensions.api("transcript");
   const mintsByAgentId = /* @__PURE__ */ new Map();
   return {
-    createAgentFromTemplate: ({
-      shareId,
-      agentId,
-      expectedActiveVersion,
-      creatorContext,
-      language
-    }) => {
+    createAgentFromTemplate: (args) => {
+      const { shareId, agentId, expectedActiveVersion, creatorContext, language } = args;
       const pending = mintsByAgentId.get(agentId);
-      if (pending != null) return pending;
+      if (pending != null) {
+        if (pending.shareId !== shareId)
+          throw Error("This Bot ID is already being imported from another template.");
+        if (pending.expectedActiveVersion !== expectedActiveVersion)
+          throw Error("This template changed while its import was in progress. Review the latest version and retry.");
+        return pending.promise;
+      }
       const minted = (async () => {
+        const localRecipes = deps.extensions.api("mcp").plugins.localBotRecipes;
+        const localView = localRecipes?.getView(shareId);
+        if (localView != null) {
+          const recipe = localRecipes.get(shareId, expectedActiveVersion);
+          const priorBinding = localRecipes.getBinding(agentId);
+          const existing = manager.listAgentsSync().find((agent) => agent.id === agentId);
+          if (existing !== void 0 && priorBinding?.shareId !== shareId)
+            throw Error("This Bot ID already belongs to an existing Bot.");
+          const binding = await localRecipes.claim(shareId, expectedActiveVersion, agentId);
+          let local;
+          if (existing !== void 0) {
+            local = {
+              agent: existing,
+              transcript: await manager.getAgentTranscript(agentId)
+            };
+          } else {
+            const extraDescription = creatorContext?.trim() ?? "";
+            const profile = {
+              name: args.name?.trim() || recipe.profile.name,
+              description: extraDescription.length > 0
+                ? `${recipe.profile.description} ${extraDescription}`
+                : recipe.profile.description,
+              avatarShape: args.avatarShape || recipe.profile.avatarShape || "",
+              avatarColor: args.avatarColor || recipe.profile.avatarColor || ""
+            };
+            local = await manager.createAgent(profile, "user", {
+              isIntroductionSuppressed: true,
+              agentId
+            });
+            deps.extensions.api("agent-identity").noteAgentMinted(agentId);
+          }
+          let completedBinding = await localRecipes.complete(agentId, binding.operationId);
+          let setupRecoveryRequired = false;
+          let setupClientNonce = completedBinding.setupClientNonce;
+          if (completedBinding.setupStatus !== "accepted" && completedBinding.setupPrompt !== undefined) {
+            const setupInputDigest = sendInputDigest({
+              agentId,
+              prompt: completedBinding.setupPrompt.prompt,
+              richText: completedBinding.setupPrompt.richText,
+              automationWriteProvenance: SAND_AUTOMATION_WRITE_PROVENANCE_TEMPLATE_IMPORT,
+              recipeSetupOperationId: completedBinding.operationId,
+              attachmentPaths: [],
+              attachmentNames: [],
+            });
+            const statuses = await Promise.all(completedBinding.setupClientNonces.map((clientNonce) =>
+              manager.promptAcceptanceStatus({ accountSlot: HOST_ACCOUNT_SLOT, clientNonce, agentId })
+            ));
+            const matching = statuses.filter((status) =>
+              status.outcome === "found" &&
+              status.record.agentId === agentId &&
+              status.record.inputDigest === setupInputDigest
+            );
+            if (matching.some((status) => status.record.status === "accepted")) {
+              completedBinding = await localRecipes.completeSetup(agentId, binding.operationId);
+            } else {
+              const recoveryRequired = statuses.some((status) =>
+                status.outcome === "unknown-durability" ||
+                status.outcome === "found" &&
+                  status.record.agentId === agentId &&
+                  status.record.inputDigest === setupInputDigest &&
+                  (status.record.status === "pending" || status.record.status === "rejected")
+              );
+              if (args.resumeSetupAfterReview === true) {
+                setupClientNonce = await localRecipes.beginSetupResume(agentId, binding.operationId);
+              } else {
+                setupRecoveryRequired = recoveryRequired;
+              }
+            }
+          }
+          const result = {
+            agent: local.agent,
+            transcript: local.transcript,
+            setup: completedBinding.setupStatus === "accepted"
+              ? NOTHING_LEFT_AFTER_SERVER_FOLDED_SETUP
+              : {
+                  ...importedTemplateSetupFromRecipe(recipe),
+                  setupClientNonce,
+                  setupOperationId: completedBinding.operationId,
+                  ...(completedBinding.setupPrompt === undefined
+                    ? {}
+                    : { setupPrompt: completedBinding.setupPrompt }),
+                  ...(setupRecoveryRequired ? { setupRecoveryRequired: true } : {})
+                }
+          };
+          deps.extensions.api("telemetry").analytics.markActive("user_action");
+          deps.extensions.api("telemetry").analytics.trackEvent("sand.agent.created", {
+            agent_id: result.agent.id,
+            origin: "user",
+            template_id: shareId
+          });
+          // Local recipe setup replays are governed by the durable Host binding,
+          // not this in-memory nonce cache.
+          mintsByAgentId.delete(agentId);
+          return result;
+        }
         const identity = deps.extensions.api("agent-identity");
         const imported = await identity.createAgentFromTemplate({
           shareId,
@@ -138,7 +260,7 @@ function createTemplateImportGatewayMethod(deps) {
           throw error42;
         }
       );
-      mintsByAgentId.set(agentId, minted);
+      mintsByAgentId.set(agentId, { shareId, expectedActiveVersion, promise: minted });
       for (const oldest of mintsByAgentId.keys()) {
         if (mintsByAgentId.size <= CREATE_AGENT_NONCE_LEDGER_CAP) break;
         mintsByAgentId.delete(oldest);
@@ -583,6 +705,7 @@ function createHostGatewayApi(deps) {
   const automations = deps.extensions.api("automations");
   const managedSetup = deps.extensions.api("managed-setup");
   const settings = deps.extensions.api("settings");
+  const localBotRecipes = () => deps.extensions.api("mcp").plugins.localBotRecipes;
   const localToolPermission2 = deps.extensions.api("local-tool-permission");
   const createAgentMintsByNonce = /* @__PURE__ */ new Map();
   const voiceRelaysInFlight = /* @__PURE__ */ new Set();
@@ -716,29 +839,111 @@ ${args.request.trim()}`;
     getAgentTranscriptTail: async (args) => manager.getAgentTranscriptTail(args.id, args),
     getAgentThread: async (args) => manager.getAgentThread(args.id, args.rootId),
     sendPrompt: async (args) => {
-      const sentToAgentId = (typeof args.agentId === "string" && args.agentId.length > 0 ? args.agentId : void 0) ?? manager.getActiveAgentId() ?? deps.rosterBookkeeping?.latestActiveAgentId ?? "unknown";
+      const recipes = localBotRecipes();
+      const recipeBinding = args.recipeSetupOperationId
+        ? recipes?.getBinding(args.agentId)
+        : undefined;
+      if (
+        args.recipeSetupOperationId &&
+        (!recipeBinding ||
+          recipeBinding.operationId !== args.recipeSetupOperationId ||
+          args.automationWriteProvenance !== SAND_AUTOMATION_WRITE_PROVENANCE_TEMPLATE_IMPORT)
+      )
+        throw Error("Recipe setup operation is no longer available. Reopen the recipe import to resume setup.");
+      let sendArgs = args;
+      let expectedDigest;
+      const acceptanceMatches = (status) =>
+        expectedDigest !== undefined &&
+        status.outcome === "found" &&
+        status.record.agentId === args.agentId &&
+        status.record.inputDigest === expectedDigest;
+      if (recipeBinding) {
+        const stableNonce = recipeBinding.setupClientNonce;
+        const nonce = args.clientNonce || stableNonce;
+        const recorded = await recipes.recordSetupPrompt(args.agentId, recipeBinding.operationId, {
+          prompt: args.prompt,
+          ...(args.richText === undefined ? {} : { richText: args.richText }),
+        }, nonce);
+        expectedDigest = sendInputDigest({
+          agentId: args.agentId,
+          prompt: recorded.prompt.prompt,
+          richText: recorded.prompt.richText,
+          automationWriteProvenance: SAND_AUTOMATION_WRITE_PROVENANCE_TEMPLATE_IMPORT,
+          recipeSetupOperationId: recipeBinding.operationId,
+          attachmentPaths: [],
+          attachmentNames: [],
+        });
+        sendArgs = {
+          ...args,
+          prompt: recorded.prompt.prompt,
+          richText: recorded.prompt.richText,
+          replyToId: undefined,
+          isFork: undefined,
+          attachmentPaths: [],
+          attachmentNames: [],
+          mcpConfigJson: undefined,
+          recipeSetupOperationId: recipeBinding.operationId,
+          automationWriteProvenance: SAND_AUTOMATION_WRITE_PROVENANCE_TEMPLATE_IMPORT,
+          clientNonce: nonce,
+        };
+        const acceptance = (clientNonce) => manager.promptAcceptanceStatus({
+          accountSlot: HOST_ACCOUNT_SLOT,
+          clientNonce,
+          agentId: args.agentId,
+        });
+        const knownAcceptances = await Promise.all(recorded.clientNonces.map(acceptance));
+        if (knownAcceptances.some((status) => status.outcome === "unknown-durability"))
+          throw Error("The Host cannot verify whether recipe setup was accepted yet. Retry after storage recovers.");
+        if (knownAcceptances.some((status) => acceptanceMatches(status) && status.record.status === "accepted")) {
+          await recipes.completeSetup(args.agentId, recipeBinding.operationId);
+          return { accepted: true };
+        }
+        const pendingNonces = recorded.clientNonces.filter((_, index) =>
+          acceptanceMatches(knownAcceptances[index]) &&
+          knownAcceptances[index].record.status === "pending"
+        );
+        const resendParent = setupResendParent(sendArgs.clientNonce);
+        if (
+          pendingNonces.length > 0 &&
+          (resendParent === undefined || !pendingNonces.includes(resendParent))
+        )
+          throw Error("A previous recipe setup send is still pending. Review the Bot transcript, then explicitly resend setup only if it was not applied.");
+      }
+      const sentToAgentId = (typeof sendArgs.agentId === "string" && sendArgs.agentId.length > 0 ? sendArgs.agentId : void 0) ?? manager.getActiveAgentId() ?? deps.rosterBookkeeping?.latestActiveAgentId ?? "unknown";
       deps.extensions.api("telemetry").reportMessageSent({
-        ...args,
+        ...sendArgs,
         agentId: sentToAgentId,
         isGroupRoom: manager.listAgentsSync().find((agent) => agent.id === sentToAgentId)?.isGroup === true
       });
-      await manager.sendPrompt(args.prompt, {
-        agentId: args.agentId,
-        directAddressedAcceptance: args.directAddressedAcceptance,
-        attachmentPaths: args.attachmentPaths ?? [],
-        attachmentNames: args.attachmentNames ?? [],
-        richText: args.richText,
-        replyToId: args.replyToId,
-        clientNonce: args.clientNonce,
-        isFork: args.isFork,
-        automationWriteProvenance: args.automationWriteProvenance,
-        traceparent: args.traceparent,
-        enterEpochMs: args.enterEpochMs,
-        composedAtMs: args.composedAtMs,
-        mcpConfigJson: args.mcpConfigJson,
-        machineId: args.machineId,
+      await manager.sendPrompt(sendArgs.prompt, {
+        agentId: sendArgs.agentId,
+        directAddressedAcceptance: sendArgs.directAddressedAcceptance,
+        attachmentPaths: sendArgs.attachmentPaths ?? [],
+        attachmentNames: sendArgs.attachmentNames ?? [],
+        richText: sendArgs.richText,
+        replyToId: sendArgs.replyToId,
+        clientNonce: sendArgs.clientNonce,
+        isFork: sendArgs.isFork,
+        automationWriteProvenance: sendArgs.automationWriteProvenance,
+        recipeSetupOperationId: sendArgs.recipeSetupOperationId,
+        traceparent: sendArgs.traceparent,
+        enterEpochMs: sendArgs.enterEpochMs,
+        composedAtMs: sendArgs.composedAtMs,
+        mcpConfigJson: sendArgs.mcpConfigJson,
+        machineId: sendArgs.machineId,
         awaitTurn: deps.environment.sendAcceptReturnDisabled
       });
+      if (recipeBinding) {
+        const finalNonce = sendArgs.clientNonce || recipeBinding.setupClientNonce;
+        const finalAcceptance = await manager.promptAcceptanceStatus({
+          accountSlot: HOST_ACCOUNT_SLOT,
+          clientNonce: finalNonce,
+          agentId: args.agentId,
+        });
+        if (!acceptanceMatches(finalAcceptance) || finalAcceptance.record.status !== "accepted")
+          throw Error("The Host did not durably accept recipe setup. Retry to resume setup.");
+        await recipes.completeSetup(args.agentId, recipeBinding.operationId);
+      }
       return { accepted: true };
     },
     promptAcceptanceStatus: async (args) => manager.promptAcceptanceStatus(args),
@@ -818,8 +1023,57 @@ ${args.request.trim()}`;
       deps.extensions.api("telemetry").analytics.markActive("user_action");
       return botTemplateGatewayView(await deps.extensions.api("bot-template-share").publish(args));
     },
-    listBotTemplates: async () => [],
-    getBotTemplateVersion: async (args) => botTemplateGatewayView(await deps.extensions.api("bot-template-share").getVersion(args)),
+    listBotTemplates: async () => {
+      const store = localBotRecipes();
+      return store ? store.list().map(botTemplateGatewayView) : [];
+    },
+    getBotTemplateVersion: async (args) => {
+      const store = localBotRecipes();
+      const local = store?.getView(args.shareId);
+      if (local != null) {
+        const recipe = store.get(args.shareId, args.version);
+        return botTemplateGatewayView({
+          shareId: recipe.shareId,
+          name: recipe.profile.name,
+          title: recipe.profile.name,
+          avatarShape: recipe.profile.avatarShape ?? "",
+          avatarColor: recipe.profile.avatarColor ?? "",
+          description: recipe.profile.description,
+          memory: recipe.memory,
+          skills: recipe.skills,
+          routines: recipe.routines,
+          plugins: recipe.plugins,
+          gettingStarted: recipe.gettingStarted,
+          published: false,
+          version: recipe.version,
+          activeVersion: recipe.version,
+          localRecipe: true,
+          dependencies: recipe.dependencies
+        });
+      }
+      return botTemplateGatewayView(await deps.extensions.api("bot-template-share").getVersion(args));
+    },
+    previewLocalBotRecipe: ({ recipeJson }) => {
+      const store = localBotRecipes();
+      if (!store) throw Error("Local Bot recipe import is available in local mode only.");
+      return store.preview(recipeJson);
+    },
+    importLocalBotRecipe: async ({ recipeJson }) => {
+      const store = localBotRecipes();
+      if (!store) throw Error("Local Bot recipe import is available in local mode only.");
+      return botTemplateGatewayView(await store.import(recipeJson));
+    },
+    updateLocalBotRecipe: async ({ shareId, recipeJson }) => {
+      const store = localBotRecipes();
+      if (!store) throw Error("Local Bot recipe updates are available in local mode only.");
+      return botTemplateGatewayView(await store.update(shareId, recipeJson));
+    },
+    removeLocalBotRecipe: async ({ shareId }) => {
+      const store = localBotRecipes();
+      if (!store) throw Error("Local Bot recipe removal is available in local mode only.");
+      await store.remove(shareId);
+      return { removed: true };
+    },
     getBotTemplateForSourceAgent: async (args) => {
       const view = await deps.extensions.api("bot-template-share").getForSourceAgent(args);
       return view == null ? null : botTemplateGatewayView(view);
@@ -1071,6 +1325,16 @@ ${args.request.trim()}`;
       const dataUrl = await deps.extensions.api("mcp").plugins.resolvePluginLogo(url2);
       return dataUrl == null ? null : { dataUrl };
     },
+    refreshLocalMarketplacePlugin: async ({ pluginId }) => {
+      if (process.env.GROKBOT_LOCAL_MODE !== "1")
+        throw Error("Marketplace source updates are available in the local profile only.");
+      await deps.extensions.api("mcp").plugins.updatePluginInstall({
+        pluginId,
+        values: {},
+        refreshSource: true,
+      });
+      return { pluginId: String(pluginId), refreshed: true };
+    },
     installMcpEntry: (args) => deps.extensions.api("mcp").plugins.installEntry(args),
     updateMcpPluginInstall: (args) => deps.extensions.api("mcp").plugins.updatePluginInstall(args),
     removeMcpServer: ({ serverId }) => deps.extensions.api("mcp").plugins.removeServer(serverId),
@@ -1149,7 +1413,7 @@ ${args.request.trim()}`;
     getHostStatus: async ({ includeManagedCapabilities }) => ({
       ...deps.extensions.api("host-upgrade").getVersionState(),
       isBusy: deps.getHealth().isBusy,
-      capabilities: includeManagedCapabilities ? await hostCapabilities(deps) : BASE_HOST_CAPABILITIES
+      capabilities: includeManagedCapabilities ? await hostCapabilities(deps) : baseHostCapabilities()
     }),
     setBoxMigrating: async (args) => {
       deps.extensions.api("forever-box").setMigrating({ migrating: args.migrating === true });
@@ -1359,4 +1623,3 @@ ${args.request.trim()}`;
     activateAgent: (agentId) => manager.announceRemoteActivation(agentId)
   });
 }
-

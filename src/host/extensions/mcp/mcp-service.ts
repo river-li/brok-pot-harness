@@ -14,6 +14,7 @@ var McpHostService = class {
       parseConfig: value => mcpConfigSchema2.parse(value), validateName: validateServerName
     }) : void 0;
     const localPlugins = localMode ? createLocalInstalledPluginsStore(getSandRootDir()) : void 0;
+    const localBotRecipes = localMode ? require("./local/bot-recipes.js").createLocalBotRecipeStore(getSandRootDir()) : void 0;
     const localStore = localMode ? require("./local/plugins.js").combineLocalMcpStores(localCustomStore, localPlugins) : void 0;
     const boxMcpExec = createBoxSandMcpExec(deps.foreverBox.box);
     const boxServers = async () => {
@@ -82,6 +83,7 @@ var McpHostService = class {
       management: this.hostMcp.management,
       plugins: {
         ...this.hostMcp.plugins,
+        ...(localBotRecipes ? { localBotRecipes } : {}),
         listServers: () => {
           kickInstallBackfillOnce();
           return this.hostMcp.plugins.listServers();

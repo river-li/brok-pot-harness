@@ -56677,6 +56677,10 @@ const H9 = "pre_port_settle",
     publishBotTemplate: { args: "object", reply: "record" },
     listBotTemplates: { args: "none", reply: "array" },
     getBotTemplateVersion: { args: "object", reply: "record" },
+    previewLocalBotRecipe: { args: "object", reply: "record" },
+    importLocalBotRecipe: { args: "object", reply: "record" },
+    updateLocalBotRecipe: { args: "object", reply: "record" },
+    removeLocalBotRecipe: { args: "object", reply: "void" },
     getBotTemplateForSourceAgent: { args: "object", reply: "record-or-null" },
     getBotTemplateExportPolicy: { args: "none", reply: "record" },
     deleteBotTemplate: { args: "object", reply: "void" },
@@ -56734,6 +56738,7 @@ const H9 = "pre_port_settle",
     getMcpPluginLogo: { args: "object", reply: "record-or-null" },
     installMcpEntry: { args: "object", reply: "record" },
     updateMcpPluginInstall: { args: "object", reply: "record" },
+    refreshLocalMarketplacePlugin: { args: "object", reply: "record" },
     removeMcpServer: { args: "object", reply: "record" },
     uninstallMcpPlugin: { args: "object", reply: "record" },
     authenticateMcpServer: { args: "object", reply: "record" },
@@ -58545,6 +58550,86 @@ function HIe(t, e) {
           }),
           S()));
     },
+    listLocalRecipes: async () => {
+      const recipes = await t.listBotTemplates();
+      return recipes.filter((recipe) => recipe.localRecipe === true);
+    },
+    isLocalMarketplaceAvailable: async () => {
+      const status = await t.getHostStatus({ includeManagedCapabilities: false });
+      return status.capabilities?.includes("localMarketplaceV1") === true;
+    },
+    localRecipePluginStates: async (pluginIds) => {
+      const [rawCatalog, installs, mcpState] = await Promise.all([
+        t.getMcpCatalog(),
+        t.getEffectiveMcpPlugins(),
+        t.getMcpState(),
+      ]);
+      const catalog = Array.isArray(rawCatalog)
+        ? rawCatalog
+        : rawCatalog?.plugins ?? [];
+      const servers = Array.isArray(mcpState)
+        ? mcpState
+        : mcpState?.servers ?? [];
+      return Object.fromEntries(
+        [...new Set(pluginIds)].map((pluginId) => {
+          const entry = catalog.find(
+            (item) => item.pluginId === pluginId || item.id === pluginId,
+          );
+          const installed = installs.find((item) => item.pluginId === pluginId);
+          const metadata = entry?.marketplaceMetadata;
+          const server = servers.find((item) => item.pluginId === pluginId);
+          let status = "Starter unavailable";
+          if (entry != null) {
+            if (installed == null) status = "Not installed";
+            else if (installed.isEnabled !== true) status = "Disabled";
+            else if (metadata?.configurationState === "awaiting_configuration")
+              status = "Needs configuration";
+            else if (metadata?.kind === "mcp")
+              status =
+                server?.status === "connected"
+                  ? "Connected"
+                  : server?.status === "error"
+                    ? "Connection error"
+                    : "Installed, not connected";
+            else status = "Installed";
+          }
+          return [pluginId, { name: entry?.displayName ?? pluginId, status }];
+        }),
+      );
+    },
+    readLocalRecipe: async (shareId, version) => {
+      const recipe = await t.getBotTemplateVersion({ shareId, version });
+      return JSON.stringify(
+        {
+          profile: {
+            name: recipe.name ?? recipe.title,
+            description: recipe.body ?? recipe.description,
+            ...(typeof recipe.avatarShape !== "string" || recipe.avatarShape.length === 0
+              ? {}
+              : { avatarShape: recipe.avatarShape }),
+            ...(typeof recipe.avatarColor !== "string" || recipe.avatarColor.length === 0
+              ? {}
+              : { avatarColor: recipe.avatarColor }),
+          },
+          memory: recipe.memory ?? [],
+          skills: recipe.skills ?? [],
+          routines: recipe.routines ?? [],
+          plugins: recipe.plugins ?? [],
+          ...(recipe.gettingStarted === undefined
+            ? {}
+            : { gettingStarted: recipe.gettingStarted }),
+        },
+        null,
+        2,
+      );
+    },
+    previewLocalRecipe: (recipeJson) => t.previewLocalBotRecipe({ recipeJson }),
+    importLocalRecipe: (recipeJson) => t.importLocalBotRecipe({ recipeJson }),
+    updateLocalRecipe: (shareId, recipeJson) =>
+      t.updateLocalBotRecipe({ shareId, recipeJson }),
+    removeLocalRecipe: (shareId) => t.removeLocalBotRecipe({ shareId }),
+    refreshLocalPlugin: (pluginId) =>
+      t.refreshLocalMarketplacePlugin({ pluginId }),
     restore: async (N) => {
       if (((a = N), o || s == null || N == null)) return;
       const L = i,
@@ -80278,6 +80363,7 @@ const P$e = "https://docs.x.ai/grok-bot",
       "getMcpPluginLogo",
       "installMcpEntry",
       "updateMcpPluginInstall",
+      "refreshLocalMarketplacePlugin",
       "removeMcpServer",
       "uninstallMcpPlugin",
       "authenticateMcpServer",
@@ -80324,6 +80410,10 @@ const P$e = "https://docs.x.ai/grok-bot",
       "publishBotTemplate",
       "listBotTemplates",
       "getBotTemplateVersion",
+      "previewLocalBotRecipe",
+      "importLocalBotRecipe",
+      "updateLocalBotRecipe",
+      "removeLocalBotRecipe",
       "getBotTemplateForSourceAgent",
       "getBotTemplateExportPolicy",
       "deleteBotTemplate",
@@ -102310,6 +102400,8 @@ function Kre(t) {
 }
 const Xre =
     "The shared Grok Bot was updated. Review the new details and try again.",
+  setupRecoveryCopy =
+    "The Host found an interrupted setup send and can't confirm whether it was applied. Review the Bot transcript. Retry only if the setup did not run; resending may repeat changes.",
   pf = "bot_template_import_access_denied",
   Yre = "This Bot isn't shared with you",
   Zre = "This Bot is managed by a team and isn't available to you.";
@@ -102991,7 +103083,7 @@ const vu = {
   mae = 0,
   uXe = 1;
 function dXe(t) {
-  const e = ee.c(72),
+  const e = ee.c(73),
     {
       state: n,
       isPending: s,
@@ -103161,7 +103253,7 @@ function dXe(t) {
         (e[40] = D))
       : (D = e[40]);
     let j;
-    e[41] !== g || e[42] !== m || e[43] !== S
+    e[41] !== g || e[42] !== m || e[43] !== S || e[72] !== a
       ? ((j =
           m || g
             ? f.jsxs(f.Fragment, {
@@ -103172,7 +103264,7 @@ function dXe(t) {
                     color: "secondary",
                     size: "md",
                     style: vu.messageCopy,
-                    children: cXe(m),
+                    children: a === setupRecoveryCopy ? a : cXe(m),
                   }),
                 ],
               })
@@ -103180,6 +103272,7 @@ function dXe(t) {
         (e[41] = g),
         (e[42] = m),
         (e[43] = S),
+        (e[72] = a),
         (e[44] = j))
       : (j = e[44]);
     let O;
@@ -103283,30 +103376,43 @@ function fXe(t, e) {
         : "create-failed";
 }
 function mXe(t) {
+  const frozenSetupPrompt = t.setup.setupPrompt;
   const e =
-    t.setup.isConversationalSetup === !0
-      ? WKe({
-          name: t.agent.name,
-          automations: t.setup.automations,
-          plugins: t.setup.plugins,
-          memories: t.setup.memories,
-          skills: t.setup.skills,
-          ...(t.setup.gettingStartedSkill === void 0
-            ? {}
-            : { gettingStartedSkill: t.setup.gettingStartedSkill }),
-        })
-      : HKe({
-          name: t.agent.name,
-          automations: t.setup.automations,
-          plugins: t.setup.plugins,
-          memories: t.setup.memories,
-          skills: t.setup.skills,
-        });
+    frozenSetupPrompt == null
+      ? t.setup.isConversationalSetup === !0
+        ? WKe({
+            name: t.agent.name,
+            automations: t.setup.automations,
+            plugins: t.setup.plugins,
+            memories: t.setup.memories,
+            skills: t.setup.skills,
+            ...(t.setup.gettingStartedSkill === void 0
+              ? {}
+              : { gettingStartedSkill: t.setup.gettingStartedSkill }),
+          })
+        : HKe({
+            name: t.agent.name,
+            automations: t.setup.automations,
+            plugins: t.setup.plugins,
+            memories: t.setup.memories,
+            skills: t.setup.skills,
+          })
+      : {
+          modelText: frozenSetupPrompt.prompt,
+          visibleRichText: frozenSetupPrompt.richText,
+        };
   t.sendPrompt({
     agentId: t.agent.id,
     prompt: e.modelText,
     richText: e.visibleRichText,
-    automationWriteProvenance: KKe,
+    automationWriteProvenance:
+      t.setup.setupOperationId == null ? KKe : "template_import",
+    ...(t.setup.setupOperationId == null
+      ? {}
+      : {
+          clientNonce: t.setup.setupClientNonce,
+          recipeSetupOperationId: t.setup.setupOperationId,
+        }),
   }).then(t.onSent, t.onFailed);
 }
 function Wq(t) {
@@ -103368,6 +103474,8 @@ function Wq(t) {
             return l({ id: "rEoexC" });
           case "send-failed":
             return l({ id: "wx1EG9" });
+          case "setup-recovery":
+            return setupRecoveryCopy;
           case "version-conflict":
             return Xre;
           case "access-denied":
@@ -103440,6 +103548,10 @@ function Wq(t) {
           E(oe.agent.id) && r();
           return;
         }
+        if (oe.setup.setupRecoveryRequired === !0) {
+          (W(), x(oe.agent.id, "setup-recovery", !0) && a());
+          return;
+        }
         (ce?.noteSendingFirstMessage(),
           mXe({
             agent: oe.agent,
@@ -103448,8 +103560,12 @@ function Wq(t) {
             onSent: () => {
               E(oe.agent.id) && r();
             },
-            onFailed: () => {
-              (W(), x(oe.agent.id, "send-failed", !0) && a());
+            onFailed: (error) => {
+              const message = error instanceof Error ? error.message : String(error);
+              const failure = /previous recipe setup send is still pending|cannot verify whether recipe setup was accepted|did not durably accept recipe setup/i.test(message)
+                ? "setup-recovery"
+                : "send-failed";
+              (W(), x(oe.agent.id, failure, !0) && a());
             },
           }));
       }),
@@ -103498,6 +103614,7 @@ function Wq(t) {
             avatarShape: k.value.view.avatarShape,
             avatarColor: k.value.view.avatarColor,
             expectedActiveVersion: k.value.expectedActiveVersion,
+            ...(j ? { resumeSetupAfterReview: true } : {}),
           }).then(J, (G) => {
             (oe || h(ce.agentId), W());
             const X = fXe(G, oe);
@@ -108900,6 +109017,9 @@ function mB(t) {
     ...(e.automationWriteProvenance === void 0
       ? {}
       : { automationWriteProvenance: e.automationWriteProvenance }),
+    ...(e.recipeSetupOperationId === void 0
+      ? {}
+      : { recipeSetupOperationId: e.recipeSetupOperationId }),
     ...(t.queuedAtMs == null ? {} : { composedAtMs: t.queuedAtMs }),
     ...(e.sessionId != null && e.sessionId.length > 0
       ? { sessionId: e.sessionId }
@@ -173797,6 +173917,14 @@ function NM({
     : e === "connectivity-failure" || e === "grace-elapsed";
 }
 function a6t(t) {
+  if (globalThis.__GROKBOT_BUILD_FEATURES__?.localWorkspace === true) {
+    return {
+      title: "Can't reach the configured Host",
+      body: "The Host Gateway for this local workspace is unavailable.",
+      hint: "Check that the configured Host is running and try again.",
+      domain: "Configured Host Gateway",
+    };
+  }
   return {
     title: t(TA.title),
     body: t(TA.body),
@@ -178387,11 +178515,124 @@ function J5t(t) {
   };
 }
 const e7t = 3e4;
+const localMarketplaceCapability = "localMarketplaceV1";
+async function localProfileMode(auth) {
+  let snapshot = auth.snapshots.get();
+  if (snapshot?.isLoaded !== true) {
+    await new Promise((resolve) => {
+      const unsubscribe = auth.snapshots.subscribe(() => {
+        snapshot = auth.snapshots.get();
+        if (snapshot?.isLoaded === true) {
+          unsubscribe();
+          resolve();
+        }
+      });
+    });
+  }
+  return auth.snapshots.get()?.status.localMode === true;
+}
+async function hasLocalMarketplace(source) {
+  const status = await source.getHostStatus({
+    includeManagedCapabilities: false,
+  });
+  return status.capabilities?.includes(localMarketplaceCapability) === true;
+}
+function localBotMarketplaceListing(recipe) {
+  const name = recipe.name ?? recipe.title;
+  const description = recipe.body ?? recipe.description;
+  return {
+    slug: recipe.shareId,
+    name,
+    description,
+    category: "Pots",
+    categories: ["Pots"],
+    shareId: recipe.shareId,
+    avatar: {
+      kind: "default",
+      ...(typeof recipe.avatarShape === "string" && recipe.avatarShape.length > 0
+        ? { shape: recipe.avatarShape }
+        : {}),
+      ...(typeof recipe.avatarColor === "string" && recipe.avatarColor.length > 0
+        ? { color: recipe.avatarColor }
+        : {}),
+    },
+    creator: { name: "", profilePhotoUrl: null, handles: [] },
+    localRecipe: true,
+    version: recipe.activeVersion ?? recipe.version,
+    activeVersion: recipe.activeVersion ?? recipe.version,
+    builtIn: recipe.builtIn === true,
+    editable: recipe.editable === true,
+    plugins: recipe.plugins ?? [],
+    dependencies: recipe.dependencies ?? [],
+  };
+}
+function localBotTemplateImportView(recipe, summary) {
+  const version = recipe.activeVersion ?? recipe.version;
+  const name = recipe.name ?? recipe.title;
+  const description = recipe.body ?? recipe.description;
+  if (
+    recipe.localRecipe !== true ||
+    typeof recipe.shareId !== "string" ||
+    typeof name !== "string" ||
+    typeof description !== "string" ||
+    !Number.isSafeInteger(version) ||
+    version < 1
+  )
+    return null;
+  return {
+    expectedActiveVersion: version,
+    instructions: description,
+    view: {
+      shareId: recipe.shareId,
+      name,
+      title: recipe.title ?? name,
+      avatarShape: recipe.avatarShape || "cloud",
+      avatarColor: recipe.avatarColor || "blue",
+      description,
+      shareUrl: null,
+      version,
+      activeVersion: version,
+      active: true,
+      published: false,
+      localRecipe: true,
+      builtIn: summary?.builtIn === true,
+      editable: summary?.editable === true,
+      memory: recipe.memory ?? [],
+      skills: recipe.skills ?? [],
+      routines: recipe.routines ?? [],
+      plugins: recipe.plugins ?? [],
+      dependencies: recipe.dependencies ?? [],
+      ...(recipe.gettingStarted === undefined
+        ? {}
+        : { gettingStarted: recipe.gettingStarted }),
+      ...(recipe.gettingStartedSkill === undefined
+        ? {}
+        : { gettingStartedSkill: recipe.gettingStartedSkill }),
+    },
+  };
+}
 function t7t(t) {
   let e = Number.NEGATIVE_INFINITY;
   const n = Hr({
       read: async () => {
-        const r = await t.desktop.listPublicBotMarketplace();
+        let r;
+        if (await localProfileMode(t.auth)) {
+          if (!(await hasLocalMarketplace(t.source)))
+            throw Error("The selected Host does not provide the local marketplace.");
+          const recipes = await t.source.listBotTemplates();
+          const listings = recipes
+            .filter((recipe) => recipe.localRecipe === true)
+            .map(localBotMarketplaceListing);
+          r = {
+            localMarketplace: true,
+            featuredListings: listings.slice(0, 4),
+            listings,
+            allCategoriesOrder: ["Pots"],
+            nextPageToken: "",
+          };
+        } else {
+          r = await t.desktop.listPublicBotMarketplace();
+        }
         return ((e = t.clock.monotonicNow()), r);
       },
     }),
@@ -178439,6 +178680,21 @@ function r7t(t) {
         resource: Hr({
           read: async () => {
             try {
+              if (await localProfileMode(t.auth)) {
+                if (!(await hasLocalMarketplace(t.source)))
+                  throw Error("The selected Host does not provide the local marketplace.");
+                const recipes = await t.source.listBotTemplates();
+                const localRecipe = recipes.find(
+                  (recipe) =>
+                    recipe.shareId === c && recipe.localRecipe === true,
+                );
+                if (localRecipe == null) return null;
+                const recipe = await t.source.getBotTemplateVersion({
+                  shareId: c,
+                  version: localRecipe.activeVersion ?? localRecipe.version,
+                });
+                return localBotTemplateImportView(recipe, localRecipe);
+              }
               return await t.desktop.getPublicBotTemplate({ shareId: c });
             } catch (m) {
               throw JI(m) ? Sde() : m;
@@ -186758,7 +187014,7 @@ function tEt(t) {
   };
 }
 function TH(t) {
-  return JSON.stringify([
+  const e = [
     t.agentId ?? null,
     t.prompt,
     t.richText ?? null,
@@ -186767,7 +187023,12 @@ function TH(t) {
     t.automationWriteProvenance ?? null,
     [...(t.attachmentPaths ?? [])],
     [...(t.attachmentNames ?? [])],
-  ]);
+  ];
+  return (
+    t.recipeSetupOperationId != null &&
+      e.push("recipeSetupOperationId", t.recipeSetupOperationId),
+    JSON.stringify(e)
+  );
 }
 const J2 = "send/nonce-digest-mismatch",
   OA = "host",
@@ -186799,8 +187060,11 @@ function sEt(t) {
     (t.replyToId !== void 0 && typeof t.replyToId != "string") ||
     (t.isFork !== void 0 && typeof t.isFork != "boolean") ||
     (t.sessionId !== void 0 && typeof t.sessionId != "string") ||
+    (t.recipeSetupOperationId !== void 0 &&
+      typeof t.recipeSetupOperationId != "string") ||
     (t.automationWriteProvenance !== void 0 &&
-      t.automationWriteProvenance !== "untrusted")
+      t.automationWriteProvenance !== "untrusted" &&
+      t.automationWriteProvenance !== "template_import")
   )
     return null;
   const e = XT(t.attachmentPaths),
@@ -186819,6 +187083,9 @@ function sEt(t) {
         ...(t.automationWriteProvenance === void 0
           ? {}
           : { automationWriteProvenance: t.automationWriteProvenance }),
+        ...(t.recipeSetupOperationId === void 0
+          ? {}
+          : { recipeSetupOperationId: t.recipeSetupOperationId }),
       };
 }
 const rEt = ["prepared", "queued", "dispatching", "accepted-awaiting-echo"];
@@ -187698,7 +187965,10 @@ function gEt(t) {
         Ae = () => w || me !== S,
         Te = () => g(ae.agentId) || y.has(ae.agentId) || ue(ae.agentId),
         Ne = Te(),
-        Ce = a(),
+        Ce =
+          typeof ae.clientNonce == "string" && ae.clientNonce.length > 0
+            ? ae.clientNonce
+            : a(),
         Be = r(),
         Pe = t.isAgentRunning(ae.agentId),
         Re = {
@@ -187765,6 +188035,9 @@ function gEt(t) {
           ...(ae.automationWriteProvenance === void 0
             ? {}
             : { automationWriteProvenance: ae.automationWriteProvenance }),
+          ...(ae.recipeSetupOperationId === void 0
+            ? {}
+            : { recipeSetupOperationId: ae.recipeSetupOperationId }),
           ...(st == null ? {} : { sessionId: st }),
         },
         _t = Uv({
@@ -191551,8 +191824,8 @@ function jCt(t) {
       clock: e,
       onSettled: () => ue.refreshTeamAgents(),
     }),
-    ze = r7t({ desktop: t.desktop, clock: e }),
-    Ve = t7t({ desktop: t.desktop, clock: e }),
+    ze = r7t({ desktop: t.desktop, source: t.source, auth: S, clock: e }),
+    Ve = t7t({ desktop: t.desktop, source: t.source, auth: S, clock: e }),
     We = $9t({ desktop: t.desktop }),
     kt = B_t({ desktop: t.desktop }),
     yt = c4t({ source: t.source, clock: e }),
@@ -193153,6 +193426,8 @@ function uRt(t, e) {
     case "publishBotTemplate":
     case "getBotTemplateVersion":
     case "getBotTemplateForSourceAgent":
+    case "importLocalBotRecipe":
+    case "updateLocalBotRecipe":
       return eW(e);
     case "listBotTemplates":
       return Array.isArray(e) ? e.map(eW) : e;

@@ -18,6 +18,7 @@ Build your desktop agent workspace, connect a model, and turn a task into files 
 | --- | --- |
 | [Sandbox and data](Sandbox.md) | Mount projects, choose an image, add reference folders, and back up data |
 | [Permissions](Permissions.md) | Separate mounts, Mac tools, Auto-review, and Keychain |
+| [Starter marketplace and Bot recipes](Marketplace.md) | Install the pinned Skill/MCP starters, configure Host-owned credentials, and import a local Bot recipe |
 | [MCP, plugins, and Skills](Extensions.md) | Connect tools and manage reusable capabilities |
 | [macOS packaging](Packaging.md) | Build an app with your icon and connect it to the Host |
 

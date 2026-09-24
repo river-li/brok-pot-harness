@@ -90,11 +90,15 @@ var SandMcpCatalogFlow = class {
   }
   async updatePluginInstall(request5, getAccessToken) {
     const plugin = await this.requireCachedPlugin(request5.pluginId, getAccessToken);
-    this.assertPluginRequiredFieldsProvided(plugin, request5.values);
+    const refreshSource = request5.refreshSource === true;
+    if (refreshSource && process.env.GROKBOT_LOCAL_MODE !== "1") {
+      throw Error("Marketplace source updates are available in the local profile only.");
+    }
+    if (!refreshSource) this.assertPluginRequiredFieldsProvided(plugin, request5.values);
     const writer = this.core.requireAccountWriter();
     await writer.updatePluginInstall({
       pluginId: BigInt(plugin.pluginId),
-      variables: request5.values
+      variables: request5.values ?? {}
     });
     return await this.core.reloadServers();
   }

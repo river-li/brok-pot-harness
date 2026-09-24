@@ -53,6 +53,7 @@
     "test:mac-exec-live": "node runtime/tests/mac-exec-live.cjs",
     "plugins": "node runtime/plugins.cjs",
     "test:plugin-files": "node --test runtime/tests/plugin-files-contract.cjs",
+    "test:marketplace-contract": "node --test runtime/tests/marketplace-contract.cjs",
     "test:plugins-live": "node runtime/tests/plugins-live.cjs",
     "build:icons": "python3 runtime/tools/build-icons.py",
     "package:mac": "npm run prepare:desktop -- --profile local && python3 runtime/tools/package-macos.py",
