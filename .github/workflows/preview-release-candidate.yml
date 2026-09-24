@@ -136,6 +136,9 @@ jobs:
       - name: Check release resource assembly and numeric bundle version
         run: python3 -m unittest runtime/tests/test_macos_packager.py
 
+      - name: Build local adapters for the packaged client
+        run: npm run build -- --profile local
+
       - name: Build independent arm64 Remote Client
         run: npm run package:mac:remote:candidate
 
