@@ -18,6 +18,7 @@ var AckObligations = class {
   tm;
   ackRedriveTimers = /* @__PURE__ */ new Map();
   ackRunTokens = /* @__PURE__ */ new Map();
+  ackRedriveRecoveryIds = /* @__PURE__ */ new Map();
   recordAckObligationSend(session, acceptedAtMs) {
     const store = this.tm.ackObligationStore;
     if (store == null || this.tm.runLifecycle.runScheduler == null) return;
@@ -81,6 +82,11 @@ var AckObligations = class {
     if (this.ackRunTokens.get(agentId)?.has(ackToken) !== true) return;
     const obligation = store.get(agentId);
     if (obligation == null) return;
+    const recoveryIds = [
+      ...(this.tm.turnRuntime.activeTurnRecoveryIds.get(agentId) ?? []),
+      ...(this.ackRedriveRecoveryIds.get(agentId) ?? [])
+    ];
+    this.tm.interruptedUserTurnStore?.markVisibleAck(agentId, recoveryIds);
     store.clear(agentId);
     this.clearAckRedriveTimer(agentId);
     const now = Date.now();
@@ -202,6 +208,10 @@ var AckObligations = class {
             })),
             { id: messageId, text: prompt }
           ];
+          const recoveryIds = this.tm.interruptedUserTurnStore?.listPending()
+            .filter((entry) => entry.agentId === agentId && entry.visibleAck !== true && entry.acceptedAtMs === bumped.lastSendAtMs)
+            .map((entry) => entry.userMessageId) ?? [];
+          this.ackRedriveRecoveryIds.set(agentId, recoveryIds);
           const result = await runner.run(prompt, {
             hidden: true,
             ackToken,
@@ -209,6 +219,11 @@ var AckObligations = class {
             recentUserMessages,
             requestSource: "handoff-resume"
           });
+          if (!result.aborted && result.pausedForUpgrade !== true && store.get(agentId) == null) {
+            for (const userMessageId of recoveryIds) {
+              this.tm.interruptedUserTurnStore?.clear(agentId, userMessageId);
+            }
+          }
           await this.tm.roster.emitAgentUpdate(session.id);
           if (isDeliveryOwed(result) && !result.aborted && result.pausedForUpgrade !== true) {
             this.tm.reportTurnEmptyDelivery({
@@ -232,6 +247,12 @@ var AckObligations = class {
             detail: sandErrorDetail(error42)
           });
         } finally {
+          this.ackRedriveRecoveryIds.delete(agentId);
+          try {
+            await this.tm.publishInterruptedUserTurnNotices();
+          } catch (error42) {
+            this.tm.hostLog(`[sand] failed to publish interrupted-request notice after ack recovery: ${String(error42)}`, "warn");
+          }
           this.retireAckRunToken(session.id, ackToken);
           this.tm.runLifecycle.endSessionRun(session);
         }

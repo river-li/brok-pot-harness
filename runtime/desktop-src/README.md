@@ -14,6 +14,11 @@ Local mode skips inherited secure-storage initialization and encrypted Gateway c
 `GROKBOT_LOCAL_KEYCHAIN=1` opts into optional Keychain features; secrets are not persisted as plaintext instead.
 See [Keychain permissions](../../docs/wiki/Permissions.md#keychain).
 
+The separately packaged Remote Client starts with a server URL and Gateway
+token, scopes its profile to that server, and stores the connection only after
+an explicit encrypted-storage choice. Its display traffic uses the configured
+local SSH-forward ports; it does not search for or start a local Host.
+
 After edits, build and prepare from the root, then quit and relaunch the desktop.
 Storage changes require `test:desktop-keychain` and `test:desktop-keychain-live`;
 the latter instruments actual Electron safeStorage calls.

@@ -12,6 +12,7 @@ English · [Chinese README](README.zh.md) · [Hosted documentation](https://zich
 
 - **Install** — [Build GBH and run your first task](docs/wiki/Build-Guide.md).
 - **Configure** — [Connect a model and choose runtime options](docs/wiki/Configuration.md).
+- **Run remotely** — [Deploy a persistent server and connect a separate desktop](docs/wiki/Remote-Server.md).
 - **Understand** — [Explore the architecture and request flow](docs/wiki/Architecture.md).
 - **Extend** — [Add MCP servers, plugins, and Skills](docs/wiki/Extensions.md).
 
@@ -85,6 +86,7 @@ then read the file back to check it.”** Files appear in `.runtime/workspace` b
 Use `npm stop` to stop the backend; your files and conversations remain on disk.
 
 [Full installation guide](docs/wiki/Build-Guide.md) · [Mount your project](docs/wiki/Sandbox.md) ·
+[Remote server and desktop client](docs/wiki/Remote-Server.md) ·
 [Package the macOS app](docs/wiki/Packaging.md) · [Troubleshooting](docs/wiki/Troubleshooting.md)
 
 ### Releases and downloads

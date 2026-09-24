@@ -4,7 +4,7 @@
   "private": true,
   "description": "Launch and verify the recovered Grok Bot desktop and Linux host",
   "devDependencies": {
-    "electron": "42.1.0",
+    "electron": "42.11.6",
     "prettier": "^3.6.2"
   },
   "dependencies": {

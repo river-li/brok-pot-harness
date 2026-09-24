@@ -20,6 +20,17 @@ var VNC_PORT = SAND_BOX_PRIMARY_NOVNC_PORT;
 var DEFAULT_AUTH_TOKEN = "local";
 var DAEMON_READY_TIMEOUT_MS = 9e4;
 var DAEMON_WATCHDOG_INTERVAL_MS = 3e4;
+function resolveVncBaseUrl(envName, fallback) {
+  if (process.env.GROKBOT_REMOTE_SERVER_MODE !== "1") return fallback;
+  try {
+    const url = new URL(process.env[envName] ?? "");
+    const hostname = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
+    if (url.protocol !== "http:" || !["127.0.0.1", "localhost", "::1"].includes(hostname)) return "";
+    return url.origin;
+  } catch {
+    return "";
+  }
+}
 var LoopbackSandBox = class {
   host;
   authToken;
@@ -103,9 +114,10 @@ var LoopbackSandBox = class {
   async ensureReady(_ctx, _agentId) {
     const endpoint = this.primaryEndpoint();
     await this.waitUntilReady(_ctx, endpoint);
+    const vncBaseUrl = resolveVncBaseUrl("SAND_REMOTE_VNC_PRIMARY_URL", `http://${this.host}:${VNC_PORT}`);
     return {
       remoteAccessor: this.protectRemoteAccessor(this.createRemoteAccessor(endpoint)),
-      vncUrl: `http://${this.host}:${VNC_PORT}/vnc.html`,
+      vncUrl: vncBaseUrl.length === 0 ? "" : `${vncBaseUrl}/vnc.html`,
       terminalsFolder: this.terminalsFolder
     };
   }
@@ -154,10 +166,11 @@ var LoopbackSandBox = class {
       headers
     };
     await this.waitUntilReady(ctx, endpoint);
+    const forkVncBaseUrl = resolveVncBaseUrl("SAND_REMOTE_VNC_FORK_URL", `http://${this.host}:${SAND_BOX_FORK_NOVNC_PORT}`);
     const window2 = {
       windowIndex,
       computerUse: this.protectRemoteAccessor(this.createRemoteAccessor(endpoint)),
-      vncUrl: `http://${this.host}:${SAND_BOX_FORK_NOVNC_PORT}/vnc.html?path=${encodeURIComponent(
+      vncUrl: forkVncBaseUrl.length === 0 ? "" : `${forkVncBaseUrl}/vnc.html?path=${encodeURIComponent(
         `websockify?token=${token}`
       )}`,
       mcp: createWindowMcpHost({

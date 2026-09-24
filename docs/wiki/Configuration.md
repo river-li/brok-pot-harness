@@ -8,6 +8,7 @@ Start with [`.env.example`](../../.env.example); do not store settings by editin
 | Launch path | Configuration source |
 | --- | --- |
 | `npm start`, `npm run start:desktop` | Nonempty root `.env` values for `GROKBOT_*` / `LITELLM_API_KEY`, then inherited shell values |
+| `npm run server:install`, `server:start`, `server:status`, `server:logs`, `server:stop`, `server:update`, `server:rotate-token`, `server:provider-smoke` | Selected server `server.env`, then nonempty shell values; root `.env` is not loaded |
 | Packaged `.app` | Process environment and packaged Host location; does not load the root `.env` automatically |
 | Host container | Variables explicitly passed through Compose by the launcher |
 | Desktop Settings | Workspace / machine settings saved by the Host |

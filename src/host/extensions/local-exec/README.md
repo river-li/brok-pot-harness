@@ -16,6 +16,7 @@ Bridges execution requests to the user's computer through Gateway or server adap
 Declared Host dependencies: [local-tool-permission](../local-tool-permission/README.md) · [telemetry](../telemetry/README.md) · [auth](../auth/README.md).
 
 Keep Mac execution separate from Linux Box execution and preserve local-tool-permission checks.
+The separately connected Remote Client can register its Mac through the retained Gateway bridge while the app and authenticated tunnel are open. Do not bypass its per-machine settings or request/action approvals; Box execution remains on the server.
 
 See [Configuration](../../../../docs/wiki/Configuration.md) for activation policy and [Features](../../../../docs/wiki/Features.md) for support status.
 

@@ -43,7 +43,8 @@ var transcriptExtension = defineHostExtension({
       {
         runLifecycle: context2.host.environment.runLifecycle,
         recreateWakeCarryDisabled: context2.host.environment.recreateWakeCarryDisabled,
-        agentInboundCoalesceMs: context2.host.environment.agentInboundCoalesceMs
+        agentInboundCoalesceMs: context2.host.environment.agentInboundCoalesceMs,
+        interruptedUserTurnStore: new SandInterruptedUserTurnStore(sandRoot)
       }
     );
     manager.setTelemetry(context2.deps.telemetry.brain);

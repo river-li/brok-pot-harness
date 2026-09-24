@@ -7,6 +7,7 @@ Build your desktop agent workspace, connect a model, and turn a task into files 
 | Guide | What you will learn |
 | --- | --- |
 | [Installation and your first task](Build-Guide.md) | Install dependencies, configure a key, launch the app, and find the output |
+| [Remote server and desktop client](Remote-Server.md) | Run a persistent Host/Box server and connect an independent desktop through SSH forwarding |
 | [Features](Features.md) | Available workflows and their support status |
 | [Configuration](Configuration.md) | Where settings live, when they take effect, and which features can be disabled |
 | [Troubleshooting](Troubleshooting.md) | Diagnose services, model requests, and desktop connections |

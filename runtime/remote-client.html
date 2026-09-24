@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; img-src 'self' data:;">
+    <title>Connect to a Grok Bot server</title>
+    <style>
+      :root { color-scheme: light dark; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #10151d; color: #edf2f8; display: grid; place-items: center; padding: 28px; }
+      main { width: min(100%, 460px); }
+      .eyebrow { color: #91a5bd; font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+      h1 { font-size: 27px; line-height: 1.2; letter-spacing: -.025em; margin: 8px 0 10px; }
+      p { color: #aebbc9; margin: 0 0 22px; }
+      form { border: 1px solid #354356; border-radius: 14px; background: #18212d; padding: 22px; box-shadow: 0 20px 60px #0005; }
+      label { display: block; color: #e5edf7; font-weight: 600; margin: 0 0 7px; }
+      input[type="url"], input[type="password"], input[type="number"] { width: 100%; border: 1px solid #4b5a6d; border-radius: 8px; background: #0d141d; color: #f5f8fc; padding: 11px 12px; font: inherit; outline: none; }
+      input:focus { border-color: #8ab9ff; box-shadow: 0 0 0 3px #4588df42; }
+      .field { margin-bottom: 17px; }
+      .hint { color: #95a5b9; font-size: 12px; margin-top: 6px; }
+      .remember { display: flex; gap: 10px; align-items: start; color: #ccd6e2; font-weight: 500; margin: 2px 0 18px; }
+      .remember input { margin: 3px 0 0; accent-color: #80aff4; }
+      button { width: 100%; border: 0; border-radius: 8px; background: #93bfff; color: #101927; padding: 11px 16px; font: inherit; font-weight: 700; cursor: pointer; }
+      button:disabled { cursor: wait; opacity: .65; }
+      #status { min-height: 22px; margin: 12px 0 0; color: #b7c9df; font-size: 13px; }
+      #status.error { color: #ffb9b4; }
+      footer { color: #8393a7; font-size: 12px; margin-top: 18px; }
+      @media (prefers-color-scheme: light) { body { background: #edf2f8; color: #172231; } form { background: white; border-color: #d2dce8; box-shadow: 0 20px 60px #27384a1c; } p, .hint, footer { color: #5c6d80; } label { color: #24354a; } input[type="url"], input[type="password"], input[type="number"] { background: #f9fbfd; color: #172231; border-color: #bac8d8; } .remember { color: #34465c; } .eyebrow { color: #5d728a; } #status { color: #435970; } #status.error { color: #a6322d; } button { background: #276ac1; color: white; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="eyebrow">Grok Bot Harness</div>
+      <h1>Connect to your server</h1>
+      <p>Your Bots, model credentials, skills, and Box workspace stay on the server. Open its SSH tunnel, then enter the local Gateway address and token.</p>
+      <form id="connection-form">
+        <div class="field">
+          <label for="gateway-url">Server URL</label>
+          <input id="gateway-url" name="gateway-url" type="url" autocomplete="url" spellcheck="false" placeholder="http://127.0.0.1:1540" required>
+          <div class="hint">The authenticated SSH tunnel must forward the Gateway and both Box display ports.</div>
+        </div>
+        <div class="field">
+          <label for="gateway-token">Gateway token</label>
+          <input id="gateway-token" name="gateway-token" type="password" autocomplete="current-password" placeholder="Paste the server token" required>
+        </div>
+        <div class="field">
+          <label for="vnc-port">Primary Box display tunnel port</label>
+          <input id="vnc-port" name="vnc-port" type="number" min="1024" max="65535" value="6180" required>
+        </div>
+        <div class="field">
+          <label for="vnc-control-port">Additional Box display tunnel port</label>
+          <input id="vnc-control-port" name="vnc-control-port" type="number" min="1024" max="65535" value="6181" required>
+          <div class="hint">Use the same ports as the server's published ports. Default SSH forwarding uses 6180 and 6181.</div>
+        </div>
+        <label class="remember"><input id="remember" name="remember" type="checkbox"> <span>Remember this connection using encrypted OS storage on this device</span></label>
+        <button id="connect" type="submit">Connect</button>
+        <div id="status" role="status" aria-live="polite"></div>
+      </form>
+      <footer>Gateway and Box display traffic use the authenticated SSH tunnel. This app will not start Docker or a local Host. When connected, supported Mac tools can use this computer through the existing Host permission and approval controls.</footer>
+    </main>
+    <script src="remote-client-ui.js"></script>
+  </body>
+</html>

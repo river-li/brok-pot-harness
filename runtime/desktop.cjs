@@ -2,16 +2,34 @@ const { spawn } = require('node:child_process');
 const { join } = require('node:path');
 const fs = require('node:fs');
 const root = join(__dirname, '..');
-require('./config.cjs')(root);
-const electron = require('electron');
 const launchArgs = process.argv.slice(2);
+const remoteIndex = launchArgs.indexOf('--remote');
+const remoteClient = remoteIndex !== -1;
+if (remoteClient) launchArgs.splice(remoteIndex, 1);
+const reconfigureIndex = launchArgs.indexOf('--reconfigure');
+const reconfigure = reconfigureIndex !== -1;
+if (reconfigure) launchArgs.splice(reconfigureIndex, 1);
 const profileIndex = launchArgs.indexOf('--profile');
 const buildProfile = profileIndex === -1 ? 'local' : launchArgs.splice(profileIndex, 2)[1];
 if (!['local','original'].includes(buildProfile)) throw Error('Unknown desktop build profile. Use local or original.');
 const isLocal = buildProfile === 'local';
+if (remoteClient && !isLocal) throw Error('The remote client requires a local-profile desktop build.');
+if (!remoteClient) require('./config.cjs')(root);
+const electron = require('electron');
 const desktop = join(root, isLocal ? '.runtime/desktop' : '.runtime/desktop-original');
 const built = JSON.parse(fs.readFileSync(join(desktop, 'dist/electron-main/build-profile.json'),'utf8'));
 if (built.profile !== buildProfile) throw Error('Desktop build profile mismatch. Run npm run prepare:desktop with the intended --profile.');
+if (remoteClient) {
+  const env = { ...process.env, GROKBOT_LOCAL_MODE: '1', GBH_REMOTE_RECONFIGURE: reconfigure ? '1' : '0' };
+  delete env.ELECTRON_RUN_AS_NODE;
+  for (const name of Object.keys(env)) {
+    if (/(?:API_KEY|TOKEN|SECRET|PASSWORD)$/i.test(name)) delete env[name];
+  }
+  const child = spawn(electron, [join(desktop, 'remote-client-main.cjs'), ...launchArgs], { env, stdio: 'inherit' });
+  child.on('error', error => {console.error(error.message); process.exitCode = 1;});
+  child.on('exit', code => {process.exitCode = code ?? 1;});
+  for (const signal of ['SIGINT','SIGTERM']) process.on(signal, () => child.kill(signal));
+} else {
 const profile = join(root, isLocal ? '.runtime/profiles/desktop' : '.runtime/profiles/desktop-original');
 fs.mkdirSync(profile, { recursive: true });
 const env = { ...process.env, ...(isLocal ? {
@@ -32,3 +50,4 @@ const child = spawn(electron, args, { env, stdio: 'inherit' });
 child.on('error', error => {console.error(error.message); process.exitCode = 1;});
 child.on('exit', code => {process.exitCode = code ?? 1;});
 for (const signal of ['SIGINT','SIGTERM']) process.on(signal, () => child.kill(signal));
+}

@@ -15,4 +15,11 @@ Use root npm scripts for normal operation. Release extraction is separate under 
 Build outputs go to `.runtime`, icons to `assets/branding`, and publishable media to `docs/media`.
 Do not package credentials or user profiles. Record only isolated data and processes owned by the capture run.
 
+`package-macos.py` keeps two entry modes: `npm run package:mac` builds the
+checkout-aware local app, and `npm run package:mac:remote` builds the separate
+**Grokbot Remote Client.app** with its URL/token connection entry and no
+absolute checkout launcher descriptor. The remote app supports macOS only in
+this packager. Remote mode requires the local desktop profile assembly but
+does not need a local Host or Docker stack to connect.
+
 [Source recovery](../../docs/wiki/Source-Recovery.md) · [Packaging](../../docs/wiki/Packaging.md) · [Media](../../docs/media/README.md)

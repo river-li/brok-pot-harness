@@ -2,8 +2,7 @@
 
 This reference helps maintainers understand what each layer of evidence establishes.
 For user-facing support, see [Features](Features.md).
-The results below were recorded for the current repository on **2026-09-21**, with Host bfe1879 and desktop resources 0.44.0.
-They are not a live CI badge or a claim that every check runs on every launch.
+Most results below were recorded on **2026-09-21**, with Host bfe1879 and desktop resources 0.44.0. The remote server/client evidence was added on **2026-09-24** with maintained Electron 42.11.6; it does not change the retained desktop product version. These are not a live CI badge or a claim that every check runs on every launch.
 
 ## Recorded coverage
 
@@ -20,6 +19,8 @@ They are not a live CI badge or a claim that every check runs on every launch.
 | Native dependencies | Piscina diff workers, tree-sitter/Bash, chunker loading |
 | Runtime settings | Custom image, absolute workspace, explicit overlay, read-only Host mounts, isolation from other stacks |
 | Branding and startup | Rounded PNG/ICNS, ad-hoc signed app; instrumented live desktop startup recorded zero safeStorage calls |
+| Remote server/client | Fresh local-profile build and independent macOS arm64 app; persistent server lifecycle, authenticated API/SSE, two-Bot Box file transfer, token rotation, and restart recovery with a real pinned linux/amd64 Box under a linux/aarch64 Docker Engine using emulation. Deterministic model fixture only, not external inference. Packaged UI review connected session-only after a bounded encrypted-storage failure, downloaded the original 29-byte Box file, displayed the remote Box via VNC, denied a local Mac Read approval, and quit normally. |
+| Remote local-computer boundary | Authenticated local-exec SSE/response auth, Host Never denial with zero action frames, disconnected-device refusal, and packaged Remote Client Deny against a random nonexistent path; no user files or OS permissions were changed |
 
 Contracts cover Responses/Auto-review, voice, MCP store/scopes, plugin files, web fetch/search, transcription, and TTS.
 See the [test guide](../../runtime/tests/README.md) and [demo metadata](../media/capture.json).
@@ -39,7 +40,7 @@ so display contention is not mistaken for a functional failure.
 - Full voice calls, physical microphones/speakers, long conversations, and multiple parked calls.
 - Broader current-Host Mac execution, GUI, file transfer, attachments, and recording workflows.
 - Local adapters for image/avatar generation and Messages; additional TTS languages.
-- Full non-Intel-macOS desktop operation and packaging; public signing, notarization, and installer distribution.
+- Full original local-app workflows on non-Intel macOS, Windows/Linux desktop packaging, public signing, notarization, and installer distribution.
 - Original-profile vendor authentication, billing, provisioning, and synchronization services.
 
 Eval execution is outside the current recovery scope. A source or test file's presence does not establish runtime success;

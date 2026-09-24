@@ -99,6 +99,22 @@ var SendPipeline = class {
       const isAddressedChatOnScreen = () => this.tm.sessions.activeSession?.id === session.id && this.tm.sessions.inMemoryTranscriptAgentId === session.id;
       const readAddressedTranscript = () => isAddressedChatOnScreen() ? getTranscript() : session.db.getTranscriptEntries();
       const appendEcho = (buildEntry, appendOptions) => appendAddressedEcho(this.tm, session, isAddressedChatOnScreen, buildEntry, appendOptions);
+      let promptForRun = trimmedPrompt;
+      let interruptedMessageId;
+      if (process.env.GROKBOT_REMOTE_SERVER_MODE === "1" && /^\/continue-interrupted(?:\s|$)/i.test(trimmedPrompt)) {
+        const match = /^\/continue-interrupted\s+([^\s]+)\s*$/i.exec(trimmedPrompt);
+        if (match == null) throw new Error("Use /continue-interrupted followed by the request ID shown in this Bot's interruption notice.");
+        const marker = this.tm.interruptedUserTurnStore?.find(session.id, match[1]);
+        if (process.env.GROKBOT_REMOTE_SERVER_MODE !== "1" || marker?.state !== "interrupted") {
+          throw new Error("That interrupted request is not pending for this Bot. Check the interruption notice and use its request ID.");
+        }
+        const original = readAddressedTranscript().find((entry) => entry.kind === "message" && entry.role === "user" && entry.id === marker.userMessageId);
+        if (original == null || typeof original.content !== "string") {
+          throw new Error("The original request is missing from this Bot's transcript. Review the transcript and send a new task.");
+        }
+        promptForRun = `[The user explicitly resumed interrupted request ${marker.userMessageId}. Original request: ${original.content}. Review the transcript and Box for actions already completed. Continue the unfinished work and deliver the original requested result without repeating completed side effects.]`;
+        interruptedMessageId = marker.userMessageId;
+      }
       try {
         sendTrace?.span.setAttribute("sand.conversation_id", session.id);
         sendTrace?.span.setAttribute("sand.attachment_count", attachmentPaths.length);
@@ -221,6 +237,9 @@ var SendPipeline = class {
       const { groupChat } = this.tm;
       const owesAck = !groupChat.isGroupSession(session);
       if (owesAck) this.tm.ackObligations.recordAckObligationSend(session, acceptedAtMs);
+      if (process.env.GROKBOT_REMOTE_SERVER_MODE === "1" && transcriptUserMessageId != null) {
+        this.tm.interruptedUserTurnStore?.recordAccepted(session.id, interruptedMessageId ?? transcriptUserMessageId, acceptedAtMs);
+      }
       const ackGuard = __using(_stack, this.tm.ackObligations.armSendGuard(session, acceptedAtMs, owesAck));
       const acceptance = emitSendAck({
         tm: this.tm,
@@ -286,7 +305,7 @@ var SendPipeline = class {
         await dispatchUserTurn({
           tm: this.tm,
           session,
-          trimmedPrompt,
+          trimmedPrompt: promptForRun,
           richText: options2.richText,
           composedAtMs: options2.composedAtMs,
           enterEpochMs: options2.enterEpochMs,
@@ -296,6 +315,7 @@ var SendPipeline = class {
           awaitTurn,
           isFork,
           userMessageId,
+          interruptedMessageId,
           replyContext,
           selectedImages,
           selectedVideos,

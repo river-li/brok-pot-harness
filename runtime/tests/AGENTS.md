@@ -21,6 +21,15 @@ prerequisite matrix; recorded results and gaps are in
 - A contract test covers only the protocol/failure boundary it asserts. A
   prepared build or syntax check does not establish a live UI or service flow;
   follow the matching prerequisites in `README.md`.
+- `remote-server-live.cjs` creates its own private Compose project, state,
+  workspace, fixture endpoint, and logs. It exercises a real Box against a
+  deterministic Responses fixture, including file downloads and recovery; do
+  not label that fixture as external inference. Its optional desktop-review
+  barrier uses only the documented dummy Gateway token and must be released
+  before test cleanup. Clean only the unique project created by that process.
+- `provider-smoke.cjs` is explicitly opt-in. It sends only its fixed prompt,
+  suppresses response bodies and credentials, and must not read or print a
+  machine-wide private environment for tests.
 - Keep `local` and `original` profile checks separate. Tests for retained
   original paths must not remove code or relax the local profile policy.
 
