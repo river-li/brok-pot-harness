@@ -153,9 +153,6 @@ jobs:
             echo "Tag $tag already exists; promotion will not move or reuse it." >&2
             exit 1
           fi
-          gh api --method POST "repos/$GH_REPO/git/refs" \
-            -f "ref=refs/tags/$tag" \
-            -f "sha=$SOURCE_SHA" > .runtime/promotion/created-tag.json
           notes="$(mktemp)"
           trap 'rm -f "$notes"' EXIT
           python3 - "$GH_REPO" "$SOURCE_SHA" "$CANDIDATE_RUN_ID" "$CANDIDATE_ATTEMPT" release/RELEASE-NOTES.md "$notes" <<'PY'
@@ -189,6 +186,9 @@ jobs:
               raise SystemExit("Release body contains an unpinned relative Markdown link.")
           Path(output_path).write_text(notes)
           PY
+          gh api --method POST "repos/$GH_REPO/git/refs" \
+            -f "ref=refs/tags/$tag" \
+            -f "sha=$SOURCE_SHA" > .runtime/promotion/created-tag.json
           gh release create "$tag" \
             ".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz" \
             ".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz.sha256" \
