@@ -911,6 +911,123 @@ class MaintenanceTriageTests(unittest.TestCase):
 
 
 class ReviewLabelInvalidationTests(unittest.TestCase):
+    def test_gh_api_builds_paginated_get_arguments(self) -> None:
+        result = subprocess.CompletedProcess(
+            args=[], returncode=0, stdout='[[{"number": 17}]]', stderr=""
+        )
+        endpoint = (
+            "repos/river-li/brok-pot-harness/pulls?state=open&base=main&per_page=100"
+        )
+
+        with patch(
+            "maintenance_workflow.invalidate_labels.subprocess.run",
+            return_value=result,
+        ) as run:
+            response = invalidate_labels.gh_api(
+                "river-li/brok-pot-harness", endpoint, paginate=True
+            )
+
+        self.assertEqual(response, [[{"number": 17}]])
+        run.assert_called_once_with(
+            [
+                "gh",
+                "api",
+                "--hostname",
+                "github.com",
+                "--paginate",
+                "--slurp",
+                endpoint,
+            ],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+
+    def test_gh_api_builds_delete_arguments_and_reports_safe_http_context(self) -> None:
+        endpoint = (
+            "repos/river-li/brok-pot-harness/issues/29/labels/"
+            "review%3Achanges-requested"
+        )
+        sensitive_stderr = (
+            "gh: Resource not accessible by integration (HTTP 403) "
+            "Authorization: Bearer token-value {\"message\":\"full response body\"}"
+        )
+        result = subprocess.CompletedProcess(
+            args=[], returncode=1, stdout="response body", stderr=sensitive_stderr
+        )
+
+        with patch(
+            "maintenance_workflow.invalidate_labels.subprocess.run",
+            return_value=result,
+        ) as run:
+            with self.assertRaises(invalidate_labels.InvalidationError) as error:
+                invalidate_labels.gh_api(
+                    "river-li/brok-pot-harness", endpoint, method="DELETE"
+                )
+
+        run.assert_called_once_with(
+            [
+                "gh",
+                "api",
+                "--hostname",
+                "github.com",
+                "--method",
+                "DELETE",
+                endpoint,
+            ],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        diagnostic = str(error.exception)
+        self.assertIn("DELETE " + endpoint, diagnostic)
+        self.assertIn("HTTP 403; category: permission denied", diagnostic)
+        self.assertNotIn("Authorization", diagnostic)
+        self.assertNotIn("token-value", diagnostic)
+        self.assertNotIn("full response body", diagnostic)
+        self.assertNotIn("Resource not accessible", diagnostic)
+
+    def test_gh_api_reports_missing_status_without_echoing_cli_error(self) -> None:
+        result = subprocess.CompletedProcess(
+            args=[],
+            returncode=1,
+            stdout="",
+            stderr="gh: connection reset Authorization: Bearer token-value",
+        )
+
+        with patch(
+            "maintenance_workflow.invalidate_labels.subprocess.run",
+            return_value=result,
+        ):
+            with self.assertRaises(invalidate_labels.InvalidationError) as error:
+                invalidate_labels.gh_api(
+                    "river-li/brok-pot-harness",
+                    "repos/river-li/brok-pot-harness/pulls?state=open",
+                )
+
+        diagnostic = str(error.exception)
+        self.assertIn("HTTP status unavailable", diagnostic)
+        self.assertIn("category: GitHub CLI or network error", diagnostic)
+        self.assertNotIn("connection reset", diagnostic)
+        self.assertNotIn("token-value", diagnostic)
+
+    def test_gh_api_reports_cli_start_failure_without_local_error_text(self) -> None:
+        with patch(
+            "maintenance_workflow.invalidate_labels.subprocess.run",
+            side_effect=FileNotFoundError("private local path"),
+        ):
+            with self.assertRaises(invalidate_labels.InvalidationError) as error:
+                invalidate_labels.gh_api(
+                    "river-li/brok-pot-harness",
+                    "repos/river-li/brok-pot-harness/pulls?state=open",
+                )
+
+        diagnostic = str(error.exception)
+        self.assertIn("category: local CLI execution error", diagnostic)
+        self.assertNotIn("private local path", diagnostic)
+
     def test_pull_request_head_or_base_update_removes_only_review_labels(self) -> None:
         calls = []
 
@@ -1038,8 +1155,12 @@ class ReviewLabelInvalidationTests(unittest.TestCase):
         self.assertIn("ref: main", workflow)
         self.assertIn("persist-credentials: false", workflow)
         self.assertIn("contents: read", workflow)
-        self.assertIn("issues: write", workflow)
-        self.assertIn("pull-requests: read", workflow)
+        self.assertRegex(
+            workflow,
+            r"(?m)^permissions:\n  contents: read\n  pull-requests: write$",
+        )
+        self.assertNotIn("issues: write", workflow)
+        self.assertNotIn("pull-requests: read", workflow)
         self.assertNotIn("contents: write", workflow)
         self.assertNotIn("review:pending", workflow)
 

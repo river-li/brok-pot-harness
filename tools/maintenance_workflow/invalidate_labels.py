@@ -10,6 +10,9 @@ from urllib.parse import quote
 
 
 REPOSITORY_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
+HTTP_STATUS_PATTERN = re.compile(
+    r"\bHTTP(?:/[0-9.]+)?\s+([1-5][0-9]{2})\b", re.IGNORECASE
+)
 REVIEW_LABELS = (
     "review:ready-to-merge",
     "review:changes-requested",
@@ -21,6 +24,35 @@ class InvalidationError(Exception):
     """A safe label invalidation failure."""
 
 
+def api_failure_context(stderr: str) -> str:
+    """Return only an HTTP status and a fixed error category from gh output."""
+    status_match = HTTP_STATUS_PATTERN.search(stderr or "")
+    if status_match is None:
+        return "HTTP status unavailable; category: GitHub CLI or network error"
+
+    status = int(status_match.group(1))
+    categories = {
+        401: "authentication",
+        403: "permission denied",
+        404: "not found or inaccessible",
+        422: "request rejected",
+        429: "rate limited",
+    }
+    if status == 403 and "rate limit" in (stderr or "").lower():
+        category = "rate limited"
+    elif status in categories:
+        category = categories[status]
+    elif status >= 500:
+        category = "GitHub server error"
+    else:
+        category = "HTTP request error"
+    return "HTTP {}; category: {}".format(status, category)
+
+
+def api_request_context(method: str, endpoint: str, detail: str) -> str:
+    return "GitHub API {} {} failed ({}).".format(method.upper(), endpoint, detail)
+
+
 def gh_api(repository: str, endpoint: str, method: str = "GET", paginate: bool = False) -> object:
     command = ["gh", "api", "--hostname", "github.com"]
     if paginate:
@@ -28,21 +60,38 @@ def gh_api(repository: str, endpoint: str, method: str = "GET", paginate: bool =
     if method != "GET":
         command.extend(["--method", method])
     command.append(endpoint)
-    result = subprocess.run(
-        command,
-        check=False,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+    except OSError:
+        raise InvalidationError(
+            api_request_context(
+                method,
+                endpoint,
+                "HTTP status unavailable; category: local CLI execution error",
+            )
+        )
     if result.returncode:
-        raise InvalidationError("GitHub API label invalidation failed (exit {}).".format(result.returncode))
+        raise InvalidationError(
+            api_request_context(method, endpoint, api_failure_context(result.stderr))
+        )
     if method != "GET":
         return None
     try:
         return json.loads(result.stdout)
     except (TypeError, ValueError):
-        raise InvalidationError("GitHub returned an unexpected label invalidation response.")
+        raise InvalidationError(
+            api_request_context(
+                method,
+                endpoint,
+                "HTTP status unavailable; category: malformed JSON response",
+            )
+        )
 
 
 def flatten_api_pages(value: object) -> List[Mapping[str, object]]:
