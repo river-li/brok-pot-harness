@@ -32,6 +32,7 @@ FENCE_RE = re.compile(
 )
 LINK_RE = re.compile(r'\]\((<[^>\n]+>|[^\s)]+)')
 ATTRIBUTE_RE = re.compile(r'((?:href|src|poster|data)=["\'])([^"\']+)', re.I)
+DETAILS_TAG_RE = re.compile(r'<details\b([^>]*)>', re.I)
 
 
 def markdown_sources(root: Path) -> list[Path]:
@@ -262,7 +263,17 @@ def rewrite_document(
             )
             return match.group(1) + updated
 
-        return ATTRIBUTE_RE.sub(html_link, part)
+        part = ATTRIBUTE_RE.sub(html_link, part)
+
+        # Python-Markdown needs md_in_html opt-in for block Markdown inside details.
+        # Keep the attribute in staged copies so the canonical Markdown stays GitHub-native.
+        def enable_details_markdown(match: re.Match[str]) -> str:
+            attributes = match.group(1)
+            if re.search(r'\bmarkdown\s*=', attributes, re.I):
+                return match.group(0)
+            return '<details markdown="block"' + attributes + '>'
+
+        return DETAILS_TAG_RE.sub(enable_details_markdown, part)
 
     return ''.join(part if index % 2 else transform(part) for index, part in enumerate(FENCE_RE.split(source.read_text())))
 

@@ -80,11 +80,10 @@ If deployment fails:
 - Open the failed workflow run, inspect the failing step logs, fix source/docs config, and re-run from a new commit.
 - If build passes but deploy fails, re-run the failed jobs after correcting permissions or Pages settings.
 
-Rollback options:
-
-- **Preferred:** revert the bad commit on `main`; the workflow redeploys the previous-good content.
-- **Emergency:** use GitHub Pages deployment history to redeploy the last good artifact, then follow with a source revert
-  so source and published site stay in sync.
+To roll back a bad publication, open a PR that reverts the change and merge it into `main`. The normal workflow then
+rebuilds and deploys the site from that commit. Verify the published URL and confirm that `source-commit.txt` matches
+the new revert merge commit. The stamp names the source that produced the artifact, even though the reversion restores
+the previous good content.
 
 ## Native GitHub Wiki export (separate destination)
 

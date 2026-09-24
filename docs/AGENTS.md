@@ -29,3 +29,13 @@ maps authored module guides into Wiki pages, rewrites source links, and includes
 referenced project media. Preserve Home.md, _Sidebar.md, and _Footer.md. Run
 npm run docs:check and tools/test_wiki.py after navigation/export changes. An
 export is not a publication; do not claim the remote Wiki is live without a push.
+
+The Pages site uses the same authored Markdown and the component READMEs linked
+from it. Keep generated staging and output under ignored `.runtime/docs-site/`;
+the site generator copies only Markdown and explicitly linked public media. Do
+not add symlink trees or runtime/private files to the site inputs. See
+[Publishing](wiki/Publishing.md) for the build, preview, artifact checks, and
+publication flow. Site PRs validate with read-only credentials; only a
+validated `main` push or manual `main` run publishes to Pages. Check rendered
+anchors, media, details blocks, and Mermaid in the local browser preview before
+claiming they work.

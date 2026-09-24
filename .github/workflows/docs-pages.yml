@@ -38,6 +38,9 @@ jobs:
       - name: Build documentation website
         run: npm run docs:site:build
 
+      - name: Verify Markdown inside README details blocks
+        run: python3 -m unittest discover -s tools -p 'test_docs_site_markdown.py'
+
       - name: Verify allowlisted Pages artifact
         run: npm run docs:site:verify
 
