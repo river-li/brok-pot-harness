@@ -59,16 +59,19 @@ var import_node_path = require("node:path");
 var import_node_sqlite3 = require("node:sqlite");
 
 // src/shared/errors/system-errno.ts
-function findSystemErrno(error) {
+function findErrorCode(error, pattern) {
   const seen = /* @__PURE__ */ new Set();
   let current = error;
   while (current != null && typeof current === "object" && !seen.has(current)) {
     seen.add(current);
     const code = current.code;
-    if (typeof code === "string" && /^E[A-Z_]+$/.test(code)) return code;
+    if (typeof code === "string" && pattern.test(code)) return code;
     current = current.cause;
   }
   return void 0;
+}
+function findSystemErrno(error) {
+  return findErrorCode(error, /^E[A-Z_]+$/);
 }
 
 // src/shared/errors/errors.ts
@@ -845,7 +848,7 @@ function openConversationBlobDb(options) {
 
 // src/host/agent-isolation/conversation-blob-store.ts
 var import_node_crypto = require("node:crypto");
-var import_node_fs4 = require("node:fs");
+var import_node_fs3 = require("node:fs");
 
 // ../node_modules/.pnpm/@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98db228b1c9efd9a1cb20db048af22a56bba107b262264e/node_modules/@bufbuild/protobuf/dist/esm/private/assert.js
 function assert(condition, msg) {
@@ -19323,55 +19326,6 @@ function collectReachableBlobHexIds({
   return { blobTypeByHexId, unresolvedProtoRefs };
 }
 
-// src/host/agent-isolation/legacy-blob-retirement.ts
-var import_node_fs3 = require("node:fs");
-function defer(reason) {
-  return { isRetirable: false, reason, legacyRows: 0, legacyBytes: 0 };
-}
-function verifyLegacyBlobRetirement(options) {
-  const { db, legacyBlobDbPath, retainedRootIdHex } = options;
-  if (!(0, import_node_fs3.existsSync)(legacyBlobDbPath)) return defer("legacy-unreadable");
-  let quickCheck;
-  try {
-    quickCheck = db.prepare("PRAGMA quick_check").get()?.quick_check;
-  } catch {
-    return defer("destination-unhealthy");
-  }
-  if (quickCheck !== "ok") return defer("destination-unhealthy");
-  switch (readConversationBlobMigrationState(db)) {
-    case "adoption-complete":
-      break;
-    case "unstarted":
-      return defer("adoption-incomplete");
-    case "recovery-rebuilt":
-      return defer("recovery-rebuilt");
-    default:
-      return defer("migration-state-unknown");
-  }
-  const root = db.prepare("SELECT 1 AS present FROM blobs WHERE id = ?").get(retainedRootIdHex);
-  if (root == null) return defer("root-missing");
-  let isAttached = false;
-  try {
-    db.prepare("ATTACH DATABASE ? AS legacy").run(legacyBlobDbPath);
-    isAttached = true;
-    const totals = db.prepare("SELECT count(*) AS rows, coalesce(sum(length(data)), 0) AS bytes FROM legacy.blobs").get();
-    return {
-      isRetirable: true,
-      legacyRows: Number(totals?.rows ?? 0),
-      legacyBytes: Number(totals?.bytes ?? 0)
-    };
-  } catch {
-    return defer("legacy-unreadable");
-  } finally {
-    if (isAttached) {
-      try {
-        db.exec("DETACH DATABASE legacy");
-      } catch {
-      }
-    }
-  }
-}
-
 // src/host/agent-isolation/conversation-blob-store.ts
 var MAX_ROOT_BLOB_BYTES = 8 * 1024 * 1024;
 var MAX_STALE_ROOT_SCAN_BYTES = 64 * 1024 * 1024;
@@ -19484,7 +19438,7 @@ var ConversationBlobStoreDb = class {
     if (migrationState !== "unstarted" && migrationState !== "recovery-rebuilt") {
       return;
     }
-    if (!(0, import_node_fs4.existsSync)(legacyBlobDbPath)) return;
+    if (!(0, import_node_fs3.existsSync)(legacyBlobDbPath)) return;
     try {
       this.db.prepare("ATTACH DATABASE ? AS legacy").run(legacyBlobDbPath);
       try {
@@ -19722,21 +19676,6 @@ var ConversationBlobStoreDb = class {
       vacuumed
     };
   }
-  verifyLegacyBlobRetirement(retainedRootIdHex, legacyBlobDbPath) {
-    if (this.isClosed) {
-      return {
-        isRetirable: false,
-        reason: "store-closed",
-        legacyRows: 0,
-        legacyBytes: 0
-      };
-    }
-    return verifyLegacyBlobRetirement({
-      db: this.db,
-      legacyBlobDbPath,
-      retainedRootIdHex
-    });
-  }
   close() {
     if (this.isClosed) return;
     this.isClosed = true;
@@ -19881,17 +19820,6 @@ function main() {
             { kind: "get-blobs-ok", requestId: request.requestId, blobs },
             transferableBuffers(blobs)
           );
-          return;
-        }
-        case "verify-legacy-blob-retirement": {
-          post({
-            kind: "verify-legacy-blob-retirement-ok",
-            requestId: request.requestId,
-            verdict: store.verifyLegacyBlobRetirement(
-              request.retainedRootIdHex,
-              request.legacyBlobDbPath
-            )
-          });
           return;
         }
         case "flush": {

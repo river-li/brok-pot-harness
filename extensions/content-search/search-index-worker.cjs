@@ -5,16 +5,19 @@ const __mod=require('node:module');const __p=require('node:path');const __depsDi
 var import_node_worker_threads = require("node:worker_threads");
 
 // src/shared/errors/system-errno.ts
-function findSystemErrno(error) {
+function findErrorCode(error, pattern) {
   const seen = /* @__PURE__ */ new Set();
   let current = error;
   while (current != null && typeof current === "object" && !seen.has(current)) {
     seen.add(current);
     const code = current.code;
-    if (typeof code === "string" && /^E[A-Z_]+$/.test(code)) return code;
+    if (typeof code === "string" && pattern.test(code)) return code;
     current = current.cause;
   }
   return void 0;
+}
+function findSystemErrno(error) {
+  return findErrorCode(error, /^E[A-Z_]+$/);
 }
 
 // src/shared/errors/errors.ts

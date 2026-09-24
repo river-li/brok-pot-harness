@@ -119,6 +119,7 @@ var BOUNDED_TELEMETRY_ERROR_NAMES = [
 ];
 var BOUNDED_TELEMETRY_TOKENS = [
   "client-paused",
+  "away-park",
   "dev-induced-offline",
   "network-return",
   "unknown",
