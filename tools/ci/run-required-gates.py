@@ -22,6 +22,7 @@ CONTRACTS = [
     ("MCP scope contract", ["npm", "run", "test:mcp-scopes"]),
     ("Plugin file contract", ["npm", "run", "test:plugin-files"]),
     ("Desktop keychain policy contract", ["npm", "run", "test:desktop-keychain"]),
+    ("Remote client, server, and recovery contracts", ["npm", "run", "test:remote-contracts"]),
 ]
 SHA_RE = re.compile(r"^(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})$")
 ZERO_SHA_RE = re.compile(r"^(?:0{40}|0{64})$")

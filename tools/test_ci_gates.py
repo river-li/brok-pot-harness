@@ -267,6 +267,12 @@ class RequiredGateTests(unittest.TestCase):
         self.assertEqual(len(results), len(CI.CONTRACTS))
         self.assertTrue(all(result.startswith("not run") for _, result in results))
 
+    def test_remote_contracts_are_in_the_required_gate(self) -> None:
+        self.assertIn(
+            ("Remote client, server, and recovery contracts", ["npm", "run", "test:remote-contracts"]),
+            CI.CONTRACTS,
+        )
+
     def test_docs_only_and_code_changes_select_intended_gates(self) -> None:
         docs_scope, docs_gates = CI.gate_plan(["README.md", "docs/wiki/Workflow.md"])
         code_scope, code_gates = CI.gate_plan(["packages/example/src/change.ts"])

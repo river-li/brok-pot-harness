@@ -67,7 +67,8 @@ npm run recover -- --output .runtime/recovered-review
 
 ## Versions and provenance
 
-Host baseline: **bfe1879**. Retained desktop resources: **0.44.0**. Current runtime Electron: **42.1.0**.
+Host baseline: **bfe1879**. Retained desktop resources: **0.44.0**. Maintained runtime Electron: **42.11.6**.
+The runtime Electron pin includes the 42.x macOS Safe Storage lazy-initialization fix; this tooling update does not change the recovered desktop product version.
 The manifest records 2,104 logical source paths; bundle variants produce more physical files.
 Resource origins and SHA-256 manifests are described in [vendor](../../vendor/README.md).
 These versions support traceability; feature support is described in [Verification](Verification.md).

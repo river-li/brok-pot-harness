@@ -16,6 +16,11 @@ copy credentials or infer successful execution from syntax checks alone.
   `GROKBOT_LOCAL_KEYCHAIN=1` is the explicit opt-in; keep machine identity
   persistence restricted and never replace encrypted secrets with plaintext
   disk persistence.
+- The remote client bootstraps the retained desktop against a loopback Gateway
+  reached through an authenticated SSH tunnel. Preserve distinct primary and
+  fork display forwards, do not fall back to a local Box/display endpoint, and
+  keep client-machine tool requests inside the existing explicit local-tool
+  permission and approval path.
 - Keep the model API key out of renderer IPC and child processes. Keep local
   Gateway/backend settings out of the original-profile launcher path. Retained
   account and service code stays present and profile-conditional.

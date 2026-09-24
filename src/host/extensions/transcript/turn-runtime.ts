@@ -125,6 +125,7 @@ var TurnRuntime = class {
   pendingToolCallStarts = /* @__PURE__ */ new Map();
   activeTurnRequestIds = /* @__PURE__ */ new Map();
   activeTurnUserMessageIds = /* @__PURE__ */ new Map();
+  activeTurnRecoveryIds = /* @__PURE__ */ new Map();
   recoveredUserMessageIds = /* @__PURE__ */ new Map();
   templateSetupWriteHints = /* @__PURE__ */ new Map();
   onUserTurnSettled;
@@ -332,6 +333,9 @@ var TurnRuntime = class {
   }
   async runTurn(session, runner, prompt, options2, epoch) {
     var _stack = [];
+    let turnSettledSuccessfully = false;
+    let turnFailed = false;
+    const interruptedTurnMessageId = options2.interruptedMessageId ?? options2.messageId;
     try {
       const _flushOnTurnSettle = __using(_stack, {
         [Symbol.dispose]: () => this.tm.traceFlusher()
@@ -433,6 +437,12 @@ var TurnRuntime = class {
       if (recoveredByTarget?.size === 0) this.recoveredUserMessageIds.delete(session.id);
       const turnMessageIds = [...recoveredMessageIds ?? [], options2.messageId];
       this.activeTurnUserMessageIds.set(session.id, turnMessageIds);
+      if (process.env.GROKBOT_REMOTE_SERVER_MODE === "1") {
+        const recoveryStore = this.tm.interruptedUserTurnStore;
+        const recoveryIds = [...new Set([...turnMessageIds, interruptedTurnMessageId])]
+          .filter((messageId) => typeof messageId === "string" && recoveryStore?.find(session.id, messageId) != null);
+        this.activeTurnRecoveryIds.set(session.id, recoveryIds);
+      }
       let spendRequestId;
       const onPersistableRunStarted = spendInitiationRecorder(
         session,
@@ -447,6 +457,10 @@ var TurnRuntime = class {
         return entryId == null ? [] : [entryId];
       });
       try {
+        const recoveryStore = this.tm.interruptedUserTurnStore;
+        for (const messageId of this.activeTurnRecoveryIds.get(session.id) ?? []) {
+          recoveryStore?.recordRunning(session.id, messageId);
+        }
         const unansweredPrompts = this.tm.widgetResponses.collectUnansweredQuestionPrompts(session, {
           carriedWakeEntryIds
         });
@@ -493,6 +507,7 @@ var TurnRuntime = class {
         await runner.drainNavigationAudit();
         const cancelled = settledResult.aborted || settledResult.pausedForUpgrade;
         turn.finalize(cancelled ? "cancelled" : "success");
+        turnSettledSuccessfully = !cancelled;
         const settledBotBlock = this.takeLiveTurnBotBlock(session);
         this.settleClientTurn(
           session,
@@ -512,6 +527,7 @@ var TurnRuntime = class {
         await this.tm.roster.emitAgentUpdate(session.id);
         this.tm.automationRuntime.emitAutomations(session);
       } catch (error42) {
+        turnFailed = true;
         await runner.drainNavigationAudit();
         const classified = classifyAgentError(error42);
         turn.finalize("error", classified, sandErrorDetail(error42));
@@ -533,6 +549,54 @@ var TurnRuntime = class {
         }
         await this.tm.roster.emitAgentUpdate(session.id);
       } finally {
+        try {
+          const interruptedStore = this.tm.interruptedUserTurnStore;
+          const recoveryIds = this.activeTurnRecoveryIds.get(session.id) ?? [];
+          if (interruptedStore != null) {
+            for (const userMessageId of recoveryIds) {
+              if (!turnSettledSuccessfully) {
+                if (options2.interruptedMessageId != null) {
+                  interruptedStore.markInterrupted(session.id, userMessageId);
+                } else if (turnFailed) {
+                  interruptedStore.clear(session.id, userMessageId);
+                }
+                continue;
+              }
+              if (options2.interruptedMessageId != null) {
+                const entries = session.db.getTranscriptEntries();
+                const notice = entries.find((entry) => entry.kind === "send-message" && entry.message?.type === "text" && entry.message.content.includes(`interrupted-user-turn:${userMessageId}`));
+                if (notice == null) {
+                  if (userMessageId === options2.interruptedMessageId) {
+                    throw new Error(`interrupted-request notice is missing for ${userMessageId}`);
+                  }
+                } else {
+                  const updated = session.db.updateTranscriptEntry(notice.id, (entry) => ({
+                    ...entry,
+                    message: {
+                      ...entry.message,
+                      content: `This previously interrupted task was resumed by a follow-up in this Bot. Check the latest transcript entry for its result. interrupted-user-turn:${userMessageId}`
+                    }
+                  }), { durable: true });
+                  if (updated == null) throw new Error(`interrupted-request notice could not be durably updated for ${userMessageId}`);
+                  if (session.id === this.tm.sessions.activeSession?.id && this.tm.sessions.inMemoryTranscriptAgentId === session.id) {
+                    updateEntry(notice.id, () => updated);
+                  }
+                  this.tm.roster.emit({ type: "updated", entry: updated }, session.id);
+                }
+              }
+              interruptedStore.clear(session.id, userMessageId);
+            }
+          }
+        } catch (error42) {
+          this.tm.hostLog(`[sand] could not persist interrupted-request status: ${String(error42)}`, "warn");
+          this.tm.trayErrors.pushError({
+            agentId: session.id,
+            title: "Interrupted task status could not be saved",
+            errorKind: "interrupted_turn_persistence_failed",
+            detail: "The server could not save whether this accepted task finished. Check server storage permissions and logs before retrying.",
+            dedupeKey: `interrupted-turn-persistence:${session.id}`
+          });
+        }
         this.forgetTemplateSetupWriteHints(session.id, turnMessageIds);
         this.activeTurns.delete(session.id);
         this.openBotBlockTurns.delete(session.id);
@@ -544,6 +608,7 @@ var TurnRuntime = class {
         this.pendingToolCallStarts.delete(session.id);
         this.activeTurnRequestIds.delete(session.id);
         this.activeTurnUserMessageIds.delete(session.id);
+        this.activeTurnRecoveryIds.delete(session.id);
         this.tm.runLifecycle.lastRequestIdBySession.delete(session.id);
         this.activeRequestPrompts.delete(session.id);
         this.activeRequestSources.delete(session.id);

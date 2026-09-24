@@ -13,10 +13,21 @@ maintained Electron assets, and runtime tests. See the
   unrelated changes. A scoped launcher/config task may intentionally revise a
   default or add opt-in behavior; document the intended behavior and verify
   the affected Compose path.
+- `server.cjs` owns the distinct `gbh-server` Compose project and persistent
+  state profile. Keep generated state under its selected state directory,
+  restrict token/env-file permissions, bind Gateway and display ports to
+  loopback, and clean up only the project selected by its private config.
+  Server model keys are read from that server env or the invoking shell; do not
+  place them in the remote desktop environment or logs.
 - `desktop.cjs` validates the prepared desktop profile, keeps local/original
   data directories separate, injects local Gateway settings only for local,
   and removes `LITELLM_API_KEY` from the Electron environment. Preserve these
   boundaries when editing launch arguments or environment forwarding.
+- Its `--remote` path loads a separate connection window without reading root
+  `.env`, the local token file, Docker state, or the Host. Remote credentials
+  may persist only through encrypted OS storage after an explicit user choice;
+  never fall back to plaintext. The connected client uses its own profile and
+  passes only Gateway/display connection values to the retained UI.
 - Local and original artifacts are assembled from the same maintained source
   into separate output directories. Local profile policy disables vendor
   login, billing, cloud provisioning, and sync while retaining those original

@@ -10,8 +10,8 @@ services:
       GROKBOT_TTS_MODEL_ROOT: /tts-models
       GROKBOT_SPEECH_THREADS: ${GROKBOT_SPEECH_THREADS:-4}
     volumes:
-      - ../.runtime/models/whisper:/models
-      - ../.runtime/models/kokoro:/tts-models
+      - ${GROKBOT_MODELS_DIR:-../.runtime/models}/whisper:/models
+      - ${GROKBOT_MODELS_DIR:-../.runtime/models}/kokoro:/tts-models
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).close()"]
       interval: 15s
@@ -45,6 +45,9 @@ services:
     environment:
       SAND_PACKAGED: "1"
       SAND_HOST_IN_BOX: "1"
+      GROKBOT_REMOTE_SERVER_MODE: ${GROKBOT_REMOTE_SERVER_MODE:-0}
+      SAND_REMOTE_VNC_PRIMARY_URL: ${SAND_REMOTE_VNC_PRIMARY_URL:-}
+      SAND_REMOTE_VNC_FORK_URL: ${SAND_REMOTE_VNC_FORK_URL:-}
       SAND_DATA_ROOT: /home/box/sand-data
       SAND_GATEWAY_BIND_HOST: 0.0.0.0
       SAND_HOST_PORT: "1340"
@@ -62,15 +65,15 @@ services:
       - search
       - speech
     ports:
-      - "127.0.0.1:1540:1340"
-      - "127.0.0.1:6180:6080"
-      - "127.0.0.1:6181:6081"
+      - "${GROKBOT_GATEWAY_HOST_BIND:-127.0.0.1}:${GROKBOT_GATEWAY_HOST_PORT:-1540}:1340"
+      - "${GROKBOT_VNC_HOST_BIND:-127.0.0.1}:${GROKBOT_VNC_HOST_PORT:-6180}:6080"
+      - "${GROKBOT_VNC_CONTROL_HOST_BIND:-127.0.0.1}:${GROKBOT_VNC_CONTROL_HOST_PORT:-6181}:6081"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - ../.runtime/build/sand-host:/home/box/sand-host:ro
       - ../.runtime/build/deps:/home/box/deps:ro
-      - ../.runtime/data:/home/box/sand-data
+      - ${GROKBOT_DATA_DIR:-../.runtime/data}:/home/box/sand-data
       - ${GROKBOT_WORKSPACE_DIR:-../.runtime/workspace}:/workspace
       - ./box-entrypoint.sh:/opt/grokbot/box-entrypoint.sh:ro
       - ./tests:/opt/grokbot/tests:ro

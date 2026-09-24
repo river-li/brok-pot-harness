@@ -15,6 +15,9 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 | Speech contracts | `npm run test:transcription`, `npm run test:tts`, `npm run test:voice` | Adapters, tickets, call protocols |
 | MCP/plugin contracts | `npm run test:mcp-store`, `npm run test:mcp-scopes`, `npm run test:plugin-files` | Configuration, scope, filesystem handling |
 | Keychain policy | `npm run test:desktop-keychain` | Conditional storage and machine identity |
+| Remote Host/client contracts | `npm run test:remote-contracts` | Loopback-only Gateway connection, encrypted server-scoped credentials, bounded isolated OS-storage helper, server lifecycle config, interruption journal, and redacted provider smoke behavior |
+| Remote server and Box | `node runtime/tests/remote-server-live.cjs` | Private Compose project and real pinned Box across an isolated loopback network boundary; deterministic Responses fixture, not external inference. Verifies authenticated API/SSE, attachment transfer, turn restart/coalescing recovery, explicit Stop, and the authenticated local-exec Never/disconnect gates against random nonexistent paths. `GBH_REMOTE_TEST_UI_REVIEW=1` adds a held-open packaged-app review: download a real Box attachment, then deny one local Read approval on a random nonexistent path. |
+| External provider smoke | `npm run server:provider-smoke` | One fixed request using the configured server URL/model/key; may incur a charge and never prints the response or key |
 | Real model | `npm run test:responses` | Current endpoint/key; may incur API charges |
 | Real desktop | `npm run test:desktop-live`, `npm run test:desktop-keychain-live` | Prepared Electron and local runtime |
 | MCP/plugin integration | `npm run test:plugins-live`; `node runtime/tests/mcp-inline-live.cjs` | Running Box and test services |
@@ -35,6 +38,13 @@ npm run test:plugin-files
 As needed for live tests, run `npm start`, wait for health, and `npm run prepare:desktop -- --profile local`.
 Generate speech fixtures with `python3 runtime/tests/create-speech-fixtures.py`.
 See [speech](../speech/README.md) for offline service tests.
+
+The remote integration creates a unique `gbh-remote-test-*` Compose project and
+private state under `.runtime/tests`; it stops/removes only that project. It
+uses the pinned `linux/amd64` Box image and may run under Docker emulation. Do
+not start it if another instance of this exact task-owned test is active. The
+optional UI barrier writes only private fixture connection metadata; it uses a
+known dummy token and never reads the operator's credentials or local files.
 
 ## Interpret results correctly
 

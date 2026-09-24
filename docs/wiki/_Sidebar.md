@@ -6,6 +6,7 @@
 **Use GBH**
 
 - [Installation](Build-Guide.md)
+- [Remote server and desktop](Remote-Server.md)
 - [Features](Features.md)
 - [Configuration](Configuration.md)
 - [Sandbox and data](Sandbox.md)

@@ -20,6 +20,12 @@ registration, dependencies, and the entry-point map.
 - Preserve nonce/digest idempotency and the durable transcript acceptance path
   when changing retries or send ordering. Keep refusal of sends to server-owned
   room sessions and the existing unattached-runner failure visible to callers.
+- Remote-server interrupted-turn journaling is profile-scoped and keyed by the
+  original accepted transcript message ID. Keep accepted work durable before
+  queue dispatch, distinguish visible acknowledgment from completion, avoid
+  clearing records based on another message's coalesced acknowledgment, and
+  mirror startup/recovery notices into both the Agent database and active
+  transcript view. Resume the same task only after an explicit same-Bot command.
 - This layer schedules and persists; `turn-execution` binds the executor and
   the Harness owns runner/tool composition. Do not duplicate the Agent loop.
   Tool authorization remains with the existing local-tool-permission and

@@ -19,6 +19,9 @@ if not (source / 'package.json').exists():
 shutil.copytree(source, target, dirs_exist_ok=True)
 shutil.copytree(ROOT / 'runtime/desktop-src', target / 'dist/electron-main', dirs_exist_ok=True)
 shutil.copytree(ROOT / 'runtime/renderer-src', target / 'dist/renderer', dirs_exist_ok=True)
+if args.profile == 'local':
+    for name in ['remote-client-main.cjs', 'remote-client-connection.cjs', 'remote-client-secure-storage.cjs', 'remote-client-preload.cjs', 'remote-client.html', 'remote-client-ui.js']:
+        shutil.copy2(ROOT / 'runtime' / name, target / name)
 local = ROOT / 'dist/local'
 if not local.exists():
     raise SystemExit('Compiled local adapters missing. Run npm run build first.')

@@ -206,6 +206,8 @@ var SandHost = class {
     lifecycle.complete({ phase: "log_catchup" });
     const entryCount = await this.ensureLoadedResilient();
     lifecycle.complete({ phase: "transcript_read", entryCount });
+    this.transcript.markRunningUserTurnsInterrupted();
+    await this.transcript.publishInterruptedUserTurnNotices();
     this.transcript.setAgentForgottenObserver((agentId) => {
       void this.boxStore.forgetAgent(agentId);
       foreverBox.diskPressureReminder.forgetAgent(agentId);
@@ -374,6 +376,8 @@ var SandHost = class {
   async dispose() {
     if (this.transcript.isPausingForUpgrade()) {
       this.transcript.markAllRunningAgentsForUpgradeResume();
+    } else if (process.env.GROKBOT_REMOTE_SERVER_MODE === "1") {
+      this.transcript.markRunningUserTurnsInterrupted();
     }
     this.hostExtensions?.api("managed-setup").dispose();
     await Promise.all([

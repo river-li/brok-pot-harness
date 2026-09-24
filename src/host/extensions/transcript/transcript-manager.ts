@@ -95,6 +95,7 @@ var TranscriptManager = class {
     this.ackRedrivePolicy = ackRedrivePolicy;
     this.clock = clock;
     this.agentInboundCoalesceMs = options2.agentInboundCoalesceMs ?? 0;
+    this.interruptedUserTurnStore = options2.interruptedUserTurnStore ?? null;
     this.sessions = new SessionRuntime(
       this,
       options2.windowedActivationDefer ?? createTaskBoundaryPolicy({ name: "transcript.windowed-activation-defer" })
@@ -115,6 +116,7 @@ var TranscriptManager = class {
   taskBoundary;
   ackRedrivePolicy;
   clock;
+  interruptedUserTurnStore;
   sendPipeline = new SendPipeline(this);
   turnRuntime = new TurnRuntime(this);
   runnerRegistry = new RunnerRegistry(this);
@@ -434,6 +436,16 @@ var TranscriptManager = class {
     return this.turnRuntime.activeTurnActsAsBoxOwner(...args);
   }
   interruptAgentRun(...args) {
+    const [agentId] = args;
+    if (process.env.GROKBOT_REMOTE_SERVER_MODE === "1" && this.runLifecycle.runningAgentIds().has(agentId)) {
+      const messageIds = new Set([
+        ...(this.turnRuntime.activeTurnUserMessageIds.get(agentId) ?? []),
+        ...(this.turnRuntime.activeTurnRecoveryIds.get(agentId) ?? []),
+        ...(this.ackObligations.ackRedriveRecoveryIds.get(agentId) ?? [])
+      ]);
+      this.interruptedUserTurnStore?.clearAgent(agentId, messageIds);
+      this.ackObligations.markAckObligationLost(agentId, "user_stop");
+    }
     return this.runnerRegistry.interruptRunForUpdateEscape(...args);
   }
   attachRunner(...args) {
@@ -694,6 +706,54 @@ var TranscriptManager = class {
   }
   markAllRunningAgentsForUpgradeResume(...args) {
     return this.upgradeResume.markAllRunningAgentsForUpgradeResume(...args);
+  }
+  async publishInterruptedUserTurnNotices() {
+    if (process.env.GROKBOT_REMOTE_SERVER_MODE !== "1" || this.interruptedUserTurnStore == null) return 0;
+    const interrupted = this.interruptedUserTurnStore.listInterrupted();
+    let published = 0;
+    for (const marker of interrupted) {
+      const obligation = this.ackObligationStore?.get(marker.agentId);
+      if (marker.visibleAck !== true && obligation?.lastSendAtMs === marker.acceptedAtMs) {
+        continue;
+      }
+      if (this.sessions.isAgentGone(marker.agentId)) {
+        this.interruptedUserTurnStore.clear(marker.agentId, marker.userMessageId);
+        continue;
+      }
+      let session;
+      try {
+        session = await this.sessions.resolveBackgroundSession(marker.agentId);
+      } catch {
+        continue;
+      }
+      const entries = session.db.getTranscriptEntries();
+      const noticeKey = `interrupted-user-turn:${marker.userMessageId}`;
+      const existingNotice = entries.find((entry) => entry.kind === "send-message" && entry.message?.type === "text" && entry.message.content.includes(noticeKey));
+      if (existingNotice != null) continue;
+      const original = entries.find((entry) => entry.kind === "message" && entry.role === "user" && entry.id === marker.userMessageId);
+      const originalText = typeof original?.content === "string" ? original.content.slice(0, 320) : "the accepted request";
+      const entry = createSendMessageEntry(
+        nextEntryId(entries, "send-message"),
+        {
+          type: "text",
+          content: `The server restarted before this accepted request finished. ${noticeKey}. Original request: ${originalText}. Check the transcript and Box for actions already completed, then send /continue-interrupted ${marker.userMessageId} to continue this same task in this Bot.`,
+          ...original == null ? {} : { reply_to: marker.userMessageId }
+        },
+        Date.now()
+      );
+      if (!session.db.appendTranscriptEntry(entry)) continue;
+      if (session.id === this.sessions.activeSession?.id && this.sessions.inMemoryTranscriptAgentId === session.id) {
+        this.sessions.setActiveTranscript(session.id, session.db.getTranscriptEntries());
+      }
+      this.roster.emit({ type: "appended", entry }, session.id);
+      void this.roster.emitAgentUpdate(session.id);
+      published += 1;
+    }
+    return published;
+  }
+  markRunningUserTurnsInterrupted() {
+    if (process.env.GROKBOT_REMOTE_SERVER_MODE !== "1") return [];
+    return this.interruptedUserTurnStore?.markRunningInterrupted() ?? [];
   }
   resumeInterruptedUpgradeTurns(...args) {
     return this.upgradeResume.resumeInterruptedUpgradeTurns(...args);

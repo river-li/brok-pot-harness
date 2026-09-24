@@ -77849,7 +77849,17 @@ var $j = class {
   async connect() {
     let t = this.env[Wj]?.trim();
     if (t == null || t.length === 0) throw new y0(`${Wj} is not set`);
-    return q_e(t, this.env[ZAt]?.trim() ?? "", this.env[XAt]?.trim() ?? "");
+    const token = this.env[ZAt]?.trim() ?? "";
+    const networkToken = this.env[XAt]?.trim() ?? "";
+    if (this.env.GROKBOT_REMOTE_CLIENT === "1") {
+      const primaryUrl = this.env.SAND_HOST_GATEWAY_VNC_PRIMARY_URL?.trim() ?? "";
+      const forkBaseUrl = this.env.SAND_HOST_GATEWAY_VNC_FORK_URL?.trim() ?? "";
+      if (token.length === 0 || networkToken.length === 0 || primaryUrl.length === 0 || forkBaseUrl.length === 0) {
+        throw new y0("Remote connection is missing its authenticated SSH tunnel or Box display routes. Reconnect with the server's Gateway and display ports forwarded.");
+      }
+      return q_e(t, token, networkToken, { primaryUrl, forkBaseUrl });
+    }
+    return q_e(t, token, networkToken);
   }
 };
 function q_e(e, t, r, n) {

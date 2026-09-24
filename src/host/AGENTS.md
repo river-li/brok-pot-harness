@@ -23,6 +23,10 @@ extension composition. See [Host README](README.md) for entry points and the
   established domain-error status/failure-code mapping, and no-store response
   headers aligned across Host and desktop clients. Do not expose the Gateway
   token in logs or error payloads.
+- Remote deployments require Gateway auth and publish the Gateway plus Box
+  display routes on loopback. Durable interrupted-turn records belong to the
+  Host profile and exact transcript user-message ID; startup notices and
+  continuation must stay visible in both the persisted and active transcript.
 - Local policy is conditional. Retain vendor login, billing, provisioning, and
   sync implementations for the original profile; local profile policy disables
   those paths. Do not bypass the existing local-tool or Auto-review approvals.

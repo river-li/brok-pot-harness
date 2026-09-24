@@ -55,6 +55,7 @@ nav:
   - Start here:
       - Overview: README.md
       - Installation and first task: docs/wiki/Build-Guide.md
+      - Remote server and desktop: docs/wiki/Remote-Server.md
       - Configuration: docs/wiki/Configuration.md
       - Features: docs/wiki/Features.md
       - Troubleshooting: docs/wiki/Troubleshooting.md
