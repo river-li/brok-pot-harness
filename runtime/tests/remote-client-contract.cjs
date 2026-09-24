@@ -115,7 +115,7 @@ test("saved connections use OS encryption and isolated server profiles", async (
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-remote-client-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const storage = encryptedStorage();
-  const store = new EncryptedConnectionStore(root, storage);
+  const store = new EncryptedConnectionStore(root, storage, { platform: "darwin" });
   const firstUrl = "http://127.0.0.1:1540";
   const secondUrl = "http://127.0.0.1:1541";
   const displayPorts = { vncPort: 6280, vncControlPort: 6281 };
@@ -140,7 +140,7 @@ test("basic_text and unavailable storage cannot persist a token", async (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-remote-client-insecure-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const basicText = encryptedStorage("basic_text");
-  const store = new EncryptedConnectionStore(root, basicText);
+  const store = new EncryptedConnectionStore(root, basicText, { platform: "darwin" });
   assert.equal(await storageIsSecure(basicText), false);
   assert.equal(await storageIsSecure(encryptedStorage(), { platform: "linux" }), false);
   await assert.rejects(store.save("http://127.0.0.1:1540", token), (error) => error.code === "SECURE_STORAGE_UNAVAILABLE");
@@ -150,7 +150,7 @@ test("basic_text and unavailable storage cannot persist a token", async (t) => {
 
 test("a stalled optional secure-store probe fails within its bound", async () => {
   const started = Date.now();
-  assert.equal(await storageIsSecure({ isAsyncEncryptionAvailable: () => new Promise(() => {}) }, { timeoutMs: 20 }), false);
+  assert.equal(await storageIsSecure({ isAsyncEncryptionAvailable: () => new Promise(() => {}) }, { platform: "darwin", timeoutMs: 20 }), false);
   assert.ok(Date.now() - started < 1000);
 });
 
