@@ -88,7 +88,7 @@ defines which directories the check treats as components.
 `docs:site:setup` installs the pinned MkDocs dependencies into ignored `.runtime/docs-venv/`.
 `docs:site:build` generates an allowlisted source tree and renders the GitHub Pages website into
 `.runtime/docs-site/site/` with MkDocs. `docs:site:serve` previews the same generated source tree.
-The docs workflow also runs `test_docs_site_markdown.py` with the pinned MkDocs dependencies to check Markdown
+The docs workflow also runs `docs_site_markdown_regression.py` with the pinned MkDocs dependencies to check Markdown
 inside the README details blocks and its image/link routes.
 The Wiki exporter writes `.runtime/wiki` and performs no network writes.
 See [Publishing](../docs/wiki/Publishing.md) for local preview, Pages deployment, rollback, and the separate Wiki workflow.

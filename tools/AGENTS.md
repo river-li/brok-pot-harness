@@ -21,7 +21,7 @@ source links to the built source commit and keep generated files out of Git. See
 validation, rollback, and the distinct PR-validation/main-publication paths.
 Cover source rewrites and output exclusions in `test_docs_site.py`, renderer
 behavior with its Node fake-DOM test, and Markdown/parser output with the docs
-dependency regression in `test_docs_site_markdown.py`. Run `npm run docs:check`,
+dependency regression in `docs_site_markdown_regression.py`. Run `npm run docs:check`,
 `npm run docs:site:build`, and `npm run docs:site:verify`; inspect the local
 browser preview for routed links, anchors, media, details blocks, and Mermaid.
 

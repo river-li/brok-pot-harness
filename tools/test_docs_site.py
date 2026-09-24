@@ -123,7 +123,7 @@ class DocumentationSiteTest(unittest.TestCase):
         self.assertIn('  pull_request:\n', workflow)
         self.assertIn('  push:\n    branches: [main]\n', workflow)
         self.assertFalse(any(line.lstrip().startswith('paths:') for line in workflow.splitlines()))
-        self.assertIn("test_docs_site_markdown.py", workflow)
+        self.assertIn("docs_site_markdown_regression.py", workflow)
         self.assertEqual(site.default_site_url('example-owner/renamed-repo'), 'https://example-owner.github.io/renamed-repo/')
         self.assertEqual(site.default_site_url('example-owner/example-owner.github.io'), 'https://example-owner.github.io/')
 
