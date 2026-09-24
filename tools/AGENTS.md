@@ -13,6 +13,18 @@ include credentials or user data, and reject unowned output directories. Export
 commands must not push or alter remotes. Test page/asset/source links and invalid
 inputs before changing the exporter.
 
+The Pages generator stages canonical Markdown and explicitly linked public media
+under ignored `.runtime/docs-site/`; do not publish symlink trees, runtime data,
+profiles, private diagnostics, or implementation bundles. Pin non-documentation
+source links to the built source commit and keep generated files out of Git. See
+[Publishing](../docs/wiki/Publishing.md) for site setup, preview, artifact
+validation, rollback, and the distinct PR-validation/main-publication paths.
+Cover source rewrites and output exclusions in `test_docs_site.py`, renderer
+behavior with its Node fake-DOM test, and Markdown/parser output with the docs
+dependency regression in `docs_site_markdown_regression.py`. Run `npm run docs:check`,
+`npm run docs:site:build`, and `npm run docs:site:verify`; inspect the local
+browser preview for routed links, anchors, media, details blocks, and Mermaid.
+
 CI helpers and their regression tests live under tools/ci and tools/test_ci_gates.py.
 Keep the required runner offline, preserve its source/base checkout reporting, and
 include the scoped-guide audit through npm run docs:check. Follow the

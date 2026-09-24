@@ -18,7 +18,7 @@ import unicodedata
 from urllib.parse import quote, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_DIRS = {'.git', '.runtime', 'node_modules', 'sand-host', 'vendor', 'licenses', 'dist'}
+SKIP_DIRS = {'.git', '.runtime', 'node_modules', 'sand-host', 'vendor', 'licenses', 'dist', 'site-src', 'site'}
 TRANSLATION = re.compile(r'\.[a-z]{2}(?:-[A-Za-z]+)?\.md$')
 FENCE = re.compile(r'(^[ \t]*```[^\n]*\n.*?^[ \t]*```[^\n]*$|^[ \t]*~~~[^\n]*\n.*?^[ \t]*~~~[^\n]*$)', re.M | re.S)
 LINK = re.compile(r'(\]\()(<[^>\n]+>|[^\s)]+)')

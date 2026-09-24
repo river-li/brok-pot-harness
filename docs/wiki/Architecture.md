@@ -7,15 +7,16 @@ the repository also contains the desktop, Host, shared protocols, execution libr
 
 ```mermaid
 flowchart LR
-  Desktop[Electron desktop] -->|Gateway| Host[Host and extensions]
-  Host --> Harness[Harness and Agent]
-  Harness <-->|Responses| Model[Configured model API]
-  Harness --> Box[Linux Box tools]
-  Harness --> MCP[MCP and plugins]
-  Box --> Workspace[Mounted workspace]
-  Host --> Store[Local conversations and settings]
-  Host --> Speech[Whisper / Kokoro]
-  Host --> Search[SearXNG]
+  Desktop["Electron desktop"] -->|Gateway| Host["Host and extensions"]
+  Host --> Harness["Harness and Agent"]
+  Harness -->|Request| Model["Configured model API"]
+  Model -->|Response| Harness
+  Harness --> Box["Linux Box tools"]
+  Harness --> MCP["MCP and plugins"]
+  Box --> Workspace["Mounted workspace"]
+  Host --> Store["Local conversations and settings"]
+  Host --> Speech["Whisper / Kokoro"]
+  Host --> Search["SearXNG"]
   Host -->|Mac tool bridge and approval| Desktop
 ```
 

@@ -49,8 +49,13 @@
     "package:mac": "npm run prepare:desktop -- --profile local && python3 runtime/tools/package-macos.py",
     "test:desktop-keychain": "node --test runtime/tests/local-keychain-contract.cjs",
     "test:desktop-keychain-live": "node runtime/tests/local-keychain-live.cjs",
-    "docs:check": "python3 tools/export-wiki.py --check && python3 tools/check-guidance.py",
-    "docs:wiki": "python3 tools/export-wiki.py"
+    "docs:check": "python3 tools/export-wiki.py --check && python3 tools/check-guidance.py && python3 -m unittest discover -s tools -p 'test_docs_site.py' && node --test tools/test_docs_site_mermaid.cjs",
+    "docs:wiki": "python3 tools/export-wiki.py",
+    "docs:site:setup": "python3 tools/docs-site.py setup",
+    "docs:site:prepare": "python3 tools/docs-site.py prepare",
+    "docs:site:build": "python3 tools/docs-site.py build",
+    "docs:site:serve": "python3 tools/docs-site.py serve",
+    "docs:site:verify": "python3 tools/docs-site.py verify"
   },
   "devDependencies": {
     "@types/node": "^26.6.1",

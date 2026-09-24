@@ -1,53 +1,109 @@
-# Publish the GitHub Wiki
+# Publish documentation (GitHub Pages and native Wiki)
 
-The canonical documentation lives in this repository. The exporter builds a native GitHub Wiki from those sources:
-Home, sidebar, footer, user guides, package guides, Host extension guides, and referenced media.
-English is the default; the Chinese project overview stays in the separate `README.zh.md`.
+The canonical documentation source remains this repository's Markdown (`docs/wiki`, module README files, and
+referenced media). Publication has two independent destinations:
 
-## How hosting works
+- **GitHub Pages website** (project site) for discoverable, navigable docs.
+- **Native GitHub Wiki** (`<repository>.wiki.git`) for teams that still use Wiki workflows.
 
-GitHub Wikis use a separate `<repository>.wiki.git` repository. Pushing Markdown into the main repository's `docs/`
-directory alone does not publish a Wiki. Enable Wiki for the repository and create its initial Home page on GitHub before
-cloning it. GitHub documents this [Wiki Git workflow](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages).
+Do not claim either destination is live until you verify its URL after deployment.
 
-`Home.md` is the entry page. `_Sidebar.md` and `_Footer.md` supply shared navigation, following
-[GitHub's sidebar and footer conventions](https://docs.github.com/en/communities/documenting-your-project-with-wikis/creating-a-footer-or-sidebar-for-your-wiki).
-No website framework or GitHub Pages build is required for this native Wiki.
+## GitHub Pages website
 
-## 1. Validate and export
+## 1. Build and preview locally
 
-From the main repository root:
+From the repository root:
+
+```sh
+python3 -m venv .runtime/docs-venv
+.runtime/docs-venv/bin/python -m pip install -r docs/requirements-pages.txt
+npm run docs:check
+npm run docs:site:build
+npm run docs:site:serve
+```
+
+Then open <http://127.0.0.1:8000/>.
+
+`docs:check` validates source links, component guidance, and the site generator's safety/link regressions.
+`docs:site:build` stages authored Markdown and linked media under ignored `.runtime/docs-site/`, builds with
+MkDocs, then checks generated links, anchors, and allowed output files. `docs:site:serve` prepares the same
+staging tree before starting the preview server. Source-code links in the site point to the exact source commit.
+Mermaid diagrams use a pinned browser renderer and are checked in the local browser preview.
+
+For previews under a project base path (forks/renames), set:
+
+```sh
+GBH_DOCS_SITE_URL="https://OWNER.github.io/REPO/" npm run docs:site:build
+```
+
+When building a fork, set `GBH_DOCS_REPOSITORY` to its `OWNER/REPO` slug as well. GitHub Actions derives both
+values from the repository that triggered the workflow. The site build output is `.runtime/docs-site/site/`;
+it includes generated pages, linked documentation media, theme assets, and `source-commit.txt` only.
+
+## 2. CI validation and deployment
+
+`.github/workflows/docs-pages.yml` provides one pipeline:
+
+- **Pull requests:** build + link validation only (no deployment credentials or Pages publish step).
+- **`main` pushes / manual dispatch:** same validation, then uploads and deploys the Pages artifact to
+  the `github-pages` environment.
+
+The workflow runs for every pull request so its `Documentation site / build` check reports on unrelated changes too.
+
+A broken doc link or failed site build fails this workflow, so the deployment job will not run.
+
+The build stamps `source-commit.txt` with the exact source commit; this identifies which source commit produced
+that published artifact.
+
+## 3. Repository settings and discoverability
+
+One-time repository settings:
+
+1. **Settings → Pages**: set **Build and deployment → Source** to **GitHub Actions**.
+2. After the first successful deployment, copy the returned `page_url`.
+3. **Settings → General → Repository details → Homepage**: set it to that URL so the website appears in repository metadata.
+
+For this repository, the expected project-site pattern is `https://river-li.github.io/brok-pot-harness/`.
+Forks use `https://<fork-owner>.github.io/<fork-repo>/`.
+
+## 4. Verify, troubleshoot, and roll back
+
+After a deployment run:
+
+1. Open the deployed HTTPS URL from the workflow summary.
+2. Confirm navigation reaches a page from each major section and at least one component guide.
+3. Confirm Mermaid diagrams render (for example, Architecture).
+4. Confirm `source-commit.txt` matches the commit that triggered deployment.
+
+If deployment fails:
+
+- Open the failed workflow run, inspect the failing step logs, fix source/docs config, and re-run from a new commit.
+- If build passes but deploy fails, re-run the failed jobs after correcting permissions or Pages settings.
+
+To roll back a bad publication, open a PR that reverts the change and merge it into `main`. The normal workflow then
+rebuilds and deploys the site from that commit. Verify the published URL and confirm that `source-commit.txt` matches
+the new revert merge commit. The stamp names the source that produced the artifact, even though the reversion restores
+the previous good content.
+
+## Native GitHub Wiki export (separate destination)
+
+GitHub Wikis are separate repositories. Exporting Markdown here does **not** publish anything until you push to
+`<repository>.wiki.git`.
+
+### 1. Validate and export
 
 ```sh
 npm run docs:check
 npm run docs:wiki
 ```
 
-The export command reads the GitHub repository from `origin`, uses `main` for source-code links, and writes `.runtime/wiki`.
-For a fork, another source branch, or a repository without an origin remote:
+Optional repository/ref override:
 
 ```sh
 npm run docs:wiki -- --repository OWNER/REPO --ref main
 ```
 
-`--repository` also accepts a credential-free `https://github.com/OWNER/REPO` URL.
-`--ref` is the source branch or commit that readers should browse, not the Wiki branch.
-Push the referenced source and assets to that branch before publishing links to them.
-
-The exporter:
-
-- Converts documentation links into native Wiki page URLs, including links to package and extension guides.
-- Converts code links into main-repository `blob` / `tree` URLs at the selected ref.
-- Copies referenced project media into the export and points embedded images at their Wiki asset URLs.
-- Preserves fenced examples and validates local targets, heading anchors, English defaults, and public configuration examples.
-- Replaces only an output directory carrying its own export marker. It never commits, pushes, or modifies source documents.
-
-The default output is `.runtime/wiki`. A custom output must be a dedicated directory directly under `.runtime`.
-The hidden `.gbh-wiki-export.json` records exported pages and assets; it is build metadata, not a Wiki page.
-
-## 2. Copy into a Wiki checkout
-
-After creating the first Wiki page on GitHub, replace `OWNER/REPO` and clone:
+### 2. Copy into a Wiki checkout
 
 ```sh
 git clone https://github.com/OWNER/REPO.wiki.git .runtime/wiki-checkout
@@ -55,41 +111,25 @@ cp .runtime/wiki/*.md .runtime/wiki-checkout/
 cp -R .runtime/wiki/assets .runtime/wiki-checkout/
 ```
 
-On subsequent updates, update the Wiki checkout before copying:
+On updates:
 
 ```sh
 git -C .runtime/wiki-checkout pull --ff-only
 ```
 
-Keep the source of truth in this main repository. Copying overwrites matching Wiki files; coordinate with collaborators
-before replacing direct edits made through GitHub. The export inventory helps identify obsolete managed pages,
-but copying does not delete unrelated Wiki pages automatically.
-
-## 3. Review and publish
+### 3. Review and publish
 
 ```sh
 git -C .runtime/wiki-checkout status --short
 git -C .runtime/wiki-checkout diff --check
 git -C .runtime/wiki-checkout diff
-# After reviewing the content:
 git -C .runtime/wiki-checkout add -- '*.md' assets
 git -C .runtime/wiki-checkout commit -m "docs: publish project wiki"
 git -C .runtime/wiki-checkout push
 ```
 
-Use the Wiki checkout's default branch. The push publishes to `https://github.com/OWNER/REPO/wiki` and requires write access.
-Use your configured Git credentials; do not put tokens in documentation or remote URLs.
-
-## Maintain navigation and translations
-
-Add user/developer pages under `docs/wiki`, then update Home and the sidebar.
-Directory README guides are exported automatically with stable, unique Wiki names.
-AGENTS.md files remain source maintenance instructions rather than Wiki pages.
-Language-suffixed translations remain separate source documents and are not mixed into the English Wiki export.
-
-Run `npm run docs:check` after editing. Changes to export behavior also require
-`python3 -m unittest discover -s tools -p 'test_wiki.py'`.
-An export prepares publishable files; it does not establish that the remote Wiki is live.
+The website deployment and the Wiki export are intentionally separate. Use whichever destination your audience needs,
+or both.
 
 ---
 [Documentation](Home.md) · [Development](Development.md) · [Project](../../README.md)
