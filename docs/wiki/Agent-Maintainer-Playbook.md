@@ -47,12 +47,12 @@ npm run maintenance -- task start --issue 123 --slug focused-change \
   --check "npm run test:recovery" \
   --rollout "verify the published page after merge" \
   --depends-on-pr 120
-cd .runtime/worktrees/<slug>
+cd .runtime/worktrees/focused-change
 git status --short --branch
 git rev-parse HEAD
 ```
 
-Repeat `--path`, `--accept`, and `--check` for each owned path, acceptance outcome, and pre-merge check. Omit `--depends-on-pr` when there is no unmerged-branch dependency and use `--rollout` only for evidence expected after merge. Paths are repository-relative and a directory reserves all descendants. The task bundle records the implementation owner, separately designated reviewer agent, trusted GitHub account for process verdicts, acceptance, checks, rollout, dependency evidence, exact starting main SHA, and handoff steps.
+Repeat `--path`, `--accept`, and `--check` for each owned path, acceptance outcome, and pre-merge check. Each `--depends-on-pr` must name a PR that is already merged and whose merge commit is in the fetched current `main`; wait for an open prerequisite to merge and update `main` before starting. Omit the option only when there is no prerequisite, never to bypass an unmerged dependency. Use `--rollout` only for evidence expected after merge. Paths are repository-relative and a directory reserves all descendants. The task bundle records the implementation owner, separately designated reviewer agent, trusted GitHub account for process verdicts, acceptance, checks, rollout, dependency evidence, exact starting main SHA, and handoff steps.
 
 Keep one implementation owner for an overlapping set of files. The coordinator assigns and schedules work; when two deliveries need the same files or behavior, finish and merge the prerequisite first, then create the next worktree from updated main. Independent work can proceed at the same time when ownership and test resources do not overlap.
 
