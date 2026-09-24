@@ -1,0 +1,178 @@
+name: Promote reviewed preview release
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_run_id:
+        description: Successful candidate workflow run ID
+        required: true
+        type: string
+      candidate_run_attempt:
+        description: Exact successful run attempt
+        required: true
+        type: string
+      source_sha:
+        description: Full source commit SHA built by the candidate run
+        required: true
+        type: string
+      release_version:
+        description: Preview version from release/project.json
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  promote:
+    if: github.ref == 'refs/heads/main'
+    name: verify and publish exact candidate artifacts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      actions: read
+      attestations: read
+      contents: write
+      pull-requests: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+      CANDIDATE_ATTEMPT: ${{ inputs.candidate_run_attempt }}
+      SOURCE_SHA: ${{ inputs.source_sha }}
+      RELEASE_VERSION: ${{ inputs.release_version }}
+    steps:
+      - name: Check out trusted promotion policy from main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Set up Node.js 24.14.0
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.14.0
+          package-manager-cache: false
+
+      - name: Validate run inputs and inspect candidate run, gates, and merged PR
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == "refs/heads/main" ]]
+          [[ "$CANDIDATE_RUN_ID" =~ ^[0-9]+$ ]]
+          [[ "$CANDIDATE_ATTEMPT" =~ ^[0-9]+$ ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+-preview\.[0-9]+$ ]]
+          mkdir -p .runtime/promotion
+          gh api "repos/$GH_REPO/actions/workflows/preview-release-candidate.yml" > .runtime/promotion/workflow.json
+          gh api "repos/$GH_REPO/actions/runs/$CANDIDATE_RUN_ID" > .runtime/promotion/run.json
+          gh api "repos/$GH_REPO/actions/runs/$CANDIDATE_RUN_ID/attempts/$CANDIDATE_ATTEMPT/jobs?per_page=100" > .runtime/promotion/jobs.json
+          gh api "repos/$GH_REPO/commits/$SOURCE_SHA/pulls?per_page=100" > .runtime/promotion/pulls.json
+          python3 runtime/tools/validate-preview-candidate.py \
+            --run .runtime/promotion/run.json \
+            --workflow .runtime/promotion/workflow.json \
+            --jobs .runtime/promotion/jobs.json \
+            --pulls .runtime/promotion/pulls.json \
+            --source-sha "$SOURCE_SHA" \
+            --attempt "$CANDIDATE_ATTEMPT" \
+            --release-version "$RELEASE_VERSION"
+
+      - name: Download the exact candidate artifacts from this run
+        run: |
+          set -euo pipefail
+          server_name="gbh-preview-server-$SOURCE_SHA-$CANDIDATE_RUN_ID-$CANDIDATE_ATTEMPT"
+          client_name="gbh-preview-client-$SOURCE_SHA-$CANDIDATE_RUN_ID-$CANDIDATE_ATTEMPT"
+          gh run download "$CANDIDATE_RUN_ID" --repo "$GH_REPO" --name "$server_name" --dir .runtime/promotion/server
+          gh run download "$CANDIDATE_RUN_ID" --repo "$GH_REPO" --name "$client_name" --dir .runtime/promotion/client
+          find .runtime/promotion/server .runtime/promotion/client -type f -maxdepth 2 -print
+
+      - name: Verify candidate bytes and cryptographic workflow provenance
+        run: |
+          set -euo pipefail
+          server=".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz"
+          client=".runtime/promotion/client/gbh-remote-client-v$RELEASE_VERSION-macos-arm64.zip"
+          (cd .runtime/promotion/server && sha256sum -c "$(basename "$server").sha256")
+          (cd .runtime/promotion/client && sha256sum -c "$(basename "$client").sha256")
+          signer="$GH_REPO/.github/workflows/preview-release-candidate.yml"
+          ref='refs/heads/agent/preview-release'
+          gh attestation verify "$server" --repo "$GH_REPO" --signer-workflow "$signer" --source-ref "$ref" --source-digest "$SOURCE_SHA" --format json > .runtime/promotion/server-attestation.json
+          gh attestation verify "$client" --repo "$GH_REPO" --signer-workflow "$signer" --source-ref "$ref" --source-digest "$SOURCE_SHA" --format json > .runtime/promotion/client-attestation.json
+          mkdir -p .runtime/promotion/server-extracted .runtime/promotion/client-extracted
+          python3 runtime/release-extract.py "$server" .runtime/promotion/server-extracted
+          node - "$SOURCE_SHA" "$RELEASE_VERSION" <<'JS'
+          const assert = require('node:assert/strict');
+          const path = require('node:path');
+          const release = require('./runtime/release.cjs');
+          const [sourceSha, version] = process.argv.slice(2);
+          const checked = release.verifyPackage(path.resolve('.runtime/promotion/server-extracted'));
+          assert.equal(checked.manifest.sourceCommit, sourceSha);
+          assert.equal(checked.manifest.sourceTreeClean, true);
+          assert.equal(checked.manifest.releaseVersion, version);
+          assert.equal(checked.manifest.buildProfile, 'local');
+          assert.equal(checked.manifest.upstreamBaseline, 'bfe1879');
+          assert.equal(checked.manifest.retainedDesktopVersion, '0.44.0');
+          JS
+          unzip -q "$client" -d .runtime/promotion/client-extracted
+          python3 - "$SOURCE_SHA" "$RELEASE_VERSION" <<'PY'
+          import json, pathlib, sys
+          source, version = sys.argv[1:]
+          manifests = list(pathlib.Path('.runtime/promotion/client-extracted').glob('*/Contents/Resources/GBH-Release-Manifest.json'))
+          assert len(manifests) == 1, f'expected one client release manifest, got {len(manifests)}'
+          manifest = json.loads(manifests[0].read_text())
+          assert manifest['sourceCommit'] == source
+          assert manifest['sourceTreeClean'] is True
+          assert manifest['releaseVersion'] == version
+          assert manifest['clientPlatform'] == 'macos/arm64'
+          assert manifest['architecture'] == 'arm64'
+          assert manifest['compatibilityId'] == 'gbh-remote-v1'
+          assert manifest['electronVersion'] == '42.11.6'
+          assert manifest['nodeVersion'] == '24.14.0'
+          assert manifest['upstreamBaseline'] == 'bfe1879'
+          assert manifest['retainedDesktopVersion'] == '0.44.0'
+          assert manifest['sourceAvailableAtRuntime'] is False
+          resources = manifests[0].parent
+          for name in ('GBH-Resource-Notices.md', 'GBH-Release-Notes.md', 'Electron-LICENSE', 'Chromium-LICENSES.html', 'GBH-Retained-Desktop-Provenance.json'):
+              assert (resources / name).is_file(), f'missing client resource notice: {name}'
+          PY
+
+      - name: Refuse to replace a published candidate, then publish these exact bytes
+        run: |
+          set -euo pipefail
+          tag="gbh-preview-v$RELEASE_VERSION"
+          if gh release view "$tag" --repo "$GH_REPO" >/dev/null 2>&1; then
+            echo "Release $tag already exists; promotion is immutable and will not replace it." >&2
+            exit 1
+          fi
+          gh api "repos/$GH_REPO/git/matching-refs/tags/$tag" > .runtime/promotion/tag-matches.json
+          if ! python3 - "$tag" .runtime/promotion/tag-matches.json <<'PY'
+          import json, sys
+          tag, filename = sys.argv[1:]
+          refs = json.load(open(filename))
+          raise SystemExit(1 if any(ref.get('ref') == f'refs/tags/{tag}' for ref in refs) else 0)
+          PY
+          then
+            echo "Tag $tag already exists; promotion will not move or reuse it." >&2
+            exit 1
+          fi
+          gh api --method POST "repos/$GH_REPO/git/refs" \
+            -f "ref=refs/tags/$tag" \
+            -f "sha=$SOURCE_SHA" > .runtime/promotion/created-tag.json
+          notes="$(mktemp)"
+          trap 'rm -f "$notes"' EXIT
+          cat release/RELEASE-NOTES.md > "$notes"
+          cat >> "$notes" <<EOF
+
+          Promoted source commit: https://github.com/$GH_REPO/commit/$SOURCE_SHA
+          Candidate workflow run $CANDIDATE_RUN_ID, attempt $CANDIDATE_ATTEMPT: https://github.com/$GH_REPO/actions/runs/$CANDIDATE_RUN_ID/attempts/$CANDIDATE_ATTEMPT
+          Install and rollback instructions for this source: https://github.com/$GH_REPO/blob/$SOURCE_SHA/release/SERVER-INSTALL.md
+          EOF
+          gh release create "$tag" \
+            ".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz" \
+            ".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz.sha256" \
+            ".runtime/promotion/client/gbh-remote-client-v$RELEASE_VERSION-macos-arm64.zip" \
+            ".runtime/promotion/client/gbh-remote-client-v$RELEASE_VERSION-macos-arm64.zip.sha256" \
+            --repo "$GH_REPO" \
+            --verify-tag \
+            --title "Grokbot Harness $RELEASE_VERSION" \
+            --notes-file "$notes" \
+            --prerelease \
+            --latest=false

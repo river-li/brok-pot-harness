@@ -3,7 +3,7 @@ services:
   speech:
     build:
       context: ./speech
-    image: gbh-local-speech:reconstructed
+    image: ${GROKBOT_SPEECH_IMAGE:-gbh-local-speech:reconstructed}
     platform: linux/amd64
     environment:
       GROKBOT_SPEECH_MODEL_ROOT: /models

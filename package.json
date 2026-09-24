@@ -57,6 +57,7 @@
     "build:icons": "python3 runtime/tools/build-icons.py",
     "package:mac": "npm run prepare:desktop -- --profile local && python3 runtime/tools/package-macos.py",
     "package:mac:remote": "npm run prepare:desktop -- --profile local && python3 runtime/tools/package-macos.py --remote",
+    "package:mac:remote:candidate": "npm run prepare:desktop -- --profile local && python3 runtime/tools/package-macos.py --remote --release-candidate",
     "test:desktop-keychain": "node --test runtime/tests/local-keychain-contract.cjs",
     "test:remote-contracts": "node --test runtime/tests/remote-client-contract.cjs runtime/tests/remote-client-secure-storage-contract.cjs runtime/tests/server-profile-contract.cjs runtime/tests/remote-recovery-contract.cjs runtime/tests/provider-smoke-contract.cjs",
     "test:desktop-keychain-live": "node runtime/tests/local-keychain-live.cjs",

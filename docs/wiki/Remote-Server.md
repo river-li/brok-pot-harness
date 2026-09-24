@@ -14,6 +14,10 @@ Shell and file tools run in the server's Box. Existing authenticated Gateway att
 
 The server is one operator's workspace. Its Gateway token grants access to every Bot on that Host; this release does not provide per-user accounts or Bot-level tenancy. Skills and plugins remain server-owned.
 
+## Preview release archive
+
+For a deployed server, use the relocatable archive and versioned manager in the [preview server install guide](../../release/SERVER-INSTALL.md). The archive is built from a clean source revision with the local profile, carries an exact file checksum inventory and resource notices, and is attested by the release candidate workflow. The final promotion workflow checks the Actions run and required jobs, signer workflow identity, source ref and commit, and archive signatures before publication. Follow the guide to verify both the checksum and attestation; the manifest and checksum alone are not signatures. The checkout-based commands below remain useful for development and recovery.
+
 ## Server platform and state
 
 The server profile uses Docker Compose and pinned `linux/amd64` service images. It requires a Docker Engine that can run those images. This delivery was exercised on a `linux/aarch64` Docker Engine using amd64 emulation; native amd64, other server architectures, and non-Linux Docker Engines have not been verified here. The independent Remote Client package and UI flow were exercised on macOS arm64. Packaging uses the build host's Electron architecture; Intel macOS and universal builds are not verified. This repository has no Windows or Linux desktop package path.

@@ -5,5 +5,6 @@ COPY requirements.lock ./requirements.lock
 RUN --mount=type=cache,target=/root/.cache/pip pip install --only-binary=:all: --no-binary=jieba -r requirements.lock
 RUN pip check
 COPY model.json model.py tts-model.json tts.py server.py ./
+COPY licenses/ /usr/share/doc/gbh-speech/licenses/
 EXPOSE 8000
 CMD ["python", "server.py"]

@@ -1,0 +1,9 @@
+{
+  "projectVersion": "0.1.0-preview.1",
+  "stateFormat": "gbh-state-v1",
+  "upstreamHostBaseline": "bfe1879",
+  "retainedDesktopVersion": "0.44.0",
+  "nodeVersion": "24.14.0",
+  "serverPlatform": "linux/amd64",
+  "clientPlatform": "macos/arm64"
+}

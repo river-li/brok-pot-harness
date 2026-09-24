@@ -8,12 +8,13 @@ const fsp = require("node:fs/promises");
 const http = require("node:http");
 const os = require("node:os");
 const path = require("node:path");
-const { randomUUID } = require("node:crypto");
+const { createHash, randomUUID } = require("node:crypto");
 const { spawn } = require("node:child_process");
 const { setTimeout: delay } = require("node:timers/promises");
 const { probeGateway } = require("../remote-client-connection.cjs");
 
-const repository = path.resolve(__dirname, "../..");
+const repository = path.resolve(process.env.GBH_REMOTE_TEST_ROOT || path.resolve(__dirname, "../.."));
+const testOutput = path.resolve(process.env.GBH_REMOTE_TEST_OUTPUT || path.join(repository, ".runtime/tests"));
 const node = process.execPath;
 const providerKey = "gbh-private-integration-fixture-key";
 const pinnedImage = "public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8";
@@ -467,6 +468,43 @@ function attachmentEntry(transcript) {
   return transcript.find((entry) => entry.kind === "send-message" && entry.message?.type === "attachment");
 }
 
+function makeSyntheticReleaseVersion(source, destination) {
+  fs.cpSync(source, destination, { recursive: true, dereference: false, verbatimSymlinks: true, errorOnExist: true });
+  const manifestPath = path.join(destination, "release-manifest.json");
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+  const version = `${manifest.releaseVersion}.test.1`;
+  const previousImage = manifest.speechImage;
+  manifest.releaseVersion = version;
+  manifest.speechImage = `gbh-server-speech:${version}-${manifest.sourceCommit.slice(0, 12)}`;
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+  const composePath = path.join(destination, "runtime/compose.yaml");
+  const compose = fs.readFileSync(composePath, "utf8");
+  if (compose.split(`image: ${previousImage}`).length !== 2) {
+    throw new Error("Synthetic release test could not find its original speech image identity.");
+  }
+  fs.writeFileSync(composePath, compose.replace(`image: ${previousImage}`, `image: ${manifest.speechImage}`));
+
+  const files = [];
+  function visit(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      const stat = fs.lstatSync(file);
+      if (stat.isSymbolicLink() || (!stat.isFile() && !stat.isDirectory())) {
+        throw new Error("Synthetic release fixture must contain only regular files and directories.");
+      }
+      if (stat.isDirectory()) visit(file);
+      else if (path.relative(destination, file) !== "SHA256SUMS") {
+        const relative = path.relative(destination, file).split(path.sep).join("/");
+        const hash = createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+        files.push(`${hash}  ${relative}`);
+      }
+    }
+  }
+  visit(destination);
+  fs.writeFileSync(path.join(destination, "SHA256SUMS"), files.sort().join("\n") + "\n");
+  return { root: destination, version, speechImage: manifest.speechImage };
+}
+
 async function downloadAttachment(base, token, agentId, attachment, expectedText) {
   assert.ok(attachment && typeof attachment.message.url === "string", "Agent transcript must contain a Box file attachment");
   const filePath = new URL(attachment.message.url).pathname;
@@ -479,8 +517,9 @@ async function downloadAttachment(base, token, agentId, attachment, expectedText
 
 async function main() {
   const id = randomUUID().replace(/-/g, "").slice(0, 10);
-  const runRoot = path.join(repository, ".runtime/tests", "remote-server-" + id);
+  const runRoot = path.join(testOutput, "remote-server-" + id);
   const stateDir = path.join(runRoot, "server-state");
+  const releaseHome = path.join(runRoot, "release-home");
   const diagnosticsDir = path.join(runRoot, "diagnostics");
   fs.mkdirSync(diagnosticsDir, { recursive: true, mode: 0o700 });
   const envFile = path.join(stateDir, "server.env");
@@ -501,6 +540,18 @@ async function main() {
     GROKBOT_CONTAINER_API_URL: "http://host.docker.internal:" + fixturePort + "/v1",
     LITELLM_API_KEY: providerKey,
   };
+  // A source-free archive has a release manifest at its root. Route it through
+  // the installed release manager automatically so this smoke can never fall
+  // back to the development server's source-build update command.
+  const releaseManagerMode = process.env.GBH_REMOTE_TEST_RELEASE_MANAGER === "1" ||
+    fs.existsSync(path.join(repository, "release-manifest.json"));
+  let releaseVersion = "";
+  if (releaseManagerMode) {
+    const verified = require(path.join(repository, "runtime/release.cjs")).verifyPackage(repository);
+    assert.equal(verified.manifest.sourceTreeClean, true, "live release smoke requires a clean-source candidate archive");
+    releaseVersion = verified.manifest.releaseVersion;
+    cliEnv.GBH_RELEASE_HOME = releaseHome;
+  }
   const fixture = createResponsesFixture();
   let serverStarted = false;
   let currentToken = "";
@@ -510,8 +561,11 @@ async function main() {
   const observedDesktopReview = [];
   const commandLog = (name) => path.join(diagnosticsDir, `${String(++commandNumber).padStart(2, "0")}-${name}.log`);
 
-  const invoke = async (name) => {
-    const result = await runProcess(node, [path.join(repository, "runtime/server.cjs"), name], cliEnv, commandLog(name));
+  const invoke = async (name, args = []) => {
+    const managed = releaseManagerMode && name !== "rotate-token";
+    const command = managed ? path.join(releaseHome, "bin/gbh-server") : node;
+    const commandArgs = managed ? [name, ...args] : [path.join(repository, "runtime/server.cjs"), name, ...args];
+    const result = await runProcess(command, commandArgs, cliEnv, commandLog(name));
     if (result.code !== 0) throw new Error("Server command " + name + " failed with exit " + result.code + "; see private diagnostics at " + diagnosticsDir);
     return result.output;
   };
@@ -526,8 +580,16 @@ async function main() {
       fixture.server.once("error", reject);
       fixture.server.listen(fixturePort, "0.0.0.0", resolve);
     });
-    const install = await runProcess(node, [path.join(repository, "runtime/server.cjs"), "install"], cliEnv, commandLog("install"));
-    assert.equal(install.code, 0, "private server install must succeed");
+    if (releaseManagerMode) {
+      const installEnv = { ...cliEnv, NODE: node };
+      const install = await runProcess(path.join(repository, "install.sh"), [], installEnv, commandLog("archive-install"));
+      assert.equal(install.code, 0, "actual release archive install script must succeed");
+      const installedVersion = await invoke("version");
+      assert.ok(installedVersion.includes(releaseVersion), "installed launcher must report the artifact's own product version");
+    } else {
+      const install = await runProcess(node, [path.join(repository, "runtime/server.cjs"), "install"], cliEnv, commandLog("install"));
+      assert.equal(install.code, 0, "private server install must succeed");
+    }
     const uiReviewMode = process.env.GBH_REMOTE_TEST_UI_REVIEW === "1";
     if (uiReviewMode) privateFile(path.join(stateDir, "gateway-token"), "gbh-ui-fixture-not-a-real-secret-token\n");
     privateFile(envFile, [
@@ -1038,7 +1100,37 @@ async function main() {
       ) ? transcript : null;
     }, "same-task recovery to become idle with its durable notice updated", 60_000);
 
-    await invoke("update");
+    let releaseUpdate = null;
+    if (releaseManagerMode) {
+      const synthetic = makeSyntheticReleaseVersion(repository, path.join(runRoot, "synthetic-update-package"));
+      const update = await invoke("update", [synthetic.root]);
+      assert.ok(update.includes(synthetic.version));
+      const candidateVersion = await invoke("version");
+      assert.ok(candidateVersion.includes(synthetic.version));
+      currentToken = readToken();
+      await waitReady();
+      for (const agent of [agentA, agentB, agentRecovery, agentAcknowledged]) {
+        const transcript = await gatewayCall(gatewayUrl, currentToken, "getAgentTranscript", { id: agent.id });
+        assert.ok(Array.isArray(transcript) && transcript.length > 0,
+          "real Box Bot data must remain visible while the synthetic candidate release is active");
+      }
+      const candidateTranscript = await gatewayCall(gatewayUrl, currentToken, "getAgentTranscript", { id: agentA.id });
+      await downloadAttachment(gatewayUrl, currentToken, agentA.id, attachmentA, markerA);
+      const rollback = await invoke("rollback");
+      assert.ok(rollback.includes(releaseVersion));
+      const restoredVersion = await invoke("version");
+      assert.ok(restoredVersion.includes(releaseVersion));
+      releaseUpdate = {
+        sourceVersion: releaseVersion,
+        syntheticVersion: synthetic.version,
+        syntheticSpeechImage: synthetic.speechImage,
+        activeVersionAfterRollback: releaseVersion,
+        persistedBoxTranscriptEntries: candidateTranscript.length,
+        userStatePreserved: true,
+      };
+    } else {
+      await invoke("update");
+    }
     serverStarted = true;
     currentToken = readToken();
     await waitReady();
@@ -1084,9 +1176,11 @@ async function main() {
         "idempotent prompt nonce and unacknowledged task redrive after Host restart",
         "post-ack interrupted task appears in transcript and reopened Bot snapshot, then explicit follow-up resumes the same file task without duplicate replay",
         "state-preserving server update and Gateway token rotation",
+        ...(releaseUpdate ? ["actual install.sh and generated launcher start a clean extracted server package; release.cjs switches to a synthetic re-versioned package and rolls back while retaining real Box task state"] : []),
         ...observedDesktopReview,
       ],
       observations: fixture.observations,
+      releaseManager: releaseUpdate,
       diagnosticPath: diagnosticsDir,
     };
     privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(report, null, 2) + "\n");
@@ -1133,6 +1227,7 @@ async function main() {
     }
     if (cleanupFailure) throw new Error("Isolated server cleanup failed: " + cleanupFailure.message + "; state and private diagnostics retained at " + runRoot);
     await fsp.rm(stateDir, { recursive: true, force: true });
+    if (releaseManagerMode) await fsp.rm(releaseHome, { recursive: true, force: true });
   }
 }
 
