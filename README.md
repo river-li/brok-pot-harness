@@ -91,8 +91,13 @@ Use `npm stop` to stop the backend; your files and conversations remain on disk.
 [Full installation guide](docs/wiki/Build-Guide.md) · [Mount your project](docs/wiki/Sandbox.md) ·
 [Package the macOS app](docs/wiki/Packaging.md) · [Troubleshooting](docs/wiki/Troubleshooting.md)
 
-Documentation website deployments are published to
-<https://river-li.github.io/brok-pot-harness/> from `main`; see [docs/wiki/Publishing.md](docs/wiki/Publishing.md).
+### Releases and downloads
+
+Check [GitHub Releases](https://github.com/river-li/brok-pot-harness/releases) for downloadable builds when available.
+The [packaging guide](docs/wiki/Packaging.md) explains how to build the desktop app from this source tree.
+
+The expected documentation website URL after the first successful deployment is
+<https://river-li.github.io/brok-pot-harness/>; see [docs/wiki/Publishing.md](docs/wiki/Publishing.md) for rollout details.
 
 ## Set up your workspace
 

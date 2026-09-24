@@ -2,36 +2,8 @@ name: Documentation site
 
 on:
   pull_request:
-    paths:
-      - '.github/workflows/docs-pages.yml'
-      - 'mkdocs.yml'
-      - 'docs/**'
-      - 'tools/export-wiki.py'
-      - 'tools/check-guidance.py'
-      - 'tools/test_wiki.py'
-      - 'README.md'
-      - 'CONTRIBUTING.md'
-      - 'packages/**/README.md'
-      - 'src/**/README.md'
-      - 'runtime/**/README.md'
-      - 'package.json'
-      - 'package-lock.json'
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/docs-pages.yml'
-      - 'mkdocs.yml'
-      - 'docs/**'
-      - 'tools/export-wiki.py'
-      - 'tools/check-guidance.py'
-      - 'tools/test_wiki.py'
-      - 'README.md'
-      - 'CONTRIBUTING.md'
-      - 'packages/**/README.md'
-      - 'src/**/README.md'
-      - 'runtime/**/README.md'
-      - 'package.json'
-      - 'package-lock.json'
   workflow_dispatch:
 
 permissions:
@@ -54,18 +26,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compute project site URL
-        shell: bash
-        run: |
-          repo="${GITHUB_REPOSITORY#*/}"
-          owner="${GITHUB_REPOSITORY_OWNER}"
-          if [[ "$repo" == "$owner.github.io" ]]; then
-            site_url="https://${owner}.github.io/"
-          else
-            site_url="https://${owner}.github.io/${repo}/"
-          fi
-          echo "GBH_DOCS_SITE_URL=${site_url}" >> "$GITHUB_ENV"
-
       - name: Install docs dependencies
         run: python3 -m pip install -r docs/requirements-pages.txt
 
@@ -78,20 +38,14 @@ jobs:
       - name: Build documentation website
         run: npm run docs:site:build
 
-      - name: Stamp source commit into artifact
-        run: printf '%s\n' "$GITHUB_SHA" > site/source-commit.txt
-
-      - name: Verify build output excludes runtime data
-        run: |
-          test ! -e site/.runtime
-          test ! -e site/node_modules
-          test ! -e site/dist
+      - name: Verify allowlisted Pages artifact
+        run: npm run docs:site:verify
 
       - name: Upload Pages artifact
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4
         with:
-          path: site
+          path: .runtime/docs-site/site
 
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

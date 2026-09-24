@@ -15,7 +15,8 @@ Do not claim either destination is live until you verify its URL after deploymen
 From the repository root:
 
 ```sh
-python3 -m pip install -r docs/requirements-pages.txt
+python3 -m venv .runtime/docs-venv
+.runtime/docs-venv/bin/python -m pip install -r docs/requirements-pages.txt
 npm run docs:check
 npm run docs:site:build
 npm run docs:site:serve
@@ -23,14 +24,21 @@ npm run docs:site:serve
 
 Then open <http://127.0.0.1:8000/>.
 
-`docs:check` fails malformed local links/anchors before the site build. `docs:site:build` runs MkDocs,
-uses `mkdocs.yml`, and renders Mermaid diagrams from fenced `mermaid` blocks.
+`docs:check` validates source links, component guidance, and the site generator's safety/link regressions.
+`docs:site:build` stages authored Markdown and linked media under ignored `.runtime/docs-site/`, builds with
+MkDocs, then checks generated links, anchors, and allowed output files. `docs:site:serve` prepares the same
+staging tree before starting the preview server. Source-code links in the site point to the exact source commit.
+Mermaid diagrams use a pinned browser renderer and are checked in the local browser preview.
 
 For previews under a project base path (forks/renames), set:
 
 ```sh
 GBH_DOCS_SITE_URL="https://OWNER.github.io/REPO/" npm run docs:site:build
 ```
+
+When building a fork, set `GBH_DOCS_REPOSITORY` to its `OWNER/REPO` slug as well. GitHub Actions derives both
+values from the repository that triggered the workflow. The site build output is `.runtime/docs-site/site/`;
+it includes generated pages, linked documentation media, theme assets, and `source-commit.txt` only.
 
 ## 2. CI validation and deployment
 
@@ -40,9 +48,11 @@ GBH_DOCS_SITE_URL="https://OWNER.github.io/REPO/" npm run docs:site:build
 - **`main` pushes / manual dispatch:** same validation, then uploads and deploys the Pages artifact to
   the `github-pages` environment.
 
+The workflow runs for every pull request so its `Documentation site / build` check reports on unrelated changes too.
+
 A broken doc link or failed site build fails this workflow, so the deployment job will not run.
 
-The build stamps `site/source-commit.txt` with the exact `GITHUB_SHA`; this identifies which source commit produced
+The build stamps `source-commit.txt` with the exact source commit; this identifies which source commit produced
 that published artifact.
 
 ## 3. Repository settings and discoverability

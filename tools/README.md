@@ -78,14 +78,16 @@ npm run docs:site:build
 npm run docs:wiki
 ```
 
-`docs:check` validates Wiki links and checks source component guidance under
+`docs:check` validates Wiki links and the Pages staging regressions, then checks source component guidance under
 `src/`, `packages/`, `dune/`, `reconstruction/`, `runtime/`, and `tools/`.
 It prunes installed dependencies and generated/cache directories before
 walking; maintained package `dist/` source remains in scope.
 The [Development guide](../docs/wiki/Development.md#scoped-guidance-coverage)
 defines which directories the check treats as components.
 
-`docs:site:build` renders the GitHub Pages website into `site/` with MkDocs.
+`docs:site:setup` installs the pinned MkDocs dependencies into ignored `.runtime/docs-venv/`.
+`docs:site:build` generates an allowlisted source tree and renders the GitHub Pages website into
+`.runtime/docs-site/site/` with MkDocs. `docs:site:serve` previews the same generated source tree.
 The Wiki exporter writes `.runtime/wiki` and performs no network writes.
 See [Publishing](../docs/wiki/Publishing.md) for local preview, Pages deployment, rollback, and the separate Wiki workflow.
 

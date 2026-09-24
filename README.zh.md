@@ -8,6 +8,7 @@
 <p align="center">桌面对话 · 本地 Sandbox · 自选模型 · MCP 与 Skills</p>
 <p align="center">
   <a href="#快速开始">快速开始</a> ·
+  <a href="https://river-li.github.io/brok-pot-harness/">项目网站</a> ·
   <a href="docs/wiki/Home.md">文档</a> ·
   <a href="docs/wiki/Features.md">功能</a> ·
   <a href="docs/wiki/Architecture.md">架构</a> ·
