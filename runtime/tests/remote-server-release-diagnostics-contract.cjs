@@ -6,26 +6,61 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 const test = require("node:test");
-const { verifyBoxVncRoute } = require("./remote-server-live.cjs");
+const { assignmentInspectorScript, verifyBoxVncRoute } = require("./remote-server-live.cjs");
 
 test("display route validation accepts the configured primary and fork tunnels", () => {
   assert.deepEqual(verifyBoxVncRoute("http://127.0.0.1:33251/vnc.html", {
     primaryPort: 33251,
     forkPort: 38383,
-  }), { kind: "primary", port: 33251, pathname: "/vnc.html" });
+    expectedWindowIndex: 1,
+  }), { kind: "primary", port: 33251, pathname: "/vnc.html", windowIndex: 1 });
 
   assert.deepEqual(verifyBoxVncRoute("http://127.0.0.1:38383/vnc.html?path=websockify%3Ftoken%3D2", {
     primaryPort: 33251,
     forkPort: 38383,
+    expectedWindowIndex: 2,
   }), { kind: "fork", port: 38383, pathname: "/vnc.html", windowIndex: 2 });
+  assert.deepEqual(verifyBoxVncRoute("http://127.0.0.1:38383/vnc.html?path=websockify%3Ftoken%3D4", {
+    primaryPort: 33251,
+    forkPort: 38383,
+    expectedWindowIndex: 4,
+  }), { kind: "fork", port: 38383, pathname: "/vnc.html", windowIndex: 4 });
 });
 
 test("display route validation rejects untrusted hosts, ports and fork paths", () => {
-  const ports = { primaryPort: 33251, forkPort: 38383 };
+  const ports = { primaryPort: 33251, forkPort: 38383, expectedWindowIndex: 2 };
   assert.throws(() => verifyBoxVncRoute("http://example.com:33251/vnc.html", ports), /loopback tunnel/);
   assert.throws(() => verifyBoxVncRoute("http://127.0.0.1:31337/vnc.html", ports), /control tunnel port/);
-  assert.throws(() => verifyBoxVncRoute("http://127.0.0.1:38383/vnc.html?path=websockify%3Ftoken%3D1", ports), /non-primary window token/);
-  assert.throws(() => verifyBoxVncRoute("http://127.0.0.1:38383/vnc.html?path=other", ports), /non-primary window token/);
+  assert.throws(() => verifyBoxVncRoute("http://127.0.0.1:38383/vnc.html?path=websockify%3Ftoken%3D1", ports), /match that Bot's persisted/);
+  assert.throws(() => verifyBoxVncRoute("http://127.0.0.1:38383/vnc.html?path=other", ports), /match that Bot's persisted/);
+});
+
+test("bounded window-assignment inspector outputs selected indexes without ownership tokens or parse snippets", (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-window-assignment-contract-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const file = path.join(root, "assignments.json");
+  const token = "SENTINEL_WINDOW_OWNER_TOKEN_DO_NOT_PRINT";
+  fs.writeFileSync(file, JSON.stringify({
+    assignments: { "agent-a": 2, "agent-b": 3, unrelated: 4 },
+    tokens: { "agent-a": token, "agent-b": token, unrelated: token },
+  }));
+
+  const selected = spawnSync(process.execPath, ["-e", assignmentInspectorScript(), "--", file, "agent-a", "agent-b"], {
+    encoding: "utf8",
+    timeout: 3000,
+  });
+  assert.equal(selected.status, 0, selected.stderr);
+  assert.deepEqual(JSON.parse(selected.stdout), { "agent-a": 2, "agent-b": 3 });
+  assert.ok(!selected.stdout.includes(token) && !selected.stderr.includes(token));
+
+  fs.writeFileSync(file, `{"assignments":{"agent-a":2},"tokens":"${token}`);
+  const malformed = spawnSync(process.execPath, ["-e", assignmentInspectorScript(), "--", file, "agent-a"], {
+    encoding: "utf8",
+    timeout: 3000,
+  });
+  assert.equal(malformed.status, 1);
+  assert.ok(!malformed.stdout.includes(token) && !malformed.stderr.includes(token));
+  assert.equal(malformed.stderr.trim(), "Could not read persisted Box window assignments.");
 });
 
 test("failed live acceptance writes a bounded diagnostic report without starting Docker", (t) => {

@@ -45,23 +45,57 @@ function inspectBoxVncRoute(value) {
   }
 }
 
-function verifyBoxVncRoute(value, { primaryPort, forkPort }) {
+function verifyBoxVncRoute(value, { primaryPort, forkPort, expectedWindowIndex }) {
   const route = inspectBoxVncRoute(value);
+  assert.ok(Number.isInteger(expectedWindowIndex) && expectedWindowIndex >= 1,
+    "server Box must have a persisted numeric window assignment");
   assert.equal(route.invalidUrl, undefined, "running Box must report an absolute display URL");
   assert.equal(route.protocol, "http:", "server Box display URL must use the tunneled HTTP endpoint");
   assert.equal(route.hostname, "127.0.0.1", "server Box display URL must stay on the loopback tunnel");
   assert.equal(route.pathname, "/vnc.html", "server Box display URL must use the noVNC page");
-  if (route.port === primaryPort) {
+  if (expectedWindowIndex === 1) {
+    assert.equal(route.port, primaryPort, "primary assignment must use the configured primary tunnel port");
     assert.equal(route.hasQuery, false, "primary display URL must not carry a fork-window token");
     assert.equal(route.hasFragment, false, "primary display URL must not carry a fragment");
-    return { kind: "primary", port: route.port, pathname: route.pathname };
+    return { kind: "primary", port: route.port, pathname: route.pathname, windowIndex: 1 };
   }
   assert.equal(route.port, forkPort, "fork display URL must use the configured control tunnel port");
   assert.equal(route.queryParameterCount, 1, "fork display URL must have only its window route parameter");
   assert.equal(route.hasFragment, false, "fork display URL must not carry a fragment");
-  assert.ok(Number.isInteger(route.forkWindowIndex) && route.forkWindowIndex >= 2,
-    "fork display URL must preserve the assigned non-primary window token");
+  assert.equal(route.forkWindowIndex, expectedWindowIndex,
+    "fork display URL token must match that Bot's persisted non-primary window assignment");
   return { kind: "fork", port: route.port, pathname: route.pathname, windowIndex: route.forkWindowIndex };
+}
+
+function assignmentInspectorScript() {
+  return `
+    const fs = require("node:fs");
+    const { setTimeout: delay } = require("node:timers/promises");
+    const [file, ...agentIds] = process.argv.slice(1);
+    (async () => {
+      const deadline = Date.now() + 10000;
+      let assignments;
+      while (Date.now() < deadline) {
+        try {
+          const saved = JSON.parse(fs.readFileSync(file, "utf8"));
+          assignments = Object.fromEntries(agentIds.map((id) => [id, saved.assignments?.[id] ?? null]));
+          if (agentIds.every((id) => Number.isInteger(assignments[id]))) break;
+        } catch (error) {
+          if (error.code !== "ENOENT") {
+            console.error("Could not read persisted Box window assignments.");
+            process.exitCode = 1;
+            return;
+          }
+        }
+        await delay(100);
+      }
+      process.stdout.write(JSON.stringify(assignments ?? {}));
+      if (!assignments || !agentIds.every((id) => Number.isInteger(assignments[id]))) process.exitCode = 1;
+    })().catch((error) => {
+      console.error("Could not inspect persisted Box window assignments.");
+      process.exitCode = 1;
+    });
+  `;
 }
 
 function sanitizeCommandLog(file, stateDir) {
@@ -677,7 +711,16 @@ async function main() {
   const readBoxStateJson = async (name) => {
     const allowed = new Set(["host-interrupted-user-turns.json", "ack-obligations.json"]);
     assert.ok(allowed.has(name), "test may inspect only the two recovery journals");
-    const script = "const fs=require('node:fs');try{process.stdout.write(fs.readFileSync(process.argv[1],'utf8'))}catch(e){if(e.code==='ENOENT')process.stdout.write('null');else{console.error(e.message);process.exitCode=1}}";
+    const script = `
+      const fs = require("node:fs");
+      const file = process.argv[1];
+      try {
+        process.stdout.write(fs.readFileSync(file, "utf8"));
+      } catch (error) {
+        if (error.code === "ENOENT") process.stdout.write("null");
+        else { console.error(error.message); process.exitCode = 1; }
+      }
+    `;
     const args = [
       "compose", "--env-file", envFile, "--project-name", projectName,
       "-f", path.join(repository, "runtime/compose.yaml"),
@@ -687,6 +730,18 @@ async function main() {
     const result = await runProcess("docker", args, testComposeEnv(), commandLog("inspect-" + name));
     assert.equal(result.code, 0, "bounded Box container journal inspection must succeed");
     return JSON.parse(result.output.trim() || "null");
+  };
+  const readAssignedWindowIndexes = async (agentIds) => {
+    const args = [
+      "compose", "--env-file", envFile, "--project-name", projectName,
+      "-f", path.join(repository, "runtime/compose.yaml"),
+      "exec", "-T", "--user", "0:0", "app", "/exec-daemon/node", "-e", assignmentInspectorScript(), "--",
+      "/home/box/.sand-window-assignments.json",
+      ...agentIds,
+    ];
+    const result = await runProcess("docker", args, testComposeEnv(), commandLog("inspect-window-assignments"));
+    assert.equal(result.code, 0, "bounded selected window-assignment inspection must succeed");
+    return JSON.parse(result.output.trim());
   };
   const readReclaimedStateJson = (name) => {
     assert.ok(new Set(["host-interrupted-user-turns.json", "ack-obligations.json"]).has(name),
@@ -803,11 +858,29 @@ async function main() {
       gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentA.id }),
       gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentB.id }),
     ]);
-    const routeA = verifyBoxVncRoute(boxStatusA.vncUrl, { primaryPort: vncPort, forkPort: vncControlPort });
-    const routeB = verifyBoxVncRoute(boxStatusB.vncUrl, { primaryPort: vncPort, forkPort: vncControlPort });
-    assert.notEqual(routeA.kind, routeB.kind,
-      "concurrent independent Bots must retain one primary and one fork display route");
-    displayRoute = { primaryPort: vncPort, forkPort: vncControlPort, agentA: routeA, agentB: routeB };
+    displayRoute = {
+      primaryPort: vncPort,
+      forkPort: vncControlPort,
+      agentA: { assignment: null, route: inspectBoxVncRoute(boxStatusA.vncUrl) },
+      agentB: { assignment: null, route: inspectBoxVncRoute(boxStatusB.vncUrl) },
+    };
+    const assignments = await readAssignedWindowIndexes([agentA.id, agentB.id]);
+    displayRoute.agentA.assignment = assignments[agentA.id];
+    displayRoute.agentB.assignment = assignments[agentB.id];
+    const routeA = verifyBoxVncRoute(boxStatusA.vncUrl, {
+      primaryPort: vncPort, forkPort: vncControlPort, expectedWindowIndex: assignments[agentA.id],
+    });
+    const routeB = verifyBoxVncRoute(boxStatusB.vncUrl, {
+      primaryPort: vncPort, forkPort: vncControlPort, expectedWindowIndex: assignments[agentB.id],
+    });
+    assert.ok(assignments[agentA.id] >= 2 && assignments[agentB.id] >= 2,
+      "fresh independent Bots must receive non-primary shared desktop windows");
+    assert.notEqual(assignments[agentA.id], assignments[agentB.id],
+      "concurrent independent Bots must keep distinct persisted window assignments");
+    assert.equal(routeA.kind, "fork");
+    assert.equal(routeB.kind, "fork");
+    displayRoute.agentA.route = routeA;
+    displayRoute.agentB.route = routeB;
     testStage = "authenticated server and state contracts";
     const hasTaskEvent = (agentId, marker) => authorizedEvents.observed.some((event) => {
       const encoded = JSON.stringify(event);
@@ -1385,4 +1458,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { inspectBoxVncRoute, verifyBoxVncRoute };
+module.exports = { assignmentInspectorScript, inspectBoxVncRoute, verifyBoxVncRoute };
