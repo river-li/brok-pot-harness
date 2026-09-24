@@ -43,4 +43,10 @@ test("model settings stay in private state and server child drops inherited cred
   assert.equal(env.GBH_SERVER_PROJECT, "brokpot-local");
   assert.equal(env.ELECTRON_RUN_AS_NODE, "1");
   assert.equal(env.LITELLM_API_KEY, undefined);
+  for (const name of ["GBH_SERVER_ENV_FILE", "GBH_SERVER_GATEWAY_PORT", "GBH_SERVER_VNC_PORT", "SAND_HOST_GATEWAY_URL"]) {
+    const previous = process.env[name];
+    process.env[name] = name.endsWith("PORT") ? "27540" : "/tmp/foreign-server.env";
+    try { assert.equal(serverEnvironment(root)[name], undefined); }
+    finally { if (previous === undefined) delete process.env[name]; else process.env[name] = previous; }
+  }
 });

@@ -45,8 +45,9 @@ maintained Electron assets, and runtime tests. See the
   branch verifies the bundled server inventory, deploys it under private user
   state, and starts only the `brokpot-local` Compose project. Its remote branch
   starts the independent encrypted client without inspecting local Docker or
-  model settings. Keep provider credentials out of the renderer and remote
-  child environment.
+  model settings. The sandboxed first-run form may send a new provider key once
+  over trusted IPC for writing to private server state; never send a persisted
+  key back to the renderer or pass one into the remote child environment.
 - Local and original artifacts are assembled from the same maintained source
   into separate output directories. Local profile policy disables vendor
   login, billing, cloud provisioning, and sync while retaining those original

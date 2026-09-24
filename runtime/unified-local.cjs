@@ -116,9 +116,10 @@ function writeSettings(stateHome, { url, model, key }) {
 }
 
 function serverEnvironment(stateHome) {
-  const env = { ...process.env, ELECTRON_RUN_AS_NODE: "1", GBH_SERVER_STATE_DIR: stateHome, GBH_SERVER_PROJECT: "brokpot-local" };
+  const env = { ...process.env, ELECTRON_RUN_AS_NODE: "1" };
   for (const name of Object.keys(env)) {
-    if (/(?:API_KEY|TOKEN|SECRET|PASSWORD)$/i.test(name) || name.startsWith("SAND_HOST_GATEWAY_") || name.startsWith("GROKBOT_")) delete env[name];
+    if (/(?:API_KEY|TOKEN|SECRET|PASSWORD)$/i.test(name) || name.startsWith("GBH_SERVER_") ||
+        name.startsWith("SAND_") || name.startsWith("GROKBOT_")) delete env[name];
   }
   env.GBH_SERVER_STATE_DIR = stateHome;
   env.GBH_SERVER_PROJECT = "brokpot-local";
