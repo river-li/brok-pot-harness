@@ -98,6 +98,87 @@ function assignmentInspectorScript() {
   `;
 }
 
+function modelCacheCleanupScript() {
+  return [
+    "import shutil",
+    "from pathlib import Path",
+    "for model_root in (Path('/models'), Path('/tts-models')):",
+    "    for entry in model_root.iterdir():",
+    "        if entry.is_dir() and not entry.is_symlink():",
+    "            shutil.rmtree(entry)",
+    "        else:",
+    "            entry.unlink()",
+  ].join("\n");
+}
+
+function privateModelCacheRoots(stateDir, runRoot) {
+  const expectedStateDir = path.join(path.resolve(runRoot), "server-state");
+  if (path.resolve(stateDir) !== expectedStateDir) {
+    throw new Error("Refusing to clean model caches outside this test's private state directory.");
+  }
+  for (const directory of [runRoot, stateDir]) {
+    const stat = fs.lstatSync(directory);
+    if (stat.isSymbolicLink() || !stat.isDirectory()) {
+      throw new Error("Refusing to clean model caches through a non-directory test path.");
+    }
+  }
+
+  const modelsDir = path.join(stateDir, "models");
+  let modelsStat;
+  try {
+    modelsStat = fs.lstatSync(modelsDir);
+  } catch (error) {
+    if (error.code === "ENOENT") return [];
+    throw error;
+  }
+  if (modelsStat.isSymbolicLink() || !modelsStat.isDirectory()) {
+    throw new Error("Refusing to clean model caches through an unsafe models path.");
+  }
+
+  return ["whisper", "kokoro"].flatMap((name) => {
+    const directory = path.join(modelsDir, name);
+    try {
+      const stat = fs.lstatSync(directory);
+      if (stat.isSymbolicLink() || !stat.isDirectory()) {
+        throw new Error("Refusing to clean model caches through an unsafe service path.");
+      }
+      return [directory];
+    } catch (error) {
+      if (error.code === "ENOENT") return [];
+      throw error;
+    }
+  });
+}
+
+function modelCacheCleanupArgs({ composeFile, envFile, projectName }) {
+  return [
+    "compose", "--env-file", envFile, "--project-name", projectName,
+    "-f", composeFile,
+    "run", "--rm", "--no-deps", "--user", "0:0",
+    "--entrypoint", "python", "speech", "-c", modelCacheCleanupScript(),
+  ];
+}
+
+function assertTestProjectStopped(serverRuntime, composeEnv, execute) {
+  serverRuntime.assertComposeProjectStopped(
+    serverRuntime.serverConfig(composeEnv),
+    composeEnv,
+    execute,
+  );
+}
+
+async function clearPrivateSpeechModelCaches({ composeFile, envFile, projectName, stateDir, runRoot, composeEnv, logFile }) {
+  const modelRoots = privateModelCacheRoots(stateDir, runRoot);
+  if (modelRoots.length === 0) return;
+  const serverRuntime = require(path.join(repository, "runtime/server.cjs"));
+  assertTestProjectStopped(serverRuntime, composeEnv);
+  const cleanupEnv = { ...composeEnv, GROKBOT_MODELS_DIR: path.join(stateDir, "models") };
+  const result = await runProcess("docker", modelCacheCleanupArgs({ composeFile, envFile, projectName }), cleanupEnv, logFile);
+  if (result.code !== 0) {
+    throw new Error("Could not remove this test's private speech model caches; see private diagnostics.");
+  }
+}
+
 function sanitizeCommandLog(file, stateDir) {
   if (!fs.existsSync(file)) return null;
   let contents = fs.readFileSync(file, "utf8");
@@ -118,7 +199,7 @@ function sanitizeCommandLog(file, stateDir) {
 
 function failureReport({ diagnosticsDir, stateDir, stage, error, cleanupError, displayRoute, fixture, releaseManager }) {
   const cleanupCommands = fs.readdirSync(diagnosticsDir)
-    .filter((name) => /-(?:stop|compose-down|prepare-release-state|update|rollback)\.log$/.test(name))
+    .filter((name) => /-(?:stop|compose-down|prepare-release-state|speech-model-cache-cleanup|update|rollback)\.log$/.test(name))
     .sort()
     .map((name) => ({ name, outputTail: sanitizeCommandLog(path.join(diagnosticsDir, name), stateDir) }));
   const safeError = (value) => value == null ? null : {
@@ -152,6 +233,12 @@ function failureReport({ diagnosticsDir, stateDir, stage, error, cleanupError, d
       fixtureErrors: fixture.observations.fixtureErrors,
     },
   };
+}
+
+function writeFailureReportFile(options) {
+  const report = failureReport(options);
+  privateFile(path.join(options.diagnosticsDir, "report.json"), JSON.stringify(report, null, 2) + "\n");
+  return report;
 }
 
 function runProcess(command, args, env, logFile) {
@@ -689,6 +776,7 @@ async function main() {
   let testStage = "fixture setup";
   let displayRoute = null;
   let releaseUpdate = null;
+  let completedReport = null;
   let eventStream = null;
   let commandNumber = 0;
   const observedDesktopReview = [];
@@ -707,6 +795,9 @@ async function main() {
     ...cliEnv,
     GROKBOT_GATEWAY_TOKEN: readToken(),
     GROKBOT_SEARCH_SECRET: fs.readFileSync(path.join(stateDir, "search-secret"), "utf8").trim(),
+    GROKBOT_DATA_DIR: path.join(stateDir, "data"),
+    GROKBOT_WORKSPACE_DIR: path.join(stateDir, "workspace"),
+    GROKBOT_MODELS_DIR: path.join(stateDir, "models"),
   });
   const readBoxStateJson = async (name) => {
     const allowed = new Set(["host-interrupted-user-turns.json", "ack-obligations.json"]);
@@ -1389,10 +1480,7 @@ async function main() {
       displayRoute,
       diagnosticPath: diagnosticsDir,
     };
-    privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(report, null, 2) + "\n");
-    console.log("PASS isolated remote server + real Box flow (deterministic model fixture).");
-    console.log("Tested Docker host architecture: " + os.arch() + "; pinned Box image: " + imagePlatform + ".");
-    console.log("Private diagnostics: " + diagnosticsDir);
+    completedReport = report;
   } catch (error) {
     mainFailure = error;
   } finally {
@@ -1412,8 +1500,25 @@ async function main() {
         "-f", path.join(repository, "runtime/compose.yaml"), "down", "--remove-orphans",
       ];
       const cleanupEnv = testComposeEnv();
+      let projectVerifiedStopped = false;
       if (serverStartAttempted && (releaseManagerMode || process.platform === "linux")) {
-        try { await invoke("prepare-release-state"); } catch (error) { cleanupFailure = cleanupFailure || error; }
+        try {
+          await invoke("prepare-release-state");
+          projectVerifiedStopped = true;
+        } catch (error) { cleanupFailure = cleanupFailure || error; }
+      }
+      if (projectVerifiedStopped) {
+        try {
+          await clearPrivateSpeechModelCaches({
+            composeFile: path.join(repository, "runtime/compose.yaml"),
+            envFile,
+            projectName,
+            stateDir,
+            runRoot,
+            composeEnv: cleanupEnv,
+            logFile: commandLog("speech-model-cache-cleanup"),
+          });
+        } catch (error) { cleanupFailure = cleanupFailure || error; }
       }
       try {
         const down = await runProcess("docker", composeArgs, cleanupEnv, commandLog("compose-down"));
@@ -1429,7 +1534,7 @@ async function main() {
       }
     }
     if (mainFailure || cleanupFailure) {
-      privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(failureReport({
+      writeFailureReportFile({
         diagnosticsDir,
         stateDir,
         stage: testStage,
@@ -1438,7 +1543,7 @@ async function main() {
         displayRoute,
         fixture,
         releaseManager: releaseUpdate,
-      }), null, 2) + "\n");
+      });
     }
     if (mainFailure) {
       privateFile(path.join(diagnosticsDir, "failure.txt"), String(mainFailure.stack || mainFailure));
@@ -1446,8 +1551,29 @@ async function main() {
       throw new Error(String(mainFailure.message || mainFailure) + (cleanupFailure ? "; cleanup also failed: " + cleanupFailure.message : "") + "; private diagnostics: " + diagnosticsDir);
     }
     if (cleanupFailure) throw new Error("Isolated server cleanup failed: " + cleanupFailure.message + "; state and private diagnostics retained at " + runRoot);
-    await fsp.rm(stateDir, { recursive: true, force: true });
-    if (releaseManagerMode) await fsp.rm(releaseHome, { recursive: true, force: true });
+    try {
+      await fsp.rm(stateDir, { recursive: true, force: true });
+      if (releaseManagerMode) await fsp.rm(releaseHome, { recursive: true, force: true });
+    } catch (error) {
+      cleanupFailure = error;
+      privateFile(path.join(diagnosticsDir, "cleanup-failure.txt"), String(error.stack || error));
+      writeFailureReportFile({
+        diagnosticsDir,
+        stateDir,
+        stage: "test state cleanup",
+        error: null,
+        cleanupError: cleanupFailure,
+        displayRoute,
+        fixture,
+        releaseManager: releaseUpdate,
+      });
+      throw new Error("Isolated server cleanup failed: " + cleanupFailure.message + "; private diagnostics: " + diagnosticsDir);
+    }
+    assert.ok(completedReport, "a successful Box report must be available after cleanup");
+    privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(completedReport, null, 2) + "\n");
+    console.log("PASS isolated remote server + real Box flow (deterministic model fixture).");
+    console.log("Tested Docker host architecture: " + os.arch() + "; pinned Box image: " + completedReport.boxImagePlatform + ".");
+    console.log("Private diagnostics: " + diagnosticsDir);
   }
 }
 
@@ -1458,4 +1584,14 @@ if (require.main === module) {
   });
 }
 
-module.exports = { assignmentInspectorScript, inspectBoxVncRoute, verifyBoxVncRoute };
+module.exports = {
+  assignmentInspectorScript,
+  assertTestProjectStopped,
+  clearPrivateSpeechModelCaches,
+  inspectBoxVncRoute,
+  modelCacheCleanupArgs,
+  modelCacheCleanupScript,
+  privateModelCacheRoots,
+  verifyBoxVncRoute,
+  writeFailureReportFile,
+};

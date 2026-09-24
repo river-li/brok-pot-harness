@@ -20,6 +20,32 @@ artifact attestations bind each candidate archive to its source revision and
 the trusted candidate workflow. See
 [server installation, update, rollback, and recovery](SERVER-INSTALL.md).
 
+## Candidate and maintenance gates
+
+The current candidate workflow builds only the Linux/amd64 server and macOS
+arm64 client pair. Each patch or hotfix must be a reviewed PR against current
+`main`, add a regression check for the reported defect, and pass
+`npm run ci:pre-pr` plus the required docs checks. That gate builds the local profile,
+runs offline contracts and the runtime build tests, checks syntax, and audits
+documentation. The runtime build tests verify `local` and `original` profile
+selection and preservation using reconstruction fixtures; they do not claim
+original-runtime integration coverage. The release packager then reconstructs
+a fresh local-profile build from the candidate commit. The candidate workflow
+must also pass the server's source-free install
+and real-Box fixture acceptance, the arm64 client package verification, and
+the dependency audit.
+
+Promotion is a manual workflow on `main` and publishes an immutable preview
+pre-release from the exact successful candidate run, attempt, source SHA, and
+attested artifact bytes. Before dispatch, review both artifacts, their hashes
+and attestations, the acceptance report, release notices, and state-format
+compatibility. Repeat the same gates for hotfixes; do not bypass the candidate
+workflow or reuse an existing tag. Stable release publishing and stable
+hotfixes are not supported by the current workflow: it accepts preview
+versions and always publishes as a pre-release. A stable release needs a
+separately reviewed policy and promotion path, plus explicit review of
+distribution notices and any state migration.
+
 ## Known limits
 
 - The server needs an operator configured Responses-compatible provider; the

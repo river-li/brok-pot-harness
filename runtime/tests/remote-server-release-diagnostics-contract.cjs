@@ -6,7 +6,16 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 const test = require("node:test");
-const { assignmentInspectorScript, verifyBoxVncRoute } = require("./remote-server-live.cjs");
+const serverRuntime = require("../server.cjs");
+const {
+  assertTestProjectStopped,
+  assignmentInspectorScript,
+  modelCacheCleanupArgs,
+  modelCacheCleanupScript,
+  privateModelCacheRoots,
+  verifyBoxVncRoute,
+  writeFailureReportFile,
+} = require("./remote-server-live.cjs");
 
 test("display route validation accepts the configured primary and fork tunnels", () => {
   assert.deepEqual(verifyBoxVncRoute("http://127.0.0.1:33251/vnc.html", {
@@ -63,6 +72,44 @@ test("bounded window-assignment inspector outputs selected indexes without owner
   assert.equal(malformed.stderr.trim(), "Could not read persisted Box window assignments.");
 });
 
+test("speech cache cleanup is limited to private state and the stopped speech service", (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-speech-cache-cleanup-contract-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const runRoot = path.join(root, "remote-server-test");
+  const stateDir = path.join(runRoot, "server-state");
+  const modelsDir = path.join(stateDir, "models");
+  fs.mkdirSync(path.join(modelsDir, "whisper"), { recursive: true });
+  fs.mkdirSync(path.join(modelsDir, "kokoro"));
+
+  assert.deepEqual(privateModelCacheRoots(stateDir, runRoot), [
+    path.join(modelsDir, "whisper"),
+    path.join(modelsDir, "kokoro"),
+  ]);
+  assert.throws(() => privateModelCacheRoots(path.join(root, "other-state"), runRoot), /outside this test's private state/);
+
+  const args = modelCacheCleanupArgs({
+    composeFile: path.join(root, "runtime/compose.yaml"),
+    envFile: path.join(stateDir, "server.env"),
+    projectName: "gbh-remote-test-contract",
+  });
+  assert.deepEqual(args.slice(7, 15), [
+    "run", "--rm", "--no-deps", "--user", "0:0", "--entrypoint", "python", "speech",
+  ]);
+  assert.match(args[16], /Path\('\/models'\), Path\('\/tts-models'\)/);
+  assert.match(args[16], /not entry\.is_symlink\(\)/);
+
+  const composeEnv = {
+    GBH_SERVER_STATE_DIR: stateDir,
+    GBH_SERVER_ENV_FILE: path.join(stateDir, "server.env"),
+    GBH_SERVER_PROJECT: "gbh-remote-test-contract",
+  };
+  const executeWithState = (state) => (command, argv) => argv.includes("ps")
+    ? { status: 0, stdout: "abcdef123456\n" }
+    : { status: 0, stdout: state + "\n" };
+  assertTestProjectStopped(serverRuntime, composeEnv, executeWithState("false"));
+  assert.throws(() => assertTestProjectStopped(serverRuntime, composeEnv, executeWithState("true")), /Stop every server service/);
+});
+
 test("failed live acceptance writes a bounded diagnostic report without starting Docker", (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-release-diagnostic-contract-"));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
@@ -73,6 +120,7 @@ test("failed live acceptance writes a bounded diagnostic report without starting
     env: { ...process.env, GBH_REMOTE_TEST_OUTPUT: root },
   });
   assert.equal(result.status, 1, result.stderr);
+  assert.ok(!result.stdout.includes("PASS isolated remote server"), "a failed test must not print a success marker");
   const run = fs.readdirSync(root).find((name) => name.startsWith("remote-server-"));
   assert.ok(run, "failure-report run directory should remain available for diagnosis");
   const reportPath = path.join(root, run, "diagnostics", "report.json");
@@ -85,4 +133,26 @@ test("failed live acceptance writes a bounded diagnostic report without starting
   assert.equal(report.cleanupFailure, null);
   assert.deepEqual(report.cleanupCommands, []);
   assert.equal(report.fixture, "deterministic Responses API fixture; no external inference");
+});
+
+test("a state-cleanup error is written as a failed acceptance report", (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-release-cleanup-report-contract-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const diagnosticsDir = path.join(root, "diagnostics");
+  fs.mkdirSync(diagnosticsDir);
+  const report = writeFailureReportFile({
+    diagnosticsDir,
+    stateDir: path.join(root, "server-state"),
+    stage: "test state cleanup",
+    error: null,
+    cleanupError: new Error("Intentional state removal failure fixture."),
+    displayRoute: null,
+    fixture: { observations: { modelRequests: 0, classifierRequests: 0, authorizedRequests: 0, fixtureErrors: [] } },
+    releaseManager: null,
+  });
+  const saved = JSON.parse(fs.readFileSync(path.join(diagnosticsDir, "report.json"), "utf8"));
+  assert.equal(report.result, "failed");
+  assert.equal(saved.result, "failed");
+  assert.equal(saved.stage, "test state cleanup");
+  assert.equal(saved.cleanupFailure.message, "Intentional state removal failure fixture.");
 });
