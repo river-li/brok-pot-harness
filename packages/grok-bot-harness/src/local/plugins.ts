@@ -17,6 +17,7 @@ import {
   localPluginId,
   localPluginServerId,
   pluginBundlePath,
+  preserveEditedUninstalledSnapshot,
   removeLocalPluginPointer,
   snapshotLocalPlugin,
   writeAtomicJson,
@@ -312,6 +313,17 @@ export function createLocalPluginStore(root: string, ports: Ports) {
               baselineFiles: installed.baselineFiles ?? {},
               oldSourceFiles: installed.marketplace.installedSourceFiles,
               newSourceFiles: staged.provenance.installedSourceFiles,
+            });
+          }
+          // An uninstalled starter may have a user-edited snapshot at the
+          // pinned digest path. Preserve those bytes before installing the
+          // clean source again; active installations never take this path.
+          if (!installed) {
+            const digest = hashLocalPluginDirectory(stage).digest;
+            preserveEditedUninstalledSnapshot(root, {
+              version: 1,
+              slug: source.slug,
+              digest,
             });
           }
           const snapshot = snapshotLocalPlugin(root, stage, source.slug);

@@ -41,7 +41,7 @@ Plugin installs and connector credentials live in the Host's shared Plugins sett
 
 An update keeps local edits to paths whose upstream contents have not changed. If the same file was edited locally and changed at the new source revision, GBH reports the conflicting path and stops the update so you can resolve it. The detail page lists detected local edits.
 
-Uninstalling a marketplace plugin removes its installed Skills and MCP configuration from the Host's plugin settings. Existing Bot profiles and workspace files remain; Bots that depend on the removed plugin need it installed and configured again before they can use those capabilities.
+Uninstalling a marketplace plugin removes its installed Skills and MCP configuration from the Host's plugin settings. Existing Bot profiles and workspace files remain; Bots that depend on the removed plugin need it installed and configured again before they can use those capabilities. If an uninstalled starter's snapshot was edited locally, adding the same pinned starter again saves that old snapshot under its plugin directory in a `.uninstalled-edits-*` recovery folder and installs fresh pinned content. This preserves the old edits without presenting them as part of the clean reinstallation.
 
 Firecrawl's pinned source contains an original `skill-gen` command template. GBH retains it as archived source material; it is unsupported as a runnable command and is not executed. The starter also does not install the upstream Firecrawl CLI fallback. No routines are included in either pinned starter. See [Extensions](Extensions.md) for the existing manual plugin-directory import flow, which remains supported.
 

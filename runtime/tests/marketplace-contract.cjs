@@ -7,7 +7,7 @@ const { createHash } = require("node:crypto");
 const { MARKETPLACE_SOURCES } = require("../../dist/local/marketplace.js");
 const { createLocalBotRecipeStore } = require("../../dist/local/bot-recipes.js");
 const { createLocalPluginStore } = require("../../dist/local/plugins.js");
-const { localPluginId } = require("../../dist/local/plugin-files.js");
+const { hashLocalPluginDirectory, localPluginId } = require("../../dist/local/plugin-files.js");
 
 function githubFixture(source) {
   const files = new Map();
@@ -151,6 +151,7 @@ test("pinned catalog installs full selected files, records provenance, and edits
   const skillPath = path.join(snapshot, "skills/firecrawl-search/SKILL.md");
   fs.appendFileSync(skillPath, "\nlocal operator note\n");
   const edited = fs.readFileSync(skillPath, "utf8");
+  const editedFiles = hashLocalPluginDirectory(snapshot).files;
   const beforeDigest = installed.digest;
   const offlineRequests = requests;
   global.fetch = async () => { requests++; throw Error("source unavailable"); };
@@ -194,6 +195,30 @@ test("pinned catalog installs full selected files, records provenance, and edits
       .marketplaceMetadata.installationState,
     "not_installed",
   );
+  global.fetch = (...args) => { requests++; return fetcher(...args); };
+  await recovered.installPlugin({
+    pluginId,
+    variables: {
+      FIRECRAWL_MCP_URL: "http://127.0.0.1:49127/firecrawl/mcp",
+      FIRECRAWL_API_KEY: "fixture-secret-value",
+    },
+  });
+  const reinstalled = JSON.parse(fs.readFileSync(statePath, "utf8")).plugins[pluginId];
+  assert.equal(reinstalled.digest, beforeDigest, "reinstall uses the pinned source digest");
+  assert.ok(fs.existsSync(skillPath), "the clean pinned snapshot is installed again");
+  assert.notEqual(fs.readFileSync(skillPath, "utf8"), edited,
+    "old local edits must not be described as pristine source content");
+  assert.deepEqual((await recovered.catalog()).plugins.find((item) =>
+    item.pluginId === pluginId).marketplaceMetadata.modifiedPaths, []);
+  const recovery = fs.readdirSync(path.dirname(snapshot))
+    .filter((name) => name.startsWith(".uninstalled-edits-"));
+  assert.equal(recovery.length, 1);
+  const archivedSnapshot = path.join(path.dirname(snapshot), recovery[0], "snapshot");
+  assert.deepEqual(hashLocalPluginDirectory(archivedSnapshot).files, editedFiles,
+    "reinstall preserves the old snapshot's files and modes");
+  assert.equal(fs.readFileSync(path.join(archivedSnapshot,
+    "skills/firecrawl-search/SKILL.md"), "utf8"), edited,
+    "reinstall preserves every byte of the previous user-edited snapshot");
 });
 
 test("local recipe preview/import/update/remove is lossless, idempotent, and binds Bots across restart", async (t) => {

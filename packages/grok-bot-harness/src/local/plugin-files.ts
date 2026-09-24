@@ -15,6 +15,7 @@ import {
   copyFileSync,
   existsSync,
   lstatSync,
+  mkdtempSync,
   mkdirSync,
   readFileSync,
   readdirSync,
@@ -146,6 +147,20 @@ export function hashLocalPluginDirectory(directory: string): LocalPluginBundleHa
 
   visit(root, "", new Set());
   return { digest: hash.digest("hex"), files };
+}
+
+/** Keep an edited snapshot after uninstall, freeing its digest path for a clean reinstall. */
+export function preserveEditedUninstalledSnapshot(
+  dataRoot: string,
+  pointer: LocalPluginPointer,
+) {
+  const candidate = join(localPluginRoot(dataRoot), pointer.slug, pointer.digest);
+  if (!existsSync(candidate)) return null;
+  const snapshot = pluginBundlePath(dataRoot, pointer);
+  if (hashLocalPluginDirectory(snapshot).digest === pointer.digest) return null;
+  const recovery = mkdtempSync(join(dirname(snapshot), ".uninstalled-edits-"));
+  renameSync(snapshot, join(recovery, "snapshot"));
+  return recovery;
 }
 
 /** Store an immutable snapshot without changing the current catalog pointer. */
