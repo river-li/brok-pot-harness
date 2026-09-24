@@ -10,11 +10,13 @@ GitHub checks out the PR merge commit for build and test commands. The evidence 
 
 The workflow installs the root dependencies from package-lock.json, then uses the shared gate runner to select checks from the verified changed paths. Markdown-only changes run the recovery and documentation checks. Any source, test, package/configuration, workflow, or other non-Markdown change runs the local build, strict type check, recovery and runtime-build tests, JavaScript syntax check, documentation and scoped-guide audit, and all offline contract scripts. An empty manual dispatch selects the full suite. Every run checks whitespace against its verified source range.
 
+The separate invalidate-review-readiness.yml workflow clears review labels on PR head synchronization, base edits, and pushes to main. It checks out only trusted main-branch code and uses API calls with contents:read, pull-requests:read, and issues:write; it never checks out or executes the PR head. This workflow is a stale-label cleanup signal, not a required merge check. The maintenance readiness command independently verifies current head/base SHAs, current checks, formal review state, and the designated process verdict.
+
 The available commands are:
 
 1. npm run build -- --profile local
 2. npm run check:local
-3. npm run test:recovery, including the scoped-guide audit tests and CI event/base tests
+3. npm run test:recovery, including scoped-guide, CI event/base, and maintenance workflow behavior tests
 4. npm run test:runtime-build
 5. npm run check:syntax for maintained JavaScript and freshly built app outputs
 6. npm run docs:check for Wiki links and README-declared source-component AGENTS.md coverage
