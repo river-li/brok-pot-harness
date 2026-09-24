@@ -17,8 +17,21 @@ maintained Electron assets, and runtime tests. See the
   state profile. Keep generated state under its selected state directory,
   restrict token/env-file permissions, bind Gateway and display ports to
   loopback, and clean up only the project selected by its private config.
+  Box startup may change data/workspace ownership to its in-container user on
+  native Linux. Release checkpoints may reclaim only those two mounts through
+  the pinned app image after verifying every project container is stopped;
+  keep model caches outside the checkpoint and avoid changing unrelated owners.
   Server model keys are read from that server env or the invoking shell; do not
   place them in the remote desktop environment or logs.
+- `release.cjs` manages only the versioned self-hosted preview under its chosen
+  release home and state home. Keep the complete file/checksum inventory and
+  product `stateFormat` gate mandatory. Checkpoint every listed state entry's
+  recursive file hashes before replacing user state, and fail closed when a
+  lock owner is unreadable or unverifiable. Stale-lock removal is an explicit
+  operator recovery step; do not claim automatic recovery after process kill.
+  Preserve unique speech image names per release so rollback Compose files
+  continue to identify their own build. Document state roots outside the
+  checkpoint, including external symlink targets and Docker storage.
 - `desktop.cjs` validates the prepared desktop profile, keeps local/original
   data directories separate, injects local Gateway settings only for local,
   and removes `LITELLM_API_KEY` from the Electron environment. Preserve these

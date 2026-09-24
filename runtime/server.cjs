@@ -46,8 +46,14 @@ function serverConfig(env = process.env) {
   };
 }
 
-function ensureDir(directory, mode) {
+function ensureDir(directory, mode, { preserveForeignOwner = false } = {}) {
   fs.mkdirSync(directory, { recursive: true, mode });
+  const stat = fs.lstatSync(directory);
+  if (stat.isSymbolicLink() || !stat.isDirectory()) {
+    throw new Error(`Server state directory must be a real directory: ${directory}.`);
+  }
+  const uid = typeof process.getuid === "function" ? process.getuid() : null;
+  if (preserveForeignOwner && uid !== null && stat.uid !== uid) return;
   fs.chmodSync(directory, mode);
 }
 
@@ -94,12 +100,16 @@ function serverEnvTemplate() {
 
 function initialize(config) {
   ensureDir(config.stateDir, 0o700);
-  ensureDir(config.dataDir, 0o700);
+  // The Box startup script owns the mounted data tree as its `box` user on
+  // native Linux. Preserve that ownership while composing the server; the
+  // release manager reclaims it through the stopped app container before a
+  // host-side checkpoint.
+  ensureDir(config.dataDir, 0o700, { preserveForeignOwner: true });
   // Box tools run as a different UID inside the container. The parent state
   // directory remains private, so the workspace can be writable in the Box.
-  ensureDir(config.workspaceDir, 0o777);
-  ensureDir(path.join(config.modelsDir, "whisper"), 0o700);
-  ensureDir(path.join(config.modelsDir, "kokoro"), 0o700);
+  ensureDir(config.workspaceDir, 0o777, { preserveForeignOwner: true });
+  ensureDir(path.join(config.modelsDir, "whisper"), 0o700, { preserveForeignOwner: true });
+  ensureDir(path.join(config.modelsDir, "kokoro"), 0o700, { preserveForeignOwner: true });
   readOrCreateSecret(path.join(config.stateDir, "gateway-token"));
   readOrCreateSecret(path.join(config.stateDir, "search-secret"));
   if (!fs.existsSync(config.envFile)) {
@@ -140,8 +150,12 @@ function containerApiUrl(settings, { required = false } = {}) {
   return url.toString().replace(/\/$/, "");
 }
 
-function runtimeEnv(config, sourceEnv = process.env, settings = readSettings(config), { requireProvider = false } = {}) {
-  initialize(config);
+function runtimeEnv(config, sourceEnv = process.env, settings = readSettings(config), {
+  requireProvider = false,
+  initializeState = true,
+} = {}) {
+  if (initializeState) initialize(config);
+  else ensureDir(config.stateDir, 0o700);
   const nonemptyEnvironment = Object.fromEntries(
     Object.entries(sourceEnv).filter(([, value]) => value !== "" && value != null),
   );
@@ -206,6 +220,51 @@ function runCompose(config, action, env) {
   });
   if (result.error) console.error(`Docker Compose could not start: ${result.error.message}`);
   return result.status ?? 1;
+}
+
+function assertComposeProjectStopped(config, env = process.env, execute = spawnSync) {
+  const options = { cwd: root, env, encoding: "utf8" };
+  const listed = execute("docker", composeArgs(config, ["ps", "--all", "--quiet"]), options);
+  if (listed.error || listed.status !== 0) {
+    throw new Error("Could not verify that every server service is stopped; release state ownership was left unchanged.");
+  }
+  const ids = (listed.stdout || "").trim().split(/\s+/).filter(Boolean);
+  if (ids.some((id) => !/^[a-f0-9]{12,64}$/i.test(id))) {
+    throw new Error("Compose returned an unverifiable server container ID; release state ownership was left unchanged.");
+  }
+  if (ids.length === 0) return;
+
+  const inspected = execute("docker", ["inspect", "--format", "{{.State.Running}}", ...ids], options);
+  if (inspected.error || inspected.status !== 0) {
+    throw new Error("Could not verify server container state; release state ownership was left unchanged.");
+  }
+  const states = (inspected.stdout || "").trim().split(/\s+/).filter(Boolean);
+  if (states.length !== ids.length || states.some((state) => state !== "true" && state !== "false")) {
+    throw new Error("Docker returned incomplete server container state; release state ownership was left unchanged.");
+  }
+  if (states.includes("true")) {
+    throw new Error("Stop every server service before preparing release state ownership.");
+  }
+}
+
+function reclaimReleaseState(config, sourceEnv, settings) {
+  if (process.platform !== "linux") return 0;
+  if (typeof process.getuid !== "function" || typeof process.getgid !== "function") {
+    console.error("The release state owner cannot be determined on this platform.");
+    return 1;
+  }
+  const composeEnv = runtimeEnv(config, sourceEnv, settings, { initializeState: false });
+  try {
+    assertComposeProjectStopped(config, composeEnv);
+  } catch (error) {
+    console.error(error.message);
+    return 1;
+  }
+  const owner = `${process.getuid()}:${process.getgid()}`;
+  return runCompose(config, [
+    "run", "--rm", "--no-deps", "--user", "0:0", "--entrypoint", "/bin/chown", "app",
+    "-hR", owner, "/home/box/sand-data", "/workspace",
+  ], composeEnv);
 }
 
 function buildLocalHost(env) {
@@ -313,7 +372,7 @@ async function main(argv = process.argv, env = process.env) {
     return 0;
   }
 
-  const settings = readSettings(config, { required: ["start", "update", "rotate-token", "provider-smoke"].includes(command) });
+  const settings = readSettings(config, { required: ["start", "update", "rotate-token", "provider-smoke", "prepare-release-state"].includes(command) });
   if (command === "start" || command === "update") {
     const composeEnv = runtimeEnv(config, env, settings, { requireProvider: true });
     if (command === "start") assertLocalBuild();
@@ -335,13 +394,16 @@ async function main(argv = process.argv, env = process.env) {
     return 0;
   }
   if (command === "status") {
-    return runCompose(config, ["ps"], runtimeEnv(config, env, settings));
+    return runCompose(config, ["ps"], runtimeEnv(config, env, settings, { initializeState: false }));
   }
   if (command === "logs") {
-    return runCompose(config, ["logs", "--tail", "80"], runtimeEnv(config, env, settings));
+    return runCompose(config, ["logs", "--tail", "80"], runtimeEnv(config, env, settings, { initializeState: false }));
   }
   if (command === "stop") {
-    return runCompose(config, ["stop", "-t", "180"], runtimeEnv(config, env, settings));
+    return runCompose(config, ["stop", "-t", "180"], runtimeEnv(config, env, settings, { initializeState: false }));
+  }
+  if (command === "prepare-release-state") {
+    return reclaimReleaseState(config, env, settings);
   }
   if (command === "rotate-token") {
     assertLocalBuild();
@@ -364,7 +426,9 @@ if (require.main === module) {
 
 module.exports = {
   containerApiUrl,
+  assertComposeProjectStopped,
   initialize,
+  reclaimReleaseState,
   readOrCreateSecret,
   runProviderSmoke,
   runtimeEnv,

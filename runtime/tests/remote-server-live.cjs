@@ -8,12 +8,13 @@ const fsp = require("node:fs/promises");
 const http = require("node:http");
 const os = require("node:os");
 const path = require("node:path");
-const { randomUUID } = require("node:crypto");
+const { createHash, randomUUID } = require("node:crypto");
 const { spawn } = require("node:child_process");
 const { setTimeout: delay } = require("node:timers/promises");
 const { probeGateway } = require("../remote-client-connection.cjs");
 
-const repository = path.resolve(__dirname, "../..");
+const repository = path.resolve(process.env.GBH_REMOTE_TEST_ROOT || path.resolve(__dirname, "../.."));
+const testOutput = path.resolve(process.env.GBH_REMOTE_TEST_OUTPUT || path.join(repository, ".runtime/tests"));
 const node = process.execPath;
 const providerKey = "gbh-private-integration-fixture-key";
 const pinnedImage = "public.ecr.aws/k0i0n2g5/cursorenvironments/universal@sha256:322c3a9031d61e210a05400dd74c82bbb1fdb42db315a8cf5ab39368c2f0c1c8";
@@ -22,6 +23,222 @@ function privateFile(file, value) {
   fs.mkdirSync(path.dirname(file), { recursive: true, mode: 0o700 });
   fs.writeFileSync(file, value, { mode: 0o600 });
   fs.chmodSync(file, 0o600);
+}
+
+function inspectBoxVncRoute(value) {
+  try {
+    const url = new URL(value);
+    const pathValue = url.searchParams.get("path");
+    const forkWindow = /^websockify\?token=(\d+)$/.exec(pathValue || "");
+    return {
+      protocol: url.protocol,
+      hostname: url.hostname,
+      port: url.port ? Number(url.port) : url.protocol === "https:" ? 443 : 80,
+      pathname: url.pathname,
+      hasQuery: url.search.length > 0,
+      queryParameterCount: [...url.searchParams.keys()].length,
+      hasFragment: url.hash.length > 0,
+      forkWindowIndex: forkWindow ? Number(forkWindow[1]) : null,
+    };
+  } catch {
+    return { invalidUrl: true };
+  }
+}
+
+function verifyBoxVncRoute(value, { primaryPort, forkPort, expectedWindowIndex }) {
+  const route = inspectBoxVncRoute(value);
+  assert.ok(Number.isInteger(expectedWindowIndex) && expectedWindowIndex >= 1,
+    "server Box must have a persisted numeric window assignment");
+  assert.equal(route.invalidUrl, undefined, "running Box must report an absolute display URL");
+  assert.equal(route.protocol, "http:", "server Box display URL must use the tunneled HTTP endpoint");
+  assert.equal(route.hostname, "127.0.0.1", "server Box display URL must stay on the loopback tunnel");
+  assert.equal(route.pathname, "/vnc.html", "server Box display URL must use the noVNC page");
+  if (expectedWindowIndex === 1) {
+    assert.equal(route.port, primaryPort, "primary assignment must use the configured primary tunnel port");
+    assert.equal(route.hasQuery, false, "primary display URL must not carry a fork-window token");
+    assert.equal(route.hasFragment, false, "primary display URL must not carry a fragment");
+    return { kind: "primary", port: route.port, pathname: route.pathname, windowIndex: 1 };
+  }
+  assert.equal(route.port, forkPort, "fork display URL must use the configured control tunnel port");
+  assert.equal(route.queryParameterCount, 1, "fork display URL must have only its window route parameter");
+  assert.equal(route.hasFragment, false, "fork display URL must not carry a fragment");
+  assert.equal(route.forkWindowIndex, expectedWindowIndex,
+    "fork display URL token must match that Bot's persisted non-primary window assignment");
+  return { kind: "fork", port: route.port, pathname: route.pathname, windowIndex: route.forkWindowIndex };
+}
+
+function assignmentInspectorScript() {
+  return `
+    const fs = require("node:fs");
+    const { setTimeout: delay } = require("node:timers/promises");
+    const [file, ...agentIds] = process.argv.slice(1);
+    (async () => {
+      const deadline = Date.now() + 10000;
+      let assignments;
+      while (Date.now() < deadline) {
+        try {
+          const saved = JSON.parse(fs.readFileSync(file, "utf8"));
+          assignments = Object.fromEntries(agentIds.map((id) => [id, saved.assignments?.[id] ?? null]));
+          if (agentIds.every((id) => Number.isInteger(assignments[id]))) break;
+        } catch (error) {
+          if (error.code !== "ENOENT") {
+            console.error("Could not read persisted Box window assignments.");
+            process.exitCode = 1;
+            return;
+          }
+        }
+        await delay(100);
+      }
+      process.stdout.write(JSON.stringify(assignments ?? {}));
+      if (!assignments || !agentIds.every((id) => Number.isInteger(assignments[id]))) process.exitCode = 1;
+    })().catch((error) => {
+      console.error("Could not inspect persisted Box window assignments.");
+      process.exitCode = 1;
+    });
+  `;
+}
+
+function modelCacheCleanupScript() {
+  return [
+    "import shutil",
+    "from pathlib import Path",
+    "for model_root in (Path('/models'), Path('/tts-models')):",
+    "    for entry in model_root.iterdir():",
+    "        if entry.is_dir() and not entry.is_symlink():",
+    "            shutil.rmtree(entry)",
+    "        else:",
+    "            entry.unlink()",
+  ].join("\n");
+}
+
+function privateModelCacheRoots(stateDir, runRoot) {
+  const expectedStateDir = path.join(path.resolve(runRoot), "server-state");
+  if (path.resolve(stateDir) !== expectedStateDir) {
+    throw new Error("Refusing to clean model caches outside this test's private state directory.");
+  }
+  for (const directory of [runRoot, stateDir]) {
+    const stat = fs.lstatSync(directory);
+    if (stat.isSymbolicLink() || !stat.isDirectory()) {
+      throw new Error("Refusing to clean model caches through a non-directory test path.");
+    }
+  }
+
+  const modelsDir = path.join(stateDir, "models");
+  let modelsStat;
+  try {
+    modelsStat = fs.lstatSync(modelsDir);
+  } catch (error) {
+    if (error.code === "ENOENT") return [];
+    throw error;
+  }
+  if (modelsStat.isSymbolicLink() || !modelsStat.isDirectory()) {
+    throw new Error("Refusing to clean model caches through an unsafe models path.");
+  }
+
+  return ["whisper", "kokoro"].flatMap((name) => {
+    const directory = path.join(modelsDir, name);
+    try {
+      const stat = fs.lstatSync(directory);
+      if (stat.isSymbolicLink() || !stat.isDirectory()) {
+        throw new Error("Refusing to clean model caches through an unsafe service path.");
+      }
+      return [directory];
+    } catch (error) {
+      if (error.code === "ENOENT") return [];
+      throw error;
+    }
+  });
+}
+
+function modelCacheCleanupArgs({ composeFile, envFile, projectName }) {
+  return [
+    "compose", "--env-file", envFile, "--project-name", projectName,
+    "-f", composeFile,
+    "run", "--rm", "--no-deps", "--user", "0:0",
+    "--entrypoint", "python", "speech", "-c", modelCacheCleanupScript(),
+  ];
+}
+
+function assertTestProjectStopped(serverRuntime, composeEnv, execute) {
+  serverRuntime.assertComposeProjectStopped(
+    serverRuntime.serverConfig(composeEnv),
+    composeEnv,
+    execute,
+  );
+}
+
+async function clearPrivateSpeechModelCaches({ composeFile, envFile, projectName, stateDir, runRoot, composeEnv, logFile }) {
+  const modelRoots = privateModelCacheRoots(stateDir, runRoot);
+  if (modelRoots.length === 0) return;
+  const serverRuntime = require(path.join(repository, "runtime/server.cjs"));
+  assertTestProjectStopped(serverRuntime, composeEnv);
+  const cleanupEnv = { ...composeEnv, GROKBOT_MODELS_DIR: path.join(stateDir, "models") };
+  const result = await runProcess("docker", modelCacheCleanupArgs({ composeFile, envFile, projectName }), cleanupEnv, logFile);
+  if (result.code !== 0) {
+    throw new Error("Could not remove this test's private speech model caches; see private diagnostics.");
+  }
+}
+
+function sanitizeCommandLog(file, stateDir) {
+  if (!fs.existsSync(file)) return null;
+  let contents = fs.readFileSync(file, "utf8");
+  const secrets = [providerKey];
+  for (const name of ["gateway-token", "search-secret"]) {
+    const secretPath = path.join(stateDir, name);
+    if (fs.existsSync(secretPath)) secrets.push(fs.readFileSync(secretPath, "utf8").trim());
+  }
+  for (const secret of secrets) {
+    if (secret) contents = contents.split(secret).join("[redacted]");
+  }
+  contents = contents
+    .replace(/\bBearer\s+[^\s"']+/gi, "Bearer [redacted]")
+    .replace(/\b(LITELLM_API_KEY|GROKBOT_GATEWAY_TOKEN|GROKBOT_SEARCH_SECRET)=\S+/gi, "$1=[redacted]")
+    .replace(/https?:\/\/[^\s"'<>]+/gi, "[URL redacted]");
+  return contents.split(/\r?\n/).slice(-60).join("\n").slice(-4096);
+}
+
+function failureReport({ diagnosticsDir, stateDir, stage, error, cleanupError, displayRoute, fixture, releaseManager }) {
+  const cleanupCommands = fs.readdirSync(diagnosticsDir)
+    .filter((name) => /-(?:stop|compose-down|prepare-release-state|speech-model-cache-cleanup|update|rollback)\.log$/.test(name))
+    .sort()
+    .map((name) => ({ name, outputTail: sanitizeCommandLog(path.join(diagnosticsDir, name), stateDir) }));
+  const safeError = (value) => value == null ? null : {
+    name: String(value.name || "Error").slice(0, 120),
+    message: String(value.message || value)
+      .replaceAll(providerKey, "[redacted]")
+      .replace(/\bBearer\s+[^\s"']+/gi, "Bearer [redacted]")
+      .replace(/https?:\/\/[^\s"'<>]+/gi, "[URL redacted]")
+      .slice(0, 1200),
+  };
+  let dockerEnginePlatform = "unavailable";
+  try {
+    dockerEnginePlatform = require("node:child_process")
+      .execFileSync("docker", ["info", "--format", "{{.OSType}}/{{.Architecture}}"], { encoding: "utf8", timeout: 3000 }).trim();
+  } catch {}
+  return {
+    result: "failed",
+    fixture: "deterministic Responses API fixture; no external inference",
+    testRunnerPlatform: process.platform + "/" + os.arch(),
+    dockerEnginePlatform,
+    stage,
+    releaseManager,
+    failure: safeError(error),
+    cleanupFailure: safeError(cleanupError),
+    displayRoute,
+    cleanupCommands,
+    observationCounts: {
+      modelRequests: fixture.observations.modelRequests,
+      classifierRequests: fixture.observations.classifierRequests,
+      authorizedRequests: fixture.observations.authorizedRequests,
+      fixtureErrors: fixture.observations.fixtureErrors,
+    },
+  };
+}
+
+function writeFailureReportFile(options) {
+  const report = failureReport(options);
+  privateFile(path.join(options.diagnosticsDir, "report.json"), JSON.stringify(report, null, 2) + "\n");
+  return report;
 }
 
 function runProcess(command, args, env, logFile) {
@@ -467,6 +684,43 @@ function attachmentEntry(transcript) {
   return transcript.find((entry) => entry.kind === "send-message" && entry.message?.type === "attachment");
 }
 
+function makeSyntheticReleaseVersion(source, destination) {
+  fs.cpSync(source, destination, { recursive: true, dereference: false, verbatimSymlinks: true, errorOnExist: true });
+  const manifestPath = path.join(destination, "release-manifest.json");
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+  const version = `${manifest.releaseVersion}.test.1`;
+  const previousImage = manifest.speechImage;
+  manifest.releaseVersion = version;
+  manifest.speechImage = `gbh-server-speech:${version}-${manifest.sourceCommit.slice(0, 12)}`;
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+  const composePath = path.join(destination, "runtime/compose.yaml");
+  const compose = fs.readFileSync(composePath, "utf8");
+  if (compose.split(`image: ${previousImage}`).length !== 2) {
+    throw new Error("Synthetic release test could not find its original speech image identity.");
+  }
+  fs.writeFileSync(composePath, compose.replace(`image: ${previousImage}`, `image: ${manifest.speechImage}`));
+
+  const files = [];
+  function visit(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      const stat = fs.lstatSync(file);
+      if (stat.isSymbolicLink() || (!stat.isFile() && !stat.isDirectory())) {
+        throw new Error("Synthetic release fixture must contain only regular files and directories.");
+      }
+      if (stat.isDirectory()) visit(file);
+      else if (path.relative(destination, file) !== "SHA256SUMS") {
+        const relative = path.relative(destination, file).split(path.sep).join("/");
+        const hash = createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+        files.push(`${hash}  ${relative}`);
+      }
+    }
+  }
+  visit(destination);
+  fs.writeFileSync(path.join(destination, "SHA256SUMS"), files.sort().join("\n") + "\n");
+  return { root: destination, version, speechImage: manifest.speechImage };
+}
+
 async function downloadAttachment(base, token, agentId, attachment, expectedText) {
   assert.ok(attachment && typeof attachment.message.url === "string", "Agent transcript must contain a Box file attachment");
   const filePath = new URL(attachment.message.url).pathname;
@@ -479,8 +733,9 @@ async function downloadAttachment(base, token, agentId, attachment, expectedText
 
 async function main() {
   const id = randomUUID().replace(/-/g, "").slice(0, 10);
-  const runRoot = path.join(repository, ".runtime/tests", "remote-server-" + id);
+  const runRoot = path.join(testOutput, "remote-server-" + id);
   const stateDir = path.join(runRoot, "server-state");
+  const releaseHome = path.join(runRoot, "release-home");
   const diagnosticsDir = path.join(runRoot, "diagnostics");
   fs.mkdirSync(diagnosticsDir, { recursive: true, mode: 0o700 });
   const envFile = path.join(stateDir, "server.env");
@@ -501,21 +756,94 @@ async function main() {
     GROKBOT_CONTAINER_API_URL: "http://host.docker.internal:" + fixturePort + "/v1",
     LITELLM_API_KEY: providerKey,
   };
+  // A source-free archive has a release manifest at its root. Route it through
+  // the installed release manager automatically so this smoke can never fall
+  // back to the development server's source-build update command.
+  const releaseManagerMode = process.env.GBH_REMOTE_TEST_RELEASE_MANAGER === "1" ||
+    fs.existsSync(path.join(repository, "release-manifest.json"));
+  let releaseVersion = "";
+  if (releaseManagerMode) {
+    const verified = require(path.join(repository, "runtime/release.cjs")).verifyPackage(repository);
+    assert.equal(verified.manifest.sourceTreeClean, true, "live release smoke requires a clean-source candidate archive");
+    releaseVersion = verified.manifest.releaseVersion;
+    cliEnv.GBH_RELEASE_HOME = releaseHome;
+  }
   const fixture = createResponsesFixture();
   let serverStarted = false;
+  let serverStartAttempted = false;
   let currentToken = "";
   let mainFailure = null;
+  let testStage = "fixture setup";
+  let displayRoute = null;
+  let releaseUpdate = null;
+  let completedReport = null;
   let eventStream = null;
   let commandNumber = 0;
   const observedDesktopReview = [];
   const commandLog = (name) => path.join(diagnosticsDir, `${String(++commandNumber).padStart(2, "0")}-${name}.log`);
 
-  const invoke = async (name) => {
-    const result = await runProcess(node, [path.join(repository, "runtime/server.cjs"), name], cliEnv, commandLog(name));
+  const invoke = async (name, args = []) => {
+    const managed = releaseManagerMode && name !== "rotate-token";
+    const command = managed ? path.join(releaseHome, "bin/gbh-server") : node;
+    const commandArgs = managed ? [name, ...args] : [path.join(repository, "runtime/server.cjs"), name, ...args];
+    const result = await runProcess(command, commandArgs, cliEnv, commandLog(name));
     if (result.code !== 0) throw new Error("Server command " + name + " failed with exit " + result.code + "; see private diagnostics at " + diagnosticsDir);
     return result.output;
   };
   const readToken = () => fs.readFileSync(path.join(stateDir, "gateway-token"), "utf8").trim();
+  const testComposeEnv = () => ({
+    ...cliEnv,
+    GROKBOT_GATEWAY_TOKEN: readToken(),
+    GROKBOT_SEARCH_SECRET: fs.readFileSync(path.join(stateDir, "search-secret"), "utf8").trim(),
+    GROKBOT_DATA_DIR: path.join(stateDir, "data"),
+    GROKBOT_WORKSPACE_DIR: path.join(stateDir, "workspace"),
+    GROKBOT_MODELS_DIR: path.join(stateDir, "models"),
+  });
+  const readBoxStateJson = async (name) => {
+    const allowed = new Set(["host-interrupted-user-turns.json", "ack-obligations.json"]);
+    assert.ok(allowed.has(name), "test may inspect only the two recovery journals");
+    const script = `
+      const fs = require("node:fs");
+      const file = process.argv[1];
+      try {
+        process.stdout.write(fs.readFileSync(file, "utf8"));
+      } catch (error) {
+        if (error.code === "ENOENT") process.stdout.write("null");
+        else { console.error(error.message); process.exitCode = 1; }
+      }
+    `;
+    const args = [
+      "compose", "--env-file", envFile, "--project-name", projectName,
+      "-f", path.join(repository, "runtime/compose.yaml"),
+      "exec", "-T", "--user", "0:0", "app", "/exec-daemon/node", "-e", script, "--",
+      "/home/box/sand-data/" + name,
+    ];
+    const result = await runProcess("docker", args, testComposeEnv(), commandLog("inspect-" + name));
+    assert.equal(result.code, 0, "bounded Box container journal inspection must succeed");
+    return JSON.parse(result.output.trim() || "null");
+  };
+  const readAssignedWindowIndexes = async (agentIds) => {
+    const args = [
+      "compose", "--env-file", envFile, "--project-name", projectName,
+      "-f", path.join(repository, "runtime/compose.yaml"),
+      "exec", "-T", "--user", "0:0", "app", "/exec-daemon/node", "-e", assignmentInspectorScript(), "--",
+      "/home/box/.sand-window-assignments.json",
+      ...agentIds,
+    ];
+    const result = await runProcess("docker", args, testComposeEnv(), commandLog("inspect-window-assignments"));
+    assert.equal(result.code, 0, "bounded selected window-assignment inspection must succeed");
+    return JSON.parse(result.output.trim());
+  };
+  const readReclaimedStateJson = (name) => {
+    assert.ok(new Set(["host-interrupted-user-turns.json", "ack-obligations.json"]).has(name),
+      "test may inspect only the two recovery journals");
+    try {
+      return JSON.parse(fs.readFileSync(path.join(stateDir, "data", name), "utf8"));
+    } catch (error) {
+      if (error.code === "ENOENT") return null;
+      throw error;
+    }
+  };
   const waitReady = async () => waitFor(async () => {
     const response = await fetch(gatewayUrl + "/health", { signal: AbortSignal.timeout(1500) });
     return response.ok;
@@ -526,8 +854,21 @@ async function main() {
       fixture.server.once("error", reject);
       fixture.server.listen(fixturePort, "0.0.0.0", resolve);
     });
-    const install = await runProcess(node, [path.join(repository, "runtime/server.cjs"), "install"], cliEnv, commandLog("install"));
-    assert.equal(install.code, 0, "private server install must succeed");
+    if (process.argv.includes("--test-failure-report")) {
+      testStage = "intentional failure-report contract";
+      throw new Error("Intentional diagnostic failure fixture.");
+    }
+    if (releaseManagerMode) {
+      testStage = "release archive installation";
+      const installEnv = { ...cliEnv, NODE: node };
+      const install = await runProcess(path.join(repository, "install.sh"), [], installEnv, commandLog("archive-install"));
+      assert.equal(install.code, 0, "actual release archive install script must succeed");
+      const installedVersion = await invoke("version");
+      assert.ok(installedVersion.includes(releaseVersion), "installed launcher must report the artifact's own product version");
+    } else {
+      const install = await runProcess(node, [path.join(repository, "runtime/server.cjs"), "install"], cliEnv, commandLog("install"));
+      assert.equal(install.code, 0, "private server install must succeed");
+    }
     const uiReviewMode = process.env.GBH_REMOTE_TEST_UI_REVIEW === "1";
     if (uiReviewMode) privateFile(path.join(stateDir, "gateway-token"), "gbh-ui-fixture-not-a-real-secret-token\n");
     privateFile(envFile, [
@@ -540,8 +881,10 @@ async function main() {
       "",
     ].join("\n"));
 
-    await invoke("start");
+    testStage = "server start and readiness";
     serverStarted = true;
+    serverStartAttempted = true;
+    await invoke("start");
     await waitReady();
     currentToken = readToken();
 
@@ -572,6 +915,7 @@ async function main() {
     })).agent;
     const markerA = "remote-box-a-" + id;
     const markerB = "remote-box-b-" + id;
+    testStage = "concurrent Box tasks and display route";
     fixture.addTask(markerA);
     fixture.addTask(markerB);
     const nonceA = randomUUID();
@@ -601,9 +945,34 @@ async function main() {
     const downloadedA = await downloadAttachment(gatewayUrl, currentToken, agentA.id, attachmentA, markerA);
     const downloadedB = await downloadAttachment(gatewayUrl, currentToken, agentB.id, attachmentB, markerB);
     assert.notEqual(downloadedA, downloadedB, "each Bot attachment must stay scoped to its own data");
-    const boxStatus = await gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentA.id });
-    assert.equal(boxStatus.vncUrl, `http://127.0.0.1:${vncPort}/vnc.html`,
-      "server Box display URLs must resolve through the configured loopback SSH tunnel port");
+    const [boxStatusA, boxStatusB] = await Promise.all([
+      gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentA.id }),
+      gatewayCall(gatewayUrl, currentToken, "getForeverBoxStatus", { id: agentB.id }),
+    ]);
+    displayRoute = {
+      primaryPort: vncPort,
+      forkPort: vncControlPort,
+      agentA: { assignment: null, route: inspectBoxVncRoute(boxStatusA.vncUrl) },
+      agentB: { assignment: null, route: inspectBoxVncRoute(boxStatusB.vncUrl) },
+    };
+    const assignments = await readAssignedWindowIndexes([agentA.id, agentB.id]);
+    displayRoute.agentA.assignment = assignments[agentA.id];
+    displayRoute.agentB.assignment = assignments[agentB.id];
+    const routeA = verifyBoxVncRoute(boxStatusA.vncUrl, {
+      primaryPort: vncPort, forkPort: vncControlPort, expectedWindowIndex: assignments[agentA.id],
+    });
+    const routeB = verifyBoxVncRoute(boxStatusB.vncUrl, {
+      primaryPort: vncPort, forkPort: vncControlPort, expectedWindowIndex: assignments[agentB.id],
+    });
+    assert.ok(assignments[agentA.id] >= 2 && assignments[agentB.id] >= 2,
+      "fresh independent Bots must receive non-primary shared desktop windows");
+    assert.notEqual(assignments[agentA.id], assignments[agentB.id],
+      "concurrent independent Bots must keep distinct persisted window assignments");
+    assert.equal(routeA.kind, "fork");
+    assert.equal(routeB.kind, "fork");
+    displayRoute.agentA.route = routeA;
+    displayRoute.agentB.route = routeB;
+    testStage = "authenticated server and state contracts";
     const hasTaskEvent = (agentId, marker) => authorizedEvents.observed.some((event) => {
       const encoded = JSON.stringify(event);
       return encoded.includes(agentId) && encoded.includes(marker);
@@ -796,16 +1165,10 @@ async function main() {
       return host.isBusy === false ? host : null;
     }, "explicitly stopped Host turn to settle");
     assert.equal(explicitlyStoppedTask.modelCalls, 1, "explicit Stop must not restart the cancelled provider request");
-    const interruptedJournalPath = path.join(stateDir, "data", "host-interrupted-user-turns.json");
-    const stoppedJournal = fs.existsSync(interruptedJournalPath)
-      ? JSON.parse(fs.readFileSync(interruptedJournalPath, "utf8")).pending
-      : [];
+    const stoppedJournal = (await readBoxStateJson("host-interrupted-user-turns.json"))?.pending || [];
     assert.ok(!stoppedJournal.some((entry) => entry.agentId === agentExplicitStop.id),
       "explicit Stop must retire that Bot's accepted-turn recovery record before interruption");
-    const ackJournalPath = path.join(stateDir, "data", "ack-obligations.json");
-    const stoppedAckJournal = fs.existsSync(ackJournalPath)
-      ? JSON.parse(fs.readFileSync(ackJournalPath, "utf8")).pending
-      : [];
+    const stoppedAckJournal = (await readBoxStateJson("ack-obligations.json"))?.pending || [];
     assert.ok(!stoppedAckJournal.some((entry) => entry.agentId === agentExplicitStop.id),
       "explicit Stop before visible acknowledgment must also retire the independent ack-redrive obligation");
 
@@ -874,10 +1237,7 @@ async function main() {
       const host = await gatewayCall(gatewayUrl, currentToken, "getHostStatus", { includeManagedCapabilities: false });
       return host.isBusy === false ? host : null;
     }, "the covering same-Bot turn to settle");
-    const recoveryJournalPath = path.join(stateDir, "data", "host-interrupted-user-turns.json");
-    const pendingBeforeRestart = fs.existsSync(recoveryJournalPath)
-      ? JSON.parse(fs.readFileSync(recoveryJournalPath, "utf8")).pending
-      : [];
+    const pendingBeforeRestart = (await readBoxStateJson("host-interrupted-user-turns.json"))?.pending || [];
     const coalescedPending = pendingBeforeRestart.filter((entry) => entry.agentId === agentCoalesced.id);
     const coalescedTargetIds = [acceptedCoalescedMessageIds.a, acceptedCoalescedMessageIds.b];
     assert.ok(!coalescedPending.some((entry) => coalescedTargetIds.includes(entry.userMessageId)),
@@ -889,9 +1249,8 @@ async function main() {
       "the settled covering turn must leave only the still-running predecessor blocker before server shutdown");
     await invoke("stop");
     serverStarted = false;
-    const stoppedRecoveryJournal = fs.existsSync(recoveryJournalPath)
-      ? JSON.parse(fs.readFileSync(recoveryJournalPath, "utf8")).pending
-      : [];
+    await invoke("prepare-release-state");
+    const stoppedRecoveryJournal = readReclaimedStateJson("host-interrupted-user-turns.json")?.pending || [];
     const blockerAfterStop = stoppedRecoveryJournal.find((entry) =>
       entry.agentId === agentCoalesced.id && entry.userMessageId === acceptedCoalescedMessageIds.blocker);
     assert.equal(blockerAfterStop?.state, "interrupted",
@@ -899,8 +1258,8 @@ async function main() {
     assert.ok(!stoppedRecoveryJournal.some((entry) =>
       entry.agentId === agentCoalesced.id && coalescedTargetIds.includes(entry.userMessageId)),
     "graceful stop must keep the completed coalesced A/B IDs retired");
-    await invoke("start");
     serverStarted = true;
+    await invoke("start");
     currentToken = readToken();
     await waitReady();
     const hasInterruptionNotice = (entries, userMessageId) => entries.some((entry) =>
@@ -947,8 +1306,8 @@ async function main() {
     await gatewayCall(gatewayUrl, currentToken, "sendPrompt", { agentId: agentRecovery.id, clientNonce: recoveryNonce, prompt: recoveryPrompt });
     await invoke("stop");
     serverStarted = false;
-    await invoke("start");
     serverStarted = true;
+    await invoke("start");
     currentToken = readToken();
     await waitReady();
     await waitFor(async () => {
@@ -986,8 +1345,8 @@ async function main() {
     await acknowledgedTask.blocked;
     await invoke("stop");
     serverStarted = false;
-    await invoke("start");
     serverStarted = true;
+    await invoke("start");
     currentToken = readToken();
     await waitReady();
     await delay(7000);
@@ -1038,7 +1397,36 @@ async function main() {
       ) ? transcript : null;
     }, "same-task recovery to become idle with its durable notice updated", 60_000);
 
-    await invoke("update");
+    if (releaseManagerMode) {
+      const synthetic = makeSyntheticReleaseVersion(repository, path.join(runRoot, "synthetic-update-package"));
+      const update = await invoke("update", [synthetic.root]);
+      assert.ok(update.includes(synthetic.version));
+      const candidateVersion = await invoke("version");
+      assert.ok(candidateVersion.includes(synthetic.version));
+      currentToken = readToken();
+      await waitReady();
+      for (const agent of [agentA, agentB, agentRecovery, agentAcknowledged]) {
+        const transcript = await gatewayCall(gatewayUrl, currentToken, "getAgentTranscript", { id: agent.id });
+        assert.ok(Array.isArray(transcript) && transcript.length > 0,
+          "real Box Bot data must remain visible while the synthetic candidate release is active");
+      }
+      const candidateTranscript = await gatewayCall(gatewayUrl, currentToken, "getAgentTranscript", { id: agentA.id });
+      await downloadAttachment(gatewayUrl, currentToken, agentA.id, attachmentA, markerA);
+      const rollback = await invoke("rollback");
+      assert.ok(rollback.includes(releaseVersion));
+      const restoredVersion = await invoke("version");
+      assert.ok(restoredVersion.includes(releaseVersion));
+      releaseUpdate = {
+        sourceVersion: releaseVersion,
+        syntheticVersion: synthetic.version,
+        syntheticSpeechImage: synthetic.speechImage,
+        activeVersionAfterRollback: releaseVersion,
+        persistedBoxTranscriptEntries: candidateTranscript.length,
+        userStatePreserved: true,
+      };
+    } else {
+      await invoke("update");
+    }
     serverStarted = true;
     currentToken = readToken();
     await waitReady();
@@ -1084,15 +1472,15 @@ async function main() {
         "idempotent prompt nonce and unacknowledged task redrive after Host restart",
         "post-ack interrupted task appears in transcript and reopened Bot snapshot, then explicit follow-up resumes the same file task without duplicate replay",
         "state-preserving server update and Gateway token rotation",
+        ...(releaseUpdate ? ["actual install.sh and generated launcher start a clean extracted server package; release.cjs switches to a synthetic re-versioned package and rolls back while retaining real Box task state"] : []),
         ...observedDesktopReview,
       ],
       observations: fixture.observations,
+      releaseManager: releaseUpdate,
+      displayRoute,
       diagnosticPath: diagnosticsDir,
     };
-    privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(report, null, 2) + "\n");
-    console.log("PASS isolated remote server + real Box flow (deterministic model fixture).");
-    console.log("Tested Docker host architecture: " + os.arch() + "; pinned Box image: " + imagePlatform + ".");
-    console.log("Private diagnostics: " + diagnosticsDir);
+    completedReport = report;
   } catch (error) {
     mainFailure = error;
   } finally {
@@ -1101,18 +1489,37 @@ async function main() {
     await new Promise((resolve) => fixture.server.close(() => resolve())).catch(() => {});
     let cleanupFailure = null;
     if (serverStarted) {
-      try { await invoke("stop"); } catch (error) { cleanupFailure = error; }
+      try {
+        await invoke("stop");
+        serverStarted = false;
+      } catch (error) { cleanupFailure = error; }
     }
     if (fs.existsSync(envFile)) {
       const composeArgs = [
         "compose", "--env-file", envFile, "--project-name", projectName,
         "-f", path.join(repository, "runtime/compose.yaml"), "down", "--remove-orphans",
       ];
-      const cleanupEnv = {
-        ...cliEnv,
-        GROKBOT_GATEWAY_TOKEN: readToken(),
-        GROKBOT_SEARCH_SECRET: fs.readFileSync(path.join(stateDir, "search-secret"), "utf8").trim(),
-      };
+      const cleanupEnv = testComposeEnv();
+      let projectVerifiedStopped = false;
+      if (serverStartAttempted && (releaseManagerMode || process.platform === "linux")) {
+        try {
+          await invoke("prepare-release-state");
+          projectVerifiedStopped = true;
+        } catch (error) { cleanupFailure = cleanupFailure || error; }
+      }
+      if (projectVerifiedStopped) {
+        try {
+          await clearPrivateSpeechModelCaches({
+            composeFile: path.join(repository, "runtime/compose.yaml"),
+            envFile,
+            projectName,
+            stateDir,
+            runRoot,
+            composeEnv: cleanupEnv,
+            logFile: commandLog("speech-model-cache-cleanup"),
+          });
+        } catch (error) { cleanupFailure = cleanupFailure || error; }
+      }
       try {
         const down = await runProcess("docker", composeArgs, cleanupEnv, commandLog("compose-down"));
         assert.equal(down.code, 0, "isolated Compose project cleanup must succeed; see private diagnostics");
@@ -1126,17 +1533,65 @@ async function main() {
         privateFile(path.join(diagnosticsDir, "cleanup-failure.txt"), String(error.stack || error));
       }
     }
+    if (mainFailure || cleanupFailure) {
+      writeFailureReportFile({
+        diagnosticsDir,
+        stateDir,
+        stage: testStage,
+        error: mainFailure,
+        cleanupError: cleanupFailure,
+        displayRoute,
+        fixture,
+        releaseManager: releaseUpdate,
+      });
+    }
     if (mainFailure) {
       privateFile(path.join(diagnosticsDir, "failure.txt"), String(mainFailure.stack || mainFailure));
       privateFile(path.join(diagnosticsDir, "fixture-summary.json"), JSON.stringify(fixture.observations, null, 2) + "\n");
       throw new Error(String(mainFailure.message || mainFailure) + (cleanupFailure ? "; cleanup also failed: " + cleanupFailure.message : "") + "; private diagnostics: " + diagnosticsDir);
     }
     if (cleanupFailure) throw new Error("Isolated server cleanup failed: " + cleanupFailure.message + "; state and private diagnostics retained at " + runRoot);
-    await fsp.rm(stateDir, { recursive: true, force: true });
+    try {
+      await fsp.rm(stateDir, { recursive: true, force: true });
+      if (releaseManagerMode) await fsp.rm(releaseHome, { recursive: true, force: true });
+    } catch (error) {
+      cleanupFailure = error;
+      privateFile(path.join(diagnosticsDir, "cleanup-failure.txt"), String(error.stack || error));
+      writeFailureReportFile({
+        diagnosticsDir,
+        stateDir,
+        stage: "test state cleanup",
+        error: null,
+        cleanupError: cleanupFailure,
+        displayRoute,
+        fixture,
+        releaseManager: releaseUpdate,
+      });
+      throw new Error("Isolated server cleanup failed: " + cleanupFailure.message + "; private diagnostics: " + diagnosticsDir);
+    }
+    assert.ok(completedReport, "a successful Box report must be available after cleanup");
+    privateFile(path.join(diagnosticsDir, "report.json"), JSON.stringify(completedReport, null, 2) + "\n");
+    console.log("PASS isolated remote server + real Box flow (deterministic model fixture).");
+    console.log("Tested Docker host architecture: " + os.arch() + "; pinned Box image: " + completedReport.boxImagePlatform + ".");
+    console.log("Private diagnostics: " + diagnosticsDir);
   }
 }
 
-main().catch((error) => {
-  console.error(error.message);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = {
+  assignmentInspectorScript,
+  assertTestProjectStopped,
+  clearPrivateSpeechModelCaches,
+  inspectBoxVncRoute,
+  modelCacheCleanupArgs,
+  modelCacheCleanupScript,
+  privateModelCacheRoots,
+  verifyBoxVncRoute,
+  writeFailureReportFile,
+};

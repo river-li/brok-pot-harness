@@ -1,0 +1,220 @@
+name: Preview release candidate
+
+on:
+  push:
+    branches: [agent/preview-release]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-release-candidate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  server:
+    name: server candidate (linux/amd64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the candidate commit
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 24.14.0
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.14.0
+          package-manager-cache: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: 3.12.10
+
+      - name: Install locked build dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix runtime --no-audit --no-fund
+
+      - name: Check dependencies and source contracts
+        run: |
+          npm audit --prefix runtime --audit-level=high
+          npm run check:local
+          npm run test:remote-contracts
+          node --test runtime/tests/release-manager-contract.cjs
+          python3 -m unittest runtime/tests/test_release_extract.py runtime/tests/test_validate_preview_candidate.py
+          npm run docs:check
+
+      - name: Build the installable server from this exact clean commit
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: python3 runtime/tools/package-release.py --source-sha "$SOURCE_SHA"
+
+      - name: Install the extracted archive without repository source
+        run: |
+          artifact=".runtime/release/$(node -p "require('./release/project.json').projectVersion")/gbh-server-v$(node -p "require('./release/project.json').projectVersion")-linux-amd64.tar.gz"
+          scratch="$(mktemp -d)"
+          trap 'rm -rf "$scratch"' EXIT
+          python3 runtime/release-extract.py "$artifact" "$scratch/package"
+          HOME="$scratch/home" GBH_RELEASE_HOME="$scratch/releases" GBH_SERVER_STATE_DIR="$scratch/state" NODE="$(command -v node)" "$scratch/package/install.sh"
+          version="$(node -p "require('./release/project.json').projectVersion")"
+          HOME="$scratch/home" GBH_RELEASE_HOME="$scratch/releases" GBH_SERVER_STATE_DIR="$scratch/state" "$scratch/releases/bin/gbh-server" version | grep -F "$version"
+          test "$(stat -c %a "$scratch/state/server.env")" = 600
+          test "$(stat -c %a "$scratch/state/gateway-token")" = 600
+          test ! -e "$scratch/package/package.json"
+
+      - name: Run real Box acceptance against the extracted archive
+        env:
+          GBH_REMOTE_TEST_ROOT: ${{ runner.temp }}/gbh-server-package
+          GBH_REMOTE_TEST_OUTPUT: ${{ runner.temp }}/gbh-server-acceptance
+          GBH_REMOTE_TEST_RELEASE_MANAGER: "1"
+        run: |
+          set -euo pipefail
+          artifact=".runtime/release/$(node -p "require('./release/project.json').projectVersion")/gbh-server-v$(node -p "require('./release/project.json').projectVersion")-linux-amd64.tar.gz"
+          mkdir -p "$GBH_REMOTE_TEST_ROOT"
+          python3 runtime/release-extract.py "$artifact" "$GBH_REMOTE_TEST_ROOT"
+          node runtime/tests/remote-server-live.cjs
+
+      - name: Stage server candidate files
+        run: |
+          version="$(node -p "require('./release/project.json').projectVersion")"
+          mkdir -p .runtime/candidate/server
+          cp ".runtime/release/$version/gbh-server-v$version-linux-amd64.tar.gz" .runtime/candidate/server/
+          cp ".runtime/release/$version/gbh-server-v$version-linux-amd64.tar.gz.sha256" .runtime/candidate/server/
+
+      - name: Upload server candidate
+        uses: actions/upload-artifact@v7
+        with:
+          name: gbh-preview-server-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/candidate/server/*
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload Box acceptance report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: gbh-preview-server-acceptance-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/gbh-server-acceptance/*/diagnostics/report.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+  client:
+    name: remote client candidate (macOS arm64)
+    runs-on: macos-15
+    timeout-minutes: 80
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the candidate commit
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 24.14.0
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.14.0
+          package-manager-cache: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: 3.12.10
+
+      - name: Install locked client dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix runtime --no-audit --no-fund
+
+      - name: Check release resource assembly and numeric bundle version
+        run: python3 -m unittest runtime/tests/test_macos_packager.py
+
+      - name: Build local adapters for the packaged client
+        run: npm run build -- --profile local
+
+      - name: Build independent arm64 Remote Client
+        run: npm run package:mac:remote:candidate
+
+      - name: Verify packaged client, notices, and extracted copy
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./release/project.json').projectVersion")"
+          app=".runtime/packages/Grokbot Remote Client.app"
+          resources="$app/Contents/Resources"
+          lipo -archs "$app/Contents/MacOS/Electron" | grep -Fx arm64
+          codesign --verify --deep --strict "$app"
+          python3 - "$resources/GBH-Release-Manifest.json" "$GITHUB_SHA" "$version" <<'PY'
+          import json, sys
+          manifest = json.load(open(sys.argv[1]))
+          assert manifest["sourceCommit"] == sys.argv[2]
+          assert manifest["sourceTreeClean"] is True
+          assert manifest["releaseVersion"] == sys.argv[3]
+          assert manifest["clientPlatform"] == "macos/arm64"
+          assert manifest["compatibilityId"] == "gbh-remote-v1"
+          assert manifest["electronVersion"] == "42.11.6"
+          assert manifest["nodeVersion"] == "24.14.0"
+          assert manifest["upstreamBaseline"] == "bfe1879"
+          assert manifest["retainedDesktopVersion"] == "0.44.0"
+          assert not manifest["sourceAvailableAtRuntime"]
+          PY
+          test -f "$resources/GBH-Resource-Notices.md"
+          test -f "$resources/GBH-Release-Notes.md"
+          test -f "$resources/Electron-LICENSE"
+          test -f "$resources/Chromium-LICENSES.html"
+          test -f "$resources/GBH-Retained-Desktop-Provenance.json"
+          ! grep -F '/Applications/Grok Bot.app' "$resources/GBH-Retained-Desktop-Provenance.json"
+          mkdir -p .runtime/release/$version/client-extracted
+          ditto -c -k --sequesterRsrc --keepParent "$app" ".runtime/release/$version/gbh-remote-client-v$version-macos-arm64.zip"
+          ditto -x -k ".runtime/release/$version/gbh-remote-client-v$version-macos-arm64.zip" .runtime/release/$version/client-extracted
+          codesign --verify --deep --strict ".runtime/release/$version/client-extracted/Grokbot Remote Client.app"
+          cmp "$resources/GBH-Release-Manifest.json" ".runtime/release/$version/client-extracted/Grokbot Remote Client.app/Contents/Resources/GBH-Release-Manifest.json"
+          (cd ".runtime/release/$version" && shasum -a 256 "gbh-remote-client-v$version-macos-arm64.zip" > "gbh-remote-client-v$version-macos-arm64.zip.sha256")
+          mkdir -p .runtime/candidate/client
+          cp ".runtime/release/$version/gbh-remote-client-v$version-macos-arm64.zip" .runtime/candidate/client/
+          cp ".runtime/release/$version/gbh-remote-client-v$version-macos-arm64.zip.sha256" .runtime/candidate/client/
+
+      - name: Upload Remote Client candidate
+        uses: actions/upload-artifact@v7
+        with:
+          name: gbh-preview-client-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/candidate/client/*
+          if-no-files-found: error
+          retention-days: 90
+
+  attest:
+    name: attest candidate artifacts
+    if: github.event_name == 'push' && github.ref == 'refs/heads/agent/preview-release'
+    needs: [server, client]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Download exact server artifact from this workflow run
+        uses: actions/download-artifact@v7
+        with:
+          name: gbh-preview-server-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/candidate/server
+
+      - name: Download exact client artifact from this workflow run
+        uses: actions/download-artifact@v7
+        with:
+          name: gbh-preview-client-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/candidate/client
+
+      - name: Attest server candidate
+        uses: actions/attest@v4.2.1
+        with:
+          subject-path: .runtime/candidate/server/*.tar.gz
+
+      - name: Attest Remote Client candidate
+        uses: actions/attest@v4.2.1
+        with:
+          subject-path: .runtime/candidate/client/*.zip
