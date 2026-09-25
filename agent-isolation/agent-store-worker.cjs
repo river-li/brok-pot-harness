@@ -9003,6 +9003,7 @@ var __protoMessage336 = class extends CompactMessage {
 };
 var MouseButton = /* @__PURE__ */ enumType(proto3, __protoPackage37, "MouseButton", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"], [3, "MIDDLE"], [4, "BACK"], [5, "FORWARD"]], 1);
 var ScrollDirection = /* @__PURE__ */ enumType(proto3, __protoPackage37, "ScrollDirection", [[0, "UNSPECIFIED"], [1, "UP"], [2, "DOWN"], [3, "LEFT"], [4, "RIGHT"]], 1);
+var KeyStroke = /* @__PURE__ */ enumType(proto3, __protoPackage37, "KeyStroke", [[0, "UNSPECIFIED"], [1, "TAP"], [2, "DOWN"], [3, "UP"]], 1);
 var Coordinate = class _Coordinate extends __protoMessage336 {
   constructor(data) {
     super();
@@ -9046,7 +9047,7 @@ var ComputerUseArgs = class _ComputerUseArgs extends __protoMessage336 {
     return proto3.util.equals(_ComputerUseArgs, a, b);
   }
   static $() {
-    return ["ComputerUseArgs|1 tool_call_id 9|2 actions #0*|3 description 9?|4 bind_unmapped_characters 8?|5 desktop_lease_actor_id 9?", ComputerUseAction];
+    return ["ComputerUseArgs|1 tool_call_id 9|2 actions #0*|3 description 9?|4 bind_unmapped_characters 8?|5 desktop_lease_actor_id 9?|6 screenshot_settle_ms 5?", ComputerUseAction];
   }
 };
 var ComputerUseAction = class _ComputerUseAction extends __protoMessage336 {
@@ -9231,6 +9232,7 @@ var KeyAction = class _KeyAction extends __protoMessage336 {
   constructor(data) {
     super();
     this.key = "";
+    this.stroke = KeyStroke.UNSPECIFIED;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options) {
@@ -9246,7 +9248,7 @@ var KeyAction = class _KeyAction extends __protoMessage336 {
     return proto3.util.equals(_KeyAction, a, b);
   }
   static $() {
-    return ["KeyAction|1 key 9|2 hold_duration_ms 5?"];
+    return ["KeyAction|1 key 9|2 hold_duration_ms 5?|3 stroke #0", KeyStroke];
   }
 };
 var WaitAction = class _WaitAction extends __protoMessage336 {

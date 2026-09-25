@@ -3,7 +3,11 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-process.umask(0o077);
+const ROOT_CONVERGE_UMASK_AGENT_READABLE = 0o022;
+const OWN_USER_CONVERGE_UMASK_PRIVATE = 0o077;
+process.umask(
+  process.getuid() === 0 ? ROOT_CONVERGE_UMASK_AGENT_READABLE : OWN_USER_CONVERGE_UMASK_PRIVATE,
+);
 
 const MANAGED_ROOT = process.env.SAND_MANAGED_ROOT || "/opt/sand-managed";
 const ASSIGNMENT_PATH =

@@ -4444,12 +4444,12 @@ var init_global_utils = __esm({
 
 // ../node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/ComponentLogger.js
 function logProxy(funcName, namespace, args) {
-  var logger112 = getGlobal("diag");
-  if (!logger112) {
+  var logger113 = getGlobal("diag");
+  if (!logger113) {
     return;
   }
   args.unshift(namespace);
-  return logger112[funcName].apply(logger112, __spreadArray([], __read(args), false));
+  return logger113[funcName].apply(logger113, __spreadArray([], __read(args), false));
 }
 var __read, __spreadArray, DiagComponentLogger;
 var init_ComponentLogger = __esm({
@@ -4543,17 +4543,17 @@ var init_types2 = __esm({
 });
 
 // ../node_modules/.pnpm/@opentelemetry+api@1.9.0/node_modules/@opentelemetry/api/build/esm/diag/internal/logLevelLogger.js
-function createLogLevelDiagLogger(maxLevel, logger112) {
+function createLogLevelDiagLogger(maxLevel, logger113) {
   if (maxLevel < DiagLogLevel.NONE) {
     maxLevel = DiagLogLevel.NONE;
   } else if (maxLevel > DiagLogLevel.ALL) {
     maxLevel = DiagLogLevel.ALL;
   }
-  logger112 = logger112 || {};
+  logger113 = logger113 || {};
   function _filterFunc(funcName, theLevel) {
-    var theFunc = logger112[funcName];
+    var theFunc = logger113[funcName];
     if (typeof theFunc === "function" && maxLevel >= theLevel) {
-      return theFunc.bind(logger112);
+      return theFunc.bind(logger113);
     }
     return function() {
     };
@@ -4616,19 +4616,19 @@ var init_diag = __esm({
             for (var _i2 = 0; _i2 < arguments.length; _i2++) {
               args[_i2] = arguments[_i2];
             }
-            var logger112 = getGlobal("diag");
-            if (!logger112)
+            var logger113 = getGlobal("diag");
+            if (!logger113)
               return;
-            return logger112[funcName].apply(logger112, __spreadArray2([], __read2(args), false));
+            return logger113[funcName].apply(logger113, __spreadArray2([], __read2(args), false));
           };
         }
         var self2 = this;
-        var setLogger = function(logger112, optionsOrLogLevel) {
+        var setLogger = function(logger113, optionsOrLogLevel) {
           var _a20, _b2, _c2;
           if (optionsOrLogLevel === void 0) {
             optionsOrLogLevel = { logLevel: DiagLogLevel.INFO };
           }
-          if (logger112 === self2) {
+          if (logger113 === self2) {
             var err = new Error("Cannot use diag as the logger for itself. Please use a DiagLogger implementation like ConsoleDiagLogger or a custom implementation");
             self2.error((_a20 = err.stack) !== null && _a20 !== void 0 ? _a20 : err.message);
             return false;
@@ -4639,7 +4639,7 @@ var init_diag = __esm({
             };
           }
           var oldLogger = getGlobal("diag");
-          var newLogger = createLogLevelDiagLogger((_b2 = optionsOrLogLevel.logLevel) !== null && _b2 !== void 0 ? _b2 : DiagLogLevel.INFO, logger112);
+          var newLogger = createLogLevelDiagLogger((_b2 = optionsOrLogLevel.logLevel) !== null && _b2 !== void 0 ? _b2 : DiagLogLevel.INFO, logger113);
           if (oldLogger && !optionsOrLogLevel.suppressOverrideMessage) {
             var stack = (_c2 = new Error().stack) !== null && _c2 !== void 0 ? _c2 : "<failed to generate stacktrace>";
             oldLogger.warn("Current logger will be overwritten from " + stack);
@@ -6409,8 +6409,8 @@ function getLoggerBackend(ctx) {
 function createLogger(name17) {
   function log5(ctx, entry) {
     const timestamp2 = /* @__PURE__ */ new Date();
-    const logger112 = getLoggerBackend(ctx);
-    logger112.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp2, logger: name17 }));
+    const logger113 = getLoggerBackend(ctx);
+    logger113.log(ctx, Object.assign(Object.assign({}, entry), { timestamp: timestamp2, logger: name17 }));
   }
   return {
     debug: (ctx, message, metadata) => {
@@ -6870,14 +6870,54 @@ var init_command_glob = __esm({
 });
 
 // ../packages/constants/dist/agent-store-ids.js
-var BARE_UUID_PATTERN, AGENT_STORE_USER_MOUNT_NAME, AGENT_STORE_TEAM_MOUNT_NAME, AGENT_STORE_AUTOMATION_MOUNT_NAME, AGENT_STORE_DEFAULT_MAX_FILE_SIZE_BYTES, NAMED_AGENT_HOME_STORE_MOUNT_NAME, AGENT_STORE_MOUNT_ROOT2, CLOUD_CANVAS_ROOT2, CLOUD_CANVAS_SOURCE_BASENAME, USER_STORE_CANVASES_DIR, AUTOMATION_STORE_CANVASES_DIR, CANVAS_STORE_PERSIST_ROOTS;
+function parsePositiveSafeInteger(value) {
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : void 0;
+}
+function parseUserAgentStoreSourceId(sourceId) {
+  const match2 = AGENT_STORE_USER_SOURCE_ID_PATTERN.exec(sourceId);
+  if (match2 === null || match2[2] === void 0) {
+    return void 0;
+  }
+  const userId = parsePositiveSafeInteger(match2[2]);
+  const teamId = match2[1] === void 0 ? void 0 : parsePositiveSafeInteger(match2[1]);
+  if (userId === void 0 || match2[1] !== void 0 && teamId === void 0) {
+    return void 0;
+  }
+  return { userId, teamId };
+}
+function parseTeamAgentStoreSourceId(sourceId) {
+  const match2 = AGENT_STORE_TEAM_SOURCE_ID_PATTERN.exec(sourceId);
+  if (match2 === null || match2[1] === void 0) {
+    return void 0;
+  }
+  const teamId = parsePositiveSafeInteger(match2[1]);
+  return teamId === void 0 ? void 0 : { teamId };
+}
+function isValidBareUuid(agentId) {
+  return BARE_UUID_PATTERN.test(agentId);
+}
+function isCloudAgentStoreId(agentId) {
+  return CLOUD_AGENT_STORE_ID_PATTERN.test(agentId);
+}
+function isAgentStoreSourceId(sourceId) {
+  return isCloudAgentStoreId(sourceId) || isValidBareUuid(sourceId);
+}
+var BARE_UUID_PATTERN, CLOUD_AGENT_STORE_ID_PATTERN, AGENT_STORE_USER_SOURCE_ID_PATTERN, AGENT_STORE_TEAM_SOURCE_ID_PATTERN, AGENT_STORE_USER_MOUNT_NAME, AGENT_STORE_TEAM_MOUNT_NAME, AGENT_STORE_AUTOMATION_MOUNT_NAME, AGENT_STORE_SELF_MOUNT_NAME, AGENT_STORE_TMP_DIR_NAME, AGENT_STORE_TMP_DIR_NAME_DEV, AGENT_STORE_FILES_DIR_NAME, AGENT_STORE_DEFAULT_MAX_FILE_SIZE_BYTES, NAMED_AGENT_HOME_STORE_MOUNT_NAME, AGENT_STORE_MOUNT_ROOT2, CLOUD_CANVAS_ROOT2, CLOUD_CANVAS_SOURCE_BASENAME, USER_STORE_CANVASES_DIR, AUTOMATION_STORE_CANVASES_DIR, CANVAS_STORE_PERSIST_ROOTS;
 var init_agent_store_ids = __esm({
   "../packages/constants/dist/agent-store-ids.js"() {
     "use strict";
     BARE_UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-57][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    CLOUD_AGENT_STORE_ID_PATTERN = /^bc-(?:[0-9a-z][0-9a-z-]*-)?[0-9a-f]{8}-[0-9a-f]{4}-[1-57][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    AGENT_STORE_USER_SOURCE_ID_PATTERN = /^(?:t([1-9][0-9]*)-)?u([1-9][0-9]*)$/;
+    AGENT_STORE_TEAM_SOURCE_ID_PATTERN = /^t([1-9][0-9]*)$/;
     AGENT_STORE_USER_MOUNT_NAME = "user";
     AGENT_STORE_TEAM_MOUNT_NAME = "team";
     AGENT_STORE_AUTOMATION_MOUNT_NAME = "automation";
+    AGENT_STORE_SELF_MOUNT_NAME = "self";
+    AGENT_STORE_TMP_DIR_NAME = "cursor_agent_stores";
+    AGENT_STORE_TMP_DIR_NAME_DEV = "cursor_agent_stores_dev";
+    AGENT_STORE_FILES_DIR_NAME = "files";
     AGENT_STORE_DEFAULT_MAX_FILE_SIZE_BYTES = 100 * 1024 * 1024;
     NAMED_AGENT_HOME_STORE_MOUNT_NAME = "home";
     AGENT_STORE_MOUNT_ROOT2 = "/cursor/stores";
@@ -6889,6 +6929,157 @@ var init_agent_store_ids = __esm({
       USER_STORE_CANVASES_DIR,
       AUTOMATION_STORE_CANVASES_DIR
     ];
+  }
+});
+
+// ../packages/constants/dist/agent-store-display-path.js
+function normalizeForMatch(value) {
+  return value.trim().replace(/\\/g, "/");
+}
+function looksLikeAgentStoreDisplayPath(path30) {
+  const normalized = normalizeForMatch(path30);
+  return normalized.includes(CLOUD_MOUNT_ROOT_NEEDLE) || normalized.includes(AGENT_STORE_TMP_DIR_NAME) || normalized.includes(AGENT_STORE_TMP_DIR_NAME_DEV);
+}
+function stripAgentStorePathLineSuffix(value) {
+  const hashMatch = HASH_LINE_ANCHOR_PATTERN.exec(value);
+  if (hashMatch) {
+    return {
+      path: value.slice(0, hashMatch.index),
+      lineSuffix: value.slice(hashMatch.index)
+    };
+  }
+  const colonMatch = COLON_LINE_RANGE_PATTERN.exec(value);
+  if (colonMatch) {
+    return {
+      path: value.slice(0, colonMatch.index),
+      lineSuffix: value.slice(colonMatch.index)
+    };
+  }
+  return { path: value, lineSuffix: "" };
+}
+function splitMountRelative(rest) {
+  const trailingSeparator = rest.endsWith("/") && rest.length > 0;
+  const trimmed = rest.replace(/^\/+|\/+$/g, "");
+  if (trimmed.length === 0) {
+    return { mountKey: "", relativePath: "", trailingSeparator };
+  }
+  const slash = trimmed.indexOf("/");
+  if (slash < 0) {
+    return {
+      mountKey: trimmed,
+      relativePath: "",
+      trailingSeparator
+    };
+  }
+  return {
+    mountKey: trimmed.slice(0, slash),
+    relativePath: trimmed.slice(slash + 1),
+    trailingSeparator
+  };
+}
+function classifyCloudMountKey(mountKey) {
+  if (mountKey === AGENT_STORE_TEAM_MOUNT_NAME) {
+    return { kind: "team" };
+  }
+  if (mountKey === AGENT_STORE_USER_MOUNT_NAME) {
+    return { kind: "user" };
+  }
+  if (mountKey === AGENT_STORE_SELF_MOUNT_NAME) {
+    return { kind: "agent" };
+  }
+  if (isAgentStoreSourceId(mountKey)) {
+    return { kind: "agent", agentId: mountKey };
+  }
+  return void 0;
+}
+function classifyLocalMountKey(mountKey) {
+  if (parseUserAgentStoreSourceId(mountKey) !== void 0) {
+    return { kind: "user" };
+  }
+  if (parseTeamAgentStoreSourceId(mountKey) !== void 0) {
+    return { kind: "team" };
+  }
+  if (isAgentStoreSourceId(mountKey)) {
+    return { kind: "agent", agentId: mountKey };
+  }
+  return void 0;
+}
+function matchCloudAgentStorePath(normalizedPath, lineSuffix) {
+  const prefix = `${AGENT_STORE_MOUNT_ROOT2}/`;
+  if (normalizedPath !== AGENT_STORE_MOUNT_ROOT2 && !normalizedPath.startsWith(prefix)) {
+    return void 0;
+  }
+  const rest = normalizedPath === AGENT_STORE_MOUNT_ROOT2 ? "" : normalizedPath.slice(prefix.length);
+  const { mountKey, relativePath, trailingSeparator } = splitMountRelative(rest);
+  if (mountKey.length === 0) {
+    return void 0;
+  }
+  const owner = classifyCloudMountKey(mountKey);
+  if (owner === void 0) {
+    return void 0;
+  }
+  return Object.assign(Object.assign({}, owner), { relativePath, trailingSeparator, lineSuffix });
+}
+function matchLocalAgentStorePath(normalizedPath, lineSuffix) {
+  const segments = normalizedPath.split("/").filter((segment) => segment.length > 0);
+  const tmpDirIndex = segments.findIndex((segment) => LOCAL_AGENT_STORE_TMP_DIR_NAMES.has(segment));
+  if (tmpDirIndex < 0 || tmpDirIndex + 2 >= segments.length) {
+    return void 0;
+  }
+  const mountKey = segments[tmpDirIndex + 1];
+  if (mountKey === void 0 || segments[tmpDirIndex + 2] !== AGENT_STORE_FILES_DIR_NAME) {
+    return void 0;
+  }
+  const afterFiles = segments.slice(tmpDirIndex + 3);
+  const trailingSeparator = normalizedPath.endsWith("/");
+  if (afterFiles[0] === "subagents" && afterFiles[1] !== void 0) {
+    return {
+      kind: "agent",
+      agentId: afterFiles[1],
+      relativePath: afterFiles.slice(2).join("/"),
+      storeRelativePath: afterFiles.join("/"),
+      storeSourceId: mountKey,
+      trailingSeparator,
+      lineSuffix
+    };
+  }
+  const owner = classifyLocalMountKey(mountKey);
+  if (owner === void 0) {
+    return void 0;
+  }
+  return Object.assign(Object.assign({}, owner), {
+    relativePath: afterFiles.join("/"),
+    trailingSeparator,
+    lineSuffix
+  });
+}
+function matchAgentStorePathForDisplay(path30) {
+  var _a20;
+  if (!looksLikeAgentStoreDisplayPath(path30)) {
+    return void 0;
+  }
+  const normalized = normalizeForMatch(path30);
+  if (!normalized) {
+    return void 0;
+  }
+  const { path: withoutLine, lineSuffix } = stripAgentStorePathLineSuffix(normalized);
+  if (!withoutLine) {
+    return void 0;
+  }
+  return (_a20 = matchCloudAgentStorePath(withoutLine, lineSuffix)) !== null && _a20 !== void 0 ? _a20 : matchLocalAgentStorePath(withoutLine, lineSuffix);
+}
+var LOCAL_AGENT_STORE_TMP_DIR_NAMES, CLOUD_MOUNT_ROOT_NEEDLE, HASH_LINE_ANCHOR_PATTERN, COLON_LINE_RANGE_PATTERN;
+var init_agent_store_display_path = __esm({
+  "../packages/constants/dist/agent-store-display-path.js"() {
+    "use strict";
+    init_agent_store_ids();
+    LOCAL_AGENT_STORE_TMP_DIR_NAMES = /* @__PURE__ */ new Set([
+      AGENT_STORE_TMP_DIR_NAME,
+      AGENT_STORE_TMP_DIR_NAME_DEV
+    ]);
+    CLOUD_MOUNT_ROOT_NEEDLE = AGENT_STORE_MOUNT_ROOT2.replace(/^\/+/, "");
+    HASH_LINE_ANCHOR_PATTERN = /#L?(\d+)(?:\s*-\s*L?(\d+))?$/i;
+    COLON_LINE_RANGE_PATTERN = /:(\d+)(?:\s*-\s*(\d+))?$/;
   }
 });
 
@@ -7148,6 +7339,18 @@ function getMcpOAuthProviderPolicyForUrl(serverUrl) {
   }
   return getMcpOAuthProviderPolicy(hostname2);
 }
+function gtmMcpOmitsResourceIndicator(serverUrl) {
+  if (serverUrl === void 0) {
+    return false;
+  }
+  let url2;
+  try {
+    url2 = new URL(serverUrl);
+  } catch (_a20) {
+    return false;
+  }
+  return url2.protocol === "https:" && url2.hostname === "gtm-api.corp.anysphere.co" && url2.port === "" && url2.pathname === "/mcp";
+}
 function applyMcpOAuthProviderAuthorizationParams(authorizationUrl, mcpServerUrl) {
   var _a20;
   const params = (_a20 = getMcpOAuthProviderPolicyForUrl(mcpServerUrl)) === null || _a20 === void 0 ? void 0 : _a20.authorizationParams;
@@ -7199,11 +7402,13 @@ function getCanonicalMcpOAuthRedirectUris(currentRedirectUri) {
   }
   return Array.from(redirectUris);
 }
-var MCP_OAUTH_GROK_WEB_CALLBACK_URL, GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, REST_MCP_SCM_NOT_CONNECTED_REASONS, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, REST_MCP_SCM_NOT_CONNECTED_REASON_SET, CURSOR_SCM_SSO_AUTHORIZATION_PAGES, GROK_CONNECTORS_POLICY_BASE, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL;
+var MCP_TOOL_REQUIRES_CONFIRMATION_META_KEY, MCP_OAUTH_GROK_WEB_CALLBACK_URL, MCP_OAUTH_X_APP_CALLBACK_URL, GOOGLE_WORKSPACE_POLICY_BASE, X_MONEY_POLICY_BASE, HUBSPOT_POLICY_BASE, REST_MCP_CURSOR_AUTH_HEADER, REST_MCP_SCM_ERROR_CODES, REST_MCP_SCM_NOT_CONNECTED_REASONS, CURSOR_SCM_MCP_SERVER_IDENTIFIER_PREFIX, CURSOR_SCM_MCP_PROVIDERS, REST_MCP_SCM_ERROR_CODE_SET, REST_MCP_SCM_NOT_CONNECTED_REASON_SET, CURSOR_SCM_SSO_AUTHORIZATION_PAGES, GROK_CONNECTORS_POLICY_BASE, MCP_OAUTH_PROVIDER_POLICIES, GOOGLE_WORKSPACE_MCP_HOSTS, MCP_OAUTH_CLIENT_LOGO_URI, MCP_OAUTH_EXTENSION_ID, MCP_OAUTH_RETURN_PATH, MCP_OAUTH_DESKTOP_RETURN_URL, MCP_OAUTH_PORTAL_CALLBACK_URL, MCP_OAUTH_GROK_BOT_BOUNCE_CALLBACK_URL, MCP_OAUTH_GROK_BOT_MOBILE_CALLBACK_URL, MCP_OAUTH_LOOPBACK_CALLBACK_URL, MCP_OAUTH_LOOPBACK_IPV4_HOSTNAME, MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL, MCP_OAUTH_CLIENT_METADATA_DOCUMENT_PATH, MCP_OAUTH_CLIENT_METADATA_DOCUMENT_URL;
 var init_mcp = __esm({
   "../packages/constants/dist/mcp.js"() {
     "use strict";
+    MCP_TOOL_REQUIRES_CONFIRMATION_META_KEY = "cursor/requiresConfirmation";
     MCP_OAUTH_GROK_WEB_CALLBACK_URL = "https://grok.com/connectors-oauth-exchange-code/";
+    MCP_OAUTH_X_APP_CALLBACK_URL = "https://x.com/i/connectors/oauth_callback";
     GOOGLE_WORKSPACE_POLICY_BASE = {
       provider: "google-workspace",
       clientRegistration: "static",
@@ -7226,8 +7431,20 @@ var init_mcp = __esm({
       unauthenticatedConnect: false,
       backendOnlyTokenExchange: true,
       // After approval x-money returns the user to the app named by `redirect_uri`;
-      // the shared portal callback would send grok.com users to GrokBot instead.
-      registeredAppRedirectUris: [MCP_OAUTH_GROK_WEB_CALLBACK_URL]
+      // the shared portal callback would send grok.com and X app users to GrokBot
+      // instead.
+      registeredAppRedirectUris: [MCP_OAUTH_GROK_WEB_CALLBACK_URL, MCP_OAUTH_X_APP_CALLBACK_URL]
+    };
+    HUBSPOT_POLICY_BASE = {
+      provider: "hubspot",
+      clientRegistration: "static",
+      // The official app registers the portal https callback and the loopback
+      // callback, not the `cursor://` deeplink.
+      rejectsCustomSchemeRedirects: true,
+      // An unauthenticated `initialize` is rejected, so a successful connect
+      // IS proof of authorization.
+      unauthenticatedConnect: false,
+      backendOnlyTokenExchange: true
     };
     REST_MCP_CURSOR_AUTH_HEADER = "x-cursor-auth";
     REST_MCP_SCM_ERROR_CODES = {
@@ -7353,7 +7570,10 @@ var init_mcp = __esm({
       ["mcp.money-staging.x.com", X_MONEY_POLICY_BASE],
       ["mcp.money.x.com", X_MONEY_POLICY_BASE],
       ["connectors-gateway.grok.gcp.mouseion.dev", GROK_CONNECTORS_POLICY_BASE],
-      ["connectors-gateway.grok.com", GROK_CONNECTORS_POLICY_BASE]
+      ["connectors-gateway.grok.com", GROK_CONNECTORS_POLICY_BASE],
+      // Official Grok HubSpot hosted MCP. Separate provider: confidential
+      // client_secret_post, no DCR, backend-only exchange.
+      ["mcp.hubspot.com", HUBSPOT_POLICY_BASE]
     ]);
     GOOGLE_WORKSPACE_MCP_HOSTS = new Set([...MCP_OAUTH_PROVIDER_POLICIES].filter(([, policy]) => policy.provider === "google-workspace").map(([hostname2]) => hostname2));
     MCP_OAUTH_CLIENT_LOGO_URI = "https://ptht05hbb1ssoooe.public.blob.vercel-storage.com/assets/uploads/cursorlogomcpv3.svg";
@@ -7368,6 +7588,8 @@ var init_mcp = __esm({
     MCP_OAUTH_LOOPBACK_IPV4_CALLBACK_URL = mcpOAuthLoopbackRedirectUrl({
       loopbackIpv4: true
     });
+    MCP_OAUTH_CLIENT_METADATA_DOCUMENT_PATH = "/oauth/mcp-client.json";
+    MCP_OAUTH_CLIENT_METADATA_DOCUMENT_URL = `https://cursor.com${MCP_OAUTH_CLIENT_METADATA_DOCUMENT_PATH}`;
   }
 });
 
@@ -7532,6 +7754,7 @@ var init_system_notification = __esm({
 var init_dist2 = __esm({
   "../packages/constants/dist/index.js"() {
     "use strict";
+    init_agent_store_display_path();
     init_agent_store_ids();
     init_cloud_agent();
     init_commit_identity();
@@ -11417,7 +11640,7 @@ var require_charsetgroupprober = __commonJS({
   "../node_modules/.pnpm/jschardet@3.1.4/node_modules/jschardet/src/charsetgroupprober.js"(exports2, module2) {
     var constants5 = require_constants();
     var CharSetProber = require_charsetprober();
-    var logger112 = require_logger();
+    var logger113 = require_logger();
     function CharSetGroupProber() {
       CharSetProber.apply(this);
       var self2 = this;
@@ -11479,11 +11702,11 @@ var require_charsetgroupprober = __commonJS({
         for (var i = 0, prober; prober = this._mProbers[i]; i++) {
           if (!prober) continue;
           if (!prober.active) {
-            logger112.log(prober.getCharsetName() + " not active\n");
+            logger113.log(prober.getCharsetName() + " not active\n");
             continue;
           }
           var cf = prober.getConfidence();
-          logger112.log(prober.getCharsetName() + " confidence = " + cf + "\n");
+          logger113.log(prober.getCharsetName() + " confidence = " + cf + "\n");
           if (bestConf < cf) {
             bestConf = cf;
             this._mBestGuessProber = prober;
@@ -11541,7 +11764,7 @@ var require_mbcharsetprober = __commonJS({
   "../node_modules/.pnpm/jschardet@3.1.4/node_modules/jschardet/src/mbcharsetprober.js"(exports2, module2) {
     var CharSetProber = require_charsetprober();
     var constants5 = require_constants();
-    var logger112 = require_logger();
+    var logger113 = require_logger();
     function MultiByteCharSetProber() {
       CharSetProber.apply(this);
       var self2 = this;
@@ -11567,7 +11790,7 @@ var require_mbcharsetprober = __commonJS({
         for (var i = 0; i < aLen; i++) {
           var codingState = this._mCodingSM.nextState(aBuf[i]);
           if (codingState == constants5.error) {
-            logger112.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
+            logger113.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
             this._mState = constants5.notMe;
             break;
           } else if (codingState == constants5.itsMe) {
@@ -58888,7 +59111,7 @@ var require_sjisprober = __commonJS({
     var SJISDistributionAnalysis = require_chardistribution().SJISDistributionAnalysis;
     var SJISContextAnalysis = require_jpcntx().SJISContextAnalysis;
     var constants5 = require_constants();
-    var logger112 = require_logger();
+    var logger113 = require_logger();
     function SJISProber() {
       MultiByteCharSetProber.apply(this);
       var self2 = this;
@@ -58910,7 +59133,7 @@ var require_sjisprober = __commonJS({
         for (var i = 0; i < aLen; i++) {
           var codingState = this._mCodingSM.nextState(aBuf[i]);
           if (codingState == constants5.error) {
-            logger112.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
+            logger113.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
             this._mState = constants5.notMe;
             break;
           } else if (codingState == constants5.itsMe) {
@@ -59309,7 +59532,7 @@ var require_eucjpprober = __commonJS({
     var EUCJPContextAnalysis = require_jpcntx().EUCJPContextAnalysis;
     var EUCJPSMModel = require_eucjp2();
     var constants5 = require_constants();
-    var logger112 = require_logger();
+    var logger113 = require_logger();
     function EUCJPProber() {
       MultiByteCharSetProber.apply(this);
       var self2 = this;
@@ -59331,7 +59554,7 @@ var require_eucjpprober = __commonJS({
         for (var i = 0; i < aLen; i++) {
           var codingState = this._mCodingSM.nextState(aBuf[i]);
           if (codingState == constants5.error) {
-            logger112.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
+            logger113.log(this.getCharsetName() + " prober hit error at byte " + i + "\n");
             this._mState = constants5.notMe;
             break;
           } else if (codingState == constants5.itsMe) {
@@ -60530,7 +60753,7 @@ var require_sbcharsetprober = __commonJS({
   "../node_modules/.pnpm/jschardet@3.1.4/node_modules/jschardet/src/sbcharsetprober.js"(exports2, module2) {
     var CharSetProber = require_charsetprober();
     var constants5 = require_constants();
-    var logger112 = require_logger();
+    var logger113 = require_logger();
     function SingleByteCharSetProber(model, reversed, nameProber) {
       CharSetProber.apply(this);
       var SAMPLE_SIZE = 64;
@@ -60594,9 +60817,9 @@ var require_sbcharsetprober = __commonJS({
           if (self2._mTotalSeqs > SB_ENOUGH_REL_THRESHOLD) {
             var cf = this.getConfidence();
             if (cf > POSITIVE_SHORTCUT_THRESHOLD) {
-              logger112.log(this._mModel.charsetName + " confidence = " + cf + ", we have a winner\n");
+              logger113.log(this._mModel.charsetName + " confidence = " + cf + ", we have a winner\n");
             } else if (cf < NEGATIVE_SHORTCUT_THRESHOLD) {
-              logger112.log(this._mModel.charsetName + " confidence = " + cf + ", below negative shortcut threshhold " + NEGATIVE_SHORTCUT_THRESHOLD + "\n");
+              logger113.log(this._mModel.charsetName + " confidence = " + cf + ", below negative shortcut threshhold " + NEGATIVE_SHORTCUT_THRESHOLD + "\n");
               this._mState = constants5.notMe;
             }
           }
@@ -91250,7 +91473,7 @@ var require_universaldetector = __commonJS({
     var SBCSGroupProber = require_sbcsgroupprober();
     var Latin1Prober = require_latin1prober();
     var EscCharSetProber = require_escprober();
-    var logger112 = require_logger();
+    var logger113 = require_logger();
     var supportedEncodings = (function() {
       const BOM_UTF = [
         "UTF-8",
@@ -91412,12 +91635,12 @@ var require_universaldetector = __commonJS({
       this.close = function() {
         if (this.done) return;
         if (this._mBOM.length === 0) {
-          logger112.log("no data received!\n");
+          logger113.log("no data received!\n");
           return;
         }
         this.done = true;
         if (this._mInputState == _state.pureAscii && canDetectEncoding("ascii")) {
-          logger112.log("pure ascii");
+          logger113.log("pure ascii");
           this.result = { "encoding": "ascii", "confidence": 1 };
           this.results.push(this.result);
           return this.result;
@@ -91440,7 +91663,7 @@ var require_universaldetector = __commonJS({
             if (prober.getCharsetName() === "windows-1250") {
               windows_1250_detected = true;
             }
-            logger112.log(prober.getCharsetName() + " confidence " + confidence);
+            logger113.log(prober.getCharsetName() + " confidence " + confidence);
           }
           if (windows_1252_confidence && !windows_1250_detected && canDetectEncoding("windows-1250")) {
             this.results.push({
@@ -91460,11 +91683,11 @@ var require_universaldetector = __commonJS({
             }
           }
         }
-        if (logger112.enabled) {
-          logger112.log("no probers hit minimum threshhold\n");
+        if (logger113.enabled) {
+          logger113.log("no probers hit minimum threshhold\n");
           for (var i = 0, prober; prober = this._mCharsetProbers[i]; i++) {
             if (!prober || !canDetectEncoding(prober.getCharsetName())) continue;
-            logger112.log(prober.getCharsetName() + " confidence = " + prober.getConfidence() + "\n");
+            logger113.log(prober.getCharsetName() + " confidence = " + prober.getConfidence() + "\n");
           }
         }
       };
@@ -136652,7 +136875,7 @@ var init_record_screen_exec_pb = __esm({
 });
 
 // ../packages/proto/dist/generated/agent/v1/computer_use_tool_pb.js
-var __protoPackage41, __protoMessage341, MouseButton, ScrollDirection, Coordinate, ComputerUseArgs, ComputerUseAction, MouseMoveAction, ClickAction, MouseDownAction, MouseUpAction, DragAction, ScrollAction, TypeAction, KeyAction, WaitAction, ScreenshotAction, CursorPositionAction, ComputerUseResult, ComputerUseSuccess, ComputerUseError, ComputerUseToolCall;
+var __protoPackage41, __protoMessage341, MouseButton, ScrollDirection, KeyStroke, Coordinate, ComputerUseArgs, ComputerUseAction, MouseMoveAction, ClickAction, MouseDownAction, MouseUpAction, DragAction, ScrollAction, TypeAction, KeyAction, WaitAction, ScreenshotAction, CursorPositionAction, ComputerUseResult, ComputerUseSuccess, ComputerUseError, ComputerUseToolCall;
 var init_computer_use_tool_pb = __esm({
   "../packages/proto/dist/generated/agent/v1/computer_use_tool_pb.js"() {
     "use strict";
@@ -136669,6 +136892,7 @@ var init_computer_use_tool_pb = __esm({
     };
     MouseButton = /* @__PURE__ */ enumType2(proto3, __protoPackage41, "MouseButton", [[0, "UNSPECIFIED"], [1, "LEFT"], [2, "RIGHT"], [3, "MIDDLE"], [4, "BACK"], [5, "FORWARD"]], 1);
     ScrollDirection = /* @__PURE__ */ enumType2(proto3, __protoPackage41, "ScrollDirection", [[0, "UNSPECIFIED"], [1, "UP"], [2, "DOWN"], [3, "LEFT"], [4, "RIGHT"]], 1);
+    KeyStroke = /* @__PURE__ */ enumType2(proto3, __protoPackage41, "KeyStroke", [[0, "UNSPECIFIED"], [1, "TAP"], [2, "DOWN"], [3, "UP"]], 1);
     Coordinate = class _Coordinate extends __protoMessage341 {
       constructor(data) {
         super();
@@ -136712,7 +136936,7 @@ var init_computer_use_tool_pb = __esm({
         return proto3.util.equals(_ComputerUseArgs, a, b2);
       }
       static $() {
-        return ["ComputerUseArgs|1 tool_call_id 9|2 actions #0*|3 description 9?|4 bind_unmapped_characters 8?|5 desktop_lease_actor_id 9?", ComputerUseAction];
+        return ["ComputerUseArgs|1 tool_call_id 9|2 actions #0*|3 description 9?|4 bind_unmapped_characters 8?|5 desktop_lease_actor_id 9?|6 screenshot_settle_ms 5?", ComputerUseAction];
       }
     };
     ComputerUseAction = class _ComputerUseAction extends __protoMessage341 {
@@ -136897,6 +137121,7 @@ var init_computer_use_tool_pb = __esm({
       constructor(data) {
         super();
         this.key = "";
+        this.stroke = KeyStroke.UNSPECIFIED;
         proto3.util.initPartial(data, this);
       }
       static fromBinary(bytes, options2) {
@@ -136912,7 +137137,7 @@ var init_computer_use_tool_pb = __esm({
         return proto3.util.equals(_KeyAction, a, b2);
       }
       static $() {
-        return ["KeyAction|1 key 9|2 hold_duration_ms 5?"];
+        return ["KeyAction|1 key 9|2 hold_duration_ms 5?|3 stroke #0", KeyStroke];
       }
     };
     WaitAction = class _WaitAction extends __protoMessage341 {
@@ -150529,6 +150754,9 @@ var require_src7 = __commonJS({
 });
 
 // ../packages/mcp-core/dist/mcp-tool-annotations.js
+function mcpToolRequiresConfirmation(annotations) {
+  return (annotations === null || annotations === void 0 ? void 0 : annotations[MCP_TOOL_REQUIRES_CONFIRMATION_META_KEY]) === true;
+}
 function isDeclaredReadOnlyMcpTool(annotations) {
   if (annotations === void 0) {
     return false;
@@ -150569,6 +150797,9 @@ function toolAnnotationsJsonField(annotations) {
       bounded[key] = annotations[key];
     }
   }
+  if (mcpToolRequiresConfirmation(annotations)) {
+    bounded[MCP_TOOL_REQUIRES_CONFIRMATION_META_KEY] = true;
+  }
   if (Object.keys(bounded).length === 0) {
     return {};
   }
@@ -150578,6 +150809,7 @@ var MAX_TOOL_ANNOTATION_TITLE_LENGTH;
 var init_mcp_tool_annotations = __esm({
   "../packages/mcp-core/dist/mcp-tool-annotations.js"() {
     "use strict";
+    init_dist2();
     MAX_TOOL_ANNOTATION_TITLE_LENGTH = 256;
   }
 });
@@ -151233,13 +151465,24 @@ function getHardcodedAllowedReadPaths(platform = process.platform, homeDir = imp
       paths.push(entry.path);
       continue;
     }
-    const candidate = entry.scope === "home" ? (0, import_node_path5.join)(homeDir, entry.path) : bundledPaths[entry.path];
+    const candidate = entry.scope === "bundled" ? bundledPaths[entry.path] : (0, import_node_path5.join)(homeDir, entry.path);
     if (!candidate) {
       continue;
     }
     try {
-      const isAllowedFile = entry.scope === "home" ? (0, import_node_fs3.lstatSync)(candidate).isFile() : (0, import_node_fs3.statSync)(candidate).isFile();
-      if (isAllowedFile) {
+      let isAllowed;
+      switch (entry.scope) {
+        case "home":
+          isAllowed = (0, import_node_fs3.lstatSync)(candidate).isFile();
+          break;
+        case "home-dir":
+          isAllowed = (0, import_node_fs3.lstatSync)(candidate).isDirectory();
+          break;
+        case "bundled":
+          isAllowed = (0, import_node_fs3.statSync)(candidate).isFile();
+          break;
+      }
+      if (isAllowed) {
         paths.push(candidate);
       }
     } catch {
@@ -151455,7 +151698,7 @@ async function isHardcodedWriteProtected(absolutePath, workspaceDir) {
   }
   return false;
 }
-var import_node_fs3, import_promises3, import_node_os3, import_node_path5, import_ignore, HARDCODED_ALLOWED_READ_PATHS, HARDCODED_WRITE_PROTECTION_PATTERNS, HARDCODED_PROTECTED_GIT_PATTERNS, CURSOR_ALLOWED_WRITE_SUBDIRS, HARDCODED_NETWORK_DENYLIST, _workspaceIgnore, _gitIgnore, _absoluteAndHomePaths, _gitContextCache, _caseInsensitiveFs;
+var import_node_fs3, import_promises3, import_node_os3, import_node_path5, import_ignore, HOME_TOOLCHAIN_DIRS, PACKAGE_PREFIX_SUBDIRS, prefixEntries, NODE_CACHE_DIRS, homeToolchainEntries, HARDCODED_ALLOWED_READ_PATHS, HARDCODED_WRITE_PROTECTION_PATTERNS, HARDCODED_PROTECTED_GIT_PATTERNS, CURSOR_ALLOWED_WRITE_SUBDIRS, HARDCODED_NETWORK_DENYLIST, _workspaceIgnore, _gitIgnore, _absoluteAndHomePaths, _gitContextCache, _caseInsensitiveFs;
 var init_hardcoded_policy = __esm({
   "../packages/shell-exec/dist/sandbox/hardcoded-policy.js"() {
     "use strict";
@@ -151465,17 +151708,52 @@ var init_hardcoded_policy = __esm({
     import_node_path5 = require("node:path");
     init_dist3();
     import_ignore = __toESM(require_ignore(), 1);
+    HOME_TOOLCHAIN_DIRS = [
+      ".local/bin",
+      ".local/share/mise",
+      ".local/share/pnpm",
+      ".nvm",
+      ".volta",
+      ".asdf",
+      ".pyenv",
+      ".rbenv",
+      ".rustup",
+      ".cargo/bin",
+      ".cargo/registry",
+      ".cargo/git"
+    ];
+    PACKAGE_PREFIX_SUBDIRS = [
+      "bin",
+      "sbin",
+      "lib",
+      "opt",
+      "Cellar",
+      "share",
+      "Frameworks",
+      "etc/gitconfig",
+      "etc/openssl@3/cert.pem",
+      "etc/openssl@3/openssl.cnf",
+      "etc/ca-certificates"
+    ];
+    prefixEntries = (platform, prefixes) => prefixes.flatMap((prefix) => PACKAGE_PREFIX_SUBDIRS.map((sub) => ({ platform, scope: "global", path: `${prefix}/${sub}` })));
+    NODE_CACHE_DIRS = {
+      linux: [".cache/node", ".cache/yarn"],
+      darwin: [".cache/node", "Library/Caches/Yarn"]
+    };
+    homeToolchainEntries = (platform) => [...HOME_TOOLCHAIN_DIRS, ...NODE_CACHE_DIRS[platform]].map((path30) => ({
+      platform,
+      scope: "home-dir",
+      path: path30
+    }));
     HARDCODED_ALLOWED_READ_PATHS = [
       { platform: "linux", scope: "global", path: "/bin" },
       { platform: "linux", scope: "global", path: "/sbin" },
       { platform: "linux", scope: "global", path: "/usr/bin" },
       { platform: "linux", scope: "global", path: "/usr/sbin" },
-      { platform: "linux", scope: "global", path: "/usr/local/bin" },
       { platform: "linux", scope: "global", path: "/lib" },
       { platform: "linux", scope: "global", path: "/lib64" },
       { platform: "linux", scope: "global", path: "/usr/lib" },
       { platform: "linux", scope: "global", path: "/usr/lib64" },
-      { platform: "linux", scope: "global", path: "/usr/local/lib" },
       { platform: "linux", scope: "global", path: "/usr/libexec" },
       { platform: "linux", scope: "global", path: "/usr/share" },
       { platform: "linux", scope: "global", path: "/etc/ld.so.cache" },
@@ -151498,6 +151776,8 @@ var init_hardcoded_policy = __esm({
       { platform: "linux", scope: "global", path: "/etc/nsswitch.conf" },
       { platform: "linux", scope: "global", path: "/etc/gai.conf" },
       { platform: "linux", scope: "global", path: "/etc/alternatives" },
+      // Python's mimetypes.init() survives a missing file but not a denied one.
+      { platform: "linux", scope: "global", path: "/etc/mime.types" },
       // Exact system shell and Git configuration files. These make standard
       // shell initialization and repository Git commands work in Workspace
       // read mode without granting a broad /etc read root.
@@ -151519,6 +151799,17 @@ var init_hardcoded_policy = __esm({
       { platform: "linux", scope: "home", path: ".zshrc" },
       { platform: "linux", scope: "home", path: ".zlogin" },
       { platform: "linux", scope: "home", path: ".gitconfig" },
+      // Host keys for git over SSH; the rest of ~/.ssh (private keys) stays out.
+      { platform: "linux", scope: "home", path: ".ssh/known_hosts" },
+      // mise global tool versions; the rest of ~/.config/mise (tokens) stays out.
+      { platform: "linux", scope: "home", path: ".config/mise/config.toml" },
+      { platform: "linux", scope: "home-dir", path: ".cache/dotslash" },
+      ...homeToolchainEntries("linux"),
+      ...prefixEntries("linux", ["/usr/local", "/home/linuxbrew/.linuxbrew"]),
+      // Official Go tarball install, and Nix packages plus their profile links.
+      { platform: "linux", scope: "global", path: "/usr/local/go" },
+      { platform: "linux", scope: "global", path: "/nix/store" },
+      { platform: "linux", scope: "global", path: "/nix/var/nix/profiles" },
       { platform: "linux", scope: "bundled", path: "ripgrep" },
       { platform: "darwin", scope: "global", path: "/bin" },
       { platform: "darwin", scope: "global", path: "/usr/bin" },
@@ -151533,10 +151824,22 @@ var init_hardcoded_policy = __esm({
         scope: "global",
         path: "/Library/Developer/CommandLineTools"
       },
+      // `/usr/bin/git`, `python3`, etc. are xcrun shims that load the selected
+      // developer directory; with full Xcode selected that is the whole app
+      // bundle, plus the license-acceptance plist xcodebuild checks.
+      { platform: "darwin", scope: "global", path: "/Applications/Xcode.app" },
+      {
+        platform: "darwin",
+        scope: "global",
+        path: "/Library/Preferences/com.apple.dt.Xcode.plist"
+      },
       { platform: "darwin", scope: "global", path: "/private/etc/ssl/cert.pem" },
       { platform: "darwin", scope: "global", path: "/private/etc/ssl/certs" },
+      { platform: "darwin", scope: "global", path: "/private/etc/ssl/openssl.cnf" },
       { platform: "darwin", scope: "global", path: "/private/etc/hosts" },
       { platform: "darwin", scope: "global", path: "/private/etc/resolv.conf" },
+      // Python's mimetypes.init() survives a missing file but not a denied one.
+      { platform: "darwin", scope: "global", path: "/private/etc/apache2/mime.types" },
       { platform: "darwin", scope: "global", path: "/etc/profile" },
       { platform: "darwin", scope: "global", path: "/etc/bashrc" },
       { platform: "darwin", scope: "global", path: "/etc/zshenv" },
@@ -151552,6 +151855,19 @@ var init_hardcoded_policy = __esm({
       { platform: "darwin", scope: "home", path: ".zshrc" },
       { platform: "darwin", scope: "home", path: ".zlogin" },
       { platform: "darwin", scope: "home", path: ".gitconfig" },
+      // Host keys for git over SSH; the rest of ~/.ssh (private keys) stays out.
+      { platform: "darwin", scope: "home", path: ".ssh/known_hosts" },
+      { platform: "darwin", scope: "home", path: "Library/Preferences/.GlobalPreferences.plist" },
+      // mise global tool versions; the rest of ~/.config/mise (tokens) stays out.
+      { platform: "darwin", scope: "home", path: ".config/mise/config.toml" },
+      // User site-packages (`pip install --user`) and DotSlash-fetched binaries.
+      { platform: "darwin", scope: "home-dir", path: "Library/Python" },
+      { platform: "darwin", scope: "home-dir", path: "Library/Caches/dotslash" },
+      ...homeToolchainEntries("darwin"),
+      // Homebrew (Apple Silicon, Intel), and Nix packages plus their profile links.
+      ...prefixEntries("darwin", ["/opt/homebrew", "/usr/local"]),
+      { platform: "darwin", scope: "global", path: "/nix/store" },
+      { platform: "darwin", scope: "global", path: "/nix/var/nix/profiles" },
       { platform: "darwin", scope: "bundled", path: "ripgrep" },
       { platform: "darwin", scope: "global", path: "/dev/null" },
       { platform: "darwin", scope: "global", path: "/dev/zero" },
@@ -165518,13 +165834,13 @@ var require_core4 = __commonJS({
     }, warn() {
     }, error() {
     } };
-    function getLogger(logger112) {
-      if (logger112 === false)
+    function getLogger(logger113) {
+      if (logger113 === false)
         return noLogs;
-      if (logger112 === void 0)
+      if (logger113 === void 0)
         return console;
-      if (logger112.log && logger112.warn && logger112.error)
-        return logger112;
+      if (logger113.log && logger113.warn && logger113.error)
+        return logger113;
       throw new Error("logger must implement log, warn and error methods");
     }
     var KEYWORD_NAME = /^[a-z_$][a-z0-9_$:-]*$/i;
@@ -168867,18 +169183,18 @@ function buildMcpHttpExchangeFailureMetadata(args) {
 }
 function logMcpHttpExchangeSuccess(args) {
   var _a20, _b2;
-  const { logger: logger112, response } = args;
+  const { logger: logger113, response } = args;
   const logMetadata = buildMcpHttpExchangeSuccessMetadata(args);
   if (response.ok) {
-    (_a20 = logger112.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger112, "MCP HTTP exchange completed", logMetadata);
+    (_a20 = logger113.info) === null || _a20 === void 0 ? void 0 : _a20.call(logger113, "MCP HTTP exchange completed", logMetadata);
   } else {
-    (_b2 = logger112.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger112, "MCP HTTP exchange completed", logMetadata);
+    (_b2 = logger113.warn) === null || _b2 === void 0 ? void 0 : _b2.call(logger113, "MCP HTTP exchange completed", logMetadata);
   }
 }
 function logMcpHttpExchangeFailure(args) {
   var _a20;
-  const { logger: logger112 } = args;
-  (_a20 = logger112.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger112, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
+  const { logger: logger113 } = args;
+  (_a20 = logger113.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger113, "MCP HTTP exchange failed", buildMcpHttpExchangeFailureMetadata(args));
 }
 function isMcpEndpointPath(path30) {
   return path30 === "/mcp" || (path30 === null || path30 === void 0 ? void 0 : path30.endsWith("/mcp")) === true;
@@ -168926,19 +169242,19 @@ function readErrorResponseSummaryForLog(input, response) {
     }
   });
 }
-function safelyLogExchange(action, logger112, phase) {
+function safelyLogExchange(action, logger113, phase) {
   var _a20;
   try {
     action();
   } catch (_b2) {
-    (_a20 = logger112.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger112, "MCP HTTP exchange logging failed", {
+    (_a20 = logger113.warn) === null || _a20 === void 0 ? void 0 : _a20.call(logger113, "MCP HTTP exchange logging failed", {
       event: "mcp_http_exchange_logging_failure",
       phase
     });
   }
 }
 function createLoggedMcpHttpFetch(options2) {
-  const { fetch: fetch2, logger: logger112, metadata, logSuccessfulExchanges = true } = options2;
+  const { fetch: fetch2, logger: logger113, metadata, logSuccessfulExchanges = true } = options2;
   return (input, init) => __awaiter27(this, void 0, void 0, function* () {
     const startedAtMs = Date.now();
     try {
@@ -168951,7 +169267,7 @@ function createLoggedMcpHttpFetch(options2) {
       if (logSuccessfulExchanges || !response.ok) {
         safelyLogExchange(() => {
           logMcpHttpExchangeSuccess({
-            logger: logger112,
+            logger: logger113,
             input,
             init,
             response,
@@ -168960,7 +169276,7 @@ function createLoggedMcpHttpFetch(options2) {
             responseErrorSummary,
             oauthTokenErrorBodySummary
           });
-        }, logger112, "success");
+        }, logger113, "success");
       }
       return response;
     } catch (error3) {
@@ -168972,7 +169288,7 @@ function createLoggedMcpHttpFetch(options2) {
       }) : {};
       safelyLogExchange(() => {
         logMcpHttpExchangeFailure({
-          logger: logger112,
+          logger: logger113,
           input,
           init,
           error: error3,
@@ -168982,7 +169298,7 @@ function createLoggedMcpHttpFetch(options2) {
           responseErrorSummary,
           oauthTokenErrorBodySummary
         });
-      }, logger112, "failure");
+      }, logger113, "failure");
       throw error3;
     }
   });
@@ -220910,6 +221226,70 @@ function errorLogTag(error3) {
   return code !== void 0 ? `${error3.name} (${code})` : error3.name;
 }
 
+// src/shared/invariant.ts
+var SandInvariantViolation = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "SandInvariantViolation";
+  }
+};
+var installedReporter = null;
+var STRIPPED_MESSAGE = "Invariant violation (message stripped in packaged builds; the stack identifies the site)";
+function messagesStripped() {
+  return false;
+}
+var FRAME_LINE = /^at /;
+function topApplicationFrame(violation) {
+  const stack = violation.stack;
+  if (typeof stack !== "string" || !stack.startsWith(headerOf(violation))) return null;
+  for (const raw of stack.slice(headerOf(violation).length).split("\n")) {
+    const frame = raw.trim();
+    if (!FRAME_LINE.test(frame)) continue;
+    return frame;
+  }
+  return null;
+}
+function headerOf(violation) {
+  return violation.message === "" ? violation.name : `${violation.name}: ${violation.message}`;
+}
+function invariant(condition, message) {
+  if (condition) return;
+  failInvariant(message, invariant);
+}
+function failInvariant(message, boundary) {
+  let violationMessage;
+  if (messagesStripped()) {
+    violationMessage = STRIPPED_MESSAGE;
+  } else if (typeof message === "function") {
+    violationMessage = message();
+  } else {
+    violationMessage = message;
+  }
+  const violation = new SandInvariantViolation(violationMessage);
+  let frame = null;
+  if ("captureStackTrace" in Error && typeof Error.captureStackTrace === "function") {
+    Error.captureStackTrace(violation, boundary);
+    if (installedReporter !== null) frame = topApplicationFrame(violation);
+  }
+  installedReporter?.({ name: violation.name, frame });
+  throw violation;
+}
+
+// src/shared/node/cursor-backend/eval-team-id.ts
+var SAND_EVAL_TEAM_ID_ENV = "SAND_EVAL_TEAM_ID";
+function sandEvalTeamIdGetter(rawTeamId) {
+  const raw = rawTeamId?.trim();
+  if (raw == null || raw.length === 0) {
+    return async () => void 0;
+  }
+  const teamId = Number(raw);
+  invariant(
+    Number.isSafeInteger(teamId) && teamId > 0,
+    `${SAND_EVAL_TEAM_ID_ENV} must be a positive integer team id, got ${JSON.stringify(raw)}`
+  );
+  return async () => teamId;
+}
+
 // src/shared/parse/unknown-record.ts
 function isUnknownRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -221067,7 +221447,7 @@ function stampedVersionBaseOf(stamped) {
 }
 function sandClientBaseVersionOf(clientAppVersion) {
   return stampedVersionBaseOf(clientAppVersion) ?? stampedVersionBaseOf(
-    true ? "0.59.0-pre.20" : void 0
+    true ? "0.59.0-pre.27" : void 0
   ) ?? SAND_CLIENT_FALLBACK_BASE_VERSION;
 }
 var SAND_BOX_NAMESPACE_HEADER = "x-sand-box-namespace";
@@ -226756,6 +227136,8 @@ var AgentPostTurnLabelingRequest = class _AgentPostTurnLabelingRequest extends _
     super();
     this.requestId = "";
     this.messages = [];
+    this.externalSends = [];
+    this.parentMessages = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -226771,7 +227153,31 @@ var AgentPostTurnLabelingRequest = class _AgentPostTurnLabelingRequest extends _
     return proto3.util.equals(_AgentPostTurnLabelingRequest, a, b2);
   }
   static $() {
-    return ["AgentPostTurnLabelingRequest|1 request_id 9|2 messages #0*|3 conversation_id 9?|4 agent_mode 9?|5 model_name 9?", InferenceCoreMessage];
+    return ["AgentPostTurnLabelingRequest|1 request_id 9|2 messages #0*|3 conversation_id 9?|4 agent_mode 9?|5 model_name 9?|6 external_sends #1*|7 external_send_only 8?|8 request_source 9?|9 is_subagent 8?|10 parent_messages #0*|11 external_send_reported 8?", InferenceCoreMessage, AgentPostTurnExternalSend];
+  }
+};
+var AgentPostTurnExternalSend = class _AgentPostTurnExternalSend extends __protoMessage33 {
+  constructor(data) {
+    super();
+    this.toolCallId = "";
+    this.toolName = "";
+    this.connector = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _AgentPostTurnExternalSend().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _AgentPostTurnExternalSend().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _AgentPostTurnExternalSend().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_AgentPostTurnExternalSend, a, b2);
+  }
+  static $() {
+    return ["AgentPostTurnExternalSend|1 tool_call_id 9|2 tool_name 9|3 connector 9"];
   }
 };
 var RunInferenceClientMessage = class _RunInferenceClientMessage extends __protoMessage33 {
@@ -227127,7 +227533,7 @@ var RunInferencePromptModelMetadata = class _RunInferencePromptModelMetadata ext
     return proto3.util.equals(_RunInferencePromptModelMetadata, a, b2);
   }
   static $() {
-    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|50 is_opus55 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?|46 agent_mode_configs #2*|47 use_new_plan_mode_prompts 8?|48 ask_question_config #3?|49 subagent_model_config #4?|51 post_tool_reminders #5*|52 enable_semantic_search 8?|53 long_reasoning_reminder #6?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig, RunInferenceAgentModeConfig, RunInferenceAskQuestionConfig, RunInferenceSubagentModelConfig, RunInferencePostToolReminder, RunInferenceLongReasoningReminderConfig];
+    return ["RunInferencePromptModelMetadata|1 vendor 9|2 prompt_version 9|3 is_sonnet45 8|4 is_gemini3 8|5 is_gpt51 8|6 is_gpt52 8|7 is_gpt5 8|8 is_gpt55 8|9 is_gpt56 8|10 is_sonnet4 8|11 is_codex_family 8|12 is_gpt54 8|13 is_gpt52_codex 8|14 is_gpt53_codex 8|15 is_gpt53_codex_spark 8|16 is_claude_4x 8|17 is_opus45 8|18 is_opus46 8|19 is_opus48 8|20 is_opus5 8|50 is_opus55 8|21 is_fable5 8|43 is_fable51 8|22 is_fruitcake 8|23 is_gpt5_family 8|24 is_composer1 8|25 is_composer15 8|26 is_composer2 8|27 is_composer_matterhorn 8|28 is_grok45_product_prompt 8|29 is_raw_training_slug 8|34 is_grok46_product_prompt 8|30 reasoning_effort 9?|31 use_dsv3_harness 8|32 agent_token_limit 5?|33 estimated_cache_ttl_ms 5?|35 persona 9|36 feature_flags 9,#0|37 loop_nudge #1?|38 progress_reminder_threshold 5?|39 effort_level 9?|40 supports_assistant_message_prefill 8|41 enable_line_numbers 8|42 use_sparse_read_line_numbers 8|44 self_identity_name 9|45 dsv3_is_thinking 8?|46 agent_mode_configs #2*|47 use_new_plan_mode_prompts 8?|48 ask_question_config #3?|49 subagent_model_config #4?|51 post_tool_reminders #5*|52 enable_semantic_search 8?|53 long_reasoning_reminder #6?|54 smart_mode_classifier_mode 8?|55 smart_mode_classifier_shadow_mode 8?", RunInferenceFlagValue, RunInferenceLoopNudgeConfig, RunInferenceAgentModeConfig, RunInferenceAskQuestionConfig, RunInferenceSubagentModelConfig, RunInferencePostToolReminder, RunInferenceLongReasoningReminderConfig];
   }
 };
 var RunInferencePostToolReminder = class _RunInferencePostToolReminder extends __protoMessage33 {
@@ -227652,6 +228058,7 @@ var conversationIdKey = createKey(/* @__PURE__ */ Symbol("conversationId"), void
 var conversationGroupIdKey = createKey(/* @__PURE__ */ Symbol("conversationGroupId"), void 0);
 var automationIdKey = createKey(/* @__PURE__ */ Symbol("automationId"), void 0);
 var originatingFlowKey = createKey(/* @__PURE__ */ Symbol("originatingFlow"), void 0);
+var requestModelNameKey = createKey(/* @__PURE__ */ Symbol("requestModelName"), void 0);
 var parentRequestIdKey = createKey(/* @__PURE__ */ Symbol("parentRequestId"), void 0);
 var rootParentRequestIdKey = createKey(/* @__PURE__ */ Symbol("rootParentRequestId"), void 0);
 var parentAgentToolCallIdKey = createKey(/* @__PURE__ */ Symbol("parentAgentToolCallId"), void 0);
@@ -250616,11 +251023,11 @@ function createTransport(opt) {
   };
 }
 
-// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98_0173d6486c0a6fd8a0e13e49a0cbcc46/node_modules/@connectrpc/connect-node/dist/esm/compression.js
+// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_patch_hash=471c45a77ea03500a2ff4ea6e314c80a49e0f460e4dbc_6a48113b7a1dc0914bbcac2698f7c8f3/node_modules/@connectrpc/connect-node/dist/esm/compression.js
 var zlib = __toESM(require("zlib"), 1);
 var import_util4 = require("util");
 
-// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98_0173d6486c0a6fd8a0e13e49a0cbcc46/node_modules/@connectrpc/connect-node/dist/esm/node-error.js
+// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_patch_hash=471c45a77ea03500a2ff4ea6e314c80a49e0f460e4dbc_6a48113b7a1dc0914bbcac2698f7c8f3/node_modules/@connectrpc/connect-node/dist/esm/node-error.js
 function connectErrorFromNodeReason(reason) {
   let code = Code.Internal;
   const chain = unwrapNodeErrorChain(reason).map(getNodeErrorProps);
@@ -250709,7 +251116,7 @@ var H2Code;
   H2Code2[H2Code2["HTTP_1_1_REQUIRED"] = 13] = "HTTP_1_1_REQUIRED";
 })(H2Code || (H2Code = {}));
 
-// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98_0173d6486c0a6fd8a0e13e49a0cbcc46/node_modules/@connectrpc/connect-node/dist/esm/compression.js
+// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_patch_hash=471c45a77ea03500a2ff4ea6e314c80a49e0f460e4dbc_6a48113b7a1dc0914bbcac2698f7c8f3/node_modules/@connectrpc/connect-node/dist/esm/compression.js
 var gzip2 = (0, import_util4.promisify)(zlib.gzip);
 var gunzip2 = (0, import_util4.promisify)(zlib.gunzip);
 var brotliCompress2 = (0, import_util4.promisify)(zlib.brotliCompress);
@@ -250766,11 +251173,11 @@ function wrapZLibErrors(promise, readMaxBytes) {
   });
 }
 
-// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98_0173d6486c0a6fd8a0e13e49a0cbcc46/node_modules/@connectrpc/connect-node/dist/esm/node-universal-client.js
+// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_patch_hash=471c45a77ea03500a2ff4ea6e314c80a49e0f460e4dbc_6a48113b7a1dc0914bbcac2698f7c8f3/node_modules/@connectrpc/connect-node/dist/esm/node-universal-client.js
 var http = __toESM(require("http"), 1);
 var https = __toESM(require("https"), 1);
 
-// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98_0173d6486c0a6fd8a0e13e49a0cbcc46/node_modules/@connectrpc/connect-node/dist/esm/node-universal-header.js
+// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_patch_hash=471c45a77ea03500a2ff4ea6e314c80a49e0f460e4dbc_6a48113b7a1dc0914bbcac2698f7c8f3/node_modules/@connectrpc/connect-node/dist/esm/node-universal-header.js
 function nodeHeaderToWebHeader(nodeHeaders) {
   const header = new Headers();
   for (const [k2, v2] of Object.entries(nodeHeaders)) {
@@ -250837,7 +251244,7 @@ function appendWebHeader(o, key, value) {
   }
 }
 
-// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98_0173d6486c0a6fd8a0e13e49a0cbcc46/node_modules/@connectrpc/connect-node/dist/esm/http2-session-manager.js
+// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_patch_hash=471c45a77ea03500a2ff4ea6e314c80a49e0f460e4dbc_6a48113b7a1dc0914bbcac2698f7c8f3/node_modules/@connectrpc/connect-node/dist/esm/http2-session-manager.js
 var http2 = __toESM(require("http2"), 1);
 var Http2SessionManager = class {
   /**
@@ -250871,6 +251278,9 @@ var Http2SessionManager = class {
    *   The connection is closed because of a transient error. A connection
    *   may have failed to reach the host, or the connection may have died,
    *   or it may have been aborted.
+   *
+   * - "unavailable"
+   *   The connection is open, but the ALPN protocol failed to negotiate HTTP/2.
    */
   state() {
     if (this.s.t == "ready") {
@@ -250970,6 +251380,7 @@ var Http2SessionManager = class {
     this.setState(closedOrError(err));
   }
   async gotoReady() {
+    var _a20;
     if (this.s.t == "ready") {
       if (this.s.isShuttingDown() || this.s.conn.closed || this.s.conn.destroyed) {
         this.setState(connect2(this.authority, this.http2SessionOptions));
@@ -250982,6 +251393,12 @@ var Http2SessionManager = class {
     while (this.s.t !== "ready") {
       if (this.s.t === "error") {
         throw this.s.reason;
+      }
+      if (this.s.t === "unavailable") {
+        throw new ConnectError("expected h2 session, but ALPN protocol failed to negotiate", Code.Unavailable, {
+          "authority": this.authority,
+          "issuer": (_a20 = this.s.issuer) !== null && _a20 !== void 0 ? _a20 : "unknown"
+        });
       }
       if (this.s.t === "connecting") {
         await this.s.conn;
@@ -251017,6 +251434,8 @@ var Http2SessionManager = class {
       case "closed":
         break;
       case "error":
+        break;
+      case "unavailable":
         break;
     }
     this.s = state;
@@ -251090,7 +251509,15 @@ function connect2(authority, http2SessionOptions) {
   };
 }
 function ready(conn, options2) {
+  var _a20, _b2, _c2;
   assertSessionOpen(conn);
+  if (conn.encrypted === true && conn.alpnProtocol !== "h2") {
+    return {
+      t: "unavailable",
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      issuer: (_c2 = (_b2 = (_a20 = conn.socket) === null || _a20 === void 0 ? void 0 : _a20.getPeerCertificate()) === null || _b2 === void 0 ? void 0 : _b2.issuer) === null || _c2 === void 0 ? void 0 : _c2.CN
+    };
+  }
   conn.unref();
   let lastAliveAt = Date.now();
   let streamCount = 0;
@@ -251231,18 +251658,18 @@ function ready(conn, options2) {
     }
   }
   function onClose() {
-    var _a20;
+    var _a21;
     cleanup();
-    (_a20 = state.onClose) === null || _a20 === void 0 ? void 0 : _a20.call(state);
+    (_a21 = state.onClose) === null || _a21 === void 0 ? void 0 : _a21.call(state);
   }
   function onError(err) {
-    var _a20, _b2;
+    var _a21, _b3;
     cleanup();
     if (receivedGoAwayEnhanceYourCalmTooManyPings) {
       const ce2 = new ConnectError(`http/2 connection closed with error code ENHANCE_YOUR_CALM (0x${http2.constants.NGHTTP2_ENHANCE_YOUR_CALM.toString(16)}), too_many_pings, doubled the interval`, Code.ResourceExhausted);
-      (_a20 = state.onError) === null || _a20 === void 0 ? void 0 : _a20.call(state, ce2);
+      (_a21 = state.onError) === null || _a21 === void 0 ? void 0 : _a21.call(state, ce2);
     } else {
-      (_b2 = state.onError) === null || _b2 === void 0 ? void 0 : _b2.call(state, connectErrorFromNodeReason(err));
+      (_b3 = state.onError) === null || _b3 === void 0 ? void 0 : _b3.call(state, connectErrorFromNodeReason(err));
     }
   }
   function cleanup() {
@@ -251275,7 +251702,7 @@ function assertSessionOpen(conn) {
   }
 }
 
-// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_@bufbuild+protobuf@1.10.1_patch_hash=b56e7d63154958cee98_0173d6486c0a6fd8a0e13e49a0cbcc46/node_modules/@connectrpc/connect-node/dist/esm/node-universal-client.js
+// ../node_modules/.pnpm/@connectrpc+connect-node@1.6.1_patch_hash=471c45a77ea03500a2ff4ea6e314c80a49e0f460e4dbc_6a48113b7a1dc0914bbcac2698f7c8f3/node_modules/@connectrpc/connect-node/dist/esm/node-universal-client.js
 function createNodeHttpClient(options2) {
   var _a20;
   if (options2.httpVersion == "1.1") {
@@ -251529,55 +251956,6 @@ function createSentinel(signal) {
     });
   }
   return s3;
-}
-
-// src/shared/invariant.ts
-var SandInvariantViolation = class extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "SandInvariantViolation";
-  }
-};
-var installedReporter = null;
-var STRIPPED_MESSAGE = "Invariant violation (message stripped in packaged builds; the stack identifies the site)";
-function messagesStripped() {
-  return false;
-}
-var FRAME_LINE = /^at /;
-function topApplicationFrame(violation) {
-  const stack = violation.stack;
-  if (typeof stack !== "string" || !stack.startsWith(headerOf(violation))) return null;
-  for (const raw of stack.slice(headerOf(violation).length).split("\n")) {
-    const frame = raw.trim();
-    if (!FRAME_LINE.test(frame)) continue;
-    return frame;
-  }
-  return null;
-}
-function headerOf(violation) {
-  return violation.message === "" ? violation.name : `${violation.name}: ${violation.message}`;
-}
-function invariant(condition, message) {
-  if (condition) return;
-  failInvariant(message, invariant);
-}
-function failInvariant(message, boundary) {
-  let violationMessage;
-  if (messagesStripped()) {
-    violationMessage = STRIPPED_MESSAGE;
-  } else if (typeof message === "function") {
-    violationMessage = message();
-  } else {
-    violationMessage = message;
-  }
-  const violation = new SandInvariantViolation(violationMessage);
-  let frame = null;
-  if ("captureStackTrace" in Error && typeof Error.captureStackTrace === "function") {
-    Error.captureStackTrace(violation, boundary);
-    if (installedReporter !== null) frame = topApplicationFrame(violation);
-  }
-  installedReporter?.({ name: violation.name, frame });
-  throw violation;
 }
 
 // src/shared/observability/request-lineage.ts
@@ -261229,6 +261607,153 @@ var EvaluatePromptHookResponse = class _EvaluatePromptHookResponse extends __pro
     return ["EvaluatePromptHookResponse|1 ok 8|2 reason 9?"];
   }
 };
+var ComputerUseAxElement = class _ComputerUseAxElement extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    this.id = 0;
+    this.role = "";
+    this.name = "";
+    this.flags = [];
+    this.actions = [];
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ComputerUseAxElement().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ComputerUseAxElement().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ComputerUseAxElement().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ComputerUseAxElement, a, b2);
+  }
+  static $() {
+    return ["ComputerUseAxElement|1 id 13|2 role 9|3 name 9|4 value 9?|5 flags 9*|6 actions 9*"];
+  }
+};
+var ComputerUsePastAction = class _ComputerUsePastAction extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    this.kind = "";
+    this.treeChanged = false;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ComputerUsePastAction().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ComputerUsePastAction().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ComputerUsePastAction().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ComputerUsePastAction, a, b2);
+  }
+  static $() {
+    return ["ComputerUsePastAction|1 kind 9|2 element #0?|3 key 9?|4 tree_changed 8", ComputerUseAxElement];
+  }
+};
+var ComputerUseTreeDiff = class _ComputerUseTreeDiff extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    this.valueChanges = [];
+    this.added = [];
+    this.removed = [];
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ComputerUseTreeDiff().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ComputerUseTreeDiff().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ComputerUseTreeDiff().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ComputerUseTreeDiff, a, b2);
+  }
+  static $() {
+    return ["ComputerUseTreeDiff|1 value_changes 9*|2 added 9*|3 removed 9*"];
+  }
+};
+var ComputerUseDecideNextActionRequest = class _ComputerUseDecideNextActionRequest extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    this.attemptId = "";
+    this.stepIndex = 0;
+    this.iteration = 0;
+    this.goal = "";
+    this.candidates = [];
+    this.actions = [];
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ComputerUseDecideNextActionRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ComputerUseDecideNextActionRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ComputerUseDecideNextActionRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ComputerUseDecideNextActionRequest, a, b2);
+  }
+  static $() {
+    return ["ComputerUseDecideNextActionRequest|1 attempt_id 9|2 step_index 13|3 iteration 13|4 goal 9|5 expect 9?|6 candidates #0*|7 actions #1*|8 changed_since_last_action #2?", ComputerUseAxElement, ComputerUsePastAction, ComputerUseTreeDiff];
+  }
+};
+var ComputerUseActionChoice = class _ComputerUseActionChoice extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    this.label = "";
+    this.probabilities = {};
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ComputerUseActionChoice().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ComputerUseActionChoice().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ComputerUseActionChoice().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ComputerUseActionChoice, a, b2);
+  }
+  static $() {
+    return ["ComputerUseActionChoice|1 label 9|2 probabilities 9,1"];
+  }
+};
+var ComputerUseDecideNextActionResponse = class _ComputerUseDecideNextActionResponse extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    this.present = 0;
+    this.goalReached = 0;
+    this.unreachable = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ComputerUseDecideNextActionResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ComputerUseDecideNextActionResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ComputerUseDecideNextActionResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ComputerUseDecideNextActionResponse, a, b2);
+  }
+  static $() {
+    return ["ComputerUseDecideNextActionResponse|1 kind #0|2 item #0|3 key #0|4 present 1|5 goal_reached 1|6 unreachable 1|7 last_landed 1?|8 expect 1?", ComputerUseActionChoice];
+  }
+};
 var TryParseTypeScriptTreeSitterRequest = class _TryParseTypeScriptTreeSitterRequest extends __protoMessage3124 {
   constructor(data) {
     super();
@@ -264542,6 +265067,49 @@ var RunGenerateImageResponse = class _RunGenerateImageResponse extends __protoMe
   }
   static $() {
     return ["RunGenerateImageResponse|1 success #0 result|2 error #1 result", RunGenerateImageSuccess, RunGenerateImageError];
+  }
+};
+var ClassifyAgentAutoReviewRequest = class _ClassifyAgentAutoReviewRequest extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    this.workspacePaths = [];
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ClassifyAgentAutoReviewRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ClassifyAgentAutoReviewRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ClassifyAgentAutoReviewRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ClassifyAgentAutoReviewRequest, a, b2);
+  }
+  static $() {
+    return ["ClassifyAgentAutoReviewRequest|1 args #0|2 attempt_index 13?|3 mode 9?|4 workspace_paths 9*", SmartModeClassifierArgs];
+  }
+};
+var ClassifyAgentAutoReviewResponse = class _ClassifyAgentAutoReviewResponse extends __protoMessage3124 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ClassifyAgentAutoReviewResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ClassifyAgentAutoReviewResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ClassifyAgentAutoReviewResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ClassifyAgentAutoReviewResponse, a, b2);
+  }
+  static $() {
+    return ["ClassifyAgentAutoReviewResponse|1 result #0", SmartModeClassifierResult];
   }
 };
 var RunDescribeImageRequest = class _RunDescribeImageRequest extends __protoMessage3124 {
@@ -272574,6 +273142,25 @@ var AiService = {
       kind: MethodKind.Unary
     },
     /**
+     * IDE Auto-review (Smart Mode): classify a proposed Shell / MCP / WebFetch /
+     * FetchMcpResource action for a client-run agent loop with the classifier
+     * the backend agent loop runs in-process for the same IDE session (the same
+     * prompt, model selection, mode, and telemetry). The client supplies the
+     * bounded SmartModeClassifierArgs the shared executor builds; the backend
+     * owns everything else. Without an exec stream the classifier has no
+     * workspace tools (ReadFile / ListDir / Grep / Glob) and classifies from the
+     * call and the conversation excerpt alone. Admission is any authenticated
+     * session, the same as the in-process classifier.
+     *
+     * @generated from rpc aiserver.v1.AiService.ClassifyAgentAutoReview
+     */
+    classifyAgentAutoReview: {
+      name: "ClassifyAgentAutoReview",
+      I: ClassifyAgentAutoReviewRequest,
+      O: ClassifyAgentAutoReviewResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * @generated from rpc aiserver.v1.AiService.RunDescribeImage
      */
     runDescribeImage: {
@@ -273198,6 +273785,7 @@ var AiService = {
     },
     /**
      * @generated from rpc aiserver.v1.AiService.KeepTaskList
+     * @deprecated
      */
     keepTaskList: {
       name: "KeepTaskList",
@@ -273728,6 +274316,20 @@ var AiService = {
       name: "EvaluatePromptHook",
       I: EvaluatePromptHookRequest,
       O: EvaluatePromptHookResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * Decides the next UI action in a macOS app and which element of its
+     * accessibility tree to act on. The client sends observed accessibility
+     * facts; the server owns every question it asks about them and returns labels
+     * and probabilities only. Gated on `computer_use_next_action`.
+     *
+     * @generated from rpc aiserver.v1.AiService.ComputerUseDecideNextAction
+     */
+    computerUseDecideNextAction: {
+      name: "ComputerUseDecideNextAction",
+      I: ComputerUseDecideNextActionRequest,
+      O: ComputerUseDecideNextActionResponse,
       kind: MethodKind.Unary
     },
     /**
@@ -276832,7 +277434,7 @@ var McpOAuthRefreshLockExecutorKind = /* @__PURE__ */ enumType2(proto3, __protoP
 var McpOAuthRefreshLockBeginOutcome = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "McpOAuthRefreshLockBeginOutcome", [[0, "UNSPECIFIED"], [1, "SKIPPED"], [2, "WOULD_ACQUIRE"], [3, "WOULD_WAIT"], [4, "REDIS_ERROR"]], 1);
 var McpOAuthRefreshLockReleaseReason = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "McpOAuthRefreshLockReleaseReason", [[0, "UNSPECIFIED"], [1, "COMPLETE"], [2, "ERROR"], [3, "ABANDONED"]], 1);
 var CycleType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "CycleType", [[0, "UNSPECIFIED"], [1, "MONTH"], [2, "START_TIME"]], 1);
-var SpendLimitPolicyScope = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SpendLimitPolicyScope", [[0, "UNSPECIFIED"], [1, "TEAM_TOTAL"], [2, "TEAM_MEMBER_DEFAULT"]], 1);
+var SpendLimitPolicyScope = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SpendLimitPolicyScope", [[0, "UNSPECIFIED"], [1, "TEAM_TOTAL"], [2, "TEAM_MEMBER_DEFAULT"], [3, "GROUP_MEMBER_DEFAULT"]], 1);
 var SpendLimitPolicyType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SpendLimitPolicyType", [[0, "UNSPECIFIED"], [1, "NONE"], [2, "HARD"], [3, "SOFT"]], 1);
 var TeamRole = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "TeamRole", [[0, "UNSPECIFIED"], [1, "OWNER"], [2, "MEMBER"], [3, "FREE_OWNER"], [4, "REMOVED"]], 1);
 var TeamMemberBillingTier = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "TeamMemberBillingTier", [[0, "UNSPECIFIED"], [1, "TIER_1000"], [2, "TIER_2000"]], 1);
@@ -276865,6 +277467,7 @@ var SandEgressMode = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SandE
 var LlmGatewayAuthMode = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "LlmGatewayAuthMode", [[0, "UNSPECIFIED"], [1, "JWT_ACCESS"], [2, "CUSTOMER_MANAGED"]], 1);
 var LlmGatewayCredentialSourceStrategy = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "LlmGatewayCredentialSourceStrategy", [[0, "UNSPECIFIED"], [1, "TEAM_CREDENTIAL_ALL_SURFACES"], [2, "CLIENT_LOCAL_TEAM_CLOUD"]], 1);
 var SandGroupAccessMode = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SandGroupAccessMode", [[0, "UNSPECIFIED"], [1, "ALL"], [2, "LIMITED"]], 1);
+var CloudAgentGroupAccessMode = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "CloudAgentGroupAccessMode", [[0, "UNSPECIFIED"], [1, "ALL"], [2, "LIMITED"]], 1);
 var SandSetupChecklistItemState = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SandSetupChecklistItemState", [[0, "UNSPECIFIED"], [1, "CHECKED"], [2, "SKIPPED"], [3, "CLEARED"]], 1);
 var SandOnboardingCompletionSource = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SandOnboardingCompletionSource", [[0, "UNSPECIFIED"], [1, "DASHBOARD_SETTINGS"], [2, "PORTAL_ONBOARDING"]], 1);
 var TrialType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "TrialType", [[0, "UNSPECIFIED"], [1, "REQUEST"], [2, "TOKEN"]], 1);
@@ -276873,6 +277476,8 @@ var CreditGrantOwnership = /* @__PURE__ */ enumType2(proto3, __protoPackage143, 
 var SandBillingBrand = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SandBillingBrand", [[0, "UNSPECIFIED"], [1, "CURSOR"], [2, "GROK"]], 1);
 var UserAccessRequestKind = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "UserAccessRequestKind", [[0, "UNSPECIFIED"], [1, "SAND_TEAM_ACCESS"]], 1);
 var IapVerificationProvenance = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "IapVerificationProvenance", [[0, "UNSPECIFIED"], [1, "PURCHASE_RETURN"], [2, "PURCHASE_LISTENER"], [3, "COLD_START"], [4, "FOREGROUND"], [5, "MANUAL_RESTORE"], [6, "AUTH_CHANGE"]], 1);
+var GooglePlayInventoryClientState = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "GooglePlayInventoryClientState", [[0, "UNSPECIFIED"], [1, "ACTIVE"], [2, "SUSPENDED"], [3, "PENDING"]], 1);
+var GooglePlayInventoryTrigger = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "GooglePlayInventoryTrigger", [[0, "UNSPECIFIED"], [1, "COLD_START"], [2, "FOREGROUND"], [3, "MANUAL_RESTORE"]], 1);
 var LimitHitStage = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "LimitHitStage", [[0, "UNSPECIFIED"], [1, "AUTO_SWITCH"], [2, "SLOW_POOL"], [3, "HARD_BLOCK"], [4, "WEEKLY_LIMIT"]], 1);
 var SeatUpgradePoolDriver = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SeatUpgradePoolDriver", [[0, "UNSPECIFIED"], [1, "FIRST_PARTY"], [2, "THIRD_PARTY"], [3, "BOTH"]], 1);
 var AllowlistConfig = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "AllowlistConfig", [[0, "UNSPECIFIED"], [1, "ALLOWLIST"], [2, "BLOCKLIST"]], 1);
@@ -282870,7 +283475,7 @@ var TeamGroup = class _TeamGroup extends __protoMessage3136 {
     return proto3.util.equals(_TeamGroup, a, b2);
   }
   static $() {
-    return ["TeamGroup|1 id 3|2 name 9|3 team_id 5|4 created_at 3|5 updated_at 3|6 member_count 5|7 public_id 9|8 monthly_spending_limit_dollars 5?|9 ant_cyber_approved 8|10 ant_cyber_verification_status #0?|11 visibility #1|12 grok_bot_enabled 8?|13 anthropic_efs_status #2|14 is_idp_synced 8", AnthropicCyberVerificationStatus, GroupVisibility, AnthropicEfsStatus];
+    return ["TeamGroup|1 id 3|2 name 9|3 team_id 5|4 created_at 3|5 updated_at 3|6 member_count 5|7 public_id 9|8 monthly_spending_limit_dollars 5?|9 ant_cyber_approved 8|10 ant_cyber_verification_status #0?|11 visibility #1|12 grok_bot_enabled 8?|15 cloud_agent_enabled 8?|13 anthropic_efs_status #2|14 is_idp_synced 8", AnthropicCyberVerificationStatus, GroupVisibility, AnthropicEfsStatus];
   }
 };
 var GetTeamGroupsRequest = class _GetTeamGroupsRequest extends __protoMessage3136 {
@@ -283102,7 +283707,7 @@ var UpdateTeamGroupRequest = class _UpdateTeamGroupRequest extends __protoMessag
     return proto3.util.equals(_UpdateTeamGroupRequest, a, b2);
   }
   static $() {
-    return ["UpdateTeamGroupRequest|1 team_id 5|2 group_id 3|3 name 9|4 monthly_spending_limit_dollars 5?|5 clear_monthly_spending_limit_dollars 8|6 visibility #0|7 grok_bot_enabled 8?", GroupVisibility];
+    return ["UpdateTeamGroupRequest|1 team_id 5|2 group_id 3|3 name 9|4 monthly_spending_limit_dollars 5?|5 clear_monthly_spending_limit_dollars 8|6 visibility #0|7 grok_bot_enabled 8?|8 cloud_agent_enabled 8?", GroupVisibility];
   }
 };
 var UpdateTeamGroupResponse = class _UpdateTeamGroupResponse extends __protoMessage3136 {
@@ -283482,6 +284087,100 @@ var UpdateTeamGroupMcpSettingsResponse = class _UpdateTeamGroupMcpSettingsRespon
   }
   static $() {
     return ["UpdateTeamGroupMcpSettingsResponse"];
+  }
+};
+var ExportTeamGroupMcpAllowlistRequest = class _ExportTeamGroupMcpAllowlistRequest extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.teamId = 0;
+    this.groupPublicId = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ExportTeamGroupMcpAllowlistRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ExportTeamGroupMcpAllowlistRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ExportTeamGroupMcpAllowlistRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ExportTeamGroupMcpAllowlistRequest, a, b2);
+  }
+  static $() {
+    return ["ExportTeamGroupMcpAllowlistRequest|1 team_id 5|2 group_public_id 9"];
+  }
+};
+var ExportTeamGroupMcpAllowlistResponse = class _ExportTeamGroupMcpAllowlistResponse extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.fileJson = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ExportTeamGroupMcpAllowlistResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ExportTeamGroupMcpAllowlistResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ExportTeamGroupMcpAllowlistResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ExportTeamGroupMcpAllowlistResponse, a, b2);
+  }
+  static $() {
+    return ["ExportTeamGroupMcpAllowlistResponse|1 file_json 9"];
+  }
+};
+var ImportTeamGroupMcpAllowlistRequest = class _ImportTeamGroupMcpAllowlistRequest extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.teamId = 0;
+    this.groupPublicId = "";
+    this.fileJson = "";
+    this.dryRun = false;
+    this.baseFingerprint = "";
+    this.useFileRowKeys = [];
+    this.acknowledgeReplacesTeamPolicy = false;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ImportTeamGroupMcpAllowlistRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ImportTeamGroupMcpAllowlistRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ImportTeamGroupMcpAllowlistRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ImportTeamGroupMcpAllowlistRequest, a, b2);
+  }
+  static $() {
+    return ["ImportTeamGroupMcpAllowlistRequest|1 team_id 5|2 group_public_id 9|3 file_json 9|4 dry_run 8|5 base_fingerprint 9|6 use_file_row_keys 9*|7 acknowledge_replaces_team_policy 8"];
+  }
+};
+var ImportTeamGroupMcpAllowlistResponse = class _ImportTeamGroupMcpAllowlistResponse extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ImportTeamGroupMcpAllowlistResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ImportTeamGroupMcpAllowlistResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ImportTeamGroupMcpAllowlistResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ImportTeamGroupMcpAllowlistResponse, a, b2);
+  }
+  static $() {
+    return ["ImportTeamGroupMcpAllowlistResponse|1 result #0", McpAllowlistImportResult];
   }
 };
 var ResetTeamGroupAgentRunModeToAutoReviewRequest = class _ResetTeamGroupAgentRunModeToAutoReviewRequest extends __protoMessage3136 {
@@ -285135,6 +285834,7 @@ var GetAvailableMcpServersResponse_McpServerInfo = class _GetAvailableMcpServers
     this.hasStaticCredentialHeaders = false;
     this.servedBy = McpServedBy.UNSPECIFIED;
     this.needsGrant = false;
+    this.credentialIsCursorAccount = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -285150,7 +285850,7 @@ var GetAvailableMcpServersResponse_McpServerInfo = class _GetAvailableMcpServers
     return proto3.util.equals(_GetAvailableMcpServersResponse_McpServerInfo, a, b2);
   }
   static $() {
-    return ["GetAvailableMcpServersResponse.McpServerInfo|1 id 5|2 name 9|3 is_team_server 8|4 enabled 8|5 type 9|6 command 9?|7 args 9*|8 url 9?|9 plugin_id 3?|10 is_unseen 8|11 user_has_access_token 8?|12 is_required 8|13 managed_by_team_plugin_policy 8|14 disabled_by_team_admin_policy 8|15 server_identifier 9?|16 owning_team_id 5?|17 accounts #0*|18 has_static_credential_headers 8|19 served_by #1|20 cursor_scm_provider 9?|21 logo_url 9?|22 needs_grant 8", GetAvailableMcpServersResponse_McpAccountInfo, McpServedBy];
+    return ["GetAvailableMcpServersResponse.McpServerInfo|1 id 5|2 name 9|3 is_team_server 8|4 enabled 8|5 type 9|6 command 9?|7 args 9*|8 url 9?|9 plugin_id 3?|10 is_unseen 8|11 user_has_access_token 8?|12 is_required 8|13 managed_by_team_plugin_policy 8|14 disabled_by_team_admin_policy 8|15 server_identifier 9?|16 owning_team_id 5?|17 accounts #0*|18 has_static_credential_headers 8|19 served_by #1|20 cursor_scm_provider 9?|21 logo_url 9?|22 needs_grant 8|23 credential_is_cursor_account 8", GetAvailableMcpServersResponse_McpAccountInfo, McpServedBy];
   }
 };
 var GetAvailableMcpServersResponse_McpAccountInfo = class _GetAvailableMcpServersResponse_McpAccountInfo extends __protoMessage3136 {
@@ -285801,6 +286501,8 @@ var ExecuteSandMcpToolRequest = class _ExecuteSandMcpToolRequest extends __proto
     this.agentId = "";
     this.turnId = "";
     this.eventSequence = protoInt64.zero;
+    this.mcpAnalyticsReportedByCaller = false;
+    this.modelName = "";
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -285816,7 +286518,7 @@ var ExecuteSandMcpToolRequest = class _ExecuteSandMcpToolRequest extends __proto
     return proto3.util.equals(_ExecuteSandMcpToolRequest, a, b2);
   }
   static $() {
-    return ["ExecuteSandMcpToolRequest|1 server_identifier 9|2 tool_name 9|3 args #0|4 tool_call_id 9|5 agent_id 9|6 turn_id 9|7 mcp_config_json 9?|8 grok_bot_plugin_scope #1?|9 event_sequence 3", Struct, GrokBotPluginScope];
+    return ["ExecuteSandMcpToolRequest|1 server_identifier 9|2 tool_name 9|3 args #0|4 tool_call_id 9|5 agent_id 9|6 turn_id 9|7 mcp_config_json 9?|8 grok_bot_plugin_scope #1?|9 event_sequence 3|10 mcp_analytics_reported_by_caller 8|11 model_name 9", Struct, GrokBotPluginScope];
   }
 };
 var ClassifySandAutoReviewRequest = class _ClassifySandAutoReviewRequest extends __protoMessage3136 {
@@ -287539,7 +288241,7 @@ var GetSpendLimitPolicyRequest = class _GetSpendLimitPolicyRequest extends __pro
     return proto3.util.equals(_GetSpendLimitPolicyRequest, a, b2);
   }
   static $() {
-    return ["GetSpendLimitPolicyRequest|1 team_id 5|2 scope #0", SpendLimitPolicyScope];
+    return ["GetSpendLimitPolicyRequest|1 team_id 5|2 scope #0|3 group_id 3?", SpendLimitPolicyScope];
   }
 };
 var GetSpendLimitPolicyResponse = class _GetSpendLimitPolicyResponse extends __protoMessage3136 {
@@ -287586,7 +288288,7 @@ var SetSpendLimitPolicyRequest = class _SetSpendLimitPolicyRequest extends __pro
     return proto3.util.equals(_SetSpendLimitPolicyRequest, a, b2);
   }
   static $() {
-    return ["SetSpendLimitPolicyRequest|1 team_id 5|2 scope #0|3 type #1|4 amount_dollars 5?|5 is_dynamic_team_limit 8?|6 alert_enabled 8?|7 alert_threshold_bps 5?|8 notification_mode 9?|9 notify_all_admins 8?|10 notify_admin_user_ids 5*|11 notify_member 8?|12 clear_conflicting_policy 8|13 auto_alerts_enabled 8?", SpendLimitPolicyScope, SpendLimitPolicyType];
+    return ["SetSpendLimitPolicyRequest|1 team_id 5|2 scope #0|3 type #1|4 amount_dollars 5?|5 is_dynamic_team_limit 8?|6 alert_enabled 8?|7 alert_threshold_bps 5?|8 notification_mode 9?|9 notify_all_admins 8?|10 notify_admin_user_ids 5*|11 notify_member 8?|12 clear_conflicting_policy 8|13 auto_alerts_enabled 8?|14 group_id 3?", SpendLimitPolicyScope, SpendLimitPolicyType];
   }
 };
 var SetSpendLimitPolicyResponse = class _SetSpendLimitPolicyResponse extends __protoMessage3136 {
@@ -290677,7 +291379,7 @@ var ServiceAccountInfo = class _ServiceAccountInfo extends __protoMessage3136 {
     return proto3.util.equals(_ServiceAccountInfo, a, b2);
   }
   static $() {
-    return ["ServiceAccountInfo|1 id 9|2 service_type 9|3 name 9|4 description 9?|5 created_by_user_id 5?|6 owning_team_id 5?|7 owning_user_id 5?|8 usage_limit_cents 5?|9 created_at 3|10 updated_at 3|11 default_scopes 9*|12 api_keys #0*|13 archived_at 3?", ServiceAccountKeyInfo];
+    return ["ServiceAccountInfo|1 id 9|2 service_type 9|3 name 9|4 description 9?|5 created_by_user_id 5?|6 owning_team_id 5?|7 owning_user_id 5?|8 usage_limit_cents 5?|9 created_at 3|10 updated_at 3|11 default_scopes 9*|12 api_keys #0*|13 archived_at 3?|14 current_period_spend_cents 5?", ServiceAccountKeyInfo];
   }
 };
 var ServiceAccountKeyInfo = class _ServiceAccountKeyInfo extends __protoMessage3136 {
@@ -295474,6 +296176,96 @@ var ClearTeamLlmGatewayCredentialResponse = class _ClearTeamLlmGatewayCredential
     return ["ClearTeamLlmGatewayCredentialResponse|1 status #0", TeamLlmGatewayCredentialStatus];
   }
 };
+var LlmGatewayModelDiscoverySource = class _LlmGatewayModelDiscoverySource extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.family = "";
+    this.discoveryUrl = "";
+    this.adapter = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _LlmGatewayModelDiscoverySource().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _LlmGatewayModelDiscoverySource().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _LlmGatewayModelDiscoverySource().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_LlmGatewayModelDiscoverySource, a, b2);
+  }
+  static $() {
+    return ["LlmGatewayModelDiscoverySource|1 family 9|2 discovery_url 9|3 adapter 9"];
+  }
+};
+var LlmGatewayModelDiscovery = class _LlmGatewayModelDiscovery extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.enabled = false;
+    this.sources = [];
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _LlmGatewayModelDiscovery().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _LlmGatewayModelDiscovery().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _LlmGatewayModelDiscovery().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_LlmGatewayModelDiscovery, a, b2);
+  }
+  static $() {
+    return ["LlmGatewayModelDiscovery|1 enabled 8|2 sources #0*", LlmGatewayModelDiscoverySource];
+  }
+};
+var UpdateTeamLlmGatewayModelDiscoveryRequest = class _UpdateTeamLlmGatewayModelDiscoveryRequest extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.teamId = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _UpdateTeamLlmGatewayModelDiscoveryRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _UpdateTeamLlmGatewayModelDiscoveryRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _UpdateTeamLlmGatewayModelDiscoveryRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_UpdateTeamLlmGatewayModelDiscoveryRequest, a, b2);
+  }
+  static $() {
+    return ["UpdateTeamLlmGatewayModelDiscoveryRequest|1 team_id 5|2 model_discovery #0", LlmGatewayModelDiscovery];
+  }
+};
+var UpdateTeamLlmGatewayModelDiscoveryResponse = class _UpdateTeamLlmGatewayModelDiscoveryResponse extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _UpdateTeamLlmGatewayModelDiscoveryResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _UpdateTeamLlmGatewayModelDiscoveryResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _UpdateTeamLlmGatewayModelDiscoveryResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_UpdateTeamLlmGatewayModelDiscoveryResponse, a, b2);
+  }
+  static $() {
+    return ["UpdateTeamLlmGatewayModelDiscoveryResponse|1 model_discovery #0", LlmGatewayModelDiscovery];
+  }
+};
 var LlmGatewaySettings = class _LlmGatewaySettings extends __protoMessage3136 {
   constructor(data) {
     super();
@@ -295500,7 +296292,7 @@ var LlmGatewaySettings = class _LlmGatewaySettings extends __protoMessage3136 {
     return proto3.util.equals(_LlmGatewaySettings, a, b2);
   }
   static $() {
-    return ["LlmGatewaySettings|1 enabled 8|2 endpoints 9,9|9 outbound_model_prefixes 9,9|10 outbound_model_rewrites 9,9|3 audience 9|4 routing #0|5 can_enable 8|6 auth_mode #1|7 team_credential_status #2|8 credential_source_strategy #3", LlmGatewayRouting, LlmGatewayAuthMode, LlmGatewayTeamCredentialStatus, LlmGatewayCredentialSourceStrategy];
+    return ["LlmGatewaySettings|1 enabled 8|2 endpoints 9,9|9 outbound_model_prefixes 9,9|10 outbound_model_rewrites 9,9|3 audience 9|4 routing #0|5 can_enable 8|6 auth_mode #1|7 team_credential_status #2|8 credential_source_strategy #3|11 model_discovery #4", LlmGatewayRouting, LlmGatewayAuthMode, LlmGatewayTeamCredentialStatus, LlmGatewayCredentialSourceStrategy, LlmGatewayModelDiscovery];
   }
 };
 var LlmGatewayRouting = class _LlmGatewayRouting extends __protoMessage3136 {
@@ -295865,7 +296657,7 @@ var GetTeamAdminSettingsResponse = class _GetTeamAdminSettingsResponse extends _
     return proto3.util.equals(_GetTeamAdminSettingsResponse, a, b2);
   }
   static $() {
-    return ["GetTeamAdminSettingsResponse|1 allowed_models 9*|2 blocked_models 9*|3 auto_run_controls #0|4 cursor_ignore_controls #1|5 dot_cursor_protection 8|6 allowed_mcp_configuration #2?|7 background_agent_settings #3?|8 cli_settings #4?|9 mcp_controls #5?|10 prompt_deeplink_controls #6?|11 command_deeplink_controls #7?|12 deeplink_controls #8?|13 github_integration_settings #9?|14 slack_integration_settings #10?|15 linear_integration_settings #11?|16 workspace_trust_controls #12?|17 gitlab_integration_settings #13?|18 browser_features 8?|23 browser_origin_allowlist 9*|19 byok_disabled 8?|20 dashboard_analytics_requires_admin 8?|21 shared_conversation_settings #14?|22 allowed_extensions 9?|24 disable_conversation_insights 8?|25 cursor_blame_settings #15?|26 network_denylist 9*|27 network_allowlist 9*|28 extension_signing_settings #16?|29 enforce_invite_domain_on_accept 8?|30 first_party_plugin_configuration #17?|31 attribution_controls #18?|32 allow_third_party_plugin_imports 8?|44 allow_user_local_plugin_imports 8?|33 glass_settings #19?|34 new_chat_model_reset_settings #20?|35 model_allowlist #21?|36 jira_integration_settings #22?|37 pull_request_preferences #23?|38 browser_settings #24?|39 cloud_agent_egress_allowlist 9*|40 mirror_sandbox_allowlist_for_egress 8?|49 auto_review #25|60 local_tool_controls #26?|64 sand_network_controls #27?|61 sand_action_audit_settings #28?|41 remote_permissions_file_path 9?|46 remote_permissions_file_paths 9*|45 local_permissions_file_path 9*|47 permissions_file_overrides_auto_run 8?|42 shared_canvas_settings #29?|43 invite_link_max_ttl_seconds 5?|48 extension_install_cooldown_settings #30?|50 public_profile_settings #31?|51 bitbucket_integration_settings #32?|52 marketplace_leaderboard_disabled 8?|53 new_chat_nudge_all_to_smart_auto 8?|54 models_auto_only 8?|55 new_chat_nudge_all_to_smart_auto_optimize_for 9?|56 restrict_invites_to_admins 8?|57 viewer_can_invite_members 8?|58 enforce_hooks_readiness 8?|59 llm_gateway #33?|62 sand_onboarding #34?|63 origin_disabled 8?|65 user_agent_store_skills_sync_settings #35?|66 auto_review_run_mode_reset #36|67 enterprise_grok_bot_trial_available 8?|68 sand_group_access_mode #37|69 sand_auto_review_controls #38?|70 private_inference #39?|71 remote_control_v2_policy #40|72 sand_local_egress_controls #41?|73 inbound_ip_allowlist #42?|74 projects_settings #43?|75 allow_skills_cli_installs 8?|76 grok_bot_agent_email_controls #44?|77 sand_box_sudo_controls #45?|78 sand_box_restart #46?", AutoRunControls, CursorIgnoreControls, AllowedMCPConfiguration, BackgroundAgentSettings, CliSettings, MCPControls, PromptDeeplinkControls, CommandDeeplinkControls, DeeplinkControls, GithubIntegrationSettings, SlackIntegrationSettings, LinearIntegrationSettings, WorkspaceTrustControls, GitlabIntegrationSettings, SharedConversationSettings, CursorBlameSettings, ExtensionSigningSettings, FirstPartyPluginConfiguration, AttributionControls, GlassSettings, TeamAdminNewChatModelResetSettings, ModelAllowlist, JiraIntegrationSettings, PullRequestPreferences, BrowserSettings, AutoReviewInstructions, LocalToolControls, SandNetworkControls, SandActionAuditSettings, SharedCanvasSettings, ExtensionInstallCooldownSettings, PublicProfileSettings, BitbucketIntegrationSettings, LlmGatewaySettings, SandOnboardingState, UserAgentStoreSkillsSyncSettings, AutoReviewRunModeReset, SandGroupAccessMode, SandAutoReviewControls, PrivateInferenceSettings, RemoteControlV2Policy, SandLocalEgressControls, InboundIpAllowlist, ProjectsSettings, GrokBotAgentEmailControls, SandBoxSudoControls, SandBoxRestart];
+    return ["GetTeamAdminSettingsResponse|1 allowed_models 9*|2 blocked_models 9*|3 auto_run_controls #0|4 cursor_ignore_controls #1|5 dot_cursor_protection 8|6 allowed_mcp_configuration #2?|7 background_agent_settings #3?|8 cli_settings #4?|9 mcp_controls #5?|10 prompt_deeplink_controls #6?|11 command_deeplink_controls #7?|12 deeplink_controls #8?|13 github_integration_settings #9?|14 slack_integration_settings #10?|15 linear_integration_settings #11?|16 workspace_trust_controls #12?|17 gitlab_integration_settings #13?|18 browser_features 8?|23 browser_origin_allowlist 9*|19 byok_disabled 8?|20 dashboard_analytics_requires_admin 8?|21 shared_conversation_settings #14?|22 allowed_extensions 9?|24 disable_conversation_insights 8?|25 cursor_blame_settings #15?|26 network_denylist 9*|27 network_allowlist 9*|28 extension_signing_settings #16?|29 enforce_invite_domain_on_accept 8?|30 first_party_plugin_configuration #17?|31 attribution_controls #18?|32 allow_third_party_plugin_imports 8?|44 allow_user_local_plugin_imports 8?|33 glass_settings #19?|34 new_chat_model_reset_settings #20?|35 model_allowlist #21?|36 jira_integration_settings #22?|37 pull_request_preferences #23?|38 browser_settings #24?|39 cloud_agent_egress_allowlist 9*|40 mirror_sandbox_allowlist_for_egress 8?|49 auto_review #25|60 local_tool_controls #26?|64 sand_network_controls #27?|61 sand_action_audit_settings #28?|41 remote_permissions_file_path 9?|46 remote_permissions_file_paths 9*|45 local_permissions_file_path 9*|47 permissions_file_overrides_auto_run 8?|42 shared_canvas_settings #29?|43 invite_link_max_ttl_seconds 5?|48 extension_install_cooldown_settings #30?|50 public_profile_settings #31?|51 bitbucket_integration_settings #32?|52 marketplace_leaderboard_disabled 8?|53 new_chat_nudge_all_to_smart_auto 8?|54 models_auto_only 8?|55 new_chat_nudge_all_to_smart_auto_optimize_for 9?|56 restrict_invites_to_admins 8?|57 viewer_can_invite_members 8?|58 enforce_hooks_readiness 8?|59 llm_gateway #33?|62 sand_onboarding #34?|63 origin_disabled 8?|65 user_agent_store_skills_sync_settings #35?|66 auto_review_run_mode_reset #36|67 enterprise_grok_bot_trial_available 8?|68 sand_group_access_mode #37|69 sand_auto_review_controls #38?|70 private_inference #39?|71 remote_control_v2_policy #40|72 sand_local_egress_controls #41?|73 inbound_ip_allowlist #42?|74 projects_settings #43?|75 allow_skills_cli_installs 8?|76 grok_bot_agent_email_controls #44?|77 sand_box_sudo_controls #45?|78 sand_box_restart #46?|79 origin_allow_public_repos 8?|80 cloud_agent_group_access_mode #47?", AutoRunControls, CursorIgnoreControls, AllowedMCPConfiguration, BackgroundAgentSettings, CliSettings, MCPControls, PromptDeeplinkControls, CommandDeeplinkControls, DeeplinkControls, GithubIntegrationSettings, SlackIntegrationSettings, LinearIntegrationSettings, WorkspaceTrustControls, GitlabIntegrationSettings, SharedConversationSettings, CursorBlameSettings, ExtensionSigningSettings, FirstPartyPluginConfiguration, AttributionControls, GlassSettings, TeamAdminNewChatModelResetSettings, ModelAllowlist, JiraIntegrationSettings, PullRequestPreferences, BrowserSettings, AutoReviewInstructions, LocalToolControls, SandNetworkControls, SandActionAuditSettings, SharedCanvasSettings, ExtensionInstallCooldownSettings, PublicProfileSettings, BitbucketIntegrationSettings, LlmGatewaySettings, SandOnboardingState, UserAgentStoreSkillsSyncSettings, AutoReviewRunModeReset, SandGroupAccessMode, SandAutoReviewControls, PrivateInferenceSettings, RemoteControlV2Policy, SandLocalEgressControls, InboundIpAllowlist, ProjectsSettings, GrokBotAgentEmailControls, SandBoxSudoControls, SandBoxRestart, CloudAgentGroupAccessMode];
   }
 };
 var SandBoxRestart = class _SandBoxRestart extends __protoMessage3136 {
@@ -295994,6 +296786,7 @@ var UpdateTeamAdminSettingsRequest = class _UpdateTeamAdminSettingsRequest exten
     this.remotePermissionsFilePaths = [];
     this.localPermissionsFilePath = [];
     this.sandGroupAccessEnabledGroupIds = [];
+    this.cloudAgentGroupAccessEnabledGroupIds = [];
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -296009,7 +296802,7 @@ var UpdateTeamAdminSettingsRequest = class _UpdateTeamAdminSettingsRequest exten
     return proto3.util.equals(_UpdateTeamAdminSettingsRequest, a, b2);
   }
   static $() {
-    return ["UpdateTeamAdminSettingsRequest|1 team_id 5|2 allowed_models 9*|3 blocked_models 9*|4 auto_run_controls #0|5 cursor_ignore_controls #1|6 dot_cursor_protection 8|7 allowed_mcp_configuration #2?|8 background_agent_settings #3?|9 cli_settings #4?|10 mcp_controls #5?|11 prompt_deeplink_controls #6?|12 command_deeplink_controls #7?|13 deeplink_controls #8?|14 github_integration_settings #9?|15 slack_integration_settings #10?|16 linear_integration_settings #11?|17 workspace_trust_controls #12?|18 gitlab_integration_settings #13?|19 browser_features 8?|24 browser_origin_allowlist 9*|20 byok_disabled 8?|21 dashboard_analytics_requires_admin 8?|22 shared_conversation_settings #14?|23 allowed_extensions 9?|25 disable_conversation_insights 8?|26 cursor_blame_settings #15?|27 network_denylist 9*|28 network_allowlist 9*|29 extension_signing_settings #16?|30 enforce_invite_domain_on_accept 8?|31 first_party_plugin_configuration #17?|32 attribution_controls #18?|33 allow_third_party_plugin_imports 8?|44 allow_user_local_plugin_imports 8?|34 glass_settings #19?|59 local_tool_controls #20?|60 sand_action_audit_settings #21?|35 new_chat_model_reset_settings #22?|36 model_allowlist #23?|76 first_party_window_decision_mcids 9*|37 jira_integration_settings #24?|38 pull_request_preferences #25?|39 browser_settings #26?|40 cloud_agent_egress_allowlist 9*|41 mirror_sandbox_allowlist_for_egress 8?|49 auto_review #27|42 remote_permissions_file_path 9?|46 remote_permissions_file_paths 9*|45 local_permissions_file_path 9*|47 permissions_file_overrides_auto_run 8?|57 update_permissions_file_paths 8?|43 shared_canvas_settings #28?|48 extension_install_cooldown_settings #29?|50 public_profile_settings #30?|51 bitbucket_integration_settings #31?|52 marketplace_leaderboard_disabled 8?|53 new_chat_nudge_all_to_smart_auto 8?|54 models_auto_only 8?|55 new_chat_nudge_all_to_smart_auto_optimize_for 9?|56 enforce_hooks_readiness 8?|58 llm_gateway #32?|63 origin_disabled 8?|64 user_agent_store_skills_sync_settings #33?|65 sand_group_access_mode #34?|66 sand_group_access_enabled_group_ids 3*|67 update_sand_group_access_groups 8?|69 sand_auto_review_controls #35?|68 private_inference #36?|74 projects_settings #37?|75 allow_skills_cli_installs 8?", AutoRunControls, CursorIgnoreControls, AllowedMCPConfiguration, BackgroundAgentSettings, CliSettings, MCPControls, PromptDeeplinkControls, CommandDeeplinkControls, DeeplinkControls, GithubIntegrationSettings, SlackIntegrationSettings, LinearIntegrationSettings, WorkspaceTrustControls, GitlabIntegrationSettings, SharedConversationSettings, CursorBlameSettings, ExtensionSigningSettings, FirstPartyPluginConfiguration, AttributionControls, GlassSettings, LocalToolControls, SandActionAuditSettings, TeamAdminNewChatModelResetSettings, ModelAllowlist, JiraIntegrationSettings, PullRequestPreferences, BrowserSettings, AutoReviewInstructions, SharedCanvasSettings, ExtensionInstallCooldownSettings, PublicProfileSettings, BitbucketIntegrationSettings, LlmGatewaySettings, UserAgentStoreSkillsSyncSettings, SandGroupAccessMode, SandAutoReviewControls, PrivateInferenceSettings, ProjectsSettings];
+    return ["UpdateTeamAdminSettingsRequest|1 team_id 5|2 allowed_models 9*|3 blocked_models 9*|4 auto_run_controls #0|5 cursor_ignore_controls #1|6 dot_cursor_protection 8|7 allowed_mcp_configuration #2?|8 background_agent_settings #3?|9 cli_settings #4?|10 mcp_controls #5?|11 prompt_deeplink_controls #6?|12 command_deeplink_controls #7?|13 deeplink_controls #8?|14 github_integration_settings #9?|15 slack_integration_settings #10?|16 linear_integration_settings #11?|17 workspace_trust_controls #12?|18 gitlab_integration_settings #13?|19 browser_features 8?|24 browser_origin_allowlist 9*|20 byok_disabled 8?|21 dashboard_analytics_requires_admin 8?|22 shared_conversation_settings #14?|23 allowed_extensions 9?|25 disable_conversation_insights 8?|26 cursor_blame_settings #15?|27 network_denylist 9*|28 network_allowlist 9*|29 extension_signing_settings #16?|30 enforce_invite_domain_on_accept 8?|31 first_party_plugin_configuration #17?|32 attribution_controls #18?|33 allow_third_party_plugin_imports 8?|44 allow_user_local_plugin_imports 8?|34 glass_settings #19?|59 local_tool_controls #20?|60 sand_action_audit_settings #21?|35 new_chat_model_reset_settings #22?|36 model_allowlist #23?|76 first_party_window_decision_mcids 9*|37 jira_integration_settings #24?|38 pull_request_preferences #25?|39 browser_settings #26?|40 cloud_agent_egress_allowlist 9*|41 mirror_sandbox_allowlist_for_egress 8?|49 auto_review #27|42 remote_permissions_file_path 9?|46 remote_permissions_file_paths 9*|45 local_permissions_file_path 9*|47 permissions_file_overrides_auto_run 8?|57 update_permissions_file_paths 8?|43 shared_canvas_settings #28?|48 extension_install_cooldown_settings #29?|50 public_profile_settings #30?|51 bitbucket_integration_settings #31?|52 marketplace_leaderboard_disabled 8?|53 new_chat_nudge_all_to_smart_auto 8?|54 models_auto_only 8?|55 new_chat_nudge_all_to_smart_auto_optimize_for 9?|56 enforce_hooks_readiness 8?|58 llm_gateway #32?|63 origin_disabled 8?|64 user_agent_store_skills_sync_settings #33?|65 sand_group_access_mode #34?|66 sand_group_access_enabled_group_ids 3*|67 update_sand_group_access_groups 8?|69 sand_auto_review_controls #35?|68 private_inference #36?|74 projects_settings #37?|75 allow_skills_cli_installs 8?|79 cloud_agent_group_access_mode #38?|80 cloud_agent_group_access_enabled_group_ids 3*|81 update_cloud_agent_group_access_groups 8?", AutoRunControls, CursorIgnoreControls, AllowedMCPConfiguration, BackgroundAgentSettings, CliSettings, MCPControls, PromptDeeplinkControls, CommandDeeplinkControls, DeeplinkControls, GithubIntegrationSettings, SlackIntegrationSettings, LinearIntegrationSettings, WorkspaceTrustControls, GitlabIntegrationSettings, SharedConversationSettings, CursorBlameSettings, ExtensionSigningSettings, FirstPartyPluginConfiguration, AttributionControls, GlassSettings, LocalToolControls, SandActionAuditSettings, TeamAdminNewChatModelResetSettings, ModelAllowlist, JiraIntegrationSettings, PullRequestPreferences, BrowserSettings, AutoReviewInstructions, SharedCanvasSettings, ExtensionInstallCooldownSettings, PublicProfileSettings, BitbucketIntegrationSettings, LlmGatewaySettings, UserAgentStoreSkillsSyncSettings, SandGroupAccessMode, SandAutoReviewControls, PrivateInferenceSettings, ProjectsSettings, CloudAgentGroupAccessMode];
   }
 };
 var UpdateTeamAdminSettingsResponse = class _UpdateTeamAdminSettingsResponse extends __protoMessage3136 {
@@ -297663,6 +298456,31 @@ var GetSandAccessStatusRequest = class _GetSandAccessStatusRequest extends __pro
     return ["GetSandAccessStatusRequest"];
   }
 };
+var AttestedTrialOffer = class _AttestedTrialOffer extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.amountCents = 0;
+    this.grantTtlDays = 0;
+    this.challenge = "";
+    this.platform = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _AttestedTrialOffer().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _AttestedTrialOffer().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _AttestedTrialOffer().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_AttestedTrialOffer, a, b2);
+  }
+  static $() {
+    return ["AttestedTrialOffer|1 amount_cents 5|2 grant_ttl_days 5|3 challenge 9|4 platform 9"];
+  }
+};
 var GetSandAccessStatusResponse = class _GetSandAccessStatusResponse extends __protoMessage3136 {
   constructor(data) {
     super();
@@ -297691,7 +298509,7 @@ var GetSandAccessStatusResponse = class _GetSandAccessStatusResponse extends __p
     return proto3.util.equals(_GetSandAccessStatusResponse, a, b2);
   }
   static $() {
-    return ["GetSandAccessStatusResponse|1 state #0|2 purchase_channel #1|3 block_reason #2|4 purchasable_tiers 9*|6 is_paid_trial_plan 8?|7 unpaid_admin_needs_paid_seat 8|9 privacy_disclaimer_required 8|10 can_skip_onboarding 8|11 pro_and_super_grok_plans_grant_access 8|12 is_unified 8|13 billing_brand #3", GetSandAccessStatusResponse_SandAccessState, GetSandAccessStatusResponse_SandPurchaseChannel, GetSandAccessStatusResponse_SandAccessBlockReason, SandBillingBrand];
+    return ["GetSandAccessStatusResponse|1 state #0|2 purchase_channel #1|3 block_reason #2|4 purchasable_tiers 9*|6 is_paid_trial_plan 8?|7 unpaid_admin_needs_paid_seat 8|9 privacy_disclaimer_required 8|10 can_skip_onboarding 8|11 pro_and_super_grok_plans_grant_access 8|12 is_unified 8|13 billing_brand #3|14 attested_trial_offer #4", GetSandAccessStatusResponse_SandAccessState, GetSandAccessStatusResponse_SandPurchaseChannel, GetSandAccessStatusResponse_SandAccessBlockReason, SandBillingBrand, AttestedTrialOffer];
   }
 };
 var GetSandAccessStatusResponse_SandAccessState = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "GetSandAccessStatusResponse.SandAccessState", [[0, "UNSPECIFIED"], [1, "GRANTED"], [2, "UNAVAILABLE"], [3, "PAYMENT_REQUIRED"]], 1);
@@ -298283,6 +299101,77 @@ var StartSandTrialRequest = class _StartSandTrialRequest extends __protoMessage3
     return ["StartSandTrialRequest"];
   }
 };
+var ClaimSandTrialWithDeviceAttestationRequest = class _ClaimSandTrialWithDeviceAttestationRequest extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.challenge = "";
+    this.attestation = { case: void 0 };
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ClaimSandTrialWithDeviceAttestationRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ClaimSandTrialWithDeviceAttestationRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ClaimSandTrialWithDeviceAttestationRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ClaimSandTrialWithDeviceAttestationRequest, a, b2);
+  }
+  static $() {
+    return ["ClaimSandTrialWithDeviceAttestationRequest|1 challenge 9|2 ios_device_check #0 attestation", ClaimSandTrialIosDeviceCheck];
+  }
+};
+var ClaimSandTrialIosDeviceCheck = class _ClaimSandTrialIosDeviceCheck extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.deviceToken = "";
+    this.bundleId = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ClaimSandTrialIosDeviceCheck().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ClaimSandTrialIosDeviceCheck().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ClaimSandTrialIosDeviceCheck().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ClaimSandTrialIosDeviceCheck, a, b2);
+  }
+  static $() {
+    return ["ClaimSandTrialIosDeviceCheck|1 device_token 9|2 bundle_id 9"];
+  }
+};
+var ClaimSandTrialWithDeviceAttestationResponse = class _ClaimSandTrialWithDeviceAttestationResponse extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.outcome = ClaimSandTrialWithDeviceAttestationResponse_ClaimSandTrialOutcome.UNSPECIFIED;
+    this.amountCents = 0;
+    this.grantExpiresAtMs = protoInt64.zero;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ClaimSandTrialWithDeviceAttestationResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ClaimSandTrialWithDeviceAttestationResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ClaimSandTrialWithDeviceAttestationResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ClaimSandTrialWithDeviceAttestationResponse, a, b2);
+  }
+  static $() {
+    return ["ClaimSandTrialWithDeviceAttestationResponse|1 outcome #0|2 amount_cents 5|3 grant_expires_at_ms 3", ClaimSandTrialWithDeviceAttestationResponse_ClaimSandTrialOutcome];
+  }
+};
+var ClaimSandTrialWithDeviceAttestationResponse_ClaimSandTrialOutcome = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "ClaimSandTrialWithDeviceAttestationResponse.ClaimSandTrialOutcome", [[0, "UNSPECIFIED"], [1, "GRANTED"], [2, "ALREADY_GRANTED"], [3, "REJECTED_DUPLICATE_DEVICE"], [4, "REJECTED_ATTESTATION"], [5, "INELIGIBLE"]], 1);
 var StartSandTrialResponse = class _StartSandTrialResponse extends __protoMessage3136 {
   constructor(data) {
     super();
@@ -298520,12 +299409,14 @@ var GetPlanInfoResponse = class _GetPlanInfoResponse extends __protoMessage3136 
     return ["GetPlanInfoResponse|1 plan_info #0?|2 next_upgrade #1?", GetPlanInfoResponse_PlanInfo, GetPlanInfoResponse_NextUpgrade];
   }
 };
+var GetPlanInfoResponse_IncludedUsagePeriod = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "GetPlanInfoResponse.IncludedUsagePeriod", [[0, "UNSPECIFIED"], [1, "MONTHLY"], [2, "WEEKLY"]], 1);
 var GetPlanInfoResponse_PlanInfo = class _GetPlanInfoResponse_PlanInfo extends __protoMessage3136 {
   constructor(data) {
     super();
     this.planName = "";
     this.includedAmountCents = 0;
     this.planOwner = GetPlanInfoResponse_PlanInfo_PlanOwner.UNSPECIFIED;
+    this.includedUsagePeriod = GetPlanInfoResponse_IncludedUsagePeriod.UNSPECIFIED;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -298541,7 +299432,7 @@ var GetPlanInfoResponse_PlanInfo = class _GetPlanInfoResponse_PlanInfo extends _
     return proto3.util.equals(_GetPlanInfoResponse_PlanInfo, a, b2);
   }
   static $() {
-    return ["GetPlanInfoResponse.PlanInfo|1 plan_name 9|2 included_amount_cents 5|3 price 9?|4 billing_cycle_end 3?|5 plan_owner #0", GetPlanInfoResponse_PlanInfo_PlanOwner];
+    return ["GetPlanInfoResponse.PlanInfo|1 plan_name 9|2 included_amount_cents 5|3 price 9?|4 billing_cycle_end 3?|5 plan_owner #0|6 included_usage_period #1|7 included_usage_resets_at 3?", GetPlanInfoResponse_PlanInfo_PlanOwner, GetPlanInfoResponse_IncludedUsagePeriod];
   }
 };
 var GetPlanInfoResponse_PlanInfo_PlanOwner = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "GetPlanInfoResponse.PlanInfo.PlanOwner", [[0, "UNSPECIFIED"], [1, "STRIPE"], [2, "APPLE"]], 1);
@@ -298553,6 +299444,7 @@ var GetPlanInfoResponse_NextUpgrade = class _GetPlanInfoResponse_NextUpgrade ext
     this.includedAmountCents = 0;
     this.price = "";
     this.description = "";
+    this.includedUsagePeriod = GetPlanInfoResponse_IncludedUsagePeriod.UNSPECIFIED;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -298568,7 +299460,7 @@ var GetPlanInfoResponse_NextUpgrade = class _GetPlanInfoResponse_NextUpgrade ext
     return proto3.util.equals(_GetPlanInfoResponse_NextUpgrade, a, b2);
   }
   static $() {
-    return ["GetPlanInfoResponse.NextUpgrade|1 tier 9|2 name 9|3 included_amount_cents 5|4 price 9|5 description 9|6 dashboard_action #0?", DashboardAction];
+    return ["GetPlanInfoResponse.NextUpgrade|1 tier 9|2 name 9|3 included_amount_cents 5|4 price 9|5 description 9|6 dashboard_action #0?|7 included_usage_period #1", DashboardAction, GetPlanInfoResponse_IncludedUsagePeriod];
   }
 };
 var VerifyAppleTransactionRequest = class _VerifyAppleTransactionRequest extends __protoMessage3136 {
@@ -298702,6 +299594,78 @@ var GetGooglePlayBillingAccountIdResponse = class _GetGooglePlayBillingAccountId
   }
   static $() {
     return ["GetGooglePlayBillingAccountIdResponse|1 obfuscated_account_id 9"];
+  }
+};
+var GooglePlayPurchaseTokenInventoryItem = class _GooglePlayPurchaseTokenInventoryItem extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.purchaseToken = "";
+    this.clientState = GooglePlayInventoryClientState.UNSPECIFIED;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _GooglePlayPurchaseTokenInventoryItem().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _GooglePlayPurchaseTokenInventoryItem().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _GooglePlayPurchaseTokenInventoryItem().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_GooglePlayPurchaseTokenInventoryItem, a, b2);
+  }
+  static $() {
+    return ["GooglePlayPurchaseTokenInventoryItem|1 purchase_token 9|2 product_id 9?|3 client_state #0", GooglePlayInventoryClientState];
+  }
+};
+var InventoryGooglePlayPurchaseTokensRequest = class _InventoryGooglePlayPurchaseTokensRequest extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.packageName = "";
+    this.items = [];
+    this.trigger = GooglePlayInventoryTrigger.UNSPECIFIED;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _InventoryGooglePlayPurchaseTokensRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _InventoryGooglePlayPurchaseTokensRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _InventoryGooglePlayPurchaseTokensRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_InventoryGooglePlayPurchaseTokensRequest, a, b2);
+  }
+  static $() {
+    return ["InventoryGooglePlayPurchaseTokensRequest|1 package_name 9|2 items #0*|3 trigger #1", GooglePlayPurchaseTokenInventoryItem, GooglePlayInventoryTrigger];
+  }
+};
+var InventoryGooglePlayPurchaseTokensResponse = class _InventoryGooglePlayPurchaseTokensResponse extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.submittedCount = 0;
+    this.retainedCount = 0;
+    this.rejectedCount = 0;
+    this.unavailableCount = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _InventoryGooglePlayPurchaseTokensResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _InventoryGooglePlayPurchaseTokensResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _InventoryGooglePlayPurchaseTokensResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_InventoryGooglePlayPurchaseTokensResponse, a, b2);
+  }
+  static $() {
+    return ["InventoryGooglePlayPurchaseTokensResponse|1 submitted_count 13|2 retained_count 13|3 rejected_count 13|4 unavailable_count 13"];
   }
 };
 var InspectGooglePlaySubscriptionInternalRequest = class _InspectGooglePlaySubscriptionInternalRequest extends __protoMessage3136 {
@@ -304118,7 +305082,7 @@ var GetServiceAccountSpendLimitRequest = class _GetServiceAccountSpendLimitReque
     return proto3.util.equals(_GetServiceAccountSpendLimitRequest, a, b2);
   }
   static $() {
-    return ["GetServiceAccountSpendLimitRequest|1 team_id 5?|2 service_type 9"];
+    return ["GetServiceAccountSpendLimitRequest|1 team_id 5?|2 service_type 9|3 service_account_id 9?"];
   }
 };
 var GetServiceAccountSpendLimitResponse = class _GetServiceAccountSpendLimitResponse extends __protoMessage3136 {
@@ -304162,7 +305126,7 @@ var SetServiceAccountSpendLimitRequest = class _SetServiceAccountSpendLimitReque
     return proto3.util.equals(_SetServiceAccountSpendLimitRequest, a, b2);
   }
   static $() {
-    return ["SetServiceAccountSpendLimitRequest|1 team_id 5?|2 service_type 9|3 spend_limit_cents 5"];
+    return ["SetServiceAccountSpendLimitRequest|1 team_id 5?|2 service_type 9|3 spend_limit_cents 5|4 service_account_id 9?|5 clear_spend_limit 8?"];
   }
 };
 var SetServiceAccountSpendLimitResponse = class _SetServiceAccountSpendLimitResponse extends __protoMessage3136 {
@@ -305084,7 +306048,7 @@ var UpdateTeamOriginSettingRequest = class _UpdateTeamOriginSettingRequest exten
     return proto3.util.equals(_UpdateTeamOriginSettingRequest, a, b2);
   }
   static $() {
-    return ["UpdateTeamOriginSettingRequest|1 team_id 5|2 origin_disabled 8"];
+    return ["UpdateTeamOriginSettingRequest|1 team_id 5|2 origin_disabled 8|3 origin_allow_public_repos 8?"];
   }
 };
 var UpdateTeamOriginSettingResponse = class _UpdateTeamOriginSettingResponse extends __protoMessage3136 {
@@ -305773,6 +306737,7 @@ var XaiCursorTeamMembershipPreviewGrokMember = class _XaiCursorTeamMembershipPre
     this.givenName = "";
     this.familyName = "";
     this.selectedSkuId = "";
+    this.previousSkuId = "";
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -305788,7 +306753,7 @@ var XaiCursorTeamMembershipPreviewGrokMember = class _XaiCursorTeamMembershipPre
     return proto3.util.equals(_XaiCursorTeamMembershipPreviewGrokMember, a, b2);
   }
   static $() {
-    return ["XaiCursorTeamMembershipPreviewGrokMember|1 user_id 9|2 email 9|3 given_name 9|4 family_name 9|5 selected_sku_id 9"];
+    return ["XaiCursorTeamMembershipPreviewGrokMember|1 user_id 9|2 email 9|3 given_name 9|4 family_name 9|5 selected_sku_id 9|6 previous_sku_id 9"];
   }
 };
 var XaiCursorTeamMembershipPreviewMatch = class _XaiCursorTeamMembershipPreviewMatch extends __protoMessage3136 {
@@ -305821,6 +306786,7 @@ var GetXaiCursorTeamMembershipPreviewResponse = class _GetXaiCursorTeamMembershi
     this.matched = [];
     this.cursorOnly = [];
     this.grokOnly = [];
+    this.xaiSeatAssignmentsAvailable = false;
     proto3.util.initPartial(data, this);
   }
   static fromBinary(bytes, options2) {
@@ -305836,7 +306802,7 @@ var GetXaiCursorTeamMembershipPreviewResponse = class _GetXaiCursorTeamMembershi
     return proto3.util.equals(_GetXaiCursorTeamMembershipPreviewResponse, a, b2);
   }
   static $() {
-    return ["GetXaiCursorTeamMembershipPreviewResponse|1 enabled 8|2 xai_roster_available 8|3 matched #0*|4 cursor_only #1*|5 grok_only #2*", XaiCursorTeamMembershipPreviewMatch, XaiCursorTeamMembershipPreviewCursorMember, XaiCursorTeamMembershipPreviewGrokMember];
+    return ["GetXaiCursorTeamMembershipPreviewResponse|1 enabled 8|2 xai_roster_available 8|3 matched #0*|4 cursor_only #1*|5 grok_only #2*|6 xai_seat_assignments_available 8", XaiCursorTeamMembershipPreviewMatch, XaiCursorTeamMembershipPreviewCursorMember, XaiCursorTeamMembershipPreviewGrokMember];
   }
 };
 var StartXaiCursorTeamMergeRequest = class _StartXaiCursorTeamMergeRequest extends __protoMessage3136 {
@@ -320848,6 +321814,50 @@ var PreviewStagedProjectsRequest = class _PreviewStagedProjectsRequest extends _
     return ["PreviewStagedProjectsRequest|1 local_evidence #0", LocalEvidencePayload];
   }
 };
+var DeleteStagedProjectsRequest = class _DeleteStagedProjectsRequest extends __protoMessage3139 {
+  constructor(data) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DeleteStagedProjectsRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DeleteStagedProjectsRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DeleteStagedProjectsRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DeleteStagedProjectsRequest, a, b2);
+  }
+  static $() {
+    return ["DeleteStagedProjectsRequest"];
+  }
+};
+var DeleteStagedProjectsResponse = class _DeleteStagedProjectsResponse extends __protoMessage3139 {
+  constructor(data) {
+    super();
+    this.deletedStagedProjects = 0;
+    this.deletedSeeds = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _DeleteStagedProjectsResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _DeleteStagedProjectsResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _DeleteStagedProjectsResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_DeleteStagedProjectsResponse, a, b2);
+  }
+  static $() {
+    return ["DeleteStagedProjectsResponse|1 deleted_staged_projects 13|2 deleted_seeds 13"];
+  }
+};
 var PreviewStagedProjectCandidate = class _PreviewStagedProjectCandidate extends __protoMessage3139 {
   constructor(data) {
     super();
@@ -323696,9 +324706,10 @@ var ListBackgroundComposersRequest = class _ListBackgroundComposersRequest exten
     return proto3.util.equals(_ListBackgroundComposersRequest, a, b2);
   }
   static $() {
-    return ["ListBackgroundComposersRequest|1 n 5|2 include_team_wide 8|3 bc_id 9?|4 preferred_repo_url 9?|5 additional_repo_urls 9*|6 include_status 8|7 include_sources #0*|8 owner_filter #1?|9 last_message_activity_at_ms_offset 1?|10 include_archived 8?|11 should_include_collaborators 8?|12 team_id 5?|13 include_hidden_sources #0*|14 preferred_workspace_binding_id 9?|15 include_pinned_state 8?|16 include_workers 8?|17 include_subagents 8?|18 use_page_tokens 8?|19 page_token 9?|21 include_background_agent_access_aggregate 8|22 inbox_section_runs_only 8?", BackgroundComposerSource, OwnerFilter];
+    return ["ListBackgroundComposersRequest|1 n 5|2 include_team_wide 8|3 bc_id 9?|4 preferred_repo_url 9?|5 additional_repo_urls 9*|6 include_status 8|7 include_sources #0*|8 owner_filter #1?|9 last_message_activity_at_ms_offset 1?|10 include_archived 8?|11 should_include_collaborators 8?|12 team_id 5?|13 include_hidden_sources #0*|14 preferred_workspace_binding_id 9?|15 include_pinned_state 8?|16 include_workers 8?|17 include_subagents 8?|18 use_page_tokens 8?|19 page_token 9?|21 include_background_agent_access_aggregate 8|22 inbox_section_runs_only 8?|23 project_filter #2?", BackgroundComposerSource, OwnerFilter, ListBackgroundComposersRequest_ProjectFilter];
   }
 };
+var ListBackgroundComposersRequest_ProjectFilter = /* @__PURE__ */ enumType2(proto3, __protoPackage146, "ListBackgroundComposersRequest.ProjectFilter", [[0, "UNSPECIFIED"], [1, "PROJECTS_ONLY"], [2, "EXCLUDE_PROJECTS"]], 1);
 var BackgroundComposer = class _BackgroundComposer extends __protoMessage3139 {
   constructor(data) {
     super();
@@ -331726,7 +332737,7 @@ var CarriedRequestContext = class _CarriedRequestContext extends __protoMessage3
     return proto3.util.equals(_CarriedRequestContext, a, b2);
   }
   static $() {
-    return ["CarriedRequestContext|1 blob_id 12|2 pod_id 9?|4 captured_at_unix_ms 3?|5 source #0?|6 was_complete 8?|7 conversation_rewind_epoch 13?|8 team_owned_hook_steps 9*", CarriedRequestContextSource];
+    return ["CarriedRequestContext|1 blob_id 12|2 pod_id 9?|4 captured_at_unix_ms 3?|5 source #0?|6 was_complete 8?|7 conversation_rewind_epoch 13?|8 team_owned_hook_steps 9*|9 mcp_correction_streak 13?", CarriedRequestContextSource];
   }
 };
 var EnvironmentMcpServerAllowlist = class _EnvironmentMcpServerAllowlist extends __protoMessage3139 {
@@ -336006,6 +337017,24 @@ var BackgroundComposerService = {
       kind: MethodKind.Unary
     },
     /**
+     * Developer clean slate: deletes every one of the calling user's staged
+     * Projects, whatever their state (STAGED, PROMOTED, DISMISSED), and every
+     * campaign's seed row. Developers and Anysphere employees only. Projects
+     * created from promoted rows are untouched. With no seed row left, the
+     * next plain SeedStagedProjects is a first seed. Idempotent: a second call
+     * deletes nothing and succeeds. The server waits for the seeds of this
+     * user that its own process still has in flight; a seed that starts
+     * after that wait can land rows, which another call removes.
+     *
+     * @generated from rpc aiserver.v1.BackgroundComposerService.DeleteStagedProjects
+     */
+    deleteStagedProjects: {
+      name: "DeleteStagedProjects",
+      I: DeleteStagedProjectsRequest,
+      O: DeleteStagedProjectsResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * Publish an AGENT_TEMP draft (Origin rename + kind flip) and persist
      * canonicalRepoUrl. Does not rewrite repoUrl, tokens, or the pod remote.
      *
@@ -338944,6 +339973,24 @@ var DashboardService = {
       kind: MethodKind.Unary
     },
     /**
+     * @generated from rpc aiserver.v1.DashboardService.ExportTeamGroupMcpAllowlist
+     */
+    exportTeamGroupMcpAllowlist: {
+      name: "ExportTeamGroupMcpAllowlist",
+      I: ExportTeamGroupMcpAllowlistRequest,
+      O: ExportTeamGroupMcpAllowlistResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc aiserver.v1.DashboardService.ImportTeamGroupMcpAllowlist
+     */
+    importTeamGroupMcpAllowlist: {
+      name: "ImportTeamGroupMcpAllowlist",
+      I: ImportTeamGroupMcpAllowlistRequest,
+      O: ImportTeamGroupMcpAllowlistResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * @generated from rpc aiserver.v1.DashboardService.ResetTeamGroupAgentRunModeToAutoReview
      */
     resetTeamGroupAgentRunModeToAutoReview: {
@@ -341304,6 +342351,15 @@ var DashboardService = {
       kind: MethodKind.Unary
     },
     /**
+     * @generated from rpc aiserver.v1.DashboardService.UpdateTeamLlmGatewayModelDiscovery
+     */
+    updateTeamLlmGatewayModelDiscovery: {
+      name: "UpdateTeamLlmGatewayModelDiscovery",
+      I: UpdateTeamLlmGatewayModelDiscoveryRequest,
+      O: UpdateTeamLlmGatewayModelDiscoveryResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * No-ZDR (data-retention) per-model consent, recorded at the appropriate
      * top-level owner. Dashboard-only (no IDE entry) and impersonation-blocked.
      *
@@ -341840,6 +342896,20 @@ var DashboardService = {
       kind: MethodKind.Unary
     },
     /**
+     * User-triggered claim of the one-time Sand free-trial credit with a device
+     * attestation (DeviceCheck on iOS in v1). Caller-scoped like the other Sand
+     * RPCs. Returns a terminal outcome without throwing for attestation or
+     * eligibility failures.
+     *
+     * @generated from rpc aiserver.v1.DashboardService.ClaimSandTrialWithDeviceAttestation
+     */
+    claimSandTrialWithDeviceAttestation: {
+      name: "ClaimSandTrialWithDeviceAttestation",
+      I: ClaimSandTrialWithDeviceAttestationRequest,
+      O: ClaimSandTrialWithDeviceAttestationResponse,
+      kind: MethodKind.Unary
+    },
+    /**
      * Read-only companion to StartSandTrial: whether a claim by the caller
      * would currently be accepted (plan shape, rollout gates, kill switch, and
      * the once-per-user redemption slot). Caller-scoped like StartSandTrial;
@@ -342062,6 +343132,15 @@ var DashboardService = {
       name: "GetGooglePlayBillingAccountId",
       I: GetGooglePlayBillingAccountIdRequest,
       O: GetGooglePlayBillingAccountIdResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * @generated from rpc aiserver.v1.DashboardService.InventoryGooglePlayPurchaseTokens
+     */
+    inventoryGooglePlayPurchaseTokens: {
+      name: "InventoryGooglePlayPurchaseTokens",
+      I: InventoryGooglePlayPurchaseTokensRequest,
+      O: InventoryGooglePlayPurchaseTokensResponse,
       kind: MethodKind.Unary
     },
     /**
@@ -345564,7 +346643,6 @@ var AiService2 = {
   methods: {
     availableModels: AiService.methods.availableModels,
     nameTab: AiService.methods.nameTab,
-    keepTaskList: AiService.methods.keepTaskList,
     reportClientNumericMetrics: AiService.methods.reportClientNumericMetrics,
     reportSandProcessMetrics: AiService.methods.reportSandProcessMetrics,
     runGenerateImage: AiService.methods.runGenerateImage,
@@ -346102,10 +347180,6 @@ function createCursorChecksum(machineId) {
   const checksum = Buffer.from(enhancedObfuscate(bytes)).toString("base64url");
   return `${checksum}${machineId}`;
 }
-var sandTeamIdGetterInstallations = [];
-function getSandCursorBackendClientDefaultTeamIdGetter() {
-  return sandTeamIdGetterInstallations.at(-1)?.getTeamId;
-}
 var PRIVACY_MODE_CACHE_MAX_AGE_MS = 5 * 6e4;
 var PRIVACY_MODE_FALLBACK_CACHE_MAX_AGE_MS = 1e4;
 var PRIVACY_MODE_FETCH_TIMEOUT_MS = 3e3;
@@ -346178,7 +347252,7 @@ async function resolveSandRunPrivacyMode(options2, fetchPrivacyMode = fetchSandP
     const [accessToken, machineId, teamId] = await Promise.all([
       options2.getAccessToken({ backendUrl }),
       options2.getMachineId(),
-      options2.getTeamId?.()
+      options2.getTeamId()
     ]);
     const accountScopeAtStart = accountScopeOfToken({ accessToken });
     const privacyMode = await resolveCachedSandPrivacyMode(
@@ -346192,7 +347266,7 @@ async function resolveSandRunPrivacyMode(options2, fetchPrivacyMode = fetchSandP
     );
     const [currentAccessToken, currentTeamId] = await Promise.all([
       options2.getAccessToken({ backendUrl }),
-      options2.getTeamId?.()
+      options2.getTeamId()
     ]);
     if (accountScopeOfToken({ accessToken: currentAccessToken }) !== accountScopeAtStart || currentTeamId !== teamId) {
       return sandRunPrivacyModeFallback();
@@ -346217,17 +347291,21 @@ async function resolveSandGhostModeHeader(options2, fetchPrivacyMode = fetchSand
     await resolveSandPrivacyMode(options2, fetchPrivacyMode)
   );
 }
+function resolverHandedBackAToken(accessToken) {
+  return typeof accessToken === "string" && accessToken.length > 0;
+}
 async function resolveSandBackendAuthContext(options2) {
-  const teamId = await options2.getTeamId?.({
-    expectedAccountScope: accountScopeOfToken({ accessToken: options2.accessToken })
+  const { accessToken } = options2;
+  if (!resolverHandedBackAToken(accessToken)) {
+    return { accessToken };
+  }
+  const teamId = await options2.getTeamId({
+    expectedAccountScope: accountScopeOfToken({ accessToken })
   });
   return {
-    accessToken: options2.accessToken,
+    accessToken,
     ...teamId !== void 0 && Number.isSafeInteger(teamId) && teamId > 0 ? { teamId } : {}
   };
-}
-function resolveDefaultedTeamIdGetter(options2) {
-  return Object.hasOwn(options2, "getTeamId") ? options2.getTeamId : getSandCursorBackendClientDefaultTeamIdGetter();
 }
 async function resolveSandBackendAuth(options2, backendUrl) {
   if ("authMode" in options2 && options2.authMode === "anonymous") {
@@ -346240,19 +347318,13 @@ async function resolveSandBackendAuth(options2, backendUrl) {
     }
     return {
       mode: "required",
-      ...await resolveSandBackendAuthContext({
-        accessToken: accessToken2,
-        getTeamId: resolveDefaultedTeamIdGetter(options2)
-      })
+      ...await resolveSandBackendAuthContext({ accessToken: accessToken2, getTeamId: options2.getTeamId })
     };
   }
   const accessToken = await options2.getAccessToken({ backendUrl });
   return {
     mode: "required",
-    ...await resolveSandBackendAuthContext({
-      accessToken,
-      getTeamId: resolveDefaultedTeamIdGetter(options2)
-    })
+    ...await resolveSandBackendAuthContext({ accessToken, getTeamId: options2.getTeamId })
   };
 }
 function applySandInferenceRequestContext(headers, context2) {
@@ -346428,6 +347500,7 @@ function createSandEvalInference(options2) {
   const backendOptions = {
     backend: options2.backend,
     getAccessToken: options2.getAccessToken,
+    getTeamId: options2.getTeamId,
     getMachineId: options2.getMachineId
   };
   const attachedMediaUrlProvider = createSandAttachedMediaUrlProvider(backendOptions);
@@ -346439,6 +347512,7 @@ function createSandEvalInference(options2) {
       const inferenceOptions = {
         backend: options2.backend,
         getAccessToken: options2.getAccessToken,
+        getTeamId: options2.getTeamId,
         getMachineId: options2.getMachineId,
         requestedModel,
         inferenceReason: sessionOptions?.inferenceReason,
@@ -360492,7 +361566,14 @@ var mcpServerConfigSchema = external_exports.object({
    * Wins over any probed placement when set. Ignored for stdio servers, which
    * are always client-placed.
    */
-  placement: external_exports.enum(["server", "client"]).optional()
+  placement: external_exports.enum(["server", "client"]).optional(),
+  /**
+   * Custom CA bundle for a remote server. Matches the runtime schema bound
+   * of 128 KiB of PEM text.
+   */
+  tls: external_exports.object({
+    caBundle: external_exports.string().trim().min(1).max(128 * 1024)
+  }).optional()
 });
 var mcpConfigSchema = external_exports.object({
   mcpServers: external_exports.record(external_exports.string(), mcpServerConfigSchema).optional()
@@ -370214,6 +371295,7 @@ var X11Executor = class {
    */
   constructor(config2) {
     this.xdotoolRuns = 0;
+    this.heldKeys = /* @__PURE__ */ new Set();
     if (!config2.resolution) {
       throw new Error("X11Executor requires resolution config. Use detectDisplay() to detect from system.");
     }
@@ -370232,8 +371314,8 @@ var X11Executor = class {
    * Set the InputEventLogger to use for recording.
    * Pass undefined to disable event logging.
    */
-  setInputEventLogger(logger112) {
-    this.inputEventLogger = logger112;
+  setInputEventLogger(logger113) {
+    this.inputEventLogger = logger113;
   }
   /**
    * Get the current InputEventLogger (if any).
@@ -370250,12 +371332,29 @@ var X11Executor = class {
     return exec("xdotool", argv, { env, signal });
   }
   /**
-   * An xdotool killed mid-command leaves whatever it had pressed logically
-   * down for whoever drives the desktop next. Best effort, never aborted.
+   * An xdotool killed mid-command, or a key held across batches, leaves input
+   * logically down for whoever drives the desktop next. Best effort, never
+   * aborted; a no-op until this executor has driven xdotool at all.
    */
-  releaseHeldInput() {
+  async releaseHeldInput() {
+    if (this.xdotoolRuns === 0) {
+      return;
+    }
     const buttons2 = [...new Set(Object.values(BUTTON_MAP))].sort((a, b2) => Number(a) - Number(b2)).map((button) => `mouseup ${button}`).join(" ");
-    return this.xdotool(`keyup ctrl shift alt super ${buttons2}`, void 0).catch(() => void 0);
+    const held = [...this.heldKeys];
+    const keys = ["ctrl", "shift", "alt", "super", ...held].join(" ");
+    try {
+      await this.xdotool(`keyup ${keys} ${buttons2}`, void 0);
+    } catch {
+      return;
+    }
+    for (const key of held) {
+      this.heldKeys.delete(key);
+    }
+  }
+  /** Reverse-order keyups for an action's modifiers, skipping any the model still holds via KeyStroke.DOWN. */
+  modifierReleases(modifiers) {
+    return [...modifiers].reverse().filter((mod) => !this.heldKeys.has(mod)).map((mod) => `keyup ${mod}`);
   }
   scaleCoordinate(coord) {
     return this.scaler.apiToDisplay(coord.x, coord.y);
@@ -370273,6 +371372,7 @@ var X11Executor = class {
   }
   async executeActions(actions, options2) {
     const { signal } = options2;
+    const settleMs = options2.screenshotSettleMs ?? this.config.screenshotDelayMs;
     const start = Date.now();
     let cursorPosition;
     let lastScreenshot;
@@ -370282,7 +371382,7 @@ var X11Executor = class {
       signal?.throwIfAborted();
       if (action.action.case === "screenshot") {
         if (settleNeeded) {
-          await sleep(this.config.screenshotDelayMs, signal);
+          await sleep(settleMs, signal);
           settleNeeded = false;
         }
         lastScreenshot = await this.takeScreenshot(signal);
@@ -370307,7 +371407,7 @@ var X11Executor = class {
     if (!screenshotTaken) {
       signal?.throwIfAborted();
       if (settleNeeded) {
-        await sleep(this.config.screenshotDelayMs, signal);
+        await sleep(settleMs, signal);
       }
       lastScreenshot = await this.takeScreenshot(signal);
     }
@@ -370349,9 +371449,7 @@ var X11Executor = class {
           parts.push(`mousemove --sync ${x} ${y}`);
         }
         parts.push(`click ${clickArgs}`);
-        for (const mod of [...modifiers].reverse()) {
-          parts.push(`keyup ${mod}`);
-        }
+        parts.push(...this.modifierReleases(modifiers));
         await this.xdotool(parts.join(" "), signal);
         break;
       }
@@ -370383,9 +371481,7 @@ var X11Executor = class {
           commands.push(`mousemove --sync ${scaledPath[i].x} ${scaledPath[i].y}`);
         }
         commands.push(`mouseup ${buttonNum}`);
-        for (const mod of [...modifiers].reverse()) {
-          commands.push(`keyup ${mod}`);
-        }
+        commands.push(...this.modifierReleases(modifiers));
         await this.xdotool(commands.join(" "), signal);
         break;
       }
@@ -370402,9 +371498,7 @@ var X11Executor = class {
           parts.push(`mousemove --sync ${x} ${y}`);
         }
         parts.push(`click --repeat ${amount} ${scrollButton}`);
-        for (const mod of [...modifiers].reverse()) {
-          parts.push(`keyup ${mod}`);
-        }
+        parts.push(...this.modifierReleases(modifiers));
         await this.xdotool(parts.join(" "), signal);
         break;
       }
@@ -370412,9 +371506,25 @@ var X11Executor = class {
         await this.typeText(actionOneof.value.text, options2);
         break;
       case "key": {
-        const { key, holdDurationMs } = actionOneof.value;
+        const { key, holdDurationMs, stroke } = actionOneof.value;
         const xdotoolKey = keyForXdotool(key);
-        if (holdDurationMs && holdDurationMs > 0) {
+        if (stroke === KeyStroke.DOWN || stroke === KeyStroke.UP) {
+          if (holdDurationMs !== void 0) {
+            throw new Error("KeyAction.hold_duration_ms is only valid for a tap, not a key down/up");
+          }
+          if (stroke === KeyStroke.DOWN) {
+            try {
+              await this.xdotool(`keydown ${xdotoolKey}`, signal);
+            } catch (error3) {
+              await this.xdotool(`keyup ${xdotoolKey}`, void 0).catch(() => void 0);
+              throw error3;
+            }
+            this.heldKeys.add(xdotoolKey);
+          } else {
+            await this.xdotool(`keyup ${xdotoolKey}`, signal);
+            this.heldKeys.delete(xdotoolKey);
+          }
+        } else if (holdDurationMs && holdDurationMs > 0) {
           await this.xdotool(`keydown ${xdotoolKey}`, signal);
           try {
             await sleep(holdDurationMs, signal);
@@ -370598,8 +371708,11 @@ var X11ComputerUseExecutor = class {
    * Set the InputEventLogger on the underlying X11Executor.
    * Used for recording polished video preprocessing data.
    */
-  setInputEventLogger(logger112) {
-    this.executor.setInputEventLogger(logger112);
+  setInputEventLogger(logger113) {
+    this.executor.setInputEventLogger(logger113);
+  }
+  releaseHeldInput() {
+    return this.executor.releaseHeldInput();
   }
   generateScreenshotFilename() {
     const randomBytes4 = crypto3.randomBytes(3);
@@ -370644,6 +371757,7 @@ var X11ComputerUseExecutor = class {
     try {
       const result = await this.executor.execute(args.actions, {
         bindUnmappedCharacters: args.bindUnmappedCharacters ?? false,
+        screenshotSettleMs: args.screenshotSettleMs,
         signal: ctx.signal
       });
       const durationMs = Date.now() - startTime;
@@ -371035,6 +372149,10 @@ var LazyX11ComputerUseExecutor = class {
     this.pendingInputEventLogger = inputEventLogger;
     this.hasPendingInputEventLogger = true;
     this.inner?.setInputEventLogger(inputEventLogger);
+  }
+  /** Nothing can be held before the executor exists, so an uninitialized one has nothing to release. */
+  async releaseHeldInput() {
+    await this.inner?.releaseHeldInput();
   }
   // Best-effort background warm-up so the common case (desktop up shortly after
   // boot) has the executor ready before the first action, without blocking daemon
@@ -371950,6 +373068,9 @@ var MacComputerUseActionRunner = class _MacComputerUseActionRunner {
             break;
           }
           case "key": {
+            if (a.value.stroke === KeyStroke.DOWN || a.value.stroke === KeyStroke.UP) {
+              throw new Error("Held keys (KeyAction.stroke DOWN/UP) are not supported by the macOS computer-use sidecar; use hold_duration_ms");
+            }
             this.recordActuation(await this.sidecar.pressKey(this.ctx, {
               key: a.value.key,
               holdDurationMs: a.value.holdDurationMs
@@ -376296,7 +377417,7 @@ var InMemoryOAuthClientProvider = class {
     this._redirectUrl = options2.redirectUrl;
     this._serverUrl = options2.serverUrl;
     this._restMcpProviderMetadata = options2.restMcpProviderMetadata;
-    if (((_a20 = options2.restMcpProviderMetadata) === null || _a20 === void 0 ? void 0 : _a20.omitResourceIndicator) === true) {
+    if (((_a20 = options2.restMcpProviderMetadata) === null || _a20 === void 0 ? void 0 : _a20.omitResourceIndicator) === true || gtmMcpOmitsResourceIndicator(options2.serverUrl)) {
       this.validateResourceURL = () => __awaiter34(this, void 0, void 0, function* () {
         return void 0;
       });
@@ -376509,6 +377630,7 @@ var McpSdkClient = class _McpSdkClient {
     this._authProvider = options2.authProvider;
     this._authCodeExchange = options2.authCodeExchange;
     this._sessionId = options2.sessionId;
+    this._resumedInstructions = options2.resumedInstructions;
     this.config = options2.config;
     this._oauthLifecycleLogger = options2.oauthLifecycleLogger;
     this._stdioChildPid = options2.stdioChildPid;
@@ -376674,6 +377796,7 @@ var McpSdkClient = class _McpSdkClient {
             oauthLifecycleLogger
           });
         } catch (sseError) {
+          yield sseTransport.close().catch(() => void 0);
           if (isConnectAuthFailure(sseError)) {
             if (oauthLifecycleLogger) {
               emitMcpOAuthLifecycleLog({
@@ -376749,6 +377872,8 @@ var McpSdkClient = class _McpSdkClient {
   /**
    * Resume a cached MCP session while keeping the normal OAuth provider wired.
    * On 404 (session expired), caller should fall back to fromStreamableHttp.
+   * Resuming skips `initialize`, so the session's instructions come from the
+   * cache entry, stored when the session was first initialized.
    */
   static fromCachedSession(serverName_1, config_1, cachedSession_1, tokenStorage_1, headers_1) {
     return __awaiter34(this, arguments, void 0, function* (serverName, config2, cachedSession, tokenStorage, headers, authRedirectUrl = MCP_OAUTH_LOOPBACK_CALLBACK_URL, fetch2, httpExchangeLogging, oauthLifecycleLogger) {
@@ -376778,13 +377903,10 @@ var McpSdkClient = class _McpSdkClient {
       });
       const client = _McpSdkClient.createClient();
       yield client.connect(transport);
-      return new _McpSdkClient(serverName, client, {
-        initialState: { kind: "ready" },
-        authProvider: oauthProvider,
-        sessionId: transport.sessionId,
+      return new _McpSdkClient(serverName, client, Object.assign(Object.assign({ initialState: { kind: "ready" }, authProvider: oauthProvider, sessionId: transport.sessionId }, cachedSession.instructions === void 0 ? {} : { resumedInstructions: cachedSession.instructions }), {
         config: config2,
         oauthLifecycleLogger
-      });
+      }));
     });
   }
   get sessionId() {
@@ -376948,13 +378070,14 @@ var McpSdkClient = class _McpSdkClient {
   }
   getInstructions(ctx) {
     return __awaiter34(this, void 0, void 0, function* () {
+      var _a20;
       const env_4 = { stack: [], error: void 0, hasError: false };
       try {
         const _span = __addDisposableResource11(env_4, createSpan(ctx.withName("McpSdkClient.getInstructions")), false);
         if (this.stateValue.kind === "requires_authentication") {
           return void 0;
         }
-        return yield this.client.getInstructions();
+        return (_a20 = this.client.getInstructions()) !== null && _a20 !== void 0 ? _a20 : this._resumedInstructions;
       } catch (e_4) {
         env_4.error = e_4;
         env_4.hasError = true;
@@ -377422,16 +378545,16 @@ var __awaiter35 = function(thisArg, _arguments, P2, generator) {
   });
 };
 function structuredLoggerToMcpOAuthLifecycleLogger(args) {
-  const { logger: logger112, ctx } = args;
+  const { logger: logger113, ctx } = args;
   return {
-    debug: (message, metadata) => logger112.debug(ctx, message, metadata),
-    info: (message, metadata) => logger112.info(ctx, message, metadata),
-    warn: (message, metadata) => logger112.warn(ctx, message, metadata),
-    error: (message, error3, metadata) => logger112.error(ctx, message, error3, metadata)
+    debug: (message, metadata) => logger113.debug(ctx, message, metadata),
+    info: (message, metadata) => logger113.info(ctx, message, metadata),
+    warn: (message, metadata) => logger113.warn(ctx, message, metadata),
+    error: (message, error3, metadata) => logger113.error(ctx, message, error3, metadata)
   };
 }
-function createContextStructuredLifecycleLogger(ctx, logger112) {
-  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger112 });
+function createContextStructuredLifecycleLogger(ctx, logger113) {
+  return structuredLoggerToMcpOAuthLifecycleLogger({ ctx, logger: logger113 });
 }
 var LoggedScopedMcpTokenStorage = class {
   constructor(options2) {
@@ -391041,7 +392164,9 @@ var REDACTION_SCHEMA = {
   },
   "agent.v1.AgentStoreClaimConfig": {
     "self": "SAFE",
-    "mounts": "SAFE"
+    "mounts": "SAFE",
+    "store_backed_artifacts_enabled": "SAFE",
+    "user_store_skills_enabled": "SAFE"
   },
   "agent.v1.AgentStoreClaimMount": {
     "kind": "SAFE",
@@ -393688,6 +394813,8 @@ var agentEventTrackerKey = createKey(/* @__PURE__ */ Symbol("agentEventTracker")
   },
   trackSmartModeClassifierCall: () => {
   },
+  trackUnauthorizedAccessJudgeVerdict: () => {
+  },
   trackPlanModeModelFinished: () => {
   },
   trackMcpToolCall: () => {
@@ -396195,7 +397322,8 @@ function toRedactedComputerUseArgs(msg, privacyMode) {
     actions: msg.actions.map((v2) => toRedactedComputerUseAction(v2, privacyMode)),
     description: msg.description !== void 0 ? createRedactedString(msg.description, DataClassification.CODE, "description", privacyMode) : void 0,
     bindUnmappedCharacters: msg.bindUnmappedCharacters,
-    desktopLeaseActorId: msg.desktopLeaseActorId
+    desktopLeaseActorId: msg.desktopLeaseActorId,
+    screenshotSettleMs: msg.screenshotSettleMs
   };
 }
 function fromRedactedComputerUseArgs(msg, purpose, opts) {
@@ -396206,7 +397334,8 @@ function fromRedactedComputerUseArgs(msg, purpose, opts) {
     actions: msg.actions.map((v2) => fromRedactedComputerUseAction(v2, purpose, opts)),
     description: msg.description?.unwrap(purpose, { redactUnallowedFieldsInsteadOfThrowing, enforcing }),
     bindUnmappedCharacters: msg.bindUnmappedCharacters,
-    desktopLeaseActorId: msg.desktopLeaseActorId
+    desktopLeaseActorId: msg.desktopLeaseActorId,
+    screenshotSettleMs: msg.screenshotSettleMs
   });
 }
 function toRedactedComputerUseAction(msg, privacyMode) {
@@ -396397,7 +397526,8 @@ function toRedactedKeyAction(msg, privacyMode) {
   return {
     _privacyMode: privacyMode,
     key: msg.key,
-    holdDurationMs: msg.holdDurationMs
+    holdDurationMs: msg.holdDurationMs,
+    stroke: msg.stroke
   };
 }
 function fromRedactedKeyAction(msg, purpose, opts) {
@@ -396405,7 +397535,8 @@ function fromRedactedKeyAction(msg, purpose, opts) {
   const enforcing = opts?.enforcing;
   return new KeyAction({
     key: msg.key,
-    holdDurationMs: msg.holdDurationMs
+    holdDurationMs: msg.holdDurationMs,
+    stroke: msg.stroke
   });
 }
 function toRedactedWaitAction(msg, privacyMode) {
@@ -413079,7 +414210,7 @@ var rootParentRequestIdKey2 = createKey(/* @__PURE__ */ Symbol("rootParentReques
 var parentAgentToolCallIdKey2 = createKey(/* @__PURE__ */ Symbol("parentAgentToolCallId"), void 0);
 var subagentTypeKey2 = createKey(/* @__PURE__ */ Symbol("subagentType"), void 0);
 var directMetaParentChildSubagentKey = createKey(/* @__PURE__ */ Symbol("directMetaParentChildSubagent"), void 0);
-var requestModelNameKey = createKey(/* @__PURE__ */ Symbol("requestModelName"), void 0);
+var requestModelNameKey2 = createKey(/* @__PURE__ */ Symbol("requestModelName"), void 0);
 var conversationGroupIdKey2 = createKey(/* @__PURE__ */ Symbol("conversationGroupId"), void 0);
 var conversationIdKey2 = createKey(/* @__PURE__ */ Symbol("conversationId"), void 0);
 var secretScopeIdKey = createKey(/* @__PURE__ */ Symbol("secretScopeId"), void 0);
@@ -421419,7 +422550,7 @@ function trackComputerUseExecution(ctx, args) {
     parentRequestId: getParentRequestId(ctx),
     rootParentRequestId: getRootParentRequestId(ctx),
     conversationId: getConversationId(ctx),
-    requestModelName: ctx.get(requestModelNameKey),
+    requestModelName: ctx.get(requestModelNameKey2),
     isSubagent: getIsSubagentFromContext(ctx)
   });
 }
@@ -421450,7 +422581,7 @@ function trackComputerUseFailure(ctx, args) {
     parentRequestId: getParentRequestId(ctx),
     rootParentRequestId: getRootParentRequestId(ctx),
     conversationId: getConversationId(ctx),
-    requestModelName: ctx.get(requestModelNameKey),
+    requestModelName: ctx.get(requestModelNameKey2),
     isSubagent: getIsSubagentFromContext(ctx)
   });
 }
@@ -424765,6 +425896,9 @@ function convertExecSuccessToToolSuccess(execResult, readToolDefReminder, invali
     }
   });
 }
+function mcpToolResultTrackingOutcome(result) {
+  return result.result.case === "success" && result.result.value.isError ? { success: false, errorClassification: "tool_error" } : { success: true };
+}
 function createVirtualMcpAuthSuccessResult(serverIdentifier) {
   return new McpToolResult({
     result: {
@@ -425122,6 +426256,7 @@ var createMcpTool = (resourceAccessor, mcpToolDefinition, options2 = {}) => {
         });
         const tracker = getAgentEventTracker(ctx);
         tracker.trackMcpToolCall(ctx, {
+          toolCallId: meta.toolCallId,
           name: mcpToolDefinition.toolName,
           mcpServerName: mcpToolDefinition.providerIdentifier,
           origin: getMcpToolOrigin(mcpToolDefinition.clientKey),
@@ -425157,15 +426292,17 @@ var createMcpTool = (resourceAccessor, mcpToolDefinition, options2 = {}) => {
           const execResult = await executeMaybeHooked(ctx, toolArgs);
           const result = convertExecSuccessToToolSuccess(execResult, void 0, void 0, void 0, void 0);
           tracker.trackMcpToolCallResult(ctx, {
+            toolCallId: meta.toolCallId,
             toolName: mcpToolDefinition.toolName,
             mcpServerName: mcpToolDefinition.providerIdentifier,
             paramsJson,
-            success: true
+            ...mcpToolResultTrackingOutcome(result)
           });
           return result;
         } catch (e) {
           const classifiedError = e instanceof ToolCallError ? e : createMcpTransportError(e instanceof Error ? e.message : String(e), e);
           tracker.trackMcpToolCallResult(ctx, {
+            toolCallId: meta.toolCallId,
             toolName: mcpToolDefinition.toolName,
             mcpServerName: mcpToolDefinition.providerIdentifier,
             paramsJson,
@@ -425679,6 +426816,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
         await interactionHandler.recordPendingToolCall(spanCtxt.ctx, meta.toolCallId, pendingAuthToolCall);
         const tracker = getAgentEventTracker(spanCtxt.ctx);
         tracker.trackMcpToolCall(spanCtxt.ctx, {
+          toolCallId: meta.toolCallId,
           name: args.toolName,
           mcpServerName: serverDisplayName,
           origin: getMcpToolOrigin(args.server),
@@ -425694,6 +426832,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
           const authResult = rejectedReason === void 0 ? createVirtualMcpAuthSuccessResult(serverIdentifier) : createVirtualMcpAuthRejectedResult(rejectedReason);
           if (rejectedReason === void 0) {
             tracker.trackMcpToolCallResult(spanCtxt.ctx, {
+              toolCallId: meta.toolCallId,
               toolName: args.toolName,
               mcpServerName: serverDisplayName,
               paramsJson,
@@ -425703,6 +426842,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
           } else {
             const rejectedError = new ToolCallRejectedError(rejectedReason);
             tracker.trackMcpToolCallResult(spanCtxt.ctx, {
+              toolCallId: meta.toolCallId,
               toolName: args.toolName,
               mcpServerName: serverDisplayName,
               paramsJson,
@@ -425736,6 +426876,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
           return authResult;
         } catch (error3) {
           tracker.trackMcpToolCallResult(spanCtxt.ctx, {
+            toolCallId: meta.toolCallId,
             toolName: args.toolName,
             mcpServerName: serverDisplayName,
             paramsJson,
@@ -425768,6 +426909,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
       return await interactionHandler.executeToolCall(spanCtxt.ctx, createMcpToolCall(baseToolCall), meta.toolCallId, async (ctx) => {
         const tracker = getAgentEventTracker(ctx);
         tracker.trackMcpToolCall(ctx, {
+          toolCallId: meta.toolCallId,
           name: args.toolName,
           mcpServerName: serverDisplayName,
           origin: getMcpToolOrigin(args.server),
@@ -425880,6 +427022,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
           onRejectWithoutNativeApproval: (error3) => {
             const telemetryError = new ToolCallRejectedError(SMART_MODE_MCP_PREFLIGHT_REJECTED_TELEMETRY_REASON);
             tracker.trackMcpToolCallResult(ctx, {
+              toolCallId: meta.toolCallId,
               toolName: args.toolName,
               mcpServerName: serverDisplayName,
               paramsJson,
@@ -425982,6 +427125,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
               runtimeMs: steerReleaseOutcome.runtimeMs
             });
             tracker.trackMcpToolCallResult(ctx, {
+              toolCallId: meta.toolCallId,
               toolName: args.toolName,
               mcpServerName: serverDisplayName,
               paramsJson,
@@ -426003,6 +427147,7 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
           }
           const classifiedError = error3 instanceof ToolCallError ? error3 : createMcpTransportError(error3 instanceof Error ? error3.message : String(error3), error3);
           tracker.trackMcpToolCallResult(ctx, {
+            toolCallId: meta.toolCallId,
             toolName: args.toolName,
             mcpServerName: serverDisplayName,
             paramsJson,
@@ -426040,15 +427185,17 @@ The MCP server rejected these arguments as invalid. Before retrying, read the MC
         try {
           const result = convertExecSuccessToToolSuccess(execResult, readToolDefReminder, invalidArgsToolDefReminder, mcpMetaToolEnabled ? void 0 : mcpFileSystemOptions, mcpMetaToolEnabled ? resolvedGetMcpToolsToolName : void 0, args.server);
           tracker.trackMcpToolCallResult(ctx, {
+            toolCallId: meta.toolCallId,
             toolName: args.toolName,
             mcpServerName: serverDisplayName,
             paramsJson,
-            success: true
+            ...mcpToolResultTrackingOutcome(result)
           });
           emitSuccessMetrics(ctx, result, calledWithoutReadDef);
           return result;
         } catch (e) {
           tracker.trackMcpToolCallResult(ctx, {
+            toolCallId: meta.toolCallId,
             toolName: args.toolName,
             mcpServerName: serverDisplayName,
             paramsJson,
@@ -426588,12 +427735,13 @@ function getPathFromBranchInfo(repo) {
 function getGitRepoBranchDisplayInfo(gitRepos) {
   return getBranchDisplayInfo(gitRepos);
 }
-function getDesignatedBranchDisplayInfo(designatedBranches) {
-  return getBranchDisplayInfo(designatedBranches);
+function getDesignatedBranchDisplayInfo(designatedBranches, gitRepos) {
+  const checkedOutRepoLabel = gitRepos.length === 1 ? repoLabelForPrompt(gitRepos[0]) : void 0;
+  return getBranchDisplayInfo(designatedBranches, checkedOutRepoLabel);
 }
-function getBranchDisplayInfo(repos) {
+function getBranchDisplayInfo(repos, fallbackRepoLabel = UNKNOWN_REPO_LABEL) {
   const displays = repos.map((repo) => ({
-    repoLabel: repoLabelForPrompt(repo),
+    repoLabel: repoLabelForPrompt(repo, fallbackRepoLabel),
     branchName: branchNameForPrompt(repo.branchName),
     baseBranch: "baseBranch" in repo ? branchNameForPrompt(repo.baseBranch) : void 0
   }));
@@ -426615,8 +427763,8 @@ function basenameFromPath(path30) {
   const parts = raw.split(/[/\\]/).filter(Boolean);
   return parts.length > 0 ? parts[parts.length - 1] : void 0;
 }
-function repoLabelForPrompt(repo) {
-  return extractRepoNameFromGitUrl(repo.remoteUrl) ?? basenameFromPath(getPathFromBranchInfo(repo)) ?? UNKNOWN_REPO_LABEL;
+function repoLabelForPrompt(repo, fallbackRepoLabel = UNKNOWN_REPO_LABEL) {
+  return extractRepoNameFromGitUrl(repo.remoteUrl) ?? basenameFromPath(getPathFromBranchInfo(repo)) ?? fallbackRepoLabel;
 }
 function buildRepoPathLookup(gitRepos) {
   const lookup3 = /* @__PURE__ */ new Map();
@@ -427048,7 +428196,7 @@ function NewProjectFromScratchGuidance({ agentPreviewCard = false, preferMarkdow
   return jsxs(Fragment, { children: [jsx("h2", { children: "Building from scratch" }), jsx("p", { children: seededEmptyRoot ? "This repository is truly empty: the root commit has no files, and no README exists. You are creating a new project, not patching an existing codebase. Scaffold freely \u2014 there is nothing to move aside or replace. Do not search the tree for conventions \u2014 there are none yet." : "This repository is empty except for a seeded README. You are creating a new project, not patching an existing codebase. Do not search the tree for conventions \u2014 there are none yet." }), jsx("h3", { children: "What to ship" }), jsxs("ul", { children: [jsx("li", { children: "Infer the direction from the user request. Do not assume everything is a web app." }), jsx("li", { children: "When the deliverable has a browser surface, ship a web app with a dev server that exposes a port. Never create just an HTML file." }), jsx("li", { children: "Ship one complete, usable slice of what they asked for. Do not scaffold a platform for features they did not request." }), jsx("li", { children: "If they named a language, framework, or stack, use it. If they did not, pick a default below and proceed. Do not ask which stack to use." }), jsxs("li", { children: ['Prefer an official scaffold (`create-next-app`, `uv init`, `cargo new`, \u2026) over hand-rolling config. For `create-next-app`, scaffold into a subdirectory inside `/workspace` (for example `tmp-scaffold`), then move the generated files up to the repo root. Do not target `.` or `/workspace` \u2014 `create-next-app` checks write access on the parent of the target, so `/workspace` probes `/` and reports "The application path is not writable" as a false positive.', !seededEmptyRoot && " Moving the seeded README aside first does not fix this."] }), jsxs("li", { children: ["Once the repo contains a real project", !seededEmptyRoot && " (more than the seeded README)", ", match that project. The defaults are only for the empty-repo first slice."] })] }), jsx("h3", { children: "Defaults when the user did not name a stack" }), jsxs("ul", { children: [jsx("li", { children: "Browser UI, dashboard, or app with a web surface: Next.js, TypeScript, Tailwind, and shadcn/ui." }), jsx("li", { children: "HTTP API only: same TypeScript repo (Route Handlers) if a UI is likely; otherwise the language they implied, or FastAPI / Hono." }), jsx("li", { children: "CLI, script, or data job: the language they implied; Python if none." }), jsx("li", { children: "Static page, toy, or game: Vite (or the official scaffold for the stack they named) with a running dev server. Never a single HTML file. Do not invent a monorepo." }), jsx("li", { children: "Library or package: a minimal package in the language they named." }), jsx("li", { children: "Mobile or native: a responsive web app unless they named a native stack." })] }), jsx("p", { children: "Do not add auth, a database, or extra services unless the request needs them. Do not add a second component library." }), jsx("h3", { children: "Taste, when there is a UI" }), jsxs("ul", { children: [jsx("li", { children: "If the UI is React and they did not name a component library, use shadcn/ui for primitives (Button, Input, Dialog, \u2026). Do not hand-roll those." }), jsx("li", { children: 'Real copy. No lorem, no "Welcome to your app."' }), jsx("li", { children: "Cover the main empty, loading, and error states." }), jsx("li", { children: "Handle desktop and mobile layouts." })] }), jsx("h3", { children: "Make it runnable here" }), jsx("p", { children: "If the app has a web surface, do this in order. Do not skip ahead to a long test pass before the user can see the app." }), omitScreenshot ? jsxs("ol", { children: [jsx("li", { children: "Start the dev server and leave it running." }), jsx("li", { children: preferMarkdownPreviewLink ? jsxs(Fragment, { children: ["Share the running app as a markdown link with a short title, for example `[Minimal Portfolio](http://127.0.0.1:43123)`. The URL must be an http(s) URL that is currently serving. Leave the app running when you finish.", sendMessageToolName !== void 0 ? ` Your user-visible output goes through ${sendMessageToolName}, so put the link inside the ${sendMessageToolName} message text \u2014 a link in ordinary assistant text is never shown to the user.` : ""] }) : "Give the user a short overview of what you built." }), jsxs("li", { children: ["If you still need to debug or test the UI, spawn a `computerUse` subagent with `run_in_background: true`. Do not wait for that pass", preferMarkdownPreviewLink ? " before sharing the link" : "", "."] })] }) : skipScreenshot ? jsxs("ol", { children: [jsx("li", { children: "Start the dev server and leave it running." }), jsxs("li", { children: ["Emit a Preview card without a screenshot and give the user a short overview of what you built. Emit a `", "<", "preview", ">", "` tag on its own line, including the angle brackets. Ex: `", "<", 'preview url="http://127.0.0.1:43123" title="Minimal Portfolio" description="Your portfolio is ready to preview."', ">", "<", "/preview", ">", "`. A line that starts with `preview url=` and omits `", "<", "` / `", ">", "` will not render. The tag must be valid XML or it will not render properly: always include both the opening `", "<", "preview", ">", "` tag and the closing `", "<", "/preview", ">", "` tag.", agentPreviewCardXmllint ? " Before emitting, pipe the exact tag (no markdown fence) to `xmllint --noout -` and only emit it if that command exits 0; if it errors, fix the tag and retry." : "", " ", "The `url` must be an http(s) URL currently serving. Clicking Preview opens your Desktop, so leave the app running (and ideally the browser open at that URL) when you finish. Emit at most one Preview card per response.", previewSendMessageDelivery] }), jsx("li", { children: "If you still need to debug or test the UI, spawn a `computerUse` subagent with `run_in_background: true`. Do not wait for that pass before the Preview card." })] }) : jsxs("ol", { children: [jsx("li", { children: "Start the dev server and leave it running." }), jsx("li", { children: "Spawn a `computerUse` subagent to open the app in the browser and take a screenshot of it running. Use that spawn only for the screenshot." }), jsx("li", { children: agentPreviewCard ? jsxs(Fragment, { children: ["Emit a Preview card with that screenshot and give the user a short overview of what you built. Emit a `", "<", "preview", ">", "` tag on its own line, including the angle brackets. Ex: `", "<", 'preview url="http://127.0.0.1:43123" title="Minimal Portfolio" description="Your portfolio is ready to preview." image="', previewArtifactsDir, 'preview_thumbnail.png"', ">", "<", "/preview", ">", "`. A line that starts with `preview url=` and omits `", "<", "` / `", ">", "` will not render. The tag must be valid XML or it will not render properly: always include both the opening `", "<", "preview", ">", "` tag and the closing `", "<", "/preview", ">", "` tag.", agentPreviewCardXmllint ? " Before emitting, pipe the exact tag (no markdown fence) to `xmllint --noout -` and only emit it if that command exits 0; if it errors, fix the tag and retry." : "", " ", "The `url` must be an http(s) URL currently serving. The `image` is the screenshot from the previous step, saved under `", previewArtifactsDir, "` (like other image artifacts), rendered as the card's thumbnail. Clicking Preview opens your Desktop, so leave the app running (and ideally the browser open at that URL) when you finish. Emit at most one Preview card per response.", previewSendMessageDelivery] }) : "Include that screenshot and give the user a short overview of what you built." }), jsxs("li", { children: ["If you still need to debug or test the UI, spawn a second `computerUse` subagent with `run_in_background: true`. Do not wait for that pass before the screenshot", agentPreviewCard ? " and Preview card" : "", "."] })] }), jsxs("ul", { children: [jsx("li", { children: "Bind the server to an uncommon port so it is less likely to conflict with another process. Avoid well-known defaults such as 3000, 5173, and 8080 when you can choose the port." }), jsx("li", { children: seededEmptyRoot ? "Write a README covering what this repo is and how to run it locally." : "Replace the seeded README with what this repo is and how to run it locally." }), jsx("li", { children: "If the app needs a secret, ship a local or mock fallback and tell the user. Do not block on credentials if possible." })] })] });
 }
 function CloudTaskInstructions({ gitRepos, designatedBranches, startedAsNewProject = false, newProjectSeededEmptyRoot = false, agentPreviewCard = false, preferMarkdownPreviewLink = false, skipPreviewScreenshot = false, agentPreviewCardSkipScreenshot = false, agentPreviewCardXmllint = false, artifactsDir = CLOUD_AGENT_ARTIFACTS_DIR, branchPrefix, branchSuffix, allowMultipleBranches = false, preferCurrentBranchInMultiPrMode = false, toolInfo, staleBuildGitRefs }) {
-  const gitRepoBranchInfo = designatedBranches !== void 0 && designatedBranches.length > 0 ? getDesignatedBranchDisplayInfo(designatedBranches) : allowMultipleBranches && preferCurrentBranchInMultiPrMode ? getGitRepoBranchDisplayInfo(gitRepos) : allowMultipleBranches ? { displays: [], hasUnknownBranch: false } : getGitRepoBranchDisplayInfo(gitRepos);
+  const gitRepoBranchInfo = designatedBranches !== void 0 && designatedBranches.length > 0 ? getDesignatedBranchDisplayInfo(designatedBranches, gitRepos) : allowMultipleBranches && preferCurrentBranchInMultiPrMode ? getGitRepoBranchDisplayInfo(gitRepos) : allowMultipleBranches ? { displays: [], hasUnknownBranch: false } : getGitRepoBranchDisplayInfo(gitRepos);
   const gitRepoBranchDisplays = gitRepoBranchInfo.displays;
   const hasUnknownBranch = gitRepoBranchInfo.hasUnknownBranch;
   const managedPrToolName = toolInfo?.allTools.PR_MANAGEMENT?.name;
@@ -432364,7 +433512,7 @@ Delegate every request needing more than one quick tool call to one coherent asy
 - In the main chat, only coordinate; answer trivial clarifications from in-context evidence \u2014 ask only when a missing choice changes the result. Any foreground call that would perform or continue any part of a delegated task \u2014 investigation through answer synthesis: stop and delegate instead.
 - Default: fresh agent per independent request or workstream; launch clearly independent ones in parallel \u2014 e.g. one cloud worker per unrelated PR, never bundled. Resume an active agent only for a direct follow-up to its assignment or when new work materially depends on its checkout, state, or substantial context costly to transfer; serialize only overlapping writes or true dependencies.
 - Scale: one ordinary high-level topic \u2014 manage workers directly. Several substantial parallel topics, or one coordination-heavy enough to pull the root into low-level management \u2014 one coordinator per area, returning one result; grown Project: orchestrate coordinators, not their worker slices. Coordinator interim completions stay internal; relay only the consolidated result or a user-input blocker.
-- Launch the chosen worker or coordinator immediately with a short kickoff from the user request \u2014 no kickoff research, no waiting on the store, \`notes.md\`, or a workers catalog. Kickoffs name an exact output destination per Placement below (unstated: child defaults to \`internal/\`). Emit content once: already in a file \u2014 pass the path, never restate it; needed as a file anyway \u2014 write it once (\`internal/\` unless a user deliverable); fresh instructions needing no artifact go straight in the prompt \u2014 never create a file just to pass them. Kickoffs and worker messages stay short \u2014 instructions plus paths, not content. Store paths are valid handoffs wherever agents run (cloud, local, self-hosted); never inline content because of a worker's location. Worker names (at creation; update when renaming while messaging): short imperative task label, about five words, never a question or full sentence \u2014 e.g. \`Review Bugbot findings on #1013465\`.
+- Launch the chosen worker or coordinator immediately with a short kickoff from the user request \u2014 no kickoff research, no waiting on the store, \`notes.md\`, or a workers catalog. Kickoffs name an exact output destination per Placement below (unstated: child defaults to \`internal/\`). Emit content once: already in a file \u2014 pass the path, never restate it; needed as a file anyway \u2014 write it once (\`internal/\` unless a user deliverable); fresh instructions needing no artifact go straight in the prompt \u2014 never create a file just to pass them. Kickoffs and worker messages stay short \u2014 instructions plus paths, not content. Hand store paths as \`/cursor/stores/<id>/<rel>\`, read from the Current agent's store line in \`<user_info>\`: a path ending in \`cursor_agent_stores/<id>/files\` drops \`files\`, and a \`/cursor/stores/self\` path uses the ID-named directory it links to; local and self-hosted workers are told how that maps to their machine, so never inline content because of a worker's location. Worker names (at creation; update when renaming while messaging): short imperative task label, about five words, never a question or full sentence \u2014 e.g. \`Review Bugbot findings on #1013465\`.
 - Routing: local workers share the user's checkout and processes; cloud workers use separate computers and branches. Prefer cloud for unrelated, independent work; local (on the user's machine) when work depends on the branch or worktree the user is running or testing, uncommitted changes, running processes, or rapid iteration \u2014 if uncertain, ask. Never overlap shared state or create a cloud fix that must be copied back when the local context was known. 'Local' means the user's machine; \`cursor-cloud-list-self-hosted-workers\` lists available machines, including the user's.
 - During direct user\u2013child conversation, completion notices only update shared status; intervene only if asked, blocked, or a root invariant requires.
 - Background shell for one medium/long command when follow-up work is unlikely.
@@ -432390,10 +433538,10 @@ Maintain one user-visible \`notes.md\` in the Agent Store (always shown below th
 
 Put lasting material in the Agent Store instead of burying it in chat \u2014 the narrowest store whose audience should retain it.
 
-- Project store: resolve from \`$CURSOR_AGENT_STORE_FILES_DIR\`; if unset, use the Current agent's store path in your context \u2014 never invent another path. Default to it for status, documents, context, artifacts.
+- Project store: the Current agent's store path in \`<user_info>\` \u2014 never invent another path. A path ending in \`cursor_agent_stores/<id>/files\` is given to workers as \`/cursor/stores/<id>/<rel>\`, dropping \`files\`; a \`/cursor/stores/self\` path is given as the ID-named directory it links to. Default to it for status, documents, context, artifacts.
 - User store: cross-Project preferences and workflows. Team store: only established team conventions. If unavailable: do not invent it; tell the user you cannot save there.
 - Never write Project files to the repository or \`~/.cursor/\` unless asked.
-- Store links join the item's path to the resolved store root; Markdown targets are expanded absolute paths, never relative or a literal \`$CURSOR_AGENT_STORE_FILES_DIR\`.
+- Store links join the item's path to the Current agent's store path in \`<user_info>\`; Markdown targets are expanded absolute paths, never relative.
 
 ### Documents and artifacts
 
@@ -432422,11 +433570,11 @@ Separate lasting material by audience: \`notes.md\` \u2014 temporary, actionable
 - Link only compact entity labels, never surrounding prose: direct subagents/coordinators \u2014 full agent name; files/plans/docs \u2014 short descriptive labels; never mention unmentioned internal descendants or invent links for nonexistent files. Name and link the artifact itself; mount or path mechanics only if asked or explaining a storage or access blocker; verified expanded absolute paths only in Markdown targets.
 - The Agent Store is also called \`Context\` in the app (the Project surface's Context tab); same storage.
 - Ask questions directly; summarize worker reports instead of copying them verbatim.`;
-var reminderBody = `1. Delegate non-trivial requests: fresh background agent per workstream; independent work in parallel; only no-tool or one-quick-call work stays foreground. Resume an owner only for a direct follow-up or a costly checkout/state/context dependency; serialize only overlapping writes or true dependencies. Scaling: one topic \u2014 manage workers directly; several substantial parallel topics or a coordination-heavy area \u2014 one coordinator per area, one result each; grown Project \u2014 orchestrate coordinators. Coordinator interim completions stay internal; relay only the consolidated result or a user-input blocker. Launch the owner immediately: short kickoff, short imperative name (about five words, never a question or sentence); emit content once \u2014 already filed, pass the path, never restated; needed as a file anyway, write once (\`internal/\` unless a deliverable); fresh instructions go straight in the prompt, never filed just to hand off; kickoffs and worker messages stay instructions plus paths, not content; store paths are valid handoffs wherever agents run (cloud, local, self-hosted) \u2014 never inline content because of a worker's location. Answer follow-ups only from sufficient evidence, else resume the owner with the exact question. End the turn when its work is done; never wait or poll for completions (a launch or send is not one); check worker status only when a result is needed now or before saying still working. Event-opened turns: SendMessage only if the event completes a user request, needs a decision, or blocks; else fold progress into \`notes.md\` and end the turn. Direct user\u2013child conversation: completion notices update shared status only; intervene only if asked, blocked, or a root invariant requires.
+var reminderBody = `1. Delegate non-trivial requests: fresh background agent per workstream; independent work in parallel; only no-tool or one-quick-call work stays foreground. Resume an owner only for a direct follow-up or a costly checkout/state/context dependency; serialize only overlapping writes or true dependencies. Scaling: one topic \u2014 manage workers directly; several substantial parallel topics or a coordination-heavy area \u2014 one coordinator per area, one result each; grown Project \u2014 orchestrate coordinators. Coordinator interim completions stay internal; relay only the consolidated result or a user-input blocker. Launch the owner immediately: short kickoff, short imperative name (about five words, never a question or sentence); emit content once \u2014 already filed, pass the path, never restated; needed as a file anyway, write once (\`internal/\` unless a deliverable); fresh instructions go straight in the prompt, never filed just to hand off; kickoffs and worker messages stay instructions plus paths, not content; hand store paths as \`/cursor/stores/<id>/<rel>\`, read from the Current agent's store line in \`<user_info>\`: a path ending in \`cursor_agent_stores/<id>/files\` drops \`files\`, and a \`/cursor/stores/self\` path uses the ID-named directory it links to; local and self-hosted workers are told how that maps to their machine, so never inline content because of a worker's location. Answer follow-ups only from sufficient evidence, else resume the owner with the exact question. End the turn when its work is done; never wait or poll for completions (a launch or send is not one); check worker status only when a result is needed now or before saying still working. Event-opened turns: SendMessage only if the event completes a user request, needs a decision, or blocks; else fold progress into \`notes.md\` and end the turn. Direct user\u2013child conversation: completion notices update shared status only; intervene only if asked, blocked, or a root invariant requires.
 2. Cloud for unrelated, independent work; one worker per unrelated PR with ongoing CI, review, or merge follow-up. Local when work depends on the user's running branch or worktree, uncommitted changes, running processes, or rapid iteration; ask if uncertain. Never a copy-back cloud fix; never overlap shared state.
 3. Skip \`notes.md\` only when no tracked item's real state changed in a way worth reflecting in its readout (same-status child completions); learning of such a change \u2014 event, message, or your own check \u2014 means rewriting that item before the turn ends, on top of the turn's other work, never deferring a warranted edit; never re-read it \u2014 its content is already in context (read only after a context reset); else finish the work, send, then edit it silently and end the turn. Never delete it: prefer in-place edits; full rewrites via a validated sibling temp file swapped in atomically; on failure the original stays. Headers only when several groups make the list hard to scan \u2014 \`##\` sections, \`###\` subgroups when needed, never \`#\` or \`####\`+; headers and groups are topical \u2014 the durable concepts and workstreams of the work \u2014 not status-based, unless the work is many unrelated or loosely related fast-moving tasks whose topics are not durable, where state-based sectioning may serve better; two-groups/two-rows nesting; parent checkboxes only for a real workstream with its own status \u2014 a status-less label is a header (\`##\`/\`###\`), never a title-only checkbox; singletons flat; restructure periodically, decaying stale items (long-untouched, abandoned, long-merged) into a linked \`archived.md\` \u2014 move, never delete. One short line per item \u2014 a status readout rewritten fresh from current state, never appended history or semicolon chains; PRs and direct agents get a short descriptive Markdown label \u2014 not the full title, not a bare PR number \u2014 with canonical targets kept; completed items checked, last, capped at the three newest (older overflow to \`archived.md\`). \`<tldr>\` only with multiple top-level sub-projects and at least six checkbox bullets; cap four items, most recently updated first; on state change, rewrite the entry as the same fresh readout; every mentioned PR, child/coordinator, plan, document, or artifact reuses the canonical link known in \`notes.md\` or the body \u2014 never strip or invent (omit instead). Rich PR links show state; do not repeat it.
 4. For every PR mentioned or returned by a child: resolve its URL, repository, and branch, call \`SetActiveBranch\` from the root checkout, then link it with a short descriptive label; claim association only after the call succeeds. For code changed by a cloud worker: show the PR when one exists, else that worker's Review link \u2014 never both. \`[Try Live](bc-id#desktop)\` (\`bc-id\` = the real child agent ID) when a child has a demo or the user specifically wants its desktop \u2014 cloud VM children only; never mention or link it for a child on a private/self-hosted worker or the user's own machine; it complements demo videos and screenshots \u2014 verify and embed those per item 5, never a link in their place.
-5. Resolve \`$CURSOR_AGENT_STORE_FILES_DIR\`; links use expanded absolute paths. Verify each user-relevant plan, then link it from \`notes.md\` and the next message. Placement: \`docs/\` only for deliverables the user asked for or will open, always linked; agent-consumed output in top-level \`internal/\`, default when unsure; never link \`internal/\` unless asked or debugging. Delegated media: exact assigned path under the parent store \`media/\` folder; the child verifies and returns it, the root verifies and embeds it before replying. Never present nonexistent, internal-only, checkout-only, child-store, or temporary artifacts as complete. Name and link artifacts themselves; path mechanics stay out of visible copy unless asked or explaining a blocker. Agent Store = \`Context\` in the app; same storage.
+5. The Project store is the Current agent's store path in \`<user_info>\`; links use that expanded absolute path. A path ending in \`cursor_agent_stores/<id>/files\` is given to workers as \`/cursor/stores/<id>/<rel>\`, dropping \`files\`; a \`/cursor/stores/self\` path is given as the ID-named directory it links to. Verify each user-relevant plan, then link it from \`notes.md\` and the next message. Placement: \`docs/\` only for deliverables the user asked for or will open, always linked; agent-consumed output in top-level \`internal/\`, default when unsure; never link \`internal/\` unless asked or debugging. Delegated media: exact assigned path under the parent store \`media/\` folder; the child verifies and returns it, the root verifies and embeds it before replying. Never present nonexistent, internal-only, checkout-only, child-store, or temporary artifacts as complete. Name and link artifacts themselves; path mechanics stay out of visible copy unless asked or explaining a blocker. Agent Store = \`Context\` in the app; same storage.
 6. Save preferences only when stated, repeated under the same conditions, or corrected; \`preferences.md\` is the short index; never invent or overgeneralize. Offer a saved workflow's natural next step once; no optional, external, or destructive work without permission. Apply saved principles within their limits.
 7. Lead with the result or decision; concise and scannable without losing meaning. Status in \`notes.md\`; detail in \`docs/\`; results, blockers, questions in chat. Match broad formality and directness in a stable voice; keep exact terms; no surface-quirk imitation.`;
 function renderSendMessageGuidance(sendMessageToolName, askQuestionAvailable) {
@@ -432615,9 +433763,29 @@ function isSafeStorePathForPrompt(path30) {
 function isSafeProjectSubagentId(value) {
   return /^[A-Za-z0-9][A-Za-z0-9._:-]*$/u.test(value);
 }
+var PROJECT_STORE_UNMOUNTED_LINE = `The Project's Agent Store is not mounted on this machine. Paths under \`${AGENT_STORE_MOUNT_ROOT2}/\` in your assignment will not resolve here; ask the coordinator for the content instead of searching for it.`;
+function cloudStoreMappingLine(storeDir) {
+  const normalized = storeDir.replace(/\\/g, "/");
+  if (normalized === AGENT_STORE_MOUNT_ROOT2 || normalized.startsWith(`${AGENT_STORE_MOUNT_ROOT2}/`)) {
+    return void 0;
+  }
+  const match2 = matchAgentStorePathForDisplay(storeDir);
+  if (match2?.kind !== "agent" || match2.agentId === void 0 || match2.storeSourceId !== void 0 || match2.relativePath.length > 0) {
+    return void 0;
+  }
+  const { agentId } = match2;
+  const cloudStorePath = `${AGENT_STORE_MOUNT_ROOT2}/${agentId}`;
+  const derivedLocalPrefix = storeDir.replace(/[/\\]+$/, "");
+  if (!isSafeStorePathForPrompt(cloudStorePath) || !isSafeStorePathForPrompt(derivedLocalPrefix)) {
+    return void 0;
+  }
+  const separator = derivedLocalPrefix.includes("\\") && !derivedLocalPrefix.includes("/") ? "\\" : "/";
+  const coordinator = isCloudAgentStoreId(agentId) ? ", including your coordinator," : "";
+  return `Cloud agents${coordinator} address this same store as \`${cloudStorePath}\`. Any \`${cloudStorePath}/<rel>\` path in your assignment is \`${derivedLocalPrefix}${separator}<rel>\` on this machine; open it there directly and never search the filesystem for it.`;
+}
 var threadStoreBody = `You are a worker for a Cursor Project coordinator, not the coordinator itself, even if you can read its context: do only the assigned work \u2014 the parent coordinator owns shared status and memory.
 
-- Read only needed context: assignment-referenced paths (read before asking for content; assigned store paths work wherever you run \u2014 cloud, local, self-hosted), \`notes.md\` for status, \`docs/\` for Project context and documents, \`preferences.md\` (when present) for reusable guidance.
+- Read only needed context: assignment-referenced paths (read before asking for content; assigned paths under \`/cursor/stores/<id>\` name the store described above; translate them as that description says, do not probe or search for them), \`notes.md\` for status, \`docs/\` for Project context and documents, \`preferences.md\` (when present) for reusable guidance.
 - Do not edit parent-coordinator-owned files (status, coordination, user memory) unless assigned; never infer or save preferences.
 - Preserve existing checkout work; no scope expansion, PR creation, pushes, or writes to external systems unless authorized.
 - If assigned as a coordinator: own descendant fan-out, follow-ups, reconciliation, and verification; descendant progress and partial completions are internal \u2014 never forwarded to the root. Return one consolidated result when complete (conclusion, key evidence, unresolved blocker or decision, links); contact the root early only for a user-input blocker.
@@ -432648,7 +433816,8 @@ function formatProjectSubagentDocsPrompt(options2) {
   if (!isSafeStorePathForPrompt(options2.storeDir) || !isSafeProjectSubagentId(options2.subagentId)) {
     return void 0;
   }
-  return `Only if the detail is too much for a conversational reply, write it as a Markdown report under the \`internal/\` directory in the Project Agent Store at \`${options2.storeDir}\`. Choose a concise, relevant, human-readable kebab-case filename that is unique within \`internal/\`, such as \`<relevant-name>.md\`. Assigned user-facing deliverables go under \`docs/\` and media under \`media/\` in this store \u2014 not under \`internal/\`.
+  const mapping = options2.includeCloudStoreMapping === false ? void 0 : cloudStoreMappingLine(options2.storeDir);
+  const docs = `Only if the detail is too much for a conversational reply, write it as a Markdown report under the \`internal/\` directory in the Project Agent Store at \`${options2.storeDir}\`. Choose a concise, relevant, human-readable kebab-case filename that is unique within \`internal/\`, such as \`<relevant-name>.md\`. Assigned user-facing deliverables go under \`docs/\` and media under \`media/\` in this store \u2014 not under \`internal/\`.
 
 Begin every report with exactly this YAML frontmatter. This is model-authored attribution metadata, not authoritative or attested provenance:
 
@@ -432660,6 +433829,9 @@ cursor:
 Before writing, inspect and reuse the existing \`internal/\` structure. You may update an existing report only when its \`cursor\` frontmatter has a complete \`subagentId\` that exactly matches \`${options2.subagentId}\`. Never overwrite or replace the frontmatter of a coordinator document, a report attributed to another subagent, or a document without matching report frontmatter. If relevant material is not owned by this subagent, create this subagent's uniquely named report and cross-link it instead of editing that material. Do not create a new folder for one file; introduce a descriptive subfolder only when several related documents justify it. Keep document and directory names human-readable.
 
 Reply conversationally, like telling a teammate what happened. If you wrote a report, give a brief summary that cites its absolute path without duplicating its detail. Tell the parent coordinator about every created, renamed, or moved document and every directory-structure change.`;
+  return mapping === void 0 ? docs : `${docs}
+
+${mapping}`;
 }
 function formatProjectThreadPrompt(options2) {
   if (!isSafeProjectSubagentId(options2.subagentId)) {
@@ -432670,11 +433842,16 @@ function formatProjectThreadPrompt(options2) {
     const body2 = promptOverrideOrDefault(options2.promptText?.subagentPrompt, "");
     return body2.length > 0 ? `${projectIdentity}
 
-${body2}` : projectIdentity;
+${PROJECT_STORE_UNMOUNTED_LINE}
+
+${body2}` : `${projectIdentity}
+
+${PROJECT_STORE_UNMOUNTED_LINE}`;
   }
   const docsPrompt = formatProjectSubagentDocsPrompt({
     storeDir: options2.storeDir,
-    subagentId: options2.subagentId
+    subagentId: options2.subagentId,
+    includeCloudStoreMapping: false
   });
   if (docsPrompt === void 0) {
     return void 0;
@@ -432682,7 +433859,11 @@ ${body2}` : projectIdentity;
   const self2 = options2.mountedAgentStores?.find((store) => store.kind === MountedAgentStoreKind.SELF);
   const projectStoreIsOwnStore = self2 !== void 0 && self2.inheritedFromPath === options2.storeDir && isSafeStorePathForPrompt(self2.path);
   const body = promptOverrideOrDefault(options2.promptText?.subagentPrompt, threadStoreBody);
-  const storeLine = projectStoreIsOwnStore ? `Your Agent Store \`${self2.path}\` is a symlink to the Project's shared store \`${options2.storeDir}\`, shared with the coordinator and sibling workers.` : `You share the parent Project's session Agent Store: \`${options2.storeDir}\`.`;
+  const storeLineBase = projectStoreIsOwnStore ? `Your Agent Store \`${self2.path}\` is a symlink to the Project's shared store \`${options2.storeDir}\`, shared with the coordinator and sibling workers.` : `You share the parent Project's session Agent Store: \`${options2.storeDir}\`.`;
+  const mappingLine = cloudStoreMappingLine(options2.storeDir);
+  const storeLine = mappingLine === void 0 ? storeLineBase : `${storeLineBase}
+
+${mappingLine}`;
   return `${projectIdentity}
 
 ${storeLine}
@@ -436563,6 +437744,7 @@ var TOOL_OWNER_TEAM_MAP = {
   REMOVE_MCP_ACCOUNT: "connectors-manager",
   RENAME_MCP_ACCOUNT: "connectors-manager",
   LIST_CREDENTIALS: "extensibility",
+  FILL_CREDENTIAL: "extensibility",
   CHECK_SUBAGENT: "async",
   MESSAGE_SUBAGENT: "async",
   STOP_SUBAGENT: "async",
@@ -443777,6 +444959,7 @@ var agentTurnResult = createCounter("agent.turn.result", {
   description: "Result status of agent turn execution",
   labelNames: [
     "outcome",
+    "error_class",
     "newConversation",
     "isauto",
     "ispremium",
@@ -443854,6 +445037,15 @@ var StepRetriesExhaustedError = class extends Error {
     this.name = "StepRetriesExhaustedError";
   }
 };
+function classifyTurnError(error3) {
+  if (error3 instanceof RetryableToolOrchestrationError || error3 instanceof DeferredInteractionResponseError || isAgentStreamStartTimeoutRecoveryTurnError(error3)) {
+    return "tool";
+  }
+  if (error3 instanceof ConnectError || error3 instanceof StepRetriesExhaustedError || error3 instanceof EmptyResponseRetryError || error3 instanceof OutputTokensLimitExceededError || error3 instanceof InputTokenLimitError) {
+    return "backend";
+  }
+  return "loop";
+}
 var MAX_RETRY_ITERATIONS = 5;
 var MAX_EMPTY_RESPONSE_RETRIES_PER_TURN = 3;
 function hasEmptyAssistantText(messages) {
@@ -445691,6 +446883,7 @@ var AbstractUserMessageActionHandler = class {
         agentTurnDuration.histogram(ctx, turnDuration2);
         agentTurnResult.increment(ctx, 1, {
           outcome: "success",
+          error_class: "none",
           newConversation: hadPreviousAssistantMessage ? "false" : "true",
           isauto: getIsAutoFromContext(ctx) ? "true" : "false",
           ispremium: getIsPremiumFromContext(ctx) ? "true" : "false",
@@ -445814,6 +447007,7 @@ var AbstractUserMessageActionHandler = class {
         }
         agentTurnResult.increment(ctx, 1, {
           outcome,
+          error_class: outcome === "error" ? classifyTurnError(error3) : "none",
           newConversation: hadPreviousAssistantMessage ? "false" : "true",
           isauto: getIsAutoFromContext(ctx) ? "true" : "false",
           ispremium: getIsPremiumFromContext(ctx) ? "true" : "false",
@@ -453151,7 +454345,7 @@ ${errorMessages.join("\n")}`);
         const rootParentRequestId = prepared.rootParentRequestId;
         const baseSubagentCtx = createSubagentContext(subagentCtx, subagentRequestId, meta.toolCallId);
         const telemetryModelName = subagentConfig.isGithubBugbotSubagent ? "github_bugbot" : overriddenModelId;
-        let subagentCtxWithTelemetry = baseSubagentCtx.with(requestModelNameKey, telemetryModelName);
+        let subagentCtxWithTelemetry = baseSubagentCtx.with(requestModelNameKey2, telemetryModelName);
         if (parentRequestId) {
           subagentCtxWithTelemetry = subagentCtxWithTelemetry.with(parentRequestIdKey2, parentRequestId);
         }
@@ -453609,10 +454803,10 @@ function deserializeConversationHistoryMessages(history, privacyMode, knownToolC
   const messages = conversationHistoryToCoreMessages(history === void 0 ? void 0 : fromRedactedConversationHistory(history, PrivacyCapability.UNSAFE_ALWAYS_ALLOWED)).filter((message) => !mentionsToolCallId(message, knownToolCallIds));
   return toRedactedCoreMessages(messages, privacyMode);
 }
-function mentionsToolCallId(message, toolCallIds) {
-  if (toolCallIds.size === 0 || typeof message.content === "string")
+function mentionsToolCallId(message, toolCallIds2) {
+  if (toolCallIds2.size === 0 || typeof message.content === "string")
     return false;
-  return message.content.some((part) => (part.type === "tool-call" || part.type === "tool-result") && toolCallIds.has(part.toolCallId));
+  return message.content.some((part) => (part.type === "tool-call" || part.type === "tool-result") && toolCallIds2.has(part.toolCallId));
 }
 function toolCallIdsOf(messages) {
   const ids = /* @__PURE__ */ new Set();
@@ -459292,24 +460486,33 @@ init_zod();
 init_zod();
 
 // ../packages/agent/dist/prompts/tmux-backed-shell-instructions.js
-function getTmuxBootstrapCommand({ sharedSessionName } = {}) {
-  const sessionName = sharedSessionName ?? "descriptive-task-name";
-  return `SESSION_NAME="${sessionName}"; tmux -f /exec-daemon/tmux.portal.conf has-session -t "=$SESSION_NAME" 2>/dev/null || tmux -f /exec-daemon/tmux.portal.conf new-session -d -s "$SESSION_NAME" -c "$PWD" -- "\${SHELL:-zsh}" -l`;
+function tmuxCommand(selfHostedMachine) {
+  return selfHostedMachine ? "tmux" : "tmux -f /exec-daemon/tmux.portal.conf";
 }
-function getTmuxBackedShellSessionsSectionText({ sharedSessionName } = {}) {
+function tmuxConfigGuidance(selfHostedMachine) {
+  return selfHostedMachine ? "On this self-hosted machine, invoke tmux without `-f`. If `tmux` is not installed (`command -v tmux` prints nothing), run long-lived commands in the background with this tool instead." : "On the VM, invoke tmux with `-f /exec-daemon/tmux.portal.conf`. If that config path is unavailable, fall back to the same command without `-f`.";
+}
+function getTmuxBootstrapCommand({ sharedSessionName, selfHostedMachine = false } = {}) {
+  const sessionName = sharedSessionName ?? "descriptive-task-name";
+  const tmux = tmuxCommand(selfHostedMachine);
+  return `SESSION_NAME="${sessionName}"; ${tmux} has-session -t "=$SESSION_NAME" 2>/dev/null || ${tmux} new-session -d -s "$SESSION_NAME" -c "$PWD" -- "\${SHELL:-zsh}" -l`;
+}
+function getTmuxBackedShellSessionsSectionText({ sharedSessionName, selfHostedMachine = false } = {}) {
   const namingGuidance = sharedSessionName === void 0 ? "Use a descriptive tmux session name for the task or command instead of a single global shared name. Prefer short kebab-case names such as `vite-dev-server`, `backend-tests`, or `db-migration`." : `There is one canonical shared tmux session for most recurring shell work \u2014 \`${sharedSessionName}\`. Start or reuse that session before ordinary setup work, then use it for every install, build, migration, version check, and verification command. Only create a separate descriptively-named session (short kebab-case, e.g. \`vite-dev-server\`, \`backend-tests\`, \`postgres\`) for long-running side processes that must keep running after a single command finishes. Do NOT invent a new per-task session name for ordinary shell work \u2014 route it through \`${sharedSessionName}\`.`;
+  const tmux = tmuxCommand(selfHostedMachine);
   return `<tmux-backed-shell-sessions>
 - tmux is the required mechanism for shell work that may outlive a single command. If you need an interactive shell, any background command (such as starting dev servers), a long-running process, follow-up input, later inspection, or a shared session that you or the user may reconnect to later, you MUST use tmux. Do NOT launch those workflows as one-shot background processes. If you are planning to set block_until_ms to 0, you should ALWAYS back this session with tmux.
-- On the VM, invoke tmux with \`-f /exec-daemon/tmux.portal.conf\`. If that config path is unavailable, fall back to the same command without \`-f\`.
+- ${tmuxConfigGuidance(selfHostedMachine)}
 - ${namingGuidance}
-- Start or reuse the appropriate session by running \`${getTmuxBootstrapCommand({ sharedSessionName })}\`.
-- Before creating a new session, list existing sessions with \`tmux -f /exec-daemon/tmux.portal.conf ls\` and reuse an existing one when appropriate.
-- To inspect or continue work in an existing session, attach with \`tmux -f /exec-daemon/tmux.portal.conf attach-session -t "$SESSION_NAME"\`.
-- To send input to a session without attaching, run \`tmux -f /exec-daemon/tmux.portal.conf send-keys -t "$SESSION_NAME:0.0" 'your command here' C-m\`.
+- Start or reuse the appropriate session by running \`${getTmuxBootstrapCommand({ sharedSessionName, selfHostedMachine })}\`.
+- Before creating a new session, list existing sessions with \`${tmux} ls\` and reuse an existing one when appropriate.
+- To inspect or continue work in an existing session, attach with \`${tmux} attach-session -t "$SESSION_NAME"\`.
+- To send input to a session without attaching, run \`${tmux} send-keys -t "$SESSION_NAME:0.0" 'your command here' C-m\`.
 </tmux-backed-shell-sessions>`;
 }
-function TmuxBackedShellInstructions({ sharedSessionName } = {}) {
-  return jsxs("li", { children: ["tmux is the required mechanism for shell work that may outlive a single command. If you need an interactive shell, any background command (such as starting dev servers), a long-running process, follow-up input, later inspection, or a shared session that you or the user may reconnect to later, you MUST use tmux. Do NOT launch those workflows as one-shot background processes. If you are planning to set block_until_ms to 0, you should ALWAYS back this session with tmux.", jsxs("ul", { children: [jsx("li", { children: "On the VM, invoke tmux with `-f /exec-daemon/tmux.portal.conf`. If that config path is unavailable, fall back to the same command without `-f`." }), sharedSessionName ? jsxs("li", { children: ["There is one canonical shared tmux session for most recurring shell work \u2014 `", sharedSessionName, "`. Start or reuse that session before ordinary setup work, then use it for every install, build, migration, version check, and verification command. Only create a separate descriptively-named session (short kebab-case, e.g. `vite-dev-server`, `backend-tests`, `postgres`) for long-running side processes that must keep running after a single command finishes. Do NOT invent a new per-task session name for ordinary shell work \u2014 route it through `", sharedSessionName, "`."] }) : jsx("li", { children: "Use a descriptive tmux session name for the task or command instead of a single global shared name. Prefer short kebab-case names such as `vite-dev-server`, `backend-tests`, or `db-migration`." }), jsxs("li", { children: ["Start or reuse the appropriate session by running", " ", `\`${getTmuxBootstrapCommand({ sharedSessionName })}\``, "."] }), jsx("li", { children: "Before creating a new session, list existing sessions with `tmux -f /exec-daemon/tmux.portal.conf ls` and reuse an existing one when appropriate." }), jsx("li", { children: 'To inspect or continue work in an existing session, attach with `tmux -f /exec-daemon/tmux.portal.conf attach-session -t "$SESSION_NAME"`.' }), jsx("li", { children: "To send input to a session without attaching, run `tmux -f /exec-daemon/tmux.portal.conf send-keys -t \"$SESSION_NAME:0.0\" 'your command here' C-m`." })] })] });
+function TmuxBackedShellInstructions({ sharedSessionName, selfHostedMachine = false } = {}) {
+  const tmux = tmuxCommand(selfHostedMachine);
+  return jsxs("li", { children: ["tmux is the required mechanism for shell work that may outlive a single command. If you need an interactive shell, any background command (such as starting dev servers), a long-running process, follow-up input, later inspection, or a shared session that you or the user may reconnect to later, you MUST use tmux. Do NOT launch those workflows as one-shot background processes. If you are planning to set block_until_ms to 0, you should ALWAYS back this session with tmux.", jsxs("ul", { children: [jsx("li", { children: tmuxConfigGuidance(selfHostedMachine) }), sharedSessionName ? jsxs("li", { children: ["There is one canonical shared tmux session for most recurring shell work \u2014 `", sharedSessionName, "`. Start or reuse that session before ordinary setup work, then use it for every install, build, migration, version check, and verification command. Only create a separate descriptively-named session (short kebab-case, e.g. `vite-dev-server`, `backend-tests`, `postgres`) for long-running side processes that must keep running after a single command finishes. Do NOT invent a new per-task session name for ordinary shell work \u2014 route it through `", sharedSessionName, "`."] }) : jsx("li", { children: "Use a descriptive tmux session name for the task or command instead of a single global shared name. Prefer short kebab-case names such as `vite-dev-server`, `backend-tests`, or `db-migration`." }), jsxs("li", { children: ["Start or reuse the appropriate session by running", " ", `\`${getTmuxBootstrapCommand({ sharedSessionName, selfHostedMachine })}\``, "."] }), jsxs("li", { children: ["Before creating a new session, list existing sessions with ", `\`${tmux} ls\``, " and reuse an existing one when appropriate."] }), jsxs("li", { children: ["To inspect or continue work in an existing session, attach with", " ", `\`${tmux} attach-session -t "$SESSION_NAME"\``, "."] }), jsxs("li", { children: ["To send input to a session without attaching, run", " ", `\`${tmux} send-keys -t "$SESSION_NAME:0.0" 'your command here' C-m\``, "."] })] })] });
 }
 
 // ../packages/agent/dist/tools/core/shell/prompts/latest.js
@@ -459357,7 +460560,7 @@ function SandboxingDescription({ isReadonly, sandboxNetworkInfo }) {
 }
 
 // ../packages/agent/dist/tools/core/shell/prompts/latest.js
-function ShellDescriptionComponent({ enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, compactShellFileGuidance, enableBlockUntilMs, defaultBlockUntilMs = 3e4, enableTmuxGuidance, tmuxSharedSessionName, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }) {
+function ShellDescriptionComponent({ enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, compactShellFileGuidance, enableBlockUntilMs, defaultBlockUntilMs = 3e4, enableTmuxGuidance, tmuxSharedSessionName, tmuxSelfHostedMachine, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }) {
   if (useMinimalHarness) {
     return jsxs(Fragment, { children: [jsx("p", { children: "Execute shell commands in the workspace." }), jsxs("ul", { children: [jsx("li", { children: "The shell is stateful - cwd & env vars persist for subsequent calls." }), jsx("li", { children: "Make efficient use of shell calls and minimize wasted tokens." }), jsx("li", { children: "Batch related shell work together or run independent checks in parallel when safe. Make liberal use of `&&`, `;`, pipes, greps, and other efficient shell use." }), jsx("li", { children: "Use targeted, output-limited terminal commands such as `rg`, `head`, `tail`, and `sed -n` when relevant to limit output." }), jsx("li", { children: "NEVER use `set -x`; it breaks this tool. If it gets set, run `set +x` to fix the shell." }), jsx("li", { children: "Optimize for overall cost, including cache reads, cache writes, and output tokens." }), jsx("li", { children: "Use the 'Workspace Path' field in the `<user_info>` section to resolve the workspace path. It will likely NOT be at `/workspace`; don't waste time trying that." }), jsx("li", { children: "Still do whatever validation is necessary to ensure the judgment is correct; efficiency means avoiding waste, not skipping verification." }), jsx("li", { children: "This may still be a long-running investigation if correctness requires it, but do not spend tokens on status updates, progress narration, or UX niceties while judging." }), jsx("li", { children: "Always quote paths that contain spaces." })] })] });
   }
@@ -459370,9 +460573,9 @@ function ShellDescriptionComponent({ enableTerminalFiles, sandboxEnabled, isRead
   const awaitToolName = allTools.AWAIT?.name;
   const showCompletionAndProgressGuidance = awaitToolName !== void 0 && enableJobCompletionNotifications && enableJobProgressNotifications;
   if (compactShellDescription === true) {
-    return jsxs(Fragment, { children: [jsx("p", { children: "Executes a given command in a shell session with optional foreground timeout." }), compactShellFileGuidance !== void 0 ? jsx("p", { children: compactShellFileGuidance }) : jsxs("p", { children: ["IMPORTANT: Use this tool for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files", awaitToolName !== void 0 ? ", sleeping" : "", ") - use the specialized tools for this instead."] }), jsxs("ul", { children: [compactShellFileGuidance === void 0 && (grepToolName || globToolName || readToolName) && jsxs("li", { children: ["Use ", [grepToolName, globToolName, readToolName].filter(Boolean).join(", "), " for file operations when applicable. If shell text search is necessary, use `rg`, not `grep` or `find`."] }), enableTerminalFiles && jsx("li", { children: "Do not truncate output with `head`, `tail`, or `sed -n` solely to limit its size; large output is saved to a terminal file." }), jsx("li", { children: "Run independent commands as parallel Shell calls. Chain dependent commands with `&&`." }), enableGithubTools && jsxs("li", { children: ["Use the `gh` command via the ", shellToolName, " tool for all GitHub-related tasks, including issues, pull requests, checks, and releases."] })] }), enableTmuxGuidance && jsx("section", { title: "tmux-backed shell sessions", children: jsx("ul", { children: jsx(TmuxBackedShellInstructions, { sharedSessionName: tmuxSharedSessionName }) }) }), sandboxEnabled && jsx(SandboxingDescription, { isReadonly, sandboxNetworkInfo })] });
+    return jsxs(Fragment, { children: [jsx("p", { children: "Executes a given command in a shell session with optional foreground timeout." }), compactShellFileGuidance !== void 0 ? jsx("p", { children: compactShellFileGuidance }) : jsxs("p", { children: ["IMPORTANT: Use this tool for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files", awaitToolName !== void 0 ? ", sleeping" : "", ") - use the specialized tools for this instead."] }), jsxs("ul", { children: [compactShellFileGuidance === void 0 && (grepToolName || globToolName || readToolName) && jsxs("li", { children: ["Use ", [grepToolName, globToolName, readToolName].filter(Boolean).join(", "), " for file operations when applicable. If shell text search is necessary, use `rg`, not `grep` or `find`."] }), enableTerminalFiles && jsx("li", { children: "Do not truncate output with `head`, `tail`, or `sed -n` solely to limit its size; large output is saved to a terminal file." }), jsx("li", { children: "Run independent commands as parallel Shell calls. Chain dependent commands with `&&`." }), enableGithubTools && jsxs("li", { children: ["Use the `gh` command via the ", shellToolName, " tool for all GitHub-related tasks, including issues, pull requests, checks, and releases."] })] }), enableTmuxGuidance && jsx("section", { title: "tmux-backed shell sessions", children: jsx("ul", { children: jsx(TmuxBackedShellInstructions, { sharedSessionName: tmuxSharedSessionName, selfHostedMachine: tmuxSelfHostedMachine }) }) }), sandboxEnabled && jsx(SandboxingDescription, { isReadonly, sandboxNetworkInfo })] });
   }
-  return jsxs(Fragment, { children: [jsx("p", { children: "Executes a given command in a shell session with optional foreground timeout." }), jsxs("p", { children: ["IMPORTANT: This tool is for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files", awaitToolName !== void 0 ? ", sleeping" : "", ") - use the specialized tools for this instead."] }), jsx("p", { children: "Before executing the command, please follow these steps:" }), jsxs("ol", { children: [enableTerminalFiles && jsxs("li", { children: [jsx("p", { children: "Check for Running Processes:" }), jsxs("ul", { children: [jsx("li", { children: "Before starting dev servers or long-running processes that should not be duplicated, search the terminals folder to check if they are already running in existing terminals." }), jsx("li", { children: "You can use this information to determine which terminal, if any, matches the command you want to run, contains the output from the command you want to inspect, or has changed since you last read them." }), jsxs("li", { children: ["Since these are text files, you can read any terminal's contents simply by reading the file", grepToolName ? jsxs(Fragment, { children: [", search using ", grepToolName, ", etc."] }) : "."] })] })] }), jsxs("li", { children: [jsx("p", { children: "Directory Verification:" }), jsxs("ul", { children: [jsx("li", { children: "If the command will create new directories or files, first run ls to verify the parent directory exists and is the correct location" }), jsx("li", { children: `For example, before running "mkdir foo/bar", first run 'ls' to check that "foo" exists and is the intended parent directory` })] })] }), jsxs("li", { children: [jsx("p", { children: "Command Execution:" }), jsxs("ul", { children: [jsx("li", { children: 'Always quote file paths that contain spaces with double quotes (e.g., cd "path with spaces/file.txt")' }), jsxs("li", { children: ["Examples of proper quoting:", jsxs("ul", { children: [jsx("li", { children: 'cd "/Users/name/My Documents" (correct)' }), jsx("li", { children: "cd /Users/name/My Documents (incorrect - will fail)" }), jsx("li", { children: 'python "/path/with spaces/script.py" (correct)' }), jsx("li", { children: "python /path/with spaces/script.py (incorrect - will fail)" })] })] }), includeCommandSubstitutionWarning && jsx("li", { children: "Treat the command argument as executable shell text: backticks and `$()` perform command substitution. Quote carefully and avoid command construction that could expose secrets in tool output." }), jsx("li", { children: "After ensuring proper quoting, execute the command." }), jsx("li", { children: "Capture the output of the command." })] })] })] }), !enableTerminalFiles && jsx("p", { children: "IMPORTANT: Do not run any long-lived processes such as watch commands, dev commands that run forever (like npm run dev for react apps), or anything that is a background process. This makes the conversation hang forever for the user. It is essential to avoid this, and refuse if the user asks you to do so." }), jsx("p", { children: "Usage notes:" }), jsxs("ul", { children: [jsx("li", { children: "The command argument is required." }), jsx("li", { children: 'The shell starts in the workspace root and is stateful across sequential calls. Current working directory and environment variables persist between calls. Use the `working_directory` parameter to run commands in different directories. Example: to run `npm install` in the `frontend` folder, set `working_directory: "frontend"` rather than using `cd frontend && npm install`.' }), !enableBlockUntilMs && jsx("li", { children: "You can specify an optional timeout in milliseconds (up to 600000ms / 10 minutes). If not specified, commands will timeout after 30000ms (30 seconds)." }), jsx("li", { children: "It is very helpful if you write a clear, concise description of what this command does in 5-10 words." }), jsxs("li", { children: ["Avoid using search commands like `find` and `grep`.", (grepToolName || globToolName) && jsxs(Fragment, { children: ["Instead prefer ", [grepToolName, globToolName].filter(Boolean).join(", "), " to search."] }), readToolName && jsxs(Fragment, { children: [" ", "Avoid read tools like `cat`, `head`, and `tail`, and prefer ", readToolName, " to read files."] }), editToolName && jsxs(Fragment, { children: [" Avoid editing files with tools like `sed` and `awk`, use ", editToolName, " instead."] })] }), enableTerminalFiles && jsx("li", { children: "Don't pipe a command's output through `head`, `tail`, or `sed -n` (or similar) just to limit its length \u2014 large output is automatically written to a terminal file that you can read in full, so truncating only risks discarding information you need (especially for long-running commands)." }), jsx("li", { children: "If you _still_ need to run `grep`, STOP. ALWAYS USE ripgrep at `rg` first, which all users have pre-installed." }), !enableBlockUntilMs && jsx("li", { children: "You do not need to use '&' at the end of commands when setting `is_background: true`." }), jsxs("li", { children: ["When issuing multiple commands:", jsxs("ul", { children: [jsxs("li", { children: ["If the commands are independent and can run in parallel, make multiple ", shellToolName, " ", 'tool calls in a single message. For example, if you need to run "git status" and "git diff", send a single message with two ', shellToolName, " tool calls in parallel."] }), jsxs("li", { children: ["If the commands depend on each other and must run sequentially, use a single", " ", shellToolName, " call with '&&' to chain them together (e.g., `git add . && git commit -m \"message\" && git push`). For instance, if one operation must complete before another starts (like mkdir before cp,", writeToolName && jsxs(Fragment, { children: [" ", writeToolName, " before ", shellToolName, " for git operations,"] }), " ", "or git add before git commit), run these operations sequentially instead."] }), jsx("li", { children: "Use ';' only when you need to run commands sequentially but don't care if earlier commands fail" }), jsx("li", { children: "DO NOT use newlines to separate commands (newlines are ok in quoted strings)" })] })] })] }), jsx("p", { children: "Dependencies:" }), jsx("p", { children: "When adding new dependencies, prefer using the package manager (e.g. npm, pip) to add the latest version. Do not make up dependency versions." }), enableBlockUntilMs && jsx("section", { title: "Managing long-running commands", children: jsxs("ul", { children: [jsx("li", { children: jsxs("p", { children: ["Commands that don't complete within `block_until_ms` (default", ` ${formatDurationForPrompt(defaultBlockUntilMs)}`, ") are moved to background. The command keeps running and output streams to a terminal file. Set `block_until_ms: 0` to immediately background (use for dev servers, watchers, or any long-running process)."] }) }), jsx("li", { children: jsx("p", { children: "You do not need to use '&' at the end of commands." }) }), jsx("li", { children: jsx("p", { children: "Make sure to set `block_until_ms` to higher than the command's expected runtime. Add some buffer since block_until_ms includes shell startup time; increase buffer next time based on `elapsed_ms` if you chose too low. E.g. if you sleep for 40s, recommended `block_until_ms` is 45s." }) }), awaitToolName === void 0 ? jsxs("li", { children: [jsx("p", { children: "Monitoring backgrounded commands:" }), jsxs("ul", { children: [jsx("li", { children: "When command moves to background, check status immediately by reading the terminal file." }), jsx("li", { children: "Header has `pid` and `running_for_ms` (updated every 5000ms)" }), jsx("li", { children: "When finished, footer with `exit_code` and `elapsed_ms` appears." }), jsx("li", { children: "Poll repeatedly to monitor by sleeping between checks. If the file gets large, read from the end of the file to capture the latest content." }), jsx("li", { children: "Pick your sleep intervals using best guess/judgment based on any knowledge you have about the command and its expected runtime, and any output from monitoring the command. When no new output, exponential backoff is a good strategy (e.g. sleep 2000ms, 4000ms, 8000ms, 16000ms...), using educated guess for min and max wait." }), jsx("li", { children: "If it's longer than expected and the command seems like it is hung, kill the process if safe to do so using the pid that appears in the header. If possible, try to fix the hang and proceed." }), jsx("li", { children: "Don't stop polling until: (a) `exit_code` footer appears (terminating command), (b) the command reaches a healthy steady state (only for non-terminating command, e.g. dev server/watcher), or (c) command is hung - follow guidance above." })] })] }) : null, showCompletionAndProgressGuidance && jsx("li", { children: "You'll be notified when the backgrounded command completes." }), showCompletionAndProgressGuidance && jsx("li", { children: 'You can monitor commands by configuring `notify_on_output`. You will be notified at the end of your turn whenever stdout/stderr output matches the regex `pattern` (do not match all outputs). Output redirected only to a file will not trigger it. You will only receive notifications after ending your turn. Configure a 5 or less words `reason` which explains what you are watching for. The UI will prefix it as "Monitored `reason`". Configure `debounce_ms` to control how many milliseconds must elapse between notifications; the harness treats values less than 5000ms as 5000ms. Configure shell commands to emit stable sentinel lines and simple anchored regexes; pipe noisy output through jq/awk/scripts if needed. The system will terminate the watcher if the notifications are overly noisy, and you will be informed in this case.' }), showCompletionAndProgressGuidance && jsx("li", { children: "Completion notifications are delivered separately from output-match notifications and do not require `notify_on_output` to be set." }), showCompletionAndProgressGuidance && jsxs("li", { children: ["Only poll with ", `\`${awaitToolName}\``, " later if you have been asked to work on something that requires the result of a previous shell command. Using the", " ", `\`${awaitToolName}\``, " is very disruptive because it prevents you from being able to multitask."] }), awaitToolName !== void 0 && enableJobCompletionNotifications && !enableJobProgressNotifications ? jsxs("li", { children: ["You'll be notified when the backgrounded command completes. Only poll with", " ", `\`${awaitToolName}\``, " when the command requires close monitoring \u2014 long-running jobs that can silently hang or degrade before completing (training runs, eval runs, deployments, long builds, datagen pipelines, DB migrations, large data transfers). For fire-and-forget commands (tests, installs, dev servers/watchers, short scripts), start them and keep working \u2014 you can always poll with ", `\`${awaitToolName}\``, " ", "later if you end up blocked on the result. If under your control, prefer commands that print periodic status updates so close monitoring is effective."] }) : null, awaitToolName !== void 0 && !enableJobCompletionNotifications ? jsxs("li", { children: ["Use the ", `\`${awaitToolName}\``, " tool to monitor the background command. If under your control, prefer commands that print periodic status updates so you can monitor effectively."] }) : null] }) }), enableJobProgressNotifications && jsx("section", { title: "Scheduling notifications", children: jsx("ul", { children: jsx("li", { children: "You can schedule notifications for yourself by starting a background shell that sleeps and echos a reminder message. This can be very useful for reminding yourself to check on another shell or task and verify it is making progress. Always think about how long you expect something to take before scheduling a notification." }) }) }), enableTmuxGuidance && jsx("section", { title: "tmux-backed shell sessions", children: jsx("ul", { children: jsx(TmuxBackedShellInstructions, { sharedSessionName: tmuxSharedSessionName }) }) }), enableGithubTools && jsxs(Fragment, { children: [jsx(CommittingChangesSection, { shellToolName }), jsx(CreatingPullRequestsSection, { shellToolName, enablePrCreationForgeGuidance }), jsx("section", { title: "Other common operations", children: jsx("ul", { children: jsx("li", { children: "View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments" }) }) })] }), sandboxEnabled && jsx(SandboxingDescription, { isReadonly, sandboxNetworkInfo })] });
+  return jsxs(Fragment, { children: [jsx("p", { children: "Executes a given command in a shell session with optional foreground timeout." }), jsxs("p", { children: ["IMPORTANT: This tool is for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files", awaitToolName !== void 0 ? ", sleeping" : "", ") - use the specialized tools for this instead."] }), jsx("p", { children: "Before executing the command, please follow these steps:" }), jsxs("ol", { children: [enableTerminalFiles && jsxs("li", { children: [jsx("p", { children: "Check for Running Processes:" }), jsxs("ul", { children: [jsx("li", { children: "Before starting dev servers or long-running processes that should not be duplicated, search the terminals folder to check if they are already running in existing terminals." }), jsx("li", { children: "You can use this information to determine which terminal, if any, matches the command you want to run, contains the output from the command you want to inspect, or has changed since you last read them." }), jsxs("li", { children: ["Since these are text files, you can read any terminal's contents simply by reading the file", grepToolName ? jsxs(Fragment, { children: [", search using ", grepToolName, ", etc."] }) : "."] })] })] }), jsxs("li", { children: [jsx("p", { children: "Directory Verification:" }), jsxs("ul", { children: [jsx("li", { children: "If the command will create new directories or files, first run ls to verify the parent directory exists and is the correct location" }), jsx("li", { children: `For example, before running "mkdir foo/bar", first run 'ls' to check that "foo" exists and is the intended parent directory` })] })] }), jsxs("li", { children: [jsx("p", { children: "Command Execution:" }), jsxs("ul", { children: [jsx("li", { children: 'Always quote file paths that contain spaces with double quotes (e.g., cd "path with spaces/file.txt")' }), jsxs("li", { children: ["Examples of proper quoting:", jsxs("ul", { children: [jsx("li", { children: 'cd "/Users/name/My Documents" (correct)' }), jsx("li", { children: "cd /Users/name/My Documents (incorrect - will fail)" }), jsx("li", { children: 'python "/path/with spaces/script.py" (correct)' }), jsx("li", { children: "python /path/with spaces/script.py (incorrect - will fail)" })] })] }), includeCommandSubstitutionWarning && jsx("li", { children: "Treat the command argument as executable shell text: backticks and `$()` perform command substitution. Quote carefully and avoid command construction that could expose secrets in tool output." }), jsx("li", { children: "After ensuring proper quoting, execute the command." }), jsx("li", { children: "Capture the output of the command." })] })] })] }), !enableTerminalFiles && jsx("p", { children: "IMPORTANT: Do not run any long-lived processes such as watch commands, dev commands that run forever (like npm run dev for react apps), or anything that is a background process. This makes the conversation hang forever for the user. It is essential to avoid this, and refuse if the user asks you to do so." }), jsx("p", { children: "Usage notes:" }), jsxs("ul", { children: [jsx("li", { children: "The command argument is required." }), jsx("li", { children: 'The shell starts in the workspace root and is stateful across sequential calls. Current working directory and environment variables persist between calls. Use the `working_directory` parameter to run commands in different directories. Example: to run `npm install` in the `frontend` folder, set `working_directory: "frontend"` rather than using `cd frontend && npm install`.' }), !enableBlockUntilMs && jsx("li", { children: "You can specify an optional timeout in milliseconds (up to 600000ms / 10 minutes). If not specified, commands will timeout after 30000ms (30 seconds)." }), jsx("li", { children: "It is very helpful if you write a clear, concise description of what this command does in 5-10 words." }), jsxs("li", { children: ["Avoid using search commands like `find` and `grep`.", (grepToolName || globToolName) && jsxs(Fragment, { children: ["Instead prefer ", [grepToolName, globToolName].filter(Boolean).join(", "), " to search."] }), readToolName && jsxs(Fragment, { children: [" ", "Avoid read tools like `cat`, `head`, and `tail`, and prefer ", readToolName, " to read files."] }), editToolName && jsxs(Fragment, { children: [" Avoid editing files with tools like `sed` and `awk`, use ", editToolName, " instead."] })] }), enableTerminalFiles && jsx("li", { children: "Don't pipe a command's output through `head`, `tail`, or `sed -n` (or similar) just to limit its length \u2014 large output is automatically written to a terminal file that you can read in full, so truncating only risks discarding information you need (especially for long-running commands)." }), jsx("li", { children: "If you _still_ need to run `grep`, STOP. ALWAYS USE ripgrep at `rg` first, which all users have pre-installed." }), !enableBlockUntilMs && jsx("li", { children: "You do not need to use '&' at the end of commands when setting `is_background: true`." }), jsxs("li", { children: ["When issuing multiple commands:", jsxs("ul", { children: [jsxs("li", { children: ["If the commands are independent and can run in parallel, make multiple ", shellToolName, " ", 'tool calls in a single message. For example, if you need to run "git status" and "git diff", send a single message with two ', shellToolName, " tool calls in parallel."] }), jsxs("li", { children: ["If the commands depend on each other and must run sequentially, use a single", " ", shellToolName, " call with '&&' to chain them together (e.g., `git add . && git commit -m \"message\" && git push`). For instance, if one operation must complete before another starts (like mkdir before cp,", writeToolName && jsxs(Fragment, { children: [" ", writeToolName, " before ", shellToolName, " for git operations,"] }), " ", "or git add before git commit), run these operations sequentially instead."] }), jsx("li", { children: "Use ';' only when you need to run commands sequentially but don't care if earlier commands fail" }), jsx("li", { children: "DO NOT use newlines to separate commands (newlines are ok in quoted strings)" })] })] })] }), jsx("p", { children: "Dependencies:" }), jsx("p", { children: "When adding new dependencies, prefer using the package manager (e.g. npm, pip) to add the latest version. Do not make up dependency versions." }), enableBlockUntilMs && jsx("section", { title: "Managing long-running commands", children: jsxs("ul", { children: [jsx("li", { children: jsxs("p", { children: ["Commands that don't complete within `block_until_ms` (default", ` ${formatDurationForPrompt(defaultBlockUntilMs)}`, ") are moved to background. The command keeps running and output streams to a terminal file. Set `block_until_ms: 0` to immediately background (use for dev servers, watchers, or any long-running process)."] }) }), jsx("li", { children: jsx("p", { children: "You do not need to use '&' at the end of commands." }) }), jsx("li", { children: jsx("p", { children: "Make sure to set `block_until_ms` to higher than the command's expected runtime. Add some buffer since block_until_ms includes shell startup time; increase buffer next time based on `elapsed_ms` if you chose too low. E.g. if you sleep for 40s, recommended `block_until_ms` is 45s." }) }), awaitToolName === void 0 ? jsxs("li", { children: [jsx("p", { children: "Monitoring backgrounded commands:" }), jsxs("ul", { children: [jsx("li", { children: "When command moves to background, check status immediately by reading the terminal file." }), jsx("li", { children: "Header has `pid` and `running_for_ms` (updated every 5000ms)" }), jsx("li", { children: "When finished, footer with `exit_code` and `elapsed_ms` appears." }), jsx("li", { children: "Poll repeatedly to monitor by sleeping between checks. If the file gets large, read from the end of the file to capture the latest content." }), jsx("li", { children: "Pick your sleep intervals using best guess/judgment based on any knowledge you have about the command and its expected runtime, and any output from monitoring the command. When no new output, exponential backoff is a good strategy (e.g. sleep 2000ms, 4000ms, 8000ms, 16000ms...), using educated guess for min and max wait." }), jsx("li", { children: "If it's longer than expected and the command seems like it is hung, kill the process if safe to do so using the pid that appears in the header. If possible, try to fix the hang and proceed." }), jsx("li", { children: "Don't stop polling until: (a) `exit_code` footer appears (terminating command), (b) the command reaches a healthy steady state (only for non-terminating command, e.g. dev server/watcher), or (c) command is hung - follow guidance above." })] })] }) : null, showCompletionAndProgressGuidance && jsx("li", { children: "You'll be notified when the backgrounded command completes." }), showCompletionAndProgressGuidance && jsx("li", { children: 'You can monitor commands by configuring `notify_on_output`. You will be notified at the end of your turn whenever stdout/stderr output matches the regex `pattern` (do not match all outputs). Output redirected only to a file will not trigger it. You will only receive notifications after ending your turn. Configure a 5 or less words `reason` which explains what you are watching for. The UI will prefix it as "Monitored `reason`". Configure `debounce_ms` to control how many milliseconds must elapse between notifications; the harness treats values less than 5000ms as 5000ms. Configure shell commands to emit stable sentinel lines and simple anchored regexes; pipe noisy output through jq/awk/scripts if needed. The system will terminate the watcher if the notifications are overly noisy, and you will be informed in this case.' }), showCompletionAndProgressGuidance && jsx("li", { children: "Completion notifications are delivered separately from output-match notifications and do not require `notify_on_output` to be set." }), showCompletionAndProgressGuidance && jsxs("li", { children: ["Only poll with ", `\`${awaitToolName}\``, " later if you have been asked to work on something that requires the result of a previous shell command. Using the", " ", `\`${awaitToolName}\``, " is very disruptive because it prevents you from being able to multitask."] }), awaitToolName !== void 0 && enableJobCompletionNotifications && !enableJobProgressNotifications ? jsxs("li", { children: ["You'll be notified when the backgrounded command completes. Only poll with", " ", `\`${awaitToolName}\``, " when the command requires close monitoring \u2014 long-running jobs that can silently hang or degrade before completing (training runs, eval runs, deployments, long builds, datagen pipelines, DB migrations, large data transfers). For fire-and-forget commands (tests, installs, dev servers/watchers, short scripts), start them and keep working \u2014 you can always poll with ", `\`${awaitToolName}\``, " ", "later if you end up blocked on the result. If under your control, prefer commands that print periodic status updates so close monitoring is effective."] }) : null, awaitToolName !== void 0 && !enableJobCompletionNotifications ? jsxs("li", { children: ["Use the ", `\`${awaitToolName}\``, " tool to monitor the background command. If under your control, prefer commands that print periodic status updates so you can monitor effectively."] }) : null] }) }), enableJobProgressNotifications && jsx("section", { title: "Scheduling notifications", children: jsx("ul", { children: jsx("li", { children: "You can schedule notifications for yourself by starting a background shell that sleeps and echos a reminder message. This can be very useful for reminding yourself to check on another shell or task and verify it is making progress. Always think about how long you expect something to take before scheduling a notification." }) }) }), enableTmuxGuidance && jsx("section", { title: "tmux-backed shell sessions", children: jsx("ul", { children: jsx(TmuxBackedShellInstructions, { sharedSessionName: tmuxSharedSessionName, selfHostedMachine: tmuxSelfHostedMachine }) }) }), enableGithubTools && jsxs(Fragment, { children: [jsx(CommittingChangesSection, { shellToolName }), jsx(CreatingPullRequestsSection, { shellToolName, enablePrCreationForgeGuidance }), jsx("section", { title: "Other common operations", children: jsx("ul", { children: jsx("li", { children: "View comments on a Github PR: gh api repos/foo/bar/pulls/123/comments" }) }) })] }), sandboxEnabled && jsx(SandboxingDescription, { isReadonly, sandboxNetworkInfo })] });
 }
 var commandSchema = external_exports.string().describe("The command to execute");
 var workingDirectorySchema = external_exports.string().optional().describe("The absolute path to the working directory to execute the command in (defaults to current directory)");
@@ -459468,14 +460671,15 @@ Usage notes:
 - When issuing multiple commands, use the ';' or '&&' operator to separate them. DO NOT use newlines (newlines are ok in quoted strings).
 - Try to maintain your current working directory throughout the session by using absolute paths and avoiding usage of \`cd\`. You may use \`cd\` if the User explicitly requests it.<good-example>pytest /foo/bar/tests</good-example><bad-example>cd /foo/bar && pytest tests</bad-example>`;
 function getDescriptionDsv3(sandboxEnabled, version3, options2) {
-  const { isReadonly, enableBlockUntilMs, enableTmuxGuidance, sandboxNetworkInfo, awaitToolName, tmuxSharedSessionName, useMinimalHarness, requireBlockUntilMs, defaultBlockUntilMs, enableJobCompletionNotifications, enableJobProgressNotifications } = options2 ?? {};
+  const { isReadonly, enableBlockUntilMs, enableTmuxGuidance, sandboxNetworkInfo, awaitToolName, tmuxSharedSessionName, tmuxSelfHostedMachine, useMinimalHarness, requireBlockUntilMs, defaultBlockUntilMs, enableJobCompletionNotifications, enableJobProgressNotifications } = options2 ?? {};
   const outputNotificationSection = enableJobProgressNotifications === true ? "You can monitor commands by configuring `notify_on_output`. You will be notified at the end of your turn whenever stdout/stderr output matches the regex `pattern`. Output redirected only to a file will not trigger it. Configure a 5-or-fewer-word `reason` explaining what you are watching for, and optionally configure `debounce_ms`." : void 0;
   const sandboxDescription = sandboxEnabled ? renderContent(SandboxingDescriptionBody({
     isReadonly: isReadonly === true,
     sandboxNetworkInfo
   })) : void 0;
   const tmuxGuidanceSection = enableTmuxGuidance === true ? getTmuxBackedShellSessionsSectionText({
-    sharedSessionName: tmuxSharedSessionName
+    sharedSessionName: tmuxSharedSessionName,
+    selfHostedMachine: tmuxSelfHostedMachine
   }) : void 0;
   const appendDescriptionSections = (base) => {
     const sections = [tmuxGuidanceSection, sandboxDescription].filter((section) => section !== void 0);
@@ -459680,7 +460884,7 @@ function getParametersSchemaDsv3(sandboxEnabled, version3, options2) {
 }
 
 // ../packages/agent/dist/tools/core/shell/prompts/index.js
-function getDescription2({ version: version3, enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, compactShellFileGuidance, enableBlockUntilMs, requireBlockUntilMs, defaultBlockUntilMs, enableTmuxGuidance, tmuxSharedSessionName, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }) {
+function getDescription2({ version: version3, enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, compactShellFileGuidance, enableBlockUntilMs, requireBlockUntilMs, defaultBlockUntilMs, enableTmuxGuidance, tmuxSharedSessionName, tmuxSelfHostedMachine, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }) {
   if (version3 === "cursor-0226") {
     if (useMinimalHarness) {
       return getDescriptionDsv3(sandboxEnabled, version3, {
@@ -459689,6 +460893,7 @@ function getDescription2({ version: version3, enableTerminalFiles, sandboxEnable
         enableTmuxGuidance,
         sandboxNetworkInfo,
         tmuxSharedSessionName,
+        tmuxSelfHostedMachine,
         useMinimalHarness: true,
         requireBlockUntilMs,
         defaultBlockUntilMs,
@@ -459701,6 +460906,7 @@ function getDescription2({ version: version3, enableTerminalFiles, sandboxEnable
       enableTmuxGuidance,
       sandboxNetworkInfo,
       tmuxSharedSessionName,
+      tmuxSelfHostedMachine,
       requireBlockUntilMs,
       defaultBlockUntilMs,
       enableJobProgressNotifications
@@ -459714,6 +460920,7 @@ function getDescription2({ version: version3, enableTerminalFiles, sandboxEnable
       sandboxNetworkInfo,
       awaitToolName: allTools.AWAIT?.name,
       tmuxSharedSessionName,
+      tmuxSelfHostedMachine,
       useMinimalHarness,
       requireBlockUntilMs,
       defaultBlockUntilMs,
@@ -459721,7 +460928,7 @@ function getDescription2({ version: version3, enableTerminalFiles, sandboxEnable
       enableJobProgressNotifications
     });
   }
-  return renderContent(jsx(ShellDescriptionComponent, { enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, compactShellFileGuidance, enableBlockUntilMs: enableBlockUntilMs ?? false, defaultBlockUntilMs, enableTmuxGuidance, tmuxSharedSessionName, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }));
+  return renderContent(jsx(ShellDescriptionComponent, { enableTerminalFiles, sandboxEnabled, isReadonly, enableGithubTools, useMinimalHarness, compactShellDescription, compactShellFileGuidance, enableBlockUntilMs: enableBlockUntilMs ?? false, defaultBlockUntilMs, enableTmuxGuidance, tmuxSharedSessionName, tmuxSelfHostedMachine, enableJobCompletionNotifications, enableJobProgressNotifications, includeCommandSubstitutionWarning, allTools, sandboxNetworkInfo, enablePrCreationForgeGuidance }));
 }
 function getToolName2(version3) {
   switch (version3) {
@@ -461530,6 +462737,7 @@ var createShellTool = (resourceAccessor, options2, promptVersion = "latest") => 
       defaultBlockUntilMs,
       enableTmuxGuidance: options2?.enableTmuxGuidance,
       tmuxSharedSessionName: options2?.tmuxSharedSessionName,
+      tmuxSelfHostedMachine: options2?.tmuxSelfHostedMachine,
       enableJobCompletionNotifications: options2?.enableJobCompletionNotifications,
       enableJobProgressNotifications: options2?.enableJobProgressNotifications,
       includeCommandSubstitutionWarning: options2?.includeCommandSubstitutionWarning,
@@ -467612,6 +468820,7 @@ var sandDeepLinks = declareDeepLinkSurface({
       error: routeOptional(routeString(/[a-z_]{1,64}/))
     }),
     open: deepLinkRoute("/v1/open", {}),
+    "create-team-bot": deepLinkRoute("/v1/create-team-bot", {}),
     settings: deepLinkRoute("/v1/settings", {
       id: routeString({ oneOf: SETTINGS_DEEP_LINK_ANCHOR_IDS })
     }),
@@ -467645,7 +468854,12 @@ function buildSandSidebarDeepLinkUrl(target, automationId) {
     throw error3;
   }
 }
-var TRANSCRIPT_DEEP_LINK_ROUTES = ["settings", "plugin-add", "sidebar"];
+var TRANSCRIPT_DEEP_LINK_ROUTES = [
+  "settings",
+  "plugin-add",
+  "sidebar",
+  "bot-template"
+];
 var TRANSCRIPT_DEEP_LINK_ROUTE_SET = new Set(TRANSCRIPT_DEEP_LINK_ROUTES);
 
 // src/shared/product/product-name.ts
@@ -468089,6 +469303,38 @@ var sandWidgetSchema = external_exports.object({
 
 // ../packages/grok-bot-harness/src/runner/tools/send-message-schema.ts
 init_zod();
+
+// ../packages/grok-bot-harness/src/runner/credential-domain.ts
+var import_tldts = __toESM(require_cjs2(), 1);
+function parseHttpUrl(raw) {
+  const value = raw.trim();
+  if (value.length === 0) return null;
+  try {
+    const url2 = new URL(value.includes("://") ? value : `https://${value}`);
+    return url2.protocol === "https:" || url2.protocol === "http:" ? url2 : null;
+  } catch {
+    return null;
+  }
+}
+function normalizedHostname(url2) {
+  return url2.hostname.toLowerCase().replace(/\.$/, "");
+}
+function isLoopbackHostname(hostname2) {
+  const host = hostname2.toLowerCase();
+  const octets = host.split(".");
+  return host === "localhost" || host === "::1" || host === "[::1]" || octets.length === 4 && octets[0] === "127" && octets.every((octet) => /^\d{1,3}$/.test(octet) && Number(octet) <= 255);
+}
+function isSecureCredentialTarget(rawTarget) {
+  const target = parseHttpUrl(rawTarget);
+  if (target == null) return false;
+  return target.protocol === "https:" || target.protocol === "http:" && isLoopbackHostname(normalizedHostname(target));
+}
+function normalizeCredentialTarget(rawTarget) {
+  if (!isSecureCredentialTarget(rawTarget)) return null;
+  return parseHttpUrl(rawTarget)?.origin ?? null;
+}
+
+// ../packages/grok-bot-harness/src/runner/tools/send-message-schema.ts
 var SEND_MESSAGE_TYPES = [
   "text",
   "attachment",
@@ -468102,6 +469348,7 @@ var SEND_MESSAGE_TYPES_WITH_CREDENTIAL_REQUEST = [
 ];
 var SEND_MESSAGE_TYPE_DESCRIPTION = "text for chat messages (default), attachment for actual files or standalone media, widget for an interactive question with selectable options, cursor-agent to reference a Cursor cloud agent by its bcId (renders as a card that opens the agent in Cursor on click), secret-request to ask the user for a credential through a secure masked input (never a chat paste).";
 var SEND_MESSAGE_TYPE_DESCRIPTION_WITH_CREDENTIAL_REQUEST = `${SEND_MESSAGE_TYPE_DESCRIPTION.slice(0, -1)}, credential-request to fill a 1Password login into the sign-in page open in the box browser.`;
+var SEND_MESSAGE_TYPE_DESCRIPTION_WITH_BROKERED_CREDENTIAL_REQUEST = `${SEND_MESSAGE_TYPE_DESCRIPTION.slice(0, -1)}, credential-request to ask 1Password for the user's logins to the websites a task needs; they approve in their 1Password app.`;
 var SEND_MESSAGE_DM_DESTINATION = "dm";
 var SEND_MESSAGE_DM_DESCRIPTION = `Optional, only meaningful during a local group-chat turn. Pass "dm" to deliver this message privately to YOUR OWN user's 1:1 chat instead of the room; the room never sees it. Only valid with type:text. Outside a group-chat turn it is ignored because your user is already the audience.`;
 var SEND_MESSAGE_DM_TEXT_ONLY_ERROR = 'to:"dm" can only be set for type:text';
@@ -468201,6 +469448,31 @@ var sendMessageObjectSchemaWithCredentialRequest = external_exports.object({
 });
 var sendMessageObjectSchema = sendMessageObjectSchemaWithCredentialRequest.omit({ credential: true }).extend({
   type: external_exports.enum(SEND_MESSAGE_TYPES).default("text").describe(SEND_MESSAGE_TYPE_DESCRIPTION)
+});
+var brokeredCredentialSchema = external_exports.object({
+  kind: external_exports.literal("brokered-login"),
+  goal: external_exports.string().trim().min(1).max(140).describe(
+    "What the whole task is, in the user's words and language, up to 140 characters; no names, account identifiers, or secrets."
+  ),
+  logins: external_exports.array(
+    external_exports.object({
+      website: external_exports.string().trim().min(1).max(2083).refine(isSecureCredentialTarget, "website must be an absolute https URL").describe(
+        "The absolute https URL of the sign-in page the login is for. The fill is bound to this exact host, so use the host the sign-in form is actually on (for example https://accounts.example.com, not https://example.com when sign-in lives on the accounts host)."
+      ),
+      reason: external_exports.string().trim().min(1).max(100).describe(
+        "Why this specific login is needed, shown to the user beside it, up to 100 characters."
+      ),
+      keywords: external_exports.array(external_exports.string().trim().min(1).max(50)).min(1).max(5).optional().describe(
+        "Optional 1-5 hints from the user's request, like a company name or the nickname they gave the account, that help 1Password suggest the right item."
+      )
+    }).strict()
+  ).min(1).max(5).describe("The 1 to 5 logins the task needs, batched up front so the user approves once.")
+}).strict();
+var sendMessageObjectSchemaWithBrokeredCredentialRequest = sendMessageObjectSchemaWithCredentialRequest.omit({ credential: true }).extend({
+  type: external_exports.enum(SEND_MESSAGE_TYPES_WITH_CREDENTIAL_REQUEST).describe(SEND_MESSAGE_TYPE_DESCRIPTION_WITH_BROKERED_CREDENTIAL_REQUEST),
+  credential: brokeredCredentialSchema.optional().describe(
+    "Required when type is credential-request. Asks 1Password for access to the named logins for this session; the user picks the exact items and approves in their 1Password app. You learn which logins were granted by entry_id and then fill each with FillCredential; values never reach you."
+  )
 });
 var TYPE_SCOPED_SEND_MESSAGE_FIELDS = [
   { field: "content", types: ["text"] },
@@ -468371,11 +469643,15 @@ function refineSendMessage(value, ctx) {
 }
 var sendMessageParameters = sendMessageObjectSchema.superRefine(refineSendMessage);
 var sendMessageParametersWithCredentialRequest = sendMessageObjectSchemaWithCredentialRequest.superRefine(refineSendMessage);
+var sendMessageParametersWithBrokeredCredentialRequest = sendMessageObjectSchemaWithBrokeredCredentialRequest.superRefine(refineSendMessage);
 var SEND_TO_USER_END_TURN_GUIDANCE = "Set end_turn to true on your final SendToUser call when your reply is complete. A successful send completes the turn without another assistant message. Omit it or set false for acknowledgements and progress updates when you still need to work. Send all required results and attachments before the final call. Do not parallelize the final call with work you still need. You can end your turn while subagents are working as long as you are done for now.";
 var sendMessageEndTurnParameters = sendMessageObjectSchema.extend({
   end_turn: external_exports.boolean().optional().describe(SEND_TO_USER_END_TURN_GUIDANCE)
 }).superRefine(refineSendMessage);
 var sendMessageEndTurnParametersWithCredentialRequest = sendMessageObjectSchemaWithCredentialRequest.extend({
+  end_turn: external_exports.boolean().optional().describe(SEND_TO_USER_END_TURN_GUIDANCE)
+}).superRefine(refineSendMessage);
+var sendMessageEndTurnParametersWithBrokeredCredentialRequest = sendMessageObjectSchemaWithBrokeredCredentialRequest.extend({
   end_turn: external_exports.boolean().optional().describe(SEND_TO_USER_END_TURN_GUIDANCE)
 }).superRefine(refineSendMessage);
 var promptHygieneSecretField = { secret: secretRequestField("CRM_API_TOKEN") };
@@ -468386,6 +469662,11 @@ var promptHygieneSendMessageEndTurnParameters = sendMessageObjectSchema.extend({
   end_turn: external_exports.boolean().optional().describe(SEND_TO_USER_END_TURN_GUIDANCE)
 }).superRefine(refineSendMessage);
 var promptHygieneSendMessageEndTurnParametersWithCredentialRequest = sendMessageObjectSchemaWithCredentialRequest.extend({
+  ...promptHygieneSecretField,
+  end_turn: external_exports.boolean().optional().describe(SEND_TO_USER_END_TURN_GUIDANCE)
+}).superRefine(refineSendMessage);
+var promptHygieneSendMessageParametersWithBrokeredCredentialRequest = sendMessageObjectSchemaWithBrokeredCredentialRequest.extend(promptHygieneSecretField).superRefine(refineSendMessage);
+var promptHygieneSendMessageEndTurnParametersWithBrokeredCredentialRequest = sendMessageObjectSchemaWithBrokeredCredentialRequest.extend({
   ...promptHygieneSecretField,
   end_turn: external_exports.boolean().optional().describe(SEND_TO_USER_END_TURN_GUIDANCE)
 }).superRefine(refineSendMessage);
@@ -469317,8 +470598,7 @@ var SITE_SECTIONS_BY_BUCKET = /* @__PURE__ */ new Map([
   ["target.com", { rest: "target" }],
   ["united.com", { rest: "united" }],
   ["ups.com", { rest: "ups" }],
-  ["usps.com", { rest: "usps" }],
-  ["yelp.com", { rest: "yelp" }]
+  ["usps.com", { rest: "usps" }]
 ]);
 function siteSectionForUrl(url2) {
   const bucket = boundedSiteBucket(url2.hostname);
@@ -470480,6 +471760,7 @@ function folderLabel(projectDir) {
   const clipped = plain.length > FOLDER_LABEL_MAX_LENGTH ? `${plain.slice(0, FOLDER_LABEL_MAX_LENGTH - 1)}\u2026` : plain;
   return clipped === "" ? "the workspace root" : `\`${clipped}\``;
 }
+var AUTO_APPLIED_HINT_WINDOW_MS = 15 * 60 * 1e3;
 
 // ../packages/grok-bot-harness/src/cloud-agents/cloud-agent-run-started-by.ts
 function cloudAgentStartedBy(armedBy) {
@@ -470851,6 +472132,9 @@ function createBackgroundWatches(host) {
     shellRewatchEntries: () => shellRewatches.entries(),
     cloudAgentWatchEntries: () => watchedCloudAgentBcIds.entries()
   };
+}
+function isBackgroundWorkRunning(subagents, watches) {
+  return subagents.hasRunningSubagents() || watches.pendingCloudAgentWatchBcIds().length > 0 || watches.hasRunningBackgroundShellWork();
 }
 
 // ../packages/grok-bot-harness/src/runner/computer-use.ts
@@ -472761,11 +474045,11 @@ var attaches = createCounter("sand.playwright.attach", {
 });
 var serverReadiness = createHistogram("sand.playwright.server_ready_ms", {
   description: "Playwright server readiness checks per computerUse prewarm, timed by listTools",
-  labelNames: ["outcome", "harness"]
+  labelNames: ["outcome", "harness", "runtime"]
 });
 var toolCalls = createHistogram("sand.playwright.tool_call_ms", {
   description: "Terminal Playwright browser tool attempts, admission failures included",
-  labelNames: ["tool", "outcome", "stage", "error_class", "harness"]
+  labelNames: ["tool", "outcome", "stage", "error_class", "harness", "runtime"]
 });
 var snapshotRecoveries = createCounter("sand.playwright.snapshot_recovered", {
   description: "Scoped snapshots answered with the whole page after the target failed to resolve",
@@ -472775,14 +474059,15 @@ function recordPlaywrightSnapshotRecovery(ctx, args) {
   snapshotRecoveries.increment(ctx, 1, args);
 }
 function recordPlaywrightServerReady(ctx, args) {
-  const { outcome, harness, durationMs } = args;
-  serverReadiness.histogram(ctx, durationMs, { outcome, harness });
+  const { outcome, harness, runtime, durationMs } = args;
+  serverReadiness.histogram(ctx, durationMs, { outcome, harness, runtime });
 }
 function recordPlaywrightToolCall(ctx, args) {
-  const { tool, harness, durationMs, result } = args;
+  const { tool, harness, runtime, durationMs, result } = args;
   toolCalls.histogram(ctx, durationMs, {
     tool,
     harness,
+    runtime,
     outcome: result.kind,
     stage: result.kind === "error" ? result.stage : "exec",
     error_class: toolCallErrorClassLabel(result)
@@ -472901,6 +474186,8 @@ function combinedComputerPrompt(options2) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/playwright-browser-tools.ts
+var import_node_crypto32 = require("node:crypto");
+init_dist();
 init_zod();
 
 // ../packages/grok-bot-harness/src/mcp/playwright-mcp-tools-list.generated.ts
@@ -478218,6 +479505,10 @@ function createSandBrowserTools(deps) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/playwright-browser-tools.ts
+var playwrightFirstClassToolExecutionKey = createKey(
+  /* @__PURE__ */ Symbol("playwrightFirstClassToolExecution"),
+  void 0
+);
 var PLAYWRIGHT_BROWSER_TOOL_NAMES = [
   "browser_close",
   "browser_resize",
@@ -478238,7 +479529,8 @@ var PLAYWRIGHT_BROWSER_TOOL_NAMES = [
   "browser_hover",
   "browser_select_option",
   "browser_tabs",
-  "browser_wait_for"
+  "browser_wait_for",
+  "browser_run_code_unsafe"
 ];
 var PLAYWRIGHT_NAVIGABLE_TOOLS = /* @__PURE__ */ new Set([
   "browser_navigate",
@@ -478265,8 +479557,27 @@ var DRIVER_ARG_NAMES = {
 };
 var PLAYWRIGHT_ROW_ARGS = external_exports.record(external_exports.unknown());
 var PLAYWRIGHT_WAIT_FOR_MAX_SECONDS = PLAYWRIGHT_ACTION_TIMEOUT_MS / 1e3;
+var PLAYWRIGHT_RUN_CODE_UNSAFE_MAX_CHARS = 16384;
+var PLAYWRIGHT_PROXY_HANDSHAKE_TOOL = "browser_proxy_handshake";
+var PlaywrightUnsafeCodeRefusedError = class extends CustomToolCallError {
+  admission;
+  constructor(admission) {
+    const message = `browser_run_code_unsafe is unavailable (${admission.reason})`;
+    super(ToolErrorClassification.UNEXPECTED_ENVIRONMENT, {
+      clientVisibleErrorMessage: message,
+      modelVisibleErrorMessage: message,
+      error: message
+    });
+    this.name = "PlaywrightUnsafeCodeRefusedError";
+    this.admission = admission;
+  }
+};
 var SCREENSHOT_ATTACHED_SENTENCE = "The image comes back attached to this result.";
 function normalizeRowArgs(name17, args) {
+  if (name17 === "browser_run_code_unsafe") {
+    const { filename: _filename, ...withoutFilename } = args;
+    return withoutFilename;
+  }
   if (name17 === "browser_take_screenshot") {
     const { filename: _filename, ...withoutFilename } = args;
     return withoutFilename;
@@ -478289,6 +479600,11 @@ var REVIEW_ELEMENT_ARG = {
 };
 function definition(row, server) {
   const inputSchema = JSON.parse(JSON.stringify(row.inputSchema));
+  if (row.name === "browser_run_code_unsafe" && isUnknownRecord(inputSchema) && isUnknownRecord(inputSchema.properties) && isUnknownRecord(inputSchema.properties.code)) {
+    delete inputSchema.properties.filename;
+    inputSchema.properties.code.maxLength = PLAYWRIGHT_RUN_CODE_UNSAFE_MAX_CHARS;
+    inputSchema.required = ["code"];
+  }
   const reviewElement = REVIEW_ELEMENT_ARG[row.name];
   if (reviewElement !== void 0 && isUnknownRecord(inputSchema)) {
     const required2 = inputSchema.required;
@@ -478308,9 +479624,33 @@ function definition(row, server) {
     toolName: row.name,
     providerIdentifier: server,
     clientKey: server,
-    description: screenshot ? `${row.description} ${SCREENSHOT_ATTACHED_SENTENCE}` : row.description,
+    description: playwrightToolDescription(row, screenshot),
     inputSchema
   };
+}
+function proxyHandshakeDefinition(server) {
+  return {
+    name: `${server}-${PLAYWRIGHT_PROXY_HANDSHAKE_TOOL}`,
+    toolName: PLAYWRIGHT_PROXY_HANDSHAKE_TOOL,
+    providerIdentifier: server,
+    clientKey: server,
+    description: "Verify the restricted Playwright proxy.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        challenge: { type: "string" }
+      },
+      required: ["challenge"],
+      additionalProperties: false
+    }
+  };
+}
+function playwrightToolDescription(row, screenshot) {
+  if (row.name === "browser_run_code_unsafe") {
+    return "Run inline Playwright page code in a restricted isolated worker.";
+  }
+  if (screenshot) return `${row.description} ${SCREENSHOT_ATTACHED_SENTENCE}`;
+  return row.description;
 }
 async function* once(text2) {
   yield text2;
@@ -478322,6 +479662,16 @@ function successOf(result) {
 }
 function textOf(success) {
   return success.content.flatMap((item) => item.content.case === "text" ? [item.content.value.text] : []).join("\n");
+}
+function isValidProxyHandshake(result, challenge) {
+  const success = successOf(result);
+  if (success === void 0 || success.isError) return false;
+  try {
+    const value = JSON.parse(textOf(success));
+    return isUnknownRecord(value) && value.proxy === "sand-playwright" && value.protocol === 1 && value.challenge === challenge;
+  } catch {
+    return false;
+  }
 }
 function pageUrlOf(result) {
   const success = successOf(result);
@@ -478378,6 +479728,9 @@ function withSilentSuccessText(result) {
 }
 function rowTool(deps, row, lastPageUrl) {
   const toolFor = (server) => createMcpTool(deps.resourceAccessor, definition(row, server), { name: row.name });
+  const proxyHandshakeFor = (server) => createMcpTool(deps.resourceAccessor, proxyHandshakeDefinition(server), {
+    name: PLAYWRIGHT_PROXY_HANDSHAKE_TOOL
+  });
   return {
     ...toolFor("unseated"),
     execute: withSafeParsedArgs(
@@ -478385,17 +479738,54 @@ function rowTool(deps, row, lastPageUrl) {
       async (ctx, interactionHandler, rawArgs, meta) => {
         const args = normalizeRowArgs(row.name, rawArgs);
         const startedAt = performance.now();
-        let stage = "window";
+        let stage = "admission";
         const record3 = (result) => recordPlaywrightToolCall(ctx, {
           tool: row.name,
           harness: deps.harness ?? "unavailable",
+          runtime: deps.runtime?.() ?? "direct",
           durationMs: performance.now() - startedAt,
           result
         });
         try {
+          if (row.name === "browser_run_code_unsafe") {
+            const admission = await deps.resolveUnsafeCodeAdmission?.(ctx) ?? {
+              kind: "refused",
+              reason: "runtime_unavailable"
+            };
+            if (admission.kind === "refused") {
+              throw new PlaywrightUnsafeCodeRefusedError(admission);
+            }
+          }
+          stage = "window";
           const windowIndex = await deps.getWindowIndex(ctx);
-          if (windowIndex === void 0) throw new PlaywrightWindowUnavailableError();
+          if (windowIndex === void 0) {
+            if (row.name === "browser_run_code_unsafe") {
+              throw new PlaywrightUnsafeCodeRefusedError({
+                kind: "refused",
+                reason: "stale_window"
+              });
+            }
+            throw new PlaywrightWindowUnavailableError();
+          }
           const server = playwrightBoxMcpServerName(windowIndex);
+          if (row.name === "browser_run_code_unsafe") {
+            const challenge = (0, import_node_crypto32.randomUUID)();
+            const handshake = await proxyHandshakeFor(server).execute(
+              ctx.with(playwrightFirstClassToolExecutionKey, true),
+              interactionHandler,
+              once(JSON.stringify({ challenge })),
+              {
+                ...meta,
+                toolCallId: `${meta.toolCallId}-proxy-handshake`
+              }
+            );
+            if (!isValidProxyHandshake(handshake, challenge)) {
+              throw new PlaywrightUnsafeCodeRefusedError({
+                kind: "refused",
+                reason: "runtime_unavailable"
+              });
+            }
+          }
           if (deps.autoReview !== void 0 && row.annotations.readOnlyHint !== true) {
             stage = "review";
             const { resourceAccessor, resolveDisplayNumber, ...options2 } = deps.autoReview;
@@ -478424,7 +479814,7 @@ function rowTool(deps, row, lastPageUrl) {
           }
           stage = "exec";
           const executed = await toolFor(server).execute(
-            ctx,
+            ctx.with(playwrightFirstClassToolExecutionKey, true),
             interactionHandler,
             once(JSON.stringify(args)),
             meta
@@ -478448,10 +479838,15 @@ function rowTool(deps, row, lastPageUrl) {
   };
 }
 function createPlaywrightBrowserTools(deps) {
-  const exposed = new Set(PLAYWRIGHT_BROWSER_TOOL_NAMES);
+  const runtime = deps.runtime?.() ?? "direct";
+  const exposed = new Set(
+    PLAYWRIGHT_BROWSER_TOOL_NAMES.filter(
+      (name17) => name17 !== "browser_run_code_unsafe" || runtime === "proxy" && deps.resolveUnsafeCodeAdmission !== void 0 && deps.autoReview?.mode !== "enforce"
+    )
+  );
   const lastPageUrl = /* @__PURE__ */ new Map();
   return PLAYWRIGHT_MCP_TOOLS_LIST.filter((row) => exposed.has(row.name)).map(
-    (row) => rowTool(deps, row, lastPageUrl)
+    (row) => rowTool({ ...deps, runtime: () => runtime }, row, lastPageUrl)
   );
 }
 
@@ -478480,6 +479875,7 @@ async function prewarmPlaywrightServer(args) {
   const serverReady = (outcome) => recordPlaywrightServerReady(args.ctx, {
     outcome,
     harness: args.harness,
+    runtime: args.playwrightRuntime?.() ?? "direct",
     durationMs: listToolsStartedAt === void 0 ? 0 : performance.now() - listToolsStartedAt
   });
   try {
@@ -478521,6 +479917,8 @@ var playwright = {
   createTools: (deps) => createPlaywrightBrowserTools({
     ...deps,
     resourceAccessor: deps.mcpResourceAccessor,
+    runtime: deps.playwrightRuntime,
+    resolveUnsafeCodeAdmission: deps.resolvePlaywrightUnsafeCodeAdmission,
     autoReview: deps.autoReview === void 0 ? void 0 : { ...deps.autoReview, resourceAccessor: deps.boxResourceAccessor }
   }),
   promptLines: {
@@ -478544,6 +479942,19 @@ var SAND_BROWSER_TOOL_SETS = {
   driver,
   playwright
 };
+
+// ../packages/grok-bot-harness/src/runner/tools/sand-browser-surface.ts
+function resolveSandBrowserToolSurface(gates, options2) {
+  return gates.browserUsePlaywright(options2) ? "playwright" : "driver";
+}
+function sandBrowserToolSurface(host) {
+  return host.browserToolSurface ?? resolveSandBrowserToolSurface(host.gates);
+}
+function resolveSandBrowserSurface(host) {
+  if (!host.remoteBoxHasDesktop || !host.getRemoteBoxAvailable()) return "none";
+  if (host.isBrowserUseSubagent) return "driver";
+  return host.isComputerUseSubagent && host.isCombinedComputerUseAvailable() ? sandBrowserToolSurface(host) : "none";
+}
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-computer-use-subagent.ts
 init_subagents_pb();
@@ -478576,9 +479987,11 @@ function isMediaReviewSubagent(subagentType) {
 }
 
 // src/shared/credentials.ts
+var BROKERED_ACCESS_REQUEST_WINDOW_MS = 10 * 60 * 1e3;
 var CREDENTIAL_MINT_DEFAULT_VAULT_NAME = "Shared with Grok Bot";
 var BROKERED_ACCESS_REQUEST_FAILURES = [
   "integration-off",
+  "turn-refused",
   "not-connected",
   "reconnect-required",
   "extension-unavailable",
@@ -478872,6 +480285,56 @@ function defineCommunicateTool(deps, spec) {
   });
 }
 
+// ../packages/grok-bot-harness/src/runner/tools/sand-credential-request.ts
+init_zod();
+var CREDENTIAL_REQUEST_MAX_PURPOSE_LENGTH = 300;
+function clampCredentialPurpose(purpose) {
+  return clampLine(purpose, CREDENTIAL_REQUEST_MAX_PURPOSE_LENGTH);
+}
+var credentialRequestCommonSchema = external_exports.object({
+  kind: external_exports.literal("browser-login"),
+  envName: external_exports.undefined().optional(),
+  purpose: external_exports.string().trim().min(1),
+  targetSite: external_exports.string().trim().min(1)
+});
+var credentialRequestSchema = credentialRequestCommonSchema.extend({
+  credentialId: external_exports.string().trim().min(1),
+  connectionId: external_exports.string().trim().min(1),
+  catalogRevision: external_exports.string().trim().min(1),
+  targetWebSocketDebuggerUrl: external_exports.string().trim().min(1).optional(),
+  autoFill: external_exports.boolean().optional(),
+  requestedAtMs: external_exports.number().finite(),
+  expiresAtMs: external_exports.number().finite()
+}).passthrough();
+var brokeredCredentialRequestSchema = external_exports.object({
+  kind: external_exports.literal("brokered-login"),
+  accessRequestId: external_exports.string().trim().min(1).max(256),
+  goal: external_exports.string().max(140),
+  entries: external_exports.array(
+    external_exports.object({
+      entryId: external_exports.string().trim().min(1).max(256),
+      website: external_exports.string().trim().min(1).max(2083),
+      reason: external_exports.string().max(100)
+    }).strict()
+  ).min(1).max(5),
+  appLink: external_exports.string().trim().min(1).max(4096).refine((link) => link.startsWith("onepassword://"), "appLink must be a 1Password app link"),
+  requestedAtMs: external_exports.number().finite(),
+  expiresAtMs: external_exports.number().finite()
+}).passthrough();
+function websiteHost(website) {
+  return URL.canParse(website) ? new URL(website).host : website;
+}
+function describeBrokeredEntries(request3) {
+  return request3.entries.map((entry) => `${websiteHost(entry.website)} (entry_id: ${entry.entryId})`).join(", ");
+}
+function summarizeCredentialRequest(request3) {
+  if (request3.kind === "brokered-login") {
+    return `Asked 1Password for access to ${request3.entries.length} login(s) for "${request3.goal}": ${describeBrokeredEntries(request3)}`;
+  }
+  return `Asked to fill the 1Password login ${request3.credentialId} into the sign-in page open at ${request3.targetSite}: ${request3.purpose}`;
+}
+var BROKERED_FILL_GUIDANCE = "To sign in with a granted login, first make the sign-in page the active tab in your box browser window with computerUse, then call FillCredential with its entry_id: 1Password's extension fills and submits the login in that tab, and you never see the values. Submitted is not signed in: after the fill returns, check the page with computerUse before continuing, never inspect or report credential input values, and hand any remaining SSO, passkey, captcha, payment, or verification-code step to the user with request_box_help. Grants last for this session only; a new session needs a new credential-request.";
+
 // ../packages/grok-bot-harness/src/runner/tools/request-onepassword-connect-tool.ts
 init_zod();
 var SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME = "request_1password_connect";
@@ -478941,7 +480404,7 @@ var setOnePasswordPreferenceParameters = external_exports.object({
     "true when the user says they don't use or don't want 1Password; false when they later say they want it offered again."
   )
 }).strict();
-var SET_ONEPASSWORD_PREFERENCE_DESCRIPTION = `Save whether the user wants 1Password offered, the same per-user setting as the card's "Not now" button. Call it with declined true when the user says they don't use or don't want 1Password: logins then go to the in-chat form and the optional Connect 1Password card is no longer suggested. Call it with declined false only when they later say they want it offered again. It shows nothing to the user. An explicit ask to set up 1Password still goes to ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, and connecting 1Password clears the setting.`;
+var SET_ONEPASSWORD_PREFERENCE_DESCRIPTION = `Save whether the user wants 1Password offered. The setting is per user, not per device. Call it with declined true when the user says they don't use or don't want 1Password: logins then go to the in-chat form and the optional Connect 1Password card is no longer suggested. Call it with declined false only when they later say they want it offered again. It shows nothing to the user. An explicit ask to set up 1Password still goes to ${SAND_REQUEST_ONEPASSWORD_CONNECT_TOOL_NAME}, and connecting 1Password clears the setting.`;
 function createSetOnePasswordPreferenceTool(deps) {
   const connectOffer = deps.connectOffer;
   return defineCommunicateTool(deps, {
@@ -479112,6 +480575,45 @@ function createCredentialTools(access4, options2 = {}) {
     })
   ];
 }
+var BROKERED_CREDENTIAL_REQUEST_GUIDANCE = `To sign in with the user's 1Password logins, send one credential-request for everything the task needs, up to five logins at once: {"type":"credential-request","credential":{"kind":"brokered-login","goal":"<what the task is, in the user's words, up to 140 characters>","logins":[{"website":"https://accounts.example.com","reason":"<why this login is needed, up to 100 characters>","keywords":["<optional hint the user gave, like a company or nickname>"]}]}}. Grok Bot sends it to 1Password, the user picks the exact items and approves in their 1Password app, and you are told which logins were granted, by entry_id, never a username or password. Then bring each sign-in page up in the box browser and call FillCredential with that entry_id; 1Password's extension fills and submits the login there. Write goal and reason in the user's language, with no names, account identifiers, or secrets. To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials".`;
+var fillCredentialParameters = external_exports.object({
+  entry_id: external_exports.string().trim().min(1).describe("The entry_id of a login the user granted in this session, from the approval note."),
+  site: external_exports.string().trim().optional().describe(
+    "The exact URL computerUse reports for the sign-in page that is open in the box browser. Pass it whenever more than one page on the login's site could be open."
+  )
+});
+function createBrokeredCredentialTools(access4, broker) {
+  return [
+    defineCommunicateTool(access4, {
+      id: "FILL_CREDENTIAL",
+      name: "FillCredential",
+      description: "Fill and submit a 1Password login the user already granted in this session into the sign-in page open in the box browser. Use it only after a credential-request was approved and named the login's entry_id, and only once the sign-in page is the active tab in your box browser window (open it with computerUse first). 1Password's own extension performs the fill: you never receive a username, password, or one-time code, and you learn only whether the fill was submitted. Submitted is not signed in, so check the page afterwards. If the result says the grant is gone, send a new credential-request. Never ask the user to type or paste a password.",
+      parameters: fillCredentialParameters,
+      execute: async (ctx, args, deps) => {
+        const site = args.site != null && args.site.length > 0 ? args.site : void 0;
+        if (site != null) noteToolTargetHost(ctx, deps.toolCallId, site);
+        if (deps.turnRefusal !== void 0) {
+          return `The 1Password login was NOT filled: ${SAND_CREDENTIAL_TURN_REFUSAL_PHRASE[deps.turnRefusal]}.`;
+        }
+        const status = await broker.getStatus();
+        if (status === "not_connected") {
+          return `The 1Password login was NOT filled: 1Password is not connected. ${ONEPASSWORD_CONNECT_CARD_HINT}`;
+        }
+        if (status === "reconnect_required") {
+          return "The 1Password login was NOT filled: 1Password no longer accepts this connection. Ask the user to reconnect 1Password in Settings, then send a new credential-request.";
+        }
+        const outcome = await broker.fill({
+          entryId: args.entry_id,
+          ...site === void 0 ? {} : { siteHint: site }
+        });
+        if (outcome.filled) {
+          return `${outcome.detail} ${BROKERED_FILL_GUIDANCE}`;
+        }
+        return `The 1Password login was NOT filled (${outcome.reason}): ${outcome.detail}${outcome.retryable ? " You may retry once the page is ready." : ""}`;
+      }
+    })
+  ];
+}
 async function listConnectedCredentials(access4, args) {
   const { site, query: query2 } = args;
   const views = await access4.list({
@@ -479138,14 +480640,18 @@ async function listConnectedCredentials(access4, args) {
 function createCredentialTurnTools(host) {
   const { credentialAccess, credentialProviderStatus } = host;
   if (credentialAccess === void 0 && credentialProviderStatus === void 0) return [];
+  const broker = credentialAccess?.broker;
   const loginRoute = {
-    loginFormFirst: host.loginFormFirst,
+    loginFormFirst: host.loginFormFirst && broker === void 0,
     connectOffer: credentialAccess?.connectOffer
   };
   const turnRefusal = credentialAccess?.turnRefusal ?? credentialProviderStatus?.turnRefusal;
+  const legacyTools = credentialAccess !== void 0 && broker === void 0 ? createCredentialTools(credentialAccess, loginRoute) : [];
+  const brokeredTools = credentialAccess !== void 0 && broker !== void 0 ? createBrokeredCredentialTools(credentialAccess, broker) : [];
   return [
     ...credentialProviderStatus === void 0 ? [] : [createCredentialProviderStatusTool(credentialProviderStatus, loginRoute)],
-    ...credentialAccess === void 0 ? [] : createCredentialTools(credentialAccess, loginRoute),
+    ...legacyTools,
+    ...brokeredTools,
     ...createOnePasswordConnectTools({
       ...turnRefusal === void 0 ? {} : { turnRefusal },
       ...loginRoute,
@@ -479246,9 +480752,7 @@ function sweepShellFailure(result) {
 }
 function remoteBoxPrewarmFor(subagentType, gates) {
   if (!isComputerUseSubagentType(subagentType)) return void 0;
-  return {
-    browserToolSurface: gates.browserUsePlaywright({ logExposure: true }) ? "playwright" : "driver"
-  };
+  return { browserToolSurface: resolveSandBrowserToolSurface(gates, { logExposure: true }) };
 }
 function mergedModelId(ids) {
   if (ids.length === 0) return void 0;
@@ -479333,6 +480837,7 @@ function createComputerUseCoordination(deps) {
             boxId,
             harness: deps.harness,
             attachBoxServers: deps.attachBoxServers,
+            playwrightRuntime: deps.playwrightRuntime,
             prepareChrome: async () => {
               await ready2.remoteAccessor.get(shellExecutorResource).execute(
                 deps.ctx,
@@ -479429,6 +480934,7 @@ var SAND_TOOL_NAMES = [
   "DraftExternalMessage",
   "FetchConnectedActivity",
   "FetchIMessageAttachment",
+  "FillCredential",
   "FindContacts",
   "FindIMessageChats",
   "GetCredentialProviderStatus",
@@ -480239,7 +481745,7 @@ async function startIdleCompaction(runner, options2 = {}) {
 }
 
 // ../packages/grok-bot-harness/src/runner/prompt-collector-glue.ts
-var import_node_crypto34 = require("node:crypto");
+var import_node_crypto35 = require("node:crypto");
 var import_node_path59 = require("node:path");
 
 // src/shared/mcp/mcp-custom-instructions.ts
@@ -481334,7 +482840,7 @@ var linearEventShapes = LINEAR_EVENT_CASES.map((eventCase) => {
   const filterKey = LINEAR_EVENT_FILTERS[eventCase];
   return filterKey == null ? `{ "case": "${eventCase}" }` : `{ "case": "${eventCase}", "${filterKey}"?: [...] }`;
 }).join(" | ");
-var TEAM_BOT_AUTOMATION_SCOPE_LINE = "On a team bot each routine belongs to the person who asked for it and stays in their own chat with you in the Grok Bot app: it runs and reports there, only they see it in their routine list, and it never fires for other teammates or for your owner. Mention that when you save one for a teammate. Routines are set up only in the app, never from Slack (a direct message included) or a group chat; from there, point the person to their chat with you in the app rather than offering to save one. When someone wants the whole team to get a result, do not promise a team-wide routine (your owner's scheduled routines stay in the owner's chat too): have the saved instruction post the result somewhere shared, such as a Slack channel, or have your owner set up a Slack channel listener, which answers in the triggering Slack thread.";
+var TEAM_BOT_AUTOMATION_SCOPE_LINE = "On a Team Bot each routine belongs to the person who asked for it and stays in their own chat with you in the Grok Bot app: it runs and reports there, only they see it in their routine list, and it never fires for other teammates or for your owner. Mention that when you save one for a teammate. Routines are set up from the person's chat with you in the app or from Slack (one saved from Slack still lands in their own app chat and runs as them), never from an in-app group chat; from a group, point the person to their chat with you in the app rather than offering to save one. When someone wants the whole team to get a result, do not promise a team-wide routine (your owner's scheduled routines stay in the owner's chat too): have the saved instruction post the result somewhere shared, such as a Slack channel, or have your owner set up a Slack channel listener, which answers in the triggering Slack thread.";
 var SLACK_CHANNEL_LISTENER_CURSOR_APP_LINE = `A Slack CHANNEL listener ("#eng") only hears channels the Cursor Slack app is actually in. Whenever you create one, and whenever a channel listener seems dead, tell the user to invite @Cursor to that exact channel in Slack (type /invite @Cursor in the channel); a private channel can't even be found until the bot is invited. The Routine panel flags affected channels the same way, so don't let a silent listener pass without mentioning the invite. The invite advice does not apply to a DM ("@someone") listener, but it does apply to "*": a "*" listener hears every channel the app is in, so an uninvited channel is silent there too.`;
 function slackChannelListenerLine(botMention) {
   if (botMention === void 0) return SLACK_CHANNEL_LISTENER_CURSOR_APP_LINE;
@@ -481790,7 +483296,7 @@ async function traceSendPhase(ctx, name17, fn) {
 }
 
 // ../packages/grok-bot-harness/src/runner/large-output-spill.ts
-var import_node_crypto32 = require("node:crypto");
+var import_node_crypto33 = require("node:crypto");
 var import_node_path56 = require("node:path");
 init_utils_pb();
 function isLargeOutputSpillEnabled(env = process.env) {
@@ -481808,7 +483314,7 @@ function createSandMcpTextSpiller(opts) {
       thresholdBytes,
       write: async (aggregateText) => {
         try {
-          const relativePath = import_node_path56.posix.join(AGENT_TOOLS_DIR, `${(0, import_node_crypto32.randomUUID)()}.txt`);
+          const relativePath = import_node_path56.posix.join(AGENT_TOOLS_DIR, `${(0, import_node_crypto33.randomUUID)()}.txt`);
           const capped = aggregateText.length > MAX_OUTPUT_FILE_SIZE ? aggregateText.slice(0, MAX_OUTPUT_FILE_SIZE) : aggregateText;
           const data = new TextEncoder().encode(capped);
           await opts.uploadTextFile(ctx, relativePath, data);
@@ -482070,7 +483576,7 @@ var GROUP_MAX_MESSAGES_PER_TURN = 3;
 var GROUP_MEMBER_TURN_MESSAGE_LIMIT_NOTICE = `This message was not delivered. You've reached this room turn's ${GROUP_MAX_MESSAGES_PER_TURN}-message limit. Consolidate, or wait for your next turn.`;
 
 // ../dune/atomic-write/dist/internal/atomic-write.js
-var import_node_crypto33 = require("node:crypto");
+var import_node_crypto34 = require("node:crypto");
 var import_node_fs22 = __toESM(require("node:fs"), 1);
 var import_node_path57 = require("node:path");
 var import_node_util11 = require("node:util");
@@ -482166,7 +483672,7 @@ function createParentsKeepingCallOrder(path30) {
   fs14.mkdirSync((0, import_node_path57.dirname)(path30), { recursive: true });
 }
 function tempPathOf(target) {
-  return `${target}.${(0, import_node_crypto33.randomInt)(TEMP_SUFFIX_BOUND)}`;
+  return `${target}.${(0, import_node_crypto34.randomInt)(TEMP_SUFFIX_BOUND)}`;
 }
 function realTarget(path30) {
   return __awaiter56(this, void 0, void 0, function* () {
@@ -482271,7 +483777,7 @@ var RESET_COMPUTER = "reset-computer";
 function routeTemplate(route, placeholder) {
   return `${GROK_BOT_DEEP_LINK_SCHEME}://${SAND_DEEP_LINK_AUTHORITY}${sandDeepLinks.routes[route].path}?id=${placeholder}`;
 }
-var LEAD = `The chat renders Grok Bot deep links as pills that open the target in the app. Write [Update Track](${buildSandSettingsDeepLinkUrl("update-channel")}), not "Settings, Updates, Update Track".`;
+var LEAD = `The chat renders Grok Bot deep links as pills that open the target. Write [Update Track](${buildSandSettingsDeepLinkUrl("update-channel")}), not "Settings, Updates, Update Track".`;
 var RECOVERY_NOTE = `Stuck or reset? Link ${UPDATE_COMPUTER} first, then ${RESET_COMPUTER}.`;
 var SIDEBAR_URL = sandDeepLinks.buildUrl("sidebar", {});
 function taughtOverviewTabIds(visibility) {
@@ -482280,11 +483786,12 @@ function taughtOverviewTabIds(visibility) {
 function routeGuidance(taught, tabs) {
   return {
     settings: `A settings row is [label](${routeTemplate("settings", "<anchor>")}), where <anchor> is one of: ${taught.join(", ")}. ${RECOVERY_NOTE}`,
-    "plugin-add": `A plugin's page is [label](${routeTemplate("plugin-add", "<plugin id from SearchPlugins>")}).`,
+    "plugin-add": `A plugin is [label](${routeTemplate("plugin-add", "<plugin id from SearchPlugins>")}).`,
+    "bot-template": `A Bot template is [label](${routeTemplate("bot-template", "<share id>")}). Set label to the Bot's real name, never "Bot template" or its share id.`,
     sidebar: `Use [label](${SIDEBAR_URL}?agent=<teammate id>&tab=<${tabs.join("|")}>) for another bot; omit agent for this bot.`
   };
 }
-var TAIL = "Use the target's real name as the label, as a noun in the sentence. The chat shows that name in place of your label. Your label shows only while the target loads, on hover, and in plain text. Write only listed anchors, exactly in this form, only in the Grok Bot chat, never through a connector.";
+var TAIL = "Use real target names as labels. Labels are loading, hover, and plain-text fallbacks. Use only listed anchors in Grok Bot chat, never through a connector.";
 function inAppLinksGuidance(visibility = {}) {
   const taught = taughtSettingsAnchorIds(visibility);
   const guidanceByRoute = routeGuidance(taught, taughtOverviewTabIds(visibility));
@@ -482367,14 +483874,34 @@ function userReplyReminderEnabled() {
   return process.env.SAND_DISABLE_USER_REPLY_REMINDER !== "1";
 }
 var UNFINISHED_TASKS_REMINDER_BODY = "The user interrupted your work to send you a message. Follow the new message first. Complete any unfinished tasks from previous turns unless the user asked you to stop, halt, cancel, quit working, or otherwise end the work; in that case, do not continue or resume those tasks.";
-var CURSOR_ORIGIN_PROMPT_BODY = [
+var CURSOR_ORIGIN_COMMON_LINES = [
   "Origin is Cursor's source-control platform and an alternative to GitHub. In repository or pull-request discussions, a capitalized \"Origin\" means this product; lowercase `origin` in Git commands or shell output usually means the repository's Git remote.",
   "- Origin repositories, files, directories, and commits are browsed at `https://cursor.com/codebase/<origin-owner>/<origin-repo>/...`. Pull-request review links use routes under `https://cursor.com/codebase`.",
   "- Treat mentions of Origin and `cursor.com/codebase` links as ordinary source-control context without asking the user what Origin is. Origin owner and repository slugs are their own coordinates, so never guess them from GitHub coordinates; use the supplied URL or look them up.",
-  "- When you mention an Origin pull request in chat, write its full `https://cursor.com/codebase/<origin-owner>/<origin-repo>/pull/<number>` URL (a markdown link is fine) so the inline Origin PR chip can render. A bare `#<number>` or a `github.com/.../pull/...` URL gets no chip for an Origin PR.",
-  "- When available, the authenticated `origin` CLI on your own computer can list and query the user's Origin namespaces, repositories, pull requests, and checks. Prefer read/list/query commands. The injected Origin session is read-only: do not attempt merge, close, delete, force-push, create/update PR, or review writes via `origin`.",
+  "- When you mention an Origin pull request in chat, write its full `https://cursor.com/codebase/<origin-owner>/<origin-repo>/pull/<number>` URL (a markdown link is fine) so the inline Origin PR chip can render. A bare `#<number>` or a `github.com/.../pull/...` URL gets no chip for an Origin PR."
+];
+var CURSOR_ORIGIN_CLI_LINES = [
+  "- When available, the authenticated `origin` CLI on your own computer can query the user's Origin repositories, pull requests, and checks through its repository-scoped commands (`origin repo view`, `origin pr view`, `origin pr checks`, `origin pr diff`). Its session has no namespace access, so it cannot list the user's namespaces or repositories: take the repository from the user or from its `cursor.com/codebase` URL. The session is not read-only (it can edit pull requests and post reviews and comments, always as the account that owns you, even on a teammate's turn), but use it only for reads: do not merge, close, delete, force-push, create or update a pull request, or post a review or comment through `origin`.",
   "- If `origin` reports that it is not authenticated or its credential is rejected, Origin access is unavailable to you this turn: tell the user and do not work around it (no `origin auth login`, API keys, or other accounts)."
 ];
+var CURSOR_ORIGIN_BUILTIN_TOOLS_LINE = "- Read and act on Origin through the built-in `cursor-origin-*` tools, which use the user's own Origin authorization: `get_repository` for one repository and its forge of record, `list_namespaces` and `list_repositories` to find repositories, `list_pull_requests` and `pull_request_read` for pull requests, `checks_read` for CI, and `create_pull_request_review`, `create_pull_request_inline_comment`, and `update_pull_request` for reviews, comments, and pull-request edits. The `source-control` skill, when it is listed, covers their shapes.";
+var CURSOR_ORIGIN_BUILTIN_GAPS = "Merging a pull request, updating its branch, restacking or re-parenting a stack, reading raw mirror status, and reading rulesets or access grants are outside those tools";
+function cursorOriginPromptBody(options2) {
+  if (!options2.originBuiltinMounted) {
+    return [...CURSOR_ORIGIN_COMMON_LINES, ...CURSOR_ORIGIN_CLI_LINES];
+  }
+  return [
+    ...CURSOR_ORIGIN_COMMON_LINES,
+    CURSOR_ORIGIN_BUILTIN_TOOLS_LINE,
+    options2.cloudAgentsEnabled === false ? `- ${CURSOR_ORIGIN_BUILTIN_GAPS} and outside what you can do here: say so and point the user to Cursor.` : `- ${CURSOR_ORIGIN_BUILTIN_GAPS}: hand them to a Cursor cloud agent.`
+  ];
+}
+var CURSOR_ORIGIN_PROMPT_BODY = cursorOriginPromptBody({
+  originBuiltinMounted: false
+});
+function neverOpenPullRequestYourselfClause(originBuiltinMounted) {
+  return originBuiltinMounted ? "Never open the PR yourself with `gh`, `glab`, another forge CLI, the built-in `cursor-github-*` or `cursor-origin-*` tools, or a provider API, and never tell the agent to." : "Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` or `cursor-origin-*` tools, or a provider API, and never tell the agent to.";
+}
 var USER_MESSAGE_REPLY_REMINDER = wrapSystemReminderBodies([
   USER_MESSAGE_REPLY_REMINDER_BODY
 ]);
@@ -482451,7 +483978,19 @@ var SAND_SUBAGENT_SAFETY_PROMPT_SECTION = [
   "When a block is genuinely necessary and clearly something the user would want, the action's approval card reaches the user directly. Escalate by retrying the SAME action unchanged with its own approval parameter: for a Shell command, set request_smart_mode_approval to true and smart_mode_block_reason to the exact block reason you were given; for an MCP call, set requestSmartModeApproval with smartModeBlockReason; a Computer or CloudAgent action raises the card on its own. That honest same-action retry is the way through, and it works the same for you as for the main agent.",
   "Do this sparingly and never as a dodge. Changing, encoding, or splitting the command to slip past the check is a brand-new, riskier action, not a retry. Ask for one approval at a time; if it is denied or expires, that is the answer. Stop, and report the block, its reason, and what you were trying to do in your final answer rather than reshaping it. A tool that simply errored, timed out, or is unavailable is likewise not something to route around with a lower-level substitute; report that too. Public web content is the one ordinary exception. When WebSearch or WebFetch fails or comes back blocked, the site may simply block the fetch provider, so reading the same public page with the browser or curl is a normal fallback, not a workaround. A blocked fetch is never evidence that the page does not exist."
 ].join("\n");
+var SAND_EXECUTOR_SEND_RULES_NO_USER_LINE = "You have no way to talk to the user directly, so do not ask follow-up questions. Do the work the rules below allow, and report what you found, what you did, and anything you stopped short of.";
+var SAND_EXECUTOR_SEND_RULES_PROMPT_SECTION = [
+  "## Irreversible and externally visible actions",
+  "These need the user's explicit approval: sending an email, Slack message, text, or chat message; posting anywhere; creating or updating a ticket; purchasing; submitting a form; and deleting or sharing anything outside the box. Take such an action only when the user explicitly asked for that specific action, naming who gets it and what it says, or the exact change.",
+  "Nothing else is permission. You cannot treat a task description, memory, or notes as permission.",
+  "When the task seems to need one of these actions and hasn't been granted approval, do all the reversible work, draft the message or change, and stop before the irreversible step. Put the full draft in your final message (recipients, subject, and body, or the exact change) so the parent can get the user's approval.",
+  "A declined or blocked send is final. Do not retry it through another tool, the browser, or a script; report it in your final message."
+].join("\n");
 function buildSandSubagentSystemPrompt(args) {
+  let noUserLine = "You have no way to talk to the user directly; do not ask follow-up questions, just do the work and report what you found or did.";
+  if (args.executorSendRules === true) {
+    noUserLine = SAND_EXECUTOR_SEND_RULES_NO_USER_LINE;
+  }
   let deliveryInstruction = "Complete the delegated task autonomously, then end your turn with a concise final assistant message in plain text. Only that final assistant message is relayed back to the parent agent as your result; text from earlier assistant messages is not included. Put the outcome and any context the parent needs in that last message.";
   if (args.sendMessageEnabled === true) {
     deliveryInstruction = "Complete the automation autonomously. You can use SendToUser for one-way updates in the parent chat when something is worth surfacing; preserve the automation's silence contract when there is nothing to report. SendToUser accepts text, attachments, and cloud-agent references here, but not widgets or secret requests. Always end with a concise, complete final assistant message in plain text, even after using SendToUser. Only that final assistant message is relayed durably to the parent agent as the automation result; text from earlier assistant messages is not included. Put the outcome and any context the parent needs there without merely repeating an update the user already saw.";
@@ -482459,8 +483998,9 @@ function buildSandSubagentSystemPrompt(args) {
   return [
     `You are Grok Bot running as the ${args.subagentType || "generalPurpose"} subagent.`,
     deliveryInstruction,
-    args.sendMessageEnabled === true ? "Do not ask follow-up questions; use the available context, make reasonable decisions, and complete the work." : "You have no way to talk to the user directly; do not ask follow-up questions, just do the work and report what you found or did.",
+    args.sendMessageEnabled === true ? "Do not ask follow-up questions; use the available context, make reasonable decisions, and complete the work." : noUserLine,
     args.readonly === true ? "Operate in readonly mode: do not modify anything." : void 0,
+    ...args.executorSendRules === true ? ["", SAND_EXECUTOR_SEND_RULES_PROMPT_SECTION] : [],
     "",
     SAND_SUBAGENT_SAFETY_PROMPT_SECTION
   ].filter((line) => line != null).join("\n");
@@ -482534,7 +484074,8 @@ var SAND_JEV_BROWSER_USE_PROMPT_SECTION = {
     "Give it one tightly-scoped task with the exact values and exactly what to report; it finds its own starting page, so a URL is optional. When your skill catalog has a `site-playbooks-<site>` skill for the site whose description covers the job, Read it first and put its deep link and stop rules in the task. Dispatch it right after your opening reply instead of narrating that you will look. When it finishes, relay its report to the user with SendToUser, then handle any follow-up the same way: another dispatch, not shell or an API.",
     "After dispatching it, end your turn: its report arrives as a new message once it finishes. Do not sleep, poll CheckSubagent, or resume it to ask what it found; a resume is read as a new browsing task.",
     "Run one browser subagent at a time: never dispatch a second while one is still running. When a request contains several independent lookups, either give one subagent the whole list or dispatch them one after another, waiting for each report before the next; relay each report as it lands.",
-    "Never put a password, one-time code or payment detail in its task: it does not type those and stops at such a field, reporting the URL. Sign-in is the user's step: hand them the box with request_box_help, then dispatch the subagent again once they are in."
+    "Never put a password, one-time code or payment detail in its task: it does not type those and stops at such a field, reporting the URL. Sign-in is the user's step: hand them the box with request_box_help, then dispatch the subagent again once they are in.",
+    "browserUseJev works only inside web pages and reports back text. Anything that needs more goes to the computerUse subagent instead: a desktop app or other GUI outside the browser, a native dialog such as a file picker, a screenshot or other image of the screen or a page, and any task that also needs the terminal or files on your computer (downloading, uploading, or inspecting a file). Everything else on the web goes to browserUseJev, not computerUse. The two share your computer's desktop, so never dispatch one while the other is still running."
   ]
 };
 var SAND_AGENT_EMAIL_CLAIMING_LINE = "Grok Bot has native inboxes on the product domain. When the user wants you to have an email address of your own, whether to send, to receive, or to \u201Ccreate an email for yourself\u201D, the native inbox is the solution. Call list_email_inboxes, then claim_email_inbox with a local part they chose. If they have not named one, ask which address they want before claiming. Never invent a random or UUID username, never send them to Settings for this, and never sign up for AgentMail or any other third-party inbox provider.";
@@ -482560,12 +484101,16 @@ function sandAgentEmailPromptSection(multipleInboxesEnabled) {
 }
 var CLOUD_AGENT_LINK_GUIDANCE = "When you point the user at a cloud agent (which to open, check, or look at), send a text SendToUser with its URL https://cursor.com/agents/<agent_id> as well as its card; the card or its name alone is not enough.";
 var CLOUD_AGENT_REPLY_MODES_GUIDANCE = 'When reply offers mode: "steer" course-corrects a running agent without losing its work (queued if it is idle), "queue" waits for its current run to finish, and "interrupt" stops it now and its in-flight work is lost; the result says which one happened.';
+var ONEPASSWORD_BROKERED_LOGIN_GUIDANCE = "The user's 1Password logins reach you through the 1Password integration, brokered by 1Password itself: you never see item titles or values. Before the first sign-in a task needs, send ONE SendToUser credential-request of kind brokered-login naming every website the task will sign in to (up to five), with a goal and a reason per login in the user's words; the user approves the exact items in their 1Password app and you are told which logins were granted by entry_id. Then, at each direct username/password login, bring the sign-in page up in the box browser and call FillCredential with that entry_id: 1Password's extension fills and submits the login there, and you learn only whether it was submitted. Never ask the user for a password value in chat, and never ask them to add or move items into a vault. When a login was not granted or the grant is gone, ask the user whether to request it again; use request_box_help only when the user prefers to sign in themselves or the remaining step is SSO, passkey, a code, captcha, or payment.";
 var ONEPASSWORD_LOGIN_GUIDANCE = `The user's 1Password logins reach you through the 1Password integration: you can see only the items in their 1Password vault named "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" (titles and sites, never values), and items land in that vault only when the user adds or moves them there by hand. At a direct username/password login, FIRST call ListCredentials with the exact current URL, before any in-chat form, request_box_help, or asking the user to type: a matching 1Password login is the default path, and each result says whether it carries a one-time code in 1Password. Then fill it with SendToUser type credential-request for that item; you learn only whether it was filled, declined, or failed, and one request covers the whole login: a username-first page's password step and any one-time code the login carries are filled for you as the site asks for them, so a verification-code page is not a handoff. When no 1Password login matches, tell the user the login was not found in the "${CREDENTIAL_MINT_DEFAULT_VAULT_NAME}" vault and that they may need to add or move it into that vault in 1Password. On their next request to log in or retry, call ListCredentials with forceRefresh true before reporting it missing again; they do not need to mention 1Password.`;
 var LOGIN_FORM_FIRST_GUIDANCE = "At a direct username/password login, FIRST call ListCredentials with the exact current URL, before any in-chat form, request_box_help, or asking the user to type: its result says how to handle this login for this user, so follow it. Never ask the user for a password value in plain chat text. Use request_box_help only when the remaining step is SSO, a passkey, a puzzle or image captcha, payment, or a verification code that result does not say is filled for you, or when the user prefers to sign in themselves.";
 function isAgentEmailPromptEnabled(options2) {
   return options2.agentEmailEnabled === true;
 }
 function browserLoginGuidanceFor(options2) {
+  if (options2.credentialFillBrokered === true) {
+    return `${ONEPASSWORD_BROKERED_LOGIN_GUIDANCE} To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". A press-and-hold I'm-human button is a mouse hold, not a human step: dispatch the subagent with holdDurationMs rather than handing the box over.`;
+  }
   if (options2.credentialFillEnabled !== true) {
     return "At a login, use request_box_help for the user-only authentication step, including passwords, SSO, passkeys, 2FA, puzzle or image captchas, and payments. A press-and-hold I'm-human button is a mouse hold, not a human step, so dispatch the subagent with holdDurationMs rather than handing the box over.";
   }
@@ -482613,7 +484158,8 @@ function buildSandCorePromptSections(options2) {
       options2.cloudAgentDurableWatchEnabled === true ? `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), and "reply" sends a follow-up. The launch or reply result says whether you also stay subscribed to later runs; where it does, each revival names who started the run and "unwatch" stops them. "watch" covers an agent you did not launch this session; with confirm: true, only when the user asked, it adopts that agent as yours. Share the pull request when done.` : `Launch and reply return immediately; you are revived automatically when the run finishes, with its status, pull request, and transcript path. First acknowledge with a text SendToUser, then include one cursor-agent attachment whenever you surface or mention that agent; its card never replaces the opening text. Keep working or end the turn, and do not poll "get" in a loop: "get" is a point-in-time status check, "dump" reads the transcript mid-run (both read-only), "watch" covers an agent you did not launch this session, and "reply" sends a follow-up. Share the pull request when done.`,
       "Send routine in-scope follow-ups without asking, using reply on the same agent so it keeps its branch and context. Ask first only if the follow-up would discard substantial work, change the agreed direction, or is genuinely ambiguous. Launch another agent only for genuinely new work.",
       ...options2.cloudAgentReplyModesEnabled === true ? [CLOUD_AGENT_REPLY_MODES_GUIDANCE] : [],
-      "A pull request belongs on the forge that is its repository's source of truth, and the cloud agent's PR tool picks that forge. If the agent reports that its PR tool refused to create or update the PR (for example, it could not read the repository's source of truth), that refusal is the result. Relay it and the reason to the user. Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` or `cursor-origin-*` tools, or a provider API, and never tell the agent to."
+      "A Project is a coordinator cloud agent. It writes no code itself. It delegates work to its own threads, and the threads open the pull requests. Launch one only when the user asks for a Cursor Project. To give a running Project more work, reply to the coordinator with the outcome you want and let it pick the thread. Its current work keeps running, so never tell it to stop or pause other work unless the user asked. A new_repo agent works in an unpublished Origin draft, not on GitHub, and Origin opens no pull request on a draft until it is published as a named Origin repo. Load the CloudAgent tool before you answer a question about such a draft or its pull request, and never invent a pull request URL.",
+      `A pull request belongs on the forge that is its repository's source of truth, and the cloud agent's PR tool picks that forge. If the agent reports that its PR tool refused to create or update the PR (for example, it could not read the repository's source of truth), that refusal is the result. Relay it and the reason to the user. ${neverOpenPullRequestYourselfClause(options2.originBuiltinMounted === true)}`
     ];
   }
   return {
@@ -482754,7 +484300,10 @@ function buildSandSystemPromptSections(options2) {
     sandUnaskedSendPromptSection(options2),
     {
       heading: "## Cursor Origin",
-      body: CURSOR_ORIGIN_PROMPT_BODY
+      body: cursorOriginPromptBody({
+        originBuiltinMounted: options2.originBuiltinMounted === true,
+        cloudAgentsEnabled
+      })
     },
     core2.codeChanges,
     {
@@ -482873,11 +484422,13 @@ function promptCacheKey(options2) {
     cloudAgentsUnavailableReason: options2.cloudAgentsEnabled ? "team" : options2.cloudAgentsUnavailableReason ?? "team",
     dynamicToolsEnabled: options2.dynamicToolsEnabled === true,
     credentialFillEnabled: options2.credentialFillEnabled === true,
+    credentialFillBrokered: options2.credentialFillEnabled === true && options2.credentialFillBrokered === true,
     loginFormFirst: options2.credentialFillEnabled === true && options2.loginFormFirst === true,
     voiceCallEnabled: options2.voiceCallEnabled === true,
     cloudAgentArtifactsEnabled: options2.cloudAgentArtifactsEnabled === true,
     cloudAgentDurableWatchEnabled: options2.cloudAgentDurableWatchEnabled === true,
     cloudAgentReplyModesEnabled: options2.cloudAgentReplyModesEnabled === true,
+    originBuiltinMounted: options2.originBuiltinMounted === true,
     sendToUserEndTurnEnabled: options2.sendToUserEndTurnEnabled === true,
     hostSurfaces,
     skillifyEnabled: options2.skillifyEnabled === true,
@@ -483047,7 +484598,7 @@ async function readShellTerminalSnapshot(host, accessor, path30, ctx = host.ctx)
 }
 async function collectPrependUserMessages(host, recentUserMessages, currentMessageId) {
   if (recentUserMessages == null || recentUserMessages.length === 0) {
-    return { prependUserMessages: [], dedupeFloorMessageId: void 0 };
+    return { prependUserMessages: [], unconfirmedUserPrompts: [], dedupeFloorMessageId: void 0 };
   }
   const state = host.getConversationState();
   const { lastUserMessageId, hasUserTurn } = await findConfirmedUserTurnWatermark(host, state);
@@ -483069,6 +484620,7 @@ ${message.text}` : message.text;
   });
   return {
     prependUserMessages,
+    unconfirmedUserPrompts: selected.map((message) => message.text),
     dedupeFloorMessageId: lastUserMessageId !== void 0 && lastUserMessageId.length > 0 ? lastUserMessageId : void 0
   };
 }
@@ -483443,13 +484995,23 @@ var STRIPE_LINK_PURCHASING_SYSTEM_PROMPT_SECTION = [
 ].join("\n");
 
 // ../packages/grok-bot-harness/src/runner/skillify/harness-skills.ts
-function signInTroubleLine({ credentialFillEnabled, formFirst }) {
+function signInTroubleLine({
+  credentialFillEnabled,
+  formFirst,
+  brokered
+}) {
+  if (brokered) {
+    return `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. ${ONEPASSWORD_BROKERED_LOGIN_GUIDANCE} To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials".`;
+  }
   if (formFirst) {
     return `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. ${LOGIN_FORM_FIRST_GUIDANCE}`;
   }
   return credentialFillEnabled ? `- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service. ${ONEPASSWORD_LOGIN_GUIDANCE} To the user, call these their 1Password logins and say 1Password filled it; never "saved login" or "saved credentials". Use request_box_help only when no 1Password login matches and the user prefers to sign in themselves, or the remaining step is SSO, passkey, a code the login does not carry, captcha, or payment.` : "- Browser sign-in trouble is a switching moment. When an existing browser workflow hits an auth wall, check SearchPlugins before reaching for request_box_help. If no connector exists, have a subagent open the service and use request_box_help for the user-only authentication step.";
 }
-function boxDesktopLine({ credentialFillEnabled, formFirst }) {
+function boxDesktopLine({ credentialFillEnabled, formFirst, brokered }) {
+  if (brokered) {
+    return "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Credential values never enter your context: a credential-request asks the user to share logins in 1Password, FillCredential has 1Password's extension fill a granted login into the open sign-in page, and manual authentication happens on the box desktop. The browser session persists there.";
+  }
   if (formFirst) {
     return "- The box has a desktop and browser the user can open and control directly. Have a subagent open the service there. Credential values never enter your context: a login is filled into the page for you, and manual authentication happens on the box desktop. The browser session persists there.";
   }
@@ -483458,9 +485020,14 @@ function boxDesktopLine({ credentialFillEnabled, formFirst }) {
 function reachingServicesSkillLines({
   credentialFillEnabled,
   agentEmailEnabled = false,
-  loginFormFirst = false
+  loginFormFirst = false,
+  credentialFillBrokered = false
 }) {
-  const loginLine = { credentialFillEnabled, formFirst: credentialFillEnabled && loginFormFirst };
+  const loginLine = {
+    credentialFillEnabled,
+    formFirst: credentialFillEnabled && loginFormFirst,
+    brokered: credentialFillEnabled && credentialFillBrokered
+  };
   return [
     "When the user wants something from a service you can't reach, with no connector for it and nothing readable on their computer, the box is your default, not a refusal: reach for it the moment it would help, without first asking permission, proposing it, or offering it as a choice. This covers chat apps (Facebook Messenger, WhatsApp, Instagram), webmail, and SaaS dashboards.",
     `- Don't ask a go-ahead for something they already asked for. When they've requested the thing ("pull my Amazon orders"), a "Want me to pull them using my browser?" confirmation widget is exactly the over-asking to avoid: they already said yes by asking. Just dispatch a subagent to open the service (see "The box desktop" for which type), then follow that skill's typed-login path when it reaches the login. The only thing you surface first is that unavoidable login step (which only they can do), never a yes/no on the task itself.`,
@@ -483474,6 +485041,34 @@ function reachingServicesSkillLines({
     ...agentEmailEnabled ? [
       "- Exception: an email address for you, the agent, is not a missing-connector webmail signup. Use Grok Bot's native inboxes (list_email_inboxes / claim_email_inbox). Do not create an AgentMail or other third-party inbox in the browser."
     ] : []
+  ];
+}
+function codeChangesNarrowLookupLine(originBuiltinMounted) {
+  const originCli = originBuiltinMounted ? "" : " the `origin` CLI for an Origin repo (`origin pr diff`),";
+  return `- For a narrow lookup, use the provider's remote read-only surfaces instead of a checkout: the built-in source-control tools first when they are in your tool list (\`cursor-github-*\` for GitHub, e.g. \`cursor-github-get_pull_request_diff\`; \`cursor-origin-*\` for Origin, e.g. \`cursor-origin-pull_request_read\`; the \`source-control\` skill, listed alongside them, covers their use),${originCli} and otherwise \`gh\` for GitHub, \`glab\` for GitLab, the Bitbucket or Azure DevOps API, or the web UI. They hand you a file's contents, a diff, a PR or issue, blame, or commit history over the network without cloning anything. That is how you answer "what does this config say?" or "what changed in that PR?". Anything broader than a narrow lookup is a cloud agent's job.`;
+}
+function codeChangesForgeOfRecordLine(originBuiltinMounted) {
+  const forgeProbe = originBuiltinMounted ? "`cursor-origin-get_repository` hints at it in `mirror`: no `mirror` or `outbound` means Origin, `inbound` means GitHub" : "`origin repo view <owner>/<repo> --json mirrorStatus`: `no-mirror` or `outbound` means Origin, anything else means GitHub";
+  return `- A pull request belongs on the forge that is its repository's source of truth (${forgeProbe}), and the cloud agent's PR tool picks that forge for it. If the agent reports that its PR tool refused to create or update the PR, for example because it could not read the repository's source of truth, that refusal is the result. Relay it and the reason to the user. ${neverOpenPullRequestYourselfClause(originBuiltinMounted)}`;
+}
+function codeChangesSectionBody(originBuiltinMounted) {
+  return [
+    `For ANY non-trivial work in a repository, including implementing a feature, fixing a bug, refactoring, otherwise writing or modifying code, and equally investigating how the code actually behaves, ALWAYS hand it to a Cursor cloud agent with the CloudAgent tool (action "launch") rather than doing it yourself. Cursor's dedicated cloud coding agents are meaningfully better at this than you are, so this is the default, not a fallback. The cloud agent runs remotely (default: a Cursor-managed VM; or a self-hosted pool / private worker when you set environment); existing-repo work uses a new branch and pull request, while a new Origin project starts directly on its main branch. You stay the coordinator: scope the task, launch it, keep the user posted, and report the result.`,
+    "- Never clone a repository onto your own computer or any registered user computer. That covers looking as well as writing: a local checkout to poke around, grep, or trace a bug is exactly the move to avoid, because repository investigation belongs to the cloud agent too and it already reads the whole repo. Shell without machineId may inspect what is already on your computer; Shell with a selected machineId may inspect what is already on that user computer. Neither form is for pulling a repo down.",
+    codeChangesNarrowLookupLine(originBuiltinMounted),
+    `- ${BUILTIN_SCM_ABSENCE_GUIDANCE}`,
+    '- Cloning is acceptable in exactly two cases, and both are rare and have to be earned rather than reached for out of convenience: the user explicitly asks you to clone or check the repo out locally, or the work genuinely cannot be done remotely or cloud-side because it depends on something that exists only on that specific machine. Say which one applies and why before you act on it. "It would be quicker" and "I just want a quick look" are not reasons.',
+    "- Don't root-cause it yourself first. The cloud agent is the stronger coder and does its own investigation, so before handing off you only need enough to name the repo, point at the rough area, and write a clear task. That deep dive is the cloud agent's job, and doing it yourself wastes time and risks locking a wrong guess into the task.",
+    `- Hand off the problem and the outcome, not a prescription. Give the cloud agent what it needs to solve it itself: the symptoms, how to reproduce it, relevant context, any constraints, and how to tell it's done. Then let it find the fix. Don't assert a root cause or spell out line-by-line edits ("the bug is in X, change line N to Y"): that boxes in the better coder, and if your diagnosis is wrong it sends the agent down the wrong path. Share any hunch about the cause only as a clearly-labeled, non-binding hypothesis it's free to discard ("my guess is the auth listener, but verify"), and explicitly invite it to investigate and reach its own conclusion.`,
+    '- Choose the launch target from the request. For a greenfield ask such as "build an app" or "start from scratch" when no existing repo is named, pass new_repo: true and omit repo/repo_url; do not ask for or invent a repo just because the user did not literally say `new_repo`. A "Cursor project", "project in Cursor", or "project agent" is the Projects feature (project: true on the existing repo), not a new repo. For work in an existing repo, pass repo (a repo on whichever source control provider the user has connected to Cursor: GitHub, GitLab, Bitbucket, or Azure DevOps, e.g. https://github.com/owner/repo or https://gitlab.com/group/project, or an existing Cursor Origin repo as its https://cursor.com/codebase/<owner>/<repo> page or origin.cursor.com clone URL; repo_url is a backward-compatible alias). Put the whole task in prompt: the problem to solve or feature to build, any constraints, and how to tell it\'s done. Ask with a widget before launching only when the request is not greenfield and you cannot identify the existing repo, or when it is unclear whether "project" means a Cursor Project or a new codebase.',
+    "- A new_repo launch keeps its minted Origin repo as the source of truth. Full Vercel deployment requires an Origin namespace and a direct connection between Vercel and Origin. Guide the user through Origin setup at https://cursor.com/codebase/get-started and connecting Vercel to Origin. Never mirror the Origin repo to GitHub solely to make Vercel work or deploy Vercel from that mirror.",
+    '- When the work needs a self-hosted / shared worker pool (Mac/iOS builds, a named pool like mobile-ios-mac, or the user says to use the pool), pass environment on that same CloudAgent launch, e.g. {"type":"pool","name":"mobile-ios-mac"}, or {"type":"pool"} for any eligible pool.',
+    '- When a screenshot, mock, chart, or repro image is part of the task, attach it to the launch (or the reply) with images: [{"url":"file:///workspace/shot.png"}], the same way you attach one to SendToAgent. The cloud agent actually sees the image, so this beats describing it. Never paste an image as a markdown ![](...) in the prompt. Absolute file:// URLs to files in your box only (a path under /workspace, or one in your own attachments/assets folder); if you only have an https:// image, download it to a file first. Say what each image shows in the prompt itself.',
+    `- When a document, dataset, log, config, archive, or recording is part of the task, hand it over with files: [{"url":"file:///workspace/spec.pdf"}] on the launch (or the reply), with the same file:// URL rules as images. The cloud agent gets each one saved into its workspace under uploads/ with the path listed in its prompt, so it reads them with its own tools; attach the file rather than pasting its contents into the prompt. Documents and any text file up to ${CLOUD_AGENT_DOCUMENT_LIMIT_LABEL} each, videos up to ${CLOUD_AGENT_VIDEO_LIMIT_LABEL} each, and at most ${CLOUD_AGENT_ATTACHMENTS_TOTAL_LIMIT_LABEL} of attachments per call (split larger sets between the launch and a follow-up); .env-style files are refused because they usually hold secrets. An image in files is delivered as a file to keep rather than shown. Say what each file is for in the prompt itself.`,
+    `- launch returns immediately with the agent's id and URL; you're revived automatically when the run finishes, with its status, branch and pull request, a short summary, and the path to its full transcript. Tell the user you've kicked it off in a short text SendToUser first, then reference the agent with a cursor-agent attachment. Do that any time you mention, hand off to, or surface a cloud agent (when summarizing one's result too), one attachment per agent; the card never replaces that opening text acknowledgement. Then keep working or end your turn; don't poll "get" in a loop. "get" is a point-in-time status check (e.g. the user asks what an agent is doing now), and "dump" reads its transcript mid-run. Both are read-only and never interrupt the agent. "watch" is for an agent you didn't launch this session. "reply" sends a follow-up and revives you the same way when that run finishes; once it's done, share its pull request link if it opened one.`,
+    codeChangesForgeOfRecordLine(originBuiltinMounted),
+    `- A follow-up to a cloud agent is a normal, low-stakes continuation of work already in flight, so by default just send it and tell the user what you sent rather than asking permission first. This is Autonomy applied here, and reflexively ending with "want me to send a follow-up?" for a routine in-scope fix (re-shooting a screenshot, fixing a bug you found, a cleanup) is exactly the over-asking to avoid, since it risks the work falling through the cracks. Only ask first when the follow-up is genuinely consequential or ambiguous: it would throw away substantial work, change an already-agreed direction, or you truly don't know which of several real options the user wants. And when more work lands on something a cloud agent already has in flight or just finished, reply to THAT agent so it keeps its branch and context, instead of launching a second one on the same task; launch is for genuinely new work.`,
+    "- A Project is a coordinator cloud agent. It writes no code itself. It delegates work to its own threads, and the threads open the pull requests. Launch one only when the user asks for a Cursor Project. To give a running Project more work, reply to the coordinator with the outcome you want and let it pick the thread. Its current work keeps running, so never tell it to stop or pause other work unless the user asked. A new_repo agent works in an unpublished Origin draft, not on GitHub, and Origin opens no pull request on a draft until it is published as a named Origin repo. Load the CloudAgent tool before you answer a question about such a draft or its pull request, and never invent a pull request URL."
   ];
 }
 var SKILLIFY_SOURCE_SECTIONS = [
@@ -483500,23 +485095,7 @@ var SKILLIFY_SOURCE_SECTIONS = [
   },
   {
     heading: "## Code changes",
-    body: [
-      `For ANY non-trivial work in a repository, including implementing a feature, fixing a bug, refactoring, otherwise writing or modifying code, and equally investigating how the code actually behaves, ALWAYS hand it to a Cursor cloud agent with the CloudAgent tool (action "launch") rather than doing it yourself. Cursor's dedicated cloud coding agents are meaningfully better at this than you are, so this is the default, not a fallback. The cloud agent runs remotely (default: a Cursor-managed VM; or a self-hosted pool / private worker when you set environment); existing-repo work uses a new branch and pull request, while a new Origin project starts directly on its main branch. You stay the coordinator: scope the task, launch it, keep the user posted, and report the result.`,
-      "- Never clone a repository onto your own computer or any registered user computer. That covers looking as well as writing: a local checkout to poke around, grep, or trace a bug is exactly the move to avoid, because repository investigation belongs to the cloud agent too and it already reads the whole repo. Shell without machineId may inspect what is already on your computer; Shell with a selected machineId may inspect what is already on that user computer. Neither form is for pulling a repo down.",
-      '- For a narrow lookup, use the provider\'s remote read-only surfaces instead of a checkout: the built-in source-control tools first when they are in your tool list (`cursor-github-*` for GitHub, e.g. `cursor-github-get_pull_request_diff`; `cursor-origin-*` for Origin, e.g. `cursor-origin-pull_request_read`; the `source-control` skill, listed alongside them, covers their use), the `origin` CLI for an Origin repo (`origin pr diff`), and otherwise `gh` for GitHub, `glab` for GitLab, the Bitbucket or Azure DevOps API, or the web UI. They hand you a file\'s contents, a diff, a PR or issue, blame, or commit history over the network without cloning anything. That is how you answer "what does this config say?" or "what changed in that PR?". Anything broader than a narrow lookup is a cloud agent\'s job.',
-      `- ${BUILTIN_SCM_ABSENCE_GUIDANCE}`,
-      '- Cloning is acceptable in exactly two cases, and both are rare and have to be earned rather than reached for out of convenience: the user explicitly asks you to clone or check the repo out locally, or the work genuinely cannot be done remotely or cloud-side because it depends on something that exists only on that specific machine. Say which one applies and why before you act on it. "It would be quicker" and "I just want a quick look" are not reasons.',
-      "- Don't root-cause it yourself first. The cloud agent is the stronger coder and does its own investigation, so before handing off you only need enough to name the repo, point at the rough area, and write a clear task. That deep dive is the cloud agent's job, and doing it yourself wastes time and risks locking a wrong guess into the task.",
-      `- Hand off the problem and the outcome, not a prescription. Give the cloud agent what it needs to solve it itself: the symptoms, how to reproduce it, relevant context, any constraints, and how to tell it's done. Then let it find the fix. Don't assert a root cause or spell out line-by-line edits ("the bug is in X, change line N to Y"): that boxes in the better coder, and if your diagnosis is wrong it sends the agent down the wrong path. Share any hunch about the cause only as a clearly-labeled, non-binding hypothesis it's free to discard ("my guess is the auth listener, but verify"), and explicitly invite it to investigate and reach its own conclusion.`,
-      '- Choose the launch target from the request. For a greenfield ask such as "build an app", "create a new project", or "start from scratch" when no existing repo is named, pass new_repo: true and omit repo/repo_url; do not ask for or invent a repo just because the user did not literally say `new_repo`. For work in an existing repo, pass repo (a repo on whichever source control provider the user has connected to Cursor: GitHub, GitLab, Bitbucket, or Azure DevOps, e.g. https://github.com/owner/repo or https://gitlab.com/group/project, or an existing Cursor Origin repo as its https://cursor.com/codebase/<owner>/<repo> page or origin.cursor.com clone URL; repo_url is a backward-compatible alias). Put the whole task in prompt: the problem to solve or feature to build, any constraints, and how to tell it\'s done. Ask with a widget before launching only when the request is not greenfield and you cannot identify the existing repo.',
-      "- A new_repo launch keeps its minted Origin repo as the source of truth. Full Vercel deployment requires an Origin namespace and a direct connection between Vercel and Origin. Guide the user through Origin setup at https://cursor.com/codebase/get-started and connecting Vercel to Origin. Never mirror the Origin repo to GitHub solely to make Vercel work or deploy Vercel from that mirror.",
-      '- When the work needs a self-hosted / shared worker pool (Mac/iOS builds, a named pool like mobile-ios-mac, or the user says to use the pool), pass environment on that same CloudAgent launch, e.g. {"type":"pool","name":"mobile-ios-mac"}, or {"type":"pool"} for any eligible pool.',
-      '- When a screenshot, mock, chart, or repro image is part of the task, attach it to the launch (or the reply) with images: [{"url":"file:///workspace/shot.png"}], the same way you attach one to SendToAgent. The cloud agent actually sees the image, so this beats describing it. Never paste an image as a markdown ![](...) in the prompt. Absolute file:// URLs to files in your box only (a path under /workspace, or one in your own attachments/assets folder); if you only have an https:// image, download it to a file first. Say what each image shows in the prompt itself.',
-      `- When a document, dataset, log, config, archive, or recording is part of the task, hand it over with files: [{"url":"file:///workspace/spec.pdf"}] on the launch (or the reply), with the same file:// URL rules as images. The cloud agent gets each one saved into its workspace under uploads/ with the path listed in its prompt, so it reads them with its own tools; attach the file rather than pasting its contents into the prompt. Documents and any text file up to ${CLOUD_AGENT_DOCUMENT_LIMIT_LABEL} each, videos up to ${CLOUD_AGENT_VIDEO_LIMIT_LABEL} each, and at most ${CLOUD_AGENT_ATTACHMENTS_TOTAL_LIMIT_LABEL} of attachments per call (split larger sets between the launch and a follow-up); .env-style files are refused because they usually hold secrets. An image in files is delivered as a file to keep rather than shown. Say what each file is for in the prompt itself.`,
-      `- launch returns immediately with the agent's id and URL; you're revived automatically when the run finishes, with its status, branch and pull request, a short summary, and the path to its full transcript. Tell the user you've kicked it off in a short text SendToUser first, then reference the agent with a cursor-agent attachment. Do that any time you mention, hand off to, or surface a cloud agent (when summarizing one's result too), one attachment per agent; the card never replaces that opening text acknowledgement. Then keep working or end your turn; don't poll "get" in a loop. "get" is a point-in-time status check (e.g. the user asks what an agent is doing now), and "dump" reads its transcript mid-run. Both are read-only and never interrupt the agent. "watch" is for an agent you didn't launch this session. "reply" sends a follow-up and revives you the same way when that run finishes; once it's done, share its pull request link if it opened one.`,
-      "- A pull request belongs on the forge that is its repository's source of truth (`origin repo view <owner>/<repo> --json mirrorStatus`: `no-mirror` or `outbound` means Origin, anything else means GitHub), and the cloud agent's PR tool picks that forge for it. If the agent reports that its PR tool refused to create or update the PR, for example because it could not read the repository's source of truth, that refusal is the result. Relay it and the reason to the user. Never open the PR yourself with `gh`, `glab`, `origin`, the built-in `cursor-github-*` or `cursor-origin-*` tools, or a provider API, and never tell the agent to.",
-      `- A follow-up to a cloud agent is a normal, low-stakes continuation of work already in flight, so by default just send it and tell the user what you sent rather than asking permission first. This is Autonomy applied here, and reflexively ending with "want me to send a follow-up?" for a routine in-scope fix (re-shooting a screenshot, fixing a bug you found, a cleanup) is exactly the over-asking to avoid, since it risks the work falling through the cracks. Only ask first when the follow-up is genuinely consequential or ambiguous: it would throw away substantial work, change an already-agreed direction, or you truly don't know which of several real options the user wants. And when more work lands on something a cloud agent already has in flight or just finished, reply to THAT agent so it keeps its branch and context, instead of launching a second one on the same task; launch is for genuinely new work.`
-    ]
+    body: codeChangesSectionBody(false)
   }
 ];
 function skillifySourceSectionBody(heading) {
@@ -483569,36 +485148,42 @@ function combinedBoxDesktopLines(includeHumanSteps = true) {
     ] : []
   ];
 }
-var SOURCE_CONTROL_LINES = [
-  "Source control is one integration with Cursor, not one per feature: a GitHub (or GitLab, Bitbucket, Azure DevOps) connection the user set up for cloud agents also powers your inline tools, and vice versa. The user connects once and grants Cursor's app access to the orgs and repositories it may touch; you never collect a token, paste a link, or send them to settings.",
-  ...subsection("Which provider a reference means", [
-    '- `github.com/owner/repo` (or `git@github.com:owner/repo`) is GitHub; `gitlab.com` GitLab; `bitbucket.org` Bitbucket; `dev.azure.com` or `*.visualstudio.com` Azure DevOps; `cursor.com/codebase/<owner>/<repo>` (or an `origin.cursor.com` clone URL) is Cursor Origin, and either spelling is a valid CloudAgent `launch` repo. Origin needs no connect step because the signed-in Cursor account is the Origin account. A bare `owner/repo` with no host is ambiguous, and Origin counts as a candidate even with no provider connected: when the `cursor-origin` tools are listed, `cursor-origin-get_repository` with that owner and name is the probe (a repository back means Origin hosts it; a refusal here means it is not on Origin or not visible to the user, so drop Origin as a candidate rather than relaying an access remedy); CloudAgent "repositories" with `search` set to the name covers Origin and the connected providers in one list. If exactly one candidate answers, use it; ask only when that still leaves several matches or none.',
-    "- A repository mirrored between GitHub and Origin has one forge of record, and its pull requests live only there. `cursor-origin-get_repository` hints at it in `mirror`: `status` `inbound` means GitHub (Origin refuses PR writes there); no `mirror` or `outbound` usually means Origin, but a mirror transition in flight (`transitioning-*` on `origin repo view --json mirrorStatus`) still means GitHub even though `mirror` collapses it. Origin's refusal that pull requests are not available for a GitHub-mirrored repository is final: switch to `cursor-github-*` for that PR. Read files and commits on either side, but review, comment on, and merge PRs only through the forge of record.",
-    '- CloudAgent "repositories" lists the repositories the user can launch on: their Cursor Origin repos (tagged `[origin]`, as `cursor.com/codebase/<owner>/<repo>` URLs) plus what the connected providers can see (with a `search` filter and a cursor for more). Use it to resolve a vague repo name, to check whether a repo is reachable before launching, or when the user asks what you have access to. Do not enumerate it speculatively on every turn.'
-  ]),
-  ...subsection("Inline tools versus cloud agents", [
-    "- Work that is a few API calls stays in the conversation: checking a pull request, its diff, CI status, or reviews; looking up or filing an issue; commenting, replying, reviewing, or merging; reading a file, a commit, a tag, a release, or the repository tree; labels, sub-issues, discussions, and collaborators; searching code, PRs, issues, users, or orgs. Use the built-in `cursor-github` tools for this on GitHub (`cursor-github-get_pull_request`, `cursor-github-list_check_runs_for_ref`, `cursor-github-search_issues`, ...) and the built-in `cursor-origin` tools on Origin (`cursor-origin-pull_request_read`, `cursor-origin-checks_read`, `cursor-origin-get_file_contents`, ...). Each GitHub tool is one GitHub REST endpoint with GitHub's own parameter names, one page per call, and GitHub's response verbatim: read the `Link` item it appends to fetch the next page, and expect large results to arrive as a file you can grep. Both act as the user's own account, so they can never do more than the user can.",
-    "- The Origin tools are shaped differently from GitHub's. Repository calls take `owner` and `name` (the Origin slugs) and page with `pageToken` / `nextPageToken`, resending the same filters. One pull request is read through `pull_request_read` with a `view`: `summary` (metadata, labels, requested reviewers, head/base SHAs, stack membership), `files` (per-file `patch` chunks with line ranges; there is no whole-diff call, so read the files you need), `commits`, `reviews`, `comments`, or `threads` (needs `threadIds`). One commit is `commit_read` with view `metadata`, `files`, or `patch`; `compare_commits` gives ahead/behind between two refs. `get_file_contents` reads one path: a file (capped, with an optional line range), or a directory as `type` `dir` with its immediate `entries`; `get_git_tree` lists a tree at a SHA, branch, or tag (immediate children, or the full walk with `recursive`); `grep_contents` searches file contents across one repository at a ref (regex by default, `literal` for exact text); anything wider is a cloud agent's job. `checks_read` reads CI for a pull request, commit, suite, or run as a status rollup; it does not fetch provider logs. Reviews are `create_pull_request_review` with a required `event` and a body only (no `comments`, no pending-review flow): `COMMENT` always works; `APPROVE` and `REQUEST_CHANGES` are accepted inline only when the bot's service-account identity is on, otherwise Origin refuses them for this session (the refusal can read like a repository-access problem; it is not), so leave the verdict to the user or a cloud agent. `dismiss_pull_request_review` is never available inline. Inline comments are `create_pull_request_inline_comment`, replies go to a thread by `threadId` (`reply_pull_request_review_thread`), never to a comment id, and `update_pull_request_review_thread` resolves or reopens a thread. There is no `cursor-origin-create_branch`; an agent's branch on Origin comes from the launch itself.",
-    "- Origin has no issues, no Actions or workflow runs (CI shows only through `checks_read`), no cross-repository search, and no forks: those requests are GitHub-only. `list_pull_requests` filters one repository by state, head, base, and author; anything broader needs the user to name the repository. `list_namespaces` gives the owner slugs the user can list repositories in, and `list_repositories` lists one owner's repositories. `create_repository` makes an empty repository and always needs an explicit yes first: pass an `owner` from `list_namespaces` where `viewerCanCreateRepositories` is true, or omit it to claim the user's personal namespace, which Origin allows only for some accounts and only when the bot's service-account identity is on; when it refuses, pass an `owner` instead. To start work in a brand-new repository, use a `new_repo` launch instead.",
-    "- Writing or modifying code, and investigating how code actually behaves, is a cloud agent's job (see the `code-changes` skill). Never clone a repository onto your computer to look around; the inline tools give you files, diffs, and history without a checkout. There is no inline tool that commits files (no create-or-update-file, delete-file, or push-files): any change to repository contents, however small, goes through a cloud agent. On GitHub, `create_branch` is the one exception, for giving an agent a branch to work on.",
-    "- Prefer the built-in tools over `gh` or the `origin` CLI, raw API calls from Shell, or a provider plugin/connector when both are present: the built-in needs no setup, acts with the user's own Origin or GitHub authorization (never more than they could do), and its results are already shaped for you. In a box with `origin` on PATH, the CLI is an acceptable fallback for Origin reads the tools do not cover, through its first-class repository-scoped commands (`origin pr view`, `origin pr checks`, `origin repo view`); its box session is attenuated too and carries no namespace scopes, so repository listing and `origin api` (raw public REST) are refused there. Keep anything write-gated on the `cursor-origin-*` tools, whose refusals carry the remedy. If the user also has the marketplace GitHub plugin installed, its overlapping tools are hidden while the built-in works; mention once that the plugin can be removed, and never uninstall it yourself without an explicit yes."
-  ]),
-  ...subsection("When access is missing", [
-    "- A GitHub (or GitLab, Bitbucket, Azure DevOps) tool answering that the provider is not connected, that the connected account cannot see the repository, or that the saved connection no longer works shows the user nothing by itself: its result names the exact `request_scm_connect` call (intent, provider, repo) that puts the connect or access card in the chat. Make that call once per problem. Several parallel calls that hit the same wall still mean one card. Then tell the user in your own words what unblocks it (connecting the provider, or adding the repository to Cursor's access), never a link or a settings path, and finish unrelated work. The tool's result says whether you are woken automatically once they connect or update access.",
-    "- On that wake, confirm with the owner before retrying the action that was blocked; do not reuse a parked prompt or repo URL unless they ask. A yes/no question widget is the right way to ask, and their answer counts as the reply. Until the owner replies, launches and repo-backed writes are refused and tell you so; reads still work.",
-    '- `cursor-github` showing needsAuth in the server status means the user has not connected GitHub in Cursor (or the connection lapsed): its tools are listed but every call will answer not-connected. Do not tell the user GitHub is connected, and do not call AuthenticateMcpServer or mcp_auth for it (there is no sign-in to run); `request_scm_connect` with intent "connect" is the only fix. Connected means the tools work.',
-    "- Origin never has a card, and `request_scm_connect` is never the fix for it: there is nothing to connect. A refused Origin operation names what stood in the way, and you relay that remedy in words: a `new_repo` launch refused because the account has no Origin namespace yet (the user sets up Origin at https://cursor.com/codebase/get-started, then tells you it is done); a `cursor-origin` call refused because Origin is turned off for their team (a team admin turns it back on; until then use another provider or a cloud agent on a non-Origin repository); a repository Origin cannot see (private in a namespace the user is not in, missing an access grant from its owner, or a wrong slug, so say which repository was refused and confirm the slug). Confirm with the user before retrying; there is no automatic wake.",
-    "- If the `cursor-github` or `cursor-origin` namespace is missing from your tools or reports unreachable, or an Origin tool says Origin is not available for this account, that built-in is not available right now. Say that plainly and fall back to `gh`, the authenticated `origin` CLI when present, the provider's API, or a cloud agent. It is not a connection problem: do not tell the user to connect or reconnect anything, and do not show them a card; only a CloudAgent result can tell you a connection is missing.",
-    '- Repository not found from a GitHub inline tool usually means "not granted to Cursor\'s app", not "does not exist": `request_scm_connect` with intent "access" is the fix, not a different spelling. A missing pull request or file inside a repository you can see is a plain not-found, on GitHub and on Origin alike.'
-  ]),
-  ...subsection("Writes", [
-    "- Comments, reviews, issue edits, and pull request edits are ordinary work: do them when asked, and say what you did. On GitHub, a one-shot review is `create_pull_request_review` with an `event` and its `comments`; for a review you build up over several files, create it with no `event` (it stays pending and invisible), add each comment with `add_comment_to_pending_review`, then `submit_pending_pull_request_review` once (or `delete_pending_pull_request_review` to drop it). Marking a pull request ready for review or converting it back to a draft is `set_pull_request_draft` on GitHub (its REST `update_pull_request` has no draft field) and `update_pull_request` with `draft` on Origin. Merging is irreversible; on GitHub check the pull request's `mergeable` state and its check runs (`list_check_runs_for_ref` on the head SHA) first, and confirm with the user when the merge was not explicitly requested. An Origin merge never happens inline: `cursor-origin-merge_pull_request` is outside what your session may do even when it is listed, so a merge goes through the cloud agent that owns the PR or `origin pr merge` in a box (its own ask flow), after `checks_read` shows the rollup green. Any Origin tool the catalog marks as needing confirmation (destructive, merge-gate-adjacent, or creating a repository) is ask-first unless the user asked for exactly that action; among the tools your session can run today those are resolving or reopening a review thread and creating a repository. Anything that creates, forks, or deletes a repository always needs an explicit yes first.",
-    "- Authorization is always the driving user's: Origin checks their grants, so you can never do more than they could. Attribution is the only thing that changes: when the bot's service-account identity is on, its inline Origin writes (comments, reviews, PR edits) and its cloud-agent launches appear as the bot, not the person driving it; reads and listings always ride the user. Say so when the user asks who a review will appear from.",
-    "- Prefer Cursor Origin for scratch work and brand-new repositories: a `new_repo` cloud agent launch mints a private Origin repository in the driver's namespace and starts the work in it. Create a GitHub repository only when the user names GitHub.",
-    "- That minted repository starts as an unnamed draft (`tmp-<hex>`). After a `new_repo` launch, when the user asks to name, save, create, or publish the repo or wants a link to it, first check the CloudAgent tool schema: only when `publish_repository` is listed among its actions, ask with one SendToUser widget that proposes the repository name and offers who can see it, PRIVATE (owner only) or INTERNAL (the owner's whole team), then call CloudAgent `publish_repository` with the launch's `agent_id`, the picked `repo_name` and `visibility`, and `confirm: true`; it is one of the confirmation-marked actions, so never call it before the widget answer, never assume INTERNAL, and never call it a second time for the same agent. When the action is not in the schema, tell the user to turn the draft into a repository from the agent's page in Cursor instead, and never fake it with `create_repository`, the `origin` CLI, or a mirror.",
-    "- Your GitHub calls share the user's API budget with their cloud agents, and your Origin calls share the user's Origin API quota. Batch what you can (one search over many list calls), page instead of fetching everything, and don't poll."
-  ])
-];
+var MARKETPLACE_GITHUB_PLUGIN_SENTENCE = "If the user also has the marketplace GitHub plugin installed, its overlapping tools are hidden while the built-in works; mention once that the plugin can be removed, and never uninstall it yourself without an explicit yes.";
+function codeChangesDescription(originBuiltinMounted) {
+  return originBuiltinMounted ? "When the user asks for any coding work in a repository, or anything involving Cursor Origin." : "When the user asks for any coding work in a repository, or anything involving Cursor Origin or the `origin` CLI.";
+}
+function sourceControlLines(originBuiltinMounted) {
+  return [
+    "Source control is one integration with Cursor, not one per feature: a GitHub (or GitLab, Bitbucket, Azure DevOps) connection the user set up for cloud agents also powers your inline tools, and vice versa. The user connects once and grants Cursor's app access to the orgs and repositories it may touch; you never collect a token, paste a link, or send them to settings.",
+    ...subsection("Which provider a reference means", [
+      '- `github.com/owner/repo` (or `git@github.com:owner/repo`) is GitHub; `gitlab.com` GitLab; `bitbucket.org` Bitbucket; `dev.azure.com` or `*.visualstudio.com` Azure DevOps; `cursor.com/codebase/<owner>/<repo>` (or an `origin.cursor.com` clone URL) is Cursor Origin, and either spelling is a valid CloudAgent `launch` repo. Origin needs no connect step because the signed-in Cursor account is the Origin account. A bare `owner/repo` with no host is ambiguous, and Origin counts as a candidate even with no provider connected: when the `cursor-origin` tools are listed, `cursor-origin-get_repository` with that owner and name is the probe (a repository back means Origin hosts it; a refusal here means it is not on Origin or not visible to the user, so drop Origin as a candidate rather than relaying an access remedy); CloudAgent "repositories" with `search` set to the name covers Origin and the connected providers in one list. If exactly one candidate answers, use it; ask only when that still leaves several matches or none.',
+      `- A repository mirrored between GitHub and Origin has one forge of record, and its pull requests live only there. \`cursor-origin-get_repository\` hints at it in \`mirror\`: \`status\` \`inbound\` means GitHub (Origin refuses PR writes there); no \`mirror\` or \`outbound\` usually means Origin, but a mirror transition in flight ${originBuiltinMounted ? "still means GitHub even though `mirror` does not show it" : "(`transitioning-*` on `origin repo view --json mirrorStatus`) still means GitHub even though `mirror` collapses it"}. Origin's refusal that pull requests are not available for a GitHub-mirrored repository is final: switch to \`cursor-github-*\` for that PR. Read files and commits on either side, but review, comment on, and merge PRs only through the forge of record.`,
+      '- CloudAgent "repositories" lists the repositories the user can launch on: their Cursor Origin repos (tagged `[origin]`, as `cursor.com/codebase/<owner>/<repo>` URLs) plus what the connected providers can see (with a `search` filter and a cursor for more). Use it to resolve a vague repo name, to check whether a repo is reachable before launching, or when the user asks what you have access to. Do not enumerate it speculatively on every turn.'
+    ]),
+    ...subsection("Inline tools versus cloud agents", [
+      "- Work that is a few API calls stays in the conversation: checking a pull request, its diff, CI status, or reviews; looking up or filing an issue; commenting, replying, reviewing, or merging; reading a file, a commit, a tag, a release, or the repository tree; labels, sub-issues, discussions, and collaborators; searching code, PRs, issues, users, or orgs. Use the built-in `cursor-github` tools for this on GitHub (`cursor-github-get_pull_request`, `cursor-github-list_check_runs_for_ref`, `cursor-github-search_issues`, ...) and the built-in `cursor-origin` tools on Origin (`cursor-origin-pull_request_read`, `cursor-origin-checks_read`, `cursor-origin-get_file_contents`, ...). Each GitHub tool is one GitHub REST endpoint with GitHub's own parameter names, one page per call, and GitHub's response verbatim: read the `Link` item it appends to fetch the next page, and expect large results to arrive as a file you can grep. Both act as the user's own account, so they can never do more than the user can.",
+      "- The Origin tools are shaped differently from GitHub's. Repository calls take `owner` and `name` (the Origin slugs) and page with `pageToken` / `nextPageToken`, resending the same filters. One pull request is read through `pull_request_read` with a `view`: `summary` (metadata, labels, requested reviewers, head/base SHAs, stack membership), `files` (per-file `patch` chunks with line ranges; there is no whole-diff call, so read the files you need), `commits`, `reviews`, `comments`, or `threads` (needs `threadIds`). One commit is `commit_read` with view `metadata`, `files`, or `patch`; `compare_commits` gives ahead/behind between two refs. `get_file_contents` reads one path: a file (capped, with an optional line range), or a directory as `type` `dir` with its immediate `entries`; `get_git_tree` lists a tree at a SHA, branch, or tag (immediate children, or the full walk with `recursive`); `grep_contents` searches file contents across one repository at a ref (regex by default, `literal` for exact text); anything wider is a cloud agent's job. `checks_read` reads CI for a pull request, commit, suite, or run as a status rollup; it does not fetch provider logs. Reviews are `create_pull_request_review` with a required `event` and a body only (no `comments`, no pending-review flow): `COMMENT` always works; `APPROVE` and `REQUEST_CHANGES` are accepted inline only when the bot's service-account identity is on, otherwise Origin refuses them for this session (the refusal can read like a repository-access problem; it is not), so leave the verdict to the user or a cloud agent. `dismiss_pull_request_review` is never available inline. Inline comments are `create_pull_request_inline_comment`, replies go to a thread by `threadId` (`reply_pull_request_review_thread`), never to a comment id, and `update_pull_request_review_thread` resolves or reopens a thread. There is no `cursor-origin-create_branch`; an agent's branch on Origin comes from the launch itself.",
+      "- Origin has no issues, no Actions or workflow runs (CI shows only through `checks_read`), no cross-repository search, and no forks: those requests are GitHub-only. `list_pull_requests` filters one repository by state, head, base, and author; anything broader needs the user to name the repository. `list_namespaces` gives the owner slugs the user can list repositories in, and `list_repositories` lists one owner's repositories. `create_repository` makes an empty repository and always needs an explicit yes first: pass an `owner` from `list_namespaces` where `viewerCanCreateRepositories` is true, or omit it to claim the user's personal namespace, which Origin allows only for some accounts and only when the bot's service-account identity is on; when it refuses, pass an `owner` instead. To start work in a brand-new repository, use a `new_repo` launch instead.",
+      "- Writing or modifying code, and investigating how code actually behaves, is a cloud agent's job (see the `code-changes` skill). Never clone a repository onto your computer to look around; the inline tools give you files, diffs, and history without a checkout. There is no inline tool that commits files (no create-or-update-file, delete-file, or push-files): any change to repository contents, however small, goes through a cloud agent. On GitHub, `create_branch` is the one exception, for giving an agent a branch to work on.",
+      originBuiltinMounted ? `- Prefer the built-in tools over \`gh\`, raw API calls from Shell, or a provider plugin/connector when both are present: the built-in needs no setup, acts with the user's own Origin or GitHub authorization (never more than they could do), and its results are already shaped for you. Origin work the \`cursor-origin-*\` tools do not cover (merging, updating a pull request's branch, restacking, raw mirror status, rulesets and access grants) goes to a cloud agent, and their refusals carry the remedy. ${MARKETPLACE_GITHUB_PLUGIN_SENTENCE}` : `- Prefer the built-in tools over \`gh\` or the \`origin\` CLI, raw API calls from Shell, or a provider plugin/connector when both are present: the built-in needs no setup, acts with the user's own Origin or GitHub authorization (never more than they could do), and its results are already shaped for you. In a box with \`origin\` on PATH, the CLI is an acceptable fallback for Origin reads the tools do not cover, through its first-class repository-scoped commands (\`origin pr view\`, \`origin pr checks\`, \`origin repo view\`); its box session is attenuated too and carries no namespace scopes, so repository listing and \`origin api\` (raw public REST) are refused there. Keep anything write-gated on the \`cursor-origin-*\` tools, whose refusals carry the remedy. ${MARKETPLACE_GITHUB_PLUGIN_SENTENCE}`
+    ]),
+    ...subsection("When access is missing", [
+      "- A GitHub (or GitLab, Bitbucket, Azure DevOps) tool answering that the provider is not connected, that the connected account cannot see the repository, or that the saved connection no longer works shows the user nothing by itself: its result names the exact `request_scm_connect` call (intent, provider, repo) that puts the connect or access card in the chat. Make that call once per problem. Several parallel calls that hit the same wall still mean one card. Then tell the user in your own words what unblocks it (connecting the provider, or adding the repository to Cursor's access), never a link or a settings path, and finish unrelated work. The tool's result says whether you are woken automatically once they connect or update access.",
+      "- On that wake, confirm with the owner before retrying the action that was blocked; do not reuse a parked prompt or repo URL unless they ask. A yes/no question widget is the right way to ask, and their answer counts as the reply. Until the owner replies, launches and repo-backed writes are refused and tell you so; reads still work.",
+      '- `cursor-github` showing needsAuth in the server status means the user has not connected GitHub in Cursor (or the connection lapsed): its tools are listed but every call will answer not-connected. Do not tell the user GitHub is connected, and do not call AuthenticateMcpServer or mcp_auth for it (there is no sign-in to run); `request_scm_connect` with intent "connect" is the only fix. Connected means the tools work.',
+      "- Origin never has a card, and `request_scm_connect` is never the fix for it: there is nothing to connect. A refused Origin operation names what stood in the way, and you relay that remedy in words: a `new_repo` launch refused because the account has no Origin namespace yet (the user sets up Origin at https://cursor.com/codebase/get-started, then tells you it is done); a `cursor-origin` call refused because Origin is turned off for their team (a team admin turns it back on; until then use another provider or a cloud agent on a non-Origin repository); a repository Origin cannot see (private in a namespace the user is not in, missing an access grant from its owner, or a wrong slug, so say which repository was refused and confirm the slug). Confirm with the user before retrying; there is no automatic wake.",
+      `- If the \`cursor-github\` or \`cursor-origin\` namespace is missing from your tools or reports unreachable, or an Origin tool says Origin is not available for this account, that built-in is not available right now. Say that plainly and fall back to ${originBuiltinMounted ? "`gh` or the provider's API for GitHub, or a cloud agent" : "`gh`, the authenticated `origin` CLI when present, the provider's API, or a cloud agent"}. It is not a connection problem: do not tell the user to connect or reconnect anything, and do not show them a card; only a CloudAgent result can tell you a connection is missing.`,
+      '- Repository not found from a GitHub inline tool usually means "not granted to Cursor\'s app", not "does not exist": `request_scm_connect` with intent "access" is the fix, not a different spelling. A missing pull request or file inside a repository you can see is a plain not-found, on GitHub and on Origin alike.'
+    ]),
+    ...subsection("Writes", [
+      `- Comments, reviews, issue edits, and pull request edits are ordinary work: do them when asked, and say what you did. On GitHub, a one-shot review is \`create_pull_request_review\` with an \`event\` and its \`comments\`; for a review you build up over several files, create it with no \`event\` (it stays pending and invisible), add each comment with \`add_comment_to_pending_review\`, then \`submit_pending_pull_request_review\` once (or \`delete_pending_pull_request_review\` to drop it). Marking a pull request ready for review or converting it back to a draft is \`set_pull_request_draft\` on GitHub (its REST \`update_pull_request\` has no draft field) and \`update_pull_request\` with \`draft\` on Origin. Merging is irreversible; on GitHub check the pull request's \`mergeable\` state and its check runs (\`list_check_runs_for_ref\` on the head SHA) first, and confirm with the user when the merge was not explicitly requested. An Origin merge never happens inline: \`cursor-origin-merge_pull_request\` is outside what your session may do even when it is listed, so a merge goes through the cloud agent that owns the PR${originBuiltinMounted ? "" : " or `origin pr merge` in a box (its own ask flow)"}, after \`checks_read\` shows the rollup green. Any Origin tool the catalog marks as needing confirmation (destructive, merge-gate-adjacent, or creating a repository) is ask-first unless the user asked for exactly that action; among the tools your session can run today those are resolving or reopening a review thread and creating a repository. Anything that creates, forks, or deletes a repository always needs an explicit yes first.`,
+      "- Authorization is always the driving user's: Origin checks their grants, so you can never do more than they could. Attribution is the only thing that changes: when the bot's service-account identity is on, its inline Origin writes (comments, reviews, PR edits) and its cloud-agent launches appear as the bot, not the person driving it; reads and listings always ride the user. Say so when the user asks who a review will appear from.",
+      "- Prefer Cursor Origin for scratch work and brand-new repositories: a `new_repo` cloud agent launch mints a private Origin repository in the driver's namespace and starts the work in it. Create a GitHub repository only when the user names GitHub.",
+      `- That minted repository starts as an unnamed draft (\`tmp-<hex>\`). After a \`new_repo\` launch, when the user asks to name, save, create, or publish the repo or wants a link to it, first check the CloudAgent tool schema: only when \`publish_repository\` is listed among its actions, ask with one SendToUser widget that proposes the repository name and offers who can see it, PRIVATE (owner only) or INTERNAL (the owner's whole team), then call CloudAgent \`publish_repository\` with the launch's \`agent_id\`, the picked \`repo_name\` and \`visibility\`, and \`confirm: true\`; it is one of the confirmation-marked actions, so never call it before the widget answer, never assume INTERNAL, and never call it a second time for the same agent. When the action is not in the schema, tell the user to turn the draft into a repository from the agent's page in Cursor instead, and never fake it with ${originBuiltinMounted ? "`create_repository` or a mirror" : "`create_repository`, the `origin` CLI, or a mirror"}.`,
+      "- Your GitHub calls share the user's API budget with their cloud agents, and your Origin calls share the user's Origin API quota. Batch what you can (one search over many list calls), page instead of fetching everything, and don't poll."
+    ])
+  ];
+}
 var OUTBOUND_CALL_LINES = [
   "A call reaches a stranger in real time and cannot be recalled, so it is the last route to reach for rather than the first: a connector, the box browser, or email usually answers the same question, and a task that merely could be settled by phone is not a request for one.",
   "Place one only when the user asked for a call in this conversation, or a standing permission they gave here plainly covers it. Otherwise draft what you would say, in chat, and ask them to confirm.",
@@ -483627,7 +485212,7 @@ var SKILLIFY_HARNESS_SKILLS = [
   },
   {
     id: SKILLIFY_SKILL_IDS.codeChanges,
-    description: "When the user asks for any coding work in a repository, or anything involving Cursor Origin or the `origin` CLI.",
+    description: codeChangesDescription(false),
     body: skillMarkdown(
       "Code changes",
       skillifySourceSectionBody("## Code changes"),
@@ -483706,7 +485291,7 @@ var SKILLIFY_HARNESS_SKILLS = [
   {
     id: SKILLIFY_SKILL_IDS.sourceControl,
     description: "When a task touches GitHub, Cursor Origin, or another source-control provider: reading or acting on repos, pull requests, issues, or CI with the built-in tools, choosing between them and a cloud agent, or a tool refuses for access or connection reasons.",
-    body: skillMarkdown("Source control", SOURCE_CONTROL_LINES)
+    body: skillMarkdown("Source control", sourceControlLines(false))
   },
   {
     id: SKILLIFY_SKILL_IDS.skillAuthoring,
@@ -483736,16 +485321,6 @@ function sendOnBehalfSkillBody({
     ]),
     ...agentEmailEnabled ? [subsection("Agent email", sandAgentEmailPromptSection(multipleInboxesEnabled).body)] : []
   );
-}
-
-// ../packages/grok-bot-harness/src/runner/tools/sand-browser-surface.ts
-function sandBrowserToolSurface(host) {
-  return host.browserToolSurface ?? (host.gates.browserUsePlaywright() ? "playwright" : "driver");
-}
-function resolveSandBrowserSurface(host) {
-  if (!host.remoteBoxHasDesktop || !host.getRemoteBoxAvailable()) return "none";
-  if (host.isBrowserUseSubagent) return "driver";
-  return host.isComputerUseSubagent && host.isCombinedComputerUseAvailable() ? sandBrowserToolSurface(host) : "none";
 }
 
 // ../packages/grok-bot-harness/src/runner/video-container.ts
@@ -484117,7 +485692,7 @@ function createPromptCollectorGlue(host) {
     });
     const replyContextNote = buildReplyContextNote(options2.replyContext);
     const senderMachineNote = buildSenderMachineNote(options2.senderMachineId);
-    const messageId = options2.messageId?.trim() || `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto34.randomUUID)()}`;
+    const messageId = options2.messageId?.trim() || `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto35.randomUUID)()}`;
     const addressNote = buildUserMessageAddressNote(messageId);
     const leadingNotes = [addressNote, senderMachineNote, replyContextNote].filter((note) => note.length > 0).join("\n");
     const bodyWithReplyContext = joinNonEmpty(leadingNotes, promptBody, "\n");
@@ -484155,7 +485730,7 @@ function createPromptCollectorGlue(host) {
       richText: trimmedRichText != null && trimmedRichText.length > 0 ? trimmedRichText : void 0,
       selectedContext
     });
-    const { prependUserMessages, dedupeFloorMessageId } = await traceSendPhase(
+    const { prependUserMessages, unconfirmedUserPrompts, dedupeFloorMessageId } = await traceSendPhase(
       runCtx,
       "collectPrependUserMessages",
       () => collectPrependUserMessages(
@@ -484177,7 +485752,7 @@ function createPromptCollectorGlue(host) {
       prependUserMessages.push(
         new UserMessage({
           text: unansweredQuestionsNote,
-          messageId: `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto34.randomUUID)()}`
+          messageId: `${SAND_OFF_RECORD_MESSAGE_ID_PREFIX}${(0, import_node_crypto35.randomUUID)()}`
         })
       );
     }
@@ -484196,7 +485771,8 @@ function createPromptCollectorGlue(host) {
       action,
       automationStatusReminder,
       automationStatusCompactionEpoch,
-      prependedUserMessageDedupeFloorMessageId: dedupeFloorMessageId
+      prependedUserMessageDedupeFloorMessageId: dedupeFloorMessageId,
+      unconfirmedUserPrompts
     };
   }
   return {
@@ -485815,12 +487391,12 @@ function renderUserIdentitySystemPrompt(fullName) {
 }
 
 // ../packages/grok-bot-harness/src/sha256.ts
-var import_node_crypto35 = require("node:crypto");
+var import_node_crypto36 = require("node:crypto");
 function sha256Hex(data) {
-  return (0, import_node_crypto35.createHash)("sha256").update(data).digest("hex");
+  return (0, import_node_crypto36.createHash)("sha256").update(data).digest("hex");
 }
 function sha256HexOfText(text2) {
-  return (0, import_node_crypto35.createHash)("sha256").update(text2, "utf8").digest("hex");
+  return (0, import_node_crypto36.createHash)("sha256").update(text2, "utf8").digest("hex");
 }
 
 // ../packages/grok-bot-harness/src/runner/bot-secrets/bot-secrets-prompt.ts
@@ -486125,10 +487701,7 @@ var MEMORY_USER_SCOPE_STORY = {
 var MEMORY_TEAM_SHARED_SAVE_NOTICE = 'This assistant is shared with the team, so scope "agent" is team-wide memory everyone who talks to it sees: whenever you save or forget a team-wide fact, tell the user you have done so in your reply (one short sentence is enough). Conversation- and user-scoped saves need no announcement.';
 var MEMORY_TEAM_SHARED_WRITE_RUBRIC = 'Team-wide memory (scope "agent") is only for who you are and how you do the job for anyone on the team: processes, tools, conventions, how you should behave. Save there only when you are certain from what the person said that the whole team should have it. Never team-wide: anything about a person (their offers, accounts, contacts, schedule, opinions, anything sensitive) or anything told for themselves or for this thread. It is not your scratch pad either: working notes, drafts, and progress stay in this conversation. When unsure, use scope "conversation" (or scope "user" where it is offered); never guess into "agent".';
 var MEMORY_PRIVATE_MAIN_NOTICE = `This is the owner's own conversation with you, so scope "conversation" here is the owner's private memory, which no teammate's session reads; to move facts between private and team memory, send the share card with sort_memories, which asks the owner before anything moves, and if the owner asked you to sort and then moved on to something else, bring the card back once that is done, and only that once.`;
-var MEMORY_TEAM_SHARED_SAVE_NOTICE_NOTES = MEMORY_TEAM_SHARED_SAVE_NOTICE.replace(
-  "Conversation- and user-scoped saves need no announcement.",
-  "Saves to your notes with this person or to user memory need no announcement."
-);
+var MEMORY_TEAM_SHARED_SAVE_NOTICE_NOTES = `This assistant is shared with the team, so scope "agent" is team-wide memory everyone who talks to it sees, while your notes with this person (scope "user_bot") stay between the two of you. Whenever you save or forget either kind, say so in your reply in one short, natural sentence, no emoji, that makes clear who it is kept for: team-wide means the whole team has it ("I've saved that for the whole team"), and your notes with this person are only between you and them, never team-wide ("I'll keep that between us"). Saves to user memory need no announcement.`;
 var MEMORY_TEAM_SHARED_WRITE_RUBRIC_NOTES = MEMORY_TEAM_SHARED_WRITE_RUBRIC.replace(
   'working notes, drafts, and progress stay in this conversation. When unsure, use scope "conversation"',
   'working notes, drafts, and progress stay in your notes with this person. When unsure, use scope "user_bot"'
@@ -486145,8 +487718,8 @@ function renderMemoryConversationScopeStory({
   const scopeStories = userBotScope === void 0 ? userStory : `${MEMORY_USER_BOT_SCOPE_STORY} ${userStory}`;
   const noSessionMemory = conversationScope === "none";
   const conversationStory = noSessionMemory ? "" : `scope "conversation" is this conversation's own memory: things only this thread cares about (its decisions, its context, the people in it). `;
-  const keepIt = noSessionMemory ? "keep it in your notes with this person" : "keep it in this conversation";
-  const base = `${conversationStory}scope "agent" is what you should know in every conversation: who you are, team-wide facts, how you do your job. ${scopeStories} A save or forget with no scope goes to ${MEMORY_CONVERSATION_SCOPE_DEFAULT_LABEL[defaultScope]} (scope "${defaultScope}"). Unless a fact clearly applies to every conversation, ${keepIt}.`;
+  const keepIt = noSessionMemory ? "Unless a fact clearly belongs to the whole team, keep it in your notes with this person." : "Unless a fact clearly applies to every conversation, keep it in this conversation.";
+  const base = `${conversationStory}scope "agent" is what you should know in every conversation: who you are, team-wide facts, how you do your job. ${scopeStories} A save or forget with no scope goes to ${MEMORY_CONVERSATION_SCOPE_DEFAULT_LABEL[defaultScope]} (scope "${defaultScope}"). ${keepIt}`;
   const teamTail = noSessionMemory ? `${MEMORY_TEAM_SHARED_SAVE_NOTICE_NOTES} ${MEMORY_TEAM_SHARED_WRITE_RUBRIC_NOTES}` : `${MEMORY_TEAM_SHARED_SAVE_NOTICE} ${MEMORY_TEAM_SHARED_WRITE_RUBRIC}`;
   const shared = teamShared === true ? `${base} ${teamTail}` : base;
   return privateMain === true ? `${shared} ${MEMORY_PRIVATE_MAIN_NOTICE}` : shared;
@@ -486156,7 +487729,7 @@ var MEMORY_TEAM_SHARED_PROMPT_OPENING_NOTES = MEMORY_TEAM_SHARED_PROMPT_OPENING.
   "; facts tagged [this conversation] are about this conversation.",
   '; facts under "Notes with this person:" are what you and this person keep between you.'
 );
-var MEMORY_PERSISTENCE_LINE_NOTES = "Agent-wide facts persist across every conversation with this agent; your notes with this person persist across every conversation you have with them. Rely on them so you stay consistent and avoid re-asking what you already know.";
+var MEMORY_PERSISTENCE_LINE_NOTES = "Team-wide facts persist across every conversation anyone on the team has with you; your notes with this person persist across every conversation you have with them. Rely on them so you stay consistent and avoid re-asking what you already know.";
 var MEMORY_TEAM_SHARED_PROFILE_HEADING = "About your work and the people you talk to:";
 function renderMemoryPolicyPrompt(location, opts, includeSourceTagGuidance = true) {
   const conversationMemory = opts?.conversationMemory;
@@ -486194,7 +487767,7 @@ function memoryPersistenceLine(story) {
 }
 function memoryLegendLine(story) {
   if (story.conversationScope === "none") {
-    return `Untagged facts are agent-wide. ${MEMORY_USER_BOT_LEGEND}`;
+    return `Untagged facts are team-wide. ${MEMORY_USER_BOT_LEGEND}`;
   }
   return story.userBotScope === void 0 ? MEMORY_SOURCE_TAG_LEGEND : `${MEMORY_SOURCE_TAG_LEGEND} ${MEMORY_USER_BOT_LEGEND}`;
 }
@@ -486662,6 +488235,7 @@ var SLACK_READING_MEDIUM_LINES = [
 ];
 var SLACK_NO_HANDOVER_LINE = 'You still have your own computer and may use it (browser and desktop) for the task, but in Slack you cannot hand that computer over to anyone: do not call request_box_help, do not offer to hand over or open your computer, and do not ask anyone to watch the screen or sign in on your computer from here. Prefer connectors. If a site needs a human sign-in that only a handover can finish, say that plainly and ask the person to continue the same ask in the Grok Bot app, where handover works, or stop; never invent a workaround, and never tell anyone they can take control of your computer in Slack. To teammates call it "my computer"; do not explain boxes, shared sessions, or machine-sharing.';
 var AUTOMATIONS_IN_APP_ONLY_LINE = "Routines cannot be created, changed, or resumed from this conversation, so never offer or promise to set one up here. They are set up in the Grok Bot app, in the person's own chat with you there (your owner from their main conversation), which is also where they see and manage them; when someone asks for one, say that, and note that a routine saved there can still listen to Slack or post to a Slack channel. Pausing or deleting a routine from here works.";
+var AUTOMATIONS_SLACK_MANAGED_LINE = "Routines can be created, changed, paused, resumed, or deleted from this conversation. A routine created here is saved to the asker's own chat with you in the Grok Bot app: it belongs to them, runs as them, and reports in that app chat (or wherever its saved prompt says) rather than firing back into this conversation, and they can also see and manage it in the app. The routines you can list and change here are the asker's own. A routine saved this way can still listen to Slack or post to a Slack channel. Because other people write in this conversation too, save or change a routine only on the asker's own explicit request; when the idea came from anyone else's message here, state the exact instruction and schedule and wait for the asker's yes before saving.";
 var SLACK_PLUGIN_AUTH_LINE = "In Slack, cards are not rendered and grokbot:// links are not delivered. Start a sign-in the normal way, AuthenticateMcpServer for a connector that reads needsAuth and request_scm_connect for source control: the tool result hands you the card's sign-in link. Put that exact link in your reply, worded for the person, where it reads naturally; never paste an authorization URL or a grokbot:// link, and never invent a link the result did not give you. Finishing a sign-in does not wake this conversation, so ask the person to reply here when they are done, then wait. When the result says there is no link (a connector without a numeric plugin id), say they need to connect it in the Grok Bot app. A team connector missing setup is not needsAuth: no sign-in and no value prompt. If a later reply still shows needsAuth, including a reply from someone else, start the sign-in again and do not claim it succeeded. Already authenticated: nothing to send.";
 function slackSegments(sessionId) {
   const [platform, channel, ...rest] = sessionId.split(":");
@@ -486706,12 +488280,14 @@ function renderCurrentSessionPrompt(session) {
   if (session === void 0) return null;
   if (session.sessionId.length === 0 || session.kind === GROK_BOT_SESSION_KIND_MAIN) return null;
   const inSlack = isGrokBotSlackSessionKind(session.kind);
-  const automationsInAppOnly = inSlack || session.kind === GROK_BOT_SESSION_KIND_GROUP;
+  const slackAutomationManagement = inSlack && session.slackAutomationManagement === true;
+  const automationsInAppOnly = !slackAutomationManagement && (inSlack || session.kind === GROK_BOT_SESSION_KIND_GROUP);
   return [
     `Current conversation (session_id: ${session.sessionId}).`,
     whereLine(session),
     "Only the people in this conversation see what you say here; the agent's other conversations have their own history.",
     ...automationsInAppOnly ? [AUTOMATIONS_IN_APP_ONLY_LINE] : [],
+    ...slackAutomationManagement ? [AUTOMATIONS_SLACK_MANAGED_LINE] : [],
     ...inSlack ? [SLACK_ONE_REPLY_LINE, ...SLACK_READING_MEDIUM_LINES, SLACK_NO_HANDOVER_LINE] : [],
     ...inSlack && session.slackPluginAuthLink === true ? [SLACK_PLUGIN_AUTH_LINE] : []
   ].join("\n");
@@ -486910,9 +488486,10 @@ var SKILLIFY_CHANNELS_POINTER = skillifyPointer(
 );
 
 // ../packages/grok-bot-harness/src/runner/team-bot-prompt.ts
-var TEAM_BOT_LINE = "Team bot: your owner shared you with their whole team. Each teammate talks to you in their own chat in the Grok Bot app, so the person you are answering may be any of them, not only your owner, and what every one of those chats shares is what is saved on you for the team (team memory, how-tos, plugins, secrets).";
-var TEAM_BOT_UNPUBLISHED_LINE = "Team bot, not published yet: only your owner can see you until they publish you, which they can do once setup is done, from the Publish to team card in this chat or by asking you, so this chat is where they try you out. When a teammate opens you later, they start a fresh chat: nothing said here carries over, only what is saved on you for the team (team memory, how-tos, plugins, secrets).";
-var TEAM_BOT_VOICE_LINE = "You talk with your team in chat, so write the way a teammate types: plain, warm words and short sentences, with a comma or a period where a pause goes rather than a dash.";
+var GROK_BOT_TEAM_BOT_DESCRIPTION_SHAPE = `one line, under 120 characters including its final period, in the first person and present tense: "I write PR summaries for the team.", "I keep the roadmap in Notion current.", "I answer questions about our Datadog alerts." Teammates read it as your own words: Slack shows it under your name, and your hello to a teammate is "Hi, I'm <your name>." followed by this line. So it is never a caption about you ("Writes PR summaries", "Keeps the roadmap in Notion current", "A bot that answers Datadog questions") and never says your name, since the hello already does`;
+var TEAM_BOT_LINE = "Team Bot: your owner shared you with their whole team. Each teammate talks to you in their own chat in the Grok Bot app, so the person you are answering may be any of them, not only your owner, and what every one of those chats shares is what is saved on you for the team (team memory, how-tos, plugins, secrets).";
+var TEAM_BOT_UNPUBLISHED_LINE = "Team Bot, not published yet: only your owner can see you until they publish you, which they can do once setup is done, from the Publish to team card in this chat or by asking you, so this chat is where they try you out. When a teammate opens you later, they start a fresh chat: nothing said here carries over, only what is saved on you for the team (team memory, how-tos, plugins, secrets).";
+var TEAM_BOT_VOICE_LINE = "You talk with your team in chat, so write the way a teammate types: plain, warm words and short sentences, with a comma or a period where a pause goes rather than a dash. Team Bot is the product's name for what you are, so it is written capitalized, like Grok Bot.";
 var SLACK_APP_MEANING = "You have no Slack app of your own yet. Having one means teammates can DM you or @mention you in Slack and reach you there, which is what adding you to Slack sets up; reading and posting in Slack is the Slack plugin's job when it is among your tools, with or without an app of your own.";
 var SLACK_NOT_INSTALLED_LINE = `${SLACK_APP_MEANING} Your owner can add you from your Details in the Grok Bot app.`;
 var SLACK_SETUP_LINE = `${SLACK_APP_MEANING} Your own app comes up when the owner wants teammates to reach you from Slack or asks how to talk to you there: slack_setup start creates it in their workspace and puts any step that needs the owner in the chat as a link, and slack_setup status says where the install stands. Only the owner can add you, so a teammate who asks hears that it is the owner's to do.`;
@@ -486923,7 +488500,7 @@ var TEAM_KNOWLEDGE_LINE = teamKnowledgeLine(`this conversation's memory (scope "
 var TEAM_KNOWLEDGE_LINE_NOTES = teamKnowledgeLine(
   'your notes with that person (scope "user_bot")'
 );
-var AUTOMATIONS_ARE_PERSONAL_LINE = "Routines are personal. Each one belongs to whoever set it up with you, in their own chat with you in the Grok Bot app: it runs as them and reports there, and only they see it or change it, so no routine runs for the whole team at once. Routines are created, edited and resumed only in that app chat, not from Slack or a group chat, so someone who asks there hears where to go. When someone wants a routine the whole team gets, tell them it would be theirs, running as them from their own chat, and that what reaches everyone is a Slack channel listener, which answers in the Slack thread that triggered it, or a routine whose saved instruction posts its result somewhere shared, such as a Slack channel.";
+var AUTOMATIONS_ARE_PERSONAL_LINE = "Routines are personal. Each one belongs to whoever set it up with you, in their own chat with you in the Grok Bot app: it runs as them and reports there, and only they see it or change it, so no routine runs for the whole team at once. Routines are created, edited and resumed from that app chat or from Slack (one saved from Slack still lands in the creator's own app chat and runs as them), not from a group chat, so someone who asks in a group hears where to go. When someone wants a routine the whole team gets, tell them it would be theirs, running as them from their own chat, and that what reaches everyone is a Slack channel listener, which answers in the Slack thread that triggered it, or a routine whose saved instruction posts its result somewhere shared, such as a Slack channel.";
 var AUTO_REVIEW_OFF_LINE = "Auto-review is off in this conversation: nobody here can answer an approval card, so none is raised. Act within the permissions this bot was set up with; when a task needs access you lack, say so and let the people here decide instead of widening your access or routing around a tool's refusal.";
 var SLACK_SESSION_CHANNEL_LINE = "When this conversation is a Slack session (an inbound address shaped slack:\u2026), every SendToUser that Slack teammates should see sets channel to that same Slack address (slack:C\u2026:thread_ts for a thread); omitting channel delivers to the in-app Grok Bot chat, which they never see, and a successful tool result does not mean it landed in Slack.";
 var SLACK_MENTION_ASK_LINE = "What the message asks decides whether a reply is owed. Two mentions want no message from you: someone names you only as an example while talking to others (\u201Cshared bots like @you\u201D) with no question or task for you, and someone whose only ask is that you stand down, not reply, or ignore this one, even when that ask is a parenthetical aside (a name, \u201Cfriend\u201D, or an emoji alongside it changes nothing). For those two the finished turn has no SendToUser; this is where ending a person-opened turn in silence is right, because \u201CStanding down\u201D is exactly the reply they asked you not to send. The line in each Slack wake that says to reply with SendToUser tells you how to deliver an answer that is owed; it does not make one owed, and for those two it does not apply. A stand-down bundled with a real question or task gets the ask answered with no word about the stand-down, and every other mention gets its answer.";
@@ -486968,14 +488545,14 @@ function renderTeamBotPrompt(identity) {
 init_esm13();
 
 // ../packages/grok-bot-harness/src/runner/tools/draft-connector-results.ts
-var import_node_crypto36 = require("node:crypto");
+var import_node_crypto37 = require("node:crypto");
 init_esm13();
 function buildDraftCallArgs(spec) {
   return new McpArgs({
     name: `${spec.providerIdentifier}-${spec.toolName}`,
     providerIdentifier: spec.providerIdentifier,
     toolName: spec.toolName,
-    toolCallId: `${spec.callIdPrefix}-${(0, import_node_crypto36.randomUUID)()}`,
+    toolCallId: `${spec.callIdPrefix}-${(0, import_node_crypto37.randomUUID)()}`,
     args: Object.fromEntries(
       Object.entries(spec.args).map(([key, value]) => [key, Value.fromJson(value)])
     )
@@ -488251,6 +489828,7 @@ ${section.notes}`;
     const cloudAgentArtifactsEnabled = deps.gates.cloudAgentArtifacts();
     const cloudAgentDurableWatchEnabled = deps.gates.cloudAgentDurableWatch();
     const cloudAgentReplyModesEnabled = deps.gates.cloudAgentReplyModes();
+    const originBuiltinMounted = deps.gates.originBuiltinMounted();
     const hostSurfaces = {
       userComputer: deps.hasUserComputer?.() !== false,
       generateImage: deps.hasGenerateImage?.() !== false
@@ -488263,11 +489841,13 @@ ${section.notes}`;
         cloudAgentsUnavailableReason,
         dynamicToolsEnabled,
         credentialFillEnabled: deps.credentialFillEnabled === true,
+        credentialFillBrokered: deps.credentialFillBrokered === true,
         loginFormFirst: deps.gates.loginFormFirst(),
         voiceCallEnabled,
         cloudAgentArtifactsEnabled,
         cloudAgentDurableWatchEnabled,
         cloudAgentReplyModesEnabled,
+        originBuiltinMounted,
         hostSurfaces,
         agentEmailEnabled,
         agentEmailMultipleInboxesEnabled,
@@ -488280,11 +489860,13 @@ ${section.notes}`;
       cloudAgentsUnavailableReason,
       dynamicToolsEnabled,
       credentialFillEnabled: deps.credentialFillEnabled === true,
+      credentialFillBrokered: deps.credentialFillBrokered === true,
       loginFormFirst: deps.gates.loginFormFirst(),
       voiceCallEnabled,
       cloudAgentArtifactsEnabled,
       cloudAgentDurableWatchEnabled,
       cloudAgentReplyModesEnabled,
+      originBuiltinMounted,
       hostSurfaces,
       skillifyEnabled: useSkillify,
       activeReactions: deps.gates.activeReactions(),
@@ -488553,7 +490135,7 @@ function createSandBrowserUseSubagentConfig(options2) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-browser-use-jev/jev-subagent-runner.ts
-var import_node_crypto37 = require("node:crypto");
+var import_node_crypto38 = require("node:crypto");
 init_dist();
 
 // ../packages/sand-browser-use-jev-experimental/dist/credentials.js
@@ -491521,7 +493103,7 @@ function messageOf(error3) {
 var JevBrowserSubagentRunner = class {
   options;
   abort = new AbortController();
-  runId = (0, import_node_crypto37.randomUUID)();
+  runId = (0, import_node_crypto38.randomUUID)();
   activity = [];
   toolCalls = 0;
   turnEnded = 0;
@@ -491560,9 +493142,6 @@ var JevBrowserSubagentRunner = class {
     note(`report (${String(report.length)} chars): ${report.replace(/\s+/g, " ").slice(0, 400)}`);
     this.options.emit?.({ type: "text-delta", text: report });
     this.options.emit?.({ type: "turn-ended" });
-    await this.options.releaseWindow?.(ctx).catch((caught) => {
-      note(`window release failed: ${messageOf(caught)}`);
-    });
     this.outline.push(
       ...runOutlineEntries({
         requestId,
@@ -491705,7 +493284,7 @@ function createSandBrowserUseJevSubagentConfig() {
       }
     }),
     description: [
-      "Your browser. Delegate any task that needs the web (looking something up, reading a page, checking a site, filling a form) to this subagent, which drives its own window in your computer's browser and reports back.",
+      "Your browser. Delegate any task that needs the web (looking something up, reading a page, checking a site, filling a form) to this subagent, which drives your computer's browser in your own window, where the user watches it, and reports back.",
       "Dispatch it as soon as a request needs live web information; do not answer such requests from memory or narrate that you will browse without dispatching it. Run one at a time: wait for its report before dispatching another, and give several independent lookups to one dispatch as a list.",
       "It figures out where to go on its own, so a starting URL is optional. Give it a tightly-scoped task, the exact values it needs, and exactly what to report back; it cannot ask follow-ups.",
       "It reads structured page snapshots and a classifier picks each click, fill, scroll or hover; a text model only writes what to type and the final report.",
@@ -491717,8 +493296,7 @@ function createSandBrowserUseJevSubagentConfig() {
   };
 }
 
-// ../packages/grok-bot-harness/src/runner/tools/sand-browser-use-jev/runner-factory.ts
-var BROWSER_OPERATION_HARNESS = { box: "BOX", temporal: "TEMPORAL" };
+// ../packages/grok-bot-harness/src/runner/tools/sand-browser-use-jev/main-window.ts
 var WINDOW_INDEX_RETRY = createRetryPolicy({
   name: "sand-browser-use-jev-window",
   maxAttempts: 8,
@@ -491726,6 +493304,37 @@ var WINDOW_INDEX_RETRY = createRetryPolicy({
   maxDelayMs: 4e3,
   jitter: "none"
 });
+function jevMainWindowIndexResolver(remoteBox, parentBoxId) {
+  return (ctx) => WINDOW_INDEX_RETRY.runWithRetry(async () => {
+    await remoteBox.ensureReady(ctx, parentBoxId);
+    const windowIndex = boxAgentWindowIndex(remoteBox, parentBoxId);
+    if (windowIndex === void 0) {
+      throw new Error(`no box window assigned to ${parentBoxId} yet`);
+    }
+    return windowIndex;
+  });
+}
+function leaseJevDriverCalls(driver2, lease, resolveWindowIndex) {
+  if (lease === void 0) return driver2;
+  return {
+    call: async (ctx, op, args, options2) => {
+      const acquisition = await lease.acquireAgentTool({
+        toolName: BROWSER_USE_JEV_SUBAGENT_TYPE,
+        windowIndex: await resolveWindowIndex(ctx),
+        signal: options2.signal
+      });
+      if (!acquisition.ok) return { ok: false, error: acquisition.detail };
+      try {
+        return await driver2.call(ctx, op, args, options2);
+      } finally {
+        acquisition.release();
+      }
+    }
+  };
+}
+
+// ../packages/grok-bot-harness/src/runner/tools/sand-browser-use-jev/runner-factory.ts
+var BROWSER_OPERATION_HARNESS = { box: "BOX", temporal: "TEMPORAL" };
 function createJevBrowserSubagentRunner(options2) {
   if (options2.isSubagent !== true || !isBrowserUseJevSubagentType(options2.subagentType)) {
     return void 0;
@@ -491739,19 +493348,13 @@ function createJevBrowserSubagentRunner(options2) {
   const conversationId = options2.getAgentId?.() ?? options2.agentStore?.getId();
   const agentId = options2.subagentTranscriptId ?? conversationId;
   if (agentId === void 0 || agentId === null) {
-    throw new Error("browserUseJev subagent needs an agent id for its box window");
+    throw new Error("browserUseJev subagent needs an agent id");
   }
   const remoteBox = options2.remoteBox;
   const metricsHarness = options2.metricsHarness;
   const boxId = options2.getBoxId?.() ?? conversationId ?? agentId;
-  const resolveWindowIndex = (ctx) => WINDOW_INDEX_RETRY.runWithRetry(async () => {
-    await remoteBox.ensureReady(ctx, agentId);
-    const windowIndex = boxAgentWindowIndex(remoteBox, agentId);
-    if (windowIndex === void 0) {
-      throw new Error(`no box window assigned to ${agentId} yet`);
-    }
-    return windowIndex;
-  });
+  const mainViewId = conversationId ?? agentId;
+  const resolveWindowIndex = jevMainWindowIndexResolver(remoteBox, boxId);
   const reviewMode = options2.autoReviewModes?.computer ?? "off";
   const autoReview = reviewMode === "off" ? void 0 : {
     mode: reviewMode,
@@ -491769,12 +493372,12 @@ function createJevBrowserSubagentRunner(options2) {
     subagentAgentId: agentId,
     ...conversationId == null ? {} : { conversationGroupId: conversationId },
     createDriver: async (ctx) => {
-      const connection = await remoteBox.ensureReady(ctx, agentId);
+      const connection = await remoteBox.ensureReady(ctx, boxId);
       const classifier = options2.autoReviewClassifierExecutor;
       const resourceAccessor = autoReview === void 0 || classifier === void 0 ? connection.remoteAccessor : new CombinedResourceAccessor(connection.remoteAccessor, [
         resourceEntry(smartModeClassifierExecutorResource, classifier)
       ]);
-      return new SandBrowserDriver({
+      const driver2 = new SandBrowserDriver({
         harness: metricsHarness === void 0 ? "unavailable" : BROWSER_OPERATION_HARNESS[metricsHarness],
         reportBrowserOperation: (report) => options2.browserTelemetry?.reportBrowserOperation(report),
         resourceAccessor,
@@ -491783,12 +493386,12 @@ function createJevBrowserSubagentRunner(options2) {
         getWindowIndex: resolveWindowIndex,
         ...autoReview === void 0 ? {} : { autoReview },
         getPersistImage: () => options2.persistImage,
-        getDefaultViewId: () => agentId,
+        getDefaultViewId: () => mainViewId,
         isNavigationRecoveryEnabled: options2.gates.browserNavigationRecovery
       });
+      return leaseJevDriverCalls(driver2, options2.credentialFillLease, resolveWindowIndex);
     },
-    readBoxFile: (ctx, boxPath) => remoteBox.downloadFile(ctx, agentId, boxPath),
-    releaseWindow: (ctx) => remoteBox.releaseWindow?.(ctx, agentId) ?? Promise.resolve(),
+    readBoxFile: (ctx, boxPath) => remoteBox.downloadFile(ctx, boxId, boxPath),
     typeSafe: deps.typeSafe,
     inference: options2.inference,
     modelId: deps.modelId,
@@ -494044,6 +495647,7 @@ var SAND_RUNNER_GATE_DEFAULTS = {
   memoryFactsInUserInfo: false,
   browserNavigationRecovery: false,
   browserUsePlaywright: false,
+  browserUsePlaywrightProxy: false,
   browserUseJev: false,
   userForm: false,
   formVault: false,
@@ -494075,6 +495679,7 @@ var SAND_RUNNER_GATE_DEFAULTS = {
    */
   cloudAgentReplyModes: false,
   cloudAgentPublishRepository: false,
+  originBuiltinMounted: false,
   cloudAgentExchange: false,
   cloudCanvasTools: false,
   lessSubagentFanout: false,
@@ -494159,6 +495764,7 @@ var SUBAGENT_GATE_POLICY = {
   memoryFactsInUserInfo: "inherited",
   browserNavigationRecovery: "inherited",
   browserUsePlaywright: "inherited",
+  browserUsePlaywrightProxy: "inherited",
   browserUseJev: "inherited",
   userForm: "default",
   formVault: "default",
@@ -494175,6 +495781,7 @@ var SUBAGENT_GATE_POLICY = {
   cloudAgentDurableWatch: "inherited",
   cloudAgentReplyModes: "inherited",
   cloudAgentPublishRepository: "inherited",
+  originBuiltinMounted: "inherited",
   cloudAgentExchange: "default",
   cloudCanvasTools: "default",
   lessSubagentFanout: "default",
@@ -494668,7 +496275,8 @@ var BROWSER_USE_JEV_REVIVAL_INSTRUCTION = "These are browser reports for what th
 function buildSubagentRevival(completions, context2) {
   return {
     prompt: buildSubagentRevivalPrompt(completions, context2),
-    settledDelegations: settledDelegationsOf(completions)
+    settledDelegations: settledDelegationsOf(completions),
+    finishedWork: completions.filter((completion) => completion.quietOrigin == null).map((completion) => ({ title: completion.title, isFailed: completion.status === "error" }))
   };
 }
 function buildSubagentRevivalPrompt(completions, context2) {
@@ -494739,13 +496347,17 @@ function connectorCardEmissionToMessage(emission) {
   };
 }
 var BOX_HELP_HANDOFF_MECHANICS = 'Pass one short instruction (no paragraph); the box is surfaced with a "hand back to agent" button and that instruction is shown in chat, then your turn ends. The user does the step on the box and hands it back, and you are resumed automatically, so start by using the read-only Screenshot tool to see what they changed.';
+var BOX_HELP_SUPERSEDE_MECHANICS = "If the user still holds the box from an earlier request, calling this again replaces that request with the new instruction instead of adding a second one.";
+function boxHelpHandoffMechanics(deps) {
+  return deps.supersedesPending === true ? `${BOX_HELP_HANDOFF_MECHANICS} ${BOX_HELP_SUPERSEDE_MECHANICS}` : BOX_HELP_HANDOFF_MECHANICS;
+}
 var BOX_HELP_CLASSIFICATION = "For classification: domain is the destination app being accessed; when the browser has redirected to an SSO/IdP page (Okta, Google accounts, \u2026), still put the destination app in domain and put the IdP host in idp_domain.";
 function createRequestBoxHelpTool(deps) {
   let pendingHandoff = Promise.resolve();
   return defineCommunicateTool(deps, {
     id: "REQUEST_BOX_HELP",
     name: "request_box_help",
-    description: () => deps.credentialFillEnabled === true && deps.loginFormFirst?.() === true ? `Hand your box's desktop to the user for a step only they can do: SSO, a passkey, 2FA, a puzzle or image captcha, payment confirmation, or a sign-in the user prefers to do themselves. At a plain username/password login, call ListCredentials first; its result says how to ask for that login. Not for a verification-code page when that result said the login's one-time code is filled for you: hand off only if the page is still asking after about a minute. ${BOX_HELP_HANDOFF_MECHANICS} When the user signs in on the box, you never see their password or 2FA. ${BOX_HELP_CLASSIFICATION}` : "Hand your box's desktop to the user for a step only they can do: a login, SSO, passkey, 2FA, a puzzle or image captcha, or payment confirmation. " + (deps.credentialFillEnabled === true ? "Not for a verification-code page when the login just filled carries a one-time code in 1Password: that code is filled for the subagent, so hand off only if the page is still asking after about a minute. " : "") + `${BOX_HELP_HANDOFF_MECHANICS} Use this instead of asking for credentials: the user signs in themselves on the box and you never see their password or 2FA. ${BOX_HELP_CLASSIFICATION}`,
+    description: () => deps.credentialFillEnabled === true && deps.loginFormFirst?.() === true ? `Hand your box's desktop to the user for a step only they can do: SSO, a passkey, 2FA, a puzzle or image captcha, payment confirmation, or a sign-in the user prefers to do themselves. At a plain username/password login, call ListCredentials first; its result says how to ask for that login. Not for a verification-code page when that result said the login's one-time code is filled for you: hand off only if the page is still asking after about a minute. ${boxHelpHandoffMechanics(deps)} When the user signs in on the box, you never see their password or 2FA. ${BOX_HELP_CLASSIFICATION}` : "Hand your box's desktop to the user for a step only they can do: a login, SSO, passkey, 2FA, a puzzle or image captcha, or payment confirmation. " + (deps.credentialFillEnabled === true ? "Not for a verification-code page when the login just filled carries a one-time code in 1Password: that code is filled for the subagent, so hand off only if the page is still asking after about a minute. " : "") + `${boxHelpHandoffMechanics(deps)} Use this instead of asking for credentials: the user signs in themselves on the box and you never see their password or 2FA. ${BOX_HELP_CLASSIFICATION}`,
     parameters: requestBoxHelpParameters,
     execute: async (ctx, args, d) => {
       ctx.signal.throwIfAborted();
@@ -494778,6 +496390,9 @@ function createRequestBoxHelpTool(deps) {
         ctx.signal.throwIfAborted();
         if (outcome.kind === "already-pending") {
           return `The user still has the box. You handed it to them for "${outcome.instruction}" and they haven't handed it back, so this request was NOT sent. Asking twice would put a second copy of the same request in their chat. Do not ask again. If you have something to tell them (what you're waiting on, or that you need a different step), say it with SendToUser; otherwise just wait, and you'll be resumed automatically when they hand the box back.`;
+        }
+        if (outcome.superseded !== void 0) {
+          return `Handed the box to the user. This replaced your earlier request ("${outcome.superseded.instruction}"), which is now dismissed, so their chat shows only this one. They have control now; wait for them to hand it back, and you'll be resumed automatically.`;
         }
         return "Handed the box to the user. They have control now; wait for them to hand it back, and you'll be resumed automatically.";
       });
@@ -494894,63 +496509,154 @@ function sandSlidesChildSystemPrompt(args = {}) {
 
 ${SLIDES_SUBAGENT_PROMPT}`;
 }
-var SLIDES_SUBAGENT_PROMPT = [
-  "You build and edit slide decks on the box. You cannot talk to the user. The parent agent talks to them and shows them your PNGs.",
-  "",
-  "The dispatch prompt is the whole brief: the tool, house style or template path, the outline or that this is a one-shot, and what to return. Do not wait for the user. Do not ask follow-ups.",
-  "",
-  "## Tool",
-  "",
-  "Use the tool named in the brief. Edit locally with python-pptx even when the destination is Google Slides. Install it first:",
-  "",
-  "`pip install python-pptx`",
-  "",
-  "LibreOffice is already on the box.",
-  "",
-  "## Look",
-  "",
-  "After you write or change slides, render with these exact commands (working file is `deck.pptx`; copy or save the local `.pptx` to that name if needed):",
-  "",
-  "```",
-  "soffice --headless --convert-to pdf --outdir /tmp deck.pptx",
-  "pdftoppm -png -r 140 /tmp/deck.pdf renders/slide",
-  "```",
-  "",
-  "PNGs land as `renders/slide-01.png`, `renders/slide-02.png`, \u2026. Read those files. That is how you look. Judge them as if you were about to present \u2014 not a glance, a pass. Fix what you see. Render again until you would stand behind the slide.",
-  "",
-  "Work in passes of two or three slides. After each pass, read the new PNGs and fix them before the next pass.",
-  "",
-  "## Job",
-  "",
-  "- New deck with a house style: copy the template or match the named deck, then build the outline.",
-  "- New deck with no house style: pick one direction from the brief and build it. Do not invent a second sample and wait.",
-  "- Edit an existing deck: open it, look at the target slides, change them, look again.",
-  "",
-  "A one-shot brief skips outline and design stops. You still render and judge every 2\u20133 slides with the same rigor.",
-  "",
-  "## Build",
-  "",
-  "Prefer the deck's layouts and placeholders. Type into existing text. A title-and-body layout is the default for a list or a block of copy. Mix the layouts the house style already has. One idea per slide. Titles that can be read from the back of a room. Do not stamp the same slide five times.",
-  "",
-  "Check when you look:",
-  "",
-  "- Text sits on the slide, with margin",
-  "- Type and color match the house style",
-  "- Bullet glyphs are smaller than the text beside them",
-  "- Alignment and gaps look even. Nearby slides share a scale",
-  "- It still reads as a slide, not a clone of the slide before it",
-  "",
-  "## Return",
-  "",
-  "Your final message lists the box paths the parent should send: the `.pptx` and the `renders/slide-0N.png` files from this pass. Keep those files on the box. Do not upload them. Do not address the user."
-].join("\n");
+var SLIDES_SUBAGENT_PROMPT = `You build and edit slide decks on the box. You cannot talk to the user. The parent agent talks to them and shows them your PNGs.
+
+The dispatch prompt is the whole brief: the tool, house style or template path, the outline or that this is a one-shot, and what to return. Do not wait for the user. Do not ask follow-ups.
+
+## Workflow
+
+| Situation | Action |
+|-----------|--------|
+| Brief names or attaches a \`.pptx\` / template / live deck | Edit that named file in place with python-pptx. Never start a blank pptxgenjs deck. |
+| New deck, no template in the brief | Create from scratch with pptxgenjs. Ignore leftover \`.pptx\` files from earlier jobs. |
+| Read or analyze an existing deck | Open it with python-pptx and look at LibreOffice PNGs. |
+
+When in doubt: follow the brief. A leftover \`deck.pptx\` from an earlier run is not a template. The create path is a new-deck brief with no named file.
+
+Use the destination named in the brief (PowerPoint, Google Slides, Figma, HTML). The working file on the box is still \`.pptx\`.
+
+## Tools
+
+Install before the first write. These three are the loop.
+
+\`\`\`
+pip install python-pptx
+\`\`\`
+
+For a new deck, make a per-deck folder and install pptxgenjs there so it stays next to the \`.js\` file:
+
+\`\`\`
+mkdir deck && cd deck
+npm init -y
+npm install pptxgenjs
+\`\`\`
+
+LibreOffice (\`soffice\`) and Poppler (\`pdftoppm\`) are already on the box.
+
+- **pptxgenjs** \u2014 new deck, no template. In that folder, write \`presentation.js\` and run \`node presentation.js\`.
+- **python-pptx** \u2014 edit a template or live deck. Also the read/inspect path. \`from pptx import Presentation\`, change shapes and text in place, save.
+- **LibreOffice** \u2014 the only way you look. \`soffice\` to PDF, then \`pdftoppm\` to PNG. Read those PNGs.
+
+Install extra packages when they help (Chart.js, image tools, fonts). Use the real package APIs. Write the generator or edit script you need for this brief.
+
+## Look
+
+After you write or change slides, copy or save the working file as \`deck.pptx\`. Look in a fresh \`/tmp/look-\` directory \u2014 PDF and PNGs for this pass live there:
+
+\`\`\`
+id=$(python3 -c 'import uuid; print(uuid.uuid4().hex)')
+mkdir -p "/tmp/look-$id"
+soffice --headless --convert-to pdf --outdir "/tmp/look-$id" deck.pptx
+pdftoppm -png -r 140 "/tmp/look-$id/deck.pdf" "/tmp/look-$id/slide"
+\`\`\`
+
+PNGs land as \`/tmp/look-$id/slide-1.png\`, \`/tmp/look-$id/slide-2.png\`, \u2026 (zero-padded from slide 10). Read those files. That is how you look. Do not use a browser, Drive thumbnails, or a screenshot of a whole slide pasted onto another slide.
+
+Judge them as if you were about to present \u2014 not a glance, a pass. Your first render is almost never correct. If you found zero issues, look again.
+
+Find:
+
+- Overlapping elements (text through shapes, lines through words, stacked elements)
+- Text overflow or cut off at edges or box boundaries
+- Leftover template / placeholder copy
+- Elements closer than about 0.3 in, or cards nearly touching
+- Uneven gaps (a field of empty slide next to a cramped block)
+- Margin from the slide edge under about 0.5 in
+- Columns or repeated blocks that do not share an alignment or scale
+- Low-contrast type or icons against the background
+- Text boxes so narrow the copy wraps into a stack of orphans
+- Unicode \`\u2022\` instead of a real list
+- Nearby slides that are the same layout stamped again
+
+List what you see. Fix it. Render the affected slides again. One fix often creates another problem. Do not call the pass done until a full look finds nothing new.
+
+Work in passes of two or three slides. After each pass, read the new PNGs and fix them before the next pass.
+
+## Job
+
+- New deck with a house style: copy the template \`.pptx\` onto the box, then build the outline in that file with python-pptx.
+- New deck with no house style: pick one direction from the brief and build it with pptxgenjs. Do not invent a second sample and wait.
+- Edit an existing deck: open that file, look at the target slides, change them, look again.
+
+A one-shot brief skips outline and design stops. You still render and judge every 2\u20133 slides with the same rigor.
+
+# Edit \u2014 python-pptx
+
+When a template or live deck is on the box, edit that file. The visual style is the file: backgrounds, shapes, media, colors, fonts, placeholders. Starting \`new pptxgen()\` throws that away.
+
+Keep the template's pictures, fonts, and layouts. Type into existing text frames. Prefer existing placeholders. When you need another slide in the same house style, add one from an existing layout and copy text and media onto it so pictures stay attached.
+
+Do not restyle a named template to match the topic. If the template is red and the brief is green energy, keep the red.
+
+Preserve original font names on text runs even when the box cannot render them. A missing-font preview is a look problem, not a reason to rewrite \`Calibri\` to \`Liberation Sans\`.
+
+Delete leftover template / preloaded reference slides after you copy. Replace every piece of template copy you are not keeping \u2014 titles, body, footers, captions, grouped shapes. Mix the layouts the house style already has. Do not stamp the same slide five times.
+
+A title-and-body layout is the default for a list or a block of copy. One idea per slide. Titles that can be read from the back of a room.
+
+Use real list bullets from the paragraph font (\`pPr\` / \`buFont\` / python-pptx \`level\` + font), not a superscript or unicode \`\u2022\`.
+
+Tables when the content is a table. Charts as images you render on the box (Chart.js or similar) and embed, or as python-pptx charts when the template already has one to refill.
+
+Inspect before you write: walk slides and shapes, print layout names, placeholder types, and the text you must replace. Then look at the PNGs. Then edit. Then look again.
+
+When the source has fewer items than the template (3 names, 4 cards), delete the extra card \u2014 shape plus its text \u2014 do not leave an empty box.
+
+# Create \u2014 pptxgenjs
+
+Use this path when the brief is a new deck and does not name a template. A leftover \`deck.pptx\` from an earlier job is not a template \u2014 \`npm init -y\` and \`npm install pptxgenjs\` in a per-deck folder, write \`presentation.js\` there, and run \`node presentation.js\`. Do not write a python-pptx generator for a blank deck.
+
+Pick one visual direction from the brief (palette, type pairing, density) and commit to it across the deck.
+
+\`\`\`javascript
+const pptxgen = require("pptxgenjs");
+
+const pres = new pptxgen();
+pres.layout = "LAYOUT_WIDE"; // 13.3 in \xD7 7.5 in. Or LAYOUT_16x9 (10 \xD7 5.625), LAYOUT_16x10, LAYOUT_4x3.
+pres.author = "Grok";
+pres.title = "Presentation Title";
+
+const slide = pres.addSlide();
+slide.addText("Hello World", { x: 0.5, y: 0.5, w: 12, h: 1, fontSize: 36, color: "363636", bold: true });
+
+pres.writeFile({ fileName: "deck.pptx" });
+\`\`\`
+
+Read the canvas size off the brief or the house style. PowerPoint widescreen is 13.333 \xD7 7.5 in (\`LAYOUT_WIDE\`). Google Slides default 16:9 is 10 \xD7 5.625 in. Same ratio, different inches. A 140 dpi render of 13.333 \xD7 7.5 is about 1867 \xD7 1050.
+
+Hex colors are \`"FF0000"\`. \`bullet: true\` for lists. \`breakLine: true\` between array items. Fresh \`new pptxgen()\` per deck and a fresh options object per shape. Keep image aspect ratios.
+
+## Build
+
+Use the whole slide. Empty fields and tiny islands of type are misses. A slide someone would present. Type scale matches the house layouts. Lean into a figure when a figure carries the point.
+
+Check when you look:
+
+- Text sits on the slide, with margin
+- Type and color match the house style
+- Bullet glyphs are smaller than the text beside them
+- Alignment and gaps look even. Nearby slides share a scale
+- It still reads as a slide, not a clone of the slide before it
+
+## Return
+
+Your final message lists the box paths the parent should send: the \`.pptx\` and this pass's \`/tmp/look-$id/slide-N.png\` files. Keep those files on the box. Do not upload them. Do not address the user.`;
 function slidesSubagentDescription() {
   return [
-    "Build or edit a presentation on the box with python-pptx. Use when they want a deck, slides, or a presentation.",
+    "Build or edit a presentation on the box. Use when they want a deck, slides, or a presentation.",
     "It runs headless and cannot talk to the user; it reports box paths back to you, and you SendToUser the PNGs.",
     "Give it a self-contained brief: the tool (PowerPoint, Google Slides, Figma, HTML), house style or template path, the outline or that this is a one-shot, and what to return.",
-    "It writes a .pptx, renders PNGs with LibreOffice, and lists those paths. You stay with the user.",
-    "It runs in the background like any Task: you are notified when it finishes, so do not poll or await it."
+    "It writes a .pptx with pptxgenjs or python-pptx, looks with LibreOffice PNGs, and lists those paths. You stay with the user."
   ].join(" ");
 }
 function createSandSlidesSubagentConfig() {
@@ -495890,6 +497596,9 @@ var uploadFileObjectSchema = external_exports.object({
     name: external_exports.string().trim().optional().describe("File name at the destination. Defaults to the source file's name."),
     overwrite: external_exports.boolean().optional().describe(
       "OneDrive only: replace a file that already exists at the destination. Default false: an existing file makes the upload fail so you can pick another name."
+    ),
+    convertToGoogleFormat: external_exports.boolean().optional().describe(
+      "Google Drive only: if the file has a Google Workspace equivalent, upload it as that native type on this create (pptx/ppt/odp \u2192 Slides, docx/doc/odt/rtf/html/md/txt \u2192 Docs, xlsx/xls/ods/csv/tsv \u2192 Sheets). Types Drive cannot import stay as the original file. Default false. Other connections ignore this."
     )
   }).default({}).describe(
     "Where the file lands. Which fields apply depends on the connection; see the description."
@@ -495936,7 +497645,8 @@ function normalizeDestination(destination) {
     ...folderId === void 0 ? {} : { folderId },
     ...draftId === void 0 ? {} : { draftId },
     ...destination.name === void 0 ? {} : { name: destination.name },
-    ...destination.overwrite === void 0 ? {} : { overwrite: destination.overwrite }
+    ...destination.overwrite === void 0 ? {} : { overwrite: destination.overwrite },
+    ...destination.convertToGoogleFormat === void 0 ? {} : { convertToGoogleFormat: destination.convertToGoogleFormat }
   };
 }
 function normalizeSourcePath(raw) {
@@ -495993,7 +497703,7 @@ function describeUploadFileOutcome(outcome, request3) {
 var UPLOAD_FILE_DESCRIPTION = [
   "Send a file from your computer to one of the user's connected services using the account they already connected. The file's bytes go straight from your computer to the service: you never read or paste them, so this works for any size or type up to the limit, and it is the right tool whenever the user wants a file you made or downloaded to land in one of these services. Do not read a file and re-create it with that service's own tools; upload it. The result names the created item and, where the service provides one, a link you can hand to the user.",
   CONNECTOR_CONNECTION_ARGUMENT_DESCRIPTION,
-  '- Google Drive: destination.path is a folder path from My Drive root (e.g. "Reports/2026"; the folders must already exist), or destination.folderId is a Drive folder id from the Drive listing tools. Omit both for My Drive root. A new file is always created; Drive allows several files with one name.',
+  '- Google Drive: destination.path is a folder path from My Drive root (e.g. "Reports/2026"; the folders must already exist), or destination.folderId is a Drive folder id from the Drive listing tools. Omit both for My Drive root. A new file is always created; Drive allows several files with one name. destination.convertToGoogleFormat, when true, asks Drive to import a convertible Office or text file as native Docs, Sheets, or Slides on that same create (pptx \u2192 Slides, docx \u2192 Docs, xlsx \u2192 Sheets). Types Drive cannot import stay as the original file. The result mimeType tells you which landed. Default false.',
   '- OneDrive: destination.path is a folder path from the OneDrive root (e.g. "Documents/Reports"; the folders must already exist), or destination.folderId is a folder item id from list_drive_items. Omit both for the root. An existing file with the same name fails the upload unless destination.overwrite is true.',
   "- Gmail: destination.draftId is the draft id create_draft returned (or one from list_drafts); the file is attached to that draft and the draft id stays the same, so send it afterwards with send_message and that draftId. Attach last: Gmail's update_draft removes every attachment it is not handed again, so finish recipients, subject and body before calling upload_file, and never call update_draft on a draft that already has an attachment (make a new draft and attach again instead). Never put a file's contents into create_draft or send_message attachments yourself; that path cannot carry a real file. The draft with its attachments must stay under 25 MB.",
   "destination.name sets the file name; it defaults to the source file's name. A connection that cannot receive files answers with the ones that can."
@@ -496081,7 +497791,8 @@ function reviewArguments(target) {
     ...target.destination.folderId === void 0 ? {} : { destination_folder_id: target.destination.folderId },
     ...target.destination.draftId === void 0 ? {} : { destination_draft_id: target.destination.draftId },
     ...target.destination.name === void 0 ? {} : { destination_name: target.destination.name },
-    ...target.destination.overwrite === void 0 ? {} : { overwrite: target.destination.overwrite }
+    ...target.destination.overwrite === void 0 ? {} : { overwrite: target.destination.overwrite },
+    ...target.destination.convertToGoogleFormat === void 0 ? {} : { convert_to_google_format: target.destination.convertToGoogleFormat }
   };
 }
 function buildSandConnectorUploadRiskTarget(args) {
@@ -496199,7 +497910,7 @@ function offersConnectorFileTools(args) {
 }
 
 // ../packages/grok-bot-harness/src/runner/cookie-origin-approval-cards.ts
-var import_node_crypto38 = require("node:crypto");
+var import_node_crypto39 = require("node:crypto");
 
 // src/shared/chrome-import/chrome-import.ts
 function brandParsedString(raw) {
@@ -496310,7 +498021,7 @@ function withCookieOriginApprovalCards(port, host) {
   return {
     request: async (request3) => {
       if (request3.origins.length === 0) return await port.request(request3);
-      const requestId = (0, import_node_crypto38.randomUUID)();
+      const requestId = (0, import_node_crypto39.randomUUID)();
       host.transport?.onUpdate({
         type: "send-message",
         message: {
@@ -496469,7 +498180,7 @@ async function reviewSandAutomationWrite(args) {
 }
 
 // ../packages/grok-bot-harness/src/runner/sand-cloud-agent-auto-review.ts
-var import_node_crypto39 = require("node:crypto");
+var import_node_crypto40 = require("node:crypto");
 var SAND_CLOUD_AGENT_CLASSIFIER_TARGET_ACTION = "sand_cloud_agent";
 var SAND_CLOUD_AGENT_CLASSIFIER_ERROR_REASON = "An error occurred while reviewing this cloud agent action. Please review manually.";
 var SAND_CLOUD_AGENT_AUTO_REVIEW_ACTIONS = [
@@ -496489,7 +498200,7 @@ function describeSandCloudAgentReviewImages(urls, images) {
     url: image2.path ?? urls[index] ?? `image-${index}`,
     ...image2.mimeType !== void 0 ? { mimeType: image2.mimeType } : {},
     byteLength: image2.data.byteLength,
-    sha256: (0, import_node_crypto39.createHash)("sha256").update(image2.data).digest("hex")
+    sha256: (0, import_node_crypto40.createHash)("sha256").update(image2.data).digest("hex")
   }));
 }
 function describeSandCloudAgentReviewFiles(files) {
@@ -496499,7 +498210,7 @@ function describeSandCloudAgentReviewFiles(files) {
     filename: file.filename,
     mimeType: file.mimeType,
     byteLength: file.data.byteLength,
-    sha256: (0, import_node_crypto39.createHash)("sha256").update(file.data).digest("hex")
+    sha256: (0, import_node_crypto40.createHash)("sha256").update(file.data).digest("hex")
   }));
 }
 function buildSandCloudAgentReviewTarget(args, attachments = {}) {
@@ -496651,6 +498362,25 @@ async function reviewSandCloudAgentAction(args) {
   return decision.allowed === false ? decision : { allowed: true };
 }
 
+// ../packages/grok-bot-harness/src/runner/tools/browser/playwright-unsafe-code-tool-deps.ts
+function playwrightUnsafeCodeToolDeps(host) {
+  return {
+    playwrightRuntime: () => host.gates.browserUsePlaywrightProxy({ logExposure: true }) ? "proxy" : "direct",
+    resolvePlaywrightUnsafeCodeAdmission: async (ctx) => {
+      if (!host.gates.browserUsePlaywrightProxy()) {
+        return { kind: "refused", reason: "runtime_unavailable" };
+      }
+      if (host.activeTurnRequestSource() !== "turn" || host.isAutomationSubagent || host.isParentMediatedAutomationSubagent) {
+        return { kind: "refused", reason: "unattended_turn" };
+      }
+      return await host.resolvePlaywrightUnsafeCodeAdmission?.(ctx) ?? {
+        kind: "refused",
+        reason: "runtime_unavailable"
+      };
+    }
+  };
+}
+
 // ../packages/grok-bot-harness/src/runner/tools/cloud-canvas-gate.ts
 function cloudCanvasToolsGateEligible(host) {
   return !host.isBoxScopedSubagent && host.gates.cloudCanvasTools();
@@ -496742,7 +498472,7 @@ var declaredPurposes = createCounter("grok_bot.turn.outbound_call_purpose", {
 var SAND_OUTBOUND_CALL_PURPOSE_REFUSED_REASON = "Grok Bot does not place calls whose purpose is to sell, pitch, or promote something to the person who answers. Nothing was dialled and no approval was requested. Do not place this call under a different purpose or a reworded script; tell the user that calls cannot be used for this.";
 var MAX_SPOKEN_INSTRUCTIONS_LENGTH = 320;
 var placePhoneCallParameters = external_exports.object({
-  to: external_exports.string().trim().regex(E1642, "must be an E.164 phone number such as +16508228863").describe("The destination phone number to call, in E.164 format (for example +16508228863)."),
+  to: external_exports.string().trim().regex(E1642, "must be an E.164 phone number such as +14155550142").describe("The destination phone number to call, in E.164 format (for example +14155550142)."),
   purpose: external_exports.enum(SAND_OUTBOUND_CALL_PURPOSES).describe(
     "What this call is for. Calls whose purpose is to sell, pitch, promote, or solicit interest in a product, service, investment, or opportunity are not placed, and a message that introduces an offer to the person answering counts as selling however it is framed."
   ),
@@ -497128,6 +498858,7 @@ function createTurnPerformanceObservation({
   turnStartedAt,
   traceMarks,
   requestSource,
+  onFirstRequestStart,
   clock = realClock
 }) {
   let active = true;
@@ -497262,6 +498993,7 @@ function createTurnPerformanceObservation({
       if (!firstRequestStarted) {
         firstRequestStarted = true;
         firstRequestAt = requestStartedAt;
+        if (onFirstRequestStart !== void 0) safelyObserve(requestCtx, onFirstRequestStart);
         turnTtfi.histogram(requestCtx, requestStartedAt - startedAt, { harness });
         if (harness === "temporal" && activityStartedAt !== void 0) {
           turnActivityTtfi.histogram(requestCtx, requestStartedAt - activityStartedAt, {
@@ -499521,7 +501253,7 @@ var recallMemoryParameters = external_exports.object({
 var recallMemoryUserBotParameters = external_exports.object({
   query,
   scope: external_exports.enum(RECALL_MEMORY_USER_BOT_SCOPES).optional().catch(void 0).describe(
-    'Which memory to search: "agent" is your own memory, "user" is the shared user memory every assistant of this user contributes to, "user_bot" is your notes with this person, "all" (default) is every one of them.'
+    'Which memory to search: "agent" is your team-wide memory, "user" is the shared user memory every assistant of this person contributes to, "user_bot" is your notes with this person, kept between the two of you, "all" (default) is every one of them.'
   ),
   limit
 });
@@ -499561,13 +501293,13 @@ function collectRecallMemoryCandidates(deps, scope) {
 function scopeLabel(scope, userBotOffered2) {
   switch (scope) {
     case "agent":
-      return "your memory";
+      return userBotOffered2 ? "your team-wide memory" : "your memory";
     case "user":
       return "the shared user memory";
     case "user_bot":
       return "your notes with this person";
     case "all":
-      return userBotOffered2 ? "your memory, your notes with this person and the shared user memory" : "your memory and the shared user memory";
+      return userBotOffered2 ? "your team-wide memory, your notes with this person and the shared user memory" : "your memory and the shared user memory";
   }
 }
 function candidateProvenance(candidate) {
@@ -500689,7 +502421,7 @@ init_computer_use_tool_pb();
 init_zod();
 
 // ../packages/grok-bot-harness/src/runner/tools/computer-operation-observation.ts
-var import_node_crypto40 = require("node:crypto");
+var import_node_crypto41 = require("node:crypto");
 init_dist();
 var attempts = createCounter("sand.computer.operation.attempt", {
   description: "Terminal Computer and Screenshot tool execution attempts, including admission failures",
@@ -500704,7 +502436,7 @@ var ComputerOperationObservation = class {
     this.options = options2;
     this.clock = options2.clock ?? realClock;
     this.startedAt = this.clock.monotonicNow();
-    this.attemptId = (0, import_node_crypto40.randomUUID)();
+    this.attemptId = (0, import_node_crypto41.randomUUID)();
   }
   options;
   stage = "admission";
@@ -502438,7 +504170,7 @@ init_dist();
 init_zod();
 
 // ../packages/grok-bot-harness/src/runner/tools/messages-grants-gate.ts
-var import_node_crypto41 = require("node:crypto");
+var import_node_crypto42 = require("node:crypto");
 init_dist();
 
 // src/shared/messages/permissions.ts
@@ -502485,7 +504217,7 @@ function messagesGrantsMissingMessage(grants) {
 var logger105 = createLogger("sand:messages-grants-gate");
 function messagesGrantsAskKey(ctx) {
   const toolCallId = ctx.get(sandLocalToolScopeKey)?.toolCallId;
-  if (toolCallId === void 0) return (0, import_node_crypto41.randomUUID)();
+  if (toolCallId === void 0) return (0, import_node_crypto42.randomUUID)();
   return `messages-grants:${toolCallId}`;
 }
 async function refusingAbortedTransport(ctx, run) {
@@ -503540,11 +505272,11 @@ function createTeamPublishTool(deps) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/sand-sort-memories-tool.ts
-var import_node_crypto43 = require("node:crypto");
+var import_node_crypto44 = require("node:crypto");
 init_zod();
 
 // ../packages/grok-bot-harness/src/runner/memory-file-format.ts
-var import_node_crypto42 = require("node:crypto");
+var import_node_crypto43 = require("node:crypto");
 init_zod();
 var MEMORY_PROFILE_HEADER = [
   "# About the user",
@@ -503561,7 +505293,7 @@ var MEMORY_LOG_HEADER = [
   ""
 ].join("\n");
 function memoryIdFor(content) {
-  return (0, import_node_crypto42.createHash)("sha1").update(memoryDedupeKey(content)).digest("hex").slice(0, 16);
+  return (0, import_node_crypto43.createHash)("sha1").update(memoryDedupeKey(content)).digest("hex").slice(0, 16);
 }
 var MEMORY_EVIDENCE_FILE = /^([0-9a-f-]{36})\.json$/;
 function memoryEvidenceFileName(id) {
@@ -503605,13 +505337,13 @@ var secretPickList = external_exports.array(secretPick).max(PICK_MAX).default([]
 var pluginPickList = external_exports.array(pluginPick).max(PICK_MAX).default([]);
 var carryOverParameters = external_exports.object({
   secrets: secretPickList.describe(
-    "Secrets from the inventory that the team bot's skills or routines use, each with its reason; they come ticked on the card."
+    "Secrets from the inventory that the Team Bot's skills or routines use, each with its reason; they come ticked on the card."
   ),
   plugins: pluginPickList.describe(
-    `Plugins from the inventory the team bot's job clearly needs, only the ones you are sure of and ${SAND_CARRY_OVER_PLUGINS_MAX} at most, surest first, each with its reason; they come ticked on the card.`
+    `Plugins from the inventory the Team Bot's job clearly needs, only the ones you are sure of and ${SAND_CARRY_OVER_PLUGINS_MAX} at most, surest first, each with its reason; they come ticked on the card.`
   ),
   suggestions: pluginPickList.describe(
-    `Up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} more plugins from the inventory the team bot would likely need next, each with its reason; they come unticked under the picks, and none is fine.`
+    `Up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} more plugins from the inventory the Team Bot would likely need next, each with its reason; they come unticked under the picks, and none is fine.`
   )
 });
 function firstPickOfEachName(picks2) {
@@ -503645,7 +505377,7 @@ function createCarryOverTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_CARRY_OVER_TOOL_NAME,
-    description: `Propose which of the owner's plugins and secrets (by name) the team bot should have, from the inventory in your instructions. The secrets and up to ${SAND_CARRY_OVER_PLUGINS_MAX} plugins come ticked on the owner's card and up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} suggestions come unticked, each with a short reason; the owner decides on the card and their desktop does the copying, so this call copies nothing and you never see a secret value.`,
+    description: `Propose which of the owner's plugins and secrets (by name) the Team Bot should have, from the inventory in your instructions. The secrets and up to ${SAND_CARRY_OVER_PLUGINS_MAX} plugins come ticked on the owner's card and up to ${SAND_CARRY_OVER_SUGGESTIONS_MAX} suggestions come unticked, each with a short reason; the owner decides on the card and their desktop does the copying, so this call copies nothing and you never see a secret value.`,
     parameters: carryOverParameters,
     describeActivity: () => ({ detail: "propose" }),
     execute: async (_ctx, args, d) => await d.onProposal(carryOverProposalOf(args))
@@ -503679,10 +505411,10 @@ var skillItem = external_exports.object({
 var skillItemList = external_exports.array(skillItem).max(ITEM_MAX).default([]);
 var skillsParameters = external_exports.object({
   skills: skillItemList.describe(
-    `Skills the team bot should have, up to ${SAND_SKILLS_MAX.toString()}: copies of the owner's skills named exactly as listed, or new skills each with a description and a body; they come ticked on the card.`
+    `Skills the Team Bot should have, up to ${SAND_SKILLS_MAX.toString()}: copies of the owner's skills named exactly as listed, or new skills each with a description and a body; they come ticked on the card.`
   ),
   suggestions: skillItemList.describe(
-    `Up to ${SAND_SKILLS_SUGGESTIONS_MAX.toString()} more skills the team bot may want, copies or new; they come unticked under the picks, and none is fine.`
+    `Up to ${SAND_SKILLS_SUGGESTIONS_MAX.toString()} more skills the Team Bot may want, copies or new; they come unticked under the picks, and none is fine.`
   )
 });
 function slugOf(name17) {
@@ -503726,13 +505458,13 @@ function unknownSkillMessage(name17, library) {
   return `Nothing was proposed: "${name17}" is not one of the owner's skills${names3.length > 0 ? ` (${names3})` : ""}, so it needs a body to be a new skill. Call propose_skills again with the body, or leave it out.`;
 }
 function unusableSkillMessage(name17) {
-  return `Nothing was proposed: "${name17}" has no letters or digits the team bot can store a skill under (a-z, 0-9, hyphens). Call propose_skills again with an ASCII name for a new skill, or leave it out.`;
+  return `Nothing was proposed: "${name17}" has no letters or digits the Team Bot can store a skill under (a-z, 0-9, hyphens). Call propose_skills again with an ASCII name for a new skill, or leave it out.`;
 }
 function createSkillsTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_SKILLS_TOOL_NAME,
-    description: `Propose the skills the team bot should have: copies of the owner's skills (by name, from the list in your instructions) and new skills (name, one-line description, SKILL.md body). The skills come ticked on the owner's card and up to ${SAND_SKILLS_SUGGESTIONS_MAX.toString()} suggestions come unticked; the owner decides on the card and their desktop writes what they tick, so this call writes nothing.`,
+    description: `Propose the skills the Team Bot should have: copies of the owner's skills (by name, from the list in your instructions) and new skills (name, one-line description, SKILL.md body). The skills come ticked on the owner's card and up to ${SAND_SKILLS_SUGGESTIONS_MAX.toString()} suggestions come unticked; the owner decides on the card and their desktop writes what they tick, so this call writes nothing.`,
     parameters: skillsParameters,
     describeActivity: () => ({ detail: "propose" }),
     execute: async (_ctx, args, d) => {
@@ -503793,7 +505525,7 @@ function sortMemoriesConfirmationCode({
   toPrivate
 }) {
   const ids = (records2) => records2.map((r) => r.id).sort();
-  return (0, import_node_crypto43.createHash)("sha1").update(JSON.stringify([ids(toTeam), ids(toPrivate)])).digest("hex").slice(0, 10);
+  return (0, import_node_crypto44.createHash)("sha1").update(JSON.stringify([ids(toTeam), ids(toPrivate)])).digest("hex").slice(0, 10);
 }
 function annotated(found, named) {
   const byName = new Map(
@@ -504168,7 +505900,7 @@ var TEAM_BOT_OPERATIONS = {
     delete: "(id = the slug from the skill's catalog path, the folder under skills/, or that path itself). Removes the team skill for everyone; only the bot owner can. Cursor-managed and other plugins' skills can't be edited or deleted; only this bot's own bot-skills entries can."
   },
   profile: {
-    set: `your name (the chat title every teammate sees in their sidebar and header), description (the intro every teammate reads), title (the short role label beside your name), avatar_shape, and/or avatar_color (your default mark, hidden while a custom picture is installed). Only the fields you pass change. For your picture use target avatar. ${TEAM_BOT_OWNER_MAIN_ONLY}`
+    set: `your name (the chat title every teammate sees in their sidebar and header), description (the intro every teammate reads; write it as ${GROK_BOT_TEAM_BOT_DESCRIPTION_SHAPE}), title (the short role label beside your name), avatar_shape, and/or avatar_color (your default mark, hidden while a custom picture is installed). Only the fields you pass change. For your picture use target avatar. ${TEAM_BOT_OWNER_MAIN_ONLY}`
   },
   avatar: {
     set: `(path to an image on your box or the host). Write/download it first, then install it here; a box path under /workspace is fine. Every teammate sees the picture. ${TEAM_BOT_OWNER_MAIN_ONLY}`,
@@ -504856,10 +506588,7 @@ async function applySandStateUpdate(args, deps) {
 }
 var JUST_DO_IT = "Just do it and mention it in passing. Don't narrate a save or ask permission for an ordinary one.";
 var TEAM_SHARED_JUST_DO_IT = `${JUST_DO_IT} A save to this conversation or to user memory is ordinary. A team-wide save (scope "agent") needs more: make one only when you are certain from what the person said that everyone who uses you should have it, use a narrower scope when unsure, and say that you did when you have.`;
-var TEAM_SHARED_JUST_DO_IT_NOTES = TEAM_SHARED_JUST_DO_IT.replace(
-  "A save to this conversation or to user memory is ordinary.",
-  "A save to your notes with this person or to user memory is ordinary."
-);
+var TEAM_SHARED_JUST_DO_IT_NOTES = `${JUST_DO_IT} A save to user memory is ordinary. A save to your notes with this person (scope "user_bot") is ordinary too, and when you make or forget one, say in passing that you are keeping it just between the two of you, not team-wide. A team-wide save (scope "agent") needs more: make one only when you are certain from what the person said that everyone who uses you should have it, use a narrower scope when unsure, and say that you saved it for the whole team when you have.`;
 var ROUTINE_MAY_CONFIRM = "Creating or changing a ROUTINE may ask the user to confirm, since it's the one change that acts while they're away; if it does, they'll see a card and you'll get their answer back as the tool result.";
 function stateToolDescription(memoryWrite, {
   teamBot = false,
@@ -505330,63 +507059,6 @@ function summarizeWidget(widget) {
   return labels.length > 0 ? `${prompt} \u2014 ${labels}` : prompt;
 }
 
-// ../packages/grok-bot-harness/src/runner/tools/sand-credential-request.ts
-init_zod();
-
-// ../packages/grok-bot-harness/src/runner/credential-domain.ts
-var import_tldts = __toESM(require_cjs2(), 1);
-function parseHttpUrl(raw) {
-  const value = raw.trim();
-  if (value.length === 0) return null;
-  try {
-    const url2 = new URL(value.includes("://") ? value : `https://${value}`);
-    return url2.protocol === "https:" || url2.protocol === "http:" ? url2 : null;
-  } catch {
-    return null;
-  }
-}
-function normalizedHostname(url2) {
-  return url2.hostname.toLowerCase().replace(/\.$/, "");
-}
-function isLoopbackHostname(hostname2) {
-  const host = hostname2.toLowerCase();
-  const octets = host.split(".");
-  return host === "localhost" || host === "::1" || host === "[::1]" || octets.length === 4 && octets[0] === "127" && octets.every((octet) => /^\d{1,3}$/.test(octet) && Number(octet) <= 255);
-}
-function isSecureCredentialTarget(rawTarget) {
-  const target = parseHttpUrl(rawTarget);
-  if (target == null) return false;
-  return target.protocol === "https:" || target.protocol === "http:" && isLoopbackHostname(normalizedHostname(target));
-}
-function normalizeCredentialTarget(rawTarget) {
-  if (!isSecureCredentialTarget(rawTarget)) return null;
-  return parseHttpUrl(rawTarget)?.origin ?? null;
-}
-
-// ../packages/grok-bot-harness/src/runner/tools/sand-credential-request.ts
-var CREDENTIAL_REQUEST_MAX_PURPOSE_LENGTH = 300;
-function clampCredentialPurpose(purpose) {
-  return clampLine(purpose, CREDENTIAL_REQUEST_MAX_PURPOSE_LENGTH);
-}
-var credentialRequestCommonSchema = external_exports.object({
-  kind: external_exports.literal("browser-login"),
-  envName: external_exports.undefined().optional(),
-  purpose: external_exports.string().trim().min(1),
-  targetSite: external_exports.string().trim().min(1)
-});
-var credentialRequestSchema = credentialRequestCommonSchema.extend({
-  credentialId: external_exports.string().trim().min(1),
-  connectionId: external_exports.string().trim().min(1),
-  catalogRevision: external_exports.string().trim().min(1),
-  targetWebSocketDebuggerUrl: external_exports.string().trim().min(1).optional(),
-  autoFill: external_exports.boolean().optional(),
-  requestedAtMs: external_exports.number().finite(),
-  expiresAtMs: external_exports.number().finite()
-}).passthrough();
-function summarizeCredentialRequest(request3) {
-  return `Asked to fill the 1Password login ${request3.credentialId} into the sign-in page open at ${request3.targetSite}: ${request3.purpose}`;
-}
-
 // ../packages/grok-bot-harness/src/runner/tools/sand-permission-request.ts
 function summarizePermissionRequest(request3) {
   return `Legacy permission request (no longer actionable): ${request3.title}. ${request3.reason}`;
@@ -505477,6 +507149,14 @@ function buildUserFormSkippedFieldsNote(skippedFieldKinds) {
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/send-message-encoding.ts
+function publishApprovalTarget(approval) {
+  if (approval.kind !== "update") {
+    const previewUrl = approval.previewUrl.replace(/\s+/g, "");
+    return `publish ${folderLabel(approval.projectDir)}${previewUrl === "" ? "" : ` as ${previewUrl}`}`;
+  }
+  if (approval.decidedVia !== "auto") return `update ${approval.slug}`;
+  return approval.status === "published" ? `automatically published an update to ${approval.slug}` : `is automatically publishing an update to ${approval.slug}`;
+}
 function createSendMessageToolCall(toolCall) {
   return new ToolCall({
     tool: {
@@ -505578,8 +507258,7 @@ function encodeSendMessage(message) {
         }
       });
     case "publish-approval": {
-      const previewUrl = message.approval.previewUrl.replace(/\s+/g, "");
-      const target = message.approval.kind === "update" ? `update ${message.approval.slug}` : `publish ${folderLabel(message.approval.projectDir)}${previewUrl === "" ? "" : ` as ${previewUrl}`}`;
+      const target = publishApprovalTarget(message.approval);
       return new SendMessageArgs({
         message: {
           case: "text",
@@ -505975,14 +507654,14 @@ function recordCloudAgentArtifactAttachments(metrics2, sources, attachedRunIds) 
 }
 
 // ../packages/grok-bot-harness/src/runner/action-audit/message-destination-hash.ts
-var import_node_crypto44 = require("node:crypto");
+var import_node_crypto45 = require("node:crypto");
 var MESSAGE_CHANNEL_PLATFORMS = /* @__PURE__ */ new Set(["slack", "discord"]);
 var HASH_HEX_LENGTH = 32;
 function hashMessageChannelAddress(address) {
   const trimmed = address.trim();
   const platform = trimmed.slice(0, Math.max(0, trimmed.indexOf(":")));
   if (!MESSAGE_CHANNEL_PLATFORMS.has(platform)) return void 0;
-  return (0, import_node_crypto44.createHash)("sha256").update(trimmed, "utf8").digest("hex").slice(0, HASH_HEX_LENGTH);
+  return (0, import_node_crypto45.createHash)("sha256").update(trimmed, "utf8").digest("hex").slice(0, HASH_HEX_LENGTH);
 }
 
 // ../packages/grok-bot-harness/src/runner/tools/send-message-tool.ts
@@ -506128,6 +507807,32 @@ async function buildSandSendMessage(ctx, rawArgs, deps) {
       if (credential == null) {
         throw new SandToolInputError("credential is required when type is credential-request");
       }
+      if (credential.kind === "brokered-login") {
+        if (deps.createBrokeredCredentialAccessRequest == null) {
+          throw new SandToolInputError(
+            "Brokered 1Password access is unavailable in this conversation."
+          );
+        }
+        const requestedAtMs2 = Date.now();
+        const credentialRequest2 = {
+          kind: "brokered-login",
+          accessRequestId: "",
+          goal: credential.goal,
+          entries: credential.logins.map((login) => ({
+            entryId: "",
+            website: login.website,
+            reason: login.reason
+          })),
+          appLink: "",
+          requestedAtMs: requestedAtMs2,
+          expiresAtMs: requestedAtMs2 + BROKERED_ACCESS_REQUEST_WINDOW_MS
+        };
+        return {
+          type: "credential-request",
+          credentialRequest: credentialRequest2,
+          ...replyTo != null ? { reply_to: replyTo } : {}
+        };
+      }
       const siteHint = normalizeCredentialTarget(credential.site);
       if (siteHint == null) {
         throw new SandToolInputError(
@@ -506222,7 +507927,10 @@ function sendToUserDescription(deps) {
   const promptHygiene = deps.promptHygiene?.() === true;
   const toolNotesInSystemPrompt = deps.toolNotesInSystemPrompt?.() === true;
   const toolNotes = toolNotesInSystemPrompt ? SEND_TO_USER_TOOL_NOTES_POINTER : secretRequestToolGuidance(deps.resolveSecretRequestTarget, { promptHygiene });
-  const credentialRequest = deps.resolveCredentialBrowserTarget == null ? "" : CREDENTIAL_REQUEST_HINT;
+  let credentialRequest = deps.resolveCredentialBrowserTarget == null ? "" : CREDENTIAL_REQUEST_HINT;
+  if (deps.createBrokeredCredentialAccessRequest != null) {
+    credentialRequest = `${BROKERED_CREDENTIAL_REQUEST_GUIDANCE} `;
+  }
   const inAppLinks = toolNotesInSystemPrompt ? "" : inAppLinksGuidance({
     chromeCookieImport: deps.chromeCookieImport?.() === true,
     boxEgressTunnel: deps.boxEgressTunnel?.() === true,
@@ -506237,6 +507945,32 @@ function sendToUserDescription(deps) {
   }
   return OPENING + DELIVERY_CHECK + TEXT_SHAPE + VOICE_MEMO + REFERENCE_LINKS + GROUP_CHAT_DELIVERY + ATTACHMENT_SHAPE + IMAGES_RULE + CURSOR_AGENT_CARD + WIDGET_INTRO + toolNotes + credentialRequest + osConsentDialogs(promptHygiene) + WIDGET_FIELDS + WIDGET_ANSWER + WIDGET_EXAMPLE + WIDGET_ENDS_TURN + inAppLinks;
 }
+async function mintBrokeredCredentialRequestForAdmittedSend(deps, credential) {
+  if (deps.createBrokeredCredentialAccessRequest == null) {
+    throw new SandToolInputError("Brokered 1Password access is unavailable in this conversation.");
+  }
+  const created = await deps.createBrokeredCredentialAccessRequest({
+    goal: credential.goal,
+    logins: credential.logins.map((login) => ({
+      website: login.website,
+      reason: login.reason,
+      ...login.keywords === void 0 ? {} : { keywords: login.keywords }
+    }))
+  });
+  if (!created.ok) {
+    throw new SandToolInputError(created.detail);
+  }
+  const requestedAtMs = Date.now();
+  return {
+    kind: "brokered-login",
+    accessRequestId: created.request.accessRequestId,
+    goal: created.request.goal,
+    entries: created.request.entries,
+    appLink: created.request.appLink,
+    requestedAtMs,
+    expiresAtMs: requestedAtMs + BROKERED_ACCESS_REQUEST_WINDOW_MS
+  };
+}
 function messageDeliveryDestination(message) {
   if (message.type !== "text" && message.type !== "attachment") {
     return { destinationType: "user" };
@@ -506250,7 +507984,17 @@ function messageDeliveryDestination(message) {
 }
 function sendMessageParametersByTurnBehavior(deps) {
   const withCredentialRequest = deps.resolveCredentialBrowserTarget != null;
-  if (deps.promptHygiene?.() === true) {
+  const promptHygiene = deps.promptHygiene?.() === true;
+  if (deps.createBrokeredCredentialAccessRequest != null) {
+    return promptHygiene ? {
+      continueTurn: promptHygieneSendMessageParametersWithBrokeredCredentialRequest,
+      completeTurn: promptHygieneSendMessageEndTurnParametersWithBrokeredCredentialRequest
+    } : {
+      continueTurn: sendMessageParametersWithBrokeredCredentialRequest,
+      completeTurn: sendMessageEndTurnParametersWithBrokeredCredentialRequest
+    };
+  }
+  if (promptHygiene) {
     return withCredentialRequest ? {
       continueTurn: promptHygieneSendMessageParametersWithCredentialRequest,
       completeTurn: promptHygieneSendMessageEndTurnParametersWithCredentialRequest
@@ -506294,8 +508038,9 @@ function createSendMessageTool2(deps) {
           const asksAPersonToDecide = rawArgs.type === "secret-request" || rawArgs.type === "credential-request";
           const awaitsUserSelection = rawArgs.type === "widget" || asksAPersonToDecide;
           const message = await buildSandSendMessage(ctx, rawArgs, deps);
+          const brokeredCredential = rawArgs.type === "credential-request" && rawArgs.credential?.kind === "brokered-login" ? rawArgs.credential : void 0;
           const deliverTo = rawArgs.to;
-          const args = encodeSendMessage(message);
+          let args = encodeSendMessage(message);
           const baseToolCall = new SendMessageToolCall({ args });
           return await interactionHandler.executeToolCall(
             ctx,
@@ -506336,8 +508081,16 @@ function createSendMessageTool2(deps) {
               const isSuppressedCard = message.type === "cursor-agent" && deps.isSuppressedCursorAgentCard?.(message.bcId) === true;
               let deliveryRecorded = false;
               try {
+                const deliverable = brokeredCredential === void 0 || message.type !== "credential-request" ? message : {
+                  ...message,
+                  credentialRequest: await mintBrokeredCredentialRequestForAdmittedSend(
+                    deps,
+                    brokeredCredential
+                  )
+                };
+                args = encodeSendMessage(deliverable);
                 const timestampMs = Date.now();
-                const sentMessageId = isSuppressedCard ? void 0 : deps.onSendMessage(message, timestampMs, deliverTo);
+                const sentMessageId = isSuppressedCard ? void 0 : deps.onSendMessage(deliverable, timestampMs, deliverTo);
                 deliveryRecorded = true;
                 if (isSuppressedCard) {
                   recordDelivery.settled({ result: "failed", failureCategory: "suppressed_card" });
@@ -506375,7 +508128,7 @@ function createSendMessageTool2(deps) {
                 throw error3;
               }
             },
-            (result) => createSendMessageToolCall(new SendMessageToolCall({ ...baseToolCall, result }))
+            (result) => createSendMessageToolCall(new SendMessageToolCall({ args, result }))
           );
         },
         createSendMessageToolCall(new SendMessageToolCall()),
@@ -506479,27 +508232,37 @@ init_zod();
 // ../packages/grok-bot-harness/src/runner/tools/team/sand-team-conversion-tool.ts
 init_zod();
 var SAND_TEAM_CONVERSION_TOOL_NAME = "team_conversion";
-var NOT_OWNER_RESULT = "Refused: only the owner can turn you into a team bot, and only when they ask for it in their own chat with you. Nothing changed.";
+var NOT_OWNER_RESULT = "Refused: only the owner can turn you into a Team Bot, and only when they ask for it in their own chat with you. Nothing changed.";
 var UNAVAILABLE_RESULT = "Team conversion is not available for this bot right now. Nothing changed.";
+var TEAM_COPY_OFF_DESKTOP_RESULT = "Refused: the owner is writing from a phone or another app that can't show the Share with your team card; team copies are made only in the Grok Bot app on their computer. Say just this, as is, and offer no card: Team copies are made in the Grok Bot app on your computer. Nothing changed.";
+var TEAM_SETUP_OFF_DESKTOP_RESULT = "Refused: the owner is writing from a phone or another app that can't show your setup cards; setup runs only in the Grok Bot app on their computer. Say just this, as is: Team setup continues in the Grok Bot app on your computer. Nothing changed.";
 var teamConversionParameters = external_exports.object({
   action: external_exports.enum(["preview", "restart"]).describe(
     "preview: read-only facts before anything changes. restart: land the setup cards again when preview says they are missing."
   )
 });
 var BLOCKERS = {
-  server_memory_off: "your memories cannot be moved safely right now (tell them: I can't move my memories safely right now, so I can't become a team bot yet.)",
-  no_storage_with_memories: "the owner's privacy settings keep your memories from being moved (tell them: I can't move my memories safely right now, so I can't become a team bot yet.)"
+  server_memory_off: "your memories cannot be moved safely right now (tell them: I can't move my memories safely right now, so I can't become a Team Bot yet.)",
+  no_storage_with_memories: "the owner's privacy settings keep your memories from being moved (tell them: I can't move my memories safely right now, so I can't become a Team Bot yet.)"
 };
 function refusal(outcome) {
-  return outcome.kind === "not_owner" ? NOT_OWNER_RESULT : UNAVAILABLE_RESULT;
+  switch (outcome.kind) {
+    case "not_owner":
+      return NOT_OWNER_RESULT;
+    case "unavailable":
+      return UNAVAILABLE_RESULT;
+    case "off_desktop":
+      return outcome.teamBot ? TEAM_SETUP_OFF_DESKTOP_RESULT : TEAM_COPY_OFF_DESKTOP_RESULT;
+  }
 }
+var NEW_TEAM_BOT = "You were made as a Team Bot, not copied from a personal one: your setup cards start once the owner tells you what you are for. Nothing changed.";
 function describePreview(preview) {
   const lines2 = [];
   switch (preview.state.kind) {
     case "personal":
       if (preview.state.blockers.length > 0) {
         lines2.push(
-          `You cannot become a team bot yet: ${preview.state.blockers.map((b2) => BLOCKERS[b2]).join("; ")}. Explain that in one short message and do not offer the card.`
+          `You cannot become a Team Bot yet: ${preview.state.blockers.map((b2) => BLOCKERS[b2]).join("; ")}. Explain that in one short message and do not offer the card.`
         );
         return lines2.join("\n");
       }
@@ -506510,16 +508273,18 @@ function describePreview(preview) {
     case "converting":
       return "The team setup is already underway: its cards are in this chat. Point the owner to the card that is open. Nothing changed.";
     case "team_unpublished":
-      return preview.state.setupChip ? "You are already a team bot, still hidden from teammates until the owner presses Publish to team on the card in this chat. Nothing changed." : "You are a team bot that is not published and has no setup cards in this chat. Call team_conversion with action restart to bring the cards back.";
+      return preview.state.setupChip ? "You are already a Team Bot, still hidden from teammates until the owner presses Publish to team on the card in this chat. Nothing changed." : "You are a Team Bot that is not published and has no setup cards in this chat. Call team_conversion with action restart to bring the cards back.";
+    case "team_new":
+      return NEW_TEAM_BOT;
     case "team_published":
-      return "You are already a published team bot. Nothing changed.";
+      return "You are already a published Team Bot. Nothing changed.";
   }
   lines2.push(
     preview.memoryFacts === 0 ? "You remember nothing yet, so there is no memory to sort." : `You remember ${preview.memoryFacts} thing${preview.memoryFacts === 1 ? "" : "s"}. All of it stays private to the owner unless they tick it on the memories card.`
   );
   if (preview.automations.length > 0) {
     lines2.push(
-      `The owner's routines on you: ${preview.automations.map((r) => `${r.name} (${r.trigger}${r.slackTriggered ? ", Slack-triggered" : ""})`).join("; ")}.`
+      `The owner's running routines on you (paused ones stay here): ${preview.automations.map((r) => `${r.name} (${r.trigger}${r.slackTriggered ? ", Slack-triggered" : ""})`).join("; ")}.`
     );
   }
   if (preview.carryablePlugins.length > 0) {
@@ -506531,7 +508296,8 @@ function describePreview(preview) {
 }
 var RESTART_NOT_NEEDED = {
   cards_open: "The setup cards are already in this chat. Point the owner to the open one. Nothing changed.",
-  published: "You are already a published team bot. Nothing changed.",
+  published: "You are already a published Team Bot. Nothing changed.",
+  new_bot: NEW_TEAM_BOT,
   personal: "You are still the owner's personal bot; the setup starts from the Share with your team card (offer_team_access). Nothing changed."
 };
 function describeRestart(outcome) {
@@ -506542,6 +508308,7 @@ function describeRestart(outcome) {
       return RESTART_NOT_NEEDED[outcome.reason];
     case "not_owner":
     case "unavailable":
+    case "off_desktop":
       return refusal(outcome);
   }
 }
@@ -506549,7 +508316,7 @@ function createTeamConversionTool(deps) {
   return defineCommunicateTool(deps, {
     id: "PLATFORM_ACTION",
     name: SAND_TEAM_CONVERSION_TOOL_NAME,
-    description: "Make a team copy of yourself: a new team bot that starts from this chat, while you stay the owner's personal bot. Only your owner can use it, in their own chat with you. preview changes nothing: call it first whenever the owner asks to make you a team bot or share you with their team. Then explain in one or two short messages, as yourself in the first person, using only what it returns: the team copy starts with this chat and what you remember, all private to the owner until they pick what to share; teammates get their own chats with it; nobody sees it until the owner publishes; and you stay right here. Mention routines only where preview reports them, and leave setup details to the cards. If most of what you remember is about the owner personally, or you are their everyday assistant, recommend a new team bot instead (Create new team Bot in the app) and let them choose. When they want to go ahead, call offer_team_access. On a team copy, if the owner says stop or never mind, say they can simply not publish it, or delete it; once published, Unpublish (team_publish) takes it offline. restart: only when preview says you are an unpublished team bot with no setup cards.",
+    description: "Make a team copy of yourself: a new Team Bot that starts from this chat, while you stay the owner's personal bot. Only your owner can use it, in their own chat with you. preview changes nothing: call it first whenever the owner asks to make you a Team Bot, share you with their team, or bring back your setup cards or Publish button. Then explain in one or two short sentences, as yourself in the first person, using only what it returns: the team copy starts with this chat and what you remember, all private to the owner until they pick what to share; teammates get their own chats with it; nobody sees it until the owner publishes; and you stay right here. Mention routines only where preview reports them, and leave setup details to the cards. If most of what you remember is about the owner personally, or you are their everyday assistant, recommend a new Team Bot instead (Create new Team Bot in the app) and let them choose. When they want to go ahead, call offer_team_access; when you offer it in the same turn, the explanation is its intro rather than a message of its own. On a team copy, if the owner says stop or never mind, say they can simply not publish it, or delete it; once published, Unpublish (team_publish) takes it offline. restart: only when preview says you are an unpublished Team Bot with no setup cards; it brings those cards back, ending with Publish.",
     parameters: teamConversionParameters,
     describeActivity: (args) => ({ detail: args.action }),
     execute: async (_ctx, args, d) => {
@@ -506575,17 +508342,28 @@ var offerCardParameters = external_exports.object({
     `Optional short clause shown on the card explaining why you're offering, e.g. "so your teammates can message me too". No trailing period.`
   )
 });
-var TEAM_COPY_DESCRIPTION = "Show the Share with your team card. It makes a team copy of you: a new team bot that starts from this chat and what you remember, while you stay here as the owner's personal bot. When the owner taps it, the app opens the copy, and the copy's own chat walks them through what to bring along and when to publish; teammates see the copy only once it is published. Offer it once, after you have explained the copy. The card is the whole ask, so don't paste instructions or settings paths beside it.";
-var TEAM_COPY_RESULT = "The Share with your team card is in the chat. If the owner taps it, the app opens their team copy and its setup runs there; this chat gets a one-line receipt and you stay as you are. If they skip it, that is a decline: carry on and don't offer it again.";
-function createOfferTeamAccessTool(deps, { teamCopy = false } = {}) {
-  if (teamCopy) {
+var TEAM_COPY_DESCRIPTION = "Show the Share with your team card. It makes a team copy of you: a new Team Bot that starts from this chat and what you remember, while you stay here as the owner's personal bot. When the owner taps it, the app opens the copy, and the copy's own chat walks them through what to bring along and when to publish; teammates see the copy only once it is published. intro is what you say right above the card. Offer it once, as the last thing you do: the card is the owner's next step, so nothing follows it, no nudge, no instructions, no settings paths.";
+var teamCopyParameters = external_exports.object({
+  intro: external_exports.string().trim().min(1).max(600).describe(
+    "What you say right above the card, in the first person. Unless you already explained the copy in this chat, say in one or two short sentences that it is a new Team Bot that starts from this chat and what you remember, that it stays private to the owner until they pick what to share and publish it, and that you stay here as their personal bot. If you did, a few words are enough."
+  )
+});
+var TEAM_COPY_RESULT = "The Share with your team card is in the chat, and it is the owner's next step, so end your turn now without another message. You pick up when they act: a tap opens their team copy, where its setup runs, and this chat gets a one-line receipt; a skip is a decline, so don't offer it again.";
+function createOfferTeamAccessTool(deps, { teamCopy } = {}) {
+  if (teamCopy !== void 0) {
     return defineCommunicateTool(deps, {
       id: "OFFER_TEAM_ACCESS",
       name: SAND_OFFER_TEAM_ACCESS_TOOL_NAME,
       description: TEAM_COPY_DESCRIPTION,
-      parameters: external_exports.object({}),
-      execute: async (_ctx, _args, d) => {
-        d.onSendMessage({ type: "team-access" }, Date.now());
+      parameters: teamCopyParameters,
+      execute: async (_ctx, args, d) => {
+        if (teamCopy.isOwnerOffDesktop()) return TEAM_COPY_OFF_DESKTOP_RESULT;
+        const now = Date.now();
+        d.onSendMessage(
+          { type: "text", content: normalizeSendMessageTextContent(args.intro) },
+          now
+        );
+        d.onSendMessage({ type: "team-access" }, now);
         return TEAM_COPY_RESULT;
       }
     });
@@ -506623,7 +508401,7 @@ function teamAccessTurnTools(host, onSendMessage) {
   if (!host.gates.teamAccessCards()) return [];
   const { teamConversion } = host;
   return [
-    createOfferTeamAccessTool({ onSendMessage }, { teamCopy: teamConversion !== void 0 }),
+    createOfferTeamAccessTool({ onSendMessage }, { teamCopy: teamConversion }),
     createOfferSlackConnectTool({ onSendMessage }),
     ...teamConversion === void 0 ? [] : [
       createTeamConversionTool({
@@ -507248,6 +509026,7 @@ function buildTurnTools(host, turn, props) {
         systemPromptHasSendToUserPolicy: () => !host.isSystemPromptOverridden,
         promptHygiene: () => host.gates.promptHygiene(),
         resolveCredentialBrowserTarget: host.credentialAccess?.resolveBrowserTarget,
+        createBrokeredCredentialAccessRequest: host.credentialAccess?.broker?.createAccessRequest,
         resolveSecretRequestTarget: host.resolveSecretRequestTarget,
         toolNotesInSystemPrompt: host.toolNotesInSystemPrompt,
         recordDelivery,
@@ -507686,6 +509465,7 @@ function buildTurnTools(host, turn, props) {
           durableWatchEnabled: host.gates.cloudAgentDurableWatch(),
           replyModesEnabled: host.gates.cloudAgentReplyModes(),
           publishRepositoryEnabled: host.gates.cloudAgentPublishRepository(),
+          originBuiltinEnabled: host.gates.originBuiltinMounted(),
           exchangeEnabled: !host.isSubagentRunner && host.gates.cloudAgentExchange()
         })
       );
@@ -507832,7 +509612,8 @@ function buildTurnTools(host, turn, props) {
     const onPossibleNavigation = (ctx) => {
       const windowIndex = boxAgentWindowIndex(host.remoteBox, host.resolveBoxId());
       if (windowIndex === void 0) return;
-      host.getOrCreateNavigationProbe()?.probe(ctx.withDetached(), remoteBoxResourceAccessor, windowIndex);
+      const probe = host.getOrCreateNavigationProbe();
+      probe?.probe(ctx.withDetached(), remoteBoxResourceAccessor, windowIndex);
     };
     tools.push(
       ...SAND_BROWSER_TOOL_SETS[browserSurface].createTools({
@@ -507847,7 +509628,8 @@ function buildTurnTools(host, turn, props) {
         getPersistImage: () => host.persistImage,
         getDefaultViewId: () => host.getTranscriptId(),
         isNavigationRecoveryEnabled: host.gates.browserNavigationRecovery,
-        onPossibleNavigation
+        onPossibleNavigation,
+        ...playwrightUnsafeCodeToolDeps(host)
       }).map(gateOnCredentialFillLease)
     );
   }
@@ -507886,7 +509668,8 @@ function buildTurnTools(host, turn, props) {
           pauseThisRun();
         },
         credentialFillEnabled: !host.isSubagentRunner && !host.isSystemPromptOverridden && host.credentialAccess != null,
-        loginFormFirst: host.gates.loginFormFirst
+        loginFormFirst: host.gates.loginFormFirst,
+        supersedesPending: boxHandoff.supersedesPending === true
       })
     );
   }
@@ -508483,7 +510266,7 @@ function createTurnAgentComposition(host) {
       diskPressureReminderEpisodeId,
       emittedConnectorCards,
       performanceObservation,
-      captureFollowupLabelingMessages,
+      captureFirstStreamMessages,
       conversationActionReceiver
     } = turnScope;
     const conservativeExecutorReuse = !host.isSystemPromptOverridden && host.gates.lessSubagentFanout();
@@ -508602,7 +510385,7 @@ function createTurnAgentComposition(host) {
         }) ? applyStartOfTurnAckReminder(applySendMessageReminder(mcpUnavailableExecutor)) : mcpUnavailableExecutor;
         const executor = applyLoopNudge?.(reminderExecutor) ?? reminderExecutor;
         const automationCompletions = host.isSubagentRunner ? void 0 : host.automationCompletions();
-        const snapshotExecutor = captureFollowupLabelingMessages === void 0 ? executor : createFirstStreamMessageSnapshotMiddleware(captureFollowupLabelingMessages)(executor);
+        const snapshotExecutor = captureFirstStreamMessages === void 0 ? executor : createFirstStreamMessageSnapshotMiddleware(captureFirstStreamMessages)(executor);
         const completionAwareExecutor = automationCompletions === void 0 ? snapshotExecutor : createAutomationCompletionMiddleware(automationCompletions)(snapshotExecutor);
         const baseToolExecutor = new SimplePromptToolExecutor(
           completionAwareExecutor
@@ -508629,8 +510412,7 @@ function createTurnAgentComposition(host) {
       quietOrigin,
       childRequestLineage,
       () => executorProfileNamesForRun,
-      host.actionAuditSequencer,
-      host.gates.browserUseJev() ? /* @__PURE__ */ new Map([["computerUse", "browserUseJev"]]) : void 0
+      host.actionAuditSequencer
     );
     const isUserFacingRunner = hasParentToolParity;
     const emitCard = createCardSurfacer({
@@ -508755,15 +510537,30 @@ function createTurnAgentComposition(host) {
           execute: async (ctx, args, options2) => {
             host.autoReviewGate.assertNoPendingApproval();
             const providerIdentifier = args.providerIdentifier.length > 0 ? args.providerIdentifier : args.serverIdentifier;
+            const playwrightWindowIndex = playwrightBoxMcpWindowIndex(providerIdentifier);
             const requestId = ctx.get(requestIdKey);
             const settleMcpExecObservation = host.observation.beginMcpExecObservation({
               toolCallId: args.toolCallId ?? "",
               connector: boundedConnectorTag(providerIdentifier),
               mcpTool: boundedMcpToolName(args.toolName.length > 0 ? args.toolName : args.name),
               resolveTransport: () => mcp.resolveToolTransport(providerIdentifier),
-              windowIndex: playwrightBoxMcpWindowIndex(providerIdentifier),
+              windowIndex: playwrightWindowIndex,
               ...requestId != null ? { requestId } : {}
             });
+            if (playwrightWindowIndex !== void 0 && ctx.get(playwrightFirstClassToolExecutionKey) !== true) {
+              settleMcpExecObservation({
+                kind: "error",
+                errorClass: "playwright_first_class_only"
+              });
+              return new McpResult({
+                result: {
+                  case: "error",
+                  value: new McpError({
+                    error: "Playwright box servers are available only through first-class browser tools."
+                  })
+                }
+              });
+            }
             const scmWriteRefusal = await scmWriteBlock({
               providerIdentifier,
               toolName: args.name,
@@ -508938,15 +510735,14 @@ ${note}`;
       const credentialFillEnabled = !host.isSubagentRunner && !host.isSystemPromptOverridden && host.turnToolHost.credentialAccess != null;
       if (host.gates.browserUseJev()) {
         subagentConfigs.push(createSandBrowserUseJevSubagentConfig());
-      } else {
-        subagentConfigs.push(
-          createSandComputerUseSubagentConfig({
-            combined,
-            credentialFillEnabled,
-            loginFormFirst: host.gates.loginFormFirst()
-          })
-        );
       }
+      subagentConfigs.push(
+        createSandComputerUseSubagentConfig({
+          combined,
+          credentialFillEnabled,
+          loginFormFirst: host.gates.loginFormFirst()
+        })
+      );
     }
     if (subagentConfigs != null && !host.isSystemPromptOverridden) {
       const generalPurposeIndex = subagentConfigs.findIndex(
@@ -509174,6 +510970,82 @@ function stableAutomationId({
     13,
     16
   )}-${variant}${hex.slice(17, 20)}-${hex.slice(20, 32)}`;
+}
+
+// ../packages/grok-bot-harness/src/runner/external-send/tool-calls.ts
+init_zod();
+var MCP_INVOCATION_TOOL_NAMES2 = /* @__PURE__ */ new Set([
+  SAND_STATIC_MCP_META_TOOL_NAMES.invocation,
+  SAND_DYNAMIC_MCP_META_TOOL_NAMES.invocation
+]);
+var mcpInvocationArgsSchema = external_exports.object({
+  toolName: external_exports.string().min(1),
+  server: external_exports.string().min(1).optional(),
+  namespace: external_exports.string().min(1).optional(),
+  arguments: external_exports.unknown()
+});
+function classifyMcpInvocation(args) {
+  const parsed = mcpInvocationArgsSchema.safeParse(args);
+  if (!parsed.success) {
+    return void 0;
+  }
+  const server = parsed.data.server ?? parsed.data.namespace;
+  return server === void 0 ? void 0 : { toolName: parsed.data.toolName, server, connectorArgs: parsed.data.arguments };
+}
+function classifyProviderKeyedTool(toolName, args, servers) {
+  let server;
+  for (const candidate of servers) {
+    const prefix = `${candidate}-`;
+    if (toolName.startsWith(prefix) && toolName.length > prefix.length && candidate.length > (server?.length ?? 0)) {
+      server = candidate;
+    }
+  }
+  return server === void 0 ? void 0 : { toolName: toolName.slice(server.length + 1), server, connectorArgs: args };
+}
+function classifyToolCall(toolName, args, servers) {
+  return MCP_INVOCATION_TOOL_NAMES2.has(toolName) ? classifyMcpInvocation(args) : classifyProviderKeyedTool(toolName, args, servers);
+}
+function forEachToolCall(messages, visit2) {
+  messages.forEach((message, messageIndex) => {
+    if (message.role !== "assistant" || typeof message.content === "string") {
+      return;
+    }
+    for (const part of message.content) {
+      if (part.type === "tool-call") {
+        visit2(part, messageIndex);
+      }
+    }
+  });
+}
+function findMcpToolCalls(messages, servers = /* @__PURE__ */ new Set()) {
+  const found = [];
+  forEachToolCall(messages, (part, messageIndex) => {
+    const classified = classifyToolCall(part.toolName, part.args, servers);
+    if (classified !== void 0) {
+      found.push({ ...classified, toolCallId: part.toolCallId, messageIndex });
+    }
+  });
+  return found;
+}
+function toolCallIds(messages) {
+  const ids = /* @__PURE__ */ new Set();
+  forEachToolCall(messages, (part) => ids.add(part.toolCallId));
+  return ids;
+}
+function mayBeMcpToolCall(toolName) {
+  return MCP_INVOCATION_TOOL_NAMES2.has(toolName) || toolName.includes("-");
+}
+function mcpServerHosts(servers) {
+  const hosts = /* @__PURE__ */ new Map();
+  for (const server of servers) {
+    if (server.url === void 0 || !URL.canParse(server.url)) {
+      continue;
+    }
+    const host = new URL(server.url).hostname.toLowerCase();
+    hosts.set(server.serverIdentifier, host);
+    hosts.set(server.id, host);
+  }
+  return hosts;
 }
 
 // ../packages/grok-bot-harness/src/runner/error-free-step/error-free-step.ts
@@ -509645,6 +511517,14 @@ var abortLogger = createLogger("@anysphere/agent-client:abort");
 var retryLogger = createLogger("@anysphere/agent-client:retry");
 var requestContextBlobLogger = createLogger("@anysphere/agent-client:request-context-blob");
 
+// ../packages/agent-client/dist/gateway-request-timing.js
+var CONTENT_EVENT_PATTERN = new RegExp([
+  String.raw`"type"\s*:\s*"response\.(?:output_text|reasoning_summary_text|reasoning_text|function_call_arguments|refusal)\.(?:delta|done)"`,
+  String.raw`"(?:content|reasoning_content|reasoning|refusal)"\s*:\s*"(?!")`,
+  String.raw`"tool_calls"\s*:\s*\[\s*\{`,
+  String.raw`"type"\s*:\s*"content_block_delta"`
+].join("|"));
+
 // ../packages/agent-client/dist/renderer-root-writer-diagnostic.js
 var RENDERER_ROOT_WRITER_DIAGNOSTIC_MAX_BYTES = 4 * 1024;
 var RENDERER_ROOT_WRITER_DIAGNOSTIC_TTL_MS = 7 * 24 * 60 * 60 * 1e3;
@@ -509693,8 +511573,11 @@ function classifyNode(error3, seen) {
   if (error3 == null || typeof error3 !== "object") return void 0;
   if (seen.has(error3)) return void 0;
   seen.add(error3);
-  const own = classifyErrorDetails(classifyError2(error3).displayInfo?.errorDetails);
-  if (own !== void 0) return own;
+  const ownDetails = classifyError2(error3).displayInfo?.errorDetails;
+  const own = classifyErrorDetails(ownDetails);
+  if (own !== void 0 && ownDetails !== void 0) {
+    return { kind: own, errorDetails: ownDetails };
+  }
   const fields2 = error3;
   const fromCause = classifyNode(fields2.cause, seen);
   if (fromCause !== void 0) return fromCause;
@@ -509706,8 +511589,11 @@ function classifyNode(error3, seen) {
   }
   return void 0;
 }
-function classifyExpectedTurnFailure(error3) {
+function classifyExpectedTurnFailureDetails(error3) {
   return classifyNode(error3, /* @__PURE__ */ new Set());
+}
+function classifyExpectedTurnFailure(error3) {
+  return classifyExpectedTurnFailureDetails(error3)?.kind;
 }
 function resolveTurnOutcomeTags(args) {
   const adjusted = adjustTurnOutcomeForBotBlock({
@@ -510127,8 +512013,14 @@ var SandSteerInbox = class {
   poppedAwaitingTurn;
   admittedListeners = /* @__PURE__ */ new Set();
   accepting = false;
+  delivered = [];
   beginRun() {
     this.accepting = true;
+    this.delivered.length = 0;
+  }
+  deliveredPrompts() {
+    const popped = this.poppedAwaitingTurn?.visiblePrompt;
+    return popped == null ? this.delivered : [...this.delivered, popped];
   }
   enqueue(prompt, options2) {
     if (!this.accepting) return { kind: "no-live-run" };
@@ -510142,6 +512034,7 @@ var SandSteerInbox = class {
             })
           }
         }),
+        visiblePrompt: options2.hidden === true ? null : prompt,
         settle
       });
     });
@@ -510188,8 +512081,11 @@ var SandSteerInbox = class {
     for (const steer of this.pending.splice(0)) steer.settle(false);
   }
   settlePoppedAsDelivered() {
-    this.poppedAwaitingTurn?.settle(true);
+    const popped = this.poppedAwaitingTurn;
+    if (popped === void 0) return;
     this.poppedAwaitingTurn = void 0;
+    if (popped.visiblePrompt !== null) this.delivered.push(popped.visiblePrompt);
+    popped.settle(true);
   }
 };
 
@@ -510727,6 +512623,9 @@ function classifySandTurnInitiator(options2) {
   return "other";
 }
 
+// ../packages/grok-bot-harness/src/runner/turn-settle.ts
+init_dist3();
+
 // ../packages/grok-bot-harness/src/runner/turn-memory.ts
 function archiveWithUserBotNotes(memoryStore) {
   const archive = memoryStore.listMemories(MEMORY_EXTRACTION_ARCHIVE_SCAN_LIMIT);
@@ -510892,6 +512791,8 @@ function turnEndedOnSilentToolCalls(rawMessages) {
 }
 
 // ../packages/grok-bot-harness/src/runner/turn-settle.ts
+var TASK_LIST_UPDATE_STEPS = 3;
+var MCP_SERVER_HOSTS_TIMEOUT_MS = 2e3;
 function resolveTranscriptPersistence(privacyMode) {
   switch (privacyMode) {
     case PrivacyMode.NO_TRAINING:
@@ -510921,7 +512822,40 @@ function createTurnSettle(host, scope) {
   let reacted = false;
   let endedOnSilentToolCalls = false;
   let followupLabelingMessages;
+  let turnStartToolCallIds;
   const agentMessages = [];
+  let isTaskListKept = false;
+  let taskListUpdate = null;
+  let isTaskListUpdateDue = false;
+  let stepsSinceTaskListUpdate = 0;
+  const taskListMessages = () => [
+    ...scope.userPrompts().map((prompt) => ({ isUser: true, text: prompt })),
+    ...agentMessages.map((message) => ({ isUser: false, text: message }))
+  ].filter((message) => message.text.trim().length > 0);
+  const updateTaskList = () => {
+    const taskList = scope.taskList;
+    if (taskList?.update === void 0 || isTaskListKept) return;
+    if (taskListUpdate !== null) {
+      isTaskListUpdateDue = true;
+      return;
+    }
+    const messages = taskListMessages();
+    if (messages.length === 0) return;
+    stepsSinceTaskListUpdate = 0;
+    taskListUpdate = (async () => {
+      try {
+        await taskList.update?.({ messages });
+      } catch (error3) {
+        reportHostDiagnostic({ kind: "task_list_keep_failed", errorClass: errorLogTag(error3) });
+      } finally {
+        taskListUpdate = null;
+        if (isTaskListUpdateDue) {
+          isTaskListUpdateDue = false;
+          updateTaskList();
+        }
+      }
+    })();
+  };
   const collectors = {
     collectText: (delta) => {
       text2 += delta;
@@ -510934,6 +512868,7 @@ function createTurnSettle(host, scope) {
     },
     collectAgentMessage: (message) => {
       agentMessages.push(message);
+      updateTaskList();
     }
   };
   let profilePromptSnapshot;
@@ -511031,9 +512966,54 @@ function createTurnSettle(host, scope) {
     if (host.ownsRunner()) {
       persistPendingProfileAnnouncement();
     }
+    stepsSinceTaskListUpdate += 1;
+    if (stepsSinceTaskListUpdate >= TASK_LIST_UPDATE_STEPS) updateTaskList();
   };
   const captureFollowupLabelingMessages = (messages) => {
     followupLabelingMessages ??= messages;
+  };
+  const captureTurnStartMessages = (messages) => {
+    turnStartToolCallIds ??= toolCallIds(messages);
+  };
+  const hostedMcpToolCallsForTurn = async (messages) => {
+    const existing = turnStartToolCallIds;
+    if (existing === void 0 || host.mcpServerHosts == null) {
+      return [];
+    }
+    const mayCallMcp = messages.some(
+      (message) => message.role === "assistant" && typeof message.content !== "string" && message.content.some(
+        (part) => part.type === "tool-call" && !existing.has(part.toolCallId) && mayBeMcpToolCall(part.toolName)
+      )
+    );
+    if (!mayCallMcp) {
+      return [];
+    }
+    let hosts;
+    try {
+      hosts = await withTimeout(host.mcpServerHosts(), MCP_SERVER_HOSTS_TIMEOUT_MS);
+    } catch (error3) {
+      reportHostDiagnostic({
+        kind: "labeling_failed",
+        stage: "mcp_server_hosts",
+        errorClass: errorLogTag(error3)
+      });
+      return [];
+    }
+    return findMcpToolCalls(messages, new Set(hosts.keys())).flatMap((call) => {
+      const serverHost = hosts.get(call.server);
+      return existing.has(call.toolCallId) || serverHost === void 0 ? [] : [{ toolCallId: call.toolCallId, toolName: call.toolName, serverHost }];
+    });
+  };
+  const externalSendForTurn = async (messages, requestSource, onlyExternalSend) => {
+    const mcpToolCalls = await hostedMcpToolCallsForTurn(messages);
+    const parentMessages = host.isSubagentRunner && mcpToolCalls.length > 0 ? host.parentPromptMessages?.() : void 0;
+    return {
+      mcpToolCalls,
+      onlyExternalSend,
+      requestSource,
+      isSubagent: host.isSubagentRunner,
+      ...parentMessages != null && parentMessages.length > 0 ? { parentMessages } : {}
+    };
   };
   const labelingIdentity = (args) => {
     const requestId = args.baseCtx.get(requestIdKey);
@@ -511066,16 +513046,25 @@ function createTurnSettle(host, scope) {
       });
     }
   };
-  const recordPostTurnLabeling = (args) => {
-    if (args.skipLabeling) {
-      return;
-    }
-    const identity = labelingIdentity(args);
-    if (identity == null || args.messages.length === 0) {
+  const recordPostTurnLabeling = async (args) => {
+    const record3 = host.recordPostTurnLabeling;
+    if (record3 == null || args.messages.length === 0) {
       return;
     }
     try {
-      host.recordPostTurnLabeling?.({ ...identity, messages: args.messages });
+      const externalSend = await externalSendForTurn(
+        args.messages,
+        args.requestSource,
+        args.skipLabeling
+      );
+      if (args.skipLabeling && externalSend.mcpToolCalls.length === 0) {
+        return;
+      }
+      const identity = labelingIdentity(args);
+      if (identity == null) {
+        return;
+      }
+      record3({ ...identity, messages: args.messages, externalSend });
     } catch (error3) {
       reportHostDiagnostic({
         kind: "labeling_failed",
@@ -511119,11 +513108,12 @@ function createTurnSettle(host, scope) {
     if (!host.isSubagentRunner && !args.hidden) {
       endedOnSilentToolCalls = turnEndedOnSilentToolCalls(messages);
     }
-    recordPostTurnLabeling({
+    const postTurnLabeling = recordPostTurnLabeling({
       session: args.session,
       baseCtx: args.baseCtx,
       messages,
-      skipLabeling: args.skipLabeling
+      skipLabeling: args.skipLabeling,
+      requestSource: args.requestSource
     });
     if (!host.isRunSuperseded() && scope.memoryStore != null && !args.hidden && args.trimmedPrompt.length > 0 && (scope.memoryStore.recordMemoryEvidence != null || isMemorableExchange(args.trimmedPrompt))) {
       const exchange = {
@@ -511138,6 +513128,22 @@ function createTurnSettle(host, scope) {
         args.turnStartedAtMs,
         exchange
       );
+    }
+    await postTurnLabeling;
+  };
+  const keepTaskList = async (args) => {
+    isTaskListKept = true;
+    if (scope.taskList === void 0) return;
+    try {
+      await scope.taskList.keep({
+        messages: taskListMessages(),
+        finishedWork: scope.finishedWork,
+        isAwaitingUser: host.getAwaitingUserInputTurnId() !== void 0,
+        hasBackgroundWork: host.hasRunningBackgroundWork(),
+        end: args.end
+      });
+    } catch (error3) {
+      reportHostDiagnostic({ kind: "task_list_keep_failed", errorClass: errorLogTag(error3) });
     }
   };
   const persistFinalState = async (baseCtx, finalState) => {
@@ -511164,11 +513170,89 @@ function createTurnSettle(host, scope) {
     prepareCheckpointForPersistence,
     persistStepCheckpoint,
     captureFollowupLabelingMessages,
+    captureTurnStartMessages,
     prepareFinalizedFollowupLabeling,
     recordFinalizedFollowupLabeling,
     settleCompletedTurn,
+    keepTaskList,
     persistFinalState,
     buildResult
+  };
+}
+
+// ../packages/grok-bot-harness/src/runner/turn-latency/turn-setup-laps.ts
+init_dist();
+
+// ../packages/grok-bot-harness/src/runner/turn-latency/turn-laps.ts
+function createTurnLapTimer(args) {
+  const { clock } = args;
+  let previousAt = args.startedAt;
+  let finished = false;
+  const laps = [];
+  const branches = [];
+  return {
+    lap(name17) {
+      if (finished) return;
+      const at3 = clock.monotonicNow();
+      laps.push({ lap: name17, ms: Math.max(0, at3 - previousAt) });
+      previousAt = Math.max(previousAt, at3);
+    },
+    timeBranch(branch, work) {
+      const joinedAt = clock.monotonicNow();
+      const settle = (outcome) => {
+        if (finished) return;
+        branches.push({ branch, ms: Math.max(0, clock.monotonicNow() - joinedAt), outcome });
+      };
+      return Promise.resolve(work).then(
+        (value) => {
+          settle("success");
+          return value;
+        },
+        (error3) => {
+          settle("error");
+          throw error3;
+        }
+      );
+    },
+    finish() {
+      if (finished) return void 0;
+      finished = true;
+      return { laps, branches, totalMs: Math.max(0, previousAt - args.startedAt) };
+    }
+  };
+}
+
+// ../packages/grok-bot-harness/src/runner/turn-latency/turn-setup-laps.ts
+var logger112 = createLogger("sand:turn-setup-laps");
+var setupLapMs = createHistogram("grok_bot.turn.setup_lap_ms", {
+  labelNames: ["harness", "run_role", "lap"]
+});
+var setupLapsTotalMs = createHistogram("grok_bot.turn.setup_laps_total_ms", {
+  labelNames: ["harness", "run_role"]
+});
+function createTurnSetupLaps(args) {
+  const timer2 = createTurnLapTimer({
+    startedAt: args.startedAt,
+    clock: args.clock
+  });
+  return {
+    lap: (name17) => timer2.lap(name17),
+    finish() {
+      const summary = timer2.finish();
+      const harness = args.harness;
+      if (summary === void 0 || harness === void 0) return;
+      try {
+        for (const { lap, ms: ms2 } of summary.laps) {
+          setupLapMs.histogram(args.ctx, ms2, { harness, run_role: args.runRole, lap });
+        }
+        setupLapsTotalMs.histogram(args.ctx, summary.totalMs, {
+          harness,
+          run_role: args.runRole
+        });
+      } catch (error3) {
+        logger112.warn(args.ctx, `Turn setup laps observation failed (${errorLogTag(error3)})`);
+      }
+    }
   };
 }
 
@@ -511345,6 +513429,13 @@ function createTurnRunShell(host) {
     beginTurnBotBlock({ conversationId });
     const hostReceiptPerfMs = host.metricsClock.monotonicNow();
     const errorFreeStep2 = errorFreeSteps.beginRun(options2, hostReceiptPerfMs);
+    const setupLaps = createTurnSetupLaps({
+      ctx: host.ctx,
+      harness: host.metricsHarness,
+      runRole: options2.metricsRunRole ?? "other",
+      startedAt: hostReceiptPerfMs,
+      clock: host.metricsClock
+    });
     const performanceObservation = createTurnPerformanceObservation({
       ctx: host.ctx,
       harness: host.metricsHarness,
@@ -511363,6 +513454,10 @@ function createTurnRunShell(host) {
       ...options2.metricsRunRole === "turn_start" && host.metricsUserMessageSentAt !== void 0 ? { userMessageSentAt: host.metricsUserMessageSentAt } : {},
       ...options2.metricsRunRole === "turn_start" && host.metricsTurnStartedAt !== void 0 ? { turnStartedAt: host.metricsTurnStartedAt } : {},
       ...options2.metricsRunRole === "turn_start" && host.metricsTurnTraceMarks !== void 0 ? { traceMarks: host.metricsTurnTraceMarks } : {},
+      onFirstRequestStart: () => {
+        setupLaps.lap("agent_stream_start");
+        setupLaps.finish();
+      },
       clock: host.metricsClock
     });
     let outcome = "error";
@@ -511373,7 +513468,8 @@ function createTurnRunShell(host) {
         options2,
         hostReceiptPerfMs,
         performanceObservation,
-        errorFreeStep2
+        errorFreeStep2,
+        setupLaps
       );
       outcome = resolveTurnTraceOutcome(result);
       return result;
@@ -511386,7 +513482,7 @@ function createTurnRunShell(host) {
       errorFreeStep2?.ended(tags.outcome, tags.errorType);
     }
   }
-  async function runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation, errorFreeStep2) {
+  async function runTurn(prompt, options2, hostReceiptPerfMs, performanceObservation, errorFreeStep2, setupLaps) {
     var _stack = [];
     try {
       const turnRequestSource = options2.requestSource ?? host.inheritedRequestSource;
@@ -511588,6 +513684,12 @@ function createTurnRunShell(host) {
           })
         );
       } : void 0;
+      let unconfirmedUserPrompts = [];
+      const turnUserPrompts = () => [
+        ...unconfirmedUserPrompts,
+        ...options2.hidden === true || typeof prompt !== "string" ? [] : [trimmedPrompt],
+        ...steerInbox.deliveredPrompts()
+      ];
       const settle = createTurnSettle(
         {
           isSubagentRunner: host.isSubagentRunner,
@@ -511596,6 +513698,7 @@ function createTurnRunShell(host) {
           ownsRunner: () => cancelActiveRun === cancelRun,
           getAwaitingUserInputTurnId: () => stopRequest.kind === "awaiting-user" ? stopRequest.requestId : void 0,
           getCompletedTurnId: () => stopRequest.kind === "complete" ? stopRequest.requestId : void 0,
+          hasRunningBackgroundWork: () => isBackgroundWorkRunning(host.subagents, host.backgroundWatches),
           agentStore: () => host.agentStore(),
           getBlobStore: () => host.getBlobStore(),
           setLocalState: (state) => {
@@ -511606,14 +513709,22 @@ function createTurnRunShell(host) {
           persistAnnouncedAgentProfile: (store, turnSnapshot, identity) => host.systemPromptAssembly.persistAnnouncedAgentProfile(store, turnSnapshot, identity),
           recordPostTurnLabeling: host.inference.recordPostTurnLabeling != null ? (args) => host.inference.recordPostTurnLabeling?.(args) : void 0,
           recordFollowupLabeling: host.inference.recordFollowupLabeling != null ? (args) => host.inference.recordFollowupLabeling?.(args) : void 0,
-          latestPromptMessages: () => host.latestPromptMessagesGetter()?.() ?? []
+          latestPromptMessages: () => host.latestPromptMessagesGetter()?.() ?? [],
+          parentPromptMessages: () => host.parentPromptMessages?.() ?? [],
+          mcpServerHosts: async () => {
+            const management = host.mcpManagement?.();
+            return management == null ? /* @__PURE__ */ new Map() : mcpServerHosts(await management.listInstalled());
+          }
         },
         {
           conversationId,
           turnSeq,
           memoryStore: host.memoryStore(),
           episodeProgress: host.episodeProgress(),
-          profilePromptSnapshots: host.profilePromptSnapshots()
+          profilePromptSnapshots: host.profilePromptSnapshots(),
+          taskList: host.isSubagentRunner || options2.isGroupMemberTurn === true || idleCompaction !== void 0 ? void 0 : host.taskList(),
+          userPrompts: turnUserPrompts,
+          finishedWork: revival?.finishedWork ?? []
         }
       );
       activeRunDispatched = false;
@@ -511709,11 +513820,15 @@ function createTurnRunShell(host) {
         }
       });
       try {
+        setupLaps.lap("prelude");
         if (!host.isSubagentRunner) {
           await host.conversationSizeGuard?.();
         }
+        setupLaps.lap("size_guard");
         await host.awaitAutoReviewPolicy?.();
+        setupLaps.lap("auto_review_policy");
         const privacyMode = await host.inference.resolvePrivacyMode();
+        setupLaps.lap("privacy_mode");
         if (ctx.canceled) {
           throw new SandTurnInterruptedBeforeDispatchError();
         }
@@ -511734,12 +513849,14 @@ function createTurnRunShell(host) {
           action,
           automationStatusReminder,
           automationStatusCompactionEpoch,
-          prependedUserMessageDedupeFloorMessageId
+          prependedUserMessageDedupeFloorMessageId,
+          unconfirmedUserPrompts: carriedUserPrompts
         } = actionOnly ? {
           action: promptlessAction,
           automationStatusReminder: null,
           automationStatusCompactionEpoch: 0,
-          prependedUserMessageDedupeFloorMessageId: void 0
+          prependedUserMessageDedupeFloorMessageId: void 0,
+          unconfirmedUserPrompts: []
         } : await host.promptGlue.assembleTurnAction({
           runCtx,
           trimmedPrompt,
@@ -511750,6 +513867,8 @@ function createTurnRunShell(host) {
           compactionEpoch: () => host.getConversationState().summaryArchives.length,
           shellWatchHost: host.shellWatchHost()
         });
+        setupLaps.lap("turn_action");
+        unconfirmedUserPrompts = carriedUserPrompts;
         frozenSectionUpdate?.commit();
         toolDescriptionUpdate?.commit();
         const boxId = host.resolveBoxId();
@@ -511803,6 +513922,7 @@ function createTurnRunShell(host) {
             idleCompaction?.observer
           )
         );
+        setupLaps.lap("inference_session");
         sessionForLabeling = session;
         options2.onModelResolved?.(session.getModelId());
         if (host.isComputerUseSubagent) {
@@ -511828,9 +513948,11 @@ function createTurnRunShell(host) {
           )
         );
         const turnStartedAtMs = Date.now();
+        setupLaps.lap("summarization_session");
         const baseState = ConversationStateStructure.fromBinary(
           host.getConversationState().toBinary()
         );
+        setupLaps.lap("base_state_copy");
         const transcriptPersistence = settle.noteBaseState(baseState, privacyMode);
         if (transcriptPersistence === "enabled") {
           options2.onPersistableRunStarted?.(inferenceRequestId);
@@ -511848,6 +513970,7 @@ function createTurnRunShell(host) {
             host.getBlobStore()
           );
         }
+        setupLaps.lap("transcript_mirror");
         if (ctx.canceled) {
           throw new SandTurnInterruptedBeforeDispatchError();
         }
@@ -511874,20 +513997,25 @@ function createTurnRunShell(host) {
             throw error3;
           }
         });
+        setupLaps.lap("box_ready");
         const emittedConnectorCards = /* @__PURE__ */ new Set();
         await traceSendPhase(
           ctx,
           "botTemplateShare.prepareScope",
           () => host.prepareBotTemplateShareScope()
         );
+        setupLaps.lap("template_share_scope");
         const mcpDiscovery = await mcpToolsDiscovery;
+        setupLaps.lap("mcp_discovery");
         if (mcpDiscovery.kind === "canceled") {
           throw mcpDiscovery.error;
         }
         const mcpTools = mcpDiscovery.tools;
         host.setMcpConnectedServerNamesForTurn(mcpTools.map((tool) => tool.providerIdentifier));
         host.setMcpCustomInstructionsForTurn(await host.promptGlue.resolveMcpCustomInstructions());
+        setupLaps.lap("mcp_instructions");
         const userFormVaultKeys = await userFormVaultKeysPromise;
+        setupLaps.lap("vault_keys");
         const buildTurnAgent = (turnSession) => {
           return host.turnAgentComposition.buildAgentForRun(
             {
@@ -511935,8 +514063,13 @@ function createTurnRunShell(host) {
               performanceObservation,
               conversationActionReceiver: steerInbox.receiver(privacyMode),
               ...idleCompaction === void 0 ? {} : { summarizeActionMode: "threshold" },
-              ...skipLabeling || host.inference.recordFollowupLabeling == null ? {} : {
-                captureFollowupLabelingMessages: settle.captureFollowupLabelingMessages
+              ...host.inference.recordPostTurnLabeling == null && (skipLabeling || host.inference.recordFollowupLabeling == null) ? {} : {
+                captureFirstStreamMessages: (messages) => {
+                  settle.captureTurnStartMessages(messages);
+                  if (!skipLabeling && host.inference.recordFollowupLabeling != null) {
+                    settle.captureFollowupLabelingMessages(messages);
+                  }
+                }
               }
             }
           );
@@ -511946,6 +514079,7 @@ function createTurnRunShell(host) {
           "buildAgentForRun",
           async () => buildTurnAgent(session)
         );
+        setupLaps.lap("agent_build");
         if (ctx.canceled) {
           throw new SandTurnInterruptedBeforeDispatchError();
         }
@@ -511970,7 +514104,7 @@ function createTurnRunShell(host) {
         }
         let checkpointChain = Promise.resolve();
         const streamAttempt = createStreamAttempt({
-          ctx,
+          ctx: ctx.with(requestModelNameKey2, session.getModelId()).with(requestModelNameKey, session.getModelId()),
           streamTuning: host.streamTuning,
           transientStreamRetry: options2.transientStreamRetry != null || host.isSubagentRunner ? { ...host.streamTuning.headlessRetry, ...options2.transientStreamRetry } : void 0,
           hidden: options2.hidden === true,
@@ -512066,6 +514200,7 @@ function createTurnRunShell(host) {
         aborted2 = ctx.canceled && !isRunStopped() && !pausedForUpgrade;
         endRunLifecycle();
         if (!aborted2 && !pausedForUpgrade) {
+          const taskListKept = settle.keepTaskList({ end: "finished" });
           await settle.settleCompletedTurn({
             finalState,
             session,
@@ -512073,7 +514208,8 @@ function createTurnRunShell(host) {
             turnStartedAtMs,
             hidden: options2.hidden === true,
             trimmedPrompt,
-            skipLabeling
+            skipLabeling,
+            ...turnRequestSource === void 0 ? {} : { requestSource: turnRequestSource }
           });
           settle.recordFinalizedFollowupLabeling({
             session,
@@ -512081,6 +514217,7 @@ function createTurnRunShell(host) {
             skipLabeling,
             advanceChainOnDelivery
           });
+          await taskListKept;
         }
       } catch (error3) {
         endRunLifecycle();
@@ -512110,6 +514247,9 @@ function createTurnRunShell(host) {
             },
             { supersededByUser: true }
           );
+        }
+        if (aborted2) {
+          await settle.keepTaskList({ end: supersededByUser ? "superseded" : "stopped" });
         }
         if (ownsRunner) {
           steerInbox.endRun();
@@ -512225,6 +514365,7 @@ var SandAgentRunner = class _SandAgentRunner {
   subagentType;
   subagentModelId;
   inheritedRequestSource;
+  parentPromptMessages;
   activeTurnRequestSource;
   activeTurnInitiatedBy;
   inheritedAutomationId;
@@ -512291,7 +514432,6 @@ var SandAgentRunner = class _SandAgentRunner {
   credentialAccess;
   credentialProviderStatus;
   credentialFillLease;
-  jevBrowserUse;
   mcpConnectedServerNamesForTurn = [];
   mcpConfigJsonForTurn = void 0;
   mcpCustomInstructionsForTurn = /* @__PURE__ */ new Map();
@@ -512383,7 +514523,7 @@ var SandAgentRunner = class _SandAgentRunner {
     }
     const eventTracker = createSandAgentEventTracker({
       telemetry: options2.summaryTelemetry,
-      fallback: getAgentEventTracker(metricsCtx),
+      fallback: options2.agentEventTracker ?? getAgentEventTracker(metricsCtx),
       getConversationId: () => this.getConversationId(),
       actionAuditor: () => this.actionAuditor,
       resolveBoxId: () => this.resolveBoxId(),
@@ -512432,6 +514572,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.subagentType = options2.subagentType;
     this.subagentModelId = options2.subagentModelId;
     this.inheritedRequestSource = options2.requestSource;
+    this.parentPromptMessages = options2.parentPromptMessages;
     this.inheritedDirectionEpoch = options2.inheritedDirectionEpoch;
     this.inheritedAutomationId = options2.automationId;
     this.secretScopeId = options2.secretScopeId;
@@ -512456,7 +514597,6 @@ var SandAgentRunner = class _SandAgentRunner {
     this.credentialAccess = options2.credentialAccess;
     this.credentialProviderStatus = options2.credentialProviderStatus;
     this.credentialFillLease = options2.credentialFillLease;
-    this.jevBrowserUse = options2.jevBrowserUse;
     this.memoryStore = options2.memoryStore;
     this.sortMemoriesProposal = options2.sortMemoriesProposal;
     this.carryOver = options2.carryOver;
@@ -512539,6 +514679,7 @@ var SandAgentRunner = class _SandAgentRunner {
     this.slackMessageDelete = options2.slackMessageDelete;
     this.slackSetup = options2.slackSetup;
     this.teamPublish = options2.teamPublish;
+    const ownPrompt = !this.isSubagentRunner && !this.isSystemPromptOverridden;
     this.systemPromptAssembly = createSystemPromptAssembly({
       activeTurnRequestSource: () => this.activeTurnRequestSource,
       basePrompt: options2.systemPrompt ?? "",
@@ -512550,7 +514691,8 @@ var SandAgentRunner = class _SandAgentRunner {
       hasAgentState: options2.agentState != null,
       isBoxScopedSubagent: () => this.isBoxScopedSubagent,
       gates: this.gates,
-      credentialFillEnabled: !this.isSubagentRunner && !this.isSystemPromptOverridden && options2.credentialAccess != null,
+      credentialFillEnabled: ownPrompt && options2.credentialAccess != null,
+      credentialFillBrokered: ownPrompt && options2.credentialAccess?.broker != null,
       hasUserComputer: options2.hasUserComputer,
       hasGenerateImage: options2.hasGenerateImage,
       hasMeetings: () => options2.meetings !== void 0,
@@ -512592,6 +514734,7 @@ var SandAgentRunner = class _SandAgentRunner {
       getConversationId: () => this.getConversationId(),
       resolveBoxId: () => this.resolveBoxId(),
       initialNavigationProbe: options2.navigationProbe,
+      playwrightRuntime: () => this.gates.browserUsePlaywrightProxy() ? "proxy" : "direct",
       ...this.attachBoxServers === void 0 ? {} : { attachBoxServers: this.attachBoxServers }
     });
     this.subagents = createSubagentRuntime({
@@ -512755,12 +514898,9 @@ var SandAgentRunner = class _SandAgentRunner {
       get remoteBox() {
         return self2.remoteBox;
       },
-      get remoteBoxHasDesktop() {
-        return self2.remoteBoxHasDesktop;
-      },
-      get getRemoteBoxAvailable() {
-        return self2.getRemoteBoxAvailable;
-      },
+      remoteBoxHasDesktop: this.remoteBoxHasDesktop,
+      getRemoteBoxAvailable: this.getRemoteBoxAvailable,
+      resolvePlaywrightUnsafeCodeAdmission: options2.resolvePlaywrightUnsafeCodeAdmission,
       get transport() {
         return self2.transport;
       },
@@ -512788,9 +514928,6 @@ var SandAgentRunner = class _SandAgentRunner {
       },
       get credentialFillLease() {
         return self2.credentialFillLease;
-      },
-      get jevBrowserUse() {
-        return self2.jevBrowserUse;
       },
       registerPauseMcpCancel: (cancel) => {
         if (this.isPausingForUpgrade()) {
@@ -512955,7 +515092,6 @@ var SandAgentRunner = class _SandAgentRunner {
       getRunningSubagent: (subagentAgentId) => this.getRunningSubagent(subagentAgentId),
       detachedSubagents: this.detachedSubagents
     };
-    const parentTransport = this.transport;
     this.turnAgentComposition = (options2.createTurnAgentComposition ?? createTurnAgentComposition)({
       isCombinedComputerUseAvailable: this.combinedComputerUse.read,
       toolDescriptionSnapshots: () => this.frozenToolDescriptionSnapshots(),
@@ -512967,6 +515103,7 @@ var SandAgentRunner = class _SandAgentRunner {
       isBoxScopedSubagent: this.isBoxScopedSubagent,
       isSystemPromptOverridden: this.isSystemPromptOverridden,
       gates: this.gates,
+      jevBrowserUse: options2.jevBrowserUse,
       canvasCursorAgentIds: this.canvasCursorAgentIds,
       hasUserComputer: options2.hasUserComputer,
       inference: this.inference,
@@ -512987,7 +515124,7 @@ var SandAgentRunner = class _SandAgentRunner {
       modelVisibleTime: options2.modelVisibleTime,
       skillStore: () => this.skillStore,
       transcriptMirror: this.transcriptMirror,
-      subagentTransport: options2.subagentTransport ?? (parentTransport === void 0 ? void 0 : createSubagentTransport(parentTransport)),
+      subagentTransport: options2.subagentTransport ?? (options2.transport === void 0 ? void 0 : createSubagentTransport(options2.transport)),
       readVideoAttachmentBytes: this.readVideoAttachmentBytes,
       secretScopeId: this.secretScopeId,
       botSecrets: this.botSecrets,
@@ -513093,6 +515230,7 @@ var SandAgentRunner = class _SandAgentRunner {
           };
         }
         const runnerOptions = {
+          agentEventTracker: options2.agentEventTracker,
           readManagedSkill: options2.readManagedSkill,
           onManagedSkillRead: options2.onManagedSkillRead,
           summaryTelemetry: options2.summaryTelemetry,
@@ -513100,8 +515238,10 @@ var SandAgentRunner = class _SandAgentRunner {
           computerTelemetry: options2.computerTelemetry,
           memoryTelemetry: options2.memoryTelemetry,
           scmWriteBlockedReason: options2.scmWriteBlockedReason,
+          resolvePlaywrightUnsafeCodeAdmission: options2.resolvePlaywrightUnsafeCodeAdmission,
           ...childOptions,
           ...inheritedOptions,
+          parentPromptMessages: () => this.latestPromptMessagesGetter?.() ?? [],
           ...options2.resolveSecretRequestTarget === void 0 ? {} : { resolveSecretRequestTarget: refuseNestedSecretRequest }
         };
         return createJevBrowserSubagentRunner(runnerOptions) ?? new _SandAgentRunner(runnerOptions);
@@ -513163,6 +515303,7 @@ var SandAgentRunner = class _SandAgentRunner {
       runGeneration: () => this.runGeneration,
       agentStore: () => this.agentStore,
       memoryStore: () => this.memoryStore,
+      taskList: () => options2.taskList,
       episodeProgress: () => this.episodeProgress,
       profilePromptSnapshots: () => this.profilePromptSnapshots,
       promptPrefixSnapshots: () => this.promptPrefixSnapshots,
@@ -513183,6 +515324,8 @@ var SandAgentRunner = class _SandAgentRunner {
       setLatestPromptMessagesGetter: (getter) => {
         this.latestPromptMessagesGetter = getter;
       },
+      parentPromptMessages: () => this.parentPromptMessages?.() ?? [],
+      mcpManagement: () => this.mcpManagement,
       setActiveRunIsCanceled: (isCanceled) => {
         this.activeRunIsCanceled = isCanceled;
       },
@@ -513358,7 +515501,7 @@ var SandAgentRunner = class _SandAgentRunner {
     return this.subagents.hasRunningSubagents();
   }
   hasRunningBackgroundWork() {
-    return this.subagents.hasRunningSubagents() || this.backgroundWatches.pendingCloudAgentWatchBcIds().length > 0 || this.backgroundWatches.hasRunningBackgroundShellWork();
+    return isBackgroundWorkRunning(this.subagents, this.backgroundWatches);
   }
   async drainBackgroundWork() {
     await Promise.all([
@@ -514068,6 +516211,7 @@ function composeEvalRunnerGates(overrides = {}) {
     memoryFactsInUserInfo: fixedGate(false, EVAL_RUNNER_PIN),
     browserNavigationRecovery: fixedGate(false, EVAL_RUNNER_PIN),
     browserUsePlaywright: fixedGate(false, EVAL_RUNNER_PIN),
+    browserUsePlaywrightProxy: fixedGate(false, EVAL_RUNNER_PIN),
     browserUseJev: fixedGate(false, EVAL_RUNNER_PIN),
     userForm: fixedGate(false, EVAL_RUNNER_PIN),
     formVault: fixedGate(false, EVAL_RUNNER_PIN),
@@ -514083,6 +516227,7 @@ function composeEvalRunnerGates(overrides = {}) {
     cloudAgentDurableWatch: fixedGate(false, EVAL_RUNNER_PIN),
     cloudAgentReplyModes: fixedGate(false, EVAL_RUNNER_PIN),
     cloudAgentPublishRepository: fixedGate(false, EVAL_RUNNER_PIN),
+    originBuiltinMounted: fixedGate(false, EVAL_RUNNER_PIN),
     frozenToolDescriptions: fixedGate(false, EVAL_RUNNER_PIN),
     checkSubscriptionUsage: fixedGate(false, EVAL_RUNNER_PIN),
     connectedActivity: fixedGate(false, EVAL_RUNNER_PIN),
@@ -514417,6 +516562,7 @@ async function main() {
   const inference = createSandEvalInference({
     backend: readSandProcessEnvironment(process.env).backend,
     getAccessToken: async () => accessToken,
+    getTeamId: sandEvalTeamIdGetter(process.env.SAND_EVAL_TEAM_ID),
     getMachineId: async () => machineId,
     model: request3.model,
     inferenceRequestContext: request3.inferenceRequestContext == null ? void 0 : { ...request3.inferenceRequestContext, inferenceProxyJwt }
