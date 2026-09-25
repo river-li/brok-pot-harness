@@ -1,9 +1,6 @@
-// @generated SignedSource<<5b626311d02d9f60f31f2b70c2ddedf085c400f186a8c69c68bc685dbfb083fa>>
+// @generated SignedSource<<003cc918c08216ed01d5bb1b029c43cd04fb3537cd61cdbb26a3480de9303a5b>>
 // Emitted by scripts/gen-box-contract.mts from sand/src/shared/box/box-contract.ts;
 // regenerate with `pnpm --filter sand run gen:box-contract`.
-export const UA_OWNER_STAMP_PATH = "/tmp/sand-ua-user";
-export const UA_OWNER_STAMP_LENGTH = 16;
-export const UA_TOKEN_DISABLED_MARKER_PATH = "/tmp/sand-ua-token-disabled";
 export const BROWSER_FINGERPRINT_SPOOF_MARKER_PATH = "/tmp/sand-browser-fingerprint-spoof";
 export const ENABLE_SPOOF_GPU_MARKER_PATH = "/tmp/sand-enable-spoof-gpu";
 export const WEB_BOT_AUTH_SIGNED_CACHE_PATH = "/tmp/sand-web-bot-auth-signed.json";

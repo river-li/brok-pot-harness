@@ -168030,11 +168030,7 @@ function tryParseIpv6(input) {
   if (totalGroups > 7) {
     return void 0;
   }
-  const groups = [
-    ...leftGroups,
-    ...new Array(8 - totalGroups).fill(0),
-    ...rightGroups
-  ];
+  const groups = [...leftGroups, ...new Array(8 - totalGroups).fill(0), ...rightGroups];
   return {
     version: 6,
     value: groups.reduce((acc, group) => acc << BIGINT_SIXTEEN | BigInt(group), BIGINT_ZERO)
@@ -221447,7 +221443,7 @@ function stampedVersionBaseOf(stamped) {
 }
 function sandClientBaseVersionOf(clientAppVersion) {
   return stampedVersionBaseOf(clientAppVersion) ?? stampedVersionBaseOf(
-    true ? "0.59.0-pre.27" : void 0
+    true ? "0.59.0-pre.31" : void 0
   ) ?? SAND_CLIENT_FALLBACK_BASE_VERSION;
 }
 var SAND_BOX_NAMESPACE_HEADER = "x-sand-box-namespace";
@@ -277497,7 +277493,7 @@ var LinearIssuesOrderBy = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "
 var LinearIssueSummariesUnavailableReason = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "LinearIssueSummariesUnavailableReason", [[0, "UNSPECIFIED"], [1, "NOT_CONNECTED"], [2, "WORKSPACE_MISMATCH"], [3, "BUDGET_RESERVED"], [4, "RATE_LIMITED"]], 1);
 var SlackRoutingRuleTargetType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SlackRoutingRuleTargetType", [[0, "UNSPECIFIED"], [1, "REPOSITORY"], [2, "ENVIRONMENT"]], 1);
 var GroupType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "GroupType", [[0, "UNSPECIFIED"], [1, "BILLING"], [2, "PRODUCT"]], 1);
-var SpendGroupByCategory = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SpendGroupByCategory", [[0, "UNSPECIFIED"], [1, "MODEL"], [2, "USAGE_TYPE"]], 1);
+var SpendGroupByCategory = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SpendGroupByCategory", [[0, "UNSPECIFIED"], [1, "MODEL"], [2, "USAGE_TYPE"], [3, "ORIGINATING_FLOW"], [4, "GROK_BOT"], [5, "PRODUCT"]], 1);
 var SpendType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "SpendType", [[0, "UNSPECIFIED"], [1, "ON_DEMAND"], [2, "INCLUDED"], [3, "ALL"]], 1);
 var GroupMemberChangeType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "GroupMemberChangeType", [[0, "UNSPECIFIED"], [1, "ADD"], [2, "REMOVE"]], 1);
 var ScimDirectoryOwnerType = /* @__PURE__ */ enumType2(proto3, __protoPackage143, "ScimDirectoryOwnerType", [[0, "UNSPECIFIED"], [1, "ORGANIZATION"], [2, "TEAM"]], 1);
@@ -279708,7 +279704,7 @@ var FinalizeIndividualUnificationRequest = class _FinalizeIndividualUnificationR
     return proto3.util.equals(_FinalizeIndividualUnificationRequest, a, b2);
   }
   static $() {
-    return ["FinalizeIndividualUnificationRequest|1 checkout_outcome #0?|2 continue_with_free 8", IndividualUnificationCheckoutOutcome];
+    return ["FinalizeIndividualUnificationRequest|1 checkout_outcome #0?|2 continue_with_free 8|3 marketing_opted_out 8?", IndividualUnificationCheckoutOutcome];
   }
 };
 var IndividualUnificationCheckoutOutcome = class _IndividualUnificationCheckoutOutcome extends __protoMessage3136 {
@@ -306969,6 +306965,51 @@ var PrepareXaiCursorTeamMergeCheckoutResponse = class _PrepareXaiCursorTeamMerge
     return ["PrepareXaiCursorTeamMergeCheckoutResponse|1 xai_team_id 9|2 cart #0*|3 checkout_state #1", XaiCursorTeamCheckoutCartLine, XaiCursorTeamMergeCheckoutState];
   }
 };
+var UnprepareXaiCursorTeamMergeCheckoutRequest = class _UnprepareXaiCursorTeamMergeCheckoutRequest extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.teamId = 0;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _UnprepareXaiCursorTeamMergeCheckoutRequest().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _UnprepareXaiCursorTeamMergeCheckoutRequest().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _UnprepareXaiCursorTeamMergeCheckoutRequest().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_UnprepareXaiCursorTeamMergeCheckoutRequest, a, b2);
+  }
+  static $() {
+    return ["UnprepareXaiCursorTeamMergeCheckoutRequest|1 team_id 5"];
+  }
+};
+var UnprepareXaiCursorTeamMergeCheckoutResponse = class _UnprepareXaiCursorTeamMergeCheckoutResponse extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.xaiTeamId = "";
+    this.checkoutState = XaiCursorTeamMergeCheckoutState.UNSPECIFIED;
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _UnprepareXaiCursorTeamMergeCheckoutResponse().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _UnprepareXaiCursorTeamMergeCheckoutResponse().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _UnprepareXaiCursorTeamMergeCheckoutResponse().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_UnprepareXaiCursorTeamMergeCheckoutResponse, a, b2);
+  }
+  static $() {
+    return ["UnprepareXaiCursorTeamMergeCheckoutResponse|1 xai_team_id 9|2 checkout_state #0", XaiCursorTeamMergeCheckoutState];
+  }
+};
 var FinalizeXaiCursorTeamMergeCheckoutRequest = class _FinalizeXaiCursorTeamMergeCheckoutRequest extends __protoMessage3136 {
   constructor(data) {
     super();
@@ -308945,7 +308986,7 @@ var GetDailySpendByCategoryRequest = class _GetDailySpendByCategoryRequest exten
     return proto3.util.equals(_GetDailySpendByCategoryRequest, a, b2);
   }
   static $() {
-    return ["GetDailySpendByCategoryRequest|1 team_id 5?|2 user_id 5?|3 period_start_ms 3|4 period_end_ms 3|5 group_by #0|6 spend_type #1?|7 service_account_id 9?|8 cloud_agent_id 9?|9 automation_id 9?|10 automation_managed_type 9?|11 client_type 9?|12 products 9*", SpendGroupByCategory, SpendType];
+    return ["GetDailySpendByCategoryRequest|1 team_id 5?|2 user_id 5?|3 period_start_ms 3|4 period_end_ms 3|5 group_by #0|6 spend_type #1?|7 service_account_id 9?|8 cloud_agent_id 9?|9 automation_id 9?|10 automation_managed_type 9?|11 client_type 9?|12 products 9*|13 include_credit_usage 8?", SpendGroupByCategory, SpendType];
   }
 };
 var DailySpendByCategory = class _DailySpendByCategory extends __protoMessage3136 {
@@ -311958,7 +311999,31 @@ var ClientActionResponse = class _ClientActionResponse extends __protoMessage313
     return proto3.util.equals(_ClientActionResponse, a, b2);
   }
   static $() {
-    return ["ClientActionResponse|1 success 8|2 error_message 9?|3 info_message 9?|4 open_url 9?"];
+    return ["ClientActionResponse|1 success 8|2 error_message 9?|3 info_message 9?|4 open_url 9?|5 confirmation #0?", ClientActionConfirmation];
+  }
+};
+var ClientActionConfirmation = class _ClientActionConfirmation extends __protoMessage3136 {
+  constructor(data) {
+    super();
+    this.title = "";
+    this.message = "";
+    this.confirmLabel = "";
+    proto3.util.initPartial(data, this);
+  }
+  static fromBinary(bytes, options2) {
+    return new _ClientActionConfirmation().fromBinary(bytes, options2);
+  }
+  static fromJson(jsonValue, options2) {
+    return new _ClientActionConfirmation().fromJson(jsonValue, options2);
+  }
+  static fromJsonString(jsonString, options2) {
+    return new _ClientActionConfirmation().fromJsonString(jsonString, options2);
+  }
+  static equals(a, b2) {
+    return proto3.util.equals(_ClientActionConfirmation, a, b2);
+  }
+  static $() {
+    return ["ClientActionConfirmation|1 title 9|2 message 9|3 confirm_label 9|4 action #0", DashboardAction];
   }
 };
 var Rule = class _Rule extends __protoMessage3136 {
@@ -321005,7 +321070,7 @@ var PRCheckStatus = class _PRCheckStatus extends __protoMessage3137 {
     return proto3.util.equals(_PRCheckStatus, a, b2);
   }
   static $() {
-    return ["PRCheckStatus|1 overall_state 9|2 success_count 5|3 failure_count 5|4 pending_count 5|5 neutral_count 5|6 skipped_count 5|7 total_count 5|8 checks #0*|9 required_failure_count 5?|10 required_pending_count 5?", PRCheck];
+    return ["PRCheckStatus|1 overall_state 9|2 success_count 5|3 failure_count 5|4 pending_count 5|5 neutral_count 5|6 skipped_count 5|7 total_count 5|8 checks #0*|9 required_failure_count 5?|10 required_pending_count 5?|11 action_required_count 5?", PRCheck];
   }
 };
 var PRCheckAnnotation = class _PRCheckAnnotation extends __protoMessage3137 {
@@ -345406,6 +345471,18 @@ var DashboardService = {
       name: "PrepareXaiCursorTeamMergeCheckout",
       I: PrepareXaiCursorTeamMergeCheckoutRequest,
       O: PrepareXaiCursorTeamMergeCheckoutResponse,
+      kind: MethodKind.Unary
+    },
+    /**
+     * Unlocks an unpaid prepared checkout so its existing seat picks can be
+     * edited. Refuses once a purchase is being confirmed.
+     *
+     * @generated from rpc aiserver.v1.DashboardService.UnprepareXaiCursorTeamMergeCheckout
+     */
+    unprepareXaiCursorTeamMergeCheckout: {
+      name: "UnprepareXaiCursorTeamMergeCheckout",
+      I: UnprepareXaiCursorTeamMergeCheckoutRequest,
+      O: UnprepareXaiCursorTeamMergeCheckoutResponse,
       kind: MethodKind.Unary
     },
     /**
@@ -472918,6 +472995,7 @@ function reviewFailureAuditOutcome(failure) {
   switch (failure) {
     case "policy_denied":
     case "approval_denied":
+    case "approval_too_long":
       return "denied";
     case "cancelled":
       return "cancelled";
@@ -473309,6 +473387,10 @@ function summarizeSandBrowserAutoReviewAction(args) {
       return summarize(
         `Run CDP command ${args.cdpMethod?.slice(0, 120) ?? ""} with ${compactHeadAndTail(redactSandAutoReviewInlineSecrets(args.cdpParams ?? "{}"), 160)}`
       );
+    case "run_code": {
+      const lines2 = (args.code ?? "").trim().split("\n").length;
+      return summarize(`Run ${lines2 === 1 ? "1 line" : `${lines2} lines`} of Playwright code`);
+    }
     case "tabs":
       if (args.tabsAction === "new" && args.url !== void 0 && args.url.length > 0) {
         return compact(
@@ -473757,6 +473839,7 @@ var SAND_BROWSER_AUTO_REVIEW_MAX_TEXT_CHARS = 2e3;
 var SAND_BROWSER_AUTO_REVIEW_MAX_URL_CHARS = 2e3;
 var SAND_BROWSER_AUTO_REVIEW_MAX_KEY_CHARS = 256;
 var SAND_BROWSER_AUTO_REVIEW_MAX_CDP_PARAMS_CHARS = 2e3;
+var SAND_BROWSER_AUTO_REVIEW_MAX_CODE_CHARS = 16384;
 var BYPASS_BROWSER_OPS = /* @__PURE__ */ new Set([
   "snapshot",
   "screenshot",
@@ -473798,6 +473881,7 @@ function normalizeSandBrowserExactActionArgs(raw) {
   assertBounded(raw.value, "value", SAND_BROWSER_AUTO_REVIEW_MAX_TEXT_CHARS);
   assertBounded(raw.key, "key", SAND_BROWSER_AUTO_REVIEW_MAX_KEY_CHARS);
   assertBounded(raw.cdpParams, "params", SAND_BROWSER_AUTO_REVIEW_MAX_CDP_PARAMS_CHARS);
+  assertBounded(raw.code, "code", SAND_BROWSER_AUTO_REVIEW_MAX_CODE_CHARS);
   if (raw.values !== void 0 && raw.values.join(", ").length > SAND_BROWSER_AUTO_REVIEW_MAX_TEXT_CHARS) {
     rejectOversizedField2("values", SAND_BROWSER_AUTO_REVIEW_MAX_TEXT_CHARS);
   }
@@ -473856,6 +473940,7 @@ function buildSandBrowserClassifierRiskTarget(args) {
       key: exactAction.key,
       cdp_method: exactAction.cdpMethod,
       cdp_params: exactAction.cdpParams,
+      code: exactAction.code,
       tabs_action: exactAction.tabsAction,
       tab_index: exactAction.tabIndex,
       coordinates: exactAction.x !== void 0 && exactAction.y !== void 0 ? { x: exactAction.x, y: exactAction.y } : void 0,
@@ -473879,6 +473964,42 @@ function buildSandBrowserClassifierRiskTarget(args) {
       project_permissions: projectPermissions
     })
   });
+}
+function reviewPhaseOutcome(error3) {
+  if (error3 instanceof SandBrowserAutoReviewBlockedError) {
+    return error3.telemetryCode === "cancelled" ? "cancelled" : "blocked";
+  }
+  return error3 instanceof Error && error3.name === "AbortError" ? "cancelled" : "error";
+}
+function notifyReviewPhase(options2, record3) {
+  if (options2.onPhase === void 0) return;
+  try {
+    options2.onPhase(record3);
+  } catch (error3) {
+    reportHostDiagnostic({
+      kind: "playwright_phase_observer_failed",
+      errorClass: errorLogTag(error3)
+    });
+  }
+}
+async function measureReviewPhase(options2, phase, execution, run, outcomeOf = () => "ok") {
+  const startedAt = performance.now();
+  let outcome = "ok";
+  try {
+    const value = await run();
+    outcome = outcomeOf(value);
+    return value;
+  } catch (error3) {
+    outcome = reviewPhaseOutcome(error3);
+    throw error3;
+  } finally {
+    notifyReviewPhase(options2, {
+      phase,
+      durationMs: performance.now() - startedAt,
+      outcome,
+      execution
+    });
+  }
 }
 async function runClassifier2(ctx, args, classifierMode, canonicalTarget) {
   const { options: options2, stateHandler } = args;
@@ -473924,10 +474045,15 @@ async function runSandBrowserAutoReviewPreflight(args) {
   const canonicalTarget = buildSandBrowserAutoReviewCanonicalTarget({
     exactAction: args.exactAction,
     boxIdentity: options2.boxIdentity,
-    reviewState: await options2.captureReviewState(args.ctx, args.toolCallId)
+    reviewState: await measureReviewPhase(
+      options2,
+      "review_state_capture",
+      "foreground",
+      () => options2.captureReviewState(args.ctx, args.toolCallId)
+    )
   });
   const fingerprint2 = fingerprintSandBrowserAutoReviewTarget(canonicalTarget);
-  const assertDisplayStateUnchanged = async () => {
+  const assertDisplayStateUnchanged = () => measureReviewPhase(options2, "review_state_recheck", "foreground", async () => {
     const currentDisplayStateIdentity = (await options2.captureReviewState(args.ctx, args.toolCallId)).displayStateIdentity;
     if (currentDisplayStateIdentity !== canonicalTarget.displayStateIdentity) {
       options2.autoReviewController?.reportDisplayRecheckFailed(options2.agentId);
@@ -473936,40 +474062,70 @@ async function runSandBrowserAutoReviewPreflight(args) {
         "state_changed"
       );
     }
-  };
+  });
+  const classifierOutcome = (decision2) => decision2.kind === "reject" ? "error" : "ok";
   if (mode === "shadow") {
-    void runClassifier2(args.ctx, args, "shadow", canonicalTarget).catch((error3) => {
+    void measureReviewPhase(
+      options2,
+      "review_classifier",
+      "background",
+      () => runClassifier2(args.ctx, args, "shadow", canonicalTarget),
+      classifierOutcome
+    ).catch((error3) => {
       if (!(error3 instanceof Error && error3.name === "AbortError")) {
         throw error3;
       }
     });
     return;
   }
-  const decision = await runClassifier2(args.ctx, args, "enforce", canonicalTarget);
+  const decision = await measureReviewPhase(
+    options2,
+    "review_classifier",
+    "foreground",
+    () => runClassifier2(args.ctx, args, "enforce", canonicalTarget),
+    classifierOutcome
+  );
   if (decision.kind === "allow") {
     await assertDisplayStateUnchanged();
     return;
   }
   const blockReason = decision.reason;
   const controller = options2.autoReviewController;
+  const code = canonicalTarget.exactAction.code;
+  if (decision.kind === "block" && code !== void 0 && code.trim().length > SAND_AUTO_REVIEW_COMMAND_MAX_CHARS) {
+    throw new SandBrowserAutoReviewBlockedError(
+      `${blockReason} This code is too long (${code.trim().length} characters) to show in full for approval; split it into snippets of at most ${SAND_AUTO_REVIEW_COMMAND_MAX_CHARS} characters.`,
+      "approval_too_long"
+    );
+  }
   if (decision.kind === "block" && controller !== void 0) {
-    const approval = await requestReviewedApproval(
-      args.ctx,
-      controller,
-      {
-        agentId: options2.agentId,
-        surface: "computer",
-        fingerprint: fingerprint2,
-        reason: blockReason,
-        summary: summarizeSandBrowserAutoReviewAction({
-          ...canonicalTarget.exactAction,
-          targetPageUrl: canonicalTarget.targetPageUrl
-        }),
-        ...decision.proposedRule === void 0 ? {} : { proposedRule: decision.proposedRule },
-        signal: args.signal,
-        ...options2.getApprovalExpiryPolicy !== void 0 ? { expiryPolicy: options2.getApprovalExpiryPolicy() } : {}
-      },
-      { toolCallId: args.toolCallId, approvalMode: "auto_review" }
+    const approval = await measureReviewPhase(
+      options2,
+      "approval_wait",
+      "foreground",
+      () => requestReviewedApproval(
+        args.ctx,
+        controller,
+        {
+          agentId: options2.agentId,
+          surface: "computer",
+          fingerprint: fingerprint2,
+          reason: blockReason,
+          summary: summarizeSandBrowserAutoReviewAction({
+            ...canonicalTarget.exactAction,
+            targetPageUrl: canonicalTarget.targetPageUrl
+          }),
+          ...code === void 0 ? {} : { command: code },
+          ...decision.proposedRule === void 0 ? {} : { proposedRule: decision.proposedRule },
+          signal: args.signal,
+          ...options2.getApprovalExpiryPolicy !== void 0 ? { expiryPolicy: options2.getApprovalExpiryPolicy() } : {}
+        },
+        { toolCallId: args.toolCallId, approvalMode: "auto_review" }
+      ),
+      (answer) => {
+        if (args.signal?.aborted === true) return "cancelled";
+        return answer.approved ? "ok" : "blocked";
+      }
     );
     if (args.signal?.aborted === true) {
       throw new SandBrowserAutoReviewBlockedError("The browser action was cancelled.", "cancelled");
@@ -474008,6 +474164,7 @@ var TOOL_ERROR_REASON_PATTERNS = [
   ["not_a_select", /Element is not a <select> element/],
   ["navigation_failed", /\bnet::ERR_/],
   ["pointer_intercepted", /intercepts pointer events/],
+  ["navigation_timeout", /\bTimeout \d+ms exceeded[\s\S]*\bnavigating to "/],
   ["action_timeout", /\bTimeout \d+ms exceeded/]
 ];
 function playwrightToolErrorReason(text2) {
@@ -474025,7 +474182,9 @@ var PlaywrightWindowUnavailableError = class extends CustomToolCallError {
 };
 function playwrightToolCallErrorClass(error3) {
   if (error3 instanceof PlaywrightWindowUnavailableError) return "window_unavailable";
-  if (error3 instanceof SandBrowserAutoReviewBlockedError) return "auto_review_blocked";
+  if (error3 instanceof SandBrowserAutoReviewBlockedError) {
+    return error3.telemetryCode === "approval_too_long" ? "auto_review_approval_too_long" : "auto_review_blocked";
+  }
   if (error3 instanceof McpServerDoesNotExistError) return "server_missing";
   if (error3 instanceof CustomToolCallError) return AGENT_CLASSIFICATION_CLASS[error3.classification];
   if (error3 instanceof ConnectError) {
@@ -474051,6 +474210,10 @@ var toolCalls = createHistogram("sand.playwright.tool_call_ms", {
   description: "Terminal Playwright browser tool attempts, admission failures included",
   labelNames: ["tool", "outcome", "stage", "error_class", "harness", "runtime"]
 });
+var phases = createHistogram("sand.playwright.phase_ms", {
+  description: "Intervals a Playwright browser tool attempt entered, one sample per entered phase; a phase the call never reached has no sample",
+  labelNames: ["tool", "phase", "outcome", "execution", "harness"]
+});
 var snapshotRecoveries = createCounter("sand.playwright.snapshot_recovered", {
   description: "Scoped snapshots answered with the whole page after the target failed to resolve",
   labelNames: ["reason", "harness"]
@@ -474073,6 +474236,38 @@ function recordPlaywrightToolCall(ctx, args) {
     error_class: toolCallErrorClassLabel(result)
   });
 }
+function recordPlaywrightPhase(ctx, args) {
+  const { tool, harness, phase, outcome, execution, durationMs } = args;
+  phases.histogram(ctx, durationMs, { tool, phase, outcome, execution, harness });
+}
+function playwrightPhaseOutcome(error3) {
+  if (error3 instanceof SandBrowserAutoReviewBlockedError) {
+    return error3.telemetryCode === "cancelled" ? "cancelled" : "blocked";
+  }
+  return playwrightToolCallErrorClass(error3) === "cancelled" ? "cancelled" : "error";
+}
+async function measurePlaywrightPhase(observe2, run) {
+  const startedAt = performance.now();
+  let outcome = "ok";
+  try {
+    return await run();
+  } catch (error3) {
+    outcome = playwrightPhaseOutcome(error3);
+    throw error3;
+  } finally {
+    observePlaywrightPhaseSafely(() => observe2(performance.now() - startedAt, outcome));
+  }
+}
+function observePlaywrightPhaseSafely(observe2) {
+  try {
+    observe2();
+  } catch (error3) {
+    reportHostDiagnostic({
+      kind: "playwright_phase_observer_failed",
+      errorClass: errorLogTag(error3)
+    });
+  }
+}
 function toolCallErrorClassLabel(result) {
   switch (result.kind) {
     case "ok":
@@ -474087,6 +474282,7 @@ function toolCallErrorClassLabel(result) {
 // ../packages/grok-bot-harness/src/mcp/playwright-box-mcp.ts
 var PLAYWRIGHT_BOX_MCP_SERVER_NAME = /^playwright-w(0|[1-9]\d*)$/;
 var PLAYWRIGHT_ACTION_TIMEOUT_MS = 1e4;
+var PLAYWRIGHT_NAVIGATION_TIMEOUT_MS = 2e4;
 function playwrightBoxMcpServerName(windowIndex) {
   return `playwright-w${windowIndex}`;
 }
@@ -474140,7 +474336,7 @@ function boxDriverDisplayLine(boxBrowser) {
   return boxBrowser === null ? "- Your display is the `DISPLAY` your Shell already runs with, exactly the display Computer screenshots and clicks. Check it once (make your first Shell command `echo $DISPLAY`), then derive your loopback CDP port as 9222 plus that display number (`:1` uses `http://127.0.0.1:9223`, `:2` uses 9224). Never guess `:1` or probe other display numbers. A foreign display's browser answers CDP perfectly while being invisible to your user. Keep CDP box-local; never publish, proxy, or expose that port." : `- Your desktop is display \`${boxBrowser.display}\`, the display Computer screenshots and clicks, and your browser's CDP endpoint is \`${boxBrowser.cdpUrl}\`. Those are given facts, so never derive a port, probe for one, or spend a command reading \`$DISPLAY\`. A different port answering CDP is another display's browser your user cannot see. Keep CDP box-local; never publish, proxy, or expose that port.`;
 }
 function combinedComputerPrompt(options2) {
-  const { browser, boxBrowser, browserNavigationRecovery } = options2;
+  const { browser, boxBrowser } = options2;
   return [
     "## Browser and desktop",
     browser.intro,
@@ -474165,12 +474361,10 @@ function combinedComputerPrompt(options2) {
     "## Observe, act, verify",
     browser.snapshotLoop,
     browser.results,
-    ...browser.navigationRecovery(browserNavigationRecovery),
+    browser.navigationRecovery,
     "- During a justified Computer portion, work in a tight see-act-verify loop: screenshot to see the real state, act, then read the one fresh screenshot returned after the entire Computer call before deciding the next one. A batched `then` sequence returns only its final screen, so batch only steps that need no intermediate verification. Never fire actions blind off a remembered layout. Coordinates drift as pages load and reflow.",
     "- Computer already applies a settle delay before its returned screenshot. If that screenshot still shows a mid-load or animating screen, wait and re-observe rather than clicking a moving target; do not add a wait merely for routine settling.",
-    ...browserNavigationRecovery ? [
-      '- During an already-justified Computer portion only: Page loads on the box fail transiently more often than on a laptop. If Chrome shows its own error page ("This site can\'t be reached", an `ERR_*` code) or a page stays blank after a navigation, reload it first (key F5, then `wait`) before treating the site as down or changing approach; only report the site unreachable after a second reload also fails. Do not switch to Computer solely to apply this recovery.'
-    ] : [],
+    '- During an already-justified Computer portion only: Page loads on the box fail transiently more often than on a laptop. If Chrome shows its own error page ("This site can\'t be reached", an `ERR_*` code) or a page stays blank after a navigation, reload it first (key F5, then `wait`) before treating the site as down or changing approach; only report the site unreachable after a second reload also fails. Do not switch to Computer solely to apply this recovery.',
     BOX_DRIVER_MISCLICK_RECOVERY_LINE,
     "- When the task calls for replacing existing text in a field, clear it first (key Control+a, then key BackSpace). If your typed text doesn't show up, the field isn't focused, so click it and try again.",
     BOX_DRIVER_SHORTCUT_FOCUS_LINE,
@@ -474196,7 +474390,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_close",
     description: "Close the page",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {},
       additionalProperties: false
@@ -474212,7 +474405,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_resize",
     description: "Resize the browser window",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         width: {
@@ -474238,7 +474430,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_console_messages",
     description: "Returns all console messages",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         level: {
@@ -474270,7 +474461,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_handle_dialog",
     description: "Handle a dialog",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         accept: {
@@ -474296,7 +474486,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_evaluate",
     description: "Evaluate JavaScript expression on page or element",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         element: {
@@ -474330,7 +474519,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_file_upload",
     description: "Upload one or multiple files",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         paths: {
@@ -474354,7 +474542,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_drop",
     description: 'Drop files or MIME-typed data onto an element, as if dragged from outside the page. At least one of "paths" or "data" must be provided.',
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         element: {
@@ -474397,7 +474584,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_find",
     description: "Search the accessibility snapshot of the current page for text or a regular expression. Returns matching snapshot nodes with a few lines of surrounding context (like search snippets), each shown under its path from the root of the tree, which is cheaper than capturing the whole snapshot when you only need to locate an element and its ref.",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         text: {
@@ -474422,7 +474608,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_fill_form",
     description: "Fill multiple form fields",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         fields: {
@@ -474472,7 +474657,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_press_key",
     description: "Press a key on the keyboard",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         key: {
@@ -474494,7 +474678,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_type",
     description: "Type text into editable element",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         element: {
@@ -474532,7 +474715,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_navigate",
     description: "Navigate to a URL",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         url: {
@@ -474554,7 +474736,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_navigate_back",
     description: "Go back to the previous page in the history",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {},
       additionalProperties: false
@@ -474570,7 +474751,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_network_requests",
     description: "Returns a numbered list of network requests since loading the page. Use browser_network_request with the number to get full details.",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         static: {
@@ -474601,7 +474781,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_network_request",
     description: "Returns full details (headers and body) of a single network request, or a single part if `part` is set. Use the number from browser_network_requests.",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         index: {
@@ -474634,7 +474813,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_run_code_unsafe",
     description: "Run a Playwright code snippet. Unsafe: executes arbitrary JavaScript in the Playwright server process and is RCE-equivalent.",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         code: {
@@ -474659,7 +474837,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_take_screenshot",
     description: "Take a screenshot of the current page. You can't perform actions based on the screenshot, use browser_snapshot for actions.",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         element: {
@@ -474704,7 +474881,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_snapshot",
     description: "Capture accessibility snapshot of the current page, this is better than screenshot",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         target: {
@@ -474737,7 +474913,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_click",
     description: "Perform click on a web page",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         element: {
@@ -474780,7 +474955,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_drag",
     description: "Perform drag and drop between two elements",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         startElement: {
@@ -474814,7 +474988,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_hover",
     description: "Hover over element on page",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         element: {
@@ -474840,7 +475013,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_select_option",
     description: "Select an option in a dropdown",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         element: {
@@ -474873,7 +475045,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_tabs",
     description: "List, create, close, or select a browser tab.",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         action: {
@@ -474904,7 +475075,6 @@ var PLAYWRIGHT_MCP_TOOLS_LIST = [
     name: "browser_wait_for",
     description: "Wait for text to appear or disappear or a specified time to pass",
     inputSchema: {
-      $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
       properties: {
         time: {
@@ -475353,7 +475523,7 @@ async function markSecretFill(element, value) {
   await element.evaluate(MARK_SECRET_FILL_FN, value);
 }
 
-async function gotoWithRecovery(page, url, recovery) {
+async function gotoWithRecovery(page, url) {
   let lastFailure;
   for (let attempt = 0; ; attempt++) {
     try {
@@ -475364,7 +475534,6 @@ async function gotoWithRecovery(page, url, recovery) {
       await page
         .waitForLoadState("load", { timeout: LOAD_SETTLE_TIMEOUT_MS })
         .catch((failure) => noteIgnoredFailure("waiting for the load event", failure));
-      if (!recovery) return { retries: 0, status: undefined };
       if (!isChromeErrorPage(page)) {
         return { retries: attempt, status: response === null ? undefined : response.status() };
       }
@@ -475373,7 +475542,6 @@ async function gotoWithRecovery(page, url, recovery) {
       );
     } catch (error) {
       await stopLoading(page);
-      if (!recovery) throw new Error(failureLine(error));
       if (!isTransientNavigationError(error)) {
         if (attempt === 0) throw new Error(failureLine(error));
         throw new Error(
@@ -475444,7 +475612,7 @@ function isReloadableUrl(url) {
 async function recoverErrorPage(context, page) {
   const intendedUrl = await intendedUrlFromHistory(context, page);
   if (intendedUrl === undefined || !isReloadableUrl(intendedUrl)) return undefined;
-  return gotoWithRecovery(page, intendedUrl, true);
+  return gotoWithRecovery(page, intendedUrl);
 }
 
 function statePath(display) {
@@ -477460,7 +477628,7 @@ async function openNewTab({ request, context, state }, url) {
   state.lastViewId = viewId;
   if (url === undefined) return { page, viewId, summary: "Opened a new tab" };
   page.setDefaultTimeout(ACTION_TIMEOUT_MS);
-  const outcome = await gotoWithRecovery(page, url, request.navigationRecovery === true);
+  const outcome = await gotoWithRecovery(page, url);
   return {
     page,
     viewId,
@@ -477473,7 +477641,7 @@ const OPS = {
   navigate: async ({ request, context, state }) => {
     if (request.newTab === true) return openNewTab({ request, context, state }, request.url);
     const { page, viewId } = await resolvePage(request, context, state);
-    const outcome = await gotoWithRecovery(page, request.url, request.navigationRecovery === true);
+    const outcome = await gotoWithRecovery(page, request.url);
     return {
       page,
       viewId,
@@ -478225,16 +478393,13 @@ async function run(request) {
       opFailure = error;
     }
     const opDurationMs = Math.max(0, performance.now() - opStartedAt);
-    const recovery = request.navigationRecovery === true;
     const mayRecover =
-      recovery &&
       result !== undefined &&
       result.page !== undefined &&
       result.recoveredErrorPage !== true &&
       RECOVER_ERROR_PAGE_AFTER.has(request.op);
     if (mayRecover) await settleIntoErrorPage(context, result.page);
     if (
-      recovery &&
       result !== undefined &&
       result.page !== undefined &&
       result.recoveredErrorPage !== true &&
@@ -478720,7 +478885,6 @@ var SandBrowserDriver = class {
       display: windowIndex,
       cdpPort: BOX_CDP_PORT_BASE + windowIndex,
       viewId: typeof args["viewId"] === "string" && args["viewId"].length > 0 ? args["viewId"] : this.deps.getDefaultViewId(),
-      navigationRecovery: this.deps.isNavigationRecoveryEnabled?.() === true,
       ...screenshotPath !== void 0 ? { screenshotPath } : {}
     };
     const encoded = import_node_buffer6.Buffer.from(JSON.stringify(request3), "utf8").toString("base64");
@@ -478858,7 +479022,6 @@ var SandBrowserDriver = class {
         display: windowIndex,
         cdpPort: BOX_CDP_PORT_BASE + windowIndex,
         viewId: typeof args["viewId"] === "string" && args["viewId"].length > 0 ? args["viewId"] : this.deps.getDefaultViewId(),
-        navigationRecovery: this.deps.isNavigationRecoveryEnabled?.() === true,
         ...screenshotPath !== void 0 ? { screenshotPath } : {}
       };
       const encoded = import_node_buffer6.Buffer.from(JSON.stringify(request3), "utf8").toString("base64");
@@ -479034,6 +479197,7 @@ function toBrowserReviewAction(op, args, defaultViewId) {
     key: stringArg(args, "key"),
     cdpMethod: op === "cdp" ? stringArg(args, "method") : void 0,
     cdpParams: op === "cdp" && args["params"] !== void 0 ? JSON.stringify(args["params"]) : void 0,
+    code: op === "run_code" ? stringArg(args, "code") : void 0,
     tabsAction: op === "tabs" ? stringArg(args, "action") : void 0,
     tabIndex: op === "tabs" ? numberArg(args, "index") : void 0,
     x: numberArg(args, "x"),
@@ -479547,7 +479711,8 @@ var REVIEW_OPS = {
   browser_select_option: "select_option",
   browser_press_key: "press_key",
   browser_drag: "drag",
-  browser_tabs: "tabs"
+  browser_tabs: "tabs",
+  browser_run_code_unsafe: "run_code"
 };
 var DRIVER_ARG_NAMES = {
   target: "ref",
@@ -479557,7 +479722,7 @@ var DRIVER_ARG_NAMES = {
 };
 var PLAYWRIGHT_ROW_ARGS = external_exports.record(external_exports.unknown());
 var PLAYWRIGHT_WAIT_FOR_MAX_SECONDS = PLAYWRIGHT_ACTION_TIMEOUT_MS / 1e3;
-var PLAYWRIGHT_RUN_CODE_UNSAFE_MAX_CHARS = 16384;
+var PLAYWRIGHT_RUN_CODE_UNSAFE_MAX_CHARS = SAND_BROWSER_AUTO_REVIEW_MAX_CODE_CHARS;
 var PLAYWRIGHT_PROXY_HANDSHAKE_TOOL = "browser_proxy_handshake";
 var PlaywrightUnsafeCodeRefusedError = class extends CustomToolCallError {
   admission;
@@ -479738,14 +479903,29 @@ function rowTool(deps, row, lastPageUrl) {
       async (ctx, interactionHandler, rawArgs, meta) => {
         const args = normalizeRowArgs(row.name, rawArgs);
         const startedAt = performance.now();
+        const harness = deps.harness ?? "unavailable";
         let stage = "admission";
         const record3 = (result) => recordPlaywrightToolCall(ctx, {
           tool: row.name,
-          harness: deps.harness ?? "unavailable",
+          harness,
           runtime: deps.runtime?.() ?? "direct",
           durationMs: performance.now() - startedAt,
           result
         });
+        const phased = (phase, run) => measurePlaywrightPhase(
+          (durationMs, outcome) => recordPlaywrightPhase(ctx, {
+            tool: row.name,
+            harness,
+            phase,
+            outcome,
+            execution: "foreground",
+            durationMs
+          }),
+          run
+        );
+        const onPhase = (reviewed) => observePlaywrightPhaseSafely(
+          () => recordPlaywrightPhase(ctx, { tool: row.name, harness, ...reviewed })
+        );
         try {
           if (row.name === "browser_run_code_unsafe") {
             const admission = await deps.resolveUnsafeCodeAdmission?.(ctx) ?? {
@@ -479757,16 +479937,19 @@ function rowTool(deps, row, lastPageUrl) {
             }
           }
           stage = "window";
-          const windowIndex = await deps.getWindowIndex(ctx);
-          if (windowIndex === void 0) {
-            if (row.name === "browser_run_code_unsafe") {
-              throw new PlaywrightUnsafeCodeRefusedError({
-                kind: "refused",
-                reason: "stale_window"
-              });
+          const windowIndex = await phased("window", async () => {
+            const seated = await deps.getWindowIndex(ctx);
+            if (seated === void 0) {
+              if (row.name === "browser_run_code_unsafe") {
+                throw new PlaywrightUnsafeCodeRefusedError({
+                  kind: "refused",
+                  reason: "stale_window"
+                });
+              }
+              throw new PlaywrightWindowUnavailableError();
             }
-            throw new PlaywrightWindowUnavailableError();
-          }
+            return seated;
+          });
           const server = playwrightBoxMcpServerName(windowIndex);
           if (row.name === "browser_run_code_unsafe") {
             const challenge = (0, import_node_crypto32.randomUUID)();
@@ -479794,6 +479977,7 @@ function rowTool(deps, row, lastPageUrl) {
               resourceAccessor,
               options: {
                 ...options2,
+                onPhase,
                 captureReviewState: async (stateCtx, stateToolCallId) => {
                   const state = await captureBrowserReviewState({
                     ctx: stateCtx,
@@ -479813,13 +479997,20 @@ function rowTool(deps, row, lastPageUrl) {
             });
           }
           stage = "exec";
-          const executed = await toolFor(server).execute(
-            ctx.with(playwrightFirstClassToolExecutionKey, true),
-            interactionHandler,
-            once(JSON.stringify(args)),
-            meta
+          if (row.name === "browser_run_code_unsafe") lastPageUrl.delete(windowIndex);
+          const executed = await phased(
+            "mcp_exec",
+            () => toolFor(server).execute(
+              ctx.with(playwrightFirstClassToolExecutionKey, true),
+              interactionHandler,
+              once(JSON.stringify(args)),
+              meta
+            )
           );
-          const result = row.name === "browser_take_screenshot" ? await withInlineScreenshot(ctx, executed) : withSilentSuccessText(executed);
+          const result = await phased(
+            "response_transform",
+            async () => row.name === "browser_take_screenshot" ? await withInlineScreenshot(ctx, executed) : withSilentSuccessText(executed)
+          );
           const pageUrl = pageUrlOf(result);
           if (pageUrl !== void 0) lastPageUrl.set(windowIndex, pageUrl);
           record3(toolCallResultOf(result));
@@ -479841,7 +480032,7 @@ function createPlaywrightBrowserTools(deps) {
   const runtime = deps.runtime?.() ?? "direct";
   const exposed = new Set(
     PLAYWRIGHT_BROWSER_TOOL_NAMES.filter(
-      (name17) => name17 !== "browser_run_code_unsafe" || runtime === "proxy" && deps.resolveUnsafeCodeAdmission !== void 0 && deps.autoReview?.mode !== "enforce"
+      (name17) => name17 !== "browser_run_code_unsafe" || runtime === "proxy" && deps.resolveUnsafeCodeAdmission !== void 0
     )
   );
   const lastPageUrl = /* @__PURE__ */ new Map();
@@ -479862,7 +480053,7 @@ var driver = {
     tabs: "- Browser tools use your own tab by default; on first use they may adopt the browser's most recently used open page. Confirm the intended owned page from its returned state. Use browser_tabs and viewId when the task genuinely needs several pages, and preserve the same task tab when switching modalities.",
     snapshotLoop: "- Work in a snapshot-act-verify loop: browser_snapshot to see the page's real structure, choose the target by its observed role and label, act on its current ref, then inspect the returned page state and any screenshots before deciding the next action. Refs are tied to the latest snapshot for that tab; after navigation or a page change, take a fresh snapshot rather than reusing old refs. Request additional evidence only when returned state or screenshots are missing or insufficient, or the task needs a different capture such as a full-page screenshot.",
     results: "- Prefer dedicated browser tools with current refs over coordinates or CDP evaluation when they can perform the step; use constrained browser_cdp for needed operations not served by dedicated tools, within its restrictions.",
-    navigationRecovery: (enabled) => enabled ? [BOX_DRIVER_NAVIGATE_RETRY_LINE] : [],
+    navigationRecovery: BOX_DRIVER_NAVIGATE_RETRY_LINE,
     humanStep: "- You can't talk to the user or hand off the box. If a step needs a human, such as a password, 2FA, a captcha, or a payment, stop and say so clearly in your final report (name the site/step) so the parent can hand them the box; never try to enter their credentials. Exception: when your task says 1Password fills the one-time code for this login, a verification-code page is not a human step. The code is filled and submitted for you, so wait for the page to move on and continue. If it is still asking for a code after about a minute, report that so the parent can hand off.",
     rawAttachment: "- When legitimate bring-up or recovery requires a raw attachment, hook up CDP with the packaged `playwright-core` (`chromium.connectOverCDP`), then reuse `browser.contexts()[0]` and its existing pages. Use CDP for bring-up and recovery, not as an alternate page-interaction path. Bring-up and recovery means confirming the tab, calling `page.goto` when you already know the URL, or inspecting a stuck page. When finished, call `browser.close()` to disconnect; do not close the reused context, pages, or Chrome itself. Prefer the offered managed browser tools, including constrained browser_cdp, for page operations. Raw Playwright/CDP through Shell is not an alternative page-interaction path or a way around managed restrictions; do not substitute raw calls for a denied managed command, including Input.* or browser-wide, storage, cookie, cache, permission, or target-management commands. Reuse the task's owned page in that context, not an unrelated page.",
     visibleVerification: VISIBLE_VERIFICATION
@@ -479928,9 +480119,7 @@ var playwright = {
     tabs: "- Playwright sees every tab of the box Chrome, not a dedicated one; the ### Page block of each result names the page it acted on, so confirm it is the intended one. browser_tabs lists them (action list marks the current tab), opens one (action new with url), or selects and closes by index. Work in the current, visible tab and open another only when the task genuinely needs several pages at once; after action new, select the new tab by index before acting on it. If browser_click or browser_take_screenshot times out, or a result names a page you did not intend, the server is on a hidden or wrong tab: list the tabs, select the visible one you want, and retry once. Preserve the same task tab when switching modalities.",
     snapshotLoop: '- Work in a snapshot-act-verify loop: browser_snapshot returns the page URL, title, and accessibility tree with [ref=...] handles (a snapshot over about 40 KB arrives as a box file path instead). Act on a ref (target: "f1e12") or a unique CSS selector; browser_click also takes element and browser_drag takes startElement and endElement, short plain-language descriptions of the targets that the review shows the user, and the two rows are refused without them. Refs stay valid until the page changes, so keep acting on the refs you already hold. Take a new snapshot only when a result reports a new URL or title, when you need a ref you do not have, or when an action fails with "Ref f1e36 not found in the current page snapshot". browser_find (text or regex) returns only the matching nodes with their refs and is the cheaper way to locate one control.',
     results: `- A browser action returns no screenshot and no inline tree. Its result is ### Page (URL, title, and an HTTP status when it landed on an error page) plus ### Snapshot as a link to the saved yml, or one line saying the page URL and title are unchanged. For a routine step that result is the verification. Do not Read the linked yml and do not snapshot after every action. An action already waits for the page to settle, and browser_wait_for sleeps at most ${PLAYWRIGHT_WAIT_FOR_MAX_SECONDS} seconds per call, so wait with text or textGone rather than time when content is still arriving. browser_take_screenshot returns the image attached to its result, followed by the saved copy's file path for SendToUser; use it when a visual check is needed, not after every step. If a browser_* call fails with connect ECONNREFUSED 127.0.0.1:92xx, Chrome is not running on your window yet: open it with the launcher described under Owned desktop startup and recovery, then retry.`,
-    navigationRecovery: () => [
-      "- Page loads on the box fail transiently more often than on a laptop, and browser_navigate does not retry. A transient failure shows as Page URL chrome-error://chromewebdata/ or an ERR_* message in the result; call browser_navigate with the intended URL once more before treating the site as down."
-    ],
+    navigationRecovery: `- Page loads on the box fail transiently more often than on a laptop, and browser_navigate does not retry. A transient failure shows as Page URL chrome-error://chromewebdata/ or an ERR_* message in the result; call browser_navigate with the intended URL once more before treating the site as down. A browser_navigate that reports "Timeout ${PLAYWRIGHT_NAVIGATION_TIMEOUT_MS}ms exceeded" while navigating only stopped waiting for a slow page: it has usually rendered enough to use, so call browser_snapshot before navigating again.`,
     humanStep: `- You can't talk to the user or hand off the box. If a step needs a human, such as a password, 2FA, a captcha, or a payment, stop and say so clearly in your final report (name the site/step) so the parent can hand them the box; never try to enter their credentials. Exception: when your task says 1Password fills the one-time code for this login, a verification-code page is not a human step. The code is filled and submitted for you, so wait for the page to move on and continue. If it is still asking for a code after about a minute, report that so the parent can hand off. A press-and-hold "I'm human" button is not a human step, and browser_click has no hold. Ground the button in a Computer screenshot and hold it with Computer click and holdDurationMs (the page rarely says how long, so start near 8000 and hold longer, up to 30000, when it asks you to try again), then check the result with browser_snapshot.`,
     rawAttachment: "- When legitimate bring-up or recovery requires a raw attachment, hook up CDP with the packaged `playwright-core` (`chromium.connectOverCDP`), then reuse `browser.contexts()[0]` and its existing pages. Use CDP for bring-up and recovery, not as an alternate page-interaction path. Bring-up and recovery means confirming the tab, calling `page.goto` when you already know the URL, or inspecting a stuck page. When finished, call `browser.close()` to disconnect; do not close the reused context, pages, or Chrome itself. Prefer the offered browser_* tools for page operations. Raw Playwright/CDP through Shell is not an alternative page-interaction path or a way around managed restrictions; do not substitute raw calls for a refused browser_* action, including Input.* or browser-wide, storage, cookie, cache, permission, or target-management commands. Reuse the task's owned page in that context, not an unrelated page.",
     visibleVerification: VISIBLE_VERIFICATION
@@ -484598,7 +484787,7 @@ async function readShellTerminalSnapshot(host, accessor, path30, ctx = host.ctx)
 }
 async function collectPrependUserMessages(host, recentUserMessages, currentMessageId) {
   if (recentUserMessages == null || recentUserMessages.length === 0) {
-    return { prependUserMessages: [], unconfirmedUserPrompts: [], dedupeFloorMessageId: void 0 };
+    return { prependUserMessages: [], dedupeFloorMessageId: void 0 };
   }
   const state = host.getConversationState();
   const { lastUserMessageId, hasUserTurn } = await findConfirmedUserTurnWatermark(host, state);
@@ -484620,7 +484809,6 @@ ${message.text}` : message.text;
   });
   return {
     prependUserMessages,
-    unconfirmedUserPrompts: selected.map((message) => message.text),
     dedupeFloorMessageId: lastUserMessageId !== void 0 && lastUserMessageId.length > 0 ? lastUserMessageId : void 0
   };
 }
@@ -485520,7 +485708,6 @@ function createPromptCollectorGlue(host) {
     if (host.isComputerUseSubagent && combined) {
       return combinedComputerPrompt({
         browser: SAND_BROWSER_TOOL_SETS[sandBrowserToolSurface(host)].promptLines,
-        browserNavigationRecovery: host.gates.browserNavigationRecovery(),
         boxBrowser: host.resolveBoxBrowser()
       });
     }
@@ -485533,9 +485720,7 @@ function createPromptCollectorGlue(host) {
         BOX_DRIVER_BULK_DATA_LINE,
         "- Work in a tight see-act-verify loop: screenshot to see the real state, act, then read the one fresh screenshot returned after the entire Computer call before deciding the next one. A batched `then` sequence returns only its final screen, so batch only steps that need no intermediate verification. Never fire actions blind off a remembered layout. Coordinates drift as pages load and reflow.",
         "- Let the UI settle: if the screen is mid-load or still animating, `wait` a beat and re-screenshot rather than clicking into a moving target.",
-        ...host.gates.browserNavigationRecovery() ? [
-          '- Page loads on the box fail transiently more often than on a laptop. If Chrome shows its own error page ("This site can\'t be reached", an `ERR_*` code) or a page stays blank after a navigation, reload it first (key F5, then `wait`) before treating the site as down or changing approach; only report the site unreachable after a second reload also fails.'
-        ] : [],
+        '- Page loads on the box fail transiently more often than on a laptop. If Chrome shows its own error page ("This site can\'t be reached", an `ERR_*` code) or a page stays blank after a navigation, reload it first (key F5, then `wait`) before treating the site as down or changing approach; only report the site unreachable after a second reload also fails.',
         BOX_DRIVER_MISCLICK_RECOVERY_LINE,
         "- Before typing into a field that may already hold text, clear it first (key Control+a, then key BackSpace). If your typed text doesn't show up, the field isn't focused, so click it and try again.",
         BOX_DRIVER_SHORTCUT_FOCUS_LINE,
@@ -485563,7 +485748,7 @@ function createPromptCollectorGlue(host) {
         "- Always take the fastest path to a destination. When you know or can construct the exact URL, such as a deep link you were handed or a site's own search/filter URL (e.g. `https://www.amazon.com/s?k=bread+flour` to search Amazon), browser_navigate straight to it instead of landing on the homepage and clicking through menus and search boxes. Encode as much of the request as the URL can carry. Sites expose their search, filters, sort, and pagination as query params or path segments, so a well-built URL lands you on the already-narrowed result rather than a page you still have to refine by hand. Only fall back to navigating through the site's UI when you can't construct a URL for it, either because you don't know the site's URL scheme and one probe didn't reveal it, or because the state genuinely isn't URL-addressable. A URL in your task is the destination itself. Go directly to it, never re-create it by hand through the site's UI.",
         "- Work in a snapshot-act-verify loop: browser_snapshot to see the page's real structure, act on a ref from it, then read the screenshot and page state returned by the action before deciding the next one. Refs stay valid across snapshots of this page load; reuse them until navigation or a stale-ref error. Snapshot when the screenshot shows a new page or a control you have no ref for.",
         "- Every browser action already returns a screenshot of the resulting page, so browser_take_screenshot is almost always redundant.",
-        ...host.gates.browserNavigationRecovery() ? [BOX_DRIVER_NAVIGATE_RETRY_LINE] : [],
+        BOX_DRIVER_NAVIGATE_RETRY_LINE,
         "- Your tools act on your own dedicated tab by default. Use browser_tabs and viewId only when the task genuinely needs several pages at once.",
         "- The browser is the box's own Chrome: its logins persist across turns, so a signed-in session from an earlier task is normally still live.",
         `- Move bulk or structured data through files, not the keyboard: build it once with ${SAND_BOX_SHELL_TOOL_NAME} (e.g. a CSV) and use the web app's own import or upload instead of filling values in field by field; to pull data out, download it in the browser and process it with ${SAND_BOX_SHELL_TOOL_NAME} or ${SAND_BOX_READ_TOOL_NAME}.`,
@@ -485730,7 +485915,7 @@ function createPromptCollectorGlue(host) {
       richText: trimmedRichText != null && trimmedRichText.length > 0 ? trimmedRichText : void 0,
       selectedContext
     });
-    const { prependUserMessages, unconfirmedUserPrompts, dedupeFloorMessageId } = await traceSendPhase(
+    const { prependUserMessages, dedupeFloorMessageId } = await traceSendPhase(
       runCtx,
       "collectPrependUserMessages",
       () => collectPrependUserMessages(
@@ -485771,8 +485956,7 @@ function createPromptCollectorGlue(host) {
       action,
       automationStatusReminder,
       automationStatusCompactionEpoch,
-      prependedUserMessageDedupeFloorMessageId: dedupeFloorMessageId,
-      unconfirmedUserPrompts
+      prependedUserMessageDedupeFloorMessageId: dedupeFloorMessageId
     };
   }
   return {
@@ -489804,7 +489988,7 @@ ${section.notes}`;
     return !deps.isParentMediatedAutomationSubagent;
   }
   function usesDynamicToolNamespaces() {
-    return hasParentPromptParity && !deps.isBoxScopedSubagent() && deps.gates.dynamicTools();
+    return hasParentPromptParity && !deps.isBoxScopedSubagent();
   }
   function includesVoiceCallPrompt() {
     return deps.gates.voiceCall() && !deps.isSubagentRunner;
@@ -493386,8 +493570,7 @@ function createJevBrowserSubagentRunner(options2) {
         getWindowIndex: resolveWindowIndex,
         ...autoReview === void 0 ? {} : { autoReview },
         getPersistImage: () => options2.persistImage,
-        getDefaultViewId: () => mainViewId,
-        isNavigationRecoveryEnabled: options2.gates.browserNavigationRecovery
+        getDefaultViewId: () => mainViewId
       });
       return leaseJevDriverCalls(driver2, options2.credentialFillLease, resolveWindowIndex);
     },
@@ -495643,9 +495826,7 @@ function createModelVisiblePathMiddleware(executor) {
 // ../packages/grok-bot-harness/src/runner/runner-gates.ts
 var SAND_RUNNER_GATE_DEFAULTS = {
   sendMessageDeliveryOwed: true,
-  dynamicTools: false,
   memoryFactsInUserInfo: false,
-  browserNavigationRecovery: false,
   browserUsePlaywright: false,
   browserUsePlaywrightProxy: false,
   browserUseJev: false,
@@ -495760,9 +495941,7 @@ function composeSandRunnerGates(wirings) {
 }
 var SUBAGENT_GATE_POLICY = {
   sendMessageDeliveryOwed: "default",
-  dynamicTools: "inherited",
   memoryFactsInUserInfo: "inherited",
-  browserNavigationRecovery: "inherited",
   browserUsePlaywright: "inherited",
   browserUsePlaywrightProxy: "inherited",
   browserUseJev: "inherited",
@@ -496275,8 +496454,7 @@ var BROWSER_USE_JEV_REVIVAL_INSTRUCTION = "These are browser reports for what th
 function buildSubagentRevival(completions, context2) {
   return {
     prompt: buildSubagentRevivalPrompt(completions, context2),
-    settledDelegations: settledDelegationsOf(completions),
-    finishedWork: completions.filter((completion) => completion.quietOrigin == null).map((completion) => ({ title: completion.title, isFailed: completion.status === "error" }))
+    settledDelegations: settledDelegationsOf(completions)
   };
 }
 function buildSubagentRevivalPrompt(completions, context2) {
@@ -498662,14 +498840,14 @@ function ttfaPhaseSpans(marks) {
     (point2) => point2[1] !== void 0 && Number.isFinite(point2[1])
   );
   const startAt = known[0]?.[1] ?? marks.firstMessageAt;
-  const phases = [];
+  const phases2 = [];
   let previousAt = startAt;
   for (const [phase, at3] of known.slice(1)) {
     const endAt = Math.max(previousAt, at3);
-    if (phase !== void 0) phases.push({ phase, startAt: previousAt, endAt });
+    if (phase !== void 0) phases2.push({ phase, startAt: previousAt, endAt });
     previousAt = endAt;
   }
-  return { phases, startAt };
+  return { phases: phases2, startAt };
 }
 function emitTtfaTrace({
   trace: trace2,
@@ -498677,7 +498855,7 @@ function emitTtfaTrace({
   toEpochMs,
   attributes
 }) {
-  const { phases, startAt } = ttfaPhaseSpans(marks);
+  const { phases: phases2, startAt } = ttfaPhaseSpans(marks);
   const totalMs = Math.max(0, marks.firstMessageAt - startAt);
   const shared = {
     ...attributes,
@@ -498686,7 +498864,7 @@ function emitTtfaTrace({
   };
   const runSpan = getSpan2(trace2.runCtx);
   runSpan?.setAttributes(shared);
-  for (const { phase, startAt: phaseStart, endAt } of phases) {
+  for (const { phase, startAt: phaseStart, endAt } of phases2) {
     const phaseMs = endAt - phaseStart;
     runSpan?.setAttribute(`grok_bot.ttfa.${phase}_ms`, phaseMs);
     recordCompletedSpanIfParented(
@@ -508903,7 +509081,7 @@ function buildTurnTools(host, turn, props) {
     host.getAutoReviewParentConversationState,
     { automationSubagent: host.isParentMediatedAutomationSubagent }
   );
-  const dynamicToolRegistry = hasParentToolParity && !host.isBoxScopedSubagent && host.gates.dynamicTools() ? new DynamicToolRegistry() : void 0;
+  const dynamicToolRegistry = hasParentToolParity && !host.isBoxScopedSubagent ? new DynamicToolRegistry() : void 0;
   const mcpMetaToolNames = sandMcpMetaToolNames(dynamicToolRegistry !== void 0);
   const tools = [];
   const toolHandoff = createToolHandoff();
@@ -509627,7 +509805,6 @@ function buildTurnTools(host, turn, props) {
         getWindowIndex,
         getPersistImage: () => host.persistImage,
         getDefaultViewId: () => host.getTranscriptId(),
-        isNavigationRecoveryEnabled: host.gates.browserNavigationRecovery,
         onPossibleNavigation,
         ...playwrightUnsafeCodeToolDeps(host)
       }).map(gateOnCredentialFillLease)
@@ -512013,14 +512190,8 @@ var SandSteerInbox = class {
   poppedAwaitingTurn;
   admittedListeners = /* @__PURE__ */ new Set();
   accepting = false;
-  delivered = [];
   beginRun() {
     this.accepting = true;
-    this.delivered.length = 0;
-  }
-  deliveredPrompts() {
-    const popped = this.poppedAwaitingTurn?.visiblePrompt;
-    return popped == null ? this.delivered : [...this.delivered, popped];
   }
   enqueue(prompt, options2) {
     if (!this.accepting) return { kind: "no-live-run" };
@@ -512034,7 +512205,6 @@ var SandSteerInbox = class {
             })
           }
         }),
-        visiblePrompt: options2.hidden === true ? null : prompt,
         settle
       });
     });
@@ -512084,7 +512254,6 @@ var SandSteerInbox = class {
     const popped = this.poppedAwaitingTurn;
     if (popped === void 0) return;
     this.poppedAwaitingTurn = void 0;
-    if (popped.visiblePrompt !== null) this.delivered.push(popped.visiblePrompt);
     popped.settle(true);
   }
 };
@@ -512791,7 +512960,6 @@ function turnEndedOnSilentToolCalls(rawMessages) {
 }
 
 // ../packages/grok-bot-harness/src/runner/turn-settle.ts
-var TASK_LIST_UPDATE_STEPS = 3;
 var MCP_SERVER_HOSTS_TIMEOUT_MS = 2e3;
 function resolveTranscriptPersistence(privacyMode) {
   switch (privacyMode) {
@@ -512824,38 +512992,6 @@ function createTurnSettle(host, scope) {
   let followupLabelingMessages;
   let turnStartToolCallIds;
   const agentMessages = [];
-  let isTaskListKept = false;
-  let taskListUpdate = null;
-  let isTaskListUpdateDue = false;
-  let stepsSinceTaskListUpdate = 0;
-  const taskListMessages = () => [
-    ...scope.userPrompts().map((prompt) => ({ isUser: true, text: prompt })),
-    ...agentMessages.map((message) => ({ isUser: false, text: message }))
-  ].filter((message) => message.text.trim().length > 0);
-  const updateTaskList = () => {
-    const taskList = scope.taskList;
-    if (taskList?.update === void 0 || isTaskListKept) return;
-    if (taskListUpdate !== null) {
-      isTaskListUpdateDue = true;
-      return;
-    }
-    const messages = taskListMessages();
-    if (messages.length === 0) return;
-    stepsSinceTaskListUpdate = 0;
-    taskListUpdate = (async () => {
-      try {
-        await taskList.update?.({ messages });
-      } catch (error3) {
-        reportHostDiagnostic({ kind: "task_list_keep_failed", errorClass: errorLogTag(error3) });
-      } finally {
-        taskListUpdate = null;
-        if (isTaskListUpdateDue) {
-          isTaskListUpdateDue = false;
-          updateTaskList();
-        }
-      }
-    })();
-  };
   const collectors = {
     collectText: (delta) => {
       text2 += delta;
@@ -512868,7 +513004,6 @@ function createTurnSettle(host, scope) {
     },
     collectAgentMessage: (message) => {
       agentMessages.push(message);
-      updateTaskList();
     }
   };
   let profilePromptSnapshot;
@@ -512966,8 +513101,6 @@ function createTurnSettle(host, scope) {
     if (host.ownsRunner()) {
       persistPendingProfileAnnouncement();
     }
-    stepsSinceTaskListUpdate += 1;
-    if (stepsSinceTaskListUpdate >= TASK_LIST_UPDATE_STEPS) updateTaskList();
   };
   const captureFollowupLabelingMessages = (messages) => {
     followupLabelingMessages ??= messages;
@@ -513131,21 +513264,6 @@ function createTurnSettle(host, scope) {
     }
     await postTurnLabeling;
   };
-  const keepTaskList = async (args) => {
-    isTaskListKept = true;
-    if (scope.taskList === void 0) return;
-    try {
-      await scope.taskList.keep({
-        messages: taskListMessages(),
-        finishedWork: scope.finishedWork,
-        isAwaitingUser: host.getAwaitingUserInputTurnId() !== void 0,
-        hasBackgroundWork: host.hasRunningBackgroundWork(),
-        end: args.end
-      });
-    } catch (error3) {
-      reportHostDiagnostic({ kind: "task_list_keep_failed", errorClass: errorLogTag(error3) });
-    }
-  };
   const persistFinalState = async (baseCtx, finalState) => {
     prepareCheckpointForPersistence(finalState);
     await persistCheckpoint(baseCtx, finalState, true);
@@ -513174,7 +513292,6 @@ function createTurnSettle(host, scope) {
     prepareFinalizedFollowupLabeling,
     recordFinalizedFollowupLabeling,
     settleCompletedTurn,
-    keepTaskList,
     persistFinalState,
     buildResult
   };
@@ -513684,12 +513801,6 @@ function createTurnRunShell(host) {
           })
         );
       } : void 0;
-      let unconfirmedUserPrompts = [];
-      const turnUserPrompts = () => [
-        ...unconfirmedUserPrompts,
-        ...options2.hidden === true || typeof prompt !== "string" ? [] : [trimmedPrompt],
-        ...steerInbox.deliveredPrompts()
-      ];
       const settle = createTurnSettle(
         {
           isSubagentRunner: host.isSubagentRunner,
@@ -513698,7 +513809,6 @@ function createTurnRunShell(host) {
           ownsRunner: () => cancelActiveRun === cancelRun,
           getAwaitingUserInputTurnId: () => stopRequest.kind === "awaiting-user" ? stopRequest.requestId : void 0,
           getCompletedTurnId: () => stopRequest.kind === "complete" ? stopRequest.requestId : void 0,
-          hasRunningBackgroundWork: () => isBackgroundWorkRunning(host.subagents, host.backgroundWatches),
           agentStore: () => host.agentStore(),
           getBlobStore: () => host.getBlobStore(),
           setLocalState: (state) => {
@@ -513721,10 +513831,7 @@ function createTurnRunShell(host) {
           turnSeq,
           memoryStore: host.memoryStore(),
           episodeProgress: host.episodeProgress(),
-          profilePromptSnapshots: host.profilePromptSnapshots(),
-          taskList: host.isSubagentRunner || options2.isGroupMemberTurn === true || idleCompaction !== void 0 ? void 0 : host.taskList(),
-          userPrompts: turnUserPrompts,
-          finishedWork: revival?.finishedWork ?? []
+          profilePromptSnapshots: host.profilePromptSnapshots()
         }
       );
       activeRunDispatched = false;
@@ -513849,14 +513956,12 @@ function createTurnRunShell(host) {
           action,
           automationStatusReminder,
           automationStatusCompactionEpoch,
-          prependedUserMessageDedupeFloorMessageId,
-          unconfirmedUserPrompts: carriedUserPrompts
+          prependedUserMessageDedupeFloorMessageId
         } = actionOnly ? {
           action: promptlessAction,
           automationStatusReminder: null,
           automationStatusCompactionEpoch: 0,
-          prependedUserMessageDedupeFloorMessageId: void 0,
-          unconfirmedUserPrompts: []
+          prependedUserMessageDedupeFloorMessageId: void 0
         } : await host.promptGlue.assembleTurnAction({
           runCtx,
           trimmedPrompt,
@@ -513868,7 +513973,6 @@ function createTurnRunShell(host) {
           shellWatchHost: host.shellWatchHost()
         });
         setupLaps.lap("turn_action");
-        unconfirmedUserPrompts = carriedUserPrompts;
         frozenSectionUpdate?.commit();
         toolDescriptionUpdate?.commit();
         const boxId = host.resolveBoxId();
@@ -514200,7 +514304,6 @@ function createTurnRunShell(host) {
         aborted2 = ctx.canceled && !isRunStopped() && !pausedForUpgrade;
         endRunLifecycle();
         if (!aborted2 && !pausedForUpgrade) {
-          const taskListKept = settle.keepTaskList({ end: "finished" });
           await settle.settleCompletedTurn({
             finalState,
             session,
@@ -514217,7 +514320,6 @@ function createTurnRunShell(host) {
             skipLabeling,
             advanceChainOnDelivery
           });
-          await taskListKept;
         }
       } catch (error3) {
         endRunLifecycle();
@@ -514247,9 +514349,6 @@ function createTurnRunShell(host) {
             },
             { supersededByUser: true }
           );
-        }
-        if (aborted2) {
-          await settle.keepTaskList({ end: supersededByUser ? "superseded" : "stopped" });
         }
         if (ownsRunner) {
           steerInbox.endRun();
@@ -515303,7 +515402,6 @@ var SandAgentRunner = class _SandAgentRunner {
       runGeneration: () => this.runGeneration,
       agentStore: () => this.agentStore,
       memoryStore: () => this.memoryStore,
-      taskList: () => options2.taskList,
       episodeProgress: () => this.episodeProgress,
       profilePromptSnapshots: () => this.profilePromptSnapshots,
       promptPrefixSnapshots: () => this.promptPrefixSnapshots,
@@ -516207,9 +516305,7 @@ function composeEvalRunnerGates(overrides = {}) {
   const baseline = composeSandRunnerGates({
     sendMessageDeliveryOwed: fixedGate(true, EVAL_RUNNER_PIN),
     spotlight: fixedGate(true, EVAL_RUNNER_PIN),
-    dynamicTools: fixedGate(false, EVAL_RUNNER_PIN),
     memoryFactsInUserInfo: fixedGate(false, EVAL_RUNNER_PIN),
-    browserNavigationRecovery: fixedGate(false, EVAL_RUNNER_PIN),
     browserUsePlaywright: fixedGate(false, EVAL_RUNNER_PIN),
     browserUsePlaywrightProxy: fixedGate(false, EVAL_RUNNER_PIN),
     browserUseJev: fixedGate(false, EVAL_RUNNER_PIN),

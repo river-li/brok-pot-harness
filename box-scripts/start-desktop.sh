@@ -243,18 +243,6 @@ CHROME_FLAGS+=(
 	--remote-debugging-port="${CHROME_DEBUG_PORT}"
 	--remote-debugging-address=127.0.0.1
 )
-SAND_CHROME_UA_TOKEN="GrokAgent/1.0"
-SAND_CHROME_UA_OWNER_FILE="${SAND_CHROME_UA_OWNER_FILE:-/tmp/sand-ua-user}"
-SAND_CHROME_UA_OWNER="$(sed -n 1p "${SAND_CHROME_UA_OWNER_FILE}" 2>/dev/null | tr -cd '0-9a-f' | cut -c1-16 || true)"
-[ -z "${SAND_CHROME_UA_OWNER}" ] || SAND_CHROME_UA_TOKEN="${SAND_CHROME_UA_TOKEN} (u:${SAND_CHROME_UA_OWNER})"
-SAND_CHROME_UA_DISABLED_FILE="${SAND_CHROME_UA_DISABLED_FILE:-/tmp/sand-ua-token-disabled}"
-[ ! -e "${SAND_CHROME_UA_DISABLED_FILE}" ] || SAND_CHROME_UA_TOKEN=""
-SAND_CHROME_UA_MAJOR="$(google-chrome-stable --version 2>/dev/null | sed -n 's/^[^0-9]*\([0-9][0-9]*\)\..*$/\1/p' || true)"
-if [ -n "${SAND_CHROME_UA_MAJOR}" ] && [ -n "${SAND_CHROME_UA_TOKEN}" ]; then
-	CHROME_FLAGS+=(
-		--user-agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${SAND_CHROME_UA_MAJOR}.0.0.0 Safari/537.36 ${SAND_CHROME_UA_TOKEN}"
-	)
-fi
 SAND_EGRESS_PROXY_FILE=/tmp/sand-egress-proxy
 if [ -r "${SAND_EGRESS_PROXY_FILE}" ]; then
 	SAND_EGRESS_PROXY_ADDR="$(sed -n 1p "${SAND_EGRESS_PROXY_FILE}" 2>/dev/null || true)"
