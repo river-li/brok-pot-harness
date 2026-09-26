@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'self';">
+  <title>Welcome to Brokpot</title>
+  <style>
+    :root { font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #221e20; background: #f7f5f1; }
+    body { margin: 0; }
+    main { max-width: 650px; margin: 52px auto; padding: 0 28px; }
+    .brand { font-size: 14px; font-weight: 750; letter-spacing: -.02em; color: #6a4cc0; }
+    h1 { font-size: 37px; letter-spacing: -.045em; margin: 31px 0 11px; line-height: 1.12; }
+    .intro { color: #676167; line-height: 1.55; margin: 0 0 29px; }
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .choice { text-align: left; background: white; border: 1px solid #ded9d6; border-radius: 17px; padding: 21px; cursor: pointer; min-height: 145px; color: inherit; font: inherit; }
+    .choice:hover, .choice:focus-visible { border-color: #7452cf; box-shadow: 0 0 0 3px #7452cf24; outline: none; }
+    .choice.selected { border: 2px solid #7452cf; padding: 20px; }
+    .choice strong { display: block; font-size: 17px; margin-bottom: 11px; }
+    .choice span { color: #686269; line-height: 1.45; font-size: 14px; }
+    .settings { display: none; margin-top: 21px; border: 1px solid #e1dcda; border-radius: 16px; padding: 21px; background: #fff; }
+    .settings.open { display: block; }
+    label { display: block; font-weight: 650; margin: 12px 0 7px; font-size: 13px; }
+    input { box-sizing: border-box; width: 100%; padding: 11px 13px; border: 1px solid #d6d1d0; border-radius: 9px; font: inherit; }
+    input:focus { outline: 2px solid #7452cf; border-color: #7452cf; }
+    .hint { color: #746e72; font-size: 12px; margin: 8px 0; }
+    footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 25px; }
+    button.primary { border: 0; border-radius: 999px; color: white; background: #231e27; padding: 12px 24px; font: inherit; cursor: pointer; }
+    button.primary:disabled { opacity: .5; cursor: default; }
+    #status { color: #685e66; font-size: 13px; line-height: 1.4; }
+    #status.error { color: #ad333d; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="brand">◈ Brokpot</div>
+    <h1>Where do you want to run your pots?</h1>
+    <p class="intro">Choose a home for your pots. You can change this choice the next time you open Brokpot.</p>
+    <div class="choices" role="group" aria-label="Run location">
+      <button class="choice" id="local" type="button"><strong>Run locally</strong><span>Run your pots in Docker on this Mac. Set a model provider once, then keep your pots here.</span></button>
+      <button class="choice" id="remote" type="button"><strong>Connect to a Brokpot server</strong><span>Use a server you already deployed. You'll enter its Gateway address and token in the connection window.</span></button>
+    </div>
+    <section class="settings" id="settings" aria-label="Local model settings">
+      <label for="url">Model API URL</label><input id="url" type="url" placeholder="https://your-provider.example/v1" autocomplete="off">
+      <label for="model">Model ID</label><input id="model" type="text" placeholder="Your Responses model ID" autocomplete="off">
+      <label for="key">API key</label><input id="key" type="password" placeholder="Optional if your endpoint needs no key" autocomplete="off">
+      <p class="hint">Saved in your private local server settings. Leave the key blank to keep an existing key.</p>
+    </section>
+    <footer><span id="status" role="status" aria-live="polite"></span><button class="primary" id="continue" type="button" disabled>Continue</button></footer>
+  </main>
+  <script src="unified-welcome-ui.js"></script>
+</body>
+</html>
