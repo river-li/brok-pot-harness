@@ -4,7 +4,7 @@ This archive is a self-hosted preview release. It contains a local-profile Host 
 
 ## Requirements
 
-- Linux x86_64 for the supported server host, with Docker Engine and Docker Compose v2.
+- Linux x86_64 for the supported server host, with Docker Engine 28.0.0 or newer and Docker Compose v2. Older or unverifiable daemons are refused before server startup.
 - Node.js exactly `24.14.0` and Python 3.9 or newer for release archive extraction. The manager checks the Node version before installing, starting, updating, or recovering a release.
 - A Responses-compatible API endpoint, model ID, and provider key for Bot inference. The key stays on the server.
 - SSH access to the server for remote Gateway and display connections. Ports bind to loopback by default.

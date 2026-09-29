@@ -55,3 +55,7 @@ cover SSE echo behavior, authorization failures, or scheduler lane ordering.
 The `test:runtime-build` check validates reconstruction/profile behavior, not
 live Host semantics. See [test coverage](../../runtime/tests/README.md) and the
 [recorded evidence](../../docs/wiki/Verification.md).
+
+- Local MCP connector setup is capability-gated and must delegate to retained MCP management. Never return or log bearer form input, or bypass runtime tool approvals.
+
+- External marketplace methods are local-profile-only. Reuse retained plugin installation and approvals; external metadata must never supply Gateway credentials or bypass version checks.

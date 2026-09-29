@@ -10,6 +10,39 @@ Marketplace discovery, imports, plugin settings, and credentials are owned by th
 
 Open **Settings → Plugins** in the desktop connected to the Host. The catalog entries are GBH-curated imports from the pinned sources below; they are not a mirror of another marketplace.
 
+## Extend a deployed Host without rebuilding clients
+
+User-imported Bot recipes are runtime data, not entries compiled into the Android
+or desktop client. The authenticated `previewLocalBotRecipe`,
+`importLocalBotRecipe`, `updateLocalBotRecipe`, and `removeLocalBotRecipe` Gateway
+operations validate and maintain the Host catalog. The desktop **Manage pots**
+flow uses these operations. Android reads `listBotTemplates` when Marketplace is
+opened or refreshed, so newly imported recipes appear without a new APK.
+
+A recipe can carry profile instructions, memories, private Skills, paused
+routines, and references to Host-installed plugins. Updating a recipe increments
+its version for future imports; it does not rewrite already-created Bots. Keep
+the recipe JSON as a private deployment artifact and preserve the Host data
+volume across upgrades. Do not add personal recipes or account credentials to
+this repository's public starter sources.
+
+Operator-imported local plugin bundles are also discovered at runtime. Use the
+[local plugin importer](Extensions.md#import-a-local-plugin) against the data root
+of the intended Host, then install the discovered entry through Plugins. For a
+server whose state directory differs from the source checkout, do not accidentally
+import into the checkout's unused `.runtime/data`: use the retained
+`importLocalPlugin(dataRoot, sourceDirectory, name)` adapter with the deployed
+Host's actual data root. Imported files and references must remain inside that
+Host's persistent storage. Plugin installation and updates affect Bots sharing
+that Host; credentials are configured separately.
+
+The **remote pinned starter-source list** is still maintained in server source.
+Adding an arbitrary GitHub URL is not a supported dynamic registry operation.
+A new pinned starter source requires a server update; a user recipe or a local
+plugin bundle does not require a client rebuild or a Host restart. Preserve
+provenance and pin imported upstream revisions rather than silently following
+`main`.
+
 ## Included starter sources
 
 | Starter | What GBH imports | Pinned source and terms |
@@ -136,3 +169,115 @@ Private Host/Box runtime evidence verified starter discovery, pinned public-sour
 
 ---
 [Documentation](Home.md) · [MCP, plugins, and Skills](Extensions.md) · [Project](../../README.md)
+
+## Additional public Skill sources
+
+The catalog also includes fixed revisions of OpenAI's GitHub CI Repair Skill
+(`openai/skills@49f948faa9258a0c61caceaf225e179651397431`) and Anthropic's Web App
+Testing and Frontend Design Skills
+(`anthropics/skills@33375500bcea98d610eb30ce10ac4e59b89c390d`). Each imports only its
+Skill directory, including helpers and its Apache-2.0 license. OpenAI's curated
+subdirectory is mapped into the plugin's discoverable Skills directory. Imports
+validate Git blob hashes and retain provenance; they do not run installation hooks
+or install Python, Playwright, GitHub CLI, browser binaries, or credentials.
+
+Android Bot details show Bot-owned Skills and shared installed plugin Skills,
+plugins, MCP connection status and discovered tool names. Explicit connector setup
+uses `addLocalMcpConnector`, gated by `localMcpConnectorsV1` in local mode. It accepts
+an HTTPS MCP endpoint and an optional bearer token stored through the retained
+MCP manager. This adds a shared server connection; it is not a per-Bot access
+control boundary. OAuth-only services still need a provider authorization adapter.
+Vendor-hosted OpenAI, Claude and Grok connectors and account tokens are not imported.
+
+## External catalogs
+
+For provider-hosted endpoints, authentication requirements, and the distinction
+between an official service and a community listing, see the research-only
+[Official MCP connection inventory](Official-MCP-Catalog.md). Inclusion in that
+inventory does not mean a connector is installed or verified with this Host.
+
+Hosts advertising `externalMarketplaceV1` expose public source browsing separately
+from the curated starter catalog. Android 0.4.0 adds **Explore public sources**
+with source selection, search, pagination, details, configuration and explicit
+installation/update. Existing clients keep their original catalog and installation
+methods. New upstream entries appear on the next uncached browse without an app
+release. Metadata is cached for five minutes; upstream rate limits back off rather
+than retrying aggressively. Catalog refresh never updates an installed extension.
+
+Default sources are the official MCP Registry, ClawHub, GitHub Popular Skills,
+OpenAI's Skills repository and Anthropic's Skills repository. The Host adapts upstream metadata into one
+entry shape. It does not host or endorse those marketplaces. Source links identify
+the publisher, and installation rechecks the selected version. ClawHub identities
+include both publisher and slug; imports respect upstream moderation and validate
+version file hashes. GitHub imports pin the resolved commit, validate Git blob
+hashes, retain directory resources/executable modes and root license files, and
+reject symlinks/submodules. Installation does not execute repository hooks.
+
+Operators can replace the default source list without rebuilding by creating
+`SAND_DATA_ROOT/marketplace-sources.json`:
+
+```json
+{
+  "sources": [
+    {"id":"mcp","title":"MCP Registry","kind":"mcp-registry","url":"https://registry.modelcontextprotocol.io/v0.1"},
+    {"id":"clawhub","title":"ClawHub","kind":"clawhub","url":"https://clawhub.ai/api/v1"},
+    {"id":"github-popular","title":"GitHub Popular Skills","kind":"github-topic","url":"https://github.com/topics/agent-skills"},
+    {"id":"team","title":"Team Skills","kind":"github-skills","url":"https://github.com/OWNER/REPOSITORY","ref":"main"}
+  ]
+}
+```
+
+`enabled:false` hides a source. IDs must be unique, and changing a source's ID or
+URL creates a different installation identity. Removing a source does not remove
+already installed extensions. Custom registry endpoints must be public HTTPS;
+metadata/file requests reject private destinations at socket DNS lookup, embedded
+credentials and redirects. Private registries are not implemented.
+To add a public Skills repository, add one source
+record; its `SKILL.md` directories are discovered automatically.
+
+**GitHub Popular Skills** searches public, non-fork, non-archived repositories
+tagged with the [agent-skills topic](https://github.com/topics/agent-skills), sorted
+by repository stars descending. Blank search browses popular repositories;
+keywords search repository names, descriptions, and READMEs, not the full text of
+every Skill. Up to 20 keywords are used; advanced GitHub query qualifiers are not accepted as operators.
+Cards identify the owner/repository and repository star count; topic membership
+and popularity do not mean official verification or a security review.
+
+Each page inspects one repository and returns up to 30 actual `SKILL.md`
+directories, including root-level Skills. **Load more** continues the same
+repository before moving to the next ranked repository. A topic repository with
+no Skills (or a tree exceeding listing limits) produces an empty page with a continuation when more repositories
+exist. GitHub's first 1,000 search results are accessible; narrow the keywords for
+additional results. This bounded approach avoids downloading every discovered
+repository. Metadata is cached for five minutes, and GitHub 403/429 responses
+trigger backoff. No GitHub token is required, so public API limits apply.
+
+Topic entries use owner/repository/path identities. Before import the Host
+rechecks topic eligibility and resolves the current default branch; a changed
+commit requires reopening details. Root Skills import the repository snapshot
+subject to the existing file/size limits. Nested Skills import their directory
+and root license files. No third-party installer is executed. Existing Android
+0.4.0 source/search/detail controls can display this Host-provided source without
+a new RPC shape; deployment of the updated Host is still required. Hosts with a
+custom source list must explicitly add the `github-topic` record above.
+
+MCP Registry entries with concrete public HTTPS Streamable HTTP or SSE endpoints
+can be installed through the retained plugin manager. Header metadata becomes
+configuration fields; secrets are not returned by the catalog or persisted on
+Android. Supply complete header values, including `Bearer` where needed. Package
+only entries and endpoints requiring URL template substitution explain why they
+cannot be installed automatically. Installing an endpoint is distinct from a
+successful authenticated connection; inspect connection/tool status in Bot details.
+
+**Current boundaries:** generic local OAuth/account-slot management and per-Bot
+extension assignment remain unimplemented. Vendor OAuth is not reused. Installed
+extensions and credentials are server-wide, explicitly labeled in the client;
+OAuth-only providers need administrator setup. ClawHub entries without an exposed
+version file manifest cannot yet be imported through GitHub handoff descriptors.
+Codex/Claude Code worker execution adapters are not supplied by this catalog layer.
+
+External installs reuse immutable local plugin snapshots and the existing
+install/configure/uninstall lifecycle. The snapshot includes `.brokpot-source.json`
+with upstream identity, version and file hashes. Updates are explicit and refuse
+to replace a locally edited snapshot. Lost install replies can be retried without
+replacing an existing configuration. Uninstall remains in **Marketplace → Plugins**.

@@ -540,6 +540,7 @@ function createTurnRunShell(host) {
         };
         const executorProfile = host.subagentType === "executor" ? host.subagentModelId : void 0;
         const mainSessionOptions = {
+          ...(process.env.GROKBOT_LOCAL_MODE === "1" ? { agentId: host.getConversationId() } : {}),
           ...executorProfile === void 0 ? { modelId: host.subagentModelId } : { executorProfile },
           inferenceReason: isMediaReviewSubagent(host.subagentType) ? InferenceReason.GEMINI_VIDEO_SUBAGENT : void 0,
           isSubagent: host.isSubagentRunner,
@@ -593,6 +594,7 @@ function createTurnRunShell(host) {
               host.emitUpdate({ type: "request-id", requestId: requestId2 });
             },
             {
+              ...(process.env.GROKBOT_LOCAL_MODE === "1" ? { agentId: host.getConversationId() } : {}),
               modelId: SAND_SUMMARIZATION_MODEL_ID,
               isSummarizationSession: true,
               ...lineage != null ? { lineage } : {}

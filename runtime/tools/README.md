@@ -57,3 +57,10 @@ contents; then publishes those same downloaded bytes. It refuses failed or
 unmerged runs and will not replace an existing release.
 
 [Source recovery](../../docs/wiki/Source-Recovery.md) · [Packaging](../../docs/wiki/Packaging.md) · [Media](../../docs/media/README.md)
+
+The local Host build writes the product version from `release/project.json` to
+its generated version file. Upstream baseline files remain unchanged. macOS
+portable/remote bundles carry the product version in Info.plist and package.json.
+The candidate workflow additionally builds the pinned Android commit, verifies
+its externally signed APK and version, and attests both APK and source metadata.
+Promotion requires all three platforms from the same successful candidate run.

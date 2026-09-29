@@ -30,3 +30,7 @@ Use `npm run check:local` only for the independent strict-TypeScript subtree;
 it does not compile recovered shared files. For Gateway methods, follow the
 [Host maintenance checks](../host/AGENTS.md) and
 [runtime test guide](../../runtime/tests/README.md).
+
+- Local MCP connector setup is capability-gated and must delegate to retained MCP management. Never return or log bearer form input, or bypass runtime tool approvals.
+
+- External Marketplace requests carry explicit source, entry and expected version. Maintain capability gating and transient configuration fields across clients.

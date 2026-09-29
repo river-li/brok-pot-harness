@@ -1,0 +1,47 @@
+/* Run in the pinned Linux amd64 sandbox image; loads retained parsers without starting a Host. */
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),Module=require('node:module');
+const assert=require('node:assert/strict');
+const {createHash}=require('node:crypto');
+const {createExternalMarketplace}=require('../../dist/local/external-marketplace.js');
+const {listLocalPluginPointers,pluginBundlePath}=require('../../dist/local/plugin-files.js');
+const file=path.resolve(__dirname,'../../.runtime/build/sand-host/host-main.cjs');
+const source=fs.readFileSync(file,'utf8');
+const start=source.indexOf('bootSandHost(runHostMain).catch(');
+assert.ok(start>0);
+const m=new Module(file,module);m.filename=file;m.paths=Module._nodeModulePaths(path.dirname(file));
+m._compile(source.slice(0,start)+'\nmodule.exports={createLocalInstalledPluginsStore};',file);
+const root=fs.mkdtempSync(path.join(os.tmpdir(),'external-loader-'));
+let version='1.0.0';
+let body='---\nname: fixture-skill\ndescription: Fixture external Skill.\n---\nRead reference.txt';
+const hash=s=>createHash('sha256').update(s).digest('hex');
+const fetcher=async input=>{
+ const u=new URL(input);
+ if(u.hostname==='registry.modelcontextprotocol.io')return Response.json({server:{name:'io.example/fixture',version:'1',title:'Fixture MCP',description:'Fixture connection',remotes:[{type:'streamable-http',url:'https://example.com/mcp',headers:[{name:'Authorization',value:'Bearer {token}',isSecret:true,isRequired:true}]}]}});
+ if(u.pathname.includes('/versions/'))return Response.json({version:{files:[{path:'SKILL.md',sha256:hash(body)},{path:'reference.txt',sha256:hash('fixture reference')}],security:{status:'clean'}}});
+ if(u.pathname.endsWith('/file'))return new Response(u.searchParams.get('path')==='SKILL.md'?body:'fixture reference');
+ return Response.json({owner:{handle:'fixture'},skill:{slug:'demo',displayName:'Fixture Skill'},latestVersion:{version}});
+};
+(async()=>{try{
+ const api=createExternalMarketplace(root,fetcher);
+ const store=m.exports.createLocalInstalledPluginsStore(root);
+ const apply=(pluginId,variables,update)=>update?store.updatePluginInstall({pluginId,variables}):store.installPlugin({pluginId,variables});
+ const args={sourceId:'clawhub',key:'fixture/demo',version};
+ const installed=await api.install(args,apply);
+ const contents=await store.installedContents();assert.equal(contents.plugins.length,1);assert.equal(contents.plugins[0].skills.length,1);assert.equal(contents.plugins[0].skills[0].name,'fixture-skill');
+ assert.equal((await api.detail(args)).installedVersion,version);
+ assert.equal((await api.install(args,()=>assert.fail('idempotent install must not call manager'))).alreadyInstalled,true);
+ const pointer=listLocalPluginPointers(root)[0];
+ const edited=path.join(pluginBundlePath(root,pointer),'skills/imported/reference.txt');
+ fs.writeFileSync(edited,'local edit');
+ await assert.rejects(api.install({...args,update:true},apply),/local edits/);
+ fs.writeFileSync(edited,'fixture reference');
+ version='2.0.0';body+='\nNew version';
+ await api.install({...args,version,update:true},apply);
+ assert.equal((await api.detail(args)).installedVersion,'2.0.0');
+ await store.uninstallPlugin({pluginId:installed.pluginId});assert.equal((await store.effective()).length,0);
+ const mcp=await api.install({sourceId:'mcp',key:'io.example/fixture',version:'1',values:{HEADER_0:'Bearer fixture-only'}},apply);
+ const servers=(await store.listServers()).servers;assert.equal(servers.length,1);assert.equal(servers[0].config.headers.Authorization,'Bearer fixture-only');
+ const catalog=await store.catalog();assert.ok(!JSON.stringify(catalog).includes('fixture-only'));
+ await store.uninstallPlugin({pluginId:mcp.pluginId});assert.equal((await store.listServers()).servers.length,0);
+ console.log('PASS: retained Skill parser, install, replay, update, local-edit protection, MCP variables and uninstall');
+}finally{fs.rmSync(root,{recursive:true,force:true});}})().catch(e=>{console.error(e);process.exitCode=1;});

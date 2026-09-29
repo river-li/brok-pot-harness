@@ -14,11 +14,29 @@ Shell and file tools run in the server's Box. Existing authenticated Gateway att
 
 The server is one operator's workspace. Its Gateway token grants access to every Bot on that Host; this release does not provide per-user accounts or Bot-level tenancy. Skills and plugins remain server-owned.
 
+Host and Box also share the container and execution privileges. A shell tool or
+plugin can access Host credentials and persisted approvals; removing a key from
+the tool's environment does not isolate it from other processes. Do not treat
+this release as a sandbox for hostile code or as a shared service for untrusted
+users. Use a dedicated VM with no unrelated credentials or workloads, restricted
+network egress and provider keys with limited privileges. The
+[security review](Security-Review.md) records remaining deployment blockers and
+the checks performed; these mitigations do not establish Host/Box isolation.
+
+For an outer VM boundary while retaining root-capable Box tools, see the
+[Firecracker deployment guide](../../runtime/firecracker/README.md). It documents
+a dedicated guest, external egress filtering and a restricted LiteLLM relay;
+Host and Box still share a trust domain inside that guest.
+
 ## Preview release archive
 
 For a deployed server, use the relocatable archive and versioned manager in the [preview server install guide](../../release/SERVER-INSTALL.md). The archive is built from a clean source revision with the local profile, carries an exact file checksum inventory and resource notices, and is attested by the release candidate workflow. The final promotion workflow checks the Actions run and required jobs, signer workflow identity, source ref and commit, and archive signatures before publication. Follow the guide to verify both the checksum and attestation; the manifest and checksum alone are not signatures. The checkout-based commands below remain useful for development and recovery.
 
 ## Server platform and state
+
+Docker Engine **28.0.0 or newer** is required. Start, update and token rotation
+fail before publishing ports on older or unverifiable daemons. Docker documents
+that [older engines can expose loopback-published ports to the same L2 network](https://docs.docker.com/engine/network/port-publishing/).
 
 The server profile uses Docker Compose and pinned `linux/amd64` service images. It requires a Docker Engine that can run those images. This delivery was exercised on a `linux/aarch64` Docker Engine using amd64 emulation; native amd64, other server architectures, and non-Linux Docker Engines have not been verified here. The independent Remote Client package and UI flow were exercised on macOS arm64. Packaging uses the build host's Electron architecture; Intel macOS and universal builds are not verified. This repository has no Windows or Linux desktop package path.
 
@@ -66,9 +84,44 @@ npm run server:logs
 
 `server:start` requires a local-profile Host build and waits for an authenticated Gateway capability check. It starts the server's Host/Box plus its search and speech services. `server:provider-smoke` is an optional preflight: it starts a short-lived app container and sends one fixed, non-streaming “Reply with exactly the word OK” request to the configured provider. It can incur a provider charge; it never prints the key or response text. The deterministic fixture in the integration test is not external inference.
 
-## Secure connection through SSH
+## Direct HTTPS or SSH connection
 
-The Gateway, primary Box display, and forked Box display bind to server loopback only. The supported connection path in this client is an authenticated SSH local forward. It accepts loopback HTTP only, with no URL credentials or token query strings. Direct public HTTP, direct HTTPS, and public unauthenticated display ports are not supported by this client.
+The macOS Remote Client accepts an HTTPS Gateway URL and token, like Android.
+Enter the server's root URL (for example `https://bots.example.com`), without an
+API path or token in the URL. The server must present a trusted certificate;
+certificate validation is never bypassed. Plain HTTP remains limited to loopback
+SSH forwards. Saved HTTPS connections use encrypted storage and server-specific
+profiles.
+
+For the
+Firecracker deployment, an operator can enable the
+[authenticated mobile HTTPS ingress](../../runtime/firecracker/README.md#android-https-access).
+It uses a trusted public-IP certificate and one shared remote gateway for both
+clients. The gateway authenticates original Host RPC, event, avatar, local-exec,
+WebAuthn and cookie-origin approval routes before forwarding to the private Host.
+`POST /connection` exchanges the operator bearer credential for the original
+`vncProxy` connection descriptor. Its primary and fork URLs carry a display-only
+capability, valid for 12 hours and invalidated by a gateway restart. It cannot
+call Host RPC. macOS uses the retained Box interface; Android provides a Box
+screen with the Host's window list. Refresh the Android Box screen or reconnect
+the macOS client after expiry. No operator token is placed in a display URL.
+
+The HTTPS form hides SSH display-port fields and obtains public display routes
+from the gateway. It never derives a separate public egress port. The optional
+macOS network-egress tunnel is still disabled for direct HTTPS; enabling Host
+channels does not remove OS permissions or original action approvals.
+
+The maintained display proxy rejects WebSocket requests with missing, opaque,
+foreign or non-loopback Origins. Its Origin must match the loopback Host and
+port of the noVNC page, including custom SSH tunnel ports. This prevents foreign
+web pages from directly opening a display socket; it does not authenticate local
+processes, other server users or services on the container network.
+
+The Host and both Box displays remain bound to server loopback. The shared
+HTTPS gateway validates the exact public WebSocket Origin before forwarding with
+fixed loopback Host/Origin headers to the existing display guard. Targets cannot
+be chosen by the client. SSH forwarding remains an alternative below. Direct
+public HTTP and public unauthenticated display ports remain unsupported.
 
 From the desktop computer, keep this tunnel open while using the app:
 

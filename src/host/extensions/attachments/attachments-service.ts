@@ -123,14 +123,25 @@ async function ingestAttachmentChunk(agentDir, chunk) {
     throw new SandAttachmentError("Attachment chunk lies outside the upload.");
   }
   const attachmentsDir = getAgentAttachmentsDir(agentDir);
+  const expectedAttachmentsDir = (0, import_node_path92.join)(await realpathNearestExisting(getSandRootDir()), (0, import_node_path92.relative)(getSandRootDir(), attachmentsDir));
+  if (await containWithin([getSandRootDir()], attachmentsDir) == null || await realpathNearestExisting(attachmentsDir) !== expectedAttachmentsDir) {
+    throw new SandAttachmentError("Attachment upload directory is outside Host storage.");
+  }
   const partsDir = (0, import_node_path92.join)(attachmentsDir, UPLOAD_PARTS_DIRNAME);
   const partPath = (0, import_node_path92.join)(partsDir, `${uploadId}.part`);
+  if (await containWithin([attachmentsDir], partsDir) == null) {
+    throw new SandAttachmentError("Attachment upload directory is outside attachment storage.");
+  }
   if (offset === 0) {
     await ensureDir(partsDir);
     await sweepStaleUploadParts(partsDir);
   }
-  const handle = await import_node_fs51.promises.open(partPath, offset === 0 ? "w" : "r+");
+  const flags = import_node_fs51.constants.O_NOFOLLOW | import_node_fs51.constants.O_RDWR | (offset === 0 ? import_node_fs51.constants.O_CREAT : 0);
+  const handle = await import_node_fs51.promises.open(partPath, flags, 384);
   try {
+    const stat28 = await handle.stat();
+    if (!stat28.isFile() || stat28.nlink !== 1) throw new SandAttachmentError("Attachment upload is not a private file.");
+    if (offset === 0) await handle.truncate(0);
     await handle.write(bytes, 0, bytes.byteLength, offset);
   } finally {
     await handle.close();
@@ -144,16 +155,33 @@ async function ingestAttachmentChunk(agentDir, chunk) {
 async function isCloudAgentArtifactPath(resolved) {
   return await containWithin([SAND_CLOUD_AGENT_ARTIFACTS_BOX_ROOT], resolved) != null;
 }
-async function isReadableHostAttachmentPath(resolved) {
-  return isPathWithin(getSandRootDir(), resolved) || await isCloudAgentArtifactPath(resolved);
+async function resolveExistingHostAttachmentPath(roots, resolved) {
+  if (!roots.some((root) => isPathWithin(root, resolved))) return null;
+  try {
+    const realSandRoot = await import_node_fs51.promises.realpath(getSandRootDir());
+    const real = await import_node_fs51.promises.realpath(resolved);
+    if (!isPathWithin(realSandRoot, real)) return null;
+    for (const root of roots) {
+      if (!isPathWithin(root, resolved)) continue;
+      const realRoot = await import_node_fs51.promises.realpath(root);
+      const expectedRoot = (0, import_node_path92.join)(realSandRoot, (0, import_node_path92.relative)(getSandRootDir(), root));
+      if (realRoot === expectedRoot && isPathWithin(realSandRoot, realRoot, { isInclusive: true }) && isPathWithin(realRoot, real)) return real;
+    }
+  } catch (error42) {
+    reportFallbackUnlessAbsent("attachments_service", error42);
+  }
+  return null;
+}
+async function resolveReadableHostAttachmentPath(resolved) {
+  return await resolveExistingHostAttachmentPath([getSandRootDir()], resolved) ?? (await isCloudAgentArtifactPath(resolved) ? resolved : null);
 }
 async function readHostAttachmentImage(filePath, reportRenditionFailure = () => {
 }) {
   if (typeof filePath !== "string" || filePath.length === 0) return null;
   const boxFile = await resolvePreviewBoxFile(filePath);
   if (boxFile != null) return await readImageAttachment(boxFile, reportRenditionFailure);
-  const resolved = reanchorHostPath(filePath);
-  if (!await isReadableHostAttachmentPath(resolved)) {
+  const resolved = await resolveReadableHostAttachmentPath(reanchorHostPath(filePath));
+  if (resolved == null) {
     return null;
   }
   return await readImageAttachment(resolved, reportRenditionFailure);
@@ -161,8 +189,8 @@ async function readHostAttachmentImage(filePath, reportRenditionFailure = () => 
 async function readHostAttachmentVideoBytes(filePath) {
   if (typeof filePath !== "string" || filePath.length === 0) return null;
   const boxFile = await resolvePreviewBoxFile(filePath);
-  const resolved = boxFile ?? reanchorHostPath(filePath);
-  if (boxFile == null && !await isReadableHostAttachmentPath(resolved)) {
+  const resolved = boxFile ?? await resolveReadableHostAttachmentPath(reanchorHostPath(filePath));
+  if (resolved == null) {
     return null;
   }
   if (videoMimeFromPath(resolved) === void 0) return null;
@@ -180,10 +208,11 @@ async function readHostAttachmentChunk(agentDir, filePath, offset, length, video
 }) {
   if (typeof filePath !== "string" || filePath.length === 0) return null;
   const reanchored = reanchorHostPath(filePath);
-  const inAgentMedia = isPathWithin(getAgentAttachmentsDir(agentDir), reanchored) || isPathWithin(getAgentAssetsDir(agentDir), reanchored);
+  const agentMedia = await resolveExistingHostAttachmentPath([getAgentAttachmentsDir(agentDir), getAgentAssetsDir(agentDir)], reanchored);
+  const inAgentMedia = agentMedia != null;
   const cloudArtifact = inAgentMedia ? false : await isCloudAgentArtifactPath(reanchored);
   const boxFile = inAgentMedia || cloudArtifact ? null : await resolvePreviewBoxFile(filePath);
-  const source = boxFile ?? reanchored;
+  const source = boxFile ?? agentMedia ?? reanchored;
   if (!inAgentMedia && !cloudArtifact && boxFile == null) return null;
   if (videoPlayback && videoMimeFromPath(source) == null) return null;
   try {
@@ -313,11 +342,10 @@ function resolveAttachmentOwnerDir(filePath) {
   if (bucket !== ATTACHMENTS_DIRNAME && bucket !== ASSETS_DIRNAME) return null;
   return (0, import_node_path92.join)(agentsRoot, agentId);
 }
-function resolveScopedAttachmentPath(agentDir, filePath) {
+async function resolveScopedAttachmentPath(agentDir, filePath) {
   if (typeof filePath !== "string" || filePath.length === 0) return null;
   const resolved = reanchorHostPath(filePath);
-  if (!isPathWithin(getAgentAttachmentsDir(agentDir), resolved)) return null;
-  return resolved;
+  return await resolveExistingHostAttachmentPath([getAgentAttachmentsDir(agentDir)], resolved);
 }
 async function resolvePreviewBoxFile(filePath) {
   const lexical = lexicalBoxFilePath(reanchorHostPath(filePath));
@@ -340,7 +368,7 @@ async function resolvePreviewBoxFile(filePath) {
   return real;
 }
 async function readAttachmentText(agentDir, filePath) {
-  const resolved = resolveScopedAttachmentPath(agentDir, filePath) ?? await resolvePreviewBoxFile(filePath);
+  const resolved = await resolveScopedAttachmentPath(agentDir, filePath) ?? await resolvePreviewBoxFile(filePath);
   if (resolved == null) return null;
   try {
     const stat28 = await import_node_fs51.promises.stat(resolved);

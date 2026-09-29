@@ -20,7 +20,7 @@ var BASE_HOST_CAPABILITIES = [
 var LOCAL_MARKETPLACE_CAPABILITY = "localMarketplaceV1";
 function baseHostCapabilities() {
   return process.env.GROKBOT_LOCAL_MODE === "1"
-    ? [...BASE_HOST_CAPABILITIES, LOCAL_MARKETPLACE_CAPABILITY]
+    ? [...BASE_HOST_CAPABILITIES, LOCAL_MARKETPLACE_CAPABILITY, "botModelsV1", "localMcpConnectorsV1", "externalMarketplaceV1"]
     : BASE_HOST_CAPABILITIES;
 }
 var CREATE_AGENT_NONCE_LEDGER_CAP = 64;
@@ -700,6 +700,10 @@ function wrapGatewayApiWithServerAgentProxy(args) {
   };
 }
 function createHostGatewayApi(deps) {
+  const externalMarketplace = () => {
+    if (process.env.GROKBOT_LOCAL_MODE !== "1") throw new SandMcpConfigError("External marketplace is unavailable.");
+    return require("./local/external-marketplace.js").createExternalMarketplace(getSandRootDir());
+  };
   const manager = deps.extensions.api("transcript");
   const attachments = deps.extensions.api("attachments");
   const automations = deps.extensions.api("automations");
@@ -1023,6 +1027,18 @@ ${args.request.trim()}`;
       deps.extensions.api("telemetry").analytics.markActive("user_action");
       return botTemplateGatewayView(await deps.extensions.api("bot-template-share").publish(args));
     },
+    getLocalModelCatalog: async () => {
+      if (process.env.GROKBOT_LOCAL_MODE !== "1") throw Error("Local models unavailable");
+      return require("./local/bot-models.js").modelCatalog();
+    },
+    getAgentModel: ({ id }) => {
+      if (process.env.GROKBOT_LOCAL_MODE !== "1" || !manager.listAgentsSync().some((a) => a.id === id)) throw Error("Bot unavailable");
+      return require("./local/bot-models.js").botModel(id);
+    },
+    setAgentModel: ({ id, modelId }) => {
+      if (process.env.GROKBOT_LOCAL_MODE !== "1" || !manager.listAgentsSync().some((a) => a.id === id)) throw Error("Bot unavailable");
+      return require("./local/bot-models.js").setBotModel(id, modelId);
+    },
     listBotTemplates: async () => {
       const store = localBotRecipes();
       return store ? store.list().map(botTemplateGatewayView) : [];
@@ -1318,6 +1334,28 @@ ${args.request.trim()}`;
     skillsCatalog: () => managedSetup.skillsCatalog(),
     syncPluginSkills: () => deps.extensions.api("mcp").syncPluginSkills(),
     getPluginSyncStatus: async () => deps.extensions.api("mcp").pluginSyncStatus(),
+    getExternalMarketplaceSources: () => externalMarketplace().sources(),
+    searchExternalMarketplace: (args) => externalMarketplace().search(args),
+    getExternalMarketplaceEntry: (args) => externalMarketplace().detail(args),
+    installExternalMarketplaceEntry: (args) => externalMarketplace().install(args, (pluginId, values, update) =>
+      update ? deps.extensions.api("mcp").plugins.updatePluginInstall({ pluginId, values })
+        : deps.extensions.api("mcp").plugins.installEntry({ entryId: pluginId, values })),
+    addLocalMcpConnector: async ({ name, url, bearerToken }) => {
+      if (process.env.GROKBOT_LOCAL_MODE !== "1") throw Error("Local connector setup is unavailable.");
+      const endpoint = new URL(url);
+      if (endpoint.protocol !== "https:" || endpoint.username || endpoint.password || endpoint.hash)
+        throw Error("Use an HTTPS MCP endpoint without embedded credentials or fragments.");
+      if (!/^[a-zA-Z][a-zA-Z0-9_-]{0,63}$/.test(name)) throw Error("Use a short connector name with letters, numbers, dashes or underscores.");
+      if (bearerToken && (bearerToken.length > 8192 || /[\r\n]/.test(bearerToken))) throw Error("Invalid bearer token.");
+      const existing = await deps.extensions.api("mcp").plugins.listServers();
+      if (existing.servers.some((server) => server.name === name || server.serverIdentifier === name))
+        throw Error("A connector with this name already exists. Refresh its status before retrying.");
+      await deps.extensions.api("mcp").management.add({ name, configJson: JSON.stringify({
+        type: "http", url: endpoint.toString(),
+        ...(bearerToken ? { headers: { Authorization: `Bearer ${bearerToken}` } } : {})
+      }) });
+      return { saved: true };
+    },
     getMcpState: () => deps.extensions.api("mcp").plugins.listServers(),
     getMcpCatalog: () => deps.extensions.api("mcp").plugins.getCatalog(),
     getEffectiveMcpPlugins: () => deps.extensions.api("mcp").plugins.listEffectivePlugins(),

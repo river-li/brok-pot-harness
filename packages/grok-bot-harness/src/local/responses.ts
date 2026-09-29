@@ -3,6 +3,7 @@
  * No Cursor account, token renewal, remote state, or provider-side conversation storage.
  */
 import { randomUUID } from 'node:crypto';
+import { botModel } from './bot-models.js';
 
 type RecordValue = Record<string, any>;
 type Message = { role: string; content: string | RecordValue[]; providerOptions?: RecordValue };
@@ -220,14 +221,16 @@ export class ResponsesExecutor {
 }
 
 export function createLocalInference() {
-  const model = process.env.GROKBOT_MODEL || 'gpt-5.6-sol';
   return {
     resolvePrivacyMode: async () => 1, // PrivacyMode.NO_STORAGE in the bundled protocol.
     getGeminiVideoAttachedMediaUrlProvider: () => undefined,
-    createSession: (onRequestId?: (id: string) => void) => ({
+    createSession: (onRequestId?: (id: string) => void, options?: { agentId?: string }) => {
+      const model = botModel(options?.agentId).effectiveModel;
+      return {
       getExecutor: (state?: Message[]) => new ResponsesExecutor(model, state, onRequestId),
       getModelId: () => model,
-    }),
+      };
+    },
     recordPostTurnLabeling: () => {},
     recordFollowupLabeling: () => {},
   };

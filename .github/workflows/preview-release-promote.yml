@@ -83,7 +83,9 @@ jobs:
           client_name="gbh-preview-client-$SOURCE_SHA-$CANDIDATE_RUN_ID-$CANDIDATE_ATTEMPT"
           gh run download "$CANDIDATE_RUN_ID" --repo "$GH_REPO" --name "$server_name" --dir .runtime/promotion/server
           gh run download "$CANDIDATE_RUN_ID" --repo "$GH_REPO" --name "$client_name" --dir .runtime/promotion/client
-          find .runtime/promotion/server .runtime/promotion/client -type f -maxdepth 2 -print
+          android_name="gbh-preview-android-$SOURCE_SHA-$CANDIDATE_RUN_ID-$CANDIDATE_ATTEMPT"
+          gh run download "$CANDIDATE_RUN_ID" --repo "$GH_REPO" --name "$android_name" --dir .runtime/promotion/android
+          find .runtime/promotion/server .runtime/promotion/client .runtime/promotion/android -maxdepth 2 -type f -print
 
       - name: Verify candidate bytes and cryptographic workflow provenance
         run: |
@@ -96,6 +98,20 @@ jobs:
           ref='refs/heads/agent/preview-release'
           gh attestation verify "$server" --repo "$GH_REPO" --signer-workflow "$signer" --source-ref "$ref" --source-digest "$SOURCE_SHA" --format json > .runtime/promotion/server-attestation.json
           gh attestation verify "$client" --repo "$GH_REPO" --signer-workflow "$signer" --source-ref "$ref" --source-digest "$SOURCE_SHA" --format json > .runtime/promotion/client-attestation.json
+          android=".runtime/promotion/android/Brokpot-v$RELEASE_VERSION-android.apk"
+          (cd .runtime/promotion/android && sha256sum -c "$(basename "$android").sha256")
+          gh attestation verify "$android" --repo "$GH_REPO" --signer-workflow "$signer" --source-ref "$ref" --source-digest "$SOURCE_SHA" --format json > .runtime/promotion/android-attestation.json
+          gh attestation verify .runtime/promotion/android/android-source.json --repo "$GH_REPO" --signer-workflow "$signer" --source-ref "$ref" --source-digest "$SOURCE_SHA" --format json > .runtime/promotion/android-source-attestation.json
+          python3 - <<'PYANDROID'
+          import json, os
+          project = json.load(open('release/project.json'))
+          android = json.load(open('.runtime/promotion/android/android-source.json'))
+          assert android['repository'] == 'river-li/brokpot-android'
+          assert android['sourceCommit'] == project['androidSourceCommit']
+          assert android['releaseVersion'] == os.environ['RELEASE_VERSION']
+          assert android['applicationId'] == 'app.brokpot.android'
+          assert android['versionCode'] == 7
+          PYANDROID
           mkdir -p .runtime/promotion/server-extracted .runtime/promotion/client-extracted
           python3 runtime/release-extract.py "$server" .runtime/promotion/server-extracted
           node - "$SOURCE_SHA" "$RELEASE_VERSION" <<'JS'
@@ -194,9 +210,12 @@ jobs:
             ".runtime/promotion/server/gbh-server-v$RELEASE_VERSION-linux-amd64.tar.gz.sha256" \
             ".runtime/promotion/client/gbh-remote-client-v$RELEASE_VERSION-macos-arm64.zip" \
             ".runtime/promotion/client/gbh-remote-client-v$RELEASE_VERSION-macos-arm64.zip.sha256" \
+            ".runtime/promotion/android/Brokpot-v$RELEASE_VERSION-android.apk" \
+            ".runtime/promotion/android/Brokpot-v$RELEASE_VERSION-android.apk.sha256" \
+            ".runtime/promotion/android/android-source.json" \
             --repo "$GH_REPO" \
             --verify-tag \
-            --title "Grokbot Harness $RELEASE_VERSION" \
+            --title "Brokpot $RELEASE_VERSION" \
             --notes-file "$notes" \
             --prerelease \
             --latest=false

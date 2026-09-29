@@ -265,6 +265,10 @@ const { desktopFixture } = require("./desktop-fixture.cjs");
       [path.join(temp, "data"), "/home/box/sand-data"],
       [path.join(temp, "workspace"), "/workspace"],
       [
+        path.join(root, "runtime/box-websockify.py"),
+        "/opt/grokbot/box-websockify.py:ro",
+      ],
+      [
         path.join(root, "runtime/box-entrypoint.sh"),
         "/opt/grokbot/box-entrypoint.sh:ro",
       ],

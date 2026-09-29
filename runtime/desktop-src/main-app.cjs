@@ -77864,6 +77864,22 @@ var $j = class {
     const token = this.env[ZAt]?.trim() ?? "";
     const networkToken = this.env[XAt]?.trim() ?? "";
     if (this.env.GROKBOT_REMOTE_CLIENT === "1") {
+      if (this.env.GROKBOT_REMOTE_HTTPS === "1") {
+        if (new URL(t).protocol !== "https:" || token.length === 0) throw new y0("Remote HTTPS connection requires a secure Gateway URL and token.");
+        const response = await fetch(`${t}/connection`, {
+          method: "POST", headers: { Authorization: `Bearer ${token}` },
+          redirect: "error", signal: AbortSignal.timeout(10000),
+        });
+        if (!response.ok) throw new y0("The remote gateway does not support full desktop connections. Update the server gateway and reconnect.");
+        const descriptor = await response.json();
+        const display = descriptor.vncProxy;
+        if (descriptor.version !== 1 || !display || typeof display.networkToken !== "string" || display.networkToken.length > 256 ||
+            ![display.primaryUrl, display.forkBaseUrl].every(value => {
+              if (typeof value !== "string") return false;
+              try { const url = new URL(value); return url.origin === new URL(t).origin && !url.username && !url.password && url.pathname.startsWith(`/display/${display.networkToken}/`); } catch { return false; }
+            })) throw new y0("The remote gateway returned invalid display routes.");
+        return q_e(t, token, display.networkToken, display);
+      }
       const primaryUrl = this.env.SAND_HOST_GATEWAY_VNC_PRIMARY_URL?.trim() ?? "";
       const forkBaseUrl = this.env.SAND_HOST_GATEWAY_VNC_FORK_URL?.trim() ?? "";
       if (token.length === 0 || networkToken.length === 0 || primaryUrl.length === 0 || forkBaseUrl.length === 0) {
@@ -78389,6 +78405,7 @@ function gmt(e, t) {
 }
 o(gmt, "deriveEgressTunnelWsUrl");
 function tEe(e) {
+  if (process.env.GROKBOT_REMOTE_HTTPS === "1") return null;
   if (e.token == null || e.token.length === 0) return null;
   let t = gmt(e.baseUrl, e.vncProxy != null);
   return t == null

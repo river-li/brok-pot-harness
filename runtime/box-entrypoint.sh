@@ -12,6 +12,12 @@ export SAND_DISABLE_ANALYTICS=1
 export GROKBOT_LOCAL_MODE=1
 export SAND_BACKEND_URL=http://127.0.0.1:9
 mkdir -p /workspace /home/box/sand-data
+# Apply the display origin guard to both primary and forked websockify launches.
+test -f /opt/grokbot/box-websockify.py
+mkdir -p /run/grokbot/bin
+printf '%s\n' '#!/bin/sh' 'exec python3 /opt/grokbot/box-websockify.py "$@"' > /run/grokbot/bin/websockify
+chmod 755 /run/grokbot/bin/websockify
+export PATH="/run/grokbot/bin:$PATH"
 # The model key belongs to inference in the host, not the tool execution process.
 env -u LITELLM_API_KEY /usr/local/bin/start-sand-box > /tmp/grokbot-box.log 2>&1 &
 box_pid=$!

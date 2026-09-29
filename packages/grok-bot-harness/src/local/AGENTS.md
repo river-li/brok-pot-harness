@@ -17,6 +17,10 @@ configured Responses API and local services; it is not recovered bundle source.
   and lifecycle. Web and speech adapters own their request limits and failure
   conversion. Follow the module map in `README.md` and preserve each retained
   port shape.
+- WebFetch must validate public destinations at socket DNS lookup and every
+  redirect. Keep literal-IP checks, fresh connections, decompressed size limits,
+  and cancellation. `allowPrivateNetwork` is a code-only fixture escape hatch;
+  never wire it to production configuration or environment variables.
 - Keep the model API key in the inference adapter process only. It must not
   reach the renderer, speech services, tool subprocesses, or diagnostics.
   Gateway credentials and model credentials are separate.
@@ -40,3 +44,10 @@ first after source edits.
 Real API and desktop integration checks are separate and listed in the
 [test guide](../../../../runtime/tests/README.md). Contract fixtures do not
 establish external provider availability.
+
+- Per-Bot model changes must never mutate process environment. Snapshot model selection per inference session; validate catalog membership before saving overrides.
+
+- New pinned Skill sources must retain their license and companion resources, validate content hashes and preserve discoverable plugin paths. Do not execute imported install hooks.
+
+- External catalogs are untrusted metadata. Keep publisher-qualified identities, version revalidation, hash checks, bounded downloads, public socket DNS checks, no automatic hooks/updates and server-scoped installation. Do not label catalog presence as OAuth authorization or security verification.
+- GitHub topic discovery must preserve topic/public-repository restrictions and bounded pagination. Stars are discovery metadata, not trust evidence; imports must recheck membership and the selected revision.

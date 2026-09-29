@@ -5,7 +5,21 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
-const { assertComposeProjectStopped, containerApiUrl, runtimeEnv, serverConfig } = require("../server.cjs");
+const { assertComposeProjectStopped, assertSecureDockerEngine, containerApiUrl, runtimeEnv, serverConfig } = require("../server.cjs");
+
+test("server refuses old or unverifiable Docker daemons before publishing ports", () => {
+  for (const version of ["28.0.0", "28.5.1", "29.0.1+vendor.2"]) {
+    assert.doesNotThrow(() => assertSecureDockerEngine({}, (_cmd, args) => {
+      assert.deepEqual(args, ["version", "--format", "{{.Server.Version}}"]);
+      return { status: 0, stdout: version + "\n" };
+    }));
+  }
+  for (const result of [
+    { status: 0, stdout: "24.0.2" }, { status: 0, stdout: "27.5.1" },
+    { status: 0, stdout: "" }, { status: 0, stdout: "unknown" },
+    { status: 1, stdout: "28.0.0" }, { error: new Error("unavailable") },
+  ]) assert.throws(() => assertSecureDockerEngine({}, () => result), /Docker Engine 28/);
+});
 
 test("server profile creates private persistent data and Box-writable workspace", (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "gbh-server-profile-"));

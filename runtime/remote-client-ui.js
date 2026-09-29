@@ -8,6 +8,14 @@ const vncControlPortInput = document.getElementById("vnc-control-port");
 const rememberInput = document.getElementById("remember");
 const connectButton = document.getElementById("connect");
 const status = document.getElementById("status");
+function updateConnectionMode() {
+  const tunnel = urlInput.value.trim().toLowerCase().startsWith("http://");
+  document.getElementById("display-tunnel-fields").hidden = !tunnel;
+  document.getElementById("https-limitations").hidden = tunnel;
+  vncPortInput.disabled = !tunnel;
+  vncControlPortInput.disabled = !tunnel;
+}
+urlInput.addEventListener("input", updateConnectionMode);
 
 function showStatus(message, isError = false) {
   status.textContent = message || "";
@@ -24,6 +32,7 @@ async function initialize() {
   if (initial.savedUrl) urlInput.value = initial.savedUrl;
   vncPortInput.value = String(initial.vncPort || 6180);
   vncControlPortInput.value = String(initial.vncControlPort || 6181);
+  updateConnectionMode();
   if (initial.startupCode === "UNAUTHORIZED") tokenInput.placeholder = "Enter the rotated server token";
   if (initial.startupMessage) {
     showStatus(initial.startupMessage, true);
@@ -37,6 +46,7 @@ async function initialize() {
     if (result.launching) return;
     busy(false);
     if (result.gatewayUrl) urlInput.value = result.gatewayUrl;
+    updateConnectionMode();
     if (result.code === "UNAUTHORIZED") tokenInput.placeholder = "Enter the rotated server token";
     showStatus(result.message || "Enter the current server token to connect.", true);
   }
@@ -51,8 +61,8 @@ form.addEventListener("submit", async (event) => {
       gatewayUrl: urlInput.value,
       token: tokenInput.value,
       remember: rememberInput.checked,
-      vncPort: Number(vncPortInput.value),
-      vncControlPort: Number(vncControlPortInput.value),
+      vncPort: vncPortInput.disabled ? 6180 : Number(vncPortInput.value),
+      vncControlPort: vncControlPortInput.disabled ? 6181 : Number(vncControlPortInput.value),
     });
     if (result.launching) {
       showStatus("Connected. Opening your server workspace…");

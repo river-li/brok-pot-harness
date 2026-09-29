@@ -18,3 +18,8 @@ must launch the independent encrypted client without Docker or local secrets.
 `install:mac` installs to user Applications by default. `release:build` uses one
 clean commit for Mac and Linux artifacts; do not source Linux release files
 from an uncommitted checkout.
+
+- The product version in release/project.json applies only to local builds and
+  distribution metadata; preserve the immutable upstream version. Candidate
+  promotion requires the signed Android artifact and its attested pinned source
+  record as well as server and macOS artifacts. Signing material stays external.

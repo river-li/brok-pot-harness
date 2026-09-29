@@ -101,3 +101,13 @@ If Finder shows an old icon, quit the old app, confirm the output path, and rela
 
 ---
 [Documentation](Home.md) · [Get started](Build-Guide.md) · [Configuration](Configuration.md) · [Project](../../README.md)
+
+## Three-platform preview
+
+The candidate/promotion workflows publish the Linux server, macOS arm64 remote
+client and signed Android APK together. `release/project.json` pins the product
+version and Android source commit. Android signing inputs are private Actions
+secrets; deployment IPs, model choices, token values and environment files are
+not source or packaging inputs. The local Host version and client package
+versions follow the product version while upstream provenance remains unchanged.
+The Android release application installs separately from older debug previews.

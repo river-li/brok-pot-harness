@@ -1,6 +1,7 @@
 name: gbh-local
 services:
   speech:
+    init: true
     build:
       context: ./speech
     image: ${GROKBOT_SPEECH_IMAGE:-gbh-local-speech:reconstructed}
@@ -26,6 +27,7 @@ services:
       SEARXNG_SECRET: ${GROKBOT_SEARCH_SECRET:?Use npm start to generate the local search secret}
       FORCE_OWNERSHIP: "false"
       GRANIAN_WORKERS: "1"
+      GRANIAN_HOST: "0.0.0.0"
     volumes:
       - ./search:/etc/searxng:ro
     tmpfs:
@@ -76,6 +78,7 @@ services:
       - ${GROKBOT_DATA_DIR:-../.runtime/data}:/home/box/sand-data
       - ${GROKBOT_WORKSPACE_DIR:-../.runtime/workspace}:/workspace
       - ./box-entrypoint.sh:/opt/grokbot/box-entrypoint.sh:ro
+      - ./box-websockify.py:/opt/grokbot/box-websockify.py:ro
       - ./tests:/opt/grokbot/tests:ro
     healthcheck:
       test: ["CMD", "/exec-daemon/node", "-e", "fetch('http://127.0.0.1:1340/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]

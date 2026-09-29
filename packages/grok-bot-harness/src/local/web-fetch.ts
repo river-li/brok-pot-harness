@@ -1,5 +1,9 @@
 /** Local implementation of the retained WebFetch service port. Approval stays
  * in the original agent tool; this transport never attaches model credentials. */
+import * as http from "node:http";
+import * as https from "node:https";
+import { createBrotliDecompress, createGunzip, createInflate } from "node:zlib";
+import { ForbiddenDestination, publicLookup, validateDestination } from "./web-fetch-network";
 import TurndownService = require("turndown");
 
 const {
@@ -7,7 +11,7 @@ const {
 }: { createDocument(html: string): Document } = require("@mixmark-io/domino");
 const { gfm }: { gfm: TurndownService.Plugin } = require("turndown-plugin-gfm");
 type Result = { content: string } | { error: string; isTimeout?: boolean };
-type Options = { timeoutMs?: number; maxBytes?: number; maxRedirects?: number };
+type Options = { timeoutMs?: number; maxBytes?: number; maxRedirects?: number; allowPrivateNetwork?: boolean };
 
 function httpUrl(input: string, base?: URL): URL {
   const url = new URL(input, base);
@@ -82,18 +86,24 @@ export function createLocalWebFetchService(options: Options = {}) {
       : timeout;
     try {
       for (let redirects = 0; ; redirects++) {
-        const response = await fetch(url, {
-          signal,
-          redirect: "manual",
-          headers: {
-            accept:
-              "text/html, application/xhtml+xml, text/plain, text/markdown, application/json;q=0.8",
-            "user-agent": "GrokBotLocal/0.44.0 WebFetch",
-          },
+        if (!options.allowPrivateNetwork) validateDestination(url);
+        const response = await new Promise<http.IncomingMessage>((resolve, reject) => {
+          const request = (url.protocol === "https:" ? https : http).request(url, {
+            signal,
+            agent: false,
+            lookup: options.allowPrivateNetwork ? undefined : publicLookup,
+            headers: {
+              accept: "text/html, application/xhtml+xml, text/plain, text/markdown, application/json;q=0.8",
+              "accept-encoding": "gzip, deflate, br",
+              "user-agent": "GrokBotLocal/0.44.0 WebFetch",
+            },
+          }, resolve);
+          request.on("error", reject);
+          request.end();
         });
         try {
-          if ([301, 302, 303, 307, 308].includes(response.status)) {
-            const location = response.headers.get("location");
+          if ([301, 302, 303, 307, 308].includes(response.statusCode!)) {
+            const location = response.headers.location;
             if (!location)
               return { error: "Web fetch redirect has no Location header." };
             if (redirects >= maxRedirects)
@@ -108,9 +118,9 @@ export function createLocalWebFetchService(options: Options = {}) {
             }
             continue;
           }
-          if (!response.ok)
-            return { error: `Web fetch returned HTTP ${response.status}.` };
-          const contentType = response.headers.get("content-type") || "";
+          if (response.statusCode! < 200 || response.statusCode! >= 300)
+            return { error: `Web fetch returned HTTP ${response.statusCode}.` };
+          const contentType = response.headers["content-type"] || "";
           const mime = contentType.split(";")[0].trim().toLowerCase();
           const html = mime === "text/html" || mime === "application/xhtml+xml";
           const text =
@@ -122,28 +132,30 @@ export function createLocalWebFetchService(options: Options = {}) {
             return {
               error: `Web fetch does not support this content type (${mime || "unspecified"}). Use a file or browser tool for binary content.`,
             };
-          if (Number(response.headers.get("content-length")) > maxBytes)
+          if (Number(response.headers["content-length"]) > maxBytes)
             return {
               error: "Web fetch response exceeds the download size limit.",
             };
-          if (!response.body) return { content: "" };
-          const reader = response.body.getReader();
+          const encoding = response.headers["content-encoding"]?.toLowerCase();
+          const decompressor = encoding === "gzip" ? createGunzip()
+            : encoding === "deflate" ? createInflate()
+            : encoding === "br" ? createBrotliDecompress() : undefined;
+          if (encoding && encoding !== "identity" && !decompressor)
+            return { error: "Web fetch does not support this content encoding." };
+          const body = decompressor ? response.pipe(decompressor) : response;
+          const failBody = (error: Error) => body.destroy(error);
+          response.on("error", failBody);
           const chunks: Uint8Array[] = [];
           let length = 0;
           try {
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
+            for await (const value of body) {
               length += value.byteLength;
               if (length > maxBytes)
-                return {
-                  error: "Web fetch response exceeds the download size limit.",
-                };
+                return { error: "Web fetch response exceeds the download size limit." };
               chunks.push(value);
             }
           } finally {
-            await reader.cancel().catch(() => {});
-            reader.releaseLock();
+            body.destroy();
           }
           const charset =
             /charset\s*=\s*["']?([^;\s"']+)/i.exec(contentType)?.[1] || "utf-8";
@@ -156,13 +168,14 @@ export function createLocalWebFetchService(options: Options = {}) {
           const content = decoder.decode(Buffer.concat(chunks, length));
           return { content: html ? htmlToMarkdown(content, url) : content };
         } finally {
-          await response.body?.cancel().catch(() => {});
+          response.destroy();
         }
       }
-    } catch {
+    } catch (error) {
       ctx.signal?.throwIfAborted();
       if (timeout.aborted)
         return { error: "Web fetch timed out.", isTimeout: true };
+      if (error instanceof ForbiddenDestination) return { error: error.message };
       return {
         error:
           "Web fetch failed. Check the URL, network connection and TLS certificate.",

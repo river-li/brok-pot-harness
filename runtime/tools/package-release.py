@@ -17,11 +17,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 PROJECT_FILE = ROOT / "release/project.json"
 COPY_PATHS = (
+    "runtime/firecracker",
+    "release/project.json",
     "runtime/server.cjs",
     "runtime/release.cjs",
     "runtime/release-extract.py",
     "runtime/compose.yaml",
     "runtime/box-entrypoint.sh",
+    "runtime/box-websockify.py",
     "runtime/search/settings.yml",
     "runtime/speech",
     "runtime/tests/provider-smoke.cjs",
@@ -38,6 +41,7 @@ REQUIRED_FILES = (
     "runtime/release-extract.py",
     "runtime/compose.yaml",
     "runtime/box-entrypoint.sh",
+    "runtime/box-websockify.py",
     "runtime/speech/licenses/KOKORO-MODEL-LICENSE",
     "runtime/speech/licenses/KOKORO-ONNX-LICENSE",
     "runtime/tests/provider-smoke.cjs",

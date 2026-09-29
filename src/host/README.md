@@ -30,3 +30,9 @@ Host profile data by `durable-file-policy.ts` and the transcript extension.
 
 [Host extension map](extensions/README.md) · [Request flow](../../docs/wiki/Architecture.md) ·
 [Development](../../docs/wiki/Development.md) · [Parent](../README.md)
+
+Local Hosts advertise `botModelsV1`: `getLocalModelCatalog`, `getAgentModel`, and `setAgentModel` expose server-owned per-Bot overrides without returning provider credentials. The Gateway validates Bot existence; the local model adapter persists selections.
+
+The local `addLocalMcpConnector` Gateway method validates explicit HTTPS connector setup and delegates persistence/discovery to MCP management; `localMcpConnectorsV1` gates mobile forms.
+
+External catalog RPCs are gated by `externalMarketplaceV1` in the local profile. Gateway methods delegate discovery/import to the local external-marketplace adapter and installation to retained MCP plugin management.

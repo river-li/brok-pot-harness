@@ -16,3 +16,9 @@ Check serialization, defaults, and both sides of an interface before changing cr
 Electron startup and Docker configuration live elsewhere. Protocol changes require checking Host, clients, and stored-data compatibility.
 
 [Host](../host/README.md) · [Packages](../../packages/README.md) · [Source recovery](../../docs/wiki/Source-Recovery.md)
+
+The local `botModelsV1` Gateway capability adds a model catalog and per-Bot get/set selection contracts. A null model ID inherits the Host default.
+
+`localMcpConnectorsV1` advertises the local-only `addLocalMcpConnector({name,url,bearerToken?})` request. It contains sensitive transient form input, never a response credential.
+
+`externalMarketplaceV1` adds source listing, search, entry details and explicit pinned installation/update RPCs for local Hosts. Existing curated Marketplace methods remain compatible.
