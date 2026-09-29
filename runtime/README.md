@@ -9,7 +9,7 @@ and manages this repository's Docker services. Users should start with [Installa
 | [server.cjs](server.cjs) | Install, configure, start, update, and rotate credentials for the separate `gbh-server` project |
 | [release.cjs](release.cjs) | Install versioned preview packages; transactionally update, rollback, and recover their persistent state |
 | [config.cjs](config.cjs) | Root `.env` loading and precedence |
-| [compose.yaml](compose.yaml), [box-entrypoint.sh](box-entrypoint.sh) | Services, mounts, ports, in-Box Host startup |
+| [compose.yaml](compose.yaml), [box-entrypoint.sh](box-entrypoint.sh), [box-websockify.py](box-websockify.py) | Services, mounts, ports, in-Box Host startup and same-origin loopback display WebSockets |
 | [desktop.cjs](desktop.cjs) | Development Electron launch, profile, Gateway configuration |
 | [remote-client-main.cjs](remote-client-main.cjs), [remote-client-connection.cjs](remote-client-connection.cjs), [remote-client-secure-storage.cjs](remote-client-secure-storage.cjs) | Independent URL/token client, encrypted connection store, bounded isolated OS credential helper, and authenticated capability check |
 | [packaged-main.cjs](packaged-main.cjs) | Packaged app's local entry |
@@ -18,6 +18,7 @@ and manages this repository's Docker services. Users should start with [Installa
 | [desktop-src](desktop-src/README.md), [renderer-src](renderer-src/README.md) | Maintained main-process and UI assets |
 | [tools](tools/README.md) | Reconstruction, desktop assembly, icons, server/client release packaging, demonstration capture |
 | [search](search/README.md), [speech](speech/README.md) | Search and speech services |
+| [firecracker](firecracker/README.md) | Dedicated root-capable microVM, restricted host inference relay and deployment boundaries |
 | [tests](tests/README.md) | Contract, service, real-model, and desktop verification |
 | [plugins.cjs](plugins.cjs) | Local plugin import and catalog listing |
 
@@ -25,6 +26,18 @@ and manages this repository's Docker services. Users should start with [Installa
 
 Run commands from the repository root. `.runtime` holds both build output and user data; do not delete it as a cache.
 Use `npm start` to apply local launch-configuration changes. Use the dedicated `server:` npm scripts for the separately scoped persistent server. `npm run start:remote-desktop` opens the URL/token connection flow and does not start local Compose services. Restart affected processes after rebuilding source.
+The remote connection form accepts trusted HTTPS URLs directly, or loopback HTTP
+through SSH. Direct HTTPS obtains authenticated Box routes from the shared gateway;
+original Host channels and desktop displays share the same public endpoint.
+
+Server start/update/token rotation require a verifiable Docker Engine version of
+28.0.0 or newer before publishing ports. Display clients must send an HTTP Origin
+matching their loopback Host and port; arbitrary tunnel port numbers still work.
+This browser check does not authenticate local processes. Host and Box remain a
+single trust domain; see the [security review](../docs/wiki/Security-Review.md).
+Search binds IPv4 explicitly for guests without IPv6. Speech uses Docker's init
+process so termination signals reach Python instead of waiting for the server
+launcher's stop timeout.
 `npm run install:mac` builds and installs the portable app to `~/Applications`;
 `npm run release:build` assembles matching macOS and Linux distribution archives
 from one clean commit. The installed app's local mode uses its own

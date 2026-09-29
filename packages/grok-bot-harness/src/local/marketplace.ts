@@ -18,6 +18,7 @@ export type MarketplaceSource = {
   supportedSkills: Array<{ name: string; description: string }>;
   omittedComponents: Array<{ kind: string; name: string; reason: string }>;
   dependencies: string[];
+  skillPaths?: string[];
 };
 
 export type MarketplaceProvenance = {
@@ -32,6 +33,85 @@ export type MarketplaceProvenance = {
 };
 
 export const MARKETPLACE_SOURCES: MarketplaceSource[] = [
+  {
+  "entryId": "gbh.openai-gh-fix-ci",
+  "slug": "gbh-openai-gh-fix-ci",
+  "owner": "openai",
+  "repository": "skills",
+  "revision": "49f948faa9258a0c61caceaf225e179651397431",
+  "sourceUrl": "https://github.com/openai/skills/tree/49f948faa9258a0c61caceaf225e179651397431/skills/.curated/gh-fix-ci",
+  "terms": "Apache-2.0",
+  "licenseEvidence": "The pinned Skill directory LICENSE.txt declares Apache-2.0.",
+  "kind": "skill",
+  "displayName": "OpenAI \u00b7 GitHub CI Repair",
+  "description": "Inspect failing GitHub Actions checks with the included Python helper.",
+  "supportedSkills": [
+    {
+      "name": "gh-fix-ci",
+      "description": "Inspect failing GitHub Actions checks with the included Python helper."
+    }
+  ],
+  "omittedComponents": [],
+  "dependencies": [
+    "Python 3 and GitHub CLI; authenticate GitHub on the server before use."
+  ],
+  "skillPaths": [
+    "skills/.curated/gh-fix-ci"
+  ]
+},
+  {
+  "entryId": "gbh.anthropic-webapp-testing",
+  "slug": "gbh-anthropic-webapp-testing",
+  "owner": "anthropics",
+  "repository": "skills",
+  "revision": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+  "sourceUrl": "https://github.com/anthropics/skills/tree/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/webapp-testing",
+  "terms": "Apache-2.0",
+  "licenseEvidence": "The pinned Skill directory LICENSE.txt declares Apache-2.0.",
+  "kind": "skill",
+  "displayName": "Anthropic \u00b7 Web App Testing",
+  "description": "Test web applications using Python Playwright and bundled server helpers.",
+  "supportedSkills": [
+    {
+      "name": "webapp-testing",
+      "description": "Test web applications using Python Playwright and bundled server helpers."
+    }
+  ],
+  "omittedComponents": [],
+  "dependencies": [
+    "Python 3, Playwright and its browser binaries; install in the Bot environment when needed."
+  ],
+  "skillPaths": [
+    "skills/webapp-testing"
+  ]
+},
+  {
+  "entryId": "gbh.anthropic-frontend-design",
+  "slug": "gbh-anthropic-frontend-design",
+  "owner": "anthropics",
+  "repository": "skills",
+  "revision": "33375500bcea98d610eb30ce10ac4e59b89c390d",
+  "sourceUrl": "https://github.com/anthropics/skills/tree/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/frontend-design",
+  "terms": "Apache-2.0",
+  "licenseEvidence": "The pinned Skill directory LICENSE.txt declares Apache-2.0.",
+  "kind": "skill",
+  "displayName": "Anthropic \u00b7 Frontend Design",
+  "description": "Design guidance for distinctive, intentional web interfaces.",
+  "supportedSkills": [
+    {
+      "name": "frontend-design",
+      "description": "Design guidance for distinctive, intentional web interfaces."
+    }
+  ],
+  "omittedComponents": [],
+  "dependencies": [
+    "The build toolchain required by your project is separate from this Skill."
+  ],
+  "skillPaths": [
+    "skills/frontend-design"
+  ]
+},
+
   {
     entryId: "gbh.chrome-extensions",
     slug: "gbh-chrome-extensions",
@@ -125,6 +205,9 @@ function sourceById(entryId: string) {
 }
 
 function installedPath(source: MarketplaceSource, path: string) {
+  for (const prefix of source.skillPaths ?? []) {
+    if (path.startsWith(prefix + "/")) return "skills/" + prefix.split("/").pop() + path.slice(prefix.length);
+  }
   if (source.kind !== "mcp") return path;
   if (path === ".mcp.json") return ".marketplace-source/firecrawl.mcp.json";
   if (path === "commands/skill-gen.md")
@@ -133,6 +216,7 @@ function installedPath(source: MarketplaceSource, path: string) {
 }
 
 function selectedPath(source: MarketplaceSource, path: string) {
+  if (source.skillPaths) return source.skillPaths.some((prefix) => path.startsWith(prefix + "/"));
   if (source.kind === "skill")
     return path === "LICENSE" || path.startsWith("skills/chrome-extensions/");
   return (

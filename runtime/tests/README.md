@@ -16,7 +16,8 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 | MCP/plugin contracts | `npm run test:mcp-store`, `npm run test:mcp-scopes`, `npm run test:plugin-files` | Configuration, scope, filesystem handling |
 | Marketplace contract | `npm run test:marketplace-contract` | Pinned-source import and provenance, local plugin edits/configuration, and recipe preview/import/update/remove contracts; source fetches use an in-process fixture |
 | Keychain policy | `npm run test:desktop-keychain` | Conditional storage and machine identity |
-| Remote Host/client contracts | `npm run test:remote-contracts` | Loopback-only Gateway connection, encrypted server-scoped credentials, bounded isolated OS-storage helper, server lifecycle config, interruption journal, and redacted provider smoke behavior |
+| Remote Host/client contracts | `npm run test:remote-contracts` | HTTPS or loopback HTTP Gateway connection, redirect refusal, encrypted server-scoped credentials, bounded isolated OS-storage helper, server lifecycle config, interruption journal, and redacted provider smoke behavior |
+| Security boundaries | `npm run test:web-fetch`; `npm run test:remote-contracts`; `python3 -m unittest runtime/tests/test_display_origin.py` | Public-destination socket/DNS policy, attachment symlink/hardlink fixtures, anonymous health, Docker >=28 gate and same-origin display policy. These do not establish Host/Box privilege isolation. |
 | Portable local app contract | `npm run test:unified-local` | Bundled runtime integrity and private model settings. A successful contract does not prove Docker or a model provider works. |
 | Release manager and archive | `node --test runtime/tests/release-manager-contract.cjs`; `python3 -m unittest runtime/tests/test_release_extract.py` | Package inventory, update failure/rollback checkpoints, startup retry, stale-lock policy, actual updater process interruption plus manual recovery, and safe tar extraction. |
 | Candidate promotion policy | `python3 -m unittest runtime/tests/test_validate_preview_candidate.py` | Exact trusted workflow, commit, attempt, successful candidate jobs, preview version, and merged source PR; rejects stale or failed candidates. |
@@ -53,6 +54,13 @@ known dummy token and never reads the operator's credentials or local files.
 
 ## Interpret results correctly
 
+`display-security-live.py` is a separate pinned-image check: run it with
+`--network none`, mount only `runtime/` read-only at `/review`, and execute
+`python3 /review/tests/display-security-live.py`. It starts its own dummy RFB
+endpoint and proxies, compares upstream versus guarded WebSocket handshakes,
+and cleans them up. It does not connect to a real display. See the
+[security review](../../docs/wiki/Security-Review.md) for findings and limits.
+
 A deterministic model fixture with a real Box can prove tool execution and approvals, not external model availability.
 Synthetic microphone input covers encoding and IPC, not hardware permissions or acoustic echo.
 Contracts do not replace real UI workflows.
@@ -64,3 +72,14 @@ leaves its test Agent in place, so point it at disposable data. Isolated tests
 use private containers and profiles and clean up only their own resources.
 Keep useful diagnostics under ignored `.runtime/tests`, without secrets or user
 sessions.
+
+`node runtime/tests/bot-models-contract.cjs` verifies independent Bot model overrides, concurrent Responses request model IDs, session snapshots, persistence and invalid selections against a private fixture. `test_firecracker_proxy.py` also covers multi-model allowlists and catalog filtering. Neither proves external model availability.
+
+`node --test runtime/tests/client-capabilities-contract.cjs` checks pinned external Skill path/resource retention and local connector validation, duplicate names, profile gating and credential-free responses. This is a fixture contract, not provider OAuth verification.
+
+`node --test runtime/tests/external-marketplace-contract.cjs` covers public destination checks, source caching/backoff, publisher identity, version/hash/path validation and configuration forms. GitHub topic fixtures cover star ranking, constrained keywords, root/nested Skills, complete pagination, stale commits, changed topic membership, incomplete search and 403 backoff. `external-marketplace-loader.cjs` runs in the pinned Linux amd64 sandbox image with a read-only repository mount, private `/tmp`, and no network; it exercises retained plugin parsers, install/replay/update/uninstall, local-edit protection and credential-free catalog output. Neither test proves provider OAuth or live MCP tool execution.
+
+`remote-gateway-contract.cjs` exercises real HTTP and WebSocket proxy sockets:
+original Host channels, descriptor authentication, relative display assets,
+primary/fork routing, credential isolation, expired display URLs, path rejection
+and cross-origin WebSocket denial. It does not prove the deployed VNC framebuffer.

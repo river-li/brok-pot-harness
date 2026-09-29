@@ -57,11 +57,12 @@ function initializeRemoteEnvironment(gatewayUrl, token, identity, displayPorts) 
   process.env.GROKBOT_LOCAL_MODE = "1";
   process.env.GROKBOT_LOCAL_VOICE = "0";
   process.env.GROKBOT_REMOTE_CLIENT = "1";
+  process.env.GROKBOT_REMOTE_HTTPS = new URL(normalized).protocol === "https:" ? "1" : "0";
   process.env.SAND_HOST_GATEWAY_URL = normalized;
   process.env.SAND_HOST_GATEWAY_TOKEN = token;
   process.env.SAND_HOST_GATEWAY_NETWORK_TOKEN = token;
-  process.env.SAND_HOST_GATEWAY_VNC_PRIMARY_URL = `http://127.0.0.1:${ports.vncPort}/vnc.html`;
-  process.env.SAND_HOST_GATEWAY_VNC_FORK_URL = `http://127.0.0.1:${ports.vncControlPort}/vnc.html`;
+  process.env.SAND_HOST_GATEWAY_VNC_PRIMARY_URL = process.env.GROKBOT_REMOTE_HTTPS === "1" ? "" : `http://127.0.0.1:${ports.vncPort}/vnc.html`;
+  process.env.SAND_HOST_GATEWAY_VNC_FORK_URL = process.env.GROKBOT_REMOTE_HTTPS === "1" ? "" : `http://127.0.0.1:${ports.vncControlPort}`;
   process.env.SAND_USER_DATA_DIR = profile;
   process.env.SAND_BACKEND_URL = "http://127.0.0.1:9";
   process.env.SAND_DEV_BOX_CONTROL_PLANE = "0";
@@ -163,6 +164,7 @@ function cleanClientEnvironment() {
     "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GBH_REMOTE_SERVER_ID", "GBH_REMOTE_LAUNCH",
     "GBH_REMOTE_RECONFIGURE",
     "GBH_REMOTE_VNC_PORT", "GBH_REMOTE_VNC_CONTROL_PORT",
+    "GROKBOT_REMOTE_HTTPS",
   ]) delete env[name];
   for (const name of Object.keys(env)) {
     if (/(?:API_KEY|TOKEN|SECRET|PASSWORD)$/i.test(name)) delete env[name];

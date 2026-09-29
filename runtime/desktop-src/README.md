@@ -16,8 +16,10 @@ See [Keychain permissions](../../docs/wiki/Permissions.md#keychain).
 
 The separately packaged Remote Client starts with a server URL and Gateway
 token, scopes its profile to that server, and stores the connection only after
-an explicit encrypted-storage choice. Its display traffic uses the configured
-local SSH-forward ports; it does not search for or start a local Host.
+an explicit encrypted-storage choice. HTTPS mode obtains the retained `vncProxy` descriptor from authenticated
+`POST /connection`, preserving primary/fork Box viewing through the same gateway.
+The optional separate macOS network-egress tunnel remains disabled. SSH mode uses the
+configured local display forwards. Neither mode searches for or starts a local Host.
 
 After edits, build and prepare from the root, then quit and relaunch the desktop.
 Storage changes require `test:desktop-keychain` and `test:desktop-keychain-live`;

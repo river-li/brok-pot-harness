@@ -222,6 +222,16 @@ function runCompose(config, action, env) {
   return result.status ?? 1;
 }
 
+function assertSecureDockerEngine(env = process.env, execute = spawnSync) {
+  const result = execute("docker", ["version", "--format", "{{.Server.Version}}"], {
+    env, encoding: "utf8", timeout: 15_000,
+  });
+  const version = /^([0-9]+)\.[0-9]+\.[0-9]+(?:[-+][\w.-]+)?$/.exec((result.stdout || "").trim());
+  if (result.error || result.status !== 0 || !version || Number(version[1]) < 28) {
+    throw new Error("Server startup requires Docker Engine 28.0.0 or newer: older engines can expose loopback-published ports to the local network. Upgrade the daemon before starting this server.");
+  }
+}
+
 function assertComposeProjectStopped(config, env = process.env, execute = spawnSync) {
   const options = { cwd: root, env, encoding: "utf8" };
   const listed = execute("docker", composeArgs(config, ["ps", "--all", "--quiet"]), options);
@@ -373,6 +383,7 @@ async function main(argv = process.argv, env = process.env) {
   }
 
   const settings = readSettings(config, { required: ["start", "update", "rotate-token", "provider-smoke", "prepare-release-state"].includes(command) });
+  if (["start", "update", "rotate-token"].includes(command)) assertSecureDockerEngine(env);
   if (command === "start" || command === "update") {
     const composeEnv = runtimeEnv(config, env, settings, { requireProvider: true });
     if (command === "start") assertLocalBuild();
@@ -390,7 +401,7 @@ async function main(argv = process.argv, env = process.env) {
     const token = composeEnv.GROKBOT_GATEWAY_TOKEN;
     await waitForGateway(config, token);
     console.log(`Server Gateway is ready at http://127.0.0.1:${config.gatewayPort}.`);
-    console.log("The Gateway and display ports are bound to server loopback; connect through SSH forwarding or a trusted TLS proxy.");
+    console.log("The Gateway and display ports are bound to server loopback; connect through authenticated SSH forwarding.");
     return 0;
   }
   if (command === "status") {
@@ -425,6 +436,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  assertSecureDockerEngine,
   containerApiUrl,
   assertComposeProjectStopped,
   initialize,

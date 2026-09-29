@@ -29,10 +29,10 @@ function normalizeGatewayUrl(value) {
   try {
     url = new URL(value.trim());
   } catch {
-    throw new Error("Enter a loopback Gateway URL from your SSH tunnel, such as http://127.0.0.1:1540.");
+    throw new Error("Enter an HTTPS server URL or a local HTTP address from your SSH tunnel.");
   }
-  if (url.protocol !== "http:") {
-    throw new Error("Connect through an authenticated SSH tunnel and enter its local HTTP Gateway URL.");
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new Error("Use HTTPS for a remote server, or HTTP through a local SSH tunnel.");
   }
   if (url.username || url.password || url.search || url.hash) {
     throw new Error("The server URL cannot contain credentials, query parameters, or a fragment.");
@@ -40,8 +40,8 @@ function normalizeGatewayUrl(value) {
   if (url.pathname !== "/") {
     throw new Error("The Gateway must be served at the URL root.");
   }
-  if (!isLoopback(url.hostname)) {
-    throw new Error("The Remote Client accepts loopback URLs only. Forward the server through an authenticated SSH tunnel first.");
+  if (url.protocol === "http:" && !isLoopback(url.hostname)) {
+    throw new Error("Remote servers require HTTPS. HTTP is allowed only for a local SSH tunnel.");
   }
   return url.origin;
 }
@@ -74,7 +74,7 @@ async function probeGateway(gatewayUrl, token, fetchImpl = fetch) {
       signal: AbortSignal.timeout(8000),
     });
   } catch {
-    throw Object.assign(new Error("The server could not be reached. Check that it is running and that the authenticated SSH tunnel is forwarding the Gateway port."), { code: "UNREACHABLE" });
+    throw Object.assign(new Error("The server could not be reached securely. Check the address, network and HTTPS certificate, or your local SSH tunnel."), { code: "UNREACHABLE" });
   }
   if (response.status === 401 || response.status === 403) {
     throw Object.assign(new Error("The Gateway token was rejected. Enter the current token; the server token may have rotated."), { code: "UNAUTHORIZED" });

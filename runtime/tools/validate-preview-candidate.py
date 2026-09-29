@@ -14,6 +14,7 @@ REQUIRED_JOBS = {
     "server candidate (linux/amd64)",
     "remote client candidate (macOS arm64)",
     "attest candidate artifacts",
+    "Android release candidate",
 }
 
 

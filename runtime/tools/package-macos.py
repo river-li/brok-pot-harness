@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 ELECTRON_PATH_MARKER = 'GBH_ELECTRON_PATH='
 LOCAL_RUNTIME_PATHS = (
-    'runtime/server.cjs', 'runtime/compose.yaml', 'runtime/box-entrypoint.sh',
+    'runtime/server.cjs', 'runtime/compose.yaml', 'runtime/box-entrypoint.sh', 'runtime/box-websockify.py',
     'runtime/search/settings.yml', 'runtime/speech',
     'runtime/tests/provider-smoke.cjs', '.runtime/build/sand-host', '.runtime/build/deps',
 )
@@ -204,7 +204,7 @@ def main():
     bundle_id = 'app.brokpot.desktop' if args.unified else ('local.gbh.remoteclient' if remote else 'local.gbh.desktop')
     info.update(CFBundleName=product_name, CFBundleDisplayName=product_name,
                 CFBundleIdentifier=bundle_id, CFBundleIconFile='AppIcon.icns')
-    if release_candidate:
+    if release_candidate or args.unified or remote:
         project = json.loads((ROOT / 'release/project.json').read_text())
         set_candidate_bundle_version(info, project['projectVersion'])
     with metadata.open('wb') as f:
@@ -212,6 +212,8 @@ def main():
     package = json.loads((app/'package.json').read_text())
     package['main'] = 'unified-main.cjs' if args.unified else ('remote-client-main.cjs' if remote else 'packaged-main.cjs')
     package['productName'] = product_name
+    if args.unified or remote:
+        package['version'] = json.loads((ROOT / 'release/project.json').read_text())['projectVersion']
     (app/'package.json').write_text(json.dumps(package, indent=2)+'\n')
     if args.unified:
         for name in ['unified-main.cjs', 'unified-desktop-main.cjs', 'unified-local.cjs', 'unified-preload.cjs',

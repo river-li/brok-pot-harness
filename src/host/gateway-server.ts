@@ -460,6 +460,9 @@ async function handleRequest(deps, req, res, eventStreamEchoes) {
   const url2 = new URL(req.url ?? "/", "http://127.0.0.1");
   if (rejectUntrustedBrowserRequest(deps, req, res)) return;
   if (req.method === "GET" && url2.pathname === GATEWAY_HEALTH_PATH) {
+    if (deps.authToken != null && !isAuthorized(req, deps.authToken)) {
+      return respondJson(res, { ok: true });
+    }
     const health = deps.getHealth();
     const payload = {
       ok: true,

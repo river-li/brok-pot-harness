@@ -220,6 +220,36 @@ def patch_local_coordinator(path: Path) -> None:
     source = source_bytes.decode("utf-8")
     source = _replace_once(
         source,
+        'function Ef(t,e){if(e==null)return t;',
+        'function Ef(t,e){if(process.env.GROKBOT_REMOTE_HTTPS==="1"&&e==null)return {...t,vncUrl:null,windows:[]};if(e==null)return t;',
+        "HTTPS client display isolation",
+    )
+    source = _replace_once(
+        source,
+        'd=`websockify?${n===void 0?"":`token=${n}&`}${i}=${s}&${o}`;',
+        'd=`${new URL(t).pathname.replace(/\\/$/, "")}/websockify?${n===void 0?"":`token=${encodeURIComponent(n)}&`}${i}=${s}&${o}`;',
+        "Preserve display gateway path prefix",
+    )
+    source = _replace_once(
+        source,
+        'return o===gf?e.primaryUrl:o===Sf?hf(e.forkBaseUrl,{networkToken:e.networkToken},Hb(n)):t',
+        'return o===gf||o===6180?e.primaryUrl:o===Sf||o===6181?hf(e.forkBaseUrl,{networkToken:e.networkToken},Hb(n)):t',
+        "Self-hosted published display ports",
+    )
+    source = _replace_once(
+        source,
+        'function BA(t,e){let n;',
+        'function BA(t,e){if(process.env.GROKBOT_REMOTE_HTTPS==="1"){let i;try{i=new URL(t)}catch{throw Error("Unsupported remote Box display route")}if(!["127.0.0.1","localhost"].includes(i.hostname)||i.pathname!=="/vnc.html"||!["6080","6081","6180","6181"].includes(i.port))throw Error("Unsupported remote Box display route")}let n;',
+        "Reject unmapped private display routes in HTTPS mode",
+    )
+    for anchor, label in (
+        ('fetch(`${s.baseUrl}${ff}/${e}`,{method:"POST",', 'Gateway POST redirects'),
+        ('fetch(`${C.baseUrl}${kA}`,{headers:', 'Gateway event redirects'),
+    ):
+        replacement = anchor.replace('`,{', '`,{redirect:"error",', 1)
+        source = _replace_once(source, anchor, replacement, label)
+    source = _replace_once(
+        source,
         'automationWriteProvenance:A(K(U_)),isFork:A(X()),traceparent:A(f())',
         'automationWriteProvenance:A(Pe(K(U_),K("template_import"))),recipeSetupOperationId:A(f()),isFork:A(X()),traceparent:A(f())',
         "sendPrompt validator",

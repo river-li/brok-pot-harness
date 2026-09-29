@@ -16,8 +16,10 @@ copy credentials or infer successful execution from syntax checks alone.
   `GROKBOT_LOCAL_KEYCHAIN=1` is the explicit opt-in; keep machine identity
   persistence restricted and never replace encrypted secrets with plaintext
   disk persistence.
-- The remote client bootstraps the retained desktop against a loopback Gateway
-  reached through an authenticated SSH tunnel. Preserve distinct primary and
+- The remote client bootstraps against trusted HTTPS or a loopback Gateway
+  reached through an authenticated SSH tunnel. HTTPS mode must not use private
+  display routes or derive public egress ports. Obtain validated same-origin
+  display capabilities from the shared gateway connection descriptor. Preserve distinct primary and
   fork display forwards, do not fall back to a local Box/display endpoint, and
   keep client-machine tool requests inside the existing explicit local-tool
   permission and approval path.

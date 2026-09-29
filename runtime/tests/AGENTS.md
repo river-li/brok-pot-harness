@@ -48,3 +48,10 @@ npm run test:runtime-build
 `npm run build -- --profile local` before fixture/live checks that consume the
 assembled Host. Do not run live or charged checks unless that evidence is
 needed for the change.
+
+- External catalog tests must use fixture metadata/private install roots. The loader test may evaluate the built bundle without its startup call for retained-parser coverage; never start a production Host or install into its profile as a fixture.
+
+- Shared remote gateway checks must preserve original Host approval channels and
+  verify that display credentials cannot call RPC. Test actual WebSocket upgrade,
+  Origin denial and capability expiry; URL mapping fixtures alone do not prove
+  noVNC rendering. Keep live display credentials out of diagnostics and URLs in logs.

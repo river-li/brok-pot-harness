@@ -39,18 +39,20 @@ function encryptedStorage(backend = "os_crypt") {
   };
 }
 
-test("server URL validation requires true loopback behind the authenticated tunnel", () => {
+test("server URL validation accepts HTTPS and restricts cleartext HTTP to loopback", () => {
+  assert.equal(normalizeGatewayUrl("https://bots.example.com/"), "https://bots.example.com");
+  assert.equal(normalizeGatewayUrl("https://203.0.113.10:443"), "https://203.0.113.10");
   assert.equal(normalizeGatewayUrl("http://127.0.0.1:1540"), "http://127.0.0.1:1540");
   assert.equal(normalizeGatewayUrl("http://[::1]:1540"), "http://[::1]:1540");
   assert.equal(normalizeGatewayUrl("http://127.19.0.8:1540"), "http://127.19.0.8:1540");
   for (const invalid of [
-    "https://bots.example.com",
     "http://bots.example.com:1540",
     "http://127.example.com:1540",
     "http://127.0.0.1.example.com:1540",
     "https://user:secret@bots.example.com",
     "https://bots.example.com/?token=hidden",
     "https://bots.example.com/gateway",
+    "https://bots.example.com/#secret",
     "file:///tmp/gateway",
   ]) assert.throws(() => normalizeGatewayUrl(invalid));
 });
@@ -70,6 +72,9 @@ test("authenticated bootstrap requires current Host capabilities and rejects red
   assert.equal(request.options.headers.authorization, "Bearer " + token);
   assert.equal(request.options.redirect, "error");
   assert.deepEqual(JSON.parse(request.options.body), { includeManagedCapabilities: false });
+  await probeGateway("https://bots.example.com", token, goodFetch);
+  assert.equal(request.url, "https://bots.example.com/api/getHostStatus");
+  assert.equal(request.options.redirect, "error");
 
   await assert.rejects(
     probeGateway("http://127.0.0.1:1540", token, async () => new Response("", { status: 401 })),
@@ -117,7 +122,7 @@ test("saved connections use OS encryption and isolated server profiles", async (
   const storage = encryptedStorage();
   const store = new EncryptedConnectionStore(root, storage, { platform: "darwin" });
   const firstUrl = "http://127.0.0.1:1540";
-  const secondUrl = "http://127.0.0.1:1541";
+  const secondUrl = "https://bots.example.com";
   const displayPorts = { vncPort: 6280, vncControlPort: 6281 };
   const firstId = await store.save(firstUrl, token, displayPorts);
   const secondId = serverIdentity(secondUrl);
@@ -130,6 +135,10 @@ test("saved connections use OS encryption and isolated server profiles", async (
   assert.ok(!fs.readFileSync(store.connectionPath(firstId), "utf8").includes(token));
   assert.ok(!fs.readFileSync(store.connectionPath(firstId), "utf8").includes(firstUrl));
   assert.equal(fs.readFileSync(store.activePath(), "utf8").trim(), firstId);
+  await store.save(secondUrl, token);
+  assert.equal((await store.loadActive()).gatewayUrl, secondUrl);
+  assert.equal((await store.load(secondId)).token, token);
+  fs.rmSync(store.connectionPath(secondId));
   store.activate(secondId);
   assert.equal(await store.loadActive(), null);
   store.clearActive();

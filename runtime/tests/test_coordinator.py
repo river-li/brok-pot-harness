@@ -19,6 +19,35 @@ spec.loader.exec_module(patcher)
 
 
 class CoordinatorMarketplaceTests(unittest.TestCase):
+    def test_https_status_removes_private_display_routes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            staged = Path(directory) / 'coordinator.cjs'
+            shutil.copy2(VENDOR, staged)
+            patcher.patch_local_coordinator(staged)
+            source = staged.read_text()
+            start = source.index('function hf(')
+            end = source.index('r(Ef,"proxifyForeverBoxStatus");', start)
+            function = 'const r=()=>{};const gf=6080,Sf=6081;' + source[start:end]
+            self.assertIn('fetch(`${s.baseUrl}${ff}/${e}`,{redirect:"error",', source)
+            self.assertIn('fetch(`${C.baseUrl}${kA}`,{redirect:"error",', source)
+            subprocess.run(['node', '-e', function + '''
+const assert = require('node:assert/strict');
+const status = {state:'running',vncUrl:'http://127.0.0.1:6080',windows:[{vncUrl:'http://127.0.0.1:6081'}]};
+process.env.GROKBOT_REMOTE_HTTPS='1';
+assert.deepEqual(Ef(status),{state:'running',vncUrl:null,windows:[]});
+assert.equal(status.windows.length,1);
+const display={primaryUrl:'https://server/display/ticket/primary/vnc.html',forkBaseUrl:'https://server/display/ticket/fork',networkToken:'ticket'};
+const mapped=Ef({vncUrl:'http://127.0.0.1:6080/vnc.html',windows:[{vncUrl:'http://127.0.0.1:6081/vnc.html?path=websockify%3Ftoken%3Dwindow-2'}]},display);
+assert.equal(mapped.vncUrl,display.primaryUrl);
+assert.equal(BA('http://127.0.0.1:6180/vnc.html',display),display.primaryUrl);
+assert.ok(BA('http://127.0.0.1:6181/vnc.html?path=websockify%3Ftoken%3Dwindow-2',display).startsWith(display.forkBaseUrl));
+assert.equal(new URL(mapped.windows[0].vncUrl).searchParams.get('path'),'/display/ticket/fork/websockify?token=window-2&network_token=ticket&resume_lower_s=900&resume_upper_s=18000');
+assert.throws(()=>BA('http://127.0.0.1:9999/vnc.html',display),/Unsupported remote/);
+assert.throws(()=>BA('https://evil.example/vnc.html',display),/Unsupported remote/);
+process.env.GROKBOT_REMOTE_HTTPS='0';
+assert.equal(Ef(status),status);
+'''], check=True, capture_output=True, text=True)
+
     def test_local_replies_cross_retained_validation_and_invalid_values_fail(self):
         original = VENDOR.read_bytes()
         with tempfile.TemporaryDirectory() as directory:

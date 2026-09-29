@@ -186,10 +186,76 @@ jobs:
           if-no-files-found: error
           retention-days: 90
 
+  android:
+    name: Android release candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Read pinned Android source and product version
+        id: android
+        run: |
+          python3 - <<'PYMETA'
+          import json, os, re
+          project = json.load(open('release/project.json'))
+          assert re.fullmatch('[0-9a-f]{40}', project['androidSourceCommit'])
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('sha=' + project['androidSourceCommit'] + '\n')
+              output.write('version=' + project['projectVersion'] + '\n')
+          PYMETA
+      - uses: actions/checkout@v7
+        with:
+          repository: river-li/brokpot-android
+          ref: ${{ steps.android.outputs.sha }}
+          path: android
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build signed APK from pinned source
+        env:
+          SIGNING_KEY: ${{ secrets.BROKPOT_ANDROID_KEYSTORE_B64 }}
+          BROKPOT_ANDROID_STORE_PASSWORD: ${{ secrets.BROKPOT_ANDROID_SIGNING_PASSWORD }}
+          BROKPOT_ANDROID_KEY_PASSWORD: ${{ secrets.BROKPOT_ANDROID_SIGNING_PASSWORD }}
+          VERSION: ${{ steps.android.outputs.version }}
+          ANDROID_SOURCE: ${{ steps.android.outputs.sha }}
+        run: |
+          set -euo pipefail
+          export BROKPOT_ANDROID_KEYSTORE="$RUNNER_TEMP/brokpot-release.jks"
+          trap 'rm -f "$BROKPOT_ANDROID_KEYSTORE"' EXIT
+          umask 077
+          printf '%s' "$SIGNING_KEY" | base64 --decode > "$BROKPOT_ANDROID_KEYSTORE"
+          unset SIGNING_KEY
+          cd android
+          ./gradlew test :app:assembleRelease :app:lintRelease --console=plain
+          apk="app/build/outputs/apk/release/app-release.apk"
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose "$apk"
+          "$ANDROID_HOME/build-tools/36.0.0/aapt" dump badging "$apk" | head -1 | grep -F "versionName='$VERSION'"
+          mkdir -p ../.runtime/candidate/android
+          cp "$apk" "../.runtime/candidate/android/Brokpot-v$VERSION-android.apk"
+          cd ../.runtime/candidate/android
+          sha256sum "Brokpot-v$VERSION-android.apk" > "Brokpot-v$VERSION-android.apk.sha256"
+          python3 - <<'PYMETA'
+          import json, os
+          from pathlib import Path
+          Path('android-source.json').write_text(json.dumps({'repository':'river-li/brokpot-android','sourceCommit':os.environ['ANDROID_SOURCE'],'releaseVersion':os.environ['VERSION'],'versionCode':7,'applicationId':'app.brokpot.android'},indent=2)+'\n')
+          PYMETA
+      - uses: actions/upload-artifact@v7
+        with:
+          name: gbh-preview-android-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/candidate/android/*
+          if-no-files-found: error
+          retention-days: 90
+
   attest:
     name: attest candidate artifacts
     if: github.event_name == 'push' && github.ref == 'refs/heads/agent/preview-release'
-    needs: [server, client]
+    needs: [server, client, android]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
@@ -218,3 +284,15 @@ jobs:
         uses: actions/attest@v4.2.1
         with:
           subject-path: .runtime/candidate/client/*.zip
+
+      - name: Download exact Android artifact from this workflow run
+        uses: actions/download-artifact@v7
+        with:
+          name: gbh-preview-android-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime/candidate/android
+      - name: Attest Android candidate
+        uses: actions/attest@v4.2.1
+        with:
+          subject-path: |
+            .runtime/candidate/android/*.apk
+            .runtime/candidate/android/android-source.json

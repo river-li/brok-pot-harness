@@ -63,6 +63,10 @@ def build(output: Path, project: Path = PROJECT, profile=None):
     shutil.copytree(project / 'vendor/deps', output / 'deps', dirs_exist_ok=True)
     if config is not None:
         write_bootstrap(target, config)
+        product = project / 'release/project.json'
+        if config['profile'] == 'local' and product.is_file():
+            # Product releases have their own version; preserve sand-host baseline.
+            (target / 'version').write_text(json.loads(product.read_text())['projectVersion'] + '\n')
     local = project / 'dist/local'
     if local.exists():
         shutil.copytree(local, target / 'local', dirs_exist_ok=True)

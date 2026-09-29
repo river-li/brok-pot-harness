@@ -1,9 +1,10 @@
 {
-  "projectVersion": "0.1.0-preview.1",
+  "projectVersion": "0.5.1-preview.1",
   "stateFormat": "gbh-state-v1",
   "upstreamHostBaseline": "bfe1879",
   "retainedDesktopVersion": "0.44.0",
   "nodeVersion": "24.14.0",
   "serverPlatform": "linux/amd64",
-  "clientPlatform": "macos/arm64"
+  "clientPlatform": "macos/arm64",
+  "androidSourceCommit": "a6bef416ad394e7e39ca75b848a8f0c9b8c7fcdb"
 }

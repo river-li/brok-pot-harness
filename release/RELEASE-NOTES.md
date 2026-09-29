@@ -1,15 +1,26 @@
-# Grokbot Harness 0.1.0-preview.1
+# Brokpot 0.5.1-preview.1
 
-This preview is the first installable self-hosted release of the recovered
-GBH runtime and its independent Remote Client. The server and client share
-compatibility ID `gbh-remote-v1`.
+This preview brings the Linux server, macOS remote client, and Android client to
+one product version. It adds the shared authenticated Host/Box gateway, isolated
+Firecracker deployment tooling, external marketplace discovery, per-Bot models,
+and Android Bot/group collaboration and Box screens.
 
-## Supported pair
+Actual deployment addresses, private network assignments, model credentials and
+operator environment files are not release inputs. Configure them on the target
+server after installation. The upstream Host baseline remains `bfe1879` and the
+retained desktop baseline remains `0.44.0`; these are provenance, not the product
+release version. State format and compatibility ID are unchanged.
+
+## Supported clients and server
 
 - Server: Linux x86_64 (`linux/amd64`), Node.js 24.14.0, Docker Engine with
   Docker Compose v2.
 - Client: macOS arm64, Electron 42.11.6. The bundle uses an ad-hoc signature
   and is not Developer ID signed or notarized.
+- Android: version 0.5.1-preview.1 (code 7), signed release APK with application
+  ID `app.brokpot.android`. It installs separately from earlier debug previews;
+  configure the server connection in this app. Its exact source revision is
+  recorded in the attested `android-source.json`.
 - Product state format: `gbh-state-v1`. Updates across a different state
   format are blocked until a tested migration is provided.
 
@@ -22,8 +33,8 @@ the trusted candidate workflow. See
 
 ## Candidate and maintenance gates
 
-The current candidate workflow builds only the Linux/amd64 server and macOS
-arm64 client pair. Each patch or hotfix must be a reviewed PR against current
+The candidate workflow builds the Linux/amd64 server, macOS arm64 remote
+client and signed Android APK from the pinned Android source commit. Each patch or hotfix must be a reviewed PR against current
 `main`, add a regression check for the reported defect, and pass
 `npm run ci:pre-pr` plus the required docs checks. That gate builds the local profile,
 runs offline contracts and the runtime build tests, checks syntax, and audits

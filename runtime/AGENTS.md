@@ -13,6 +13,8 @@ maintained Electron assets, and runtime tests. See the
   unrelated changes. A scoped launcher/config task may intentionally revise a
   default or add opt-in behavior; document the intended behavior and verify
   the affected Compose path.
+  Preserve the search IPv4 bind and speech init process: the Firecracker guest
+  disables IPv6, and a direct Python PID 1 does not handle normal stop signals.
 - `server.cjs` owns the distinct `gbh-server` Compose project and persistent
   state profile. Keep generated state under its selected state directory,
   restrict token/env-file permissions, bind Gateway and display ports to
@@ -23,6 +25,10 @@ maintained Electron assets, and runtime tests. See the
   keep model caches outside the checkpoint and avoid changing unrelated owners.
   Server model keys are read from that server env or the invoking shell; do not
   place them in the remote desktop environment or logs.
+  Keep the Docker Engine >=28 startup check before publishing ports. The
+  `box-websockify.py` wrapper must cover primary and forked displays, require
+  matching loopback Host/Origin, and ship in both server and portable app
+  inventories. This is browser-origin protection, not a Box/Host isolation claim.
 - `release.cjs` manages only the versioned self-hosted preview under its chosen
   release home and state home. Keep the complete file/checksum inventory and
   product `stateFormat` gate mandatory. Checkpoint every listed state entry's
@@ -41,6 +47,9 @@ maintained Electron assets, and runtime tests. See the
   may persist only through encrypted OS storage after an explicit user choice;
   never fall back to plaintext. The connected client uses its own profile and
   passes only Gateway/display connection values to the retained UI.
+  Accept trusted HTTPS or loopback HTTP, never public cleartext HTTP or TLS
+  bypasses. HTTPS mode must not fall back to local Box display ports. Keep
+  bootstrap, Gateway commands and event streams from following redirects.
 - `unified-main.cjs` owns the portable macOS run-location welcome. Its local
   branch verifies the bundled server inventory, deploys it under private user
   state, and starts only the `brokpot-local` Compose project. Its remote branch
