@@ -11,20 +11,21 @@ function listen(server) {
   });
 }
 
-function post(url, token, body) {
+function post(url, gatewayToken, body, secondaryToken) {
   return fetch(url, {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      authorization: `Bearer ${token}`,
+      authorization: `Bearer ${gatewayToken}`,
+      ...(secondaryToken ? { "x-brokpot-mcp-token": secondaryToken } : {}),
     },
     body: JSON.stringify(body),
   });
 }
 
-test("coordinator MCP bridges authenticated Gateway chat", async (t) => {
+test("Brokpot MCP authenticates with Gateway token and supports long-running observation", async (t) => {
   const gatewayToken = "gateway-test-token";
-  const mcpToken = "mcp-test-token";
+  const secondaryToken = "secondary-test-token";
   const transcripts = [];
   const calls = [];
   const gateway = http.createServer(async (req, res) => {
@@ -37,12 +38,17 @@ test("coordinator MCP bridges authenticated Gateway chat", async (t) => {
     const body = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
     calls.push({ path: req.url, body });
     res.setHeader("content-type", "application/json");
+
+    if (req.url === "/api/getHostStatus") {
+      res.end(JSON.stringify({ ok: true, isBusy: true, activeAgentId: "coord-1", lastBusyAtMs: 123 }));
+      return;
+    }
     if (req.url === "/api/listAgents") {
-      res.end(JSON.stringify([{ id: "coord-1", name: "Coordinator", description: "routes tasks" }]));
+      res.end(JSON.stringify([{ id: "coord-1", name: "Steve", description: "coordinates work", runState: "running" }]));
       return;
     }
     if (req.url === "/api/searchAgents") {
-      res.end(JSON.stringify([{ id: "coord-1", name: "Coordinator", description: "routes tasks" }]));
+      res.end(JSON.stringify([{ id: "coord-1", name: "Steve", description: "coordinates work", runState: "running" }]));
       return;
     }
     if (req.url === "/api/getAgentTranscript") {
@@ -50,19 +56,25 @@ test("coordinator MCP bridges authenticated Gateway chat", async (t) => {
       return;
     }
     if (req.url === "/api/sendPrompt") {
-      transcripts.push({ kind: "user-message", id: "u1", message: { type: "text", text: body.prompt } });
-      setTimeout(() => {
-        transcripts.push({
-          kind: "send-message",
-          id: "a1",
-          message: { type: "text", text: "Delegation accepted." },
-        });
-      }, 25);
-      res.end(JSON.stringify({ status: "accepted", clientNonce: body.clientNonce }));
+      transcripts.push({ kind: "message", role: "user", id: body.clientNonce, content: body.prompt });
+      res.end(JSON.stringify({ status: "accepted" }));
+      return;
+    }
+    if (req.url === "/api/getSubagents") {
+      res.end(JSON.stringify([{ subagentId: "sub-1", subagentType: "executor", title: "Implement migration", status: "running", startedAtMs: 100 }]));
+      return;
+    }
+    if (req.url === "/api/getAsyncTasks") {
+      res.end(JSON.stringify([{ kind: "subagent", id: "sub-1", status: "running" }]));
+      return;
+    }
+    if (req.url === "/api/getConversationOutline") {
+      res.end(JSON.stringify([{ kind: "tool-call", id: "t1", name: "Task", status: "pending", summary: "Delegating implementation" }]));
       return;
     }
     res.writeHead(404).end(JSON.stringify({ error: "not found" }));
   });
+
   const gatewayPort = await listen(gateway);
   t.after(() => gateway.close());
 
@@ -74,9 +86,8 @@ test("coordinator MCP bridges authenticated Gateway chat", async (t) => {
       env: {
         ...process.env,
         SAND_HOST_GATEWAY_URL: `http://127.0.0.1:${gatewayPort}`,
-        SAND_HOST_GATEWAY_TOKEN: gatewayToken,
         BROKPOT_MCP_HTTP_PORT: String(mcpPort),
-        BROKPOT_MCP_SERVER_TOKEN: mcpToken,
+        BROKPOT_MCP_SERVER_TOKEN: secondaryToken,
       },
       stdio: ["ignore", "ignore", "pipe"],
     },
@@ -86,7 +97,7 @@ test("coordinator MCP bridges authenticated Gateway chat", async (t) => {
   await new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error("MCP server did not start")), 3000);
     child.stderr.on("data", (chunk) => {
-      if (chunk.toString().includes("coordinator MCP listening")) {
+      if (chunk.toString().includes("Brokpot MCP listening")) {
         clearTimeout(timer);
         resolve();
       }
@@ -95,55 +106,100 @@ test("coordinator MCP bridges authenticated Gateway chat", async (t) => {
   });
 
   const base = `http://127.0.0.1:${mcpPort}/mcp`;
-  const unauthorized = await post(base, "wrong", {
-    jsonrpc: "2.0",
-    id: 1,
-    method: "tools/list",
-    params: {},
-  });
-  assert.equal(unauthorized.status, 401);
 
-  const initialized = await post(base, mcpToken, {
+  const missingGateway = await fetch(base, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-brokpot-mcp-token": secondaryToken },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }),
+  });
+  assert.equal(missingGateway.status, 401);
+
+  const missingSecondFactor = await post(base, gatewayToken, {
     jsonrpc: "2.0",
     id: 2,
-    method: "initialize",
-    params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } },
-  });
-  assert.equal(initialized.status, 200);
-  const initializeBody = await initialized.json();
-  assert.equal(initializeBody.result.serverInfo.name, "brokpot-coordinator");
-
-  const tools = await post(base, mcpToken, {
-    jsonrpc: "2.0",
-    id: 3,
     method: "tools/list",
     params: {},
   });
-  const toolsBody = await tools.json();
-  assert.deepEqual(
-    toolsBody.result.tools.map((tool) => tool.name),
-    ["brokpot_list_bots", "brokpot_chat_coordinator", "brokpot_read_transcript"],
-  );
+  assert.equal(missingSecondFactor.status, 401);
 
-  const chat = await post(base, mcpToken, {
+  const initialized = await post(base, gatewayToken, {
+    jsonrpc: "2.0",
+    id: 3,
+    method: "initialize",
+    params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } },
+  }, secondaryToken);
+  assert.equal(initialized.status, 200);
+
+  const toolsResponse = await post(base, gatewayToken, {
     jsonrpc: "2.0",
     id: 4,
+    method: "tools/list",
+    params: {},
+  }, secondaryToken);
+  const toolsBody = await toolsResponse.json();
+  assert.deepEqual(
+    toolsBody.result.tools.map((tool) => tool.name),
+    [
+      "brokpot_list_agents",
+      "brokpot_send_message",
+      "brokpot_get_updates",
+      "brokpot_wait_for_updates",
+      "brokpot_get_agent_status",
+      "brokpot_read_transcript",
+    ],
+  );
+
+  const sendResponse = await post(base, gatewayToken, {
+    jsonrpc: "2.0",
+    id: 5,
     method: "tools/call",
     params: {
-      name: "brokpot_chat_coordinator",
-      arguments: {
-        agent_name: "Coordinator",
-        message: "Create a worker and delegate the build.",
-        timeout_ms: 2000,
-        poll_interval_ms: 20,
-      },
+      name: "brokpot_send_message",
+      arguments: { agent_name: "Steve", message: "Please coordinate the billing migration." },
     },
+  }, secondaryToken);
+  const sendBody = await sendResponse.json();
+  const sent = JSON.parse(sendBody.result.content[0].text);
+  assert.equal(sent.agent.id, "coord-1");
+  assert.equal(sent.accepted, true);
+  assert.ok(sent.message_id);
+  assert.ok(sent.updates_cursor);
+
+  transcripts.push({
+    kind: "send-message",
+    id: "a1",
+    timestampMs: 200,
+    message: { type: "text", content: "I delegated implementation and am waiting on the executor." },
   });
-  const chatBody = await chat.json();
-  assert.equal(chatBody.result.isError, undefined);
-  const payload = JSON.parse(chatBody.result.content[0].text);
-  assert.equal(payload.agent.id, "coord-1");
-  assert.equal(payload.reply, "Delegation accepted.");
-  assert.equal(payload.timed_out, false);
+
+  const updateResponse = await post(base, gatewayToken, {
+    jsonrpc: "2.0",
+    id: 6,
+    method: "tools/call",
+    params: {
+      name: "brokpot_get_updates",
+      arguments: { cursor: sent.updates_cursor },
+    },
+  }, secondaryToken);
+  const updateBody = await updateResponse.json();
+  const updates = JSON.parse(updateBody.result.content[0].text);
+  assert.equal(updates.updates.length, 1);
+  assert.equal(updates.updates[0].text, "I delegated implementation and am waiting on the executor.");
+
+  const statusResponse = await post(base, gatewayToken, {
+    jsonrpc: "2.0",
+    id: 7,
+    method: "tools/call",
+    params: {
+      name: "brokpot_get_agent_status",
+      arguments: { agent_id: "coord-1" },
+    },
+  }, secondaryToken);
+  const statusBody = await statusResponse.json();
+  const status = JSON.parse(statusBody.result.content[0].text);
+  assert.equal(status.subagents[0].status, "running");
+  assert.equal(status.async_tasks[0].id, "sub-1");
+  assert.equal(status.host.active_agent_id, "coord-1");
+
   assert.ok(calls.some((call) => call.path === "/api/sendPrompt" && call.body.agentId === "coord-1"));
 });
