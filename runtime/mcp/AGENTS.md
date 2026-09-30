@@ -12,8 +12,10 @@ This directory contains the standalone Brokpot MCP-to-Gateway adapter.
 ## Authentication and transport
 
 - stdio mode requires `SAND_HOST_GATEWAY_TOKEN`.
-- HTTP mode requires the caller's Brokpot Gateway bearer token and verifies it against the real Gateway.
-- `BROKPOT_MCP_SERVER_TOKEN`, when configured, is an additional bridge factor and never substitutes for Gateway authentication.
+- HTTP defaults to the caller's Brokpot Gateway bearer token. Opt-in OAuth verifies that token at browser consent and issues separate resource-bound MCP tokens; never accept a raw Gateway bearer token or tool-argument credential in OAuth mode.
+- `BROKPOT_MCP_SERVER_TOKEN`, when configured, is an additional bridge factor and never substitutes for Gateway authentication. In OAuth mode verify it at consent, not through a custom header ChatGPT cannot provide.
+- `oauth-server.cjs` uses the pinned OAuth library for code/PKCE/refresh mechanics. Preserve exact callbacks, S256, resource and scope checks, browser-bound one-use consent, refresh reuse revocation, and sanitized errors. Client discovery may only fetch the explicitly configured ChatGPT metadata URL.
+- Grants are in-memory and single-process. Do not add persistence, multi-tenant accounts, automatic consent, new upstream credentials, or a generic client-metadata URL fetch without separate design and review.
 - Never log credentials, raw authorization headers, or resolved environments.
 - Refuse remote plaintext HTTP Gateway connections by default; use loopback forwarding or HTTPS.
 
