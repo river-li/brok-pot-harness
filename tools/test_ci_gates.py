@@ -273,6 +273,18 @@ class RequiredGateTests(unittest.TestCase):
             CI.CONTRACTS,
         )
 
+    def test_coordinator_mcp_contract_runs_and_propagates_failure(self) -> None:
+        invoked = []
+
+        def record_execution(name, command):
+            invoked.append(command)
+            return "failed (exit 1)" if command == ["npm", "run", "test:coordinator-mcp"] else "passed"
+
+        results = CI.contract_results("passed", record_execution)
+
+        self.assertEqual(invoked.count(["npm", "run", "test:coordinator-mcp"]), 1)
+        self.assertIn(("Coordinator MCP contract", "failed (exit 1)"), results)
+
     def test_docs_only_and_code_changes_select_intended_gates(self) -> None:
         docs_scope, docs_gates = CI.gate_plan(["README.md", "docs/wiki/Workflow.md"])
         code_scope, code_gates = CI.gate_plan(["packages/example/src/change.ts"])

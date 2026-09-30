@@ -128,6 +128,8 @@ The isolated contract test verifies:
 - agent discovery;
 - immediate `sendPrompt` acceptance;
 - cursor-based retrieval of later transcript updates;
+- one shared wait deadline across sequential Gateway requests and response-body reads, preserving the cursor on timeout;
 - observation of existing subagent, async-task, outline, and Host state.
 
-It uses a fake Gateway and does not require a real model or real Gateway token.
+It uses a fake HTTP Gateway and does not require a real model or real Gateway token.
+The suite is also included in the required offline gates (`npm run ci:pre-pr`).

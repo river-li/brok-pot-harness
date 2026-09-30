@@ -11,6 +11,18 @@ function listen(server) {
   });
 }
 
+function delayResponse(res, delayMs) {
+  return new Promise((resolve) => {
+    const finish = () => {
+      clearTimeout(timer);
+      res.off("close", finish);
+      resolve();
+    };
+    const timer = setTimeout(finish, delayMs);
+    res.once("close", finish);
+  });
+}
+
 function post(url, gatewayToken, body, secondaryToken) {
   return fetch(url, {
     method: "POST",
@@ -42,6 +54,9 @@ function makeHarness(t, options = {}) {
   const transcripts = [];
   const accepted = new Map();
   const calls = [];
+  const pendingRequests = new Set();
+  const requestErrors = [];
+  const abortedResponses = [];
   const roster =
     options.roster ??
     [
@@ -49,14 +64,10 @@ function makeHarness(t, options = {}) {
       { id: "worker-1", name: "Builder", description: "implementation worker", runState: "idle" },
     ];
 
-  const gateway = http.createServer(async (req, res) => {
+  async function handleRequest(req, res) {
     if (req.headers.authorization !== `Bearer ${gatewayToken}`) {
       res.writeHead(401, { "content-type": "application/json" }).end(JSON.stringify({ error: "unauthorized" }));
       return;
-    }
-
-    if (typeof options.delayMs === "number" && options.delayMs > 0) {
-      await new Promise((resolve) => setTimeout(resolve, options.delayMs));
     }
 
     const chunks = [];
@@ -64,6 +75,18 @@ function makeHarness(t, options = {}) {
     const body = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
     calls.push({ path: req.url, body });
     res.setHeader("content-type", "application/json");
+
+    if (options.stallBodyPath === req.url) {
+      // Flush headers and part of a valid response, then wait for client abort.
+      const closed = new Promise((resolve) => res.once("close", resolve));
+      res.write("[");
+      await closed;
+      return;
+    }
+    if (typeof options.delayMs === "number" && options.delayMs > 0) {
+      await delayResponse(res, options.delayMs);
+    }
+    if (res.destroyed) return;
 
     if (req.url === "/api/getHostStatus") {
       res.end(JSON.stringify({ ok: true, isBusy: true, activeAgentId: "coord-1", lastBusyAtMs: 123 }));
@@ -141,6 +164,18 @@ function makeHarness(t, options = {}) {
       return;
     }
     res.writeHead(404).end(JSON.stringify({ error: "not found" }));
+  }
+
+  const gateway = http.createServer((req, res) => {
+    res.once("close", () => {
+      if (!res.writableFinished) abortedResponses.push(req.url);
+    });
+    const pending = handleRequest(req, res).catch((error) => {
+      // Client deadline expiration can also interrupt request-body consumption.
+      if (!(req.aborted && error.code === "ECONNRESET")) requestErrors.push(error);
+      res.destroy();
+    }).finally(() => pendingRequests.delete(pending));
+    pendingRequests.add(pending);
   });
 
   let child;
@@ -152,10 +187,24 @@ function makeHarness(t, options = {}) {
     transcripts,
     accepted,
     calls,
+    abortedResponses,
     roster,
+    async drainRequests() {
+      await Promise.all([...pendingRequests]);
+    },
     async start() {
       const gatewayPort = await listen(gateway);
-      t.after(() => gateway.close());
+      t.after(async () => {
+        if (child && child.exitCode == null && child.signalCode == null) {
+          const exited = new Promise((resolve) => child.once("close", resolve));
+          child.kill("SIGTERM");
+          await exited;
+        }
+        const closed = new Promise((resolve, reject) => gateway.close((error) => error ? reject(error) : resolve()));
+        gateway.closeAllConnections();
+        await Promise.all([closed, ...pendingRequests]);
+        assert.deepEqual(requestErrors, [], "unexpected fake Gateway request failures");
+      });
 
       const mcpPort = 19000 + Math.floor(Math.random() * 1000);
       child = spawn(
@@ -171,7 +220,6 @@ function makeHarness(t, options = {}) {
           stdio: ["ignore", "ignore", "pipe"],
         },
       );
-      t.after(() => child.kill("SIGTERM"));
 
       await new Promise((resolve, reject) => {
         const timer = setTimeout(() => reject(new Error("MCP server did not start")), 3000);
@@ -428,5 +476,68 @@ test("long-poll deadline bounds slow Gateway I/O", async (t) => {
   const elapsed = Date.now() - started;
 
   assert.equal(waited.timed_out, true);
+  assert.equal(waited.cursor, cursorResult.cursor);
+  assert.deepEqual(waited.updates, []);
   assert.ok(elapsed < 550, `expected bounded wait, got ${elapsed}ms`);
+  await h.drainRequests();
+  assert.deepEqual(h.abortedResponses, ["/api/listAgents"]);
+});
+
+test("long-poll deadline preserves the cursor when headers arrive before a stalled body", async (t) => {
+  const options = {};
+  const h = makeHarness(t, options);
+  const base = await h.start();
+  h.transcripts.push({ kind: "message", role: "user", id: "seed", content: "seed" });
+  const initial = await callTool(base, h.gatewayToken, h.secondaryToken, 70, "brokpot_read_transcript", {
+    agent_id: "coord-1",
+  });
+  h.transcripts.push({ kind: "send-message", id: "later", message: { type: "text", content: "still unread" } });
+  options.stallBodyPath = "/api/getAgentTranscript";
+
+  const started = Date.now();
+  const waited = await callTool(base, h.gatewayToken, h.secondaryToken, 71, "brokpot_wait_for_updates", {
+    cursor: initial.cursor,
+    timeout_ms: 250,
+  });
+  const elapsed = Date.now() - started;
+  assert.equal(waited.timed_out, true);
+  assert.equal(waited.cursor, initial.cursor);
+  assert.deepEqual(waited.updates, []);
+  assert.ok(elapsed < 550, `expected bounded body read, got ${elapsed}ms`);
+  await h.drainRequests();
+  assert.deepEqual(h.abortedResponses, ["/api/getAgentTranscript"]);
+
+  delete options.stallBodyPath;
+  const resumed = await callTool(base, h.gatewayToken, h.secondaryToken, 72, "brokpot_get_updates", {
+    cursor: waited.cursor,
+  });
+  assert.deepEqual(resumed.updates.map((update) => update.id), ["later"]);
+});
+
+test("long-poll shares one deadline across sequential roster and transcript requests", async (t) => {
+  const options = {};
+  const h = makeHarness(t, options);
+  const base = await h.start();
+  h.transcripts.push({ kind: "message", role: "user", id: "seed", content: "seed" });
+  const initial = await callTool(base, h.gatewayToken, h.secondaryToken, 80, "brokpot_read_transcript", {
+    agent_id: "coord-1",
+  });
+  h.transcripts.push({ kind: "send-message", id: "later", message: { type: "text", content: "still unread" } });
+  // Each response fits individually; their combined latency exceeds the budget.
+  options.delayMs = 180;
+  const callStart = h.calls.length;
+
+  const started = Date.now();
+  const waited = await callTool(base, h.gatewayToken, h.secondaryToken, 81, "brokpot_wait_for_updates", {
+    cursor: initial.cursor,
+    timeout_ms: 250,
+  });
+  const elapsed = Date.now() - started;
+  assert.equal(waited.timed_out, true);
+  assert.equal(waited.cursor, initial.cursor);
+  assert.deepEqual(waited.updates, []);
+  assert.deepEqual(h.calls.slice(callStart).map((call) => call.path), ["/api/listAgents", "/api/getAgentTranscript"]);
+  assert.ok(elapsed < 550, `expected one shared budget, got ${elapsed}ms`);
+  await h.drainRequests();
+  assert.deepEqual(h.abortedResponses, ["/api/getAgentTranscript"]);
 });

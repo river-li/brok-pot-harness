@@ -62,6 +62,7 @@ async function gatewayCall(method, args = {}, options = {}) {
   if (!authToken) throw new Error("A Brokpot Gateway token is required.");
   const timeoutMs = remainingBudget(options.deadlineMs, options.timeoutMs || 30000);
   let response;
+  let text;
   try {
     response = await fetch(new URL(`/api/${method}`, gatewayBase()), {
       method: "POST",
@@ -74,6 +75,7 @@ async function gatewayCall(method, args = {}, options = {}) {
       body: JSON.stringify(args),
       signal: AbortSignal.timeout(timeoutMs),
     });
+    text = await response.text();
   } catch (error) {
     if (options.deadlineMs != null && (Date.now() >= options.deadlineMs || error?.name === "TimeoutError" || error?.name === "AbortError")) {
       throw new McpDeadlineExceededError();
@@ -81,7 +83,6 @@ async function gatewayCall(method, args = {}, options = {}) {
     throw error;
   }
 
-  const text = await response.text();
   let payload;
   try {
     payload = text ? JSON.parse(text) : null;
