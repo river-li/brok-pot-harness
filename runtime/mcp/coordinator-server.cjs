@@ -6,11 +6,19 @@ const readline = require("node:readline");
 const { randomUUID, timingSafeEqual } = require("node:crypto");
 
 const MCP_PROTOCOL_VERSION = "2025-06-18";
-const SERVER_INFO = { name: "brokpot-gateway", version: "0.2.0" };
+const SERVER_INFO = { name: "brokpot-gateway", version: "0.2.1" };
 const DEFAULT_GATEWAY_URL = "http://127.0.0.1:1540";
 const DEFAULT_HTTP_PORT = 1541;
 const MAX_BODY_BYTES = 1024 * 1024;
 const MAX_WAIT_MS = 30000;
+const HOST_ACCOUNT_SLOT = "host";
+
+class McpDeadlineExceededError extends Error {
+  constructor() {
+    super("The MCP wait deadline expired before the Gateway operation completed.");
+    this.name = "McpDeadlineExceededError";
+  }
+}
 
 function envInt(name, fallback, min, max) {
   const value = process.env[name];
@@ -42,20 +50,37 @@ function gatewayBase() {
   return base;
 }
 
-async function gatewayCall(method, args = {}, timeoutMs = 30000, token) {
-  const authToken = token || process.env.SAND_HOST_GATEWAY_TOKEN;
+function remainingBudget(deadlineMs, fallbackMs = 30000) {
+  if (deadlineMs == null) return fallbackMs;
+  const remaining = deadlineMs - Date.now();
+  if (remaining <= 0) throw new McpDeadlineExceededError();
+  return Math.max(1, Math.min(fallbackMs, remaining));
+}
+
+async function gatewayCall(method, args = {}, options = {}) {
+  const authToken = options.token || process.env.SAND_HOST_GATEWAY_TOKEN;
   if (!authToken) throw new Error("A Brokpot Gateway token is required.");
-  const response = await fetch(new URL(`/api/${method}`, gatewayBase()), {
-    method: "POST",
-    redirect: "error",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${authToken}`,
-      "x-sand-slim-avatars": "1",
-    },
-    body: JSON.stringify(args),
-    signal: AbortSignal.timeout(timeoutMs),
-  });
+  const timeoutMs = remainingBudget(options.deadlineMs, options.timeoutMs || 30000);
+  let response;
+  try {
+    response = await fetch(new URL(`/api/${method}`, gatewayBase()), {
+      method: "POST",
+      redirect: "error",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${authToken}`,
+        "x-sand-slim-avatars": "1",
+      },
+      body: JSON.stringify(args),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch (error) {
+    if (options.deadlineMs != null && (Date.now() >= options.deadlineMs || error?.name === "TimeoutError" || error?.name === "AbortError")) {
+      throw new McpDeadlineExceededError();
+    }
+    throw error;
+  }
+
   const text = await response.text();
   let payload;
   try {
@@ -76,47 +101,141 @@ async function gatewayCall(method, args = {}, timeoutMs = 30000, token) {
 }
 
 async function verifyGatewayToken(token) {
-  await gatewayCall("getHostStatus", { includeManagedCapabilities: false }, 5000, token);
+  await gatewayCall(
+    "getHostStatus",
+    { includeManagedCapabilities: false },
+    { token, timeoutMs: 5000 },
+  );
 }
 
-function messageText(entry) {
-  if (!entry || entry.kind !== "send-message") return null;
-  const message = entry.message;
-  if (!message || message.type !== "text") return null;
-  if (typeof message.content === "string") return message.content;
-  if (typeof message.text === "string") return message.text;
-  return null;
-}
+function userVisibleUpdate(entry) {
+  if (!entry) return null;
 
-function outboundUpdate(entry) {
-  const text = messageText(entry);
-  if (text != null) {
-    return {
+  if (entry.kind === "send-message") {
+    const message = entry.message;
+    if (!message || typeof message.type !== "string") return null;
+    const base = {
       id: entry.id || null,
       kind: "message",
-      text,
+      message_type: message.type,
       timestamp_ms: entry.timestampMs || entry.createdAtMs || null,
-      channel: entry.message?.channel || null,
+      channel: message.channel || null,
+    };
+
+    if (message.type === "text") {
+      const text =
+        typeof message.content === "string"
+          ? message.content
+          : typeof message.text === "string"
+            ? message.text
+            : "";
+      return { ...base, text, requires_user_action: false };
+    }
+
+    if (message.type === "attachment") {
+      return {
+        ...base,
+        attachment: {
+          url: typeof message.url === "string" ? message.url : null,
+          file_name: typeof message.file_name === "string" ? message.file_name : null,
+          alt: typeof message.alt === "string" ? message.alt : null,
+        },
+        requires_user_action: false,
+      };
+    }
+
+    if (message.type === "widget") {
+      return {
+        ...base,
+        prompt: typeof message.widget?.prompt === "string" ? message.widget.prompt : "Bot requested input.",
+        options: Array.isArray(message.widget?.options)
+          ? message.widget.options.map((option) => ({
+              label: option?.label ?? null,
+              value: option?.value ?? null,
+              description: option?.description ?? null,
+            }))
+          : [],
+        responded_value: entry.respondedValue ?? null,
+        dismissed: entry.widgetDismissed === true,
+        requires_user_action: entry.respondedValue == null && entry.widgetDismissed !== true,
+        action_surface: "existing-brokpot-ui",
+      };
+    }
+
+    if (message.type === "auto-review-approval") {
+      const approval = message.approval || {};
+      const status = approval.status || null;
+      return {
+        ...base,
+        summary: approval.summary || "Auto-review requested approval.",
+        request_id: approval.requestId || null,
+        status,
+        requires_user_action: status === "pending",
+        action_surface: "existing-brokpot-ui",
+      };
+    }
+
+    if (message.type === "local-tool-permission") {
+      const ask = message.ask || {};
+      const status = ask.status || null;
+      return {
+        ...base,
+        summary:
+          ask.action || ask.target
+            ? `Permission requested for ${ask.action || "local action"}${ask.target ? `: ${ask.target}` : ""}.`
+            : "Bot requested permission to use a local computer capability.",
+        request_id: ask.requestId || null,
+        status,
+        requires_user_action: status === "pending",
+        action_surface: "existing-brokpot-ui",
+      };
+    }
+
+    if (message.type === "secret-request" || message.type === "credential-request") {
+      return {
+        ...base,
+        summary: "Bot requested a credential through the existing secure Brokpot UI.",
+        requires_user_action: true,
+        action_surface: "existing-brokpot-ui",
+      };
+    }
+
+    if (message.type === "cursor-agent") {
+      return {
+        ...base,
+        cloud_agent_id: message.bcId || null,
+        requires_user_action: false,
+      };
+    }
+
+    return {
+      ...base,
+      summary: `Bot emitted a ${message.type} message/card.`,
+      requires_user_action: false,
     };
   }
-  if (entry?.kind === "notice" || entry?.kind === "error" || entry?.kind === "event") {
+
+  if (entry.kind === "notice" || entry.kind === "error" || entry.kind === "event") {
     return {
       id: entry.id || null,
       kind: entry.kind,
       timestamp_ms: entry.timestampMs || entry.createdAtMs || null,
       entry,
+      requires_user_action: false,
     };
   }
+
   return null;
 }
 
-function encodeCursor(agentId, transcript) {
-  const last = transcript.length > 0 ? transcript[transcript.length - 1] : null;
+function encodeCursorAt(agentId, transcript, index) {
+  const bounded = Math.max(0, Math.min(index, transcript.length));
+  const anchor = bounded > 0 ? transcript[bounded - 1] : null;
   const payload = {
     v: 1,
     agent_id: agentId,
-    index: transcript.length,
-    anchor_id: typeof last?.id === "string" ? last.id : null,
+    index: bounded,
+    anchor_id: typeof anchor?.id === "string" ? anchor.id : null,
   };
   return Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
 }
@@ -137,32 +256,57 @@ function decodeCursor(cursor) {
   }
 }
 
-async function resolveAgent(args, token) {
+function cursorStart(transcript, decoded) {
+  if (decoded == null) return { start: Math.max(0, transcript.length - 20), rebased: false };
+  if (decoded.anchor_id != null) {
+    const anchor = transcript.findIndex((entry) => entry?.id === decoded.anchor_id);
+    if (anchor >= 0) return { start: anchor + 1, rebased: false };
+    return { start: 0, rebased: true };
+  }
+  if (decoded.index === 0) return { start: 0, rebased: false };
+  return { start: 0, rebased: true };
+}
+
+function matchingRosterAgents(agents, name) {
+  const normalized = name.trim().toLowerCase();
+  return agents.filter(
+    (agent) => typeof agent?.name === "string" && agent.name.trim().toLowerCase() === normalized,
+  );
+}
+
+async function resolveAgent(args, token, deadlineMs) {
+  const agents = await gatewayCall("listAgents", {}, { token, deadlineMs });
   if (typeof args.agent_id === "string" && args.agent_id.trim()) {
-    const agents = await gatewayCall("listAgents", {}, 30000, token);
     const found = agents.find((agent) => agent.id === args.agent_id.trim());
     if (!found) throw new Error(`No Bot found with id ${args.agent_id}.`);
     return found;
   }
+
   const name = typeof args.agent_name === "string" ? args.agent_name.trim() : "";
   if (!name) throw new Error("Provide agent_id or agent_name.");
-  const agents = await gatewayCall("searchAgents", { query: name, limit: 20 }, 30000, token);
-  const exact = agents.filter((agent) => String(agent.name || "").toLowerCase() === name.toLowerCase());
-  const candidates = exact.length ? exact : agents;
-  if (candidates.length === 0) throw new Error(`No Bot matched "${name}".`);
-  if (candidates.length > 1) {
-    const choices = candidates.slice(0, 8).map((agent) => `${agent.name} (${agent.id})`).join(", ");
-    throw new Error(`Multiple Bots matched "${name}": ${choices}. Use agent_id.`);
+
+  const matches = matchingRosterAgents(agents, name);
+  if (matches.length === 0) throw new Error(`No Bot named "${name}" exists in the Host roster.`);
+  if (matches.length > 1) {
+    const choices = matches
+      .slice(0, 8)
+      .map((agent) => `${agent.name} (${agent.id})`)
+      .join(", ");
+    throw new Error(`Multiple Bots are named "${name}": ${choices}. Use agent_id.`);
   }
-  return candidates[0];
+  return matches[0];
 }
 
 async function listAgents(args, token) {
-  const query = typeof args.query === "string" ? args.query.trim() : "";
-  const rows = query
-    ? await gatewayCall("searchAgents", { query, limit: 100 }, 30000, token)
-    : await gatewayCall("listAgents", {}, 30000, token);
-  return rows.map((agent) => ({
+  const rows = await gatewayCall("listAgents", {}, { token });
+  const query = typeof args.query === "string" ? args.query.trim().toLowerCase() : "";
+  const filtered = !query
+    ? rows
+    : rows.filter((agent) =>
+        [agent?.id, agent?.name, agent?.title, agent?.description]
+          .some((value) => typeof value === "string" && value.toLowerCase().includes(query)),
+      );
+  return filtered.map((agent) => ({
     id: agent.id,
     name: agent.name,
     description: agent.description || "",
@@ -172,65 +316,119 @@ async function listAgents(args, token) {
   }));
 }
 
+async function acceptanceRecord(agentId, clientNonce, token, deadlineMs) {
+  const status = await gatewayCall(
+    "promptAcceptanceStatus",
+    {
+      accountSlot: HOST_ACCOUNT_SLOT,
+      clientNonce,
+      agentId,
+    },
+    { token, deadlineMs },
+  );
+  return status?.outcome === "found" && status.record && typeof status.record === "object"
+    ? status.record
+    : null;
+}
+
+function boundaryIndexForAcceptedMessage(transcript, record, clientNonce) {
+  const echoEntryId = typeof record?.echoEntryId === "string" ? record.echoEntryId : null;
+  if (echoEntryId != null) {
+    const index = transcript.findIndex((entry) => entry?.id === echoEntryId);
+    if (index >= 0) return index + 1;
+  }
+  const nonceIndex = transcript.findIndex(
+    (entry) =>
+      (entry?.kind === "message" || entry?.kind === "user-attachment") &&
+      entry?.clientNonce === clientNonce,
+  );
+  return nonceIndex >= 0 ? nonceIndex + 1 : null;
+}
+
 async function sendMessage(args, token) {
   const message = typeof args.message === "string" ? args.message.trim() : "";
   if (!message) throw new Error("message must be a non-empty string.");
+
   const agent = await resolveAgent(args, token);
-  const before = await gatewayCall("getAgentTranscript", { id: agent.id }, 30000, token);
-  const cursor = encodeCursor(agent.id, before);
-  const clientNonce = typeof args.message_id === "string" && args.message_id.trim()
-    ? args.message_id.trim()
-    : randomUUID();
+  const clientNonce =
+    typeof args.message_id === "string" && args.message_id.trim()
+      ? args.message_id.trim()
+      : randomUUID();
+
+  const beforeStatus = await acceptanceRecord(agent.id, clientNonce, token);
+  const before = await gatewayCall("getAgentTranscript", { id: agent.id }, { token });
+  const fallbackBoundary = encodeCursorAt(agent.id, before, before.length);
+
   const acceptance = await gatewayCall(
     "sendPrompt",
     { prompt: message, agentId: agent.id, clientNonce },
-    30000,
-    token,
+    { token },
   );
+
+  const [record, after] = await Promise.all([
+    acceptanceRecord(agent.id, clientNonce, token),
+    gatewayCall("getAgentTranscript", { id: agent.id }, { token }),
+  ]);
+  const boundaryIndex = boundaryIndexForAcceptedMessage(after, record, clientNonce);
+
+  if (boundaryIndex == null && beforeStatus != null) {
+    throw new Error(
+      "The message_id was already accepted, but its original transcript boundary could not be recovered safely. Read the transcript directly instead of advancing a new updates cursor.",
+    );
+  }
+
   return {
     agent: { id: agent.id, name: agent.name },
     message_id: clientNonce,
-    accepted: true,
+    accepted: acceptance?.accepted !== false,
     acceptance,
-    updates_cursor: cursor,
+    acceptance_record: record,
+    updates_cursor:
+      boundaryIndex == null
+        ? fallbackBoundary
+        : encodeCursorAt(agent.id, after, boundaryIndex),
   };
 }
 
-function cursorStart(transcript, decoded) {
-  if (decoded == null) return { start: Math.max(0, transcript.length - 20), rebased: false };
-  if (decoded.anchor_id != null) {
-    const anchor = transcript.findIndex((entry) => entry?.id === decoded.anchor_id);
-    if (anchor >= 0) return { start: anchor + 1, rebased: false };
-  }
-  if (decoded.index <= transcript.length) return { start: decoded.index, rebased: true };
-  return { start: 0, rebased: true };
-}
-
-async function getUpdates(args, token) {
+async function getUpdates(args, token, deadlineMs) {
   const decoded = decodeCursor(args.cursor);
   const agent = decoded != null
-    ? await resolveAgent({ agent_id: decoded.agent_id }, token)
-    : await resolveAgent(args, token);
+    ? await resolveAgent({ agent_id: decoded.agent_id }, token, deadlineMs)
+    : await resolveAgent(args, token, deadlineMs);
+
   if (
     decoded != null &&
     typeof args.agent_id === "string" &&
     args.agent_id.trim() &&
     args.agent_id.trim() !== decoded.agent_id
   ) throw new Error("cursor belongs to a different Bot.");
-  const transcript = await gatewayCall("getAgentTranscript", { id: agent.id }, 30000, token);
+
+  const transcript = await gatewayCall(
+    "getAgentTranscript",
+    { id: agent.id },
+    { token, deadlineMs },
+  );
   const { start, rebased } = cursorStart(transcript, decoded);
-  const maxUpdates = Number.isInteger(args.limit) ? Math.min(Math.max(args.limit, 1), 100) : 50;
-  const updates = transcript
-    .slice(start)
-    .map(outboundUpdate)
-    .filter(Boolean)
-    .slice(0, maxUpdates);
+  const limit = Number.isInteger(args.limit) ? Math.min(Math.max(args.limit, 1), 100) : 50;
+
+  const updates = [];
+  let consumedThrough = start;
+  let scanned = 0;
+  for (let index = start; index < transcript.length; index += 1) {
+    const update = userVisibleUpdate(transcript[index]);
+    scanned += 1;
+    if (update != null) updates.push(update);
+    consumedThrough = index + 1;
+    if (updates.length >= limit) break;
+  }
+
   return {
     agent: { id: agent.id, name: agent.name },
     updates,
-    cursor: encodeCursor(agent.id, transcript),
+    cursor: encodeCursorAt(agent.id, transcript, consumedThrough),
     cursor_rebased: rebased,
-    transcript_entries_seen: Math.max(0, transcript.length - start),
+    transcript_entries_seen: scanned,
+    has_more: consumedThrough < transcript.length,
   };
 }
 
@@ -241,28 +439,57 @@ async function waitForUpdates(args, token) {
   const pollMs = Number.isInteger(args.poll_interval_ms)
     ? Math.min(Math.max(args.poll_interval_ms, 100), 5000)
     : 750;
-  const deadline = Date.now() + timeoutMs;
+  const deadlineMs = Date.now() + timeoutMs;
   let cursor = args.cursor;
-  let latest;
-  do {
-    latest = await getUpdates({ ...args, cursor }, token);
-    cursor = latest.cursor;
-    if (latest.updates.length > 0) {
-      return { ...latest, timed_out: false };
+  let latest = null;
+
+  while (Date.now() < deadlineMs) {
+    try {
+      latest = await getUpdates({ ...args, cursor }, token, deadlineMs);
+    } catch (error) {
+      if (error instanceof McpDeadlineExceededError) {
+        return {
+          ...(latest || {
+            agent: null,
+            updates: [],
+            cursor: cursor || null,
+            cursor_rebased: false,
+            transcript_entries_seen: 0,
+            has_more: false,
+          }),
+          timed_out: true,
+        };
+      }
+      throw error;
     }
-    if (Date.now() >= deadline) break;
-    await new Promise((resolve) => setTimeout(resolve, Math.min(pollMs, Math.max(0, deadline - Date.now()))));
-  } while (Date.now() < deadline);
-  return { ...latest, cursor, timed_out: true };
+
+    cursor = latest.cursor;
+    if (latest.updates.length > 0) return { ...latest, timed_out: false };
+    const remaining = deadlineMs - Date.now();
+    if (remaining <= 0) break;
+    await new Promise((resolve) => setTimeout(resolve, Math.min(pollMs, remaining)));
+  }
+
+  return {
+    ...(latest || {
+      agent: null,
+      updates: [],
+      cursor: cursor || null,
+      cursor_rebased: false,
+      transcript_entries_seen: 0,
+      has_more: false,
+    }),
+    timed_out: true,
+  };
 }
 
 async function readTranscript(args, token) {
   const agent = await resolveAgent(args, token);
   const limit = Number.isInteger(args.limit) ? Math.min(Math.max(args.limit, 1), 100) : 20;
-  const transcript = await gatewayCall("getAgentTranscript", { id: agent.id }, 30000, token);
+  const transcript = await gatewayCall("getAgentTranscript", { id: agent.id }, { token });
   return {
     agent: { id: agent.id, name: agent.name },
-    cursor: encodeCursor(agent.id, transcript),
+    cursor: encodeCursorAt(agent.id, transcript, transcript.length),
     entries: transcript.slice(-limit),
   };
 }
@@ -270,10 +497,10 @@ async function readTranscript(args, token) {
 async function getAgentStatus(args, token) {
   const agent = await resolveAgent(args, token);
   const [subagents, asyncTasks, outline, host] = await Promise.all([
-    gatewayCall("getSubagents", { id: agent.id }, 30000, token),
-    gatewayCall("getAsyncTasks", { id: agent.id }, 30000, token),
-    gatewayCall("getConversationOutline", { id: agent.id }, 30000, token),
-    gatewayCall("getHostStatus", { includeManagedCapabilities: false }, 30000, token),
+    gatewayCall("getSubagents", { id: agent.id }, { token }),
+    gatewayCall("getAsyncTasks", { id: agent.id }, { token }),
+    gatewayCall("getConversationOutline", { id: agent.id }, { token }),
+    gatewayCall("getHostStatus", { includeManagedCapabilities: false }, { token }),
   ]);
   return {
     agent,
@@ -293,7 +520,7 @@ const TOOLS = [
   {
     name: "brokpot_list_agents",
     description:
-      "List or search Bots on the authenticated Brokpot Host. Use this to discover coordinators, project managers, groups, or other Bots and obtain stable agent ids.",
+      "List or filter Bots in the authenticated Brokpot Host roster. Use this to discover coordinators, project managers, groups, or other Bots and obtain stable agent ids.",
     inputSchema: {
       type: "object",
       properties: { query: { type: "string" } },
@@ -303,7 +530,7 @@ const TOOLS = [
   {
     name: "brokpot_send_message",
     description:
-      "Reliably submit a message to one Bot and return immediately after the Host accepts it. This does not wait for the Bot or any downstream agents to finish. The returned updates_cursor can be passed to brokpot_get_updates or brokpot_wait_for_updates.",
+      "Reliably submit a message to one roster Bot and return after the existing sendPrompt RPC accepts it. This does not wait for the Bot or downstream agents to finish. Reusing message_id is idempotent and preserves the original update boundary. Pass updates_cursor to brokpot_get_updates or brokpot_wait_for_updates.",
     inputSchema: {
       type: "object",
       properties: {
@@ -319,7 +546,7 @@ const TOOLS = [
   {
     name: "brokpot_get_updates",
     description:
-      "Read new user-visible Bot messages/notices since an opaque transcript cursor. It is safe to call repeatedly for long-running work; the Host transcript remains the source of truth.",
+      "Read new user-visible Bot messages, attachments, input cards, approvals, notices, and errors since an opaque transcript cursor. Pagination never advances beyond entries actually consumed.",
     inputSchema: {
       type: "object",
       properties: {
@@ -334,7 +561,7 @@ const TOOLS = [
   {
     name: "brokpot_wait_for_updates",
     description:
-      "Long-poll for new user-visible updates without waiting for the whole task to finish. The wait is bounded to 30 seconds; use the returned cursor for the next call.",
+      "Long-poll for the next user-visible update without waiting for the whole task to finish. The shared deadline, including Gateway I/O, is bounded to 30 seconds. Use the returned cursor for the next call.",
     inputSchema: {
       type: "object",
       properties: {
@@ -364,7 +591,7 @@ const TOOLS = [
   {
     name: "brokpot_read_transcript",
     description:
-      "Read recent raw transcript entries for a Bot for audit/debugging, including group/coordinator conversations when the caller intentionally wants to inspect them.",
+      "Read recent raw transcript entries for one roster Bot for audit/debugging, including group/coordinator conversations when the caller intentionally wants to inspect them.",
     inputSchema: {
       type: "object",
       properties: {
@@ -468,7 +695,8 @@ function runStdio() {
 }
 
 function sameToken(supplied, expected) {
-  const a = Buffer.from(supplied || "");
+  if (Array.isArray(supplied)) supplied = supplied[0];
+  const a = Buffer.from(typeof supplied === "string" ? supplied : "");
   const b = Buffer.from(expected || "");
   return a.length === b.length && a.length > 0 && timingSafeEqual(a, b);
 }
@@ -486,7 +714,7 @@ async function readJson(req) {
 
 function bearerToken(req) {
   const auth = req.headers.authorization || "";
-  return auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  return typeof auth === "string" && auth.startsWith("Bearer ") ? auth.slice(7) : "";
 }
 
 function runHttp() {
