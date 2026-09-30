@@ -72,7 +72,10 @@
     "docs:site:prepare": "python3 tools/docs-site.py prepare",
     "docs:site:build": "python3 tools/docs-site.py build",
     "docs:site:serve": "python3 tools/docs-site.py serve",
-    "docs:site:verify": "python3 tools/docs-site.py verify"
+    "docs:site:verify": "python3 tools/docs-site.py verify",
+    "mcp:coordinator": "node runtime/mcp/coordinator-server.cjs",
+    "mcp:coordinator:http": "node runtime/mcp/coordinator-server.cjs --http",
+    "test:coordinator-mcp": "node --test runtime/tests/coordinator-mcp-contract.cjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.1",

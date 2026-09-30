@@ -20,6 +20,7 @@ CONTRACTS = [
     ("Voice contracts", ["npm", "run", "test:voice"]),
     ("MCP store contract", ["npm", "run", "test:mcp-store"]),
     ("MCP scope contract", ["npm", "run", "test:mcp-scopes"]),
+    ("Coordinator MCP contract", ["npm", "run", "test:coordinator-mcp"]),
     ("Plugin file contract", ["npm", "run", "test:plugin-files"]),
     ("Curated marketplace and Bot recipe contract", ["npm", "run", "test:marketplace-contract"]),
     ("Desktop keychain policy contract", ["npm", "run", "test:desktop-keychain"]),

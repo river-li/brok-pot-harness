@@ -14,6 +14,7 @@ and complete desktop workflows. Recorded results are in [Verification](../../doc
 | Web contracts | `npm run test:web-fetch`, `npm run test:web-search` | Local test services; boundaries and failures |
 | Speech contracts | `npm run test:transcription`, `npm run test:tts`, `npm run test:voice` | Adapters, tickets, call protocols |
 | MCP/plugin contracts | `npm run test:mcp-store`, `npm run test:mcp-scopes`, `npm run test:plugin-files` | Configuration, scope, filesystem handling |
+| Coordinator MCP contract | `npm run test:coordinator-mcp` | Fake HTTP Gateway; authentication, message acceptance, durable cursors, state observation, and shared wait deadlines through headers and body reads. Included in required offline gates. |
 | Marketplace contract | `npm run test:marketplace-contract` | Pinned-source import and provenance, local plugin edits/configuration, and recipe preview/import/update/remove contracts; source fetches use an in-process fixture |
 | Keychain policy | `npm run test:desktop-keychain` | Conditional storage and machine identity |
 | Remote Host/client contracts | `npm run test:remote-contracts` | Loopback-only Gateway connection, encrypted server-scoped credentials, bounded isolated OS-storage helper, server lifecycle config, interruption journal, and redacted provider smoke behavior |
