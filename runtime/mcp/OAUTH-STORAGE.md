@@ -18,7 +18,10 @@ are never stored. Gateway credentials and per-grant refresh signing secrets are
 inside the encrypted payload. Consent forms and authorization codes stay in RAM.
 SQLite transactions with synchronous=FULL commit before successful token or
 revocation responses. No plaintext journal or temporary snapshot is written.
-The directory is 0700; database and key are 0600. A random 32-byte key is loaded
+The directory is 0700; database and source key are 0600. Read-only systemd
+credentials may instead be 0440 with root-owned 0550 credential directories and
+service-specific ACLs. Only the exact `CREDENTIALS_DIRECTORY` under
+`/run/credentials/` receives that narrow permission exception. A random 32-byte key is loaded
 from a separate file, normally systemd LoadCredential, not an environment value.
 The key must survive deploys and remain outside database backup directories.
 
