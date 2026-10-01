@@ -36,8 +36,9 @@ opaque. Only the current refresh token hash is retained for each grant. A validl
 signed earlier generation revokes the entire grant, even across restart. Forged
 or future generations do not revoke it. Rotation increments the generation;
 there is no growing list of used refresh tokens. Access hashes expire normally.
-Active grants are bounded; capacity exhaustion rejects new grants, not rotation
-of an existing grant. Explicit revocation removes the credential from subsequent
+Active grants are bounded; the grant-count limit rejects new grants, not rotation
+of an existing grant. The separate access-record limit also pauses refresh until
+short-lived records expire or grants are revoked. Explicit revocation removes the credential from subsequent
 snapshots. SQLite pages/journals/backups may contain older ciphertext: encryption
 does not claim secure physical deletion or protection after host/root compromise.
 
