@@ -105,7 +105,8 @@ Client configuration:
   these tools. `brokpot:write` allows `brokpot_send_message`, which may start
   work. Request both for the complete tool set; a read-only grant cannot send.
 - Access tokens expire after 15 minutes. Refresh tokens rotate on use; reuse
-  revokes the whole grant. A grant expires absolutely after seven days. Tokens
+  revokes the whole grant. Memory-only grants expire after seven days; durable
+  grants below have no fixed expiry. Tokens
   are bound to this exact MCP resource; `resource` is required on authorization
   and token requests. Refresh cannot expand scope.
 - `POST /oauth/revoke` accepts a form containing `client_id` and `token` (an
@@ -119,24 +120,56 @@ Client configuration:
 - MCP authorization is checked again after receiving the request body. A token
   revoked or expired while the body was pending cannot start Gateway work.
 
-Operating limits: this is a **single-process, single-Host self-hosted bridge**.
-Grants, consent sessions and the upstream Gateway credential are stored only in
-process memory; no credentials are written to disk. Restarting requires users to
-authorize again, but the CIMD/static client identity stays the same. Do not run
-multiple replicas behind a load balancer. This is not a multi-user identity
-provider or a persistent OAuth service. Rotate the upstream Gateway token to
-invalidate access at the Gateway; restart the bridge to clear all grants.
-Storage is bounded to 4,096 pending consent/code records per type and 16,384
-access/refresh records per type. Used refresh records remain until the grant's
-absolute expiry for replay detection. At capacity, new exchanges return 503
-before consuming the presented code or refresh token; retry after records expire
-or revoke unused grants. Expired records are swept on requests and every 30 seconds.
-For persistent or multi-instance deployments, use a separately reviewed identity
-provider and credential store rather than copying process memory into a file.
+### Durable login (optional)
 
-The implementation is covered by synthetic local contracts, not a completed
-ChatGPT account-linking test or a live deployment. Existing no-auth wrappers are
-outside this bridge and must not remain exposed as an authentication bypass.
+Use Node **22.13 or newer** for SQLite support and configure both variables:
+
+```sh
+export BROKPOT_MCP_OAUTH_STORE_DIR=/var/lib/gbh-mcp/oauth-durable
+export BROKPOT_MCP_OAUTH_KEY_FILE=/run/credentials/gbh-mcp.service/oauth-key
+```
+
+Create a random **32-byte binary** key once, outside the store directory; do not
+replace it during deploys. With systemd, keep the source key root-owned 0600 and
+inject it with `LoadCredential=oauth-key:/etc/gbh-mcp/oauth-state.key`. Set the key
+file environment variable to `%d/oauth-key` in the unit. Use a private 0700 state
+directory under `StateDirectory=gbh-mcp`. The bridge accepts systemd's read-only
+0440 credential only inside a private directory owned by the service user.
+Never put the key bytes in environment variables, repository files or logs.
+
+`grants.sqlite` stores AES-256-GCM encrypted state. MCP token values are not stored;
+Gateway credentials and refresh-signing secrets are encrypted with the separate
+key. Access tokens last 15 minutes. Durable grants/refresh tokens have no fixed
+expiry and survive restarts until revoked. Rotating a Gateway token blocks future
+Gateway calls; the next rejected MCP operation persists revocation of its grant.
+ChatGPT may still require reconnection for its own account/client policies.
+
+Memory-only grants cannot migrate: users reconnect once when durable mode is first
+enabled. Pending consent forms and authorization codes remain ephemeral; restart
+those flows after a service restart. Keep the same store, key and public identity
+across releases. Missing keys, corruption or binding changes fail closed, never
+silently clear the database. Storage failures latch OAuth unavailable until repair
+and restart. An interrupted refresh exchange may require reconnecting if the
+rotation committed before its response reached the client.
+
+Operate **one process on one machine, with a local filesystem**. A live owner
+prevents a second bridge from opening the store; a dead owner is recovered after
+crash. Do not use network filesystems or replicas. Grants are capped at 4,096 and
+access/refresh records at 16,384 per type. Durable refresh rotation keeps one
+current hash per grant and detects replay by authenticated generation, so its
+history does not grow. Memory mode keeps used refresh hashes until expiry. At
+capacity, retry after access records expire or revoke unused grants.
+
+Back up the database while the service is stopped and protect the key separately.
+Do not restore old grants as though revocations were current: restoring a stale
+backup can resurrect revoked access. After disaster recovery or suspected key
+exposure, stop the service, archive the old store securely, provision a new key
+and empty store, and reconnect. This also provides an explicit revoke-all/key
+rotation procedure; stopping/restarting alone no longer revokes durable grants.
+See [storage design and failure boundaries](OAUTH-STORAGE.md) for the threat model.
+
+Without the two variables, the existing seven-day memory-only mode remains and
+restart clears grants. Existing no-auth wrappers must not remain exposed.
 
 Protocol references:
 [OpenAI authentication](https://developers.openai.com/plugins/build/auth),

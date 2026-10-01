@@ -796,9 +796,9 @@ function createHttpServer({ oauth = null, secondFactor = process.env.BROKPOT_MCP
         res.end(JSON.stringify({ error: oauth ? (status === 401 ? "invalid_token" : "Gateway request failed") : error instanceof Error ? error.message : String(error) }));
       }
     })().catch((error) => {
-      const status = error instanceof SyntaxError ? 400 : 500;
+      const status = error?.status === 503 ? 503 : error instanceof SyntaxError ? 400 : 500;
       res.writeHead(status, { "content-type": "application/json", "cache-control": "no-store" });
-      res.end(JSON.stringify({ error: oauth ? "Invalid MCP request" : error instanceof Error ? error.message : String(error) }));
+      res.end(JSON.stringify({ error: oauth ? (status === 503 ? "OAuth storage unavailable" : "Invalid MCP request") : error instanceof Error ? error.message : String(error) }));
     });
   });
   server.once("close", () => oauth?.close());

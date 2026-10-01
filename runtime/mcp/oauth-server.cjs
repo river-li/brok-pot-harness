@@ -3,7 +3,7 @@
 // The library owns code redemption, PKCE verification, and refresh rotation.
 // This adapter owns MCP discovery, Gateway consent, resource binding and storage.
 const OAuth2Server = require("@node-oauth/oauth2-server");
-const { createHash, randomBytes, timingSafeEqual } = require("node:crypto");
+const { createHash, createHmac, randomBytes, timingSafeEqual } = require("node:crypto");
 
 const SCOPES = ["brokpot:read", "brokpot:write"];
 const CHATGPT_CLIENT_ID = "https://chatgpt.com/oauth/client.json";
@@ -56,7 +56,17 @@ function oauthConfig(env = process.env) {
   const cimd = /^https:\/\/chatgpt\.com\/oauth\/(?:[A-Za-z0-9_-]+\/)?client\.json$/.test(clientId);
   if (!cimd && !/^[A-Za-z0-9_-]{1,128}$/.test(clientId))
     throw new Error("OAuth client ID must be a ChatGPT metadata URL or a static public-client identifier.");
-  return { issuer: base.origin, resource: `${base.origin}/mcp`, clientId, cimd, redirectUris: redirects, secondFactor: env.BROKPOT_MCP_SERVER_TOKEN || "" };
+  const directory = env.BROKPOT_MCP_OAUTH_STORE_DIR;
+  const keyFile = env.BROKPOT_MCP_OAUTH_KEY_FILE;
+  if (Boolean(directory) !== Boolean(keyFile)) throw new Error("OAuth persistence requires both store directory and key file.");
+  if (directory) {
+    const path = require("node:path");
+    if (!path.isAbsolute(directory) || !path.isAbsolute(keyFile) ||
+        path.resolve(keyFile).startsWith(path.resolve(directory) + path.sep))
+      throw new Error("OAuth storage and key paths must be absolute; keep the key outside the store directory.");
+  }
+  const storage = directory ? { directory, keyFile } : undefined;
+  return { ...(storage ? { storage } : {}), issuer: base.origin, resource: `${base.origin}/mcp`, clientId, cimd, redirectUris: redirects, secondFactor: env.BROKPOT_MCP_SERVER_TOKEN || "" };
 }
 
 async function readBody(req) {
@@ -98,24 +108,80 @@ async function fetchClientMetadata(clientId) {
   return JSON.parse(Buffer.concat(chunks).toString("utf8"));
 }
 
-function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fetchClientMetadata } = {}) {
+function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fetchClientMetadata, openStore = require("./oauth-store.cjs").openOAuthStore } = {}) {
   const forms = new Map();
   const codes = new Map();
   const access = new Map();
   const refresh = new Map();
+  const grants = new Map();
+  const store = config.storage ? openStore({ ...config.storage,
+    binding: [config.issuer, config.resource, config.clientId] }) : null;
+  let storageFailed = false;
   let cachedClient;
   let clientExpires = 0;
   let clientLoading;
   let pendingTokens = 0;
-  const active = (user) => user && !user.revoked && user.expiresAt > Date.now() && user.resource === config.resource;
-  const revoke = (user) => { user.revoked = true; user.gatewayToken = ""; };
+  const active = (user) => user && !user.revoked && (user.expiresAt === null || user.expiresAt > Date.now()) && user.resource === config.resource;
+  function healthy() {
+    if (storageFailed) fail("temporarily_unavailable", "OAuth storage is unavailable.", 503);
+    try { store?.check(); } catch { storageFailed = true; fail("temporarily_unavailable", "OAuth storage is unavailable.", 503); }
+  }
+  function persist() {
+    if (!store) return;
+    healthy();
+    const live = [...grants.values()].filter(active);
+    const records = (map) => [...map].filter(([, item]) => active(item.user)).map(([hash, item]) =>
+      [hash, { userId: item.user.id, scope: item.scope, used: item.used,
+        accessExpires: item.accessTokenExpiresAt.getTime(), refreshExpires: item.refreshTokenExpiresAt?.getTime() ?? null }]);
+    try { store.save({ version: 1, grants: live, access: records(access), refresh: records(refresh) }); }
+    catch { storageFailed = true; fail("temporarily_unavailable", "OAuth storage is unavailable.", 503); }
+  }
+  const revoke = (user) => {
+    user.revoked = true; user.gatewayToken = "";
+    grants.delete(user.id);
+    for (const map of [access, refresh]) for (const [hash, item] of map) if (item.user === user) map.delete(hash);
+    persist();
+  };
+  function restore(snapshot) {
+    if (!snapshot) return;
+    const valid = (condition) => { if (!condition) throw new Error("Invalid OAuth storage snapshot."); };
+    valid(snapshot.version === 1 && Array.isArray(snapshot.grants) && snapshot.grants.length <= MAX_ENTRIES);
+    for (const user of snapshot.grants) {
+      valid(/^[A-Za-z0-9_-]{43}$/.test(user.id) && typeof user.gatewayToken === "string" && user.gatewayToken.length > 0 &&
+        user.resource === config.resource && user.expiresAt === null && !user.revoked &&
+        /^[A-Za-z0-9_-]{43}$/.test(user.refreshSecret) && Number.isSafeInteger(user.generation) && user.generation > 0 && !grants.has(user.id));
+      grants.set(user.id, user);
+    }
+    for (const [name, map] of [["access", access], ["refresh", refresh]]) {
+      valid(Array.isArray(snapshot[name]) && snapshot[name].length <= MAX_TOKEN_ENTRIES);
+      for (const [hash, record] of snapshot[name]) {
+        valid(/^[a-f0-9]{64}$/.test(hash) && !map.has(hash) && grants.has(record.userId) &&
+          Array.isArray(record.scope) && record.scope.length > 0 && record.scope.every((scope) => SCOPES.includes(scope)) &&
+          typeof record.used === "boolean" && Number.isFinite(record.accessExpires) && record.refreshExpires === null);
+        map.set(hash, { user: grants.get(record.userId), client: { id: config.clientId, grants: ["authorization_code", "refresh_token"] },
+          scope: record.scope, used: record.used, accessTokenExpiresAt: new Date(record.accessExpires), refreshTokenExpiresAt: undefined });
+      }
+    }
+  }
+  try { restore(store?.initial); } catch { store?.close(); throw new Error("Invalid OAuth storage snapshot."); }
+  const signRefresh = (user, generation) => createHmac("sha256", Buffer.from(user.refreshSecret, "base64url"))
+    .update(`rt1.${user.id}.${generation}`).digest("base64url");
+  function durableRefresh(token) {
+    const parts = typeof token === "string" ? token.split(".") : [];
+    if (parts.length !== 4 || parts[0] !== "rt1" || !/^[1-9][0-9]{0,15}$/.test(parts[2])) return null;
+    const user = grants.get(parts[1]);
+    const generation = Number(parts[2]);
+    if (!active(user) || !Number.isSafeInteger(generation) || !equal(parts[3], signRefresh(user, generation))) return null;
+    if (generation < user.generation) { revoke(user); return null; }
+    return generation === user.generation ? user : null;
+  }
 
   function sweep() {
     const now = Date.now();
     for (const [key, item] of forms) if (item.expiresAt <= now) forms.delete(key);
     for (const [key, item] of codes) if (item.expiresAt <= now || !active(item.user)) codes.delete(key);
     for (const [key, item] of access) if (item.accessTokenExpiresAt <= now || !active(item.user)) access.delete(key);
-    for (const [key, item] of refresh) if (item.refreshTokenExpiresAt <= now || !active(item.user)) refresh.delete(key);
+    for (const [key, item] of refresh) if ((item.refreshTokenExpiresAt && item.refreshTokenExpiresAt <= now) || !active(item.user)) refresh.delete(key);
   }
   // Also release expired Gateway credentials while the bridge is idle.
   const cleanup = setInterval(sweep, 30000);
@@ -151,46 +217,65 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
   const model = {
     getClient,
     generateAccessToken: opaque,
-    generateRefreshToken: opaque,
+    generateRefreshToken: (_client, user) => {
+      if (!store) return opaque();
+      if (!Number.isSafeInteger(user.generation + 1)) throw new Error("Refresh generation exhausted.");
+      user.generation += 1;
+      return `rt1.${user.id}.${user.generation}.${signRefresh(user, user.generation)}`;
+    },
     generateAuthorizationCode: opaque,
     validateScope: (_user, _client, scopes) => scopes?.length && scopes.every((scope) => SCOPES.includes(scope)) ? scopes : false,
     validateRedirectUri: (uri, client) => client.redirectUris.includes(uri),
     saveAuthorizationCode(code, client, user) {
+      healthy();
       room(codes);
       const record = { ...code, client, user, used: false };
       codes.set(digest(code.authorizationCode), record);
       return record;
     },
     getAuthorizationCode(code) {
+      healthy();
       const record = codes.get(digest(code));
       if (record?.used) { revoke(record.user); return false; }
       return record && active(record.user) ? record : false;
     },
     revokeAuthorizationCode(code) {
+      healthy();
       if (code.used) { revoke(code.user); return false; }
       code.used = true;
       return true;
     },
     saveToken(token, client, user) {
+      healthy();
       if (!active(user)) throw new OAuth2Server.InvalidGrantError("Grant expired or revoked.");
       room(access);
+      if (store) {
+        if (!grants.has(user.id) && grants.size >= MAX_ENTRIES) fail("temporarily_unavailable", "Grant capacity reached.", 503);
+        grants.set(user.id, user);
+        for (const [hash, record] of refresh) if (record.user === user) refresh.delete(hash);
+      }
       room(refresh);
-      token.accessTokenExpiresAt = new Date(Math.min(token.accessTokenExpiresAt.getTime(), user.expiresAt));
-      token.refreshTokenExpiresAt = new Date(Math.min(token.refreshTokenExpiresAt.getTime(), user.expiresAt));
+      token.accessTokenExpiresAt = new Date(Math.min(token.accessTokenExpiresAt.getTime(), user.expiresAt ?? Infinity));
+      token.refreshTokenExpiresAt = store ? undefined : new Date(Math.min(token.refreshTokenExpiresAt.getTime(), user.expiresAt));
       const stored = { ...token, accessToken: undefined, refreshToken: undefined, client, user, used: false };
       access.set(digest(token.accessToken), stored);
       refresh.set(digest(token.refreshToken), stored);
+      persist();
       return { ...token, client, user };
     },
     getRefreshToken(token) {
+      healthy();
+      if (store && !durableRefresh(token)) return false;
       const record = refresh.get(digest(token));
       if (record?.used) { revoke(record.user); return false; }
       return record && active(record.user) ? { ...record, refreshToken: token } : false;
     },
     revokeToken(token) {
+      healthy();
       const record = refresh.get(digest(token.refreshToken));
       if (!record || record.used) { if (record) revoke(record.user); return false; }
       record.used = true;
+      persist();
       return true;
     },
   };
@@ -214,6 +299,7 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
   }
 
   function authenticate(token) {
+    healthy();
     sweep();
     const record = typeof token === "string" && token ? access.get(digest(token)) : null;
     return record && active(record.user) && record.accessTokenExpiresAt > Date.now()
@@ -226,6 +312,7 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
     if (!["/.well-known/oauth-protected-resource", "/.well-known/oauth-protected-resource/mcp", "/.well-known/oauth-authorization-server", "/oauth/authorize", "/oauth/token", "/oauth/revoke"].includes(route)) return false;
     let trustedRedirect;
     try {
+      healthy();
       sweep();
       if (route.startsWith("/.well-known/")) {
         if (req.method !== "GET") { res.writeHead(405, { allow: "GET" }).end(); return true; }
@@ -265,7 +352,7 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
           // Chromium also applies form-action to the 303 callback destination.
           "content-security-policy": `default-src 'none'; form-action 'self' ${callbackOrigin}; frame-ancestors 'none'; base-uri 'none'`,
           "set-cookie": `brokpot_oauth=${browser}; Path=/oauth/authorize; HttpOnly; SameSite=Lax; Max-Age=${FORM_SECONDS}${secure}` });
-        res.end(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Connect Brokpot</title><main><h1>Connect Brokpot</h1><p>Client: ${escapeHtml(config.clientId)}</p><p>Callback: ${escapeHtml(params.redirect_uri)}</p><p>Permissions: ${escapeHtml(params.scope)}</p><p>Read permission exposes all Bots and their conversations on this Host. Write permission lets this client send messages that can start Bot work. Existing Brokpot approvals still apply.</p><p>Enter your Gateway token only on this trusted Brokpot page, never in a chat or a tool argument. It stays in this bridge's memory for up to seven days; the client receives separate short-lived MCP tokens.</p><form method="post" action="/oauth/authorize"><input type="hidden" name="transaction" value="${transaction}"><label>Gateway token <input type="password" name="gateway_token" autocomplete="off" required></label>${config.secondFactor ? '<label>Bridge second factor <input type="password" name="second_factor" autocomplete="off" required></label>' : ""}<button type="submit" name="decision" value="approve">Approve connection</button><button type="submit" name="decision" value="deny" formnovalidate>Cancel</button></form></main></html>`);
+        res.end(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Connect Brokpot</title><main><h1>Connect Brokpot</h1><p>Client: ${escapeHtml(config.clientId)}</p><p>Callback: ${escapeHtml(params.redirect_uri)}</p><p>Permissions: ${escapeHtml(params.scope)}</p><p>Read permission exposes all Bots and their conversations on this Host. Write permission lets this client send messages that can start Bot work. Existing Brokpot approvals still apply.</p><p>Enter your Gateway token only on this trusted Brokpot page, never in a chat or a tool argument. It ${store ? "is encrypted on this server until you revoke access" : "stays in this bridge's memory for up to seven days"}; the client receives separate short-lived MCP tokens.</p><form method="post" action="/oauth/authorize"><input type="hidden" name="transaction" value="${transaction}"><label>Gateway token <input type="password" name="gateway_token" autocomplete="off" required></label>${config.secondFactor ? '<label>Bridge second factor <input type="password" name="second_factor" autocomplete="off" required></label>' : ""}<button type="submit" name="decision" value="approve">Approve connection</button><button type="submit" name="decision" value="deny" formnovalidate>Cancel</button></form></main></html>`);
         return true;
       }
       if (req.method !== "POST") { res.writeHead(405, { allow: route === "/oauth/authorize" ? "GET, POST" : "POST" }).end(); return true; }
@@ -282,7 +369,8 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
         if (body.decision !== "approve") fail("invalid_request", "Explicit consent is required.");
         if (!body.gateway_token || (config.secondFactor && !equal(body.second_factor, config.secondFactor))) fail("access_denied", "Gateway credentials were not accepted.", 401);
         try { await verifyGatewayToken(body.gateway_token); } catch { fail("access_denied", "Gateway credentials were not accepted or Gateway is unavailable.", 401); }
-        const user = { id: opaque(), gatewayToken: body.gateway_token, resource: transaction.params.resource, expiresAt: Date.now() + GRANT_SECONDS * 1000 };
+        const user = { id: opaque(), gatewayToken: body.gateway_token, resource: transaction.params.resource, expiresAt: store ? null : Date.now() + GRANT_SECONDS * 1000,
+          ...(store ? { refreshSecret: opaque(), generation: 0 } : {}) };
         const request = new OAuth2Server.Request({ method: "GET", query: transaction.params, headers: {}, body: {} });
         const response = new OAuth2Server.Response();
         const code = await oauth.authorize(request, response, { authenticateHandler: { handle: () => user } });
@@ -293,6 +381,8 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
       if (body.client_id !== config.clientId) fail("invalid_client", "Unrecognized client.");
       if (route === "/oauth/revoke") {
         const token = body.token || "";
+        const signedUser = store ? durableRefresh(token) : null;
+        if (signedUser) revoke(signedUser);
         const record = refresh.get(digest(token)) || access.get(digest(token));
         if (record && record.client.id === body.client_id) revoke(record.user);
         json(res, 200, {});
@@ -304,7 +394,8 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
       const response = new OAuth2Server.Response();
       // Reserve before the library consumes a one-use code/refresh token. The
       // reservation also covers concurrent exchanges across asynchronous hooks.
-      if (access.size + pendingTokens >= MAX_TOKEN_ENTRIES || refresh.size + pendingTokens >= MAX_TOKEN_ENTRIES)
+      if (access.size + pendingTokens >= MAX_TOKEN_ENTRIES || refresh.size + pendingTokens >= MAX_TOKEN_ENTRIES ||
+          (store && body.grant_type === "authorization_code" && grants.size + pendingTokens >= MAX_ENTRIES))
         fail("temporarily_unavailable", "Authorization capacity reached. Retry later.", 503);
       pendingTokens += 1;
       try { await oauth.token(request, response); } finally { pendingTokens -= 1; }
@@ -321,7 +412,7 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
     return true;
   }
 
-  return { handle, authenticate, challenge, scopes: SCOPES, close: () => { clearInterval(cleanup); forms.clear(); codes.clear(); access.clear(); refresh.clear(); } };
+  return { handle, authenticate, challenge, scopes: SCOPES, close: () => { clearInterval(cleanup); forms.clear(); codes.clear(); access.clear(); refresh.clear(); grants.clear(); store?.close(); } };
 }
 
 module.exports = { createOAuthServer, oauthConfig };
