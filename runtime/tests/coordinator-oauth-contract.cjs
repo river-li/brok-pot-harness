@@ -47,19 +47,24 @@ async function harness(t, options = {}) {
     server.closeAllConnections();
     await new Promise((resolve) => server.close(resolve));
     if (!options.mcp) oauth.close();
+    options.config?.storage?.cleanup?.();
   });
   const origin = `http://127.0.0.1:${server.address().port}`;
   const issuer = publicOrigin || origin;
   const config = { issuer, resource: `${issuer}/mcp`, clientId: "test-client", cimd: false,
     redirectUris: [CALLBACK], secondFactor: "", ...options.config };
-  oauth = createOAuthServer(config, {
+  const create = () => createOAuthServer(config, {
     verifyGatewayToken: async (token) => {
       checkedTokens.push(token);
       if (options.verifyGatewayToken) return options.verifyGatewayToken(token);
       if (token !== GATEWAY_TOKEN) throw new Error(`Rejected synthetic credential: ${token}`);
     },
+    ...(options.openStore ? { openStore: options.openStore } : {}),
     loadClientMetadata: options.loadClientMetadata || (() => { throw new Error("Unexpected metadata fetch"); }),
   });
+
+  oauth = create();
+  const restart = () => { oauth.close(); oauth = create(); };
 
   async function request(path, options = {}) {
     const response = await fetch(`${origin}${path}`, { redirect: "manual", ...options });
@@ -116,7 +121,7 @@ async function harness(t, options = {}) {
     assert.equal(response.status, 200, response.text);
     return { ...grant, tokens: response.body, tokenResponse: response };
   }
-  return { oauth, origin, config, checkedTokens, request, post, authorizationParams, begin,
+  return { get oauth() { return oauth; }, restart, origin, config, checkedTokens, request, post, authorizationParams, begin,
     consent, authorize, redeem, refresh, issue };
 }
 
@@ -541,7 +546,7 @@ test("metadata loader failures are sanitized and cannot issue authorization code
   assert.deepEqual(h.checkedTokens, []);
 });
 
-async function gatewayHarness(t) {
+async function gatewayHarness(t, options = {}) {
   const state = { calls: [], reject: false, transcripts: [], accepted: new Map() };
   const server = http.createServer(async (req, res) => {
     const chunks = [];
@@ -589,7 +594,7 @@ async function gatewayHarness(t) {
     server.closeAllConnections();
     await new Promise((resolve) => server.close(resolve));
   });
-  const h = await harness(t, { mcp: true, config: { secondFactor: SECOND_FACTOR },
+  const h = await harness(t, { mcp: true, config: { secondFactor: SECOND_FACTOR, ...options.config },
     verifyGatewayToken: async (token) => {
       const result = await fetch(`${url}/api/getHostStatus`, { method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
@@ -605,7 +610,7 @@ async function gatewayHarness(t) {
   });
   const call = (name, args, accessToken, headers) => rpc("tools/call", { name, arguments: args }, accessToken, headers);
   const issue = (scope = "brokpot:read brokpot:write") => h.issue({ scope }, { second_factor: SECOND_FACTOR });
-  return { ...h, state, rpc, call, issue };
+  return { ...h, get oauth() { return h.oauth; }, state, rpc, call, issue };
 }
 
 test("MCP HTTP accepts issued OAuth access tokens and rejects raw Gateway or tool-argument credentials", async (t) => {
@@ -754,3 +759,159 @@ for (const invalidation of ["revoked", "expired"]) {
     assert.equal(h.state.calls.length, callsBefore, "A revoked or expired request must not reach the Gateway");
   });
 }
+
+
+// Persistence is opt-in; CI uses Node >=22.13. Older runtimes still test memory mode.
+let hasSQLite = false;
+try { require("node:sqlite"); hasSQLite = true; } catch {}
+function durableFiles(t) {
+  const fs = require("node:fs"), os = require("node:os"), path = require("node:path");
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "brokpot-oauth-"));
+  fs.chmodSync(root, 0o700);
+  const keyFile = path.join(root, "key");
+  fs.writeFileSync(keyFile, randomBytes(32), { mode: 0o600 });
+  return { directory: path.join(root, "data"), keyFile, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
+}
+
+test("durable grants survive restart, exceed seven days, rotate with bounded state and revoke permanently", { skip: !hasSQLite }, async (t) => {
+  const storage = durableFiles(t);
+  const h = await harness(t, { config: { storage } });
+  const grant = await h.issue();
+  const oldAccess = grant.tokens.access_token;
+  h.restart();
+  assert.ok(h.oauth.authenticate(oldAccess));
+  let tokens = grant.tokens;
+  const now = Date.now;
+  Date.now = () => now() + 10 * 24 * 60 * 60 * 1000;
+  try {
+    assert.equal(h.oauth.authenticate(oldAccess), null);
+    const refreshed = await h.refresh(tokens.refresh_token);
+    assert.equal(refreshed.status, 200);
+    tokens = refreshed.body;
+  } finally { Date.now = now; }
+  for (let i = 0; i < 25; i++) {
+    const result = await h.refresh(tokens.refresh_token);
+    assert.equal(result.status, 200);
+    tokens = result.body;
+  }
+  h.restart();
+  assert.ok(h.oauth.authenticate(tokens.access_token));
+  const fs = require("node:fs"), path = require("node:path");
+  for (const file of fs.readdirSync(storage.directory)) {
+    const bytes = fs.readFileSync(path.join(storage.directory, file));
+    for (const secret of [GATEWAY_TOKEN, tokens.access_token, tokens.refresh_token]) assert.equal(bytes.includes(Buffer.from(secret)), false);
+    assert.equal(fs.statSync(path.join(storage.directory, file)).mode & 0o077, 0);
+  }
+  const { DatabaseSync } = require("node:sqlite");
+  const db = new DatabaseSync(path.join(storage.directory, "grants.sqlite"));
+  assert.ok(db.prepare("SELECT length(payload) AS n FROM state").get().n < 16000, "Rotations must not accumulate refresh history");
+  db.close();
+  assert.equal((await h.post("/oauth/revoke", { client_id: h.config.clientId, token: tokens.refresh_token })).status, 200);
+  h.restart();
+  assert.equal(h.oauth.authenticate(tokens.access_token), null);
+  assert.equal((await h.refresh(tokens.refresh_token)).status, 400);
+});
+
+test("durable refresh replay after restart revokes the family, while forgery does not", { skip: !hasSQLite }, async (t) => {
+  const h = await harness(t, { config: { storage: durableFiles(t) } });
+  const grant = await h.issue();
+  const next = await h.refresh(grant.tokens.refresh_token);
+  assert.equal(next.status, 200);
+  h.restart();
+  assert.equal((await h.refresh(grant.tokens.refresh_token + "x")).status, 400);
+  assert.ok(h.oauth.authenticate(next.body.access_token));
+  assert.equal((await h.refresh(grant.tokens.refresh_token)).status, 400);
+  h.restart();
+  assert.equal(h.oauth.authenticate(next.body.access_token), null);
+  assert.equal((await h.refresh(next.body.refresh_token)).status, 400);
+});
+
+test("durable storage rejects live owners, wrong keys, corruption and changed issuer binding without resetting data", { skip: !hasSQLite }, async (t) => {
+  const fs = require("node:fs"), path = require("node:path");
+  const storage = durableFiles(t);
+  const h = await harness(t, { config: { storage } });
+  await h.issue();
+  assert.throws(() => createOAuthServer(h.config), /storage/);
+  h.oauth.close();
+  const before = fs.readFileSync(path.join(storage.directory, "grants.sqlite"));
+  const oldKey = fs.readFileSync(storage.keyFile);
+  fs.writeFileSync(storage.keyFile, randomBytes(32));
+  assert.throws(() => createOAuthServer(h.config), /storage/);
+  fs.writeFileSync(storage.keyFile, oldKey);
+  assert.throws(() => createOAuthServer({ ...h.config, resource: "https://other.example/mcp" }), /storage/);
+  assert.deepEqual(fs.readFileSync(path.join(storage.directory, "grants.sqlite")), before);
+  const { DatabaseSync } = require("node:sqlite");
+  const db = new DatabaseSync(path.join(storage.directory, "grants.sqlite"));
+  db.exec("UPDATE state SET payload=zeroblob(100)"); db.close();
+  assert.throws(() => createOAuthServer(h.config), /storage/);
+});
+
+test("durable commit failure latches all authorization paths unavailable before success", { skip: !hasSQLite }, async (t) => {
+  const { openOAuthStore } = require("../mcp/oauth-store.cjs");
+  let failSave = false;
+  const h = await harness(t, { config: { storage: durableFiles(t) }, openStore: (args) => {
+    const store = openOAuthStore(args);
+    return { ...store, save: (value) => { if (failSave) throw new Error("synthetic disk failure"); store.save(value); } };
+  } });
+  const grant = await h.issue();
+  failSave = true;
+  const results = await Promise.all([h.refresh(grant.tokens.refresh_token), h.refresh(grant.tokens.refresh_token)]);
+  assert.ok(results.every((result) => result.status >= 400));
+  assert.throws(() => h.oauth.authenticate(grant.tokens.access_token), /storage/);
+  assert.equal((await h.post("/oauth/revoke", { client_id: h.config.clientId, token: grant.tokens.access_token })).status, 503);
+  assert.equal((await h.begin().catch((error) => error)).name, "AssertionError");
+});
+
+test("durable storage recovers a crashed local owner and preserves its committed state", { skip: !hasSQLite }, async (t) => {
+  const fs = require("node:fs"), path = require("node:path");
+  const { spawn } = require("node:child_process");
+  const storage = durableFiles(t);
+  t.after(storage.cleanup);
+  const modulePath = path.resolve(__dirname, "../mcp/oauth-store.cjs");
+  const child = spawn(process.execPath, ["-e", `const s=require(${JSON.stringify(modulePath)}).openOAuthStore(${JSON.stringify({ ...storage, binding: ["fixture"] })});s.save({value:"committed"});process.stdout.write("ready");setInterval(()=>{},1000);`], { stdio: ["ignore", "pipe", "pipe"] });
+  t.after(() => child.kill("SIGKILL"));
+  await new Promise((resolve, reject) => { child.stdout.once("data", resolve); child.once("error", reject); child.once("exit", () => reject(new Error("Fixture exited before ready"))); });
+  child.kill("SIGKILL");
+  await new Promise((resolve) => child.once("exit", resolve));
+  const store = require("../mcp/oauth-store.cjs").openOAuthStore({ ...storage, binding: ["fixture"] });
+  assert.deepEqual(store.initial, { value: "committed" }); store.close();
+});
+
+
+test("durable Gateway rejection persists revocation across restart", { skip: !hasSQLite }, async (t) => {
+  const h = await gatewayHarness(t, { config: { storage: durableFiles(t) } });
+  const grant = await h.issue();
+  h.state.reject = true;
+  assert.equal((await h.call("brokpot_list_agents", {}, grant.tokens.access_token)).body.result.isError, true);
+  h.restart();
+  h.state.reject = false;
+  assert.equal((await h.rpc("tools/list", {}, grant.tokens.access_token)).status, 401);
+  assert.equal((await h.refresh(grant.tokens.refresh_token)).status, 400);
+});
+
+test("durable concurrent refresh cannot create two live descendants", { skip: !hasSQLite }, async (t) => {
+  const h = await harness(t, { config: { storage: durableFiles(t) } });
+  const grant = await h.issue();
+  const responses = await Promise.all([h.refresh(grant.tokens.refresh_token), h.refresh(grant.tokens.refresh_token)]);
+  assert.ok(responses.filter((r) => r.status === 200).length <= 1);
+  h.restart();
+  for (const response of responses.filter((r) => r.status === 200)) {
+    assert.equal(h.oauth.authenticate(response.body.access_token), null);
+    assert.equal((await h.refresh(response.body.refresh_token)).status, 400);
+  }
+});
+
+test("store enforces private files, rejects symlinks and allows protected read-only systemd key files", { skip: !hasSQLite }, (t) => {
+  const fs = require("node:fs"), path = require("node:path");
+  const storage = durableFiles(t); t.after(storage.cleanup);
+  const { openOAuthStore } = require("../mcp/oauth-store.cjs");
+  const config = { ...storage, binding: ["fixture"] };
+  fs.chmodSync(storage.keyFile, 0o644);
+  assert.throws(() => openOAuthStore(config), /storage/);
+  fs.chmodSync(storage.keyFile, 0o440);
+  let store = openOAuthStore(config); store.save({ fixture: true }); store.close();
+  const db = path.join(storage.directory, "grants.sqlite");
+  fs.chmodSync(db, 0o644); assert.throws(() => openOAuthStore(config), /storage/); fs.chmodSync(db, 0o600);
+  fs.symlinkSync(storage.keyFile, db + "-journal"); assert.throws(() => openOAuthStore(config), /storage/); fs.unlinkSync(db + "-journal");
+  fs.renameSync(db, db + ".saved"); fs.symlinkSync(db + ".saved", db); assert.throws(() => openOAuthStore(config), /storage/);
+});
