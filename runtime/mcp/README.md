@@ -18,7 +18,7 @@ npm run mcp:coordinator
 
 The MCP server verifies the token against `getHostStatus` during initialization and uses it for every Gateway RPC.
 
-### HTTP mode
+### HTTP mode: direct Gateway bearer (default)
 
 HTTP clients must send the Brokpot Gateway token directly as the bearer credential:
 
@@ -43,6 +43,100 @@ The second factor never replaces Gateway authentication.
 The bridge refuses non-loopback plaintext HTTP Gateway URLs by default. For remote deployments, keep the Gateway loopback-only and reach the MCP endpoint through SSH forwarding or a TLS/authenticated reverse proxy.
 
 The current Brokpot Gateway token is Host-wide. Anyone authorized to this MCP bridge can access the same Bot set and Gateway capabilities exposed by these MCP tools.
+
+### HTTP mode: OAuth for ChatGPT
+
+`BROKPOT_MCP_AUTH_MODE=oauth` enables authorization-code + S256 PKCE through
+the pinned `@node-oauth/oauth2-server` library. ChatGPT receives separate opaque
+MCP access/refresh tokens. The Gateway token never becomes a tool argument or an
+MCP bearer token in this mode. The existing authenticated Gateway RPCs and Bot
+approval policy remain unchanged.
+
+Run `npm ci` after updating the source. Configure a public HTTPS origin and the
+**exact callback shown in your ChatGPT MCP management page**:
+
+```sh
+export SAND_HOST_GATEWAY_URL=http://127.0.0.1:1540
+export BROKPOT_MCP_AUTH_MODE=oauth
+export BROKPOT_MCP_PUBLIC_URL=https://brokpot.example.com
+export BROKPOT_MCP_OAUTH_REDIRECT_URIS='["https://chatgpt.com/connector_platform_oauth_redirect"]'
+npm run mcp:coordinator:http
+```
+
+The example callback is ChatGPT's stable callback. Use it only when it matches
+the management page. The bridge includes the issuer (`iss`) in authorization
+redirects and advertises that capability. The public URL is an origin, without
+a path/query; the MCP resource is exactly `https://brokpot.example.com/mcp`.
+HTTP public URLs are accepted only for loopback development, not remote access.
+
+1. Put the loopback-bound bridge behind a trusted HTTPS reverse proxy. Forward
+   `/mcp`, `/oauth/*`, and `/.well-known/*` without rewriting paths; preserve
+   `Authorization`, `Origin`, cookies, form bodies, and `WWW-Authenticate`.
+   Do not put another login page in front of discovery or OAuth endpoints.
+   Enforce request/rate limits at the proxy and disable sensitive query/body/
+   header logging. Never expose the plaintext listener directly to the internet.
+2. In ChatGPT, add `https://brokpot.example.com/mcp`, select OAuth and CIMD.
+   The default client ID is `https://chatgpt.com/oauth/client.json`. No client
+   secret is generated or required; token endpoint authentication is `none`
+   with mandatory PKCE. This identifies the public client and does not prove a
+   request's network origin; use the official mTLS guidance if that is needed.
+3. On the trusted Brokpot authorization page, review the client, callback and
+   permissions. Enter the existing Gateway token there and approve. If the
+   optional bridge second factor is configured, enter it on the same form.
+   Do not paste either credential in ChatGPT. Cancellation grants no access.
+4. ChatGPT exchanges the one-use code and uses the new access token in the
+   `Authorization: Bearer` header. A raw Gateway token is rejected on `/mcp`
+   in OAuth mode, even if it would be valid directly against the Gateway.
+
+Client configuration:
+
+- `BROKPOT_MCP_OAUTH_CLIENT_ID` optionally selects the exact callback-specific
+  ChatGPT metadata URL shown in its management page. Only `chatgpt.com/oauth/…/client.json`
+  URLs in the supported shape may be fetched; redirects, arbitrary hosts and
+  client-supplied discovery URLs are rejected. The metadata must support public
+  client authentication, code/refresh grants and the configured callback.
+- For a manually registered public client, set that variable to an identifier
+  containing only letters, digits, `_` or `-`, and configure exact callbacks in
+  `BROKPOT_MCP_OAUTH_REDIRECT_URIS`. Enter that same client ID in the client UI.
+  CIMD is then disabled. There is no DCR endpoint or client-secret flow.
+- Discovery endpoints are `/.well-known/oauth-protected-resource/mcp` (also
+  available at the root well-known path) and `/.well-known/oauth-authorization-server`.
+- `brokpot:read` allows observation, including all Host conversations exposed by
+  these tools. `brokpot:write` allows `brokpot_send_message`, which may start
+  work. Request both for the complete tool set; a read-only grant cannot send.
+- Access tokens expire after 15 minutes. Refresh tokens rotate on use; reuse
+  revokes the whole grant. A grant expires absolutely after seven days. Tokens
+  are bound to this exact MCP resource; `resource` is required on authorization
+  and token requests. Refresh cannot expand scope.
+- `POST /oauth/revoke` accepts a form containing `client_id` and `token` (an
+  access or refresh token), and revokes that complete grant. Unknown tokens
+  return success without revealing whether an account exists.
+- MCP authorization is checked again after receiving the request body. A token
+  revoked or expired while the body was pending cannot start Gateway work.
+
+Operating limits: this is a **single-process, single-Host self-hosted bridge**.
+Grants, consent sessions and the upstream Gateway credential are stored only in
+process memory; no credentials are written to disk. Restarting requires users to
+authorize again, but the CIMD/static client identity stays the same. Do not run
+multiple replicas behind a load balancer. This is not a multi-user identity
+provider or a persistent OAuth service. Rotate the upstream Gateway token to
+invalidate access at the Gateway; restart the bridge to clear all grants.
+Storage is bounded to 4,096 pending consent/code records per type and 16,384
+access/refresh records per type. Used refresh records remain until the grant's
+absolute expiry for replay detection. At capacity, new exchanges return 503
+before consuming the presented code or refresh token; retry after records expire
+or revoke unused grants. Expired records are swept on requests and every 30 seconds.
+For persistent or multi-instance deployments, use a separately reviewed identity
+provider and credential store rather than copying process memory into a file.
+
+The implementation is covered by synthetic local contracts, not a completed
+ChatGPT account-linking test or a live deployment. Existing no-auth wrappers are
+outside this bridge and must not remain exposed as an authentication bypass.
+
+Protocol references:
+[OpenAI authentication](https://developers.openai.com/plugins/build/auth),
+[MCP authorization](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization),
+[OAuth library](https://node-oauth.github.io/node-oauth2-server/).
 
 ## Tools
 
@@ -130,6 +224,9 @@ The isolated contract test verifies:
 - cursor-based retrieval of later transcript updates;
 - one shared wait deadline across sequential Gateway requests and response-body reads, preserving the cursor on timeout;
 - observation of existing subagent, async-task, outline, and Host state.
+- OAuth discovery and challenges, consent/CSRF, exact callbacks, S256 PKCE,
+  resource/scope checks, token expiry/replay, refresh rotation and revocation;
+- OAuth transport credentials and tool metadata, using only synthetic tokens.
 
 It uses a fake HTTP Gateway and does not require a real model or real Gateway token.
 The suite is also included in the required offline gates (`npm run ci:pre-pr`).

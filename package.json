@@ -75,7 +75,7 @@
     "docs:site:verify": "python3 tools/docs-site.py verify",
     "mcp:coordinator": "node runtime/mcp/coordinator-server.cjs",
     "mcp:coordinator:http": "node runtime/mcp/coordinator-server.cjs --http",
-    "test:coordinator-mcp": "node --test runtime/tests/coordinator-mcp-contract.cjs"
+    "test:coordinator-mcp": "node --test runtime/tests/coordinator-mcp-contract.cjs runtime/tests/coordinator-oauth-contract.cjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.1",
@@ -85,6 +85,7 @@
   },
   "dependencies": {
     "@mixmark-io/domino": "2.2.0",
+    "@node-oauth/oauth2-server": "5.3.0",
     "turndown": "7.2.4",
     "turndown-plugin-gfm": "1.0.2",
     "ws": "8.21.3"

@@ -6,7 +6,7 @@ const readline = require("node:readline");
 const { randomUUID, timingSafeEqual } = require("node:crypto");
 
 const MCP_PROTOCOL_VERSION = "2025-06-18";
-const SERVER_INFO = { name: "brokpot-gateway", version: "0.2.1" };
+const SERVER_INFO = { name: "brokpot-gateway", version: "0.3.0" };
 const DEFAULT_GATEWAY_URL = "http://127.0.0.1:1540";
 const DEFAULT_HTTP_PORT = 1541;
 const MAX_BODY_BYTES = 1024 * 1024;
@@ -642,19 +642,29 @@ async function dispatch(request, context) {
   }
   if (method === "tools/list") {
     await verifyGatewayToken(context.gatewayToken);
-    return { jsonrpc: "2.0", id, result: { tools: TOOLS } };
+    const tools = context.oauth ? TOOLS.map((tool) => {
+      const securitySchemes = [{ type: "oauth2", scopes: [toolScope(tool.name)] }];
+      return { ...tool, securitySchemes, _meta: { securitySchemes } };
+    }) : TOOLS;
+    return { jsonrpc: "2.0", id, result: { tools } };
   }
   if (method === "tools/call") {
     try {
       const result = await callTool(params?.name, params?.arguments || {}, context.gatewayToken);
       return { jsonrpc: "2.0", id, result };
     } catch (error) {
+      if (context.oauth && error?.status === 401) {
+        context.authorization.revoke();
+        return { jsonrpc: "2.0", id, result: { isError: true,
+          content: [{ type: "text", text: "Reconnect Brokpot: Gateway authorization is no longer valid." }],
+          _meta: { "mcp/www_authenticate": [context.oauth.challenge()] } } };
+      }
       return {
         jsonrpc: "2.0",
         id,
         result: {
           isError: true,
-          content: [{ type: "text", text: error instanceof Error ? error.message : String(error) }],
+          content: [{ type: "text", text: context.oauth && error?.status ? "Gateway request failed." : error instanceof Error ? error.message : String(error) }],
         },
       };
     }
@@ -715,26 +725,35 @@ async function readJson(req) {
 
 function bearerToken(req) {
   const auth = req.headers.authorization || "";
-  return typeof auth === "string" && auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  const match = typeof auth === "string" && /^Bearer ([^\s]+)$/i.exec(auth);
+  return match ? match[1] : "";
 }
 
-function runHttp() {
-  const host = process.env.BROKPOT_MCP_HTTP_HOST || "127.0.0.1";
-  const port = envInt("BROKPOT_MCP_HTTP_PORT", DEFAULT_HTTP_PORT, 1, 65535);
-  const secondFactor = process.env.BROKPOT_MCP_SERVER_TOKEN;
+function toolScope(name) {
+  return name === "brokpot_send_message" ? "brokpot:write" : "brokpot:read";
+}
+
+function createHttpServer({ oauth = null, secondFactor = process.env.BROKPOT_MCP_SERVER_TOKEN, publicOrigin } = {}) {
   const server = http.createServer((req, res) => {
     void (async () => {
+      if (oauth && await oauth.handle(req, res)) return;
       if (req.url !== "/mcp") {
         res.writeHead(404).end();
         return;
       }
-      const gatewayToken = bearerToken(req);
-      if (!gatewayToken) {
-        res.writeHead(401, { "content-type": "application/json" });
-        res.end(JSON.stringify({ error: "Brokpot Gateway bearer token required" }));
+      if (oauth && req.headers.origin && req.headers.origin !== publicOrigin) {
+        res.writeHead(403).end();
         return;
       }
-      if (secondFactor && !sameToken(req.headers["x-brokpot-mcp-token"], secondFactor)) {
+      const token = bearerToken(req);
+      let authorization = oauth ? oauth.authenticate(token) : null;
+      let gatewayToken = oauth ? authorization?.gatewayToken : token;
+      if (!gatewayToken) {
+        res.writeHead(401, { "content-type": "application/json", "cache-control": "no-store", ...(oauth ? { "www-authenticate": oauth.challenge() } : {}) });
+        res.end(JSON.stringify({ error: oauth ? "invalid_token" : "Brokpot Gateway bearer token required" }));
+        return;
+      }
+      if (!oauth && secondFactor && !sameToken(req.headers["x-brokpot-mcp-token"], secondFactor)) {
         res.writeHead(401, { "content-type": "application/json" });
         res.end(JSON.stringify({ error: "secondary MCP token required" }));
         return;
@@ -744,28 +763,63 @@ function runHttp() {
         return;
       }
       const request = await readJson(req);
+      // Reading a slow body yields control: the grant may expire or be revoked
+      // after the header check. Revalidate before dispatching any Gateway work.
+      if (oauth) {
+        authorization = oauth.authenticate(token);
+        gatewayToken = authorization?.gatewayToken;
+        if (!gatewayToken) {
+          res.writeHead(401, { "content-type": "application/json", "cache-control": "no-store", "www-authenticate": oauth.challenge() });
+          res.end(JSON.stringify({ error: "invalid_token" }));
+          return;
+        }
+      }
+      if (oauth && request?.method === "tools/call" && !authorization.scopes.includes(toolScope(request.params?.name))) {
+        const challenge = oauth.challenge("insufficient_scope", [toolScope(request.params?.name)]);
+        res.writeHead(403, { "content-type": "application/json", "cache-control": "no-store", "www-authenticate": challenge });
+        res.end(JSON.stringify({ jsonrpc: "2.0", id: request.id ?? null, result: { isError: true,
+          content: [{ type: "text", text: "Additional Brokpot permission is required." }], _meta: { "mcp/www_authenticate": [challenge] } } }));
+        return;
+      }
       try {
-        const response = await dispatch(request, { gatewayToken });
+        const response = await dispatch(request, { gatewayToken, oauth, authorization });
         if (response == null) {
           res.writeHead(202).end();
           return;
         }
-        res.writeHead(200, { "content-type": "application/json" });
+        res.writeHead(200, { "content-type": "application/json", "cache-control": "no-store" });
         res.end(JSON.stringify(response));
       } catch (error) {
         const status = error?.status === 401 ? 401 : 500;
-        res.writeHead(status, { "content-type": "application/json" });
-        res.end(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }));
+        if (oauth && status === 401) authorization.revoke();
+        res.writeHead(status, { "content-type": "application/json", "cache-control": "no-store", ...(oauth && status === 401 ? { "www-authenticate": oauth.challenge() } : {}) });
+        res.end(JSON.stringify({ error: oauth ? (status === 401 ? "invalid_token" : "Gateway request failed") : error instanceof Error ? error.message : String(error) }));
       }
     })().catch((error) => {
-      res.writeHead(500, { "content-type": "application/json" });
-      res.end(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }));
+      const status = error instanceof SyntaxError ? 400 : 500;
+      res.writeHead(status, { "content-type": "application/json", "cache-control": "no-store" });
+      res.end(JSON.stringify({ error: oauth ? "Invalid MCP request" : error instanceof Error ? error.message : String(error) }));
     });
   });
+  server.once("close", () => oauth?.close());
+  return server;
+}
+
+function runHttp() {
+  const host = process.env.BROKPOT_MCP_HTTP_HOST || "127.0.0.1";
+  const port = envInt("BROKPOT_MCP_HTTP_PORT", DEFAULT_HTTP_PORT, 1, 65535);
+  const { oauthConfig, createOAuthServer } = require("./oauth-server.cjs");
+  const config = oauthConfig();
+  const oauth = config ? createOAuthServer(config, { verifyGatewayToken }) : null;
+  const server = createHttpServer({ oauth, publicOrigin: config?.issuer });
   server.listen(port, host, () => {
     process.stderr.write(`Brokpot MCP listening on http://${host}:${port}/mcp\n`);
   });
 }
 
-if (process.argv.includes("--http")) runHttp();
-else runStdio();
+if (require.main === module) {
+  if (process.argv.includes("--http")) runHttp();
+  else runStdio();
+}
+
+module.exports = { createHttpServer };
