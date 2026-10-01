@@ -195,9 +195,11 @@ test("explicit consent issues distinct opaque tokens and preserves state and iss
   assert.equal(grant.location.searchParams.get("error"), null);
   assert.match(grant.response.headers.get("set-cookie"), /HttpOnly; SameSite=Lax/);
   assert.match(grant.response.headers.get("content-security-policy"), /frame-ancestors 'none'/);
-  assert.match(grant.response.headers.get("content-security-policy"), /form-action 'self'/);
+  assert.equal(grant.response.headers.get("content-security-policy"),
+    "default-src 'none'; form-action 'self' https://client.example; frame-ancestors 'none'; base-uri 'none'");
   assert.equal(grant.response.headers.get("x-frame-options"), "DENY");
-  assert.equal(grant.response.headers.get("referrer-policy"), "no-referrer");
+  assert.equal(grant.response.headers.get("referrer-policy"), "strict-origin");
+  assert.equal(grant.result.headers.get("referrer-policy"), "no-referrer");
   assert.match(grant.response.text, /brokpot:read brokpot:write/);
   assert.deepEqual(h.checkedTokens, [GATEWAY_TOKEN]);
   const { access_token: accessToken, refresh_token: refreshToken } = grant.tokens;

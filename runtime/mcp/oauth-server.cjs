@@ -257,9 +257,13 @@ function createOAuthServer(config, { verifyGatewayToken, loadClientMetadata = fe
         const browser = opaque();
         forms.set(digest(transaction), { params, browserHash: digest(browser), expiresAt: Date.now() + FORM_SECONDS * 1000 });
         const secure = config.issuer.startsWith("https:") ? "; Secure" : "";
-        res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "referrer-policy": "no-referrer",
+        // Native form POSTs need a non-null Origin for the consent CSRF check.
+        // Only the origin is sent; the code redirect below still uses no-referrer.
+        const callbackOrigin = new URL(params.redirect_uri).origin;
+        res.writeHead(200, { "content-type": "text/html; charset=utf-8", "cache-control": "no-store", "referrer-policy": "strict-origin",
           "x-frame-options": "DENY", "x-content-type-options": "nosniff",
-          "content-security-policy": "default-src 'none'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
+          // Chromium also applies form-action to the 303 callback destination.
+          "content-security-policy": `default-src 'none'; form-action 'self' ${callbackOrigin}; frame-ancestors 'none'; base-uri 'none'`,
           "set-cookie": `brokpot_oauth=${browser}; Path=/oauth/authorize; HttpOnly; SameSite=Lax; Max-Age=${FORM_SECONDS}${secure}` });
         res.end(`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Connect Brokpot</title><main><h1>Connect Brokpot</h1><p>Client: ${escapeHtml(config.clientId)}</p><p>Callback: ${escapeHtml(params.redirect_uri)}</p><p>Permissions: ${escapeHtml(params.scope)}</p><p>Read permission exposes all Bots and their conversations on this Host. Write permission lets this client send messages that can start Bot work. Existing Brokpot approvals still apply.</p><p>Enter your Gateway token only on this trusted Brokpot page, never in a chat or a tool argument. It stays in this bridge's memory for up to seven days; the client receives separate short-lived MCP tokens.</p><form method="post" action="/oauth/authorize"><input type="hidden" name="transaction" value="${transaction}"><label>Gateway token <input type="password" name="gateway_token" autocomplete="off" required></label>${config.secondFactor ? '<label>Bridge second factor <input type="password" name="second_factor" autocomplete="off" required></label>' : ""}<button type="submit" name="decision" value="approve">Approve connection</button><button type="submit" name="decision" value="deny" formnovalidate>Cancel</button></form></main></html>`);
         return true;

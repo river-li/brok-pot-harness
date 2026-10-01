@@ -111,6 +111,11 @@ Client configuration:
 - `POST /oauth/revoke` accepts a form containing `client_id` and `token` (an
   access or refresh token), and revokes that complete grant. Unknown tokens
   return success without revealing whether an account exists.
+- The consent page uses `Referrer-Policy: strict-origin` so native browser form
+  submissions preserve the `Origin` required by the CSRF check. Its CSP permits
+  form submission to itself and the validated callback origin, because Chromium
+  checks the callback redirect too. Code redirects retain `no-referrer`; exact
+  callback, Origin, browser cookie and one-use transaction checks remain required.
 - MCP authorization is checked again after receiving the request body. A token
   revoked or expired while the body was pending cannot start Gateway work.
 
