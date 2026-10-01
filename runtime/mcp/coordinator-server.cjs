@@ -746,8 +746,8 @@ function createHttpServer({ oauth = null, secondFactor = process.env.BROKPOT_MCP
         return;
       }
       const token = bearerToken(req);
-      const authorization = oauth ? oauth.authenticate(token) : null;
-      const gatewayToken = oauth ? authorization?.gatewayToken : token;
+      let authorization = oauth ? oauth.authenticate(token) : null;
+      let gatewayToken = oauth ? authorization?.gatewayToken : token;
       if (!gatewayToken) {
         res.writeHead(401, { "content-type": "application/json", "cache-control": "no-store", ...(oauth ? { "www-authenticate": oauth.challenge() } : {}) });
         res.end(JSON.stringify({ error: oauth ? "invalid_token" : "Brokpot Gateway bearer token required" }));
@@ -763,6 +763,17 @@ function createHttpServer({ oauth = null, secondFactor = process.env.BROKPOT_MCP
         return;
       }
       const request = await readJson(req);
+      // Reading a slow body yields control: the grant may expire or be revoked
+      // after the header check. Revalidate before dispatching any Gateway work.
+      if (oauth) {
+        authorization = oauth.authenticate(token);
+        gatewayToken = authorization?.gatewayToken;
+        if (!gatewayToken) {
+          res.writeHead(401, { "content-type": "application/json", "cache-control": "no-store", "www-authenticate": oauth.challenge() });
+          res.end(JSON.stringify({ error: "invalid_token" }));
+          return;
+        }
+      }
       if (oauth && request?.method === "tools/call" && !authorization.scopes.includes(toolScope(request.params?.name))) {
         const challenge = oauth.challenge("insufficient_scope", [toolScope(request.params?.name)]);
         res.writeHead(403, { "content-type": "application/json", "cache-control": "no-store", "www-authenticate": challenge });

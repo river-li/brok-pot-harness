@@ -111,6 +111,8 @@ Client configuration:
 - `POST /oauth/revoke` accepts a form containing `client_id` and `token` (an
   access or refresh token), and revokes that complete grant. Unknown tokens
   return success without revealing whether an account exists.
+- MCP authorization is checked again after receiving the request body. A token
+  revoked or expired while the body was pending cannot start Gateway work.
 
 Operating limits: this is a **single-process, single-Host self-hosted bridge**.
 Grants, consent sessions and the upstream Gateway credential are stored only in

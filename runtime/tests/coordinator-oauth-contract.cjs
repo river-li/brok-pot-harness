@@ -707,3 +707,48 @@ test("Gateway 401 during MCP initialize, ping or discovery also invalidates OAut
     denied(await h.refresh(grant.tokens.refresh_token), "invalid_grant");
   }
 });
+
+for (const invalidation of ["revoked", "expired"]) {
+  test(`MCP revalidates tokens ${invalidation} while the request body is pending`, async (t) => {
+    t.mock.timers.enable({ apis: ["Date"], now: NOW });
+    const h = await gatewayHarness(t);
+    const grant = await h.issue();
+    let headersChecked;
+    const checked = new Promise((resolve) => { headersChecked = resolve; });
+    const authenticate = h.oauth.authenticate;
+    h.oauth.authenticate = (...args) => {
+      const authorization = authenticate(...args);
+      headersChecked();
+      return authorization;
+    };
+    const payload = JSON.stringify({ jsonrpc: "2.0", id: 99, method: "tools/call",
+      params: { name: "brokpot_send_message", arguments: { agent_id: "test-agent", message: "Synthetic delayed request." } } });
+    let req;
+    const response = new Promise((resolve, reject) => {
+      req = http.request(`${h.origin}/mcp`, { method: "POST", headers: {
+        authorization: `Bearer ${grant.tokens.access_token}`, "content-type": "application/json",
+        "content-length": Buffer.byteLength(payload),
+      } }, (res) => {
+        let text = "";
+        res.on("data", (chunk) => { text += chunk; });
+        res.on("end", () => resolve({ status: res.statusCode, headers: new Headers(res.headers), body: JSON.parse(text), text }));
+      });
+      req.on("error", reject);
+      req.flushHeaders();
+    });
+    t.after(() => req.destroy());
+    await checked;
+    if (invalidation === "revoked") {
+      assert.equal((await h.post("/oauth/revoke", { client_id: h.config.clientId, token: grant.tokens.access_token })).status, 200);
+    } else {
+      t.mock.timers.setTime(NOW + 900000);
+    }
+    assert.equal(h.oauth.authenticate(grant.tokens.access_token), null);
+    const callsBefore = h.state.calls.length;
+    req.end(payload);
+    const result = await response;
+    denied(result, "invalid_token", 401);
+    assert.equal(result.headers.get("www-authenticate"), h.oauth.challenge());
+    assert.equal(h.state.calls.length, callsBefore, "A revoked or expired request must not reach the Gateway");
+  });
+}
