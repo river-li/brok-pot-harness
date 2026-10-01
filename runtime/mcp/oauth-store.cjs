@@ -10,9 +10,15 @@ function privateFile(file, maxSize, credential = false) {
   try {
     const stat = fs.fstatSync(fd);
     const parent = credential ? fs.lstatSync(path.dirname(file)) : null;
+    // systemd may use root-owned 0550/0440 credential mounts with service ACLs.
+    // Trust only its exact /run/credentials directory, never an arbitrary 0440 key.
+    const systemdDirectory = process.env.CREDENTIALS_DIRECTORY;
+    const systemdCredential = credential && parent.isDirectory() && !parent.isSymbolicLink() &&
+      path.dirname(file) === systemdDirectory && systemdDirectory.startsWith("/run/credentials/") &&
+      parent.uid === 0 && stat.uid === 0 && (parent.mode & 0o777) === 0o550 && (stat.mode & 0o777) === 0o440;
     const privateGroupRead = credential && parent.isDirectory() && !parent.isSymbolicLink() &&
       !(parent.mode & 0o077) && parent.uid === process.getuid() && !(stat.mode & 0o037);
-    if (!stat.isFile() || ((stat.mode & 0o077) && !privateGroupRead) || stat.size > maxSize) throw new Error("Unsafe OAuth storage file.");
+    if (!stat.isFile() || ((stat.mode & 0o077) && !privateGroupRead && !systemdCredential) || stat.size > maxSize) throw new Error("Unsafe OAuth storage file.");
     return fs.readFileSync(fd);
   } finally { fs.closeSync(fd); }
 }

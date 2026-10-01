@@ -133,8 +133,11 @@ Create a random **32-byte binary** key once, outside the store directory; do not
 replace it during deploys. With systemd, keep the source key root-owned 0600 and
 inject it with `LoadCredential=oauth-key:/etc/gbh-mcp/oauth-state.key`. Set the key
 file environment variable to `%d/oauth-key` in the unit. Use a private 0700 state
-directory under `StateDirectory=gbh-mcp`. The bridge accepts systemd's read-only
-0440 credential only inside a private directory owned by the service user.
+directory under `StateDirectory=gbh-mcp`. The bridge accepts a read-only 0440 credential inside a private service-owned
+directory, or systemd's exact `/run/credentials/…` directory identified by
+`CREDENTIALS_DIRECTORY` with root-owned 0550/0440 directory/file modes. The latter
+uses systemd's service-specific ACL/mount isolation; arbitrary group-readable
+key files are still rejected.
 Never put the key bytes in environment variables, repository files or logs.
 
 `grants.sqlite` stores AES-256-GCM encrypted state. MCP token values are not stored;
